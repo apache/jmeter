@@ -18,6 +18,7 @@ package org.apache.jmeter.visualizers;
 
 import java.util.HashMap;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FlowLayout;
@@ -35,7 +36,6 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 
 
-import org.apache.jmeter.gui.util.JMeterColor;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
@@ -142,7 +142,7 @@ public class MonitorPerformancePanel extends JSplitPane
 		GRAPHPANEL.setLayout(new BorderLayout());
 		GRAPHPANEL.setMaximumSize(
 			new Dimension(MODEL.getBufferSize(),MODEL.getBufferSize()));
-		GRAPHPANEL.setBackground(JMeterColor.WHITE);
+		GRAPHPANEL.setBackground(Color.white);
 		GRAPHPANEL.add(GRAPH,BorderLayout.CENTER);
 		right.add(GRAPHPANEL,BorderLayout.CENTER);
 		
