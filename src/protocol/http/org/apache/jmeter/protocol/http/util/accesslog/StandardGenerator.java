@@ -61,12 +61,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
-import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
-import org.apache.jmeter.save.SaveService;
-import org.apache.jmeter.threads.ThreadGroup;
-import org.apache.jmeter.control.gui.LoopControlPanel;
-import org.apache.jmeter.control.LoopController;
 
 /**
  * Title:		Apache Jakarta JMeter<br>
@@ -107,14 +102,11 @@ import org.apache.jmeter.control.LoopController;
 public class StandardGenerator implements Generator, Serializable {
 
 	protected HTTPSampler SAMPLE = null;
-	protected ListedHashTree SAMPLERS = null;
 	protected FileWriter WRITER = null;
 	protected OutputStream OUTPUT = null;
 	protected String FILENAME = null;
 	protected File FILE = null;
 	protected ThreadGroup THREADGROUP = null;
-	protected LoopControlPanel PANEL = null;
-	protected LoopController CONTROL = null;
 	
 	/**
 	 * The constructor is used by GUI and samplers
@@ -146,23 +138,6 @@ public class StandardGenerator implements Generator, Serializable {
 	 */
 	protected void init(){
 		generateRequest();
-		// I haven't figured out exactly how to
-		// generate a valid JMeter test plan
-		// and save it.
-		/*
-		SAMPLERS = new ListedHashTree();
-		if (FILENAME != null){
-			FILE = new File(FILENAME);
-			initStream();
-		}
-		THREADGROUP = new ThreadGroup();
-		THREADGROUP.setNumThreads(1);
-		PANEL = new LoopControlPanel();
-		CONTROL = new LoopController();
-		SAMPLERS.add("org.apache.jmeter.threads.ThreadGroup",THREADGROUP);
-		SAMPLERS.add("org.apache.jmeter.control.gui.LoopControlPanel",PANEL);
-		SAMPLERS.add("org.apache.jmeter.control.LoopController",CONTROL);
-		*/
 	}
 
 	/**
@@ -180,8 +155,6 @@ public class StandardGenerator implements Generator, Serializable {
 	 * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#close()
 	 */
 	public void close() {
-		SAMPLERS.clear();
-		SAMPLERS = null;
 		try {
 			if (OUTPUT != null){
 				OUTPUT.close();
@@ -274,7 +247,11 @@ public class StandardGenerator implements Generator, Serializable {
 	 */
 	public void save(){
 		try {
-			SaveService.saveSubTree(this.SAMPLERS,this.OUTPUT);
+			// no implementation at this time, since
+			// we bypass the idea of having a console
+			// tool to generate test plans. Instead
+			// I decided to have a sampler that uses
+			// the generator and parser directly
 		} catch (Exception exception){
 		}
 	}
