@@ -21,6 +21,8 @@ package org.apache.jmeter;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.Authenticator;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -78,6 +80,7 @@ public class JMeter implements JMeterPlugin
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
     private static final int PROPFILE_OPT = 'p';
+    private static final int PROPFILE2_OPT = 'q'; // Bug 33920 - additional prop files
     private static final int TESTFILE_OPT = 't';
     private static final int LOGFILE_OPT = 'l';
     private static final int NONGUI_OPT = 'n';
@@ -92,6 +95,7 @@ public class JMeter implements JMeterPlugin
     private static final int SYSTEM_PROPERTY = 'D';
     private static final int LOGLEVEL = 'L';
     private static final int REMOTE_OPT = 'r';
+	private static final int JMETER_HOME_OPT = 'd';
 
     /**
      * Define the understood options. Each CLOptionDescriptor contains:
@@ -121,6 +125,12 @@ public class JMeter implements JMeterPlugin
                 CLOptionDescriptor.ARGUMENT_REQUIRED,
                 PROPFILE_OPT,
                 "the jmeter property file to use"),
+            new CLOptionDescriptor(
+	                "addprop",
+	                CLOptionDescriptor.ARGUMENT_REQUIRED 
+	                | CLOptionDescriptor.DUPLICATES_ALLOWED, // Bug 33920 - allow multiple props
+	                PROPFILE2_OPT,
+	                "additional property file(s)"),
             new CLOptionDescriptor(
                 "testfile",
                 CLOptionDescriptor.ARGUMENT_REQUIRED,
@@ -184,7 +194,13 @@ public class JMeter implements JMeterPlugin
                 "runremote",
                 CLOptionDescriptor.ARGUMENT_DISALLOWED,
                 REMOTE_OPT,
-                "Start remote servers from non-gui mode")};
+                "Start remote servers from non-gui mode"),
+			new CLOptionDescriptor(
+		         "homedir",
+		          CLOptionDescriptor.ARGUMENT_REQUIRED,
+		          JMETER_HOME_OPT,
+		          "the jmeter home directory to use"),
+                };
 
     public JMeter()
     {
@@ -385,7 +401,13 @@ public class JMeter implements JMeterPlugin
                     + File.separator
                     + "jmeter.properties");
         }
-        JMeterUtils.setJMeterHome(NewDriver.getJMeterDir());
+
+		// Bug 33845 - allow direct override of Home dir
+		if (parser.getArgumentById(JMETER_HOME_OPT) == null) {
+    		JMeterUtils.setJMeterHome(NewDriver.getJMeterDir());
+		} else {
+    		JMeterUtils.setJMeterHome(parser.getArgumentById(JMETER_HOME_OPT).getArgument());
+        }
 
         // Process command line property definitions (can occur multiple times)
 
@@ -401,6 +423,16 @@ public class JMeter implements JMeterPlugin
 
             switch (option.getDescriptor().getId())
             {
+			    case PROPFILE2_OPT : // Bug 33920 - allow multiple props
+					File f = new File(name);
+				    try {
+						jmeterProps.load(new FileInputStream(f));
+					} catch (FileNotFoundException e) {
+						log.warn("Can't find additional property file: "+name,e);
+					} catch (IOException e) {
+						log.warn("Error loading additional property file: "+name,e);
+					}
+					break;
                 case SYSTEM_PROPERTY :
                     if (value.length() > 0)
                     { // Set it
