@@ -74,7 +74,7 @@ import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
 /**
- * Threadgroup
+ * ThreadGroup
  *
  *@author Michael Stover
  *@version $Id$
@@ -85,18 +85,11 @@ public class ThreadGroup
 {
     private static Logger log =
         Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
+
     public final static String NUM_THREADS = "ThreadGroup.num_threads";
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
     public final static String RAMP_TIME = "ThreadGroup.ramp_time";
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
     public final static String MAIN_CONTROLLER = "ThreadGroup.main_controller";
+
     private final int DEFAULT_NUM_THREADS = 1;
     private final int DEFAULT_RAMP_UP = 0;
     private SampleQueue queue = null;
@@ -104,18 +97,18 @@ public class ThreadGroup
     private LinkedList listeners = new LinkedList();
     private LinkedList remoteListeners = new LinkedList();
 
-    /****************************************
-     * !ToDo (Constructor description)
-     ***************************************/
+    /**
+     * No-arg constructor.
+     */
     public ThreadGroup()
     {
     }
 
-    /****************************************
-     * !ToDo (Method aadescription)
+    /**
+     * Set the nuber of threads.
      *
-     *@param numThreads  !ToDo (Parameter description)
-     ***************************************/
+     * @param numThreads the number of threads.
+     */
     public void setNumThreads(int numThreads)
     {
         setProperty(NUM_THREADS, new Integer(numThreads));
@@ -136,11 +129,11 @@ public class ThreadGroup
         return getSamplerController().next();
     }
 
-    /****************************************
-     * !ToDo (Method aadescription)
+    /**
+     * Set the ramp-up value.
      *
-     *@param rampUp  !ToDo (Parameter description)
-     ***************************************/
+     * @param rampUp the ramp-up value.
+     */
     public void setRampUp(int rampUp)
     {
         setProperty(RAMP_TIME, new Integer(rampUp));
@@ -151,82 +144,82 @@ public class ThreadGroup
         return getSamplerController().isNextFirst();
     }
 
-    /****************************************
-     * !ToDoo (Method description)
+    /**
+     * Get the ramp-up value.
      *
-     *@return   !ToDo (Return description)
-     ***************************************/
+     * @return the ramp-up value.
+     */
     public int getRampUp()
     {
         return getPropertyAsInt(ThreadGroup.RAMP_TIME);
     }
 
-    /****************************************
-     * !ToDoo (Method description)
+    /**
+     * Get the sampler controller.
      *
-     *@return   !ToDo (Return description)
-     ***************************************/
+     * @return the sampler controller.
+     */
     public Controller getSamplerController()
     {
         return (Controller) getProperty(MAIN_CONTROLLER);
     }
 
-    /****************************************
-     * !ToDo (Method description)
+    /**
+     * Set the sampler controller.
      *
-     *@param c  !ToDo (Parameter description)
-     ***************************************/
+     * @param c the sampler controller.
+     */
     public void setSamplerController(LoopController c)
     {
         c.setContinueForever(false);
         setProperty(MAIN_CONTROLLER, c);
     }
 
-    /****************************************
-     * !ToDoo (Method description)
+    /**
+     * Get the number of threads.
      *
-     *@return   !ToDo (Return description)
-     ***************************************/
+     * @return the number of threads.
+     */
     public int getNumThreads()
     {
         return this.getPropertyAsInt(ThreadGroup.NUM_THREADS);
     }
 
-    /****************************************
-     * !ToDoo (Method description)
+    /**
+     * Get the default number of threads.
      *
-     *@return   !ToDo (Return description)
-     ***************************************/
+     * @return the default number of threads.
+     */
     public int getDefaultNumThreads()
     {
         return this.DEFAULT_NUM_THREADS;
     }
 
-    /****************************************
-     * !ToDoo (Method description)
+    /**
+     * Get the default ramp-up value.
      *
-     *@return   !ToDo (Return description)
-     ***************************************/
+     * @return the default ramp-up value (in seconds).
+     */
     public int getDefaultRampUp()
     {
         return this.DEFAULT_RAMP_UP;
     }
 
-    /****************************************
-     * !ToDo
+    /**
+     * Add a test element.
      *
-     *@param child  !ToDo
-     ***************************************/
+     * @param child the test element to add.
+     */
     public void addTestElement(TestElement child)
     {
         getSamplerController().addTestElement(child);
     }
 
-    /****************************************
-     * !ToDo (Method description)
+    /**
+     * A sample has occurred.
      *
-     *@param e  !ToDo (Parameter description)
-     ***************************************/
+     *@param e the sample event.
+     */
     public void sampleOccurred(SampleEvent e)
     {
         if (queue == null)
@@ -239,58 +232,59 @@ public class ThreadGroup
         queue.sampleOccurred(e);
     }
 
-    /****************************************
+    /**
      * A sample has started.
      *
-     *@param e  !ToDo (Parameter description)
-     ***************************************/
+     *@param e the sample event.
+     */
     public void sampleStarted(SampleEvent e)
     {
     }
 
-    /****************************************
+    /**
      * A sample has stopped.
      *
-     *@param e  !ToDo (Parameter description)
-     ***************************************/
+     * @param e the sample event
+     */
     public void sampleStopped(SampleEvent e)
     {
     }
 
-    /****************************************
+    /**
      * Separate thread to deliver all SampleEvents. This ensures that sample
-     * listeners will get sample events 1 at a time, and can thus ignore thread
+     * listeners will get sample events one at a time and can thus ignore thread
      * issues.
      *
-     *@author    $Author$
-     *@created   $Date$
-     *@version   $Revision$
-     ***************************************/
+     * @author Mike Stover
+     * @version $Id$
+     */
     private class SampleQueue implements Runnable, Serializable
     {
         List occurredQ = Collections.synchronizedList(new LinkedList());
 
-        /****************************************
-         * !ToDo (Constructor description)
-         ***************************************/
+        /**
+         * No-arg constructor.
+         */
         public SampleQueue()
         {
         }
 
-        /****************************************
-         * !ToDo (Method description)
-         *
-         *@param e  !ToDo (Parameter description)
-         ***************************************/
+        /**
+         * A sample occurred.
+         * 
+         * @param e the sample event.
+         */
         public synchronized void sampleOccurred(SampleEvent e)
         {
             occurredQ.add(e);
             this.notify();
         }
 
-        /****************************************
-         * !ToDo (Method description)
-         ***************************************/
+        /**
+         * Run the thread.
+         * 
+         * @see java.lang.Runnable#run()
+         */
         public void run()
         {
             SampleEvent event = null;
