@@ -252,7 +252,7 @@ public class HTTPSampler extends AbstractSampler
     }
     public void setProtocol(String value)
     {
-        setProperty(PROTOCOL, value);
+        setProperty(PROTOCOL, value.toLowerCase());
     }
     public String getProtocol()
     {
