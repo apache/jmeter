@@ -69,7 +69,6 @@ import junit.framework.TestCase;
 
 import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.config.ConfigElement;
-import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.functions.InvalidVariableException;
@@ -85,6 +84,7 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
@@ -102,7 +102,7 @@ import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 
-public class ProxyControl extends ConfigTestElement implements Serializable
+public class ProxyControl extends GenericController implements Serializable
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
     private Daemon server;
@@ -218,6 +218,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
 
     public void startProxy()
     {
+        notifyTestListenersOfStart();
         server = new Daemon(getPort(), this);
         server.start();
     }
@@ -283,7 +284,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
         if (filterUrl(sampler))
         {
             placeConfigElement(sampler, subConfigs);
-            notifyListeners(new SampleEvent(result,sampler.getName()));
+            notifySampleListeners(new SampleEvent(result,sampler.getName()));
         }
     }
 
@@ -299,6 +300,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
             catch (InterruptedException e)
             {
             }
+            notifyTestListenersOfEnd();
         }
     }
 
@@ -608,43 +610,67 @@ public class ProxyControl extends ConfigTestElement implements Serializable
     }
     
     /**
-     * This will notify sample listeners of the sampling that just occured
-     * -- so that we have a means to record the server's responses as we go.
-     * <p>
-     * Only listeners which are directly within the RecordingControllers or
-     * ThreadGroups where recording is happening will be notified.
+     * This will notify sample listeners directly within the Proxy
+     * of the sampling that just occured -- so that we have a
+     * means to record the server's responses as we go.
      * 
      * @param event sampling event to be delivered
      */
-    private void notifyListeners(SampleEvent event) {
+    private void notifySampleListeners(SampleEvent event)
+    {
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
-        List nodes = treeModel.getNodesOfType(RecordingController.class);
-        if (nodes.size() == 0)
+        JMeterTreeNode myNode = treeModel.getNodeOf(this);
+        Enumeration enum = myNode.children();
+        while (enum.hasMoreElements())
         {
-            nodes = treeModel.getNodesOfType(ThreadGroup.class);
-        }
-        Iterator iter = nodes.iterator();
-        while (iter.hasNext())
-        {
-            JMeterTreeNode node = (JMeterTreeNode) iter.next();
-
-            if (!node.isEnabled())
-            {
-                continue;
+            JMeterTreeNode subNode =
+                (JMeterTreeNode) enum.nextElement();
+            TestElement testElement =
+                (TestElement) subNode.createTestElement();
+            if (testElement instanceof SampleListener) {
+                ((SampleListener)testElement).sampleOccurred(event);
             }
-            else
-            {
-                Enumeration enum = node.children();
-                while (enum.hasMoreElements())
-                {
-                    JMeterTreeNode subNode =
-                        (JMeterTreeNode) enum.nextElement();
-                    TestElement testElement =
-                        (TestElement) subNode.createTestElement();
-                    if (testElement instanceof SampleListener) {
-                        ((SampleListener)testElement).sampleOccurred(event);
-                    }
-                }
+        }
+    }
+
+    /**
+     * This will notify test listeners directly within the Proxy that the 'test'
+     * (here meaning the proxy recording) has started.
+     */
+    private void notifyTestListenersOfStart()
+    {
+        JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
+        JMeterTreeNode myNode = treeModel.getNodeOf(this);
+        Enumeration enum = myNode.children();
+        while (enum.hasMoreElements())
+        {
+            JMeterTreeNode subNode =
+                (JMeterTreeNode) enum.nextElement();
+            TestElement testElement =
+                (TestElement) subNode.createTestElement();
+            if (testElement instanceof TestListener) {
+                ((TestListener)testElement).testStarted();
+            }
+        }
+    }
+    
+    /**
+     * This will notify test listeners directly within the Proxy that the 'test'
+     * (here meaning the proxy recording) has ended.
+     */
+    private void notifyTestListenersOfEnd()
+    {
+        JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
+        JMeterTreeNode myNode = treeModel.getNodeOf(this);
+        Enumeration enum = myNode.children();
+        while (enum.hasMoreElements())
+        {
+            JMeterTreeNode subNode =
+                (JMeterTreeNode) enum.nextElement();
+            TestElement testElement =
+                (TestElement) subNode.createTestElement();
+            if (testElement instanceof TestListener) {
+                ((TestListener)testElement).testEnded();
             }
         }
     }

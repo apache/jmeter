@@ -81,15 +81,14 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.control.Controller;
+import org.apache.jmeter.control.gui.LogicControllerGui;
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.functions.InvalidVariableException;
-import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
@@ -108,7 +107,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class ProxyControlGui
-    extends AbstractJMeterGuiComponent
+    extends LogicControllerGui
     implements
         JMeterGUIComponent,
         ActionListener,
@@ -175,11 +174,6 @@ public class ProxyControlGui
     {
         super();
         init();
-    }
-
-    public JPopupMenu createPopupMenu()
-    {
-        return MenuFactory.getDefaultTimerMenu();
     }
 
     public TestElement createTestElement()
@@ -672,7 +666,9 @@ public class ProxyControlGui
                     .getTreeModel()
                     .getRoot();
             targetNodesModel.addElement(
-                new TreeNodeWrapper(null, "Use Recording Controller"));
+                new TreeNodeWrapper(
+                    null,
+                    JMeterUtils.getResString("use_recording_controller")));
             buildNodesModel(root, "", 0);
         }
         for (int i = 0; i < targetNodesModel.getSize(); i++)
