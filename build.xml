@@ -7,7 +7,7 @@
   <property name="sources.src.dir" value="src"/>
   <!-- Where the API documentation lives -->
   <property name="docs.api.dest.dir" value="docs/api"/>
-  <property name="version" value="_1.6.0Beta"/>
+  <property name="version" value="_1.6Alpha"/>
   <property name="docs.src" value="./xdocs"/>
   <property name="docs.dest" value="./docs"/>
 
@@ -143,11 +143,11 @@
     - Creates the distribution packages
     -->
     <target name="dist" depends="install">
-        <jar jarfile="../ApacheJMeter${version}.jar" basedir="../" includes="jmeter/**" excludes="**/classes/**"/>
-        <zip zipfile="../ApacheJMeter${version}.zip" basedir="../" includes="jmeter/**" excludes="**/classes/**"/>
-        <tar tarfile="../ApacheJMeter${version}.tar" basedir="../" excludes="**/classes/**" includes="jmeter/**" />
+        <jar jarfile="../ApacheJMeter${version}.jar" basedir="../" includes="jakarta-jmeter/**" excludes="**/classes/**,**/xdocs/**"/>
+        <zip zipfile="../ApacheJMeter${version}.zip" basedir="../" includes="jakarta-jmeter/**" excludes="**/classes/**,**/xdocs/**"/>
+        <tar tarfile="../ApacheJMeter${version}.tar" basedir="../" excludes="**/classes/**,**/xdocs/**" includes="jakarta-jmeter/**" />
         <gzip zipfile="$../ApacheJMeter${version}.tar.gz" src="../ApacheJMeter${version}.tar" />
-     </target>
+    </target>
 
     <!--
     - Deletes old build files.
