@@ -171,6 +171,7 @@ public class GenericTestBeanCustomizer extends JPanel
 
             // Don't get editors for hidden or non-read-write properties:
             if (descriptors[i].isHidden()
+                || (descriptors[i].isExpert() && ! JMeterUtils.isExpertMode())
                 || descriptors[i].getReadMethod() == null
                 || descriptors[i].getWriteMethod() == null)
             {
