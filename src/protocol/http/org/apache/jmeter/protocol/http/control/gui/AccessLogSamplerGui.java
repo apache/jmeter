@@ -150,7 +150,7 @@ public class AccessLogSamplerGui
     }
 
     /**
-     * @see JMeterGUIComponent#getStaticLabel()
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
      */
     public String getStaticLabel()
     {
@@ -158,7 +158,7 @@ public class AccessLogSamplerGui
     }
 
     /**
-     * @see JMeterGUIComponent#createTestElement()
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
     public TestElement createTestElement()
     {
@@ -179,7 +179,7 @@ public class AccessLogSamplerGui
 	 * Utility method to parse the string and get a int port
 	 * number. If it couldn't parse the string to an integer,
 	 * it will return the default port 80.
-	 * @return
+	 * @return port number
 	 */
 	public int getPortNumber(){
 		try {
@@ -195,7 +195,7 @@ public class AccessLogSamplerGui
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * @see JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement s)
     {

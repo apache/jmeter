@@ -102,7 +102,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * @see JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement sampler)
     {

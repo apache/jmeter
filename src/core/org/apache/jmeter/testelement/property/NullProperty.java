@@ -54,7 +54,7 @@ public class NullProperty extends AbstractProperty
     }
 
     /**
-     * @see JMeterProperty#isTemporary(TestElement)
+     * see JMeterProperty#isTemporary(TestElement)
      */
     public boolean isTemporary(TestElement owner)
     {

@@ -191,7 +191,7 @@ public class FileReporter extends JPanel
  */
 class graphPanel extends JPanel
 {
-    boolean autoScale = true;
+    //boolean autoScale = true;
     Hashtable data;
     Vector keys = new Vector();
     Vector colorList = new Vector();

@@ -212,7 +212,7 @@ public class Daemon extends Thread
     /**
      * Stop the proxy daemon.  The daemon may not stop immediately.
      *
-     * @see #ACCEPT_TIMEOUT
+     * see #ACCEPT_TIMEOUT
      */
     public void stopServer()
     {

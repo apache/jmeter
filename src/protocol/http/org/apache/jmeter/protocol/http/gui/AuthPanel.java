@@ -91,7 +91,7 @@ import org.apache.log.Logger;
  * Sampler. It also understands how to get AuthManagers for the files that the
  * user selects.
  *
- * @author    
+ * @author    unattributed
  * @version   $Revision$  Last updated: $Date$
  */
 public class AuthPanel extends AbstractConfigGui implements ActionListener
@@ -133,7 +133,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * @see JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement el)
     {
