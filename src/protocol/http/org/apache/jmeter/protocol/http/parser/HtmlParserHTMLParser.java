@@ -34,12 +34,14 @@ import org.htmlparser.scanners.BaseHrefScanner;
 import org.htmlparser.scanners.BodyScanner;
 import org.htmlparser.scanners.InputTagScanner;
 import org.htmlparser.scanners.LinkScanner;
+import org.htmlparser.scanners.ScriptScanner;
 import org.htmlparser.tags.AppletTag;
 import org.htmlparser.tags.BaseHrefTag;
 import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.LinkTag;
+import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
@@ -155,7 +157,12 @@ class HtmlParserHTMLParser extends HTMLParser
 						ImageTag img = (ImageTag)link.getChild(0);
 						binUrlStr = img.getImageURL();
 					}
+				} else if (node instanceof ScriptTag){
+					ScriptTag script = (ScriptTag)node;
+					binUrlStr = script.getAttribute("src");
 				}
+				
+				//TODO add <LINK HREF=""> scanner
 
                 if (binUrlStr == null)
                 {
@@ -201,5 +208,6 @@ class HtmlParserHTMLParser extends HTMLParser
         parser.addScanner(new InputTagScanner());
         // add applet tag scanner
         parser.addScanner(new AppletScanner());
+        parser.addScanner(new ScriptScanner());
     }
 }
