@@ -101,20 +101,19 @@ public class CookieManager
     public static final String CLEAR = "CookieManager.clearEachIteration";
     public static final String COOKIES = "CookieManager.cookies";
 
-    // FIXME: SimpleDateFormat isn't thread-safe, so we need to synchronize
-    // access to it.
-    private static SimpleDateFormat dateFormat =
+    // SimpleDateFormat isn't thread-safe
+    // TestElements are cloned for each thread, so
+    // we use an instance variable.
+    private SimpleDateFormat dateFormat =
         new SimpleDateFormat("EEEE, dd-MMM-yy HH:mm:ss zzz");
-
-    static {
-        // The cookie specification requires that the timezone be GMT.
-        // See http://developer.netscape.com/docs/manuals/communicator/jsguide4/cookies.htm
-        // See http://www.cookiecentral.com/faq/
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-    }
 
     public CookieManager()
     {
+		// The cookie specification requires that the timezone be GMT.
+		// See http://developer.netscape.com/docs/manuals/communicator/jsguide4/cookies.htm
+		// See http://www.cookiecentral.com/faq/
+		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+
         setProperty(new CollectionProperty(COOKIES, new ArrayList()));
         setProperty(new BooleanProperty(CLEAR, false));
     }
