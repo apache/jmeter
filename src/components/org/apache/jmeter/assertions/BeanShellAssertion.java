@@ -38,7 +38,7 @@ import org.apache.log.Logger;
 public class BeanShellAssertion extends AbstractTestElement
     implements Serializable, Assertion
 {
-	protected static final Logger log = LoggingManager.getLoggerForClass();
+	private static Logger log = LoggingManager.getLoggerForClass();
 
     public static final String FILENAME   = "BeanShellAssertion.filename"; //$NON-NLS-1$
 	public static final String SCRIPT     = "BeanShellAssertion.query"; //$NON-NLS-1$
@@ -100,14 +100,12 @@ public class BeanShellAssertion extends AbstractTestElement
         	String request=getScript();
         	String fileName=getFilename();
         	
-        	// Has to be done after construction, otherwise fails serialisation check
-        	bshInterpreter.set("log",log);  //$NON-NLS-1$
-			
         	bshInterpreter.set("FileName",getFilename());//$NON-NLS-1$
 			bshInterpreter.set("Parameters",getParameters());// as a single line $NON-NLS-1$
 			bshInterpreter.set("bsh.args",//$NON-NLS-1$
 					JOrphanUtils.split(getParameters()," "));//$NON-NLS-1$
-			
+
+			// Add SamplerData for consistency with BeanShell Sampler
 			bshInterpreter.set("SampleResult",response);// Raw access to the response //$NON-NLS-1$
 			bshInterpreter.set("Response",response);// Raw access to the response //$NON-NLS-1$
 			bshInterpreter.set("ResponseData",response.getResponseData());//$NON-NLS-1$
