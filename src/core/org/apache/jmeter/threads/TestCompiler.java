@@ -298,8 +298,6 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
 
         class TestSampler extends AbstractSampler implements PerSampleClonable
         {
-            public void addCustomTestElement(TestElement t)
-            {}
             public org.apache.jmeter.samplers.SampleResult sample(org.apache.jmeter.samplers.Entry e)
             {
                 return null;
