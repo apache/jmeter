@@ -155,7 +155,7 @@ public class ViewResultsFullVisualizer
     /**
      * Update the visualizer with new data.
      */
-    public void updateGui(SampleResult res)
+    public synchronized void updateGui(SampleResult res)
     {
         log.debug("Start : updateGui1");
         if (log.isDebugEnabled())
