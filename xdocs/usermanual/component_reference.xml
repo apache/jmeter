@@ -1540,10 +1540,10 @@ A reference name - refName - for reusing the value created by this function. Sto
 	</p>For example:<p>
 <code>
 <pre>
-__property(user.dir) - return value of user.dir
-__property(user.dir,UDIR) - return value of user.dir and save in UDIR
-__property(abcd,ABCD,atod) - return value of property abcd (or "atod" if not defined) and save in ABCD
-__property(abcd,,atod) - return value of property abcd (or "atod" if not defined) but don't save it
+${__property(user.dir)} - return value of user.dir
+${__property(user.dir,UDIR)} - return value of user.dir and save in UDIR
+${__property(abcd,ABCD,atod)} - return value of property abcd (or "atod" if not defined) and save in ABCD
+${__property(abcd,,atod)} - return value of property abcd (or "atod" if not defined) but don't save it
 </pre>
 </code></p>
 	</description>
@@ -1553,6 +1553,36 @@ __property(abcd,,atod) - return value of property abcd (or "atod" if not defined
         <property name="Name of function" required="No">A reference name for reusing the value
                 computed by this function.</property>
         <property name="Default Value" required="No">The default value for the property.</property>
+</properties>
+</component>
+
+<component index="13.10.10" name="__P">
+<description><p>This is a simplified property function which is
+	intended for use with properties defined on the command line.
+	If the property is not found, the default is returned.
+	If no default was provided, then returns 1.
+	</p>For example:<p>
+<code>
+<pre>
+Define the property value:
+
+jmeter -Jgroup1.threads=7 -Jhostname1=www.realhost.edu
+
+Fetch the values:
+${__P(group1.threads)} - return the value of group1.threads
+${__P(group1.loops)} - return the value of group1.loops
+${__P(hostname,www.dummy.org)} - return value of property hostname or www.dummy.org if not defined
+</pre>
+In the examples above, the first function call would return 7, 
+the second would return 1 and the last would return www.dummy.org
+(unless those properties were defined elsewhere!)
+</code></p>
+	</description>
+
+<properties>
+        <property name="Property Name" required="Yes">The property name to be retrieved.</property>
+        <property name="Default Value" required="No">The default value for the property.
+        	If omitted, the default is set to "1".</property>
 </properties>
 </component>
 
