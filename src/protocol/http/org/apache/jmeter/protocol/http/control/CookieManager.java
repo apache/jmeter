@@ -389,7 +389,9 @@ public class CookieManager
             }
             else if (key.equalsIgnoreCase("domain"))
             {
-                domain= nvp.substring(index + 1);
+                //trim() is a workaround for bug in Oracle8iAS wherere
+            	//cookies would have leading spaces in the domain portion
+            	domain= nvp.substring(index + 1).trim();
                 
                 // The standard dictates domains must have a leading dot,
                 // but the new standard (Cookie2) tells us to add it if it's not
