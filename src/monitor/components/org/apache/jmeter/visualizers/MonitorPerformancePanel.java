@@ -62,13 +62,13 @@ public class MonitorPerformancePanel extends JSplitPane
 		JMeterUtils.getResString("monitor_legend_memory_per");
 	public static final String LEGEND_THREAD =
 		JMeterUtils.getResString("monitor_legend_thread_per");
-	public static ImageIcon LEGEND_HEALTH_ICON =
+	public static final ImageIcon LEGEND_HEALTH_ICON =
 		JMeterUtils.getImage("monitor-green-legend.gif");
-	public static ImageIcon LEGEND_LOAD_ICON =
+	public static final ImageIcon LEGEND_LOAD_ICON =
 		JMeterUtils.getImage("monitor-blue-legend.gif");
-	public static ImageIcon LEGEND_MEM_ICON =
+	public static final ImageIcon LEGEND_MEM_ICON =
 		JMeterUtils.getImage("monitor-orange-legend.gif");
-	public static ImageIcon LEGEND_THREAD_ICON =
+	public static final ImageIcon LEGEND_THREAD_ICON =
 		JMeterUtils.getImage("monitor-red-legend.gif");
 	public static final String GRID_LABEL_TOP =
 		JMeterUtils.getResString("monitor_label_left_top");
