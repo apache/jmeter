@@ -201,6 +201,14 @@ public final class ClassFinder
             strPathsOrJars = fixSlashes(strPathsOrJars);
             strPathsOrJars = fixEndingSlashes(strPathsOrJars);
         }
+		if (log.isDebugEnabled())
+		{
+		    for (i = 0; i < strPathsOrJars.length; i++)
+		    {
+				log.debug("strPathsOrJars[" + i + "] : " + strPathsOrJars[i]);
+			}
+		}
+		
         // find all jar files or paths that end with strPathOrJar
         while (stPaths.hasMoreTokens())
         {
@@ -209,23 +217,24 @@ public final class ClassFinder
             strPath = fixEndingSlashes(strPath);
             if (strPathsOrJars == null)
             {
+				log.debug("Adding: " + strPath);
                 listPaths.add(strPath);
             }
             else
             {
+                boolean found=false;
                 for (i = 0; i < strPathsOrJars.length; i++)
                 {
-                    if (log.isDebugEnabled())
-                    {
-                        log.debug("strPath(lower) : " + strPath.toLowerCase());
-                        log.debug(
-                            "strPathsOrJars[" + i + "] : " + strPathsOrJars[i]);
-                    }
                     if (strPath.endsWith(strPathsOrJars[i]))
                     {
-                        log.debug("match!!!");
+                    	found=true;
+                        log.debug("Adding "+strPath+" found at "+i);
                         listPaths.add(strPath);
+                        break;// no need to look further
                     }
+                }
+                if (!found){
+                	log.debug("Did not find: "+strPath);
                 }
             }
         }
