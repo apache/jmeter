@@ -71,7 +71,7 @@ public class SampleResult implements Serializable
     private String threadName;
     private String responseMessage="";
     private String responseHeaders=""; // Never return null
-    private String contentType; // e.g. text/html; charset=utf-8
+    private String contentType=""; // e.g. text/html; charset=utf-8
     private String requestHeaders="";
     private long timeStamp = 0;// the time stamp - can be start or end
     private long startTime = 0;
@@ -496,7 +496,7 @@ public class SampleResult implements Serializable
     }
 
     /**
-     * @return the content type - text or bin
+     * @return the content type - e.g. text/html [;charset=utf-8 ]
      */
     public String getContentType()
     {
