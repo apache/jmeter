@@ -10,12 +10,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.util.ComponentUtil;
 import org.apache.jmeter.swing.HtmlPane;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.util.LoggingManager;
-import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.gui.ComponentUtil;
+import org.jorphan.logging.LoggingManager;
 /**
  * @author Administrator
  *
@@ -25,7 +24,7 @@ import org.apache.log.Logger;
 public class Help implements Command
 {
 	transient private static Logger log =
-		Hierarchy.getDefaultHierarchy().getLoggerFor(LoggingManager.GUI);
+		LoggingManager.getLoggerFor(JMeterUtils.GUI);
 	private static Set commands = new HashSet();
 	public final static String HELP = "help";
 	private static String helpPage =

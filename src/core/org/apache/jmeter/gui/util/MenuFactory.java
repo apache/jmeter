@@ -70,10 +70,10 @@ import javax.swing.MenuElement;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.action.ActionRouter;
-import org.apache.jmeter.util.ClassFinder;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.reflect.ClassFinder;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -424,7 +424,9 @@ public class MenuFactory
 	{
 		try
 		{
-			List guiClasses = ClassFinder.findClassesThatExtend(new Class[]
+			List guiClasses = ClassFinder.findClassesThatExtend(
+					JMeterUtils.getSearchPaths(),
+					new Class[]
 					{JMeterGUIComponent.class});
 			timers = new LinkedList();
 			controllers = new LinkedList();

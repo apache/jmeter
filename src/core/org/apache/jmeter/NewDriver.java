@@ -131,23 +131,7 @@ public class NewDriver
 		
 		System.setProperty("java.class.path",System.getProperty("java.class.path")+classpath.toString());
 		loader = new URLClassLoader((URL[])jars.toArray(new URL[0]));
-		try {
-			loader.loadClass("org.apache.jmeter.gui.GuiPackage");
-			loader.loadClass("org.apache.jmeter.gui.JMeterFileFilter");
-			loader.loadClass("org.apache.jmeter.gui.MainFrame");
-			loader.loadClass("org.apache.jmeter.gui.action.ActionRouter");
-			loader.loadClass("org.apache.jmeter.gui.action.CheckDirty");
-			loader.loadClass("org.apache.jmeter.gui.tree.JMeterTreeListener");
-			loader.loadClass("org.apache.jmeter.gui.tree.JMeterTreeModel");
-			loader.loadClass("org.apache.jmeter.gui.util.ComponentUtil");
-			loader.loadClass("org.apache.jmeter.gui.util.MenuFactory");
-			loader.loadClass("org.apache.jmeter.util.JMeterUtils");
-			loader.loadClass("javax.xml.parsers.SAXParserFactory");
-			loader.loadClass("org.apache.xerces.jaxp.SAXParserFactoryImpl");
 		
-		} catch(ClassNotFoundException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public static String getJMeterDir()

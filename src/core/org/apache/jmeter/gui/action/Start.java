@@ -58,11 +58,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
+
 import org.apache.jmeter.engine.JMeterEngineException;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.util.ListedHashTree;
+import org.jorphan.collections.HashTree;
 
 /****************************************
  * Title: Apache JMeter Description: Copyright: Copyright (c) 2000 Company:
@@ -129,7 +130,7 @@ public class Start extends AbstractAction
 	{
 		GuiPackage gui = GuiPackage.getInstance();
 		engine = new StandardJMeterEngine();
-		ListedHashTree testTree = gui.getTreeModel().getTestPlan();
+		HashTree testTree = gui.getTreeModel().getTestPlan();
 		convertSubTree(testTree);
 		testTree.add(testTree.getArray()[0],gui.getMainFrame());
 		engine.configure(testTree);

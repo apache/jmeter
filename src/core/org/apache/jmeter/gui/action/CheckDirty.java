@@ -9,9 +9,9 @@ import java.util.Set;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.util.ListedHashTree;
-import org.apache.jmeter.util.ListedHashTreeVisitor;
+import org.jorphan.collections.HashTree;
+import org.jorphan.collections.HashTreeTraverser;
+import org.jorphan.collections.ListedHashTree;
 
 /**
  * @author mstover
@@ -20,7 +20,7 @@ import org.apache.jmeter.util.ListedHashTreeVisitor;
  * Window>Preferences>Java>Templates.
  */
 public class CheckDirty extends AbstractAction implements 
-		ListedHashTreeVisitor 
+		HashTreeTraverser 
 {
 	private Map previousGuiItems;
 	public static final String CHECK_DIRTY = "check_dirty";
@@ -62,12 +62,12 @@ public class CheckDirty extends AbstractAction implements
 		String action = e.getActionCommand();
 		if(action.equals(SUB_TREE_SAVED) || action.equals(SAVE))
 		{
-			ListedHashTree subTree = GuiPackage.getInstance().getCurrentSubTree();
+			HashTree subTree = GuiPackage.getInstance().getCurrentSubTree();
 			subTree.traverse(this);
 		}
 		else if(action.equals(SAVE_ALL) || action.equals(SAVE_TO_PREVIOUS))
 		{
-			ListedHashTree subTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
+			HashTree subTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
 			subTree.traverse(this);
 		}
 		else if(action.equals(SUB_TREE_LOADED))
@@ -95,7 +95,7 @@ public class CheckDirty extends AbstractAction implements
 		{
 			checkMode = true;
 			dirty = false;
-			ListedHashTree wholeTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
+			HashTree wholeTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
 			wholeTree.traverse(this);
 			GuiPackage.getInstance().setDirty(dirty);
 			checkMode = false;
@@ -106,7 +106,7 @@ public class CheckDirty extends AbstractAction implements
 	 * The tree traverses itself depth-first, calling processNode for each object
 	 * it encounters as it goes.
 	 */
-	public void addNode(Object node,ListedHashTree subTree)
+	public void addNode(Object node,HashTree subTree)
 	{
 		JMeterGUIComponent treeNode = (JMeterGUIComponent)node;
 		if(checkMode)

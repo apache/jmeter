@@ -65,13 +65,13 @@ import javax.swing.JSplitPane;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.jmeter.gui.util.VerticalLayout;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.gui.layout.VerticalLayout;
 /****************************************
  * This class implements a statistical analyser that plots the accumulated time
  * taken to load each set of pages. The number of plots is equivalent to the

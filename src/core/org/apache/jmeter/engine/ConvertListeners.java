@@ -12,10 +12,10 @@ import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.ThreadGroup;
-import org.apache.jmeter.util.ListedHashTree;
-import org.apache.jmeter.util.ListedHashTreeVisitor;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.collections.HashTree;
+import org.jorphan.collections.HashTreeTraverser;
 
 /**
  * @author mstover
@@ -23,14 +23,14 @@ import org.apache.log.Logger;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class ConvertListeners implements ListedHashTreeVisitor {
+public class ConvertListeners implements HashTreeTraverser {
 
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.engine");
 	/**
 	 * @see ListedHashTreeVisitor#addNode(Object, ListedHashTree)
 	 */
-	public void addNode(Object node, ListedHashTree subTree) {
+	public void addNode(Object node, HashTree subTree) {
 		if(node instanceof ThreadGroup)
 			{
 				log.info("num threads = "+((ThreadGroup)node).getNumThreads());

@@ -61,7 +61,6 @@ import org.apache.jmeter.config.ResponseBasedModifier;
 import org.apache.jmeter.gui.JMeterComponentModel;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.samplers.*;
-import org.apache.jmeter.util.ClassFinder;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.testelement.TestElement;
 

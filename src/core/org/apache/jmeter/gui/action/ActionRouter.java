@@ -56,7 +56,6 @@
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -65,10 +64,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.jmeter.util.ClassFinder;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.reflect.ClassFinder;
 
 /**
  *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -172,6 +171,7 @@ public class ActionRouter implements ActionListener
 		try
 		{
 			listClasses = ClassFinder.findClassesThatExtend(
+					JMeterUtils.getSearchPaths(),
 					new Class[]{Class.forName("org.apache.jmeter.gui.action.Command")});
 			commands = new HashMap(listClasses.size());
 			if (listClasses.size() == 0)

@@ -61,9 +61,10 @@ import java.util.Map;
 
 import org.apache.jmeter.save.old.xml.NameSpaceHandler;
 import org.apache.jmeter.save.old.xml.TagHandler;
-import org.apache.jmeter.util.ClassFinder;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.reflect.ClassFinder;
 import org.xml.sax.Attributes;
 
 /**
@@ -83,6 +84,7 @@ public class JMeterNameSpaceHandler implements NameSpaceHandler {
 		try {
 			List classes =
 				ClassFinder.findClassesThatExtend(
+						JMeterUtils.getSearchPaths(),
 					new Class[] { org.apache.jmeter.save.old.xml.TagHandler.class });
 			Iterator iter = classes.iterator();
 			while (iter.hasNext()) {

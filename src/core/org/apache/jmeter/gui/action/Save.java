@@ -68,9 +68,10 @@ import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.ListedHashTree;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.collections.HashTree;
+import org.jorphan.collections.ListedHashTree;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -128,7 +129,7 @@ public class Save implements Command
 	 ***************************************/
 	public void doAction(ActionEvent e)
 	{
-		ListedHashTree subTree = null;
+		HashTree subTree = null;
 		if(e.getActionCommand().equals(SAVE))
 		{
 			subTree = GuiPackage.getInstance().getCurrentSubTree();
@@ -182,13 +183,13 @@ public class Save implements Command
 		}
 	}
 
-	private void convertSubTree(ListedHashTree tree)
+	private void convertSubTree(HashTree tree)
 	{
 		Iterator iter = new LinkedList(tree.list()).iterator();
 		while (iter.hasNext())
 		{
 			JMeterGUIComponent item = (JMeterGUIComponent)iter.next();
-			convertSubTree(tree.get(item));
+			convertSubTree(tree.getTree(item));
 			TestElement testElement = item.createTestElement();
 			tree.replace(item,testElement);
 		}
@@ -209,16 +210,16 @@ public class Save implements Command
 
 		public void testTreeConversion() throws Exception
 		{
-			ListedHashTree tree = new ListedHashTree();
+			HashTree tree = new ListedHashTree();
 			JMeterGUIComponent root = new org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui();
 			tree.add(root,root);
-			tree.get(root).add(root,root);
+			tree.getTree(root).add(root,root);
 			save.convertSubTree(tree);
 			assertEquals(tree.getArray()[0].getClass().getName(),root.createTestElement().getClass().getName());
-			tree = tree.get(tree.getArray()[0]);
+			tree = tree.getTree(tree.getArray()[0]);
 			assertEquals(tree.getArray()[0].getClass().getName(),
 					root.createTestElement().getClass().getName());
-			assertEquals(tree.get(tree.getArray()[0]).getArray()[0].getClass().getName(),
+			assertEquals(tree.getTree(tree.getArray()[0]).getArray()[0].getClass().getName(),
 					root.createTestElement().getClass().getName());
 		}
 	}

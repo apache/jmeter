@@ -67,11 +67,11 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.assertions.AssertionResult;
-import org.apache.jmeter.gui.util.VerticalLayout;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:

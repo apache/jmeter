@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
+
 import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
@@ -18,9 +19,9 @@ import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.LoggingManager;
-import org.apache.log.Hierarchy;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Logger;
+import org.jorphan.logging.LoggingManager;
 //
 // Class:     HttpRequestHdr
 // Abstract:  The headers of the client HTTP request.
@@ -35,7 +36,7 @@ import org.apache.log.Logger;
 public class HttpRequestHdr
 {
 	Logger log =
-		Hierarchy.getDefaultHierarchy().getLoggerFor(LoggingManager.HTTP);
+		LoggingManager.getLoggerFor(JMeterUtils.HTTP);
 	/****************************************
 	 * Http Request method. Such as get or post.
 	 ***************************************/

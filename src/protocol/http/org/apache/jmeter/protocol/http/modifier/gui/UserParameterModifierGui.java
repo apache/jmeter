@@ -53,17 +53,19 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.modifier.gui;
-import javax.swing.*;
-import java.awt.event.*;
-import javax.swing.border.*;
-import javax.swing.table.*;
-import java.awt.*;
-import javax.swing.text.*;
-import org.apache.jmeter.gui.util.*;
+import java.awt.Font;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+
 import org.apache.jmeter.config.gui.AbstractModifierGui;
 import org.apache.jmeter.protocol.http.modifier.UserParameterModifier;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
+import org.jorphan.gui.layout.VerticalLayout;
 /************************************************************
  *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
  *

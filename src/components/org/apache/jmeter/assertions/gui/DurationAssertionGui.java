@@ -68,11 +68,11 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.assertions.DurationAssertion;
-import org.apache.jmeter.gui.util.VerticalLayout;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.gui.layout.VerticalLayout;
 
 
 /****************************************

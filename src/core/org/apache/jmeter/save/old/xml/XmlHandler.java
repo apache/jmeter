@@ -54,13 +54,15 @@
  */
 package org.apache.jmeter.save.old.xml;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.jmeter.util.ListedHashTree;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.collections.HashTree;
+import org.jorphan.collections.ListedHashTree;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -277,7 +279,7 @@ public class XmlHandler extends DefaultHandler
 				break;
 			}
 		}
-		ListedHashTree subTree = objectHierarchy.get(stack);
+		HashTree subTree = objectHierarchy.getTree(stack);
 		if (subTree == null)
 		{
 			return new LinkedList();
@@ -324,14 +326,15 @@ public class XmlHandler extends DefaultHandler
 		}
 	}
 
-	private void replaceWithModels(ListedHashTree tree)
+	private void replaceWithModels(HashTree tree)
 	{
+		log.debug("XML elements: "+tree.list());
 		Iterator iter = new LinkedList(tree.list()).iterator();
 		while (iter.hasNext())
 		{
 			TagHandler item = (TagHandler)iter.next();
 			tree.replace(item,item.getModel());
-			replaceWithModels(tree.get(item.getModel()));
+			replaceWithModels(tree.getTree(item.getModel()));
 		}
 	}
 
@@ -359,15 +362,15 @@ public class XmlHandler extends DefaultHandler
 		}
 	}
 
-	private void replaceSubItems(ListedHashTree subTree, Object item)
+	private void replaceSubItems(HashTree subTree, Object item)
 	{
-		ListedHashTree subSubTree = subTree.get(item);
-		List subItems = subSubTree.list();
+		HashTree subSubTree = subTree.getTree(item);
+		Collection subItems = subSubTree.list();
 		Iterator iter2 = subItems.iterator();
 		while (iter2.hasNext())
 		{
 			Object subItem = iter2.next();
-			subTree.set(subItem, subSubTree.get(subItem));
+			subTree.set(subItem, subSubTree.getTree(subItem));
 		}
 	}
 }

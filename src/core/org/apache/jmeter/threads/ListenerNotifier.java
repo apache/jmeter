@@ -2,11 +2,12 @@ package org.apache.jmeter.threads;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
-import org.apache.jmeter.util.LoggingManager;
-import org.apache.log.Hierarchy;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Logger;
+import org.jorphan.logging.LoggingManager;
 /**
  * @author Administrator
  *
@@ -16,7 +17,7 @@ import org.apache.log.Logger;
 public class ListenerNotifier extends LinkedList implements Runnable
 {
 	private static Logger log =
-		Hierarchy.getDefaultHierarchy().getLoggerFor(LoggingManager.ENGINE);
+		LoggingManager.getLoggerFor(JMeterUtils.ENGINE);
 	/**
 	 * @see java.lang.Runnable#run()
 	 */

@@ -1,16 +1,26 @@
 package org.apache.jmeter.protocol.http.modifier.gui;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+
 import org.apache.jmeter.config.gui.AbstractModifierGui;
-import org.apache.jmeter.gui.NamePanel;
-import org.apache.jmeter.gui.util.VerticalLayout;
 import org.apache.jmeter.protocol.http.modifier.ParamMask;
 import org.apache.jmeter.protocol.http.modifier.ParamModifier;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * A swing panel to allow UI with the ParamModifier class.

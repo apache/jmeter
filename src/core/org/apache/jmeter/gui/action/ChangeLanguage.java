@@ -6,9 +6,8 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.util.LoggingManager;
-import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.logging.LoggingManager;
 /**
  * @author Administrator
  *
@@ -19,7 +18,7 @@ public class ChangeLanguage implements Command
 {
 	private static final Set commands = new HashSet();
 	public final static String CHANGE_LANGUAGE = "change_language";
-	private Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(LoggingManager.GUI);
+	private Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
 	
 	static
 	{
