@@ -277,6 +277,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
      */
     public void modifyTestElement(TestElement cm)
     {
+        cm.clear();
         configureTestElement(cm);
         if(cm instanceof CookieManager)
         {
@@ -299,6 +300,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
 	
 	private void populateTable(CookieManager manager)
 	{
+        tableModel.clearData();
 		Iterator iter = manager.getCookies().iterator();
 		while(iter.hasNext())
 		{
