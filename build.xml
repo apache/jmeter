@@ -301,6 +301,9 @@
   <property name="excalibur-compatibility.jar" value="${lib.dir}/excalibur-compatibility-1.1.jar"/>
   <property name="junit.jar" value="${lib.dir}/junit.jar"/>
   <property name="logkit.jar" value="${lib.dir}/logkit-1.2.jar"/>
+  <property name="excalibur-datasource.jar" value="${lib.dir}/excalibur-datasource-1.1.1.jar"/>
+  <property name="excalibur-pool.jar" value="${lib.dir}/excalibur-pool-1.2.jar"/>
+  <property name="excalibur-instrument.jar" value="${lib.dir}/excalibur-instrument-1.0.jar"/>
   
   <!-- The following 3 jars are probably optional for JDK1.4 -->
   <property name="xalan.jar" value="${lib.dir}/xalan.jar"/>
@@ -337,6 +340,9 @@
     <include name="${js.jar}"/>
     <include name="${soap.jar}"/>
     <include name="${tidy.jar}"/>
+    <include name="${excalibur-datasource.jar}"/>
+    <include name="${excalibur-pool.jar}"/>
+    <include name="${excalibur-instrument.jar}"/>
   </patternset>
 
   <!--
