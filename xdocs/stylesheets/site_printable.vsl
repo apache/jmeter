@@ -22,7 +22,7 @@
 	 #set ($space = $space.charAt(0))
 	 #set ($udsc = "_")
 	 #set ($udsc = $udsc.charAt(0))	 
-	 #set ($imgdir = "$relativePath/../docs/images")
+	 #set ($imgdir = "$relativePath/images")
 	 #set ($sshotdir = "$imgdir/screenshots")
 
 <!-- start the processing -->
@@ -229,7 +229,7 @@
 #end
 
 #macro (getAtts $tag)
-	#foreach ($att in $tag.getAttributes()) $att.getName()="$att.getValue()"#end
+#foreach ($att in $tag.getAttributes()) $att.getName()="$att.getValue()"#end
 #end
 
 #macro (outputEndTag $tag)
