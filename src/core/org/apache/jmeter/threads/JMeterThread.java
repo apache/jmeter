@@ -39,6 +39,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -231,6 +232,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
             controller.initialize();
             controller.addIterationListener(new IterationListener());
             threadContext.setSamplingStarted(true);
+            threadStarted();
             while (running)
             {
                 Sampler sam;
@@ -285,7 +287,54 @@ public class JMeterThread implements Runnable, java.io.Serializable
             threadContext.clear();
             log.info("Thread " + threadName + " is done");
             monitor.threadFinished(this);
+            threadFinished();
         }
+    }
+
+	/**
+	 * 
+	 */
+	private void threadStarted() {
+		Traverser startup = new Traverser(true);
+        testTree.traverse(startup);
+	}
+
+    /**
+	 * 
+	 */
+	private void threadFinished() {
+		Traverser shut = new Traverser(false);
+        testTree.traverse(shut);
+	}
+
+    private class Traverser implements HashTreeTraverser
+    {
+    private boolean isStart = false;
+    private Traverser(boolean start)
+    {
+    isStart = start;
+    }
+		public void addNode(Object node, HashTree subTree) {
+			if (node instanceof TestElement) {
+				TestElement te = (TestElement) node;
+				if (isStart)
+				{
+					te.threadStarted();
+				}
+				else
+				{
+					te.threadFinished();
+				}
+			}
+		}
+
+		public void subtractNode() 
+		{
+		}
+
+		public void processPath()
+		{
+		}
     }
 
     public String getThreadName()
