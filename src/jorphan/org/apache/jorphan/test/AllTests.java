@@ -275,6 +275,23 @@ public final class AllTests
         }
     }
 
+    /*
+     * Externally callable suite() method for use by JUnit
+     * Allows tests to be run directly under JUnit, rather than using the
+     * startup code in the rest of the module. No parameters can be passed in,
+     * so it is less flexible.
+     */
+    public static TestSuite suite()
+    {
+    	String args[] = { "../lib/ext",
+    		              "./jmetertest.properties",
+                          "org.apache.jmeter.util.JMeterUtils"
+                        };
+
+		initializeManager(args);
+		return suite(args[0]);
+    }
+    
     /**
      * A unit test suite for JUnit.
      *
