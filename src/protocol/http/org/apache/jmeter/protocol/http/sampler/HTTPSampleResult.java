@@ -82,7 +82,7 @@ public class HTTPSampleResult extends SampleResult
      */
     public boolean isRedirect()
     {
-        final String[] REDIRECT_CODES= { "301", "302", "303", "304" };
+        final String[] REDIRECT_CODES= { "301", "302", "303" }; // NOT 304!
         String code= getResponseCode();
         for (int i= 0; i < REDIRECT_CODES.length; i++)
         {
