@@ -835,8 +835,9 @@ which clearly won't match. Thus the For 2 Sampler will not be run.
 </component>
 <component name="While Controller" index="15.2.13" screenshot="">
 	<description>
-<note>ALPHA CODE: the current release does not evaluate the condition on initial entry</note>
-		<p>The While Controller runs its children until the condion is false
+<note>ALPHA CODE</note>
+		<p>The While Controller runs its children until the condition is false, i.e. not "true"
+If the condition is equal to "false" intially, the Controller does not run at all.
 		</p>
 
 <p>Possible condition values:</p>
