@@ -80,6 +80,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -737,6 +738,18 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
 		{
 			mainPanel.add(currentPanel, cp);
 		}
+		
+		// Add a 0-sized invisible component that will take all the vertical
+		// space that nobody wants:
+		GridBagConstraints cs= new GridBagConstraints(); // for strut
+		cs.gridx= 1;
+		cs.gridy= y++;
+		cs.gridwidth= 2;
+		cs.weighty= 0.0001;
+
+		mainPanel.add(Box.createHorizontalStrut(0), cs);
+		
+		// Done: add the panel to the GUI:
         add(mainPanel, BorderLayout.CENTER);
     }
 
