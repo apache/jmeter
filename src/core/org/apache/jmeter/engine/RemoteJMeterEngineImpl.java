@@ -19,8 +19,9 @@
 package org.apache.jmeter.engine;
 
 import java.net.InetAddress;
-import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
@@ -37,16 +38,29 @@ public class RemoteJMeterEngineImpl
     transient private static Logger log = LoggingManager.getLoggerForClass();
     JMeterEngine backingEngine;
 
+    public static final int DEFAULT_RMI_PORT = 1099;
+    
     public RemoteJMeterEngineImpl() throws RemoteException
     {
-    	log.info("Starting backing engine");
+    	init(DEFAULT_RMI_PORT);
+    }
+    public RemoteJMeterEngineImpl(int port) throws RemoteException
+    {
+       init(port == 0 ? DEFAULT_RMI_PORT : port);
+    }
+
+    private void init(int port) throws RemoteException
+    {
+    	log.info("Starting backing engine on "+port);
 		log.debug("This = "+ this);
         try
         {
+        	Registry reg = LocateRegistry.getRegistry(port);
             backingEngine =
                 new StandardJMeterEngine(
                     InetAddress.getLocalHost().getHostName());
-            Naming.rebind("JMeterEngine", this);
+            reg.rebind("JMeterEngine", this);
+            log.info("Bound to registry on port " + port);
         }
         catch(Exception ex){
 			log.error(
