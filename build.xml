@@ -13,7 +13,7 @@
   </description>
 
   <!-- JMeter version -->
-  <property name="version" value="1.8.1"/>
+  <property name="version" value="1.9-RC1"/>
 
   <!-- Where the Sources live -->
   <property name="src.dir" value="src"/>
