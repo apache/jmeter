@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,14 +57,16 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -247,7 +249,7 @@ public class GraphVisualizer extends AbstractVisualizer
     }
 
     /****************************************
-     * Description of the Method
+     * Initialize the GUI
      ***************************************/
     private void init()
     {
@@ -273,151 +275,291 @@ public class GraphVisualizer extends AbstractVisualizer
         mainPanel.add(getNamePanel());
         mainPanel.add(this.getFilePanel());
 
-        // Set up panel where user can choose which graphs to display
+
+        // Set up the graph with header, footer, Y axis and graph display
+        JPanel graphPanel = new JPanel(new BorderLayout());
+        graphPanel.add(createYAxis(), BorderLayout.WEST);
+        graphPanel.add(createChoosePanel(), BorderLayout.NORTH);
+        graphPanel.add(createGraphPanel(), BorderLayout.CENTER);
+        graphPanel.add(createGraphInfoPanel(), BorderLayout.SOUTH);
+
+        // Add the main panel and the graph
+        this.add(mainPanel, BorderLayout.NORTH);
+        this.add(graphPanel, BorderLayout.CENTER);
+    }
+
+    // Methods used in creating the GUI
+
+    /**
+     * Creates the panel containing the graph's Y axis labels.
+     * 
+     * @return the Y axis panel
+     */
+    private JPanel createYAxis() {
+        JPanel graphYAxisPanel = new JPanel();
+        
+        graphYAxisPanel.setLayout(new BorderLayout());
+        
+        maxYField = createYAxisField(5);
+        minYField = createYAxisField(3);
+
+        graphYAxisPanel.add(createYAxisPanel("graph_results_ms", maxYField),
+                        BorderLayout.NORTH);
+        graphYAxisPanel.add(createYAxisPanel("graph_results_ms", minYField),
+                        BorderLayout.SOUTH);
+
+        return graphYAxisPanel;
+    }
+
+    /**
+     * Creates a text field to be used for the value of a Y axis
+     * label.  These fields hold the minimum and maximum values
+     * for the graph.  The units are kept in a separate label
+     * outside of this field.
+     * 
+     * @param length the number of characters which the field
+     *                will use to calculate its preferred width.
+     *                This should be set to the maximum number
+     *                of digits that are expected to be necessary
+     *                to hold the label value.
+     * 
+     * @see #createYAxisPanel(String, JTextField)
+     * 
+     * @return a text field configured to be used in the Y axis
+     */
+    private JTextField createYAxisField(int length) {
+        JTextField field = new JTextField(length);
+        field.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+        field.setEditable(false);
+        field.setForeground(Color.black);
+        field.setBackground(getBackground());
+        field.setHorizontalAlignment(JTextField.RIGHT);
+        return field;
+    }
+
+    /**
+     * Creates a panel for an entire Y axis label. This includes
+     * the dynamic value as well as the unit label.
+     * 
+     * @param labelResourceName the name of the label resource.
+     *          This is used to look up the label text using
+     *          {@link JMeterUtils#getResString(String)}.
+     * 
+     * @return a panel containing both the dynamic and static parts
+     *          of a Y axis label
+     */
+    private JPanel createYAxisPanel(String labelResourceName, JTextField field) {
+        JPanel panel = new JPanel(new FlowLayout());
+        JLabel label = new JLabel(JMeterUtils.getResString(labelResourceName));
+        
+        panel.add(field);
+        panel.add(label);
+        return panel;
+    }
+
+
+    /**
+     * Creates a panel which allows the user to choose which graphs
+     * to display. This panel consists of a check box for each type
+     * of graph (current sample, average, deviation, and throughput).
+     * 
+     * @return a panel allowing the user to choose which graphs
+     *          to display
+     */
+    private JPanel createChoosePanel() {
         JPanel chooseGraphsPanel = new JPanel();
-
+        
         chooseGraphsPanel.setLayout(new FlowLayout());
-        JLabel selectGraphsLabel = new JLabel(JMeterUtils.getResString("graph_choose_graphs"));
-
-        data = new JCheckBox(JMeterUtils.getResString("graph_results_data"));
-        data.setSelected(true);
-        data.addItemListener(this);
-        data.setForeground(Color.black);
-        average = new JCheckBox(JMeterUtils.getResString("graph_results_average"));
-        average.setSelected(true);
-        average.addItemListener(this);
-        average.setForeground(Color.blue);
-        deviation = new JCheckBox(JMeterUtils.getResString("graph_results_deviation"));
-        deviation.setSelected(true);
-        deviation.addItemListener(this);
-        deviation.setForeground(Color.red);
-        throughput = new JCheckBox(JMeterUtils.getResString("graph_results_throughput"));
-        throughput.setSelected(true);
-        throughput.addItemListener(this);
-        throughput.setForeground(JMeterColor.dark_green);
+        JLabel selectGraphsLabel = new JLabel(
+                        JMeterUtils.getResString("graph_choose_graphs"));
+        data = createChooseCheckBox("graph_results_data", Color.black);
+        average = createChooseCheckBox("graph_results_average", Color.blue);
+        deviation = createChooseCheckBox("graph_results_deviation", Color.red);
+        throughput = createChooseCheckBox("graph_results_throughput",
+                        JMeterColor.dark_green);
 
         chooseGraphsPanel.add(selectGraphsLabel);
         chooseGraphsPanel.add(data);
         chooseGraphsPanel.add(average);
         chooseGraphsPanel.add(deviation);
         chooseGraphsPanel.add(throughput);
+        return chooseGraphsPanel;
+    }
 
-        // Set up the graph itself
-        JScrollPane graphScrollPanel = new JScrollPane(graph, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    /**
+     * Creates a check box configured to be used to in the choose panel
+     * allowing the user to select whether or not a particular kind of
+     * graph data will be displayed.
+     * 
+     * @param labelResourceName the name of the label resource.
+     *                This is used to look up the label text using
+     *                {@link JMeterUtils#getResString(String)}.
+     * @param color  the color used for the checkbox text. By
+     *                convention this is the same color that is used
+     *                to draw the graph and for the corresponding
+     *                info field.
+     *
+     * @return       a checkbox allowing the user to select whether or
+     *                not a kind of graph data will be displayed
+     */
+    private JCheckBox createChooseCheckBox(String labelResourceName, Color color) {
+        JCheckBox checkBox = new JCheckBox(
+                        JMeterUtils.getResString(labelResourceName));
+        checkBox.setSelected(true);
+        checkBox.addItemListener(this);
+        checkBox.setForeground(color);
+        return checkBox;
+    }
 
-        graphScrollPanel.setViewportBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-        // graphScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        // graphScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+
+    /**
+     * Creates a scroll pane containing the actual graph of
+     * the results.
+     * 
+     * @return a scroll pane containing the graph
+     */
+    private JScrollPane createGraphPanel() {
+        JScrollPane graphScrollPanel =
+            new JScrollPane(graph, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+                    JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        graphScrollPanel.setViewportBorder(
+                BorderFactory.createEmptyBorder(2, 2, 2, 2));
+
+        return graphScrollPanel;
+    }
 
 
-        // Set up Y axis panel
-        JPanel graphYAxisPanel = new JPanel();
+    /**
+     * Creates a panel which numerically displays the current graph
+     * values.
+     * 
+     * @return a panel showing the current graph values
+     */
+    private Box createGraphInfoPanel() {
+        Box graphInfoPanel = Box.createHorizontalBox();
 
-        graphYAxisPanel.setLayout(new BorderLayout());
-        JPanel maxYPanel = new JPanel(new FlowLayout());
-        JLabel maxYLabel = new JLabel(JMeterUtils.getResString("graph_results_ms"));
+        noSamplesField = createInfoField(Color.black, 6);
+        dataField = createInfoField(Color.black, 5);
+        averageField = createInfoField(Color.blue, 5);
+        deviationField = createInfoField(Color.red, 5);
+        throughputField = createInfoField(JMeterColor.dark_green, 15);
 
-        maxYField = new JTextField(5);
-        maxYField.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        maxYField.setEditable(false);
-        maxYField.setForeground(Color.black);
-        maxYField.setBackground(getBackground());
-        maxYField.setHorizontalAlignment(JTextField.RIGHT);
-        maxYPanel.add(maxYField);
-        maxYPanel.add(maxYLabel);
-        JPanel minYPanel = new JPanel(new FlowLayout());
-        JLabel minYLabel = new JLabel(JMeterUtils.getResString("graph_results_ms"));
+        graphInfoPanel.add(createInfoColumn(
+                    createInfoLabel("graph_results_no_samples", noSamplesField),
+                    noSamplesField,
+                    createInfoLabel("graph_results_deviation", deviationField),
+                    deviationField));
+        graphInfoPanel.add(Box.createHorizontalGlue());
 
-        minYField = new JTextField(3);
-        minYField.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        minYField.setEditable(false);
-        minYField.setForeground(Color.black);
-        minYField.setBackground(getBackground());
-        minYField.setHorizontalAlignment(JTextField.RIGHT);
-        minYPanel.add(minYField);
-        minYPanel.add(minYLabel);
-        graphYAxisPanel.add(maxYPanel, BorderLayout.NORTH);
-        graphYAxisPanel.add(minYPanel, BorderLayout.SOUTH);
+        graphInfoPanel.add(createInfoColumn(
+                    createInfoLabel("graph_results_latest_sample", dataField),
+                    dataField,
+                    createInfoLabel("graph_results_throughput", throughputField),
+                    throughputField));
+        graphInfoPanel.add(Box.createHorizontalGlue());
 
-        // Set up footer of graph which displays numerics of the graphs
-        JPanel dataPanel = new JPanel();
-        JLabel dataLabel = new JLabel(JMeterUtils.getResString("graph_results_latest_sample"));
+        graphInfoPanel.add(createInfoColumn(
+                    createInfoLabel("graph_results_average", averageField),
+                    averageField,
+                    null,
+                    null));
+        graphInfoPanel.add(Box.createHorizontalGlue());
 
-        dataLabel.setForeground(Color.black);
-        dataField = new JTextField(5);
-        dataField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        dataField.setEditable(false);
-        dataField.setForeground(Color.black);
-        dataField.setBackground(getBackground());
-        dataPanel.add(dataLabel);
-        dataPanel.add(dataField);
-        JPanel averagePanel = new JPanel();
-        JLabel averageLabel = new JLabel(JMeterUtils.getResString("graph_results_average"));
+        return graphInfoPanel;
+    }
 
-        averageLabel.setForeground(Color.blue);
-        averageField = new JTextField(5);
-        averageField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        averageField.setEditable(false);
-        averageField.setForeground(Color.blue);
-        averageField.setBackground(getBackground());
-        averagePanel.add(averageLabel);
-        averagePanel.add(averageField);
-        JPanel deviationPanel = new JPanel();
-        JLabel deviationLabel = new JLabel(JMeterUtils.getResString("graph_results_deviation"));
+    /**
+     * Creates one of the fields used to display the graph's current
+     * values.
+     * 
+     * @param color   the color used to draw the value. By convention
+     *                 this is the same color that is used to draw the
+     *                 graph for this value and in the choose panel.
+     * @param length  the number of digits which the field should be
+     *                 able to display
+     * 
+     * @return        a text field configured to display one of the
+     *                 current graph values
+     */
+    private JTextField createInfoField(Color color, int length) {
+        JTextField field = new JTextField(length);
+        field.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        field.setEditable(false);
+        field.setForeground(color);
+        field.setBackground(getBackground());
 
-        deviationLabel.setForeground(Color.red);
-        deviationField = new JTextField(5);
-        deviationField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        deviationField.setEditable(false);
-        deviationField.setForeground(Color.red);
-        deviationField.setBackground(getBackground());
-        deviationPanel.add(deviationLabel);
-        deviationPanel.add(deviationField);
-        JPanel throughputPanel = new JPanel();
-        JLabel throughputLabel = new JLabel(JMeterUtils.getResString("graph_results_throughput"));
+        // The text field should expand horizontally, but have
+        // a fixed height
+        field.setMaximumSize(new Dimension(
+                    field.getMaximumSize().width,
+                    field.getPreferredSize().height));
+        return field;
+    }
 
-        throughputLabel.setForeground(JMeterColor.dark_green);
-        throughputField = new JTextField(15);
-        throughputField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        throughputField.setEditable(false);
-        throughputField.setForeground(JMeterColor.dark_green);
-        throughputField.setBackground(getBackground());
-        throughputPanel.add(throughputLabel);
-        throughputPanel.add(throughputField);
-        JPanel noSamplesPanel = new JPanel();
-        JLabel noSamplesLabel = new JLabel(JMeterUtils.getResString("graph_results_no_samples"));
 
-        noSamplesField = new JTextField(6);
-        noSamplesField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        noSamplesField.setEditable(false);
-        noSamplesField.setForeground(Color.black);
-        noSamplesField.setBackground(getBackground());
-        noSamplesPanel.add(noSamplesLabel);
-        noSamplesPanel.add(noSamplesField);
+    /**
+     * Creates a label for one of the fields used to display the graph's
+     * current values. Neither the label created by this method or the
+     * <code>field</code> passed as a parameter is added to the GUI here.
+     * 
+     * @param labelResourceName  the name of the label resource.
+     *                This is used to look up the label text using
+     *                {@link JMeterUtils#getResString(String)}.
+     * @param field  the field this label is being created for.
+     */
+    private JLabel createInfoLabel(String labelResourceName, JTextField field) {
+        JLabel label = new JLabel(
+                JMeterUtils.getResString(labelResourceName));
+        label.setForeground(field.getForeground());
+        label.setLabelFor(field);
+        return label;
+    }
 
-        JPanel graphInfoPanel = new JPanel();
+    /**
+     * Creates a panel containing two pairs of labels and fields for
+     * displaying the current graph values. This method exists to help with
+     * laying out the fields in columns. If one or more components are null
+     * then these components will be represented by blank space.
+     * 
+     * @param label1  the label for the first field. This label will
+     *                 be placed in the upper left section of the panel.
+     *                 If this parameter is null, this section of the
+     *                 panel will be left blank.
+     * @param field1  the field corresponding to the first label. This
+     *                 field will be placed in the upper right section
+     *                 of the panel. If this parameter is null, this
+     *                 section of the panel will be left blank.
+     * @param label2  the label for the second field. This label will
+     *                 be placed in the lower left section of the panel.
+     *                 If this parameter is null, this section of the
+     *                 panel will be left blank.
+     * @param field2  the field corresponding to the second label. This
+     *                 field will be placed in the lower right section
+     *                 of the panel. If this parameter is null, this
+     *                 section of the panel will be left blank.
+     */
+    private Box createInfoColumn(JLabel label1, JTextField field1,
+            JLabel label2, JTextField field2) {
 
-        graphInfoPanel.setLayout(new GridLayout(2, 3));
-        graphInfoPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        // This column actually consists of a row with two sub-columns
+        // The first column contains the labels, and the second
+        // column contains the fields.
+        Box row = Box.createHorizontalBox();		
+        Box col = Box.createVerticalBox();
+        col.add(label1 != null ? label1 : Box.createVerticalGlue());
+        col.add(label2 != null ? label2 : Box.createVerticalGlue());
+        row.add(col);
 
-        graphInfoPanel.add(noSamplesPanel);
-        graphInfoPanel.add(dataPanel);
-        graphInfoPanel.add(averagePanel);
-        graphInfoPanel.add(deviationPanel);
-        graphInfoPanel.add(throughputPanel);
+        row.add(Box.createHorizontalStrut(5));
 
-        // Set up the graph with header, footer, Y axis and graph display
-        JPanel graphPanel = new JPanel();
+        col = Box.createVerticalBox();
+        col.add(field1 != null ? field1 : Box.createVerticalGlue());
+        col.add(field2 != null ? field2 : Box.createVerticalGlue());
+        row.add(col);
 
-        graphPanel.setLayout(new BorderLayout());
-        graphPanel.add(graphYAxisPanel, BorderLayout.WEST);
-        graphPanel.add(chooseGraphsPanel, BorderLayout.NORTH);
-        graphPanel.add(graphScrollPanel, BorderLayout.CENTER);
-        graphPanel.add(graphInfoPanel, BorderLayout.SOUTH);
+        row.add(Box.createHorizontalStrut(5));
 
-        // Add the main panel and the graph
-        this.add(mainPanel, BorderLayout.NORTH);
-        this.add(graphPanel, BorderLayout.CENTER);
+        return row;
     }
 }
