@@ -11,7 +11,7 @@
 if "%name%"=="" set name=Apache_JMeter
 
 :: Set package version
-if "%version%"=="" set version=1.0
+if "%version%"=="" set version=1.0.1
 
 :: Set directory name
 if "%dir%"=="" set dir="temp"
