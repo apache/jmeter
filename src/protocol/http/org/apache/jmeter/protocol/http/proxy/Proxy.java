@@ -262,7 +262,6 @@ public class Proxy extends Thread {
 		OutputStream out)
 		throws IOException {
 		try {
-			
 			out.write(inBytes);
 			out.flush();
 			log.info("Done writing to client");

@@ -142,7 +142,7 @@ public class HttpRequestHdr
 		while (keys.hasNext())
 		{
 			String key = (String) keys.next();
-			if (!key.equals("proxy-connection") && !key.equals("content-length") /*&& !key.equals("accept-encoding")*/)
+			if (!key.equals("proxy-connection") && !key.equals("content-length") && !key.equals("accept-encoding"))
 			{
 				manager.add((Header) headers.get(key));
 			}
@@ -193,7 +193,7 @@ public class HttpRequestHdr
 		sampler.setMethod(method);
 		log.debug("Proxy: method server: "+sampler.getMethod());
 		sampler.setPath(serverUrl());
-		log.debug("Proxy: setting path: "+sampler.getPath());
+		log.debug("Proxy: setting path: "+sampler.getEncodedPath());
 		sampler.setName(sampler.getPath());
 		sampler.setPort(serverPort());
 		log.debug("Proxy: setting port: "+sampler.getPort());

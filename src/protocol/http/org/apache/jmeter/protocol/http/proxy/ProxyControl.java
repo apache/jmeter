@@ -78,6 +78,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
@@ -199,11 +200,11 @@ public class ProxyControl extends ConfigTestElement implements Serializable
      ***********************************************************/
     public void addExcludedPattern(String pattern)
     {
-        getExcludePatterns().add(pattern);
+        getExcludePatterns().addItem(pattern);
     }
-    public Collection getExcludePatterns()
+    public CollectionProperty getExcludePatterns()
     {
-        return (Collection) getProperty(EXCLUDE_LIST).getObjectValue();
+        return (CollectionProperty) getProperty(EXCLUDE_LIST);
     }
     /************************************************************
      *  !ToDo
@@ -212,11 +213,11 @@ public class ProxyControl extends ConfigTestElement implements Serializable
      ***********************************************************/
     public void addIncludedPattern(String pattern)
     {
-        getIncludePatterns().add(pattern);
+        getIncludePatterns().addItem(pattern);
     }
-    public Collection getIncludePatterns()
+    public CollectionProperty getIncludePatterns()
     {
-        return (Collection) getProperty(INCLUDE_LIST).getObjectValue();
+        return (CollectionProperty) getProperty(INCLUDE_LIST);
     }
     /************************************************************
      *  !ToDo (Method description)
@@ -385,10 +386,10 @@ public class ProxyControl extends ConfigTestElement implements Serializable
     private boolean checkIncludes(HTTPSampler sampler)
     {
         boolean ok = false;
-        Iterator iter = getIncludePatterns().iterator();
+        PropertyIterator iter = getIncludePatterns().iterator();
         while (iter.hasNext())
         {
-            String item = ((StringProperty) iter.next()).getStringValue();
+            String item = iter.next().getStringValue();
             Pattern pattern = patternCache.getPattern(item, Perl5Compiler.READ_ONLY_MASK & Perl5Compiler.SINGLELINE_MASK);
             StringBuffer url = new StringBuffer(sampler.getDomain());
             url.append(":");
@@ -410,10 +411,10 @@ public class ProxyControl extends ConfigTestElement implements Serializable
     private boolean checkExcludes(HTTPSampler sampler)
     {
         boolean ok = true;
-        Iterator iter = getExcludePatterns().iterator();
+        PropertyIterator iter = getExcludePatterns().iterator();
         while (iter.hasNext())
         {
-            String item = ((StringProperty) iter.next()).getStringValue();
+            String item = iter.next().getStringValue();
             Pattern pattern = patternCache.getPattern(item, Perl5Compiler.READ_ONLY_MASK & Perl5Compiler.SINGLELINE_MASK);
             StringBuffer url = new StringBuffer(sampler.getDomain());
             url.append(":");
