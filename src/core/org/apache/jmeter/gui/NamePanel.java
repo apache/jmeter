@@ -54,9 +54,10 @@
  */
 package org.apache.jmeter.gui;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.util.Collection;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -181,12 +182,14 @@ public class NamePanel extends JPanel implements JMeterGUIComponent
 	}
 
     private void init() {
-        this.setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+
         nameLabel = new JLabel(JMeterUtils.getResString("name"));
         nameLabel.setName("name");
-
-        this.add(nameLabel);
-        this.add(nameField);
+        add(nameLabel);
+        add(Box.createHorizontalStrut(2));
+        add(nameField);
+        
         nameLabel.setLabelFor(nameField);
         nameField.setName("name");
         nameField.getDocument().addDocumentListener(new DocumentListener() {
