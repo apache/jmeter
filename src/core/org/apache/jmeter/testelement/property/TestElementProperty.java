@@ -30,7 +30,7 @@ public class TestElementProperty extends AbstractProperty
         {
             if (value != null)
             {
-                return value.equals(((TestElementProperty) o).getObjectValue());
+                return value.equals(((JMeterProperty) o).getObjectValue());
             }
         }
         return false;

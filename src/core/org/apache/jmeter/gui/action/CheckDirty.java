@@ -22,7 +22,7 @@ import org.apache.jorphan.collections.ListedHashTree;
 public class CheckDirty extends AbstractAction implements 
 		HashTreeTraverser
 {
-	private Map previousGuiItems;
+	private static Map previousGuiItems;
 	public static final String CHECK_DIRTY = "check_dirty";
 	public static final String SUB_TREE_SAVED = "sub_tree_saved";
 	public static final String SUB_TREE_LOADED = "sub_tree_loaded";
@@ -130,7 +130,7 @@ public class CheckDirty extends AbstractAction implements
 		}
 		else
 		{
-			previousGuiItems.put(treeNode,treeNode.createTestElement());
+			previousGuiItems.put(treeNode,treeNode.createTestElement().clone());
 		}
 	}
 
