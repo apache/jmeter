@@ -39,6 +39,7 @@ public class StatCalculator implements Serializable
     double mean = 0;
     double deviation = 0;
     int count = 0;
+    long bytes = 0;
     
     public void clear()
     {
@@ -73,7 +74,11 @@ public class StatCalculator implements Serializable
         Number val = new Double(newValue);
         addValue(val);
     }
-    
+
+	public void addBytes(long newValue){
+		bytes += newValue;    
+	}
+	
     public void addAll(StatCalculator calc)
     {
        Iterator iter = values.iterator();
@@ -90,6 +95,10 @@ public class StatCalculator implements Serializable
           return (Number) values.get((int)(values.size() * .5));
        }
        return new Long(0);
+    }
+    
+    public long getTotalBytes(){
+    	return bytes;
     }
     
     /**
