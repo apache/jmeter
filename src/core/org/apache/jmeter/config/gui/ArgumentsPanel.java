@@ -73,16 +73,17 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
+
 import junit.framework.TestCase;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.gui.util.PowerTableModel;
-import org.apache.jmeter.gui.util.TextAreaCellRenderer;
-import org.apache.jmeter.gui.util.TextAreaTableCellEditor;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.Data;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -95,6 +96,8 @@ import org.apache.jorphan.collections.Data;
 public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 		ActionListener,CellEditorListener
 {
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			JMeterUtils.GUI);
 	JTable table;
 	JButton add;
 	JButton delete;
@@ -209,6 +212,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 	 ***************************************/
 	public void focusLost(FocusEvent e)
 	{
+		log.debug("Focus lost on table");
+		stopTableEditing();
 	}
 
 	/****************************************
@@ -276,11 +281,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 	protected void addArgument() {
 		// If a table cell is being edited, we should accept the current value
 		// and stop the editing before adding a new row.
-		if(table.isEditing())
-		{
-			TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
-			cellEditor.stopCellEditing();
-		}
+		stopTableEditing();
 		
 		tableModel.addNewRow();
 		tableModel.fireTableDataChanged();
@@ -291,6 +292,15 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 		// Highlight (select) the appropriate row.
 		int rowToSelect = tableModel.getRowCount() - 1;
 		table.setRowSelectionInterval(rowToSelect, rowToSelect);
+	}
+
+	private void stopTableEditing()
+	{
+		if(table.isEditing())
+		{
+			TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
+			cellEditor.stopCellEditing();
+		}
 	}
 
 	/****************************************
