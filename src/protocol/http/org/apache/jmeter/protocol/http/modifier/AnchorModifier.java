@@ -297,7 +297,7 @@ public class AnchorModifier
             super(name);
         }
 
-        public void testModifySampler() throws Exception
+        public void testProcessingHTMLFile(String HTMLFileName) throws Exception
         {
             HTTPSampler config =
                 (HTTPSampler) SaveService
@@ -320,11 +320,12 @@ public class AnchorModifier
             result.setResponseData(
                 new TextFile(
                     System.getProperty("user.dir")
-                        + "/testfiles/jmeter_home_page.html")
+                        + HTMLFileName)
                     .getText()
                     .getBytes());
             result.setSampleLabel(context.toString());
             result.setSamplerData(context.toString());
+            result.setURL(new URL("http://nagoya.apache.org/fakepage.html"));
             JMeterContextService.getContext().setPreviousResult(result);
             AnchorModifier modifier = new AnchorModifier();
             modifier.process();
@@ -359,67 +360,23 @@ public class AnchorModifier
                 config.toString());
         }
 
+        public void testModifySampler() throws Exception
+        {
+            testProcessingHTMLFile(
+                "/testfiles/jmeter_home_page.html");
+        }
+        
         public void testModifySamplerWithRelativeLink() throws Exception
         {
-            HTTPSampler config =
-                (HTTPSampler) SaveService
-                    .loadSubTree(
-                        new FileInputStream(
-                            System.getProperty("user.dir")
-                                + "/testfiles/load_bug_list.jmx"))
-                    .getArray()[0];
-            config.setRunningVersion(true);
-            HTTPSampleResult result = new HTTPSampleResult();
-            HTTPSampler context =
-                (HTTPSampler) SaveService
-                    .loadSubTree(
-                        new FileInputStream(
-                            System.getProperty("user.dir")
-                                + "/testfiles/Load_JMeter_Page.jmx"))
-                    .getArray()[0];
-            JMeterContextService.getContext().setCurrentSampler(context);
-            JMeterContextService.getContext().setCurrentSampler(config);
-            result.setResponseData(
-                new TextFile(
-                    System.getProperty("user.dir")
-                        + "/testfiles/jmeter_home_page_with_relative_links.html")
-                    .getText()
-                    .getBytes());
-            result.setURL(new URL("http://nagoya.apache.org/fakepage.html"));
-            result.setSampleLabel(context.toString());
-            result.setSamplerData(context.toString());
-            JMeterContextService.getContext().setPreviousResult(result);
-            AnchorModifier modifier = new AnchorModifier();
-            modifier.process();
-            assertEquals(
-                "http://nagoya.apache.org/bugzilla/buglist.cgi?"
-                    + "bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED"
-                    + "&email1=&emailtype1=substring&emailassigned_to1=1"
-                    + "&email2=&emailtype2=substring&emailreporter2=1"
-                    + "&bugidtype=include&bug_id=&changedin=&votes="
-                    + "&chfieldfrom=&chfieldto=Now&chfieldvalue="
-                    + "&product=JMeter&short_desc=&short_desc_type=substring"
-                    + "&long_desc=&long_desc_type=substring&bug_file_loc="
-                    + "&bug_file_loc_type=substring&keywords="
-                    + "&keywords_type=anywords"
-                    + "&field0-0-0=noop&type0-0-0=noop&value0-0-0="
-                    + "&cmdtype=doit&order=Reuse+same+sort+as+last+time",
-                config.toString());
-            config.recoverRunningVersion();
-            assertEquals(
-                "http://nagoya.apache.org/bugzilla/buglist.cgi?"
-                    + "bug_status=.*&bug_status=.*&bug_status=.*&email1="
-                    + "&emailtype1=substring&emailassigned_to1=1&email2="
-                    + "&emailtype2=substring&emailreporter2=1"
-                    + "&bugidtype=include&bug_id=&changedin=&votes="
-                    + "&chfieldfrom=&chfieldto=Now&chfieldvalue="
-                    + "&product=JMeter&short_desc=&short_desc_type=substring"
-                    + "&long_desc=&long_desc_type=substring&bug_file_loc="
-                    + "&bug_file_loc_type=substring&keywords="
-                    + "&keywords_type=anywords&field0-0-0=noop"
-                    + "&type0-0-0=noop&value0-0-0=&cmdtype=doit"
-                    + "&order=Reuse+same+sort+as+last+time",
-                config.toString());
+            testProcessingHTMLFile(
+                "/testfiles/jmeter_home_page_with_relative_links.html");
         }
+/* Feature not yet implemented. TODO: implement it.
+        public void testModifySamplerWithBaseHRef() throws Exception
+        {
+            testProcessingHTMLFile(
+                "/testfiles/jmeter_home_page_with_base_href.html");
+        }
+*/
     }
 }
