@@ -106,13 +106,13 @@ public class DragNDrop extends AbstractAction
     
     /**
      * Determine whether or not dragged nodes can be added to this parent.
-     * 
+     * Also used by Paste
      * TODO tighten rules
      * TODO move to MenuFactory?
 	 * @param parentNode
 	 * @return whether it is OK to add the dragged nodes to this parent
 	 */
-	private boolean canAddTo(JMeterTreeNode parentNode) {
+	static boolean canAddTo(JMeterTreeNode parentNode) {
 		if (null==parentNode) return false;
 		TestElement te = parentNode.getTestElement();
 		//System.out.println("Add to: "+te.getClass().getName());
