@@ -57,6 +57,8 @@ public class WhileController extends GenericController implements Serializable
      */
     private boolean conditionTrue(boolean inLoop)
     {
+//		clear cached condition
+		getProperty(CONDITION).recoverRunningVersion(null);
     	String cnd = getCondition();
     	log.debug("Condition string:"+cnd);
     	boolean res;
