@@ -225,6 +225,8 @@ public class MenuFactory
 		}
 		menu.add(enabled);
 		menu.add(disabled);
+		addSeparator(menu);
+		menu.add(makeMenuItem(JMeterUtils.getResString("help"),"Help","help"));
 	}
 
 	/****************************************
