@@ -42,7 +42,6 @@ import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.util.NoThreadClone;
-import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.SampleEvent;
@@ -57,9 +56,7 @@ import org.xml.sax.SAXException;
 
 
 /**
- * @author Michael Stover
- * @author <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell</a>
- * @version $Id$
+ * @version $Revision$ on $Date$
  */
 public class ResultCollector
     extends AbstractListenerElement
@@ -174,6 +171,7 @@ public class ResultCollector
         if (new File(getFilename()).exists())
         {
             clearVisualizer();
+            BufferedReader dataReader = null;
             try
             {
                 Configuration savedSamples = getConfiguration(getFilename());
@@ -181,7 +179,7 @@ public class ResultCollector
             }
             catch(SAXException e)
             {
-                BufferedReader dataReader = new BufferedReader(new FileReader(getFilename()));
+                dataReader = new BufferedReader(new FileReader(getFilename()));
                 String line;
                 while((line = dataReader.readLine()) != null)
                 {
@@ -191,6 +189,10 @@ public class ResultCollector
             catch (Exception e)
             {
                 log.error("", e);
+            }
+            finally
+			{
+            	if (dataReader != null) dataReader.close();
             }
         }
         //inLoading = false;
@@ -294,7 +296,7 @@ public class ResultCollector
         } catch (IOException e) {
         	log.warn("Error trying to find XML terminator "+e.toString());
     		try {
-				raf.close();
+				if (raf != null) raf.close();
 			} catch (IOException e1) {}
 			return false;
 		}
