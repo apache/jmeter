@@ -71,6 +71,11 @@ public class HTTPSampleResult extends SampleResult
         super();
     }
     
+	public HTTPSampleResult(long elapsed)
+	{
+		super(elapsed);
+	}
+    
     /**
      * Construct a 'parent' result for an already-existing result, essentially
      * cloning it:
@@ -181,6 +186,27 @@ public class HTTPSampleResult extends SampleResult
     public void setCookies(String string)
     {
         cookies = string;
+    }
+
+    private String queryString = ""; // never null
+    /**
+     * Fetch the query string
+     * 
+     * @return the query string
+     */
+    public String getQueryString()
+    {
+        return queryString;
+    }
+
+    /**
+     * Save the query string
+     * 
+     * @param string the query string
+     */
+    public void setQueryString(String string)
+    {
+        queryString = string;
     }
 
 }
