@@ -32,6 +32,7 @@ import org.htmlparser.Parser;
 import org.htmlparser.scanners.AppletScanner;
 import org.htmlparser.scanners.BaseHrefScanner;
 import org.htmlparser.scanners.BodyScanner;
+import org.htmlparser.scanners.FrameScanner;
 import org.htmlparser.scanners.InputTagScanner;
 import org.htmlparser.scanners.LinkScanner;
 import org.htmlparser.scanners.LinkTagScanner;
@@ -39,6 +40,7 @@ import org.htmlparser.scanners.ScriptScanner;
 import org.htmlparser.tags.AppletTag;
 import org.htmlparser.tags.BaseHrefTag;
 import org.htmlparser.tags.BodyTag;
+import org.htmlparser.tags.FrameTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.LinkTag;
@@ -162,9 +164,14 @@ class HtmlParserHTMLParser extends HTMLParser
 				} else if (node instanceof ScriptTag){
 					ScriptTag script = (ScriptTag)node;
 					binUrlStr = script.getAttribute("src");
+				} else if (node instanceof FrameTag){
+					FrameTag tag = (FrameTag)node;
+					binUrlStr = tag.getAttribute("src");
 				} else if (node instanceof LinkTagTag){
 					LinkTagTag script = (LinkTagTag)node;
-					binUrlStr = script.getAttribute("href");
+					if (script.getAttribute("rel").equalsIgnoreCase("stylesheet")){
+						binUrlStr = script.getAttribute("href");
+					}
 				}
 				
                 if (binUrlStr == null)
@@ -213,5 +220,6 @@ class HtmlParserHTMLParser extends HTMLParser
         parser.addScanner(new AppletScanner());
         parser.addScanner(new ScriptScanner());
         parser.addScanner(new LinkTagScanner());
+        parser.addScanner(new FrameScanner());
     }
 }
