@@ -40,7 +40,7 @@ JAVADOCOPT = -d $(DOCDIR) -version -private \
 
 # Packages is the list of packages inside our base package.
 BASE = org.apache.jmeter
-VERSION = 1.3
+VERSION = 1.4
 PACKAGES = \
 	$(BASE) \
 	$(BASE).timers \
