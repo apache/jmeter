@@ -117,14 +117,20 @@ public class ProxyControl extends GenericController implements Serializable
     public static final String INCLUDE_LIST = "ProxyControlGui.include_list";
     public static final String CAPTURE_HTTP_HEADERS = "ProxyControlGui.capture_http_headers";
 	public static final String ADD_ASSERTIONS = "ProxyControlGui.add_assertion";
-	public static final String ADD_SEPARATORS = "ProxyControlGui.add_separator";
+	public static final String GROUPING_MODE = "ProxyControlGui.grouping_mode";
 	public static final String USE_KEEPALIVE  = "ProxyControlGui.use_keepalive";
+
+    public static final int GROUPING_NO_GROUPS = 0;
+    public static final int GROUPING_ADD_SEPARATORS = 1;
+    // TODO: implement these two:
+    //public static final int GROUPING_IN_CONTROLLERS = 2;
+    //public static final int GROUPING_STORE_FIRST_ONLY = 3;
 
 	private long lastTime = 0;//When was the last sample seen?
 	private static final long sampleGap = 
 	    JMeterUtils.getPropDefault("proxy.pause",1000);//Detect if user has pressed a new link
 	private boolean addAssertions;
-	private boolean addSeparators;
+	private int groupingMode;
 	private boolean useKeepAlive;
     
     /**
@@ -158,10 +164,10 @@ public class ProxyControl extends GenericController implements Serializable
         setProperty(new BooleanProperty(CAPTURE_HTTP_HEADERS,capture));
     }
 
-	public void setSeparators(boolean b)
+	public void setGroupingMode(int grouping)
 	{
-		addSeparators=b;
-		setProperty(new BooleanProperty(ADD_SEPARATORS,b));
+		this.groupingMode= grouping;
+		setProperty(new IntegerProperty(GROUPING_MODE,grouping));
 	}
 
 	public void setAssertions(boolean b)
@@ -359,7 +365,7 @@ public class ProxyControl extends GenericController implements Serializable
 	private void addDivider(JMeterTreeModel model,JMeterTreeNode node)
 	    throws IllegalUserActionException
 	{
-		if (addSeparators){
+		if (groupingMode == GROUPING_ADD_SEPARATORS){
 			GenericController sc = new GenericController();
 			sc.setProperty(TestElement.GUI_CLASS,
 			    "org.apache.jmeter.control.gui.LogicControllerGui");
