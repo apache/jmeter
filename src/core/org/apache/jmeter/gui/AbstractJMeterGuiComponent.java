@@ -54,16 +54,18 @@
  */
 package org.apache.jmeter.gui;
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
@@ -171,6 +173,7 @@ public abstract class AbstractJMeterGuiComponent
         //titleLabel.setAlignmentX(0.5f);
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.add(titleLabel);
+        panel.setMaximumSize(new Dimension(panel.getMaximumSize().width,panel.getPreferredSize().height));
         return panel;
     }
 
@@ -236,12 +239,10 @@ public abstract class AbstractJMeterGuiComponent
      * 
      * @return a Box containing the component title and name panel
      */
-    protected Box makeTitlePanel() {
-        Box titlePanel = Box.createVerticalBox();
+    protected Container makeTitlePanel() {
+        VerticalPanel titlePanel = new VerticalPanel();
         titlePanel.add(createTitleLabel());
         titlePanel.add(getNamePanel());
-        titlePanel.validate();
-        titlePanel.setMinimumSize(titlePanel.getPreferredSize());
         return titlePanel;
     }
     
