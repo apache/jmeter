@@ -1,27 +1,3 @@
 #!/bin/sh
 
-USAGE=$0" [-h remote-host] [-p policy-file] [-f property-file]"
-
-PROPERTIES=`dirname $0`/jmeter.properties
-POLICY=`pwd`/default-policy
-
-while getopts h:f:p: x; do 
-    case $x in
-	h) JAVA_PROPS=$OPTARG;;
-	p) POLICY=$OPTARG;;
-	f) PROPERTIES=$OPTARG;;
-	?) echo $USAGE; exit -1;;
-    esac;
-done
-
-for i in `dirname $0`/../lib/*.jar
-do
-    CLASSPATH=${CLASSPATH}:$i
-done
-
-for i in `dirname $0`/../ext/*.jar
-do
-    CLASSPATH=${CLASSPATH}:$i
-done
-
-java -classpath $CLASSPATH:`dirname $0`/ApacheJMeter.jar -Djava.security.policy=$POLICY org.apache.jmeter.engine.RemoteJMeterEngineImpl $PROPERTIES $JAVA_PROPS
+`dirname $0`/jmeter -s
