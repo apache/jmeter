@@ -70,6 +70,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -115,6 +116,13 @@ public class ProxyControlGui
 {
     private static transient Logger log = LoggingManager.getLoggerForClass();
     private JTextField portField;
+
+   /**
+    * Used to indicate that HTTP request headers should be captured.
+    * The default is to <b>not</b> capture the HTTP request headers,
+    * which are specific to particular browser settings.
+    */
+   private JCheckBox httpHeaders;
 
     private ProxyControl model;
 
@@ -174,10 +182,11 @@ public class ProxyControlGui
         configureTestElement(el);
         if(el instanceof ProxyControl)
         {
-            ((ProxyControl)el).setPort(portField.getText());
-            setIncludeListInProxyControl((ProxyControl)el);
-            setExcludeListInProxyControl((ProxyControl)el);
-            model = (ProxyControl)el;
+			model = (ProxyControl)el;
+            model.setPort(portField.getText());
+            setIncludeListInProxyControl(model);
+            setExcludeListInProxyControl(model);
+            model.setCaptureHttpHeaders(httpHeaders.isSelected());
         }
     }
 
@@ -220,6 +229,7 @@ public class ProxyControlGui
         super.configure(element);
         model = (ProxyControl)element;
         portField.setText(model.getPropertyAsString(ProxyControl.PORT));
+		httpHeaders.setSelected(model.getPropertyAsBoolean(ProxyControl.CAPTURE_HTTP_HEADERS));
         populateTable(includeModel, model.getIncludePatterns().iterator());
         populateTable(excludeModel, model.getExcludePatterns().iterator());
         repaint();
@@ -273,6 +283,10 @@ public class ProxyControlGui
             model.stopProxy();
             model = (ProxyControl) createTestElement();
             startProxy();
+        }
+        else if (command.equals(ProxyControl.CAPTURE_HTTP_HEADERS))
+        {
+            enableRestart();
         }
         else if (command.equals(ADD_EXCLUDE))
         {
@@ -381,6 +395,7 @@ public class ProxyControlGui
                 }
             }
         }
+        enableRestart();
     }
 
     private void init()
@@ -436,9 +451,19 @@ public class ProxyControlGui
         JLabel label = new JLabel(JMeterUtils.getResString("port"));
         label.setLabelFor(portField);
 
+        httpHeaders = new JCheckBox(JMeterUtils.getResString("proxy_headers"));
+        httpHeaders.setName(ProxyControl.CAPTURE_HTTP_HEADERS);
+        httpHeaders.setSelected(true); //maintain original default
+        httpHeaders.addActionListener(this);
+        httpHeaders.setActionCommand(ProxyControl.CAPTURE_HTTP_HEADERS);
+
         HorizontalPanel panel = new HorizontalPanel();
         panel.add(label);
         panel.add(portField);
+
+        panel.add(Box.createHorizontalStrut(10));
+        panel.add(httpHeaders);
+
         return panel;
     }
 

@@ -76,6 +76,7 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.RecordingController;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -104,6 +105,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
     public final static String PORT = "ProxyControlGui.port";
     public final static String EXCLUDE_LIST = "ProxyControlGui.exclude_list";
     public final static String INCLUDE_LIST = "ProxyControlGui.include_list";
+    public final static String CAPTURE_HTTP_HEADERS = "ProxyControlGui.capture_http_headers";
 
     public ProxyControl()
     {
@@ -111,6 +113,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
         setPort(DEFAULT_PORT);
         setExcludeList(new HashSet());
         setIncludeList(new HashSet());
+        setCaptureHttpHeaders(true); // maintain original behaviour
     }
 
     public void setPort(int port)
@@ -122,7 +125,12 @@ public class ProxyControl extends ConfigTestElement implements Serializable
     {
         setProperty(PORT,port);
     }
-    
+  
+    public void setCaptureHttpHeaders(boolean capture)
+    {
+        setProperty(new BooleanProperty(CAPTURE_HTTP_HEADERS,capture));
+    }
+
     public void setIncludeList(Collection list)
     {
         setProperty(new CollectionProperty(INCLUDE_LIST, new HashSet(list)));
@@ -145,6 +153,11 @@ public class ProxyControl extends ConfigTestElement implements Serializable
     public int getDefaultPort()
     {
         return DEFAULT_PORT;
+    }
+
+    public boolean getCaptureHttpHeaders()
+    {
+        return getPropertyAsBoolean(CAPTURE_HTTP_HEADERS);
     }
 
     public Class getGuiClass()
@@ -213,6 +226,13 @@ public class ProxyControl extends ConfigTestElement implements Serializable
         if (server != null)
         {
             server.stopServer();
+            try
+            {
+                server.join(1000); // wait for server to stop
+            }
+            catch (InterruptedException e)
+            {
+            }
         }
     }
 
@@ -439,8 +459,12 @@ public class ProxyControl extends ConfigTestElement implements Serializable
             GuiPackage.getInstance().getReplacer().reverseReplace(sampler);
             for (int i = 0; i < configs.length; i++)
             {
-                GuiPackage.getInstance().getReplacer().reverseReplace(
-                    configs[i]);
+                if (configs[i] != null)
+                {
+                    GuiPackage.getInstance().getReplacer().reverseReplace(
+                        configs[i]);
+                }
+
             }
         }
         catch (InvalidVariableException e)
