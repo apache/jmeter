@@ -24,7 +24,37 @@ import org.apache.log.Logger;
 
 /**
  * This is the base class for JMeter GUI components which can display test
- * results in some way.
+ * results in some way.  It provides the following conveniences to developers:
+ * <ul>
+ * <li>Implements the {@link org.apache.jmeter.gui.JMeterGUIComponent JMeterGUIComponent} interface that allows your Gui visualizer to 
+ * "plug-in" to the JMeter GUI environment.  Provides implementations for the following methods:
+ * <ul><li>{@link org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement) configure(TestElement)}.  Any additional parameters of your Visualizer
+ * need to be handled by you.</li>
+ * <li>{@link org.apache.jmeter.gui.JMeterGUIComponent#createTestElement() createTestElement()}.  For most purposes, the default 
+ * {@link org.apache.jmeter.reporters.ResultCollector ResultCollector} created by this method is sufficient.</li>
+ * <li>{@link org.apache.jmeter.gui.JMeterGUIComponent#getMenuCategories getMenuCategories()}.  To control where in the GUI your visualizer 
+ * can be added.</li>
+ * <li>{@link org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement) modifyTestElement(TestElement)}.  Again, additional
+ * parameters you require have to be handled by you.</li>
+ * <li>{@link org.apache.jmeter.gui.JMeterGUIComponent#createPopupMenu() createPopupMenu()}.  </li>
+ * </ul>
+ * <li>Provides convenience methods to help you make a JMeter-compatible GUI:
+ * <ul><li>{@link makeTitlePanel() makeTitlePanel()}.  Returns a panel that includes the name of the component, and a FilePanel that allows users 
+ * to control what file samples are logged to.</li>
+ * <li>{@link getModel() getModel()} and {@link setModel(ResultCollector) setModel(ResultCollector)} methods for setting and getting the model class that handles the receiving
+ * and logging of sample results.</li>
+ * </ul></ul>
+ * For most developers, making a new visualizer is primarly for the purpose of either calculating new statistics on the sample results that other 
+ * visualizers don't calculate, or displaying the results visually in a new and interesting way.  Making a new visualizer for either of these
+ * purposes is easy - just extend this class and implement the {@link org.apache.jmeter.visualizers.Visualizer#add(SampleResult) add(SampleResult)} method
+ * and display the results as you see fit.  This AbstractVisualizer and the default {@link org.apache.jmeter.reporters.ResultCollector ResultCollector} handle 
+ * logging and registering to receive SampleEvents for you - all you need to do is include the JPanel created by makeTitlePanel somewhere in
+ * your gui to allow users set the log file.
+ * <p>
+ * If you are doing more than that, you may need to extend {@link org.apache.jmeter.reporters.ResultCollector ResultCollector} as well and modify the 
+ * {@link configure(TestElement) configure(TestElement)}, {@link modifyTestElement(TestElement) modifyTestElement(TestElement)}, and 
+ * {@link createTestElement() createTestElement()} methods to create and modify your alternate ResultCollector.  For an example of this, see the
+ * {@link org.apache.jmeter.visualizers.MailerVisualizer MailerVisualizer}.
  * Copyright: 2000,2003
  *
  * @author    Michael Stover
@@ -76,6 +106,12 @@ public abstract class AbstractVisualizer
         return errorLogging;
     }
 
+    /**
+     * Provides access to the ResultCollector model class for extending implementations.  Using this method and setModel(ResultCollector) is only necessary
+     * if your visualizer requires a differently behaving ResultCollector.  Using these methods will allow maximum reuse of the methods provided
+     * by AbstractVisualizer in this event.
+     * @return
+     */
     protected ResultCollector getModel()
     {
         return collector;
@@ -260,6 +296,8 @@ public abstract class AbstractVisualizer
     }
 
     /**
+     * Provides extending classes the opportunity to set the ResultCollector model for the Visualizer.  This is useful to allow maximum reuse of the
+     * methods from AbstractVisualizer.
      * @param collector
      */
     protected void setModel(ResultCollector collector)

@@ -57,13 +57,11 @@ package org.apache.jmeter.visualizers;
 import org.apache.jmeter.samplers.SampleResult;
 
 /**
- * This interface defines those methods needed by a visualizer
- * to be run and accessed.
+ * Implement this method to be a Visualizer for JMeter.  This interface defines a single method, "add()", that provides the means by which 
+ * {@link org.apache.jmeter.samplers.SampleResult SampleResults} are passed to the implementing visualizer for display/logging.  
+ * The easiest way to create the visualizer is to extend the {@link org.apache.jmeter.visualizers.gui.AbstractVisualizer AbstractVisualizer} class.
  *
- * All visualizer pluging must implement this inteface in order
- * to be plugged into JMeter.
- *
- * @author  <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
+ * @author  <a href="mailto:mstoer1@apache.org">Michael Stover</a>
  * @version $Revision$ $Date$
  */
 public interface Visualizer {
