@@ -140,15 +140,19 @@ public abstract class HTMLParser
 //    }
 
     public static final HTMLParser getParser(){
-		boolean reusable=false;
-		String htmlParserClassName=
-		    JMeterUtils.getPropDefault(PARSER_CLASSNAME,DEFAULT_PARSER);
+        return getParser(JMeterUtils.getPropDefault(PARSER_CLASSNAME,DEFAULT_PARSER));
+    }
 
+	public static final synchronized HTMLParser getParser(String htmlParserClassName){
+
+        // Is there a cached parser?
 		HTMLParser pars=(HTMLParser) parsers.get(htmlParserClassName);
 		if (pars != null){
 			log.info("Fetched "+htmlParserClassName);
 			return pars;
 		}
+
+        // Is there a cached method for creating a parser?
 		Method meth =(Method) methods.get(htmlParserClassName);
 		if (meth != null) {
 			try
@@ -171,24 +175,31 @@ public abstract class HTMLParser
             {
 				throw new Error("Should not happen",e);
             };
-			log.info("Using "+htmlParserClassName);
+			log.info("Refetched "+htmlParserClassName);
 			return pars;
 		}
 		
+		// Create the method cache, and the parser cache if possible
 		try
 		{
 			Class clazz = Class.forName(htmlParserClassName);
 			meth = clazz.getMethod(PARSER_METHOD,null);
+			methods.put(htmlParserClassName,meth);// Cache the method
 			pars= (HTMLParser) meth.invoke(null,null);
+			boolean reusable=false;
 			try{
 				reusable=((Boolean)
 				           clazz.getMethod(PARSER_REUSABLE,null)
 				          .invoke(null,null))
 				          .booleanValue();
+				if (reusable){
+					parsers.put(htmlParserClassName,pars);// cache the parser
+				}
 			}
 			catch (Exception e){
-				// ignored
+				reusable=false;
 			}
+			log.info("Created "+htmlParserClassName+(reusable? " - reusable":""));
 		}
 		catch (NullPointerException e) // method did not return anything
 		{
@@ -218,11 +229,6 @@ public abstract class HTMLParser
         {
 			throw new Error(e);
         }
-		log.info("Created "+htmlParserClassName+ " reusable="+reusable);
-		if (reusable){
-			parsers.put(htmlParserClassName,pars);
-		}
-		methods.put(htmlParserClassName,meth);
     	return pars;
     }
 //    /**
