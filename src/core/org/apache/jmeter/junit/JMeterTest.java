@@ -354,6 +354,11 @@ public class JMeterTest extends JMeterTestCase
                     }
                 }
             }
+            catch (NoClassDefFoundError e)
+            {
+				// no luck. Ignore this class
+				System.out.println(exName+": could not construct "+n);
+            }
             catch (IllegalAccessException e)
             {
 				caught=e;
