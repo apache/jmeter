@@ -382,18 +382,18 @@ save, and read saved test results.
 The saving and reading of test results is generic.  The various
 listeners generally have a panel whereby one can specify the file to
 which the results will be written (or read).  The results are stored as XML
-files, typically with a ".jtl" extension.
+files, typically with a ".jtl" extension.</p>
 <p>
 The information to be saved is configurable.  If one specifies the
 "Functional Test Mode" on the Test Plan element, one gets the largest
 amount of information.  If this box is not checked, the default saved
 data includes a time stamp (the number of milliseconds since midnight,
 January 1, 1970 UTC), the data type, the thread name, the label, the
-response time, message, and code, and a success indicator.
+response time, message, and code, and a success indicator.</p>
 <p>
 One can get a more selective set of information my modifying the
 jmeter.properties file.  The following example indicates how to set
-these.
+these.</p>
 <p>
 <code>
 <pre>
@@ -425,17 +425,17 @@ jmeter.save.saveservice.timestamp_format=MM/dd/yy HH:mm:ss
 # legitimate values: none, first, all
 jmeter.save.saveservice.assertion_results=first
 </pre>
-</code>
+</code></p>
 <p>
 The date format to be used for the timestamp is described in <A
 HREF="http://java.sun.com/j2se/1.4/docs/api/java/text/SimpleDateFormat.html">
 <B>SimpleDateFormat</B></A>.
 Bear in mind that choosing a date format other than "ms" is likely to
 make it impossible for JMeter to interpret the value when it is read
-in later for viewing purposes.
+in later for viewing purposes.</p>
 <p>
-The viewing capabilities are described in the following subsections.
-<p>
+The viewing capabilities are described in the following subsections.</p>
+
 </description>
 <component index="13.3.1" name="Mailer Visualizer" screenshot="../images/screenshots/mailer_vis.png">
 <description><p>The mailer visualizer can be set up to send email if a test run receives too many
@@ -504,7 +504,7 @@ button.  The default view shows all of the text contained in the
 response.  The alternative view attempts to render the response as
 HTML.  The rendered HTML is likely to compare poorly to the view one
 would get in any web browser; however, it does provide a quick
-approximation that is helpful for initial result evaluation.
+approximation that is helpful for initial result evaluation.</p>
 </description>
 </component>
 
