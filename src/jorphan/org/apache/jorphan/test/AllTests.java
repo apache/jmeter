@@ -186,6 +186,16 @@ public final class AllTests
 		System.out.println(e+"="+System.getProperty(e));
 		System.out.println(g+"="+System.getProperty(g));
 		System.out.println("Headless? "+java.awt.GraphicsEnvironment.isHeadless());
+		Class c;
+		try {
+			String n=System.getProperty(g);
+			c = Class.forName(n);
+			System.out.println("Found class:  "+n);
+			c.newInstance();
+			System.out.println("Instantiated: "+n);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 //--
         System.exit(0);
     }
