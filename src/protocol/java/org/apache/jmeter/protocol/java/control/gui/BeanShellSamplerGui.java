@@ -114,7 +114,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui implements ActionLis
 
     public String getStaticLabel()
     {
-        return JMeterUtils.getResString("bsh_sampler_title" + "(BETA CODE)");
+        return JMeterUtils.getResString("bsh_sampler_title") + " (BETA CODE)";
     }
     private JTextField filename;
     
