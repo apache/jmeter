@@ -64,16 +64,23 @@ import java.io.UnsupportedEncodingException;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JEditorPane;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -114,10 +121,15 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
     private DefaultMutableTreeNode root;
     private DefaultTreeModel treeModel;
 
-    private JTextArea stats;
+    private JTextPane stats;
     private JEditorPane results;
+    private JScrollPane resultsScrollPane;
+    private JLabel imageLabel;
     private JTextArea sampleDataField;
 
+    private JRadioButton textButton;
+    private JRadioButton htmlButton;
+    
     private JTree jTree;
 
     public ViewResultsFullVisualizer()
@@ -225,128 +237,118 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
             log.debug("valueChanged : selected node - " + node);
         }
 
-        stats.setText("");
-        if (node != null)
-        {
-            SampleResult res = (SampleResult) node.getUserObject();
+        StyledDocument statsDoc = stats.getStyledDocument();
+        try {
+            statsDoc.remove(0, statsDoc.getLength());
+            if (node != null) {
+                SampleResult res = (SampleResult) node.getUserObject();
 
-            if (log.isDebugEnabled())
-            {
-                log.debug("valueChanged1 : sample result - " + res);
+                if (log.isDebugEnabled()) {
+                    log.debug("valueChanged1 : sample result - " + res);
+                }
+
+                if (res != null) {
+                    // load time label
+
+                    log.debug("valueChanged1 : load time - " + res.getTime());
+                    if (res != null && res.getSamplerData() != null) {
+                        sampleDataField.setText(res.getSamplerData().trim());
+                    }
+
+                    statsDoc.insertString(
+                        statsDoc.getLength(),
+                        "Load time: " + res.getTime() + "\n",
+                        null);
+
+                    String responseCode = res.getResponseCode();
+                    log.debug(
+                        "valueChanged1 : response code - " + responseCode);
+
+                    int responseLevel = 0;
+                    if (responseCode != null) {
+                        try {
+                            responseLevel =
+                                Integer.parseInt(responseCode) / 100;
+                        } catch (NumberFormatException numberFormatException) {
+                            // no need to change the foreground color
+                        }
+                    }
+
+                    Style style = null;
+                    switch (responseLevel) {
+                        case 3 :
+                            style = statsDoc.getStyle("Redirect");
+                            break;
+                        case 4 :
+                            style = statsDoc.getStyle("ClientError");
+                            break;
+                        case 5 :
+                            style = statsDoc.getStyle("ServerError");
+                            break;
+                    }
+                    statsDoc.insertString(
+                        statsDoc.getLength(),
+                        "HTTP response code: " + responseCode + "\n",
+                        style);
+
+                    // response message label
+                    String responseMsgStr = res.getResponseMessage();
+
+                    log.debug(
+                        "valueChanged1 : response message - " + responseMsgStr);
+                    statsDoc.insertString(
+                        statsDoc.getLength(),
+                        "HTTP response message: " + responseMsgStr + "\n",
+                        null);
+
+                    // get the text response and image icon
+                    // to determine which is NOT null
+                    byte[] responseBytes = (byte[]) res.getResponseData();
+                    if (res.getDataType() != null
+                        && res.getDataType().equals(SampleResult.TEXT)) {
+                        String response = null;
+                        try {
+                            response = new String(responseBytes, "utf-8");
+                        } catch (UnsupportedEncodingException err) {
+                            response = new String(responseBytes);
+                        }
+
+                        if (response != null) {
+                            if (textMode) {
+                                showTextResponse(response);
+                            } else {
+                                showRenderedResponse(response);
+                            }
+                        }
+                    } else if (responseBytes != null) {
+                        showImage(new ImageIcon(responseBytes));
+                    }
+                }
             }
-
-            if (res != null)
-            {
-                // load time label
-
-                log.debug("valueChanged1 : load time - " + res.getTime());
-                if (res != null && res.getSamplerData() != null)
-                {
-                    sampleDataField.setText(res.getSamplerData().trim());
-                }
-
-                stats.append("Load time: " + res.getTime() + "\n");
-
-                String responseCode = res.getResponseCode();
-                log.debug("valueChanged1 : response code - " + responseCode);
-
-                int responseLevel = 0;
-                if (responseCode != null) {
-                    try
-                    {
-                        responseLevel = Integer.parseInt(responseCode) / 100;
-                    }
-                    catch (NumberFormatException numberFormatException)
-                    {
-                        // no need to change the foreground color
-                    }
-                }
-                
-                switch (responseLevel)
-                {
-                    case 3 :
-                        // responseCodeLabel.setForeground(REDIRECT_COLOR);
-                        break;
-                    case 4 :
-                        // responseCodeLabel.setForeground(CLIENT_ERROR_COLOR);
-                        break;
-                    case 5 :
-                        // responseCodeLabel.setForeground(SERVER_ERROR_COLOR);
-                        break;
-                }
-                stats.append("HTTP response code: " + responseCode + "\n");
-                // responseCodeLabel.setText(JMeterUtils.getResString("HTTP response code") + " : " + responseCode);
-
-                // response message label
-                String responseMsgStr = res.getResponseMessage();
-
-                log.debug("valueChanged1 : response message - " + responseMsgStr);
-                stats.append("HTTP response message: " + responseMsgStr);
-                // responseMsgLabel.setText("HTTP response message : " + responseMsgStr);
-
-                // get the text response and image icon
-                // to determine which is NOT null
-                byte[] responseBytes = (byte[]) res.getResponseData();
-                ImageIcon icon = null;
-                String response = null;
-                if (res.getDataType() != null && res.getDataType().equals(SampleResult.TEXT))
-                {
-                    try
-                    {
-                        response = new String(responseBytes, "utf-8");
-                    }
-                    catch (UnsupportedEncodingException err)
-                    {
-                        response = new String(responseBytes);
-                    }
-                }
-                else if (responseBytes != null)
-                {
-                    icon = new ImageIcon(responseBytes);
-                }
-                if (response != null)
-                {
-                    if (textMode) {
-                        showTextResponse(response);
-                    } else {
-                        showRenderedResponse(response);
-                    }
-                }
-                /*                else if (icon != null)
-                                {
-                                    JLabel image = new JLabel();
-                
-                                    image.setIcon(icon);
-                                    showImage(image);
-                                }
-                */
-                //                treeSplitPane.revalidate();
-                //                treeSplitPane.repaint();
-            }
+        } catch (BadLocationException exc) {
+            log.error("Error setting statistics text", exc);
+            stats.setText("");
         }
         log.debug("End : valueChanged1");
     }
-    /*
-        protected void initTextArea()
-        {
-            textArea = new JTextArea();
-            textArea.setLineWrap(true);
-            textArea.setWrapStyleWord(true);
-            textArea.setTabSize(4);
-            textArea.setRows(4);
-        }
+
+    private void showImage(Icon image) {
+        imageLabel.setIcon(image);
+        resultsScrollPane.setViewportView(imageLabel);
         
-        protected void showImage(JLabel image)
-        {
-            textScrollArea.setViewportView(image);
-        }
-    */
+        textButton.setEnabled(false);
+        htmlButton.setEnabled(false);
+    }
+
     protected void showTextResponse(String response)
     {
-        //        textScrollArea.setViewportView(textArea);
         results.setContentType("text/plain");
         results.setText(response == null ? "" : response);
         results.setCaretPosition(0);
+        resultsScrollPane.setViewportView(results);
+
+        textButton.setEnabled(true);
+        htmlButton.setEnabled(true);
     }
 
     /**********************************************************************
@@ -395,15 +397,6 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
         }
     }
 
-    /*
-        protected void initHtmlEditPane()
-        {
-            htmlEditPane = new JEditorPane();
-            HTMLEditorKit htmlKit = new HTMLEditorKit();
-    
-            htmlEditPane.setEditorKit(htmlKit);
-        }
-    */
     protected void showRenderedResponse(String response)
     {
         if (response == null) {
@@ -428,19 +421,23 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
         results.setContentType("text/html");
         results.setText(html);
         results.setCaretPosition(0);
+        resultsScrollPane.setViewportView(results);
+
+        textButton.setEnabled(true);
+        htmlButton.setEnabled(true);
     }
 
     protected Component createHtmlOrTextPane()
     {
         ButtonGroup group = new ButtonGroup();
 
-        JRadioButton textButton = new JRadioButton(TEXT_BUTTON_LABEL);
+        textButton = new JRadioButton(TEXT_BUTTON_LABEL);
         textButton.setActionCommand(TEXT_COMMAND);
         textButton.addActionListener(this);
         textButton.setSelected(textMode);
         group.add(textButton);
         
-        JRadioButton htmlButton = new JRadioButton(HTML_BUTTON_LABEL);
+        htmlButton = new JRadioButton(HTML_BUTTON_LABEL);
         htmlButton.setActionCommand(HTML_COMMAND);
         htmlButton.addActionListener(this);
         htmlButton.setSelected(!textMode);
@@ -451,28 +448,6 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
         pane.add(htmlButton);
         return pane;
     }
-
-    /*
-        protected Component getBottomPane()
-        {
-            JPanel outerPanel = new JPanel(new BorderLayout());
-            JPanel panel = new JPanel(new VerticalLayout(5, VerticalLayout.LEFT));
-            postDataField = new JLabeledTextArea(JMeterUtils.getResString("request_data"), null);
-            loadTimeLabel = new JLabel();
-            panel.add(postDataField);
-            panel.add(loadTimeLabel);
-            responseCodeLabel = new JLabel();
-            panel.add(responseCodeLabel);
-            responseMsgLabel = new JLabel();
-            panel.add(responseMsgLabel);
-            initHtmlOrTextButton();
-            panel.add(htmlOrTextButton);
-            textScrollArea = new JScrollPane();
-            outerPanel.add(panel,BorderLayout.NORTH);
-            outerPanel.add(textScrollArea,BorderLayout.CENTER);
-            return outerPanel;
-        }
-    */
 
     /****************************************
      * Initialize this visualizer
@@ -515,9 +490,22 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
     }
 
     private Component createBottomLeftPanel() {
-        stats = new JTextArea();
+        stats = new JTextPane();
         stats.setEditable(false);
         stats.setBackground(getBackground());
+
+        // Add styles to use for different types of status messages        
+        StyledDocument doc = (StyledDocument)stats.getDocument();
+
+        Style style = doc.addStyle("Redirect", null);
+        StyleConstants.setForeground(style, REDIRECT_COLOR);
+
+        style = doc.addStyle("ClientError", null);
+        StyleConstants.setForeground(style, CLIENT_ERROR_COLOR);
+        
+        style = doc.addStyle("ServerError", null);
+        StyleConstants.setForeground(style, SERVER_ERROR_COLOR);
+                
 
         JScrollPane pane = makeScrollPane(stats);
         pane.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
@@ -529,7 +517,6 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
         sampleDataField.setEditable(false);
         sampleDataField.setLineWrap(true);
         sampleDataField.setWrapStyleWord(true);
-//        sampleDataField.setRows(4);
 
         JPanel pane = new JPanel (new BorderLayout(0, 5));
         pane.setBorder(BorderFactory.createTitledBorder("Request Data"));
@@ -541,9 +528,12 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
         results = new JEditorPane();
         results.setEditable(false);
         
+        resultsScrollPane = makeScrollPane(results);
+        imageLabel = new JLabel();
+        
         JPanel resultsPane = new JPanel(new BorderLayout());
         resultsPane.setBorder(BorderFactory.createTitledBorder("Response Data"));
-        resultsPane.add(makeScrollPane(results), BorderLayout.CENTER);
+        resultsPane.add(resultsScrollPane, BorderLayout.CENTER);
         resultsPane.add(createHtmlOrTextPane(), BorderLayout.SOUTH);
 
         return resultsPane;
