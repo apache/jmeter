@@ -96,29 +96,65 @@ public class ThroughputController
 
     private IntegerWrapper globalNumExecutions;
     private IntegerWrapper globalIteration;
-    private transient Object numExecutionsLock;
-    private transient Object iterationLock;
+    private transient Object counterLock;
 
-    private int numExecutions = 0, iteration = -1;
-    private boolean returnTrue;
+    /**
+     * Number of completed executions.
+     */
+    private int numExecutions = 0;
+    
+    /**
+     * Index of the current iteration. 0-based.
+     */
+    private int iteration = -1;
+    
+    /**
+     * Whether to deliver samplers on this iteration.
+     */
+    private boolean runThisTime;
 
     public ThroughputController()
     {
         globalNumExecutions = new IntegerWrapper(new Integer(0));
         globalIteration = new IntegerWrapper(new Integer(-1));
-        numExecutionsLock = new Object();
-        iterationLock = new Object();
+        counterLock = new Object();
         setStyle(BYNUMBER);
         setPerThread(true);
         setMaxThroughput(1);
         setPercentThroughput(100);
-        returnTrue = false;
+        runThisTime = false;
     }
 
     public void reInitialize()
     {
-        returnTrue = false;
+        runThisTime = false;
         super.reInitialize();
+        
+        int executions, iterations;
+        boolean retval = false;
+
+        executions = getExecutions();
+        iterations = getIteration();
+        if (getStyle() == BYNUMBER)
+        {
+            if (executions < getMaxThroughputAsInt())
+            {
+                runThisTime = true;
+            }
+        }
+        else
+        {
+            if (iterations == 0 && getPercentThroughputAsFloat() > 0)
+            {
+                runThisTime = true;
+            }
+            else if (
+                ((float) executions / iterations) * 100
+                    <= getPercentThroughputAsFloat())
+            {
+                runThisTime = true;
+            }
+        }
     }
 
     public void setStyle(int style)
@@ -270,69 +306,13 @@ public class ThroughputController
      */
     public Sampler next()
     {
-        Sampler retVal = null;
-        if (getSubControllers().size() > 0
+        if (runThisTime
+            && getSubControllers().size() > 0
             && current < getSubControllers().size())
         {
-            if (!isPerThread())
-            {
-                synchronized (numExecutionsLock)
-                {
-                    if (canExecute())
-                    {
-                        retVal = super.next();
-                    }
-                }
-            }
-            else
-            {
-                if (canExecute())
-                {
-                    retVal = super.next();
-                }
-            }
+            return super.next();
         }
-        return retVal;
-    }
-
-    protected boolean canExecute()
-    {
-        if (returnTrue)
-        {
-            return true;
-        }
-        
-        int executions, iterations;
-        boolean retval = false;
-
-        executions = getExecutions();
-        iterations = getIteration();
-        if (getStyle() == BYNUMBER)
-        {
-            if (executions < getMaxThroughputAsInt())
-            {
-                retval = true;
-            }
-        }
-        else
-        {
-            if (iterations == 0 && getPercentThroughputAsFloat() > 0)
-            {
-                retval = true;
-            }
-            else if (
-                ((float) executions / iterations) * 100
-                    <= getPercentThroughputAsFloat())
-            {
-                retval = true;
-            }
-        }
-        if (retval)
-        {
-            returnTrue = true;
-            increaseExecutions();
-        }
-        return retval;
+        return null;
     }
 
     /**
@@ -363,9 +343,8 @@ public class ThroughputController
         clone.iteration = iteration;
         clone.globalNumExecutions = globalNumExecutions;
         clone.globalIteration = globalIteration;
-        clone.numExecutionsLock = numExecutionsLock;
-        clone.iterationLock = iterationLock;
-        clone.returnTrue = false;
+        clone.counterLock = counterLock;
+        clone.runThisTime = false;
         return clone;
     }
 
@@ -373,8 +352,7 @@ public class ThroughputController
         throws IOException, ClassNotFoundException
     {
         in.defaultReadObject();
-        numExecutionsLock = new Object();
-        iterationLock = new Object();
+        counterLock = new Object();
     }
 
     /* (non-Javadoc)
@@ -384,15 +362,28 @@ public class ThroughputController
     {
         if (!isPerThread())
         {
-            synchronized (iterationLock)
+            synchronized (counterLock)
             {
                 increaseIteration();
+
+                // Count the previous iteration as executed iif it was run:
+                if (runThisTime)
+                {
+                    increaseExecutions();
+                }
             }
         }
         else
         {
             increaseIteration();
+
+            // Count the previous iteration as executed iif it was run:
+            if (runThisTime)
+            {
+                increaseExecutions();
+            }
         }
+        
         reInitialize();
     }
 
@@ -478,12 +469,16 @@ public class ThroughputController
             sub_1.addTestElement(new TestSampler("one"));
             sub_1.addTestElement(new TestSampler("two"));
 
-            LoopController controller = new LoopController();
-            controller.setLoops(5);
-            controller.addTestElement(new TestSampler("zero"));
-            controller.addTestElement(sub_1);
-            controller.addIterationListener(sub_1);
-            controller.addTestElement(new TestSampler("three"));
+            LoopController loop = new LoopController();
+            loop.setLoops(5);
+            loop.addTestElement(new TestSampler("zero"));
+            loop.addTestElement(sub_1);
+            loop.addIterationListener(sub_1);
+            loop.addTestElement(new TestSampler("three"));
+
+            LoopController test = new LoopController();
+            test.setLoops(2);
+            test.addTestElement(loop);
 
             String[] order =
                 new String[] {
@@ -501,26 +496,31 @@ public class ThroughputController
                     "three",
                     "zero",
                     "three",
+                    "zero",
+                    "three",
+                    "zero",
+                    "three",
+                    "zero",
+                    "three",
+                    "zero",
+                    "three",
+                    "zero",
+                    "three",
                 };
-            int counter= 0;
             sub_1.testStarted();
-            controller.initialize();
-            for (int i=0; i<3; i++)
+            test.initialize();
+            for (int counter= 0; counter < order.length; counter++)
             {
-                TestElement sampler = null;
-                while ((sampler = controller.next()) != null)
-                {
-                    assertEquals("Counter: "+counter+", i: "+i
-                            +", executions: "+sub_1.getExecutions()
-                            +", iteration: "+sub_1.getIteration(),
-                        order[counter],
-                        sampler.getPropertyAsString(TestElement.NAME)
-                        );
-                    counter++;
-                }
-                assertEquals(counter, order.length);
-                counter= 0;
+                TestElement sampler = test.next();
+                assertNotNull(sampler);
+                assertEquals("Counter: "+counter
+                        +", executions: "+sub_1.getExecutions()
+                        +", iteration: "+sub_1.getIteration(),
+                    order[counter],
+                    sampler.getPropertyAsString(TestElement.NAME)
+                    );
             }
+            assertNull(test.next());
             sub_1.testEnded();
         }
 
