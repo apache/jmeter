@@ -1,10 +1,13 @@
 package org.apache.jmeter.gui;
 
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * Marker interface indicating that an instance of a component cannot be shared.
+ * The GUI instance will be shared among all test elements of a given type if
+ * the GUI component class does not implement this interface.
+ * 
+ * @author unknown
+ * @version $Revision$
  */
 public interface UnsharedComponent
-{}
+{
+}
