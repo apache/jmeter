@@ -1,4 +1,5 @@
 @echo off
+
 rem   $Id$
 rem   Copyright 2001-2004 The Apache Software Foundation
 rem 
@@ -26,12 +27,13 @@ rem  ============================================
 
 
 if "%OS%"=="Windows_NT" goto WinNT
-echo "Sorry, this command file requires Windows NT/ 2000"
+echo "Sorry, this command file requires Windows NT/ 2000 / XP"
+pause
 goto END
 :WinNT
 
 rem change to the directory in which this script resides, i.e. bin
-cd %~dp0
+cd /D %~dp0
 
 jmeter -t %1
 

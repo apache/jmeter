@@ -24,67 +24,30 @@ rem  formed from the input file name but with the
 rem  extension .jtl
 rem
 rem  Only the first parameter is used.
-rem
-rem  For other OSes, the script currently behaves
-rem  like jmeter.bat - patches welcome!
+rem  Only works for Win2k.
 rem
 rem  ============================================
-if not "%OS%"=="Windows_NT" goto win9xStart
-:winNTStart
-@setlocal
 
-rem Need to check if we are using the 4NT shell...
-if "%eval[2+2]" == "4" goto setup4NT
+if "%OS%"=="Windows_NT" goto WinNT
+echo "Sorry, this command file requires Windows NT/ 2000 / XP"
+pause
+goto END
+:WinNT
 
 rem Change to directory containing this file, which must be in bin
-if exist %~nx0 goto winNT1
 echo Changing to JMeter home directory
-cd %~dp0
+cd /D %~dp0
 
-:winNT1
-rem On NT/2K grab all arguments at once
 rem Check file is supplied
 if a == a%1 goto winNT2
 rem Check it has extension .jmx
 if a%~x1 == a.jmx goto winNT3
 :winNT2
 echo Please supply a script name with the extension .jmx
+pause
 goto :EOF
 :winNT3
-set JMETER_CMD_LINE_ARGS=-n -t %1 -l %~dpn1.jtl
-echo %JMETER_CMD_LINE_ARGS%
-goto doneStart
 
-:setup4NT
-set JMETER_CMD_LINE_ARGS=%$
-goto doneStart
+jmeter -n -t %1 -l %~dpn1.jtl
 
-:win9xStart
-rem Slurp the command line arguments.  This loop allows for an unlimited number of 
-rem agruments (up to the command line limit, anyway).
-
-set JMETER_CMD_LINE_ARGS=
-
-:setupArgs
-if %1a==a goto doneStart
-set JMETER_CMD_LINE_ARGS=%JMETER_CMD_LINE_ARGS% %1
-shift
-goto setupArgs
-
-:doneStart
-rem This label provides a place for the argument list loop to break out 
-rem and for NT handling to skip to.
-
-rem See the unix startup file for the rationale of the following parameters,
-rem including some tuning recommendations
-set HEAP=-Xms256m -Xmx256m
-set NEW=-XX:NewSize=128m -XX:MaxNewSize=128m
-set SURVIVOR=-XX:SurvivorRatio=8 -XX:TargetSurvivorRatio=50%
-set TENURING=-XX:MaxTenuringThreshold=2
-set EVACUATION=-XX:MaxLiveObjectEvacuationRatio=20%
-set RMIGC=-Dsun.rmi.dgc.client.gcInterval=600000 -Dsun.rmi.dgc.server.gcInterval=600000
-set PERM=-XX:PermSize=64m -XX:MaxPermSize=64m
-set DEBUG=-verbose:gc -XX:+PrintTenuringDistribution
-set ARGS=%HEAP% %NEW% %SURVIVOR% %TENURING% %EVACUATION% %RMIGC% %PERM% %DEBUG%
-
-java %JVM_ARGS% %ARGS% -jar ApacheJMeter.jar %JMETER_CMD_LINE_ARGS%
+:END
