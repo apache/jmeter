@@ -52,7 +52,8 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.visualizers;
+package org.apache.jmeter.visualizers;
+
 
 /**
  * The Interface to be implemented by any class that wants to be notified by
@@ -64,13 +65,13 @@
 public interface ModelListener
 {
 
-	/**
-	 * Informs the Visualizer that the model has changed.
-	 */
-	public void updateVisualizer();
+    /**
+     * Informs the Visualizer that the model has changed.
+     */
+    public void updateVisualizer();
 
-	/**
-	 * Informs the Visualizer that a message should be displayed.
-	 */
-	public void displayMessage(String messageString, boolean isError);
+    /**
+     * Informs the Visualizer that a message should be displayed.
+     */
+    public void displayMessage(String messageString, boolean isError);
 }

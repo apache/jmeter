@@ -54,6 +54,7 @@
  */
 package org.apache.jmeter.visualizers;
 
+
 // java
 import java.text.DecimalFormat;
 import java.util.HashSet;
@@ -75,10 +76,11 @@ import org.apache.jmeter.samplers.SampleResult;
  * @author James Boutcher
  * @version 1.0
  */
-public class RunningSample {
-	
-	private static DecimalFormat rateFormatter = new DecimalFormat("#.0");	
-   private static DecimalFormat errorFormatter = new DecimalFormat("#0.00%");
+public class RunningSample
+{
+
+    private static DecimalFormat rateFormatter = new DecimalFormat("#.0");
+    private static DecimalFormat errorFormatter = new DecimalFormat("#0.00%");
 
     private long counter;
     private long runningSum;
@@ -92,9 +94,10 @@ public class RunningSample {
     /**
      * use this constructor.
      */
-    public RunningSample(String label, int index) {
-        this.label= label;
-	this.index = index;
+    public RunningSample(String label, int index)
+    {
+        this.label = label;
+        this.index = index;
         counter = 0L;
         runningSum = 0L;
         max = Long.MIN_VALUE;
@@ -110,11 +113,12 @@ public class RunningSample {
      * last samples as the total time passed, and the test may actually have
      * started before that start time and ended after that end time.
      **/
-    public double getRate() {
-      long howLongRunning = lastTime - firstTime;
+    public double getRate()
+    {
+        long howLongRunning = lastTime - firstTime;
 
-      if (howLongRunning == 0) return Double.MAX_VALUE;
-      return (double)counter / howLongRunning * 1000.0;
+        if (howLongRunning == 0) return Double.MAX_VALUE;
+        return (double) counter / howLongRunning * 1000.0;
     }
 
     /**
@@ -123,11 +127,12 @@ public class RunningSample {
      * last samples as the total time passed, and the test may actually have
      * started before that start time and ended after that end time.
      **/
-    public double getRatePerMin() {
-      long howLongRunning = lastTime - firstTime;
+    public double getRatePerMin()
+    {
+        long howLongRunning = lastTime - firstTime;
 
-      if (howLongRunning == 0) return Double.MAX_VALUE;
-      return (double)counter / howLongRunning * 60000.0;
+        if (howLongRunning == 0) return Double.MAX_VALUE;
+        return (double) counter / howLongRunning * 60000.0;
     }
 
     /**
@@ -143,28 +148,33 @@ public class RunningSample {
      *      "15.9/min"
      * @return a String representation of the rate the samples are being taken at.
      */
-    public String getRateString() {
-        double rate= getRate();
+    public String getRateString()
+    {
+        double rate = getRate();
 
         if (rate == Double.MAX_VALUE) return "N/A";
- 
-        String unit="sec";
-        if (rate < 1.0) {
-	    rate *= 60.0;
-	    unit = "min";
+
+        String unit = "sec";
+
+        if (rate < 1.0)
+        {
+            rate *= 60.0;
+            unit = "min";
         }
-        if (rate < 1.0) {
-	    rate *= 60.0;
-	    unit = "/hour";
+        if (rate < 1.0)
+        {
+            rate *= 60.0;
+            unit = "/hour";
         }
 
         String rval = rateFormatter.format(rate) + "/" + unit;
+
         return (rval);
     }
 
     public String getLabel()
     {
-    	return label;
+        return label;
     }
 
     public int getIndex()
@@ -177,12 +187,15 @@ public class RunningSample {
      * @arg aTimeInMillis Time in milliseconds that this sample took to process
      * @arg aSuccessFlag Flag for if this sample was successful or not
      */
-    public synchronized void addSample(SampleResult res) {
-		long aTimeInMillis = res.getTime();
-		boolean aSuccessFlag = res.isSuccessful();
-		lastTime = res.getTimeStamp();
+    public synchronized void addSample(SampleResult res)
+    {
+        long aTimeInMillis = res.getTime();
+        boolean aSuccessFlag = res.isSuccessful();
+
+        lastTime = res.getTimeStamp();
         counter++;
-        if (firstTime == 0L) {
+        if (firstTime == 0L)
+        {
             // this is our first sample, set the start time to current timestamp
             firstTime = lastTime;
         }
@@ -196,8 +209,10 @@ public class RunningSample {
      * Returns the time in milliseconds of the quickest sample.
      * @return the time in milliseconds of the quickest sample.
      */
-    public long getMin() {
+    public long getMin()
+    {
         long rval = 0;
+
         if (min != Long.MAX_VALUE) rval = min;
         return (rval);
     }
@@ -206,8 +221,10 @@ public class RunningSample {
      * Returns the time in milliseconds of the slowest sample.
      * @return the time in milliseconds of the slowest sample.
      */
-    public long getMax() {
+    public long getMax()
+    {
         long rval = 0;
+
         if (max != Long.MIN_VALUE) rval = max;
         return (rval);
     }
@@ -216,7 +233,8 @@ public class RunningSample {
      * Returns the average time in milliseconds that samples ran in.
      * @return the average time in milliseconds that samples ran in.
      */
-    public long getAverage() {
+    public long getAverage()
+    {
         if (counter == 0) return (0);
         return (runningSum / counter);
     }
@@ -225,7 +243,8 @@ public class RunningSample {
      * Returns the number of samples that have been recorded by this instance of the RunningSample class.
      * @return the number of samples that have been recorded by this instance of the RunningSample class.
      */
-    public long getNumSamples() {
+    public long getNumSamples()
+    {
         return (counter);
     }
 
@@ -236,29 +255,34 @@ public class RunningSample {
      *
      * @return the raw double value of the percentage of samples with errors that were recorded.
      */
-    public double getErrorPercentage() {
+    public double getErrorPercentage()
+    {
         double rval = 0.0;
+
         if (counter == 0) return (rval);
         rval = (double) errorCount / (double) counter;
         return (rval);
     }
-
 
     /**
      * Returns a String which represents the percentage of sample errors that have occurred.
      * "0.00%" through "100.00%"
      * @return a String which represents the percentage of sample errors that have occurred.
      */
-    public String getErrorPercentageString() {
+    public String getErrorPercentageString()
+    {
         double myErrorPercentage = this.getErrorPercentage();
+
         return (errorFormatter.format(myErrorPercentage));
     }
 
     /**
      * For debugging purposes, mainly.
      */
-    public String toString() {
+    public String toString()
+    {
         StringBuffer mySB = new StringBuffer();
+
         mySB.append("Samples: " + this.getNumSamples() + "  ");
         mySB.append("Avg: " + this.getAverage() + "  ");
         mySB.append("Min: " + this.getMin() + "  ");

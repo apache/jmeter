@@ -55,12 +55,14 @@
 
 package org.apache.jmeter.visualizers;
 
+
 import java.awt.*;
 import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 import org.apache.jmeter.samplers.SampleResult;
+
 
 /**
  * This class implements a statistical analyser that
@@ -73,210 +75,252 @@ import org.apache.jmeter.samplers.SampleResult;
  * @author  <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
  * @version $Revision$ $Date$
  */
-public class WindowedVisualizer extends JPanel implements ImageVisualizer {
+public class WindowedVisualizer extends JPanel implements ImageVisualizer
+{
 
-	 public class Graph extends JComponent implements Scrollable {
+    public class Graph extends JComponent implements Scrollable
+    {
 
-		  private int counter = 0;
-		  private int cursor = 0;
-		  private int sum = 0;
-		  private int window = 100;
-		  private int samples = 2000;
-		  private int max = 1;
-		  private boolean active = true;
-		  private int[] sample;
-		  private int[] average;
+        private int counter = 0;
+        private int cursor = 0;
+        private int sum = 0;
+        private int window = 100;
+        private int samples = 2000;
+        private int max = 1;
+        private boolean active = true;
+        private int[] sample;
+        private int[] average;
 
-		  public Graph() {
-				this.sample = new int[window];
-				this.average = new int[window];
-				this.setPreferredSize(getPreferredScrollableViewportSize());
-		  }
+        public Graph()
+        {
+            this.sample = new int[window];
+            this.average = new int[window];
+            this.setPreferredSize(getPreferredScrollableViewportSize());
+        }
 
-		  public int getWindowSize() {
-				return window;
-		  }
+        public int getWindowSize()
+        {
+            return window;
+        }
 
-		  public int setWindowSize(int window) {
-				if (window > 0) this.window = window;
-				return this.window;
-		  }
+        public int setWindowSize(int window)
+        {
+            if (window > 0) this.window = window;
+            return this.window;
+        }
 
-		  public int getSamples() {
-				return samples;
-		  }
+        public int getSamples()
+        {
+            return samples;
+        }
 
-		  public int setSamples(int samples) {
-				if (samples > 0) this.samples = samples;
-			return this.samples;
-		  }
+        public int setSamples(int samples)
+        {
+            if (samples > 0) this.samples = samples;
+            return this.samples;
+        }
 
-		  public int add(long sam) {
-				if (++counter < samples) {
-					 int s = (int) sam;
+        public int add(long sam)
+        {
+            if (++counter < samples)
+            {
+                int s = (int) sam;
 
-					if (cursor < window - 1) {
-						cursor++;
-					} else {
-						cursor = 0;
-					}
+                if (cursor < window - 1)
+                {
+                    cursor++;
+                }
+                else
+                {
+                    cursor = 0;
+                }
 
-					 sum -= sample[cursor];
-					 sample[cursor] = s;
-					 sum += s;
+                sum -= sample[cursor];
+                sample[cursor] = s;
+                sum += s;
 
-					 if (s > max) max = s;
+                if (s > max) max = s;
 
-					 average[cursor] = sum / window;
-				} else {
-					 active = false;
-				}
+                average[cursor] = sum / window;
+            }
+            else
+            {
+                active = false;
+            }
 
-			return average[cursor];
-		  }
+            return average[cursor];
+        }
 
-		  public void clear() {
-				sample = new int[window];
-				average = new int[window];
-				sum = 0;
-				cursor = 0;
-				counter = 0;
-				max = 1;
-				active = true;
-		  }
+        public void clear()
+        {
+            sample = new int[window];
+            average = new int[window];
+            sum = 0;
+            cursor = 0;
+            counter = 0;
+            max = 1;
+            active = true;
+        }
 
-		  public void paintComponent(Graphics g) {
-				super.paintComponent(g);
+        public void paintComponent(Graphics g)
+        {
+            super.paintComponent(g);
 
-				Dimension d = this.getSize();
+            Dimension d = this.getSize();
 
-				for (int i = 0, x = 0; i < window; i++, x++) {
-					 int s = (int) (sample[i] * d.height / max);
-					 g.setColor(Color.black);
-					 g.fillRect(x, d.height - s - 1, 1, 2);
-					 int a = (int) (average[i] * d.height / max);
-					 g.setColor(Color.blue);
-					 g.fillRect(x, d.height - a - 1, 1, 2);
-				}
-		  }
+            for (int i = 0, x = 0; i < window; i++, x++)
+            {
+                int s = (int) (sample[i] * d.height / max);
 
-		  public Dimension getPreferredScrollableViewportSize() {
-				return new Dimension(400, 200);
-		  }
+                g.setColor(Color.black);
+                g.fillRect(x, d.height - s - 1, 1, 2);
+                int a = (int) (average[i] * d.height / max);
 
-		  public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
-				return 1;
-		  }
+                g.setColor(Color.blue);
+                g.fillRect(x, d.height - a - 1, 1, 2);
+            }
+        }
 
-		  public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
-				return 50;
-		  }
+        public Dimension getPreferredScrollableViewportSize()
+        {
+            return new Dimension(400, 200);
+        }
 
-		  public boolean getScrollableTracksViewportWidth() {
-				return false;
-		  }
+        public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
+        {
+            return 1;
+        }
 
-		  public boolean getScrollableTracksViewportHeight() {
-				return true;
-		  }
-	 }
+        public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
+        {
+            return 50;
+        }
 
-	 private Graph graph;
-	 private JTextField windowField;
-	 private JTextField samplesField;
-	 private JTextField dataField;
-	 private JTextField averageField;
-	 private JTextField deviationField;
+        public boolean getScrollableTracksViewportWidth()
+        {
+            return false;
+        }
 
-	 public WindowedVisualizer() {
-		  super();
+        public boolean getScrollableTracksViewportHeight()
+        {
+            return true;
+        }
+    }
 
-		  graph = new Graph();
-		  JScrollPane graphScrollPanel = new JScrollPane(graph);
-		  graphScrollPanel.setViewportBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-		  //graphScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		  //graphScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+    private Graph graph;
+    private JTextField windowField;
+    private JTextField samplesField;
+    private JTextField dataField;
+    private JTextField averageField;
+    private JTextField deviationField;
 
-		  JLabel windowLabel = new JLabel("Window");
-		  windowField = new JTextField();
-		  windowField.setEditable(true);
-		windowField.setColumns(5);
-		windowField.setText(Integer.toString(this.graph.getWindowSize()));
-		  JLabel samplesLabel = new JLabel("Samples");
-		  samplesField = new JTextField();
-		  samplesField.setEditable(true);
-		  samplesField.setColumns(5);
-		samplesField.setText(Integer.toString(this.graph.getSamples()));
+    public WindowedVisualizer()
+    {
+        super();
 
-		  JPanel sidePanel = new JPanel();
-		  sidePanel.setLayout(new GridLayout(0, 1));
-		  sidePanel.add(windowLabel);
-		  sidePanel.add(windowField);
-		  sidePanel.add(samplesLabel);
-		  sidePanel.add(samplesField);
+        graph = new Graph();
+        JScrollPane graphScrollPanel = new JScrollPane(graph);
 
-		  dataField = new JTextField("0000ms");
-		  dataField.setEditable(false);
-		  dataField.setForeground(Color.black);
-		  dataField.setBackground(getBackground());
-		  averageField = new JTextField("0000ms");
-		  averageField.setEditable(false);
-		  averageField.setForeground(Color.blue);
-		  averageField.setBackground(getBackground());
+        graphScrollPanel.setViewportBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+        // graphScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        // graphScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
-		  JPanel showPanel = new JPanel();
-		  showPanel.setLayout(new GridLayout(0, 1));
-		  showPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
-		  showPanel.add(dataField);
-		  showPanel.add(averageField);
+        JLabel windowLabel = new JLabel("Window");
 
-		  setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		  setLayout(new BorderLayout());
-		  add(sidePanel, BorderLayout.WEST);
-		  add(graphScrollPanel, BorderLayout.CENTER);
-		  add(showPanel, BorderLayout.EAST);
-	 }
+        windowField = new JTextField();
+        windowField.setEditable(true);
+        windowField.setColumns(5);
+        windowField.setText(Integer.toString(this.graph.getWindowSize()));
+        JLabel samplesLabel = new JLabel("Samples");
 
-	 public synchronized void add(SampleResult sampleResult) {
-		long sample = sampleResult.getTime();
-		  int average = this.graph.add(sample);
+        samplesField = new JTextField();
+        samplesField.setEditable(true);
+        samplesField.setColumns(5);
+        samplesField.setText(Integer.toString(this.graph.getSamples()));
 
-		  dataField.setText(sample + "ms");
-		  averageField.setText(average + "ms");
+        JPanel sidePanel = new JPanel();
 
-		  repaint();
-	 }
+        sidePanel.setLayout(new GridLayout(0, 1));
+        sidePanel.add(windowLabel);
+        sidePanel.add(windowField);
+        sidePanel.add(samplesLabel);
+        sidePanel.add(samplesField);
 
-	 public synchronized void clear() {
+        dataField = new JTextField("0000ms");
+        dataField.setEditable(false);
+        dataField.setForeground(Color.black);
+        dataField.setBackground(getBackground());
+        averageField = new JTextField("0000ms");
+        averageField.setEditable(false);
+        averageField.setForeground(Color.blue);
+        averageField.setBackground(getBackground());
 
-		try {
-				windowField.setText(Integer.toString(this.graph.setWindowSize(Integer.parseInt(windowField.getText()))));
-		  } catch (Exception ignored) {};
+        JPanel showPanel = new JPanel();
 
-		  try {
-				samplesField.setText(Integer.toString(this.graph.setSamples(Integer.parseInt(samplesField.getText()))));
-		  } catch (Exception ignored) {};
+        showPanel.setLayout(new GridLayout(0, 1));
+        showPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        showPanel.add(dataField);
+        showPanel.add(averageField);
 
-		  this.graph.clear();
+        setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        setLayout(new BorderLayout());
+        add(sidePanel, BorderLayout.WEST);
+        add(graphScrollPanel, BorderLayout.CENTER);
+        add(showPanel, BorderLayout.EAST);
+    }
 
-		  dataField.setText("0000ms");
-		  averageField.setText("0000ms");
+    public synchronized void add(SampleResult sampleResult)
+    {
+        long sample = sampleResult.getTime();
+        int average = this.graph.add(sample);
 
-		  repaint();
-	 }
+        dataField.setText(sample + "ms");
+        averageField.setText(average + "ms");
 
-	 public String toString() {
-		  return "Show the samples analysys as windowed dot plots";
-	 }
+        repaint();
+    }
 
-	 public JPanel getControlPanel() {
-	return this;
-	 }
+    public synchronized void clear()
+    {
 
-	 public Image getImage() {
-	Image result = graph.createImage(graph.getWidth(), graph.getHeight());
-	graph.paintComponent(result.getGraphics());
+        try
+        {
+            windowField.setText(Integer.toString(this.graph.setWindowSize(Integer.parseInt(windowField.getText()))));
+        }
+        catch (Exception ignored)
+        {};
 
-	return result;
-	 }
+        try
+        {
+            samplesField.setText(Integer.toString(this.graph.setSamples(Integer.parseInt(samplesField.getText()))));
+        }
+        catch (Exception ignored)
+        {};
+
+        this.graph.clear();
+
+        dataField.setText("0000ms");
+        averageField.setText("0000ms");
+
+        repaint();
+    }
+
+    public String toString()
+    {
+        return "Show the samples analysys as windowed dot plots";
+    }
+
+    public JPanel getControlPanel()
+    {
+        return this;
+    }
+
+    public Image getImage()
+    {
+        Image result = graph.createImage(graph.getWidth(), graph.getHeight());
+
+        graph.paintComponent(result.getGraphics());
+
+        return result;
+    }
 }

@@ -53,12 +53,16 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.visualizers; // java
+
+
 import java.util.*; // apache
 import junit.framework.TestCase;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
+
+
 /****************************************
  * Title: StatVisualizerModel.java Description: Aggregrate Table-Based Reporting
  * Model for JMeter Props to the people who've done the other visualizers ahead
@@ -72,203 +76,223 @@ import org.apache.jmeter.util.JMeterUtils;
  ***************************************/
 public class StatVisualizerModel implements Clearable
 {
-	private String name;
-	private List listeners;
-	private Vector runningSamples;
-	private Map labelMap;
-	private RunningSample total;
+    private String name;
+    private List listeners;
+    private Vector runningSamples;
+    private Map labelMap;
+    private RunningSample total;
 
-	/****************************************
-	 * Default Constuctor
-	 ***************************************/
-	public StatVisualizerModel()
-	{
-		listeners = new LinkedList();
-		runningSamples = new Vector(0, 10);
-		labelMap = Collections.synchronizedMap(new HashMap(10));
-		total = new RunningSample("__TOTAL__", -1);
-	}
-	/****************************************
-	 * Sets the Name attribute of the StatVisualizerModel object
-	 *
-	 *@param name  The new Name value
-	 ***************************************/
-	public void setName(String name)
-	{
-		this.name = name;
-	}
+    /****************************************
+     * Default Constuctor
+     ***************************************/
+    public StatVisualizerModel()
+    {
+        listeners = new LinkedList();
+        runningSamples = new Vector(0, 10);
+        labelMap = Collections.synchronizedMap(new HashMap(10));
+        total = new RunningSample("__TOTAL__", -1);
+    }
 
-	/****************************************
-	 * Gets the GuiClass attribute of the StatVisualizerModel object
-	 *
-	 *@return   The GuiClass value
-	 ***************************************/
-	public Class getGuiClass()
-	{
-		return StatVisualizer.class;
-	}
-	/****************************************
-	 * Gets the Name attribute of the StatVisualizerModel object
-	 *
-	 *@return   The Name value
-	 ***************************************/
-	public String getName()
-	{
-		return name;
-	}
-	/****************************************
-	 * Registers a listener (a visualizer, graph, etc) to this model. This will
-	 * allow the model to fire GUI updates to anyone when data changes, etc.
-	 *
-	 *@param listener       !ToDo
-	 ***************************************/
-	public void addGraphListener(GraphListener listener)
-	{
-		listeners.add(listener);
-	}
-	
-	public void addAccumListener(AccumListener listener)
-	{
-		listeners.add(listener);
-	}
+    /****************************************
+     * Sets the Name attribute of the StatVisualizerModel object
+     *
+     *@param name  The new Name value
+     ***************************************/
+    public void setName(String name)
+    {
+        this.name = name;
+    }
 
-	public int getRunningSampleCount() {
-	  	return runningSamples.size();
-	}
+    /****************************************
+     * Gets the GuiClass attribute of the StatVisualizerModel object
+     *
+     *@return   The GuiClass value
+     ***************************************/
+    public Class getGuiClass()
+    {
+        return StatVisualizer.class;
+    }
 
-	public RunningSample getRunningSample(int index)
-	{
-		return (RunningSample)runningSamples.get(index);
-	}
+    /****************************************
+     * Gets the Name attribute of the StatVisualizerModel object
+     *
+     *@return   The Name value
+     ***************************************/
+    public String getName()
+    {
+        return name;
+    }
 
-	public RunningSample getRunningSample(String label)
-	{
-		return (RunningSample)labelMap.get(label);
-	}
+    /****************************************
+     * Registers a listener (a visualizer, graph, etc) to this model. This will
+     * allow the model to fire GUI updates to anyone when data changes, etc.
+     *
+     *@param listener       !ToDo
+     ***************************************/
+    public void addGraphListener(GraphListener listener)
+    {
+        listeners.add(listener);
+    }
 
-	public RunningSample getRunningSampleTotal() {
-	  	return total;
-	}
+    public void addAccumListener(AccumListener listener)
+    {
+        listeners.add(listener);
+    }
 
-	/****************************************
-	 * !ToDo
-	 *
-	 *@param res  !ToDo
-	 ***************************************/
-	public void addNewSample(SampleResult res)
-	{
-		String aLabel = res.getSampleLabel();
-		String responseCode = res.getResponseCode();
-		RunningSample s;
-		synchronized(labelMap) {
-		  s= (RunningSample)labelMap.get(aLabel);
-		  if (s == null) {
-			  s = new RunningSample(aLabel, runningSamples.size());
-			  runningSamples.add(s);
-			  labelMap.put(aLabel, s);
-		  }
-		}
-		s.addSample(res);
-		total.addSample(res);
-		this.fireDataChanged(s);
-	}
-	/****************************************
-	 * Reset everything we can in the model.
-	 ***************************************/
-	public void clear()
-	{
-		// clear the data structures
-		runningSamples.clear();
-		labelMap.clear();
-		total= new RunningSample("__TOTAL__", -1);
-		this.fireDataChanged();
-	}
-	/****************************************
-	 * Called when the model changes - then we call out to all registered listeners
-	 * and tell them to update themselves.
-	 ***************************************/
-	protected void fireDataChanged()
-	{
-		Iterator iter = listeners.iterator();
-		while (iter.hasNext())
-		{
-			Object myObj = iter.next();
-			if (!(myObj instanceof GraphListener))
-			{
-				continue;
-			}
-			((GraphListener) myObj).updateGui();
-		}
-	}
-	
-	protected void fireDataChanged(RunningSample s)
-	{
-		Iterator iter = listeners.iterator();
-		while (iter.hasNext())
-		{
-			Object myObj = iter.next();
-			if (!(myObj instanceof AccumListener))
-			{
-				continue;
-			}
-			((AccumListener) myObj).updateGui(s);
-		}
-	}
+    public int getRunningSampleCount()
+    {
+        return runningSamples.size();
+    }
 
-	public static class Test extends junit.framework.TestCase
-	{
-	  public Test(String name)
-	  {
-	    super(name);
-	  }
+    public RunningSample getRunningSample(int index)
+    {
+        return (RunningSample) runningSamples.get(index);
+    }
 
-	  private SampleResult sample(String label, long timestamp,
-	      				long time, boolean ok)
-	  {
-	    SampleResult res= new SampleResult();
-	    res.setSampleLabel(label);
-	    res.setTimeStamp(timestamp);
-	    res.setTime(time);
-	    res.setSuccessful(ok);
-	    return res;
-	  }
+    public RunningSample getRunningSample(String label)
+    {
+        return (RunningSample) labelMap.get(label);
+    }
 
-	  public void testStatisticsCalculation() {
-	    StatVisualizerModel m= new StatVisualizerModel();
-	    long t0= System.currentTimeMillis();
-	    m.addNewSample(sample("1", t0+0, 100, true));
-	    m.addNewSample(sample("2", t0+250, 200, true));
-	    m.addNewSample(sample("1", t0+500, 300, true));
-	    assertEquals(2, m.getRunningSampleCount());
-	    assertEquals(2, m.labelMap.size());
+    public RunningSample getRunningSampleTotal()
+    {
+        return total;
+    }
 
-	    {
-	    RunningSample s= m.getRunningSample("1");
-	    assertEquals("1", s.getLabel());
-	    assertEquals(2, s.getNumSamples());
-	    assertEquals(100, s.getMin());
-	    assertEquals(300, s.getMax());
-	    assertEquals(200, s.getAverage());
-	    assertEquals(4.0, s.getRate(), 1e-6);
-	    }
+    /****************************************
+     * !ToDo
+     *
+     *@param res  !ToDo
+     ***************************************/
+    public void addNewSample(SampleResult res)
+    {
+        String aLabel = res.getSampleLabel();
+        String responseCode = res.getResponseCode();
+        RunningSample s;
 
-	    {
-	    RunningSample s= m.getRunningSample("2");
-	    assertEquals("2", s.getLabel());
-	    assertEquals(1, s.getNumSamples());
-	    assertEquals(200, s.getMin());
-	    assertEquals(200, s.getMax());
-	    assertEquals(200, s.getAverage());
-	    }
+        synchronized (labelMap)
+        {
+            s = (RunningSample) labelMap.get(aLabel);
+            if (s == null)
+            {
+                s = new RunningSample(aLabel, runningSamples.size());
+                runningSamples.add(s);
+                labelMap.put(aLabel, s);
+            }
+        }
+        s.addSample(res);
+        total.addSample(res);
+        this.fireDataChanged(s);
+    }
 
-	    {
-	    RunningSample s= m.getRunningSampleTotal();
-	    assertEquals(3, s.getNumSamples());
-	    assertEquals(100, s.getMin());
-	    assertEquals(300, s.getMax());
-	    assertEquals(200, s.getAverage());
-	    assertEquals(6.0, s.getRate(), 1e-6);
-	    }
-	  }
-	}
+    /****************************************
+     * Reset everything we can in the model.
+     ***************************************/
+    public void clear()
+    {
+        // clear the data structures
+        runningSamples.clear();
+        labelMap.clear();
+        total = new RunningSample("__TOTAL__", -1);
+        this.fireDataChanged();
+    }
+
+    /****************************************
+     * Called when the model changes - then we call out to all registered listeners
+     * and tell them to update themselves.
+     ***************************************/
+    protected void fireDataChanged()
+    {
+        Iterator iter = listeners.iterator();
+
+        while (iter.hasNext())
+        {
+            Object myObj = iter.next();
+
+            if (!(myObj instanceof GraphListener))
+            {
+                continue;
+            }
+            ((GraphListener) myObj).updateGui();
+        }
+    }
+
+    protected void fireDataChanged(RunningSample s)
+    {
+        Iterator iter = listeners.iterator();
+
+        while (iter.hasNext())
+        {
+            Object myObj = iter.next();
+
+            if (!(myObj instanceof AccumListener))
+            {
+                continue;
+            }
+            ((AccumListener) myObj).updateGui(s);
+        }
+    }
+
+    public static class Test extends junit.framework.TestCase
+    {
+        public Test(String name)
+        {
+            super(name);
+        }
+
+        private SampleResult sample(String label, long timestamp,
+                long time, boolean ok)
+        {
+            SampleResult res = new SampleResult();
+
+            res.setSampleLabel(label);
+            res.setTimeStamp(timestamp);
+            res.setTime(time);
+            res.setSuccessful(ok);
+            return res;
+        }
+
+        public void testStatisticsCalculation()
+        {
+            StatVisualizerModel m = new StatVisualizerModel();
+            long t0 = System.currentTimeMillis();
+
+            m.addNewSample(sample("1", t0 + 0, 100, true));
+            m.addNewSample(sample("2", t0 + 250, 200, true));
+            m.addNewSample(sample("1", t0 + 500, 300, true));
+            assertEquals(2, m.getRunningSampleCount());
+            assertEquals(2, m.labelMap.size());
+
+            {
+                RunningSample s = m.getRunningSample("1");
+
+                assertEquals("1", s.getLabel());
+                assertEquals(2, s.getNumSamples());
+                assertEquals(100, s.getMin());
+                assertEquals(300, s.getMax());
+                assertEquals(200, s.getAverage());
+                assertEquals(4.0, s.getRate(), 1e-6);
+            }
+
+            {
+                RunningSample s = m.getRunningSample("2");
+
+                assertEquals("2", s.getLabel());
+                assertEquals(1, s.getNumSamples());
+                assertEquals(200, s.getMin());
+                assertEquals(200, s.getMax());
+                assertEquals(200, s.getAverage());
+            }
+
+            {
+                RunningSample s = m.getRunningSampleTotal();
+
+                assertEquals(3, s.getNumSamples());
+                assertEquals(100, s.getMin());
+                assertEquals(300, s.getMax());
+                assertEquals(200, s.getAverage());
+                assertEquals(6.0, s.getRate(), 1e-6);
+            }
+        }
+    }
 }
