@@ -49,11 +49,9 @@ public final class CLArgsParser
     private static final int STATE_NO_OPTIONS = 4;
     private static final int STATE_OPTION_MODE = 5;
 
+	// Values for creating tokens
     private static final int TOKEN_SEPARATOR = 0;
     private static final int TOKEN_STRING = 1;
-
-    private static final char[] ARG2_SEPARATORS = // Used to find the end of the second argument
-            new char[]{(char)0 };
 
     private static final char[] ARG_SEPARATORS =
             new char[]{(char)0, '='};
@@ -714,12 +712,7 @@ public final class CLArgsParser
                 final StringBuffer sb = new StringBuffer();
 
                 m_ch = getChar();
-                if( '-' == m_ch )
-                {
-                    m_lastChar = m_ch;
-                }
-
-                while( !isSeparator( m_ch, ARG2_SEPARATORS ) )
+                while( !isSeparator( m_ch, NULL_SEPARATORS ) )
                 {
                     sb.append( m_ch );
                     m_ch = getChar();
