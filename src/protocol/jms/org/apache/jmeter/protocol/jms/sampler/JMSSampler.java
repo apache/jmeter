@@ -27,7 +27,7 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.JMeterProperty;
+//import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
 /**
