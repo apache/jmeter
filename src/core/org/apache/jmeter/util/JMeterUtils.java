@@ -94,7 +94,7 @@ import org.xml.sax.XMLReader;
  *  This class contains the static utility methods used by JMeter.
  *
  *@author     <a href="mailto://stefano@apache.org">Stefano Mazzocchi</a>
- *@created    June 28, 2001
+ *Created    June 28, 2001
  *@version    $Revision$ $Date$
  */
 public class JMeterUtils implements UnitTestManager
@@ -219,7 +219,7 @@ public class JMeterUtils implements UnitTestManager
      * Changes the current locale: re-reads resource strings and notifies
      * listeners.
      *
-     * @author Oliver Rossmueller
+     * author Oliver Rossmueller
      * @param locale new locale
      */
     public static void setLocale(Locale loc)
@@ -235,7 +235,7 @@ public class JMeterUtils implements UnitTestManager
     /**
      * Gets the current locale.
      *
-     * @author Oliver Rossmueller
+     * author Oliver Rossmueller
      * @return current locale
      */
     public static Locale getLocale()
@@ -244,7 +244,7 @@ public class JMeterUtils implements UnitTestManager
     }
 
     /**
-     * @author Oliver Rossmueller
+     * author Oliver Rossmueller
      */
     public static void addLocaleChangeListener(LocaleChangeListener listener)
     {
@@ -252,7 +252,7 @@ public class JMeterUtils implements UnitTestManager
     }
 
     /**
-     * @author Oliver Rossmueller
+     * author Oliver Rossmueller
      */
     public static void removeLocaleChangeListener(LocaleChangeListener listener)
     {
@@ -262,7 +262,7 @@ public class JMeterUtils implements UnitTestManager
     /**
      * Notify all listeners interested in locale changes.
      *
-     * @author Oliver Rossmueller
+     * author Oliver Rossmueller
      */
     private static void notifyLocaleChangeListeners()
     {
@@ -589,7 +589,7 @@ public class JMeterUtils implements UnitTestManager
         {
             String strVal =
                 appProperties
-                    .getProperty(propName, (new Boolean(defaultVal)).toString())
+                    .getProperty(propName, (Boolean.valueOf(defaultVal)).toString())
                     .trim();
             if (strVal.equalsIgnoreCase("true")
                 || strVal.equalsIgnoreCase("t"))
