@@ -833,26 +833,34 @@ some of its classes - at present JMeter can only run from jar files.
   <target name="test" depends="install,test-only" description="Run tests"/>
   
   <target name="test-only">
-   <echo >gump.run = ${gump.run}</echo>
+   <echo >
+   gump.run = ${gump.run}
+   Test with headless=true
+   </echo>
    <java classname="org.apache.jorphan.test.AllTests" fork="yes" dir="${basedir}/bin">
       <classpath>
 	<path refid="classpath"/>
 	<fileset dir="${dest.jar}" includes="*.jar"/>
       </classpath>
-      <!-- Run headless if running under Gump -->
+      <!-- Run headless if running under Gump
       <sysproperty key="java.awt.headless" value="${gump.run}"/>
-
+      -->
+      <sysproperty key="java.awt.headless" value="true"/>
       <arg value="../lib/ext"/>
       <arg value="./jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>
    <!-- TEMP test again non-headless-->
-   <echo>Test non-headless</echo>
+   <echo >
+   gump.run = ${gump.run}
+   Test with headless=false (rather than omitted)
+   </echo>
    <java classname="org.apache.jorphan.test.AllTests" fork="yes" dir="${basedir}/bin">
       <classpath>
 	<path refid="classpath"/>
 	<fileset dir="${dest.jar}" includes="*.jar"/>
       </classpath>
+      <sysproperty key="java.awt.headless" value="false"/>
       <arg value="../lib/ext"/>
       <arg value="./jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
