@@ -206,9 +206,10 @@ public class JMeterTreeListener
         return nodes;
     }
 
-    public void removedSelectedNode()
+    public TreePath removedSelectedNode()
     {
         currentPath = currentPath.getParentPath();
+        return currentPath;
     }
 
     public void valueChanged(TreeSelectionEvent e)
