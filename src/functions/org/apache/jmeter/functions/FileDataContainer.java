@@ -62,7 +62,7 @@ import org.apache.log.Logger;
 
 /**
  * Creation date: (20/03/2003 09:37:44)
- * @author: Cyrus Montakab
+ * @author  Cyrus Montakab
  * @version $Revision$
  */
 public class FileDataContainer
