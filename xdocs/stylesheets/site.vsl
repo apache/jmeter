@@ -267,7 +267,7 @@
 #end
 
 #macro ( subsection $subsection)
-	 <table border="0" cellspacing="0" cellpadding="2">
+	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 		<tr><td bgcolor="$subbannerbg">
 		  <font color="$subbannerfg" face="arial,helvetica,sanserif">
 			 <a name="$subsection.getAttributeValue("anchor")"><strong>$subsection.getAttributeValue("name")</strong></a>
@@ -289,7 +289,7 @@
 #end
 
 #macro ( section $section)
-	 <table border="0" cellspacing="0" cellpadding="2">
+	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 		<tr><td bgcolor="$bannerbg">
 		  <font color="$bannerfg" face="arial,helvetica,sanserif">
 			 <a name="$!section.getAttributeValue("anchor")"><strong>$section.getAttributeValue("name")</strong></a>
