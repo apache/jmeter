@@ -131,7 +131,7 @@ public class URLRewritingModifier
 		public void testGrabSessionId() throws Exception
 		{
 			String html =
-				"location: http://server.com/index.html?session_id=jfdkjdkf%jddkfdfjkdjfdf";
+				"location: http://server.com/index.html?session_id=jfdkjdkf%20jddkfdfjkdjfdf%22";
 			response = new SampleResult();
 			response.setResponseData(html.getBytes());
 			URLRewritingModifier mod = new URLRewritingModifier();
@@ -145,10 +145,10 @@ public class URLRewritingModifier
 			mod.modifyEntry(sampler, response);
 			Arguments args = sampler.getArguments();
 			assertEquals(
-				"jfdkjdkf%jddkfdfjkdjfdf",
+				"jfdkjdkf jddkfdfjkdjfdf\"",
 				((Argument) args.getArguments().get(0)).getValue());
 			assertEquals(
-				"http://server.com:80/index.html?session_id=jfdkjdkf%jddkfdfjkdjfdf",
+				"http://server.com:80/index.html?session_id=jfdkjdkf+jddkfdfjkdjfdf%22",
 				sampler.toString());
 		}
 		public void testGrabSessionId2() throws Exception

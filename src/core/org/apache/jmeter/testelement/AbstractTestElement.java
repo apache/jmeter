@@ -33,17 +33,9 @@ public abstract class AbstractTestElement implements TestElement,Serializable
      ***************************************/
     public Object clone()
     {
-        try
-        {
-            TestElement newObject = (TestElement)this.getClass().newInstance();
-            configureClone(newObject);
-            return newObject;
-        }
-        catch(Exception e)
-        {
-            log.error("",e);
-        }
-        return null;
+        TestElementCloner cloner = new TestElementCloner();
+        this.traverse(cloner);
+        return cloner.getClonedElement();
     }
 
     public void removeProperty(String key)
@@ -126,6 +118,70 @@ public abstract class AbstractTestElement implements TestElement,Serializable
     public Collection getPropertyNames()
     {
         return testInfo.keySet();
+    }
+    
+    public void traverse(TestElementTraverser traverser)
+    {
+        Iterator iter = getPropertyNames().iterator();
+        traverser.startTestElement(this);
+        while (iter.hasNext())
+        {
+            String key = (String)iter.next();
+            Object value = getProperty(key);
+            traverseObject(traverser, key,value);
+        }
+        traverser.endTestElement(this);
+    }
+
+    protected void traverseObject(TestElementTraverser traverser, Object key,Object value)
+    {
+        traverser.startProperty(key);
+        traverseObject(traverser, value);
+        traverser.endProperty(key);
+    }
+
+    protected void traverseObject(TestElementTraverser traverser, Object value)
+    {
+        if(value instanceof TestElement)
+        {
+            ((TestElement)value).traverse(traverser);
+        }
+        else if(value instanceof Collection)
+        {            
+            traverseCollection((Collection)value,traverser);
+        }
+        else if(value instanceof Map)
+        {
+            traverseMap((Map)value,traverser);
+        }
+        else
+        {
+            traverser.simplePropertyValue(value);
+        }
+    }
+    
+    protected void traverseMap(Map map,TestElementTraverser traverser)
+    {
+        traverser.startMap(map);
+        Iterator iter = map.keySet().iterator();
+        while (iter.hasNext())
+        {
+            Object key = iter.next();
+            Object value = map.get(key);
+            traverseObject(traverser,key,value);            
+        }
+        traverser.endMap(map);
+    }
+    
+    protected void traverseCollection(Collection col,TestElementTraverser traverser)
+    {
+        traverser.startCollection(col);
+        Iterator iter = col.iterator();
+        while (iter.hasNext())
+        {
+            traverseObject(traverser,iter.next());           
+        }
+        traverser.endCollection(col);
     }
 
     /****************************************

@@ -68,6 +68,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import junit.framework.TestCase;
@@ -722,7 +723,10 @@ public class SaveService implements SaveServiceConstants
 
     public static Configuration getConfigForTestElement(String named, TestElement item)
     {
-        DefaultConfiguration config = new DefaultConfiguration("testelement", "testelement");
+        TestElementSaver saver = new TestElementSaver(named);
+        item.traverse(saver);
+        Configuration config = saver.getConfiguration();
+       /* DefaultConfiguration config = new DefaultConfiguration("testelement", "testelement");
 
         if (named != null)
         {
@@ -755,7 +759,7 @@ public class SaveService implements SaveServiceConstants
             {
                 config.addChild(createConfigForString(name, value.toString()));
             }
-        }
+        }*/
         return config;
     }
 
@@ -865,6 +869,11 @@ public class SaveService implements SaveServiceConstants
                 element.setProperty(children[i].getAttribute("name"),
                         createCollection(children[i]));
             }
+            else if(children[i].getName().equals("map"))
+            {
+                element.setProperty(children[i].getAttribute("name"),
+                createMap(children[i]));
+            }
         }
         return element;
     }
@@ -894,8 +903,40 @@ public class SaveService implements SaveServiceConstants
             {
                 coll.add(items[i].getValue(""));
             }
+            else if (items[i].getName().equals("map"))
+            {
+                coll.add(createMap(items[i]));
+            }
         }
         return coll;
+    }
+    
+    private static Map createMap(Configuration config) throws ConfigurationException, ClassNotFoundException,
+    IllegalAccessException, InstantiationException
+    {
+        Map map = (Map) Class.forName((String) config.getAttribute("class")).newInstance();
+                Configuration[] items = config.getChildren();
+
+                for (int i = 0; i < items.length; i++)
+                {
+                    if (items[i].getName().equals("property"))
+                    {
+                        map.put(items[i].getAttribute("name"),items[i].getValue(""));
+                    }
+                    else if (items[i].getName().equals("testelement"))
+                    {
+                        map.put(items[i].getAttribute("name"),createTestElement(items[i]));
+                    }
+                    else if (items[i].getName().equals("collection"))
+                    {
+                        map.put(items[i].getAttribute("name"),createCollection(items[i]));
+                    }
+                    else if (items[i].getName().equals("map"))
+                    {
+                        map.put(items[i].getAttribute("name"),createMap(items[i]));
+                    }
+                }
+                return map;
     }
 
     private static HashTree generateNode(Configuration config)
