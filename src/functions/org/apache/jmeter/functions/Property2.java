@@ -114,7 +114,7 @@ public class Property2 extends AbstractFunction implements Serializable
 
     public Object clone()
     {
-        return new Property();
+        return new Property2();
     }
 
     public synchronized String execute(
