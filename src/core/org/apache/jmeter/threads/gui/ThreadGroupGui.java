@@ -111,6 +111,7 @@ public class ThreadGroupGui
     private JDateField end;
     private JCheckBox scheduler;
     private JTextField duration;
+    private JTextField delay; //Relative start-up time
     
     // Sampler error action buttons
 	private JRadioButton continueBox;
@@ -164,6 +165,7 @@ public class ThreadGroupGui
             new StringProperty(
                 ThreadGroup.ON_SAMPLE_ERROR,onSampleError()));
 		tg.setProperty(ThreadGroup.DURATION, duration.getText());
+		tg.setProperty(ThreadGroup.DELAY, delay.getText());
     }
     
     private void setSampleErrorBoxes(ThreadGroup te){
@@ -203,6 +205,7 @@ public class ThreadGroupGui
         start.setDate(new Date(tg.getPropertyAsLong(ThreadGroup.START_TIME)));
         end.setDate(new Date(tg.getPropertyAsLong(ThreadGroup.END_TIME)));
 		duration.setText(tg.getPropertyAsString(ThreadGroup.DURATION));
+		delay.setText(tg.getPropertyAsString(ThreadGroup.DELAY));
         
         setSampleErrorBoxes((ThreadGroup) tg);
     }
@@ -296,6 +299,21 @@ public class ThreadGroupGui
 		panel.add(label, BorderLayout.WEST);
 		duration = new JTextField();
 		panel.add(duration, BorderLayout.CENTER);
+		return panel;
+	}
+
+	/**
+	 * Create a panel containing the Duration field and corresponding label.
+	 * 
+	 * @return a GUI panel containing the Duration field
+	 */
+	private JPanel createDelayPanel()
+	{
+		JPanel panel = new JPanel(new BorderLayout(5, 0));
+		JLabel label = new JLabel(JMeterUtils.getResString("delay"));
+		panel.add(label, BorderLayout.WEST);
+		delay = new JTextField();
+		panel.add(delay, BorderLayout.CENTER);
 		return panel;
 	}
 
@@ -397,6 +415,7 @@ public class ThreadGroupGui
         mainPanel.add(createStartTimePanel());
         mainPanel.add(createEndTimePanel());
 		mainPanel.add(createDurationPanel());
+		mainPanel.add(createDelayPanel());
         mainPanel.setVisible(false);
         VerticalPanel intgrationPanel = new VerticalPanel();
         intgrationPanel.add(threadPropsPanel);        
