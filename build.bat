@@ -5,7 +5,7 @@ set LOCALCLASSPATH=%JAVA_HOME%\lib\tools.jar
 for %%i in (".\lib\*.jar") do CALL lcp %%i
 echo %LOCALCLASSPATH%
 
-for %%i in (..\jakarta-site2\lib\*.jar) do set LOCALCLASSPATH=%LOCALCLASSPATH%;%%i
+for %%i in (..\jakarta-site2\lib\*.jar) do CALL lcp %%i
 
 SET BUILDFILE=build.xml
 echo %LOCALCLASSPATH%

@@ -6,8 +6,6 @@
   </properties>
 <body>
 <section name="Timers">
-
-<h2>Timers</h2>:
 <p>Timers help program flow by controlling how long JMeter's engine delays between
 each sample attempt.  Each sampling thread that runs will pause between every
 sample, depending on which timers have been chosen.

@@ -32,7 +32,7 @@
 <li>New Http sampling that automatically parses HTML response for images to download, and includes the downloading of
 these images in total time for request (Neth neth6@atozasia.com) </li>
 <li>HTTP responses from server can be parsed for links and forms, and dynamic data can be extracted and added to test
-samples at run-time</li> </ul>
+samples at run-time (documented)</li> </ul>
 
 <h3>Version 1.6.1</h3>
 <ul>
