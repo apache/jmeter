@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,16 +53,18 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.config.gui;
+import java.awt.BorderLayout;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -129,31 +131,36 @@ public class LoginConfigGui extends AbstractConfigGui
 
 	private void init()
 	{
-		this.setLayout(new VerticalLayout(1, VerticalLayout.LEFT));
+		setLayout(new BorderLayout(0, 5));
 
-		if(displayName)
-		{
-			this.add(makeTitlePanel());
+		if (displayName) {
+            setBorder(makeBorder());
+			add(makeTitlePanel(), BorderLayout.NORTH);
 		}
 
-		this.add(createUsernamePanel());
-		this.add(createPasswordPanel());
+        VerticalPanel mainPanel = new VerticalPanel();
+        mainPanel.add(createUsernamePanel());
+        mainPanel.add(createPasswordPanel());
+        add(mainPanel, BorderLayout.CENTER);
 	}
 
 	private JPanel createUsernamePanel()
 	{
-		JPanel panel = new JPanel();
-		panel.add(new JLabel(JMeterUtils.getResString("username")));
-		panel.add(username);
+		JPanel panel = new JPanel(new BorderLayout(5, 0));
+        JLabel label = new JLabel(JMeterUtils.getResString("username"));
+        label.setLabelFor(username);
+        panel.add(label, BorderLayout.WEST);
+		panel.add(username, BorderLayout.CENTER);
 		return panel;
 	}
 
 	private JPanel createPasswordPanel()
 	{
-		JPanel panel = new JPanel();
-		panel.add(new JLabel(JMeterUtils.getResString("password")));
-		panel.add(password);
+		JPanel panel = new JPanel(new BorderLayout(5, 0));
+		JLabel label = new JLabel(JMeterUtils.getResString("password"));
+        label.setLabelFor(password);
+        panel.add(label, BorderLayout.WEST);
+        panel.add(password, BorderLayout.CENTER);
 		return panel;
 	}
-
 }
