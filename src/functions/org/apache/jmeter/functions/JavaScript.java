@@ -69,88 +69,99 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.JavaScriptException;
 import org.mozilla.javascript.Scriptable;
 
+public class JavaScript extends AbstractFunction implements Serializable
+{
 
+    private static final List desc = new LinkedList();
+    private static final String KEY = "__javaScript";
 
-public class JavaScript extends AbstractFunction implements Serializable {
+    static {
+        desc.add("JavaScript expression to evaluate");
+        desc.add(JMeterUtils.getResString("function_name_param"));
+    }
 
-	private static final List desc = new LinkedList();
-	private static final String KEY = "__javaScript";
-			
-	static {
-		desc.add("JavaScript expression to evaluate");
-		desc.add(JMeterUtils.getResString("function_name_param"));
-	}
+    private Object[] values;
 
-	private Object[] values;
+    public JavaScript()
+    {
+    }
 
-
-	public JavaScript() {}
-
-	public Object clone() 	{
-		JavaScript newJavaScript = new JavaScript();
-		return newJavaScript;
-	}
-
-    /* (non-Javadoc)
-	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-	 */
-	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-			throws InvalidVariableException {
-
-		JMeterVariables vars = getVariables();
-		
-		String script = ((CompoundVariable)values[0]).execute();
-		String varName = ((CompoundVariable)values[values.length - 1]).execute();
-		String resultStr = "";
-		
-		Context cx = Context.enter();
-		try {
-
-			Scriptable scope = cx.initStandardObjects(null);
-			Object result = cx.evaluateString(scope, script, "<cmd>", 1, null);
-
-			resultStr = Context.toString( result );
-			vars.put( varName, resultStr );
-
-		} catch ( JavaScriptException e ) {
-			throw new InvalidVariableException();			
-		} finally {
-			Context.exit();
-		}
-
-		return resultStr;
-
-	}
-
+    public Object clone()
+    {
+        JavaScript newJavaScript = new JavaScript();
+        return newJavaScript;
+    }
 
     /* (non-Javadoc)
-	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-	 */
-	public void setParameters(Collection parameters)
-			throws InvalidVariableException {
-		
-		values = parameters.toArray();
-		
-		if ( values.length < 2 ) {
-			throw new InvalidVariableException();
-		}
+     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
+     */
+    public synchronized String execute(
+        SampleResult previousResult,
+        Sampler currentSampler)
+        throws InvalidVariableException
+    {
 
-	}
+        JMeterVariables vars = getVariables();
 
+        String script = ((CompoundVariable) values[0]).execute();
+        String varName =
+            ((CompoundVariable) values[values.length - 1]).execute();
+        String resultStr = "";
+
+        Context cx = Context.enter();
+        try
+        {
+
+            Scriptable scope = cx.initStandardObjects(null);
+            Object result = cx.evaluateString(scope, script, "<cmd>", 1, null);
+
+            resultStr = Context.toString(result);
+            vars.put(varName, resultStr);
+
+        }
+        catch (JavaScriptException e)
+        {
+            throw new InvalidVariableException();
+        }
+        finally
+        {
+            Context.exit();
+        }
+
+        return resultStr;
+
+    }
 
     /* (non-Javadoc)
-	 * @see org.apache.jmeter.functions.Function#getReferenceKey()
-	 */
-	public String getReferenceKey() {
-		return KEY;
-	}
+     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
+     */
+    public void setParameters(Collection parameters)
+        throws InvalidVariableException
+    {
 
+        values = parameters.toArray();
+
+        if (values.length < 2)
+        {
+            throw new InvalidVariableException();
+        }
+
+    }
 
     /* (non-Javadoc)
-	 * @see org.apache.jmeter.functions.Function#getArgumentDesc()
-	 */
-	public List getArgumentDesc() {
-		return desc;
-	}
+     * @see org.apache.jmeter.functions.Function#getReferenceKey()
+     */
+    public String getReferenceKey()
+    {
+        return KEY;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.functions.Function#getArgumentDesc()
+     */
+    public List getArgumentDesc()
+    {
+        return desc;
+    }
 
 }

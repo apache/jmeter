@@ -51,10 +51,7 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- * 
- * $ID$
  */
- 
 package org.apache.jmeter.functions;
 
 import java.io.Serializable;
@@ -68,77 +65,86 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * GetProperty (Function)
- * 
- * @author default
- *
- * @version $Id$
- * 
- * Function to get a JMeter property
+ * GetProperty Function to get a JMeter property.
  * 
  * Parameters:
- * 		- property name
- * 		- variable name (optional)
+ *      - property name
+ *      - variable name (optional)
  * 
  * Returns:
- * 		- the property value or the property name if not found
+ *      - the property value or the property name if not found
  * 
+ * @version $Id$
  */
+public class Property extends AbstractFunction implements Serializable
+{
 
-public class Property extends AbstractFunction implements Serializable {
+    private static final List desc = new LinkedList();
+    private static final String KEY = "__property";
 
-	private static final List desc = new LinkedList();
-	private static final String KEY = "__property";
-	
-	// Number of parameters expected - used to reject invalid calls
-	private static final int MIN_PARAMETER_COUNT = 1;
-	private static final int MAX_PARAMETER_COUNT = 2;
-	static {
-		desc.add(JMeterUtils.getResString("property_name_param"));
-		desc.add(JMeterUtils.getResString("function_name_param"));
-	}
+    // Number of parameters expected - used to reject invalid calls
+    private static final int MIN_PARAMETER_COUNT = 1;
+    private static final int MAX_PARAMETER_COUNT = 2;
+    static {
+        desc.add(JMeterUtils.getResString("property_name_param"));
+        desc.add(JMeterUtils.getResString("function_name_param"));
+    }
 
-	
-	private Object[] values;
+    private Object[] values;
 
+    public Property()
+    {
+    }
 
-	public Property() {}
+    public Object clone()
+    {
+        return new Property();
+    }
 
-	public Object clone() 	{
-		return new Property();
-	}
+    public synchronized String execute(
+        SampleResult previousResult,
+        Sampler currentSampler)
+        throws InvalidVariableException
+    {
 
-	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-			throws InvalidVariableException {
+        String propertyName = ((CompoundVariable) values[0]).execute();
+        String propertyValue =
+            JMeterUtils.getPropDefault(propertyName, propertyName);
+        if (values.length > 1)
+        {
+            String variableName = ((CompoundVariable) values[1]).execute();
+            getVariables().put(variableName, propertyValue);
+        }
+        return propertyValue;
 
-		String propertyName = ((CompoundVariable)values[0]).execute();
-		String propertyValue = JMeterUtils.getPropDefault(propertyName,propertyName);
-		if (values.length > 1) {
-			String variableName = ((CompoundVariable)values[1]).execute();
-			getVariables().put(variableName,propertyValue);
-		}
-		return propertyValue;
+    }
 
-	}
+    public void setParameters(Collection parameters)
+        throws InvalidVariableException
+    {
 
-	public void setParameters(Collection parameters)
-			throws InvalidVariableException {
+        values = parameters.toArray();
 
-		values = parameters.toArray();
-		
-		if (( values.length < MIN_PARAMETER_COUNT ) || ( values.length > MAX_PARAMETER_COUNT )) {
-			throw new InvalidVariableException("Parameter Count not between "
-				+MIN_PARAMETER_COUNT+" & "+MAX_PARAMETER_COUNT);
-		}
+        if ((values.length < MIN_PARAMETER_COUNT)
+            || (values.length > MAX_PARAMETER_COUNT))
+        {
+            throw new InvalidVariableException(
+                "Parameter Count not between "
+                    + MIN_PARAMETER_COUNT
+                    + " & "
+                    + MAX_PARAMETER_COUNT);
+        }
 
-	}
+    }
 
-	public String getReferenceKey() {
-		return KEY;
-	}
+    public String getReferenceKey()
+    {
+        return KEY;
+    }
 
-	public List getArgumentDesc() {
-		return desc;
-	}
+    public List getArgumentDesc()
+    {
+        return desc;
+    }
 
 }

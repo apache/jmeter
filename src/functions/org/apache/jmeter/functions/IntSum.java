@@ -75,93 +75,98 @@ import org.apache.jmeter.util.JMeterUtils;
 public class IntSum extends AbstractFunction implements Serializable
 {
 
-	private static final List desc = new LinkedList();
-	private static final String KEY = "__intSum";
-	
-	static
-	{
-		desc.add(JMeterUtils.getResString("intsum_param_1"));
-		desc.add(JMeterUtils.getResString("intsum_param_2"));
-		desc.add(JMeterUtils.getResString("function_name_param"));
-	}
-	
-	private Object[] values;
+    private static final List desc = new LinkedList();
+    private static final String KEY = "__intSum";
 
+    static {
+        desc.add(JMeterUtils.getResString("intsum_param_1"));
+        desc.add(JMeterUtils.getResString("intsum_param_2"));
+        desc.add(JMeterUtils.getResString("function_name_param"));
+    }
+
+    private Object[] values;
 
     /**
      * No-arg constructor.
      */
-	public IntSum() {}
+    public IntSum()
+    {
+    }
 
     /**
      * Clone this Add object.
      * 
      * @return A new Add object.
      */
-	public Object clone()
-	{
-		IntSum newIntSum = new IntSum();
-		return newIntSum;
-	}
+    public Object clone()
+    {
+        IntSum newIntSum = new IntSum();
+        return newIntSum;
+    }
 
-	/**
-	 * Execute the function.
-	 * 
-	 * @see Function#execute(SampleResult, Sampler)
-	 */
-	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-			throws InvalidVariableException
-	{
+    /**
+     * Execute the function.
+     * 
+     * @see Function#execute(SampleResult, Sampler)
+     */
+    public synchronized String execute(
+        SampleResult previousResult,
+        Sampler currentSampler)
+        throws InvalidVariableException
+    {
 
-		JMeterVariables vars = getVariables();
-		
-		int sum = 0;
-		String varName = ((CompoundVariable)values[values.length - 1]).execute();
+        JMeterVariables vars = getVariables();
 
-		for (int i = 0; i < values.length - 1; i++)
-		{
-			sum += Integer.parseInt(((CompoundVariable)values[i]).execute());
-		}
+        int sum = 0;
+        String varName =
+            ((CompoundVariable) values[values.length - 1]).execute();
 
-		String totalString = Integer.toString(sum);
-		vars.put(varName, totalString);
+        for (int i = 0; i < values.length - 1; i++)
+        {
+            sum += Integer.parseInt(((CompoundVariable) values[i]).execute());
+        }
 
-		return totalString;
+        String totalString = Integer.toString(sum);
+        vars.put(varName, totalString);
 
-	}
+        return totalString;
 
-	/**
-	 * Set the parameters for the function.
-	 * 
-	 * @see Function#setParameters(Collection)
-	 */
-	public void setParameters(Collection parameters)
-			throws InvalidVariableException
-	{
-		values = parameters.toArray();
-		
-		if ( values.length < 3 ) {
-			throw new InvalidVariableException();
-		}
+    }
 
-	}
+    /**
+     * Set the parameters for the function.
+     * 
+     * @see Function#setParameters(Collection)
+     */
+    public void setParameters(Collection parameters)
+        throws InvalidVariableException
+    {
+        values = parameters.toArray();
 
-	/**
-	 * Get the invocation key for this function.
-	 * 
-	 * @see Function#getReferenceKey()
-	 */
-	public String getReferenceKey() {
-		return KEY;
-	}
+        if (values.length < 3)
+        {
+            throw new InvalidVariableException();
+        }
 
-	/**
-	 * Get the description of this function.
-	 * 
-	 * @see Function#getArgumentDesc()
-	 */
-	public List getArgumentDesc() {
-		return desc;
-	}
+    }
 
+    /**
+     * Get the invocation key for this function.
+     * 
+     * @see Function#getReferenceKey()
+     */
+    public String getReferenceKey()
+    {
+        return KEY;
+    }
+
+    /**
+     * Get the description of this function.
+     * 
+     * @see Function#getArgumentDesc()
+     */
+    public List getArgumentDesc()
+    {
+        return desc;
+    }
 }
