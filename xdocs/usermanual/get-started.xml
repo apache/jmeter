@@ -99,35 +99,48 @@ and the JAVA_HOME environment variable set, JMeter should be installed successfu
 <section name="2.4 Running JMeter" anchor="running">
 <p>To run JMeter, run the jmeter.bat (for Windows) or jmeter (for Unix) file.</p>
 
-<p>If JMeter does not start correctly, it may be because your system does not support
-the commands contained in jmeter.bat/jmeter.  If this is the case,
-you will need to rewrite the jmeter.bat/jmeter file to explicitly include all
-JAR files that are located in JMeter's "lib" directory in the JMeter classpath.</p>
-
-
 <subsection name="2.4.1 JMeter's Classpath" anchor="classpath">
-<p>The jmeter.bat/jmeter file automatically adds all JAR files that are located in JMeter's "lib"
-directory to JMeter's classpath.  If you want to add other JAR files to JMeter's classpath, then
-you must copy them to JMeter's "lib" directory.</p>
+<p>JMeter automatically finds classes from jars in its /lib and /lib/ext directories.  
+If you want to add other JAR files to JMeter's classpath, then
+you must copy them to JMeter's "lib" directory.  If you have developed new JMeter specific components,
+then you should jar them and copy the jar into JMeter's /lib/ext directory.  JMeter will
+automatically find JMeter components in any jars found here.</p>
 </subsection>
 
 <subsection name="2.4.2 Using a Proxy Server" anchor="proxy_server">
 <p>If you are testing from behind a firewall/proxy server, you may need to provide JMeter with
 the firewall/proxy server hostname and port number.  To do so, run the jmeter.bat/jmeter file
 from a command line with the following parameters:</p>
-<p>-h [proxy server hostname or ip address]<br/>
--p [proxy server port]</p>
-<p><b>Example</b>: jmeter -h my.proxy.server -p 8000</p>
+<p>-H [proxy server hostname or ip address]<br/>
+-P [proxy server port]</p>
+<p><b>Example</b>: jmeter -H my.proxy.server -P 8000</p>
+<p>Alternatively, you can use --proxyHost and --proxyPort</p>
 </subsection>
 
 <subsection name="2.4.3 Non-GUI Mode" anchor="non_gui">
-<p>For non-interactive testing, you may choose to run JMeter without the GUI. Run the
-nongui.bat/nongui.sh script has one required parameter:</p>
-<p>-o [name of JMX file that contains the Test Plan].</p>
+<p>For non-interactive testing, you may choose to run JMeter without the GUI. To do so, use
+the following command options</p>
+<p>-n This specifies JMeter is to run in non-gui mode</p>
+<p>-t [name of JMX file that contains the Test Plan].</p>
+<p>-l [name of JTL file to log sample results to.</p>
 <p>The script also lets you specify the optional firewall/proxy server information:</p>
-<p>-h [proxy server hostname or ip address]<br/>
--p [proxy server port]</p>
-<p><b>Example</b>: nongui -o my_test.jmx -h my.proxy.server -p 8000</p>
+<p>-H [proxy server hostname or ip address]<br/>
+-P [proxy server port]</p>
+<p><b>Example</b>: jmeter -n -t my_test.jmx -l log.jtl -H my.proxy.server -P 8000</p>
+</subsection>
+
+<subsection name="2.4.4 Server Mode" anchor="server">
+<p>For <a href="remote-test.html">distributed testing</a>, run JMeter in server mode, and then control each server from the GUI.
+  
+<note>You must first run <b>rmiregistry</b> from your JDK installation with the ApacheJMeter_core.jar added to your
+system classpath. ApacheJMeter_core.jar resides in JMeter's /lib/ext directory.</note>
+
+Then, run JMeter, using the -s option:</p>
+<p>-s This specifies JMeter is to run as a server</p>
+<p>The script also lets you specify the optional firewall/proxy server information:</p>
+<p>-H [proxy server hostname or ip address]<br/>
+-P [proxy server port]</p>
+<p><b>Example</b>: jmeter -s -H my.proxy.server -P 8000</p>
 </subsection>
 </section>
 
@@ -138,9 +151,9 @@ nongui.bat/nongui.sh script has one required parameter:</p>
   (jmeter [properties file]).
   </p>
   <properties>
-	<property name="search_paths">If you have developed new extensions to JMeter,
-		you can tell JMeter where to find your classes by adding the name of the
-  jar, or the directory where your classes live.</property>
+	<property name="ssl.provider">You must specify the class for your SSL
+	implementation.  If you are using the JSSE from sun, then it is:<br/>
+	com.sun.net.ssl.internal.ssl.Provider.</property>
   <property name="user.dir">The directory JMeter will first go to for saving and
 	loading test scripts.</property>
   <property name="remote_hosts">Comma-delimited list of remote JMeter hosts.

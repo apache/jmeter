@@ -126,6 +126,7 @@
 		<copy tofile="${sources.src.dir}/org/apache/jmeter/util/JMeterUtils.java"
 				file="${sources.src.dir}/org/apache/jmeter/util/JMeterUtils.java_temp"
 				overwrite="yes"/>
+		<delete file="${sources.src.dir}/org/apache/jmeter/util/JMeterUtils.java_temp"/>
 	</target>
 
 	<target name="rmi" depends="compile">

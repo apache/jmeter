@@ -7,7 +7,7 @@
 <body>
 <section name="FTP Test Controller">
 <p>
-The FTP Test controller is a generative controller whose function is to create a single test case for FTP applications.
+The FTP Test controller is a Sampler whose function is to create a single test case for FTP applications.
 The FTP Test allows you to configure an FTP sample:</p>
 <ul>
 <li><b>Server</b>: Host name of the server being tested.</li>

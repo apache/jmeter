@@ -10,33 +10,9 @@
 List of those things yet to do, wishes, dreams, etc.. (in no particular
 order)
 </p>
-<ul>
-  <li><STRONG>New modules:</STRONG></li>
-  <ul>
-	<li>RMI</li>
-	<li>SMTP</li>
-	<li>JINI</li>
-	<li>Corba</li>
-	<li>HTTP-multiPart</li>
-	<li>Local Java Object</li>
-  </ul>
-  <li><strong>Adding reporters:</strong> Reporters would offer report generation based
-		  on data collected by JMeter.  For those looking for more information than
-		  simply time per sample and average time, a reporter should be available.
-		  Examples could include statistical reports, accuracy reports (eg what exactly
-		  did the web page return - this could be used for QA testing).</li>
-
-  <li><strong>Dynamic control while JMeter runs</strong> Enable users to change
-  options while JMeter runs - ie change number of threads running, start and stop
-  thread groups individually, add test samples on the fly, etc.</li>
-  <li><strong>Drag n Drop</strong> allow users to move test elements around the tree
-  easily</li>
-  <li><b>OffLine reporting</b> - Enable the various visualizers to display test results
-  only after the run is finished.  This would facilitate heavier loads since constantly
-  updating the GUI takes up so much processing</li>
-  <li><b>Running indicator</b> - JMeter needs to do something lightweight, yet effective,
-  to indicate to the user when it is running a test</li>
-</ul>
+<p>This page has been made obsolete by the Jakarta Bugzilla database, where enhancement requests are
+stored.  You may <a href="http://nagoya.apache.org/bugzilla/enter_bug.cgi?product=JMeter">submit
+ your own enhancement request</a> there as well.</p>
 </section>
 </body>
 </document>

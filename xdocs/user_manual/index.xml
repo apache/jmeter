@@ -51,7 +51,7 @@ to file).  Listeners are also leaves in a test configuration tree.
 <li>A <b>controller</b> is an element that controls the flow of test samples.  It also controls the process by which
 test samples are created.  Controllers implement JMeter's various testing
 protocols. <a href="logical_controllers.html">Logic Controllers</a> may have other controllers and/or config elements as
-sub-elements, and <a href="test_samples.html">Generative Controllers</a> can only have config elements or assertions as sub-elements.
+sub-elements, and <a href="test_samples.html">Samplers</a> can only have config elements or assertions as sub-elements.
 </li>
 <li>An <b>Assertion</b> states a requirement that the server's response must satisfy.  For instance, an Assertion element
 can be configured to assert that response text from a web server will include a particular string.  If it does
