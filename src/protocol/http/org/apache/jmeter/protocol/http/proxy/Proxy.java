@@ -65,7 +65,7 @@ import java.net.UnknownHostException;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -81,8 +81,7 @@ import org.apache.log.Logger;
 public class Proxy extends Thread
 {
     /** Logging. */
-    private static transient Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+    private static transient Logger log = LoggingManager.getLoggerForClass();
 
     /** Socket to client. */
     private Socket clientSocket = null;

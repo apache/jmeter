@@ -5,7 +5,7 @@ import java.io.InterruptedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -19,8 +19,7 @@ import org.apache.log.Logger;
 public class Daemon extends Thread
 {
     /** Logging */
-    private static transient Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+    private static transient Logger log = LoggingManager.getLoggerForClass();
 
     /** The default port to listen on. */
     private static final int DEFAULT_DAEMON_PORT = 8080;

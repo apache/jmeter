@@ -68,7 +68,7 @@ import junit.framework.TestCase;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.property.PropertyIterator;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.MalformedPatternException;
@@ -88,8 +88,7 @@ import org.xml.sax.SAXException;
  */
 public final class HtmlParser implements Serializable
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     protected static String utfEncodingName;
     private int compilerOptions =
@@ -576,8 +575,7 @@ public final class HtmlParser implements Serializable
      */
     public static class Test extends TestCase
     {
-        transient private static Logger log =
-            Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.test");
+        transient private static Logger log = LoggingManager.getLoggerForClass();
 
         public Test(String name)
         {

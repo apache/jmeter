@@ -66,7 +66,7 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -106,8 +106,7 @@ public class JavaSampler extends AbstractSampler implements TestListener
     /**
      * Logging
      */
-    private static transient Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
+    private static transient Logger log = LoggingManager.getLoggerForClass();
 
     /**
      * Set used to register all active JavaSamplers.  This is used so that the

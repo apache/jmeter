@@ -57,7 +57,7 @@ package org.apache.jmeter.functions;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**

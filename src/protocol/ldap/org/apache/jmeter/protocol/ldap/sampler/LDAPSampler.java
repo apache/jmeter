@@ -75,7 +75,7 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 
@@ -90,8 +90,7 @@ import org.apache.log.Logger;
  */
 public class LDAPSampler extends AbstractSampler
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.ldap");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     public final static String SERVERNAME = "servername";
     public final static String PORT = "port";

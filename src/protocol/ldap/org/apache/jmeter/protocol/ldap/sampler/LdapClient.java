@@ -65,7 +65,7 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchControls;
 
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 
@@ -80,8 +80,7 @@ import org.apache.log.Logger;
  */
 public class LdapClient
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.ldap");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     DirContext dirContext;
 
     /**
