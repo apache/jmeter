@@ -502,6 +502,9 @@ public class JMeter implements JMeterPlugin
             ClassNotFoundException,
             InstantiationException
     {
+    	// add a system property so samplers can check to see if JMeter
+    	// is running in NonGui mode
+		System.setProperty("JMeter.NonGui","true");    	
         JMeter driver = new JMeter();
         PluginManager.install(this, false);
 
