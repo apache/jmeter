@@ -17,17 +17,17 @@ using a <complink name="FTP Request Defaults"/> Configuration
 Element so you do not have to enter the same information for each FTP Request Generative
 Controller. </description>
 <properties>
-	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-	<property name="Server Name or IP" required="Yes">Domain name or IP address of the FTP server.
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Server Name or IP" required="Yes">Domain name or IP address of the FTP server.
 JMeter assumes the FTP server is listening on the default port.</property>
-	<property name="File to Retrieve From Server" required="Yes">Path and name of the file to retrieve.</property>
-	<property name="Username" required="Usually">FTP account username.</property>
-	<property name="Password" required="Usually">FTP account password.</property>
+        <property name="File to Retrieve From Server" required="Yes">Path and name of the file to retrieve.</property>
+        <property name="Username" required="Usually">FTP account username.</property>
+        <property name="Password" required="Usually">FTP account password.</property>
 </properties>
 <links>
-	<link href="test_plan.html#assertions">Assertions</link>
-	<complink name="FTP Request Defaults"/>
-	<link href="build-ftp-test-plan.html">Building an FTP Test Plan</link>
+        <link href="test_plan.html#assertions">Assertions</link>
+        <complink name="FTP Request Defaults"/>
+        <link href="build-ftp-test-plan.html">Building an FTP Test Plan</link>
 </links>
 
 </component>
@@ -35,74 +35,74 @@ JMeter assumes the FTP server is listening on the default port.</property>
 <component name="HTTP Request" index="13.1.2" screenshot="../images/screenshots/gen-controller/http-request.png">
 
 <description>
-	<p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
-	also lets you control whether or not JMeter parses HTML files for images and
-	Java applets and sends HTTP requests to retrieve them.</p>
-	<p>If you are going to send multiple requests to the same web server, consider
-	using an <complink name="HTTP Request Defaults"/>
-	Configuration Element so you do not have to enter the same information for each
-	HTTP Request.</p>
+        <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
+        also lets you control whether or not JMeter parses HTML files for images and
+        Java applets and sends HTTP requests to retrieve them.</p>
+        <p>If you are going to send multiple requests to the same web server, consider
+        using an <complink name="HTTP Request Defaults"/>
+        Configuration Element so you do not have to enter the same information for each
+        HTTP Request.</p>
 
-	<p>Or, instead of manually adding HTTP Requests, you may want to use
-	JMeter's <complink name="HTTP Proxy Server"/> to create
-	them.  This can save you time if you have a lot of HTTP requests or requests with many
-	parameters.</p>
+        <p>Or, instead of manually adding HTTP Requests, you may want to use
+        JMeter's <complink name="HTTP Proxy Server"/> to create
+        them.  This can save you time if you have a lot of HTTP requests or requests with many
+        parameters.</p>
 
-	<p>If the request requires a login authorization, you will also have to add an
-	<complink name="HTTP Authorization Manager"/>
-	Configuration Element. And, if the request uses cookies, then you will also need an
-	<complink name="HTTP Cookie Manager"/>.  You can
-	add either of these elements to the Thread Group or the HTTP Request.  If you have
-	more than one HTTP Request that needs authorizations or cookies, then add the
-	elements to the Thread Group.  That way, all HTTP Request controllers will share the
-	same Authorization Manager and Cookie Manager elements.</p>
+        <p>If the request requires a login authorization, you will also have to add an
+        <complink name="HTTP Authorization Manager"/>
+        Configuration Element. And, if the request uses cookies, then you will also need an
+        <complink name="HTTP Cookie Manager"/>.  You can
+        add either of these elements to the Thread Group or the HTTP Request.  If you have
+        more than one HTTP Request that needs authorizations or cookies, then add the
+        elements to the Thread Group.  That way, all HTTP Request controllers will share the
+        same Authorization Manager and Cookie Manager elements.</p>
 
-	<p>If the request uses a technique called "URL Rewriting" to maintain sessions,
-	then see section
-	<a href="build-adv-web-test-plan.html#url_rewriting">6.1 Handling User Sessions With URL Rewriting</a>
-	for additional configuration steps.</p>
+        <p>If the request uses a technique called "URL Rewriting" to maintain sessions,
+        then see section
+        <a href="build-adv-web-test-plan.html#url_rewriting">6.1 Handling User Sessions With URL Rewriting</a>
+        for additional configuration steps.</p>
 </description>
 
 <properties>
-	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-	<property name="Server" required="Yes">Domain name or IP address of the web server.</property>
-	<property name="Port" required="No (defaults to 80)">Port the web server is listening to.</property>
-	<property name="Protocol" required="Yes">HTTP or HTTPS.</property>
-	<property name="Method" required="Yes">HTTP GET or HTTP POST.</property>
-	<property name="Path" required="Yes">The path to resource (for example, /servlets/myServlet). If the
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Server" required="Yes">Domain name or IP address of the web server.</property>
+        <property name="Port" required="No (defaults to 80)">Port the web server is listening to.</property>
+        <property name="Protocol" required="Yes">HTTP or HTTPS.</property>
+        <property name="Method" required="Yes">HTTP GET or HTTP POST.</property>
+        <property name="Path" required="Yes">The path to resource (for example, /servlets/myServlet). If the
 resource requires query string parameters, add them below in the
 "Send Parameters With the Request" section.</property>
-	<property name="Send Parameters With the Request" required="No">The query string will
-	be generated from the list of parameters you provide.  Each parameter has a <i>name</i> and
-	<i>value</i>.  The query string will be generated in the correct fashion, depending on
-	the choice of "Method" you made (ie if you chose GET, the query string will be
-	appended to the URL, if POST, then it will be sent separately).  Also, if you are
-	sending a file using a multipart form, the query string will be created using the
-	multipart form specifications.
-	<p>
-	Additionally, you can specify whether each paramter should be URL encoded.  If you are not sure what this
-	means, it is probably best to select it.  If your values contain characters such as &amp;amp; or spaces, or
-	question marks, then encoding is usually required.</p></property>
-	<property name="Filename" required="No">Name of the file to send.  If left blank, JMeter
-	does not send a file, if filled in, JMeter automatically sends the request as
-	a multipart form request.</property>
-	<property name="Parameter Name" required="No (Yes if Filename filled in)">Name of the web request parameter.</property>
-	<property name="MIME Type" required="No (Yes if Filename filled in)">MIME type (for example, text/plain).</property>
-	<property name="Retrieve All Images and Java Applets" required="No">Tell JMeter to parse the HTML file
+        <property name="Send Parameters With the Request" required="No">The query string will
+        be generated from the list of parameters you provide.  Each parameter has a <i>name</i> and
+        <i>value</i>.  The query string will be generated in the correct fashion, depending on
+        the choice of "Method" you made (ie if you chose GET, the query string will be
+        appended to the URL, if POST, then it will be sent separately).  Also, if you are
+        sending a file using a multipart form, the query string will be created using the
+        multipart form specifications.
+        <p>
+        Additionally, you can specify whether each paramter should be URL encoded.  If you are not sure what this
+        means, it is probably best to select it.  If your values contain characters such as &amp;amp; or spaces, or
+        question marks, then encoding is usually required.</p></property>
+        <property name="Filename" required="No">Name of the file to send.  If left blank, JMeter
+        does not send a file, if filled in, JMeter automatically sends the request as
+        a multipart form request.</property>
+        <property name="Parameter Name" required="No (Yes if Filename filled in)">Name of the web request parameter.</property>
+        <property name="MIME Type" required="No (Yes if Filename filled in)">MIME type (for example, text/plain).</property>
+        <property name="Retrieve All Images and Java Applets" required="No">Tell JMeter to parse the HTML file
 and send HTTP/HTTPS requests for all images and Java applets referenced in the file.</property>
 </properties>
 
 <links>
-	<link href="test_plan.html#assertions">Assertion</link>
-	<link href="build-web-test-plan.html">Building a Web Test Plan</link>
-	<link href="build-adv-web-test-plan.html">Building an Advanced Web Test Plan</link>
-	<complink name="HTTP Authorization Manager"/>
-	<complink name="HTTP Cookie Manager"/>
-	<complink name="HTTP Header Manager"/>
-	<complink name="HTML Link Parser"/>
-	<complink name="HTTP Proxy Server"/>
-	<complink name="HTTP Request Defaults"/>
-	<link href="build-adv-web-test-plan.html#url_rewriting">HTTP Requests and Session ID's: URL Rewriting</link>
+        <link href="test_plan.html#assertions">Assertion</link>
+        <link href="build-web-test-plan.html">Building a Web Test Plan</link>
+        <link href="build-adv-web-test-plan.html">Building an Advanced Web Test Plan</link>
+        <complink name="HTTP Authorization Manager"/>
+        <complink name="HTTP Cookie Manager"/>
+        <complink name="HTTP Header Manager"/>
+        <complink name="HTML Link Parser"/>
+        <complink name="HTTP Proxy Server"/>
+        <complink name="HTTP Request Defaults"/>
+        <link href="build-adv-web-test-plan.html#url_rewriting">HTTP Requests and Session ID's: URL Rewriting</link>
 </links>
 
 </component>
@@ -119,30 +119,30 @@ This way, you do not have to enter the same information for each JDBC Request
 controller.</p></description>
 
 <properties>
-	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-	<property name="JDBC URL" required="Yes">URL of the database (for example,
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="JDBC URL" required="Yes">URL of the database (for example,
 "jdbc:weblogic:oracle"). Refer to your database's JDBC documentation for the
 URL you should use.</property>
-	<property name="Driver Class" required="Yes">The database driver Java class (for example,
+        <property name="Driver Class" required="Yes">The database driver Java class (for example,
 "weblogic.jdbc.oci.Driver"). Refer to your database's JDBC documentation for
 the name of the JDBC driver class you should use.</property>
-	<property name="Username" required="Usually (database dependent)">FTP account username.</property>
-	<property name="Password" required="Usually (database dependent)">FTP account password.</property>
-	<property name="Number of Connections in Pool" required="Yes">Number of database connection
+        <property name="Username" required="Usually (database dependent)">FTP account username.</property>
+        <property name="Password" required="Usually (database dependent)">FTP account password.</property>
+        <property name="Number of Connections in Pool" required="Yes">Number of database connection
 instances to create and keep active. The maximum value depends on your database.
 Also, JMeter imposes a maximum of 100 connections.</property>
-	<property name="Max Usage For Each Connection" required="Yes">Maximum number of times JMeter
+        <property name="Max Usage For Each Connection" required="Yes">Maximum number of times JMeter
 uses a database connection instance before recycling it (destroying and creating
 a new instance).</property>
-	<property name="SQL Query String" required="Yes">SQL query (for example, "select * from t_customers").</property>
+        <property name="SQL Query String" required="Yes">SQL query (for example, "select * from t_customers").</property>
 </properties>
 
 <links>
-	<link href="test_plan.html#assertions">Assertion</link>
-	<link href="build-db-test-plan.html">Building a Database Test Plan</link>
-	<complink name="JDBC Database Login Defaults"/>
-	<complink name="JDBC Database Connection Pool Defaults"/>
-	<complink name="JDBC SQL Query Defaults"/>
+        <link href="test_plan.html#assertions">Assertion</link>
+        <link href="build-db-test-plan.html">Building a Database Test Plan</link>
+        <complink name="JDBC Database Login Defaults"/>
+        <complink name="JDBC Database Connection Pool Defaults"/>
+        <complink name="JDBC SQL Query Defaults"/>
 </links>
 
 </component>
@@ -159,14 +159,14 @@ table below - as defined by your implementation.  A simple example (SleepTest) i
 provided.</p></description>
 
 <properties>
-	<property name="Name" required="No">Descriptive name for this sampler
-	 that is shown in the tree.</property>
-	<property name="Classname" required="Yes">The specific implementation of
-	the JavaSamplerClient interface to be sampled.</property>
-	<property name="Send Parameters with Request" required="No">A list of
-	arguments that will be passed to the sampled class.  All arguments
-	are sent as Strings.</property>
-	</properties>
+        <property name="Name" required="No">Descriptive name for this sampler
+         that is shown in the tree.</property>
+        <property name="Classname" required="Yes">The specific implementation of
+        the JavaSamplerClient interface to be sampled.</property>
+        <property name="Send Parameters with Request" required="No">A list of
+        arguments that will be passed to the sampled class.  All arguments
+        are sent as Strings.</property>
+        </properties>
 
 </component>
 
@@ -178,12 +178,12 @@ POST content.</p>
 </description>
 
 <properties>
-	<property name="Name" required="No">Descriptive name for this sampler
-	 that is shown in the tree.</property>
-	<property name="URL" required="Yes">The URL to direct the SOAP request to.</property>
-	<property name="Soap/XML-RPC Data" required="No">The Soap XML message, or XML-RPC
-	instructions.</property>
-	</properties>
+        <property name="Name" required="No">Descriptive name for this sampler
+         that is shown in the tree.</property>
+        <property name="URL" required="Yes">The URL to direct the SOAP request to.</property>
+        <property name="Soap/XML-RPC Data" required="No">The Soap XML message, or XML-RPC
+        instructions.</property>
+        </properties>
 
 </component>
 
@@ -196,7 +196,7 @@ POST content.</p>
 other controllers for each loop iteration. </p>
 </description>
 <properties>
-	<property name="name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="name" required="No">Descriptive name for this controller that is shown in the tree.</property>
 </properties>
 
 <!--
@@ -244,7 +244,7 @@ to have a single thread and a loop count of eight.  Notice that the Test Plan ha
 two Interleave Controllers inside of it.</p>
 
 <figure image="../images/screenshots/logic-controller/interleave2.gif">
-	Figure 2 - Interleave Controller Example 2
+        Figure 2 - Interleave Controller Example 2
 </figure>
 
 <p>The outer Interleave Controller alternates between the
@@ -263,13 +263,13 @@ count to three, JMeter will send a total of 2 * 3 = 6 HTTP Requests.
 </p></description>
 
 <properties>
-	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-	<property name="Loop Count" required="Yes, unless &quot;Forever&quot; is checked">
-		The number of times the subelements of this controller will be iterated each time
-		through a test run.
-		<p><b>Special Case:</b> The Loop Controller embedded in the <a href="test_plan.html#thread_group">Thread Group</a>
-		element behaves slightly differently.  Unless set to forever, it stops the test after
-		the given number of iterations have been done.</p></property>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Loop Count" required="Yes, unless &quot;Forever&quot; is checked">
+                The number of times the subelements of this controller will be iterated each time
+                through a test run.
+                <p><b>Special Case:</b> The Loop Controller embedded in the <a href="test_plan.html#thread_group">Thread Group</a>
+                element behaves slightly differently.  Unless set to forever, it stops the test after
+                the given number of iterations have been done.</p></property>
 </properties>
 
 <example title="Looping Example" anchor="loop_example">
@@ -303,7 +303,7 @@ count value you specify in the Thread Group or Loop Controller.</p>
 to login once to establish a session.</p>
 </description>
 <properties>
-	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
 </properties>
 
 <example title="Once Only Example" anchor="once_only_example">
@@ -326,7 +326,7 @@ Logic Controllers.  Unlike other Logic Controllers, this controller provides no 
 storage device.</p>
 </description>
 <properties>
-	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
 </properties>
 
 <example title="Using the Simple Controller" anchor="simple_controller_example">
@@ -353,7 +353,7 @@ This is particularly true of the Random Controller.  Experiment before you assum
 what results any given interaction will give</note>
 </description>
 <properties>
-	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
 </properties>
 
 </component>
@@ -367,33 +367,96 @@ be saved under the Recording Controller.</p>
 
 </description>
 <properties>
-	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
 </properties>
 
 </component>
 </section>
 
 <section name="13.3 Listeners" anchor="listeners">
+<description>
+Most of the listeners perform several roles in addition to "listening"
+to the test results.  They frequently also provide means to view,
+save, and read saved test results.
+<p>
+The saving and reading of test results is generic.  The various
+listeners generally have a panel whereby one can specify the file to
+which the results will be written (or read).  The results are stored as XML
+files, typically with a ".jtl" extension.
+<p>
+The information to be saved is configurable.  If one specifies the
+"Functional Test Mode" on the Test Plan element, one gets the largest
+amount of information.  If this box is not checked, the default saved
+data includes a time stamp (the number of milliseconds since midnight,
+January 1, 1970 UTC), the data type, the thread name, the label, the
+response time, message, and code, and a success indicator.
+<p>
+One can get a more selective set of information my modifying the
+jmeter.properties file.  The following example indicates how to set
+these.
+<p>
+<code>
+<pre>
+#---------------------------------------------------------------------------
+# Results file configuration
+#---------------------------------------------------------------------------
+
+# This section helps determine how result data will be saved.
+# The commented out values are the defaults.
+
+# legitimate values: xml, csv, db.  Only xml is currently supported.
+#jmeter.save.saveservice.output_format=xml
+
+# true when field should be saved; false otherwise
+
+jmeter.save.saveservice.data_type=false
+jmeter.save.saveservice.label=true
+jmeter.save.saveservice.response_code=false
+jmeter.save.saveservice.response_data=false
+jmeter.save.saveservice.response_message=false
+jmeter.save.saveservice.successful=true
+jmeter.save.saveservice.thread_name=false
+jmeter.save.saveservice.time=false
+
+# legitimate values: none, ms, or a format suitable for SimpleDateFormat
+#jmeter.save.saveservice.timestamp_format=ms
+jmeter.save.saveservice.timestamp_format=MM/dd/yy HH:mm:ss
+
+# legitimate values: none, first, all
+jmeter.save.saveservice.assertion_results=first
+</pre>
+</code>
+<p>
+The date format to be used for the timestamp is described in <A
+HREF="http://java.sun.com/j2se/1.4/docs/api/java/text/SimpleDateFormat.html">
+<B>SimpleDateFormat</B></A>.
+Bear in mind that choosing a date format other than "ms" is likely to
+make it impossible for JMeter to interpret the value when it is read
+in later for viewing purposes.
+<p>
+The viewing capabilities are described in the following subsections.
+<p>
+</description>
 <component index="13.3.1" name="Mailer Visualizer" screenshot="../images/screenshots/mailer_vis.png">
 <description><p>The mailer visualizer can be set up to send email if a test run receives too many
 failed responses from the server.</p></description>
 
 <properties>
-	<property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-	<property name="From" required="Yes">Email address to send messages from.</property>
-	<property name="Addressie(s)" required="Yes">Email address to send messages to.</property>
-	<property name="SMTP Host" required="No">IP address or host name of SMTP (email redirector)
-	server.</property>
-	<property name="Failure Subject" required="No">Email subject line for fail messages.</property>
-	<property name="Success Subject" required="No">Email subject line for success messages.</property>
-	<property name="Failure Limit" required="Yes">Once this number of failed responses are received, a failure
-	email is sent.</property>
-	<property name="Success Limit" required="Yes">Once this number of successful responses are
-	received <strong>after previously reaching the failure limit</strong>, a success email
-	is sent.  The mailer will thus only send out messages in a sequence of failed-succeeded-failed-succeeded, etc.</property>
-	<property name="Test Mail" required="No"></property>
-	<property name="Failures" required="No">A field that keeps a running total of number
-	of failures so far received.</property>
+        <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+        <property name="From" required="Yes">Email address to send messages from.</property>
+        <property name="Addressie(s)" required="Yes">Email address to send messages to.</property>
+        <property name="SMTP Host" required="No">IP address or host name of SMTP (email redirector)
+        server.</property>
+        <property name="Failure Subject" required="No">Email subject line for fail messages.</property>
+        <property name="Success Subject" required="No">Email subject line for success messages.</property>
+        <property name="Failure Limit" required="Yes">Once this number of failed responses are received, a failure
+        email is sent.</property>
+        <property name="Success Limit" required="Yes">Once this number of successful responses are
+        received <strong>after previously reaching the failure limit</strong>, a success email
+        is sent.  The mailer will thus only send out messages in a sequence of failed-succeeded-failed-succeeded, etc.</property>
+        <property name="Test Mail" required="No"></property>
+        <property name="Failures" required="No">A field that keeps a running total of number
+        of failures so far received.</property>
 </properties>
 </component>
 
@@ -427,14 +490,22 @@ is shown).  It also reports failures of any <a href="test_plan.html#assertions">
 are part of the test plan.</p></description>
 
 <links>
-	<complink name="Basic Assertion"/>
+        <complink name="Basic Assertion"/>
 </links>
 </component>
 
 <component index="13.3.6" name="View Results Tree" screenshot="../images/screenshots/view_results_tree.png">
 <description>The View Results Tree shows a tree of all sample responses, allowing you to view the
 response for any sample.  In addition to showing the response, you can see the time it took to get
-this response, and some response codes.</description>
+this response, and some response codes.
+<p>
+There are two ways two view the response, controllable by a push
+button.  The default view shows all of the text contained in the
+response.  The alternative view attempts to render the response as
+HTML.  The rendered HTML is likely to compare poorly to the view one
+would get in any web browser; however, it does provide a quick
+approximation that is helpful for initial result evaluation.
+</description>
 </component>
 
 <component index="13.3.7" name="Aggregate Report" screenshot="../images/screenshots/aggregate_report.png">
@@ -469,7 +540,7 @@ Test Plan, with each Thread Group having its own Authorization Manager.
 </description>
 
 <properties>
-	<property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
+        <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
   <property name="Base URL" required="Yes">A partial or complete URL that matches one or more HTTP Request URLs.  As an example,
 say you specify a Base URL of "http://jakarta.apache.org/restricted/" with a username of "jmeter" and
 a password of "jmeter".  If you send an HTTP request to the URL
@@ -525,7 +596,7 @@ session information, each JMeter thread will have its own session.</p>
 the cookie will be shared by all JMeter threads.</p>
 </description>
 <properties>
-	<property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
+        <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
   <property name="Cookies Stored in the Cookie Manager" required="No (discouraged, unless you know what you're doing)">This
   gives you the opportunity to use hardcoded cookies that will be used by all threads during the test execution.</property>
   <property name="Add Button" required="N/A">Add an entry to the cookie table.</property>
@@ -549,17 +620,17 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
 </description>
 
 <properties>
-	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-	<property name="Port" required="Yes">The port that the Proxy Server listens to.  8080 is the default, but you can change it
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Port" required="Yes">The port that the Proxy Server listens to.  8080 is the default, but you can change it
 if that port is already in use on your machine.</property>
-	<property name="Patterns to Include" required="No">Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
-	those that meet the requirements of the Include/Exclude fields are <i>recorded</i>.  If both Include and Exclude are
-	left empty, then everything is recorded (which can result in dozens of samples recorded for each page, as images, stylesheets,
-	etc are recorded).  <b>If there is at least one entry in the Include field, then only requests that match one or more Include patterns are
-	recorded</b>.</property>
-	<property name="Patterns to Exclude" required="No">Regular expressions that are matched against the URL that is sampled.
-	<b>Any requests that match one or more Exclude pattern are <i>not</i> recorded</b>.</property>
-	<property name="Clear Buttons" required="N/A">Remove all regular expressions from the list.</property>
+        <property name="Patterns to Include" required="No">Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
+        those that meet the requirements of the Include/Exclude fields are <i>recorded</i>.  If both Include and Exclude are
+        left empty, then everything is recorded (which can result in dozens of samples recorded for each page, as images, stylesheets,
+        etc are recorded).  <b>If there is at least one entry in the Include field, then only requests that match one or more Include patterns are
+        recorded</b>.</property>
+        <property name="Patterns to Exclude" required="No">Regular expressions that are matched against the URL that is sampled.
+        <b>Any requests that match one or more Exclude pattern are <i>not</i> recorded</b>.</property>
+        <property name="Clear Buttons" required="N/A">Remove all regular expressions from the list.</property>
   <property name="Start Button" required="N/A">Start the proxy server.  JMeter writes the following message to the console once the proxy server
 has started up and is ready to take requests: "Proxy up and running!".</property>
   <property name="Stop Button" required="N/A">Stop the proxy server.</property>
@@ -597,7 +668,7 @@ cookie manager, etc.</p>
 </component>
 
 <component index="13.4.4" name="HTTP Request Defaults"
-	screenshot="../images/screenshots/http-config/http-request-defaults.gif">
+        screenshot="../images/screenshots/http-config/http-request-defaults.gif">
 <description><p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are
 creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server,
 you could add a single HTTP Request Defaults element with the "Server Name or IP" field filled in.  Then, when
@@ -606,41 +677,41 @@ this field value from the HTTP Request Defaults element.</p>
 </description>
 
 <properties>
-	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-	<property name="Server" required="Yes">Domain name or IP address of the web server.</property>
-	<property name="Port" required="No (defaults to 80)">Port the web server is listening to.</property>
-	<property name="Protocol" required="Yes">HTTP or HTTPS.</property>
-	<property name="Method" required="Yes">HTTP GET or HTTP POST.</property>
-	<property name="Path" required="Yes">The path to resource (for example, /servlets/myServlet). If the
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Server" required="Yes">Domain name or IP address of the web server.</property>
+        <property name="Port" required="No (defaults to 80)">Port the web server is listening to.</property>
+        <property name="Protocol" required="Yes">HTTP or HTTPS.</property>
+        <property name="Method" required="Yes">HTTP GET or HTTP POST.</property>
+        <property name="Path" required="Yes">The path to resource (for example, /servlets/myServlet). If the
 resource requires query string parameters, add them below in the
 "Send Parameters With the Request" section.</property>
-	<property name="Send Parameters With the Request" required="No">The query string will
-	be generated from the list of parameters you provide.  Each parameter has a <i>name</i> and
-	<i>value</i>.  The query string will be generated in the correct fashion, depending on
-	the choice of "Method" you made (ie if you chose GET, the query string will be
-	appended to the URL, if POST, then it will be sent separately).  Also, if you are
-	sending a file using a multipart form, the query string will be created using the
-	multipart form specifications.</property>
+        <property name="Send Parameters With the Request" required="No">The query string will
+        be generated from the list of parameters you provide.  Each parameter has a <i>name</i> and
+        <i>value</i>.  The query string will be generated in the correct fashion, depending on
+        the choice of "Method" you made (ie if you chose GET, the query string will be
+        appended to the URL, if POST, then it will be sent separately).  Also, if you are
+        sending a file using a multipart form, the query string will be created using the
+        multipart form specifications.</property>
 </properties>
 </component>
 
 <component index="13.4.5" name="FTP Request Defaults"
-		screenshot="../images/screenshots/ftp-config/ftp-request-defaults.gif">
+                screenshot="../images/screenshots/ftp-config/ftp-request-defaults.gif">
 <description></description>
 </component>
 
 <component index="13.4.6" name="JDBC Database Connection Pool Defaults"
-		screenshot="../images/screenshots/jdbc-config/jdbc-db-conn-pool.gif">
+                screenshot="../images/screenshots/jdbc-config/jdbc-db-conn-pool.gif">
 <description></description>
 </component>
 
 <component index="13.4.7" name="JDBC Database Login Defaults"
-		screenshot="../images/screenshots/jdbc-config/jdbc-db-login.gif">
+                screenshot="../images/screenshots/jdbc-config/jdbc-db-login.gif">
 <description></description>
 </component>
 
 <component index="13.4.8" name="JDBC SQL Query Defaults"
-		screenshot="../images/screenshots/jdbc-config/jdbc-sql-query.gif">
+                screenshot="../images/screenshots/jdbc-config/jdbc-sql-query.gif">
 <description></description>
 </component>
 
@@ -651,9 +722,9 @@ resource requires query string parameters, add them below in the
 </description>
 
 <properties>
-	<property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
+        <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
   <property name="Name (Header)" required="No (You should have at least one, however)">Name of the request header.
-	Two common request headers you may want to experiment with
+        Two common request headers you may want to experiment with
 are "User-Agent" and "Referer".</property>
   <property name="Value" required="No (You should have at least one, however)">Request header value.</property>
   <property name="Add Button" required="N/A">Add an entry to the header table.</property>
@@ -695,17 +766,17 @@ in the Thread Group.  The counter config lets the user configure a starting poin
 and the increment.  The counter will loop from the start to the max, and then start over
 with the start, continuing on like that until the test is ended.  </p></description>
 <properties>
-	<property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-	<property name="Start" required="Yes">The starting number for the counter.  The counter will equal this
-	number during the first iteration.</property>
-	<property name="Increment" required="Yes">How much to increment the counter by after each
-	iteration.</property>
-	<property name="Maximum" required="Yes">If the counter exceeds the maximum, then it is reset to the Start value.</property>
-	<property name="Reference Name" required="Yes">This controls how you refer to this value in other elements.  Syntax is
-	as in <a href="functions.html">user-defined values</a>: <code>$(reference_name}</code>.</property>
-	<property name="Track Counter Independently for each User" required="No">In other words, is this a global counter, or does each user get their
-	own counter?  If unchecked, the counter is global (ie, user #1 will get value "1", and user #2 will get value "2" on
-	the first iteration).  If checked, each user has an independent counter.</property>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Start" required="Yes">The starting number for the counter.  The counter will equal this
+        number during the first iteration.</property>
+        <property name="Increment" required="Yes">How much to increment the counter by after each
+        iteration.</property>
+        <property name="Maximum" required="Yes">If the counter exceeds the maximum, then it is reset to the Start value.</property>
+        <property name="Reference Name" required="Yes">This controls how you refer to this value in other elements.  Syntax is
+        as in <a href="functions.html">user-defined values</a>: <code>$(reference_name}</code>.</property>
+        <property name="Track Counter Independently for each User" required="No">In other words, is this a global counter, or does each user get their
+        own counter?  If unchecked, the counter is global (ie, user #1 will get value "1", and user #2 will get value "2" on
+        the first iteration).  If checked, each user has an independent counter.</property>
 </properties>
 </component>
 
@@ -721,16 +792,16 @@ to match the entire response, or if the response is only expected to contain the
 strings. You can attach multiple assertions to any controller for additionaly flexibility.</p>
 </description>
 <properties>
-	<property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-	<property name="Response Field to Test" required="Yes">Instructs JMeter to test
-		against either the Response Text from the server, or against the URL string that was sampled.</property>
-	<property name="Pattern Matching Rules" required="Yes">Indicates whether the text being tested
-	must CONTAIN or MATCH the test patterns.  NOT may also be selected to indicate the text
-	should NOT CONTAIN or NOT MATCH the test patterns.</property>
-	<property name="Patterns to Test" required="Yes">A list of regular expressions to
-	be tested.  Each pattern is tested separately.  There is no difference between setting up
-	one Assertion with multiple patterns and setting up multiple Assertions with one
-	pattern each (assuming the other options are the same).</property>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Response Field to Test" required="Yes">Instructs JMeter to test
+                against either the Response Text from the server, or against the URL string that was sampled.</property>
+        <property name="Pattern Matching Rules" required="Yes">Indicates whether the text being tested
+        must CONTAIN or MATCH the test patterns.  NOT may also be selected to indicate the text
+        should NOT CONTAIN or NOT MATCH the test patterns.</property>
+        <property name="Patterns to Test" required="Yes">A list of regular expressions to
+        be tested.  Each pattern is tested separately.  There is no difference between setting up
+        one Assertion with multiple patterns and setting up multiple Assertions with one
+        pattern each (assuming the other options are the same).</property>
 </properties>
 
 <example title="Assertion Examples" anchor="assertion_examples">
@@ -750,8 +821,8 @@ user) is marked as a failed response.</p></description>
 
 <properties>
 <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-	<property name="Duration in Milliseconds" required="Yes">The maximum number of milliseconds
-	each response is allowed before being marked as failed.</property>
+        <property name="Duration in Milliseconds" required="Yes">The maximum number of milliseconds
+        each response is allowed before being marked as failed.</property>
 
 </properties>
 </component>
@@ -766,8 +837,8 @@ user) is marked as a failed response.</p></description>
 requests, use this timer.</p></description>
 
 <properties>
-	<property name="Name" required="No">Descriptive name for this timer that is shown in the tree.</property>
-	<property name="Thread Delay" required="Yes">Number of milliseconds to pause.</property>
+        <property name="Name" required="No">Descriptive name for this timer that is shown in the tree.</property>
+        <property name="Thread Delay" required="Yes">Number of milliseconds to pause.</property>
 </properties>
 </component>
 
@@ -780,7 +851,7 @@ the deviation value you specify, and the offset value.</p></description>
 
 
 <properties>
-	<property name="Name" required="No">Descriptive name for this timer that is shown in the tree</property>
+        <property name="Name" required="No">Descriptive name for this timer that is shown in the tree</property>
   <property name="Deviation" required="Yes">Deviation in milliseconds.</property>
   <property name="Constant Delay Offset" required="Yes">Number of milliseconds to pause in addition
 to the random delay.</property>
@@ -795,7 +866,7 @@ each time interval having the same probability of occurring. The total delay
 is the sum of the random value and the offset value.</p></description>
 
 <properties>
-	<property name="Name" required="No">Descriptive name for this timer that is shown in the tree. </property>
+        <property name="Name" required="No">Descriptive name for this timer that is shown in the tree. </property>
   <property name="Random Delay Maximum" required="Yes">Maxium random number of milliseconds to
 pause.</property>
   <property name="Constant Delay Offset" required="Yes">Number of milliseconds to pause in addition
@@ -811,7 +882,7 @@ to the random delay.</property>
 <p>Only samples within the container where you put the timer count towards the calculated throughput. Also note that the total time (used in the denominator to calculate the throughput) starts counting with the first such sample -- not with the test start.</p></description>
 
 <properties>
-	<property name="Name" required="No">Descriptive name for this timer that is shown in the tree. </property>
+        <property name="Name" required="No">Descriptive name for this timer that is shown in the tree. </property>
   <property name="Target Throughput" required="Yes">Throughput we want the timer to try to generate.</property>
 </properties>
 
@@ -882,12 +953,12 @@ Clever users will even determine that this modifier can be used to grab values t
 </description>
 
 <properties>
-	<property name="Name" required="No">Descriptive name given to this element in the test tree.</property>
-	<property name="Session Argument Name" required="Yes">The name of the parameter to grab from
-	previous response.  This modifier will find the parameter anywhere it exists on the page, and
-	grab the value assigned to it, whether it's in an HREF or a form.</property>
-	<property name="Path Extension" required="No">Some web apps rewrite URLs by appending
-	a semi-colon plus the session id parameter.  Check this box if that is so.</property>
+        <property name="Name" required="No">Descriptive name given to this element in the test tree.</property>
+        <property name="Session Argument Name" required="Yes">The name of the parameter to grab from
+        previous response.  This modifier will find the parameter anywhere it exists on the page, and
+        grab the value assigned to it, whether it's in an HREF or a form.</property>
+        <property name="Path Extension" required="No">Some web apps rewrite URLs by appending
+        a semi-colon plus the session id parameter.  Check this box if that is so.</property>
 </properties>
 </component>
 
@@ -907,15 +978,15 @@ user_3<br/>
 user_4, etc.</p></description>
 
 <properties>
-	<property name="Name" required="No">Descriptive name given to this element in the test tree.</property>
-	<property name="Name (second appearing)" required="Yes">The name of the parameter to
-	modify or add to the HTTP Request.</property>
-	<property name="ID Prefix" required="No">A string value to prefix to every generated value.</property>
-	<property name="Lower Bound" required="Yes">A number value to start the counter at.</property>
-	<property name="Upper Bound" required="Yes">A number value to end the counter, at which point it restarts
-	with the Lower Bound value.</property>
-	<property name="Increment" required="Yes">Value to increment the counter by each time through.</property>
-	<property name="ID Suffix" required="No">A string value to add as suffix to every generated vaue.</property>
+        <property name="Name" required="No">Descriptive name given to this element in the test tree.</property>
+        <property name="Name (second appearing)" required="Yes">The name of the parameter to
+        modify or add to the HTTP Request.</property>
+        <property name="ID Prefix" required="No">A string value to prefix to every generated value.</property>
+        <property name="Lower Bound" required="Yes">A number value to start the counter at.</property>
+        <property name="Upper Bound" required="Yes">A number value to end the counter, at which point it restarts
+        with the Lower Bound value.</property>
+        <property name="Increment" required="Yes">Value to increment the counter by each time through.</property>
+        <property name="ID Suffix" required="No">A string value to add as suffix to every generated vaue.</property>
 </properties>
 </component>
 
@@ -932,9 +1003,9 @@ any other thread</note>
 </description>
 
 <properties>
-	<property name="Name" required="No">Descriptive name given to this element in the test tree.</property>
-	<property name="File Name" required="Yes">Name of the XML file in JMeter's /bin directory
-	that holds the value sets.</property>
+        <property name="Name" required="No">Descriptive name given to this element in the test tree.</property>
+        <property name="File Name" required="Yes">Name of the XML file in JMeter's /bin directory
+        that holds the value sets.</property>
 </properties>
 </component>
 
@@ -1019,29 +1090,29 @@ replacement string") parsed by this function</li>
 </p></description>
 
 <properties>
-	<property name="First arguement" required="Yes">The first argument is the regular expression
-	to be applied to the response data.  It will grab all matches.  Any parts of this expression
-	that you wish to use in your template string, be sure to surround in parentheses.  Example:
-	&amp;lt;a href="(.*)"&amp;gt;.  This will grab the value of the link and store it as the first group (there is
-	only 1 group).  Another example: &amp;lt;input type="hidden" name="(.*)" value="(.*)"&amp;gt;.  This will
-	grab the name as the first group, and the value as the second group.  These values can be used
-	in your template string</property>
-	<property name="Second argument" required="Yes">This is the template string that will replace
-	the function at run-time.  To refer to a group captured in the regular expression, use the syntax:
-	$[group_number]$.  Ie: $1$, or $2$.  Your template can be any string.</property>
-	<property name="Third argument" required="Yes">The third argument tells JMeter which match
-	to use.  Your regular expression might find numerous matches.  You have four choices:
-		<ul><li>An integer - Tells JMeter to use that match.  '1' for the first found match, '2' for the
-		second, and so on</li>
-		<li>RAND - Tells JMeter to choose a match at random.</li>
-		<li>ALL - Tells JMeter to use all matches, and create a template string for each one and then
-		append them all together.  This option is little used.</li>
-		<li>A float number between 0 and 1 - tells JMeter to find the Xth match using the formula:
-		(number_of_matches_found * float_number) rounded to nearest integer.</li>
-		</ul></property>
-	<property name="Fourth argument" required="No">If 'ALL' was selected for the above argument
-	value, then this argument will be inserted between each appended copy of the template value.</property>
-	<property name="Fifth argument" required="No">Default value returned if no match is found</property>
+        <property name="First arguement" required="Yes">The first argument is the regular expression
+        to be applied to the response data.  It will grab all matches.  Any parts of this expression
+        that you wish to use in your template string, be sure to surround in parentheses.  Example:
+        &amp;lt;a href="(.*)"&amp;gt;.  This will grab the value of the link and store it as the first group (there is
+        only 1 group).  Another example: &amp;lt;input type="hidden" name="(.*)" value="(.*)"&amp;gt;.  This will
+        grab the name as the first group, and the value as the second group.  These values can be used
+        in your template string</property>
+        <property name="Second argument" required="Yes">This is the template string that will replace
+        the function at run-time.  To refer to a group captured in the regular expression, use the syntax:
+        $[group_number]$.  Ie: $1$, or $2$.  Your template can be any string.</property>
+        <property name="Third argument" required="Yes">The third argument tells JMeter which match
+        to use.  Your regular expression might find numerous matches.  You have four choices:
+                <ul><li>An integer - Tells JMeter to use that match.  '1' for the first found match, '2' for the
+                second, and so on</li>
+                <li>RAND - Tells JMeter to choose a match at random.</li>
+                <li>ALL - Tells JMeter to use all matches, and create a template string for each one and then
+                append them all together.  This option is little used.</li>
+                <li>A float number between 0 and 1 - tells JMeter to find the Xth match using the formula:
+                (number_of_matches_found * float_number) rounded to nearest integer.</li>
+                </ul></property>
+        <property name="Fourth argument" required="No">If 'ALL' was selected for the above argument
+        value, then this argument will be inserted between each appended copy of the template value.</property>
+        <property name="Fifth argument" required="No">Default value returned if no match is found</property>
     <property name="Sixth argument" required="No">A reference name for reusing the values parsed by this function.<br/>
         Stored values are ${refName} (the replacement template string) and ${refName_g#} where "#" is the
         group number from the regular expression ("0" can be used to refer to the entire match).</property>
@@ -1056,12 +1127,12 @@ that is like counting the number of iterations through the test plan.  A global 
 counting how many times that request was run.</p></description>
 
 <properties>
-	<property name="First argument" required="Yes">TRUE if you wish each simulated user's counter
-	to be kept independent and separate from the other users.  FALSE for a global counter.</property>
+        <property name="First argument" required="Yes">TRUE if you wish each simulated user's counter
+        to be kept independent and separate from the other users.  FALSE for a global counter.</property>
 
 <property name="Second argument" required="No">A reference name for reusing the value created by this function.<br/>
-		Stored values are of the form ${refName}.  This allows you to keep one counter and refer to its value in
-		multiple places.</property>
+                Stored values are of the form ${refName}.  This allows you to keep one counter and refer to its value in
+                multiple places.</property>
 </properties>
 </component>
 
@@ -1079,11 +1150,11 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 </p></description>
 
 <properties>
-	<property name="First argument" required="Yes">The first int value.</property>
-	<property name="Second argument" required="Yes">The second int value.</property>
-	<property name="nth argument" required="No">The nth int value.</property>
-	<property name="last argument" required="Yes">A reference name for reusing the value
-		computed by this function.</property>
+        <property name="First argument" required="Yes">The first int value.</property>
+        <property name="Second argument" required="Yes">The second int value.</property>
+        <property name="nth argument" required="No">The nth int value.</property>
+        <property name="last argument" required="Yes">A reference name for reusing the value
+                computed by this function.</property>
 </properties>
 </component>
 
