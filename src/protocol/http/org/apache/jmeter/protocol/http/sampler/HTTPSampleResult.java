@@ -73,18 +73,20 @@ public class HTTPSampleResult extends SampleResult
     
 	public HTTPSampleResult(long elapsed)
 	{
-		super(elapsed);
+		super(elapsed,true);
 	}
     
     /**
      * Construct a 'parent' result for an already-existing result, essentially
-     * cloning it:
+     * cloning it
+     * 
+     * The start-time is set from the existing sample.
      *  
      * @param res existing sample result
      */
     public HTTPSampleResult(HTTPSampleResult res)
     {
-        super(res.getTime());
+        setStartTime(res.getStartTime());
 
         setSampleLabel(res.getSampleLabel());
         setHTTPMethod(res.getHTTPMethod());
@@ -97,7 +99,6 @@ public class HTTPSampleResult extends SampleResult
         setDataType(res.getDataType());
         setResponseHeaders(res.getResponseHeaders());
         setCookies(res.getCookies());
-
         addSubResult(res);
     }
 
