@@ -63,9 +63,8 @@ import java.net.URLDecoder;
 import java.util.LinkedList;
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.apache.jmeter.config.Argument;
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jorphan.logging.LoggingManager;
@@ -466,24 +465,6 @@ public final class HtmlParsingUtils implements Serializable
 
         return buf.toString();
     }
-
-    /**
-     * @version   $Revision$
-     */
-    public static class Test extends TestCase
-    {
-        transient private static Logger log = LoggingManager.getLoggerForClass();
-
-        public Test(String name)
-        {
-            super(name);
-        }
-
-        protected void setUp()
-        {
-        }
-    }
-
     private static HTTPSampler createFormUrlConfig(
         Node tempNode,
         URL context)
@@ -498,4 +479,45 @@ public final class HtmlParsingUtils implements Serializable
         HTTPSampler url = createUrlFromAnchor(action, context);
         return url;
     }
+    
+///////////////////// Start of Test Code /////////////////
+
+// TODO: need more tests
+
+	public static class Test extends JMeterTestCase
+	{
+
+		public Test(String name)
+		{
+			super(name);
+		}
+
+		protected void setUp()
+		{
+		}
+		
+		public void testGetParser() throws Exception
+		{
+			getParser();
+		}
+		public void testGetDom() throws Exception
+		{
+			getDOM("<HTML></HTML>");
+			getDOM("");
+		}
+		public void testIsArgumentMatched() throws Exception
+		{
+			Argument arg = new Argument();
+			Argument argp = new Argument();
+			assertTrue(isArgumentMatched(arg,argp));
+
+			arg = new Argument("test","abcd");
+			argp = new Argument("test","a.*d");
+			assertTrue(isArgumentMatched(arg,argp));
+
+			arg = new Argument("test","abcd");
+			argp = new Argument("test","a.*e");
+			assertFalse(isArgumentMatched(arg,argp));
+		}
+	}
 }
