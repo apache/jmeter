@@ -260,8 +260,11 @@ Examples:
 	</p>
 	<p>
 	When a filename is first encountered, the file is opened and read into an internal
-	array. All subsequent references to the same file name use the same internal array.
-	[N.B. the filename case is significant to the function, even if the OS doesn't care,
+	array. If a blank line is detected, this is treated as end of file - this allows
+	trailing comments to be used (N.B. this feature was introduced in versions after 1.9.1)
+	</p>
+	<p>All subsequent references to the same file name use the same internal array.
+	N.B. the filename case is significant to the function, even if the OS doesn't care,
 	so CSVRead(abc.txt,0) and CSVRead(aBc.txt,0) would refer to different internal arrays.
 	</p>
 	<p>
