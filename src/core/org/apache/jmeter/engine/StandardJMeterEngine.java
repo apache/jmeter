@@ -233,6 +233,16 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 	{
 		notifier.stop();
 		Iterator iter = testListeners.getSearchResults().iterator();
+		while(!notifier.isStopped())
+		{
+			try
+			{
+				Thread.sleep(1000);
+			}
+			catch (InterruptedException e)
+			{
+			}
+		}
 		while(iter.hasNext())
 		{
 			if(host == null)
@@ -265,7 +275,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 		}
 	}
 
-	public void threadFinished(JMeterThread thread)
+	public synchronized void threadFinished(JMeterThread thread)
 	{
 		allThreads.remove(thread);
 		if(allThreads.size() == 0)

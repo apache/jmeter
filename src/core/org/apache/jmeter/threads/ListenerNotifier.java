@@ -18,6 +18,7 @@ public class ListenerNotifier extends LinkedList implements Runnable
 	 */
 	boolean running;
 	boolean isStopped;
+	int sleepTime = 2000;
 	
 	public ListenerNotifier()
 	{
@@ -41,7 +42,13 @@ public class ListenerNotifier extends LinkedList implements Runnable
 					((SampleListener)iter.next()).sampleOccurred(res);
 				}
 			}
-			Thread.yield();
+			try
+			{
+				Thread.sleep(sleepTime);
+			}
+			catch (InterruptedException e)
+			{
+			}
 		}
 		isStopped = true;
 	}
@@ -55,6 +62,7 @@ public class ListenerNotifier extends LinkedList implements Runnable
 	{
 		super.addLast(item);
 		super.addLast(listeners);
+		sleepTime = 0;
 	}
 	
 	public synchronized Object removeFirst()
@@ -65,6 +73,7 @@ public class ListenerNotifier extends LinkedList implements Runnable
 		}
 		catch (RuntimeException e)
 		{
+			sleepTime = 2000;
 			return null;
 		}
 	}
