@@ -179,10 +179,7 @@ public class ProxyControlGui
 
     public TestElement createTestElement()
     {
-        if (model == null)
-        {
-            model = makeProxyControl();
-        }
+        model = makeProxyControl();
         log.debug("creating/configuring model = " + model);
         modifyTestElement(model);
         return model;
@@ -315,13 +312,11 @@ public class ProxyControlGui
         }
         else if (command.equals(START))
         {
-            model = (ProxyControl) createTestElement();
             startProxy();
         }
         else if (command.equals(RESTART))
         {
             model.stopProxy();
-            model = (ProxyControl) createTestElement();
             startProxy();
         }
         else if ( command.equals(ProxyControl.CAPTURE_HTTP_HEADERS)
