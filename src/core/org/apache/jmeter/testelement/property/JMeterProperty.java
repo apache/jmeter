@@ -46,14 +46,6 @@ public interface JMeterProperty extends Serializable, Cloneable, Comparable
     public void recoverRunningVersion(TestElement owner);
     
     /**
-     * Indicates whether the property is a temporary property. A property newly
-     * created and added to a test element that is currently a running version
-     * should be made temporary.
-     * @return boolean
-     */
-    public boolean isTemporary(TestElement owner);
-    
-    /**
      * Take the given property object and merge it's value with the current
      * property object.  For most property types, this will simply be ignored.
      * But for collection properties and test element properties, more complex
@@ -61,22 +53,6 @@ public interface JMeterProperty extends Serializable, Cloneable, Comparable
      * @param prop
      */
     public void mergeIn(JMeterProperty prop);
-    
-    /**
-     * A property newly created and added to a test element that is currently a
-     * running version should be made temporary.  This indicates it is not part
-     * of the running version of the test element and will be deleted when the
-     * test element recovers state.
-     * @param temporary
-     */
-    public void setTemporary(boolean temporary, TestElement owner);
-    
-    /**
-     * Tells the property that it should clear information regarding the
-     * temporary attribute for the given owner.
-     * @param owner
-     */
-    public void clearTemporary(TestElement owner);
     
     public int getIntValue();
     

@@ -122,7 +122,6 @@ public class NullProperty extends AbstractProperty
      */
     public void recoverRunningVersion(TestElement owner)
     {
-        super.recoverRunningVersion(owner);
         tempValue = null;
     }
 

@@ -152,7 +152,6 @@ public class TestElementProperty extends MultiProperty
             value = savedValue;
         }
         value.recoverRunningVersion();
-        super.recoverRunningVersion(null);
     }
 
     /* (non-Javadoc)

@@ -152,7 +152,7 @@ public class CollectionProperty extends MultiProperty
 
     public PropertyIterator iterator()
     {
-        return new PropertyIteratorImpl(value);
+        return getIterator(value);
     }
 
     /* (non-Javadoc)

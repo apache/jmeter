@@ -19,6 +19,15 @@ public class PropertyIteratorImpl implements PropertyIterator
             iter = value.iterator();
         }
         
+        public PropertyIteratorImpl()
+        {
+        }
+        
+        public void setCollection(Collection value)
+        {
+            iter = value.iterator();
+        }
+        
         public boolean hasNext()
         {
             return iter.hasNext();

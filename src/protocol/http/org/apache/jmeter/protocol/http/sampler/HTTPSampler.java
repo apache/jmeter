@@ -1046,7 +1046,6 @@ public class HTTPSampler extends AbstractSampler
         log.debug("Start : sample2");
         long time = System.currentTimeMillis();
         SampleResult res = new SampleResult();
-        log.debug("#4, encoded path = " + getEncodedPath());
         URL u = null;
         try
         {

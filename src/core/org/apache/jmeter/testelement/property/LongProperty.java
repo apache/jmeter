@@ -1,5 +1,7 @@
 package org.apache.jmeter.testelement.property;
 
+import org.apache.jmeter.testelement.TestElement;
+
 
 /**
  * @version $Revision$
@@ -7,6 +9,7 @@ package org.apache.jmeter.testelement.property;
 public class LongProperty extends NumberProperty
 {
     long value;
+    long savedValue;
 
     public LongProperty(String name, long value)
     {
@@ -18,6 +21,23 @@ public class LongProperty extends NumberProperty
     {
         super();
     }
+    
+    /* (non-Javadoc)
+         * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
+         */
+        public void setRunningVersion(boolean runningVersion)
+        {
+            savedValue = value;
+            super.setRunningVersion(runningVersion);
+        }
+
+        /* (non-Javadoc)
+         * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+         */
+        public void recoverRunningVersion(TestElement owner)
+        {
+            value = savedValue;
+        }
 
     public void setValue(int value)
     {

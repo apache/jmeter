@@ -55,11 +55,11 @@
  package org.apache.jmeter.testelement.property;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -71,7 +71,6 @@ public abstract class AbstractProperty implements JMeterProperty
     protected static Logger log = LoggingManager.getLoggerForClass();
     private String name;
     private boolean runningVersion = false;
-    private Map ownerMap;
 
     public AbstractProperty(String name)
     {
@@ -123,61 +122,10 @@ public abstract class AbstractProperty implements JMeterProperty
     {
         this.runningVersion = runningVersion;
     }
-
-    /* (non-Javadoc)
-     * @see JMeterProperty#isTemporary(TestElement)
-     */
-    public boolean isTemporary(TestElement owner)
+    
+    protected PropertyIterator getIterator(Collection values)
     {
-        if (ownerMap == null)
-        {
-            return false;
-        }
-        else
-        {
-            boolean[] temp = (boolean[]) ownerMap.get(owner);
-            if (temp == null)
-            {
-                return false;
-            }
-            return temp[0];
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see JMeterProperty#mergeIn(JMeterProperty)
-     */
-    public void mergeIn(JMeterProperty prop)
-    {}
-
-    /* (non-Javadoc)
-     * @see JMeterProperty#setTemporary(boolean, TestElement)
-     */
-    public void setTemporary(boolean temporary, TestElement owner)
-    {
-        if (ownerMap == null)
-        {
-            ownerMap = new HashMap();
-        }
-        boolean[] temp = (boolean[]) ownerMap.get(owner);
-        if (temp != null)
-        {
-            temp[0] = temporary;
-        }
-        else
-        {
-            temp = new boolean[] { temporary };
-            ownerMap.put(owner, temp);
-        }
-    }
-
-    public void clearTemporary(TestElement owner)
-    {
-        if (ownerMap == null)
-        {
-            return;
-        }
-        ownerMap.remove(owner);
+        return new PropertyIteratorImpl(values);
     }
 
     /* (non-Javadoc)
@@ -191,7 +139,6 @@ public abstract class AbstractProperty implements JMeterProperty
                 (AbstractProperty) this.getClass().newInstance();
             prop.name = name;
             prop.runningVersion = runningVersion;
-            prop.ownerMap = ownerMap;
             return prop;
         }
         catch (InstantiationException e)
@@ -266,13 +213,6 @@ public abstract class AbstractProperty implements JMeterProperty
             log.error("Tried to parse a non-number string to an integer", e);
             return 0;
         }
-    }
-
-    /**
-     * @see JMeterProperty#recoverRunningVersion(TestElement)
-     */
-    public void recoverRunningVersion(TestElement owner)
-    {
     }
 
     /**
@@ -479,6 +419,13 @@ public abstract class AbstractProperty implements JMeterProperty
     public String toString()
     {
         return getStringValue();
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.property.JMeterProperty#mergeIn(org.apache.jmeter.testelement.property.JMeterProperty)
+     */
+    public void mergeIn(JMeterProperty prop)
+    {
     }
 
 }

@@ -158,7 +158,6 @@ public class FunctionProperty extends AbstractProperty
      */
     public void recoverRunningVersion(TestElement owner)
     {
-        super.recoverRunningVersion(owner);
         cacheValue = null;
     }
 }

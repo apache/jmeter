@@ -140,6 +140,5 @@ public class StringProperty extends AbstractProperty
         {
             value = savedValue;
         }
-        super.recoverRunningVersion(owner);
     }
 }
