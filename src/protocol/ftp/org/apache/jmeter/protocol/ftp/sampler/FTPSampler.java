@@ -54,14 +54,16 @@
  */
 package org.apache.jmeter.protocol.ftp.sampler;
 
-import java.sql.*;
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.config.*;
-import org.apache.jmeter.protocol.ftp.config.*;
-import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.samplers.Entry;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.config.LoginConfig;
+import org.apache.jmeter.protocol.ftp.config.FtpConfig;
 import org.apache.jmeter.samplers.AbstractSampler;
+import org.apache.jmeter.samplers.Entry;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.PerSampleClonable;
 import org.apache.jmeter.testelement.TestElement;
 
@@ -108,7 +110,7 @@ public class FTPSampler extends AbstractSampler implements PerSampleClonable {
 	}
 	public String getServer()
 	{
-		return (String)this.getProperty(SERVER);
+		return getPropertyAsString(SERVER);
 	}
 	public void setFilename(String newFilename)
 	{
@@ -116,7 +118,7 @@ public class FTPSampler extends AbstractSampler implements PerSampleClonable {
 	}
 	public String getFilename()
 	{
-		return (String)this.getProperty(FILENAME);
+		return getPropertyAsString(FILENAME);
 	}
 	
 	/**

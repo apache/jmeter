@@ -137,9 +137,9 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
     public void configure(TestElement el)
     {
         super.configure(el);
-        mimetypeField.setText((String) el.getProperty(HTTPSampler.MIMETYPE));
-        filenameField.setText((String) el.getProperty(HTTPSampler.FILE_NAME));
-        paramNameField.setText((String) el.getProperty(HTTPSampler.FILE_FIELD));
+        mimetypeField.setText(el.getPropertyAsString(HTTPSampler.MIMETYPE));
+        filenameField.setText(el.getPropertyAsString(HTTPSampler.FILE_NAME));
+        paramNameField.setText(el.getPropertyAsString(HTTPSampler.FILE_FIELD));
     }
 
     /****************************************

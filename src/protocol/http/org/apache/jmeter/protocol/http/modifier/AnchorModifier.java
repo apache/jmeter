@@ -66,12 +66,14 @@ import java.util.Random;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigElement;
-import org.apache.jmeter.config.ResponseBasedModifier;
+import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.protocol.http.parser.HtmlParser;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 import org.w3c.dom.Document;
@@ -89,7 +91,7 @@ import org.xml.sax.SAXException;
  *@version    1.0
  ***********************************************************/
 
-public class AnchorModifier extends AbstractTestElement implements ResponseBasedModifier,
+public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 		Serializable
 {
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
@@ -110,12 +112,14 @@ public class AnchorModifier extends AbstractTestElement implements ResponseBased
 	 *@param  result  !ToDo (Parameter description)
 	 *@return         !ToDo (Return description)
 	 ***********************************************************/
-	public boolean modifyEntry(Sampler sam, SampleResult result)
+	public void process()
 	{
+        SampleResult result = JMeterContextService.getContext().getPreviousResult();
+        Sampler sam = JMeterContextService.getContext().getCurrentSampler();
 		HTTPSampler sampler = null;
 		if(result == null || !(sam instanceof HTTPSampler))
 		{
-			return false;
+			return;
 		}
 		else
 		{
@@ -139,7 +143,7 @@ public class AnchorModifier extends AbstractTestElement implements ResponseBased
 		}
 		catch (SAXException e)
 		{
-			return false;
+			return;
 		}
 		addAnchorUrls(html, result, sampler, potentialLinks);
 		addFormUrls(html,result,sampler,potentialLinks);
@@ -150,10 +154,10 @@ public class AnchorModifier extends AbstractTestElement implements ResponseBased
 			sampler.setPath(url.getPath());
 			if(url.getMethod().equals(HTTPSampler.POST))
 			{
-				Iterator iter = sampler.getArguments().iterator();
+				PropertyIterator iter = sampler.getArguments().iterator();
 				while(iter.hasNext())
 				{
-					Argument arg = (Argument)iter.next();
+					Argument arg = (Argument)iter.next().getObjectValue();
 					modifyArgument(arg,url.getArguments());
 				}
 			}
@@ -163,19 +167,19 @@ public class AnchorModifier extends AbstractTestElement implements ResponseBased
 				//config.parseArguments(url.getQueryString());
 			}
 			sampler.setProtocol(url.getProtocol());
-			return true;
+			return;
 		}
-		return false;
+		return;
 	}
 
 	private void modifyArgument(Argument arg,Arguments args)
 	{
 		List possibleReplacements = new ArrayList();
-		Iterator iter = args.iterator();
+		PropertyIterator iter = args.iterator();
 		Argument replacementArg;
 		while (iter.hasNext())
 		{
-			replacementArg = (Argument)iter.next();
+			replacementArg = (Argument)iter.next().getObjectValue();
 			try
 			{
 				if(HtmlParser.isArgumentMatched(replacementArg,arg))
@@ -213,7 +217,7 @@ public class AnchorModifier extends AbstractTestElement implements ResponseBased
 		for(int x = 0;x < rootList.getLength();x++)
 		{
 			urls.addAll(HtmlParser.createURLFromForm(rootList.item(x),
-					(HTTPSampler)result.getSamplerData()));
+					(HTTPSampler)JMeterContextService.getContext().getPreviousSampler()));
 		}
 		Iterator iter = urls.iterator();
 		while (iter.hasNext())
@@ -249,7 +253,7 @@ public class AnchorModifier extends AbstractTestElement implements ResponseBased
 			String hrefStr = namedItem.getNodeValue();
 			try
 			{
-				HTTPSampler newUrl = HtmlParser.createUrlFromAnchor(hrefStr, (HTTPSampler)result.getSamplerData());
+				HTTPSampler newUrl = HtmlParser.createUrlFromAnchor(hrefStr, (HTTPSampler)JMeterContextService.getContext().getPreviousSampler());
 				newUrl.setMethod(HTTPSampler.GET);
 				if (HtmlParser.isAnchorMatched(newUrl, config))
 				{

@@ -59,7 +59,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -84,10 +83,11 @@ import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Allows the user to specify if she needs cookie services, and give parameters
@@ -301,10 +301,10 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
 	private void populateTable(CookieManager manager)
 	{
         tableModel.clearData();
-		Iterator iter = manager.getCookies().iterator();
+		PropertyIterator iter = manager.getCookies().iterator();
 		while(iter.hasNext())
 		{
-			addCookieToTable((Cookie)iter.next());
+			addCookieToTable((Cookie)iter.next().getObjectValue());
 		}
 	}
 	

@@ -65,7 +65,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -370,7 +369,7 @@ public class HTTPSamplerFull extends HTTPSampler
     {
         log.debug("Start : loadBinary");
         byte[] ret = new byte[0];
-        res.setSamplerData(new HTTPSampler(url));
+        res.setSamplerData(new HTTPSampler(url).toString());
         try
         {
             conn = setupConnection(url, GET);
@@ -489,13 +488,6 @@ public class HTTPSamplerFull extends HTTPSampler
         }
         log.debug("End   : getErrorLevel");
         return errorLevel;
-    }
-
-    public Object clone()
-    {
-        HTTPSamplerFull newSampler = new HTTPSamplerFull();
-        this.configureClone(newSampler);
-        return newSampler;
     }
 
     /**

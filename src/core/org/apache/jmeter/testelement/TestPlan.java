@@ -8,6 +8,10 @@ import java.util.Map;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigElement;
+import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -57,7 +61,7 @@ public class TestPlan extends AbstractTestElement implements Serializable
 
     public void setUserDefinedVariables(Arguments vars)
     {
-        setProperty(USER_DEFINED_VARIABLES, vars);
+        setProperty(new TestElementProperty(USER_DEFINED_VARIABLES, vars));
     }
 
     public Map getUserDefinedVariables()
@@ -68,7 +72,7 @@ public class TestPlan extends AbstractTestElement implements Serializable
 
     private Arguments getVariables()
     {
-        Arguments args = (Arguments) getProperty(USER_DEFINED_VARIABLES);
+        Arguments args = (Arguments) getProperty(USER_DEFINED_VARIABLES).getObjectValue();
         if (args == null)
         {
             args = new Arguments();
@@ -79,7 +83,7 @@ public class TestPlan extends AbstractTestElement implements Serializable
 
     public void setFunctionalMode(boolean funcMode)
     {
-        setProperty(FUNCTIONAL_MODE, new Boolean(funcMode));
+        setProperty(new BooleanProperty(FUNCTIONAL_MODE, funcMode));
     }
 
     /****************************************
@@ -90,7 +94,7 @@ public class TestPlan extends AbstractTestElement implements Serializable
     public TestPlan(String name)
     {
         setName(name);
-        setProperty(THREAD_GROUPS, threadGroups);
+        setProperty(new CollectionProperty(THREAD_GROUPS, threadGroups));
     }
 
     public void addParameter(String name, String value)
@@ -116,7 +120,7 @@ public class TestPlan extends AbstractTestElement implements Serializable
             {
                 plan = new TestPlan(name);
             }
-            plan.setProperty(TestElement.GUI_CLASS, "org.apache.jmeter.control.gui.TestPlanGui");
+            plan.setProperty(new StringProperty(TestElement.GUI_CLASS, "org.apache.jmeter.control.gui.TestPlanGui"));
         }
         return plan;
     }

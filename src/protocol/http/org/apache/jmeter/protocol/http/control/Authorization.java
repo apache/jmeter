@@ -99,19 +99,19 @@ public class Authorization extends AbstractTestElement implements Serializable
 	 }
 
 	 public String getURL() {
-		  return (String)getProperty(URL);
+		  return getPropertyAsString(URL);
 	 }
 	 public synchronized void setURL(String url) {
 		  setProperty(URL,url);
 	 }
 	 public String getUser() {
-		  return (String)getProperty(USERNAME);
+		  return getPropertyAsString(USERNAME);
 	 }
 	 public synchronized void setUser(String user) {
 		  setProperty(USERNAME,user);
 	 }
 	 public String getPass() {
-		  return (String)getProperty(PASSWORD);
+		  return getPropertyAsString(PASSWORD);
 	 }
 	 public synchronized void setPass(String pass) {
 		  setProperty(PASSWORD,pass);

@@ -134,7 +134,7 @@ public class GaussianRandomTimerGui extends AbstractTimerGui implements KeyListe
     {
         this.configureTestElement(timer);
         ((RandomTimer)timer).setDelay(delayField.getText());
-        ((RandomTimer)timer).setRange(Double.parseDouble(rangeField.getText()));
+        ((RandomTimer)timer).setRange(rangeField.getText());
     }
 
 	/**
@@ -145,8 +145,8 @@ public class GaussianRandomTimerGui extends AbstractTimerGui implements KeyListe
 	public void configure(TestElement el)
 	{
 		super.configure(el);
-		delayField.setText(el.getProperty(RandomTimer.DELAY).toString());
-		rangeField.setText(el.getProperty(RandomTimer.RANGE).toString());
+		delayField.setText(el.getPropertyAsString(RandomTimer.DELAY));
+		rangeField.setText(el.getPropertyAsString(RandomTimer.RANGE));
 	}
 
 	/**

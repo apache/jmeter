@@ -75,8 +75,10 @@ import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.RecordingController;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
-import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
@@ -119,15 +121,21 @@ public class ProxyControl extends ConfigTestElement implements Serializable
      ***********************************************************/
     public void setPort(int port)
     {
-        this.setProperty(PORT, new Integer(port));
+        this.setProperty(new IntegerProperty(PORT, port));
     }
+    
+    public void setPort(String port)
+    {
+        setProperty(PORT,port);
+    }
+    
     public void setIncludeList(Collection list)
     {
-        setProperty(INCLUDE_LIST, new HashSet(list));
+        setProperty(new CollectionProperty(INCLUDE_LIST, new HashSet(list)));
     }
     public void setExcludeList(Collection list)
     {
-        setProperty(EXCLUDE_LIST, new HashSet(list));
+        setProperty(new CollectionProperty(EXCLUDE_LIST, new HashSet(list)));
     }
     /************************************************************
      *  !ToDoo (Method description)
@@ -145,15 +153,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
      ***********************************************************/
     public int getPort()
     {
-        if (this.getProperty(PORT) instanceof String)
-        {
-            setPort(Integer.parseInt((String) getProperty(PORT)));
-            return ((Integer) this.getProperty(PORT)).intValue();
-        }
-        else
-        {
-            return ((Integer) this.getProperty(PORT)).intValue();
-        }
+        return getPropertyAsInt(PORT);
     }
     /************************************************************
      *  !ToDoo (Method description)
@@ -202,7 +202,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
     }
     public Collection getExcludePatterns()
     {
-        return (Collection) getProperty(EXCLUDE_LIST);
+        return (Collection) getProperty(EXCLUDE_LIST).getObjectValue();
     }
     /************************************************************
      *  !ToDo
@@ -215,7 +215,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
     }
     public Collection getIncludePatterns()
     {
-        return (Collection) getProperty(INCLUDE_LIST);
+        return (Collection) getProperty(INCLUDE_LIST).getObjectValue();
     }
     /************************************************************
      *  !ToDo (Method description)

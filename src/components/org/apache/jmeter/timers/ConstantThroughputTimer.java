@@ -60,6 +60,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -105,7 +106,7 @@ public class ConstantThroughputTimer
      */
     public void setThroughput(long throughput)
     {
-		setProperty(THROUGHPUT,new Long(throughput));
+		setProperty(new LongProperty(THROUGHPUT,throughput));
 		delay= 60000/throughput;
     }
 
@@ -146,15 +147,7 @@ public class ConstantThroughputTimer
      */
     public long getThroughput()
     {
-		Object throughput = getProperty(THROUGHPUT);
-		if(throughput instanceof Long)
-		{
-		    return ((Long)throughput).longValue();
-		}
-		else
-		{
-		    return Long.parseLong((String)throughput);
-		}
+		return  getPropertyAsLong(THROUGHPUT);
     }
 
 	/**

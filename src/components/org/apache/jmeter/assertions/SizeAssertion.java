@@ -59,6 +59,8 @@ import java.text.MessageFormat;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -123,7 +125,7 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
          * set the Operator 
          ******/
         public void setCompOper(int operator) {
-               setProperty(OPERATOR_KEY,new Integer(operator));
+               setProperty(new IntegerProperty(OPERATOR_KEY,operator));
 
         }
 
@@ -148,10 +150,10 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 			throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative"));
 		}
 		if (size == Long.MAX_VALUE) {
-			setProperty(SIZE_KEY, new Long(0));
+			setProperty(new LongProperty(SIZE_KEY, 0));
 		}
 		else {
-			setProperty(SIZE_KEY, new Long(size));
+			setProperty(new LongProperty(SIZE_KEY, size));
 		}
 	}
 

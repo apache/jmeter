@@ -1,7 +1,9 @@
 package org.apache.jmeter.protocol.http.modifier;
 
-import org.apache.jmeter.testelement.AbstractTestElement;
 import java.io.Serializable;
+
+import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.property.LongProperty;
 
 /**
  *  This object defines with what a parameter has its value replaced, and the
@@ -75,7 +77,7 @@ public class ParamMask extends AbstractTestElement implements Serializable
 	 */
 	public void setLowerBound(long val)
 	{
-		setProperty(LOWER_BOUND, new Long(val));
+		setProperty(new LongProperty(LOWER_BOUND,val));
 	}
 
 
@@ -87,8 +89,7 @@ public class ParamMask extends AbstractTestElement implements Serializable
 	 */
 	public void setUpperBound(long val)
 	{
-		setProperty(UPPER_BOUND,new Long(val));
-	}
+		setProperty(new LongProperty(UPPER_BOUND,val));	}
 
 
 	/**
@@ -98,7 +99,7 @@ public class ParamMask extends AbstractTestElement implements Serializable
 	 */
 	public void setIncrement(long incr)
 	{
-		setProperty(INCREMENT,new Long(incr));
+		setProperty(new LongProperty(INCREMENT,incr));
 	}
 
 
@@ -123,7 +124,7 @@ public class ParamMask extends AbstractTestElement implements Serializable
 	 */
 	public String getPrefix()
 	{
-		return (String) getProperty(PREFIX);
+		return getPropertyAsString(PREFIX);
 	}
 
 
@@ -135,8 +136,7 @@ public class ParamMask extends AbstractTestElement implements Serializable
 	 */
 	public long getLowerBound()
 	{
-		Object lowerBound = getProperty(LOWER_BOUND);
-		return getLongValue(lowerBound);
+		return getPropertyAsLong(LOWER_BOUND);
 	}
 
 
@@ -148,8 +148,7 @@ public class ParamMask extends AbstractTestElement implements Serializable
 	 */
 	public long getUpperBound()
 	{
-		Object bound = getProperty(UPPER_BOUND);
-		return getLongValue(bound);
+		return getPropertyAsLong(UPPER_BOUND);
 	}
 
 
@@ -161,8 +160,7 @@ public class ParamMask extends AbstractTestElement implements Serializable
 	 */
 	public long getIncrement()
 	{
-		Object inc = getProperty(INCREMENT);
-		return getLongValue(inc);
+		return getPropertyAsLong(INCREMENT);
 	}
 
 
@@ -174,7 +172,7 @@ public class ParamMask extends AbstractTestElement implements Serializable
 	 */
 	public String getSuffix()
 	{
-		return (String) getProperty(SUFFIX);
+		return getPropertyAsString(SUFFIX);
 	}
 
 
@@ -223,7 +221,7 @@ public class ParamMask extends AbstractTestElement implements Serializable
 
 	public String getFieldName()
 	{
-		return (String)getProperty(FIELD_NAME);
+		return getPropertyAsString(FIELD_NAME);
 	}
 
 
@@ -248,25 +246,5 @@ public class ParamMask extends AbstractTestElement implements Serializable
 		sb.append("-------------------------------\n");
 
 		return sb.toString();
-	}
-
-
-	/**
-	 *  Gets the LongValue attribute of the ParamMask object
-	 *
-	 *@param  bound  Description of Parameter
-	 */
-	private long getLongValue(Object bound)
-	{
-		if (bound == null)
-		{
-			return (long)0;
-		} else if (bound instanceof Long)
-		{
-			return ((Long) bound).longValue();
-		} else
-		{
-			return Long.parseLong((String) bound);
-		}
 	}
 }

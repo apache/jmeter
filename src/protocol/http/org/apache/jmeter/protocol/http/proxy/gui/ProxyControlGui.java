@@ -172,7 +172,7 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
         configureTestElement(el);
         if(el instanceof ProxyControl)
         {            
-            ((ProxyControl)el).setPort(Integer.parseInt(portField.getText()));
+            ((ProxyControl)el).setPort(portField.getText());
             setIncludeListInProxyControl((ProxyControl)el);
             setExcludeListInProxyControl((ProxyControl)el);
             model = (ProxyControl)el;
@@ -217,7 +217,7 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
         log.debug("Configuring gui with " + element);
         super.configure(element);
         model = (ProxyControl)element;
-        portField.setText(model.getProperty(ProxyControl.PORT).toString());
+        portField.setText(model.getPropertyAsString(ProxyControl.PORT));
         populateTable(includeModel, model.getIncludePatterns().iterator());
         populateTable(excludeModel, model.getExcludePatterns().iterator());
         repaint();

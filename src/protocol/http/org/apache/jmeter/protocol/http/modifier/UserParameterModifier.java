@@ -54,16 +54,17 @@
  */
 package org.apache.jmeter.protocol.http.modifier;
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.Modifier;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 /************************************************************
@@ -157,16 +158,16 @@ public class UserParameterModifier
 		HTTPSampler config = (HTTPSampler) entry;
 		Map currentUser = allAvailableUsers.getNextUserMods();
 		boolean changeValue = false;
-		Iterator iter = config.getArguments().iterator();
+		PropertyIterator iter = config.getArguments().iterator();
 		while (iter.hasNext())
 		{
-			Argument arg = (Argument) iter.next();
+			Argument arg = (Argument) iter.next().getObjectValue();
 			// if parameter name exists in http request
 			// then change its value
 			// (Note: each jmeter thread (ie user) gets to have unique values)			
 			if (currentUser.containsKey(arg.getName()))
 			{
-				arg.setValue(currentUser.get(arg.getName()));
+				arg.setValue((String)currentUser.get(arg.getName()));
 			}
 		}
 		return changeValue;

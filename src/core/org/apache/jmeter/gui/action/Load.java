@@ -179,7 +179,7 @@ public class Load implements Command
 	{
 			JMeterGUIComponent gui = null;
 			try {
-				gui = (JMeterGUIComponent)Class.forName((String)item.getProperty(TestElement.GUI_CLASS)).newInstance();
+				gui = (JMeterGUIComponent)Class.forName(item.getPropertyAsString(TestElement.GUI_CLASS)).newInstance();
 			} catch(Exception e) {
 				log.warn("Couldn't get gui for "+item,e);
 				gui = new WorkBenchGui();

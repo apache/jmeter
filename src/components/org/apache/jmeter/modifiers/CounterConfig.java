@@ -4,6 +4,8 @@ import java.io.Serializable;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.VariablesCollection;
+import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -90,7 +92,7 @@ public class CounterConfig
 	
 	public void setStart(int start)
 	{
-		setProperty(START,new Integer(start));
+		setProperty(new IntegerProperty(START,start));
 	}
 	
 	public void setStart(String start)
@@ -105,7 +107,7 @@ public class CounterConfig
 	
 	public void setEnd(int end)
 	{
-		setProperty(END,new Integer(end));
+		setProperty(new IntegerProperty(END,end));
 	}
 	
 	public void setEnd(String end)
@@ -120,7 +122,7 @@ public class CounterConfig
 	
 	public void setIncrement(int inc)
 	{
-		setProperty(INCREMENT,new Integer(inc));
+		setProperty(new IntegerProperty(INCREMENT,inc));
 	}
 	
 	public void setIncrement(String incr)
@@ -135,7 +137,7 @@ public class CounterConfig
 	
 	public void setIsPerUser(boolean isPer)
 	{
-		setProperty(PER_USER,new Boolean(isPer));
+		setProperty(new BooleanProperty(PER_USER,isPer));
 	}
 	
 	public boolean isPerUser()

@@ -1,14 +1,16 @@
 package org.apache.jmeter.save;
 
-import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestElementTraverser;
+import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.MapProperty;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 
 /**
  * @author Administrator
@@ -43,7 +45,7 @@ public class TestElementSaver implements TestElementTraverser, SaveServiceConsta
         if (rootConfig == null)
         {
             rootConfig = config;
-            if(name != null && name.length() > 0)
+            if (name != null && name.length() > 0)
             {
                 rootConfig.setAttribute("name", name);
             }
@@ -69,34 +71,12 @@ public class TestElementSaver implements TestElementTraverser, SaveServiceConsta
      */
     public void endTestElement(TestElement el)
     {
-        simplePropertyValue(stack.removeLast());
-    }
-
-    /**
-     * @see org.apache.jmeter.testelement.TestElementTraverser#startProperty(java.lang.Object)
-     */
-    public void startProperty(Object key)
-    {
-        stack.add(key);
-    }
-
-    /**
-     * @see org.apache.jmeter.testelement.TestElementTraverser#endProperty(java.lang.Object)
-     */
-    public void endProperty(Object key)
-    {
-        DefaultConfiguration config = (DefaultConfiguration) stack.getLast();
-        if(config.getName().equals("property"))
-        {
-            stack.removeLast();
-            ((DefaultConfiguration) stack.getLast()).addChild(config);
-        }
     }
 
     /**
      * @see org.apache.jmeter.testelement.TestElementTraverser#simplePropertyValue(java.lang.Object)
      */
-    public void simplePropertyValue(Object value)
+    public void simplePropertyValue(JMeterProperty value)
     {
         try
         {
@@ -129,39 +109,87 @@ public class TestElementSaver implements TestElementTraverser, SaveServiceConsta
     /**
      * @see org.apache.jmeter.testelement.TestElementTraverser#startMap(java.util.Map)
      */
-    public void startMap(Map map)
+    public void startMap(MapProperty map)
     {
         DefaultConfiguration config = new DefaultConfiguration("map", "map");
-        config.setAttribute("class", map.getClass().getName());
-        setConfigName(config);
+        config.setAttribute("class", map.getObjectValue().getClass().getName());
+        config.setAttribute("name",map.getName());
+        config.setAttribute("propType",map.getClass().getName());
         stack.add(config);
     }
 
     /**
      * @see org.apache.jmeter.testelement.TestElementTraverser#endMap(java.util.Map)
      */
-    public void endMap(Map map)
+    public void endMap(MapProperty map)
     {
-        simplePropertyValue(stack.removeLast());
+        finishConfig();
     }
 
     /**
      * @see org.apache.jmeter.testelement.TestElementTraverser#startCollection(java.util.Collection)
      */
-    public void startCollection(Collection col)
+    public void startCollection(CollectionProperty col)
     {
         DefaultConfiguration config = new DefaultConfiguration("collection", "collection");
-        config.setAttribute("class", col.getClass().getName());
-        setConfigName(config);
+        config.setAttribute("class", col.getObjectValue().getClass().getName());
+        config.setAttribute("name",col.getName());
+        config.setAttribute("propType",col.getClass().getName());
         stack.add(config);
     }
 
     /**
      * @see org.apache.jmeter.testelement.TestElementTraverser#endCollection(java.util.Collection)
      */
-    public void endCollection(Collection col)
+    public void endCollection(CollectionProperty col)
     {
-        simplePropertyValue(stack.removeLast());
+        finishConfig();
+    }
+
+    /**
+     * @see org.apache.jmeter.testelement.TestElementTraverser#endProperty(org.apache.jmeter.testelement.property.JMeterProperty)
+     */
+    public void endProperty(JMeterProperty key)
+    {
+        finishConfig();
+    }
+
+    private void finishConfig()
+    {
+        if (stack.size() > 1)
+        {
+            Configuration config = (Configuration) stack.removeLast();
+            ((DefaultConfiguration) stack.getLast()).addChild(config);
+        }
+    }
+
+    /**
+     * @see org.apache.jmeter.testelement.TestElementTraverser#startProperty(org.apache.jmeter.testelement.property.JMeterProperty)
+     */
+    public void startProperty(JMeterProperty key)
+    {
+        if (key instanceof CollectionProperty)
+        {
+            startCollection((CollectionProperty) key);
+        }
+        else if (key instanceof MapProperty)
+        {
+            startMap((MapProperty) key);
+        }
+        else if (key instanceof TestElementProperty)
+        {
+            stack.addLast(key.getName());
+        }
+        else
+        {
+            DefaultConfiguration config = new DefaultConfiguration("property", "property");
+            config.setValue(key.getStringValue());
+            config.setAttribute("name", key.getName());
+            config.setAttribute("propType", key.getClass().getName());
+            config.setAttribute(XML_SPACE, PRESERVE);
+            stack.addLast(config);
+        }
+
     }
 
 }

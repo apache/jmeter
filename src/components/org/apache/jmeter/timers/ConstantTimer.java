@@ -122,7 +122,7 @@ public class ConstantTimer
      */
     public String getDelay()
     {
-        return (String) getProperty(DELAY);
+        return getPropertyAsString(DELAY);
     }
 
     /**
@@ -167,8 +167,7 @@ public class ConstantTimer
 
         try
         {
-            String delayString = (String) getProperty(DELAY);
-            delay = Long.parseLong(delayString);
+            delay = getPropertyAsLong(DELAY);
         }
         catch (ClassCastException ex)
         {

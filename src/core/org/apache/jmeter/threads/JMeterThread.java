@@ -153,16 +153,16 @@ public class JMeterThread implements Runnable, java.io.Serializable
                             notifyThreadListeners();
                         }
                         SamplePackage pack = compiler.configureSampler(controller.next());
-                        runPreProcessors(pack.getPreProcessors());
+                        threadContext.setCurrentSampler(pack.getSampler());
                         delay(pack.getTimers());
                         SampleResult result = pack.getSampler().sample(null);
                         result.setThreadName(threadName);
                         result.setTimeStamp(System.currentTimeMillis());
                         threadContext.setPreviousResult(result);
-                        threadContext.setCurrentSampler(pack.getSampler());
                         checkAssertions(pack.getAssertions(), result);
                         runPostProcessors(pack.getPostProcessors());
                         notifyListeners(pack.getSampleListeners(), result);
+                        compiler.done(pack);
                     }
                     catch (Exception e)
                     {
@@ -216,16 +216,6 @@ public class JMeterThread implements Runnable, java.io.Serializable
         }
     }
 
-    private void runPreProcessors(List preProcessors)
-    {
-        ListIterator iter = preProcessors.listIterator(preProcessors.size());
-        while (iter.hasPrevious())
-        {
-            PreProcessor ex = (PreProcessor) iter.previous();
-            ex.process();
-        }
-    }
-
     private void delay(List timers)
     {
         int sum = 0;
@@ -268,7 +258,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
 
     private void notifyListeners(List listeners, SampleResult result)
     {
-        SampleEvent event = new SampleEvent(result, (String) controller.getProperty(TestElement.NAME));
+        SampleEvent event = new SampleEvent(result,controller.getPropertyAsString(TestElement.NAME));
         compiler.sampleOccurred(event);
         notifier.notifyListeners(event, listeners);
 

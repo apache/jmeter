@@ -22,6 +22,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.gui.action.ActionRouter;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JLabeledChoice;
@@ -135,11 +136,11 @@ public class FunctionHelper extends JDialog implements
 		if(args.getArguments().size() > 0)
 		{
 			functionCall.append("(");
-			Iterator iter = args.getArguments().iterator();
+			PropertyIterator iter = args.iterator();
 			boolean first = true;
 			while(iter.hasNext())
 			{
-				Argument arg = (Argument)iter.next();
+				Argument arg = (Argument)iter.next().getObjectValue();
 				if(!first)
 				{
 					functionCall.append(",");

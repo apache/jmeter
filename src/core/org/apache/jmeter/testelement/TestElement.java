@@ -1,6 +1,4 @@
 package org.apache.jmeter.testelement;
-import java.util.Collection;
-
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 
@@ -47,6 +45,8 @@ public interface TestElement extends Cloneable
 	 ***************************************/
 	public void addTestElement(TestElement child);
     
+    public void setProperty(String key,String value);
+    
     /**
      * Returns true or false whether the element is the running version.
      * @return boolean
@@ -59,6 +59,12 @@ public interface TestElement extends Cloneable
      * @return boolean
      */
     public boolean getPropertyAsBoolean(String key);
+    
+    public long getPropertyAsLong(String key);
+    
+    public int getPropertyAsInt(String key);
+    
+    public float getPropertyAsFloat(String key);
     
     /**
      * Make the test element the running version, or make it no longer the
@@ -76,13 +82,6 @@ public interface TestElement extends Cloneable
      * makeRunningVersion() was called.
      */
     public void recoverRunningVersion();
-
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public Collection getPropertyNames();
     
     /**
      * Clear the TestElement of all data.
@@ -94,30 +93,38 @@ public interface TestElement extends Cloneable
 	 *
 	 *@param key  !ToDo (Parameter description)
 	 *@return     !ToDo (Return description)
-	 ***************************************/
-	public Object getProperty(String key);
+	 **************************************
+	public Object getProperty(String key);*/
 
 	public String getPropertyAsString(String key);
     
     /**
-     * Adds a property to the TestElement.
+     * Adds a property to the TestElement.  The property will be marked as
+     * temporary if this test element is a running version.
      * @param property
      */
     public void addProperty(JMeterProperty property);
+    
+    /**
+     * Sets and overwrites a property in the TestElement.  This call will be 
+     * ignored if the TestElement is currently a "running version".
+     * @param property
+     */
+    public void setProperty(JMeterProperty property);
+    
+    /**
+     * Given the name of the property, returns the appropriate property from
+     * JMeter.  If it is null, a NullProperty object will be returned.
+     * @param propName
+     * @return JMeterProperty
+     */
+    public JMeterProperty getProperty(String propName);
     
     /**
      * Get a Property Iterator for the TestElements properties.
      * @return PropertyIterator
      */
     public PropertyIterator propertyIterator();
-
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param key       !ToDo (Parameter description)
-	 *@param property  !ToDo (Parameter description)
-	 ***************************************/
-	public void setProperty(String key, Object property);
 
 	public void removeProperty(String key);
 

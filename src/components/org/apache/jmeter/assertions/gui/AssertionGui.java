@@ -63,7 +63,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -85,6 +84,7 @@ import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.gui.util.TextAreaCellRenderer;
 import org.apache.jmeter.gui.util.TextAreaTableCellEditor;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 
 /****************************************
@@ -206,10 +206,10 @@ public class AssertionGui extends AbstractAssertionGui implements FocusListener
             labelButton.setSelected(true);
         }
         tableModel.clearData();
-        Iterator tests = model.getTestStrings().iterator();
+        PropertyIterator tests = model.getTestStrings().iterator();
         while (tests.hasNext())
         {
-            tableModel.addRow(new Object[] { tests.next()});
+            tableModel.addRow(new Object[] { tests.next().getStringValue()});
         }
         if(model.getTestStrings().size() == 0)
         {

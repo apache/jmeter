@@ -79,7 +79,10 @@ public class StringFromFile extends AbstractFunction implements Serializable
 		String fileName = ((CompoundVariable)values[0]).execute();
 		myName = ((CompoundVariable)values[1]).execute();
 
-		openFile(fileName);
+		if(myBread == null)
+        {
+            openFile(fileName);
+        } 
 
 		myValue="**ERR**";
 		if (null != myBread) {// Did we open the file?

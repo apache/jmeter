@@ -25,6 +25,23 @@ public class IntegerProperty extends AbstractProperty
     {
         this.value = value;
     }
+    
+    public void setObjectValue(Object v)
+        {
+            if(v instanceof Number)
+            {
+                value = ((Number)v).intValue();
+            }
+            else
+            {
+                try
+                {
+                    value = Integer.parseInt(v.toString());
+                }
+                catch (RuntimeException e)
+                {}
+            }
+        }
 
     /**
      * @see org.apache.jmeter.testelement.property.JMeterProperty#getStringValue()

@@ -54,10 +54,11 @@
  */
  package org.apache.jmeter.protocol.jdbc.config;
 
-import org.apache.jmeter.config.*;
-import org.apache.jmeter.util.JMeterUtils;
+import java.io.Serializable;
+
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
-import java.io.*;
+import org.apache.jmeter.testelement.property.IntegerProperty;
 
 
 /**
@@ -92,7 +93,7 @@ public class PoolConfig extends ConfigTestElement implements Serializable
 
 	public void setMaxUse(int use)
 	{
-		this.setProperty(JDBCSampler.MAXUSE,new Integer(use));
+		this.setProperty(new IntegerProperty(JDBCSampler.MAXUSE,use));
 	}
 
 	public int getNumConnections()
@@ -111,6 +112,6 @@ public class PoolConfig extends ConfigTestElement implements Serializable
 
 	public void setNumConnections(int conns)
 	{
-		this.setProperty(JDBCSampler.CONNECTIONS,new Integer(conns));
+		this.setProperty(new IntegerProperty(JDBCSampler.CONNECTIONS,conns));
 	}
 }

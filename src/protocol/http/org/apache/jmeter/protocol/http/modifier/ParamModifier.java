@@ -1,7 +1,6 @@
 package org.apache.jmeter.protocol.http.modifier;
 
 import java.io.Serializable;
-import java.util.Iterator;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Modifier;
@@ -9,6 +8,8 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 
 /**
  *  <P>
@@ -58,12 +59,12 @@ public class ParamModifier extends AbstractTestElement implements TestListener,M
 	 */
 	public ParamModifier()
 	{
-		setProperty(MASK,new ParamMask());
+		setProperty(new TestElementProperty(MASK,new ParamMask()));
 	}
 
 	public ParamMask getMask()
 	{
-		return (ParamMask)getProperty(MASK);
+		return (ParamMask)getProperty(MASK).getObjectValue();
 	}
 	
 	public void testStarted()
@@ -108,10 +109,10 @@ public class ParamModifier extends AbstractTestElement implements TestListener,M
 			sampler = (HTTPSampler)sam;
 		}
 		boolean modified = false;
-		Iterator iter = sampler.getArguments().iterator();
+		PropertyIterator iter = sampler.getArguments().iterator();
 		while (iter.hasNext())
 		{
-			Argument arg = (Argument) iter.next();
+			Argument arg = (Argument) iter.next().getObjectValue();
 			modified = modifyArgument(arg);
 			if (modified)
 			{

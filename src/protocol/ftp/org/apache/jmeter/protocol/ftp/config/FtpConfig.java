@@ -54,11 +54,10 @@
  */
  package org.apache.jmeter.protocol.ftp.config;
 
-import org.apache.jmeter.config.*;
+import java.io.Serializable;
+
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.ftp.sampler.FTPSampler;
-import org.apache.jmeter.util.JMeterUtils;
-import java.util.Collection;
-import java.io.*;
 
 /**
  * Title:        JMeter
@@ -94,7 +93,7 @@ public class FtpConfig extends ConfigTestElement implements Serializable
 	}
 	public String getServer()
 	{
-		return (String)this.getProperty(FTPSampler.SERVER);
+		return getPropertyAsString(FTPSampler.SERVER);
 	}
 	public void setFilename(String newFilename)
 	{
@@ -102,7 +101,7 @@ public class FtpConfig extends ConfigTestElement implements Serializable
 	}
 	public String getFilename()
 	{
-		return (String)this.getProperty(FTPSampler.FILENAME);
+		return getPropertyAsString(FTPSampler.FILENAME);
 	}
 
 	 /**

@@ -67,6 +67,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.PerThreadClonable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
@@ -130,7 +131,7 @@ public class JavaSampler extends AbstractSampler
      */
     public void setArguments(Arguments args)
     {
-        this.setProperty(ARGUMENTS, args);
+        this.setProperty(new TestElementProperty(ARGUMENTS, args));
     }
 
     /**
@@ -141,7 +142,7 @@ public class JavaSampler extends AbstractSampler
      */
     public Arguments getArguments()
     {
-        return (Arguments) getProperty(ARGUMENTS);
+        return (Arguments) getProperty(ARGUMENTS).getObjectValue();
     }
 
     public void addCustomTestElement(TestElement el)

@@ -102,8 +102,8 @@ public class FtpConfigGui extends AbstractConfigGui
 	public void configure(TestElement element)
 	{
 		super.configure(element);
-		server.setText((String)element.getProperty(FTPSampler.SERVER));
-		filename.setText((String)element.getProperty(FTPSampler.FILENAME));
+		server.setText(element.getPropertyAsString(FTPSampler.SERVER));
+		filename.setText(element.getPropertyAsString(FTPSampler.FILENAME));
 	}
 
 	public TestElement createTestElement()

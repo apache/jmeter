@@ -81,6 +81,7 @@ import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.io.TextFile;
 import org.apache.log.Hierarchy;
@@ -141,7 +142,7 @@ public class ResultCollector extends AbstractListenerElement
 
     public void setErrorLogging(boolean errorLogging)
     {
-        setProperty(ERROR_LOGGING, new Boolean(errorLogging));
+        setProperty(new BooleanProperty(ERROR_LOGGING, errorLogging));
     }
 
     /**
