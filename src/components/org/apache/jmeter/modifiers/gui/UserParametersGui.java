@@ -139,7 +139,9 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 
         JPanel paramPanel = new JPanel(new BorderLayout());
         paramPanel.add(tableLabel, BorderLayout.NORTH);
-		paramPanel.add(new JScrollPane(paramTable), BorderLayout.CENTER);
+        JScrollPane scroll = new JScrollPane(paramTable);
+        scroll.setPreferredSize(scroll.getMinimumSize());
+		paramPanel.add(scroll, BorderLayout.CENTER);
 		paramPanel.add(makeButtonPanel(), BorderLayout.SOUTH);
 		return paramPanel;
 	}

@@ -6,6 +6,8 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.jorphan.collections.Data;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 /**
  * @author mstover
  *
@@ -13,6 +15,7 @@ import org.apache.jorphan.collections.Data;
  * Window>Preferences>Java>Templates.
  */
 public class PowerTableModel extends DefaultTableModel {
+    private static Logger log = LoggingManager.getLoggerForClass();
 	Data model = new Data();
 	Class[] columnClasses;
 
@@ -54,7 +57,9 @@ public class PowerTableModel extends DefaultTableModel {
 		 *@param row  Description of Parameter
 		 ***************************************/
 	public void removeRow(int row) {
+        log.debug("remove row: " + row);
 		if (model.size() > row) {
+            log.debug("Calling remove row on Data");
 			model.removeRow(row);
 		}
 	}
