@@ -329,7 +329,6 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 	protected void init()
 	{
 		this.setLayout(new BorderLayout());
-		log.debug("Start : init1");
 		SampleResult rootSampleResult = new SampleResult();
 		rootSampleResult.setSampleLabel("Root");
 		rootSampleResult.setSuccessful(true);
@@ -347,9 +346,9 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 		resultPane = new JScrollPane(resultPanel);
 		treeSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 				treePane, resultPane);
+		getFilePanel().add(getErrorLoggingCheckbox());
 		add(getFilePanel(),BorderLayout.NORTH);
 		add(treeSplitPane,BorderLayout.CENTER);
-		log.debug("End : init1");
 	}
 	
 	private class ResultsNodeRenderer extends DefaultTreeCellRenderer
