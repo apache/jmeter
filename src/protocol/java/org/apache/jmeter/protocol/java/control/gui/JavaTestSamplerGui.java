@@ -71,81 +71,63 @@ import org.apache.jmeter.util.JMeterUtils;
  * @author Brad Kiewel
  * @version $Revision$
  */
+public class JavaTestSamplerGui extends AbstractSamplerGui
+{
+    /** Panel containing the configuration options. */
+    private JavaConfigGui javaPanel = null;
 
-public class JavaTestSamplerGui extends AbstractSamplerGui {
-	
-	private JavaConfigGui javaPanel = null;
+    /**
+     * Constructor for JavaTestSamplerGui
+     */
+    public JavaTestSamplerGui()
+    {
+        super();
+        init();
+    }
 
-	/**
-	 * Constructor for JavaTestSamplerGui
-	 *
-	public JavaTestSamplerGui(LayoutManager arg0, boolean arg1) {
-		super(arg0, arg1);
-	}
+    /* Implements JMeterGuiComponent.getStaticLabel() */
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("Java Request");
+    }
 
-	/**
-	 * Constructor for JavaTestSamplerGui
-	 *
-	public JavaTestSamplerGui(LayoutManager arg0) {
-		super(arg0);
-	}
-
-	/**
-	 * Constructor for JavaTestSamplerGui
-	 *
-	public JavaTestSamplerGui(boolean arg0) {
-		super(arg0);
-	}
-
-	/**
-	 * Constructor for JavaTestSamplerGui
-	 */
-	public JavaTestSamplerGui() {
-		super();
-		init();
-	}
-	
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("Java Request");
-	}
-
-	private void init() {
+    /**
+     * Initialize the GUI components and layout.
+     */
+    private void init()
+    {
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
         
-		add(makeTitlePanel(), BorderLayout.NORTH);
+        add(makeTitlePanel(), BorderLayout.NORTH);
 
-		javaPanel = new JavaConfigGui(false);
-		
-		add(javaPanel, BorderLayout.CENTER);
-	}
-	
-	public TestElement createTestElement()
-	{
-		JavaSampler sampler = new JavaSampler();
+        javaPanel = new JavaConfigGui(false);
+
+        add(javaPanel, BorderLayout.CENTER);
+    }
+
+    /* Implements JMeterGuiComponent.createTestElement() */ 
+    public TestElement createTestElement()
+    {
+        JavaSampler sampler = new JavaSampler();
         modifyTestElement(sampler);
-		return sampler;
-	}
+        return sampler;
+    }
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
+    /* Implements JMeterGuiComponent.modifyTestElement(TestElement) */
     public void modifyTestElement(TestElement sampler)
     {
         sampler.clear();
-        JavaConfig config = (JavaConfig)javaPanel.createTestElement();
-        this.configureTestElement(sampler);
+        JavaConfig config = (JavaConfig) javaPanel.createTestElement();
+        configureTestElement(sampler);
         sampler.addTestElement(config);
     }
-    
 
-	
-	public void configure(TestElement el)
-	{
-		super.configure(el);
-		javaPanel.configure(el);
-	}
+    /* Overrides AbstractJMeterGuiComponent.configure(TestElement) */
+    public void configure(TestElement el)
+    {
+        super.configure(el);
+        javaPanel.configure(el);
+    }
 }
 
