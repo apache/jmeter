@@ -28,7 +28,6 @@ import org.apache.log.Logger;
 /**
  * A sampler which understands BSF
  *
- * @author sebb AT apache DOT org
  * @version    $Revision$ Updated on: $Date$
  */
 public class BSFSampler extends AbstractSampler
@@ -41,7 +40,7 @@ public class BSFSampler extends AbstractSampler
 	public static final String LANGUAGE   = "BSFSampler.language"; //$NON-NLS-1$
 	public static final String PARAMETERS = "BSFSampler.parameters"; //$NON-NLS-1$
 
-	private BSFManager mgr;
+	private transient BSFManager mgr;
 	private BSFEngine bsfEngine;
 	
 	public BSFSampler()
