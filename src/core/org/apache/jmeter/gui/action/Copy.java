@@ -13,6 +13,7 @@ import java.util.Set;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.testelement.TestElement;
 
 /**
  * @author Thad Smith
@@ -57,6 +58,7 @@ public class Copy extends AbstractAction {
 	public static JMeterTreeNode cloneTreeNode(JMeterTreeNode node)
 	{
 		JMeterTreeNode treeNode = (JMeterTreeNode)node.clone();
+		treeNode.setUserObject(((TestElement)node.getUserObject()).clone());
 		cloneChildren(treeNode,node);
 		return treeNode;
 	}
@@ -67,7 +69,9 @@ public class Copy extends AbstractAction {
 		while (enum.hasMoreElements()) 
 		{
 			JMeterTreeNode child = (JMeterTreeNode)enum.nextElement();
-			to.add((JMeterTreeNode)child.clone());	
+			JMeterTreeNode childClone = (JMeterTreeNode)child.clone();
+			childClone.setUserObject(((TestElement)child.getUserObject()).clone());
+			to.add(childClone);	
 			cloneChildren((JMeterTreeNode)to.getLastChild(),child);
 		}
 	}
