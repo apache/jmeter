@@ -224,6 +224,7 @@ public class ViewResultsFullVisualizer
             if (node != null)
             {
                 SampleResult res = (SampleResult) node.getUserObject();
+                byte[] responseBytes = res.getResponseData();
 
                 if (log.isDebugEnabled())
                 {
@@ -305,48 +306,19 @@ public class ViewResultsFullVisualizer
 						"\nHTTP response headers:\n" + res.getResponseHeaders() + "\n",
 						null);
 
-                    // get the text response and image icon
-                    // to determine which is NOT null
-                    byte[] responseBytes = (byte[]) res.getResponseData();
-
-                    if (res.getDataType() != null
-                        && res.getDataType().equals(SampleResult.TEXT))
+                    String response = getResponseAsString(res);
+                    if (textMode)
                     {
-                        String response = null;
-                        try
-                        {
-							// Showing large strings can be VERY costly, so we will avoid doing so if the response
-							// data is larger than 200K. TODO: instead, we could delay doing the result.setText
-							// call until the user chooses the "Response data" tab. Plus we could warn the user
-							// if this happens and revert the choice if he doesn't confirm he's ready to wait.
-							if (responseBytes.length > 200*1024)
-							{
-								response= 
-									("Response too large to be displayed ("+responseBytes.length+" bytes).");
-							}
-							else
-							{
-								response = new String(responseBytes, "UTF-8");
-							}
-                        }
-                        catch (UnsupportedEncodingException err)
-                        {
-                            throw new Error(err.toString()); // UTF-8 not supported? Com'on!
-                        }
-
-                        if (textMode)
-                        {
-                            showTextResponse(response);
-                        }
-                        else
-                        {
-                            showRenderedResponse(response);
-                        }
+                        showTextResponse(response);
                     }
-                    else if (responseBytes != null)
+                    else
                     {
-                        showImage(new ImageIcon(responseBytes));
+                        showRenderedResponse(response);
                     }
+                }
+                else if (responseBytes != null)
+                {
+                    showImage(new ImageIcon(responseBytes));
                 }
             }
         }
@@ -375,6 +347,44 @@ public class ViewResultsFullVisualizer
 
         textButton.setEnabled(true);
         htmlButton.setEnabled(true);
+    }
+
+    private static String getResponseAsString(SampleResult res)
+	{
+    	
+        byte[] responseBytes = res.getResponseData();
+        String response = null;
+//        System.out.println("grasDE="+res.getDataEncoding());
+//        System.out.println("grasCT="+res.getContentType());
+//        System.out.println("grasDT="+res.getDataType());
+        if (res.getDataType() != null
+            && res.getDataType().equals(SampleResult.TEXT))
+        {
+            try
+            {
+				// Showing large strings can be VERY costly, so we will avoid doing so if the response
+				// data is larger than 200K. TODO: instead, we could delay doing the result.setText
+				// call until the user chooses the "Response data" tab. Plus we could warn the user
+				// if this happens and revert the choice if he doesn't confirm he's ready to wait.
+				if (responseBytes.length > 200*1024)
+				{
+					response= 
+						("Response too large to be displayed ("+responseBytes.length+" bytes).");
+					log.warn("Response too large to display.");
+				}
+				else
+				{
+					response = 
+						new String(responseBytes,res.getDataEncoding());
+				}
+            }
+            catch (UnsupportedEncodingException err)
+            {
+            	log.warn("Could not decode response "+err);
+				response = 	new String(responseBytes);// Try the default encoding instead
+            }
+        }
+    	return response;
     }
 
     /**
@@ -408,35 +418,7 @@ public class ViewResultsFullVisualizer
             }
 
             SampleResult res = (SampleResult) node.getUserObject();
-            byte[] responseBytes = (byte[]) res.getResponseData();
-            String response = null;
-
-            if (res.getDataType() != null
-                && res.getDataType().equals(SampleResult.TEXT))
-            {
-                try
-                {
-					// Showing large strings can be VERY costly, so we will avoid doing so if the response
-					// data is larger than 200K. TODO: instead, we could delay doing the result.setText
-					// call until the user chooses the "Response data" tab. Plus we could warn the user
-					// if this happens and revert the choice if he doesn't confirm he's ready to wait.
-					if (responseBytes.length > 200*1024)
-					{
-						response= 
-							("Response too large to be displayed ("+responseBytes.length+" bytes).");
-						log.warn("Response too large to display.");
-					}
-					else
-					{
-						response = new String(responseBytes, "UTF-8");
-					}
-                }
-                catch (UnsupportedEncodingException err)
-                {
-                	throw new Error(err.toString()); // UTF-8 unsupported? Com'on!
-                }
-            }
-
+            String response = getResponseAsString(res);
             if (textMode)
             {
                 showTextResponse(response);
