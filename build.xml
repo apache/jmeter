@@ -262,6 +262,7 @@
 
   <!-- Directory where these 3rd party libraries will live -->
   <property name="lib.dir" value="lib"/>
+	<property name="legacy.dir" location="legacy"/>
   
   <!-- Directory where Optional 3rd party libraries will live -->
   <property name="lib.opt" value="lib/opt"/>
@@ -373,7 +374,7 @@
   -->
   <path id="anakia.classpath">
     <fileset dir="${lib.dir}" includes="velocity*.jar"/>
-    <fileset dir="${lib.dir}" includes="jdom-*.jar"/>
+    <fileset dir="${legacy.dir}" includes="jdom-*.jar"/>
     <fileset dir="${lib.dir}" includes="commons-collections*.jar"/>
     <fileset dir="${lib.dir}" includes="logkit-*.jar"/>
   </path>
