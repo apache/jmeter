@@ -90,12 +90,8 @@ import org.apache.jmeter.util.JMeterUtils;
  *@version   1.0
  ***************************************/
 
-public class UrlConfigGui extends AbstractConfigGui
+public class UrlConfigGui extends JPanel
 {
-	/****************************************
-	 * !ToDo (Field description)
-	 ***************************************/
-	protected boolean displayName = true;
 
 	/****************************************
 	 * !ToDo (Field description)
@@ -128,29 +124,15 @@ public class UrlConfigGui extends AbstractConfigGui
 	 ***************************************/
 	public UrlConfigGui()
 	{
-		this(true);
-	}
-
-	/****************************************
-	 * !ToDo (Constructor description)
-	 *
-	 *@param display  !ToDo (Parameter description)
-	 ***************************************/
-	public UrlConfigGui(boolean display)
-	{
-		displayName = display;
 		init();
-		setName(getStaticLabel());
 	}
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getStaticLabel()
+
+	  protected void configureTestElement(TestElement mc)
 	{
-		return JMeterUtils.getResString("url_config_title");
+		mc.setProperty(TestElement.NAME, getName());
+		mc.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
+		mc.setProperty(TestElement.TEST_CLASS, mc.getClass().getName());
 	}
 
 	/****************************************
@@ -248,40 +230,8 @@ public class UrlConfigGui extends AbstractConfigGui
 		webRequestPanel.add(northPanel,BorderLayout.NORTH);
 		webRequestPanel.add(getParameterPanel(),BorderLayout.CENTER);
 
-		if(displayName)
-		{
-			// MAIN PANEL
-			JPanel mainPanel = new JPanel();
-			Border margin = new EmptyBorder(10, 10, 5, 10);
-			mainPanel.setBorder(margin);
-			mainPanel.setLayout(new BorderLayout());
-			JPanel normalPanel = new JPanel(new VerticalLayout(5,VerticalLayout.LEFT));
-
-			// TITLE
-			JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("url_config_title"));
-			Font curFont = panelTitleLabel.getFont();
-			int curFontSize = curFont.getSize();
-			curFontSize += 4;
-			panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-			normalPanel.add(panelTitleLabel);
-
-			// NAME
-			if(displayName)
-			{
-				normalPanel.add(getNamePanel());
-			}
-
-			normalPanel.add(webServerPanel);
-			mainPanel.add(normalPanel,BorderLayout.NORTH);
-			mainPanel.add(webRequestPanel,BorderLayout.CENTER);
-
-			this.add(mainPanel,BorderLayout.CENTER);
-		}
-		else
-		{
-			this.add(webServerPanel,BorderLayout.NORTH);
-			this.add(webRequestPanel,BorderLayout.CENTER);
-		}
+		this.add(webServerPanel,BorderLayout.NORTH);
+		this.add(webRequestPanel,BorderLayout.CENTER);
 	}
 
 	/****************************************

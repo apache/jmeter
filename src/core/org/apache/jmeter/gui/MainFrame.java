@@ -134,7 +134,13 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 		stoppingMessage.getContentPane().add(stopLabel);
 		stoppingMessage.pack();
 		ComponentUtil.centerComponentInComponent(this,stoppingMessage);
-		stoppingMessage.show();
+		SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					stoppingMessage.show();
+				}
+			});
 	}
 
 	/****************************************
