@@ -1,4 +1,8 @@
 /*
+ * $Header$
+ * $Revision$
+ * $Date$
+ * 
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -75,21 +79,24 @@ import org.apache.oro.text.regex.Perl5Matcher;
  *
  * @author     Michael Stover
  * @author     <a href="mailto:jacarlco@katun.com">Jonathan Carlson</a>
- * @created    $Date$
- * @version    $Revision$
+ * @version    $Revision$ Last Updated: $Date$
  ***********************************************************/
 public class ResponseAssertion
    extends AbstractTestElement
    implements Serializable, Assertion
 {
    public final static String TEST_FIELD = "Assertion.test_field";
-   public final static String TEST_TYPE = "Assertion.test_type";
-   public final static String TEST_STRINGS = "Asserion.test_strings";
+   // Values for TEST_FIELD
    public final static String SAMPLE_LABEL = "Assertion.sample_label";
    public final static String RESPONSE_DATA = "Assertion.response_data";
+   public final static String RESPONSE_CODE = "Assertion.response_code";
+   public final static String RESPONSE_MESSAGE = "Assertion.response_message";
 
+   public final static String TEST_STRINGS = "Asserion.test_strings";
+
+   public final static String TEST_TYPE = "Assertion.test_type";
    /* 
-    * Mask values for TestType
+    * Mask values for TEST_TYPE
     * TODO: remove either MATCH or CONTAINS - they are mutually exckusive 
     */
    public final static int MATCH = 1 << 0;
@@ -161,15 +168,15 @@ public class ResponseAssertion
    {
       getTestStrings().addProperty(new StringProperty(testString,testString));
    }
-   public void setTestString(String testString, int index)
+   public void setTestString(String testString, int index)//NOTUSED?
    {
       getTestStrings().set(index, testString);
    }
-   public void removeTestString(String testString)
+   public void removeTestString(String testString)//NOTUSED?
    {
       getTestStrings().remove(testString);
    }
-   public void removeTestString(int index)
+   public void removeTestString(int index)//NOTUSED?
    {
       getTestStrings().remove(index);
    }
@@ -275,16 +282,27 @@ public class ResponseAssertion
       boolean pass = true;
       boolean not = (NOT & getTestType()) > 0;
       AssertionResult result = new AssertionResult();
-      String toCheck; // The string to check (Url or data)
+      String toCheck=""; // The string to check (Url or data)
       
+      // What are we testing against?
       if (ResponseAssertion.RESPONSE_DATA.equals(getTestField()))
-      { // We're testing the response data
+      {
 		toCheck = new String(response.responseDataAsBA());
-      } else { // we're testing the URL
+      }
+      else if (ResponseAssertion.RESPONSE_CODE.equals(getTestField()))
+      {
+		toCheck=response.getResponseCode();
+	  }
+	  else if (ResponseAssertion.RESPONSE_MESSAGE.equals(getTestField()))
+	  {
+		toCheck=response.getResponseMessage();
+      }
+      else 
+      { // Assume it is the URL
       	toCheck=response.getSamplerData();
       	if (toCheck == null) toCheck = "";
       }
-      
+
       if(toCheck.length()==0)
       {
           return setResultForNull(result);
@@ -343,24 +361,41 @@ public class ResponseAssertion
  */
 private String getFailText(String stringPattern) {
 	String text;
+	String what;
+	if (ResponseAssertion.RESPONSE_DATA.equals(getTestField()))
+	{
+		what="text";
+	}
+	else if (ResponseAssertion.RESPONSE_CODE.equals(getTestField()))
+	{
+		what="code";
+	}
+	else if (ResponseAssertion.RESPONSE_MESSAGE.equals(getTestField()))
+	{
+		what="message";
+	}
+	else // Assume it is the URL
+	{
+		what="URL";
+	}
 	switch(getTestType()){
 		case CONTAINS:
-			text = "Test failed, expected to contain ";
+			text = " expected to contain ";
 			break;
 		case NOT | CONTAINS:
-			text = "Test failed, expected not to contain ";
+			text = " expected not to contain ";
 			break;
 		case MATCH:
-			text = "Test failed, expected to match ";
+			text = " expected to match ";
 			break;
 		case NOT | MATCH:
-			text = "Test failed, expected not to match ";
+			text = " expected not to match ";
 			break;
 		default:// should never happen...
-		text = "Test failed, expected something using ";
+		text = " expected something using ";
 	}
 
-	return text + "/" + stringPattern + "/";
+	return "Test failed, " + what + text + "/" + stringPattern + "/";
 }
 protected AssertionResult setResultForNull(AssertionResult result)
 {
