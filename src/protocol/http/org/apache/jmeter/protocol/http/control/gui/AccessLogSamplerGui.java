@@ -63,6 +63,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.JOptionPane;
 
 import org.apache.jmeter.protocol.http.sampler.AccessLogSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
@@ -163,13 +164,13 @@ public class AccessLogSamplerGui
     {
     	if (SAMPLER == null){
 			SAMPLER = new AccessLogSampler();
-			SAMPLER.setSamplerGUI(this);
 			this.configureTestElement(SAMPLER);
 			SAMPLER.setParserClassName(parserClassName.getText());
 			SAMPLER.setGeneratorClassName(generatorClassName.getText());
 			SAMPLER.setLogFile(logFile.getFilename());
 			SAMPLER.setDomain(HOSTNAME.getText());
 			SAMPLER.setPort(getPortNumber());
+
     	}
 		return SAMPLER;
     }
@@ -199,7 +200,6 @@ public class AccessLogSamplerGui
     public void modifyTestElement(TestElement s)
     {
 		SAMPLER = (AccessLogSampler) s;
-		SAMPLER.setSamplerGUI(this);
         this.configureTestElement(SAMPLER);
 		SAMPLER.setParserClassName(parserClassName.getText());
 		SAMPLER.setGeneratorClassName(generatorClassName.getText());
@@ -286,6 +286,7 @@ public class AccessLogSamplerGui
         HOSTNAME.setText(SAMPLER.getDomain());
         PORT.setText(String.valueOf(SAMPLER.getPort()));
         getImages.setSelected(SAMPLER.isImageParser());
+
     }
     
     /**
@@ -298,14 +299,16 @@ public class AccessLogSamplerGui
     {
         if (event.getSource() == parserClassName)
         {
-            SAMPLER.instantiateParser();
+        	SAMPLER.setParserClassName(parserClassName.getText());
+        	handleParserEvent();
         }
         if (event.getSource() == logFile)
         {
             //this.setUpGenerator();
         }
         if (event.getSource() == generatorClassName){
-			SAMPLER.instantiateGenerator();
+        	SAMPLER.setGeneratorClassName(generatorClassName.getText());
+        	handleGeneratorEvent();
         }
         if (event.getSource() == HOSTNAME){
         }
@@ -313,4 +316,37 @@ public class AccessLogSamplerGui
         }
     }
 
+	/**
+	 * handleParserEvent is used to check the
+	 * parser class. If it is not valid, it
+	 * should pop up an error message.
+	 */    
+    public void handleParserEvent(){
+		if(!SAMPLER.checkParser()){
+			// we should pop up a dialog
+			JOptionPane.showConfirmDialog(
+				this,
+				JMeterUtils.getResString("log_parser_cnf_msg"),
+				"Warning",
+				JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.ERROR_MESSAGE);
+		}
+    }
+
+	/**
+	 * handleGeneratorEvent is used to check the
+	 * generator class. If it is not valid, it
+	 * should pop up an error message.
+	 */
+	public void handleGeneratorEvent(){
+		if(!SAMPLER.checkGenerator()){
+			// we should pop up a dialog
+			JOptionPane.showConfirmDialog(
+				this,
+				JMeterUtils.getResString("generator_cnf_msg"),
+				"Warning",
+				JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.ERROR_MESSAGE);
+		}
+	}
 }
