@@ -42,6 +42,8 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterStopTestException;
+import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.log.Logger;
 
 /**
@@ -271,6 +273,16 @@ public class JMeterThread implements Runnable, java.io.Serializable
                         }
 
                     }
+                    catch (JMeterStopTestException e)
+					{
+                    	log.info("Stopping Test: "+e.toString());
+                    	stopTest();
+					}
+                    catch (JMeterStopThreadException e)
+					{
+                    	log.info("Stopping Thread: "+e.toString());
+                    	stopThread();
+					}
                     catch (Exception e)
                     {
                         log.error("", e);
