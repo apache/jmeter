@@ -189,17 +189,17 @@ Figure 5.7. Graph Results Listener</figure>
 
 <section name="5.6 Saving the Test Plan" anchor="saving">
 <p>Although it is not required, we recommend that you save the Test Plan to a
-file before running it.  To save the Test Plan, select the Test Plan element
-in the tree. Then, select Save As from the File menu.</p>
+file before running it.  To save the Test Plan, select Save Test Plan from the
+File menu (with the latest release, it is no longer necessary to select the
+Test Plan element first).</p>
 
 <note>JMeter allows you to save the entire Test Plan tree or
-only a portion of it.  JMeter uses the currently selected tree element
-and saves all elements located in that particular "branch" of the tree.
-Because you want to save all of the elements, you must select the Test Plan
-element before selecting File --&gt; Save As.</note>
-
-<note>You can also access the Save As menu item by selecting an
-element and then clicking your right mouse button.</note>
+only a portion of it.  To save only the elements located in a particular "branch"
+of the Test Plan tree, select the Test Plan element in the tree from which to start
+the "branch", and then click your right mouse button to access the Save As menu item.
+Alternatively, select the appropriate Test Plan element  and then select Save As from
+the Edit menu.
+</note>
 
 </section>
 
