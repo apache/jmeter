@@ -52,12 +52,13 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+ 
 package org.apache.jmeter.timers.gui;
+
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -73,17 +74,17 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 /**
  * GUI for the Constant Throughput Timer.
  *
- * @author    <a href="mailto:jsalvata@atg.com">Jordi Salvat i Alabart</a>
- * @created   $Date$
- * @version   1.0
+ * @author <a href="mailto:jsalvata@atg.com">Jordi Salvat i Alabart</a>
+ * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
+ * @version $Id$
  */
 public class ConstantThroughputTimerGui
 	extends AbstractTimerGui
 	implements KeyListener
 {
     private final String DEFAULT_THROUGHPUT = "60";
-
     private final String THROUGHPUT_FIELD = "Throughput Field";
+
     private JTextField throughputField;
 
     /**
@@ -92,27 +93,42 @@ public class ConstantThroughputTimerGui
      */
     public ConstantThroughputTimerGui()
     {
-	init();
+		init();
     }
 
+	/**
+	 * Get the title to display for this component.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
+	 */
     public String getStaticLabel()
     {
-	return JMeterUtils.getResString("constant_throughput_timer_title");
+		return JMeterUtils.getResString("constant_throughput_timer_title");
     }
 
+	/**
+	 * Create the test element underlying this GUI component.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+	 */
     public TestElement createTestElement()
     {
-	ConstantThroughputTimer timer = new ConstantThroughputTimer();
-	this.configureTestElement(timer);
-	timer.setThroughput(Long.parseLong(throughputField.getText()));
-	return timer;
+		ConstantThroughputTimer timer = new ConstantThroughputTimer();
+		this.configureTestElement(timer);
+		timer.setThroughput(Long.parseLong(throughputField.getText()));
+		return timer;
     }
 
+	/**
+	 * Configure this GUI component from the underlying TestElement.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
+	 */
     public void configure(TestElement el)
     {
-	super.configure(el);
-	ConstantThroughputTimer e= (ConstantThroughputTimer)el;
-	throughputField.setText(String.valueOf(e.getThroughput()));
+		super.configure(el);
+		ConstantThroughputTimer e= (ConstantThroughputTimer)el;
+		throughputField.setText(String.valueOf(e.getThroughput()));
     }
 
     /**
@@ -123,34 +139,44 @@ public class ConstantThroughputTimerGui
      */
     public void keyReleased(KeyEvent e)
     {
-	String n = e.getComponent().getName();
-	if(n.equals(THROUGHPUT_FIELD))
-	{
-	    try
-	    {
-		Long.parseLong(throughputField.getText());
-	    }
-	    catch(NumberFormatException nfe)
-	    {
-		if(throughputField.getText().length() > 0)
+		String n = e.getComponent().getName();
+		if(n.equals(THROUGHPUT_FIELD))
 		{
-		    JOptionPane.showMessageDialog(this,
-			    "You must enter a valid number",
-			    "Invalid data", JOptionPane.WARNING_MESSAGE);
-		    // We reset the text to be an empty string instead
-		    // of the default value. If we reset it to the
-		    // default value, then the user has to delete
-		    // that value and reenter his/her own. That's
-		    // too much trouble for the user.
+		    try
+		    {
+			Long.parseLong(throughputField.getText());
+		    }
+		    catch(NumberFormatException nfe)
+		    {
+			if(throughputField.getText().length() > 0)
+			{
+			    JOptionPane.showMessageDialog(this,
+				    "You must enter a valid number",
+				    "Invalid data", JOptionPane.WARNING_MESSAGE);
+			    // We reset the text to be an empty string instead
+			    // of the default value. If we reset it to the
+			    // default value, then the user has to delete
+			    // that value and reenter his/her own. That's
+			    // too much trouble for the user.
+			}
+		    }
 		}
-	    }
-	}
     }
 
+	/**
+	 * Process a KeyEvent.
+	 *
+	 * @param e the event to handle.
+	 */
     public void keyPressed(KeyEvent e)
     {
     }
 
+	/**
+	 * Process a KeyEvent.
+	 *
+	 * @param e the event to handle.
+	 */
     public void keyTyped(KeyEvent e)
     {
     }
@@ -160,41 +186,42 @@ public class ConstantThroughputTimerGui
      */
     private void init()
     {
-	this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT,
-		    			  VerticalLayout.TOP));
-
-	// MAIN PANEL
-	JPanel mainPanel = new JPanel();
-	Border margin = new EmptyBorder(10, 10, 5, 10);
-	mainPanel.setBorder(margin);
-	mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-	// TITLE
-	JLabel panelTitleLabel = new JLabel(
-		JMeterUtils.getResString("constant_throughput_timer_title"));
-	Font curFont = panelTitleLabel.getFont();
-	int curFontSize = curFont.getSize();
-	curFontSize += 4;
-	panelTitleLabel.setFont(new Font(curFont.getFontName(),
-		    curFont.getStyle(), curFontSize));
-	mainPanel.add(panelTitleLabel);
-
-	// NAME
-	mainPanel.add(getNamePanel());
-
-	// throughput
-	JPanel throughputPanel = new JPanel();
-	JLabel throughputLabel = new JLabel(
-	      JMeterUtils.getResString("constant_throughput_timer_throughput"));
-	throughputPanel.add(throughputLabel);
-	throughputField = new JTextField(6);
-	throughputField.setText(DEFAULT_THROUGHPUT);
-	throughputPanel.add(throughputField);
-	mainPanel.add(throughputPanel);
-
-	throughputField.addKeyListener(this);
-	throughputField.setName(THROUGHPUT_FIELD);
-
-	this.add(mainPanel);
+		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT,
+			    			  VerticalLayout.TOP));
+	
+		// MAIN PANEL
+		JPanel mainPanel = new JPanel();
+		Border margin = new EmptyBorder(10, 10, 5, 10);
+		mainPanel.setBorder(margin);
+		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+	
+		// TITLE
+		JLabel panelTitleLabel = new JLabel(
+			JMeterUtils.getResString("constant_throughput_timer_title"));
+		Font curFont = panelTitleLabel.getFont();
+		int curFontSize = curFont.getSize();
+		curFontSize += 4;
+		panelTitleLabel.setFont(new Font(curFont.getFontName(),
+			    curFont.getStyle(), curFontSize));
+		mainPanel.add(panelTitleLabel);
+	
+		// NAME
+		mainPanel.add(getNamePanel());
+	
+		// throughput
+		JPanel throughputPanel = new JPanel();
+		JLabel throughputLabel = new JLabel(
+		      JMeterUtils.getResString("constant_throughput_timer_throughput"));
+		throughputPanel.add(throughputLabel);
+		throughputField = new JTextField(6);
+		throughputField.setText(DEFAULT_THROUGHPUT);
+		throughputPanel.add(throughputField);
+		mainPanel.add(throughputPanel);
+	
+		throughputField.addKeyListener(this);
+		throughputField.setName(THROUGHPUT_FIELD);
+	
+		this.add(mainPanel);
     }
+    
 }

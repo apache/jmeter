@@ -52,10 +52,10 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+
 package org.apache.jmeter.timers.gui;
+
 import java.awt.Font;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -70,103 +70,80 @@ import org.apache.jmeter.timers.ConstantTimer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
+/**
+ * The GUI for ConstantTimer. 
  *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
-public class ConstantTimerGui extends AbstractTimerGui implements KeyListener
+ * @author Michael Stover
+ * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
+ * @version $Id$
+ */
+public class ConstantTimerGui extends AbstractTimerGui 
 {
+	/**
+	 * The default value for the delay.
+	 */
 	private final String DEFAULT_DELAY = "300";
 
 	private final String DELAY_FIELD = "Delay Field";
+
 	private JTextField delayField;
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
+	/**
+	 * No-arg constructor.
+	 */
 	public ConstantTimerGui()
 	{
 		init();
 	}
 
-	/****************************************
-	 * !ToDo (Method description)
+	/**
+	 * Handle an error.
 	 *
-	 *@param e        !ToDo (Parameter description)
-	 *@param thrower  !ToDo (Parameter description)
-	 ***************************************/
+	 * @param e the Exception that was thrown.
+	 * @param thrower the JComponent that threw the Exception.
+	 */
 	public static void error(Exception e, JComponent thrower)
 	{
 		JOptionPane.showMessageDialog(thrower, e, "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
+	/**
+	 * Get the title to display for this component.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
+	 */
 	public String getStaticLabel()
 	{
 		return JMeterUtils.getResString("constant_timer_title");
 	}
 
+	/**
+	 * Create the test element underlying this GUI component.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+	 */
 	public TestElement createTestElement()
 	{
 		ConstantTimer timer = new ConstantTimer();
 		this.configureTestElement(timer);
-		timer.setDelay(Long.parseLong(delayField.getText()));
+		timer.setDelay(delayField.getText());
 		return timer;
 	}
 
+	/**
+	 * Configure this GUI component from the underlying TestElement.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
+	 */
 	public void configure(TestElement el)
 	{
 		super.configure(el);
-		delayField.setText(((ConstantTimer)el).getDelay()+"");
+		delayField.setText(((ConstantTimer)el).getDelay());
 	}
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void keyReleased(KeyEvent e)
-	{
-		String n = e.getComponent().getName();
-		if(n.equals(DELAY_FIELD))
-		{
-			try
-			{
-				Long.parseLong(delayField.getText());
-			}
-			catch(NumberFormatException nfe)
-			{
-				if(delayField.getText().length() > 0)
-				{
-					JOptionPane.showMessageDialog(this, "You must enter a valid number",
-							"Invalid data", JOptionPane.WARNING_MESSAGE);
-					// We reset the text to be an empty string instead
-					// of the default value. If we reset it to the
-					// default value, then the user has to delete
-					// that value and reenter his/her own. That's
-					// too much trouble for the user.
-				}
-			}
-		}
-	}
-
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void keyPressed(KeyEvent e) { }
-
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void keyTyped(KeyEvent e) { }
-
+	/**
+	 * Initialize this component.
+	 */
 	private void init()
 	{
 		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
@@ -192,14 +169,13 @@ public class ConstantTimerGui extends AbstractTimerGui implements KeyListener
 		JPanel delayPanel = new JPanel();
 		JLabel delayLabel = new JLabel(JMeterUtils.getResString("constant_timer_delay"));
 		delayPanel.add(delayLabel);
-		delayField = new JTextField(6);
+		delayField = new JTextField(20);
 		delayField.setText(DEFAULT_DELAY);
 		delayPanel.add(delayField);
 		mainPanel.add(delayPanel);
-
-		delayField.addKeyListener(this);
 		delayField.setName(DELAY_FIELD);
 
 		this.add(mainPanel);
 	}
+	
 }

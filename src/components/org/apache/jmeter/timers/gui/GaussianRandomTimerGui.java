@@ -52,7 +52,9 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+ 
 package org.apache.jmeter.timers.gui;
+
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -74,14 +76,13 @@ import org.apache.jmeter.timers.RandomTimer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
+/**
+ * Implementation of a gaussian random timer.
  *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
+ * @author    Michael Stover
+ * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
+ * @version $Id$
+ */
 public class GaussianRandomTimerGui extends AbstractTimerGui implements KeyListener
 {
 
@@ -94,34 +95,44 @@ public class GaussianRandomTimerGui extends AbstractTimerGui implements KeyListe
 	private JTextField delayField;
 	private JTextField rangeField;
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
+	/**
+	 * No-arg constructor.
+	 */
 	public GaussianRandomTimerGui()
 	{
 		init();
 	}
 
-	/****************************************
-	 * !ToDo (Method description)
+	/**
+	 * Handle an error.
 	 *
-	 *@param e        !ToDo (Parameter description)
-	 *@param thrower  !ToDo (Parameter description)
-	 ***************************************/
+	 * @param e the Exception that was thrown.
+	 * @param thrower the JComponent that threw the Exception.
+	 */
 	public static void error(Exception e, JComponent thrower)
 	{
 		JOptionPane.showMessageDialog(thrower, e, "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
+	/**
+	 * Create the test element underlying this GUI component.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+	 */
 	public TestElement createTestElement()
 	{
 		RandomTimer timer = new GaussianRandomTimer();
 		this.configureTestElement(timer);
-		timer.setDelay(Long.parseLong(delayField.getText()));
+		timer.setDelay(delayField.getText());
 		timer.setRange(Double.parseDouble(rangeField.getText()));
 		return timer;
 	}
 
+	/**
+	 * Configure this GUI component from the underlying TestElement.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
+	 */
 	public void configure(TestElement el)
 	{
 		super.configure(el);
@@ -129,36 +140,26 @@ public class GaussianRandomTimerGui extends AbstractTimerGui implements KeyListe
 		rangeField.setText(el.getProperty(RandomTimer.RANGE).toString());
 	}
 
+	/**
+	 * Get the title to display for this component.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
+	 */
 	public String getStaticLabel()
 	{
 		return JMeterUtils.getResString("gaussian_timer_title");
 	}
 
-	/****************************************
-	 * !ToDo (Method description)
+	/**
+	 * Process a KeyEvent.
 	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
+	 * @param e the event to handle.
+	 */
 	public void keyReleased(KeyEvent e)
 	{
 		String temp = e.getComponent().getName();
 
-		if(temp.equals(DELAY_FIELD))
-		{
-			try
-			{
-				Long.parseLong(delayField.getText());
-			}
-			catch(NumberFormatException nfe)
-			{
-				if(delayField.getText().length() > 0)
-				{
-					JOptionPane.showMessageDialog(this, "You must enter a valid number",
-							"Invalid data", JOptionPane.WARNING_MESSAGE);
-				}
-			}
-		}
-		else if(temp.equals(RANGE_FIELD))
+		if(temp.equals(RANGE_FIELD))
 		{
 			try
 			{
@@ -175,20 +176,27 @@ public class GaussianRandomTimerGui extends AbstractTimerGui implements KeyListe
 		}
 	}
 
-	/****************************************
-	 * !ToDo (Method description)
+	/**
+	 * Process a KeyEvent.
 	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void keyPressed(KeyEvent e) { }
+	 * @param e the event to handle.
+	 */
+	public void keyPressed(KeyEvent e) 
+	{ 
+	}
 
-	/****************************************
-	 * !ToDo (Method description)
+	/**
+	 * Process a KeyEvent.
 	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void keyTyped(KeyEvent e) { }
+	 * @param e the event to handle.
+	 */
+	public void keyTyped(KeyEvent e) 
+	{ 
+	}
 
+	/**
+	 * Initialize this component.
+	 */
 	private void init()
 	{
 		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
@@ -232,7 +240,7 @@ public class GaussianRandomTimerGui extends AbstractTimerGui implements KeyListe
 		JPanel avgDelayPanel = new JPanel();
 		JLabel delayLabel = new JLabel(JMeterUtils.getResString("gaussian_timer_delay"));
 		avgDelayPanel.add(delayLabel);
-		delayField = new JTextField(6);
+		delayField = new JTextField(20);
 		delayField.setText(DEFAULT_DELAY);
 		delayField.setName(DELAY_FIELD);
 		delayField.addKeyListener(this);
@@ -244,4 +252,5 @@ public class GaussianRandomTimerGui extends AbstractTimerGui implements KeyListe
 		// Set the initial focus to the delay field
 		new FocusRequester(rangeField);
 	}
+	
 }

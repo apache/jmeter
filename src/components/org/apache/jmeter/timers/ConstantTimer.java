@@ -60,92 +60,117 @@ import java.io.*;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.ThreadListener;
+import org.apache.jmeter.testelement.VariablesCollection;
+import org.apache.jmeter.threads.JMeterVariables;
 
-/************************************************************
- *  This class implements a constant timer with its own panel and fields for
- *  value update and user interaction.
+/**
+ * This class implements a constant timer with its own panel and fields for
+ * value update and user interaction.
  *
- *@author     <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
- *@created    $Date$
- *@version    $Revision$ $Date$
- ***********************************************************/
-
-public class ConstantTimer extends AbstractTestElement implements Timer, Serializable
+ * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
+ * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
+ * @version $Revision$ $Date$
+ */
+public class ConstantTimer extends AbstractTestElement 
+        implements Timer, Serializable, ThreadListener
 {
 	public final static String DELAY = "ConstantTimer.delay";
+	private VariablesCollection vars = new VariablesCollection();
+	private JMeterVariables variables;
 	private static List addableList = new LinkedList();
+	private long delay = 0;
 
-	/************************************************************
-	 *  !ToDo (Constructor description)
-	 ***********************************************************/
+	/**
+	 * No-arg constructor.
+	 * 
+	 * @see java.lang.Object#Object()
+	 */
 	public ConstantTimer()
 	{
 	}
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 *
-	 *@param  delay  !ToDo (Parameter description)
-	 ***********************************************************/
-	public void setDelay(long delay)
+	/**
+	 * Set the delay for this timer.
+	 *  
+	 * @see org.apache.jmeter.timers.Timer#setDelay(String)
+	 */
+	public void setDelay(String delay)
 	{
-		setProperty(DELAY,new Long(delay));
+		setProperty(DELAY, delay);
 	}
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 *
-	 *@param  range  !ToDo (Parameter description)
-	 ***********************************************************/
+	/**
+	 * Set the range (not used for this timer).
+	 * 
+	 * @see org.apache.jmeter.timers.Timer#setRange(double)
+	 */
 	public void setRange(double range)
 	{
 	}
 
-	/************************************************************
-	 *  !ToDoo (Method description)
-	 *
-	 *@return    !ToDo (Return description)
-	 ***********************************************************/
-	public long getDelay()
+	/**
+	 * Get the delay value for display.
+	 * 
+	 * @return the delay value for display.
+	 * @see org.apache.jmeter.timers.Timer#getDelay()
+	 */
+	public String getDelay()
 	{
-		Object delay = getProperty(DELAY);
-		if(delay instanceof Long)
-		{
-			return ((Long)delay).longValue();
-		}
-		else
-		{
-			return Long.parseLong((String)delay);
-		}
+		return (String) getProperty(DELAY);
 	}
 
-	/************************************************************
-	 *  !ToDoo (Method description)
-	 *
-	 *@return    !ToDo (Return description)
-	 ***********************************************************/
+	/**
+	 * Retrieve the range (not used for this timer).
+	 * 
+	 * @return the range (always zero for this timer).
+	 * @see org.apache.jmeter.timers.Timer#getRange()
+	 */
 	public double getRange()
 	{
 		return (double)0;
 	}
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 *
-	 *@return    !ToDo (Return description)
-	 ***********************************************************/
+	/**
+	 * Retrieve the delay to use during test execution.
+	 * 
+	 * @return the delay.
+	 */
 	public long delay()
 	{
-		return getDelay();
+		return delay;
 	}
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 *
-	 *@return    !ToDo (Return description)
-	 ***********************************************************/
+	/**
+	 * Provide a description of this timer class.
+	 * 
+	 * @return the description of this timer class.
+	 */
 	public String toString()
 	{
 		return JMeterUtils.getResString("constant_timer_memo");
 	}
+
+	/**
+	 * Gain access to any variables that have been defined.
+	 * 
+	 * @see org.apache.jmeter.testelement.ThreadListener#iterationStarted(int)
+	 */
+	public void iterationStarted(int iterationCount)
+	{
+		variables = vars.getVariables();
+		String delayString = (String) getProperty(DELAY);
+		delay = Long.parseLong(delayString);
+	}
+
+	/**
+	 * Make changes to variables available elsewhere.
+	 * 
+	 * @see org.apache.jmeter.testelement.ThreadListener#setJMeterVariables(JMeterVariables)
+	 */
+	public void setJMeterVariables(JMeterVariables jmVars)
+	{
+		//vars.addJMeterVariables(jmVars);
+	}
+
 }
