@@ -9,124 +9,123 @@
 
 <ul>
   <li><a href="intro.html">1. Introduction</a></li>
-  <ul>
-	 <li><a href="intro.html#history">1.1 History</a></li>
-	 <li><a href="intro.html#future">1.2 The Future</a></li>
-  </ul>
   <li><a href="get-started.html">2. Getting Started</a></li>
   <ul>
-	 <li><a href="get-started.html#requirements">2.1 Requirements</a></li>
-	 <ul>
-		<li><a href="get-started.html#java_versions">2.1.1 Java Versions<!--: JDK1.2 and higher (has not been tested w/JDK 1.4)--></a></li>
-		<li><a href="get-started.html#os">2.1.2 Operating Systems<!--: any (has been tested on Windows 98, ...)--></a></li>
-		<li><a href="get-started.html#jdbc">2.1.3 JDBC Driver (for testing databases)</a></li>
-		<li><a href="get-started.html#xml">2.1.4 SAX XML Parser</a></li>
-		<li><a href="get-started.html#ssl">2.1.5 SSL Encryption Support</a></li>
-		<li><a href="get-started.html#mail">2.1.6 Email Support</a></li>
-	 </ul>
-	 <li><a href="get-started.html#install">2.2 Installation<!--(includes configuration)--></a></li>
-	 <ul>
-		<li><a href="get-started.html#download_latest">2.2.1 Downloading the Latest Release</a></li>
-		<li><a href="get-started.html#download_nightly">2.2.2 Downloading Nightly Builds<!-- (include build instructions)--></a></li>
-	 </ul>
-	 <li><a href="get-started.html#run">2.3 Running JMeter</a></li>
-	 <ul>
-		<li><a href="get-started.html#classpath">2.3.1 JMeter's Classpath</a></li>
-		<li><a href="get-started.html#proxy_server">2.3.2 Using a Proxy Server</a></li>
-		<li><a href="get-started.html#cl_only">2.3.4 Non-GUI Mode</a></li>
-	</ul>
+    <li><a href="get-started.html#requirements">2.1 Requirements</a></li>
+    <ul>
+      <li><a href="get-started.html#java_versions">2.1.1 Java Versions<!--: JDK1.2 and higher (has not been tested w/JDK 1.4)--></a></li>
+      <li><a href="get-started.html#os">2.1.2 Operating Systems<!--: any (has been tested on Windows 98, ...)--></a></li>
+      <li><a href="get-started.html#jdbc">2.1.3 JDBC Driver (for testing databases)</a></li>
+      <li><a href="get-started.html#xml">2.1.4 SAX XML Parser</a></li>
+    </ul>
+    <li><a href="get-started.html#install">2.2 Installation<!--(includes configuration)--></a></li>
+    <ul>
+      <li><a href="get-started.html#download_latest">2.2.1 Downloading the Latest Release</a></li>
+      <li><a href="get-started.html#download_nightly">2.2.2 Downloading Nightly Builds<!-- (include build instructions)--></a></li>
+      <li><a href="get-started.html#unix">2.2.3 UNIX Instructions</a></li>
+      <li><a href="get-started.html#windows">2.2.4 MS-Windows Instructions</a></li>
+    </ul>
   </ul>
   <li><a href="build-test-plan.html">3. Building a Test Plan</a></li>
   <ul>
-	 <li><a href="build-test-plan.html#add_remove">3.1 Adding and Removing Elements</a></li>
-	 <li><a href="build-test-plan.html#load_save">3.2 Loading and Saving Elements</a></li>
-	 <li><a href="build-test-plan.html#run">3.3 Running a Test Plan</a></li>
+    <li><a href="build-test-plan.html#add_remove">3.1 Adding and Removing Elements</a></li>
+    <li><a href="build-test-plan.html#load_save">3.2 Loading and Saving Elements</a></li>
+    <li><a href="build-test-plan.html#run">3.3 Running a Test Plan</a></li>
   </ul>
   <li><a href="elements-test-plan.html">4. Elements of a Test Plan</a></li>
   <ul>
-	 <li><a href="thread-group.html">4.1 Thread Group</a></li>
-	 <li><a href="controller.html">4.2 Controllers</a></li>
-	 <ul>
-		<li><a href="gen-controller.html">4.2.1 Generative Controllers</a></li>
-		<ul>
-		  <li><a href="gen-controller.html#ftp_request">4.2.1.1 FTP Request</a></li>
-		  <li><a href="gen-controller.html#http_request">4.2.1.2 HTTP Request</a></li>
-		  <li><a href="gen-controller.html#jdbc_request">4.2.1.3 JDBC Request</a></li>
-		</ul>
-		<li><a href="logic-controller.html">4.2.2 Logic Controllers</a></li>
-		<ul>
-		  <li><a href="logic-controller.html#interleave">4.2.2.1 Interleave Controller</a></li>
-		  <li><a href="logic-controller.html#loop">4.2.2.2 Loop Controller</a></li>
-		  <li><a href="logic-controller.html#mod_manager">4.2.2.3 Modification Manager</a></li>
-		  <li><a href="logic-controller.html#once_only">4.2.2.4 Once Only Controller</a></li>
-		  <li><a href="logic-controller.html#simple">4.2.2.5 Simple Controller</a></li>
-		</ul>
-	 </ul>
-	 <li><a href="listener.html">4.3 Reporters</a></li>
-	 <ul>
-		  <li><a href="listener.html#view_graph_tree">4.3.1 View Graph Tree</a></li>
-		  <li><a href="listener.html#graph_full_results">4.3.2 Graph Full Results</a></li>
-		  <li><a href="listener.html#graph_results">4.3.3 Graph Results</a></li>
-		  <li><a href="listener.html#spline">4.3.4 Spline Visualizer</a></li>
-		  <li><a href="listener.html#assertion_results">4.3.5 Assertion Results</a></li>
-		  <li><a href="listener.html#file_reporter">4.3.6 File Reporter</a></li>
-		  <li><a href="listener.html#view_results">4.3.7 View Results</a></li>
-		  <li><a href="listener.html#view_results_tree">4.3.8 View Result Tree</a></li>
-	 </ul>
-	 <li><a href="timer.html">4.4 Timers</a></li>
-	 <ul>
-		<li><a href="timer.html#constant">4.4.1 Constant Timer</a></li>
-		<li><a href="timer.html#gaussian">4.4.2 Gaussian Random Timer</a></li>
-		<li><a href="timer.html#uniform">4.4.3 Uniform Random Timer</a></li>
-	 </ul>
+    <li><a href="thread-group.html">4.1 Thread Group</a></li>
+    <li><a href="controller.html">4.2 Controllers</a></li>
+    <ul>
+      <li><a href="gen-controller.html">4.2.1 Generative Controllers</a></li>
+      <ul>
+        <li><a href="gen-controller.html#ftp_request">4.2.1.1 FTP Request</a></li>
+        <li><a href="gen-controller.html#http_request">4.2.1.2 HTTP Request</a></li>
+        <li><a href="gen-controller.html#jdbc_request">4.2.1.3 JDBC Request</a></li>
+      </ul>
+      <li><a href="logic-controller.html">4.2.2 Logic Controllers</a></li>
+      <ul>
+        <li><a href="logic-controller.html#interleave">4.2.2.1 Interleave Controller</a></li>
+        <li><a href="logic-controller.html#loop">4.2.2.2 Loop Controller</a></li>
+        <li><a href="logic-controller.html#mod_manager">4.2.2.3 Modification Manager</a></li>
+        <li><a href="logic-controller.html#once_only">4.2.2.4 Once Only Controller</a></li>
+        <li><a href="logic-controller.html#simple">4.2.2.5 Simple Controller</a></li>
+      </ul>
+    </ul>
+    <li><a href="listener.html">4.3 Listeners</a></li>
+    <ul>
+      <li><a href="listener.html#graph">4.3.1 Graphs</a></li>
+      <ul>
+        <li><a href="listener.html#view_graph_tree">4.3.1.1 View Graph Tree</a></li>
+        <li><a href="listener.html#graph_full_results">4.3.1.2 Graph Full Results</a></li>
+        <li><a href="listener.html#graph_results">4.3.1.3 Graph Results</a></li>
+        <li><a href="listener.html#spline">4.3.1.4 Spline Visualizer</a></li>
+      </ul>
+      <li><a href="listener.html#managers">4.3.2 Managers</a></li>
+      <ul>
+        <li><a href="listener.html#mod_manager">4.3.2.1 Modification Manager</a></li>
+      </ul>
+      <li><a href="listener.html#misc">4.3.3 Miscellaneous</a></li>
+      <ul>
+        <li><a href="listener.html#assertion_results">4.3.3.1 Assertion Results</a></li>
+        <li><a href="listener.html#file_reporter">4.3.3.2 File Reporter</a></li>
+        <li><a href="listener.html#view_results">4.3.3.3 View Results</a></li>
+        <li><a href="listener.html#view_results_tree">4.3.3.4 View Result Tree</a></li>
+      </ul>
+    </ul>
+    <li><a href="timer.html">4.4 Timers</a></li>
+    <ul>
+      <li><a href="timer.html#constant">4.4.1 Constant Timer</a></li>
+      <li><a href="timer.html#gaussian">4.4.2 Gaussian Random Timer</a></li>
+      <li><a href="timer.html#uniform">4.4.3 Uniform Random Timer</a></li>
+    </ul>
 
-	 <li><a href="assertion.html">4.5 Assertions</a></li>
+    <li><a href="assertion.html">4.5 Assertions</a></li>
 
-	 <li><a href="ftp-config.html">4.6 FTP Configuration Elements</a></li>
-	 <ul>
-		<li><a href="ftp-config.html#request_defaults">4.6.1 FTP Request Defaults</a></li>
-	 </ul>
+    <li><a href="ftp-config.html">4.6 FTP Configuration Elements</a></li>
+    <ul>
+      <li><a href="ftp-config.html#request_defaults">4.6.1 FTP Request Defaults</a></li>
+    </ul>
 
-	 <li><a href="http-config.html">4.7 HTTP Configuration Elements</a></li>
-	 <ul>
-		<li><a href="http-config.html#auth_manager">4.7.1 HTTP Authorization Manager</a></li>
-		<li><a href="http-config.html#cookie_manager">4.7.2 HTTP Cookie Manager</a></li>
-		<li><a href="http-config.html#header_manager">4.7.3 HTTP Header Manager</a></li>
-		<li><a href="http-config.html#proxy_server">4.7.4 HTTP Proxy Server</a></li>
-		<li><a href="http-config.html#request_defaults">4.7.5 HTTP Request Defaults</a></li>
-	 </ul>
+    <li><a href="http-config.html">4.7 HTTP Configuration Elements</a></li>
+    <ul>
+      <li><a href="http-config.html#auth_manager">4.7.1 HTTP Authorization Manager</a></li>
+      <li><a href="http-config.html#cookie_manager">4.7.2 HTTP Cookie Manager</a></li>
+      <li><a href="http-config.html#header_manager">4.7.3 HTTP Header Manager</a></li>
+      <li><a href="http-config.html#proxy_server">4.7.4 HTTP Proxy Server</a></li>
+      <li><a href="http-config.html#request_defaults">4.7.5 HTTP Request Defaults</a></li>
+    </ul>
 
-	 <li><a href="jdbc-config.html">4.8 JDBC Configuration Elements</a></li>
-	 <ul>
-		<li><a href="jdbc-config.html#conn_pool">4.8.1 JDBC Database Connection Pool Defaults</a></li>
-		<li><a href="jdbc-config.html#login">4.8.2 JDBC Database Login Defaults</a></li>
-		<li><a href="jdbc-config.html#sql_query">4.8.3 JDBC SQL Query Defaults</a></li>
-	 </ul>
+    <li><a href="jdbc-config.html">4.8 JDBC Configuration Elements</a></li>
+    <ul>
+      <li><a href="jdbc-config.html#conn_pool">4.8.1 JDBC Database Connection Pool Defaults</a></li>
+      <li><a href="jdbc-config.html#login">4.8.2 JDBC Database Login Defaults</a></li>
+      <li><a href="jdbc-config.html#sql_query">4.8.3 JDBC SQL Query Defaults</a></li>
+    </ul>
   </ul>
 
   <li><a href="build-web-test-plan.html">5. Building a Web Test Plan</a></li>
-	 <ul>
-		<li><a href="build-web-test-plan.htm#adding_users">5.1 Adding Users</a></li>
-		<li><a href="build-web-test-plan.html#adding_defaults">5.2 Adding Default HTTP Request Properties</a></li>
-		<li><a href="build-web-test-plan.html#adding_requests">5.3 Adding HTTP Requests</a></li>
-		<li><a href="build-web-test-plan.html#adding_file_reporter">5.4 Adding a File Reporter to Store the Test Results</a></li>
-		<li><a href="build-web-test-plan.html#saving">5.5 Saving the Test Plan</a></li>
-		<li><a href="build-web-test-plan.html#running">5.6 Running the Test Plan</a></li>
-	 </ul>
+    <ul>
+      <li><a href="build-web-test-plan.htm#adding_users">5.1 Adding Users</a></li>
+      <li><a href="build-web-test-plan.html#adding_defaults">5.2 Adding Default HTTP Request Properties</a></li>
+      <li><a href="build-web-test-plan.html#adding_requests">5.3 Adding HTTP Requests</a></li>
+      <li><a href="build-web-test-plan.html#adding_file_reporter">5.4 Adding a File Reporter to Store the Test Results</a></li>
+      <li><a href="build-web-test-plan.html#saving">5.5 Saving the Test Plan</a></li>
+      <li><a href="build-web-test-plan.html#running">5.6 Running the Test Plan</a></li>
+    </ul>
 
   <li><a href="build-adv-web-test-plan.html">6. Building an Advanced Web Test Plan</a></li>
   <li><a href="build-db-test-plan.html">7. Building a Database Test Plan</a></li>
   <li><a href="build-ftp-test-plan.html">8. Building a FTP Test Plan</a></li>
   <li><a href="remote-test.html">9. Remote Testing</a></li>
-  <li><a href="configuring_jmeter.html">10. Configuring JMeter</a></li>
-  <li><a href="best-practices.html">11. Best Practices</a></li>
+  <li><a href="best-practices.html">10. Best Practices</a></li>
   <ul>
-	 <li><a href="best-practices.html#limit_threads">11.1 [ALL] Limit the Number of Threads</a></li>
-	 <li><a href="best-practices.html#put_cookie_manager">11.2 [HTTP] Where to Put the Cookie Manager</a></li>
-	 <li><a href="best-practices.html#put_auth_manager">11.3 [HTTP] Where to Put the Authorization Manager</a></li>
+    <li><a href="best-practices.html#limit_threads">10.1 [ALL] Limit the Number of Threads</a></li>
+    <li><a href="best-practices.html#put_cookie_manager">10.2 [HTTP] Where to Put the Cookie Manager</a></li>
+    <li><a href="best-practices.html#put_auth_manager">10.3 [HTTP] Where to Put the Authorization Manager</a></li>
   </ul>
-  <li><a href="boss.html">12. Help! My boss wants me to load test our web app!</a></li>
-  <li><a href="glossary.html">13. Glossary</a></li>
+  <li><a href="boss.html">11. Help! My boss wants me to load test our web app!</a></li>
+  <li><a href="glossary.html">12. Glossary</a></li>
 </ul>
 
 </section>
