@@ -177,7 +177,7 @@ public final class ClassFinder
         // find all jar files or paths that end with strPathOrJar
         while (stPaths.hasMoreTokens())
         {
-            strPath = fixDotDir((String) stPaths.nextToken());
+            strPath = fixDotDir(stPaths.nextToken());
             strPath = fixSlashes(strPath);
             strPath = fixEndingSlashes(strPath);
             if (strPathsOrJars == null)

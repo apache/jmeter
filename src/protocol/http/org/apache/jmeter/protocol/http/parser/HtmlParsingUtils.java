@@ -175,9 +175,9 @@ public final class HtmlParsingUtils
                         Perl5Compiler.READ_ONLY_MASK)))
             && (arg.getValue().equals(patternArg.getValue())
                 || matcher.matches(
-                    (String) arg.getValue(),
+                    arg.getValue(),
                     patternCache.getPattern(
-                        (String) patternArg.getValue(),
+                        patternArg.getValue(),
                         Perl5Compiler.READ_ONLY_MASK)));
     }
 
