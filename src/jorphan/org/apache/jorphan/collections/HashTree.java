@@ -850,7 +850,7 @@ public class HashTree implements Serializable, Map
     public Object[] getArray(Collection treePath)
     {
         HashTree tree = getTreePath(treePath);
-        return tree.getArray();
+        return (tree != null) ? tree.getArray() : null;
     }
     
     protected HashTree getTreePath(Collection treePath)
