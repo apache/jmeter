@@ -152,6 +152,14 @@ public final class AllTests
 		for (int i=0;i<cpe.length;i++){
 			sb.append("\n");
 			sb.append(cpe[i]);
+			if (new java.io.File(cpe[i]).exists())
+			{
+				sb.append(" - OK");			
+			}
+			else
+			{
+				sb.append(" - ??");
+			}
 		}
 		log.info(sb.toString());
 
