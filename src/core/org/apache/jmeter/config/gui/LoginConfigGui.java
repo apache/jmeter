@@ -60,6 +60,7 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
@@ -104,8 +105,8 @@ public class LoginConfigGui extends AbstractConfigGui
 	public void configure(TestElement element)
 	{
 		super.configure(element);
-		username.setText((String)element.getProperty(ConfigTestElement.USERNAME));
-		password.setText((String)element.getProperty(ConfigTestElement.PASSWORD));
+		username.setText(element.getPropertyAsString(ConfigTestElement.USERNAME));
+		password.setText(element.getPropertyAsString(ConfigTestElement.PASSWORD));
 	}
 
 	public TestElement createTestElement()
@@ -122,8 +123,8 @@ public class LoginConfigGui extends AbstractConfigGui
     public void modifyTestElement(TestElement element)
     {
         configureTestElement(element);
-        element.setProperty(ConfigTestElement.USERNAME,username.getText());
-        element.setProperty(ConfigTestElement.PASSWORD,password.getText());
+        element.setProperty(new StringProperty(ConfigTestElement.USERNAME,username.getText()));
+        element.setProperty(new StringProperty(ConfigTestElement.PASSWORD,password.getText()));
     }
 
 	private void init()

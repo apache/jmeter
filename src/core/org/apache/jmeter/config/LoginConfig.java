@@ -56,6 +56,8 @@ package org.apache.jmeter.config;
 
 import java.io.Serializable;
 
+import org.apache.jmeter.testelement.property.StringProperty;
+
 /************************************************************
  *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
  *
@@ -81,7 +83,7 @@ public class LoginConfig extends ConfigTestElement implements Serializable
 	 ***********************************************************/
 	public void setUsername(String username)
 	{
-		setProperty(ConfigTestElement.USERNAME, username);
+		setProperty(new StringProperty(ConfigTestElement.USERNAME, username));
 	}
 
 	/************************************************************
@@ -91,7 +93,7 @@ public class LoginConfig extends ConfigTestElement implements Serializable
 	 ***********************************************************/
 	public void setPassword(String password)
 	{
-		setProperty(ConfigTestElement.PASSWORD, password);
+		setProperty(new StringProperty(ConfigTestElement.PASSWORD, password));
 	}
 
 
@@ -102,7 +104,7 @@ public class LoginConfig extends ConfigTestElement implements Serializable
 	 ***********************************************************/
 	public String getUsername()
 	{
-		return (String)this.getProperty(ConfigTestElement.USERNAME);
+		return getPropertyAsString(ConfigTestElement.USERNAME);
 	}
 
 	/************************************************************
@@ -112,7 +114,7 @@ public class LoginConfig extends ConfigTestElement implements Serializable
 	 ***********************************************************/
 	public String getPassword()
 	{
-		return (String)this.getProperty(ConfigTestElement.PASSWORD);
+		return getPropertyAsString(ConfigTestElement.PASSWORD);
 	}
 
 }

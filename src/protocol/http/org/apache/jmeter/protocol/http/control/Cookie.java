@@ -59,6 +59,8 @@ import java.io.Serializable;
 
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
@@ -120,7 +122,7 @@ public class Cookie extends AbstractTestElement implements Serializable
 	  * get the value for this object.
 	  */
 	 public String getValue() {
-		  return (String)this.getProperty(VALUE);
+		  return getPropertyAsString(VALUE);
 	 }
 
 	 /**
@@ -134,7 +136,7 @@ public class Cookie extends AbstractTestElement implements Serializable
 	  * get the domain for this object.
 	  */
 	 public String getDomain() {
-		  return (String)getProperty(DOMAIN);
+		  return getPropertyAsString(DOMAIN);
 	 }
 
 	 /**
@@ -148,55 +150,35 @@ public class Cookie extends AbstractTestElement implements Serializable
 	  * get the expires for this object.
 	  */
 	 public long getExpires() {
-		Object ret = getProperty(EXPIRES);
-		if(ret == null)
-		{
-			return 0;
-		}
-		else if(ret instanceof Long)
-		{
-			return ((Long)ret).longValue();
-		}
-		else if(ret instanceof String)
-		{
-			try
-			{
-				return Long.parseLong((String)ret);
-			}
-			catch (Exception ex)
-			{
-			}
-		}
-		return 0;
+		return getPropertyAsLong(EXPIRES);
 	 }
 
 	 /**
 	  * set the expires for this object.
 	  */
 	 public synchronized void setExpires(long expires) {
-		  setProperty(EXPIRES,new Long(expires));
+		  setProperty(new LongProperty(EXPIRES,expires));
 	 }
 
 	 /**
 	  * get the secure for this object.
 	  */
 	 public boolean getSecure() {
-	 	log.info("Secure = "+getProperty(SECURE));
-		return this.getPropertyAsBoolean(SECURE);
+	 	return getPropertyAsBoolean(SECURE);
 	 }
 
 	 /**
 	  * set the secure for this object.
 	  */
 	 public synchronized void setSecure(boolean secure) {
-		  setProperty(SECURE,new Boolean(secure));
+		  setProperty(new BooleanProperty(SECURE,secure));
 	 }
 
 	 /**
 	  * get the path for this object.
 	  */
 	 public String getPath() {
-		  return (String)getProperty(PATH);
+		  return getPropertyAsString(PATH);
 	 }
 
 	 /**

@@ -69,6 +69,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -98,12 +99,12 @@ public class HeaderManager extends ConfigTestElement implements
 	 private static List addableList = new LinkedList();
 
 	 public HeaderManager () {
-		setProperty(HEADERS,new ArrayList());
+		setProperty(new CollectionProperty(HEADERS,new ArrayList()));
 	 }
 
 
-	 public List getHeaders() {
-		  return (List)getProperty(HEADERS);
+	 public CollectionProperty getHeaders() {
+		  return (CollectionProperty)getProperty(HEADERS);
 	 }
 
 	 public int getColumnCount() {
@@ -120,7 +121,7 @@ public class HeaderManager extends ConfigTestElement implements
 
 	public Header getHeader(int row)
 	{
-		return (Header)getHeaders().get(row);
+		return (Header)getHeaders().get(row).getObjectValue();
 	}
 
 	 /** save the header data to a file */
@@ -162,7 +163,7 @@ public class HeaderManager extends ConfigTestElement implements
 					 int name = 0;
 					 int value = 1;
 					 Header header = new Header(st[name], st[value]);
-					 getHeaders().add(header);
+					 getHeaders().addItem(header);
 				} catch (Exception e) {
 					 throw new IOException("Error parsing header line\n\t'" + line + "'\n\t" + e);
 				}
@@ -172,12 +173,12 @@ public class HeaderManager extends ConfigTestElement implements
 
 	 /** add a header */
 	 public void add(Header h) {
-		  getHeaders().add(h);
+		  getHeaders().addItem(h);
 	 }
 
 	 /** add an empty header */
 	 public void add() {
-		getHeaders().add(new Header());
+		getHeaders().addItem(new Header());
 	 }
 
 	 /** remove a header */
@@ -192,7 +193,7 @@ public class HeaderManager extends ConfigTestElement implements
 
 	 /** return the header at index i */
 	 public Header get(int i) {
-		  return (Header) getHeaders().get(i);
+		  return (Header) getHeaders().get(i).getObjectValue();
 	 }
 
 	 /*

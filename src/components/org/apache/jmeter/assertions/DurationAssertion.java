@@ -58,6 +58,7 @@ import java.text.MessageFormat;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.util.JMeterUtils;
 /**
  * Checks if an Sample is sampled within a specified time-frame. If the
@@ -118,11 +119,11 @@ public class DurationAssertion extends AbstractTestElement implements Serializab
       }
       if (duration == Long.MAX_VALUE)
       {
-         setProperty(DURATION_KEY, new Long(0));
+         setProperty(new LongProperty(DURATION_KEY,0));
       }
       else
       {
-         setProperty(DURATION_KEY, new Long(duration));
+         setProperty(new LongProperty(DURATION_KEY,duration));
       }
    }
 }

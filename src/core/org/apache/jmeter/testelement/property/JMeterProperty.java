@@ -18,12 +18,20 @@ public interface JMeterProperty extends Serializable, Cloneable, Comparable
      */
     public boolean isRunningVersion();
     
+    public boolean equals(Object o);
+    
     /**
      * The name of the property.  Typically this should match the name that keys
      * the property's location in the test elements Map.
      * @return String
      */
     public String getName();
+    
+    /**
+     * Set the property name.
+     * @param name
+     */
+    public void setName(String name);
     
     /**
      * Make the property a running version or turn it off as the running
@@ -69,6 +77,13 @@ public interface JMeterProperty extends Serializable, Cloneable, Comparable
      */
     public void setTemporary(boolean temporary, TestElement owner);
     
+    /**
+     * Tells the property that it should clear information regarding the
+     * temporary attribute for the given owner.
+     * @param owner
+     */
+    public void clearTemporary(TestElement owner);
+    
     public int getIntValue();
     
     public long getLongValue();
@@ -82,6 +97,8 @@ public interface JMeterProperty extends Serializable, Cloneable, Comparable
     public String getStringValue();
     
     public Object getObjectValue();
+    
+    public void setObjectValue(Object value);
     
     public Object clone();
 }

@@ -70,6 +70,8 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.PerThreadClonable;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
@@ -111,7 +113,7 @@ public class ThreadGroup
      */
     public void setNumThreads(int numThreads)
     {
-        setProperty(NUM_THREADS, new Integer(numThreads));
+        setProperty(new IntegerProperty(NUM_THREADS, numThreads));
     }
 
     public boolean isDone()
@@ -136,7 +138,7 @@ public class ThreadGroup
      */
     public void setRampUp(int rampUp)
     {
-        setProperty(RAMP_TIME, new Integer(rampUp));
+        setProperty(new IntegerProperty(RAMP_TIME,rampUp));
     }
 
     public boolean isNextFirst()
@@ -161,7 +163,7 @@ public class ThreadGroup
      */
     public Controller getSamplerController()
     {
-        return (Controller) getProperty(MAIN_CONTROLLER);
+        return (Controller) getProperty(MAIN_CONTROLLER).getObjectValue();
     }
 
     /**
@@ -172,7 +174,7 @@ public class ThreadGroup
     public void setSamplerController(LoopController c)
     {
         c.setContinueForever(false);
-        setProperty(MAIN_CONTROLLER, c);
+        setProperty(new TestElementProperty(MAIN_CONTROLLER, c));
     }
 
     /**

@@ -55,13 +55,21 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URLConnection;
+import java.util.Iterator;
 
-import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
-import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.config.Argument;
+import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 
 /**
  * Title:        JMeter
@@ -97,10 +105,10 @@ public class PostWriter
 		{
 			OutputStream out = connection.getOutputStream();//new FileOutputStream("c:\\data\\experiment.txt");//new ByteArrayOutputStream();//
 			writeln(out,"--"+BOUNDARY);
-			Iterator args = sampler.getArguments().iterator();
+			PropertyIterator args = sampler.getArguments().iterator();
 			while (args.hasNext())
 			{
-				Argument arg = (Argument)args.next();
+				Argument arg = (Argument)args.next().getObjectValue();
 				writeFormMultipartStyle(out, arg.getName(), (String)arg.getValue());
 				writeln(out,"--" + BOUNDARY);
 			}
@@ -154,10 +162,10 @@ public class PostWriter
 	{
 		long size = 0;
 		size += BOUNDARY.length()+2;
-		Iterator iter = config.getArguments().iterator();
+		PropertyIterator iter = config.getArguments().iterator();
 		while (iter.hasNext())
 		{
-			Argument item = (Argument)iter.next();
+			Argument item = (Argument)iter.next().getObjectValue();
 			size += item.getName().length() + item.getValue().toString().length();
 			size += CRLF.length * 4;
 			size += BOUNDARY.length()+2;

@@ -17,6 +17,11 @@ public class TestElementProperty extends AbstractProperty
         super(name);
         this.value = value;
     }
+    
+    public TestElementProperty()
+    {
+        super();
+    }
 
     /**
      * @see org.apache.jmeter.testelement.property.JMeterProperty#getStringValue()
@@ -29,6 +34,14 @@ public class TestElementProperty extends AbstractProperty
         }        
         return value.toString();
     }
+    
+    public void setObjectValue(Object v)
+            {
+                if(v instanceof TestElement)
+                {
+                    value = (TestElement)v;
+                }
+            }
 
     /**
      * @see org.apache.jmeter.testelement.property.JMeterProperty#getObjectValue()
@@ -54,7 +67,7 @@ public class TestElementProperty extends AbstractProperty
     public Object clone() 
     {
         TestElementProperty prop = (TestElementProperty)super.clone();
-        prop.value = value;
+        prop.value = (TestElement)value.clone();
         return prop;
     }
 

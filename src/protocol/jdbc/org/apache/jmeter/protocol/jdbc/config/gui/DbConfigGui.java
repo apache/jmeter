@@ -137,8 +137,8 @@ public class DbConfigGui extends AbstractConfigGui
 	public void configure(TestElement element)
 	{
 		super.configure(element);
-		urlField.setText((String)element.getProperty(JDBCSampler.URL));
-		driverField.setText((String)element.getProperty(JDBCSampler.DRIVER));
+		urlField.setText(element.getPropertyAsString(JDBCSampler.URL));
+		driverField.setText(element.getPropertyAsString(JDBCSampler.DRIVER));
 		loginGui.configure(element);
 	}
 

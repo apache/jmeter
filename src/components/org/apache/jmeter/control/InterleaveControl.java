@@ -59,6 +59,7 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.PerSampleClonable;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.IntegerProperty;
 
 /****************************************
  * Title: Description: Copyright: Copyright (c) 2001 Company:
@@ -155,7 +156,7 @@ public class InterleaveControl extends GenericController implements Serializable
 	
 	public void setStyle(int style)
 	{
-		setProperty(STYLE,new Integer(style));
+		setProperty(new IntegerProperty(STYLE,style));
 	}
 	
 	public int getStyle()
@@ -240,11 +241,11 @@ public class InterleaveControl extends GenericController implements Serializable
 					TestElement sampler = controller.next();
 					if(counter == 0)
 					{
-						assertEquals(interleaveOrder[i%2],sampler.getProperty(TestElement.NAME));
+						assertEquals(interleaveOrder[i%2],sampler.getPropertyAsString(TestElement.NAME));
 					}
 					else
 					{
-						assertEquals(order[counter],sampler.getProperty(TestElement.NAME));
+						assertEquals(order[counter],sampler.getPropertyAsString(TestElement.NAME));
 					}
 					counter++;
 				}
@@ -279,7 +280,7 @@ public class InterleaveControl extends GenericController implements Serializable
 				{
 					TestElement sampler = controller.next();
 					assertEquals("failed on "+counter,
-							order[counter],sampler.getProperty(TestElement.NAME));
+							order[counter],sampler.getPropertyAsString(TestElement.NAME));
 					counter++;
 				}
 			}
@@ -312,7 +313,7 @@ public class InterleaveControl extends GenericController implements Serializable
 				while(controller.hasNext())
 				{
 					TestElement sampler = controller.next();
-					assertEquals("failed on "+counter,order[counter],sampler.getProperty(TestElement.NAME));
+					assertEquals("failed on "+counter,order[counter],sampler.getPropertyAsString(TestElement.NAME));
 					counter++;
 				}
 			}
@@ -339,7 +340,7 @@ public class InterleaveControl extends GenericController implements Serializable
 				while(controller.hasNext())
 				{
 					TestElement sampler = controller.next();
-					assertEquals("failed on "+counter,order[counter],sampler.getProperty(TestElement.NAME));
+					assertEquals("failed on "+counter,order[counter],sampler.getPropertyAsString(TestElement.NAME));
 					counter++;
 				}
 			}
@@ -366,7 +367,7 @@ public class InterleaveControl extends GenericController implements Serializable
 				while(controller.hasNext())
 				{
 					TestElement sampler = controller.next();
-					assertEquals("failed on "+counter,order[counter],sampler.getProperty(TestElement.NAME));
+					assertEquals("failed on "+counter,order[counter],sampler.getPropertyAsString(TestElement.NAME));
 					counter++;
 				}
 			}

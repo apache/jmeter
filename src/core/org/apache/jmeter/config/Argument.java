@@ -56,7 +56,7 @@ package org.apache.jmeter.config;
 import java.io.Serializable;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.StringProperty;
 
 //Mark Walsh, 2002-08-03, add metadata attribute
 // add constructor Argument(String name, Object value, Object metadata)
@@ -83,11 +83,11 @@ public class Argument extends AbstractTestElement implements Serializable
 	 *@param value  Description of Parameter
 	 *@param metadata Description of Parameter
 	 ***************************************/
-	public Argument(String name, Object value, Object metadata)
+	public Argument(String name, String value, String metadata)
 	{
-		setProperty(NAME, name);
-		setProperty(VALUE, value);
-		setProperty(METADATA, metadata);
+		setProperty(new StringProperty(NAME, name));
+		setProperty(new StringProperty(VALUE, value));
+		setProperty(new StringProperty(METADATA, metadata));
 	}
 
 	/****************************************
@@ -96,10 +96,10 @@ public class Argument extends AbstractTestElement implements Serializable
 	 *@param name   Description of Parameter
 	 *@param value  Description of Parameter
 	 ***************************************/
-	public Argument(String name, Object value)
+	public Argument(String name, String value)
 	{
-		setProperty(NAME, name);
-		setProperty(VALUE, value);
+		setProperty(new StringProperty(NAME, name));
+		setProperty(new StringProperty(VALUE, value));
 	}
 
 	/****************************************
@@ -108,30 +108,28 @@ public class Argument extends AbstractTestElement implements Serializable
 	public Argument() { }
 
 	/****************************************
-	 * !ToDo
-	 *
-	 *@param el  !ToDo
-	 ***************************************/
-	public void addTestElement(TestElement el) { }
-
-	/****************************************
 	 * Sets the Name attribute of the Argument object
 	 *
 	 *@param newName  The new Name value
 	 ***************************************/
 	public void setName(String newName)
 	{
-		setProperty(NAME, newName);
+		setProperty(new StringProperty(NAME, newName));
 	}
+    
+    public String getName()
+    {
+        return getPropertyAsString(NAME);
+    }
 
 	/****************************************
 	 * Sets the Value attribute of the Argument object
 	 *
 	 *@param newValue  The new Value value
 	 ***************************************/
-	public void setValue(Object newValue)
+	public void setValue(String newValue)
 	{
-		setProperty(VALUE, newValue);
+		setProperty(new StringProperty(VALUE, newValue));
 	}
 
 	/****************************************
@@ -139,19 +137,9 @@ public class Argument extends AbstractTestElement implements Serializable
 	 *
 	 *@param newMetaData  The new Metadata value
 	 ***************************************/
-	public void setMetaData(Object newMetaData)
+	public void setMetaData(String newMetaData)
 	{
-		setProperty(METADATA, newMetaData);
-	}
-
-	/****************************************
-	 * Gets the Name attribute of the Argument object
-	 *
-	 *@return   The Name value
-	 ***************************************/
-	public String getName()
-	{
-		return (String)getProperty(NAME);
+		setProperty(new StringProperty(METADATA, newMetaData));
 	}
 
 	/****************************************
@@ -159,9 +147,9 @@ public class Argument extends AbstractTestElement implements Serializable
 	 *
 	 *@return   The Value value
 	 ***************************************/
-	public Object getValue()
+	public String getValue()
 	{
-		return getProperty(VALUE);
+		return getPropertyAsString(VALUE);
 	}
 
 	/****************************************
@@ -169,8 +157,8 @@ public class Argument extends AbstractTestElement implements Serializable
 	 *
 	 *@return   The MetaData value
 	 ***************************************/
-	public Object getMetaData()
+	public String getMetaData()
 	{
-		return getProperty(METADATA);
+		return getPropertyAsString(METADATA);
 	}
 }

@@ -119,7 +119,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
         functionalMode.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(TestPlan.FUNCTIONAL_MODE));
         if (el.getProperty(TestPlan.USER_DEFINED_VARIABLES) != null)
         {
-            argsPanel.configure((Arguments) el.getProperty(TestPlan.USER_DEFINED_VARIABLES));
+            argsPanel.configure((Arguments) el.getProperty(TestPlan.USER_DEFINED_VARIABLES).getObjectValue());
         }
     }
 

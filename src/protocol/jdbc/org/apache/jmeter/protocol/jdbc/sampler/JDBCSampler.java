@@ -227,7 +227,7 @@ public class JDBCSampler extends AbstractSampler
         end = System.currentTimeMillis();
         time += end - start;
         res.setTime(time);
-        res.setSamplerData(this);
+        res.setSamplerData(this.toString());
         return res;
     }
 

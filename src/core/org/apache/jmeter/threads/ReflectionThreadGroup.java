@@ -70,16 +70,4 @@ package org.apache.jmeter.threads;
 public class ReflectionThreadGroup extends ThreadGroup
 {
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public Object clone()
-	{
-		ReflectionThreadGroup group = new ReflectionThreadGroup();
-		configureClone(group);
-		return group;
-	}
-
 }

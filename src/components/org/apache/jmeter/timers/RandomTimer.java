@@ -58,6 +58,9 @@ package org.apache.jmeter.timers;
 import java.io.Serializable;
 import java.util.Random;
 
+import org.apache.jmeter.testelement.property.DoubleProperty;
+import org.apache.jmeter.testelement.property.StringProperty;
+
 /***
  * This class implements a random timer with its own panel and fields for value
  * update and user interaction. Since this class does not define the delay()
@@ -86,8 +89,13 @@ public abstract class RandomTimer extends ConstantTimer implements Timer, Serial
 	 */
 	public void setRange(double range)
 	{
-		setProperty(RANGE,new Double(range));
+		setProperty(new DoubleProperty(RANGE,range));
 	}
+    
+    public void setRange(String range)
+    {
+        setProperty(new StringProperty(RANGE,range));
+    }
 
 	/**
 	 * Get the range value.

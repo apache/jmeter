@@ -59,7 +59,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -72,6 +71,9 @@ import javax.swing.table.TableCellEditor;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.Data;
 import org.apache.jorphan.gui.layout.VerticalLayout;
@@ -133,11 +135,11 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
     public  void configure(TestElement el){
         super.configure(el);
         tableModel.clearData();
-        Iterator iter=el.getPropertyNames().iterator();
+        PropertyIterator iter=el.propertyIterator();
         while(iter.hasNext())
         {
-            String str = (String)iter.next();
-            tableModel.addRow(new Object[]{str,el.getProperty(str)});
+            JMeterProperty prop = iter.next();
+            tableModel.addRow(new Object[]{prop.getName(),prop.getStringValue()});
         }
         checkDeleteStatus();
     }
@@ -159,8 +161,8 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
         model.reset();
         while(model.next())
         {
-            el.setProperty((String)model.getColumnValue(COLUMN_NAMES[0]),
-                                model.getColumnValue(COLUMN_NAMES[1]));
+            el.setProperty(new StringProperty((String)model.getColumnValue(COLUMN_NAMES[0]),
+                                (String)model.getColumnValue(COLUMN_NAMES[1])));
         }
         super.configureTestElement(el);
     }

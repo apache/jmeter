@@ -69,6 +69,7 @@ import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.layout.VerticalLayout;
@@ -124,7 +125,7 @@ public class HttpDefaultsGui extends AbstractConfigGui
         config.setProperty(HTTPSampler.PROTOCOL,protocol.getText());
         config.setProperty(HTTPSampler.DOMAIN,domain.getText());
         config.setProperty(HTTPSampler.PATH,path.getText());
-        config.setProperty(HTTPSampler.ARGUMENTS,argPanel.createTestElement());
+        config.setProperty(new TestElementProperty(HTTPSampler.ARGUMENTS,argPanel.createTestElement()));
         config.setProperty(HTTPSampler.PORT,port.getText());
     }
 	
@@ -135,7 +136,7 @@ public class HttpDefaultsGui extends AbstractConfigGui
 		domain.setText(el.getPropertyAsString(HTTPSampler.DOMAIN));
 		path.setText(el.getPropertyAsString(HTTPSampler.PATH));
 		port.setText(el.getPropertyAsString(HTTPSampler.PORT));
-		argPanel.configure((TestElement)el.getProperty(HTTPSampler.ARGUMENTS));
+		argPanel.configure((TestElement)el.getProperty(HTTPSampler.ARGUMENTS).getObjectValue());
 	}
 	
 	private void init()

@@ -60,6 +60,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.java.sampler.JavaSampler;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerClient;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
@@ -109,7 +110,7 @@ public class JavaConfig extends ConfigTestElement implements Serializable
 	 */
 	public String getClassname()
 	{
-		return (String) getPropertyAsString(JavaSampler.CLASSNAME);
+		return getPropertyAsString(JavaSampler.CLASSNAME);
 	}
 
 	public void addArgument(String name,String value)
@@ -120,12 +121,12 @@ public class JavaConfig extends ConfigTestElement implements Serializable
 
 	public void removeArguments()
 	{
-		this.setProperty(JavaSampler.ARGUMENTS,new Arguments());
+		this.setProperty(new TestElementProperty(JavaSampler.ARGUMENTS,new Arguments()));
 	}
 	
 	public void setArguments(Arguments args)
 	{
-		setProperty(JavaSampler.ARGUMENTS,args);
+		setProperty(new TestElementProperty(JavaSampler.ARGUMENTS,args));
 	}
 
 	/**
@@ -135,7 +136,7 @@ public class JavaConfig extends ConfigTestElement implements Serializable
 	 */
 	public Arguments getArguments()
 	{
-		return (Arguments) getProperty(JavaSampler.ARGUMENTS);
+		return (Arguments) getProperty(JavaSampler.ARGUMENTS).getObjectValue();
 	}
 }
 

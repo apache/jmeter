@@ -104,7 +104,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
 	{
 		super.configure(element);
 		urlConfigGui.configure(element);
-		String testClass = (String)element.getProperty(TestElement.TEST_CLASS);
+		String testClass = element.getPropertyAsString(TestElement.TEST_CLASS);
 		if(testClass != null && testClass.endsWith("Full"))
 		{
 			getImages.setSelected(true);

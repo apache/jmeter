@@ -54,10 +54,10 @@
  */
  package org.apache.jmeter.protocol.jdbc.config;
 
-import org.apache.jmeter.config.*;
-import org.apache.jmeter.util.JMeterUtils;
+import java.io.Serializable;
+
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
-import java.io.*;
 
 
 /**
@@ -82,7 +82,7 @@ public class SqlConfig extends ConfigTestElement implements Serializable
 	}
 	public String getQuery()
 	{
-		return (String)this.getProperty(JDBCSampler.QUERY);
+		return this.getPropertyAsString(JDBCSampler.QUERY);
 	}
 
 }

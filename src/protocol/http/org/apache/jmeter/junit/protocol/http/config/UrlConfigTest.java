@@ -112,11 +112,10 @@
 
 import junit.framework.TestCase;
 
-
-
-
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.testelement.property.NullProperty;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 
 
 
@@ -139,101 +138,53 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 
 
 public class UrlConfigTest extends TestCase
-
 {
-
 	HTTPSampler config;
-
 	HTTPSampler defaultConfig;
-
 	HTTPSampler partialConfig;
 
-
-
 	public UrlConfigTest(String name)
-
 	{
-
 		super(name);
-
 	}
-
-
 
 	protected void setUp()
-
 	{
-
 		Arguments args = new Arguments();
-
 		args.addArgument("username","mstover");
-
 		args.addArgument("password","pass");
-
 		args.addArgument("action","login");
-
 		config = new HTTPSampler();
-
 		config.setName("Full Config");
-
 		config.setProperty(HTTPSampler.DOMAIN,"www.lazer.com");
-
 		config.setProperty(HTTPSampler.PATH,"login.jsp");
-
 		config.setProperty(HTTPSampler.METHOD,HTTPSampler.POST);
-
-		config.setProperty(HTTPSampler.ARGUMENTS,args);
-
-
-
+		config.setProperty(new TestElementProperty(HTTPSampler.ARGUMENTS,args));
 		defaultConfig = new HTTPSampler();
-
 		defaultConfig.setName("default");
-
 		defaultConfig.setProperty(HTTPSampler.DOMAIN,"www.xerox.com");
-
 		defaultConfig.setProperty(HTTPSampler.PATH,"default.html");
-
-
-
 		partialConfig = new HTTPSampler();
-
 		partialConfig.setProperty(HTTPSampler.PATH,"main.jsp");
-
 		partialConfig.setProperty(HTTPSampler.METHOD,HTTPSampler.GET);
-
 	}
-
-
 
 	public void testSimpleConfig()
-
 	{
-
 		assertTrue(config.getName().equals("Full Config"));
-
 		assertEquals(config.getDomain(),"www.lazer.com");
-
 	}
-
-
 
 	public void testOverRide()
 	{
-		this.assertNull(partialConfig.getProperty(HTTPSampler.DOMAIN));
+		assertTrue(new NullProperty().equals(partialConfig.getProperty(HTTPSampler.DOMAIN)));
 		partialConfig.addTestElement(defaultConfig);
-		assertEquals(partialConfig.getProperty(HTTPSampler.DOMAIN),"www.xerox.com");
-		assertEquals(partialConfig.getProperty(HTTPSampler.PATH),"main.jsp");
+		assertEquals(partialConfig.getPropertyAsString(HTTPSampler.DOMAIN),"www.xerox.com");
+		assertEquals(partialConfig.getPropertyAsString(HTTPSampler.PATH),"main.jsp");
 	}
 
-
-
-
-
 	public static void main(String[] args)
-
 	{
-
 	}
 
 }

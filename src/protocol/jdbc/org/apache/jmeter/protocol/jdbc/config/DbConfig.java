@@ -54,10 +54,10 @@
  */
  package org.apache.jmeter.protocol.jdbc.config;
 
+import java.io.Serializable;
+
 import org.apache.jmeter.config.LoginConfig;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
-import java.io.*;
 
 /**
  * Title:        JMeter
@@ -76,7 +76,7 @@ public class DbConfig extends LoginConfig implements Serializable
 	}
 	public String getUrl()
 	{
-		return (String)this.getProperty(JDBCSampler.URL);
+		return getPropertyAsString(JDBCSampler.URL);
 	}
 
 	public void setUrl(String url)
@@ -86,7 +86,7 @@ public class DbConfig extends LoginConfig implements Serializable
 
 	public String getDriver()
 	{
-		return (String)this.getProperty(JDBCSampler.DRIVER);
+		return getPropertyAsString(JDBCSampler.DRIVER);
 	}
 
 	public void setDriver(String driver)

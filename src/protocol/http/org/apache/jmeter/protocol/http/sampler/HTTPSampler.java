@@ -63,11 +63,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.Header;
@@ -77,7 +75,11 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.PerSampleClonable;
-import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Hierarchy;
@@ -217,7 +219,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
         return getPropertyAsString(ENCODED_PATH);
     }
 
-    public void setProperty(String key, Object prop)
+    public void setProperty(String key, String prop)
     {
         super.setProperty(key, prop);
         if (PATH.equals(key))
@@ -232,7 +234,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
     }
     public void setFollowRedirects(boolean value)
     {
-        setProperty(FOLLOW_REDIRECTS, new Boolean(value));
+        setProperty(new BooleanProperty(FOLLOW_REDIRECTS, value));
     }
     public boolean getFollowRedirects()
     {
@@ -248,7 +250,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
     }
     public void setUseKeepAlive(boolean value)
     {
-        setProperty(USE_KEEPALIVE, new Boolean(value));
+        setProperty(new BooleanProperty(USE_KEEPALIVE,value));
     }
     public boolean getUseKeepAlive()
     {
@@ -277,7 +279,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
     }
     public void setPort(int value)
     {
-        setProperty(PORT, new Integer(value));
+        setProperty(new IntegerProperty(PORT,value));
     }
     public int getPort()
     {
@@ -298,39 +300,39 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
     }
     public String getDomain()
     {
-        return (String) getProperty(DOMAIN);
+        return getPropertyAsString(DOMAIN);
     }
     public void setArguments(Arguments value)
     {
-        setProperty(ARGUMENTS, value);
+        setProperty(new TestElementProperty(ARGUMENTS, value));
     }
     public Arguments getArguments()
     {
-        return (Arguments) getProperty(ARGUMENTS);
+        return (Arguments) getProperty(ARGUMENTS).getObjectValue();
     }
     public void setAuthManager(AuthManager value)
     {
-        setProperty(AUTH_MANAGER, value);
+        setProperty(new TestElementProperty(AUTH_MANAGER, value));
     }
     public AuthManager getAuthManager()
     {
-        return (AuthManager) getProperty(AUTH_MANAGER);
+        return (AuthManager) getProperty(AUTH_MANAGER).getObjectValue();
     }
     public void setHeaderManager(HeaderManager value)
     {
-        setProperty(HEADER_MANAGER, value);
+        setProperty(new TestElementProperty(HEADER_MANAGER, value));
     }
     public HeaderManager getHeaderManager()
     {
-        return (HeaderManager) getProperty(HEADER_MANAGER);
+        return (HeaderManager) getProperty(HEADER_MANAGER).getObjectValue();
     }
     public void setCookieManager(CookieManager value)
     {
-        setProperty(COOKIE_MANAGER, value);
+        setProperty(new TestElementProperty(COOKIE_MANAGER, value));
     }
     public CookieManager getCookieManager()
     {
-        return (CookieManager) getProperty(COOKIE_MANAGER);
+        return (CookieManager) getProperty(COOKIE_MANAGER).getObjectValue();
     }
     public void setMimetype(String value)
     {
@@ -338,59 +340,9 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
     }
     public String getMimetype()
     {
-        return (String) getProperty(MIMETYPE);
+        return getPropertyAsString(MIMETYPE);
     }
-    protected void addCustomTestElement(TestElement element)
-    {
-        if (element instanceof Arguments)
-        {
-            if (getProperty(ARGUMENTS) != null)
-            {
-                ((Arguments) getProperty(ARGUMENTS)).addTestElement(element);
-            }
-            else
-            {
-                setProperty(ARGUMENTS, element);
-            }
-        }
-        else if (element instanceof AuthManager)
-        {
-            if (getProperty(AUTH_MANAGER) != null)
-            {
-                ((TestElement) getProperty(AUTH_MANAGER)).addTestElement(element);
-            }
-            else
-            {
-                setProperty(AUTH_MANAGER, element);
-            }
-        }
-        else if (element instanceof CookieManager)
-        {
-            if (getProperty(COOKIE_MANAGER) != null)
-            {
-                ((TestElement) getProperty(COOKIE_MANAGER)).addTestElement(element);
-            }
-            else
-            {
-                setProperty(COOKIE_MANAGER, element);
-            }
-        }
-        else if (element instanceof HeaderManager)
-        {
-            if (getProperty(HEADER_MANAGER) != null)
-            {
-                ((TestElement) getProperty(HEADER_MANAGER)).addTestElement(element);
-            }
-            else
-            {
-                setProperty(HEADER_MANAGER, element);
-            }
-        }
-        else if (element instanceof HTTPSampler || element instanceof ConfigTestElement)
-        {
-            this.mergeIn(element);
-        }
-    }
+
     /****************************************
      * !ToDo (Field description)
      ***************************************/
@@ -485,11 +437,11 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
     public String getQueryString()
     {
         StringBuffer buf = new StringBuffer();
-        Iterator iter = getArguments().iterator();
+        PropertyIterator iter = getArguments().iterator();
         boolean first = true;
         while (iter.hasNext())
         {
-            HTTPArgument item = (HTTPArgument) iter.next();
+            HTTPArgument item = (HTTPArgument) iter.next().getObjectValue();
             if (!first)
             {
                 buf.append("&");
@@ -752,13 +704,13 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
     {
         if (headerManager != null)
         {
-            Collection headers = headerManager.getHeaders();
+            CollectionProperty headers = headerManager.getHeaders();
             if (headers != null)
             {
-                Iterator i = headers.iterator();
+                PropertyIterator i = headers.iterator();
                 while (i.hasNext())
                 {
-                    Header header = (Header) i.next();
+                    Header header = (Header) i.next().getObjectValue();
                     conn.setRequestProperty(header.getName(), header.getValue());
                 }
             }
@@ -806,7 +758,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
     }
     public void removeArguments()
     {
-        setProperty(HTTPSampler.ARGUMENTS, new Arguments());
+        setProperty(new TestElementProperty(HTTPSampler.ARGUMENTS, new Arguments()));
     }
     /****************************************
      * Follow redirection manually. Normally if the web server does a redirection
@@ -909,7 +861,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
             u = getUrl();
             res.setSampleLabel(getName());
             // specify the data to the result.
-            res.setSamplerData(this);
+            res.setSamplerData(this.toString());
             /****************************************
              * END - cached logging hack
              ***************************************/

@@ -149,9 +149,9 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent
     public void configure(TestElement tg)
     {
         super.configure(tg);
-        threadInput.setText(tg.getProperty(ThreadGroup.NUM_THREADS).toString());
-        rampInput.setText(tg.getProperty(ThreadGroup.RAMP_TIME).toString());
-        loopPanel.configure((TestElement) tg.getProperty(ThreadGroup.MAIN_CONTROLLER));
+        threadInput.setText(tg.getPropertyAsString(ThreadGroup.NUM_THREADS));
+        rampInput.setText(tg.getPropertyAsString(ThreadGroup.RAMP_TIME));
+        loopPanel.configure((TestElement) tg.getProperty(ThreadGroup.MAIN_CONTROLLER).getObjectValue());
     }
 
     /****************************************

@@ -64,7 +64,7 @@ public class LoopControlPanel extends AbstractControllerGui implements KeyListen
      ***************************************/
     public void configure(TestElement element)
     {
-        setName((String) element.getProperty(TestElement.NAME));
+        super.configure(element);
         if (element instanceof LoopController)
         {
             setState(((LoopController) element).getLoops());
@@ -98,7 +98,7 @@ public class LoopControlPanel extends AbstractControllerGui implements KeyListen
         {
             if (loops.getText().length() > 0)
             {
-                ((LoopController) lc).setLoops(Integer.parseInt(loops.getText()));
+                ((LoopController) lc).setLoops(loops.getText());
             }
             else
             {

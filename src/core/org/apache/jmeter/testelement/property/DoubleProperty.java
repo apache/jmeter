@@ -6,17 +6,18 @@ package org.apache.jmeter.testelement.property;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class FloatProperty extends AbstractProperty
+public class DoubleProperty extends AbstractProperty
 {
-    float value;
+
+     double value;
     
-    public FloatProperty(String name,float value)
+    public DoubleProperty(String name,double value)
     {
         super(name);
         this.value = value;
     }
     
-    public FloatProperty()
+    public DoubleProperty()
     {
     }
     
@@ -29,13 +30,13 @@ public class FloatProperty extends AbstractProperty
     {
         if(v instanceof Number)
         {
-            value = ((Number)v).floatValue();
+            value = ((Number)v).doubleValue();
         }
         else
         {
             try
             {
-                value = Float.parseFloat(v.toString());
+                value = Double.parseDouble(v.toString());
             }
             catch (RuntimeException e)
             {}
@@ -47,7 +48,7 @@ public class FloatProperty extends AbstractProperty
      */
     public String getStringValue()
     {
-        return Float.toString(value);
+        return Double.toString(value);
     }
 
     /**
@@ -55,7 +56,7 @@ public class FloatProperty extends AbstractProperty
      */
     public Object getObjectValue()
     {
-        return new Float(value);
+        return new Double(value);
     }
 
     /**
@@ -63,7 +64,7 @@ public class FloatProperty extends AbstractProperty
      */
     public Object clone() 
     {
-        FloatProperty prop = (FloatProperty)super.clone();
+        DoubleProperty prop = (DoubleProperty)super.clone();
         prop.value = value;
         return prop;
     }
@@ -75,7 +76,7 @@ public class FloatProperty extends AbstractProperty
     {
         if(arg0 instanceof JMeterProperty)
         {
-            float argValue = ((JMeterProperty)arg0).getFloatValue();
+            double argValue = ((JMeterProperty)arg0).getDoubleValue();
             if(value < argValue)
             {
                 return -1;
@@ -108,7 +109,7 @@ public class FloatProperty extends AbstractProperty
      */
     public double getDoubleValue()
     {
-        return (double)value;
+        return value;
     }
 
     /**
@@ -116,7 +117,7 @@ public class FloatProperty extends AbstractProperty
      */
     public float getFloatValue()
     {
-        return value;
+        return (float)value;
     }
 
     /**

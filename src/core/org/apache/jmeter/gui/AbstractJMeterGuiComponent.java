@@ -61,6 +61,9 @@ import javax.swing.JPanel;
 
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.NullProperty;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -159,8 +162,8 @@ public abstract class AbstractJMeterGuiComponent
 	 */
 	public void configure(TestElement element)
 	{
-		setName((String) element.getProperty(TestElement.NAME));
-        if(element.getProperty(TestElement.ENABLED) == null)
+		setName(element.getPropertyAsString(TestElement.NAME));
+        if(element.getProperty(TestElement.ENABLED) instanceof NullProperty)
         {
             enabled = true;
         }
@@ -179,12 +182,12 @@ public abstract class AbstractJMeterGuiComponent
 	 */
 	protected void configureTestElement(TestElement mc)
 	{
-		mc.setProperty(TestElement.NAME, getName());
-		mc.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
-		mc.setProperty(TestElement.TEST_CLASS, mc.getClass().getName());
+		mc.setProperty(new StringProperty(TestElement.NAME, getName()));
+		mc.setProperty(new StringProperty(TestElement.GUI_CLASS, this.getClass().getName()));
+		mc.setProperty(new StringProperty(TestElement.TEST_CLASS, mc.getClass().getName()));
                 //This  stores the state of the TestElement 
                 log.debug("setting element to enabled: " + enabled);
-                mc.setProperty(TestElement.ENABLED,new Boolean(enabled).toString());
+                mc.setProperty(new BooleanProperty(TestElement.ENABLED,enabled));
 	}
 	
 	/**

@@ -10,6 +10,7 @@ import junit.framework.TestCase;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -225,7 +226,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
      */
     public void setMatchNumber(int matchNumber)
     {
-        setProperty(MATCH_NUMBER, new Integer(matchNumber));
+        setProperty(new IntegerProperty(MATCH_NUMBER,matchNumber));
     }
 
     public int getMatchNumber()

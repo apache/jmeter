@@ -354,7 +354,7 @@ public class GenericController extends AbstractTestElement implements Controller
 				while(controller.hasNext())
 				{
 					TestElement sampler = controller.next();
-					assertEquals(order[counter++],sampler.getProperty(TestElement.NAME));
+					assertEquals(order[counter++],sampler.getPropertyAsString(TestElement.NAME));
 				}
 			}
 		}

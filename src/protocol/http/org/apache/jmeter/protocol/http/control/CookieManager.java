@@ -69,7 +69,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -78,6 +77,8 @@ import java.util.Vector;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testelement.PerThreadClonable;
+import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
@@ -113,12 +114,12 @@ public class CookieManager extends ConfigTestElement implements
 	 }
 
 	  public CookieManager () {
-		setProperty(COOKIES,new ArrayList());
+		setProperty(new CollectionProperty(COOKIES,new ArrayList()));
 	  }
 
-	 public List getCookies()
+	 public CollectionProperty getCookies()
 	 {
-		  return (List)getProperty(COOKIES);
+		  return (CollectionProperty)getProperty(COOKIES);
 	 }
 
 	 public int getCookieCount()
@@ -145,9 +146,9 @@ public class CookieManager extends ConfigTestElement implements
 			 if (!file.isAbsolute()) file = new File(System.getProperty("user.dir") + File.separator + authFile);
 			 PrintWriter writer = new PrintWriter(new FileWriter(file));
 	 writer.println("# JMeter generated Cookie file");
-	 List cookies = getCookies();
-	 for (int i = 0; i < cookies.size(); i++) {
-		  Cookie cook = (Cookie) cookies.get(i);
+	 PropertyIterator cookies = getCookies().iterator();
+	 while (cookies.hasNext()) {
+		  Cookie cook = (Cookie) cookies.next().getObjectValue();
 		  writer.println(cook.toString());
 	 }
 	 writer.flush();
@@ -181,7 +182,7 @@ public class CookieManager extends ConfigTestElement implements
 							int value = 6;
 							Cookie cookie = new Cookie(st[name], st[value], st[domain],
 										  st[path], secure, expires);
-							getCookies().add(cookie);
+							getCookies().addItem(cookie);
 					 } catch (Exception e) {
 							throw new IOException("Error parsing cookie line\n\t'" + line + "'\n\t" + e);
 					 }
@@ -191,17 +192,17 @@ public class CookieManager extends ConfigTestElement implements
 
 	  /** add a cookie */
 	  public void add(Cookie c) {
-			 getCookies().add(c);
+			 getCookies().addItem(c);
 	  }
 
 	  /** add an empty cookie */
 	  public void add() {
-		  getCookies().add(new Cookie());
+		  getCookies().addItem(new Cookie());
 	  }
           /***Remove all the cookie*/
 	  public void clear() {
               super.clear();
-          setProperty(COOKIES,new ArrayList());
+          setProperty(new CollectionProperty(COOKIES,new ArrayList()));
 	  }
 
 
@@ -254,8 +255,8 @@ public class CookieManager extends ConfigTestElement implements
 			! url.getProtocol().toUpperCase().trim().equals("HTTPS")) return null;
 
 			 StringBuffer header = new StringBuffer();
-			 for (Iterator enum = getCookies().iterator(); enum.hasNext();) {
-					 Cookie cookie = (Cookie) enum.next();
+			 for (PropertyIterator enum = getCookies().iterator(); enum.hasNext();) {
+					 Cookie cookie = (Cookie) enum.next().getObjectValue();
 					 if (url.getHost().endsWith(cookie.getDomain()) &&
 								  url.getFile().startsWith(cookie.getPath()) &&
 								  (System.currentTimeMillis() / 1000) <= cookie.getExpires()) {
@@ -331,7 +332,7 @@ public class CookieManager extends ConfigTestElement implements
 
 			 if (newCookie.getExpires() >= System.currentTimeMillis())
 			 {
-					 getCookies().add(newCookie);
+					 getCookies().addItem(newCookie);
 			 }
 	  }
 

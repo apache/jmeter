@@ -1,17 +1,17 @@
 package org.apache.jmeter.testelement;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
+import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.MapProperty;
+import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.PropertyIteratorImpl;
+import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
@@ -25,10 +25,10 @@ import org.apache.log.Logger;
 
 public abstract class AbstractTestElement implements TestElement,Serializable
 {
-    private Map testInfo = Collections.synchronizedMap(new HashMap());
     transient private static Logger log =
             Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
-    private List temporaryMembers;
+    
+    private Map propMap = Collections.synchronizedMap(new HashMap());
             
     private boolean runningVersion;
 
@@ -39,26 +39,36 @@ public abstract class AbstractTestElement implements TestElement,Serializable
      ***************************************/
     public Object clone()
     {
-        TestElementCloner cloner = new TestElementCloner();
-        this.traverse(cloner);
-        return cloner.getClonedElement();
+        TestElement clonedElement = null;
+        try
+        {
+            clonedElement = (TestElement)this.getClass().newInstance();
+        }
+        catch(Exception e){}
+        
+        PropertyIterator iter = propertyIterator();
+        while(iter.hasNext())
+        {
+            clonedElement.addProperty((JMeterProperty)iter.next().clone());
+        }
+        return clonedElement;
     }
     
     public void clear()
     {
-        testInfo.clear();
+        propMap.clear();
     }
 
     public void removeProperty(String key)
     {
-        testInfo.remove(key);
+        propMap.remove(key);
     }
 
     public boolean equals(Object o)
     {
         if(o instanceof AbstractTestElement)
         {
-            return ((AbstractTestElement)o).testInfo.equals(testInfo);
+            return ((AbstractTestElement)o).propMap.equals(propMap);
         }
         else
         {
@@ -72,25 +82,8 @@ public abstract class AbstractTestElement implements TestElement,Serializable
      *@param el  !ToDo
      ***************************************/
     public void addTestElement(TestElement el)
-    {
-        if(isRunningVersion())
-        {
-            Iterator iter = temporaryMembers.iterator();
-            while (iter.hasNext())
-            {
-                TestElement item = (TestElement)iter.next();
-                if(item.getClass().equals(el.getClass()))
-                {
-                    item.addTestElement(el);
-                    return;
-                }                
-            }
-            temporaryMembers.add(el);
-        }        
-        else if(el.getClass().equals(this.getClass()))
-        {
-            mergeIn(el);
-        }
+    {      
+        mergeIn(el);
     }
 
     /****************************************
@@ -100,7 +93,7 @@ public abstract class AbstractTestElement implements TestElement,Serializable
      ***************************************/
     public void setName(String name)
     {
-        setProperty(TestElement.NAME, name);
+        setProperty(new StringProperty(TestElement.NAME, name));
     }
 
     /****************************************
@@ -110,328 +103,146 @@ public abstract class AbstractTestElement implements TestElement,Serializable
      ***************************************/
     public String getName()
     {
-        return (String)getProperty(TestElement.NAME);
+        return getProperty(TestElement.NAME).getStringValue();
     }
 
     /****************************************
-     * !ToDo (Method description)
-     *
-     *@param key   !ToDo (Parameter description)
-     *@param prop  !ToDo (Parameter description)
-     ***************************************/
-    public void setProperty(String key, Object prop)
+     * Get the named property.  If it doesn't
+     * exist, a NullProperty object is
+     * returned.
+     * **************************************/
+    public JMeterProperty getProperty(String key)
     {
-        testInfo.put(key, prop);
-    }
-
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@param key  !ToDo (Parameter description)
-     *@return     !ToDo (Return description)
-     ***************************************/
-    public Object getProperty(String key)
-    {
-        return testInfo.get(key);
-    }
-
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
-    public Collection getPropertyNames()
-    {
-        return testInfo.keySet();
+        JMeterProperty prop = (JMeterProperty)propMap.get(key);
+        if(prop == null)
+        {
+            prop = new NullProperty(key);
+        }
+        return prop;
     }
     
     public void traverse(TestElementTraverser traverser)
     {
-        Iterator iter = getPropertyNames().iterator();
+        PropertyIterator iter = propertyIterator();
         traverser.startTestElement(this);
         while (iter.hasNext())
         {
-            String key = (String)iter.next();
-            Object value = getProperty(key);
-            traverseObject(traverser, key,value);
+            traverseProperty(traverser,iter.next());
         }
         traverser.endTestElement(this);
     }
 
-    protected void traverseObject(TestElementTraverser traverser, Object key,Object value)
+    protected void traverseProperty(TestElementTraverser traverser, JMeterProperty value)
     {
-        traverser.startProperty(key);
-        traverseObject(traverser, value);
-        traverser.endProperty(key);
-    }
-
-    protected void traverseObject(TestElementTraverser traverser, Object value)
-    {
-        if(value instanceof TestElement)
+        traverser.startProperty(value);
+        if(value instanceof TestElementProperty)
         {
-            ((TestElement)value).traverse(traverser);
+            ((TestElement)value.getObjectValue()).traverse(traverser);
         }
-        else if(value instanceof Collection)
+        else if(value instanceof CollectionProperty)
         {            
-            traverseCollection((Collection)value,traverser);
+            traverseCollection((CollectionProperty)value,traverser);
         }
-        else if(value instanceof Map)
+        else if(value instanceof MapProperty)
         {
-            traverseMap((Map)value,traverser);
+            traverseMap((MapProperty)value,traverser);
         }
-        else
-        {
-            traverser.simplePropertyValue(value);
-        }
+        traverser.endProperty(value);
     }
     
-    protected void traverseMap(Map map,TestElementTraverser traverser)
+    protected void traverseMap(MapProperty map,TestElementTraverser traverser)
     {
-        traverser.startMap(map);
-        Iterator iter = map.keySet().iterator();
+        PropertyIterator iter = map.valueIterator();
         while (iter.hasNext())
         {
-            Object key = iter.next();
-            Object value = map.get(key);
-            traverseObject(traverser,key,value);            
+            traverseProperty(traverser,iter.next());            
         }
-        traverser.endMap(map);
     }
     
-    protected void traverseCollection(Collection col,TestElementTraverser traverser)
+    protected void traverseCollection(CollectionProperty col,TestElementTraverser traverser)
     {
-        traverser.startCollection(col);
-        Iterator iter = col.iterator();
+        PropertyIterator iter = col.iterator();
         while (iter.hasNext())
         {
-            traverseObject(traverser,iter.next());           
-        }
-        traverser.endCollection(col);
-    }
-
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param newObject  !ToDo (Parameter description)
-     ***************************************/
-    protected void configureClone(TestElement newObject)
-    {
-        Iterator iter = getPropertyNames().iterator();
-        while(iter.hasNext())
-        {
-            String key = (String)iter.next();
-            Object value = getProperty(key);
-            if(value instanceof TestElement)
-            {
-                newObject.setProperty(key, ((TestElement)value).clone());
-            }
-            else if(value instanceof Collection)
-            {
-                try
-                {
-                    newObject.setProperty(key,cloneCollection(value));
-                }
-                catch(Exception e)
-                {
-                    log.error("",e);
-                }
-            }
-            else
-            {
-                newObject.setProperty(key, value);
-            }
-        }
-    }
-
-    protected Collection cloneCollection(Object value)
-            throws InstantiationException,
-                   IllegalAccessException,
-                   ClassNotFoundException
-    {
-        Iterator collIter = ((Collection)value).iterator();
-        Collection newColl = (Collection)value.getClass().newInstance();
-        while(collIter.hasNext())
-        {
-            Object val = collIter.next();
-            if(val instanceof TestElement)
-            {
-                val = ((TestElement)val).clone();
-            }
-            else if(val instanceof Collection)
-            {
-                try
-                {
-                    val = cloneCollection(val);
-                }
-                catch(Exception e)
-                {
-                    continue;
-                }
-            }
-            newColl.add(val);
-        }
-        return newColl;
-    }
-
-    private long getLongValue(Object bound)
-    {
-        if (bound == null)
-        {
-            return (long)0;
-        }
-        else if (bound instanceof Long)
-        {
-            return ((Long) bound).longValue();
-        }
-        else
-        {
-            return Long.parseLong((String) bound);
-        }
-    }
-
-    private float getFloatValue(Object bound)
-    {
-        if (bound == null)
-        {
-                return (float)0;
-        }
-        else if (bound instanceof Float)
-        {
-            return ((Float) bound).floatValue();
-        }
-        else
-        {
-            return Float.parseFloat((String) bound);
-        }
-    }
-
-    private double getDoubleValue(Object bound)
-    {
-        if (bound == null)
-        {
-            return (double)0;
-        }
-        else if (bound instanceof Double)
-        {
-            return ((Double) bound).doubleValue();
-        }
-        else
-        {
-            return Double.parseDouble((String) bound);
-        }
-    }
-
-    private String getStringValue(Object bound)
-    {
-        if (bound == null)
-        {
-            return "";
-        }
-        else {
-            return bound.toString();
-        }
-    }
-    
-    private Collection getCollectionValue(Object value)
-    {
-        if(value == null)
-        {
-            return new LinkedList();
-        }
-        if(value instanceof Collection)
-        {
-            return (Collection)value;
-        }
-        if(value instanceof Object[])
-        {
-            return Arrays.asList((Object[])value);
-        }
-        List newList = new LinkedList();
-        newList.add(value);
-        return newList;
-    }
-
-    private int getIntValue(Object bound)
-    {
-        if (bound == null)
-        {
-            return (int)0;
-        }
-        else if (bound instanceof Integer)
-        {
-            return ((Integer) bound).intValue();
-        }
-        else
-        {
-            try
-            {
-                return Integer.parseInt((String) bound);
-            }
-            catch(NumberFormatException e)
-            {
-                return 0;
-            }
-        }
-    }
-
-    private boolean getBooleanValue(Object bound)
-    {
-        if (bound == null)
-        {
-            return false;
-        }
-        else if (bound instanceof Boolean)
-        {
-            return ((Boolean) bound).booleanValue();
-        }
-        else
-        {
-            return new Boolean((String) bound).booleanValue();
+            traverseProperty(traverser,iter.next());           
         }
     }
 
     public int getPropertyAsInt(String key)
     {
-        return getIntValue(getProperty(key));
+        return getProperty(key).getIntValue();
     }
 
     public boolean getPropertyAsBoolean(String key)
     {
-        return getBooleanValue(getProperty(key));
+        return getProperty(key).getBooleanValue();
     }
 
     public float getPropertyAsFloat(String key)
     {
-        return getFloatValue(getProperty(key));
+        return getProperty(key).getFloatValue();
     }
 
     public long getPropertyAsLong(String key)
     {
-        return getLongValue(getProperty(key));
+        return getProperty(key).getLongValue();
     }
 
     public double getPropertyAsDouble(String key)
     {
-        return getDoubleValue(getProperty(key));
+        return getProperty(key).getDoubleValue();
     }
 
     public String getPropertyAsString(String key)
     {
-        return getStringValue(getProperty(key));
-    }
-    
-    public Collection getPropertyAsCollection(String key)
-    {
-        return getCollectionValue(getProperty(key));
+        return getProperty(key).getStringValue();
     }
     
     public void addProperty(JMeterProperty property)
     {
+        if(isRunningVersion())
+        {
+            property.setTemporary(true,this);
+        }
+        else
+        {
+            property.clearTemporary(this);
+        }
+        JMeterProperty prop = getProperty(property.getName());
+        if(!(prop instanceof NullProperty) && !prop.getStringValue().equals(""))
+        {
+            prop.mergeIn(property);
+        }
+        else
+        {
+            propMap.put(property.getName(),property);
+        }
+    }
+    
+    public void setProperty(JMeterProperty property)
+    {
+        if(isRunningVersion())
+        {
+            if(getProperty(property.getName()) instanceof NullProperty)
+            {
+                addProperty(property);
+            }            
+            return;
+        }
+        else
+        {
+            propMap.put(property.getName(),property);
+        }
+    }
+    
+    public void setProperty(String name,String value)
+    {
+        setProperty(new StringProperty(name,value));
     }
     
     public PropertyIterator propertyIterator()
     {
-        return new PropertyIteratorImpl(testInfo.values());
+        return new PropertyIteratorImpl(propMap.values());
     }
 
     /****************************************
@@ -441,55 +252,12 @@ public abstract class AbstractTestElement implements TestElement,Serializable
      ***************************************/
     protected void mergeIn(TestElement element)
     {
-        Iterator iter = element.getPropertyNames().iterator();
-        while(iter.hasNext())
-        {
-            String key = (String)iter.next();
-            Object value = element.getProperty(key);
-            if(getProperty(key) == null || getProperty(key).equals(""))
-            {
-                setProperty(key, value);
-                continue;
-            }
-            if(value instanceof TestElement)
-            {
-                if(getProperty(key) == null)
-                {
-                    setProperty(key,value);
-                }
-                else if(getProperty(key) instanceof TestElement)
-                {
-                    ((TestElement)getProperty(key)).addTestElement((TestElement)value);
-                }
-            }
-            else if(value instanceof Collection)
-            {
-                Collection localCollection = (Collection)getProperty(key);
-                if(localCollection == null)
-                {
-                    setProperty(key,value);
-                }
-                else
-                {
-                    // Remove any repeated elements:
-                    Iterator iter2 = ((Collection)value).iterator();
-                    while(iter2.hasNext())
-                    {
-                        Object item = iter2.next();
-                        if(!localCollection.contains(item))
-                        {
-                            localCollection.remove(item);
-                        }
-                    }
-                    // Add all elements now:
-                    iter2 = ((Collection)value).iterator();
-                    while(iter2.hasNext())
-                    {
-                        localCollection.add(iter2.next());
-                    }
-                }
-            }
-        }
+       PropertyIterator iter = element.propertyIterator();
+       while(iter.hasNext())
+       {
+           JMeterProperty prop = iter.next();
+           addProperty(prop);            
+       }
     }
     /**
      * Returns the runningVersion.
@@ -506,19 +274,29 @@ public abstract class AbstractTestElement implements TestElement,Serializable
      */
     public void setRunningVersion(boolean runningVersion)
     {
-        if(runningVersion)
-        {
-            temporaryMembers = new LinkedList();
-        }
-        else
-        {
-            temporaryMembers = null;
-        }
         this.runningVersion = runningVersion;
+        PropertyIterator iter = propertyIterator();
+        while(iter.hasNext())
+        {
+            iter.next().setRunningVersion(true);
+        }
     }
     
     public void recoverRunningVersion()
     {
-        temporaryMembers.clear();
+        PropertyIterator iter = propertyIterator();
+        while(iter.hasNext())
+        {
+            JMeterProperty prop = iter.next();
+            if(prop.isTemporary(this))
+            {
+                iter.remove();
+                prop.clearTemporary(this);
+            }
+            else
+            {
+                prop.recoverRunningVersion(this);
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 package org.apache.jmeter.testelement.property;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.threads.JMeterContextService;
 
 /**
@@ -25,6 +26,14 @@ public class FunctionProperty extends AbstractProperty
     {
         super();
     }
+    
+    public void setObjectValue(Object v)
+        {
+            if(v instanceof CompoundVariable)
+            {
+                function = (CompoundVariable)v;
+            }
+        }
 
     /**
      * Executes the function (and caches the value for the duration of the test
@@ -36,10 +45,12 @@ public class FunctionProperty extends AbstractProperty
     {
         if(!isRunningVersion())
         {
+            log.debug("Not running version, return raw function string");
             return function.getRawParameters();
         }
         else
         {
+            log.debug("Running version, executing function");
             int iter = JMeterContextService.getContext().getVariables().getIteration();
             if(iter < testIteration)
             {
@@ -49,6 +60,7 @@ public class FunctionProperty extends AbstractProperty
             {
                 testIteration = iter;
                 cacheValue = function.execute();
+                log.debug("cache value set to: '" + cacheValue + "'",new Exception());
             }
             return cacheValue;
         }
@@ -69,6 +81,15 @@ public class FunctionProperty extends AbstractProperty
         prop.testIteration = testIteration;
         prop.function = function;
         return prop;
+    }
+
+    /**
+     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+     */
+    public void recoverRunningVersion(TestElement owner)
+    {
+        super.recoverRunningVersion(owner);
+        cacheValue = null;
     }
 
 }
