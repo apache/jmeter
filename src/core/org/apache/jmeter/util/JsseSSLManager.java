@@ -54,12 +54,21 @@
  */
 package org.apache.jmeter.util;
 import java.net.HttpURLConnection;
+import java.net.Socket;
 import java.security.KeyStore;
 import java.security.Principal;
 import java.security.PrivateKey;
 import java.security.Provider;
 import java.security.SecureRandom;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509KeyManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.jmeter.util.keystore.JmeterKeyStore;
 import org.apache.log.Hierarchy;
@@ -67,12 +76,6 @@ import org.apache.log.Logger;
 
 import com.sun.net.ssl.HostnameVerifier;
 import com.sun.net.ssl.HttpsURLConnection;
-import com.sun.net.ssl.KeyManager;
-import com.sun.net.ssl.KeyManagerFactory;
-import com.sun.net.ssl.SSLContext;
-import com.sun.net.ssl.TrustManager;
-import com.sun.net.ssl.X509KeyManager;
-import com.sun.net.ssl.X509TrustManager;
 /**
  *  The SSLManager handles the KeyStore information for JMeter. Basically, it
  *  handles all the logic for loading and initializing all the JSSE parameters
@@ -87,348 +90,314 @@ import com.sun.net.ssl.X509TrustManager;
  */
 public class JsseSSLManager extends SSLManager
 {
-	transient private static Logger log =
-		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.util");
-	/**
-	 *  Cache the SecureRandom instance because it takes a long time to create
-	 */
-	private SecureRandom rand;
-	/**
-	 *  Cache the Context so we can retrieve it from other places
-	 */
-	private SSLContext context = null;
-	private Provider pro = null;
-	/**
-	 *  Private Constructor to remove the possibility of directly instantiating
-	 *  this object. Create the SSLContext, and wrap all the X509KeyManagers with
-	 *  our X509KeyManager so that we can choose our alias.
-	 *
-	 *@param  provider  Description of Parameter
-	 */
-	public JsseSSLManager(Provider provider)
-	{
-		setProvider(provider);
-		try
-		{
-			Class iaikProvider =
-				SSLManager.class.getClassLoader().loadClass(
-					"iaik.security.jsse.provider.IAIKJSSEProvider");
-			setProvider((Provider) iaikProvider.newInstance());
-		}
-		catch (Exception e)
-		{
-		}
-		try
-		{
-			Class sunProvider =
-				SSLManager.class.getClassLoader().loadClass(
-					"com.sun.net.ssl.internal.ssl.Provider");
-			setProvider((Provider) sunProvider.newInstance());
-		}
-		catch (Exception e)
-		{
-		}
-		if (null == this.rand)
-		{
-			this.rand = new SecureRandom();
-		}
-		if ("all"
-			.equalsIgnoreCase(JMeterUtils.getPropDefault("javax.net.debug", "none")))
-		{
-			System.setProperty("javax.net.debug", "all");
-		}
-		this.getContext();
-		log.info("JsseSSLManager installed");
-	}
-	/**
-	 *  Sets the Context attribute of the JsseSSLManager object
-	 *
-	 *@param  conn  The new Context value
-	 */
-	public void setContext(HttpURLConnection conn)
-	{
-		HttpsURLConnection secureConn = (HttpsURLConnection) conn;
-		secureConn.setSSLSocketFactory(this.getContext().getSocketFactory());
-		HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier()
-		{
-			public boolean verify(String urlHostname, String certHostname)
-			{
-				return true;
-			}
-		});
-	}
-	/**
-	 *  Sets the Provider attribute of the JsseSSLManager object
-	 *
-	 *@param  p  The new Provider value
-	 */
-	protected final void setProvider(Provider p)
-	{
-		super.setProvider(p);
-		if (null == this.pro)
-		{
-			this.pro = p;
-		}
-	}
-	/**
-	 *  Returns the SSLContext we are using. It is useful for obtaining the
-	 *  SSLSocketFactory so that your created sockets are authenticated.
-	 *
-	 *@return    The Context value
-	 */
-	private SSLContext getContext()
-	{
-		if (null == this.context)
-		{
-			try
-			{
-				this.context = SSLContext.getInstance("TLS", this.pro);
-			}
-			catch (Exception e)
-			{
-				try
-				{
-					this.context = SSLContext.getInstance("TLS");
-				}
-				catch (Exception ee)
-				{
-				}
-			}
-			try
-			{
-				KeyManagerFactory managerFactory =
-					KeyManagerFactory.getInstance("SunX509");
-				JmeterKeyStore keys = this.getKeyStore();
-				managerFactory.init(null, this.defaultpw.toCharArray());
-				KeyManager[] managers = managerFactory.getKeyManagers();
-				log.info(keys.getClass().toString());
-				for (int i = 0; i < managers.length; i++)
-				{
-					if (managers[i] instanceof X509KeyManager)
-					{
-						X509KeyManager manager = (X509KeyManager) managers[i];
-						managers[i] = new WrappedX509KeyManager(manager, keys);
-					}
-				}
-				TrustManager[] trusts =
-					new TrustManager[] { new AlwaysTrustManager(this.getTrustStore())};
-				context.init(managers, trusts, this.rand);
-				HttpsURLConnection.setDefaultSSLSocketFactory(
-					context.getSocketFactory());
-			}
-			catch (Exception e)
-			{
-			}
-			String[] dCiphers =
-				this.context.getSocketFactory().getDefaultCipherSuites();
-			String[] sCiphers =
-				this.context.getSocketFactory().getSupportedCipherSuites();
-			int len =
-				(dCiphers.length > sCiphers.length) ? dCiphers.length : sCiphers.length;
-			for (int i = 0; i < len; i++)
-			{
-				if (i < dCiphers.length)
-				{
-					log.info("Default Cipher: " + dCiphers[i]);
-				}
-				if (i < sCiphers.length)
-				{
-					log.info("Supported Cipher: " + sCiphers[i]);
-				}
-			}
-		}
-		return this.context;
-	}
-	/**
-	 *  Description of the Class
-	 *
-	 *@author     MStover
-	 *@created    March 21, 2002
-	 */
-	protected static class AlwaysTrustManager implements X509TrustManager
-	{
-		/**
-		 *  Description of the Field
-		 */
-		protected X509Certificate[] certs;
-		/**
-		 *  Constructor for the AlwaysTrustManager object
-		 *
-		 *@param  store  Description of Parameter
-		 */
-		public AlwaysTrustManager(KeyStore store)
-		{
-			try
-			{
-				java.util.Enumeration enum = store.aliases();
-				java.util.ArrayList list = new java.util.ArrayList(store.size());
-				while (enum.hasMoreElements())
-				{
-					String alias = (String) enum.nextElement();
-					log.info("AlwaysTrustManager alias: " + alias);
-					if (store.isCertificateEntry(alias))
-					{
-						list.add(store.getCertificate(alias));
-						log.info(" INSTALLED");
-					}
-					else
-					{
-						log.info(" SKIPPED");
-					}
-				}
-				this.certs = (X509Certificate[]) list.toArray(new X509Certificate[] {
-				});
-			}
-			catch (Exception e)
-			{
-				this.certs = null;
-			}
-		}
-		/**
-		 *  Gets the AcceptedIssuers attribute of the AlwaysTrustManager object
-		 *
-		 *@return    The AcceptedIssuers value
-		 */
-		public X509Certificate[] getAcceptedIssuers()
-		{
-			log.info("Get accepted Issuers");
-			return certs;
-		}
-		/**
-		 *  Gets the ClientTrusted attribute of the AlwaysTrustManager object
-		 *
-		 *@param  chain  Description of Parameter
-		 *@return        The ClientTrusted value
-		 */
-		public boolean isClientTrusted(X509Certificate[] chain)
-		{
-			log.info("Is client trusted ???");
-			return true;
-		}
-		/**
-		 *  Gets the ServerTrusted attribute of the AlwaysTrustManager object
-		 *
-		 *@param  chain  Description of Parameter
-		 *@return        The ServerTrusted value
-		 */
-		public boolean isServerTrusted(X509Certificate[] chain)
-		{
-			log.info("Is server trusted ???");
-			return true;
-		}
-	}
-	/**
-	 *  This is the X509KeyManager we have defined for the sole purpose of selecing
-	 *  the proper key and certificate based on the keystore available.
-	 *
-	 *@author     MStover
-	 *@created    March 21, 2002
-	 */
-	private static class WrappedX509KeyManager implements X509KeyManager
-	{
-		/**
-		 *  The parent X509KeyManager
-		 */
-		private final X509KeyManager manager;
-		/**
-		 *  The KeyStore this KeyManager uses
-		 */
-		private final JmeterKeyStore store;
-		/**
-		 *  Instantiate a new WrappedX509KeyManager.
-		 *
-		 *@param  parent  The parent X509KeyManager
-		 *@param  ks      The KeyStore we derive our client certs and keys from
-		 */
-		public WrappedX509KeyManager(X509KeyManager parent, JmeterKeyStore ks)
-		{
-			this.manager = parent;
-			this.store = ks;
-		}
-		/**
-		 *  Compiles the list of all client aliases with a private key. Currently,
-		 *  keyType and issuers are both ignored.
-		 *
-		 *@param  keyType  The type of private key the server expects (RSA, DSA, etc.)
-		 *@param  issuers  The CA certificates we are narrowing our selection on.
-		 *@return          The ClientAliases value
-		 */
-		public String[] getClientAliases(String keyType, Principal[] issuers)
-		{
-			log.info("WrappedX509Manager: getClientAliases: ");
-			log.info(this.store.getAlias());
-			return new String[] { this.store.getAlias()};
-		}
-		/**
-		 *  Get the list of server aliases for the SSLServerSockets. This is not used
-		 *  in JMeter.
-		 *
-		 *@param  keyType  The type of private key the server expects (RSA, DSA, etc.)
-		 *@param  issuers  The CA certificates we are narrowing our selection on.
-		 *@return          The ServerAliases value
-		 */
-		public String[] getServerAliases(String keyType, Principal[] issuers)
-		{
-			log.info("WrappedX509Manager: getServerAliases: ");
-			log.info(this.manager.getServerAliases(keyType, issuers).toString());
-			return this.manager.getServerAliases(keyType, issuers);
-		}
-		/**
-		 *  Get the Certificate chain for a particular alias
-		 *
-		 *@param  alias  The client alias
-		 *@return        The CertificateChain value
-		 */
-		public X509Certificate[] getCertificateChain(String alias)
-		{
-			log.info("WrappedX509Manager: getCertificateChain(" + alias + ")");
-			log.info(this.store.getCertificateChain().toString());
-			return this.store.getCertificateChain();
-		}
-		/**
-		 *  Get the Private Key for a particular alias
-		 *
-		 *@param  alias  The client alias
-		 *@return        The PrivateKey value
-		 */
-		public PrivateKey getPrivateKey(String alias)
-		{
-			log.info(
-				"WrappedX509Manager: getPrivateKey: " + this.store.getPrivateKey());
-			return this.store.getPrivateKey();
-		}
-		/**
-		 *  Select the Alias we will authenticate as if Client authentication is
-		 *  required by the server we are connecting to. We get the list of aliases,
-		 *  and if there is only one alias we automatically select it. If there are
-		 *  more than one alias that has a private key, we prompt the user to choose
-		 *  which alias using a combo box. Otherwise, we simply provide a text box,
-		 *  which may or may not work. The alias does have to match one in the
-		 *  keystore.
-		 *
-		 *@param  keyType  The type of private key the server expects (RSA, DSA, etc.)
-		 *@param  issuers  The CA certificates we are narrowing our selection on.
-		 *@return          Description of the Returned Value
-		 */
-		public String chooseClientAlias(String keyType, Principal[] issuers)
-		{
-			log.info("Alias: " + this.store.getAlias());
-			return this.store.getAlias();
-		}
-		/**
-		 *  Choose the server alias for the SSLServerSockets. This are not used in
-		 *  JMeter.
-		 *
-		 *@param  keyType  The type of private key the server expects (RSA, DSA, etc.)
-		 *@param  issuers  The CA certificates we are narrowing our selection on.
-		 *@return          Description of the Returned Value
-		 */
-		public String chooseServerAlias(String keyType, Principal[] issuers)
-		{
-			log.info(
-				"WrappedX509Manager: chooseServerAlias: "
-					+ this.manager.chooseServerAlias(keyType, issuers));
-			return this.manager.chooseServerAlias(keyType, issuers);
-		}
-	}
+    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.util");
+    /**
+     *  Cache the SecureRandom instance because it takes a long time to create
+     */
+    private SecureRandom rand;
+    /**
+     *  Cache the Context so we can retrieve it from other places
+     */
+    private SSLContext context = null;
+    private Provider pro = null;
+    /**
+     *  Private Constructor to remove the possibility of directly instantiating
+     *  this object. Create the SSLContext, and wrap all the X509KeyManagers with
+     *  our X509KeyManager so that we can choose our alias.
+     *
+     *@param  provider  Description of Parameter
+     */
+    public JsseSSLManager(Provider provider)
+    {
+        log.debug("ssl Provider =  " + provider);
+        setProvider(provider);
+        try
+        {
+            Class iaikProvider = SSLManager.class.getClassLoader().loadClass("iaik.security.jsse.provider.IAIKJSSEProvider");
+            setProvider((Provider) iaikProvider.newInstance());
+        }
+        catch (Exception e)
+        {}
+        if (null == this.rand)
+        {
+            this.rand = new SecureRandom();
+        }
+        if ("all".equalsIgnoreCase(JMeterUtils.getPropDefault("javax.net.debug", "none")))
+        {
+            System.setProperty("javax.net.debug", "all");
+        }
+        this.getContext();
+        log.info("JsseSSLManager installed");
+    }
+    /**
+     *  Sets the Context attribute of the JsseSSLManager object
+     *
+     *@param  conn  The new Context value
+     */
+    public void setContext(HttpURLConnection conn)
+    {
+        //HttpsURLConnection secureConn = (HttpsURLConnection) conn;
+        //secureConn.setSSLSocketFactory(this.getContext().getSocketFactory());
+        
+    }
+    /**
+     *  Sets the Provider attribute of the JsseSSLManager object
+     *
+     *@param  p  The new Provider value
+     */
+    protected final void setProvider(Provider p)
+    {
+        super.setProvider(p);
+        if (null == this.pro)
+        {
+            this.pro = p;
+        }
+    }
+    /**
+     *  Returns the SSLContext we are using. It is useful for obtaining the
+     *  SSLSocketFactory so that your created sockets are authenticated.
+     *
+     *@return    The Context value
+     */
+    private SSLContext getContext()
+    {
+        if (null == this.context)
+        {
+            try
+            {
+                if (pro != null)
+                {
+                    this.context = SSLContext.getInstance("TLS",pro);
+                }
+                else
+                {
+                    this.context = SSLContext.getInstance("TLS");
+                }
+                log.debug("SSL context = " + context);
+            }
+            catch (Exception ee)
+            {
+                log.error("Exception occurred",ee);
+            }
+            try
+            {
+                KeyManagerFactory managerFactory = KeyManagerFactory.getInstance("SunX509");
+                JmeterKeyStore keys = this.getKeyStore();
+                managerFactory.init(null, this.defaultpw.toCharArray());
+                KeyManager[] managers = managerFactory.getKeyManagers();
+                log.info(keys.getClass().toString());
+                for (int i = 0; i < managers.length; i++)
+                {
+                    if (managers[i] instanceof X509KeyManager)
+                    {
+                        X509KeyManager manager = (X509KeyManager) managers[i];
+                        managers[i] = new WrappedX509KeyManager(manager, keys);
+                    }
+                }
+                TrustManager[] trusts = new TrustManager[] { new AlwaysTrustManager(this.getTrustStore())};
+                context.init(managers, trusts, this.rand);
+                HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
+                HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier()
+                {
+                    public boolean verify(String urlHostname, String certHostname)
+                    {
+                        return true;
+                    }
+                });
+                log.debug("SSL stuff all set");
+            }
+            catch (Exception e)
+            {
+                log.error("Exception occurred",e);
+            }
+            String[] dCiphers = this.context.getSocketFactory().getDefaultCipherSuites();
+            String[] sCiphers = this.context.getSocketFactory().getSupportedCipherSuites();
+            int len = (dCiphers.length > sCiphers.length) ? dCiphers.length : sCiphers.length;
+            for (int i = 0; i < len; i++)
+            {
+                if (i < dCiphers.length)
+                {
+                    log.info("Default Cipher: " + dCiphers[i]);
+                }
+                if (i < sCiphers.length)
+                {
+                    log.info("Supported Cipher: " + sCiphers[i]);
+                }
+            }
+        }
+        return this.context;
+    }
+    /**
+     *  Description of the Class
+     *
+     *@author     MStover
+     *@created    March 21, 2002
+     */
+    protected static class AlwaysTrustManager implements X509TrustManager
+    {
+        /**
+         *  Description of the Field
+         */
+        protected X509Certificate[] certs;
+        /**
+         *  Constructor for the AlwaysTrustManager object
+         *
+         *@param  store  Description of Parameter
+         */
+        public AlwaysTrustManager(KeyStore store)
+        {
+            try
+            {
+                java.util.Enumeration enum = store.aliases();
+                java.util.ArrayList list = new java.util.ArrayList(store.size());
+                while (enum.hasMoreElements())
+                {
+                    String alias = (String) enum.nextElement();
+                    log.info("AlwaysTrustManager alias: " + alias);
+                    if (store.isCertificateEntry(alias))
+                    {
+                        list.add(store.getCertificate(alias));
+                        log.info(" INSTALLED");
+                    }
+                    else
+                    {
+                        log.info(" SKIPPED");
+                    }
+                }
+                this.certs = (X509Certificate[]) list.toArray(new X509Certificate[] {});
+            }
+            catch (Exception e)
+            {
+                this.certs = null;
+            }
+        }
+        /**
+         *  Gets the AcceptedIssuers attribute of the AlwaysTrustManager object
+         *
+         *@return    The AcceptedIssuers value
+         */
+        public X509Certificate[] getAcceptedIssuers()
+        {
+            log.info("Get accepted Issuers");
+            return certs;
+        }
+        /**
+         * @see javax.net.ssl.X509TrustManager#checkClientTrusted(java.security.cert.X509Certificate, java.lang.String)
+         */
+        public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException
+        {}
+
+        /**
+         * @see javax.net.ssl.X509TrustManager#checkServerTrusted(java.security.cert.X509Certificate, java.lang.String)
+         */
+        public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException
+        {}
+
+    }
+    /**
+     *  This is the X509KeyManager we have defined for the sole purpose of selecing
+     *  the proper key and certificate based on the keystore available.
+     *
+     *@author     MStover
+     *@created    March 21, 2002
+     */
+    private static class WrappedX509KeyManager implements X509KeyManager
+    {
+        /**
+         *  The parent X509KeyManager
+         */
+        private final X509KeyManager manager;
+        /**
+         *  The KeyStore this KeyManager uses
+         */
+        private final JmeterKeyStore store;
+        /**
+         *  Instantiate a new WrappedX509KeyManager.
+         *
+         *@param  parent  The parent X509KeyManager
+         *@param  ks      The KeyStore we derive our client certs and keys from
+         */
+        public WrappedX509KeyManager(X509KeyManager parent, JmeterKeyStore ks)
+        {
+            this.manager = parent;
+            this.store = ks;
+        }
+        /**
+         *  Compiles the list of all client aliases with a private key. Currently,
+         *  keyType and issuers are both ignored.
+         *
+         *@param  keyType  The type of private key the server expects (RSA, DSA, etc.)
+         *@param  issuers  The CA certificates we are narrowing our selection on.
+         *@return          The ClientAliases value
+         */
+        public String[] getClientAliases(String keyType, Principal[] issuers)
+        {
+            log.info("WrappedX509Manager: getClientAliases: ");
+            log.info(this.store.getAlias());
+            return new String[] { this.store.getAlias()};
+        }
+        /**
+         *  Get the list of server aliases for the SSLServerSockets. This is not used
+         *  in JMeter.
+         *
+         *@param  keyType  The type of private key the server expects (RSA, DSA, etc.)
+         *@param  issuers  The CA certificates we are narrowing our selection on.
+         *@return          The ServerAliases value
+         */
+        public String[] getServerAliases(String keyType, Principal[] issuers)
+        {
+            log.info("WrappedX509Manager: getServerAliases: ");
+            log.info(this.manager.getServerAliases(keyType, issuers).toString());
+            return this.manager.getServerAliases(keyType, issuers);
+        }
+        /**
+         *  Get the Certificate chain for a particular alias
+         *
+         *@param  alias  The client alias
+         *@return        The CertificateChain value
+         */
+        public X509Certificate[] getCertificateChain(String alias)
+        {
+            log.info("WrappedX509Manager: getCertificateChain(" + alias + ")");
+            log.info(this.store.getCertificateChain().toString());
+            return this.store.getCertificateChain();
+        }
+        /**
+         *  Get the Private Key for a particular alias
+         *
+         *@param  alias  The client alias
+         *@return        The PrivateKey value
+         */
+        public PrivateKey getPrivateKey(String alias)
+        {
+            log.info("WrappedX509Manager: getPrivateKey: " + this.store.getPrivateKey());
+            return this.store.getPrivateKey();
+        }
+        /**
+         * Select the Alias we will authenticate as if Client authentication is
+         * required by the server we are connecting to. We get the list of
+         * aliases,  and if there is only one alias we automatically select it.
+         * If there are  more than one alias that has a private key, we prompt
+         * the user to choose  which alias using a combo box. Otherwise, we
+         * simply provide a text box,  which may or may not work. The alias does
+         * have to match one in the  keystore.
+         * @see javax.net.ssl.X509KeyManager#chooseClientAlias(java.lang.String, java.security.Principal, java.net.Socket)
+         */
+        public String chooseClientAlias(String[] arg0, Principal[] arg1, Socket arg2)
+        {
+            log.info("Alias: " + this.store.getAlias());
+            return this.store.getAlias();
+        }
+
+        /**
+         * Choose the server alias for the SSLServerSockets. This are not used
+         * in  JMeter.
+         * @see javax.net.ssl.X509KeyManager#chooseServerAlias(java.lang.String, java.security.Principal, java.net.Socket)
+         */
+        public String chooseServerAlias(String arg0, Principal[] arg1, Socket arg2)
+        {
+            return this.manager.chooseServerAlias(arg0, arg1, arg2);
+        }
+
+    }
 }

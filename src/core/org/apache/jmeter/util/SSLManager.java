@@ -148,7 +148,7 @@ public abstract class SSLManager {
 
             if (null == password) {
                 if (null == defaultpw) {
-                    this.defaultpw = JMeterUtils.getJMeterProperties().getProperty("javax.net.ssl.keyStorePassword");
+                    this.defaultpw = JMeterUtils.getJMeterProperties().getProperty("javax.net.ssl.keyStorePassword","password");
 
                     if (null == defaultpw) {
                         synchronized (this) {
@@ -174,7 +174,7 @@ public abstract class SSLManager {
                     this.keyStore.load(null, password);
                 }
             } catch (Exception e) {
-	      throw new RuntimeException("Can't load KeyStore: "+e.toString());
+	           log.error("Couldn't load keystore" ,e);
             }
 
         log.info("JmeterKeyStore Location: " + fileName);
@@ -273,9 +273,9 @@ public abstract class SSLManager {
     static
     {
 
-        SSLManager.isSSLSupported = false;
+        SSLManager.isSSLSupported = true;
         SSLManager.sslProvider = null;
-
+/*
         try {
             // Class.forName() was choking if the property wasn't set on the line below..
             String strSSLProvider = JMeterUtils.getPropDefault("ssl.provider",null);
@@ -298,19 +298,19 @@ public abstract class SSLManager {
         }
 
         String protocol = JMeterUtils.getPropDefault("ssl.pkgs", JMeterUtils.getPropDefault("java.protocol.handler.pkgs", null));
-
+        SSLManager.sslProvider = null;
         // register https protocol handler.  JSSE needs a provider--but iSaSiLk does not.
         if (null != protocol) {
             System.setProperty("java.protocol.handler.pkgs", protocol);
             if ("iaik.protocol".equals(protocol)) {
                 SSLManager.isSSLSupported = true;
                 SSLManager.isIAIKProvider = true;
-            } else if (SSLManager.sslProvider != null) {
+            } else {
                 // This is the case where a provider is set and java.protocol.handler.pkgs is set
                 SSLManager.isSSLSupported = true;
             }
         } else {
-            SSLManager.isSSLSupported = false;
-        }
+            SSLManager.isSSLSupported = true;
+        }*/
     }
 }
