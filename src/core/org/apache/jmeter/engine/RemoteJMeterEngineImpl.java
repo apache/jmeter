@@ -87,8 +87,7 @@ public class RemoteJMeterEngineImpl
         catch(Exception ex){
 			log.error(
 				"rmiregistry needs to be running to start JMeter in server " +
-				"mode",
-				ex);
+				"mode\n\t" + ex.toString());
 			// Throw an Exception to ensure caller knows ...
 			throw new RemoteException("Cannot start. See server log file.");
         }
