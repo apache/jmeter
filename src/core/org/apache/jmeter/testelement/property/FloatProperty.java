@@ -1,11 +1,14 @@
 package org.apache.jmeter.testelement.property;
 
+import org.apache.jmeter.testelement.TestElement;
+
 /**
  * @version $Revision$
  */
 public class FloatProperty extends NumberProperty
 {
     float value;
+    float savedValue;
     
     public FloatProperty(String name,float value)
     {
@@ -16,6 +19,23 @@ public class FloatProperty extends NumberProperty
     public FloatProperty()
     {
     }
+    
+    /* (non-Javadoc)
+         * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
+         */
+        public void setRunningVersion(boolean runningVersion)
+        {
+            savedValue = value;
+            super.setRunningVersion(runningVersion);
+        }
+
+        /* (non-Javadoc)
+         * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+         */
+        public void recoverRunningVersion(TestElement owner)
+        {
+            value = savedValue;
+        }
     
     public void setValue(float value)
     {
