@@ -333,7 +333,7 @@ POST content.</p>
 
 </component>
 
-<component name="WebService(SOAP) Request (Alpha Code)" index="14.1.7" screenshot="webservice_sampler.png">
+<component name="WebService(SOAP) Request (Beta Code)" index="14.1.7" screenshot="webservice_sampler.png">
 
 <description><p>This sampler has been tested with IIS Webservice running .NET 1.0. It
  hasn't been tested with SUN or IBM webservices providers, but it should work.
