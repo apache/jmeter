@@ -25,7 +25,6 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
-import org.apache.jmeter.gui.util.JMeterColor;
 import org.apache.jmeter.samplers.Clearable;
 
 /**
@@ -210,7 +209,7 @@ public class MonitorGraph
 			int q1 = (int)(height * 0.25);
 			int q2 = (int)(height * 0.50);
 			int q3 = (int)(height * 0.75);
-			g.setColor(JMeterColor.lightGray);
+			g.setColor(Color.lightGray);
 			g.drawLine(0,q1,getWidth(),q1);
 			g.drawLine(0,q2,getWidth(),q2);
 			g.drawLine(0,q3,getWidth(),q3);
@@ -232,7 +231,7 @@ public class MonitorGraph
 			int lasty =
 				(int)(height - (height * ((double)last.getHealth()/3.0)));
 
-			g.setColor(JMeterColor.GREEN);
+			g.setColor(Color.green);
 			g.drawLine(lastx,lasty,xaxis,hly);
 		}
 
@@ -243,7 +242,7 @@ public class MonitorGraph
 			int lastldy =
 				(int)(height - (height * ((double)last.getLoad()/100.0)));
 
-			g.setColor(Color.BLUE);
+			g.setColor(Color.blue);
 			g.drawLine(lastx,lastldy,xaxis,ldy);
 		}
 
@@ -254,7 +253,7 @@ public class MonitorGraph
 			int lastmmy =
 				(int)(height - (height * ((double)last.getMemload()/100.0)));
 
-			g.setColor(JMeterColor.ORANGE);
+			g.setColor(Color.orange);
 			g.drawLine(lastx,lastmmy,xaxis,mmy);
 		}
 
@@ -265,7 +264,7 @@ public class MonitorGraph
 			int lastthy =
 				(int)(height - (height * ((double)last.getThreadload()/100.0)));
 
-			g.setColor(Color.RED);
+			g.setColor(Color.red);
 			g.drawLine(lastx,lastthy,xaxis,thy);
 		}
 	}
