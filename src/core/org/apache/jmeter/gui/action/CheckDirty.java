@@ -27,8 +27,9 @@ public class CheckDirty extends AbstractAction implements
 	public static final String SUB_TREE_SAVED = "sub_tree_saved";
 	public static final String SUB_TREE_LOADED = "sub_tree_loaded";
 	public static final String ADD_ALL = "add_all";
-	public static final String SAVE = "save";
+	public static final String SAVE = "save_as";
 	public static final String SAVE_ALL = "save_all";
+	public static final String SAVE_TO_PREVIOUS = "save";
 	public static final String REMOVE = "check_remove";
 	
 	boolean checkMode = false;
@@ -45,6 +46,7 @@ public class CheckDirty extends AbstractAction implements
 		commands.add(SAVE);
 		commands.add(SAVE_ALL);
 		commands.add(REMOVE);
+		commands.add(SAVE_TO_PREVIOUS);
 	}
 	
 	public CheckDirty()
@@ -63,7 +65,7 @@ public class CheckDirty extends AbstractAction implements
 			ListedHashTree subTree = GuiPackage.getInstance().getCurrentSubTree();
 			subTree.traverse(this);
 		}
-		else if(action.equals(SAVE_ALL))
+		else if(action.equals(SAVE_ALL) || action.equals(SAVE_TO_PREVIOUS))
 		{
 			ListedHashTree subTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
 			subTree.traverse(this);

@@ -121,6 +121,47 @@ public class ActionRouter implements ActionListener
 					") not yet implemented");
 		}
 	}
+	
+	public Set getAction(String actionName)
+	{
+		Set set = new HashSet();
+		Set commandObjects = (Set)commands.get(actionName);
+		Iterator iter = commandObjects.iterator();
+		while(iter.hasNext())
+		{
+			try
+			{
+				set.add(iter.next());
+			}
+			catch(Exception err)
+			{
+				log.error("",err);
+			}
+		}
+		return set;
+	}
+	
+	public Command getAction(String actionName,String className)
+	{
+		Set commandObjects = (Set)commands.get(actionName);
+		Iterator iter = commandObjects.iterator();
+		while(iter.hasNext())
+		{
+			try
+			{
+				Command com = (Command)iter.next();
+				if(com.getClass().getName().equals(className))
+				{
+					return com;
+				}
+			}
+			catch(Exception err)
+			{
+				log.error("",err);
+			}
+		}
+		return null;
+	}
 
 	private void populateCommandMap()
 	{
