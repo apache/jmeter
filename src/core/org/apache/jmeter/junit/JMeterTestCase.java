@@ -21,6 +21,7 @@ import org.apache.log.Logger;
  */
 public abstract class JMeterTestCase extends TestCase
 {
+	// Used by findTestFile
 	private static final String filePrefix; 
 	public JMeterTestCase(){
 		super();
@@ -56,11 +57,32 @@ public abstract class JMeterTestCase extends TestCase
 			}
     		JMeterUtils jmu = new JMeterUtils();
     		jmu.initializeProperties(file);
+			logprop("java.version");
+			logprop("java.vendor");
+			logprop("java.home");
+			logprop("user.home");
+			logprop("user.dir");
+			logprop("java.class.version");
+			logprop("os.name");
+			logprop("os.version");
+			logprop("os.arch");
+			logprop("java.class.path");
+			//TODO re-enable when split() is available in jorphan?
+//			String cp = System.getProperty("java.class.path");
+//			String cpe[]= JMeterUtils.split(cp,";","");
+//			for (int i=0;i<cpe.length;i++){
+//				System.out.println(cpe[i]);
+//			}
     	} else {
     		filePrefix="";
     	}
     }
     
+	private static void logprop(String prop)
+	{
+		System.out.println(prop+"="+System.getProperty(prop));
+	}
+
 	// Helper method to find a file
 	protected static File findTestFile(String file)
 	{
