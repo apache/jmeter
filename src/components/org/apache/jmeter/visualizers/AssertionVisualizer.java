@@ -53,17 +53,23 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.visualizers;
+import java.awt.BorderLayout;
 import java.awt.Font;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.border.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+
 import org.apache.jmeter.assertions.AssertionResult;
-import org.apache.jmeter.gui.*;
 import org.apache.jmeter.gui.util.VerticalLayout;
-import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
@@ -147,7 +153,7 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 
 	private void init()
 	{
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		this.setLayout(new BorderLayout());
 
 		// MAIN PANEL
 		JPanel mainPanel = new JPanel();
@@ -179,8 +185,8 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 		areaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		//areaScrollPane.setPreferredSize(new Dimension(250, 250));
-		mainPanel.add(areaScrollPane);
 
-		this.add(mainPanel);
+		this.add(mainPanel,BorderLayout.NORTH);
+		this.add(areaScrollPane,BorderLayout.CENTER);
 	}
 }
