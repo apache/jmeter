@@ -276,7 +276,6 @@ public class JMeterThread implements Runnable, java.io.Serializable
                         delay(pack.getTimers());                        
                         SampleResult result = pack.getSampler().sample(null);
                         result.setThreadName(threadName);
-                        result.setTimeStamp(System.currentTimeMillis());
                         threadContext.setPreviousResult(result);
                         runPostProcessors(pack.getPostProcessors());
                         checkAssertions(pack.getAssertions(), result);

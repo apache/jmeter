@@ -389,7 +389,6 @@ public class ResultCollector
     public void sampleOccurred(SampleEvent e)
     {
         SampleResult result = e.getResult();
-        result.setTimeStamp(System.currentTimeMillis());
 
         if (!isErrorLogging() || !result.isSuccessful())
         {
