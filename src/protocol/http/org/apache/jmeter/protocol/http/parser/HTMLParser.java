@@ -66,12 +66,17 @@ import java.util.Iterator;
 import junit.framework.TestCase;
 
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * HtmlParsers can parse HTML content to obtain URLs.
  */
 public abstract class HTMLParser
 {
+	/** Used to store the Logger (used for debug and error messages). */
+	transient private static Logger log = LoggingManager.getLoggerForClass();
+
     /** Singleton */
     static HTMLParser parser;
 
@@ -109,6 +114,7 @@ public abstract class HTMLParser
         {
             throw new Error(e);
         }
+        log.info("Using "+htmlParserClassName);
     }
 
     /**
