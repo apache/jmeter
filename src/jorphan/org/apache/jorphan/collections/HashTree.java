@@ -864,43 +864,49 @@ public class HashTree implements Serializable, Map
      * Compares all objects in the tree and verifies that the two trees contain
      * the same objects at the same tree levels.  Returns true if they do,
      * false otherwise.
-     * 
+     *
+     * @param o Object to be compared against 
      * @see java.lang.Object#equals(Object)
      */
     public boolean equals(Object o)
     {
-        boolean flag = true;
-        if (o instanceof HashTree)
-        {
-            HashTree oo = (HashTree) o;
-            Iterator it = data.keySet().iterator();
-            while (it.hasNext())
-            {
-                if (!oo.containsKey(it.next()))
-                {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag)
-            {
-                it = data.keySet().iterator();
-                while (it.hasNext())
-                {
-                    Object temp = it.next();
-                    flag = get(temp).equals(oo.get(temp));
-                    if (!flag)
-                    {
-                        break;
-                    }
-                }
-            }
-        }
-        else
-        {
-            flag = false;
-        }
-        return flag;
+       if (!(o instanceof HashTree)) return false;
+       HashTree oo = (HashTree) o;
+       if (oo.size() != this.size()) return false;
+       return data.equals(oo.data);
+
+//        boolean flag = true;
+//        if (o instanceof HashTree)
+//        {
+//            HashTree oo = (HashTree) o;
+//            Iterator it = data.keySet().iterator();
+//            while (it.hasNext())
+//            {
+//                if (!oo.containsKey(it.next()))
+//                {
+//                    flag = false;
+//                    break;
+//                }
+//            }
+//            if (flag)
+//            {
+//                it = data.keySet().iterator();
+//                while (it.hasNext())
+//                {
+//                    Object temp = it.next();
+//                    flag = get(temp).equals(oo.get(temp));
+//                    if (!flag)
+//                    {
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//        else
+//        {
+//            flag = false;
+//        }
+//        return flag;
     }
     
     /**
@@ -1080,5 +1086,54 @@ public class HashTree implements Serializable, Map
             assertEquals(1, tree.list(treePath).size());
             assertEquals("value", tree.getArray(treePath)[0]);
         }
+        
+		public void testEqualsAndHashCode() throws Exception
+		{
+			HashTree tree1 = new HashTree("abcd");
+			HashTree tree2 = new HashTree("abcd");
+			HashTree tree3 = new HashTree("abcde");
+			HashTree tree4 = new HashTree("abcde");
+			
+			assertTrue(tree1.equals(tree1));
+			assertTrue(tree1.equals(tree2));
+			assertTrue(tree2.equals(tree1));
+			assertTrue(tree2.equals(tree2));
+			assertTrue(tree1.hashCode()==tree2.hashCode());
+
+			assertTrue(tree3.equals(tree3));
+			assertTrue(tree3.equals(tree4));
+			assertTrue(tree4.equals(tree3));
+			assertTrue(tree4.equals(tree4));
+			assertTrue(tree3.hashCode()==tree4.hashCode());
+
+			assertNotSame(tree1,tree2);
+			assertNotSame(tree1,tree3);
+			assertNotSame(tree1,tree4);
+			assertNotSame(tree2,tree3);
+			assertNotSame(tree2,tree4);
+			
+			assertFalse(tree1.equals(tree3));
+			assertFalse(tree1.equals(tree4));
+			assertFalse(tree2.equals(tree3));
+			assertFalse(tree2.equals(tree4));
+			
+			assertFalse(tree1.equals(null));
+			assertFalse(tree1.equals(null));
+			assertFalse(tree2.equals(null));
+			assertFalse(tree2.equals(null));
+
+			tree1.add("abcd",tree3);
+			assertFalse(tree1.equals(tree2));
+			assertFalse(tree2.equals(tree1));// Check reflexive
+			if (tree1.hashCode()==tree2.hashCode())
+			{
+				// This is not a requirement
+				System.out.println("WARN: unequal HashTrees should not have equal hashCodes");
+			}
+			tree2.add("abcd",tree4);
+			assertTrue(tree1.equals(tree2));
+			assertTrue(tree2.equals(tree1));
+			assertTrue(tree1.hashCode()==tree2.hashCode());
+	    }
     }
 }
