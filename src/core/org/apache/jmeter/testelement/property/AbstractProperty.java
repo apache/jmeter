@@ -427,13 +427,14 @@ public abstract class AbstractProperty implements JMeterProperty
     }
 
     /**
-     * Provides a string representation of the property.
+     * Provides the string representation of the property.
      * 
-     * @return a string consisting of the name and its value
+     * @return the string value
      */
     public String toString()
     {
-        return name + "=" + getStringValue();
+    	// N.B. Other classes rely on this returning just the string.
+        return getStringValue();
     }
 
     /* (non-Javadoc)
