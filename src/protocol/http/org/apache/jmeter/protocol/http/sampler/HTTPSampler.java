@@ -136,7 +136,7 @@ public class HTTPSampler extends AbstractSampler
 
     /** A number to indicate that the port has not been set.  **/
     public static final int UNSPECIFIED_PORT= 0;
-    private static final int MAX_REDIRECTS= 10;
+    private static final int MAX_REDIRECTS= 5; // As recommended by RFC 2068
     protected static String encoding= "iso-8859-1";
     private static final PostWriter postWriter= new PostWriter();
     transient protected HttpURLConnection conn;
@@ -1007,7 +1007,8 @@ public class HTTPSampler extends AbstractSampler
         }
 
         URL newUrl= new URL(loc);
-        setMethod(GET);
+        setMethod(GET); // According to RFC 2068, this is an error, but it's
+                        // what all browsers seem to do.
         setProtocol(newUrl.getProtocol());
         setDomain(newUrl.getHost());
         setPort(newUrl.getPort());
@@ -1133,10 +1134,10 @@ public class HTTPSampler extends AbstractSampler
                 }
 
                 redirectUrl(conn, url);
-                SampleResult redirectResult= sample(redirects + 1);
-                res.addSubResult(redirectResult);
-                res.setSuccessful(redirectResult.isSuccessful());
-                res.setTime(res.getTime() + redirectResult.getTime());
+                SampleResult redirect= res;
+                res= sample(redirects + 1);
+                res.addSubResult(redirect);
+                res.setTime(res.getTime()+redirect.getTime());
             }
             log.debug("End : sample, redirects=" + redirects);
             if (isImageParser())
