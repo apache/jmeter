@@ -11,10 +11,12 @@ public class IterationEvent
     
     int iteration;
     TestElement source;
+    TestElement current;
     
-    public IterationEvent(TestElement source,int iter)
+    public IterationEvent(TestElement source,TestElement current,int iter)
     {
         iteration = iter;
+        this.current = current;
         this.source = source;
     }
 
@@ -35,6 +37,11 @@ public class IterationEvent
     {
         return source;
     }
+    
+    public TestElement getCurrent()
+    {
+    	return current;
+    }
 
     /**
      * Sets the iteration.
@@ -52,6 +59,11 @@ public class IterationEvent
     public void setSource(TestElement source)
     {
         this.source = source;
+    }
+    
+    public void setCurrent(TestElement current)
+    {
+    	this.current = current;
     }
 
 }

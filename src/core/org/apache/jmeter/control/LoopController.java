@@ -170,7 +170,7 @@ public class LoopController extends GenericController implements Serializable
 	
 	public boolean hasNext() 
 	{
-		if (getLoops()!=0) 
+		if (getLoops()!=0 && !endOfLoop()) 
 		{
 			return super.hasNext();
 		} 
@@ -182,7 +182,6 @@ public class LoopController extends GenericController implements Serializable
 
 	protected boolean hasNextAtEnd()
 	{
-		resetCurrent();
 		incrementLoopCount();
 		if(endOfLoop())
 		{
@@ -190,20 +189,10 @@ public class LoopController extends GenericController implements Serializable
 		}
 		else
 		{
+			resetCurrent();
 			return hasNext();
 		}
 	}
-	
-/*	public Sampler next() {
-		if ((!getContinueForever() && getLoops()>0) || getContinueForever()) 
-		{
-			return super.next();
-		}
-		else 
-		{
-			return null;
-		}
-	}*/
 	
 	public boolean isDone() {
 		if (getLoops()!=0) 

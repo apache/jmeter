@@ -77,7 +77,7 @@ import org.apache.jmeter.testelement.TestElement;
  ***************************************/
 
 public class GenericController extends AbstractTestElement implements Controller,
-		Serializable,PerThreadClonable
+		Serializable,PerThreadClonable,IterationListener
 {
     protected List iterationListeners = new LinkedList();
 	/****************************************
@@ -97,6 +97,7 @@ public class GenericController extends AbstractTestElement implements Controller
 	private boolean done = false, timeForNext = false;
 	private List assertions = new LinkedList();
     private boolean first = true;
+    private int samplersReturned = 0;
 
 	/****************************************
 	 * !ToDo (Constructor description)
@@ -182,6 +183,7 @@ public class GenericController extends AbstractTestElement implements Controller
 		if(controller == null)
 		{
 			retVal = hasNextAtEnd();
+			resetCurrent();
 		}
 		else if(controller instanceof Controller)
 		{
@@ -199,10 +201,7 @@ public class GenericController extends AbstractTestElement implements Controller
 		{
 			retVal = true;
 		}
-		if(!retVal)
-		{
-			reInitialize();
-		}
+
 		return retVal;
 	}
 
@@ -270,6 +269,19 @@ public class GenericController extends AbstractTestElement implements Controller
 	{
 		return subControllersAndSamplers;
 	}
+	
+	/**
+	 * @see org.apache.jmeter.control.Controller#samplersReturned()
+	 */
+	public int samplersReturned()
+	{
+		return samplersReturned;
+	}
+	
+	protected void resetSamplersReturned()
+	{
+		samplersReturned = 0;
+	}
 
 
 	/****************************************
@@ -296,17 +308,21 @@ public class GenericController extends AbstractTestElement implements Controller
 	 *@return   !ToDo (Return description)
 	 ***************************************/
 	public Sampler next()
-	{
-        fireIterEvents();     
+	{    
 		TestElement controller = getCurrentController();
+		fireIterEvents(controller);
 		if(controller == null)
 		{
 			nextAtEnd();
-			return next();
+			if (subControllersAndSamplers.size()>0)
+				return next();
+			else
+				return null;
 		}
 		if(controller instanceof Sampler)
 		{
 			incrementCurrent();
+			samplersReturned++;
 			return (Sampler)controller;
 		}
 		else
@@ -330,14 +346,17 @@ public class GenericController extends AbstractTestElement implements Controller
 		}
 	}
 
-    protected void fireIterEvents()
+    protected void fireIterEvents(TestElement current)
     {
         if(isNextFirst())
         {
-            fireIterationStart();
+            fireIterationStart(current);
             first = false;
-        }  
-        fireIteration();
+        }
+        if (current instanceof GenericController && ((GenericController)current).isNextFirst()) 
+        { 
+	        fireIteration(current);
+        }
     }
     
     protected int getIterCount()
@@ -345,24 +364,31 @@ public class GenericController extends AbstractTestElement implements Controller
         return 1;
     }
     
-    protected void fireIterationStart()
+    protected void fireIterationStart(TestElement current)
     {
         Iterator iter = iterationListeners.iterator();
         while (iter.hasNext())
         {
             IterationListener item = (IterationListener)iter.next();
-            item.iterationStart(new IterationEvent(this,getIterCount()));            
+            item.iterationStart(new IterationEvent(this,current,getIterCount()));            
         }
     }
     
-    protected void fireIteration() {
+    protected void fireIteration(TestElement current) {
     	Iterator iter = iterationListeners.iterator();
     	while (iter.hasNext())
     	{
     		IterationListener item = (IterationListener)iter.next();
-    		item.iteration(new IterationEvent(this,getIterCount()));
+    		item.iteration(new IterationEvent(this,current,getIterCount()));
     	}
     }
+    
+    public void iterationStart(IterationEvent event)
+    {
+    	resetSamplersReturned();
+    }
+    
+    public void iteration(IterationEvent event) {}
 
 	public static class Test extends junit.framework.TestCase
 	{

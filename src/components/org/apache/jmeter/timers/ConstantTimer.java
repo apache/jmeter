@@ -160,7 +160,7 @@ public class ConstantTimer
     /**
      * Gain access to any variables that have been defined.
      * 
-     * @see org.apache.jmeter.testelement.ThreadListener#iterationStarted(int)
+     * @see org.apache.jmeter.engine.event.IterationListener#iterationStarted(org.apache.jmeter.engine.event.IterationEvent)
      */
     public void iterationStart(IterationEvent event)
     {
