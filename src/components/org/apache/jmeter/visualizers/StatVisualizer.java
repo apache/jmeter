@@ -60,9 +60,6 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -241,7 +238,7 @@ public class StatVisualizer
 		mainPanel.setBorder(margin);
 		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 		// TITLE
-		JLabel panelTitleLabel = new JLabel("Aggregate Report");
+		JLabel panelTitleLabel = new JLabel(VISUALIZER_NAME);
 		Font curFont = panelTitleLabel.getFont();
 		int curFontSize = curFont.getSize();
 		curFontSize += 4;
