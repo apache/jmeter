@@ -52,7 +52,6 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-
 package org.apache.jorphan.gui;
 
 import java.awt.Insets;
@@ -76,7 +75,10 @@ public class JLabeledChoice extends JPanel implements JLabeledField
 {
     private JLabel mLabel = new JLabel();
     private JComboBox choiceList;
-    private ArrayList mChangeListeners = new ArrayList(3); // Maybe move to vector if MT problems occur
+    
+    // Maybe move to vector if MT problems occur
+    private ArrayList mChangeListeners = new ArrayList(3);
+    
     private JButton delete, add;
 
     /**
@@ -156,7 +158,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField
     {
         /*if(choiceList.isEditable())
         {
-        	choiceList.addActionListener(new ComboListener());
+            choiceList.addActionListener(new ComboListener());
         }*/
         choiceList.setBorder(BorderFactory.createLoweredBevelBorder());
         // Register the handler for focus listening. This handler will
@@ -164,7 +166,6 @@ public class JLabeledChoice extends JPanel implements JLabeledField
         // the focus is gained to when it is lost.
         choiceList.addItemListener(new ItemListener()
         {
-
             /**
              * Callback method when the focus to the Text Field component
              * is lost.

@@ -52,96 +52,126 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- 
-
 package org.apache.jorphan.collections;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 /**
- * Useful for finding all nodes in the tree that represent objects of a particular
- * type.  For instance, if your tree contains all strings, and a few StringBuffer objects, 
- * you can use the SearchByClass traverser to find all the StringBuffer objects in your
- * tree.  
+ * Useful for finding all nodes in the tree that represent objects of a
+ * particular type.  For instance, if your tree contains all strings, and a few
+ * StringBuffer objects, you can use the SearchByClass traverser to find all
+ * the StringBuffer objects in your tree.  
  * <p>
- * Usage is simple.  Given a {@link HashTree} object "tree", and a SearchByClass object:
- * <p>
+ * Usage is simple.  Given a {@link HashTree} object "tree", and a
+ * SearchByClass object:
  * <pre>
- * 	HashTree tree = new HashTree();
- * 	// ... tree gets filled with objects
- * 	SearchByClass searcher = new SearchByClass(StringBuffer.class);
- * 	tree.traverse(searcher);
- * 	Iterator iter = searcher.getSearchResults().iterator();
- * 	while(iter.hasNext())
- * 	{
- * 		StringBuffer foundNode = (StringBuffer)iter.next();
- * 		HashTree subTreeOfFoundNode = searcher.getSubTree(foundNode);
- * 		//  .... do something with node and subTree...
- * 	}
+ *  HashTree tree = new HashTree();
+ *  // ... tree gets filled with objects
+ *  SearchByClass searcher = new SearchByClass(StringBuffer.class);
+ *  tree.traverse(searcher);
+ *  Iterator iter = searcher.getSearchResults().iterator();
+ *  while(iter.hasNext())
+ *  {
+ *      StringBuffer foundNode = (StringBuffer)iter.next();
+ *      HashTree subTreeOfFoundNode = searcher.getSubTree(foundNode);
+ *      //  .... do something with node and subTree...
+ *  }
  * </pre>
- * @author Michael Stover (mstover1 at apache.org)
+ * 
  * @see HashTree
  * @see HashTreeTraverser
+ *
+ * @author Michael Stover (mstover1 at apache.org)
+ * @version $Revision$
  */
-public class SearchByClass implements HashTreeTraverser {
-	List objectsOfClass = new LinkedList();
-	Map subTrees = new HashMap();
-	Class searchClass = null;
-	/**
-	 * Creates an instance of SearchByClass.  However, without setting the Class to search
-	 * for, it will be a useless object.
-	 * @see java.lang.Object#Object()
-	 */
-	public SearchByClass() {}
-	/**
-	 * Creates an instance of SearchByClass, and sets the Class to be searched for.
-	 * @param searchClass
-	 */
-	public SearchByClass(Class searchClass) {
-		this.searchClass = searchClass;
-	}
-	/**
-	 * After traversing the HashTree, call this method to get a collection of the
-	 * nodes that were found.
-	 * @return Collection  All found nodes of the requested type
-	 */
-	public Collection getSearchResults() {
-		return objectsOfClass;
-	}
-	/**
-	 * Given a specific found node, this method will return the sub tree of that node.
-	 * @param root The node for which the sub tree is requested.
-	 * @return HashTree
-	 */
-	public HashTree getSubTree(Object root) {
-		return (HashTree)subTrees.get(root);
-	}
-	public void addNode(Object node, HashTree subTree) {
-		if (searchClass.isAssignableFrom(node.getClass())) {
-			objectsOfClass.add(node);
-			ListedHashTree tree = new ListedHashTree(node);
-			tree.set(node, subTree);
-			subTrees.put(node, tree);
-		}
-	}
-	public static class Test extends junit.framework.TestCase {
-		public Test(String name) {
-			super(name);
-		}
-		public void testSearch() throws Exception {
-			ListedHashTree tree = new ListedHashTree();
-			SearchByClass searcher = new SearchByClass(Integer.class);
-			String one = "one";
-			String two = "two";
-			Integer o = new Integer(1);
-			tree.add(one, o);
-			tree.getTree(one).add(o, two);
-			tree.traverse(searcher);
-			assertEquals(1, searcher.getSearchResults().size());
-		}
-	}
-	public void subtractNode() {}
-	public void processPath() {}
+public class SearchByClass implements HashTreeTraverser
+{
+    List objectsOfClass = new LinkedList();
+    Map subTrees = new HashMap();
+    Class searchClass = null;
+    
+    /**
+     * Creates an instance of SearchByClass.  However, without setting the
+     * Class to search for, it will be a useless object.
+     */
+    public SearchByClass()
+    {
+    }
+
+    /**
+     * Creates an instance of SearchByClass, and sets the Class to be searched
+     * for.
+     * 
+     * @param searchClass
+     */
+    public SearchByClass(Class searchClass)
+    {
+        this.searchClass = searchClass;
+    }
+    
+    /**
+     * After traversing the HashTree, call this method to get a collection of
+     * the nodes that were found.
+     * 
+     * @return Collection  All found nodes of the requested type
+     */
+    public Collection getSearchResults()
+    {
+        return objectsOfClass;
+    }
+    
+    /**
+     * Given a specific found node, this method will return the sub tree of
+     * that node.
+     * 
+     * @param root the node for which the sub tree is requested
+     * @return HashTree
+     */
+    public HashTree getSubTree(Object root)
+    {
+        return (HashTree) subTrees.get(root);
+    }
+    
+    public void addNode(Object node, HashTree subTree)
+    {
+        if (searchClass.isAssignableFrom(node.getClass()))
+        {
+            objectsOfClass.add(node);
+            ListedHashTree tree = new ListedHashTree(node);
+            tree.set(node, subTree);
+            subTrees.put(node, tree);
+        }
+    }
+    
+    public static class Test extends junit.framework.TestCase
+    {
+        public Test(String name)
+        {
+            super(name);
+        }
+        public void testSearch() throws Exception
+        {
+            ListedHashTree tree = new ListedHashTree();
+            SearchByClass searcher = new SearchByClass(Integer.class);
+            String one = "one";
+            String two = "two";
+            Integer o = new Integer(1);
+            tree.add(one, o);
+            tree.getTree(one).add(o, two);
+            tree.traverse(searcher);
+            assertEquals(1, searcher.getSearchResults().size());
+        }
+    }
+
+    public void subtractNode()
+    {
+    }
+
+    public void processPath()
+    {
+    }
 }

@@ -52,7 +52,6 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- 
 package org.apache.jorphan.io;
 
 import java.io.BufferedReader;
@@ -65,87 +64,67 @@ import java.io.Writer;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/************************************************************
- *  !ToDo (Class description)
- *
- *@author     Giles Cope (gilescope at users.sourceforge.net), Michael Stover (mstover1 at apache.org)
- ***********************************************************/
+/**
+ * @author Giles Cope (gilescope at users.sourceforge.net)
+ * @author Michael Stover (mstover1 at apache.org)
+ * @version $Revision$
+ */
 public class TextFile extends File
 {
-	
-	transient private static Logger log = LoggingManager.getLoggerFor(
-			"jorphan.io");
-	/************************************************************
-	 *  !ToDo (Constructor description)
-	 *
-	 *@param  filename  !ToDo (Parameter description)
-	 ***********************************************************/
-	public TextFile(File filename)
-	{
-		super(filename.toString());
-	}	
-	
-	public TextFile()
-	{
-		super("");
-	}
+    transient private static Logger log =
+        LoggingManager.getLoggerFor("jorphan.io");
 
-	/************************************************************
-	 *  !ToDo (Constructor description)
-	 *
-	 *@param  filename  !ToDo (Parameter description)
-	 ***********************************************************/
-	public TextFile(String filename)
-	{
-		super(filename);
-	}
+    public TextFile(File filename)
+    {
+        super(filename.toString());
+    }
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 *
-	 *@param  body  !ToDo (Parameter description)
-	 ***********************************************************/
-	public void setText(String body)
-	{
-		try
-		{
-			Writer writer = new FileWriter(this);
-			writer.write(body);
-			writer.flush();
-			writer.close();
-		}
-		catch (IOException ioe)
-		{
-			log.error("",ioe);
-		}
-	}
+    public TextFile()
+    {
+        super("");
+    }
 
-	/************************************************************
-	 *  !ToDoo (Method description)
-	 *
-	 *@return    !ToDo (Return description)
-	 ***********************************************************/
-	public String getText()
-	{
-		String lineEnd = System.getProperty("line.separator");
-		StringBuffer sb = new StringBuffer();
-		try
-		{
-			BufferedReader br = new BufferedReader(new FileReader(this));
-			String line = "NOTNULL";
-			while (line != null)
-			{
-				line = br.readLine();
-				if (line != null)
-				{
-					sb.append(line + lineEnd);
-				}
-			}
-		}
-		catch (IOException ioe)
-		{
-			log.error("",ioe);
-		}
-		return sb.toString();
-	}
+    public TextFile(String filename)
+    {
+        super(filename);
+    }
+
+    public void setText(String body)
+    {
+        try
+        {
+            Writer writer = new FileWriter(this);
+            writer.write(body);
+            writer.flush();
+            writer.close();
+        }
+        catch (IOException ioe)
+        {
+            log.error("", ioe);
+        }
+    }
+
+    public String getText()
+    {
+        String lineEnd = System.getProperty("line.separator");
+        StringBuffer sb = new StringBuffer();
+        try
+        {
+            BufferedReader br = new BufferedReader(new FileReader(this));
+            String line = "NOTNULL";
+            while (line != null)
+            {
+                line = br.readLine();
+                if (line != null)
+                {
+                    sb.append(line + lineEnd);
+                }
+            }
+        }
+        catch (IOException ioe)
+        {
+            log.error("", ioe);
+        }
+        return sb.toString();
+    }
 }

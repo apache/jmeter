@@ -60,44 +60,46 @@
 package org.apache.jorphan.util;
 
 /**
- * Class to get access to the protected getClassContext() method of SecurityManager,
- * thus obtaining the call stack.
+ * Class to get access to the protected getClassContext() method of
+ * SecurityManager, thus obtaining the call stack.
  * 
- * May not work with applications that install their own security managers
+ * May not work with applications that install their own security managers.
  * 
  * @author
  * @version $Id$
- *
  */
-public class ClassContext extends SecurityManager {
-	private ClassContext(){// don't allow others to instantiate this
-	}
-	
-	private static ClassContext _instance= new ClassContext();
-	
-	/*
-	 * N.B. Both static routines pick up the instance context directly
-	 * This ensures that both return the same stack depth
-	 */
-	 
-	/**
-	 * Gets the calling context as an array of classes
-	 * Class[0] is this class.
-	 *  
-	 * @return Class[] - list of classes in the callers context
-	 */
-	public static Class[] getMyClassContext()
-	{
-		return _instance.getClassContext();
-	}
-	/**
-	 * Get the name of the class at a particular stack depth
-	 * i=0 gives this class
-	 * 
-	 * @param i - stack depth
-	 * @return String - name of class at depth i
-	 */
-	public static String getCallerClassNameAt(int i){
-		return _instance.getClassContext()[i].getName();
-	}
+public class ClassContext extends SecurityManager
+{
+    private ClassContext()
+    { // don't allow others to instantiate this
+    }
+
+    private static ClassContext _instance = new ClassContext();
+
+    /*
+     * N.B. Both static routines pick up the instance context directly
+     * This ensures that both return the same stack depth
+     */
+
+    /**
+     * Gets the calling context as an array of classes
+     * Class[0] is this class.
+     *  
+     * @return Class[] - list of classes in the callers context
+     */
+    public static Class[] getMyClassContext()
+    {
+        return _instance.getClassContext();
+    }
+    /**
+     * Get the name of the class at a particular stack depth
+     * i=0 gives this class
+     * 
+     * @param i - stack depth
+     * @return String - name of class at depth i
+     */
+    public static String getCallerClassNameAt(int i)
+    {
+        return _instance.getClassContext()[i].getName();
+    }
 }
