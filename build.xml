@@ -830,16 +830,17 @@ some of its classes - at present JMeter can only run from jar files.
 
   <target name="docs-all" depends="docs-site,docs-printable,docs-api" description="Generate documentation."/>
 
-  <target name="test" depends="install" description="Run tests">
+  <target name="test" depends="install,test-only" description="Run tests"/>
+  
+  <target name="test-only">
    <echo >gump.run = ${gump.run}</echo>
    <java classname="org.apache.jorphan.test.AllTests" fork="yes" dir="${basedir}/bin">
       <classpath>
 	<path refid="classpath"/>
 	<fileset dir="${dest.jar}" includes="*.jar"/>
       </classpath>
-      <!-- Gump already does this...
+      <!-- Run headless if running under Gump -->
       <sysproperty key="java.awt.headless" value="${gump.run}"/>
-      -->
 
       <arg value="../lib/ext"/>
       <arg value="./jmetertest.properties"/>
