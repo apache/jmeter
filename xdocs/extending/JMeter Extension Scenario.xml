@@ -151,7 +151,7 @@ extension.
   look like <PRE>search_paths=ApacheJMeter.jar;classes;../ext/YourJar.jar</PRE></LI>
   <LI>Run JMeter and watch the magic. </LI></OL>
 
-<H2><A names="tips">Tips</A></H2>
+<H2><A name="tips">Tips</A></H2>
 <OL>
   <LI>You might consider using log4j as your logging utility since that's what
   JMeter uses. It's helpful for figuring out what's going on. Not all JMeter
