@@ -161,6 +161,9 @@ will use the ones provided by the user. If no host or port are provided and
 JMeter wasn't started with command line options, the sampler will fail
 silently. This behavior may not be what users expect.</p>
 
+<p><b>Note:</b> If you're using Cassini webserver, it does not work correctly and is not a reliable webserver. Cassini is meant to be a simple example and isn't a full blown webserver like IIS. Cassini does not close connections correctly, which causes JMeter to hang or not get the response contents.</p>
+<p>Currently, only .NET uses SOAPAction, so it is normal to have a blank SOAPAction for all other webservices. The list includes JWSDP, Weblogic, Axis, The Mind Electric Glue, and gSoap.</p>
+
 </section>
 
 <section name="10.3 Adding a Listener to View Store the Test Results" anchor="adding_listener">
