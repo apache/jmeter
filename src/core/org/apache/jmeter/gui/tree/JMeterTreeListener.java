@@ -39,7 +39,6 @@ import javax.swing.tree.TreePath;
 import org.apache.jmeter.control.gui.TestPlanGui;
 import org.apache.jmeter.control.gui.WorkBenchGui;
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.MainFrame;
 import org.apache.jmeter.gui.action.DragNDrop;
 import org.apache.jmeter.util.JMeterUtils;
@@ -299,7 +298,7 @@ public class JMeterTreeListener
                 {
                     tree.setSelectionPath(currentPath);
                 }
-                if (getCurrentNode() instanceof JMeterGUIComponent)
+                if (getCurrentNode() instanceof JMeterTreeNode)
                 {
                     log.debug("About to display pop-up");
                     displayPopUp(e);
@@ -368,8 +367,7 @@ public class JMeterTreeListener
 
     private void displayPopUp(MouseEvent e)
     {
-        JPopupMenu pop =
-            ((JMeterGUIComponent) getCurrentNode()).createPopupMenu();
+        JPopupMenu pop = getCurrentNode().createPopupMenu();
         GuiPackage.getInstance().displayPopUp(e, pop);
     }
 
