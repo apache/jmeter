@@ -134,6 +134,7 @@ public class JMeterTreeModel extends DefaultTreeModel
                 ((TestElement) current.getUserObject()).addTestElement(item);
                 ((TestPlan)current.getUserObject()).setName(item.getPropertyAsString(TestElement.NAME));
                 ((TestPlan)current.getUserObject()).setFunctionalMode(item.getPropertyAsBoolean(TestPlan.FUNCTIONAL_MODE));
+                ((TestPlan)current.getUserObject()).setSerialized(item.getPropertyAsBoolean(TestPlan.SERIALIZE_THREADGROUPS));
                 addSubTree(subTree.getTree(item), current);
             }
             else if(item instanceof WorkBench)
