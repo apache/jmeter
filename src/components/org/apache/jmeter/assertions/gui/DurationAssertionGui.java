@@ -55,39 +55,21 @@
 package org.apache.jmeter.assertions.gui;
 
 import java.awt.FlowLayout;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.Iterator;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultListCellRenderer;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.TableCellRenderer;
+
 import org.apache.jmeter.assertions.DurationAssertion;
-import org.apache.jmeter.assertions.ResponseAssertion;
-import org.apache.jmeter.gui.util.PowerTableModel;
-import org.apache.jmeter.gui.util.TextAreaCellRenderer;
-import org.apache.jmeter.gui.util.TextAreaTableCellEditor;
 import org.apache.jmeter.gui.util.VerticalLayout;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -139,7 +121,6 @@ public class DurationAssertionGui extends AbstractAssertionGui implements FocusL
 			assertionDuration = Long.parseLong(durationString);
 		}
 		catch (NumberFormatException e) {
-			System.out.println("exception");
 			assertionDuration = Long.MAX_VALUE;
 		}
 		el.setAllowedDuration(assertionDuration);
@@ -185,6 +166,7 @@ public class DurationAssertionGui extends AbstractAssertionGui implements FocusL
 
 		durationPanel.add(new JLabel(JMeterUtils.getResString("duration_assertion_label")));
 		duration = new JTextField(5);
+		duration.addFocusListener(this);
 		durationPanel.add(duration);
 
 		mainPanel.add(durationPanel);
@@ -199,6 +181,23 @@ public class DurationAssertionGui extends AbstractAssertionGui implements FocusL
 	 ***************************************/
 	public void focusLost(FocusEvent e)
 	{
+		boolean isInvalid = false;
+		String durationString = duration.getText();
+		if (durationString != null) {
+			try {
+				long assertionDuration = Long.parseLong(durationString);
+				if (assertionDuration < 0) {
+					isInvalid = true;
+				}
+			}
+			catch (NumberFormatException ex) {
+				isInvalid = true;
+			}
+			if (isInvalid) {
+				System.out.println("DurationAssertionGui: Not a valid number!");
+				JOptionPane.showMessageDialog(null, JMeterUtils.getResString("duration_assertion_input_error"), "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
 	}
 
 	/****************************************

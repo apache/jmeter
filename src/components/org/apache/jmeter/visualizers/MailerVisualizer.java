@@ -54,21 +54,40 @@
  */
  package org.apache.jmeter.visualizers;
 
-import java.io.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
-import java.util.*;
-import java.net.*;
-import javax.mail.*;
-import javax.mail.internet.*;
-//import javax.activation.* ;
+import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Properties;
-import org.apache.jmeter.util.*;
-import org.apache.jmeter.gui.util.*;
-import org.apache.jmeter.samplers.*;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+
+import org.apache.jmeter.gui.util.VerticalLayout;
+import org.apache.jmeter.samplers.Clearable;
+import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
 /*
@@ -337,13 +356,15 @@ public class MailerVisualizer extends AbstractVisualizer
 		}
 		catch (UnknownHostException e1)
 		{
-			System.out.println("NxError:Invalid Mail Server " + e1);
-			System.exit(1);
+			System.out.println("Invalid Mail Server " + e1);
+			JOptionPane.showMessageDialog(null, JMeterUtils.getResString("invalid_mail_server"), "Error", JOptionPane.ERROR_MESSAGE);
+			//System.exit(1);
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
-			System.exit(1);
+			System.out.println("Couldn't send mail...");
+			JOptionPane.showMessageDialog(null, JMeterUtils.getResString("mailer_error"), "Error", JOptionPane.ERROR_MESSAGE);
+			//System.exit(1);
 		}
 	}
 
@@ -494,9 +515,7 @@ public class MailerVisualizer extends AbstractVisualizer
 	 */
 	public String getStaticLabel()
 	{
-		// should be something like this:
-		//	return JMeterUtils.getResString("mailer_visualizer_title");
-		return "Mailer Visualizer";
+		return JMeterUtils.getResString("mailer_visualizer_title");
 	}
 
 	/**
@@ -508,9 +527,7 @@ public class MailerVisualizer extends AbstractVisualizer
 	 */
 	public String getAttributesTitle()
 	{
-		// should be something like this:
-		//	return JMeterUtils.getResString("mailer_attributes_panel")
-		return "Mailing attributes";
+		return JMeterUtils.getResString("mailer_attributes_panel");
 	}
 	/**
 	* Method used to log a String.
@@ -627,7 +644,4 @@ public class MailerVisualizer extends AbstractVisualizer
 
 }
 
-// new ressource_strings:
-// mailer_visualizer_title - used as the title of this Visualizer
-// mailer_attributes_panel - used as the title of the JPanel (EtchedBorder - title) where the attributes are entered
 
