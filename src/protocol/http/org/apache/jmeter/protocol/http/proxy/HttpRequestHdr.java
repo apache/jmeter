@@ -19,6 +19,7 @@ import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -29,7 +30,7 @@ import org.apache.log.Logger;
  */
 public class HttpRequestHdr
 {
-    Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     /**
      * Http Request method. Such as get or post.
@@ -50,6 +51,13 @@ public class HttpRequestHdr
     public String postData = "";
     static String CR = "\r\n";
     private Map headers = new HashMap();
+
+    /*
+     * Optionally number the requests
+     */    
+    private static boolean numberRequests
+	    = JMeterUtils.getPropDefault("proxy.number.requests",false);
+    private static int requestNumber = 0 ;// running number
  
     /**
      * Parses a http header from a stream.
@@ -200,7 +208,12 @@ public class HttpRequestHdr
         log.debug("Proxy: method server: " + sampler.getMethod());
         sampler.setPath(serverUrl());
         log.debug("Proxy: setting path: " + sampler.getEncodedPath());
-        sampler.setName(sampler.getPath());
+        if (numberRequests){
+        	requestNumber++;
+			sampler.setName(requestNumber + " " + sampler.getPath());
+        } else {
+			sampler.setName(sampler.getPath());
+        }
         sampler.setPort(serverPort());
         log.debug("Proxy: setting port: " + sampler.getPort());
         if (url.indexOf("//") > -1)
