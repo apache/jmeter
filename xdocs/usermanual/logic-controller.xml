@@ -28,7 +28,7 @@ request, and use them to dynamically create the next request.</li>
 other Logic Controllers to a Logic Controller. </p>  
 </section>
 
-<section name="4.2.2.1 Interleave Controller">
+<section name="4.2.2.1 Interleave Controller" anchor="interleave">
 <p>If you add Generative or Logic Controllers to an Interleave Controller, JMeter will alternate among each of the 
 other controllers for each loop iteration. </p>
 
@@ -93,7 +93,7 @@ Note, the File Reporter is configured to store the results in a file named "inte
 
 </section>
 
-<section name="4.2.2.2 Loop Controller">
+<section name="4.2.2.2 Loop Controller" anchor="loop">
 <p>If you add Generative or Logic Controllers to a Loop Controller, JMeter will 
 loop through them a certain number of times, in addition to the loop value you 
 specified for the Thread Group.  For example, if you add one HTTP Request to a 
@@ -123,12 +123,12 @@ is configured to store the results in a file named "loop-test.dat" in the curren
 
 </section>
 
-<section name="4.2.2.3 Modification Manager">
+<section name="4.2.2.3 Modification Manager" anchor="mod_manager">
 <p>Put description text here...</p>
 <p>This element has no visual elements.</p>
 </section>
 
-<section name="4.2.2.4 Once Only Controller">
+<section name="4.2.2.4 Once Only Controller" anchor="once_only">
 <p>The Once Only Logic Controller tells JMeter to process the controller(s) inside it only once, regardless of the loop 
 count value you specify in the Thread Group or Loop Controller.</p>
 
@@ -153,7 +153,7 @@ Bug Page, Bug Page. Note, the File Reporter is configured to store the results i
 <br>Figure x. Once Only Controller Example</br></p>
 </section>
 
-<section name="4.2.2.5 Simple Controller">
+<section name="4.2.2.5 Simple Controller" anchor="simple">
 
 <p>The Simple Logic Controller lets  you organize your Generative Controllers and other
 Logic Controllers.  Unlike other Logic Controllers, this controller provides no functionality beyond that of a 
