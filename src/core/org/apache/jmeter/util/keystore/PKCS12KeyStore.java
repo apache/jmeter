@@ -75,7 +75,8 @@ import java.util.Arrays;
  * @author <a href="bloritsch@apache.org">Berin Loritsch</a>
  * @version CVS $Revision$ $Date$
  */
-public class PKCS12KeyStore extends JmeterKeyStore {
+public class PKCS12KeyStore extends JmeterKeyStore
+{
     /** The Certificate chain */
     private X509Certificate[] certChain;
 
@@ -85,14 +86,16 @@ public class PKCS12KeyStore extends JmeterKeyStore {
     /** The alias */
     private String alias;
 
-    public PKCS12KeyStore(String type)
-    throws Exception {
-        if ( !"PKCS12".equalsIgnoreCase(type) ) {
+    public PKCS12KeyStore(String type) throws Exception
+    {
+        if (!"PKCS12".equalsIgnoreCase(type))
+        {
             throw new Exception("Invalid keystore type");
         }
     }
 
-    public final String getAlias() {
+    public final String getAlias()
+    {
         return this.alias;
     }
 
@@ -100,7 +103,8 @@ public class PKCS12KeyStore extends JmeterKeyStore {
      * Process PKCS12 input stream into the private key and certificate chain.
      */
     public void load(InputStream is, String pword)
-    throws IOException, PKCSException, CertificateException {
+        throws IOException, PKCSException, CertificateException
+    {
         PKCS12 p12 = new PKCS12(is);
         is.close();
 
@@ -108,7 +112,8 @@ public class PKCS12KeyStore extends JmeterKeyStore {
 
         KeyBag keyBag = p12.getKeyBag();
 
-        if (null == keyBag) {
+        if (null == keyBag)
+        {
             throw new PKCSException("No private key found");
         }
 
@@ -117,42 +122,50 @@ public class PKCS12KeyStore extends JmeterKeyStore {
         this.key = keyBag.getPrivateKey();
 
         CertificateBag[] certBags = p12.getCertificateBags();
-        if ((null == certBags) || (certBags.length == 0)) {
+        if ((null == certBags) || (certBags.length == 0))
+        {
             throw new PKCSException("No certificates found");
         }
 
         this.alias = new String(keyBagLocalKeyId);
         X509Certificate myCert = null;
 
-        for( int i=0; i < certBags.length; i++) {
+        for (int i = 0; i < certBags.length; i++)
+        {
             byte[] certBagLocalKeyId = certBags[i].getLocalKeyID();
-            if ((null != keyBagLocalKeyId) && (null != certBagLocalKeyId)) {
-                if (Arrays.equals(certBagLocalKeyId, keyBagLocalKeyId)) {
+            if ((null != keyBagLocalKeyId) && (null != certBagLocalKeyId))
+            {
+                if (Arrays.equals(certBagLocalKeyId, keyBagLocalKeyId))
+                {
                     myCert = certBags[i].getCertificate();
                     break;
                 }
             }
         }
 
-        if (null == myCert) {
+        if (null == myCert)
+        {
             throw new PKCSException("No owner certificate found");
         }
 
-        iaik.x509.X509Certificate[] certChain = CertificateBag.getCertificates(certBags);
+        iaik.x509.X509Certificate[] certChain =
+            CertificateBag.getCertificates(certBags);
         this.certChain = Util.arrangeCertificateChain(certChain, false);
     }
 
     /**
      * Get the ordered certificate chain.
      */
-    public final X509Certificate[] getCertificateChain() {
+    public final X509Certificate[] getCertificateChain()
+    {
         return this.certChain;
     }
 
     /**
      * Return the private Key
      */
-    public final PrivateKey getPrivateKey() {
+    public final PrivateKey getPrivateKey()
+    {
         return this.key;
     }
 }

@@ -55,16 +55,11 @@
  package org.apache.jmeter.util;
 
 /**
- * Title:        JMeter
- * Description:
- * Copyright:    Copyright (c) 2000
- * Company:      Apache
  * @author Michael Stover
- * @version 1.0
+ * @version $Revision$
  */
 
 public interface NamedObject
 {
-
-	public String getName();
+    public String getName();
 }

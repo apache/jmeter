@@ -67,32 +67,36 @@ import java.util.Enumeration;
  * @author <a href="bloritsch@apache.org">Berin Loritsch</a>
  * @version CVS $Revision$ $Date$
  */
-public class DefaultKeyStore extends JmeterKeyStore {
+public class DefaultKeyStore extends JmeterKeyStore
+{
     private X509Certificate[] certChain;
     private PrivateKey key;
     private String alias;
     private final KeyStore store;
 
-    public DefaultKeyStore(String type)
-    throws Exception {
+    public DefaultKeyStore(String type) throws Exception
+    {
         this.store = KeyStore.getInstance(type);
     }
 
-    public void load(InputStream is, String pword)
-    throws Exception {
+    public void load(InputStream is, String pword) throws Exception
+    {
         store.load(is, pword.toCharArray());
         PrivateKey key = null;
         X509Certificate[] certChain = null;
 
         Enumeration aliases = store.aliases();
-        while (aliases.hasMoreElements()) {
-	    this.alias = (String) aliases.nextElement();
-            if (store.isKeyEntry(alias)) {
+        while (aliases.hasMoreElements())
+        {
+            this.alias = (String) aliases.nextElement();
+            if (store.isKeyEntry(alias))
+            {
                 key = (PrivateKey) store.getKey(alias, pword.toCharArray());
                 Certificate[] chain = store.getCertificateChain(alias);
                 certChain = new X509Certificate[chain.length];
 
-                for (int i = 0; i < chain.length; i++) {
+                for (int i = 0; i < chain.length; i++)
+                {
                     certChain[i] = (X509Certificate) chain[i];
                 }
 
@@ -100,22 +104,31 @@ public class DefaultKeyStore extends JmeterKeyStore {
             }
         }
 
-        if (null == key) throw new Exception("No key found");
-        if (null == certChain) throw new Exception("No certificate chain found");
+        if (null == key)
+        {
+            throw new Exception("No key found");
+        }
+        if (null == certChain)
+        {
+            throw new Exception("No certificate chain found");
+        }
 
         this.key = key;
         this.certChain = certChain;
     }
 
-    public final X509Certificate[] getCertificateChain() {
+    public final X509Certificate[] getCertificateChain()
+    {
         return this.certChain;
     }
 
-    public final PrivateKey getPrivateKey() {
+    public final PrivateKey getPrivateKey()
+    {
         return this.key;
     }
 
-    public final String getAlias() {
+    public final String getAlias()
+    {
         return this.alias;
     }
 }

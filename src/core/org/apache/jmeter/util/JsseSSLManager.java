@@ -75,6 +75,7 @@ import com.sun.net.ssl.SSLContext;
 import com.sun.net.ssl.TrustManager;
 import com.sun.net.ssl.X509KeyManager;
 import com.sun.net.ssl.X509TrustManager;
+
 /**
  *  The SSLManager handles the KeyStore information for JMeter. Basically, it
  *  handles all the logic for loading and initializing all the JSSE parameters
@@ -89,7 +90,9 @@ import com.sun.net.ssl.X509TrustManager;
  */
 public class JsseSSLManager extends SSLManager
 {
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.util");
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.util");
+
     /**
      *  Cache the SecureRandom instance because it takes a long time to create
      */
@@ -100,11 +103,11 @@ public class JsseSSLManager extends SSLManager
     private SSLContext context = null;
     private Provider pro = null;
     /**
-     *  Private Constructor to remove the possibility of directly instantiating
-     *  this object. Create the SSLContext, and wrap all the X509KeyManagers with
-     *  our X509KeyManager so that we can choose our alias.
+     * Private Constructor to remove the possibility of directly instantiating
+     * this object. Create the SSLContext, and wrap all the X509KeyManagers
+     * with our X509KeyManager so that we can choose our alias.
      *
-     *@param  provider  Description of Parameter
+     * @param  provider  Description of Parameter
      */
     public JsseSSLManager(Provider provider)
     {
@@ -112,7 +115,9 @@ public class JsseSSLManager extends SSLManager
         setProvider(provider);
         try
         {
-            Class iaikProvider = SSLManager.class.getClassLoader().loadClass("iaik.security.jsse.provider.IAIKJSSEProvider");
+            Class iaikProvider =
+                SSLManager.class.getClassLoader().loadClass(
+                    "iaik.security.jsse.provider.IAIKJSSEProvider");
             setProvider((Provider) iaikProvider.newInstance());
         }
         catch (Exception e)
@@ -121,13 +126,17 @@ public class JsseSSLManager extends SSLManager
         {
             this.rand = new SecureRandom();
         }
-        if ("all".equalsIgnoreCase(JMeterUtils.getPropDefault("javax.net.debug", "none")))
+
+        if ("all"
+            .equalsIgnoreCase(
+                JMeterUtils.getPropDefault("javax.net.debug", "none")))
         {
             System.setProperty("javax.net.debug", "all");
         }
         this.getContext();
         log.info("JsseSSLManager installed");
     }
+
     /**
      *  Sets the Context attribute of the JsseSSLManager object
      *
@@ -137,20 +146,25 @@ public class JsseSSLManager extends SSLManager
     {
         if(conn instanceof com.sun.net.ssl.HttpsURLConnection)
         {
-            com.sun.net.ssl.HttpsURLConnection secureConn = (com.sun.net.ssl.HttpsURLConnection) conn;
-            secureConn.setSSLSocketFactory(this.getContext().getSocketFactory());
+            com.sun.net.ssl.HttpsURLConnection secureConn =
+                (com.sun.net.ssl.HttpsURLConnection) conn;
+            secureConn.setSSLSocketFactory(
+                this.getContext().getSocketFactory());
         }
-        else if(conn instanceof sun.net.www.protocol.https.HttpsURLConnectionImpl)
+        else if (
+            conn instanceof sun.net.www.protocol.https.HttpsURLConnectionImpl)
         {
-            sun.net.www.protocol.https.HttpsURLConnectionImpl secureConn = (sun.net.www.protocol.https.HttpsURLConnectionImpl)conn;
-            secureConn.setSSLSocketFactory(this.getContext().getSocketFactory());
-        }
-        
+            sun.net.www.protocol.https.HttpsURLConnectionImpl secureConn =
+                (sun.net.www.protocol.https.HttpsURLConnectionImpl) conn;
+            secureConn.setSSLSocketFactory(
+                this.getContext().getSocketFactory());
+        }        
     }
+    
     /**
-     *  Sets the Provider attribute of the JsseSSLManager object
+     * Sets the Provider attribute of the JsseSSLManager object
      *
-     *@param  p  The new Provider value
+     * @param  p  The new Provider value
      */
     protected final void setProvider(Provider p)
     {
@@ -160,11 +174,12 @@ public class JsseSSLManager extends SSLManager
             this.pro = p;
         }
     }
+    
     /**
-     *  Returns the SSLContext we are using. It is useful for obtaining the
-     *  SSLSocketFactory so that your created sockets are authenticated.
+     * Returns the SSLContext we are using. It is useful for obtaining the
+     * SSLSocketFactory so that your created sockets are authenticated.
      *
-     *@return    The Context value
+     * @return    The Context value
      */
     private SSLContext getContext()
     {
@@ -188,7 +203,8 @@ public class JsseSSLManager extends SSLManager
             }
             try
             {
-                KeyManagerFactory managerFactory = KeyManagerFactory.getInstance("SunX509");
+                KeyManagerFactory managerFactory =
+                    KeyManagerFactory.getInstance("SunX509");
                 JmeterKeyStore keys = this.getKeyStore();
                 managerFactory.init(null, this.defaultpw.toCharArray());
                 KeyManager[] managers = managerFactory.getKeyManagers();
@@ -201,12 +217,18 @@ public class JsseSSLManager extends SSLManager
                         managers[i] = new WrappedX509KeyManager(manager, keys);
                     }
                 }
-                TrustManager[] trusts = new TrustManager[] { new AlwaysTrustManager(this.getTrustStore())};
+                TrustManager[] trusts =
+                    new TrustManager[] {
+                         new AlwaysTrustManager(this.getTrustStore())};
                 context.init(managers, trusts, this.rand);
-                HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
-                HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier()
+                HttpsURLConnection.setDefaultSSLSocketFactory(
+                    context.getSocketFactory());
+                HttpsURLConnection
+                    .setDefaultHostnameVerifier(new HostnameVerifier()
                 {
-                    public boolean verify(String urlHostname, String certHostname)
+                    public boolean verify(
+                        String urlHostname,
+                        String certHostname)
                     {
                         return true;
                     }
@@ -217,9 +239,15 @@ public class JsseSSLManager extends SSLManager
             {
                 log.error("Exception occurred",e);
             }
-            String[] dCiphers = this.context.getSocketFactory().getDefaultCipherSuites();
-            String[] sCiphers = this.context.getSocketFactory().getSupportedCipherSuites();
-            int len = (dCiphers.length > sCiphers.length) ? dCiphers.length : sCiphers.length;
+
+            String[] dCiphers =
+                this.context.getSocketFactory().getDefaultCipherSuites();
+            String[] sCiphers =
+                this.context.getSocketFactory().getSupportedCipherSuites();
+            int len =
+                (dCiphers.length > sCiphers.length)
+                    ? dCiphers.length
+                    : sCiphers.length;
             for (int i = 0; i < len; i++)
             {
                 if (i < dCiphers.length)
@@ -234,11 +262,10 @@ public class JsseSSLManager extends SSLManager
         }
         return this.context;
     }
+
     /**
-     *  Description of the Class
-     *
-     *@author     MStover
-     *@created    March 21, 2002
+     * @author     MStover
+     * @created    March 21, 2002
      */
     protected static class AlwaysTrustManager implements X509TrustManager
     {
@@ -256,7 +283,8 @@ public class JsseSSLManager extends SSLManager
             try
             {
                 java.util.Enumeration enum = store.aliases();
-                java.util.ArrayList list = new java.util.ArrayList(store.size());
+                java.util.ArrayList list =
+                    new java.util.ArrayList(store.size());
                 while (enum.hasMoreElements())
                 {
                     String alias = (String) enum.nextElement();
@@ -271,13 +299,16 @@ public class JsseSSLManager extends SSLManager
                         log.info(" SKIPPED");
                     }
                 }
-                this.certs = (X509Certificate[]) list.toArray(new X509Certificate[] {});
+                this.certs =
+                    (X509Certificate[]) list.toArray(new X509Certificate[] {
+                });
             }
             catch (Exception e)
             {
                 this.certs = null;
             }
         }
+
         /**
          *  Gets the AcceptedIssuers attribute of the AlwaysTrustManager object
          *
@@ -291,27 +322,23 @@ public class JsseSSLManager extends SSLManager
         /* (non-Javadoc)
          * @see X509TrustManager#checkClientTrusted(X509Certificate[], String)
          */
-        public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException
+        public void checkClientTrusted(X509Certificate[] arg0, String arg1)
+            throws CertificateException
         {}
 
         /* (non-Javadoc)
          * @see X509TrustManager#checkServerTrusted(X509Certificate[], String)
          */
-        public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException
+        public void checkServerTrusted(X509Certificate[] arg0, String arg1)
+            throws CertificateException
         {}
 
-        /* (non-Javadoc)
-         * @see com.sun.net.ssl.X509TrustManager#isClientTrusted(X509Certificate[])
-         */
         public boolean isClientTrusted(X509Certificate[] arg0)
         {
             // TODO Auto-generated method stub
             return true;
         }
 
-        /* (non-Javadoc)
-         * @see com.sun.net.ssl.X509TrustManager#isServerTrusted(X509Certificate[])
-         */
         public boolean isServerTrusted(X509Certificate[] arg0)
         {
             // TODO Auto-generated method stub
@@ -320,11 +347,11 @@ public class JsseSSLManager extends SSLManager
 
     }
     /**
-     *  This is the X509KeyManager we have defined for the sole purpose of selecing
-     *  the proper key and certificate based on the keystore available.
+     * This is the X509KeyManager we have defined for the sole purpose of
+     * selecting the proper key and certificate based on the keystore available.
      *
-     *@author     MStover
-     *@created    March 21, 2002
+     * @author     MStover
+     * @created    March 21, 2002
      */
     private static class WrappedX509KeyManager implements X509KeyManager
     {
@@ -348,12 +375,14 @@ public class JsseSSLManager extends SSLManager
             this.store = ks;
         }
         /**
-         *  Compiles the list of all client aliases with a private key. Currently,
-         *  keyType and issuers are both ignored.
+         * Compiles the list of all client aliases with a private key.
+         * Currently,  keyType and issuers are both ignored.
          *
-         *@param  keyType  The type of private key the server expects (RSA, DSA, etc.)
-         *@param  issuers  The CA certificates we are narrowing our selection on.
-         *@return          The ClientAliases value
+         *@param  keyType  the type of private key the server expects (RSA,
+         *                 DSA, etc.)
+         *@param  issuers  the CA certificates we are narrowing our selection
+         *                 on.
+         *@return          the ClientAliases value
          */
         public String[] getClientAliases(String keyType, Principal[] issuers)
         {
@@ -362,19 +391,23 @@ public class JsseSSLManager extends SSLManager
             return new String[] { this.store.getAlias()};
         }
         /**
-         *  Get the list of server aliases for the SSLServerSockets. This is not used
-         *  in JMeter.
+         * Get the list of server aliases for the SSLServerSockets. This is not
+         * used in JMeter.
          *
-         *@param  keyType  The type of private key the server expects (RSA, DSA, etc.)
-         *@param  issuers  The CA certificates we are narrowing our selection on.
-         *@return          The ServerAliases value
+         * @param  keyType  the type of private key the server expects (RSA,
+         *                  DSA, etc.)
+         * @param  issuers  the CA certificates we are narrowing our selection
+         *                  on.
+         * @return          the ServerAliases value
          */
         public String[] getServerAliases(String keyType, Principal[] issuers)
         {
             log.info("WrappedX509Manager: getServerAliases: ");
-            log.info(this.manager.getServerAliases(keyType, issuers).toString());
+            log.info(
+                this.manager.getServerAliases(keyType, issuers).toString());
             return this.manager.getServerAliases(keyType, issuers);
         }
+
         /**
          *  Get the Certificate chain for a particular alias
          *
@@ -387,6 +420,7 @@ public class JsseSSLManager extends SSLManager
             log.info(this.store.getCertificateChain().toString());
             return this.store.getCertificateChain();
         }
+
         /**
          *  Get the Private Key for a particular alias
          *
@@ -395,9 +429,12 @@ public class JsseSSLManager extends SSLManager
          */
         public PrivateKey getPrivateKey(String alias)
         {
-            log.info("WrappedX509Manager: getPrivateKey: " + this.store.getPrivateKey());
+            log.info(
+                "WrappedX509Manager: getPrivateKey: "
+                    + this.store.getPrivateKey());
             return this.store.getPrivateKey();
         }
+
         /**
          * Select the Alias we will authenticate as if Client authentication is
          * required by the server we are connecting to. We get the list of
@@ -408,7 +445,10 @@ public class JsseSSLManager extends SSLManager
          * have to match one in the  keystore.
          * @see javax.net.ssl.X509KeyManager#chooseClientAlias(java.lang.String, java.security.Principal, java.net.Socket)
          */
-        public String chooseClientAlias(String[] arg0, Principal[] arg1, Socket arg2)
+        public String chooseClientAlias(
+            String[] arg0,
+            Principal[] arg1,
+            Socket arg2)
         {
             log.info("Alias: " + this.store.getAlias());
             return this.store.getAlias();
@@ -419,26 +459,22 @@ public class JsseSSLManager extends SSLManager
          * in  JMeter.
          * @see javax.net.ssl.X509KeyManager#chooseServerAlias(java.lang.String, java.security.Principal, java.net.Socket)
          */
-        public String chooseServerAlias(String arg0, Principal[] arg1, Socket arg2)
+        public String chooseServerAlias(
+            String arg0,
+            Principal[] arg1,
+            Socket arg2)
         {
             return this.manager.chooseServerAlias(arg0, arg1);
         }
 
-        /* (non-Javadoc)
-         * @see com.sun.net.ssl.X509KeyManager#chooseClientAlias(java.lang.String, java.security.Principal[])
-         */
         public String chooseClientAlias(String arg0, Principal[] arg1)
         {
             return store.getAlias();
         }
 
-        /* (non-Javadoc)
-         * @see com.sun.net.ssl.X509KeyManager#chooseServerAlias(java.lang.String, java.security.Principal[])
-         */
         public String chooseServerAlias(String arg0, Principal[] arg1)
         {
             return manager.chooseServerAlias(arg0,arg1);
         }
-
     }
 }
