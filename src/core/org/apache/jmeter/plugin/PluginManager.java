@@ -80,13 +80,8 @@ public class PluginManager
 	 * Installs a plugin.
 	 * @param plugin The plugin to install.
 	 * @param useGui Indication of whether or not the gui will be used.
-	 * @throws ClassNotFoundException
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
 	 */
     public static void install(JMeterPlugin plugin, boolean useGui)
-            throws ClassNotFoundException, InstantiationException,
-		    IllegalAccessException
     {
     	if (useGui)
     	{
@@ -96,8 +91,6 @@ public class PluginManager
 
 
     private void installPlugin(JMeterPlugin plugin)
-            throws ClassNotFoundException, InstantiationException,
-		    IllegalAccessException
     {
         String[][] icons = plugin.getIconMappings();
         ClassLoader classloader = plugin.getClass().getClassLoader();
@@ -115,6 +108,5 @@ public class PluginManager
                 GUIFactory.registerIcon(icons[i][0], new ImageIcon(resource));
             }
         }
-    }
-    
+    } 
 }
