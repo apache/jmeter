@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,23 +57,20 @@ package org.apache.jmeter.control.gui;
 
 
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.ModuleController;
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.NamePanel;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -107,24 +104,9 @@ public class ModuleControllerGui extends AbstractControllerGui /*implements Unsh
 	 * Initializes the gui panel for the ModuleController instance.
 	 */
 	public ModuleControllerGui() {
-		initialize();
-		setName(getStaticLabel());		
+		init();
 	}
 
-
-	/**
-	 * @see	String
-	 */
-	public void setName(String name) {
-		namePanel.setName(name);
-	}
-
-	/**
-	 * @see	String
-	 */
-	public String getName() {
-		return namePanel.getName();
-	}
 
 	/** 
 	 * @see	org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
@@ -192,34 +174,17 @@ public class ModuleControllerGui extends AbstractControllerGui /*implements Unsh
 	}
 
 
-	private void initialize() {
+	private void init() {
 		
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(getStaticLabel());
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
-
-		// NAME
-		namePanel = new NamePanel();
-		mainPanel.add(namePanel);
-
-		this.add(mainPanel);
+		add(createTitleLabel());
+        add(getNamePanel());
 			
 		// DROP-DOWN MENU
-		JPanel containersPanel = new JPanel();
-		containersPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		containersPanel.add( new JLabel( CONTROLLER ) );
+		JPanel modulesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		modulesPanel.add( new JLabel( CONTROLLER ) );
 		
 		nodesModel = new DefaultComboBoxModel();
 
@@ -244,9 +209,9 @@ public class ModuleControllerGui extends AbstractControllerGui /*implements Unsh
 		} catch ( ClassNotFoundException e ) {
 		}
 		 
-		containersPanel.add( nodes );
-		mainPanel.add( containersPanel );
+		modulesPanel.add( nodes );
 
+		add( modulesPanel );
 	}
 	
 	private void reinitialize() {

@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,18 +53,13 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control.gui;
-import java.awt.Font;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.BorderFactory;
 import javax.swing.JPopupMenu;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.control.ModifyController;
-import org.apache.jmeter.gui.NamePanel;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -75,20 +70,17 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *
  *@author    Kevin Hammond
  *@created   $Date$
- *@version   1.0
+ *@version   $Revision$
  ***************************************/
 
 public class ModifyControllerGui extends AbstractControllerGui
 {
-	ModifyController model;
-
 	/****************************************
 	 * !ToDo (Constructor description)
 	 ***************************************/
 	public ModifyControllerGui()
 	{
 		init();
-		setName(getStaticLabel());
 	}
 	
 	/****************************************
@@ -132,27 +124,6 @@ public class ModifyControllerGui extends AbstractControllerGui
 	/****************************************
 	 * !ToDo (Method description)
 	 *
-	 *@param name  !ToDo (Parameter description)
-	 ***************************************/
-	public void setName(String name)
-	{
-		super.setName(name);
-		namePanel.setName(name);
-	}
-
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getName()
-	{
-		return namePanel.getName();
-	}
-
-	/****************************************
-	 * !ToDo (Method description)
-	 *
 	 *@return   !ToDo (Return description)
 	 ***************************************/
 	public TestElement createTestElement()
@@ -173,26 +144,10 @@ public class ModifyControllerGui extends AbstractControllerGui
 
 	private void init()
 	{
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("modification_manager_title"));
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
-
-		// NAME
-		namePanel = new NamePanel();
-		mainPanel.add(namePanel);
-
-		this.add(mainPanel);
+		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+        
+		add(createTitleLabel());
+        add(getNamePanel());
 	}
 }

@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,16 +53,10 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control.gui;
-import java.awt.Font;
-
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.control.InterleaveControl;
-import org.apache.jmeter.gui.NamePanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
@@ -72,13 +66,13 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *
  *@author    Kevin Hammond
  *@created   $Date$
- *@version   1.0
+ *@version   $Revision$
  ***************************************/
 
 public class InterleaveControlGui extends AbstractControllerGui
 {
-	InterleaveControl model;
-	JCheckBox style;
+	private InterleaveControl model;
+	private JCheckBox style;
 
 	/****************************************
 	 * !ToDo (Constructor description)
@@ -86,29 +80,8 @@ public class InterleaveControlGui extends AbstractControllerGui
 	public InterleaveControlGui()
 	{
 		init();
-		setName(getStaticLabel());
 	}
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param name  !ToDo (Parameter description)
-	 ***************************************/
-	public void setName(String name)
-	{
-		namePanel.setName(name);
-	}
-
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getName()
-	{
-		return namePanel.getName();
-	}
-	
 	public void configure(TestElement el)
 	{
 		super.configure(el);
@@ -163,28 +136,13 @@ public class InterleaveControlGui extends AbstractControllerGui
 
 	private void init()
 	{
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+		add(createTitleLabel());
+        add(getNamePanel());
 
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("interleave_control_title"));
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
-
-		// NAME
-		namePanel = new NamePanel();
-		mainPanel.add(namePanel);
-
-		this.add(mainPanel);
 		style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers"));
-		this.add(style);
+		add(style);
 	}
 }
