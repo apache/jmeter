@@ -80,7 +80,10 @@ public class FtpConfig extends ConfigTestElement implements Serializable
             return true;
         }
         else
+        {
             return false;
+        }
+
     }
 
     public void setServer(String newServer)
