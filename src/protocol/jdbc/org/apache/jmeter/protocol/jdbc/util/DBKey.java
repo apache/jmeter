@@ -54,9 +54,6 @@
  */
 package org.apache.jmeter.protocol.jdbc.util;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public class DBKey implements Serializable
@@ -64,17 +61,6 @@ public class DBKey implements Serializable
 
     public DBKey()
     {
-    }
-
-    void readObject(ObjectInputStream ois)
-        throws ClassNotFoundException, IOException
-    {
-        ois.defaultReadObject();
-    }
-
-    void writeObject(ObjectOutputStream oos) throws IOException
-    {
-        oos.defaultWriteObject();
     }
 
     public void setUrl(String newUrl)
@@ -145,9 +131,13 @@ public class DBKey implements Serializable
     public boolean equals(Object key)
     {
         if (key instanceof DBKey)
+        {
             return url.equals(((DBKey) key).getUrl());
+        }
         else
+        {
             return false;
+        }
     }
 
     public int hashCode()
