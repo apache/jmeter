@@ -222,7 +222,7 @@ public class TCPSampler extends AbstractSampler implements TestListener
         SampleResult res = new SampleResult();
         boolean isSuccessful = false;
         res.setSampleLabel(getLabel());
-        long start = System.currentTimeMillis();
+        res.sampleStart();
         try
         {
 			Socket sock = getSocket();
@@ -252,8 +252,7 @@ public class TCPSampler extends AbstractSampler implements TestListener
         }
 
         // Calculate response time
-        long end = System.currentTimeMillis();
-        res.setTime(end - start);
+        res.sampleEnd();
 
         // Set if we were successful or not
         res.setSuccessful(isSuccessful);
