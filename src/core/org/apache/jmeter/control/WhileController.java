@@ -52,6 +52,10 @@ public class WhileController extends GenericController implements Serializable
      */
     public boolean isDone()
     {
+		if (getSubControllers().size() == 0) // Nothing left to run
+        {
+            return true;
+        }
         return false;// Never want to remove the controller from the tree
     }
 
