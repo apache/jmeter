@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -70,133 +70,132 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
-/************************************************************
- *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author     Michael Stover
- *@created    $Date$
- *@version    1.0
- ***********************************************************/
-
-public class JMeterTreeNode extends DefaultMutableTreeNode
-	implements JMeterGUIComponent
+/**
+ * @author     Michael Stover
+ * @version    $Revision$
+ */
+public class JMeterTreeNode
+    extends DefaultMutableTreeNode
+    implements JMeterGUIComponent
 {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-					"jmeter.gui");
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
     JMeterTreeModel treeModel;
     boolean enabled = true;
 
+    public JMeterTreeNode(TestElement userObj, JMeterTreeModel treeModel)
+    {
+        super(userObj);
+        this.treeModel = treeModel;
+    }
 
-	public JMeterTreeNode(TestElement userObj, JMeterTreeModel treeModel)
-	{
-		super(userObj);
-		this.treeModel = treeModel;
-	}
+    public boolean isEnabled()
+    {
+        return (
+            (AbstractTestElement) createTestElement()).getPropertyAsBoolean(
+            TestElement.ENABLED);
+    }
 
-	public boolean isEnabled()
-	{
-		return ((AbstractTestElement)createTestElement()).getPropertyAsBoolean(TestElement.ENABLED);
-	}
+    public void setEnabled(boolean enabled)
+    {
+        createTestElement().setProperty(
+            new BooleanProperty(TestElement.ENABLED, enabled));
+    }
 
-	public void setEnabled(boolean enabled)
-	{
-		createTestElement().setProperty(new BooleanProperty(TestElement.ENABLED,enabled));
-	}
-    
     public void clear()
     {
     }
 
-	public ImageIcon getIcon()
-	{
-		try
-		{
-			return GUIFactory.getIcon(Class.forName(createTestElement().getPropertyAsString(TestElement.GUI_CLASS)));
-		}
-		catch (ClassNotFoundException e)
-		{
-			log.warn("Can't get icon for class " + 
-					createTestElement(),e);
-			return null;
-		}
-	}
-
-	public Collection getMenuCategories()
-	{
-		try
-		{
-			return GuiPackage.getInstance().getGui(createTestElement()).getMenuCategories();
-		}
-		catch (Exception e)
-		{
-			log.error("Can't get popup menu for gui",e);
-			return null;
-		}
-	}
-
-	public JPopupMenu createPopupMenu()
-	{
-		try
-		{
-			return GuiPackage.getInstance().getGui(createTestElement()).createPopupMenu();
-		}
-		catch (Exception e)
-		{
-			log.error("Can't get popup menu for gui",e);
-			return null;
-		}
-	}
-
-	public void configure(TestElement element)
-	{
-		
-	}
-    
-    /**
-         * Modifies a given TestElement to mirror the data in the gui components.
-         * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-         */
-    public void modifyTestElement(TestElement el)
+    public ImageIcon getIcon()
     {
-        
+        try
+        {
+            return GUIFactory.getIcon(
+                Class.forName(
+                    createTestElement().getPropertyAsString(
+                        TestElement.GUI_CLASS)));
+        }
+        catch (ClassNotFoundException e)
+        {
+            log.warn("Can't get icon for class " + createTestElement(), e);
+            return null;
+        }
     }
 
-	public TestElement createTestElement()
-	{
-		return (TestElement)getUserObject();
-	}
+    public Collection getMenuCategories()
+    {
+        try
+        {
+            return GuiPackage
+                .getInstance()
+                .getGui(createTestElement())
+                .getMenuCategories();
+        }
+        catch (Exception e)
+        {
+            log.error("Can't get popup menu for gui", e);
+            return null;
+        }
+    }
 
-	public String getStaticLabel()
-	{
-		return GuiPackage.getInstance().getGui((TestElement)getUserObject()).getStaticLabel();
-	}
+    public JPopupMenu createPopupMenu()
+    {
+        try
+        {
+            return GuiPackage
+                .getInstance()
+                .getGui(createTestElement())
+                .createPopupMenu();
+        }
+        catch (Exception e)
+        {
+            log.error("Can't get popup menu for gui", e);
+            return null;
+        }
+    }
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 *
-	 *@param  name  !ToDo (Parameter description)
-	 ***********************************************************/
-	public void setName(String name)
-	{
-		((TestElement)getUserObject()).setProperty(new StringProperty(TestElement.NAME,name));
-	}
+    public void configure(TestElement element)
+    {
 
-	/************************************************************
-	 *  !ToDoo (Method description)
-	 *
-	 *@return    !ToDo (Return description)
-	 ***********************************************************/
-	public String getName()
-	{
-		return ((TestElement)getUserObject()).getPropertyAsString(TestElement.NAME);
-	}
+    }
 
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     */
+    public void modifyTestElement(TestElement el)
+    {
+
+    }
+
+    public TestElement createTestElement()
+    {
+        return (TestElement) getUserObject();
+    }
+
+    public String getStaticLabel()
+    {
+        return GuiPackage
+            .getInstance()
+            .getGui((TestElement) getUserObject())
+            .getStaticLabel();
+    }
+
+    public void setName(String name)
+    {
+        ((TestElement) getUserObject()).setProperty(
+            new StringProperty(TestElement.NAME, name));
+    }
+
+    public String getName()
+    {
+        return ((TestElement) getUserObject()).getPropertyAsString(
+            TestElement.NAME);
+    }
 
     public void setNode(JMeterTreeNode node)
     {
-        
-    }
 
+    }
 
     public void nameChanged()
     {
