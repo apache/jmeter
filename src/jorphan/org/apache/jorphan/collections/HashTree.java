@@ -804,7 +804,11 @@ public class HashTree implements Serializable, Map
      */
     public Object[] getArray(Object key)
     {
-        return getTree(key).getArray();
+       HashTree t = getTree(key);
+       if(t != null)
+        return t.getArray();
+       else
+          return null;
     }
     
     /**
