@@ -1,72 +1,112 @@
-<?xml version="1.0"?>
-
-<TestPlan>
-<threadgroups>
-<ThreadGroup name="Jakarta Users" numThreads="2" rampUp="0">
-<controllers>
-<LoopController type="org.apache.jmeter.control.LoopController" name="Loop Controller" iterations="3">
-<configElements>
-<ConfigElement type="org.apache.jmeter.protocol.http.config.UrlConfig">
-<property name="name">Defaults</property>
-<property name="PROTOCOL">http</property>
-<property name="domain">jakarta.apache.org</property>
-<property name="arguments"><Arguments>
-</Arguments>
-</property>
-<property name="path">/</property>
-<property name="method">GET</property>
-</ConfigElement>
-</configElements>
-<controllers>
-<Controller type="org.apache.jmeter.control.OnceOnlyController" name="Once Only Controller">
-<configElements>
-</configElements>
-<controllers>
-<HttpTestSample type="org.apache.jmeter.protocol.http.control.HttpTestSample" name="Home Page" getImages="false">
-<defaultUrl>
-<ConfigElement type="org.apache.jmeter.protocol.http.config.MultipartUrlConfig">
-<property name="PROTOCOL">http</property>
-<property name="arguments"><Arguments>
-</Arguments>
-</property>
-<property name="path">/</property>
-<property name="method">GET</property>
-</ConfigElement></defaultUrl>
-<configElements>
-</configElements>
-<controllers>
-</controllers>
-</HttpTestSample>
-
-</controllers>
-</Controller>
-<HttpTestSample type="org.apache.jmeter.protocol.http.control.HttpTestSample" name="Bug Page" getImages="false">
-<defaultUrl>
-<ConfigElement type="org.apache.jmeter.protocol.http.config.MultipartUrlConfig">
-<property name="PROTOCOL">http</property>
-<property name="arguments"><Arguments>
-</Arguments>
-</property>
-<property name="path">/site/bugs.html</property>
-<property name="method">GET</property>
-</ConfigElement></defaultUrl>
-<configElements>
-</configElements>
-<controllers>
-</controllers>
-</HttpTestSample>
-
-</controllers>
-</LoopController>
-</controllers>
-<timers>
-</timers>
-<listeners>
-<Filer type="org.apache.jmeter.reporters.Filer" name="File Reporter" verbose="true" append="false" autoFlush="false" viewSubmitData="true" file="once-only-test.dat"/>
-</listeners>
-</ThreadGroup>
-
-</threadgroups>
-<configElements>
-</configElements>
-</TestPlan>
+<?xml version="1.0" encoding="UTF-8"?>
+<node>
+<testelement class="org.apache.jmeter.testelement.TestPlan">
+<testelement class="org.apache.jmeter.config.Arguments" name="TestPlan.user_defined_variables">
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
+<collection class="java.util.ArrayList" name="Arguments.arguments"/>
+<property xml:space="preserve" name="TestElement.name">Argument List</property>
+</testelement>
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.control.gui.TestPlanGui</property>
+<collection class="java.util.LinkedList" name="TestPlan.thread_groups"/>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.testelement.TestPlan</property>
+<property xml:space="preserve" name="TestElement.name">Test Plan</property>
+<property xml:space="preserve" name="TestPlan.functional_mode">false</property>
+</testelement>
+<node>
+<testelement class="org.apache.jmeter.threads.ThreadGroup">
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.threads.gui.ThreadGroupGui</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.threads.ThreadGroup</property>
+<testelement class="org.apache.jmeter.control.LoopController" name="ThreadGroup.main_controller">
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</property>
+<property xml:space="preserve" name="LoopController.loops">3</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.control.LoopController</property>
+<property xml:space="preserve" name="TestElement.name">Loop Controller</property>
+<property xml:space="preserve" name="LoopController.continue_forever">false</property>
+</testelement>
+<property xml:space="preserve" name="TestElement.name">Jakarta Users</property>
+<property xml:space="preserve" name="ThreadGroup.num_threads">2</property>
+<property xml:space="preserve" name="ThreadGroup.ramp_time">0</property>
+</testelement>
+<node>
+<testelement class="org.apache.jmeter.config.ConfigTestElement">
+<property xml:space="preserve" name="HTTPSampler.path">/</property>
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</property>
+<property xml:space="preserve" name="TestElement.name">Defaults</property>
+<property xml:space="preserve" name="HTTPSampler.domain">jakarta.apache.org</property>
+<property xml:space="preserve" name="HTTPSampler.port"/>
+<testelement class="org.apache.jmeter.config.Arguments" name="HTTPsampler.Arguments">
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
+<collection class="java.util.ArrayList" name="Arguments.arguments"/>
+<property xml:space="preserve" name="TestElement.name"/>
+</testelement>
+</testelement>
+</node>
+<node>
+<testelement class="org.apache.jmeter.control.OnceOnlyController">
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.control.gui.OnceOnlyControllerGui</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.control.OnceOnlyController</property>
+<property xml:space="preserve" name="TestElement.name">Once Only Controller</property>
+</testelement>
+<node>
+<testelement class="org.apache.jmeter.protocol.http.sampler.HTTPSampler">
+<property xml:space="preserve" name="HTTPSampler.mimetype"/>
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
+<property xml:space="preserve" name="HTTPSampler.path">/</property>
+<collection class="java.util.ArrayList" name="AbstractSampler.assertions"/>
+<property xml:space="preserve" name="HTTPSampler.FILE_FIELD"/>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
+<property xml:space="preserve" name="HTTPSampler.method">GET</property>
+<property xml:space="preserve" name="TestElement.name">Home Page</property>
+<property xml:space="preserve" name="HTTPSampler.domain"/>
+<property xml:space="preserve" name="HTTPSampler.use_keepalive">false</property>
+<property xml:space="preserve" name="HTTPSampler.protocol">http</property>
+<property xml:space="preserve" name="HTTPSampler.follow_redirects">false</property>
+<property xml:space="preserve" name="HTTPSampler.port"/>
+<testelement class="org.apache.jmeter.config.Arguments" name="HTTPsampler.Arguments">
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
+<collection class="java.util.ArrayList" name="Arguments.arguments"/>
+<property xml:space="preserve" name="TestElement.name"/>
+</testelement>
+<property xml:space="preserve" name="HTTPSampler.FILE_NAME"/>
+</testelement>
+</node>
+</node>
+<node>
+<testelement class="org.apache.jmeter.protocol.http.sampler.HTTPSampler">
+<property xml:space="preserve" name="HTTPSampler.mimetype"/>
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
+<property xml:space="preserve" name="HTTPSampler.path">/site/bugs.html</property>
+<collection class="java.util.ArrayList" name="AbstractSampler.assertions"/>
+<property xml:space="preserve" name="HTTPSampler.FILE_FIELD"/>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
+<property xml:space="preserve" name="HTTPSampler.method">GET</property>
+<property xml:space="preserve" name="TestElement.name">Bug Page</property>
+<property xml:space="preserve" name="HTTPSampler.domain"/>
+<property xml:space="preserve" name="HTTPSampler.use_keepalive">false</property>
+<property xml:space="preserve" name="HTTPSampler.protocol">http</property>
+<property xml:space="preserve" name="HTTPSampler.follow_redirects">false</property>
+<property xml:space="preserve" name="HTTPSampler.port"/>
+<testelement class="org.apache.jmeter.config.Arguments" name="HTTPsampler.Arguments">
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
+<collection class="java.util.ArrayList" name="Arguments.arguments"/>
+<property xml:space="preserve" name="TestElement.name"/>
+</testelement>
+<property xml:space="preserve" name="HTTPSampler.FILE_NAME"/>
+</testelement>
+</node>
+<node>
+<testelement class="org.apache.jmeter.reporters.ResultCollector">
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.visualizers.GraphVisualizer</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.reporters.ResultCollector</property>
+<property xml:space="preserve" name="TestElement.name">File Reporter</property>
+<property xml:space="preserve" name="filename">once-only-test.dat</property>
+<property xml:space="preserve" name="ResultCollector.error_logging">false</property>
+</testelement>
+</node>
+</node>
+</node>

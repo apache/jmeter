@@ -211,7 +211,7 @@ public class Save implements Command
 		public void testTreeConversion() throws Exception
 		{
 			HashTree tree = new ListedHashTree();
-			JMeterGUIComponent root = new org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui();
+			JMeterGUIComponent root = new org.apache.jmeter.config.gui.ArgumentsPanel();
 			tree.add(root,root);
 			tree.getTree(root).add(root,root);
 			save.convertSubTree(tree);

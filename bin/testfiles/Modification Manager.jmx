@@ -1,41 +1,85 @@
-<?xml version="1.0"?>
-
-<Controller type="org.apache.jmeter.control.ModifyController" name="Modification Manager">
-<configElements>
-</configElements>
-<controllers>
-<HttpTestSample type="org.apache.jmeter.protocol.http.control.HttpTestSample" name="Web Testing">
-<defaultUrl>
-<ConfigElement type="org.apache.jmeter.protocol.http.config.UrlConfig">
-<property name="port">80</property>
-<property name="PROTOCOL">http</property>
-<property name="arguments"><Arguments>
-</Arguments>
-</property>
-<property name="domain">13.231.197.158</property>
-<property name="path"></property>
-<property name="method">GET</property>
-</ConfigElement></defaultUrl>
-<urlList>
-<ConfigElement type="org.apache.jmeter.protocol.http.config.UrlConfig">
-<property name="port">80</property>
-<property name="name">/xdx/admin/inspect_job.jsp</property>
-<property name="PROTOCOL">http</property>
-<property name="arguments"><Arguments>
-<argument name="request.job_id">.*</argument>
-<argument name="request.action1">opjobadmin.action.inspect</argument>
-</Arguments>
-</property>
-<property name="domain"></property>
-<property name="path">/xdx/admin/inspect_job.jsp</property>
-<property name="method">GET</property>
-</ConfigElement>
-</urlList>
-<configElements>
-</configElements>
-<controllers>
-</controllers>
-</HttpTestSample>
-
-</controllers>
-</Controller>
+<?xml version="1.0" encoding="UTF-8"?>
+<node>
+<testelement class="org.apache.jmeter.testelement.TestPlan">
+<testelement class="org.apache.jmeter.config.Arguments" name="TestPlan.user_defined_variables">
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
+<collection class="java.util.ArrayList" name="Arguments.arguments"/>
+<property xml:space="preserve" name="TestElement.name">Argument List</property>
+</testelement>
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.control.gui.TestPlanGui</property>
+<collection class="java.util.LinkedList" name="TestPlan.thread_groups"/>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.testelement.TestPlan</property>
+<property xml:space="preserve" name="TestElement.name">Test Plan</property>
+<property xml:space="preserve" name="TestPlan.functional_mode">false</property>
+</testelement>
+<node>
+<testelement class="org.apache.jmeter.control.GenericController">
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.control.GenericController</property>
+<property xml:space="preserve" name="TestElement.name">Modification Manager</property>
+</testelement>
+<node>
+<testelement class="org.apache.jmeter.control.GenericController">
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.control.GenericController</property>
+<property xml:space="preserve" name="TestElement.name">Simple Controller</property>
+</testelement>
+<node>
+<testelement class="org.apache.jmeter.protocol.http.sampler.HTTPSampler">
+<property xml:space="preserve" name="HTTPSampler.mimetype"/>
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
+<property xml:space="preserve" name="HTTPSampler.path">/xdx/admin/inspect_job.jsp</property>
+<collection class="java.util.ArrayList" name="AbstractSampler.assertions"/>
+<property xml:space="preserve" name="HTTPSampler.FILE_FIELD"/>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
+<property xml:space="preserve" name="HTTPSampler.method">GET</property>
+<property xml:space="preserve" name="TestElement.name">Web Testing</property>
+<property xml:space="preserve" name="HTTPSampler.domain"/>
+<property xml:space="preserve" name="HTTPSampler.use_keepalive">false</property>
+<property xml:space="preserve" name="HTTPSampler.protocol">http</property>
+<property xml:space="preserve" name="HTTPSampler.follow_redirects">false</property>
+<property xml:space="preserve" name="HTTPSampler.port">80</property>
+<testelement class="org.apache.jmeter.config.Arguments" name="HTTPsampler.Arguments">
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
+<collection class="java.util.ArrayList" name="Arguments.arguments">
+<testelement class="org.apache.jmeter.protocol.http.util.HTTPArgument">
+<property xml:space="preserve" name="Argument.value">.*</property>
+<property xml:space="preserve" name="Argument.name">request.job_id</property>
+<property xml:space="preserve" name="HTTPArgument.always_encode">true</property>
+<property xml:space="preserve" name="HTTPArgument.encoded_name">request.job_id</property>
+<property xml:space="preserve" name="HTTPArgument.encoded_value">.*</property>
+</testelement>
+<testelement class="org.apache.jmeter.protocol.http.util.HTTPArgument">
+<property xml:space="preserve" name="Argument.value">opjobadmin.action.inspect</property>
+<property xml:space="preserve" name="Argument.name">request.action1</property>
+<property xml:space="preserve" name="HTTPArgument.always_encode">true</property>
+<property xml:space="preserve" name="HTTPArgument.encoded_name">request.action1</property>
+<property xml:space="preserve" name="HTTPArgument.encoded_value">opjobadmin.action.inspect</property>
+</testelement>
+</collection>
+<property xml:space="preserve" name="TestElement.name"/>
+</testelement>
+<property xml:space="preserve" name="HTTPSampler.FILE_NAME"/>
+</testelement>
+</node>
+<node>
+<testelement class="org.apache.jmeter.config.ConfigTestElement">
+<property xml:space="preserve" name="HTTPSampler.path"/>
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</property>
+<property xml:space="preserve" name="TestElement.name">HTTP Request Defaults</property>
+<property xml:space="preserve" name="HTTPSampler.domain">13.231.197.158</property>
+<property xml:space="preserve" name="HTTPSampler.port">80</property>
+<testelement class="org.apache.jmeter.config.Arguments" name="HTTPsampler.Arguments">
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
+<collection class="java.util.ArrayList" name="Arguments.arguments"/>
+<property xml:space="preserve" name="TestElement.name"/>
+</testelement>
+</testelement>
+</node>
+</node>
+</node>
+</node>
