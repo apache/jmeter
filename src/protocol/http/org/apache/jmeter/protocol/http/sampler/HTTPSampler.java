@@ -253,6 +253,7 @@ public class HTTPSampler extends AbstractSampler
     }
     public void addEncodedArgument(String name, String value, String metaData)
     {
+        log.debug("adding argument: name: " + name + " value: " + value + " metaData: " + metaData);
         Arguments args = getArguments();
         HTTPArgument arg = new HTTPArgument(name, value, metaData, true);
         if (arg.getName().equals(arg.getEncodedName()) && arg.getValue().equals(arg.getEncodedValue()))
@@ -494,15 +495,19 @@ public class HTTPSampler extends AbstractSampler
             {
                 first = false;
             }
+            log.debug("Making query: appending name = '" + item.getEncodedName() + "'");
             buf.append(item.getEncodedName());
             if (item.getMetaData() == null)
             {
+                log.debug("Making query: appending metadata(which was null) = '" + item.getMetaData() + "'");
                 buf.append("=");
             }
             else
             {
+                log.debug("Making query: appending metadata = '" + item.getMetaData() + "'");
                 buf.append(item.getMetaData());
             }
+            log.debug("Making query: appending value = '" + item.getEncodedValue() + "'");
             buf.append(item.getEncodedValue());
         }
         return buf.toString();
@@ -1049,6 +1054,17 @@ public class HTTPSampler extends AbstractSampler
         {
             super(name);
         }
+        
+        public void testArgumentWithoutEquals() throws Exception
+        {
+            HTTPSampler sampler = new HTTPSampler();
+            sampler.setProtocol("http");
+            sampler.setMethod(HTTPSampler.GET);
+            sampler.setPath("/index.html?pear");
+            sampler.setDomain("www.apache.org");
+            assertEquals("http://www.apache.org:80/index.html?pear",sampler.getUrl().toString());
+        }
+        
         public void testMakingUrl() throws Exception
         {
             HTTPSampler config = new HTTPSampler();

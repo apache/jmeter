@@ -84,7 +84,7 @@ public class Arguments extends ConfigTestElement implements Serializable
                         JMeterUtils.getResString("metadata")
 			};
 
-	private final static String ARGUMENTS = "Arguments.arguments";
+	public final static String ARGUMENTS = "Arguments.arguments";
 
 
 	/****************************************
