@@ -86,7 +86,14 @@ public class RegexExtractor
             return;
         }
         log.debug("RegexExtractor processing result");
-        context.getVariables().put(getRefName(), getDefaultValue());
+
+        // Fetch some variables
+		JMeterVariables vars = context.getVariables();
+		String refName = getRefName();
+		int matchNumber = getMatchNumber();
+
+        vars.put(refName, getDefaultValue());
+        
         Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
         PatternMatcherInput input =
             new PatternMatcherInput(
@@ -98,7 +105,7 @@ public class RegexExtractor
 			List matches = new ArrayList();
 			int x = 0;
 			boolean done = false;
-			do
+            do
 			{
 			    if (matcher.contains(input, pattern))
 			    {
@@ -111,15 +118,31 @@ public class RegexExtractor
 			    }
 			    x++;
 			}
-			while (x != getMatchNumber() && !done);
+			while (x != matchNumber && !done);
+
 			try
 			{
-			    MatchResult match = getCorrectMatch(matches);
-			    if (match != null)
-			    {
-			        context.getVariables().put(getRefName(), generateResult(match));
-			        saveGroups(context.getVariables(), getRefName(), match);
-			    }
+			    MatchResult match;
+			    if (matchNumber >= 0){// Original match behaviour
+				    match = getCorrectMatch(matches, matchNumber);
+				    if (match != null)
+				    {
+				        vars.put(refName, generateResult(match));
+				        saveGroups(vars, refName, match);
+				    }
+				}
+				else // < 0 means we save all the matches
+				{
+					vars.put(refName+"_matchNr", ""+matches.size());// Save the count
+					for (int i=1;i<=matches.size();i++) {
+						match = getCorrectMatch(matches, i);
+						if (match != null)
+						{
+							vars.put(refName+"_"+i, generateResult(match));
+							saveGroups(vars, refName+"_"+i, match);
+						}
+					}
+				}
 			}
 			catch (RuntimeException e)
 			{
@@ -153,7 +176,7 @@ public class RegexExtractor
         return cloned;
     }
 
-    protected String generateResult(MatchResult match)
+    private String generateResult(MatchResult match)
     {
         StringBuffer result = new StringBuffer();
         for (int a = 0; a < template.length; a++)
@@ -248,24 +271,23 @@ public class RegexExtractor
 
     /**
      * Grab the appropriate result from the list.
-     * @param matches
+     * @param matches list of matches
+     * @param entry the entry number in the list
      * @return MatchResult
      */
-    protected MatchResult getCorrectMatch(List matches)
+    private MatchResult getCorrectMatch(List matches, int entry)
     {
-        if (getMatchNumber() == matches.size() && matches.size() > 0)
-        {
-            return (MatchResult) matches.get(matches.size() - 1);
-        }
-        else if (getMatchNumber() == 0 && matches.size() > 0)
-        {
-            return (MatchResult) matches.get(
-                JMeterUtils.getRandomInt(matches.size()));
-        }
-        else
-        {
-            return null;
-        }
+        int matchSize = matches.size();
+
+        if (matchSize <= 0 || entry > matchSize) return null;
+        
+		if (entry == 0) // Random match
+		{
+			return (MatchResult) matches.get(
+				JMeterUtils.getRandomInt(matchSize));
+		}
+        
+        return (MatchResult) matches.get(entry - 1);
     }
 
     public void setRegex(String regex)
@@ -369,6 +391,9 @@ public class RegexExtractor
             extractor.setMatchNumber(2);
             extractor.process();
             assertEquals("5", vars.get("regVal"));
+			assertEquals("pinposition2", vars.get("regVal_g1"));
+			assertEquals("5", vars.get("regVal_g2"));
+			assertEquals("<value field=\"pinposition2\">5</value>", vars.get("regVal_g0"));
         }
 
         public void testVariableExtraction2() throws Exception
@@ -401,5 +426,20 @@ public class RegexExtractor
             extractor.process();
             assertEquals("_pinposition2", vars.get("regVal"));
         }
+		public void testVariableExtraction5() throws Exception
+		{
+			extractor.setRegex(
+				"<value field=\"(pinposition\\d+)\">(\\d+)</value>");
+			extractor.setTemplate("_$1$");
+			extractor.setMatchNumber(-1);
+			extractor.process();
+			assertEquals("3",vars.get("regVal_matchNr"));
+			assertEquals("_pinposition1", vars.get("regVal_1"));
+			assertEquals("_pinposition2", vars.get("regVal_2"));
+			assertEquals("_pinposition3", vars.get("regVal_3"));
+			assertEquals("pinposition1", vars.get("regVal_1_g1"));
+			assertEquals("1", vars.get("regVal_1_g2"));
+			assertEquals("<value field=\"pinposition1\">1</value>", vars.get("regVal_1_g0"));
+		}
     }
 }
