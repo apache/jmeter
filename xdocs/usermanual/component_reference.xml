@@ -854,6 +854,18 @@ The While Controller runs its children until the condition is "false".
 If the last sample just before the loop failed, don't enter loop.</li>
 <li>Otherwise - exit (or don't enter) the loop when the condition evaluates to the string "false" (case is ignored)</li>
 </ul>
+<p>Note: unlike the IfController, the condition is not evaluated as a JavaScript expression. 
+The condition can be any variable or function that eventually evaluates to "false". 
+This allows one to use JavaScript, BeanShell, properties or variables as needed.
+<br></br>
+For example:
+<ul>
+	<li>${VAR} - where VAR is set to false by some other test element</li>
+	<li>${__javaScript(${C}==10,dummy)}</li>
+	<li>${_P(property)}</li>
+	<li>etc</li>
+</ul>
+</p>
 	</description>
 <properties>
 	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
@@ -874,6 +886,8 @@ listeners generally have a panel whereby one can specify the file to
 which the results will be written (or read).  By default,
 the results are stored as CSV
 files, typically with a ".jtl" extension.  Storing as CSV is the most efficient option, but is less detailed than XML (the other available option).</p>
+<note>To read existing results and display them, use the file panel Browse button to open the file.
+</note>
 <p>To change the format, in jmeter.properties, find the following line:</p>
 <p>jmeter.save.saveservice.output_format=csv</p>
 <p>Change "csv" to "xml" for greater detail.</p>
