@@ -405,7 +405,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
          {
             try
             {
-               t.sleep(milis);
+               Thread.sleep(milis);
             }
             catch (InterruptedException e)
             {
