@@ -74,7 +74,7 @@ import javax.swing.ImageIcon;
  *@version    1.0
  ***********************************************************/
 
-public class JMeterTreeNode extends DefaultMutableTreeNode implements JMeterGUIComponent
+public class JMeterTreeNode extends DefaultMutableTreeNode
 {
     JMeterTreeModel treeModel;
 
