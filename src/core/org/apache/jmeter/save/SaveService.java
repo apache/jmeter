@@ -200,6 +200,13 @@ public class SaveService
       writer.write('\n');
    }
 
+   public synchronized static void saveTestElement(TestElement elem,
+        Writer writer) throws Exception
+   {
+      saver.toXML(elem,writer);
+      writer.write('\n');  	
+   }
+        
    static boolean versionsOK = true;
 
    // Extract version digits from String of the form #Revision: n.mm #
