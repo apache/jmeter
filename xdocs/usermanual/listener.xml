@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<document>
+
+<properties>
+  <title>User's Manual: Listeners</title>
+</properties>
+
+<body>
+
+<section name="4.3 Listeners">
+<p>Put description text here...</p>
+</section>
+
+<section name="4.3.1 Graphs">
+<p>Put description text here...</p>
+</section>
+
+<section name="4.3.1.1 View Graph Tree">
+<p>Put description text here...</p>
+</section>
+
+<section name="4.3.1.2 Graph Full Results">
+<p>Put description text here...</p>
+<p>
+<img src="../images/screenshots/graph_full_results.gif" width="453" height="237" alt="Graph Full Results"></img>
+</p>
+</section>
+
+<section name="4.3.1.3 Graph Results">
+<p>Put description text here...</p>
+</section>
+
+<section name="4.3.1.4 Spline Visualizer">
+<p>Put description text here...</p>
+</section>
+
+<section name="4.3.2 Managers">
+<p>Put description text here...</p>
+</section>
+
+<section name="4.3.2.1 Modification Manager">
+<p>Put description text here...</p>
+<p>This element has no visual elements.</p>
+</section>
+
+
+<section name="4.3.3 Miscellaneous">
+<p>Put description text here...</p>
+</section>
+
+<section name="4.3.3.1 Assertion Results">
+<p>Put description text here...</p>
+<p>
+<img src="../images/screenshots/assertion_results.gif" width="475" height="273" alt="Assertion Results"></img>
+</p>
+</section>
+
+<section name="4.3.3.2 File Reporter">
+<p>Put description text here...</p>
+<p>
+<img src="../images/screenshots/file_reporter.gif" width="390" height="317" alt="File Reporter"></img>
+</p>
+</section>
+
+<section name="4.3.3.3 View Results">
+<p>Put description text here...</p>
+<p>
+<img src="../images/screenshots/view_results.gif" width="446" height="352" alt="View Results"></img>
+</p>
+</section>
+
+<section name="4.3.3.4 View Result Tree">
+<p>Put description text here...</p>
+<p>
+<img src="../images/screenshots/view_result_tree.gif" width="490" height="210" alt="View Result Tree"></img>
+</p>
+</section>
+
+</body>
+</document>

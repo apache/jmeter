@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<document>
+
+<properties>
+  <title>User's Manual: Controllers</title>
+</properties>
+
+<body>
+
+<section name="4.2 Controllers">
+<p>Overview of Controllers. Explain difference between Logical and Generative Controllers.</p>
+
+<p>
+<a href="gen-controller.html">4.2.1 Generative Controllers</a><br></br>
+<a href="logic-controller.html">4.2.2 Logical Controllers</a>
+</p>
+</section>
+
+</body>
+</document>

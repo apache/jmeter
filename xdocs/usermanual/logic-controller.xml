@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<document>
+
+<properties>
+  <title>User's Manual: Logic Controllers</title>
+</properties>
+
+<body>
+
+<section name="4.2.2 Logic Controllers">
+<p>Put description text here...</p>
+</section>
+
+<section name="4.2.2.1 Interleave Controller">
+<p>Put description text here...</p>
+</section>
+
+<section name="4.2.2.2 Loop Controller">
+<p>Put description text here...</p>
+<p><img src="../images/screenshots/logic-controller/loop-controller.gif" width="397" height="111"></img></p>
+</section>
+
+<section name="4.2.2.3 Modification Manager">
+<p>Put description text here...</p>
+<p>This element has no visual elements.</p>
+</section>
+
+<section name="4.2.2.4 Once Only Controller">
+<p>Put description text here...</p>
+</section>
+
+<section name="4.2.2.5 Simple Controller">
+<p>Put description text here...</p>
+</section>
+
+</body>
+</document>
