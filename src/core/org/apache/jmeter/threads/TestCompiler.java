@@ -17,12 +17,12 @@ import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.PerSampleClonable;
-import org.apache.jmeter.testelement.PerThreadClonable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.ListedHashTree;
@@ -183,7 +183,7 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 						objectsWithFunctions.add(item);
 					}
 				}
-				if(item != sam)
+				if(!(item instanceof Sampler))
 				{
 					configs.add(item);
 				}
@@ -234,8 +234,14 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 			sampler.setName("sampler");
 			Arguments args = new Arguments();
 			args.addArgument("param1", "value1");
+			HTTPSampler sampler2 = new HTTPSampler();
+			sampler.setName("sampler2");
+			Arguments args2 = new Arguments();
+			args2.addArgument(new HTTPArgument("xml","<data>1234</data>"));
+			sampler2.setArguments(args2);
 			testing.add(controller, config1);
 			testing.add(controller, sampler);
+			testing.add(controller,sampler2);
 			testing.get(controller).add(sampler, args);
 			TestCompiler.initialize();
 
@@ -244,6 +250,7 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 			sampler = (HTTPSampler)compiler.configureSampler(sampler).getSampler();
 			assertEquals(config1.getProperty(HTTPSampler.DOMAIN), sampler.getDomain());
 			assertEquals(args.getArgument(0).getName(), sampler.getArguments().getArgument(0).getName());
+			assertEquals(1,sampler.getArguments().getArguments().size());
 		}
 	}
 
