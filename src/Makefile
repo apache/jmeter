@@ -5,7 +5,7 @@
 ################################################################################
 
 ################################################################################
-# Common definitions.  Edit these settings for your site.  
+# Common definitions.  Edit these settings for your site.
 #
 # LOCATION     : where to write the classes and javadocs.
 # JAVAC        : the java compiler
@@ -40,7 +40,7 @@ JAVADOCOPT = -d $(DOCDIR) -version -private \
 
 # Packages is the list of packages inside our base package.
 BASE = org.apache.jmeter
-VERSION = 1.1
+VERSION = 1.3
 PACKAGES = \
 	$(BASE) \
 	$(BASE).timers \
