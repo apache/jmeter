@@ -137,7 +137,7 @@ public class RegexExtractor
 				else // < 0 means we save all the matches
 				{
 					int prevCount = 0;
-					String prevString=(String)vars.get(refName+"_matchNr");
+					String prevString=vars.get(refName+"_matchNr");
 					if (prevString != null)
                     {
                     try
@@ -238,13 +238,16 @@ public class RegexExtractor
         log.debug("template = " + rawTemplate);
         Util.split(pieces, matcher, templatePattern, rawTemplate);
         PatternMatcherInput input = new PatternMatcherInput(rawTemplate);
-        Iterator iter = pieces.iterator();
         boolean startsWith = isFirstElementGroup(rawTemplate);
         log.debug(
             "template split into "
                 + pieces.size()
                 + " pieces, starts with = "
                 + startsWith);
+        if (startsWith){
+            pieces.remove(0);// Remove initial empty entry
+        }
+        Iterator iter = pieces.iterator();
         while (iter.hasNext())
         {
             boolean matchExists = matcher.contains(input, templatePattern);
@@ -428,6 +431,58 @@ public class RegexExtractor
 			assertEquals("pinposition2", vars.get("regVal_g1"));
 			assertEquals("5", vars.get("regVal_g2"));
 			assertEquals("<value field=\"pinposition2\">5</value>", vars.get("regVal_g0"));
+        }
+
+        static void templateSetup(RegexExtractor rex,String tmp){
+            rex.setRegex("<company-(\\w+?)-(\\w+?)-(\\w+?)>");
+            rex.setMatchNumber(1);
+            rex.setTemplate(tmp);
+            rex.process();        	
+        }
+        public void testTemplate1() throws Exception
+        {
+        	templateSetup(extractor,"");
+			assertEquals("<company-xmlext-query-ret>", vars.get("regVal_g0"));
+			assertEquals("xmlext", vars.get("regVal_g1"));
+			assertEquals("query", vars.get("regVal_g2"));
+			assertEquals("ret", vars.get("regVal_g3"));
+            assertEquals("", vars.get("regVal"));
+        }
+
+        public void testTemplate2() throws Exception
+        {
+        	templateSetup(extractor,"ABC");
+            assertEquals("ABC", vars.get("regVal"));
+        }
+
+        public void testTemplate3() throws Exception
+        {
+        	templateSetup(extractor,"$2$");
+            assertEquals("query", vars.get("regVal"));
+        }
+
+        public void testTemplate4() throws Exception
+        {
+        	templateSetup(extractor,"PRE$2$");
+            assertEquals("PREquery", vars.get("regVal"));
+        }
+
+        public void testTemplate5() throws Exception
+        {
+        	templateSetup(extractor,"$2$POST");
+            assertEquals("queryPOST", vars.get("regVal"));
+        }
+
+        public void testTemplate6() throws Exception
+        {
+        	templateSetup(extractor,"$2$$1$");
+            assertEquals("queryxmlext", vars.get("regVal"));
+        }
+
+        public void testTemplate7() throws Exception
+        {
+        	templateSetup(extractor,"$2$MID$1$");
+            assertEquals("queryMIDxmlext", vars.get("regVal"));
         }
 
         public void testVariableExtraction2() throws Exception
