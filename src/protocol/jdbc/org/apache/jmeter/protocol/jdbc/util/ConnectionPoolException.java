@@ -58,14 +58,14 @@ package org.apache.jmeter.protocol.jdbc.util;
  * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
  * @version $Revision$
  */
-public class NoConnectionsAvailableException extends ConnectionPoolException
+public class ConnectionPoolException extends Exception
 {
-    public NoConnectionsAvailableException()
+    public ConnectionPoolException()
     {
         super();
     }
 
-    public NoConnectionsAvailableException(String arg0)
+    public ConnectionPoolException(String arg0)
     {
         super(arg0);
     }

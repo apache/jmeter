@@ -64,6 +64,7 @@ import java.util.Map;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.protocol.jdbc.util.ConnectionPoolException;
 import org.apache.jmeter.protocol.jdbc.util.DBConnectionManager;
 import org.apache.jmeter.protocol.jdbc.util.DBKey;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -92,6 +93,9 @@ public class JDBCSampler extends AbstractSampler implements TestListener
     public static final String QUERY = "JDBCSampler.query";
 
     public static final String JDBCSAMPLER_PROPERTY_PREFIX = "JDBCSampler.";
+    public static final String CONNECTION_POOL_IMPL =
+        JDBCSAMPLER_PROPERTY_PREFIX + "connPoolClass";
+
     
     /** Database connection pool manager. */
     private transient DBConnectionManager manager =
@@ -107,19 +111,22 @@ public class JDBCSampler extends AbstractSampler implements TestListener
 
     public SampleResult sample(Entry e)
     {
-        DBKey key = getKey();
-        
+        DBKey key = null;
+
         SampleResult res = new SampleResult();
-
-        Connection conn = null;
-        Statement stmt = null;
-
         res.setSampleLabel(getName());
         res.setSamplerData(this.toString());
 
+
         long startTime = System.currentTimeMillis();
+        
+        Connection conn = null;
+        Statement stmt = null;
+
         try
         {
+            key = getKey();
+            
             // TODO: Consider creating a sub-result with the time to get the
             //       connection.
             conn = manager.getConnection(key);
@@ -190,7 +197,7 @@ public class JDBCSampler extends AbstractSampler implements TestListener
         return res;
     }
 
-    private DBKey getKey()
+    private DBKey getKey() throws ConnectionPoolException
     {
         if (dbkey == null)
         {
@@ -299,15 +306,27 @@ public class JDBCSampler extends AbstractSampler implements TestListener
 
     public void testStarted(String host)
     {
+        testStarted();
+    }
+
+    public synchronized void testStarted()
+    {
+        // The first call to getKey for a given key will set up the connection
+        // pool.  This can take awhile, so do it while the test is starting
+        // instead of waiting for the first sample.
+        try
+        {
+            getKey();
+        }
+        catch (ConnectionPoolException e)
+        {
+            log.error("Error initializing database connection", e);
+        }
     }
 
     public void testEnded(String host)
     {
         testEnded();
-    }
-
-    public synchronized void testStarted()
-    {
     }
 
     public synchronized void testEnded()
