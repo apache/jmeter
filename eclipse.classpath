@@ -23,7 +23,9 @@
     <classpathentry kind="src" path="src/examples"/>
     <classpathentry kind="src" output="build/htmlparser" path="src/htmlparser"/>
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-    <classpathentry kind="lib" path="lib/avalon-excalibur-4.1.jar"/>
+    <classpathentry kind="lib" path="lib/excalibur-campatibility-1.1.jar"/>
+    <classpathentry kind="lib" path="lib/excalibur-i18n-1.1.jar"/>
+    <classpathentry kind="lib" path="lib/excalibur-logger-1.1.jar"/>
     <classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
     <classpathentry kind="lib" path="lib/jakarta-oro-2.0.8.jar"/>
     <classpathentry kind="lib" path="lib/js.jar"/>
