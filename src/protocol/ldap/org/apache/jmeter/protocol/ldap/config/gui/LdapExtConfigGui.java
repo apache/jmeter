@@ -129,6 +129,12 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener
         return  "ldapext_sample_title";
     }
 
+    // Remove this when status changes (and update component_reference)
+    public String getStaticLabel() 
+	{
+		return super.getStaticLabel() + " (ALPHA)";
+	}
+
     /**
      * A newly created component can be initialized with the contents of
      * a Test Element object by calling this method.  The component is

@@ -83,6 +83,12 @@ public class LdapExtTestSamplerGui extends AbstractSamplerGui {
     public String getLabelResource() {
         return "ldapext_testing_title";
     }
+
+    // Remove this when status changes (and update component_reference)
+    public String getStaticLabel() 
+	{
+		return super.getStaticLabel() + " (ALPHA)";
+	}
     
     private void init() {
         setLayout(new BorderLayout(0, 5));
