@@ -129,7 +129,7 @@ public final class ActionRouter implements ActionListener
         }
         catch (NullPointerException er)
         {
-            log.error("", er);
+            log.error("performAction("+e.getActionCommand()+") " + e.toString() + " caused", er);
             JMeterUtils.reportErrorToUser(
                 "Sorry, this feature ("
                     + e.getActionCommand()

@@ -951,11 +951,27 @@ public class JMeterUtils implements UnitTestManager
             errorMsg = "Unknown error - see log file";
             log.warn("Unknown error", new Throwable("errorMsg == null"));
         }
-        JOptionPane.showMessageDialog(
-            GuiPackage.getInstance().getMainFrame(),
-            errorMsg,
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
+        try
+        {
+            JOptionPane.showMessageDialog(
+                GuiPackage.getInstance().getMainFrame(),
+                errorMsg,
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+        catch (RuntimeException e)
+        {
+        	if (e.getClass().getName().equals("java.awt.HeadlessException")) //JDK1.4:
+        	{
+				//System.out.println(errorMsg+"[HeadlessException]");
+				//throw e;
+				log.warn("reportErrorToUser(\""+errorMsg+"\") caused",e);
+        	}
+        	else
+        	{
+        		throw e;
+        	}
+        }
     }
     /**
      *  Finds a string in an array of strings and returns the
