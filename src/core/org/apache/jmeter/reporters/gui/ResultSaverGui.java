@@ -38,6 +38,9 @@ public class ResultSaverGui extends AbstractPostProcessorGui
         return JMeterUtils.getResString("resultsaver_title");
     }
     
+	/**
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
+	 */
     public void configure(TestElement el)
     {
         super.configure(el);
