@@ -104,6 +104,7 @@ public class HTTPSampler extends AbstractSampler
 	public final static String PATH = "HTTPSampler.path";
 	public final static String FOLLOW_REDIRECTS = "HTTPSampler.follow_redirects";
 	public final static String PROTOCOL = "HTTPSampler.protocol";
+	public final static String DEFAULT_PROTOCOL = "http";
 	public final static String URL = "HTTPSampler.URL";
 	public final static String POST = "POST";
 	public final static String GET = "GET";
@@ -142,7 +143,12 @@ public class HTTPSampler extends AbstractSampler
 	}
 	public String getProtocol()
 	{
-		return getPropertyAsString(PROTOCOL);
+		String protocol= getPropertyAsString(PROTOCOL);
+		if (protocol==null || protocol.equals(""))
+		{
+		  return DEFAULT_PROTOCOL;
+		}
+		else return protocol;
 	}
 	/**
 	 *  Sets the Path attribute of the UrlConfig object
