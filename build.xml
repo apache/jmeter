@@ -213,8 +213,11 @@
 				 includes="**/*.xml"
 				 lastModifiedCheck="false"
 				 velocityPropertiesFile="${docs.src}/velocity.properties"/>
-		<copy todir="${docs.dest}/images">
-			<fileset dir="${docs.src}/images"/>
+		<copy todir="${docs.dest}">
+			<fileset dir="${docs.src}">
+				<include name="images/**"/>
+				<include name="demos/**"/>
+			</fileset>
 		</copy>
 	</target>
 
