@@ -131,7 +131,11 @@ public class Arguments extends ConfigTestElement implements Serializable
         while (iter.hasNext())
         {
             Argument arg = (Argument) iter.next().getObjectValue();
-            argMap.put(arg.getName(), arg.getValue());
+            // Because CollectionProperty.mergeIn will not prevent adding two
+            // properties of the same name, we need to select the first value so
+            // that this element's values prevail over defaults provided by configuration
+            // elements:
+            if (! argMap.containsKey(arg.getName())) argMap.put(arg.getName(), arg.getValue());
         }
         return argMap;
     }
