@@ -183,16 +183,10 @@ public class ProxyControl extends ConfigTestElement implements Serializable
      ***********************************************************/
     public void startProxy()
     {
-        try
-        {
-            server = new Daemon(getPort(), this);
-            server.start();
-        }
-        catch (UnknownHostException e)
-        {
-            log.error("", e);
-        }
+        server = new Daemon(getPort(), this);
+        server.start();
     }
+    
     /************************************************************
      *  !ToDo
      *
