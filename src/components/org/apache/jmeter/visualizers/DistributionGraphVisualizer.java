@@ -24,13 +24,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -55,7 +52,7 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * @version   $Revision: 
  */
 public class DistributionGraphVisualizer extends AbstractVisualizer
-        implements ImageVisualizer, ItemListener, GraphListener, Clearable
+        implements ImageVisualizer, GraphListener, Clearable
 {
     SamplingStatCalculator model;
     private JPanel graphPanel = null;
@@ -122,11 +119,6 @@ public class DistributionGraphVisualizer extends AbstractVisualizer
         return "distribution_graph_title";
     }
 
-    public void itemStateChanged(ItemEvent e)
-    {
-        this.graph.repaint();
-    }
-
     public synchronized void clear()
     {
         this.graph.clear();
@@ -162,35 +154,6 @@ public class DistributionGraphVisualizer extends AbstractVisualizer
     }
 
     // Methods used in creating the GUI
-
-    /**
-     * Creates a check box configured to be used to in the choose panel
-     * allowing the user to select whether or not a particular kind of
-     * graph data will be displayed.
-     * 
-     * @param labelResourceName the name of the label resource.
-     *                This is used to look up the label text using
-     *                {@link JMeterUtils#getResString(String)}.
-     * @param color  the color used for the checkbox text. By
-     *                convention this is the same color that is used
-     *                to draw the graph and for the corresponding
-     *                info field.
-     *
-     * @return       a checkbox allowing the user to select whether or
-     *                not a kind of graph data will be displayed
-     */
-    private JCheckBox createChooseCheckBox(
-        String labelResourceName,
-        Color color)
-    {
-        JCheckBox checkBox = new JCheckBox(
-                        JMeterUtils.getResString(labelResourceName));
-        checkBox.setSelected(true);
-        checkBox.addItemListener(this);
-        checkBox.setForeground(color);
-        return checkBox;
-    }
-
 
     /**
      * Creates a scroll pane containing the actual graph of
