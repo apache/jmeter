@@ -183,7 +183,8 @@
 
   <!-- Where the build result .jars will be placed -->
   <property name="dest.jar" value="lib/ext"/>
-  <property name="dest.jar.jorphan" value="lib"/>
+  <property name="lib.dir" value="lib"/>
+  <property name="lib.dir" value="lib"/>
   <property name="dest.jar.jmeter" value="bin"/>
 
   <!-- Where the API documentation lives -->
@@ -194,7 +195,6 @@
   <property name="dest.printable_docs" value="printable_docs"/>
 
   <!-- Directory where these 3rd party libraries will live -->
-  <!-- probably has to be the same as dest.jar.jorphan -->
   <property name="lib.dir" value="lib"/>
 
   <!-- Other stuff -->
@@ -518,8 +518,8 @@
     <jar jarfile="${dest.jar}/ApacheJMeter_jdbc.jar" basedir="${build.jdbc}"/>
     <jar jarfile="${dest.jar}/ApacheJMeter_java.jar" basedir="${build.java}"/>
     <jar jarfile="${dest.jar}/ApacheJMeter_ldap.jar" basedir="${build.ldap}"/>
-    <jar jarfile="${dest.jar.jorphan}/htmlparser.jar" basedir="${build.htmlparser}"/>
-    <jar jarfile="${dest.jar.jorphan}/jorphan.jar" basedir="${build.jorphan}"/>
+    <jar jarfile="${lib.dir}/htmlparser.jar" basedir="${build.htmlparser}"/>
+    <jar jarfile="${lib.dir}/jorphan.jar" basedir="${build.jorphan}"/>
   </target>
 
   <target name="install" depends="package" description="Install JMeter. (Compiles code and creates jars)">
@@ -553,6 +553,7 @@
     <include name="${dest.printable_docs}/**"/>
     <include name="${extras.dir}/**"/>
     <include name="${lib.dir}/jorphan.jar"/>
+    <include name="${lib.dir}/htmlparser.jar"/>
     <include name="README"/>
     <include name="LICENSE"/>
   </patternset>
@@ -689,7 +690,8 @@
     
   <target name="clean" description="Clean up to force a build from source.">
     <delete file="${dest.jar.jmeter}/ApacheJMeter.jar"/>
-    <delete quiet="true" file="${dest.jar.jorphan}/jorphan.jar"/>
+    <delete quiet="true" file="${lib.dir}/jorphan.jar"/>
+    <delete quiet="true" file="${lib.dir}/htmlparser.jar"/>
     <delete quiet="true">
         <fileset dir="${dest.jar}" excludes=".cvsignore"/>
     </delete>
