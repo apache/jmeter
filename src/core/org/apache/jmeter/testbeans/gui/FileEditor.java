@@ -103,11 +103,13 @@ public class FileEditor implements PropertyEditor, ActionListener
 		JButton button= new JButton("Browse...");
 		button.addActionListener(this);
 
-		// Get a WrapperEditor to provide the field or combo:
-		editor= new WrapperEditor(
-			new SimpleFileEditor(),
-			new ComboStringEditor(),
-			true, true, true);
+        // Get a WrapperEditor to provide the field or combo -- we'll delegate
+        // most methods to it:
+        editor= new WrapperEditor(
+            this,
+            new SimpleFileEditor(),
+            new ComboStringEditor(),
+            true, true, true, null);
 
 		// Create a panel containing the combo and the button:
 		panel= new JPanel(new BorderLayout(5,0));
