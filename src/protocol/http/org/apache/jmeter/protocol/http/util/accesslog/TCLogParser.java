@@ -243,7 +243,7 @@ public class TCLogParser implements LogParser
             }
             while (line != null)
             {
-				if (line != null && line.length() > 0)
+				if (line.length() > 0)
 				{
 					this.parseLine(line);
 				}
@@ -518,7 +518,7 @@ public class TCLogParser implements LogParser
         }
         if (value == null)
         {
-            value = new String();
+            value = "";
         }
         return new NVPair(name.trim(), value.trim());
     }
