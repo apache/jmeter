@@ -126,6 +126,7 @@
       <sourcePath path="${src.java}" />
       <sourcePath path="${src.jdbc}" />
       <sourcePath path="${src.ldap}" />
+      <sourcePath path="${src.mail}" />
       <sourcePath path="${src.components}" />
       <sourcePath path="${src.functions}" />
       <class location="${lib.dir}/jorphan.jar" />
@@ -191,6 +192,7 @@
   <property name="src.htmlparser" value="src/htmlparser"/>
   <property name="src.tcp" value="src/protocol/tcp"/>
   <property name="src.examples" value="src/examples"/>
+  <property name="src.mail" value="src/protocol/mail"/>
   <property name="src.monitor.components" value="src/monitor/components"/>
   <property name="src.monitor.model" value="src/monitor/model"/>
 
@@ -213,6 +215,7 @@
     <pathelement location="${src.htmlparser}"/>
     <pathelement location="${src.tcp}"/>
     <pathelement location="${src.examples}"/>
+    <pathelement location="${src.mail}"/>
     <pathelement location="${src.monitor.components}"/>
     <pathelement location="${src.monitor.model}"/>
   </path>
@@ -228,6 +231,7 @@
   <property name="build.functions" value="build/functions"/>
   <property name="build.jorphan" value="build/jorphan"/>
   <property name="build.ldap" location="build/protocol/ldap"/>
+  <property name="build.mail" location="build/protocol/mail"/>
   <property name="build.htmlparser" location="build/htmlparser"/>
   <property name="build.tcp" location="build/protocol/tcp"/>
   <property name="build.examples" location="build/examples"/>
@@ -545,10 +549,26 @@
     </javac>
   </target>
   
-    <target name="compile-ldap" depends="compile-jorphan,compile-core" 
+  <target name="compile-ldap" depends="compile-jorphan,compile-core" 
     description="Compile components specific to LDAP sampling.">
     <mkdir dir="${build.ldap}"/>
     <javac srcdir="${src.ldap}" destdir="${build.ldap}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+      <include name="**/*.java"/>
+      <classpath>
+        <path refid="classpath"/>
+        <pathelement location="${build.jorphan}"/>
+        <pathelement location="${build.core}"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="create-mail-dir">
+    <mkdir dir="${build.mail}"/>
+  </target>
+
+  <target name="compile-mail" depends="compile-jorphan,compile-core,create-mail-dir" if="javamail.complete"
+    description="Compile components specific to IMAP and POP3 sampling.">
+    <javac srcdir="${src.mail}" destdir="${build.mail}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -584,7 +604,7 @@
     </javac>
   </target>
 
-  <target name="compile-protocols" depends="compile-http,compile-ftp,compile-jdbc,compile-java,compile-ldap,compile-tcp" description="Compile all protocol-specific components."/>
+  <target name="compile-protocols" depends="compile-http,compile-ftp,compile-jdbc,compile-java,compile-ldap,compile-mail,compile-tcp" description="Compile all protocol-specific components."/>
 
   <target name="compile-examples" depends="compile-jorphan,compile-core" description="Compile example components.">
     <mkdir dir="${build.examples}"/>
@@ -750,6 +770,12 @@ some of its classes - at present JMeter can only run from jar files.
     <jar jarfile="${dest.jar}/ApacheJMeter_ldap.jar">
       <fileset dir="${build.ldap}" includes="**/*.class" />
       <fileset dir="${src.ldap}" includes="**/*.properties" />
+    </jar>
+    
+    <!-- mail -->
+    <jar jarfile="${dest.jar}/ApacheJMeter_mail.jar" >
+      <fileset dir="${build.mail}" includes="**/*.class"  />
+      <fileset dir="${src.mail}" includes="**/*.properties" />
     </jar>
     
     <!-- tcp -->
