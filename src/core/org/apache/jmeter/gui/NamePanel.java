@@ -129,6 +129,11 @@ public class NamePanel extends JPanel implements JMeterGUIComponent
         add(nameLabel, BorderLayout.WEST);
         add(nameField, BorderLayout.CENTER);
     }
+    
+    public void clear()
+    {
+        setName(getStaticLabel());        
+    }
 
 
     /**

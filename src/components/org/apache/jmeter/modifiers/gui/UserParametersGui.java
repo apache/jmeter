@@ -1,7 +1,6 @@
 package org.apache.jmeter.modifiers.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -132,11 +131,11 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 			new JLabel(JMeterUtils.getResString("user_parameters_table"));
 		initTableModel();
 		paramTable = new JTable(tableModel);
-		paramTable.setRowSelectionAllowed(true);
-		paramTable.setColumnSelectionAllowed(true);
+		//paramTable.setRowSelectionAllowed(true);
+		//paramTable.setColumnSelectionAllowed(true);
 		paramTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		paramTable.setCellSelectionEnabled(true);
-        paramTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
+		//paramTable.setCellSelectionEnabled(true);
+        //paramTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
         JPanel paramPanel = new JPanel(new BorderLayout());
         paramPanel.add(tableLabel, BorderLayout.NORTH);

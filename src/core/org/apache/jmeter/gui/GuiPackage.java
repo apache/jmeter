@@ -272,6 +272,7 @@ public class GuiPackage
         try
         {
             JMeterGUIComponent comp = getGuiFromCache(guiClass);
+            comp.clear();
             TestElement node = comp.createTestElement();
             nodesToGui.put(node, comp);
             return node;
