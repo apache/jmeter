@@ -35,7 +35,7 @@ public class JMeterContext
     
     private StandardJMeterEngine engine;
     private JMeterThread thread;
-    private ThreadGroup threadGroup;
+    //NOTUSED private ThreadGroup threadGroup;
     private int threadNum;
     private byte[] readBuffer = null;
 

@@ -49,7 +49,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
     private JLabeledTextField matchNumberField;
     private JLabeledTextField refNameField;
     
-    private JCheckBox scanHeader;
+    //NOTUSED private JCheckBox scanHeader;
 	private JRadioButton useBody;
 	private JRadioButton useHeaders;
     

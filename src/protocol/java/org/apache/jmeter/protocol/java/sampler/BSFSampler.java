@@ -41,7 +41,7 @@ public class BSFSampler extends AbstractSampler
 	public static final String LANGUAGE   = "BSFSampler.language"; //$NON-NLS-1$
 	public static final String PARAMETERS = "BSFSampler.parameters"; //$NON-NLS-1$
 
-	private transient BSFManager mgr;
+	//private transient BSFManager mgr;
 	private BSFEngine bsfEngine;
 	
 	public BSFSampler()
