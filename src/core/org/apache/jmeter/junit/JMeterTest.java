@@ -350,14 +350,14 @@ public class JMeterTest extends JMeterTestCase
                     catch (NoSuchMethodException f)
                     {
                         // no luck. Ignore this class
-						System.out.println(exName+": could not construct "+n);
+						System.out.println(exName+": could not construct "+n+" "+f);
                     }
                 }
             }
             catch (NoClassDefFoundError e)
             {
 				// no luck. Ignore this class
-				System.out.println(exName+": could not construct "+n);
+				System.out.println(exName+": could not construct "+n+" "+e);
             }
             catch (IllegalAccessException e)
             {
@@ -384,16 +384,6 @@ public class JMeterTest extends JMeterTestCase
             }
         }
         caughtError=false;
-    } 
-    catch (Exception t)
-    {
-    	caught = t;
-    	throw t;
-	}
-	catch (Error t)
-	{
-		caught = t;
-		throw t;
     } 
     finally 
     {
