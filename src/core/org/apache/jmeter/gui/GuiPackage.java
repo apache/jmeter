@@ -514,10 +514,10 @@ public final class GuiPackage implements LocaleChangeListener
     public ValueReplacer getReplacer()
     {
         return new ValueReplacer(
-            (TestPlan) ((JMeterGUIComponent) getTreeModel()
+            (TestPlan) ((JMeterTreeNode) getTreeModel()
                 .getTestPlan()
                 .getArray()[0])
-                .createTestElement());
+                .getTestElement());
     }
 
     /**
@@ -618,8 +618,7 @@ public final class GuiPackage implements LocaleChangeListener
         // which is empty.]
         getMainFrame().setMainPanel(
             (javax.swing.JComponent) getCurrentGui());
-        getMainFrame().setEditMenu(
-            ((JMeterGUIComponent) getTreeListener().getCurrentNode())
+        getMainFrame().setEditMenu(getTreeListener().getCurrentNode()
                 .createPopupMenu());
     }
 }

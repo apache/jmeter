@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
@@ -131,14 +130,14 @@ public class CheckDirty
     public void addNode(Object node, HashTree subTree)
     {
         log.debug("Node is class:" + node.getClass());
-        JMeterGUIComponent treeNode = (JMeterGUIComponent) node;
+        JMeterTreeNode treeNode = (JMeterTreeNode) node;
         if (checkMode)
         {
             if (previousGuiItems.containsKey(treeNode))
             {
                 if (!previousGuiItems
                     .get(treeNode)
-                    .equals(treeNode.createTestElement()))
+                    .equals(treeNode.getTestElement()))
                 {
                     dirty = true;
                 }
@@ -156,7 +155,7 @@ public class CheckDirty
         {
             previousGuiItems.put(
                 treeNode,
-                treeNode.createTestElement().clone());
+                treeNode.getTestElement().clone());
         }
     }
 
