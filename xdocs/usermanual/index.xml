@@ -68,7 +68,7 @@
 		<li><a href="build-web-test-plan.html#adding_defaults">5.2 Adding Default HTTP Request Properties</a></li>
 		<li><a href="build-web-test-plan.html#adding_cookie_support">5.3 Adding Cookie Support</a></li>
 		<li><a href="build-web-test-plan.html#adding_requests">5.4 Adding HTTP Requests</a></li>
-		<li><a href="build-web-test-plan.html#adding_listener">5.5 Adding a Listener to View and Store the Test Results</a></li>
+		<li><a href="build-web-test-plan.html#adding_listener">5.5 Adding a Listener to View/Store the Test Results</a></li>
 		<li><a href="build-web-test-plan.html#saving">5.6 Saving the Test Plan</a></li>
 		<li><a href="build-web-test-plan.html#running">5.7 Running the Test Plan</a></li>
 	 </ul>
@@ -78,12 +78,19 @@
 		<li><a href="build-adv-web-test-plan.html#header_manager">6.2 Using a Header Manager</a></li>
 	 </ul>
   <li><a href="build-db-test-plan.html">7. Building a Database Test Plan</a></li>
+	 <ul>
+		<li><a href="build-db-test-plan.html#adding_users">7.1 Adding Users</a></li>
+		<li><a href="build-db-test-plan.html#adding_requests">7.2 Adding JDBC Requests</a></li>
+		<li><a href="build-db-test-plan.html#adding_listener">7.3 Adding a Listener to View/Store the Test Results</a></li>
+		<li><a href="build-db-test-plan.html#saving">7.4 Saving the Test Plan</a></li>
+		<li><a href="build-db-test-plan.html#running">7.5 Running the Test Plan</a></li>
+	 </ul>
   <li><a href="build-ftp-test-plan.html">8. Building an FTP Test Plan</a></li>
 	 <ul>
 		<li><a href="build-ftp-test-plan.html#adding_users">8.1 Adding Users</a></li>
 		<li><a href="build-ftp-test-plan.html#adding_defaults">8.2 Adding Default FTP Request Properties</a></li>
 		<li><a href="build-ftp-test-plan.html#adding_requests">8.3 Adding FTP Requests</a></li>
-		<li><a href="build-ftp-test-plan.html#adding_listener">8.4 Adding a Listener to View the Test Results</a></li>
+		<li><a href="build-ftp-test-plan.html#adding_listener">8.4 Adding a Listener to View/Store the Test Results</a></li>
 		<li><a href="build-ftp-test-plan.html#saving">8.5 Saving the Test Plan</a></li>
 		<li><a href="build-ftp-test-plan.html#running">8.6 Running the Test Plan</a></li>
 	 </ul>

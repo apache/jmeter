@@ -86,9 +86,10 @@ will be performing.  In this section, you will specify the default settings
 for your FTP requests.  And then, in section 8.3, you will add FTP Request
 elements which use some of the default settings you specified here.</p>
 
-<p>Begin by selecting the O'Reilly Users element. Clicking your right mouse button
+<p>Begin by selecting the O'Reilly Users element. Click your right mouse button
 to get the Add menu, and then select Add --&gt; Config Element --&gt; FTP Request
-Defaults. Then, select this new element to view its Control Panel (see Figure 8.3).</p>
+Defaults. Then, select this new element to view its Control Panel (see Figure 8.3).
+</p>
 
 <figure image="../images/screenshots/ftptest/ftp-defaults.png">
 Figure 8.3. FTP Request Defaults</figure>
@@ -156,13 +157,13 @@ Figure 8.6. FTP Request for O'Reilly mSQL Java tutorial file</figure>
 
 </section>
 
-<section name="8.4 Adding a Listener to View Store the Test Results" anchor="adding_listener">
+<section name="8.4 Adding a Listener to View/Store the Test Results" anchor="adding_listener">
 <p>The final element you need to add to your Test Plan is a
  <a href="component_reference.html#listeners">Listener</a>. This element is
 responsible for storing all of the results of your FTP requests in a file and presenting
 a visual model of the data.</p>
 
-<p>Select the Jakarta Users element and add a <complink name="Spline Visualizer"/>
+<p>Select the O'Reilly Users element and add a <complink name="Spline Visualizer"/>
 listener (Add --&gt; Listener --&gt; Spline Visualizer).</p>
 
 <figure image="../images/screenshots/ftptest/spline-results.png">

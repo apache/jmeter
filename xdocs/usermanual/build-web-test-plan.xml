@@ -36,13 +36,11 @@ JMeter the number of users you want to simulate, how often the users should send
 requests, and the how many requests they should send.</p>
 
 <p>Go ahead and add the ThreadGroup element by first selecting the Test Plan,
-and then from the Edit menu, select Add --&gt; ThreadGroup.</p>
-
-<note>You can also access the Edit menu by selecting an element
-and then clicking your right mouse button.</note>
+clicking your right mouse button to get the Add menu, and then select
+Add --&gt; ThreadGroup.</p>
 
 <p>You should now see the Thread Group element under Test Plan.  If you do not
-see the element, then "expand" the Test Plan tree by double-clicking on the
+see the element, then "expand" the Test Plan tree by clicking on the
 Test Plan element.</p>
 
 <p>Next, you need to modify the default properties.  Select the Thread Group element
@@ -91,9 +89,10 @@ will be performing.  In this section, you will specify the default settings
 for your HTTP requests.  And then, in section 5.3, you will add HTTP Request
 elements which use some of the default settings you specified here.</p>
 
-<p>Begin by selecting the Jakarta Users element. From the Edit menu, choose
-Add --&gt; Config Element --&gt; HTTP Request Defaults. Then, select this new
-element to view its Control Panel (see Figure 5.3).</p>
+<p>Begin by selecting the Jakarta Users element. Click your right mouse button
+to get the Add menu, and then select Add --&gt; Config Element --&gt; HTTP Request
+Defaults. Then, select this new element to view its Control Panel (see Figure 5.3).
+</p>
 
 <figure image="../images/screenshots/webtest/http-defaults1.gif">
 Figure 5.3. HTTP Request Defaults</figure>

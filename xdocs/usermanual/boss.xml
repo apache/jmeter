@@ -2,7 +2,7 @@
 <document>
 
 <properties>
-  <author>Martin Ramshaw</author>
+  <author email="mramshaw@alumni.concordia.ca">Martin Ramshaw</author>
   <title>User's Manual: My boss wants me to...</title>
 </properties>
 
@@ -94,14 +94,15 @@ and any supplied documentation).
 	<subsection name="12.4.1 ping">
 	<p>
 	This can be used to establish whether or not you can reach your
-	target site.
+	target site. Options can be specified so that 'ping' provides the
+	same type of route reporting as 'traceroute'.
 	</p>
 	</subsection>
-	<subsection name="12.4.2 nslookup">
+	<subsection name="12.4.2 nslookup/dig">
 	<p>
 	While the <u>user</u> will normally use a human-readable internet
 	address, <u>you</u> may wish to avoid the overhead of DNS lookups when
-	performing benchmarking/load-testing. This can be used to determine
+	performing benchmarking/load-testing. These can be used to determine
 	the unique address (dotted quad) of your target site.
 	</p>
 	</subsection>
@@ -132,14 +133,22 @@ if your requirements are not particularly complicated.
 	performance reporting.
 	</p>
 	</subsection>
-	<subsection name="12.5.2 Microsoft WAS">
+	<subsection name="12.5.2 HttpUnit">
+	<p>
+	This is worth a look. It is a library (and therefore of more interest to
+	developers) that can be used to perform HTTP tests/benchmarks. It is
+	intended to be used instead of a web browser (therefore no GUI) in
+	conjunction with <b>JUnit</b>.
+	</p>
+	</subsection>
+	<subsection name="12.5.3 Microsoft WAS">
 	<p>
 	This is definitely worth a look. It has an excellent user interface
 	but it may not do exactly what you want. If this is the case, be aware
 	that the functionality of this product is not likely to change.
 	</p>
 	</subsection>
-	<subsection name="12.5.3 JMeter">
+	<subsection name="12.5.4 JMeter">
 	<p>
 	If you have non-standard requirements, then this solution offers an
 	open-source community to provide them (of course, if you are reading
