@@ -216,7 +216,7 @@ public class SampleResult implements Serializable
      */
     public void setTime(long elapsed){
 		long now = System.currentTimeMillis();
-    	setTimes(now,elapsed);
+    	setTimes(now-elapsed,now);
     }
 
     public void setMarked(String filename)
@@ -628,6 +628,9 @@ public class SampleResult implements Serializable
 	}
 	
 ////////////////////////////// Start of Test Code ///////////////////////////
+
+
+//TODO need more tests - particularly for the new functions
 
     public static class Test extends TestCase
     {
