@@ -257,6 +257,8 @@
   <property name="tidy.jar" value="${lib.dir}/Tidy.jar"/>
 
   <patternset id="external.jars">
+    <include name="${lib.dir}/*.html"/>
+    <include name="${lib.dir}/LICENCE*.*"/>
     <include name="${avalon-excalibur.jar}"/>
     <include name="${avalon-framework.jar}"/>
     <include name="${jakarta-oro.jar}"/>
@@ -270,7 +272,6 @@
     <include name="${js.jar}"/>
     <include name="${soap.jar}"/>
     <include name="${tidy.jar}"/>
-    <include name="${lib.dir}/*.html"/>
   </patternset>
 
   <!--
@@ -689,6 +690,10 @@ some of its classes - at present JMeter can only run from jar files.
 
   <!-- list of files needed for a binary distribution -->
   <patternset id="dist.binaries">
+    <include name="LICENSE"/>
+    <include name="NOTICE"/>
+    <include name="README"/>
+    <include name="INSTALL"/>
     <include name="${dest.jar.jmeter}/ApacheJMeter.jar"/>
     <include name="${dest.jar.jmeter}/jmeter*"/>
     <include name="${dest.jar.jmeter}/upgrade.properties"/>
@@ -699,8 +704,6 @@ some of its classes - at present JMeter can only run from jar files.
     <include name="${extras.dir}/**"/>
     <include name="${lib.dir}/jorphan.jar"/>
     <include name="${lib.dir}/htmlparser.jar"/>
-    <include name="README"/>
-    <include name="LICENSE"/>
   </patternset>
 
   <!--
@@ -710,12 +713,14 @@ some of its classes - at present JMeter can only run from jar files.
   <property name="dist.executables" value="${dest.jar.jmeter}/jmeter ${dest.jar.jmeter}/jmeter-server"/>
 
   <patternset id="dist.sources">
+    <include name="LICENSE"/>
+    <include name="NOTICE"/>
+    <include name="README"/>
+    <include name="INSTALL"/>
     <include name="${src.dir}/**"/>
     <include name="${src.docs}/**"/>
     <include name="build.*"/>
     <include name="lcp.bat"/>
-    <include name="LICENSE"/>
-    <include name="README"/>
     <include name="${dest.jar.jmeter}/jmeter*.bat"/>
     <include name="${dest.jar.jmeter}/jmeter.properties"/>
     <include name="${dest.jar.jmeter}/log4j.conf"/>
