@@ -16,7 +16,6 @@
  */
 package org.apache.jmeter.visualizers;
 
-import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
@@ -25,12 +24,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
 
-import javax.xml.bind.*;
-import javax.xml.transform.stream.StreamSource;
-
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jorphan.tomcat.manager.*;
+import org.apache.jmeter.monitor.model.ObjectFactory;
+import org.apache.jmeter.monitor.model.Status;
 import org.apache.jmeter.monitor.util.Stats;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 
@@ -139,39 +136,23 @@ public class MonitorAccumModel implements Clearable, Serializable
 		String rescontent = new String(sample.getResponseData());
 		if (sample.getResponseCode().equals("200") &&
 			((HTTPSampleResult)sample).isMonitor()){
-			try {
-				JAXBContext jxbc = new ObjectFactory();
-				Unmarshaller mar = jxbc.createUnmarshaller();
-				String resdata = new String(sample.getResponseData());
-				// we trim because SAX still has a problem if there
-				// extra linebreaks at the beginning. That has been
-				// around for a long time.
-				resdata = resdata.trim();
-				resdata = resdata.replaceAll("\"&#63;\"","\"0\"");
-				StreamSource ss = new StreamSource(
-					new ByteArrayInputStream(resdata.getBytes()));
-				Object ld =
-					mar.unmarshal(ss);
-				if (ld instanceof Status){
-					Status st = (Status)ld;
-					MonitorStats stat =
-						new MonitorStats(Stats.calculateStatus(st),
-							Stats.calculateLoad(st),
-							0,
-							Stats.calculateMemoryLoad(st),
-							Stats.calculateThreadLoad(st),
-							surl.getHost(),
-							String.valueOf(surl.getPort()),
-							surl.getProtocol(),
-							System.currentTimeMillis());
-
-					MonitorModel mo = new MonitorModel(stat);
-					this.addSample(mo);
-					notifyListeners(mo);
-				}
-			} catch (JAXBException e){
-				// we don't log the errors
-				// e.printStackTrace();
+			ObjectFactory of = ObjectFactory.getInstance();
+			Status st = of.parseBytes(sample.getResponseData());
+			if (st != null){
+				MonitorStats stat =
+					new MonitorStats(Stats.calculateStatus(st),
+						Stats.calculateLoad(st),
+						0,
+						Stats.calculateMemoryLoad(st),
+						Stats.calculateThreadLoad(st),
+						surl.getHost(),
+						String.valueOf(surl.getPort()),
+						surl.getProtocol(),
+						System.currentTimeMillis());
+				MonitorModel mo = new MonitorModel(stat);
+				this.addSample(mo);
+				notifyListeners(mo);
+			} else {
 				noResponse(surl);
 			}
 		} else if (((HTTPSampleResult)sample).isMonitor() ){
