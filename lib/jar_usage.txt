@@ -13,6 +13,9 @@ commons-collections
 htmlparser
 - http: parsing html
 
+jai
+- com.sun.media.jai
+
 jakarta-oro
 - regular expressions: various
 
