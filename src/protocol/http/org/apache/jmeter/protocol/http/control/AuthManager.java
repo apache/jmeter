@@ -188,7 +188,7 @@ public class AuthManager
 
     public String getAuthHeaderForURL(URL url)
     {
-        if (isSupportedProtocol(url))
+        if (isUnsupportedProtocol(url))
         {
             return null;
         }
@@ -333,7 +333,7 @@ public class AuthManager
         return getAuthObjects().size();
     }
 
-    private boolean isSupportedProtocol(URL url)
+    private boolean isUnsupportedProtocol(URL url)
     {
         return !url.getProtocol().toUpperCase().equals("HTTP")
             && !url.getProtocol().toUpperCase().equals("HTTPS");
