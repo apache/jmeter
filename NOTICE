@@ -1,0 +1,12 @@
+This product includes software developed by
+The Apache Software Foundation (http://www.apache.org/).
+
+JavaScript support is provided by the Mozilla Rhino project
+See http://www.mozilla.org/rhino/
+
+This product includes software developed by the
+JDOM Project (http://www.jdom.org/).
+
+Unit testing support is provided by JUnit
+under the Common Public License Version 1.0: http://www.opensource.org/licenses/cpl.php
+See http://www.junit.org/
