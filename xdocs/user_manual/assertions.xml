@@ -37,7 +37,7 @@ displays the URL of each test sample as it is returned, and, if the test failed 
 more assertions, those failures are reported under the sample URL.  If the test succeeded,
 only the sampled URL is shown.  It's very simplistic currently - but this listener
 is useful for watching what URL's JMeter is sampling.  In the future, more powerful
-assertion listeners will be developed.
+assertion listeners will be developed.</p>
 </section>
 
 <section name="Example test tree">

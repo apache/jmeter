@@ -6,7 +6,7 @@
   <property name="sources.src.dir" value="src"/>
   <!-- Where the API documentation lives -->
   <property name="docs.api.dest.dir" value="docs/api"/>
-  <property name="version" value="_1.6.1"/>
+  <property name="version" value="_1.7Beta"/>
   <property name="docs.src" value="./xdocs"/>
   <property name="docs.dest" value="./docs"/>
   <property name="printable_docs.dest" value="./printable_docs"/>
@@ -86,7 +86,7 @@
 				<exclude name="**/Changelog*"/>
 				<exclude name="**/*.orig"/>
 				<exclude name="org/apache/jmeter/protocol/http/util/SSLStaticProvider.java" unless="jsse.present"/>
-                <exclude name="**/SSLManager*" unless="jsse.present"/>
+					 <exclude name="**/SSLManager*" unless="jsse.present"/>
 				<exclude name="org/apache/jmeter/visualizers/MailerVisualizer.java" unless="javamail.complete"/>
 				<exclude name="org/apache/jmeter/reporters/MailerResultCollector.java" unless="javamail.complete"/>
 				<classpath refid="classpath"/>
@@ -181,7 +181,7 @@
 				lastModifiedCheck="false"
 				velocityPropertiesFile="${docs.src}/velocity.properties"></anakia>
 	 </target>
-	 
+
 	 <target name="printable_docs" depends="no.anakia" if="AnakiaTask.present">
 		  <taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask"/>
 		  <anakia basedir="${docs.src}" destdir="${docs.dest}/"
