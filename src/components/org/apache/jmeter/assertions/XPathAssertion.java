@@ -172,7 +172,7 @@ public class XPathAssertion extends AbstractTestElement implements
 
 	/**
 	 * Set the XPath String this will be used as an xpath
-	 * @param String xpath
+	 * @param xpath String
 	 */
 	public void setXPathString(String xpath) {
 		setProperty(new StringProperty(XPATH_KEY, xpath));
@@ -180,7 +180,7 @@ public class XPathAssertion extends AbstractTestElement implements
 
 	/**
 	 * Set whether to ignore element whitespace
-	 * @param boolean whitespace
+	 * @param whitespace
 	 */
 	public void setWhitespace(boolean whitespace) {
 		setProperty(new BooleanProperty(WHITESPACE_KEY, whitespace));
@@ -188,7 +188,7 @@ public class XPathAssertion extends AbstractTestElement implements
 
 	/**
 	 * Set use validation 
-	 * @param boolean validate
+	 * @param validate
 	 */
 	public void setValidating(boolean validate) {
 		setProperty(new BooleanProperty(VALIDATE_KEY, validate));
@@ -196,7 +196,7 @@ public class XPathAssertion extends AbstractTestElement implements
 
 	/**
 	 * Set whether this is namespace aware 
-	 * @param boolean validate
+	 * @param namespace
 	 */
 	public void setNamespace(boolean namespace) {
 		setProperty(new BooleanProperty(NAMESPACE_KEY, namespace));

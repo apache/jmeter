@@ -96,7 +96,7 @@ public class XPathPanel extends JPanel {
 	}
 	/**
 	 * Get the XPath String 
-	 * @return
+	 * @return String
 	 */
 	public String getXPath() {
 		return this.xpath.getText();
@@ -110,9 +110,8 @@ public class XPathPanel extends JPanel {
 	}
 	/**
 	 * Does this negate the xpath results
-	 * @return
+	 * @return boolean
 	 */
-
 	public boolean isNegated() {
 		return this.negated.isSelected();
 	}
@@ -126,7 +125,7 @@ public class XPathPanel extends JPanel {
 	}
 	/**
 	 * Negated chechbox
-	 * @return
+	 * @return JCheckBox
 	 */
 	public JCheckBox getNegatedCheckBox() {
 	    if (negated == null ) {
@@ -137,7 +136,7 @@ public class XPathPanel extends JPanel {
 	}
 	/**
 	 * Check XPath button
-	 * @return
+	 * @return JButton
 	 */
 	public JButton getCheckXPathButton() {
 		if (checkXPath == null) {

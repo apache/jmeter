@@ -71,7 +71,7 @@ public class XPathUtil {
 	  * @param validate
 	  * @param whitespace
 	  * @param namespace
-	  * @return
+	  * @return document builder
 	  * @throws ParserConfigurationException
 	  * @throws SAXException
 	  */
@@ -92,7 +92,7 @@ public class XPathUtil {
 	 * @param whitespace Element Whitespace
 	 * @param namespace Is Namespace aware.
 	 * @param tolerant Is tolerant
-	 * @return
+	 * @return document
 	 * @throws ParserConfigurationException
 	 * @throws IOException
 	 * @throws SAXException
