@@ -58,7 +58,6 @@ package org.apache.jmeter.util;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -122,16 +121,21 @@ public class BeanShellServer implements Runnable {
 			Method setInt = Interpreter.getMethod(
 					"set",
 					new Class[] {string,int.class});
+			Method source =
+				Interpreter.getMethod(
+					"source",
+					new Class[] {string});
 			
 			setObj.invoke(instance, new Object[] { "t",this });
 			setInt.invoke(instance, new Object[] { "portnum",new Integer(serverport) });
-			eval.invoke(instance, new Object[]{"setAccessibility(true)"});
+
 			if (serverfile.length() > 0 ){
-				setObj.invoke(instance, new Object[] { "serverfile",serverfile });
 				try {
-					eval.invoke(instance, new Object[]{"source(serverfile)"});
+					source.invoke(instance, new Object[]{serverfile});
 				} catch (InvocationTargetException e1) {
-					log.warn("Could not evaluate "+serverfile);
+					log.warn("Could not source "+serverfile);
+					Throwable t= e1.getCause();
+					if (t != null) log.warn(t.toString());
 				}
 			}
 			eval.invoke(instance, new Object[]{"server(portnum)"});
