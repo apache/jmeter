@@ -86,6 +86,7 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 	public final static int LESSTHANEQUAL = 6;
 	/** Key for storing assertion-informations in the jmx-file. */
 	private static final String SIZE_KEY = "SizeAssertion.size";
+        private static final String OPERATOR_KEY="SizeAssertion.operator";
 	byte[] resultData;
 	
 	/**
@@ -117,6 +118,23 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 	public long getAllowedSize() {
 		return getPropertyAsLong(SIZE_KEY);
 	}
+
+        /******
+         * set the Operator 
+         ******/
+        public void setCompOper(int operator) {
+               setProperty(OPERATOR_KEY,new Integer(operator));
+
+        }
+
+	/**
+	 * Returns the operator to be asserted. EQUAL = 1, NOTEQUAL = 2
+         * GREATERTHAN = 3,LESSTHAN = 4,GREATERTHANEQUAL = 5,LESSTHANEQUAL = 6
+	 */
+        
+        public int getCompOper() {
+               return getPropertyAsInt(OPERATOR_KEY);
+        }
 
 	/**
 	 * Set the size that shall be asserted.
@@ -198,7 +216,8 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 	
 	private boolean compareSize(long resultSize) {
 		boolean result = false;
-		switch (comparator) 
+            int comp =getCompOper();
+		switch (comp) 
 		{
 			case EQUAL: 
 				result = (resultSize == getAllowedSize());
