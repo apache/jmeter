@@ -1,4 +1,5 @@
 package org.apache.jmeter.junit;
+import java.awt.GraphicsEnvironment;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
@@ -37,6 +38,16 @@ public class JMeterTest extends TestCase
         super(name);
     }
 
+    public void testGUIEnv() throws Exception // Try to find why Gump tests fail
+    {
+    	//java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment(GraphicsEnvironment.java:62)
+		String nm = (String) java.security.AccessController.doPrivileged
+			   (new sun.security.action.GetPropertyAction
+				("java.awt.graphicsenv", null));
+        System.out.println("\njava.awt.graphicsenv="+nm);
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		System.out.println("ge="+ge);
+    }
     public void testGUIComponents() throws Exception
     {
         Iterator iter = getObjects(JMeterGUIComponent.class).iterator();
