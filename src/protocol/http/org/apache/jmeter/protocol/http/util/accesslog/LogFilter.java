@@ -21,7 +21,9 @@ package org.apache.jmeter.protocol.http.util.accesslog;
 import java.util.ArrayList;
 
 import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.oro.text.regex.*;
+import org.apache.oro.text.regex.Pattern;
+import org.apache.oro.text.regex.Perl5Compiler;
+import org.apache.oro.text.regex.Perl5Matcher;
 
 /**
  * Description:<br>
@@ -80,7 +82,7 @@ import org.apache.oro.text.regex.*;
  * will return null if it is filtered and replace
  * any part of the string that should be replaced.
  * <p>
- * @author		Peter Lin<br>
+ * 
  * @version 	$Revision$ last updated $Date$
  * Created on:	Jun 26, 2003<br>
  */
