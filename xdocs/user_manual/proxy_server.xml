@@ -5,63 +5,64 @@
 	 <title>HTTP Proxy Server</title>
   </properties>
 <body>
-<section name="HTTP Proxy Server">
-
-<h2>HTTP Proxy Server to record browser requests</h2>:
-<p>To use the proxy server, create a Threadgroup in your testplan or workbench.  
+<section name="HTTP Proxy Server to record browser requests">
+<p>To use the proxy server, create a Threadgroup in your testplan or workbench.
 In the Threadgroup, <i>add</i> the Proxy Server (it will be an option under Config Elements).</p>
 <p>
 The Proxy Server allows JMeter to watch and record your actions while you browse your web application
 with your normal browser (such as Internet Explorer).  JMeter will create test sample objects and store them
 directly into your test plan as you go (so you can view samples interactively while you make them).</p>
-<h3>Configuring the Proxy Server</h3>
+</section>
+<section name="Configuring the Proxy Server">
 <p>
 There are a few simple options in the Proxy Server's configuration screen that give you some control over the Proxy's
 behavior.  First, you can select the port that the Proxy Server listens to.  8080 is the default, but you can change it
 if that port is already in use on your machine.</p>
 <p>
-The Include and Exclude fields allow you to filter requests.  If, for example, you left both fields blank, then JMeter 
+The Include and Exclude fields allow you to filter requests.  If, for example, you left both fields blank, then JMeter
 would record every action of your browser.  This can often result in 20+ test samples being recorded for each web page
 (it will record all image requests, CSS files, Javascript files, etc).  This is probably not desirable (there are better
 ways to tell JMeter to download the images from a page).  The Include/Exclude fields give you some say over what gets
 recorded.  </p>
 <p>
-If the Include field is left empty, then all requests will &quot;pass&quot; the include test.  If the Exclude field is 
+If the Include field is left empty, then all requests will &quot;pass&quot; the include test.  If the Exclude field is
 left empty, then all request will &quot;pass&quot; the exclude test.  Once the Include field has at least one entry,
 then only those requests that match at least one entry will &quot;pass&quot; (&quot;pass&quot; means &quot;be
 recorded&quot;). </p>
 <p>
-If the Exclude field is left empty, then all requests (that have passed the Include field check) will pass.  If there are 
+If the Exclude field is left empty, then all requests (that have passed the Include field check) will pass.  If there are
 entries in the Exclude field, then any request that matches at least one entry will not be recorded.
 </p>
 <p>
 To add an entry to the Include or Exclude field, type the entry into the text field, and hit &quot;Enter&quot; when done.
-The text will be added to the List box to the right of the text field.  To clear the text field, hit the &quot;clear&quot; 
+The text will be added to the List box to the right of the text field.  To clear the text field, hit the &quot;clear&quot;
 button.  Currently, there is no way to individually select items and delete them.
 </p>
 <p>
 These entries will be treated as Perl-type regular expressions.  They will be matched against the host name + the path of
 each browser request.  Thus, if the URL you are browsing is http://jakarta.apache.org/jmeter/index.html?username=xxxx,
 then the regular expression will be tested against the string: &quot;jakarta.apache.org/jmeter/index.html&quot;.  Thus,
-if you wanted to include all .html files, you're regular expression might look like: &quot;.*\.html&quot;.  Using a 
+if you wanted to include all .html files, you're regular expression might look like: &quot;.*\.html&quot;.  Using a
 combination of includes and excludes, you should be able to record what you are interested in and skip what you are
 not.</p>
 <p>
 When you are ready to begin, hit &quot;start&quot;.</p>
 <p>
 Currently, the Proxy Server does not save these settings when saved to file.</p>
-<h3>Where do the samples get recorded to?</h3>
+</section>
+<section name="Where do the samples get recorded to?">
 <p>
 If you went ahead and tried out the Proxy Server, you might have noticed that nothing was recorded.  In order for samples
-to be recorded, the Proxy Server needs to be able to find a Web Test Controller somewhere in the tree.  The Proxy Server 
-will record the samples under any appropriate Web Test Controller it finds.  If you add a Web Test Controller, and do 
+to be recorded, the Proxy Server needs to be able to find a Web Test Controller somewhere in the tree.  The Proxy Server
+will record the samples under any appropriate Web Test Controller it finds.  If you add a Web Test Controller, and do
 nothing more to it, all recorded samples will be recorded into it.  If you enter a domain name in the Web Test Controller,
-only those samples that have a matching domain will be recorded into it.  Same with the Path field.  
+only those samples that have a matching domain will be recorded into it.  Same with the Path field.
 </p>
-<h3>All Done</h3>
+</section>
+<section name="All Done">
 <p>
 When you are done recording your test samples, stop the proxy server (hit the &quot;stop&quot; button).  Remember to reset
-your browser's proxy settings.  Now, you may want to sort and re-order the test script, add timers, listeners, a 
+your browser's proxy settings.  Now, you may want to sort and re-order the test script, add timers, listeners, a
 cookie manager, etc.  </p>
 
 </section>

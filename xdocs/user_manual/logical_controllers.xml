@@ -1,42 +1,21 @@
 <?xml version="1.0"?>
 <document>
   <properties>
-	 <author email="bburns@apache.org">Michael Stover, brendan Burns, et al.</author>
+	 <author email="mstover1@apache.org">Michael Stover, et al.</author>
 	 <title>Logical Controllers</title>
   </properties>
 <body>
 <section name="Logical Controllers">
 
-<h2>Logical controllers control test iteration behavior</h2>:
-<p>To add a logical controller to a test, right click on a tree element (must
-be either a ThreadGroup or Controller element), and select from the controller
-list the one you want to add.  It will be added to the bottom of that elements
-children.
-</p>
 <p>
 A logical controller is a controller that regulates the iterative behavior of
 it's sub-controllers, and sometimes, it can also affect the behavior of its
-parent controller indirectly.  Many logical controllers will simply be elements
-that a user will drop into their test (in a certain position within the tree hierarchy)
-with nothing more to do.
-</p>
-<h3>Example: Once Only Control</h3>
-<p>
-The Once Only Controller causes the controllers under to deliver test cases only
-once during a test run.  Thereafter, those test cases are dropped from the test.
-In other words, those test cases will be sampled only during the first iteration.
-There is no configuration required (are possible) for this controller, so it is
-very simple to use.  One might find this controller useful to create a test plan
-where a login page is sampled only once, and thereafter skipped - which is typical
-user behavior.
-</p>
-<h3>Hypothetical Example: Loop Control</h3>
-<p>
-A loop control element would be used to force the test to iterate through certain
-sub elements multiple times before going on to other test elements.  Again, the
-loop controller would be placed in the tree hierarchy, and all sub elements would
-be iterated through a specified number of times each time through the test cycle.
-Such a loop control element would allow the user to configure the loop count.
+parent controller indirectly.  A logical controller can also modify test samples
+that pass through it. The essential distinction between a logical controller and a
+<a href="test_samples.html">test sample controller</a> is that logical controllers create no test samples by
+themselves.  If you add a logical controller to the test tree with no sub-conrollers,
+then it can have no effect on the test.  It's only useful as a parent of other
+<a href="test_samples.html">sample generating controllers</a>.
 </p>
 </section>
 </body>
