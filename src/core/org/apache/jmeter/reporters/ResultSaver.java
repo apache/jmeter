@@ -38,7 +38,6 @@ import org.apache.log.Logger;
  * 
  * This is mainly intended for validation tests
  * 
- * @author sebb AT apache DOT org
  * @version $Revision$ Last updated: $Date$
  */
 public class ResultSaver

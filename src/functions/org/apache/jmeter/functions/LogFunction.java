@@ -41,7 +41,6 @@ import org.apache.log.Priority;
  * Returns:
  *  - the input string
  * 
- * @author sebb AT apache DOT org
  * @version $Revision$ Updated: $Date$
  */
 public class LogFunction extends AbstractFunction implements Serializable

@@ -33,7 +33,6 @@ import java.util.Iterator;
  * Designed for use by HTMLParser, so is not a full implementation 
  * - e.g. does not support remove()
  * 
- * @author sebb AT apache DOT org
  * @version $Revision$ $Date$
  */
 public class URLCollection

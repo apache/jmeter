@@ -24,7 +24,6 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.tcp.sampler.TCPSampler;
 
 /**
- * @author sebb AT apache DOT org
  * @version $Revision$ $Date$
  */
 public class TCPConfig extends ConfigTestElement implements Serializable

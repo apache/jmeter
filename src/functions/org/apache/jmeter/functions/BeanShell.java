@@ -38,7 +38,6 @@ import org.apache.log.Logger;
  * ALPHA CODE - liable to change without notice!
  * =============================================
  * 
- * @author sebb AT apache DOT org
  * @version    $Revision$ Updated on: $Date$
  */
 

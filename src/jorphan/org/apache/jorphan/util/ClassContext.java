@@ -24,7 +24,6 @@ package org.apache.jorphan.util;
  * 
  * May not work with applications that install their own security managers.
  * 
- * @author sebb AT apache DOT org
  * @version $Revision$ last updated $Date$
  */
 public final class ClassContext extends SecurityManager

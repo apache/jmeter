@@ -55,8 +55,6 @@ import org.apache.log.Logger;
  * - the file name is resolved at file (re-)open time
  * - the output variable name is resolved every time the function is invoked
  * 
- * @author sebb AT apache DOT org
- *
  * @version $Revision$ Updated on: $Date$
  */
 public class StringFromFile extends AbstractFunction implements Serializable

@@ -52,9 +52,6 @@ import org.apache.log.Logger;
  *  __CSVRead(*ONE,1); etc
  * 
  *
- * @author Cyrus M.
- * @author sebb AT apache DOT org (multi-file version)
- * 
  * @version $Revision$ Last Updated: $Date$
  */
 public class CSVRead extends AbstractFunction implements Serializable

@@ -53,7 +53,6 @@ import org.apache.jmeter.util.JMeterUtils;
  *  - the default value, but if not present
  *  - "1" (suitable for use in ThreadGroup GUI)
  * 
- * @author sebb AT apache DOT org
  * @version $Revision$ Updated: $Date$
  */
 public class Property2 extends AbstractFunction implements Serializable

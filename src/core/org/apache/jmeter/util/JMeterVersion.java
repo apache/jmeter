@@ -31,7 +31,6 @@ package org.apache.jmeter.util;
 /**
  * Utility class to define the JMeter Version string
  * 
- * @author sebb AT apache.org
  * @version $Revision$ $Date$
  */
 public class JMeterVersion

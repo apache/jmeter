@@ -34,7 +34,6 @@ import org.apache.log.Logger;
 /**
  * Transaction Controller to measure transaction times
  * 
- * @author  sebb AT apache DOT org
  * @version $Revision$
  */
 public class TransactionController
