@@ -4,9 +4,10 @@ import java.io.Serializable;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.IterationEvent;
 import org.apache.jmeter.engine.event.IterationListener;
-import org.apache.jmeter.testelement.VariablesCollection;
+import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -19,7 +20,7 @@ import org.apache.log.Logger;
  */
 public class CounterConfig
 	extends ConfigTestElement
-	implements Serializable, IterationListener
+	implements Serializable, IterationListener,NoThreadClone
 {
 	private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.ELEMENTS);
 	private final static String START = "CounterConfig.start";
@@ -33,15 +34,14 @@ public class CounterConfig
 	private int increment = 1;
 	private int start = 0;
 	private int end = Integer.MAX_VALUE;
-	private VariablesCollection vars = new VariablesCollection();
 	private int currentIterationCount = -1;
 	/**
 	 * @see org.apache.jmeter.testelement.ThreadListener#iterationStarted(int)
 	 */
 	public synchronized void iterationStart(IterationEvent event)
 	{
-		JMeterVariables variables = vars.getVariables();
-		if(!perUser)
+		JMeterVariables variables = JMeterContextService.getContext().getVariables();
+		if(!isPerUser())
 		{
 			globalCounter++;
 			int value = start + (increment * globalCounter);
@@ -55,9 +55,10 @@ public class CounterConfig
 		else
 		{		
 			String value = variables.get(getVarName());
-			if(value == null)
+			if(value == null || value.equals(""))
 			{
 				variables.put(getVarName(),Integer.toString(start));
+                value = variables.get(getVarName());
 			}
 			else
 			{
@@ -77,18 +78,6 @@ public class CounterConfig
 				}		
 			}	
 		}			
-	}
-	
-	/**
-	 * @see org.apache.jmeter.testelement.ThreadListener#setJMeterVariables(JMeterVariables)
-	 */
-	public void setJMeterVariables(JMeterVariables jmVars)
-	{
-		vars.addJMeterVariables(jmVars);
-		start = getStart();
-		end = getEnd();
-		increment = getIncrement();
-		perUser = isPerUser();
 	}
 	
 	public void setStart(int start)
