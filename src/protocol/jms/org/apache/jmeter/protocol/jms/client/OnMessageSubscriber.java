@@ -1,0 +1,122 @@
+/*
+ * Copyright 2001-2004 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+ 
+package org.apache.jmeter.protocol.jms.client;
+
+import javax.naming.Context;
+import javax.jms.JMSException;
+import javax.jms.MessageListener;
+import javax.jms.Topic;
+import javax.jms.TopicConnection;
+import javax.jms.TopicConnectionFactory;
+import javax.jms.TopicSession;
+import javax.jms.TopicSubscriber;
+
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
+
+/**
+ * @author pete
+ *
+ * To change the template for this generated type comment go to
+ * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ */
+public class OnMessageSubscriber {
+
+	static Logger log = LoggingManager.getLoggerForClass();
+
+	private TopicConnection CONN = null;
+	private TopicSession SESSION = null;
+	private Topic TOPIC = null;
+	private TopicSubscriber SUBSCRIBER = null;
+
+    /**
+     * 
+     */
+    public OnMessageSubscriber() {
+        super();
+    }
+    
+    public OnMessageSubscriber(String jndi, String url, String connfactory,
+    String topic, String useAuth, String user, String pwd){
+    	Context ctx = initJNDI(jndi,url,useAuth,user,pwd);
+    	if (ctx != null) {
+    		initConnection(ctx,connfactory,topic);
+		} else {
+			log.equals("Could not initialize JNDI Initial Context Factory");
+    	}
+    }
+    
+    public Context initJNDI(String jndi, String url, String useAuth, String user, String pwd){
+    	return InitialContextFactory.lookupContext(jndi,url,useAuth,user,pwd);
+    }
+    
+    public void initConnection(Context ctx, String connfactory, String topic){
+    	try {
+			TopicConnectionFactory connfac =
+				ConnectionFactory.getTopicConnectionFactory(ctx,connfactory);
+			this.CONN = ConnectionFactory.getTopicConnection();
+			this.TOPIC = InitialContextFactory.lookupTopic(ctx,topic);
+			this.SESSION = this.CONN.createTopicSession(false,TopicSession.AUTO_ACKNOWLEDGE);
+			this.SUBSCRIBER = this.SESSION.createSubscriber(this.TOPIC);
+			log.info("created the topic connection successfully");
+        } catch (JMSException e){
+    	    log.error("Connection error: " + e.getMessage());
+        }
+    }
+
+	public void pause(){
+		try {
+			this.CONN.stop();
+		} catch (JMSException e){
+			log.error("failed to stop recieving");
+		}
+	}
+	
+	public void resume(){
+		try {
+			this.CONN.start();
+		} catch (JMSException e){
+			log.error("failed to start recieving");
+		}
+	}
+	
+	public void close(){
+		try {
+			log.info("Subscriber closed");
+			this.SUBSCRIBER.close();
+			this.SESSION.close();
+			this.CONN.close();
+			this.SUBSCRIBER = null;
+			this.SESSION = null;
+			this.CONN = null;
+			this.finalize();
+		} catch (JMSException e){
+			log.error(e.getMessage());
+		} catch (Throwable e){
+			log.error(e.getMessage());
+		}
+	}
+
+	public void setMessageListener(MessageListener listener){
+		try {
+			this.SUBSCRIBER.setMessageListener(listener);
+		} catch (JMSException e){
+			log.error(e.getMessage());
+		}
+	}
+}
