@@ -125,17 +125,16 @@ public final class HtmlParsingUtils implements Serializable
         Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
         PropertyIterator iter = config.getArguments().iterator();
 
-        // In JDK1.2, URLDecoder.decode has Exception in its throws clause.
-        // However, it was removed in JDK1.3. Since JMeter is
-        // JDK1.2-compatible, we need to catch Exception.
         String query = null;
         try
         {
-            query = URLDecoder.decode(newLink.getQueryString());// TODO use decode(String,"UTF-8") instead?
+            query = URLDecoder.decode(newLink.getQueryString(),"UTF-8");
         }
-        catch (Exception e)
+        catch (UnsupportedEncodingException e)
         {
-            // do nothing. query will remain null.
+            // UTF-8 unsupported? You must be joking!
+            log.error("UTF-8 encoding not supported!");
+            throw new Error(e);
         }
 
         if (query == null && config.getArguments().getArgumentCount() > 0)
