@@ -206,7 +206,8 @@
 				<include name="jakarta-jmeter/**"/>
 				<exclude name="**/classes/**"/>
 				<exclude name="**/xdocs/**"/>
-				<exclude name="**/ext/**"/>
+				<exclude name="jakarta-jmeter/ext/**"/>
+				<exclude name="**/src/**"/>
 			</fileset>
 		</zip>
 		<tar tarfile="../ApacheJMeter_${version}.tar" basedir=".." includes="jakarta-jmeter/**" excludes="**/classes/**,**/xdocs/**,**/ext/**"/>
