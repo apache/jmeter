@@ -168,8 +168,15 @@ public class JMeterTest extends JMeterTestCase
 	{
 		if (guiTitles.size() > 0) {
 			String title = guiItem.getStaticLabel();
-			assertTrue("Component ref should contain entry for "+title,
-			    guiTitles.contains(title));
+			boolean ct =guiTitles.contains(title); 
+			if (// Is this a work in progress ?
+			    (title.indexOf("(ALPHA") == -1)
+			    &&
+			    (title.indexOf("(BETA")  == -1)
+			)
+			{// No, not a work in progress ...
+				assertTrue("Component ref should contain entry for "+title,ct);
+			}
 		}
 	}
 	
