@@ -85,7 +85,7 @@ public class Close implements Command
                     new ActionEvent(
                         e.getSource(),
                         e.getID(),
-                        CheckDirty.SAVE_ALL));
+                        Save.SAVE));
             }
         }
         guiPackage.getTreeModel().clearTestPlan();
