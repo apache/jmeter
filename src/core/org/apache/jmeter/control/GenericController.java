@@ -98,10 +98,7 @@ public class GenericController extends AbstractTestElement implements Controller
     /**
      * Creates a Generic Controller
      */
-    public GenericController()
-    {
-        initialize();
-    }
+    public GenericController(){}
 
     public void initialize()
     {

@@ -56,8 +56,11 @@ package org.apache.jmeter.control.gui;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -76,15 +79,20 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *@version   $Revision$
  ***************************************/
 
-public class ThroughputControllerGui extends AbstractControllerGui implements ActionListener
+public class ThroughputControllerGui 
+	extends AbstractControllerGui
 {
-    private JComboBox style;
+    private JComboBox styleBox;
+    private int style;
     private JTextField throughput;
+    private JCheckBox perthread;
+    private boolean isPerThread = true;
 
     private String BYNUMBER_LABEL = JMeterUtils.getResString("throughput_control_bynumber_label");
 	private String BYPERCENT_LABEL = JMeterUtils.getResString("throughput_control_bypercent_label");
 	private String THROUGHPUT_LABEL = JMeterUtils.getResString("throughput_control_tplabel");
 	private String THROUGHPUT = "Througput Field";
+	private String PERTHREAD_LABEL = JMeterUtils.getResString("throughput_control_perthread_label");
 
 	/****************************************
 	 * !ToDo (Constructor description)
@@ -113,8 +121,9 @@ public class ThroughputControllerGui extends AbstractControllerGui implements Ac
     public void modifyTestElement(TestElement tc)
     {
         configureTestElement(tc);
-        if (((String)style.getSelectedItem()).equals(BYNUMBER_LABEL)) {
-        	((ThroughputController)tc).setStyle(ThroughputController.BYNUMBER);
+		((ThroughputController)tc).setStyle(style);
+		((ThroughputController)tc).setPerThread(isPerThread);
+        if (style == ThroughputController.BYNUMBER) {
 			try {
 				((ThroughputController)tc).setMaxThroughput(Integer.parseInt(throughput.getText().trim()));
 			} catch (NumberFormatException e) {
@@ -122,11 +131,10 @@ public class ThroughputControllerGui extends AbstractControllerGui implements Ac
 			}
         }
         else {
-        	((ThroughputController)tc).setStyle(ThroughputController.BYPERCENT);
         	try {
         		((ThroughputController)tc).setPercentThroughput(Float.parseFloat(throughput.getText().trim()));
         	} catch (NumberFormatException e) {
-        		((ThroughputController)tc).setMaxThroughput(100);
+        		((ThroughputController)tc).setPercentThroughput(100);
            	}
         }
     }
@@ -136,15 +144,15 @@ public class ThroughputControllerGui extends AbstractControllerGui implements Ac
 		super.configure(el);
 		if (((ThroughputController)el).getStyle() == ThroughputController.BYNUMBER)
 		{
-			style.getModel().setSelectedItem(BYNUMBER_LABEL);
+			styleBox.getModel().setSelectedItem(BYNUMBER_LABEL);
 			throughput.setText(String.valueOf(((ThroughputController)el).getMaxThroughput()));
 		}
 		else
 		{
-			style.setSelectedItem(BYPERCENT_LABEL);
+			styleBox.setSelectedItem(BYPERCENT_LABEL);
 			throughput.setText(String.valueOf(((ThroughputController)el).getPercentThroughput()));
 		}
-		
+		perthread.setSelected(((ThroughputController)el).isPerThread());		
 	}
 
 	/****************************************
@@ -166,12 +174,24 @@ public class ThroughputControllerGui extends AbstractControllerGui implements Ac
 		DefaultComboBoxModel styleModel = new DefaultComboBoxModel();
 		styleModel.addElement(BYNUMBER_LABEL);
 		styleModel.addElement(BYPERCENT_LABEL);
-		style = new JComboBox(styleModel);
-		add(style);
+		styleBox = new JComboBox(styleModel);
+		styleBox.addActionListener(
+			new ActionListener()
+			{
+				public void actionPerformed(ActionEvent e)
+				{
+					if (((String)styleBox.getSelectedItem()).equals(BYNUMBER_LABEL))
+						style = ThroughputController.BYNUMBER;
+					else
+						style = ThroughputController.BYPERCENT;
+				}
+			}
+		);
+		add(styleBox);
 
 		// TYPE FIELD
 		JPanel tpPanel = new JPanel();
-		JLabel tpLabel = new JLabel(JMeterUtils.getResString("throughput_control_tplabel"));
+		JLabel tpLabel = new JLabel(THROUGHPUT_LABEL);
 		tpPanel.add(tpLabel);
 
 		// TEXT FIELD
@@ -179,37 +199,24 @@ public class ThroughputControllerGui extends AbstractControllerGui implements Ac
 		tpPanel.add(throughput);
 		throughput.setName(THROUGHPUT);
 		throughput.setText("1");
-		throughput.addActionListener(this);
+//		throughput.addActionListener(this);
 		tpPanel.add(throughput);
-
 		add(tpPanel);
+		
+		// PERTHREAD FIELD
+		perthread = new JCheckBox(PERTHREAD_LABEL, isPerThread);
+		perthread.addItemListener(
+			new ItemListener() 
+			{
+				public void itemStateChanged(ItemEvent event)
+				{
+					if (event.getStateChange() == ItemEvent.SELECTED)
+						isPerThread = true;
+					else
+						isPerThread = false;
+				}
+			}
+		);
+//		add(perthread);
 	}
-	
-	public void actionPerformed (ActionEvent event) 
-	{
-		if (((String)style.getSelectedItem()).equals(BYNUMBER_LABEL))
-		{
-			try 
-			{
-				Integer.parseInt(throughput.getText().trim());
-			} 
-			catch (NumberFormatException e) 
-			{
-				
-			}
-		}
-		else
-		{
-			try
-			{
-				Float.parseFloat(throughput.getText().trim());
-			}
-			catch (NumberFormatException e)
-			{
-				
-			}
-			
-		}
-	}
-
 }
