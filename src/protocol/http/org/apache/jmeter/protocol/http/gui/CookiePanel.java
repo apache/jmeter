@@ -62,6 +62,7 @@ import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -76,6 +77,7 @@ import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
@@ -99,6 +101,8 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
 
 	private JTable cookieTable;
     private PowerTableModel tableModel;
+    private JCheckBox clearEachIteration;
+    private static final String clearEachIterationLabel = "clear_cookies_per_iter";
 
     private static final String[] columnNames = {
          JMeterUtils.getResString("name"),
@@ -130,6 +134,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
 	public CookiePanel()
 	{
 		tableModel = new PowerTableModel(columnNames, columnClasses);
+		clearEachIteration = new JCheckBox(JMeterUtils.getResString(clearEachIterationLabel), false);
 		init();
 	}
 
@@ -288,6 +293,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
             	Cookie cookie = createCookie(tableModel.getRowData(i));
             	cookieManager.add(cookie);
             }
+            cookieManager.setClearEachIteration(clearEachIteration.isSelected());
         }
     }
 	
@@ -331,6 +337,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
 	{
 		super.configure(el);
 		populateTable((CookieManager)el);
+		clearEachIteration.setSelected(((CookieManager)el).getClearEachIteration());
 	}
 
 	/****************************************
@@ -340,8 +347,11 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
 	{
         setLayout(new BorderLayout());
         setBorder(makeBorder());
-        
-		add (makeTitlePanel(), BorderLayout.NORTH);
+        JPanel northPanel = new JPanel();
+        northPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+        northPanel.add(makeTitlePanel());
+        northPanel.add(clearEachIteration);
+		add (northPanel, BorderLayout.NORTH);
         add (createCookieTablePanel(), BorderLayout.CENTER);
 	}
 
