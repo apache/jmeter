@@ -11,25 +11,26 @@ import org.apache.jmeter.testelement.TestElement;
 public class TestElementProperty extends AbstractProperty
 {
     TestElement value;
-    
-    public TestElementProperty(String name,TestElement value)
+    TestElement savedValue = null;
+
+    public TestElementProperty(String name, TestElement value)
     {
         super(name);
         this.value = value;
     }
-    
+
     public TestElementProperty()
     {
         super();
     }
-    
+
     public boolean equals(Object o)
     {
-        if(o instanceof TestElementProperty)
+        if (o instanceof TestElementProperty)
         {
-            if(value != null)
+            if (value != null)
             {
-                return value.equals(((TestElementProperty)o).getObjectValue());
+                return value.equals(((TestElementProperty) o).getObjectValue());
             }
         }
         return false;
@@ -40,20 +41,20 @@ public class TestElementProperty extends AbstractProperty
      */
     public String getStringValue()
     {
-        if(value == null)
-        {
-            return null;
-        }        
         return value.toString();
     }
-    
+
     public void setObjectValue(Object v)
+    {
+        if (v instanceof TestElement)
+        {
+            if (isRunningVersion())
             {
-                if(v instanceof TestElement)
-                {
-                    value = (TestElement)v;
-                }
+                savedValue = this.value;
             }
+            value = (TestElement) v;
+        }
+    }
 
     /**
      * @see org.apache.jmeter.testelement.property.JMeterProperty#getObjectValue()
@@ -62,12 +63,12 @@ public class TestElementProperty extends AbstractProperty
     {
         return value;
     }
-    
+
     public TestElement getElement()
     {
         return value;
     }
-    
+
     public void setElement(TestElement el)
     {
         value = el;
@@ -76,10 +77,10 @@ public class TestElementProperty extends AbstractProperty
     /**
      * @see java.lang.Object#clone()
      */
-    public Object clone() 
+    public Object clone()
     {
-        TestElementProperty prop = (TestElementProperty)super.clone();
-        prop.value = (TestElement)value.clone();
+        TestElementProperty prop = (TestElementProperty) super.clone();
+        prop.value = (TestElement) value.clone();
         return prop;
     }
 
@@ -88,9 +89,9 @@ public class TestElementProperty extends AbstractProperty
      */
     public void mergeIn(JMeterProperty prop)
     {
-        if(isEqualType(prop))
+        if (isEqualType(prop))
         {
-            value.addTestElement((TestElement)prop.getObjectValue());
+            value.addTestElement((TestElement) prop.getObjectValue());
         }
     }
 
@@ -99,6 +100,11 @@ public class TestElementProperty extends AbstractProperty
      */
     public void recoverRunningVersion(TestElement owner)
     {
+        if (savedValue != null)
+        {
+            value = savedValue;
+            savedValue = null;
+        }
         super.recoverRunningVersion(null);
         value.recoverRunningVersion();
     }
@@ -119,11 +125,11 @@ public class TestElementProperty extends AbstractProperty
     {
         super.setTemporary(temporary, owner);
         PropertyIterator iter = value.propertyIterator();
-        while(iter.hasNext())
+        while (iter.hasNext())
         {
-            iter.next().setTemporary(temporary,owner);
+            iter.next().setTemporary(temporary, owner);
         }
-        
+
     }
 
 }

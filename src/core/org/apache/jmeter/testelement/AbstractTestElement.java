@@ -245,7 +245,10 @@ public abstract class AbstractTestElement implements TestElement, Serializable
             {
                 addProperty(property);
             }
-            return;
+            else
+            {
+                getProperty(property.getName()).setObjectValue(property.getObjectValue());
+            } 
         }
         else
         {

@@ -1,6 +1,6 @@
 package org.apache.jmeter.testelement.property;
 
-
+import org.apache.jmeter.testelement.TestElement;
 
 /**
  * @author Administrator
@@ -11,13 +11,14 @@ package org.apache.jmeter.testelement.property;
 public class StringProperty extends AbstractProperty
 {
     String value;
-    
-    public StringProperty(String name,String value)
+    String savedValue;
+
+    public StringProperty(String name, String value)
     {
         super(name);
         this.value = value;
     }
-    
+
     public StringProperty()
     {
         super();
@@ -30,9 +31,13 @@ public class StringProperty extends AbstractProperty
     {
         super.setRunningVersion(runningVersion);
     }
-    
+
     public void setObjectValue(Object v)
     {
+        if (isRunningVersion())
+        {
+            savedValue = this.value;
+        }
         value = v.toString();
     }
 
@@ -57,10 +62,10 @@ public class StringProperty extends AbstractProperty
      */
     public Object clone()
     {
-        StringProperty prop = (StringProperty)super.clone();
+        StringProperty prop = (StringProperty) super.clone();
         prop.value = value;
         return prop;
-    }    
+    }
 
     /**
      * Sets the value.
@@ -69,6 +74,20 @@ public class StringProperty extends AbstractProperty
     public void setValue(String value)
     {
         this.value = value;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+     */
+    public void recoverRunningVersion(TestElement owner)
+    {
+        if (savedValue != null)
+        {
+            value = savedValue;
+            savedValue = null;
+        }
+        // TODO Auto-generated method stub
+        super.recoverRunningVersion(owner);
     }
 
 }

@@ -14,6 +14,7 @@ import org.apache.jmeter.testelement.TestElement;
 public class MapProperty extends AbstractProperty
 {
     Map value;
+    Map savedValue = null;
 
     public MapProperty(String name, Map value)
     {
@@ -30,21 +31,25 @@ public class MapProperty extends AbstractProperty
     {
         if (v instanceof Map)
         {
+            if (isRunningVersion())
+            {
+                savedValue = this.value;
+            }
             value = normalizeMap((Map) v);
         }
     }
-    
+
     public void addProperty(JMeterProperty prop)
     {
-        if(value.size() == 0 || valueIterator().next().getClass().equals(prop.getClass()))
+        if (value.size() == 0 || valueIterator().next().getClass().equals(prop.getClass()))
         {
-            value.put(prop.getName(),prop);
+            value.put(prop.getName(), prop);
         }
     }
-    
+
     public JMeterProperty get(String key)
     {
-        return (JMeterProperty)value.get(key);
+        return (JMeterProperty) value.get(key);
     }
 
     /**
@@ -160,6 +165,11 @@ public class MapProperty extends AbstractProperty
      */
     public void recoverRunningVersion(TestElement owner)
     {
+        if (savedValue != null)
+        {
+            value = savedValue;
+            savedValue = null;
+        }
         Iterator iter = value.keySet().iterator();
         while (iter.hasNext())
         {

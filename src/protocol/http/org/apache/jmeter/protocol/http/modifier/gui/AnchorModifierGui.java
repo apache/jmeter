@@ -53,14 +53,11 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.modifier.gui;
-import java.awt.Font;
-
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.jmeter.config.gui.AbstractResponseBasedModifierGui;
+import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.protocol.http.modifier.AnchorModifier;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -74,7 +71,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *@version   1.0
  ***************************************/
 
-public class AnchorModifierGui extends AbstractResponseBasedModifierGui
+public class AnchorModifierGui extends AbstractPreProcessorGui
 {
 
 	/****************************************
