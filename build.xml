@@ -180,8 +180,9 @@
 	 </target>
 
 	 <target name="test" depends="install">
-				<java classname="org.apache.jmeter.junit.AllTests" fork="yes" dir=".">
+				<java classname="org.apache.jmeter.junit.AllTests" fork="yes" dir="${basedir}">
 						<classpath refid="testClasspath"/>
+						<arg value="./bin/jmeter.properties"/>
 				</java>
 	</target>
 
