@@ -80,8 +80,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * in a JTable, and the statistics are displayed at the bottom of the table.
  *
  *@author    <a href="mailto:alf@i100.no">Alf Hogemark</a>
- *@created   March 10, 2002
- *@version   $Revision$
+ * created   March 10, 2002
+ *@version   $Revision$ Updated on $Date$
  */
 public class TableVisualizer
     extends AbstractVisualizer
@@ -145,7 +145,7 @@ public class TableVisualizer
 
     public synchronized void clear()
     {
-        log.warn("Clear called",new Exception());
+        log.debug("Clear called",new Exception("Debug"));
         // this.graph.clear();
         model.clear();
         dataField.setText("0000");

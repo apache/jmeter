@@ -7,7 +7,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @version $Revision$
+ * @version $Revision$  Updated on: $Date$
  */
 public class HtmlPane extends JTextPane
 {
@@ -24,7 +24,7 @@ public class HtmlPane extends JTextPane
                     String ref = e.getURL().getRef();
                     if (ref != null && ref.length() > 0)
                     {
-                        log.warn("reference to scroll to = " + ref);
+                        log.debug("reference to scroll to = " + ref);
                         scrollToReference(ref);
                     }
                 }
