@@ -62,7 +62,6 @@ import junit.framework.TestSuite;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 //NOTUSED import org.apache.jorphan.logging.LoggingManager;
@@ -78,15 +77,17 @@ public class LoopController extends GenericController implements Serializable
     //NOTUSED private static Logger log = LoggingManager.getLoggerForClass();
 
     private final static String LOOPS = "LoopController.loops";
-    private final static String CONTINUE_FOREVER =
-        "LoopController.continue_forever";
     private int loopCount = 0;
 
     public LoopController()
     {
-        setContinueForever(true);
     }
 
+    /**
+     * Sets the number of iterations of the loop.
+     * 
+     * @param loops number of iterations, -1 for infinite
+     */
     public void setLoops(int loops)
     {
         setProperty(new IntegerProperty(LOOPS, loops));
@@ -112,16 +113,6 @@ public class LoopController extends GenericController implements Serializable
     public String getLoopString()
     {
         return getPropertyAsString(LOOPS);
-    }
-
-    public void setContinueForever(boolean forever)
-    {
-        setProperty(new BooleanProperty(CONTINUE_FOREVER, forever));
-    }
-
-    public boolean getContinueForever()
-    {
-        return getPropertyAsBoolean(CONTINUE_FOREVER);
     }
 
     /* (non-Javadoc)
@@ -152,14 +143,7 @@ public class LoopController extends GenericController implements Serializable
         reInitialize();
         if (endOfLoop())
         {
-            if (!getContinueForever())
-            {
-                setDone(true);
-            }
-            else
-            {
-                resetLoopCount();
-            }
+            resetLoopCount();
             return null;
         }
         else
@@ -250,6 +234,18 @@ public class LoopController extends GenericController implements Serializable
             loop.addTestElement(new TestSampler("never run"));
             loop.initialize();
             assertNull(loop.next());
+        }
+
+        public void testInfinteLoop() throws Exception
+        {
+            LoopController loop = new LoopController();
+            loop.setLoops(-1);
+            loop.addTestElement(new TestSampler("never run"));
+            loop.initialize();
+            for (int i=0; i<10; i++)
+            {
+                assertNotNull(loop.next());
+            }
         }
     }
 
