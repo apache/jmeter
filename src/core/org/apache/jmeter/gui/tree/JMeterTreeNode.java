@@ -82,7 +82,8 @@ public class JMeterTreeNode
     private JMeterTreeModel treeModel;
     //boolean enabled = true;
 
-    JMeterTreeNode(){// Allow guiTest and serializable test to work
+    public JMeterTreeNode(){// Allow guiTest and serializable test to work
+    	this(null,null);
     }
     
     public JMeterTreeNode(TestElement userObj, JMeterTreeModel treeModel)
