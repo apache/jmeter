@@ -142,7 +142,7 @@ public class GraphVisualizer extends AbstractVisualizer
     /****************************************
      * !ToDo (Method description)
      ***************************************/
-    public void updateGui()
+    public synchronized void updateGui()
     {
         graph.updateGui();
         noSamplesField.setText(Long.toString(model.getSampleCount()));
@@ -159,7 +159,7 @@ public class GraphVisualizer extends AbstractVisualizer
      *
      *@param s  !ToDo (Parameter description)
      ***************************************/
-    public void updateGui(Sample s)
+    public synchronized void updateGui(Sample s)
     {
         // We have received one more sample
         graph.updateGui(s);

@@ -54,7 +54,6 @@
  */
 package org.apache.jmeter.visualizers;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -76,7 +75,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-
 /****************************************
  * This class implements a statistical analyser that takes samples to process a
  * Spline interpolated curve. Currently, it tries to look mostly like the
@@ -86,8 +84,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *@created   $Date$
  *@version   0.9.1
  ***************************************/
-public class SplineVisualizer extends AbstractVisualizer implements ImageVisualizer,
-        GraphListener, Clearable
+public class SplineVisualizer extends AbstractVisualizer implements ImageVisualizer, GraphListener, Clearable
 {
 
     /****************************************
@@ -276,10 +273,13 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
     public void updateGui()
     {
         repaint();
-        setMinimum(model.getMinimum());
-        setMaximum(model.getMaximum());
-        setAverage(model.getAverage());
-        setIncoming(model.getCurrent());
+        synchronized (this)
+        {
+            setMinimum(model.getMinimum());
+            setMaximum(model.getMaximum());
+            setAverage(model.getAverage());
+            setIncoming(model.getCurrent());
+        }
     }
 
     /****************************************
@@ -454,8 +454,7 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
                 g.setColor(this.getBackground());
                 g.fillRect(0, 0, width, height);
                 g.setColor(WAITING_COLOR);
-                g.drawString(JMeterUtils.getResString("spline_visualizer_waitingmessage"),
-                        (width - 120) / 2, height - (height - 12) / 2);
+                g.drawString(JMeterUtils.getResString("spline_visualizer_waitingmessage"), (width - 120) / 2, height - (height - 12) / 2);
                 return;
             }
 
@@ -474,7 +473,7 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
                 lastHeight = height;
             }
 
-            this.plot = model.getDataCurve().getPlots(width, height);// rounds!
+            this.plot = model.getDataCurve().getPlots(width, height); // rounds!
 
             int n = plot.length;
             int curY = plot[0];
@@ -488,4 +487,3 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         }
     }
 }
-

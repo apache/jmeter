@@ -54,7 +54,6 @@
  */
 package org.apache.jmeter.visualizers;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -76,7 +75,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-
 /****************************************
  * This class implements a statistical analyser that calculates both the average
  * and the standard deviation of the sampling process. The samples are displayed
@@ -86,8 +84,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *@created   March 10, 2002
  *@version   $Revision$
  ***************************************/
-public class TableVisualizer extends AbstractVisualizer
-        implements GraphListener, Clearable
+public class TableVisualizer extends AbstractVisualizer implements GraphListener, Clearable
 {
     private TableDataModel model = null;
     private JTable table = null;
@@ -127,10 +124,15 @@ public class TableVisualizer extends AbstractVisualizer
         table.tableChanged(new TableModelEvent(model));
         tableScrollPanel.revalidate();
         tableScrollPanel.repaint();
-        noSamplesField.setText(Long.toString(model.getSampleCount()));
-        dataField.setText(Long.toString(model.getCurrentData()));
-        averageField.setText(Long.toString(model.getCurrentAverage()));
-        deviationField.setText(Long.toString(model.getCurrentDeviation()));
+        updateTextFields();
+    }
+
+    protected synchronized void updateTextFields()
+    {
+            noSamplesField.setText(Long.toString(model.getSampleCount()));
+            dataField.setText(Long.toString(model.getCurrentData()));
+            averageField.setText(Long.toString(model.getCurrentAverage()));
+            deviationField.setText(Long.toString(model.getCurrentDeviation()));
     }
 
     /****************************************
@@ -155,10 +157,7 @@ public class TableVisualizer extends AbstractVisualizer
         table.tableChanged(new TableModelEvent(model));
         tableScrollPanel.revalidate();
         tableScrollPanel.repaint();
-        noSamplesField.setText(Long.toString(model.getSampleCount()));
-        dataField.setText(Long.toString(model.getCurrentData()));
-        averageField.setText(Long.toString(model.getCurrentAverage()));
-        deviationField.setText(Long.toString(model.getCurrentDeviation()));
+        updateTextFields();
     }
 
     /****************************************
