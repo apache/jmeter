@@ -92,7 +92,7 @@ you have a little more money, there are commercial linuxes. If you can justify
 it, a commercial Unix (Solaris, etc) is probably the best choice.
 </p>
 <p>
-For non-Windows platforms, investigate "umount -n unlimited" with a view to
+For non-Windows platforms, investigate "ulimit -n unlimited" with a view to
 including it in your user account startup scripts (.bashrc or .cshrc scripts
 for the testing account).
 </p>
