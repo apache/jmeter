@@ -166,6 +166,17 @@ public class HTTPSampler extends AbstractSampler
     private static Substitution spaceSub = new StringSubstitution("%20");
 
     private int connectionTries = 0;
+    
+    /* Delegate redirects to the URLConnection implementation - this can be useful
+     * with alternate URLConnection implementations.
+     * 
+     * Defaults to false, to maintain backward compatibility. 
+     */
+    private static boolean delegateRedirects =
+    	JMeterUtils.getJMeterProperties().
+    	getProperty("HTTPSampler.delegateRedirects","false").equalsIgnoreCase("true") ;
+
+    
     public void setFileField(String value)
     {
         setProperty(FILE_FIELD, value);
@@ -627,7 +638,11 @@ public class HTTPSampler extends AbstractSampler
         // My longer term plan is to use Apache's home grown HTTP Client, or
         // maybe even HTTPUnit's classes.  I'm sure both would be better than
         // Sun's.
-        HttpURLConnection.setFollowRedirects(false);
+        
+        // [sebb] Make redirect following configurable (see bug 19004)
+        // They do seem to work on JVM 1.4.1_03 (Sun/WinXP)
+        HttpURLConnection.setFollowRedirects(delegateRedirects);
+        
         conn = (HttpURLConnection) u.openConnection();
         // Delegate SSL specific stuff to SSLManager so that compilation still
         // works otherwise.
