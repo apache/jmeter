@@ -89,56 +89,6 @@
   <li><a href="boss.html">12. Help! My boss wants me to load test our web app!</a></li>
 
   <li><a href="component_reference.html">13. Component Reference</a></li>
-	<ul>
-		<li><a href="component_reference.html#generative_controllers">13.1 Generative Controllers</a></li>
-		<ul>
-		  <li>13.1.1 <complink name="FTP Request"/></li>
-		  <li>13.1.2 <complink name="HTTP Request"/></li>
-		  <li>13.1.3 <complink name="JDBC Request"/></li>
-		</ul>
-		<li><a href="component_reference.html#logic_controllers">13.2 Logic Controllers</a></li>
-		<ul>
-		  <li>13.2.1 <complink name="Interleave Controller"/></li>
-		  <li>13.2.2 <complink name="Loop Controller"/></li>
-		  <li>13.2.3 <complink name="Modification Manager"/></li>
-		  <li>13.2.4 <complink name="Once Only Controller"/></li>
-		  <li>13.2.5 <complink name="Simple Controller"/></li>
-		</ul>
-		<li><a href="component_reference.html#listeners">13.3 Listeners</a></li>
-		<ul>
-		  <li>13.3.1 <complink name="View Graph Tree"/></li>
-		  <li>13.3.2 <complink name="Graph Full Results"/></li>
-		  <li>13.3.3 <complink name="Graph Results"/></li>
-		  <li>13.3.4 <complink name="Spline Visualizer"/></li>
-		  <li>13.3.5 <complink name="Assertion Results"/></li>
-		  <li>13.3.6 <complink name="File Reporter"/></li>
-		  <li>13.3.7 <complink name="View Results"/></li>
-		  <li>13.3.8 <complink name="View Result Tree"/></li>
-		</ul>
-		<li><a href="component_reference.html#config_elements">13.4 Configuration Elements</a></li>
-		<ul>
-			<li>13.4.1 <complink name="HTTP Authorization Manager"/></li>
-			<li>13.4.2 <complink name="HTTP Cookie Manager"/></li>
-			<li>13.4.3 <complink name="HTTP Proxy Server"/></li>
-			<li>13.4.4 <complink name="HTTP Request Defaults"/></li>
-			<li>13.4.5 <complink name="FTP Request Defaults"/></li>
-			<li>13.4.6 <complink name="JDBC Database Connection Pool Defaults"/></li>
-			<li>13.4.7 <complink name="JDBC Database Login Defaults"/></li>
-			<li>13.4.8 <complink name="JDBC SQL Query Defaults"/></li>
-			<li>13.4.9 <complink name="HTML Link Parser"/></li>
-			<li>13.4.10 <complink name="HTTP Header Manager"/></li>
-		</ul>
-		<li><a href="component_reference.html#assertions">13.5 Assertions</a></li>
-		<ul>
-			<li>13.5.1 <complink name="Basic Assertion"/></li>
-		</ul>
-		<li><a href="component_reference.html#timers">13.6 Timers</a></li>
-		<ul>
-			<li>13.6.1 <complink name="Constant Timer"/></li>
-			<li>13.6.2 <complink name="Gaussian Random Timer"/></li>
-			<li>13.6.3 <complink name="Uniform Random Timer"/></li>
-		</ul>
-	</ul>
   <li><a href="glossary.html">14. Glossary</a></li>
 </ul>
 
