@@ -71,7 +71,6 @@ import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
 /**
-/**
  * @author Cyrus M.
  * Syntax is similar to StringFromFile function.
  * The function represented by this class allows data to be read from CSV
@@ -306,14 +305,14 @@ public class CSVRead extends AbstractFunction implements Serializable
     }
 
     /**
-     * @see set the FileDataContainer
+     * Set the FileDataContainer.
      */
     protected synchronized void setFileData(FileDataContainer newValue)
     {
         fileData = newValue;
     }
     /**
-     * @see org.apache.jmeter.functions.Function#setParameters(String)
+     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
      */
     public void setParameters(Collection parameters) throws InvalidVariableException
     {

@@ -330,22 +330,6 @@ public class MenuFactory
 		return pop;
 	}
 
-	public static JPopupMenu getDefaultModifierMenu()
-	{
-		JPopupMenu pop = new JPopupMenu();
-		MenuFactory.addEditMenu(pop, true);
-		MenuFactory.addFileMenu(pop);
-		return pop;
-	}
-
-	public static JPopupMenu getDefaultResponseBasedModifierMenu()
-	{
-		JPopupMenu pop = new JPopupMenu();
-		MenuFactory.addEditMenu(pop, true);
-		MenuFactory.addFileMenu(pop);
-		return pop;
-	}
-
 	public static JPopupMenu getDefaultAssertionMenu()
 	{
 		JPopupMenu pop = new JPopupMenu();

@@ -76,8 +76,6 @@ import org.apache.jmeter.testelement.TestElement;
  * 
  * @see AbstractJMeterGuiComponent
  * @see org.apache.jmeter.config.gui.AbstractConfigGui
- * @see org.apache.jmeter.config.gui.AbstractModifierGui
- * @see org.apache.jmeter.config.gui.AbstractResponseBasedModifierGui
  * @see org.apache.jmeter.assertions.gui.AbstractAssertionGui
  * @see org.apache.jmeter.control.gui.AbstractControllerGui
  * @see org.apache.jmeter.timers.gui.AbstractTimerGui
