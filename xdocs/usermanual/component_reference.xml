@@ -797,6 +797,17 @@ out of the return page and puts them in the inputVar variable</p>
 </properties>
 </component>
 
+<component name="Runtime Controller" index="15.2.12" screenshot="">
+	<description>
+		<p>The Runtime Controller controls how long its children are allowed to run.
+		</p>
+	</description>
+<properties>
+	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+	<property name="Runtime (seconds)" required="Yes">Desired runtime in seconds</property>
+</properties>
+</component>
+
 </section>
 
 <section name="15.3 Listeners" anchor="listeners">
