@@ -289,7 +289,7 @@ public class WebServiceSampler extends HTTPSampler
 
 	/**
 	 * Return whether or not to use proxy
-	 * @return
+	 * @return true if should use proxy
 	 */	
 	public boolean getUseProxy(){
 		return this.getPropertyAsBoolean(USE_PROXY);
@@ -305,7 +305,7 @@ public class WebServiceSampler extends HTTPSampler
 
 	/**
 	 * Return the proxy hostname
-	 * @return
+	 * @return the proxy hostname
 	 */	
 	public String getProxyHost(){
 		this.checkProxy();
@@ -322,7 +322,7 @@ public class WebServiceSampler extends HTTPSampler
 
 	/**
 	 * Return the proxy port
-	 * @return
+	 * @return the proxy port
 	 */	
 	public int getProxyPort(){
 		this.checkProxy();

@@ -65,8 +65,8 @@ import org.apache.jmeter.junit.JMeterTestCase;
  * work with this parser. Servers that are known
  * to use non standard formats are IIS and Netscape.
  * <p>
- * @author:	Peter Lin<br>
- * @version: 	$Revision$ last updated $Date$
+ * @author		Peter Lin<br>
+ * @version 	$Revision$ last updated $Date$
  * Created on:	June 23, 2003<br>
  */
 

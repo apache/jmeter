@@ -36,8 +36,8 @@ package org.apache.jmeter.protocol.http.util.accesslog;
  * Using access logs can also reduce the amount
  * of memory needed to run large test plans.
  * <br>
- * @author:	Peter Lin<br>
- * @version: 	$Revision$ last updated $Date$
+ * @author		Peter Lin<br>
+ * @version 	$Revision$ last updated $Date$
  * Created on:	Jun 26, 2003<br>
  */
 
