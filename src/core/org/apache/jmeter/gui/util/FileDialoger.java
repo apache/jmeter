@@ -52,8 +52,11 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */package org.apache.jmeter.gui.util;
-import java.io.*;
-import javax.swing.*;
+import java.io.File;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.util.JMeterUtils;
@@ -72,6 +75,7 @@ public class FileDialoger
 	 * The last directory visited by the user while choosing Files.
 	 ***************************************/
 	public static String lastJFCDirectory = null;
+	public static JFileChooser jfc = new JFileChooser();
 
 	/****************************************
 	 * !ToDo (Constructor description)
@@ -91,7 +95,7 @@ public class FileDialoger
 	 ***************************************/
 	public static JFileChooser promptToOpenFile(String[] exts)
 	{
-		JFileChooser jfc = null;
+		//JFileChooser jfc = null;
 
 		if(lastJFCDirectory == null)
 		{
@@ -99,18 +103,10 @@ public class FileDialoger
 
 			if(!start.equals(""))
 			{
-				jfc = new JFileChooser(start);
-			}
-			else
-			{
-				jfc = new JFileChooser();
+				jfc.setCurrentDirectory(new File(start));
 			}
 		}
-		else
-		{
-			jfc = new JFileChooser(lastJFCDirectory);
-		}
-
+		clearFileFilters();
 		jfc.addChoosableFileFilter(new JMeterFileFilter(exts));
 		int retVal = jfc.showOpenDialog(GuiPackage.getInstance().getMainFrame());
 		lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
@@ -122,6 +118,15 @@ public class FileDialoger
 		else 
 		{
 			return null;
+		}
+	}
+
+	private static void clearFileFilters()
+	{
+		FileFilter[] filters = jfc.getChoosableFileFilters();
+		for(int x = 0;x < filters.length;x++)
+		{
+			jfc.removeChoosableFileFilter(filters[x]);
 		}
 	}
 	
@@ -145,22 +150,14 @@ public class FileDialoger
 	 ***************************************/
 	public static JFileChooser promptToSaveFile(String filename)
 	{
-		JFileChooser jfc = null;
 		if(lastJFCDirectory == null)
 		{
 			String start = JMeterUtils.getPropDefault("user.dir", "");
 			if(!start.equals(""))
 			{
-				jfc = new JFileChooser(start);
+				jfc = new JFileChooser(new File(start));
 			}
-			else
-			{
-				jfc = new JFileChooser();
-			}
-		}
-		else
-		{
-			jfc = new JFileChooser(lastJFCDirectory);
+			lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
 		}
 		String ext = ".jmx";
 		if(filename != null)
@@ -172,7 +169,7 @@ public class FileDialoger
 				ext = filename.substring(i);
 			}
 		}		
-		
+		clearFileFilters();
 		jfc.addChoosableFileFilter(new JMeterFileFilter(new String[]{ext}));
 
 

@@ -157,6 +157,7 @@ public class GraphVisualizer extends AbstractVisualizer
 	public void updateGui(Sample s)
 	{
 		// We have received one more sample
+		graph.updateGui(s);
 		noSamplesField.setText(Long.toString(model.getSampleCount()));
 		dataField.setText(Long.toString(s.data));
 		averageField.setText(Long.toString(s.average));
