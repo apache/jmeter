@@ -131,27 +131,26 @@ public class Proxy extends Thread
     public void run()
     {
         HttpRequestHdr request = new HttpRequestHdr();
-
+        byte[] serverResponse = new byte[0];
+        HeaderManager headers = new HeaderManager();
+        HTTPSampler sampler = new HTTPSampler();
         try
         {
             byte[] clientRequest =
                 request.parse(
                     new BufferedInputStream(clientSocket.getInputStream()));
-            HeaderManager headers = request.getHeaderManager();
+            headers = request.getHeaderManager();
 
-            HTTPSampler sampler = request.getSampler();
+            sampler = request.getSampler();
             sampler.setHeaderManager(headers);
 
-            byte[] serverResponse = sampler.sample().getResponseData();
+            serverResponse = sampler.sample().getResponseData();
             writeToClient(
                 serverResponse,
                 new BufferedOutputStream(clientSocket.getOutputStream()));
             headers.removeHeaderNamed("cookie");
 
-            target.deliverSampler(
-                sampler,
-                new TestElement[] { headers },
-                serverResponse);
+           
         }
         catch (UnknownHostException uhe)
         {
@@ -165,6 +164,10 @@ public class Proxy extends Thread
         }
         finally
         {
+            target.deliverSampler(
+                                       sampler,
+                                       new TestElement[] { headers },
+                                       serverResponse);
             try
             {
                 clientSocket.close();
