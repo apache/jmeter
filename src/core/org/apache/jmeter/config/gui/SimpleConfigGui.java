@@ -1,20 +1,19 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  * 
-*/
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy
+ * of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ *  
+ */
 
 package org.apache.jmeter.config.gui;
 
@@ -41,10 +40,9 @@ import org.apache.jorphan.collections.Data;
 
 /**
  * Default config gui for Configuration Element.
- *
- * @version    $Revision$ on $Date$
  */
-public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
+public class SimpleConfigGui extends AbstractConfigGui implements
+      ActionListener
 {
     /* This class created for enhancement Bug ID 9101. */
     
@@ -150,6 +148,10 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
      */
     public void modifyTestElement(TestElement el)
     {
+       if (table.isEditing())
+       {
+          table.getCellEditor().stopCellEditing();
+       }
         Data model = tableModel.getData();
         model.reset();
         while (model.next())
@@ -242,104 +244,99 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
         return buttonPanel;
     }
 
-    /**
-     * Enable or disable the delete button depending on whether or not there
-     * is a row to be deleted.
-     */
-    protected void checkDeleteStatus()
-    {
-        // Disable DELETE if there are no rows in the table to delete.
-        if (tableModel.getRowCount() == 0)
-        {
+   /**
+    * Enable or disable the delete button depending on whether or not there is
+    * a row to be deleted.
+    */
+   protected void checkDeleteStatus()
+   {
+      // Disable DELETE if there are no rows in the table to delete.
+      if (tableModel.getRowCount() == 0)
+      {
+         delete.setEnabled(false);
+      }
+      else
+      {
+         delete.setEnabled(true);
+      }
+   }
+
+   /**
+    * Add a new argument row to the table.
+    */
+   protected void addArgument()
+   {
+      // If a table cell is being edited, we should accept the current value
+      // and stop the editing before adding a new row.
+      stopTableEditing();
+
+      tableModel.addNewRow();
+      tableModel.fireTableDataChanged();
+
+      // Enable DELETE (which may already be enabled, but it won't hurt)
+      delete.setEnabled(true);
+
+      // Highlight (select) the appropriate row.
+      int rowToSelect = tableModel.getRowCount() - 1;
+      table.setRowSelectionInterval(rowToSelect, rowToSelect);
+   }
+
+   /**
+    * Stop any editing that is currently being done on the table. This will
+    * save any changes that have already been made.
+    */
+   protected void stopTableEditing()
+   {
+      if (table.isEditing())
+      {
+         TableCellEditor cellEditor = table.getCellEditor(
+               table.getEditingRow(), table.getEditingColumn());
+         cellEditor.stopCellEditing();
+      }
+   }
+
+   /**
+    * Remove the currently selected argument from the table.
+    */
+   protected void deleteArgument()
+   {
+      // If a table cell is being edited, we must cancel the editing before
+      // deleting the row
+      if (table.isEditing())
+      {
+         TableCellEditor cellEditor = table.getCellEditor(
+               table.getEditingRow(), table.getEditingColumn());
+         cellEditor.cancelCellEditing();
+      }
+
+      int rowSelected = table.getSelectedRow();
+
+      if (rowSelected >= 0)
+      {
+
+         //removeProperty(tableModel.getValueAt (
+         //    table.getSelectedRow(),0).toString());
+         tableModel.removeRow(rowSelected);
+         tableModel.fireTableDataChanged();
+
+         // Disable DELETE if there are no rows in the table to delete.
+         if (tableModel.getRowCount() == 0)
+         {
             delete.setEnabled(false);
-        }
-        else
-        {
-            delete.setEnabled(true);
-        }
-    }
+         }
+         else
+         {
+            // Table still contains one or more rows, so highlight (select)
+            // the appropriate one.
+            int rowToSelect = rowSelected;
 
-    /**
-     * Add a new argument row to the table.
-     */
-    protected void addArgument()
-    {
-        // If a table cell is being edited, we should accept the current value
-        // and stop the editing before adding a new row.
-        stopTableEditing();
-                
-        tableModel.addNewRow();
-        tableModel.fireTableDataChanged();
-                
-        // Enable DELETE (which may already be enabled, but it won't hurt)
-        delete.setEnabled(true);
-                
-        // Highlight (select) the appropriate row.
-        int rowToSelect = tableModel.getRowCount() - 1;
-        table.setRowSelectionInterval(rowToSelect, rowToSelect);
-    }
-
-    /**
-     * Stop any editing that is currently being done on the table.  This will
-     * save any changes that have already been made.
-     */
-    protected void stopTableEditing()
-    {
-        if (table.isEditing())
-        {
-            TableCellEditor cellEditor =
-                table.getCellEditor(
-                    table.getEditingRow(),
-                    table.getEditingColumn());
-            cellEditor.stopCellEditing();
-        }
-    }
-
-    /**
-     * Remove the currently selected argument from the table.
-     */
-    protected void deleteArgument()
-    {
-        // If a table cell is being edited, we must cancel the editing before
-        // deleting the row
-        if (table.isEditing())
-        {
-            TableCellEditor cellEditor =
-                table.getCellEditor(
-                    table.getEditingRow(),
-                    table.getEditingColumn());
-            cellEditor.cancelCellEditing();
-        }
-                
-        int rowSelected = table.getSelectedRow();
-
-
-        if (rowSelected >= 0)
-        {
-
-            //removeProperty(tableModel.getValueAt (
-            //    table.getSelectedRow(),0).toString());
-            tableModel.removeRow(rowSelected);
-            tableModel.fireTableDataChanged();
-
-            // Disable DELETE if there are no rows in the table to delete.
-            if (tableModel.getRowCount() == 0)
+            if (rowSelected >= tableModel.getRowCount())
             {
-                delete.setEnabled(false);
+               rowToSelect = rowSelected - 1;
             }
-            else
-            {
-                // Table still contains one or more rows, so highlight (select)
-                // the appropriate one.
-                int rowToSelect = rowSelected;
-                
-                if (rowSelected >= tableModel.getRowCount())
-                {
-                    rowToSelect = rowSelected - 1;
-                }
-                
-                table.setRowSelectionInterval(rowToSelect, rowToSelect);
-            }
-        }
-    }
+
+            table.setRowSelectionInterval(rowToSelect, rowToSelect);
+         }
+      }
+   }
 }

@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -31,7 +30,6 @@ package org.apache.jmeter.util;
 /**
  * Utility class to define the JMeter Version string
  * 
- * @version $Revision$ $Date$
  */
 public class JMeterVersion
 {
@@ -41,8 +39,10 @@ public class JMeterVersion
 	 * pattern: VERSION = <quote>.*<quote>
 	 * 
 	 */
-	static final String VERSION = "2.0.20040608";
+	static final String VERSION = "2.0.20040612";
 
+	static final String COPYRIGHT = "Copyright (c) 1998-2004 The Apache Software Foundation";
+	
     private JMeterVersion() // Not instantiable
     {
         super();

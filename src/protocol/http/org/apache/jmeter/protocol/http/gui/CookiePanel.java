@@ -262,6 +262,10 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
      */
     public void modifyTestElement(TestElement cm)
     {
+       if (cookieTable.isEditing())
+       {
+          cookieTable.getCellEditor().stopCellEditing();
+       }
         cm.clear();
         configureTestElement(cm);
         if (cm instanceof CookieManager)

@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -28,6 +27,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Pattern;
@@ -38,7 +38,6 @@ import org.apache.oro.text.regex.Perl5Matcher;
  *
  * @author     Michael Stover
  * @author     <a href="mailto:jacarlco@katun.com">Jonathan Carlson</a>
- * @version    $Revision$ Last Updated: $Date$
 */
 public class ResponseAssertion
    extends AbstractTestElement
@@ -50,6 +49,7 @@ public class ResponseAssertion
    public final static String RESPONSE_DATA = "Assertion.response_data";
    public final static String RESPONSE_CODE = "Assertion.response_code";
    public final static String RESPONSE_MESSAGE = "Assertion.response_message";
+   public final static String ASSUME_SUCCESS = "Assertion.assume_success";
 
    public final static String TEST_STRINGS = "Asserion.test_strings";
 
@@ -58,9 +58,9 @@ public class ResponseAssertion
     * Mask values for TEST_TYPE
     * TODO: remove either MATCH or CONTAINS - they are mutually exckusive 
     */
-   public final static int MATCH = 1 << 0;
-   public final static int CONTAINS = 1 << 1;
-   public final static int NOT = 1 << 2;
+   private final static int MATCH = 1 << 0;
+   private final static int CONTAINS = 1 << 1;
+   private final static int NOT = 1 << 2;
 
    private static ThreadLocal matcher = new ThreadLocal()
    {
@@ -234,6 +234,14 @@ public class ResponseAssertion
    {
       setTestType(getTestType() &  ~ NOT);
    }
+   public boolean getAssumeSuccess()
+   {
+   	return getPropertyAsBoolean(ASSUME_SUCCESS,false);
+   }
+   public void setAssumeSuccess(boolean b)
+   {
+   	  setProperty(ASSUME_SUCCESS,JOrphanUtils.booleanToString(b));
+   }
    /**
     * Make sure the response satisfies the specified assertion requirements.
     * 
@@ -247,6 +255,11 @@ public class ResponseAssertion
       AssertionResult result = new AssertionResult();
       String toCheck=""; // The string to check (Url or data)
       
+      if (getAssumeSuccess())
+      {
+      	response.setSuccessful(true);// Allow testing of failure codes
+      }
+
       // What are we testing against?
       if (ResponseAssertion.RESPONSE_DATA.equals(getTestField()))
       {

@@ -65,7 +65,7 @@ public class CounterConfigGui extends AbstractPreProcessorGui
         {
             CounterConfig config = (CounterConfig) c;
             config.setStart(startField.getText());
-            if (endField.getText().length() > 0)
+            //Bug 22820 if (endField.getText().length() > 0)
             {
                 config.setEnd(endField.getText());
             }

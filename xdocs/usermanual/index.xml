@@ -22,14 +22,39 @@
 
 <body>
 <section name="User's Manual">
+<p>Click on the section name to go straight to the section. 
+	Click on the "+" to go to the relevant section of the detailed section list,
+	where you can select individual subsections.</p>
 
+<subsection name="Section Summary">
 <ul>
-  <li><a href="intro.html">1. Introduction</a></li>
+  <li><a href="#intro">+</a>...<a href="intro.html">1. Introduction</a></li>
+  <li><a href="#get-started">+</a>...<a href="get-started.html">2. Getting Started</a></li>
+  <li><a href="#build-test-plan">+</a>...<a href="build-test-plan.html">3. Building a Test Plan</a></li>
+  <li><a href="#test-plan">+</a>...<a href="test_plan.html">4. Elements of a Test Plan</a></li>
+  <li><a href="#build-web-test-plan">+</a>...<a href="build-web-test-plan.html">5. Building a Web Test Plan</a></li>
+  <li><a href="#build-adv-web-test-plan">+</a>...<a href="build-adv-web-test-plan.html">6. Building an Advanced Web Test Plan</a></li>
+  <li><a href="#build-db-test-plan">+</a>...<a href="build-db-test-plan.html">7. Building a Database Test Plan</a></li>
+  <li><a href="#build-ftp-test-plan">+</a>...<a href="build-ftp-test-plan.html">8. Building an FTP Test Plan</a></li>
+  <li><a href="#build-ldap-test-plan">+</a>...<a href="build-ldap-test-plan.html">9. Building an LDAP Test Plan</a></li>
+  <li><a href="#build-ws-test-plan">+</a>...<a href="build-ws-test-plan.html">10. Building a Webservice Test Plan</a></li>
+  <li><a href="#build-monitor-test-plan">+</a>...<a href="build-monitor-test-plan.html">11. Building a Monitor Test Plan</a></li>
+  <li><a href="#remote-test">+</a>...<a href="remote-test.html">12. Remote Testing</a></li>
+  <li><a href="#best-practices">+</a>...<a href="best-practices.html">13. Best Practices</a></li>
+  <li><a href="#boss">+</a>...<a href="boss.html">14. Help! My boss wants me to load test our web app!</a></li>
+  <li><a href="#component_reference">+</a>...<a href="component_reference.html">15. Component Reference</a></li>
+  <li><a href="#functions">+</a>...<a href="functions.html">16. Functions</a></li>
+  <li><a href="#glossary">+</a>...<a href="glossary.html">17. Glossary</a></li>
+</ul>
+</subsection>
+<subsection name="Detailed Section List">
+<ul>
+  <li><a name="intro"/><a href="intro.html">1. Introduction</a></li>
   <ul>
 	 <li><a href="intro.html#history">1.1 History</a></li>
 	 <li><a href="intro.html#future">1.2 The Future</a></li>
   </ul>
-  <li><a href="get-started.html">2. Getting Started</a></li>
+  <li><a name="get-started"/><a href="get-started.html">2. Getting Started</a></li>
   <ul>
 	 <li><a href="get-started.html#requirements">2.1 Requirements</a></li>
 	 <ul>
@@ -57,17 +82,19 @@
 		<li><a href="get-started.html#non_gui">2.4.3 Non-GUI Mode</a></li>
 		<li><a href="get-started.html#server">2.4.4 Distributed Mode</a></li>
 		<li><a href="get-started.html#override">2.4.5 Overriding Properties Via The Command Line</a></li>
+		<li><a href="get-started.html#logging">2.4.6 Logging and Error Messages</a></li>
 	 </ul>
 	 <li><a href="get-started.html#configuring_jmeter">2.5 Configuring JMeter</a></li>
   </ul>
-  <li><a href="build-test-plan.html">3. Building a Test Plan</a></li>
+  <li><a name="build-test-plan"/><a href="build-test-plan.html">3. Building a Test Plan</a></li>
   <ul>
 	 <li><a href="build-test-plan.html#add_remove">3.1 Adding and Removing Elements</a></li>
 	 <li><a href="build-test-plan.html#load_save">3.2 Loading and Saving Elements</a></li>
 	 <li><a href="build-test-plan.html#config_element">3.3 Configuring Tree Elements</a></li>
-	 <li><a href="build-test-plan.html#run">3.3 Running a Test Plan</a></li>
+	 <li><a href="build-test-plan.html#run">3.4 Running a Test Plan</a></li>
+	 <li><a href="build-test-plan.html#scoping_rules">3.5 Scoping Rules</a></li>
   </ul>
-  <li><a href="test_plan.html">4. Elements of a Test Plan</a></li>
+  <li><a name="test_plan"/><a href="test_plan.html">4. Elements of a Test Plan</a></li>
   <ul>
 	 <li><a href="test_plan.html#thread_group">4.1 Thread Group</a></li>
 	 <li><a href="test_plan.html#controllers">4.2 Controllers</a></li>
@@ -82,7 +109,7 @@
 	 <li><a href="test_plan.html#preprocessors">4.7 Pre-Processor Elements</a></li>
 	 <li><a href="test_plan.html#postprocessors">4.8 Post-Processor Elements</a></li>
 	</ul>
-  <li><a href="build-web-test-plan.html">5. Building a Web Test Plan</a></li>
+ <li><a name="build-web-test-plan"/><a href="build-web-test-plan.html">5. Building a Web Test Plan</a></li>
 	 <ul>
 		<li><a href="build-web-test-plan.html#adding_users">5.1 Adding Users</a></li>
 		<li><a href="build-web-test-plan.html#adding_defaults">5.2 Adding Default HTTP Request Properties</a></li>
@@ -92,12 +119,12 @@
 		<li><a href="build-web-test-plan.html#saving">5.6 Saving the Test Plan</a></li>
 		<li><a href="build-web-test-plan.html#running">5.7 Running the Test Plan</a></li>
 	 </ul>
-  <li><a href="build-adv-web-test-plan.html">6. Building an Advanced Web Test Plan</a></li>
+ <li><a name="build-adv-web-test-plan"/><a href="build-adv-web-test-plan.html">6. Building an Advanced Web Test Plan</a></li>
 	 <ul>
 		<li><a href="build-adv-web-test-plan.html#session_url_rewriting">6.1 Handling User Sessions With URL Rewriting</a></li>
 		<li><a href="build-adv-web-test-plan.html#header_manager">6.2 Using a Header Manager</a></li>
 	 </ul>
-  <li><a href="build-db-test-plan.html">7. Building a Database Test Plan</a></li>
+ <li><a name="build-db-test-plan"/><a href="build-db-test-plan.html">7. Building a Database Test Plan</a></li>
 	 <ul>
 		<li><a href="build-db-test-plan.html#adding_users">7.1 Adding Users</a></li>
 		<li><a href="build-db-test-plan.html#adding_requests">7.2 Adding JDBC Requests</a></li>
@@ -105,7 +132,7 @@
 		<li><a href="build-db-test-plan.html#saving">7.4 Saving the Test Plan</a></li>
 		<li><a href="build-db-test-plan.html#running">7.5 Running the Test Plan</a></li>
 	 </ul>
-  <li><a href="build-ftp-test-plan.html">8. Building an FTP Test Plan</a></li>
+ <li><a name="build-ftp-test-plan"/><a href="build-ftp-test-plan.html">8. Building an FTP Test Plan</a></li>
 	 <ul>
 		<li><a href="build-ftp-test-plan.html#adding_users">8.1 Adding Users</a></li>
 		<li><a href="build-ftp-test-plan.html#adding_defaults">8.2 Adding Default FTP Request Properties</a></li>
@@ -113,6 +140,8 @@
 		<li><a href="build-ftp-test-plan.html#adding_listener">8.4 Adding a Listener to View/Store the Test Results</a></li>
 		<li><a href="build-ftp-test-plan.html#saving">8.5 Saving the Test Plan</a></li>
 		<li><a href="build-ftp-test-plan.html#running">8.6 Running the Test Plan</a></li>
+	 </ul>
+ <li><a name="build-ldap-test-plan"/><a href="build-ldap-test-plan.html">9. Building an LDAP Test Plan</a></li>
   <ul>
     <li><a href="build-ldap-test-plan.html#adding_users">9.1 Adding Users</a></li>
     <li><a href="build-ldap-test-plan.html#add_login">9.2 Adding Login Config Element</a></li>
@@ -122,25 +151,23 @@
     <li><a href="build-ldap-test-plan.html#saving">9.6 Saving the Test Plan</a></li>
     <li><a href="build-ldap-test-plan.html#running">9.7 Running the Test Plan</a></li>
   </ul>
-
-	 </ul>
-  <li><a href="build-ldap-test-plan.html">9. Building an LDAP Test Plan</a></li>
-  <li><a href="build-ws-test-plan.html">10. Building a Webservice Test Plan</a></li>
-  <li><a href="build-monitor-test-plan.html">11. Building a Monitor Test Plan</a></li>
-  <li><a href="remote-test.html">12. Remote Testing</a></li>
-  <li><a href="best-practices.html">13. Best Practices</a></li>
+ <li><a name="build-ws-test-plan"/><a href="build-ws-test-plan.html">10. Building a Webservice Test Plan</a></li>
+ <li><a name="build-monitor-test-plan"/><a href="build-monitor-test-plan.html">11. Building a Monitor Test Plan</a></li>
+ <li><a name="remote-test"/><a href="remote-test.html">12. Remote Testing</a></li>
+ <li><a name="best-practices"/><a href="best-practices.html">13. Best Practices</a></li>
   <ul>
 	 <li><a href="best-practices.html#limit_threads">13.1 [ALL] Limit the Number of Threads</a></li>
 	 <li><a href="best-practices.html#put_cookie_manager">13.2 [HTTP] Where to Put the Cookie Manager</a></li>
 	 <li><a href="best-practices.html#put_auth_manager">13.3 [HTTP] Where to Put the Authorization Manager</a></li>
 	 <li><a href="best-practices.html#proxy_server">13.4 Using the Proxy Server to record test scripts</a></li>
   </ul>
-  <li><a href="boss.html">14. Help! My boss wants me to load test our web app!</a></li>
+ <li><a name="boss"/><a href="boss.html">14. Help! My boss wants me to load test our web app!</a></li>
 
-  <li><a href="component_reference.html">15. Component Reference</a></li>
-  <li><a href="functions.html">16. Functions</a></li>
-  <li><a href="glossary.html">17. Glossary</a></li>
+ <li><a name="component_reference"/><a href="component_reference.html">15. Component Reference</a></li>
+ <li><a name="functions"/><a href="functions.html">16. Functions</a></li>
+ <li><a name="glossary"/><a href="glossary.html">17. Glossary</a></li>
 </ul>
+</subsection>
 
 </section>
 </body>

@@ -209,14 +209,16 @@ A reference name - refName - for reusing the value created by this function. Sto
 	The current sequence number is passed in as the only parameter.
     If the optional sequence numbers are not used, the path name is used as is.
 	Useful formatting sequences are:
-<pre>
-# - insert the number, with no leading zeros or spaces
-000 - insert the number packed out to 3 digits with leading zeros if necessary
-
-Examples:
- pin#.dat -> pin1.dat, ... pin9.dat, pin10.dat, ... pin9999.dat
+	</p>
+	<p>
+<code>
+# - insert the number, with no leading zeros or spaces<br/>
+000 - insert the number packed out to 3 digits with leading zeros if necessary<br/>
+<p/>
+Examples:<br/>
+ pin#.dat -> pin1.dat, ... pin9.dat, pin10.dat, ... pin9999.dat<br/>
  pin000.dat -> pin001.dat ... pin099.dat ... pin999.dat ... pin9999.dat
-</pre>
+</code><p/>
 	If more digits are required than there are formatting characters, the number will be
 	expanded as necessary. To prevent a formatting character from being interpreted,
 	enclose it in single quotes. See the documentation for DecimalFormat for full details.
@@ -311,14 +313,13 @@ Examples:
 	If the property value cannot be found, and no default has been supplied, it returns the property name.
 	When supplying a default value, there is no need to provide a function name - the parameter can be set to null, and it will be ignored.
 	</p>For example:<p>
-<code>
-<pre>
-${__property(user.dir)} - return value of user.dir
-${__property(user.dir,UDIR)} - return value of user.dir and save in UDIR
-${__property(abcd,ABCD,atod)} - return value of property abcd (or "atod" if not defined) and save in ABCD
-${__property(abcd,,atod)} - return value of property abcd (or "atod" if not defined) but don't save it
-</pre>
-</code></p>
+		<ul>
+<li>${__property(user.dir)} - return value of user.dir</li>
+<li>${__property(user.dir,UDIR)} - return value of user.dir and save in UDIR</li>
+<li>${__property(abcd,ABCD,atod)} - return value of property abcd (or "atod" if not defined) and save in ABCD</li>
+<li>${__property(abcd,,atod)} - return value of property abcd (or "atod" if not defined) but don't save it</li>
+</ul>
+</p>
 	</description>
 
 <properties>
@@ -332,24 +333,30 @@ ${__property(abcd,,atod)} - return value of property abcd (or "atod" if not defi
 <component index="16.5.10" name="__P">
 <description><p>This is a simplified property function which is
 	intended for use with properties defined on the command line.
-	If the property is not found, the default is returned.
-	If no default was provided, then returns 1.
+	Unlike the __property function, there is no option to save the value in a variable,
+	and if no default value is supplied, it is assumed to be 1. 
+	The value of 1 was chosen because it is valid for common test variables such
+	as loops, thread count, ramp up etc.
 	</p>For example:<p>
 <code>
-<pre>
 Define the property value:
-
+<br/>
 jmeter -Jgroup1.threads=7 -Jhostname1=www.realhost.edu
+<br/>
 
 Fetch the values:
+<br/>
 ${__P(group1.threads)} - return the value of group1.threads
+<br/>
 ${__P(group1.loops)} - return the value of group1.loops
+<br/>
 ${__P(hostname,www.dummy.org)} - return value of property hostname or www.dummy.org if not defined
-</pre>
+<br/>
+</code>
 In the examples above, the first function call would return 7, 
 the second would return 1 and the last would return www.dummy.org
 (unless those properties were defined elsewhere!)
-</code></p>
+</p>
 	</description>
 
 <properties>

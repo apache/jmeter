@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -100,6 +99,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel
 
     public TestElement createTestElement()
     {
+       stopTableEditing();
         Iterator modelData = tableModel.iterator();
         Arguments args = new Arguments();
         while (modelData.hasNext())

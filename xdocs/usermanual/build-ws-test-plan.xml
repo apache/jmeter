@@ -15,7 +15,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<document prev="build-ftp-test-plan.html" next="build-monitor-test-plan.html" date="$Date$">
+<document prev="build-ldap-test-plan.html" next="build-monitor-test-plan.html" date="$Date$">
 
 <properties>
   <title>User's Manual: Building a WebService Test Plan</title>
