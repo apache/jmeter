@@ -22,11 +22,11 @@ import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
 import javax.swing.tree.TreePath;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.protocol.http.proxy.ProxyControl;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
@@ -76,12 +76,17 @@ public class Remove implements Command
 
     public static void removeNode(JMeterTreeNode node)
     {
-        GuiPackage.getInstance().getTreeModel().removeNodeFromParent(node);
-        TestElement testElement = node.getTestElement(); 
-		if(testElement instanceof ProxyControl)
-		{
-		    ((ProxyControl)testElement).stopProxy();
-		}
-		GuiPackage.getInstance().removeNode(testElement);
+        TestElement testElement = node.getTestElement();
+        if (testElement.canRemove())
+        {
+            GuiPackage.getInstance().getTreeModel().removeNodeFromParent(node);
+    		GuiPackage.getInstance().removeNode(testElement);
+        }
+        else
+        {
+        	String message=testElement.getClass().getName()+ " is busy";
+        	JOptionPane.showMessageDialog(null, message, "Cannot remove item",
+        			JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
