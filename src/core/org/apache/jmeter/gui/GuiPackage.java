@@ -325,18 +325,23 @@ public final class GuiPackage implements LocaleChangeListener
             nodesToGui.put(node, comp);
             return node;
         }
+        catch (NoClassDefFoundError e)
+        {
+            log.error("Problem retrieving gui for "+objClass, e);
+            throw new RuntimeException(e.toString()); // Probably a missing jar
+        }
         catch (ClassNotFoundException e)
         {
             log.error("Problem retrieving gui for "+objClass, e);
-            throw new Error(e.toString()); // Programming error: bail out.
+            throw new RuntimeException(e.toString()); // Programming error: bail out.
         } catch (InstantiationException e)
         {
             log.error("Problem retrieving gui for "+objClass, e);
-            throw new Error(e.toString()); // Programming error: bail out.
+            throw new RuntimeException(e.toString()); // Programming error: bail out.
         } catch (IllegalAccessException e)
         {
             log.error("Problem retrieving gui for "+objClass, e);
-            throw new Error(e.toString()); // Programming error: bail out.
+            throw new RuntimeException(e.toString()); // Programming error: bail out.
         }
     }
     /**
