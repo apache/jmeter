@@ -14,6 +14,8 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * @version $Revision$
@@ -22,6 +24,7 @@ public class UserParameters
     extends AbstractTestElement
     implements Serializable, PreProcessor, LoopIterationListener
 {
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static final String NAMES = "UserParameters.names";
     public static final String THREAD_VALUES = "UserParameters.thread_values";
@@ -108,6 +111,10 @@ public class UserParameters
 
     public void process()
     {
+    	if (log.isDebugEnabled())
+    	{
+			log.debug(Thread.currentThread().getName() + " process " + isPerIteration());//$NON-NLS-1$
+    	}
         if (!isPerIteration())
         {
             setValues();
@@ -118,7 +125,10 @@ public class UserParameters
     {
         synchronized (lock)
         {
-            log.debug("Running up named: " + getName());
+			if (log.isDebugEnabled())
+			{
+		        log.debug(Thread.currentThread().getName() + " Running up named: " + getName());//$NON-NLS-1$
+			}
             PropertyIterator namesIter = getNames().iterator();
             PropertyIterator valueIter = getValues().iterator();
             JMeterVariables jmvars =
@@ -127,7 +137,10 @@ public class UserParameters
             {
                 String name = namesIter.next().getStringValue();
                 String value = valueIter.next().getStringValue();
-                log.debug("saving variable: " + name + "=" + value);
+				if (log.isDebugEnabled())
+				{
+                    log.debug(Thread.currentThread().getName()+" saving variable: "+name+"="+value);//$NON-NLS-1$
+				}
                 jmvars.put(name, value);
             }
         }
@@ -138,6 +151,10 @@ public class UserParameters
      */
     public void iterationStart(LoopIterationEvent event)
     {
+		if (log.isDebugEnabled())
+        {
+			log.debug(Thread.currentThread().getName() + " iteration start " + isPerIteration());//$NON-NLS-1$
+        }
         if (isPerIteration())
         {
             setValues();
