@@ -137,7 +137,7 @@ public class XPathAssertionGui extends AbstractAssertionGui implements
 		xpath.addFocusListener(this);
 		sizePanel.add(xpath, BorderLayout.WEST);
 		sizePanel.add(checkXPath, BorderLayout.EAST);
-		sizePanel.add(negated, BorderLayout.PAGE_END);
+		sizePanel.add(negated, BorderLayout.SOUTH);// JDK1.4 PAGE_END
 
 		JPanel optionPanel = new JPanel();
 		optionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory
