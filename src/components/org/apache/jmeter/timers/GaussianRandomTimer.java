@@ -55,8 +55,7 @@
 
 package org.apache.jmeter.timers;
 
-import java.util.*;
-import java.io.*;
+import java.io.Serializable;
 
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -65,17 +64,19 @@ import org.apache.jmeter.util.JMeterUtils;
  * to be instantiable and implements a random delay with
  * an average value and a gaussian distributed variation.
  *
- * @author  <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
- * @version $Revision$ $Date$
+ * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
+ * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
+ * @version $Id$
  */
 public class GaussianRandomTimer extends RandomTimer implements Serializable
 {
 
 	 public long delay() {
-		  return (long) Math.abs((this.random.nextGaussian() * getRange()) + getDelay());
+		  return (long) Math.abs((this.random.nextGaussian() * getRange()) + super.delay());
 	 }
 
 	 public String toString() {
 		  return JMeterUtils.getResString("gaussian_timer_memo");
 	 }
+	 
 }

@@ -55,8 +55,7 @@
 
 package org.apache.jmeter.timers;
 
-import java.util.*;
-import java.io.*;
+import java.io.Serializable;
 
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -72,11 +71,12 @@ public class UniformRandomTimer extends RandomTimer implements Serializable
 {
 	public long delay()
 	{
-		return (long) Math.abs((this.random.nextDouble() * getRange()) + getDelay());
+		return (long) Math.abs((this.random.nextDouble() * getRange()) + super.delay());
 	}
 
 	public String toString()
 	{
 		return JMeterUtils.getResString("uniform_timer_memo");
 	}
+	
 }
