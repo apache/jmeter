@@ -82,7 +82,7 @@ public class ActionRouter implements ActionListener
 	private Map commands = new HashMap();
 	private static ActionRouter router;
 	private static AddToTree add = new AddToTree();
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.gui");
 
 

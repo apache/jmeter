@@ -127,7 +127,7 @@ public class SampleResult implements Serializable
 	 */
 	private final static String TOTAL_TIME = "totalTime";
 
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
 
 
 	/**

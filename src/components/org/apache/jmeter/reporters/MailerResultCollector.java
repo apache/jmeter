@@ -30,7 +30,7 @@ import org.apache.log.Logger;
 
 public class MailerResultCollector extends ResultCollector implements Serializable
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.elements");
 	String address;
 	String from;

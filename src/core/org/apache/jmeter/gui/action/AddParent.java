@@ -20,7 +20,7 @@ import org.apache.log.Logger;
 
 public class AddParent implements Command
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.gui");
 	private static Set commands = new HashSet();
 	static

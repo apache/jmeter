@@ -108,7 +108,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 	private static final String FAILURE_LIMIT_KEY = "MailerModel.failureLimit";
 	private static final String SUCCESS_LIMIT_KEY = "MailerModel.successLimit";
 
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
 	/** The listener for changes. */
 	ModelListener changeListener;

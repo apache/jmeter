@@ -20,7 +20,7 @@ import org.apache.log.Logger;
 public class TextFile extends File
 {
 	
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.util");
 	/************************************************************
 	 *  !ToDo (Constructor description)

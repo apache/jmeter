@@ -79,7 +79,7 @@ import org.apache.log.Logger;
  */
 public class JNDISampler implements Sampler
 {
-  private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+  transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.protocol.jndi");
 
   public static final String QUERY = "JNDISampler.query";

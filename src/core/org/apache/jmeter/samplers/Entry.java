@@ -77,7 +77,7 @@ import org.apache.log.Logger;
 
 public class Entry
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.elements");
 	Map configSet;
 	Set clonedSet;

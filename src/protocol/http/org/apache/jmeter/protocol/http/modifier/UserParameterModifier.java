@@ -83,7 +83,7 @@ public class UserParameterModifier
 	extends ConfigTestElement
 	implements Modifier, Serializable, TestListener
 {
-	private static Logger log =
+	transient private static Logger log =
 		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
 	private static final String XMLURI = "UserParameterModifier.xmluri";
 	//-------------------------------------------

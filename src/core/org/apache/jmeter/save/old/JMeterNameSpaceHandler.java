@@ -76,7 +76,7 @@ import org.xml.sax.Attributes;
  */
 
 public class JMeterNameSpaceHandler implements NameSpaceHandler {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.util");
 	private static Map saveHandlers = new HashMap();
 	static {

@@ -76,7 +76,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class XmlHandler extends DefaultHandler
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.util");
 	protected LinkedList objectStack;
 

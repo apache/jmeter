@@ -26,10 +26,10 @@ public class URLRewritingModifier
 	extends AbstractTestElement
 	implements Serializable, ResponseBasedModifier
 {
-	private static Logger log =
+	transient private static Logger log =
 		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
 	private Pattern case1, case2, case3;
-	Perl5Compiler compiler = new Perl5Compiler();
+	transient Perl5Compiler compiler = new Perl5Compiler();
 	private final static String ARGUMENT_NAME = "argument_name";
 	private final static String PATH_EXTENSION = "path_extension";
 	/**

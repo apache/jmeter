@@ -23,7 +23,7 @@ import org.apache.log.Logger;
  */
 public class Help implements Command
 {
-	private static Logger log =
+	transient private static Logger log =
 		Hierarchy.getDefaultHierarchy().getLoggerFor(LoggingManager.GUI);
 	private static Set commands = new HashSet();
 	public final static String HELP = "help";

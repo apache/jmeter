@@ -132,7 +132,7 @@ import org.apache.log.Logger;
  *  @version 1.0 - 199903202000
  */
 public class Spline3 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.gui");
 
 	 protected float[][] _coefficients;

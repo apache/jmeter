@@ -84,7 +84,7 @@ public class JavaSampler extends AbstractSampler implements JavaSamplerClient {
 	private JavaSamplerClient javaClient = null;
 
 	/** Logging  */
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
 
 	public JavaSampler() {
 		setArguments(new Arguments());

@@ -110,7 +110,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 	protected JTree jTree;
 	protected int childIndex;
 
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
 	/****************************************
 	 * !ToDo (Constructor description)

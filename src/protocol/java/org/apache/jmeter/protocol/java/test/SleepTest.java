@@ -72,7 +72,7 @@ import org.apache.log.Logger;
 
 public class SleepTest implements JavaSamplerClient {
 	/** Define category for logging  */
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
 	/** */
 	private long sleepTime = 1000;
 	/** */

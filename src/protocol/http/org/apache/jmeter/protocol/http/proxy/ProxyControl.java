@@ -95,7 +95,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
  ***********************************************************/
 public class ProxyControl extends ConfigTestElement implements Serializable
 {
-	private static Logger log =
+	transient private static Logger log =
 		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
 	Daemon server;
 	private final int DEFAULT_PORT = 8080;

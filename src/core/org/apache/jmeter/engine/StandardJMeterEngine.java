@@ -86,7 +86,7 @@ import org.apache.log.Logger;
  ***********************************************************/
 public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor,Runnable
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.engine");
 	private static long WAIT_TO_DIE = 5 * 1000; //5 seconds
 	Map allThreads;

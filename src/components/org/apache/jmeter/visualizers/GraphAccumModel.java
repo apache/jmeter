@@ -112,7 +112,7 @@ public class GraphAccumModel implements Clearable
 	 *  Description of the Field
 	 */
 	protected SampleResult current;
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
 
 	/**

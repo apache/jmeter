@@ -77,7 +77,7 @@ import org.xml.sax.Attributes;
 
 public abstract class TagHandler implements SaveHandler
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.util");
 	private LinkedList tagsIn = new LinkedList();
 	private boolean done = false;

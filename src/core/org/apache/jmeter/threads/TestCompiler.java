@@ -48,7 +48,7 @@ import org.apache.log.Logger;
 
 public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.engine");
 	LinkedList stack = new LinkedList();
 	Map samplerConfigMap = new HashMap();

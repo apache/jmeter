@@ -69,7 +69,7 @@ import org.apache.log.Logger;
  */
 public class Cookie extends AbstractTestElement implements Serializable
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.protocol.http");
 	 private static String NAME = "Cookie.name";
 	 private static String VALUE = "Cookie.value";

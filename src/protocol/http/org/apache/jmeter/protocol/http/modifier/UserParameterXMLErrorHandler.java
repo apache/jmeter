@@ -68,7 +68,7 @@ import org.xml.sax.SAXParseException;
  ***********************************************************/
 public class UserParameterXMLErrorHandler implements ErrorHandler
 {
-	private static Logger log =
+	transient private static Logger log =
 		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
 	//-------------------------------------------
 	// Constants and Data Members

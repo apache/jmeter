@@ -341,7 +341,7 @@ public class HTTPSampler extends AbstractSampler
 	 ***************************************/
 	protected final static String NON_HTTP_RESPONSE_MESSAGE =
 		"Non HTTP response message";
-	private static Logger log =
+	transient private static Logger log =
 		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
 	/****************************************
 	 * Holds a list of URLs sampled - so we're not flooding stdout with debug

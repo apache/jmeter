@@ -72,7 +72,7 @@ public class RemoteJMeterEngineImpl
 		 extends java.rmi.server.UnicastRemoteObject
 		 implements RemoteJMeterEngine
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.engine");
 	JMeterEngine backingEngine;
 

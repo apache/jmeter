@@ -86,7 +86,7 @@ import org.apache.log.Logger;
 
 public class DurationAssertionGui extends AbstractAssertionGui implements FocusListener
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.elements");
 
 	private JTextField duration;

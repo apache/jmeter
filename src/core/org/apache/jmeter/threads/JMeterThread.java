@@ -82,7 +82,7 @@ import org.apache.log.Logger;
  *@version   $Revision$
  ***************************************/
 public class JMeterThread implements Runnable, java.io.Serializable {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.engine");
 	static Map samplers = new HashMap();
 	int initialDelay = 0;

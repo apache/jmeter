@@ -101,7 +101,7 @@ import org.apache.log.Logger;
  ***************************************/
 public class HeaderPanel extends AbstractConfigGui implements ActionListener,FocusListener
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.protocol.http");
 	InnerTableModel tableModel;
 

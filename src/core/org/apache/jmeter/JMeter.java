@@ -88,7 +88,7 @@ import org.apache.log.Logger;
  * Window>Preferences>Java>Templates.
  */
 public class JMeter {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter");
 
 	private final static int PROPFILE_OPT = 'p';

@@ -98,7 +98,7 @@ public class GraphAccumVisualizer extends AbstractVisualizer
 	 * !ToDo (Field description)
 	 ***************************************/
 	protected JPanel legendPanel;
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
 
 	/****************************************

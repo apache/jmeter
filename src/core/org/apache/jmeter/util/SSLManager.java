@@ -80,7 +80,7 @@ import org.apache.log.Logger;
  * @version CVS $Revision$ $Date$
  */
 public abstract class SSLManager {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.util");
     /** Singleton instance of the manager */
     private static SSLManager manager;

@@ -23,7 +23,7 @@ import org.xml.sax.Attributes;
 
 public class AssertionHandler extends TagHandler implements SaveHandler
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.util");
 	ResponseAssertion model;
 
