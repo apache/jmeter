@@ -75,95 +75,96 @@ import org.apache.jmeter.threads.JMeterVariables;
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Revision$ $Date$
  */
-public class ConstantTimer extends AbstractTestElement 
-        implements Timer, Serializable, ThreadListener
+public class ConstantTimer
+    extends AbstractTestElement
+    implements Timer, Serializable, ThreadListener
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter.elements");
+    private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
 
-	public final static String DELAY = "ConstantTimer.delay";
-	private VariablesCollection vars = new VariablesCollection();
-	private JMeterVariables variables;
-	private static List addableList = new LinkedList();
-	private long delay = 0;
+    public final static String DELAY = "ConstantTimer.delay";
+    private VariablesCollection vars = new VariablesCollection();
+    private JMeterVariables variables;
+    private static List addableList = new LinkedList();
+    private long delay = 0;
 
-	/**
-	 * No-arg constructor.
-	 */
-	public ConstantTimer()
-	{
-	}
+    /**
+     * No-arg constructor.
+     */
+    public ConstantTimer()
+    {
+    }
 
-	/**
-	 * Set the delay for this timer.
-	 *  
-	 * @see org.apache.jmeter.timers.Timer#setDelay(String)
-	 */
-	public void setDelay(String delay)
-	{
-		setProperty(DELAY, delay);
-	}
+    /**
+     * Set the delay for this timer.
+     *  
+     * @see org.apache.jmeter.timers.Timer#setDelay(String)
+     */
+    public void setDelay(String delay)
+    {
+        setProperty(DELAY, delay);
+    }
 
-	/**
-	 * Set the range (not used for this timer).
-	 * 
-	 * @see org.apache.jmeter.timers.Timer#setRange(double)
-	 */
-	public void setRange(double range)
-	{
-	}
+    /**
+     * Set the range (not used for this timer).
+     * 
+     * @see org.apache.jmeter.timers.Timer#setRange(double)
+     */
+    public void setRange(double range)
+    {
+    }
 
-	/**
-	 * Get the delay value for display.
-	 * 
-	 * @return the delay value for display.
-	 * @see org.apache.jmeter.timers.Timer#getDelay()
-	 */
-	public String getDelay()
-	{
-		return (String) getProperty(DELAY);
-	}
+    /**
+     * Get the delay value for display.
+     * 
+     * @return the delay value for display.
+     * @see org.apache.jmeter.timers.Timer#getDelay()
+     */
+    public String getDelay()
+    {
+        return (String) getProperty(DELAY);
+    }
 
-	/**
-	 * Retrieve the range (not used for this timer).
-	 * 
-	 * @return the range (always zero for this timer).
-	 * @see org.apache.jmeter.timers.Timer#getRange()
-	 */
-	public double getRange()
-	{
-		return (double)0;
-	}
+    /**
+     * Retrieve the range (not used for this timer).
+     * 
+     * @return the range (always zero for this timer).
+     * @see org.apache.jmeter.timers.Timer#getRange()
+     */
+    public double getRange()
+    {
+        return (double) 0;
+    }
 
-	/**
-	 * Retrieve the delay to use during test execution.
-	 * 
-	 * @return the delay.
-	 */
-	public long delay()
-	{
-		return delay;
-	}
+    /**
+     * Retrieve the delay to use during test execution.
+     * 
+     * @return the delay.
+     */
+    public long delay()
+    {
+        return delay;
+    }
 
-	/**
-	 * Provide a description of this timer class.
-	 * 
-	 * @return the description of this timer class.
-	 */
-	public String toString()
-	{
-		return JMeterUtils.getResString("constant_timer_memo");
-	}
+    /**
+     * Provide a description of this timer class.
+     * 
+     * @return the description of this timer class.
+     */
+    public String toString()
+    {
+        return JMeterUtils.getResString("constant_timer_memo");
+    }
 
-	/**
-	 * Gain access to any variables that have been defined.
-	 * 
-	 * @see org.apache.jmeter.testelement.ThreadListener#iterationStarted(int)
-	 */
-	public void iterationStarted(int iterationCount)
-	{
-		variables = vars.getVariables();
-		
+    /**
+     * Gain access to any variables that have been defined.
+     * 
+     * @see org.apache.jmeter.testelement.ThreadListener#iterationStarted(int)
+     */
+    public void iterationStarted(int iterationCount)
+    {
+        variables = vars.getVariables();
+
         try
         {
             String delayString = (String) getProperty(DELAY);
@@ -171,19 +172,23 @@ public class ConstantTimer extends AbstractTestElement
         }
         catch (ClassCastException ex)
         {
-            log.error("Unable to determine delay - you may have used an undefined variable in the test element with the name: " + getName(), ex);
+            log.error(
+                "Unable to determine delay - you may have used an undefined "
+                    + "variable in the test element with the name: "
+                    + getName(),
+                ex);
             delay = 0;
         }
-	}
+    }
 
-	/**
-	 * Make changes to variables available elsewhere.
-	 * 
-	 * @see org.apache.jmeter.testelement.ThreadListener#setJMeterVariables(JMeterVariables)
-	 */
-	public void setJMeterVariables(JMeterVariables jmVars)
-	{
-		//vars.addJMeterVariables(jmVars);
-	}
+    /**
+     * Make changes to variables available elsewhere.
+     * 
+     * @see org.apache.jmeter.testelement.ThreadListener#setJMeterVariables(JMeterVariables)
+     */
+    public void setJMeterVariables(JMeterVariables jmVars)
+    {
+        //vars.addJMeterVariables(jmVars);
+    }
 
 }
