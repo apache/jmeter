@@ -701,6 +701,13 @@ public final class CLArgsParser
                 {
                     m_option.addArgument( token.getValue() );
                 }
+                // Are we about to start a new option?
+                if (0 == m_ch && '-' == peekAtChar()){
+                    // Yes, so the second argument is missing
+                    m_option.addArgument( "" );
+                    m_options.addElement( m_option );
+                    m_state = STATE_NORMAL; 
+                }
             }
             else //2nd argument
             {
