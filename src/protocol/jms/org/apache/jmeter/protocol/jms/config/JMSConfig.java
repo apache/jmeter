@@ -27,99 +27,120 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
 /**
- * @author MBlankestijn
+ * Configuration for Java Messaging Point-to-Point requests.
+ * <br>
+ * Created on:  October 28, 2004
  *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * @author Martijn Blankestijn
+ * @version $Id$ 
  */
-public class JMSConfig extends ConfigTestElement implements Serializable {
-	public static final String IS_ONE_WAY = "true";
-	public static final String ARGUMENTS = "arguments";
-	public static final String RECEIVE_QUEUE = "JMSSampler.ReceiveQueue";
-	public static final String XML_DATA = "HTTPSamper.xml_data";
-	public final static String SEND_QUEUE = "JMSSampler.SendQueue";
-	public final static String QUEUE_CONNECTION_FACTORY_JNDI =
-		"JMSSampler.queueconnectionfactory";
-    
-	/**
-	 *  Constructor for the JavaConfig object
-	 */
-	public JMSConfig()
-	{
-		setArguments(new Arguments());
-	}
+public class JMSConfig extends ConfigTestElement implements Serializable
+{
+    public static final String IS_ONE_WAY = "true";
+    public static final String ARGUMENTS = "arguments";
+    public static final String RECEIVE_QUEUE = "JMSSampler.ReceiveQueue";
+    public static final String XML_DATA = "HTTPSamper.xml_data";
+    public final static String SEND_QUEUE = "JMSSampler.SendQueue";
+    public final static String QUEUE_CONNECTION_FACTORY_JNDI =
+        "JMSSampler.queueconnectionfactory";
+
+    /**
+     *  Constructor for the JavaConfig object
+     */
+    public JMSConfig()
+    {
+        setArguments(new Arguments());
+    }
+
+    /**
+     * Adds an argument to the list of arguments for this JavaConfig object.
+     * The {@link org.apache.jmeter.protocol.java.sampler.JavaSamplerClient}
+     * implementation can access these arguments through the
+     * {@link org.apache.jmeter.protocol.java.sampler.JavaSamplerContext}.
+     * 
+     * @param name       the name of the argument to be added
+     * @param value      the value of the argument to be added
+     */
+    public void addArgument(String name, String value)
+    {
+        Arguments args = this.getArguments();
+        args.addArgument(name, value);
+    }
+
+    /**
+     * Removes all of the arguments associated with this JavaConfig object.
+     */
+    public void removeArguments()
+    {
+        setProperty(
+            new TestElementProperty(
+                JMSSampler.JMS_PROPERTIES,
+                new Arguments()));
+    }
 
 	/**
-	 * Adds an argument to the list of arguments for this JavaConfig object.
-	 * The {@link org.apache.jmeter.protocol.java.sampler.JavaSamplerClient}
-	 * implementation can access these arguments through the
-	 * {@link org.apache.jmeter.protocol.java.sampler.JavaSamplerContext}.
-	 * 
-	 * @param name       the name of the argument to be added
-	 * @param value      the value of the argument to be added
+	 * Returns the name of the queue connection factory.
+	 * @return the queue connection factory
 	 */
-	public void addArgument(String name, String value)
-	{
-		Arguments args = this.getArguments();
-		args.addArgument(name, value);
-	}
+    public String getQueueConnectionFactory()
+    {
+        return getPropertyAsString(QUEUE_CONNECTION_FACTORY_JNDI);
+    }
 
-	/**
-	 * Removes all of the arguments associated with this JavaConfig object.
-	 */
-	public void removeArguments()
-	{
-		setProperty(
-			new TestElementProperty(JMSSampler.JMS_PROPERTIES, new Arguments()));
-	}
+    public void setQueueConnectionFactory(String qcf)
+    {
+        setProperty(QUEUE_CONNECTION_FACTORY_JNDI, qcf);
+    }
 
+    public String getSendQueue()
+    {
+        return getPropertyAsString(SEND_QUEUE);
+    }
 
-	public String getQueueConnectionFactory() {
-		return getPropertyAsString(QUEUE_CONNECTION_FACTORY_JNDI);
-	}
+    public void setSendQueue(String name)
+    {
+        setProperty(SEND_QUEUE, name);
+    }
 
-	public void setQueueConnectionFactory(String qcf) {
-		setProperty(QUEUE_CONNECTION_FACTORY_JNDI, qcf);
-	}
+    public String getReceiveQueue()
+    {
+        return getPropertyAsString(RECEIVE_QUEUE);
+    }
 
-	public String getSendQueue() {
-		return getPropertyAsString(SEND_QUEUE);
-	}
+    public void setReceiveQueue(String name)
+    {
+        setProperty(RECEIVE_QUEUE, name);
+    }
 
-	public void setSendQueue(String name) {
-		setProperty(SEND_QUEUE, name);
-	}
+    public String getContent()
+    {
+        return getPropertyAsString(XML_DATA);
+    }
 
-	public String getReceiveQueue() {
-		return getPropertyAsString(RECEIVE_QUEUE);
-	}
+    public void setContent(String content)
+    {
+        setProperty(XML_DATA, content);
+    }
 
-	public void setReceiveQueue(String name) {
-		setProperty(RECEIVE_QUEUE, name);
-	}
+    public boolean getIsOneway()
+    {
+        return getPropertyAsBoolean(IS_ONE_WAY);
+    }
 
-	public String getContent() {
-		return getPropertyAsString(XML_DATA);
-	}
+    public void setIsOneway(boolean isOneway)
+    {
+        JMeterProperty property = new BooleanProperty(IS_ONE_WAY, isOneway);
+        setProperty(property);
+    }
+    public void setArguments(Arguments args)
+    {
+        setProperty(new TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
+    }
 
-	public void setContent(String content) {
-		setProperty(XML_DATA, content);
-	}
-
-	public boolean getIsOneway() {
-		return getPropertyAsBoolean(IS_ONE_WAY);
-	}
-	
-	public void setIsOneway(boolean isOneway) {
-		JMeterProperty property = new BooleanProperty(IS_ONE_WAY, isOneway);
-		setProperty(property);
-	}
-	public void setArguments(Arguments args) {
-		setProperty(new TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
-	}
-
-	public Arguments getArguments() {
-		return (Arguments) getProperty(JMSSampler.JMS_PROPERTIES).getObjectValue();
-	}
+    public Arguments getArguments()
+    {
+        return (Arguments) getProperty(JMSSampler.JMS_PROPERTIES)
+            .getObjectValue();
+    }
 
 }

@@ -21,19 +21,19 @@ import java.util.Hashtable;
 
 import javax.jms.Message;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
+
 
 /**
- * @author MBlankestijn
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * Administration of messages. 
+ * @author Martijn Blankestijn 
+ * @version $Id$.
  */
 public class MessageAdmin {
 	private static final MessageAdmin SINGLETON = new MessageAdmin();
 	private Hashtable table = new Hashtable();
-	private static final Log LOGGER = LogFactory.getLog(MessageAdmin.class);
+	static Logger log = LoggingManager.getLoggerForClass();
 	
 	private MessageAdmin() {
 		
@@ -45,16 +45,16 @@ public class MessageAdmin {
 	 * @param request
 	 */
 	public void putRequest(String id, Message request) {
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("put request id " + id);
+		if (log.isDebugEnabled()) {
+			log.debug("put request id " + id);
 		}
 		table.put(id, new PlaceHolder(request));
 	}
 	
 	public void putReply(String id, Message reply) {
 		PlaceHolder holder = (PlaceHolder)table.get(id);
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("put reply id " + id + " for holder " + holder);
+		if (log.isDebugEnabled()) {
+			log.debug("put reply id " + id + " for holder " + holder);
 		}
 		if (holder!=null) {
 			holder.setReply(reply);
@@ -70,11 +70,11 @@ public class MessageAdmin {
 	 */
 	public Message get(String id) {
 		PlaceHolder holder = (PlaceHolder)table.remove(id);
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("get reply for " + id + " for " + holder);
+		if (log.isDebugEnabled()) {
+			log.debug("get reply for " + id + " for " + holder);
 		}
 		if (!holder.hasReply()) {
-			LOGGER.debug("Message " + id + " not found.");
+			log.debug("Message " + id + " not found.");
 		}
 		return (Message) holder.getReply();
 	}

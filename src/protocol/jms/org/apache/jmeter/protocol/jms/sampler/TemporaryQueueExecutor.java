@@ -22,30 +22,36 @@ import javax.jms.Message;
 import javax.jms.Queue;
 import javax.jms.QueueRequestor;
 import javax.jms.QueueSession;
-
 /**
  * Request/reply executor with a temporary reply queue.
- * @author MBlankestijn
+ * <br>
+ * Created on:  October 28, 2004
  *
+ * @author Martijn Blankestijn
+ * @version $Id$ 
  */
-public class TemporaryQueueExecutor implements QueueExecutor {
-	/** The sender and receiver. */
-	private QueueRequestor requestor;
+public class TemporaryQueueExecutor implements QueueExecutor
+{
+    /** The sender and receiver. */
+    private QueueRequestor requestor;
 
-	/**
-	 * Constructor.
-	 * @param session the session to use to send the message
-	 * @param queue the queue to send the message on
-	 * @throws JMSException
-	 */
-	public TemporaryQueueExecutor(QueueSession session, Queue destination) throws JMSException {
-		requestor = new QueueRequestor(session, destination);
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.protocol.jms.sampler.QueueExecutor#sendAndReceive(javax.jms.Message)
-	 */
-	public Message sendAndReceive(Message request) throws JMSException {
-		return requestor.request(request);
-	}
+    /**
+     * Constructor.
+     * @param session the session to use to send the message
+     * @param queue the queue to send the message on
+     * @throws JMSException
+     */
+    public TemporaryQueueExecutor(QueueSession session, Queue destination)
+        throws JMSException
+    {
+        requestor = new QueueRequestor(session, destination);
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.protocol.jms.sampler.QueueExecutor#sendAndReceive(javax.jms.Message)
+     */
+    public Message sendAndReceive(Message request) throws JMSException
+    {
+        return requestor.request(request);
+    }
 }

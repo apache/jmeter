@@ -26,14 +26,13 @@ import javax.jms.QueueReceiver;
 import javax.jms.QueueSession;
 import javax.jms.Session;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
- * @author MBlankestijn
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * Receiver of pseudo-synchronous reply messages.  
+ * @author Martijn Blankestijn 
+ * @version $Id$.
  */
 public class Receiver implements Runnable {
 	private boolean active;
@@ -41,7 +40,7 @@ public class Receiver implements Runnable {
 	private QueueReceiver consumer;
 	private QueueConnection conn;
 	private static Receiver receiver;
-	private static final Log LOGGER = LogFactory.getLog(Receiver.class);
+	static Logger log = LoggingManager.getLoggerForClass();
 
 	private Receiver(QueueConnectionFactory factory, Queue receiveQueue) throws JMSException {
 		conn = factory.createQueueConnection();
@@ -67,9 +66,9 @@ public class Receiver implements Runnable {
 			reply = null;
 			try {
 				reply = consumer.receive();
-				LOGGER.debug("CorrId:" + reply.getJMSCorrelationID());
+				log.debug("CorrId:" + reply.getJMSCorrelationID());
 				if (reply.getJMSCorrelationID()==null) {
-					LOGGER.debug("Received message with correlation id null, will discard message");
+					log.debug("Received message with correlation id null, will discard message");
 				}
 				else {
 					MessageAdmin.getAdmin().putReply(reply.getJMSCorrelationID(), reply);
