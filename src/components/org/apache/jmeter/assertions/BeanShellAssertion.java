@@ -42,7 +42,7 @@ public class BeanShellAssertion extends AbstractTestElement
 	public static final String SCRIPT     = "BeanShellAssertion.query"; //$NON-NLS-1$
 	public static final String PARAMETERS = "BeanShellAssertion.parameters"; //$NON-NLS-1$
 
-    private Interpreter bshInterpreter;
+	private transient Interpreter bshInterpreter;
 	
 	public BeanShellAssertion()
 	{

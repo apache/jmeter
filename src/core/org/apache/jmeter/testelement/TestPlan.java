@@ -48,8 +48,8 @@ public class TestPlan extends AbstractTestElement implements Serializable
         "TestPlan.serialize_threadgroups";
     public final static String COMMENTS = "TestPlan.comments";
 
-    private List threadGroups = new LinkedList();
-    private List configs = new LinkedList();
+    private transient List threadGroups = new LinkedList();
+    private transient List configs = new LinkedList();
     private static List itemsCanAdd = new LinkedList();
     private static TestPlan plan;
     

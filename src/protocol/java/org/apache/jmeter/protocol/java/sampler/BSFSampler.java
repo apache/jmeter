@@ -42,7 +42,7 @@ public class BSFSampler extends AbstractSampler
 	public static final String PARAMETERS = "BSFSampler.parameters"; //$NON-NLS-1$
 
 	private transient BSFManager mgr;
-	private BSFEngine bsfEngine;
+	private transient BSFEngine bsfEngine;
 	
 	public BSFSampler()
 	{

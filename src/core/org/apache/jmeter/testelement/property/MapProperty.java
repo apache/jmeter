@@ -28,7 +28,7 @@ import org.apache.jmeter.testelement.TestElement;
 public class MapProperty extends MultiProperty
 {
     Map value;
-    Map savedValue = null;
+    transient Map savedValue = null;
 
     public MapProperty(String name, Map value)
     {

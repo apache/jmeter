@@ -31,7 +31,7 @@ import org.apache.jmeter.testelement.TestElement;
 public class CollectionProperty extends MultiProperty
 {
     protected Collection value;
-    private Collection savedValue;
+    transient private Collection savedValue;
 
     public CollectionProperty(String name, Collection value)
     {
@@ -239,7 +239,7 @@ public class CollectionProperty extends MultiProperty
             CollectionProperty coll = new CollectionProperty();
             coll.addItem("joe");
             coll.addProperty(new FunctionProperty());
-            assertEquals("joe",coll.get(0).getName());
+            assertEquals("joe",coll.get(0).getStringValue());
             assertEquals(
                 "org.apache.jmeter.testelement.property.FunctionProperty",
                 coll.get(1).getClass().getName());

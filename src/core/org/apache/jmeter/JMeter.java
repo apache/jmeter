@@ -223,7 +223,7 @@ public class JMeter implements JMeterPlugin
                 File f = new File(testFile.getArgument());
                 log.info("Loading file: " + f);
                 FileInputStream reader = new FileInputStream(f);
-                HashTree tree = SaveService.loadSubTree(reader);
+                HashTree tree = SaveService.loadTree(reader);
                 new Load().insertLoadedTree(1, tree);
             }
             catch (Exception e)
@@ -501,7 +501,7 @@ public class JMeter implements JMeterPlugin
             reader = new FileInputStream(f);
             log.info("Loading file: " + f);
 
-            HashTree tree = SaveService.loadSubTree(reader);
+            HashTree tree = SaveService.loadTree(reader);
 
             // Remove the disabled items
             // For GUI runs this is done in Start.java

@@ -125,7 +125,7 @@ public class ResponseAssertion
     ***********************************************************/
    public void addTestString(String testString)
    {
-      getTestStrings().addProperty(new StringProperty(testString,testString));
+      getTestStrings().addProperty(new StringProperty(String.valueOf(testString.hashCode()),testString));
    }
    public void setTestString(String testString, int index)//NOTUSED?
    {

@@ -27,7 +27,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 public class BooleanProperty extends AbstractProperty
 {
     boolean value; //TODO: should these be private?
-    boolean savedValue;
+    transient boolean savedValue;
     
     public BooleanProperty(String name,boolean v)
     {
