@@ -61,18 +61,20 @@ import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
 /**
- * Insert the type's description here.
  * Creation date: (20/03/2003 09:37:44)
  * @author: Cyrus Montakab
+ * @version $Revision$
  */
 public class FileDataContainer
 {
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor(
+            "jmeter.FileDataContainer");
+
     private ArrayList fileData;
 
-    // keeping track on which row was last read
+    /** Keeping track on which row was last read. */
     private int rowPosition = -1;
-
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.FileDataContainer");
 
     /**
      * FileDataContainer constructor comment.
@@ -82,6 +84,7 @@ public class FileDataContainer
         super();
         this.fileData = new ArrayList();
     }
+
     /**
      * FileDataContainer constructor comment.
      */
@@ -90,8 +93,8 @@ public class FileDataContainer
         super();
         fileData = newFileData;
     }
+
     /**
-     * Insert the method's description here.
      * Creation date: (20/03/2003 09:39:50)
      * @param newRowPosition int
      */
@@ -99,12 +102,12 @@ public class FileDataContainer
     {
         fileData.add(processNextCSVLine(newLine));
     }
+
     /**
-     * Insert the method's description here.
      * Creation date: (20/03/2003 09:39:50)
      * @return java.util.ArrayList
      */
-    public java.util.ArrayList getNextLine()
+    public ArrayList getNextLine()
     {
         ArrayList result = null;
         if (fileData != null && fileData.size() > 0)
@@ -120,8 +123,8 @@ public class FileDataContainer
         }
         return result;
     }
+    
     /**
-     * Insert the method's description here.
      * Creation date: (20/03/2003 09:39:50)
      * @return int
      */
@@ -129,8 +132,8 @@ public class FileDataContainer
     {
         return rowPosition;
     }
+
     /**
-     * Insert the method's description here.
      * Creation date: (20/03/2003 09:39:50)
      * @param newRowPosition int
      */
@@ -144,11 +147,11 @@ public class FileDataContainer
                 rowPosition = 0;
             }
         }
-        //    log.debug (Thread.currentThread().getName() + " >>>> incrementRowPosition - returning : "+ rowPosition);
+        //    log.debug (Thread.currentThread().getName() +
+        //         " >>>> incrementRowPosition - returning : "+ rowPosition);
     }
+    
     /**
-     *
-     * @param theLine
      * @return        an ArrayList of Strings containing one element for each
      *                value in the line
      */

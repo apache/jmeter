@@ -75,96 +75,101 @@ import org.apache.jmeter.util.JMeterUtils;
 public class Random extends AbstractFunction implements Serializable
 {
 
-	private static final List desc = new LinkedList();
-	private static final String KEY = "__Random";
+    private static final List desc = new LinkedList();
+    private static final String KEY = "__Random";
 
-	static
-	{
-		desc.add(JMeterUtils.getResString("minimum_param"));
-		desc.add(JMeterUtils.getResString("maximum_param"));
-		desc.add(JMeterUtils.getResString("function_name_param"));
-	}
+    static {
+        desc.add(JMeterUtils.getResString("minimum_param"));
+        desc.add(JMeterUtils.getResString("maximum_param"));
+        desc.add(JMeterUtils.getResString("function_name_param"));
+    }
 
-	private CompoundVariable varName,minimum,maximum;
-
+    private CompoundVariable varName, minimum, maximum;
 
     /**
      * No-arg constructor.
      */
-	public Random() {}
+    public Random()
+    {
+    }
 
     /**
      * Clone this Add object.
      *
      * @return A new Add object.
      */
-	public Object clone()
-	{
-		Random newRandom = new Random();
-		return newRandom;
-	}
+    public Object clone()
+    {
+        Random newRandom = new Random();
+        return newRandom;
+    }
 
-	/**
-	 * Execute the function.
-	 *
-	 * @see Function#execute(SampleResult, Sampler)
-	 */
-	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-			throws InvalidVariableException
-	{
+    /**
+     * Execute the function.
+     *
+     * @see Function#execute(SampleResult, Sampler)
+     */
+    public synchronized String execute(
+        SampleResult previousResult,
+        Sampler currentSampler)
+        throws InvalidVariableException
+    {
 
-		JMeterVariables vars = getVariables();
+        JMeterVariables vars = getVariables();
 
-		int min = Integer.parseInt(minimum.execute());
-		int max = Integer.parseInt(maximum.execute());
-        
-		int rand = (int)Math.round(min + Math.random()*(max-min));
+        int min = Integer.parseInt(minimum.execute());
+        int max = Integer.parseInt(maximum.execute());
 
-		String randString = Integer.toString(rand);
-		vars.put(varName.execute(), randString);
+        int rand = (int) Math.round(min + Math.random() * (max - min));
 
-		return randString;
+        String randString = Integer.toString(rand);
+        vars.put(varName.execute(), randString);
 
-	}
+        return randString;
 
-	/**
-	 * Set the parameters for the function.
-	 *
-	 * @see Function#setParameters(Collection)
-	 */
-	public void setParameters(Collection parameters)
-			throws InvalidVariableException
-	{
-		Object[] values = parameters.toArray();
+    }
 
-		if ( values.length < 3 ) {
-			throw new InvalidVariableException();
-		}
+    /**
+     * Set the parameters for the function.
+     *
+     * @see Function#setParameters(Collection)
+     */
+    public void setParameters(Collection parameters)
+        throws InvalidVariableException
+    {
+        Object[] values = parameters.toArray();
+
+        if (values.length < 3)
+        {
+            throw new InvalidVariableException();
+        }
         else
         {
-            varName = (CompoundVariable)values[2];
-            minimum = (CompoundVariable)values[0];
-            maximum = (CompoundVariable)values[1];
+            varName = (CompoundVariable) values[2];
+            minimum = (CompoundVariable) values[0];
+            maximum = (CompoundVariable) values[1];
         }
 
-	}
+    }
 
-	/**
-	 * Get the invocation key for this function.
-	 *
-	 * @see Function#getReferenceKey()
-	 */
-	public String getReferenceKey() {
-		return KEY;
-	}
+    /**
+     * Get the invocation key for this function.
+     *
+     * @see Function#getReferenceKey()
+     */
+    public String getReferenceKey()
+    {
+        return KEY;
+    }
 
-	/**
-	 * Get the description of this function.
-	 *
-	 * @see Function#getArgumentDesc()
-	 */
-	public List getArgumentDesc() {
-		return desc;
-	}
+    /**
+     * Get the description of this function.
+     *
+     * @see Function#getArgumentDesc()
+     */
+    public List getArgumentDesc()
+    {
+        return desc;
+    }
 
 }

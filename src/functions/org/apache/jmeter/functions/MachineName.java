@@ -52,7 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- 
+
 package org.apache.jmeter.functions;
 
 import java.io.Serializable;
@@ -68,81 +68,97 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
+public class MachineName extends AbstractFunction implements Serializable
+{
 
+    private static final List desc = new LinkedList();
+    private static final String KEY = "__machineName";
 
-public class MachineName extends AbstractFunction implements Serializable {
+    // Number of parameters expected - used to reject invalid calls
+    private static final int PARAMETER_COUNT = 1;
+    static {
+        //desc.add("Use fully qualified host name: TRUE/FALSE (Default FALSE)");
+        desc.add(JMeterUtils.getResString("function_name_param"));
+    }
 
-	private static final List desc = new LinkedList();
-	private static final String KEY = "__machineName";
-	
-	// Number of parameters expected - used to reject invalid calls
-	private static final int PARAMETER_COUNT = 1;
-	static {
-//		desc.add("Use fully qualified host name: TRUE/FALSE (Default FALSE)");
-		desc.add(JMeterUtils.getResString("function_name_param"));
-	}
-	
-	private Object[] values;
+    private Object[] values;
 
+    public MachineName()
+    {
+    }
 
-	public MachineName() {}
+    public Object clone()
+    {
+        return new MachineName();
+    }
 
-	public Object clone() 	{
-		return new MachineName();
-	}
+    public synchronized String execute(
+        SampleResult previousResult,
+        Sampler currentSampler)
+        throws InvalidVariableException
+    {
 
-	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-			throws InvalidVariableException {
+        JMeterVariables vars = getVariables();
 
-		JMeterVariables vars = getVariables();
+        /*
+        boolean fullHostName = false;
+        if (((CompoundFunction) values[0])
+            .execute()
+            .toLowerCase()
+            .equals("true"))
+        {
+            fullHostName = true;
+        }
+        */
+        
+        String varName =
+            ((CompoundVariable) values[values.length - 1]).execute();
+        String machineName = "";
 
-//		boolean fullHostName = false;
-//		if ( ((CompoundFunction)values[0]).execute().toLowerCase().equals("true") )
-//					fullHostName = true;
-					
-		String varName = ((CompoundVariable)values[values.length - 1]).execute();
-		String machineName = "";
+        try
+        {
 
-		try {
-			
-			InetAddress Address = InetAddress.getLocalHost();
-			
-			//fullHostName disabled until we move up to 1.4 as the support jre
-//			if ( fullHostName ) {
-//				machineName = Address.getCanonicalHostName();
+            InetAddress Address = InetAddress.getLocalHost();
 
-//			} else {
-				machineName = Address.getHostName();
-//			}
-			
-		} catch ( UnknownHostException e ) {
-		}
-		
-		vars.put( varName, machineName );
-		return machineName;
+            //fullHostName disabled until we move up to 1.4 as the support jre
+            //  if ( fullHostName ) {
+            //      machineName = Address.getCanonicalHostName();
 
-	}
+            //  } else {
+            machineName = Address.getHostName();
+            //  }
 
-	public void setParameters(Collection parameters)
-			throws InvalidVariableException {
+        }
+        catch (UnknownHostException e)
+        {
+        }
 
-		values = parameters.toArray();
-		
-		if ( values.length != PARAMETER_COUNT ) {
-			throw new InvalidVariableException("Parameter Count != "+PARAMETER_COUNT);
-		}
+        vars.put(varName, machineName);
+        return machineName;
 
-	}
+    }
 
-	public String getReferenceKey() {
-		return KEY;
-	}
+    public void setParameters(Collection parameters)
+        throws InvalidVariableException
+    {
 
-	public List getArgumentDesc() {
-		return desc;
-	}
+        values = parameters.toArray();
 
+        if (values.length != PARAMETER_COUNT)
+        {
+            throw new InvalidVariableException(
+                "Parameter Count != " + PARAMETER_COUNT);
+        }
+
+    }
+
+    public String getReferenceKey()
+    {
+        return KEY;
+    }
+
+    public List getArgumentDesc()
+    {
+        return desc;
+    }
 }
-
-
-
