@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -64,72 +64,75 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- *  Title: JMeter Description: Copyright: Copyright (c) 2002 Company: Apache
- * This command clears the existing test plan, 
- * allowing the creation of a New test plan
+ * This command clears the existing test plan, allowing the creation of a New
+ * test plan.
  *
- *@author     <a href="mramshaw@alumni.concordia.ca">Martin Ramshaw</a>
- *@created    June 6, 2002
- *@version    1.0
+ * @author     <a href="mramshaw@alumni.concordia.ca">Martin Ramshaw</a>
+ * @created    June 6, 2002
+ * @version    $Revision$
  */
-
 public class New implements Command
 {
 
-	private static Set commands = new HashSet();
+    private static Set commands = new HashSet();
+    static {
+        commands.add("new");
+    }
 
-	/**
-	 *  Constructor for the New object.
-	 */
-	public New()
-	{
-	}
+    /**
+     *  Constructor for the New object.
+     */
+    public New()
+    {
+    }
 
-	/**
-	 *  Gets the ActionNames attribute of the New object.
-	 *
-	 *@return    The ActionNames value.
-	 */
-	public Set getActionNames()
-	{
-		return commands;
-	}
+    /**
+     * Gets the ActionNames attribute of the New object.
+     *
+     *@return    the ActionNames value
+     */
+    public Set getActionNames()
+    {
+        return commands;
+    }
 
-	/**
-	 *  This method performs the actual command processing.
-	 *
-	 *@param  e  This is the generic UI action event.
-	 */
-	public void doAction(ActionEvent e)
-	{
-		ActionRouter.getInstance().actionPerformed(new ActionEvent(
-				e.getSource(),e.getID(),CheckDirty.CHECK_DIRTY));
-		GuiPackage guiPackage = GuiPackage.getInstance();
-		if(guiPackage.isDirty())
-		{
-			if(JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
-					JMeterUtils.getResString("cancel_new_to_save"),
-					JMeterUtils.getResString("Save?"),
-					JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION)
-				ActionRouter.getInstance().actionPerformed(new ActionEvent(
-						e.getSource(),e.getID(),CheckDirty.SAVE_ALL));
-		}
-		guiPackage.getTreeModel().clearTestPlan();
-		guiPackage.getTreeListener().getJTree().setSelectionRow(1);
+    /**
+     * This method performs the actual command processing.
+     *
+     *@param  e  the generic UI action event
+     */
+    public void doAction(ActionEvent e)
+    {
+        ActionRouter.getInstance().actionPerformed(
+            new ActionEvent(e.getSource(), e.getID(), CheckDirty.CHECK_DIRTY));
+        GuiPackage guiPackage = GuiPackage.getInstance();
+        if (guiPackage.isDirty())
+        {
+            if (JOptionPane
+                .showConfirmDialog(
+                    GuiPackage.getInstance().getMainFrame(),
+                    JMeterUtils.getResString("cancel_new_to_save"),
+                    JMeterUtils.getResString("Save?"),
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE)
+                == JOptionPane.YES_OPTION)
+                ActionRouter.getInstance().actionPerformed(
+                    new ActionEvent(
+                        e.getSource(),
+                        e.getID(),
+                        CheckDirty.SAVE_ALL));
+        }
+        guiPackage.getTreeModel().clearTestPlan();
+        guiPackage.getTreeListener().getJTree().setSelectionRow(1);
 
-		// Clear the name of the test plan file
-		Save save = (Save) ActionRouter.getInstance().getAction("save", "org.apache.jmeter.gui.action.Save");
-		save.setTestPlanFile(null);
-		
-		ActionRouter.getInstance().actionPerformed(new ActionEvent(
-				e.getSource(),e.getID(),CheckDirty.ADD_ALL));
-	}
+        // Clear the name of the test plan file
+        Save save =
+            (Save) ActionRouter.getInstance().getAction(
+                "save",
+                "org.apache.jmeter.gui.action.Save");
+        save.setTestPlanFile(null);
 
-	static
-	{
-		commands.add("new");
-	}
-
+        ActionRouter.getInstance().actionPerformed(
+            new ActionEvent(e.getSource(), e.getID(), CheckDirty.ADD_ALL));
+    }
 }
-

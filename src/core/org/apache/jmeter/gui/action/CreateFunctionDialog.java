@@ -6,31 +6,34 @@ import java.util.Set;
 
 import org.apache.jmeter.functions.gui.FunctionHelper;
 
-public class CreateFunctionDialog extends AbstractAction {
-	
-	private static Set commands;
-	private FunctionHelper helper = null;
+/**
+ * @version $Revision$
+ */
+public class CreateFunctionDialog extends AbstractAction
+{
+    private FunctionHelper helper = null;
 
+    private static Set commands;
     static {
         commands = new HashSet();
         commands.add("functions");
     }
-    
+
     public CreateFunctionDialog()
     {
-			helper = new FunctionHelper();
+        helper = new FunctionHelper();
     }
-    
+
     /**
      * Provide the list of Action names that are available in this command.
      */
-    public Set getActionNames() {
+    public Set getActionNames()
+    {
         return commands;
     }
 
-	public void doAction(ActionEvent arg0) 
-	{   
-		helper.show();
-	}
-
+    public void doAction(ActionEvent arg0)
+    {
+        helper.show();
+    }
 }

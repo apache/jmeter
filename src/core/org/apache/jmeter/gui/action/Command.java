@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,23 +52,19 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.gui.action;
+package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
 import java.util.Set;
 
 /**
- * Title:        JMeter
- * Description:
- * Copyright:    Copyright (c) 2000
- * Company:      Apache
  * @author Michael Stover
- * @version 1.0
+ * @version $Revision$
  */
 
 public interface Command
 {
-	public void doAction(ActionEvent e);
+    public void doAction(ActionEvent e);
 
-	public Set getActionNames();
+    public Set getActionNames();
 }

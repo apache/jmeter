@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -63,36 +63,36 @@ import java.util.Set;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
 public class ChangeLanguage implements Command
 {
-	private static final Set commands = new HashSet();
-	public final static String CHANGE_LANGUAGE = "change_language";
-	private Logger log = LoggingManager.getLoggerForClass();
-	
-	static
-	{
-		commands.add(CHANGE_LANGUAGE);
-	}
-	/**
-	 * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
-	 */
-	public void doAction(ActionEvent e)
-	{
-		Locale loc =new Locale(((Component)e.getSource()).getName(),"");
-		log.debug("Changing language to "+loc.getLanguage());
-		JMeterUtils.setLocale(loc);
-	}
-	/**
-	 * @see org.apache.jmeter.gui.action.Command#getActionNames()
-	 */
-	public Set getActionNames()
-	{
-		return commands;
-	}
+    private static final Set commands = new HashSet();
+    public final static String CHANGE_LANGUAGE = "change_language";
+    private Logger log = LoggingManager.getLoggerForClass();
+
+    static
+    {
+        commands.add(CHANGE_LANGUAGE);
+    }
+    
+    /**
+     * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
+     */
+    public void doAction(ActionEvent e)
+    {
+        Locale loc = new Locale(((Component) e.getSource()).getName(), "");
+        log.debug("Changing language to " + loc.getLanguage());
+        JMeterUtils.setLocale(loc);
+    }
+    
+    /**
+     * @see org.apache.jmeter.gui.action.Command#getActionNames()
+     */
+    public Set getActionNames()
+    {
+        return commands;
+    }
 }

@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -62,62 +62,52 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 
 /**
- *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author     Michael Stover
- *@created    October 5, 2001
- *@version    1.0
+ * @author     Michael Stover
+ * @version    $Revision$
  */
-
 public class Remove implements Command
 {
+    private static Set commands = new HashSet();
+    static {
+        commands.add("remove");
+    }
 
-	private static Set commands = new HashSet();
+    /**
+     *  Constructor for the Remove object
+     */
+    public Remove()
+    {
+    }
 
-	/**
-	 *  Constructor for the Remove object
-	 */
-	public Remove()
-	{
-	}
+    /**
+     * Gets the ActionNames attribute of the Remove object.
+     *
+     * @return    the ActionNames value
+     */
+    public Set getActionNames()
+    {
+        return commands;
+    }
 
-	/**
-	 *  Gets the ActionNames attribute of the Remove object
-	 *
-	 *@return    The ActionNames value
-	 */
-	public Set getActionNames()
-	{
-		return commands;
-	}
+    public void doAction(ActionEvent e)
+    {
+        ActionRouter.getInstance().actionPerformed(
+            new ActionEvent(e.getSource(), e.getID(), CheckDirty.REMOVE));
+        GuiPackage guiPackage = GuiPackage.getInstance();
+        JMeterTreeNode[] nodes =
+            guiPackage.getTreeListener().getSelectedNodes();
+        guiPackage.getTreeListener().removedSelectedNode();
+        for (int i = nodes.length - 1; i >= 0; i--)
+        {
+            removeNode(nodes[i]);
+        }
+        guiPackage.getTreeListener().getJTree().setSelectionRow(1);
 
-	/**
-	 *  Description of the Method
-	 *
-	 *@param  e  Description of Parameter
-	 */
-	public void doAction(ActionEvent e)
-	{
-		ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(),
-				e.getID(),CheckDirty.REMOVE));
-		GuiPackage guiPackage = GuiPackage.getInstance();
-		JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
-		guiPackage.getTreeListener().removedSelectedNode();
-		for (int i = nodes.length - 1; i >= 0; i--)
-		{
-				removeNode(nodes[i]);
-		}
-		guiPackage.getTreeListener().getJTree().setSelectionRow(1);
-
-	}
+    }
 
     public static void removeNode(JMeterTreeNode node)
     {
         GuiPackage.getInstance().getTreeModel().removeNodeFromParent(node);
         GuiPackage.getInstance().removeNode(node.createTestElement());
     }
-	static
-	{
-		commands.add("remove");
-	}
 }

@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -75,35 +75,35 @@ import org.apache.jmeter.util.SSLManager;
  * key from Netscape 4.04 or higher and use it in a read only format.  You must
  * supply a password that is greater than six characters due to limitations in
  * the keytool program--and possibly the rest of the system.
- *
  * <p>
- * By selecting a *.p12 file as your keystore (your PKCS#12) format file, you can
- * have a whopping one key keystore.  The advantage is that you can test a
+ * By selecting a *.p12 file as your keystore (your PKCS#12) format file, you
+ * can have a whopping one key keystore.  The advantage is that you can test a
  * connection using the assigned Certificate from a Certificate Authority.
  * </p>
  *
  * @author <a href="bloritsch@apache.org">Berin Loritsch</a>
  * @version CVS $Revision$ $Date$
  */
-
-public class SSLManagerCommand implements Command {
+public class SSLManagerCommand implements Command
+{
     private static Set commandSet;
-    private JFileChooser keyStoreChooser;
-
     static {
         HashSet commands = new HashSet();
         commands.add("sslManager");
         SSLManagerCommand.commandSet = Collections.unmodifiableSet(commands);
-        
     }
+
+    private JFileChooser keyStoreChooser;
 
     /**
      * Handle the "sslmanager" action by displaying the "SSL CLient Manager"
      * dialog box.  The Dialog Box is NOT modal, because those should be avoided
      * if at all possible.
      */
-    public void doAction(ActionEvent e) {
-        if (e.getActionCommand().equals("sslManager")) {
+    public void doAction(ActionEvent e)
+    {
+        if (e.getActionCommand().equals("sslManager"))
+        {
             this.sslManager();
         }
     }
@@ -111,28 +111,40 @@ public class SSLManagerCommand implements Command {
     /**
      * Provide the list of Action names that are available in this command.
      */
-    public Set getActionNames() {
+    public Set getActionNames()
+    {
         return SSLManagerCommand.commandSet;
     }
 
     /**
-     * Called by sslManager button. Raises sslManager dialog.  Currently the sslManager box has
-     * the product image and the copyright notice.  The dialog box is centered
-     * over the MainFrame.
+     * Called by sslManager button. Raises sslManager dialog.  Currently the
+     * sslManager box has the product image and the copyright notice.  The
+     * dialog box is centered over the MainFrame.
      */
-    private void sslManager() {
+    private void sslManager()
+    {
         SSLManager.reset();
 
-        keyStoreChooser = new JFileChooser(JMeterUtils.getJMeterProperties().getProperty("user.dir"));
+        keyStoreChooser =
+            new JFileChooser(
+                JMeterUtils.getJMeterProperties().getProperty("user.dir"));
         keyStoreChooser.addChoosableFileFilter(new AcceptPKCS12FileFilter());
         keyStoreChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        int retVal = keyStoreChooser.showOpenDialog(GuiPackage.getInstance().getMainFrame());
+        int retVal =
+            keyStoreChooser.showOpenDialog(
+                GuiPackage.getInstance().getMainFrame());
 
-        if (JFileChooser.APPROVE_OPTION == retVal) {
+        if (JFileChooser.APPROVE_OPTION == retVal)
+        {
             File selectedFile = keyStoreChooser.getSelectedFile();
-            try {
-                JMeterUtils.getJMeterProperties().setProperty("javax.net.ssl.keyStore", selectedFile.getCanonicalPath());
-            } catch (Exception e) {
+            try
+            {
+                JMeterUtils.getJMeterProperties().setProperty(
+                    "javax.net.ssl.keyStore",
+                    selectedFile.getCanonicalPath());
+            }
+            catch (Exception e)
+            {
             }
         }
 
@@ -143,13 +155,15 @@ public class SSLManagerCommand implements Command {
     /**
      * Internal class to add a PKCS12 file format filter for JFileChooser.
      */
-    static private class AcceptPKCS12FileFilter extends FileFilter {
+    static private class AcceptPKCS12FileFilter extends FileFilter
+    {
         /**
          * Get the description that shows up in JFileChooser filter menu.
          *
          * @return description
          */
-        public String getDescription() {
+        public String getDescription()
+        {
             return JMeterUtils.getResString("pkcs12_desc");
         }
 
@@ -159,10 +173,11 @@ public class SSLManagerCommand implements Command {
          * @param testfile file to test
          * @return         true if file is accepted, false otherwise
          */
-        public boolean accept(File testFile) {
-            return testFile.isDirectory() ||
-                   testFile.getName().endsWith(".p12") ||
-                   testFile.getName().endsWith(".P12");
+        public boolean accept(File testFile)
+        {
+            return testFile.isDirectory()
+                || testFile.getName().endsWith(".p12")
+                || testFile.getName().endsWith(".P12");
         }
     }
 }

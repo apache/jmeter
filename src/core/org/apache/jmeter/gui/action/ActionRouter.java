@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -73,13 +73,9 @@ import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.log.Logger;
 
 /**
- *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author     Michael Stover
- *@created    February 10, 2001
- *@version    1.0
+ * @author     Michael Stover
+ * @version    $Revision$
  */
-
 public class ActionRouter implements ActionListener
 {
     private Map commands = new HashMap();
@@ -90,13 +86,9 @@ public class ActionRouter implements ActionListener
     private Map postActionListeners = new HashMap();
 
     private ActionRouter()
-    {}
+    {
+    }
 
-    /**
-     *  Description of the Method
-     *
-     *@param  e  Description of Parameter
-     */
     public void actionPerformed(final ActionEvent e)
     {
         SwingUtilities.invokeLater(new Runnable()
@@ -134,13 +126,16 @@ public class ActionRouter implements ActionListener
         catch (NullPointerException er)
         {
             log.error("", er);
-            JMeterUtils.reportErrorToUser("Sorry, this feature (" + e.getActionCommand() + ") not yet implemented");
+            JMeterUtils.reportErrorToUser(
+                "Sorry, this feature ("
+                    + e.getActionCommand()
+                    + ") not yet implemented");
         }
     }
 
     /**
      * To execute an action immediately in the current thread.
-     * @param e
+     * @param e the action to execute
      */
     public void doActionNow(ActionEvent e)
     {
@@ -214,9 +209,10 @@ public class ActionRouter implements ActionListener
      * Allows an ActionListener to receive notification of a command
      * being executed prior to the actual execution of the command.
      * 
-     * @param action	The Class of the command for which the listener will
-     * notifications for. Class must extend org.apache.jmeter.gui.action.Command
-     * @param listener	The ActionListener to receive the notifications
+     * @param action    the Class of the command for which the listener will
+     *                  notifications for. Class must extend
+     *                  org.apache.jmeter.gui.action.Command.
+     * @param listener  the ActionListener to receive the notifications
      */
     public void addPreActionListener(Class action, ActionListener listener)
     {
@@ -237,9 +233,10 @@ public class ActionRouter implements ActionListener
      * notifications of a command being executed prior to the actual 
      * execution of the command.
      * 
-     * @param action	The Class of the command for which the listener will
-     * notifications for. Class must extend org.apache.jmeter.gui.action.Command
-     * @param listener	The ActionListener to receive the notifications
+     * @param action    the Class of the command for which the listener will
+     *                  notifications for. Class must extend
+     *                  org.apache.jmeter.gui.action.Command.
+     * @param listener  the ActionListener to receive the notifications
      */
     public void removePreActionListener(Class action, ActionListener listener)
     {
@@ -258,8 +255,9 @@ public class ActionRouter implements ActionListener
      * Allows an ActionListener to receive notification of a command
      * being executed after the command has executed.
      * 
-     * @param action	The Class of the command for which the listener will
-     * notifications for. Class must extend org.apache.jmeter.gui.action.Command
+     * @param action    the Class of the command for which the listener will
+     *                  notifications for. Class must extend
+     *                  org.apache.jmeter.gui.action.Command.
      * @param listener
      */
     public void addPostActionListener(Class action, ActionListener listener)
@@ -280,8 +278,9 @@ public class ActionRouter implements ActionListener
      * Allows an ActionListener to be removed from receiving 
      * notifications of a command being executed after the command has executed.
      * 
-     * @param action	The Class of the command for which the listener will
-     * notifications for. Class must extend org.apache.jmeter.gui.action.Command
+     * @param action    the Class of the command for which the listener will
+     *                  notifications for. Class must extend
+     *                  org.apache.jmeter.gui.action.Command.
      * @param listener
      */
     public void removePostActionListener(Class action, ActionListener listener)
@@ -301,7 +300,8 @@ public class ActionRouter implements ActionListener
     {
         if (action != null)
         {
-            HashSet listenerSet = (HashSet) preActionListeners.get(action.getName());
+            HashSet listenerSet =
+                (HashSet) preActionListeners.get(action.getName());
             if (listenerSet != null && listenerSet.size() > 0)
             {
                 Object[] listeners = listenerSet.toArray();
@@ -317,7 +317,8 @@ public class ActionRouter implements ActionListener
     {
         if (action != null)
         {
-            HashSet listenerSet = (HashSet) postActionListeners.get(action.getName());
+            HashSet listenerSet =
+                (HashSet) postActionListeners.get(action.getName());
             if (listenerSet != null && listenerSet.size() > 0)
             {
                 Object[] listeners = listenerSet.toArray();
@@ -337,7 +338,12 @@ public class ActionRouter implements ActionListener
         Class commandClass;
         try
         {
-            listClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { Class.forName("org.apache.jmeter.gui.action.Command")});
+            listClasses =
+                ClassFinder.findClassesThatExtend(
+                    JMeterUtils.getSearchPaths(),
+                    new Class[] {
+                        Class.forName(
+                            "org.apache.jmeter.gui.action.Command")});
             commands = new HashMap(listClasses.size());
             if (listClasses.size() == 0)
             {
