@@ -70,7 +70,7 @@
 	<!--
 	- Another name for install(?)
 	-->
-	target name="all" depends="install"/>
+	<target name="all" depends="install"/>
 
 	<!--
 	- Creates the distribution packages
