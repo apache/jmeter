@@ -171,7 +171,16 @@ public class HttpRequestHdr
 
 	public String getContentType()
 	{
-		return (String)headers.get("Content-Type");
+		String contentType = (String)headers.get("Content-Type");
+		if(contentType == null)
+		{
+			contentType = (String)headers.get("Content-type");
+		}
+		if(contentType == null)
+		{
+			contentType = (String)headers.get("content-type");
+		}
+		return contentType;
 	}
 	
 	public static MultipartUrlConfig isMultipart(String contentType)
