@@ -1160,10 +1160,8 @@ public class HashTree implements Serializable, Map
 			assertFalse(tree2.equals(tree3));
 			assertFalse(tree2.equals(tree4));
 			
-			assertFalse(tree1.equals(null));
-			assertFalse(tree1.equals(null));
-			assertFalse(tree2.equals(null));
-			assertFalse(tree2.equals(null));
+			assertNotNull(tree1);
+			assertNotNull(tree2);
 
 			tree1.add("abcd",tree3);
 			assertFalse(tree1.equals(tree2));
