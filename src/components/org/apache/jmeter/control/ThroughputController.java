@@ -313,12 +313,12 @@ public class ThroughputController
         }
         else
         {
-            if (iteration == 0 && getPercentThroughputAsFloat() > 0)
+            if (iterations == 0 && getPercentThroughputAsFloat() > 0)
             {
                 retval = true;
             }
             else if (
-                ((float) executions / iteration) * 100
+                ((float) executions / iterations) * 100
                     <= getPercentThroughputAsFloat())
             {
                 retval = true;
