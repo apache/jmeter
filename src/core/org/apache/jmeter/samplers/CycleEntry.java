@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,18 +55,12 @@
  package org.apache.jmeter.samplers;
 
 /**
- * Title:        Apache JMeter
- * Description:
- * Copyright:    Copyright (c) 2000
- * Company:      Apache Foundation
  * @author Michael Stover
- * @version 1.0
+ * @version $Revision$
  */
-
 public class CycleEntry extends Entry
 {
-
-	public CycleEntry()
-	{
-	}
+    public CycleEntry()
+    {
+    }
 }

@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,7 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.samplers;
+package org.apache.jmeter.samplers;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,133 +66,98 @@ import org.apache.jmeter.config.ConfigElement;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
-/************************************************************
- *  Title: Apache JMeter Description: Copyright: Copyright (c) 2000 Company:
- *  Apache Foundation
- *
- *@author     Michael Stover
- *@created    $Date$
- *@version    1.0
- ***********************************************************/
-
+/**
+ * @author     Michael Stover
+ * @version    $Revision$
+ */
 public class Entry
 {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter.elements");
-	Map configSet;
-	Set clonedSet;
-	Class sampler;
-	List assertions;
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+    Map configSet;
+    Set clonedSet;
+    Class sampler;
+    List assertions;
 
-	/************************************************************
-	 *  !ToDo (Constructor description)
-	 ***********************************************************/
-	public Entry()
-	{
-		configSet = new HashMap();
-		clonedSet = new HashSet();
-		assertions = new LinkedList();
-	}
+    public Entry()
+    {
+        configSet = new HashMap();
+        clonedSet = new HashSet();
+        assertions = new LinkedList();
+    }
 
-	public void addAssertion(Assertion assertion)
-	{
-		assertions.add(assertion);
-	}
+    public void addAssertion(Assertion assertion)
+    {
+        assertions.add(assertion);
+    }
 
-	public List getAssertions()
-	{
-		return assertions;
-	}
+    public List getAssertions()
+    {
+        return assertions;
+    }
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 *
-	 *@param  samplerClass  !ToDo (Parameter description)
-	 ***********************************************************/
-	public void setSamplerClass(Class samplerClass)
-	{
-		this.sampler = samplerClass;
-	}
+    public void setSamplerClass(Class samplerClass)
+    {
+        this.sampler = samplerClass;
+    }
 
-	/************************************************************
-	 *  !ToDoo (Method description)
-	 *
-	 *@return    !ToDo (Return description)
-	 ***********************************************************/
-	public Class getSamplerClass()
-	{
-		return this.sampler;
-	}
+    public Class getSamplerClass()
+    {
+        return this.sampler;
+    }
 
-	/************************************************************
-	 *  !ToDoo (Method description)
-	 *
-	 *@param  configClass  !ToDo (Parameter description)
-	 *@return              !ToDo (Return description)
-	 ***********************************************************/
-	public ConfigElement getConfigElement(Class configClass)
-	{
-		return (ConfigElement)configSet.get(configClass);
-	}
+    public ConfigElement getConfigElement(Class configClass)
+    {
+        return (ConfigElement) configSet.get(configClass);
+    }
 
-	/************************************************************
-	 *  !ToDo
-	 *
-	 *@param  config  !ToDo
-	 ***********************************************************/
-	public void addConfigElement(ConfigElement config)
-	{
-		addConfigElement(config,config.getClass());
-	}
+    public void addConfigElement(ConfigElement config)
+    {
+        addConfigElement(config, config.getClass());
+    }
 
-	/**
-	 * Add a config element as a specific class.  Usually this is done to add a
-	 * subclass as one of it's parent classes.
-	 */
-	public void addConfigElement(ConfigElement config,Class asClass)
-	{
-		if (config != null)
-		{
-			ConfigElement current = (ConfigElement)configSet.get(asClass);
-			if (current == null)
-			{
-				configSet.put(asClass, cloneIfNecessary(config));
-			}
-			else
-			{
-				current.addConfigElement(config);
-			}
-		}
-	}
+    /**
+     * Add a config element as a specific class.  Usually this is done to add a
+     * subclass as one of it's parent classes.
+     */
+    public void addConfigElement(ConfigElement config, Class asClass)
+    {
+        if (config != null)
+        {
+            ConfigElement current = (ConfigElement) configSet.get(asClass);
+            if (current == null)
+            {
+                configSet.put(asClass, cloneIfNecessary(config));
+            }
+            else
+            {
+                current.addConfigElement(config);
+            }
+        }
+    }
 
-	private ConfigElement cloneIfNecessary(ConfigElement config)
-	{
-		if(config.expectsModification())
-		{
-			return config;
-		}
-		else
-		{
-			return (ConfigElement)config.clone();
-		}
-	}
+    private ConfigElement cloneIfNecessary(ConfigElement config)
+    {
+        if (config.expectsModification())
+        {
+            return config;
+        }
+        else
+        {
+            return (ConfigElement) config.clone();
+        }
+    }
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 *
-	 *@return    !ToDo (Return description)
-	 ***********************************************************/
-	public Object clone()
-	{
-		try
-		{
-			return super.clone();
-		}
-		catch (Exception ex)
-		{
-			log.error("",ex);
-		}
-		return null;
-	}
-
+    public Object clone()
+    {
+        try
+        {
+            return super.clone();
+        }
+        catch (Exception ex)
+        {
+            log.error("", ex);
+        }
+        return null;
+    }
 }

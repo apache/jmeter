@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,7 +25,8 @@
  * if and wherever such third-party acknowledgments normally appear.
  *
  * 4. The names "Apache" and "Apache Software Foundation" and
- * "Apache JMeter" must not be used to endorse or promote products * derived from this software without prior written permission. For
+ * "Apache JMeter" must not be used to endorse or promote products
+ * derived from this software without prior written permission. For
  * written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
@@ -51,130 +52,112 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.samplers;
+package org.apache.jmeter.samplers;
 
 import java.rmi.RemoteException;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testelement.TestListener;
 
-/************************************************************
- *  !ToDo (Class description)
- *
- *@author     $Author$
- *@created    $Date$
- *@version    $Revision$
- ***********************************************************/
+/**
+ * @version    $Revision$
+ */
 public class RemoteSampleListenerImpl
-		 extends java.rmi.server.UnicastRemoteObject
-		 implements RemoteSampleListener,SampleListener,TestListener
+    extends java.rmi.server.UnicastRemoteObject
+    implements RemoteSampleListener, SampleListener, TestListener
 {
-	TestListener testListener;
-	SampleListener sampleListener;
-	
-	public RemoteSampleListenerImpl() throws RemoteException
-	{
-		super();
-	}
-	
-	public void setListener(Object listener)
-	{
-		if(listener instanceof TestListener)
-		{
-			testListener = (TestListener)listener;
-		}
-		if(listener instanceof SampleListener)
-		{
-			sampleListener = (SampleListener)listener;
-		}
-	}
+    TestListener testListener;
+    SampleListener sampleListener;
 
-	/************************************************************
-	 *  !ToDo (Constructor description)
-	 *
-	 *@param  listeners            !ToDo (Parameter description)
-	 *@exception  RemoteException  !ToDo (Exception description)
-	 ***********************************************************/
-	public RemoteSampleListenerImpl(Object listener) throws RemoteException
-	{
-		super();
-		setListener(listener);
-	}
+    public RemoteSampleListenerImpl() throws RemoteException
+    {
+        super();
+    }
 
-	public void testStarted()
-	{
-		if(testListener != null)
-		{
-			testListener.testStarted();
-		}
-	}
+    public void setListener(Object listener)
+    {
+        if (listener instanceof TestListener)
+        {
+            testListener = (TestListener) listener;
+        }
+        if (listener instanceof SampleListener)
+        {
+            sampleListener = (SampleListener) listener;
+        }
+    }
 
-	public void testStarted(String host)
-	{
-		if(testListener != null)
-		{
-			testListener.testStarted(host);
-		}
-	}
+    public RemoteSampleListenerImpl(Object listener) throws RemoteException
+    {
+        super();
+        setListener(listener);
+    }
 
-	public void testEnded()
-	{
-		if(testListener != null)
-		{
-			testListener.testEnded();
-		}
-	}
+    public void testStarted()
+    {
+        if (testListener != null)
+        {
+            testListener.testStarted();
+        }
+    }
 
-	public void testEnded(String host)
-	{
-		if(testListener != null)
-		{
-			testListener.testEnded(host);
-		}
-	}
+    public void testStarted(String host)
+    {
+        if (testListener != null)
+        {
+            testListener.testStarted(host);
+        }
+    }
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 *
-	 *@param  e  !ToDo (Parameter description)
-	 ***********************************************************/
-	public void sampleOccurred(SampleEvent e)
-	{
-		if (sampleListener != null)
-		{
-			sampleListener.sampleOccurred(e);
-		}
-	}
+    public void testEnded()
+    {
+        if (testListener != null)
+        {
+            testListener.testEnded();
+        }
+    }
 
-	/************************************************************
-	 *  A sample has started.
-	 *
-	 *@param  e  !ToDo (Parameter description)
-	 ***********************************************************/
-	public void sampleStarted(SampleEvent e)
-	{
-		if (sampleListener != null)
-		{
-			sampleListener.sampleStarted(e);
-		}
-	}
+    public void testEnded(String host)
+    {
+        if (testListener != null)
+        {
+            testListener.testEnded(host);
+        }
+    }
 
-	/************************************************************
-	 *  A sample has stopped.
-	 *
-	 *@param  e  !ToDo (Parameter description)
-	 ***********************************************************/
-	public void sampleStopped(SampleEvent e)
-	{
-		if (sampleListener != null)
-		{
-			sampleListener.sampleStopped(e);
-		}
-	}
+    public void sampleOccurred(SampleEvent e)
+    {
+        if (sampleListener != null)
+        {
+            sampleListener.sampleOccurred(e);
+        }
+    }
+
+    /**
+     * A sample has started.
+     */
+    public void sampleStarted(SampleEvent e)
+    {
+        if (sampleListener != null)
+        {
+            sampleListener.sampleStarted(e);
+        }
+    }
+
+    /**
+     * A sample has stopped.
+     */
+    public void sampleStopped(SampleEvent e)
+    {
+        if (sampleListener != null)
+        {
+            sampleListener.sampleStopped(e);
+        }
+    }
+    
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(LoopIterationEvent)
+     * @see TestListener#testIterationStart(LoopIterationEvent)
      */
     public void testIterationStart(LoopIterationEvent event)
-    {}
-
+    {
+    }
 }

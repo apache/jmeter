@@ -10,78 +10,75 @@ import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
 /**
- * <p>Title: </p>
- * <p>Description: </p>
- * <p>Copyright: Copyright (c) 2001</p>
- * <p>Company: </p>
  * @author unascribed
- * @version 1.0
+ * @version $Revision$
  */
-
-public class RemoteTestListenerWrapper extends AbstractTestElement implements
-		TestListener,Serializable,NoThreadClone
+public class RemoteTestListenerWrapper
+    extends AbstractTestElement
+    implements TestListener, Serializable, NoThreadClone
 {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter.elements");
-	RemoteSampleListener listener;
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+    RemoteSampleListener listener;
 
-	public RemoteTestListenerWrapper()
-	{
-	}
+    public RemoteTestListenerWrapper()
+    {
+    }
 
-	public RemoteTestListenerWrapper(RemoteSampleListener l)
-	{
-		listener = l;
-	}
-	public void testStarted()
-	{
-		try
-		{
-			listener.testStarted();
-		}
-		catch (Exception ex)
-		{
-			log.error("",ex);
-		}
+    public RemoteTestListenerWrapper(RemoteSampleListener l)
+    {
+        listener = l;
+    }
+    public void testStarted()
+    {
+        try
+        {
+            listener.testStarted();
+        }
+        catch (Exception ex)
+        {
+            log.error("", ex);
+        }
 
-	}
-	public void testEnded()
-	{
-		try
-		{
-			listener.testEnded();
-		}
-		catch (Exception ex)
-		{
-			log.error("",ex);
-		}
-	}
-	public void testStarted(String host)
-	{
-		try
-		{
-			listener.testStarted(host);
-		}
-		catch (Exception ex)
-		{
-			log.error("",ex);
-		}
-	}
-	public void testEnded(String host)
-	{
-		try
-		{
-			listener.testEnded(host);
-		}
-		catch (Exception ex)
-		{
-			log.error("",ex);
-		}
-	}
+    }
+    public void testEnded()
+    {
+        try
+        {
+            listener.testEnded();
+        }
+        catch (Exception ex)
+        {
+            log.error("", ex);
+        }
+    }
+    public void testStarted(String host)
+    {
+        try
+        {
+            listener.testStarted(host);
+        }
+        catch (Exception ex)
+        {
+            log.error("", ex);
+        }
+    }
+    public void testEnded(String host)
+    {
+        try
+        {
+            listener.testEnded(host);
+        }
+        catch (Exception ex)
+        {
+            log.error("", ex);
+        }
+    }
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(LoopIterationEvent)
+     * @see TestListener#testIterationStart(LoopIterationEvent)
      */
     public void testIterationStart(LoopIterationEvent event)
-    {}
+    {
+    }
 
 }

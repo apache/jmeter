@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,7 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.samplers;
+package org.apache.jmeter.samplers;
 
 import java.rmi.RemoteException;
 
@@ -61,30 +61,31 @@ import java.rmi.RemoteException;
  * Specifically, when sampling is started,
  * when a specific sample is obtained,
  * and when sampling is stopped.
+ * 
+ * @version $Revision$
  */
-public interface RemoteSampleListener
-	 extends java.rmi.Remote
+public interface RemoteSampleListener extends java.rmi.Remote
 {
-	
-	public void testStarted() throws RemoteException;
-	
-	public void testStarted(String host) throws RemoteException;
-	
-	public void testEnded() throws RemoteException;
-	
-	public void testEnded(String host) throws RemoteException;
-	 /**
-	  * A sample has started and stopped.
-	  **/
-	 public void sampleOccurred(SampleEvent e) throws RemoteException;
+    public void testStarted() throws RemoteException;
 
-	 /**
-	  * A sample has started.
-	  **/
-	 public void sampleStarted(SampleEvent e) throws RemoteException;
+    public void testStarted(String host) throws RemoteException;
 
-	 /**
-	  * A sample has stopped.
-	  **/
-	 public void sampleStopped(SampleEvent e) throws RemoteException;
+    public void testEnded() throws RemoteException;
+
+    public void testEnded(String host) throws RemoteException;
+
+    /**
+     * A sample has started and stopped.
+     */
+    public void sampleOccurred(SampleEvent e) throws RemoteException;
+
+    /**
+     * A sample has started.
+     */
+    public void sampleStarted(SampleEvent e) throws RemoteException;
+
+    /**
+     * A sample has stopped.
+     */
+    public void sampleStopped(SampleEvent e) throws RemoteException;
 }
