@@ -166,4 +166,12 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
         return box;
     }
 
+    /**
+     * @param collector
+     */
+    protected void setModel(ResultCollector collector)
+    {
+        this.collector = collector;
+    }
+
 }
