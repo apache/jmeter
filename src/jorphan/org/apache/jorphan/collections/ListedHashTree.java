@@ -52,7 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- 
+
 package org.apache.jorphan.collections;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -65,242 +65,231 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-/****************************************
- * ListedHashTree is a different implementation of the {@link HashTree} collection class. 
- * In the ListedHashTree,
- * the order in which values are added is preserved (not to be confused with
- * {@link SortedHashTree}, which sorts the order of the values using the compare()
- * function).  Any listing of nodes or iteration through the list of nodes of a
- * ListedHashTree will be given in the order in which the nodes were added to the
- * tree.
+/**
+ * ListedHashTree is a different implementation of the {@link HashTree}
+ * collection class. In the ListedHashTree, the order in which values are added
+ * is preserved (not to be confused with {@link SortedHashTree}, which sorts
+ * the order of the values using the compare() function).  Any listing of nodes
+ * or iteration through the list of nodes of a ListedHashTree will be given in
+ * the order in which the nodes were added to the tree.
  *
- *@author    mstover1 at apache.org
  * @see HashTree
- ***************************************/
-public class ListedHashTree extends HashTree implements Serializable,Cloneable
+ * @author  mstover1 at apache.org
+ * @version $Revision$
+ */
+public class ListedHashTree extends HashTree implements Serializable, Cloneable
 {
+    private List order;
 
-	private List order;
+    public ListedHashTree()
+    {
+        data = new HashMap();
+        order = new LinkedList();
+    }
 
-	public ListedHashTree()
-	{
-		data = new HashMap();
-		order = new LinkedList();
-	}
-	
-	public Object clone()
-	{
-		ListedHashTree newTree = new ListedHashTree();
+    public Object clone()
+    {
+        ListedHashTree newTree = new ListedHashTree();
         cloneTree(newTree);
-		return newTree;
-	}
+        return newTree;
+    }
 
-	public ListedHashTree(Object key)
-	{
-		data = new HashMap();
-		order = new LinkedList();
-		data.put(key, new ListedHashTree());
-		order.add(key);
-	}
+    public ListedHashTree(Object key)
+    {
+        data = new HashMap();
+        order = new LinkedList();
+        data.put(key, new ListedHashTree());
+        order.add(key);
+    }
 
-	public ListedHashTree(Collection keys)
-	{
-		data = new HashMap();
-		order = new LinkedList();
-		Iterator it = keys.iterator();
-		while(it.hasNext())
-		{
-			Object temp = it.next();
-			data.put(temp, new ListedHashTree());
-			order.add(temp);
-		}
-	}
+    public ListedHashTree(Collection keys)
+    {
+        data = new HashMap();
+        order = new LinkedList();
+        Iterator it = keys.iterator();
+        while (it.hasNext())
+        {
+            Object temp = it.next();
+            data.put(temp, new ListedHashTree());
+            order.add(temp);
+        }
+    }
 
-	public ListedHashTree(Object[] keys)
-	{
-		data = new HashMap();
-		order = new LinkedList();
-		for(int x = 0; x < keys.length; x++)
-		{
-			data.put(keys[x], new ListedHashTree());
-			order.add(keys[x]);
-		}
-	}
+    public ListedHashTree(Object[] keys)
+    {
+        data = new HashMap();
+        order = new LinkedList();
+        for (int x = 0; x < keys.length; x++)
+        {
+            data.put(keys[x], new ListedHashTree());
+            order.add(keys[x]);
+        }
+    }
 
-	public void set(Object key, Object value)
-	{
-		if(!data.containsKey(key))
-		{
-			order.add(key);
-		}
-		super.set(key,value);
-	}
+    public void set(Object key, Object value)
+    {
+        if (!data.containsKey(key))
+        {
+            order.add(key);
+        }
+        super.set(key, value);
+    }
 
-	public void set(Object key, HashTree t)
-	{
-		if(!data.containsKey(key))
-		{
-			order.add(key);
-		}
-		super.set(key,t);
-	}
+    public void set(Object key, HashTree t)
+    {
+        if (!data.containsKey(key))
+        {
+            order.add(key);
+        }
+        super.set(key, t);
+    }
 
-	public void set(Object key, Object[] values)
-	{		
-		if(!data.containsKey(key))
-		{
-			order.add(key);
-		}
-		super.set(key,values);
-	}
+    public void set(Object key, Object[] values)
+    {
+        if (!data.containsKey(key))
+        {
+            order.add(key);
+        }
+        super.set(key, values);
+    }
 
-	public void set(Object key, Collection values)
-	{
-		if(!data.containsKey(key))
-		{
-			order.add(key);
-		}
-		super.set(key,values);
-	}
+    public void set(Object key, Collection values)
+    {
+        if (!data.containsKey(key))
+        {
+            order.add(key);
+        }
+        super.set(key, values);
+    }
 
-	public void replace(Object currentKey, Object newKey)
-	{
-		HashTree tree = getTree(currentKey);
-		data.remove(currentKey);
-		data.put(newKey, tree);
-		order.set(order.indexOf(currentKey), newKey);
-	}
-	
-	public HashTree createNewTree()
-	{
-		return new ListedHashTree();
-	}
-	
-	public HashTree createNewTree(Object key)
-	{
-		return new ListedHashTree(key);
-	}
-	
-	public HashTree createNewTree(Collection values)
-	{
-		return new ListedHashTree(values);
-	}
+    public void replace(Object currentKey, Object newKey)
+    {
+        HashTree tree = getTree(currentKey);
+        data.remove(currentKey);
+        data.put(newKey, tree);
+        order.set(order.indexOf(currentKey), newKey);
+    }
 
-	public void add(Object key)
-	{
-		if(!data.containsKey(key))
-		{
-			data.put(key, createNewTree());
-			order.add(key);
-		}
-	}
+    public HashTree createNewTree()
+    {
+        return new ListedHashTree();
+    }
 
-	public Collection list()
-	{
-		return order;
-	}
+    public HashTree createNewTree(Object key)
+    {
+        return new ListedHashTree(key);
+    }
 
-	public Object remove(Object key)
-	{
-		order.remove(key);
-		return data.remove(key);
-	}
+    public HashTree createNewTree(Collection values)
+    {
+        return new ListedHashTree(values);
+    }
 
-	public Object[] getArray()
-	{
-		return order.toArray();
-	}
+    public void add(Object key)
+    {
+        if (!data.containsKey(key))
+        {
+            data.put(key, createNewTree());
+            order.add(key);
+        }
+    }
 
-	public int hashCode()
-	{
-		return data.hashCode() * 7 + 3;
-	}
+    public Collection list()
+    {
+        return order;
+    }
 
-	public boolean equals(Object o)
-	{
-		boolean flag = true;
-		if(o instanceof ListedHashTree)
-		{
-			ListedHashTree oo = (ListedHashTree)o;
-			Iterator it = order.iterator();
-			Iterator it2 = oo.order.iterator();
-			if(size() != oo.size())
-			{
-				flag = false;
-			}
-			while(it.hasNext() && it2.hasNext() && flag)
-			{
-				if(!it.next().equals(it2.next()))
-				{
-					flag = false;
-				}
-			}
-			if(flag)
-			{
-				it = order.iterator();
-				while(it.hasNext() && flag)
-				{
-					Object temp = it.next();
-					flag = get(temp).equals(oo.get(temp));
-				}
-			}
-		}
-		else
-		{
-			flag = false;
-		}
-		return flag;
-	}
+    public Object remove(Object key)
+    {
+        order.remove(key);
+        return data.remove(key);
+    }
 
-	public Set keySet()
-	{
-		return data.keySet();
-	}
+    public Object[] getArray()
+    {
+        return order.toArray();
+    }
 
-	public int size()
-	{
-		return data.size();
-	}
+    public int hashCode()
+    {
+        return data.hashCode() * 7 + 3;
+    }
 
-	void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException
-	{
-		ois.defaultReadObject();
-	}
+    public boolean equals(Object o)
+    {
+        boolean flag = true;
+        if (o instanceof ListedHashTree)
+        {
+            ListedHashTree oo = (ListedHashTree) o;
+            Iterator it = order.iterator();
+            Iterator it2 = oo.order.iterator();
+            if (size() != oo.size())
+            {
+                flag = false;
+            }
+            while (it.hasNext() && it2.hasNext() && flag)
+            {
+                if (!it.next().equals(it2.next()))
+                {
+                    flag = false;
+                }
+            }
+            if (flag)
+            {
+                it = order.iterator();
+                while (it.hasNext() && flag)
+                {
+                    Object temp = it.next();
+                    flag = get(temp).equals(oo.get(temp));
+                }
+            }
+        }
+        else
+        {
+            flag = false;
+        }
+        return flag;
+    }
 
-	void writeObject(ObjectOutputStream oos) throws IOException
-	{
-		oos.defaultWriteObject();
-	}
+    public Set keySet()
+    {
+        return data.keySet();
+    }
 
-	public static class Test extends junit.framework.TestCase
-	{
-		/****************************************
-		 * !ToDo (Constructor description)
-		 *
-		 *@param name  !ToDo (Parameter description)
-		 ***************************************/
-		public Test(String name)
-		{
-			super(name);
-		}
+    public int size()
+    {
+        return data.size();
+    }
 
-		/****************************************
-		 * !ToDo
-		 *
-		 *@exception Exception  !ToDo (Exception description)
-		 ***************************************/
-		public void testAddObjectAndTree() throws Exception
-		{
-			ListedHashTree tree = new ListedHashTree("key");
-			ListedHashTree newTree = new ListedHashTree("value");
-			tree.add("key", newTree);
-			assertEquals(tree.list().size(), 1);
-			assertEquals("key",tree.getArray()[0]);
-			assertEquals(1,tree.getTree("key").list().size());
-			assertEquals(0,tree.getTree("key").getTree("value").size());
-			assertEquals(tree.getTree("key").getArray()[0], "value");
-			assertNotNull(tree.getTree("key").get("value"));
-		}
-	}
+    void readObject(ObjectInputStream ois)
+        throws ClassNotFoundException, IOException
+    {
+        ois.defaultReadObject();
+    }
 
+    void writeObject(ObjectOutputStream oos) throws IOException
+    {
+        oos.defaultWriteObject();
+    }
+
+    public static class Test extends junit.framework.TestCase
+    {
+        public Test(String name)
+        {
+            super(name);
+        }
+
+        public void testAddObjectAndTree() throws Exception
+        {
+            ListedHashTree tree = new ListedHashTree("key");
+            ListedHashTree newTree = new ListedHashTree("value");
+            tree.add("key", newTree);
+            assertEquals(tree.list().size(), 1);
+            assertEquals("key", tree.getArray()[0]);
+            assertEquals(1, tree.getTree("key").list().size());
+            assertEquals(0, tree.getTree("key").getTree("value").size());
+            assertEquals(tree.getTree("key").getArray()[0], "value");
+            assertNotNull(tree.getTree("key").get("value"));
+        }
+    }
 }

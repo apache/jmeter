@@ -52,98 +52,87 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- 
-package org.apache.jorphan.gui;
 
-/**
- * Title:        Apache JMeter
- * Description:
- * Copyright:    Copyright (c) 2000
- * Company:      Apache Foundation
- * @author bo.regnlin@pc.nu (Bo Regnlin)
- * @version 1.0
- */
+package org.apache.jorphan.gui;
 
 import java.awt.Component;
 import java.awt.Dimension;
 
 /**
- * This class is a Util for awt Component and could be
- * used to place them in center of an other.
- *
+ * This class is a Util for awt Component and could be used to place them in
+ * center of an other.
  *
  * @author  <a href="mailto:bo.regnlin@pc.nu">Bo Regnlin</a>
-* @version 1.0
+ * @version $Revision$
  */
 public class ComponentUtil
 {
-  /**
-		 * Use this static method if you want to center
-	  * and set its proposion compared to the size of
-	  * the current users screen size.
-	  * Valid percent is between +-(0-100) minus is treated
-	  * as plus, bigger than 100 is always set to 100.
-		 *
-		 *@param  component The component you want to center and set
-size on.
-		 *@param  percentOfScreen The percent of the current screensize
-you want
-	  *        the component to be.
-		 */
-  public static void centerComponentInWindow(Component component, int
-percentOfScreen)
-  {
-	 if(percentOfScreen < 0)
-	 {
-		centerComponentInWindow(component, - percentOfScreen);
-		return;
-	 }
-	 if(percentOfScreen > 100)
-	 {
-		centerComponentInWindow(component, 100);
-		return;
-	 }
-	 double percent = percentOfScreen / 100.d;
-	 Dimension dimension = component.getToolkit().getScreenSize();
-	 component.setSize((int)(dimension.getWidth()*percent),
-							 (int)(dimension.getHeight()*percent));
-	 centerComponentInWindow(component);
-  }
+    /**
+     * Use this static method if you want to center and set its position
+     * compared to the size of the current users screen size.  Valid percent
+     * is between +-(0-100) minus is treated as plus, bigger than 100 is always
+     * set to 100.
+     *
+     * @param component       the component you want to center and set size on
+     * @param percentOfScreen the percent of the current screensize you want
+     *                        the component to be
+     */
+    public static void centerComponentInWindow(
+        Component component,
+        int percentOfScreen)
+    {
+        if (percentOfScreen < 0)
+        {
+            centerComponentInWindow(component, -percentOfScreen);
+            return;
+        }
+        if (percentOfScreen > 100)
+        {
+            centerComponentInWindow(component, 100);
+            return;
+        }
+        double percent = percentOfScreen / 100.d;
+        Dimension dimension = component.getToolkit().getScreenSize();
+        component.setSize(
+            (int) (dimension.getWidth() * percent),
+            (int) (dimension.getHeight() * percent));
+        centerComponentInWindow(component);
+    }
 
-  /**
-		 * Use this static method if you want to center a component in
-Window.
-		 *
-		 *@param  component The component you want to center in window.
-		 */
-  public static void centerComponentInWindow(Component component)
-  {
-	 Dimension dimension = component.getToolkit().getScreenSize();
+    /**
+     * Use this static method if you want to center a component in Window.
+     *
+     *@param  component the component you want to center in window
+     */
+    public static void centerComponentInWindow(Component component)
+    {
+        Dimension dimension = component.getToolkit().getScreenSize();
 
-	 component.setLocation((int)((dimension.getWidth()-component.getWidth())/2),
-								  (int)((dimension.getHeight()-component.getHeight
-())/2));
-	 component.validate();
-	 component.repaint();
-  }
+        component.setLocation(
+            (int) ((dimension.getWidth() - component.getWidth()) / 2),
+            (int) ((dimension.getHeight() - component.getHeight()) / 2));
+        component.validate();
+        component.repaint();
+    }
 
-  /**
-		 * Use this static method if you want to center
-	  * a component over an other component.
-		 *
-		 *@param  parent The component you want to use to place it on.
-		 *@param  toBeCentered The component you want to center.
-		 */
-  public static void centerComponentInComponent(Component parent, Component
-toBeCentered)
-  {
-	 toBeCentered.setLocation((int)parent.getX() + (int)((parent.getWidth()-
-toBeCentered.getWidth())/2),
-									 (int)parent.getY() + (int)((parent.getHeight()-
-toBeCentered.getHeight())/2));
+    /**
+     * Use this static method if you want to center a component over another
+     * component.
+     *
+     * @param  parent       the component you want to use to place it on
+     * @param  toBeCentered the component you want to center
+     */
+    public static void centerComponentInComponent(
+        Component parent,
+        Component toBeCentered)
+    {
+        toBeCentered.setLocation(
+            (int) parent.getX()
+                + (int) ((parent.getWidth() - toBeCentered.getWidth()) / 2),
+            (int) parent.getY()
+                + (int) ((parent.getHeight() - toBeCentered.getHeight()) / 2));
 
-	 toBeCentered.validate();
-	 toBeCentered.repaint();
-  }
-
+        toBeCentered.validate();
+        toBeCentered.repaint();
+    }
 }

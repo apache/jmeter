@@ -79,38 +79,41 @@ public class JOrphanUtils
      */
     public static String[] split(String splittee, String splitChar)
     {
-	if (splittee == null || splitChar == null)
-	{
-	    return new String[0];
-	}
-	StringTokenizer tokens;
-	String temp;
-	int spot;
-	while ((spot = splittee.indexOf(splitChar + splitChar)) != -1)
-	{
-	    splittee = splittee.substring(0, spot + splitChar.length())
-		       + splittee.substring(spot + 2 * splitChar.length(),
-			       splittee.length());
-	}
-	Vector returns = new Vector();
-	int start = 0;
-	int length = splittee.length();
-	spot = 0;
-	while (start<length && (spot = splittee.indexOf(splitChar, start)) > -1)
-	{
-	    if (spot > 0)
-	    {
-		returns.addElement(splittee.substring(start, spot));
-	    }
-	    start = spot + splitChar.length();
-	}
-	if (start < length)
-	{
-	    returns.add(splittee.substring(start));
-	}
-	String[] values = new String[returns.size()];
-	returns.copyInto(values);
-	return values;
+        if (splittee == null || splitChar == null)
+        {
+            return new String[0];
+        }
+        StringTokenizer tokens;
+        String temp;
+        int spot;
+        while ((spot = splittee.indexOf(splitChar + splitChar)) != -1)
+        {
+            splittee =
+                splittee.substring(0, spot + splitChar.length())
+                    + splittee.substring(
+                        spot + 2 * splitChar.length(),
+                        splittee.length());
+        }
+        Vector returns = new Vector();
+        int start = 0;
+        int length = splittee.length();
+        spot = 0;
+        while (start < length
+            && (spot = splittee.indexOf(splitChar, start)) > -1)
+        {
+            if (spot > 0)
+            {
+                returns.addElement(splittee.substring(start, spot));
+            }
+            start = spot + splitChar.length();
+        }
+        if (start < length)
+        {
+            returns.add(splittee.substring(start));
+        }
+        String[] values = new String[returns.size()];
+        returns.copyInto(values);
+        return values;
     }
     // End Method split(String, String)
 }

@@ -14,10 +14,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
 public class ObjectTableModel extends DefaultTableModel
 {
@@ -30,8 +27,12 @@ public class ObjectTableModel extends DefaultTableModel
     private transient ArrayList setMethods = new ArrayList();
     private transient ArrayList getMethods = new ArrayList();
 
-    public ObjectTableModel(String[] headers, String[] propertyNames, Class[] propertyClasses, Class[] renderClasses, 
-            Object sampleObject)
+    public ObjectTableModel(
+        String[] headers,
+        String[] propertyNames,
+        Class[] propertyClasses,
+        Class[] renderClasses,
+        Object sampleObject)
     {
         this.headers.addAll(Arrays.asList(headers));
         this.classes.addAll(Arrays.asList(renderClasses));
@@ -39,18 +40,30 @@ public class ObjectTableModel extends DefaultTableModel
         Class[] emptyClasses = new Class[0];
         for (int i = 0; i < propertyNames.length; i++)
         {
-            propertyNames[i] = propertyNames[i].substring(0, 1).toUpperCase() + propertyNames[i].substring(1);
+            propertyNames[i] =
+                propertyNames[i].substring(0, 1).toUpperCase()
+                    + propertyNames[i].substring(1);
             try
             {
-                if (!propertyClasses[i].equals(Boolean.class) && !propertyClasses[i].equals(boolean.class))
+                if (!propertyClasses[i].equals(Boolean.class)
+                    && !propertyClasses[i].equals(boolean.class))
                 {
-                    getMethods.add(objectClass.getMethod("get" + propertyNames[i], emptyClasses));
+                    getMethods.add(
+                        objectClass.getMethod(
+                            "get" + propertyNames[i],
+                            emptyClasses));
                 }
                 else
                 {
-                    getMethods.add(objectClass.getMethod("is" + propertyNames[i], emptyClasses));
+                    getMethods.add(
+                        objectClass.getMethod(
+                            "is" + propertyNames[i],
+                            emptyClasses));
                 }
-                setMethods.add(objectClass.getMethod("set" + propertyNames[i], new Class[]{propertyClasses[i]}));
+                setMethods.add(
+                    objectClass.getMethod(
+                        "set" + propertyNames[i],
+                        new Class[] { propertyClasses[i] }));
             }
             catch (NoSuchMethodException e)
             {
