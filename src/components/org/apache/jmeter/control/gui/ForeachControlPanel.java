@@ -144,7 +144,7 @@ public class ForeachControlPanel
     /* Implements JMeterGUIComponent.getStaticLabel() */
     public String getStaticLabel()
     {
-        return JMeterUtils.getResString("foreach_controller_title") +" (BETA)";
+        return JMeterUtils.getResString("foreach_controller_title");
     }
 
     /**
