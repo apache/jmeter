@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,7 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.protocol.jdbc.config;
+package org.apache.jmeter.protocol.jdbc.config;
 
 import java.io.Serializable;
 
@@ -60,58 +60,52 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 
-
 /**
- * Title:        JMeter
- * Description:
- * Copyright:    Copyright (c) 2000
- * Company:      Apache
  * @author Michael Stover
- * @version 1.0
+ * @version $Revision$
  */
-
 public class PoolConfig extends ConfigTestElement implements Serializable
 {
 
-	public PoolConfig()
-	{
-	}
+    public PoolConfig()
+    {
+    }
 
-	public int getMaxUse()
-	{
-		Object max = this.getProperty(JDBCSampler.MAXUSE);
-		if(max instanceof Integer)
-		{
-			return ((Integer)max).intValue();
-		}
-		else if(max instanceof String)
-		{
-			return Integer.parseInt((String)max);
-		}
-		return 50;
-	}
+    public int getMaxUse()
+    {
+        Object max = this.getProperty(JDBCSampler.MAXUSE);
+        if (max instanceof Integer)
+        {
+            return ((Integer) max).intValue();
+        }
+        else if (max instanceof String)
+        {
+            return Integer.parseInt((String) max);
+        }
+        return 50;
+    }
 
-	public void setMaxUse(int use)
-	{
-		this.setProperty(new IntegerProperty(JDBCSampler.MAXUSE,use));
-	}
+    public void setMaxUse(int use)
+    {
+        this.setProperty(new IntegerProperty(JDBCSampler.MAXUSE, use));
+    }
 
-	public int getNumConnections()
-	{
-		Object numConn = this.getProperty(JDBCSampler.CONNECTIONS);
-		if(numConn instanceof Integer)
-		{
-			return ((Integer)numConn).intValue();
-		}
-		else if(numConn instanceof String)
-		{
-			return Integer.parseInt((String)numConn);
-		}
-		return 1;
-	}
+    public int getNumConnections()
+    {
+        Object numConn = this.getProperty(JDBCSampler.CONNECTIONS);
+        if (numConn instanceof Integer)
+        {
+            return ((Integer) numConn).intValue();
+        }
+        else if (numConn instanceof String)
+        {
+            return Integer.parseInt((String) numConn);
+        }
+        return 1;
+    }
 
-	public void setNumConnections(int conns)
-	{
-		this.setProperty(new IntegerProperty(JDBCSampler.CONNECTIONS,conns));
-	}
+    public void setNumConnections(int conns)
+    {
+        this.setProperty(new IntegerProperty(JDBCSampler.CONNECTIONS, conns));
+    }
 }

@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.jdbc.control.gui;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
@@ -67,49 +68,41 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
- * Title: Description: Copyright: Copyright (c) 2001 Company:
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
+/**
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 public class JdbcTestSampleGui extends AbstractSamplerGui
 {
 
-	private PoolConfigGui poolGui;
-	private DbConfigGui dbGui;
-	private SqlConfigGui sqlGui;
+    private PoolConfigGui poolGui;
+    private DbConfigGui dbGui;
+    private SqlConfigGui sqlGui;
 
+    public JdbcTestSampleGui()
+    {
+        init();
+    }
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public JdbcTestSampleGui()
-	{
-		init();
-	}
+    public void configure(TestElement element)
+    {
+        super.configure(element);
+        dbGui.configure(element);
+        poolGui.configure(element);
+        sqlGui.configure(element);
+    }
 
-	public void configure(TestElement element)
-	{
-		super.configure(element);
-		dbGui.configure(element);
-		poolGui.configure(element);
-		sqlGui.configure(element);
-	}
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("database_testing_title");
+    }
 
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("database_testing_title");
-	}
-
-	public TestElement createTestElement()
-	{
-		JDBCSampler sampler = new JDBCSampler();
-		modifyTestElement(sampler);
-		return sampler;
-	}
+    public TestElement createTestElement()
+    {
+        JDBCSampler sampler = new JDBCSampler();
+        modifyTestElement(sampler);
+        return sampler;
+    }
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
@@ -124,31 +117,32 @@ public class JdbcTestSampleGui extends AbstractSamplerGui
         configureTestElement(sampler);
     }
 
-	private void init()
-	{
+    private void init()
+    {
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
-        
-		add(makeTitlePanel(), BorderLayout.NORTH);
+
+        add(makeTitlePanel(), BorderLayout.NORTH);
 
         JPanel mainPanel = new JPanel(new BorderLayout(0, 5));
 
-        VerticalPanel connPanel = new VerticalPanel();        
-		dbGui = new DbConfigGui(false);
-		connPanel.add(dbGui);
+        VerticalPanel connPanel = new VerticalPanel();
+        dbGui = new DbConfigGui(false);
+        connPanel.add(dbGui);
 
-		poolGui = new PoolConfigGui(false);
-		connPanel.add(poolGui);
+        poolGui = new PoolConfigGui(false);
+        connPanel.add(poolGui);
 
         mainPanel.add(connPanel, BorderLayout.NORTH);
-        
-		sqlGui = new SqlConfigGui(false);
-		mainPanel.add(sqlGui, BorderLayout.CENTER);
 
-		add(mainPanel, BorderLayout.CENTER);
-	}
-    
-    public Dimension getPreferredSize() {
+        sqlGui = new SqlConfigGui(false);
+        mainPanel.add(sqlGui, BorderLayout.CENTER);
+
+        add(mainPanel, BorderLayout.CENTER);
+    }
+
+    public Dimension getPreferredSize()
+    {
         return getMinimumSize();
     }
 }

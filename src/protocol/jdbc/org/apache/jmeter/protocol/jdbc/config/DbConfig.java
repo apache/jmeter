@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,7 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.protocol.jdbc.config;
+package org.apache.jmeter.protocol.jdbc.config;
 
 import java.io.Serializable;
 
@@ -60,37 +60,32 @@ import org.apache.jmeter.config.LoginConfig;
 import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
 
 /**
- * Title:        JMeter
- * Description:
- * Copyright:    Copyright (c) 2000
- * Company:      Apache
  * @author Michael Stover
- * @version 1.0
+ * @version $Revision$
  */
-
 public class DbConfig extends LoginConfig implements Serializable
 {
+    public DbConfig()
+    {
+    }
 
-	public DbConfig()
-	{
-	}
-	public String getUrl()
-	{
-		return getPropertyAsString(JDBCSampler.URL);
-	}
+    public String getUrl()
+    {
+        return getPropertyAsString(JDBCSampler.URL);
+    }
 
-	public void setUrl(String url)
-	{
-		setProperty(JDBCSampler.URL,url);
-	}
+    public void setUrl(String url)
+    {
+        setProperty(JDBCSampler.URL, url);
+    }
 
-	public String getDriver()
-	{
-		return getPropertyAsString(JDBCSampler.DRIVER);
-	}
+    public String getDriver()
+    {
+        return getPropertyAsString(JDBCSampler.DRIVER);
+    }
 
-	public void setDriver(String driver)
-	{
-		setProperty(JDBCSampler.DRIVER,driver);
-	}
+    public void setDriver(String driver)
+    {
+        setProperty(JDBCSampler.DRIVER, driver);
+    }
 }
