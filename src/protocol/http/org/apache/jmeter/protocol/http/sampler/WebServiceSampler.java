@@ -56,11 +56,13 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Random;
+import org.xml.sax.*;
 
 import org.apache.jorphan.io.TextFile;
 
@@ -76,7 +78,6 @@ import org.apache.soap.transport.*;
 import org.apache.soap.transport.http.SOAPHTTPConnection;
 import javax.xml.parsers.*;
 import org.w3c.dom.Document;
-import org.xml.sax.*;
 
 /**
  * Sampler to handle Web Service requests. It uses Apache SOAP drivers to
@@ -145,6 +146,8 @@ public class WebServiceSampler extends HTTPSampler
      */
     protected static DocumentBuilder XDB = null;
 
+	protected String FILE_CONTENTS = null;
+	
     /**
      * Set the path where XML messages are stored for random selection.
      */
@@ -192,18 +195,19 @@ public class WebServiceSampler extends HTTPSampler
      * run efficiently.
      * @return String contents of the file
      */
-    private String retrieveRuntimeXmlData()
+    private File retrieveRuntimeXmlData()
     {
         String file = getRandomFileName();
         if (file.length() > 0)
         {
-            TextFile contents = new TextFile(file);
-            if (contents.exists())
-            {
-                return contents.getText();
-            }
+        	if (this.getReadResponse()){
+        		TextFile tfile = new TextFile(file);
+        		FILE_CONTENTS = tfile.getText();
+        	}
+        	return new File(file);
+        } else {
+        	return null;
         }
-        return getXmlData();
     }
 
     /**
@@ -425,33 +429,39 @@ public class WebServiceSampler extends HTTPSampler
      */
     protected Document openDocument(String key)
     {
-        String xmlData = retrieveRuntimeXmlData();
-        if (xmlData != null && xmlData.length() > 0)
-        {
-            Document doc = null;
-            try
-            {
-                if (XDB == null)
-                {
-                    XDB = XMLParserUtils.getXMLDocBuilder();
-                }
-                doc = XDB.parse(new InputSource(new StringReader(xmlData)));
-                // cache the document
-                if (this.getPropertyAsBoolean(MEMORY_CACHE))
-                {
-                    DOMPool.putDocument(key, doc);
-                }
-            }
-            catch (Exception ex)
-            {
-                // ex.printStackTrace();
-            }
-            return doc;
-        }
-        else
-        {
-            return null;
-        }
+		if (XDB == null)
+		{
+			XDB = XMLParserUtils.getXMLDocBuilder();
+		}
+		Document doc = null;
+    	// if either a file or path location is given,
+    	// get the file object.
+    	if (getXmlFile().length() > 0 || getXmlPathLoc().length() > 0){
+    		try {
+				doc = XDB.parse(new FileInputStream(retrieveRuntimeXmlData()));
+    		} catch (Exception e){
+    			// there should be a file, if not fail silently
+    		}
+    	} else {
+    		FILE_CONTENTS = getXmlData();
+			if (FILE_CONTENTS != null && FILE_CONTENTS.length() > 0)
+			{
+				try
+				{
+					doc = XDB.parse(
+						new InputSource(new StringReader(FILE_CONTENTS)));
+				}
+				catch (Exception ex)
+				{
+					// ex.printStackTrace();
+				}
+			}
+    	}
+		if (this.getPropertyAsBoolean(MEMORY_CACHE))
+		{
+			DOMPool.putDocument(key, doc);
+		}
+		return doc;
     }
 
     /**
@@ -487,8 +497,9 @@ public class WebServiceSampler extends HTTPSampler
     {
         try
         {
-            Envelope msgEnv = Envelope.unmarshall(createDocument());
-
+			org.w3c.dom.Element rdoc = createDocument();
+            Envelope msgEnv = Envelope.unmarshall(rdoc);
+			
             // send the message
             Message msg = new Message();
             RESULT.sampleStart();
@@ -546,12 +557,20 @@ public class WebServiceSampler extends HTTPSampler
                         .getBytes());
             }
             RESULT.setSuccessful(true);
+            // 1-22-04 updated the sampler so that when read
+            // response is set, it also sets SamplerData with
+            // the XML message, so users can see what was
+            // sent. if read response is not checked, it will
+            // not set sampler data with the request message.
+            // peter lin.
             RESULT.setSamplerData(
                 getUrl().getProtocol()
                     + "://"
                     + getUrl().getHost()
                     + "/"
-                    + getUrl().getFile());
+                    + getUrl().getFile()
+                    + "\n"
+                    + FILE_CONTENTS);
             RESULT.setDataEncoding(
                 st.getResponseSOAPContext().getContentType());
             // setting this is just a formality, since
