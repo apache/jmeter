@@ -48,6 +48,9 @@
 
   -->
   
+  <!-- Are we running under Gump? -->
+  <property name="gump.run" value="false"/>
+  
   <!-- Renamed targets -->
   <target name="all-docs">
     <echo message="Target has been renamed to docs-all"/>
@@ -616,6 +619,13 @@ some of its classes - at present JMeter can only run from jar files.
     <!-- Test: while Gump builds are being sorted out
     <property name="beanshell.present" value="assume"/>
     -->
+    <!-- Check for Gump option depends -->
+    <available classname="bsh.Interpreter" property="beanshell.present">
+      <classpath refid="classpath"/>
+    </available>
+    <available classname="org.apache.bsf.BSFManager" property="bsf.present">
+      <classpath refid="classpath"/>
+    </available>
   </target>
 
   <!-- list of files needed for a binary distribution -->
@@ -821,11 +831,13 @@ some of its classes - at present JMeter can only run from jar files.
   <target name="docs-all" depends="docs-site,docs-printable,docs-api" description="Generate documentation."/>
 
   <target name="test" depends="install" description="Run tests">
-    <java classname="org.apache.jorphan.test.AllTests" fork="yes" dir="${basedir}/bin">
+   <echo >gump.run = ${gump.run}</echo>
+   <java classname="org.apache.jorphan.test.AllTests" fork="yes" dir="${basedir}/bin">
       <classpath>
 	<path refid="classpath"/>
 	<fileset dir="${dest.jar}" includes="*.jar"/>
       </classpath>
+      <sysproperty key="java.awt.headless" value="${gump.run}"/>
 
       <arg value="../lib/ext"/>
       <arg value="./jmetertest.properties"/>
