@@ -97,7 +97,7 @@ public class DistributionGraphVisualizer extends AbstractVisualizer
 			graph.setPreferredSize(new Dimension(getWidth() - 40, getHeight() - 160));
     	}
 		graphPanel.updateUI();
-        graph.updateGui();
+        graph.repaint();
     }
 
     public synchronized void updateGui(Sample s)
