@@ -23,17 +23,11 @@
 <section name="Downloading nightly builds">
 	<p></p>
 	<h2>Where are the nightly builds?</h2>
-	<p>There are usually some zip files at the following locations:</p>
-	<ul>
-		<li>CVS HEAD Zips: <a href="http://gump.covalent.net/jars/latest/jakarta-jmeter/">
-			http://gump.covalent.net/jars/latest/jakarta-jmeter/</a>
-			Log: <a href="http://gump.covalent.net/log/jakarta-jmeter-test.html">Test log</a>
-		</li>
-		<li>2.0 Branch Zips: <a href="http://gump.covalent.net/jars/latest/jakarta-jmeter-20/">
-			http://gump.covalent.net/jars/latest/jakarta-jmeter-20/</a>
-			Log: <a href="http://gump.covalent.net/log/jakarta-jmeter-20-test.html">Test log</a>
-		</li>
-	</ul>
+	<p>There are currently no regular nightly builds - sorry.</p>
+    <p>However, occasional builds are made available via the 
+<a href="http://jakarta.apache.org/site/binindex.cgi">Binary Downloads</a> in the 
+<a href="http://jakarta.apache.org/site/binindex.cgi#Nightly%20Builds">Nightly builds</a> section.
+</p>
 	<h2>What do they consist of?</h2>
 <p>
 JMeter is distributed as a set of zip (or tar or tar-gz) archive files.

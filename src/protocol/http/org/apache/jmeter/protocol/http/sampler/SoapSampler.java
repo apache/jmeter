@@ -75,7 +75,7 @@ public class SoapSampler extends HTTPSampler
     {
         ((HttpURLConnection) connection).setRequestMethod("POST");
         connection.setRequestProperty(
-            "Content-length",
+            "Content-Length",
             "" + getXmlData().length());
         // my first attempt at fixing the bug failed, due to user
         // error on my part. HeaderManager does not use the normal
@@ -93,7 +93,7 @@ public class SoapSampler extends HTTPSampler
         		}
         } else {
         	// otherwise we use "text/xml" as the default
-			connection.setRequestProperty("Content-type", "text/xml");
+			connection.setRequestProperty("Content-Type", "text/xml");
         }
         connection.setDoOutput(true);
     }

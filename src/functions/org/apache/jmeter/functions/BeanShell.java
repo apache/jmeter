@@ -19,6 +19,7 @@
 package org.apache.jmeter.functions;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -27,6 +28,8 @@ import java.util.List;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -47,7 +50,8 @@ public class BeanShell extends AbstractFunction implements Serializable
 	protected static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final List desc = new LinkedList();
-    private static final String KEY = "__BeanShell";
+    private static final String KEY = "__BeanShell";  //$NON-NLS-1$
+    public static final String INIT_FILE = "beanshell.function.init";  //$NON-NLS-1$
 
 	
     static {
@@ -75,7 +79,13 @@ public class BeanShell extends AbstractFunction implements Serializable
         throws InvalidVariableException
     {
 
-        JMeterVariables vars = getVariables();
+    	if (bshSet == null) // did we find BeanShell?
+    	{
+    		throw new InvalidVariableException("BeanShell not found");
+    	}
+    	
+    	JMeterContext jmctx = JMeterContextService.getContext();
+        JMeterVariables vars = jmctx.getVariables();
 
         String script  = ((CompoundVariable) values[0]).execute();
         String varName = "";
@@ -91,20 +101,23 @@ public class BeanShell extends AbstractFunction implements Serializable
         {
 
 			// Pass in some variables
-        	if (currentSampler != null) {
-				setObj.invoke(instance, new Object[] {"Sampler",currentSampler});
+        	if (currentSampler != null)
+        	{
+				bshInvoke(bshSet,"Sampler",currentSampler);  //$NON-NLS-1$
         	}
 			
 			if (previousResult != null)
 			{
-				setObj.invoke(instance, new Object[] {"SampleResult",previousResult});
+				bshInvoke(bshSet,"SampleResult",previousResult);  //$NON-NLS-1$
 			}
-				
-			setObj.invoke(instance, new Object[] {"log",log});
-			setObj.invoke(instance, new Object[] {"t",this});
+			
+			// Allow access to context and variables directly
+			bshInvoke(bshSet,"ctx",jmctx);  //$NON-NLS-1$
+			bshInvoke(bshSet,"vars",vars); //$NON-NLS-1$
+			bshInvoke(bshSet,"threadName",Thread.currentThread().getName());  //$NON-NLS-1$
 			
             // Execute the script
-            Object bshOut = eval.invoke(instance, new Object[]{script});
+            Object bshOut = bshInvoke(bshEval,script,null);
 			if (bshOut != null) {
 				resultStr = bshOut.toString();
 			}
@@ -115,7 +128,7 @@ public class BeanShell extends AbstractFunction implements Serializable
         }
 		catch (Exception ex) // Mainly for bsh.EvalError
 		{
-			log.warn("",ex);
+			log.warn("Error running BSH script",ex);
 		}
 
         log.debug("Output="+resultStr);
@@ -132,12 +145,37 @@ public class BeanShell extends AbstractFunction implements Serializable
     }
 
 	transient private Object instance;
-	transient private Method setObj;
-	transient private Method eval;
+	transient private Method bshSet;
+	transient private Method bshEval;
+	transient private Method bshSource;
 
 //TODO move to common class (in jorphan?) so can be shared with other BSH modules
 
-    private void setupBeanShell()
+
+	// Helper method for invoking bsh methods
+	private Object bshInvoke(Method m, String s, Object o)
+	{
+		Object r=null;
+		try {
+			if (o == null)
+			{
+				r = m.invoke(instance, new Object[] {s});
+			}
+			else
+			{
+			    r = m.invoke(instance, new Object[] {s, o});
+			}
+		} catch (IllegalArgumentException e) {
+			log.error("Error invoking bsh method "+m.getName()+"\n",e);
+		} catch (IllegalAccessException e) {
+			log.error("Error invoking bsh method "+m.getName()+"\n",e);
+		} catch (InvocationTargetException e) {
+			log.error("Error invoking bsh method "+m.getName()+"\n",e);
+		}		
+		return r;
+	}
+
+	private void setupBeanShell()
     {    
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
@@ -148,12 +186,17 @@ public class BeanShell extends AbstractFunction implements Serializable
 		Class string = String.class;
 		Class object = Object.class;
 			
-		eval = Interpreter.getMethod(
-				"eval",
+		bshEval = Interpreter.getMethod(
+				"eval", //$NON-NLS-1$
 				new Class[] {string});
-		setObj = Interpreter.getMethod(
-				"set",
+		bshSet = Interpreter.getMethod(
+				"set", //$NON-NLS-1$
 				new Class[] {string,object});
+		
+		bshSource = Interpreter.getMethod(
+				"source", //$NON-NLS-1$
+				new Class[] {string});
+
 	}
 	catch(ClassNotFoundException e ){
 		log.error("Beanshell Interpreter not found");
@@ -163,6 +206,10 @@ public class BeanShell extends AbstractFunction implements Serializable
 		log.error("Problem starting BeanShell server ",e);
 	}
 
+	// These don't vary between executes, so can be done once
+	bshInvoke(bshSet,"log",log); //$NON-NLS-1$
+    String initFile = JMeterUtils.getPropDefault(INIT_FILE,null);
+	if (initFile!=null) bshInvoke(bshSource,initFile,null);
 	}
 	
     /* (non-Javadoc)

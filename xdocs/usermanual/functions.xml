@@ -33,7 +33,24 @@ element in a test tree.  A function looks like this:</p>
 Parentheses surround the parameters sent to the function.  The actual parameters vary from function 
 to function.  Functions that require no parameters can leave off the parentheses.  The function itself
 is wrapped in ${}.</p>
-
+<p>List of functions:</p>
+<ul>
+        <li><a href="#__regexFunction">regexFunction - regular expression evaluator</a></li>
+        <li><a href="#__counter">counter</a></li>
+        <li><a href="#__threadNum">threadNum - get thread number</a></li>
+        <li><a href="#__intSum">intSum - add variables</a></li>
+        <li><a href="#__StringFromFile">StringFromFile - read a line from a file</a></li>
+        <li><a href="#__machineName">machineName - get the local machine name</a></li>
+        <li><a href="#__javaScript">JavaScript (Apache Rhino)</a></li>
+        <li><a href="#__Random">random number</a></li>
+        <li><a href="#__CSVRead">CSVRead -read from CSV delimited file</a></li>
+        <li><a href="#__property">read a property</a></li>
+        <li><a href="#__P">P -read a property</a></li>
+        <li><a href="#__log">log - log a message</a></li>
+        <li><a href="#__logn">log - log a message</a></li>
+        <li><a href="#__BeanShell">BeanShell - run BeanShell</a></li>
+        <li><a href="#__split">split - Split a string into variables</a></li>
+</ul>
 
 <subsection name="16.1 What can functions do" anchor="what_can_do">
 <p>There are two kinds of functions: user-defined static values, and built-in functions.<br/>
@@ -100,8 +117,10 @@ replacement string") parsed by this function</li>
 <li>${refName_g0} to refer to the entire match  parsed by this function.</li>
 <li>${refName_g1} to refer to the first group parsed by this function.</li>
 <li>${refName_g#} to refer to the n<sup>th</sup> group parsed by this function.</li>
+<li>${refName_matchNr} to refer to the number of groups found by this function.</li>
 </ul>
-</p></description>
+</p>
+</description>
 
 <properties>
         <property name="First argument" required="Yes">The first argument is the regular expression
@@ -172,7 +191,10 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 </properties>
 </component>
 
+<!-- Alternate spelling -->
+<a name="__StringFromFile"/>
 <component index="16.5.5" name="_StringFromFile">
+
 <description>
 	<p>
 	The StringFromFile function can be used to read strings from a text file. 
@@ -181,7 +203,8 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 	</p>
 	<p>
 	Each time it is called it reads the next line from the file.
-	When the end of the file is reached, it will start reading again from the beginning.
+	When the end of the file is reached, it will start reading again from the beginning,
+	unless the maximum loop count has been reached.
 	If there are multiple references to the function in a test script, each will open the file independently,
 	even if the file names are the same.
 	[If the value is to be used again elsewhere, use different variable names for each function call.]
@@ -198,7 +221,7 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
         <property name="Variable Name" required="No">
 A reference name - refName - for reusing the value created by this function. Stored values are of the form ${refName}.
         </property>
-        <property name="Start sequence number" required="No">Initial Sequence number</property>
+        <property name="Start sequence number" required="No">Initial Sequence number (if omitted, the End sequence number is treated as a loop count)</property>
         <property name="End   sequence number" required="No">Final sequence number (if omitted, seqence numbers can increase without limit)</property>
 </properties>
 <p>The file name parameter is resolved when the file is opened or re-opened.</p>
@@ -206,7 +229,7 @@ A reference name - refName - for reusing the value created by this function. Sto
 <p><b>Using sequence numbers:</b></p>
 <p>When using the optional sequence numbers, the path name is used as the format string for java.text.DecimalFormat.
 	The current sequence number is passed in as the only parameter.
-    If the optional sequence numbers are not used, the path name is used as is.
+    If the optional start number is not specified, the path name is used as is.
 	Useful formatting sequences are:
 	</p>
 	<p>
@@ -229,11 +252,16 @@ Examples:<br/>
 	the same character as is used to separate parts of file names.<br/>
 	See the documentation for DecimalFormat for full details.<br/>
 	If the path name does not contain any special formatting characters,
-	it will be unaffected by the current sequence number. 
-	In this case, specifying only a start sequence number will have no effect,
-	but specifying a start and end sequence number will result in the file
-	being used at most end-start+1 times.
+	the current sequence number will be appended to the name, otherwise
+	the number will be inserted aaccording to the fomatting instructions.<br/>
+	If the start sequence number is omitted, and the end sequence number is specified,
+	the sequence number is interpreted as a loop count, and the file will be used at most "end" times.
+	In this case the filename is not formatted.
+	<code>
 	
+	${_StringFromFile(PIN#.DAT,,1,2)} - reads PIN1.DAT, PIN2.DAT
+	${_StringFromFile(PIN.DAT,,,2)} - reads PIN.DAT twice
+	</code>
 	</p>
 </component>
 
@@ -409,13 +437,86 @@ the second would return 1 and the last would return www.dummy.org
 <description>
 	<p>
 	The BeanShell function evaluates the script passed to it, and returns the result.
-	</p>
+</p>
+<p>
+Note that a different Interpreter is used for each independent occurence of the function
+in a test script, but the same Interpreter is used for subsequent invocations.
+This means that variables persist across calls to the function.
+</p>
+<p>
+A single instance of a function may be called from multiple threads.
+However the function execute() method is synchronised.
+</p>
+<p>
+If the property "beanshell.function.init" is defined, it is passed to the Interpreter
+as the name of a sourced file. This can be used to define common methods and variables. There is a
+sample init file in the bin directory: BeanShellFunction.bshrc.
+</p>
+<p>
+The following variables are set before the script is executed:
+<ul>
+<li>log - the logger for the BeanShell function (*)</li>
+<li>ctx - the current JMeter context variable</li>
+<li>vars - the current JMeter variables</li>
+<li>threadName - the threadName</li>
+<li>Sampler the current Sampler, if any</li>
+<li>SampleResult - the current SampleResult, if any</li>
+</ul>
+(*) means that this is set before the init file, if any, is processed. 
+Other variables vary from invocation to invocation.
+</p>
 </description>
 
 <properties>
-        <property name="BeanShell script" required="Yes">A script</property>
+        <property name="BeanShell script" required="Yes">A beanshell script (not a file name)</property>
         <property name="Name of variable" required="No">A reference name for reusing the value
                computed by this function.</property>
+        
+</properties>
+<p>
+Example:
+<pre>
+${__BeanShell(123*456)} - returns 56088
+${__BeanShell(source("function.bsh"))} - processes the script in function.bsh
+</pre>
+</p>
+</component>
+
+<component index="16.5.14" name="__split">
+<description>
+	<p>
+	The split function splits the string passed to it according to the delimiter,
+    and returns the original string. If any delimiters are adjacent, "?" is returned as the value.
+    The split strings are returned in the variables ${VAR_1}, ${VAR_2} etc. 
+    The count of variables is returned in ${VAR_n}. 
+	</p>
+	<p/>
+	Example:
+	<code>
+	<br/>
+	Define VAR="a,,c" in the test plan.
+	<br/>
+	${__split(${VAR},VAR)}
+	<br/>
+	This will return the contents of VAR, i.e. "a,,c" and set the following variables:
+	<br/>
+        VAR_1=a
+	<br/>
+        VAR_2=?
+	<br/>
+        VAR_3=c
+	<br/>
+        VAR_n=3
+	</code>
+</description>
+
+<properties>
+        <property name="String to split" required="Yes">A delimited string, e.g. "a|b|c"</property>
+        <property name="Name of variable" required="Yes">A reference name for reusing the value
+               computed by this function.</property>
+        <property name="Delimiter" required="No">The delimiter character, e.g. "|". 
+If omitted, "," is used. Note that "," would need to be specified as "\,".
+</property>
         
 </properties>
 </component>

@@ -51,10 +51,12 @@ public class Cut extends AbstractAction
     public void doAction(ActionEvent e)
     {
         GuiPackage guiPack = GuiPackage.getInstance();
-        JMeterTreeNode currentNode = guiPack.getTreeListener().getCurrentNode();
+        JMeterTreeNode[] currentNodes = guiPack.getTreeListener().getSelectedNodes();
 
-        Copy.setCopiedNode(currentNode);
-        guiPack.getTreeModel().removeNodeFromParent(currentNode);
+ 		Copy.setCopiedNodes(currentNodes);
+ 		for(int i=0;i<currentNodes.length;i++) {
+ 	        guiPack.getTreeModel().removeNodeFromParent(currentNodes[i]);
+ 		}
         guiPack.getMainFrame().repaint();
     }
 }

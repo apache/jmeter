@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 import java.util.zip.ZipFile;
 
 import org.apache.jorphan.logging.LoggingManager;
@@ -107,7 +108,7 @@ public final class ClassFinder
         throws IOException, ClassNotFoundException
     {
         List listPaths = null;
-        ArrayList listClasses = null;
+        Set listClasses = null;
         List listSuperClasses = null;
         strPathsOrJars = addJarsInPath(strPathsOrJars);
         if (log.isDebugEnabled())
@@ -126,7 +127,7 @@ public final class ClassFinder
                 log.debug("listPaths : " + tIter.next());
             }
         }
-        listClasses = new ArrayList();
+        listClasses = new TreeSet();
         listSuperClasses = new ArrayList();
         for (int i = 0; i < superClasses.length; i++)
         {
@@ -142,9 +143,9 @@ public final class ClassFinder
                 log.debug("listClasses : " + tIter.next());
             }
         }
-        List subClassList =
+        Set subClassList =
             findAllSubclasses(listSuperClasses, listClasses, innerClasses);
-        return subClassList;
+        return new ArrayList(subClassList);
     }
 
     private static List getClasspathMatches(String[] strPathsOrJars)
@@ -369,16 +370,16 @@ public final class ClassFinder
      *                           the search
      *@return                    ArrayList of the subclasses
      */
-    private static ArrayList findAllSubclasses(
+    private static Set findAllSubclasses(
         List listSuperClasses,
-        List listAllClasses,
+        Set listAllClasses,
         boolean innerClasses)
     {
         Iterator iterClasses = null;
-        ArrayList listSubClasses = null;
+        Set listSubClasses = null;
         String strClassName = null;
         Class tempClass = null;
-        listSubClasses = new ArrayList();
+        listSubClasses = new TreeSet();
         iterClasses = listSuperClasses.iterator();
         while (iterClasses.hasNext())
         {
@@ -445,8 +446,8 @@ public final class ClassFinder
      */
     private static void findAllSubclassesOneClass(
         Class theClass,
-        List listAllClasses,
-        List listSubClasses,
+        Set listAllClasses,
+        Set listSubClasses,
         boolean innerClasses)
     {
         Iterator iterClasses = null;
@@ -507,7 +508,7 @@ public final class ClassFinder
         return strClassName;
     }
     
-    private static void findClassesInOnePath(String strPath, List listClasses)
+    private static void findClassesInOnePath(String strPath, Set listClasses)
         throws IOException
     {
         File file = null;
@@ -534,7 +535,7 @@ public final class ClassFinder
         }
     }
 
-    private static void findClassesInPaths(List listPaths, List listClasses)
+    private static void findClassesInPaths(List listPaths, Set listClasses)
         throws IOException
     {
         Iterator iterPaths = listPaths.iterator();
@@ -547,7 +548,7 @@ public final class ClassFinder
     private static void findClassesInPathsDir(
         String strPathElement,
         File dir,
-        List listClasses)
+        Set listClasses)
         throws IOException
     {
         File file = null;

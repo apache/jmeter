@@ -29,6 +29,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -42,9 +43,17 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.ComponentView;
+import javax.swing.text.Document;
+import javax.swing.text.EditorKit;
+import javax.swing.text.Element;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import javax.swing.text.View;
+import javax.swing.text.ViewFactory;
+import javax.swing.text.html.HTML;
+import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -74,12 +83,19 @@ public class ViewResultsFullVisualizer
     public final static Color CLIENT_ERROR_COLOR = Color.blue;
     public final static Color REDIRECT_COLOR = Color.green;
 
+    private static final String DOWNLOAD_LABEL = "Download embedded resources";
     private static final String HTML_BUTTON_LABEL = "Render HTML";
     private static final String TEXT_BUTTON_LABEL = "Show Text";
 
-    private static final String HTML_COMMAND = "html";
-    private static final String TEXT_COMMAND = "text";
+    private static final String TEXT_HTML = "text/html"; // $NON-NLS-1$
+    private static final String HTML_COMMAND = "html"; // $NON-NLS-1$
+    private static final String TEXT_COMMAND = "text"; // $NON-NLS-1$
     private boolean textMode = true;
+    
+    // Keep copies of the two editors needed
+    private static EditorKit customisedEditor = new LocalHTMLEditorKit();
+    private static EditorKit defaultHtmlEditor = 
+    	JEditorPane.createEditorKitForContentType(TEXT_HTML);
 
     private DefaultMutableTreeNode root;
     private DefaultTreeModel treeModel;
@@ -92,6 +108,7 @@ public class ViewResultsFullVisualizer
 
     private JRadioButton textButton;
     private JRadioButton htmlButton;
+    private JCheckBox downloadAll;
 
     private JTree jTree;
 
@@ -308,7 +325,7 @@ public class ViewResultsFullVisualizer
 	                    }
 	                    else
 	                    {
-	                        showRenderedResponse(response);
+	                        showRenderedResponse(response,res);
 	                    }
                     }
                     else
@@ -421,12 +438,12 @@ public class ViewResultsFullVisualizer
             }
             else
             {
-                showRenderedResponse(response);
+                showRenderedResponse(response,res);
             }
         }
     }
 
-    protected void showRenderedResponse(String response)
+    protected void showRenderedResponse(String response, SampleResult res)
     {
         if (response == null)
         {
@@ -449,7 +466,24 @@ public class ViewResultsFullVisualizer
         }
 
         String html = response.substring(htmlIndex);
-        results.setContentType("text/html");
+        
+        /* 
+         * To disable downloading and rendering of images and frames,
+         * enable the editor-kit. The Stream property can then be
+         */
+        
+		// Must be done before setContentType
+		results.setEditorKitForContentType(TEXT_HTML,
+				downloadAll.isSelected() ? defaultHtmlEditor : customisedEditor);
+
+        results.setContentType(TEXT_HTML);
+
+        if (downloadAll.isSelected())
+        {
+            // Allow JMeter to render frames (and relative images)
+            // Must be done after setContentType [Why?]
+		    results.getDocument().putProperty(Document.StreamDescriptionProperty,res.getURL());
+        }
 
         /* Get round problems parsing
          *  <META http-equiv='content-type' content='text/html; charset=utf-8'>
@@ -483,9 +517,12 @@ public class ViewResultsFullVisualizer
         htmlButton.setSelected(!textMode);
         group.add(htmlButton);
 
+        downloadAll = new JCheckBox(DOWNLOAD_LABEL);
+
         JPanel pane = new JPanel();
         pane.add(textButton);
         pane.add(htmlButton);
+        pane.add(downloadAll);
         return pane;
     }
 
@@ -608,5 +645,43 @@ public class ViewResultsFullVisualizer
             }
             return this;
         }
+    }
+
+    private static class LocalHTMLEditorKit extends HTMLEditorKit {
+
+    	private static final ViewFactory defaultFactory = new LocalHTMLFactory();
+    	
+    	public ViewFactory getViewFactory() {
+    		return defaultFactory;
+    	}
+
+    	private static class LocalHTMLFactory 
+		extends javax.swing.text.html.HTMLEditorKit.HTMLFactory 
+		{
+    		/*
+    		 * Provide dummy implementations to suppress download and display
+    		 * of related resources:
+    		 * - FRAMEs
+    		 * - IMAGEs
+    		 * TODO create better dummy displays
+    		 */
+    		public View create(Element elem) 
+    		{
+    		    Object o = elem.getAttributes().getAttribute(StyleConstants.NameAttribute);
+    		    if (o instanceof HTML.Tag) 
+    		    {
+    			    HTML.Tag kind = (HTML.Tag) o;
+    			    if (kind == HTML.Tag.FRAME)
+    			    {
+    			        return new ComponentView(elem);
+	   			    }
+	   			    else if (kind==HTML.Tag.IMG)
+	   			    {
+	   			    	return new ComponentView(elem);
+	   		        }
+    			}
+    			return super.create(elem);
+    		}
+    	}
     }
 }

@@ -19,6 +19,7 @@ package org.apache.jmeter.samplers;
 
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -77,7 +78,7 @@ public class SampleResult implements Serializable
    {
       return saveConfig;
    }
-    private byte[] responseData;
+    private byte[] responseData = EMPTY_BA;
     private String responseCode;
     private String label;
     private String samplerData;
@@ -744,4 +745,14 @@ public class SampleResult implements Serializable
    {
       this.timeStamp = timeStamp;
    }
+   
+   private URL location;
+
+	public void setURL(URL location) {
+	    this.location= location;
+	}
+
+	public URL getURL() {
+	    return location;
+	}
 }

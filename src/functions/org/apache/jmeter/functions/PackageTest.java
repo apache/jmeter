@@ -35,6 +35,10 @@ import junit.framework.TestSuite;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.log.Logger;
@@ -83,8 +87,44 @@ public class PackageTest extends JMeterTestCase
 		return sff;
 	}
 
+	// Create the SplitFile function and set its parameters.
+	private static SplitFunction SplitParams(String p1, String p2, String p3)
+	throws Exception
+	{
+		SplitFunction split = new SplitFunction();
+		Collection parms = new LinkedList();
+		parms.add(new CompoundVariable(p1));
+		if (p2 != null) parms.add(new CompoundVariable(p2));
+		if (p3 != null) parms.add(new CompoundVariable(p3));
+		split.setParameters(parms);
+		return split;
+	}
+
+	// Create the BeanShell function and set its parameters.
+	private static BeanShell BSHFParams(String p1, String p2, String p3)
+	throws Exception
+	{
+		BeanShell bsh = new BeanShell();
+		bsh.setParameters(MakeParams(p1,p2,p3));
+		return bsh;
+	}
+	private static Collection MakeParams(String p1, String p2, String p3)
+	{
+		Collection parms = new LinkedList();
+		if (p1 != null) parms.add(new CompoundVariable(p1));
+		if (p2 != null) parms.add(new CompoundVariable(p2));
+		if (p3 != null) parms.add(new CompoundVariable(p3));
+		return parms;	
+	}
+
 	public static Test suite() throws Exception
 	{
+		   TestSuite allsuites = new TestSuite();
+		   
+		   TestSuite bsh = new TestSuite("BeanShell");
+		   bsh.addTest( new PackageTest("BSH1"));
+		   allsuites.addTest(bsh);
+   
 		   TestSuite suite = new TestSuite("SingleThreaded");
   		   suite.addTest(new PackageTest("CSVParams"));
 		   suite.addTest(new PackageTest("CSVNoFile"));
@@ -93,18 +133,172 @@ public class PackageTest extends JMeterTestCase
 
            suite.addTest(new PackageTest("CSValias"));
            suite.addTest(new PackageTest("CSVBlankLine"));
+           allsuites.addTest(suite);
 
            //Reset files
            suite.addTest(new PackageTest("CSVSetup"));
 		   TestSuite par = new ActiveTestSuite("Parallel");
 		   par.addTest(new PackageTest("CSVThread1"));
 		   par.addTest(new PackageTest("CSVThread2"));
-		   suite.addTest(par);
+		   allsuites.addTest(par);
 		   
 		   TestSuite sff = new TestSuite("StringFromFile");
 		   sff.addTest(new PackageTest("SFFTest1"));
-		   suite.addTest(sff);
-		   return suite;
+		   sff.addTest(new PackageTest("SFFTest2"));
+		   sff.addTest(new PackageTest("SFFTest3"));
+		   sff.addTest(new PackageTest("SFFTest4"));
+		   sff.addTest(new PackageTest("SFFTest5"));
+		   allsuites.addTest(sff);
+		   
+		   TestSuite split = new TestSuite("SplitFunction");
+		   split.addTest(new PackageTest("SplitTest1"));
+		   allsuites.addTest(split);
+		   
+		   return allsuites;
+    }
+    
+    private JMeterContext jmctx = null;
+	private JMeterVariables vars = null;
+    public void setUp()
+    {
+    	jmctx = JMeterContextService.getContext();
+        jmctx.setVariables(new JMeterVariables());
+    	vars = jmctx.getVariables();
+    }
+
+    public void BSH1() throws Exception
+	{
+		String fn = "testfiles/BeanShellTest.bsh";
+    	BeanShell bsh;
+    	try
+		{
+    	    bsh = BSHFParams(null,null,null);
+    	    fail("Expected InvalidVariableException");
+		}  	catch (InvalidVariableException e) {}
+    	
+    	try
+		{
+    	    bsh = BSHFParams("","","");
+    	    fail("Expected InvalidVariableException");
+		}  	catch (InvalidVariableException e) {}
+		
+		bsh = BSHFParams("","",null);
+		assertEquals("",bsh.execute());
+		
+		bsh = BSHFParams("1",null,null);
+		assertEquals("1",bsh.execute());
+
+		bsh = BSHFParams("1+1","VAR",null);
+		assertEquals("2",bsh.execute());
+		assertEquals("2",vars.get("VAR"));
+
+		// Check some initial variables
+		bsh = BSHFParams("return threadName",null,null);
+		assertEquals(Thread.currentThread().getName(),bsh.execute());
+		bsh = BSHFParams("return log.getClass().getName()",null,null);
+		assertEquals(log.getClass().getName(),bsh.execute());
+
+		// Check source works
+		bsh = BSHFParams("source (\"testfiles/BeanShellTest.bsh\")",null,null);
+		assertEquals("9876",bsh.execute());
+
+		// Check persistence
+		bsh = BSHFParams("${SCR1}",null,null);
+
+		vars.put("SCR1","var1=11");
+		assertEquals("11",bsh.execute());
+
+		vars.put("SCR1","var2=22");
+		assertEquals("22",bsh.execute());
+
+		vars.put("SCR1","x=var1");
+		assertEquals("11",bsh.execute());
+
+		vars.put("SCR1","++x");
+		assertEquals("12",bsh.execute());
+
+		vars.put("VAR1","test");
+		vars.put("SCR1","vars.get(\"VAR1\")");
+		assertEquals("test",bsh.execute());
+
+
+		// Check init file functioning
+		JMeterUtils.getJMeterProperties()
+		    .setProperty(BeanShell.INIT_FILE,fn);
+		bsh = BSHFParams("${SCR2}",null,null);
+		vars.put("SCR2","getprop(\""+BeanShell.INIT_FILE+"\")");
+		assertEquals(fn,bsh.execute());// Check that bsh has read the file
+		vars.put("SCR2","getprop(\"avavaav\",\"default\")");
+		assertEquals("default",bsh.execute());
+		vars.put("SCR2","++i");
+		assertEquals("1",bsh.execute());
+		vars.put("SCR2","++i");
+		assertEquals("2",bsh.execute());
+		
+	}
+    
+    public void SplitTest1() throws Exception
+    {
+    	SplitFunction split=null;
+    	String src="";
+    	
+    	try
+		{
+		    split = SplitParams("a,b,c",null,null);
+		    fail("Expected InvalidVariableException (wrong number of parameters)");
+		}
+    	catch (InvalidVariableException e)
+		{
+    		//OK
+		}
+    	src="a,b,c";
+	    split = SplitParams(src,"VAR1",null);
+    	assertEquals(src,split.execute());
+    	assertEquals(src,vars.get("VAR1"));
+    	assertEquals("3",vars.get("VAR1_n"));
+    	assertEquals("a",vars.get("VAR1_1"));
+    	assertEquals("b",vars.get("VAR1_2"));
+    	assertEquals("c",vars.get("VAR1_3"));
+    	assertNull(vars.get("VAR1_4"));
+
+    	split = SplitParams(src,"VAR2",",");
+    	assertEquals(src,split.execute());
+    	assertEquals(src,vars.get("VAR2"));
+    	assertEquals("3",vars.get("VAR2_n"));
+    	assertEquals("a",vars.get("VAR2_1"));
+    	assertEquals("b",vars.get("VAR2_2"));
+    	assertEquals("c",vars.get("VAR2_3"));
+    	assertNull(vars.get("VAR2_4"));
+
+
+    	src = "a|b|c";
+    	split = SplitParams(src,"VAR3","|");
+    	assertEquals(src,split.execute());
+    	assertEquals(src,vars.get("VAR3"));
+    	assertEquals("3",vars.get("VAR3_n"));
+    	assertEquals("a",vars.get("VAR3_1"));
+    	assertEquals("b",vars.get("VAR3_2"));
+    	assertEquals("c",vars.get("VAR3_3"));
+    	assertNull(vars.get("VAR3_4"));
+
+    	src="a|b||";
+    	split = SplitParams(src,"VAR4","|");
+    	assertEquals(src,split.execute());
+    	assertEquals(src,vars.get("VAR4"));
+    	assertEquals("3",vars.get("VAR4_n"));
+    	assertEquals("a",vars.get("VAR4_1"));
+    	assertEquals("b",vars.get("VAR4_2"));
+    	assertEquals("?",vars.get("VAR4_3"));
+    	assertNull(vars.get("VAR4_5"));
+
+    	src="a,,c";
+    	vars.put("VAR",src);
+    	split = SplitParams("${VAR}","VAR",null);
+    	assertEquals(src,split.execute());
+    	assertEquals("3",vars.get("VAR_n"));
+    	assertEquals("a",vars.get("VAR_1"));
+    	assertEquals("?",vars.get("VAR_2"));
+    	assertEquals("c",vars.get("VAR_3"));
     }
     
     public void SFFTest1() throws Exception
@@ -136,6 +330,68 @@ public class PackageTest extends JMeterTestCase
 		}
     }
     
+    public void SFFTest2() throws Exception
+    {
+		StringFromFile sff = SFFParams("testfiles/SFFTest1.txt","",null,null);
+		assertEquals("uno",sff.execute());
+		assertEquals("dos",sff.execute());
+		assertEquals("tres",sff.execute());
+		assertEquals("cuatro",sff.execute());
+		assertEquals("cinco",sff.execute());
+		assertEquals("uno",sff.execute()); // Restarts
+		assertEquals("dos",sff.execute());
+		assertEquals("tres",sff.execute());
+		assertEquals("cuatro",sff.execute());
+		assertEquals("cinco",sff.execute());
+    }
+    
+    public void SFFTest3() throws Exception
+    {
+		StringFromFile sff = SFFParams("testfiles/SFFTest1.txt","","","");
+		assertEquals("uno",sff.execute());
+		assertEquals("dos",sff.execute());
+		assertEquals("tres",sff.execute());
+		assertEquals("cuatro",sff.execute());
+		assertEquals("cinco",sff.execute());
+		assertEquals("uno",sff.execute()); // Restarts
+		assertEquals("dos",sff.execute());
+		assertEquals("tres",sff.execute());
+		assertEquals("cuatro",sff.execute());
+		assertEquals("cinco",sff.execute());
+    }
+    
+    public void SFFTest4() throws Exception
+    {
+		StringFromFile sff = SFFParams("xxtestfiles/SFFTest1.txt","","","");
+		assertEquals(StringFromFile.ERR_IND,sff.execute());
+		assertEquals(StringFromFile.ERR_IND,sff.execute());
+    }
+    
+    // Test that only loops twice
+    public void SFFTest5() throws Exception
+    {
+		StringFromFile sff = SFFParams("testfiles/SFFTest1.txt","","","2");
+		assertEquals("uno",sff.execute());
+		assertEquals("dos",sff.execute());
+		assertEquals("tres",sff.execute());
+		assertEquals("cuatro",sff.execute());
+		assertEquals("cinco",sff.execute());
+		assertEquals("uno",sff.execute());
+		assertEquals("dos",sff.execute());
+		assertEquals("tres",sff.execute());
+		assertEquals("cuatro",sff.execute());
+		assertEquals("cinco",sff.execute());
+		try
+		{
+			sff.execute();
+			fail("Should have thrown JMeterStopThreadException");
+		}
+		catch (JMeterStopThreadException e)
+		{
+			// expected
+		}
+    }
+   
     // Function objects to be tested
     private static CSVRead cr1, cr2, cr3, cr4, cr5, cr6;
     

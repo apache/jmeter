@@ -308,9 +308,9 @@ public class HTTPSampler extends HTTPSamplerBase
     }
 
     /**
-     * @param conn
-     * @param headerBuf
-     * @param i
+     * @param conn connection
+     * @param headerIndex which header to use
+     * @param resultBuf output string buffer
      */
     protected void modifyHeaderValues(HttpURLConnection conn, int headerIndex, StringBuffer resultBuf) 
     {

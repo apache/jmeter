@@ -287,7 +287,11 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements
       // TODO: this menu is too wide (allows, e.g. to add controllers, no
       // matter the
       // type of the element). Change to match the actual bean's capabilities.
-      return MenuFactory.getDefaultControllerMenu();
+      if (Timer.class.isAssignableFrom(testBeanClass))//HACK: Fix one such problem
+    	{
+    		return MenuFactory.getDefaultTimerMenu();
+    	}
+        return MenuFactory.getDefaultControllerMenu();
    }
 
    /*
