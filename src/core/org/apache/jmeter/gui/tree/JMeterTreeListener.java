@@ -100,7 +100,7 @@ public class JMeterTreeListener
     private JMeterTreeModel model;
     private JTree tree;
     private boolean dragging = false;
-    private JMeterTreeNode draggedNode;
+    private JMeterTreeNode[] draggedNodes;
     private JLabel dragIcon = new JLabel(JMeterUtils.getImage("leafnode.gif"));
 
     /**
@@ -224,7 +224,7 @@ public class JMeterTreeListener
 
     public void mouseReleased(MouseEvent e)
     {
-        if (dragging && isValidDragAction(draggedNode, getCurrentNode()))
+        if (dragging && isValidDragAction(draggedNodes, getCurrentNode()))
         {
             dragging = false;
             JPopupMenu dragNdrop = new JPopupMenu();
@@ -253,9 +253,9 @@ public class JMeterTreeListener
         dragging = false;
     }
 
-    public JMeterTreeNode getDraggedNode()
+    public JMeterTreeNode[] getDraggedNodes()
     {
-        return draggedNode;
+        return draggedNodes;
     }
 
     /**
@@ -263,14 +263,14 @@ public class JMeterTreeListener
      * into itself.
      */
     private boolean isValidDragAction(
-        JMeterTreeNode source,
+        JMeterTreeNode[] source,
         JMeterTreeNode dest)
     {
         boolean isValid = true;
         TreeNode[] path = dest.getPath();
         for (int i = 0; i < path.length; i++)
         {
-            if (path[i] == source)
+            if (contains(source,path[i]))
             {
                 isValid = false;
             }
@@ -293,12 +293,24 @@ public class JMeterTreeListener
             if (tree.getPathForLocation(e.getX(), e.getY()) != null)
             {
                 currentPath = tree.getPathForLocation(e.getX(), e.getY());
-                if (getCurrentNode() != draggedNode)
+                if (!contains(draggedNodes,getCurrentNode()))
                 {
                     tree.setSelectionPath(currentPath);
                 }
             }
         }
+    }
+    
+    private boolean contains(Object[] container,Object item)
+    {
+        for (int i = 0; i < container.length; i++)
+        {
+            if(container[i] == item)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void mousePressed(MouseEvent e)
@@ -337,9 +349,9 @@ public class JMeterTreeListener
         if (!dragging)
         {
             dragging = true;
-            draggedNode = getCurrentNode();
-            if (draggedNode.getUserObject() instanceof TestPlanGui
-                || draggedNode.getUserObject() instanceof WorkBenchGui)
+            draggedNodes = getSelectedNodes();
+            if (draggedNodes[0].getUserObject() instanceof TestPlanGui
+                || draggedNodes[0].getUserObject() instanceof WorkBenchGui)
             {
                 dragging = false;
             }
