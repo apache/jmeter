@@ -65,7 +65,6 @@ import java.util.StringTokenizer;
 
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.functions.InvalidVariableException;
-//import org.apache.jmeter.functions.util.ArgumentDecoder;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
