@@ -2,11 +2,14 @@ package org.apache.jmeter.modifiers.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -27,20 +30,13 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- */
 public class UserParametersGui extends AbstractConfigGui {
 
     private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
-	private String THREAD_COLUMNS =
-		JMeterUtils.getResString("user");
+	private String THREAD_COLUMNS = JMeterUtils.getResString("user");
 
-	JTable paramTable;
-	PowerTableModel tableModel;
+	private JTable paramTable;
+	private PowerTableModel tableModel;
 	private int numUserColumns = 1;
 	private JButton addParameterButton,
 		addUserButton,
@@ -116,23 +112,20 @@ public class UserParametersGui extends AbstractConfigGui {
     }
 
 	private void init() {
-		this.setLayout(new BorderLayout());
-		add(makeTitlePanel(), BorderLayout.NORTH);
-		add(makeParameterPanel(), BorderLayout.CENTER);
+        setBorder(makeBorder());
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        add(makeTitlePanel());
+
+        perIterationCheck = new JCheckBox(JMeterUtils.getResString("update_per_iter"), true);
+        Box perIterationPanel = Box.createHorizontalBox();
+        perIterationPanel.add(perIterationCheck);
+        perIterationPanel.add(Box.createHorizontalGlue());
+        add(perIterationPanel);
+
+		add(makeParameterPanel());
 	}
     
-    protected JPanel makeTitlePanel()
-    {
-        perIterationCheck = new JCheckBox(JMeterUtils.getResString("update_per_iter"));
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(super.makeTitlePanel(),BorderLayout.NORTH);
-        panel.add(perIterationCheck,BorderLayout.SOUTH);
-        perIterationCheck.setSelected(true);
-        return panel;
-    }
-
 	private JPanel makeParameterPanel() {
-		JPanel paramPanel = new JPanel(new BorderLayout());
 		JLabel tableLabel =
 			new JLabel(JMeterUtils.getResString("user_parameters_table"));
 		initTableModel();
@@ -141,13 +134,11 @@ public class UserParametersGui extends AbstractConfigGui {
 		paramTable.setColumnSelectionAllowed(true);
 		paramTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		paramTable.setCellSelectionEnabled(true);
-		paramPanel.add(tableLabel, BorderLayout.NORTH);
-		JScrollPane scroller = new JScrollPane(paramTable);
-		Dimension tableDim = scroller.getPreferredSize();
-		tableDim.height = 70;
-		scroller.setPreferredSize(tableDim);
-		scroller.setColumnHeaderView(paramTable.getTableHeader());
-		paramPanel.add(scroller, BorderLayout.CENTER);
+        paramTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
+
+        JPanel paramPanel = new JPanel(new BorderLayout());
+        paramPanel.add(tableLabel, BorderLayout.NORTH);
+		paramPanel.add(new JScrollPane(paramTable), BorderLayout.CENTER);
 		paramPanel.add(makeButtonPanel(), BorderLayout.SOUTH);
 		return paramPanel;
 	}
@@ -164,6 +155,7 @@ public class UserParametersGui extends AbstractConfigGui {
 
 	private JPanel makeButtonPanel() {
 		JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(2,2));
 		addParameterButton =
 			new JButton(JMeterUtils.getResString("add_parameter"));
 		addUserButton = new JButton(JMeterUtils.getResString("add_user"));
@@ -172,8 +164,8 @@ public class UserParametersGui extends AbstractConfigGui {
 		deleteColumnButton =
 			new JButton(JMeterUtils.getResString("delete_user"));
 		buttonPanel.add(addParameterButton);
+        buttonPanel.add(deleteRowButton);
 		buttonPanel.add(addUserButton);
-		buttonPanel.add(deleteRowButton);
 		buttonPanel.add(deleteColumnButton);
 		addParameterButton.addActionListener(new AddParamAction());
 		addUserButton.addActionListener(new AddUserAction());
