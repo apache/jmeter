@@ -164,6 +164,7 @@ public class TCPConfigGui extends AbstractConfigGui
 	{    	
 		JLabel reqLabel = new JLabel(JMeterUtils.getResString("tcp_request_data"));
 		requestData = new JTextArea(3,0);
+		requestData.setLineWrap(true);
 		requestData.setName(REQUEST);
 		reqLabel.setLabelFor(requestData);
 	
