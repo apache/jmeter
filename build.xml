@@ -119,6 +119,7 @@
       <auxClasspath path="${commons-collections.jar}" />
       <auxClasspath path="${bsf.jar}" />
       <auxClasspath path="${bsh.jar}" />
+      <auxClasspath path="${js.jar}" />
       
     </findbugs>
   </target>
