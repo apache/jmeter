@@ -37,6 +37,7 @@ import org.apache.jmeter.testelement.property.MapProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -190,7 +191,7 @@ public abstract class TestBean extends AbstractTestElement
         }
         else if (type == boolean.class || type == Boolean.class)
         {
-            value= new Boolean(property.getBooleanValue());
+            value= JOrphanUtils.valueOf(property.getBooleanValue());//JDK1.4:
         }
         else if (type == double.class || type == Double.class)
         {
