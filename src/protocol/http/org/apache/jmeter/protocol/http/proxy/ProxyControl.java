@@ -290,6 +290,7 @@ public class ProxyControl extends GenericController implements Serializable
             {
             }
             notifyTestListenersOfEnd();
+            server = null;
         }
     }
 
@@ -837,6 +838,9 @@ public class ProxyControl extends GenericController implements Serializable
         }
     }
 
+    public boolean canRemove(){
+    	return null==server;
+    }
     public static class Test extends TestCase
     {
     	HTTPSampler sampler;
