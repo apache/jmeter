@@ -46,7 +46,7 @@ import org.apache.log.Logger;
  */
 public class TCPSampler extends AbstractSampler implements TestListener
 {
-	protected static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
     public final static String SERVER     = "TCPSampler.server";   //$NON-NLS-1$
     public final static String PORT       = "TCPSampler.port";     //$NON-NLS-1$
