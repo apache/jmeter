@@ -71,7 +71,7 @@ import org.apache.log.Logger;
  *
  * @author     Brad Kiewel
  * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
- * @version $Id$
+ * @version $Revision$
  */
 public class JavaConfig extends ConfigTestElement implements Serializable
 {

@@ -71,7 +71,7 @@ import org.apache.log.Logger;
  * in the future.
  * 
  * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
- * @version $Id$
+ * @version $Revision$
  */
 public class JavaSamplerContext
 {
