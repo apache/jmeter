@@ -98,7 +98,11 @@ public class RemoteStart extends AbstractAction
 
     public void doAction(ActionEvent e)
     {
-        String name = ((Component) e.getSource()).getName().trim();
+        String name = ((Component) e.getSource()).getName();
+        if(name != null)
+        {
+            name = name.trim();
+        }
         String action = e.getActionCommand();
         if (action.equals("remote_stop"))
         {
