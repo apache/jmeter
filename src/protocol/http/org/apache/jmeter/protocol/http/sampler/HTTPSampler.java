@@ -1118,7 +1118,8 @@ public class HTTPSampler extends AbstractSampler
                 }
 
                 if (isImageParser()
-                    && res.getDataType().equals(HTTPSampleResult.TEXT))
+                    && res.getDataType().equals(HTTPSampleResult.TEXT)
+                    && res.isSuccessful())
                 {
                     if (frameDepth > MAX_FRAME_DEPTH)
                     {
