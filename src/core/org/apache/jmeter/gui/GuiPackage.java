@@ -108,11 +108,17 @@ public final class GuiPackage
     private Map nodesToGui = new HashMap();
     
     /**
-     * Map from String to JMeterGUIComponent, mapping the fully qualified class
-     * name of a GUI component to an instance of that component.
+     * Map from Class to JMeterGUIComponent, mapping the Class of a GUI
+     * component to an instance of that component.
      */
     private Map guis = new HashMap();
     
+    /**
+     * Map from Class to TestBeanGUI, mapping the Class of a TestBean to an
+     * instance of TestBeanGUI to be used to edit such components.
+     */
+    private Map testBeanGUIs= new HashMap();
+
     /** The currently selected node in the tree. */
     private JMeterTreeNode currentNode = null;
     
@@ -377,22 +383,28 @@ public final class GuiPackage
                IllegalAccessException,
                ClassNotFoundException
     {
-        JMeterGUIComponent comp = (JMeterGUIComponent) guis.get(guiClass);
-        if (comp == null)
-        {
-            if (guiClass == TestBeanGUI.class)
-            {
-                comp= new TestBeanGUI(testClass);
-            }
-            else
-            {
-                comp = (JMeterGUIComponent) guiClass.newInstance();
-            }
-            if (!(comp instanceof UnsharedComponent))
-            {
-                guis.put(guiClass, comp);
-            }
-        }
+        JMeterGUIComponent comp ;
+		if (guiClass == TestBeanGUI.class)
+		{
+			comp= (TestBeanGUI) testBeanGUIs.get(testClass); 
+			if (comp == null)
+			{
+				comp= new TestBeanGUI(testClass);
+				testBeanGUIs.put(testClass, comp);
+			} 
+		}
+		else
+		{
+			comp= (JMeterGUIComponent) guis.get(guiClass);
+			if (comp == null) 
+			{
+				comp = (JMeterGUIComponent) guiClass.newInstance();
+				if (!(comp instanceof UnsharedComponent))
+				{
+					guis.put(guiClass, comp);
+				}
+			} 
+		}
         return comp;
     }
 
