@@ -809,8 +809,7 @@ public class HTTPSampler extends AbstractSampler
         boolean logError=false; // Should we log the error?
         try
         {
-            if (conn.getContentEncoding() != null
-                && conn.getContentEncoding().equals("gzip"))
+            if ("gzip".equals(conn.getContentEncoding()))// works OK even if CE is null
             {
                 in=
                     new BufferedInputStream(
@@ -1086,15 +1085,29 @@ public class HTTPSampler extends AbstractSampler
 
             res.setResponseMessage(conn.getResponseMessage());
 
-            String ct= conn.getHeaderField("Content-type");
-            res.setContentType(ct);
-            if (ct != null && ct.startsWith("image/"))
+            String ct= conn.getContentType();//getHeaderField("Content-type");
+            res.setContentType(ct);// e.g. text/html; charset=ISO-8859-1
+            if (ct != null)
             {
-                res.setDataType(HTTPSampleResult.BINARY);
-            }
-            else
-            {
-                res.setDataType(HTTPSampleResult.TEXT);
+            	// Extract charset and store as DataEncoding
+            	// TODO do we need process http-equiv META tags, e.g.:
+            	// <META http-equiv="content-type" content="text/html; charset=foobar">
+            	// or can we leave that to the renderer ?
+            	String de=ct.toLowerCase();
+            	final String cs="charset=";
+            	int cset= de.indexOf(cs);
+            	if (cset >= 0)
+            	{
+                	res.setDataEncoding(de.substring(cset+cs.length()));
+            	}
+	           	if (ct.startsWith("image/"))
+	            {
+	                res.setDataType(HTTPSampleResult.BINARY);
+	            }
+	            else
+	            {
+	                res.setDataType(HTTPSampleResult.TEXT);
+	            }
             }
 
             res.setResponseHeaders(getResponseHeaders(conn));
