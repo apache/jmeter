@@ -85,9 +85,8 @@ import org.apache.log.Logger;
  *
  * NOTE: A single instance of file is opened and used for all threads.
  * For example, if thread-1 reads the first line and then issues a 'next()',
- * then thread-2 will be starting from line-1.
+ * then thread-2 will start from line-2.
  *
- * Use CSVRead to isolate the file usage between different threads.
  *
  * @author Cyrus M.
  * @version $Revision$ Last Updated: $Date$
@@ -107,8 +106,6 @@ public class CSVRead extends AbstractFunction implements Serializable
 
     private static FileDataContainer fileData;
 
-    private String myValue = "<please supply a file>"; // Default value
-    private String myName = "CSVRead_"; // Name to store value in
     private Object[] values;
     private BufferedReader myBread; // Buffered reader
 
@@ -121,7 +118,6 @@ public class CSVRead extends AbstractFunction implements Serializable
 
     public CSVRead()
     {
-        myName = "ThreadStringFromFile_";
     }
 
     public Object clone()
@@ -138,6 +134,8 @@ public class CSVRead extends AbstractFunction implements Serializable
         Sampler currentSampler)
         throws InvalidVariableException
     {
+    	String columnOrNext="";
+    	String myValue = "";
         try
         {
 
@@ -147,18 +145,26 @@ public class CSVRead extends AbstractFunction implements Serializable
             fileName =
                 ((org.apache.jmeter.engine.util.CompoundVariable) values[0])
                     .execute();
-            myName =
+            columnOrNext =
                 ((org.apache.jmeter.engine.util.CompoundVariable) values[1])
                     .execute();
 
             // instantiates the fileDataContainer if one not already present.
-            FileDataContainer fileData = getFileData(fileName);
+            FileDataContainer myfileData = getFileData(fileName);
 
             // if argument is 'next' - go to the next line
-            if (myName.equals("next()") || myName.equals("next"))
+            if (columnOrNext.equals("next()") || columnOrNext.equals("next"))
             {
-                fileData.incrementRowPosition();
+                myfileData.incrementRowPosition();
                 storeCurrentLine(null);
+                /*
+                 * All done now ,so return the empty string - this allows the caller to
+                 * append __CSVRead(file,next) to the last instance of __CSVRead(file,col)
+                 * 
+                 * N.B. It is important not to read any further lines at this point, otherwise
+                 * the wrong line can be retrieved when using multiple threads. 
+                 */
+                 return "";
             }
 
             // see if we already have read a line for this thread ...
@@ -166,34 +172,37 @@ public class CSVRead extends AbstractFunction implements Serializable
 
             // if no lines associated with this thread - then read, process and
             // store...
-            if (fileData != null && processedLines == null)
+            if (myfileData != null && processedLines == null)
             {
-                processedLines = (ArrayList) fileData.getNextLine();
+                processedLines = (ArrayList) myfileData.getNextLine();
                 this.storeCurrentLine(processedLines);
             }
 
-            //  get the current line number
-            int columnIndex = 0;
             try
             {
-                columnIndex = Integer.parseInt(myName);
+                int columnIndex = Integer.parseInt(columnOrNext); // what column is wanted?
                 myValue = (String) processedLines.get(columnIndex);
             }
-            catch (Exception e)
+            catch (NumberFormatException e)
             {
-                myValue = "";
+                log.warn("Column number error: " + columnOrNext + " "+ e.toString());
             }
-
-            log.debug(
-                Thread.currentThread().getName()
+			catch (IndexOutOfBoundsException e)
+			{
+				log.warn("Invalid column number: " + columnOrNext + " "+ e.toString());
+			}
+			if (log.isDebugEnabled()){
+				log.debug(
+                  Thread.currentThread().getName() + " " + getId()
                     + ">>>> execute ("
                     + fileName
                     + " , "
-                    + myName
+                    + columnOrNext
                     + ")   "
                     + this.hashCode());
+			}
         }
-        catch (Exception e)
+        catch (IOException e)
         {
             log.error("execute", e);
         }
@@ -215,12 +224,12 @@ public class CSVRead extends AbstractFunction implements Serializable
     protected synchronized FileDataContainer getFileData(String fileName)
         throws IOException
     {
-        if (fileData == null)
+        if (CSVRead.fileData == null)
         {
-            fileData = load(fileName);
+			CSVRead.fileData = load(fileName);
         }
 
-        return fileData;
+        return CSVRead.fileData;
     }
 
     protected String getId()
@@ -256,7 +265,7 @@ public class CSVRead extends AbstractFunction implements Serializable
     private synchronized FileDataContainer load(String fileName)
         throws IOException
     {
-        FileDataContainer fileData = new FileDataContainer();
+        FileDataContainer myfileData = new FileDataContainer();
         openFile(fileName);
 
         if (null != myBread)
@@ -267,12 +276,12 @@ public class CSVRead extends AbstractFunction implements Serializable
                 String line = myBread.readLine();
                 while (line != null)
                 {
-                    fileData.addLine(line);
+                    myfileData.addLine(line);
                     line = myBread.readLine();
                 }
                 myBread.close();
-                setFileData(fileData);
-                return fileData;
+                setFileData(myfileData);
+                return myfileData;
             }
             catch (java.io.IOException e)
             {
@@ -280,7 +289,7 @@ public class CSVRead extends AbstractFunction implements Serializable
                 throw e;
             }
         }
-        return fileData;
+        return myfileData;
     }
     
     private void openFile(String fileName)
@@ -302,7 +311,10 @@ public class CSVRead extends AbstractFunction implements Serializable
      */
     protected ArrayList reloadCurrentLine() throws InvalidVariableException
     {
-        log.debug(getId() + "reloaded " + getThreadData().get(getId()));
+    	if (log.isDebugEnabled()){
+            log.debug( Thread.currentThread().getName() 
+                + " " + getId() + " reloaded " + getThreadData().get(getId()));
+    	}
 
         return (ArrayList) getThreadData().get(getId());
     }
@@ -312,7 +324,7 @@ public class CSVRead extends AbstractFunction implements Serializable
      */
     protected synchronized void reset()
     {
-        log.debug(getId() + "reseting .... ");
+        log.debug(Thread.currentThread().getName() + " " +getId() + " reseting .... ");
         this.setFileData(null);
         CSVRead.threadData = new Hashtable();
     }
@@ -322,7 +334,7 @@ public class CSVRead extends AbstractFunction implements Serializable
      */
     protected synchronized void setFileData(FileDataContainer newValue)
     {
-        fileData = newValue;
+		CSVRead.fileData = newValue;
     }
     
     /**
@@ -331,7 +343,7 @@ public class CSVRead extends AbstractFunction implements Serializable
     public void setParameters(Collection parameters)
         throws InvalidVariableException
     {
-        log.debug(getId() + "setParameter - Collection" + parameters);
+        log.debug(Thread.currentThread().getName() + " " + getId() + "setParameter - Collection" + parameters);
 
         reset();
         values = parameters.toArray();
@@ -350,8 +362,9 @@ public class CSVRead extends AbstractFunction implements Serializable
         throws InvalidVariableException
     {
         String id = getId();
-        log.debug(id + "storing " + currentLine);
-
+        if (log.isDebugEnabled()){
+        	log.debug(Thread.currentThread().getName() + " " + id + " storing " + currentLine);
+        }
         if (currentLine == null)
         {
             getThreadData().remove(id);
