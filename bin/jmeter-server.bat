@@ -1,4 +1,4 @@
-@echo on
+@echo off
 
 set PROP=jmeter.properties
 set LOG4JCONFIG=log4j.configuration=log4j.conf

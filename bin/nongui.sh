@@ -1,4 +1,5 @@
 #!/bin/sh
+
 USAGE=$0" [-h proxyHost] [-p proxyPort] [-f property-file] [-o jmeter script file]"
 LOG4JCONFIG=log4j.configuration=log4j.conf
 
