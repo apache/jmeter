@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,15 +55,11 @@
 
 package org.apache.jmeter.timers.gui;
 
-import java.awt.Font;
-
+import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.ConstantTimer;
@@ -155,36 +151,20 @@ public class ConstantTimerGui extends AbstractTimerGui
 	 */
 	private void init()
 	{
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+		setBorder(makeBorder());
+		add(makeTitlePanel());
 
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("constant_timer_title"));
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
-
-		// NAME
-		mainPanel.add(getNamePanel());
-
-		// DELAY
-		JPanel delayPanel = new JPanel();
+        Box delayPanel = Box.createHorizontalBox();
 		JLabel delayLabel = new JLabel(JMeterUtils.getResString("constant_timer_delay"));
 		delayPanel.add(delayLabel);
-		delayField = new JTextField(20);
-		delayField.setText(DEFAULT_DELAY);
-		delayPanel.add(delayField);
-		mainPanel.add(delayPanel);
-		delayField.setName(DELAY_FIELD);
 
-		this.add(mainPanel);
-	}
-	
+		delayField = new JTextField(6);
+		delayField.setText(DEFAULT_DELAY);
+        delayField.setName(DELAY_FIELD);
+		delayPanel.add(delayField);
+
+		add(delayPanel);
+	}	
 }
