@@ -20,7 +20,7 @@ package org.apache.jmeter.protocol.jdbc.util;
 
 import java.io.Serializable;
 
-public class DBKey implements Serializable
+public class DBKey implements Serializable //TODO does it need to be serializable?
 {
     private final String driver;
     private final String url;
@@ -57,7 +57,11 @@ public class DBKey implements Serializable
         this.url = url;
         this.username = username;
         this.password = password;
+        
+        // All the fields used by the hashCode are now fixed, so calculate it
+        hashCode = calculateHashCode();
     }
+    
     // Dummy constructor to allow JMeter test suite to work
     public DBKey(){
     	this("","","","");
@@ -147,10 +151,7 @@ public class DBKey implements Serializable
 
     public int hashCode()
     {
-        if (hashCode == 0)
-        {
-            hashCode = calculateHashCode();
-        }
+        hashCode = calculateHashCode();
         return hashCode;
     }
     
