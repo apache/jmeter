@@ -27,7 +27,6 @@ import java.awt.Image;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -59,7 +58,6 @@ public class DistributionGraphVisualizer extends AbstractVisualizer
 
     private DistributionGraph graph;
     private JTextField noteField;
-    private JButton saveButton;
     private int delay = 10;
     private int counter = 0;
     
@@ -144,13 +142,13 @@ public class DistributionGraphVisualizer extends AbstractVisualizer
         this.setBorder(margin);
 
         // Set up the graph with header, footer, Y axis and graph display
-        JPanel graphPanel = new JPanel(new BorderLayout());
-        graphPanel.add(createGraphPanel(), BorderLayout.CENTER);
-        graphPanel.add(createGraphInfoPanel(), BorderLayout.SOUTH);
+        JPanel lgraphPanel = new JPanel(new BorderLayout());
+        lgraphPanel.add(createGraphPanel(), BorderLayout.CENTER);
+        lgraphPanel.add(createGraphInfoPanel(), BorderLayout.SOUTH);
 
         // Add the main panel and the graph
         this.add(makeTitlePanel(), BorderLayout.NORTH);
-        this.add(graphPanel, BorderLayout.CENTER);
+        this.add(lgraphPanel, BorderLayout.CENTER);
     }
 
     // Methods used in creating the GUI
@@ -171,34 +169,34 @@ public class DistributionGraphVisualizer extends AbstractVisualizer
         return graphPanel;
     }
 
-    /**
-     * Creates one of the fields used to display the graph's current
-     * values.
-     * 
-     * @param color   the color used to draw the value. By convention
-     *                 this is the same color that is used to draw the
-     *                 graph for this value and in the choose panel.
-     * @param length  the number of digits which the field should be
-     *                 able to display
-     * 
-     * @return        a text field configured to display one of the
-     *                 current graph values
-     */
-    private JTextField createInfoField(Color color, int length)
-    {
-        JTextField field = new JTextField(length);
-        field.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        field.setEditable(false);
-        field.setForeground(color);
-        field.setBackground(getBackground());
-
-        // The text field should expand horizontally, but have
-        // a fixed height
-        field.setMaximumSize(new Dimension(
-                    field.getMaximumSize().width,
-                    field.getPreferredSize().height));
-        return field;
-    }
+//    /**
+//     * Creates one of the fields used to display the graph's current
+//     * values.
+//     * 
+//     * @param color   the color used to draw the value. By convention
+//     *                 this is the same color that is used to draw the
+//     *                 graph for this value and in the choose panel.
+//     * @param length  the number of digits which the field should be
+//     *                 able to display
+//     * 
+//     * @return        a text field configured to display one of the
+//     *                 current graph values
+//     */
+//    private JTextField createInfoField(Color color, int length)
+//    {
+//        JTextField field = new JTextField(length);
+//        field.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+//        field.setEditable(false);
+//        field.setForeground(color);
+//        field.setBackground(getBackground());
+//
+//        // The text field should expand horizontally, but have
+//        // a fixed height
+//        field.setMaximumSize(new Dimension(
+//                    field.getMaximumSize().width,
+//                    field.getPreferredSize().height));
+//        return field;
+//    }
 
 
     /**
