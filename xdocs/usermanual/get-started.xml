@@ -145,6 +145,15 @@ Run jmeter-server/jmeter-server.bat, plus these optional commands:</p>
 -P [proxy server port]</p>
 <p><b>Example</b>: jmeter-server -H my.proxy.server -P 8000</p>
 </subsection>
+
+<subsection name="2.4.5 Overriding Properties Via The Command Line" anchor="override">
+<p>Java system properties, JMeter properties, and logging properties can be overriden directly on the command line (instead of modifying jmeter.properties).
+To do so, use the following options:</p>
+<p>-D[prop_name]=[value] - defines a java system property value.</p>
+<p>-J[prop name]=[value] - overrides a JMeter property.</p>
+<p>-L[category]=[priority] - overrides a logging setting, setting a particular category to the given priority level.</p>
+<p><b>Example</b>: jmeter -Duser.dir=/home/mstover/jmeter_stuff -Jremote_hosts=127.0.0.1 -Ljmeter.engine=DEBUG</p>
+</subsection>
 </section>
 
 <section name="2.5 Configuring JMeter" anchor="configuring_jmeter">

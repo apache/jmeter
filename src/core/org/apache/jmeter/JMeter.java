@@ -58,6 +58,8 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.Authenticator;
+import java.util.List;
+import java.util.Properties;
 
 import org.apache.avalon.excalibur.cli.CLArgsParser;
 import org.apache.avalon.excalibur.cli.CLOption;
@@ -92,7 +94,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.gui.ComponentUtil;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -102,8 +104,7 @@ import org.apache.log.Logger;
  * Window>Preferences>Java>Templates.
  */
 public class JMeter implements JMeterPlugin {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter");
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
 	private final static int PROPFILE_OPT = 'p';
 	private final static int TESTFILE_OPT = 't';
@@ -116,6 +117,9 @@ public class JMeter implements JMeterPlugin {
 	protected static final int PROXY_PORT = 'P';
 	protected static final int PROXY_USERNAME = 'u';
 	protected static final int PROXY_PASSWORD = 'a';
+	private   static final int JMETER_PROPERTY = 'J';
+	private   static final int SYSTEM_PROPERTY = 'D';
+	private   static final int LOGLEVEL = 'L';
 
 	/**
 	 *  Define the understood options. Each CLOptionDescriptor contains:
@@ -183,6 +187,24 @@ public class JMeter implements JMeterPlugin {
 				CLOptionDescriptor.ARGUMENT_REQUIRED,
 				PROXY_PASSWORD,
 				"Set password for proxy server that JMeter is to use"),
+			new CLOptionDescriptor(
+				"jmeterproperty",
+				CLOptionDescriptor.DUPLICATES_ALLOWED
+				| CLOptionDescriptor.ARGUMENTS_REQUIRED_2,
+				JMETER_PROPERTY,
+				"Define additional JMeter properties"),
+			new CLOptionDescriptor(
+				"systemproperty",
+				CLOptionDescriptor.DUPLICATES_ALLOWED
+				| CLOptionDescriptor.ARGUMENTS_REQUIRED_2,
+				SYSTEM_PROPERTY,
+				"Define additional JMeter properties"),
+			new CLOptionDescriptor(
+				"loglevel",
+				CLOptionDescriptor.DUPLICATES_ALLOWED
+				| CLOptionDescriptor.ARGUMENTS_REQUIRED_2,
+				LOGLEVEL,
+				"Define loglevel: [category=]level e.g. jorphan=INFO or jmeter.util=DEBUG"),
 			};
 
 	public JMeter() {
@@ -214,6 +236,7 @@ public class JMeter implements JMeterPlugin {
 			try
 			{
 				File f = new File(testFile.getArgument());
+				log.info("Loading file: "+f);
 				FileInputStream reader = new FileInputStream(f);
 				HashTree tree = SaveService.loadSubTree(reader);
 				new Load().insertLoadedTree(1,tree);
@@ -238,6 +261,7 @@ public class JMeter implements JMeterPlugin {
 		try {
 			initializeProperties(parser);
 			setProxy(parser);
+			log.info("Version " + JMeterUtils.getJMeterVersion());
 			if (parser.getArgumentById(VERSION_OPT) != null) {
 				System.out.println(
 					"Apache JMeter, Copyright (c) 2002 The Apache Software Foundation");
@@ -314,6 +338,49 @@ public class JMeter implements JMeterPlugin {
 				File.separator + "bin" + File.separator + "jmeter.properties");
 		}
 		JMeterUtils.setJMeterHome(NewDriver.getJMeterDir());
+
+//		Process command line property definitions (can occur multiple times)
+
+		Properties jmeterProps = JMeterUtils.getJMeterProperties();
+		List clOptions = parser.getArguments();
+		int size = clOptions.size();
+
+		for (int i = 0; i < size; i++) {
+			CLOption option = (CLOption) clOptions.get(i);
+			String name=option.getArgument(0);
+			String value=option.getArgument(1);
+
+			switch (option.getId()) {
+				case SYSTEM_PROPERTY:
+					if (value.length() > 0){ // Set it
+						log.info("Setting System property: "+name+"="+value);
+						System.getProperties().setProperty(name,value);
+					} else { // Reset it
+						log.warn("Removing System property: "+name);
+						System.getProperties().remove(name);
+					}
+					break;
+				case JMETER_PROPERTY:
+					if (value.length() > 0){ // Set it
+						log.info("Setting JMeter property: "+name+"="+value);
+						jmeterProps.setProperty(name,value);
+					} else { // Reset it
+						log.warn("Removing JMeter property: "+name);
+						jmeterProps.remove(name);
+					}
+					break;
+				case LOGLEVEL:
+					if (value.length() > 0){ // Set category
+						log.info("LogLevel: "+name+"="+value);
+						LoggingManager.setPriority(value,name);
+					} else { // Set root level
+						log.warn("LogLevel: "+name);
+						LoggingManager.setPriority(name);
+					}
+					break;
+			}
+		}
+		
 	}
 
 	public void startServer() {
@@ -342,7 +409,7 @@ public class JMeter implements JMeterPlugin {
 		}
 	}
 
-	private void run(String testFile, String logFile) {
+	private void run(String testFile, String logFile) {// run test in batch mode
 		FileInputStream reader = null;
 		try {
 			File f = new File(testFile);
@@ -352,6 +419,7 @@ public class JMeter implements JMeterPlugin {
 			}
 
 			reader = new FileInputStream(f);
+			log.info("Loading file: "+f);
 
 			HashTree tree = SaveService.loadSubTree(reader);
 			if(logFile != null)
