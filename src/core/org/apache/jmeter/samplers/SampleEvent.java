@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,31 +52,39 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.samplers;
+package org.apache.jmeter.samplers;
+
+import java.io.Serializable;
 
 /**
  * Packages information regarding the target of a sample event,
  * such as the result from that event and the thread group it
  * ran in.
+ * 
+ * @version $Revision$
  */
-public class SampleEvent implements java.io.Serializable {
-	 SampleResult result;
-	 String threadGroup;
+public class SampleEvent implements Serializable
+{
+    SampleResult result;
+    String threadGroup;
 
-	 public SampleEvent()
-	 {
-	 }
+    public SampleEvent()
+    {
+    }
 
-	 public SampleEvent(SampleResult result, String threadGroup) {
-	this.result=result;
-	this.threadGroup=threadGroup;
-	 }
+    public SampleEvent(SampleResult result, String threadGroup)
+    {
+        this.result = result;
+        this.threadGroup = threadGroup;
+    }
 
-	 public SampleResult getResult() {
-	return result;
-	 }
+    public SampleResult getResult()
+    {
+        return result;
+    }
 
-	 public String getThreadGroup() {
-	return threadGroup;
-	 }
+    public String getThreadGroup()
+    {
+        return threadGroup;
+    }
 }
