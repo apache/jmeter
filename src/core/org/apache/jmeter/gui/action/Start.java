@@ -80,15 +80,21 @@ public class Start extends AbstractAction
         }
         else if (e.getActionCommand().equals(JMeterMenuBar.ACTION_STOP))
         {
-            GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
-            engine.stopTest();
-            engine = null;
+        	if (engine != null)
+        	{
+	            GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
+	            engine.stopTest();
+	            engine = null;
+        	}
         }
         else if (e.getActionCommand().equals(JMeterMenuBar.ACTION_SHUTDOWN))
         {
-        	GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
-        	engine.askThreadsToStop();
-        	engine = null;
+        	if (engine != null)
+        	{
+	        	GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
+	        	engine.askThreadsToStop();
+	        	engine = null;
+        	}
         }
     }
 
