@@ -794,6 +794,17 @@ out of the return page and puts them in the inputVar variable</p>
 </properties>
 </component>
 
+<component name="Runtime Controller" index="15.2.12" screenshot="">
+	<description>
+		<p>The Runtime Controller controls how long its children are allowed to run.
+		</p>
+	</description>
+<properties>
+	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+	<property name="Runtime (seconds)" required="Yes">Desired runtime in seconds</property>
+</properties>
+</component>
+
 </section>
 
 <section name="15.3 Listeners" anchor="listeners">
@@ -1347,8 +1358,19 @@ pattern. You can attach multiple assertions to any controller for additional fle
 </description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Response Field to Test" required="Yes">Instructs JMeter to test
-                against either the Response Text from the server, or against the URL string that was sampled.</property>
+        <property name="Response Field to Test" required="Yes">Instructs JMeter which field of the Response to test.
+                This may be the Response Text from the server, the URL string that was sampled,
+                the Response Code (e.g. 404) or the Response Message (e.g. Not Found).
+                <p>
+                The overall success of the sample is determined by combining the result of the
+                assertion with the existing Response status.
+                When the Ignore Status checkbox is selected, the Response status is forced
+                to successful before evaluating the Assertion.
+                </p>
+                HTTP Responses with statuses in the 4xx and 5xx ranges are normally
+                regarded as unsuccessful. 
+                The checkbox can be used to regard a 404 status as successful.
+                </property>
         <property name="Pattern Matching Rules" required="Yes">Indicates whether the text being tested
         must CONTAIN or MATCH the test patterns.  NOT may also be selected to indicate the text
         should NOT CONTAIN or NOT MATCH the test patterns.</property>
@@ -1411,9 +1433,29 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 
 <properties>
 <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-<property name="Script" required="Yes">The BeanShell script to run</property>
-
+<property name="Parameters" required="No">Parameters to pass to the BeanShell script.
+	The parameters are stored in the following variables:
+	<ul>
+		<li>Parameters - string containing the parameters as a single variable</li>
+	    <li>bsh.args - String array containing parameters, split on white-space</li>
+	</ul></property>
+<property name="Script file" required="No">A file containing the BeanShell script to run</property>
+<property name="Script" required="No">The BeanShell script to run</property>
 </properties>
+<p>The following variables are defined to the script:
+<ul>
+	<li>Response - the response Object; read-write</li>
+	<li>Failure - boolean; read-write; used to set the Assertion status</li>
+	<li>FailureMessage - String; read-write; used to set the Assertion message</li>
+	<li>ResponseData - the response body</li>
+	<li>ResponseCode - e.g. 200</li>
+	<li>ResponseMessage - e.g. OK</li>
+	<li>ResponseHeaders - contains the HTTP headers</li>
+	<li>RequestHeaders - containse the HTTP headers sent to the server</li>
+	<li>SampleLabel</li>
+	<li>SamplerData</li>
+</ul>
+</p>
 </component>
 
 <component index="15.5.6" name="MD5Hex Assertion">

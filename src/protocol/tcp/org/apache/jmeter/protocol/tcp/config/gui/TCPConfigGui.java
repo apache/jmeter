@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -34,7 +33,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
- * @version   $Revision$ $Date$
  */
 public class TCPConfigGui extends AbstractConfigGui
 {
@@ -164,6 +162,7 @@ public class TCPConfigGui extends AbstractConfigGui
 	{    	
 		JLabel reqLabel = new JLabel(JMeterUtils.getResString("tcp_request_data"));
 		requestData = new JTextArea(3,0);
+		requestData.setLineWrap(true);
 		requestData.setName(REQUEST);
 		reqLabel.setLabelFor(requestData);
 	

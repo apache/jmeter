@@ -359,12 +359,8 @@ public class CookieManager
                 {
                     String expires = nvp.substring(index + 1);
                     Date date = dateFormat.parse(expires);
-                    if (date.getTime() > System.currentTimeMillis())
-                        //TODO: why this conditional? If it's expired, it's
-                        // expired!
-                    {
-                        newCookie.setExpires(date.getTime());
-                    }
+                    //Always set expiry date - see Bugzilla id 29493
+                    newCookie.setExpires(date.getTime());
                 }
                 catch (ParseException pe)
                 {

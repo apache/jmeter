@@ -118,6 +118,10 @@ public class UserParametersGui extends AbstractPreProcessorGui
      */
     public void modifyTestElement(TestElement params)
     {
+       if (paramTable.isEditing())
+       {
+          paramTable.getCellEditor().stopCellEditing();
+       }
         ((UserParameters) params).setNames(
             new CollectionProperty(
                 UserParameters.NAMES,
