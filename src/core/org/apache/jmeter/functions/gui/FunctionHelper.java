@@ -182,7 +182,7 @@ public class FunctionHelper
         public void actionPerformed(ActionEvent e)
         {
             String[] source =
-                new String[] { Help.HELP_PAGE,
+                new String[] { Help.HELP_FUNCTIONS,
                     functionList.getText()};
             ActionEvent helpEvent = new ActionEvent(source, e.getID(), "help");
             ActionRouter.getInstance().actionPerformed(helpEvent);
