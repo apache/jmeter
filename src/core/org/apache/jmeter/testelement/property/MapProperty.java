@@ -33,6 +33,19 @@ public class MapProperty extends AbstractProperty
             value = normalizeMap((Map) v);
         }
     }
+    
+    public void addProperty(JMeterProperty prop)
+    {
+        if(value.size() == 0 || valueIterator().next().getClass().equals(prop.getClass()))
+        {
+            value.put(prop.getName(),prop);
+        }
+    }
+    
+    public JMeterProperty get(String key)
+    {
+        return (JMeterProperty)value.get(key);
+    }
 
     /**
          * Figures out what kind of properties this collection is holding and
