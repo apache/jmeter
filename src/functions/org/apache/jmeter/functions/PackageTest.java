@@ -147,6 +147,8 @@ public class PackageTest extends JMeterTestCase
     public void SplitTest1() throws Exception
     {
     	SplitFunction split=null;
+    	String src="";
+    	
     	try
 		{
 		    split = SplitParams("a,b,c",null,null);
@@ -156,42 +158,54 @@ public class PackageTest extends JMeterTestCase
 		{
     		//OK
 		}
-	    split = SplitParams("a,b,c","VAR1",null);
-    	split.execute();
-    	assertEquals("a,b,c",vars.get("VAR1"));
+    	src="a,b,c";
+	    split = SplitParams(src,"VAR1",null);
+    	assertEquals(src,split.execute());
+    	assertEquals(src,vars.get("VAR1"));
     	assertEquals("3",vars.get("VAR1_n"));
     	assertEquals("a",vars.get("VAR1_1"));
     	assertEquals("b",vars.get("VAR1_2"));
     	assertEquals("c",vars.get("VAR1_3"));
     	assertNull(vars.get("VAR1_4"));
 
-    	split = SplitParams("a,b,c","VAR2",",");
-    	split.execute();
-    	assertEquals("a,b,c",vars.get("VAR2"));
+    	split = SplitParams(src,"VAR2",",");
+    	assertEquals(src,split.execute());
+    	assertEquals(src,vars.get("VAR2"));
     	assertEquals("3",vars.get("VAR2_n"));
     	assertEquals("a",vars.get("VAR2_1"));
     	assertEquals("b",vars.get("VAR2_2"));
     	assertEquals("c",vars.get("VAR2_3"));
     	assertNull(vars.get("VAR2_4"));
 
-    	split = SplitParams("a|b|c","VAR3","|");
-    	split.execute();
-    	assertEquals("a|b|c",vars.get("VAR3"));
+
+    	src = "a|b|c";
+    	split = SplitParams(src,"VAR3","|");
+    	assertEquals(src,split.execute());
+    	assertEquals(src,vars.get("VAR3"));
     	assertEquals("3",vars.get("VAR3_n"));
     	assertEquals("a",vars.get("VAR3_1"));
     	assertEquals("b",vars.get("VAR3_2"));
     	assertEquals("c",vars.get("VAR3_3"));
     	assertNull(vars.get("VAR3_4"));
 
-    	split = SplitParams("a|b||","VAR4","|");
-    	split.execute();
-    	assertEquals("a|b||",vars.get("VAR4"));
+    	src="a|b||";
+    	split = SplitParams(src,"VAR4","|");
+    	assertEquals(src,split.execute());
+    	assertEquals(src,vars.get("VAR4"));
     	assertEquals("3",vars.get("VAR4_n"));
     	assertEquals("a",vars.get("VAR4_1"));
     	assertEquals("b",vars.get("VAR4_2"));
     	assertEquals("?",vars.get("VAR4_3"));
     	assertNull(vars.get("VAR4_5"));
 
+    	src="a,,c";
+    	vars.put("VAR",src);
+    	split = SplitParams("${VAR}","VAR",null);
+    	assertEquals(src,split.execute());
+    	assertEquals("3",vars.get("VAR_n"));
+    	assertEquals("a",vars.get("VAR_1"));
+    	assertEquals("?",vars.get("VAR_2"));
+    	assertEquals("c",vars.get("VAR_3"));
     }
     
     public void SFFTest1() throws Exception
