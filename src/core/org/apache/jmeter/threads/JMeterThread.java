@@ -216,6 +216,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
             threadContext = JMeterContextService.getContext();
             threadContext.setVariables(threadVars);
             threadContext.setThreadNum(getThreadNum());
+            threadContext.setThread(this);
             testTree.traverse(compiler);
             running = true;
             //listeners = controller.getListeners();
@@ -354,12 +355,21 @@ public class JMeterThread implements Runnable, java.io.Serializable
 		//engine.stopTest();
 		if (engine != null ) engine.askThreadsToStop();
 	}
+
 	private void stopThread()
 	{
 		running = false;
 		log.info("Stop Thread detected by thread " + threadName);
 	}
 
+	public void pauseThread(int milis)
+	{
+		try
+		{
+			Thread.sleep(milis);
+		}
+		catch (InterruptedException e) {}
+	}
 
     private void checkAssertions(List assertions, SampleResult result)
     {
@@ -493,6 +503,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
             notifyTestListeners();
         }
     }
+    
     /**
      * Save the engine instance for access to the stop methods
      * 
