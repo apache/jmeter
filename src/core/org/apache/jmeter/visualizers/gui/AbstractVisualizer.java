@@ -61,11 +61,9 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
 
     protected Component getFilePanel()
     {
-        Box panel = Box.createHorizontalBox();
-        panel.add(filePanel);
-        panel.add(getErrorLoggingCheckbox());
-        panel.add(Box.createHorizontalGlue());
-        return panel;
+        filePanel.add(getErrorLoggingCheckbox());
+        //filePanel.add(Box.createHorizontalGlue());
+        return filePanel;
     }
 
     public void setFile(String filename)

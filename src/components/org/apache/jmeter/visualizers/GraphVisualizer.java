@@ -557,4 +557,12 @@ public class GraphVisualizer extends AbstractVisualizer
 
         return row;
     }
+    /* (non-Javadoc)
+     * @see java.awt.Component#getPreferredSize()
+     */
+    public Dimension getPreferredSize()
+    {
+        return getMinimumSize();
+    }
+
 }

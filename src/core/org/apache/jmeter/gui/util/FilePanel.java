@@ -61,11 +61,9 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -81,7 +79,7 @@ import org.apache.jmeter.util.JMeterUtils;
  *@version    1.0
  */
 
-public class FilePanel extends JPanel implements ActionListener
+public class FilePanel extends HorizontalPanel implements ActionListener
 {
 
 	JTextField filename = new JTextField(20);
@@ -125,7 +123,6 @@ public class FilePanel extends JPanel implements ActionListener
 	 */
 	private void init()
 	{
-		setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
 		setBorder(BorderFactory.createTitledBorder(title));
 		add(label);
         add(Box.createHorizontalStrut(5));
@@ -133,13 +130,9 @@ public class FilePanel extends JPanel implements ActionListener
         add(Box.createHorizontalStrut(5));
 		filename.addActionListener(this);
 		add(browse);
-        add(Box.createHorizontalGlue());
 		browse.setActionCommand("browse");
 		browse.addActionListener(this);
-        
-        // Allow this component to expand horizontally but not vertically
-        setMaximumSize(
-            new Dimension(getMaximumSize().width, getPreferredSize().height));
+
 	}
 
 	/**
