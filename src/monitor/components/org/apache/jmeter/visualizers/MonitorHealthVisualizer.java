@@ -64,9 +64,9 @@ public class MonitorHealthVisualizer extends AbstractVisualizer
     	init();
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("monitor_health_title");
+        return "monitor_health_title";
     }
 
 	/**
