@@ -2,7 +2,6 @@ package org.apache.jmeter.modifiers;
 import java.io.Serializable;
 
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.engine.event.IterationDeliverEvent;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.engine.util.NoThreadClone;
@@ -80,11 +79,6 @@ public class CounterConfig
 			}	
 		}			
 	}
-	
-	/**
-	 * @see org.apache.jmeter.engine.event.IterationListener#iteration(org.apache.jmeter.engine.event.IterationEvent)
-	 */
-	public void iteration(IterationDeliverEvent event) {}
 	
 	public void setStart(int start)
 	{
