@@ -54,17 +54,12 @@
  */
 package org.apache.jmeter.functions;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
@@ -84,18 +79,19 @@ import org.apache.log.Logger;
  *   ${_CSVRead(c:/BOF/abcd.csv,next())}  // Go to next line of
 'c:/BOF/abcd.csv'
  *
- * NOTE: A single instance of file is opened and used for all threads.
- * For example, if thread-1 reads the first line and then issues a 'next()',
- * then thread-2 will start from line-2.
- *
+ * NOTE: A single instance of each different file is opened and used for all threads.
+ * 
+ * To open the same file twice, use the alias function:
+ *  __CSVRead(abc.csv,*ONE);
+ *  __CSVRead(abc.csv,*TWO);
+ * 
+ *  __CSVRead(*ONE,1); etc
+ * 
  *
  * @author Cyrus M.
+ * @author sebb AT apache DOT org (multi-file version)
+ * 
  * @version $Revision$ Last Updated: $Date$
- */
-
-/*
- * It appears that JMeter instantiates a new copy of each function for
- * every reference in a Sampler or elsewhere.
  */
 public class CSVRead extends AbstractFunction implements Serializable
 {
@@ -105,13 +101,9 @@ public class CSVRead extends AbstractFunction implements Serializable
 
     private static final List desc = new LinkedList();
 
-    private static FileDataContainer fileData;
-
-    private Object[] values;
-    private BufferedReader myBread; // Buffered reader
-
-    private static Hashtable threadData = null;
-
+    
+    private Object[] values; // Parameter list
+    
     static {
         desc.add(JMeterUtils.getResString("csvread_file_file_name"));
         desc.add(JMeterUtils.getResString("column_number"));
@@ -135,85 +127,59 @@ public class CSVRead extends AbstractFunction implements Serializable
         Sampler currentSampler)
         throws InvalidVariableException
     {
-    	String columnOrNext="";
     	String myValue = "";
-        try
-        {
 
-            ArrayList processedLines = null;
-            String fileName = null;
-
-            fileName =
+        String fileName =
                 ((org.apache.jmeter.engine.util.CompoundVariable) values[0])
                     .execute();
-            columnOrNext =
+        String columnOrNext =
                 ((org.apache.jmeter.engine.util.CompoundVariable) values[1])
                     .execute();
 
-            // instantiates the fileDataContainer if one not already present.
-            FileDataContainer myfileData = getFileData(fileName);
+		log.debug("execute (" + fileName + " , " + columnOrNext + ")   ");
 
-            // if argument is 'next' - go to the next line
-            if (columnOrNext.equals("next()") || columnOrNext.equals("next"))
-            {
-                storeCurrentLine(null);
-                /*
-                 * All done now ,so return the empty string - this allows the caller to
-                 * append __CSVRead(file,next) to the last instance of __CSVRead(file,col)
-                 * 
-                 * N.B. It is important not to read any further lines at this point, otherwise
-                 * the wrong line can be retrieved when using multiple threads. 
-                 */
-                 return "";
-            }
-
-            // see if we already have read a line for this thread ...
-            processedLines = reloadCurrentLine();
-
-            // if no lines associated with this thread - then read, process and
-            // store...
-            if (myfileData != null && processedLines == null)
-            {
-                processedLines = (ArrayList) myfileData.getNextLine();
-				myfileData.incrementRowPosition();
-                this.storeCurrentLine(processedLines);
-            }
-
-            try
-            {
-                int columnIndex = Integer.parseInt(columnOrNext); // what column is wanted?
-                if (processedLines != null) {
-					myValue = (String) processedLines.get(columnIndex);
-                } else {
-                	log.error("No file data found");
-                }
-                
-            }
-            catch (NumberFormatException e)
-            {
-                log.warn("Column number error: " + columnOrNext + " "+ e.toString());
-            }
-			catch (IndexOutOfBoundsException e)
-			{
-				log.warn("Invalid column number: " + columnOrNext + " "+ e.toString());
-			}
-			if (log.isDebugEnabled()){
-				log.debug(
-                  Thread.currentThread().getName() + " " + getId()
-                    + ">>>> execute ("
-                    + fileName
-                    + " , "
-                    + columnOrNext
-                    + ")   "
-                    + this.hashCode());
-			}
-        }
-        catch (IOException e)
+        // Process __CSVRead(filename,*ALIAS)
+        if (columnOrNext.startsWith("*"))
         {
-            log.error("execute", e);
+            FileWrapper.open(fileName,columnOrNext);
+            /*
+             * All done, so return
+             */
+            return "";
+        }  
+            
+        // if argument is 'next' - go to the next line
+        if (columnOrNext.equals("next()") || columnOrNext.equals("next"))
+        {
+        	FileWrapper.endRow(fileName);
+        
+            /*
+             * All done now ,so return the empty string - this allows the caller to
+             * append __CSVRead(file,next) to the last instance of __CSVRead(file,col)
+             * 
+             * N.B. It is important not to read any further lines at this point, otherwise
+             * the wrong line can be retrieved when using multiple threads. 
+             */
+             return "";
         }
-        return myValue;
 
+        try
+        {
+            int columnIndex = Integer.parseInt(columnOrNext); // what column is wanted?
+            myValue = FileWrapper.getColumn(fileName,columnIndex);
+        }
+        catch (NumberFormatException e)
+        {
+            log.warn("Column number error: " + columnOrNext + " "+ e.toString());
+        }
+		catch (IndexOutOfBoundsException e)
+		{
+			log.warn("Invalid column number: " + columnOrNext + " "+ e.toString());
+		}
+
+        log.debug("execute value: "+myValue);
+        
+        return myValue;
     }
 
     /**
@@ -225,25 +191,6 @@ public class CSVRead extends AbstractFunction implements Serializable
     }
 
     /**
-     * get the FileDataContainer
-     */
-    protected synchronized FileDataContainer getFileData(String fileName)
-        throws IOException
-    {
-        if (CSVRead.fileData == null)
-        {
-			CSVRead.fileData = load(fileName);
-        }
-
-        return CSVRead.fileData;
-    }
-
-    protected String getId()
-    {
-        return "" + Thread.currentThread().hashCode();
-    }
-
-    /**
      * @see org.apache.jmeter.functions.Function#getReferenceKey()
      */
     public String getReferenceKey()
@@ -252,132 +199,32 @@ public class CSVRead extends AbstractFunction implements Serializable
     }
     
     /**
-     * Creation date: (24/03/2003 17:11:30)
-     * @return java.util.Hashtable
-     */
-    protected static synchronized Hashtable getThreadData()
-    {
-        if (threadData == null)
-        {
-            threadData = new Hashtable();
-        }
-
-        return threadData;
-    }
-    
-    /**
-     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-     */
-    private synchronized FileDataContainer load(String fileName)
-        throws IOException
-    {
-        FileDataContainer myfileData = new FileDataContainer();
-        openFile(fileName);
-
-        if (null != myBread)
-        { // Did we open the file?
-
-            try
-            {
-                String line = myBread.readLine();
-                while (line != null)
-                {
-                    myfileData.addLine(line);
-                    line = myBread.readLine();
-                }
-                myBread.close();
-                setFileData(myfileData);
-                return myfileData;
-            }
-            catch (java.io.IOException e)
-            {
-                log.error("load(" + fileName + ")", e);
-                throw e;
-            }
-        }
-        return myfileData;
-    }
-    
-    private void openFile(String fileName)
-    {
-        try
-        {
-            FileReader fis = new FileReader(fileName);
-            myBread = new BufferedReader(fis);
-        }
-        catch (FileNotFoundException e)
-        {
-            log.error(e.toString());
-        }
-    }
-    
-    /**
-     * this is for version 1.8.1 only -
-     * @deprecated
-     */
-    protected ArrayList reloadCurrentLine() throws InvalidVariableException
-    {
-    	if (log.isDebugEnabled()){
-            log.debug( Thread.currentThread().getName() 
-                + " " + getId() + " reloaded " + getThreadData().get(getId()));
-    	}
-
-        return (ArrayList) getThreadData().get(getId());
-    }
-
-    /**
-     * reset - resets the file - so the file is read in the next iteration
-     */
-    protected synchronized void reset()
-    {
-        log.debug(Thread.currentThread().getName() + " " +getId() + " reseting .... ");
-        this.setFileData(null);
-        CSVRead.threadData = new Hashtable();
-    }
-
-    /**
-     * Set the FileDataContainer.
-     */
-    protected synchronized void setFileData(FileDataContainer newValue)
-    {
-		CSVRead.fileData = newValue;
-    }
-    
-    /**
      * @see org.apache.jmeter.functions.Function#setParameters(Collection)
      */
     public void setParameters(Collection parameters)
         throws InvalidVariableException
     {
-        log.debug(Thread.currentThread().getName() + " " + getId() + "setParameter - Collection" + parameters);
+   		log.debug("setParameter - Collection.size=" + parameters.size());
 
-        reset();
         values = parameters.toArray();
 
-        if (values.length > 2)
-        {
-            throw new InvalidVariableException();
-        }
-    }
+		if (log.isDebugEnabled()){
+			for (int i=0;i <parameters.size();i++){
+				log.debug("i:"+((CompoundVariable)values[i]).execute());
+			}
+		}
 
-    /**
-     * this is for version 1.8.1 only -
-     * @deprecated
-     */
-    public void storeCurrentLine(ArrayList currentLine)
-        throws InvalidVariableException
-    {
-        String id = getId();
-        if (log.isDebugEnabled()){
-        	log.debug(Thread.currentThread().getName() + " " + id + " storing " + currentLine);
-        }
-        if (currentLine == null)
+        if (values.length != 2)
         {
-            getThreadData().remove(id);
+            throw new InvalidVariableException("Wrong number of parameters; 2 != "+values.length);
         }
-        else
-        {
-            getThreadData().put(id, currentLine);
-        }
+        
+        /*
+         * Need to reset the containers for repeated runs; about the only way for 
+         * functions to detect that a run is starting seems to be the setParameters()
+         * call.
+        */
+		FileWrapper.clearAll();//TODO only clear the relevant entry - if possible...
+
     }
 }
