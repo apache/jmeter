@@ -66,7 +66,7 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter
          MarshallingContext context)
    {
       TestElementProperty prop = (TestElementProperty) arg0;
-      writer.addAttribute("name", prop.getName());
+      writer.addAttribute("name", ConversionHelp.encode(prop.getName()));
       writer.addAttribute("elementType", prop.getObjectValue().getClass()
             .getName());
       PropertyIterator iter = prop.iterator();
@@ -89,7 +89,7 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter
       {
          TestElementProperty prop = (TestElementProperty) createCollection(context
                .getRequiredType());
-         prop.setName(reader.getAttribute("name"));
+         prop.setName(ConversionHelp.decode(reader.getAttribute("name")));
          prop.setObjectValue((TestElement) Class.forName(
                reader.getAttribute("elementType")).newInstance());
          while (reader.hasMoreChildren())

@@ -52,7 +52,7 @@ public class LongPropertyConverter implements Converter
          MarshallingContext arg2)
    {
       LongProperty prop = (LongProperty)obj;
-      writer.addAttribute("name",prop.getName());
+      writer.addAttribute("name",ConversionHelp.encode(prop.getName()));
       writer.setValue(prop.getStringValue());
    }
 
@@ -62,7 +62,7 @@ public class LongPropertyConverter implements Converter
    public Object unmarshal(HierarchicalStreamReader reader,
          UnmarshallingContext arg1)
    {
-      LongProperty prop = new LongProperty(reader.getAttribute("name"),Long.parseLong(reader.getValue()));
+      LongProperty prop = new LongProperty(ConversionHelp.decode(reader.getAttribute("name")),Long.parseLong(reader.getValue()));
       return prop;
    }
 }
