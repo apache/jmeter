@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,16 +58,15 @@ package org.apache.jmeter.visualizers;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.Scrollable;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.TableModelEvent;
@@ -79,7 +78,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 
 /****************************************
@@ -94,11 +92,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *@version   1.0
  ***************************************/
 public class StatVisualizer extends AbstractVisualizer
-        implements Scrollable, AccumListener, Clearable
+        implements AccumListener, Clearable
 {
-    // protected NamePanel namePanel;
-    // protected GraphAccum graph;
-    // protected JPanel legendPanel;
     /****************************************
      * !ToDo (Field description)
      ***************************************/
@@ -111,10 +106,6 @@ public class StatVisualizer extends AbstractVisualizer
     private final static String VISUALIZER_NAME =
             JMeterUtils.getResString("aggregate_report");
     private long sleepTill = 0;
-    private static int width = 2000;
-    // private boolean data = true;
-    // private boolean average = true;
-    // private boolean deviation = true;
     transient private StatVisualizerModel model;
     transient private StatTableModel myStatTableModel;
 
@@ -126,7 +117,6 @@ public class StatVisualizer extends AbstractVisualizer
         super();
         model = new StatVisualizerModel();
         model.addAccumListener(this);
-        this.setPreferredSize(new Dimension(width, 800));
         init();
     }
 
@@ -148,69 +138,6 @@ public class StatVisualizer extends AbstractVisualizer
     public void add(SampleResult res)
     {
         model.addNewSample(res);
-    }
-
-    /****************************************
-     * Gets the PreferredScrollableViewportSize attribute of this Visualizer
-     *
-     *@return   The PreferredScrollableViewportSize value
-     ***************************************/
-    public Dimension getPreferredScrollableViewportSize()
-    {
-        return this.getPreferredSize();
-    }
-
-    /****************************************
-     * Gets the ScrollableUnitIncrement attribute of the Visualizer
-     *
-     *@param visibleRect  Description of Parameter
-     *@param orientation  Description of Parameter
-     *@param direction    Description of Parameter
-     *@return             The ScrollableUnitIncrement value
-     ***************************************/
-    public int getScrollableUnitIncrement(
-            Rectangle visibleRect,
-            int orientation,
-            int direction)
-    {
-        // yanked this from some other visualizer - along with most of the core GUI stuff. not my bag.
-        return 5;
-    }
-
-    /****************************************
-     * Gets the ScrollableBlockIncrement attribute of the Visualizer
-     *
-     *@param visibleRect  Description of Parameter
-     *@param orientation  Description of Parameter
-     *@param direction    Description of Parameter
-     *@return             The ScrollableBlockIncrement value
-     ***************************************/
-    public int getScrollableBlockIncrement(
-            Rectangle visibleRect,
-            int orientation,
-            int direction)
-    {
-        return (int) (visibleRect.width * .9);
-    }
-
-    /****************************************
-     * Gets the ScrollableTracksViewportWidth attribute of the Visualizer
-     *
-     *@return   The ScrollableTracksViewportWidth value
-     ***************************************/
-    public boolean getScrollableTracksViewportWidth()
-    {
-        return false;
-    }
-
-    /****************************************
-     * Gets the ScrollableTracksViewportHeight attribute of the Visualizer
-     *
-     *@return   The ScrollableTracksViewportHeight value
-     ***************************************/
-    public boolean getScrollableTracksViewportHeight()
-    {
-        return true;
     }
 
     /****************************************
@@ -248,12 +175,14 @@ public class StatVisualizer extends AbstractVisualizer
     private void init()
     {
         this.setLayout(new BorderLayout());
+
         // MAIN PANEL
         JPanel mainPanel = new JPanel();
         Border margin = new EmptyBorder(10, 10, 5, 10);
 
         mainPanel.setBorder(margin);
-        mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
         // TITLE
         JLabel panelTitleLabel = new JLabel(VISUALIZER_NAME);
         Font curFont = panelTitleLabel.getFont();

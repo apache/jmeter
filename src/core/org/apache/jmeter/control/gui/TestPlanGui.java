@@ -144,8 +144,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
         functionalMode = new JCheckBox(JMeterUtils.getResString("functional_mode"));
         southPanel.add(functionalMode, BorderLayout.NORTH);
         JTextArea explain = new JTextArea(JMeterUtils.getResString("functional_mode_explanation"));
-        explain.setColumns(30);
-        explain.setRows(10);
+        explain.setEditable(false);
         explain.setBackground(this.getBackground());
         southPanel.add(explain, BorderLayout.CENTER);
         add(getVariablePanel(), BorderLayout.CENTER);

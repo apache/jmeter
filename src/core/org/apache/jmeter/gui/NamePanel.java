@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.gui;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.Collection;
 
@@ -203,6 +204,10 @@ public class NamePanel extends JPanel implements JMeterGUIComponent
                 // not for text fields
             }
         });
+        
+        // Allow this component to expand horizontally but not vertically
+        setMaximumSize(
+            new Dimension(getMaximumSize().width, getPreferredSize().height));
     }
 
 

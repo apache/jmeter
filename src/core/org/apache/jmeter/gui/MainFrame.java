@@ -60,7 +60,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -274,23 +273,9 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 	public void setMainPanel(JComponent comp)
 	{
 		mainPanel.removeAll();
-		Rectangle rect = mainPanel.getVisibleRect();
-		Insets in = mainPanel.getInsets();
-		Dimension dim = new Dimension(((int)rect.getWidth()) - (in.right + in.left) * 2,
-				((int)rect.getHeight()) - (in.top + in.bottom) * 2);
-		Dimension min = comp.getMinimumSize();
-		if(dim.width < min.width)
-		{
-			dim.width = min.width;
-		}
-		if(dim.height < min.height)
-		{
-			dim.height = min.height;
-		}
-		comp.setPreferredSize(dim);
 		comp.validate();
 		mainPanel.add(comp);
-		mainPanel.validate();
+		mainPanel.revalidate();
 		mainPanel.repaint();
 	}
 

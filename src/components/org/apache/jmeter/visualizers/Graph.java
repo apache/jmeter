@@ -2,7 +2,7 @@
  *  ====================================================================
  *  The Apache Software License, Version 1.1
  *
- *  Copyright (c) 2001 The Apache Software Foundation.  All rights
+ *  Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  *  reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -93,7 +93,6 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
      */
     public Graph()
     {
-        this.setPreferredSize(new Dimension(width, 800));
     }
 
     /**
