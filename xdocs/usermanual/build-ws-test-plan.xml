@@ -124,9 +124,12 @@ to the location. For convienance, there is a third option of using a
 message folder. The sampler will randomly select files from a given
 folder and use the text for the soap message.</p>
 
-<p>If you are behind a HTTP Proxy, check use proxy and enter the host
-and port. If "Use Proxy" is check, but no host or port, the sampler will
-fail silently.</p>
+<p>An important note on the sampler. It will automatically use the proxy host
+and port passed to JMeter from command line, if thoe fields in the sampler are
+left blank. If a sampler has values in the proxy host and port text field, it
+will use the ones provided by the user. If no host or port are provided and
+JMeter wasn't started with command line options, the sampler will fail
+silently. This behavior may not be what users expect.</p>
 
 </section>
 

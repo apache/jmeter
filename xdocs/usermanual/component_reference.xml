@@ -337,7 +337,7 @@ POST content.</p>
 
 <description><p>This sampler has been tested with IIS Webservice running .NET 1.0. It
  hasn't been tested with SUN or IBM webservices providers, but it should work.
- The sampler uses Apache SOAP driver, to serialize the message and set the header
+ The sampler uses Apache SOAP driver to serialize the message and set the header
  with the correct SOAPAction. Right now the sampler doesn't support automatic WSDL
  handling, since Apache SOAP currently does not provide support for it. Both IBM
  and SUN provide WSDL drivers. There are 3 options for the post data: text area,
@@ -346,6 +346,11 @@ POST content.</p>
  <p>The sampler requires mail.jar and activation.jar. This is because Apache SOAP
  requires the libs. Because mail.jar and activation.jar are distributed by Sun,
  you have to download it separately.</p>
+ <p>An important note on the sampler is it will automatically use the proxy host
+ and port passed to JMeter from command line, if thoe fields in the sampler are
+ left blank. If a sampler has values in the proxy host and port text field, it
+ will use the ones provided by the user. This behavior may not be what users
+ expect.</p>
 </description>
 
 <properties>
