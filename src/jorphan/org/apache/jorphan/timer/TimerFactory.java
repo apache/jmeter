@@ -54,18 +54,16 @@
  */
 package org.apache.jorphan.timer;
 
-// ----------------------------------------------------------------------------
 /**
- * This non-instantiable non-extendible class acts as a Factory for {@link ITimer}
- * implementations.
+ * This non-instantiable non-extendible class acts as a Factory for
+ * {@link ITimer} implementations.
  * 
- * @author (C) <a href="mailto:vroubtsov@illinoisalumni.org">Vlad Roubtsov</a>, 2002
+ * @author <a href="mailto:vroubtsov@illinoisalumni.org">Vlad Roubtsov</a>
  * @author Originally published in <a href="http://www.javaworld.com/javaworld/javaqa/2003-01/01-qa-0110-timing.html">JavaWorld</a>
+ * @version $Revision$
  */
-public abstract class TimerFactory
+public final class TimerFactory
 {
-    // public: ................................................................
-
     /**
      * Creates a new instance of {@link ITimer} which is returned in 'ready'
      * state. If the JNI-based/high-resolution implementation is not available
@@ -85,14 +83,9 @@ public abstract class TimerFactory
             return new JavaSystemTimer ();
         }
     }
-    
-    // protected: .............................................................
 
-    // package: ...............................................................
-    
-    // private: ...............................................................
-    
-    private TimerFactory () {} // prevent subclassing
-    
-} // end of class
-// ----------------------------------------------------------------------------
+    /**
+     * Private default constructor to prevent instantiation.
+     */    
+    private TimerFactory () {}   
+}
