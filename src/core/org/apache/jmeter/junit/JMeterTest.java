@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -144,7 +145,7 @@ public class JMeterTest extends TestCase
         }
     }
 
-    protected Collection getObjects(Class extendsClass) throws Exception
+    private Collection getObjects(Class extendsClass) throws Exception
     {
         Iterator classes =
             ClassFinder
@@ -155,7 +156,13 @@ public class JMeterTest extends TestCase
         List objects = new LinkedList();
         while (classes.hasNext())
         {
-            Class c = Class.forName((String) classes.next());
+        	String n = (String) classes.next();
+        	//TODO - improve this check
+        	if (n.endsWith("RemoteJMeterEngineImpl"))
+        	{
+        		continue; // Don't try to instantiate remote server
+        	}
+            Class c = Class.forName(n);
             try
             {
                 try
@@ -183,6 +190,17 @@ public class JMeterTest extends TestCase
             {
                 // We won't test serialization of restricted-access
                 // classes.
+            }
+            catch (Exception e)
+            {
+            	if (e instanceof RemoteException)
+				{
+					log.warn(e.toString());
+				}
+				else
+				{
+					throw new Exception(e);
+				}
             }
         }
         return objects;
