@@ -23,35 +23,34 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 import javax.swing.JComponent;
 
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
-//import com.sun.media.jai.codec.BMPEncodeParam;
-//import com.sun.media.jai.codec.ImageCodec;
-//import com.sun.media.jai.codec.ImageEncoder;
-//import com.sun.media.jai.codec.PNGEncodeParam;
-//import com.sun.media.jai.codec.TIFFEncodeParam;
+
+import org.apache.batik.ext.awt.image.codec.PNGEncodeParam;
+import org.apache.batik.ext.awt.image.codec.PNGImageEncoder;
+import org.apache.batik.ext.awt.image.codec.tiff.TIFFEncodeParam;
+import org.apache.batik.ext.awt.image.codec.tiff.TIFFImageEncoder;
 
 /**
  * Class is responsible for taking a component and saving it
- * as a JPEG, GIF, PNG or TIFF. The class is very simple.
- * It provides several methods saveJComponent(filename,Component).
- * This means any GUI component can be passed to the save service.
- * Logic governing which panels can be saved is completely 
- * external to the save service.
- * On a related note, it may make more sense to save the graphs
- * as SVG, so that users can scale the graphs.
+ * as a JPEG, PNG or TIFF. The class is very simple. Thanks to
+ * Batik and the developers who worked so hard on it. The
+ * original implementation I used JAI, which allows redistribution
+ * but requires indemnification.
+ * Luckily Batik has an alternative to JAI. Hurray for Apache
+ * projects. I don't see any noticeable differences between
+ * Batik and JAI.
  */
 public class SaveGraphicsService implements SaveServiceConstants {
 
 	public static final int PNG = 0;
-	public static final int BMP = 1;
-	public static final int TIFF = 2;
+	public static final int TIFF = 1;
 	public static final String PNG_EXTENSION = ".png";
-	public static final String BMP_EXTENSION = ".bmp";
 	public static final String TIFF_EXTENSION = ".tif";
 	public static final String JPEG_EXTENSION = ".jpg";
 	
@@ -62,6 +61,16 @@ public class SaveGraphicsService implements SaveServiceConstants {
 		super();
 	}
 
+	/**
+	 * If someone wants to save a JPEG, use this method. There
+	 * is a limitation though. It uses gray scale instead of
+	 * color due to artifacts with color encoding. For some
+	 * reason, it does not translate pure red and orange
+	 * correctly. To make the text readable, gray scale is
+	 * used.
+	 * @param filename
+	 * @param component
+	 */
 	public void saveUsingJPEGEncoder(String filename, JComponent component){
 		Dimension size = component.getSize();
 		// We use Gray scale, since color produces poor quality
@@ -93,47 +102,12 @@ public class SaveGraphicsService implements SaveServiceConstants {
 	}
 	
 	/**
-	 * Method uses JAI to save the graph instead of the
-	 * stock com.sun.image.codec.jpeg API. The stock
-	 * codec is a bit lame and generates poor quality.
-	 * @param filename
-	 * @param component
-	 */
-	/**
-	public void saveJComponentWithJAI(String filename, JComponent component){
-		Dimension size = component.getSize();
-		BufferedImage image = new BufferedImage(size.width, size.height,
-			BufferedImage.TYPE_INT_RGB);
-		Graphics2D grp = image.createGraphics();
-		component.paint(grp);
-		
-		File outfile = new File(filename);
-		FileOutputStream fos = createFile(outfile);
-		ImageEncoder encoder = ImageCodec.createImageEncoder("PNG",fos,null);
-		PNGEncodeParam param = new PNGEncodeParam.RGB();
-		encoder.setParam(param);
-		try {
-			encoder.encode(image);
-			fos.close();
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			try {
-				fos.close();
-			} catch (Exception e){
-			}
-		}
-	}
-	**/
-	
-	/**
 	 * Method will save the JComponent as an image. The
-	 * formats are PNG, BMP, and TIFF.
+	 * formats are PNG, and TIFF.
 	 * @param filename
 	 * @param type
 	 * @param component
 	 */
-	/**
 	public void saveJComponent(String filename, int type, JComponent component){	
 		Dimension size = component.getSize();
 		BufferedImage image = new BufferedImage(size.width, size.height,
@@ -143,98 +117,58 @@ public class SaveGraphicsService implements SaveServiceConstants {
 		
 		if (type == PNG){
 			filename += PNG_EXTENSION;
-			this.savePNG(filename,image);
-		} else if (type == BMP){
-			filename += BMP_EXTENSION;
-			this.saveBMP(filename,image);
+			this.savePNGWithBatik(filename,image);
 		} else if (type == TIFF){
 			filename = filename + TIFF_EXTENSION;
-			this.saveTIFF(filename,image);
+			this.saveTIFFWithBatik(filename,image);
 		}
 	}
-	**/
 
 	/**
-	 * Method takes a filename and BufferedImage. It will save
-	 * the image as PNG.
+	 * Use Batik to save a PNG of the graph
 	 * @param filename
 	 * @param image
-	 */	
-	/**
-	public void savePNG(String filename, BufferedImage image){
+	 */
+	public void savePNGWithBatik(String filename, BufferedImage image){
 		File outfile = new File(filename);
-		FileOutputStream fos = createFile(outfile);
-		ImageEncoder encoder = ImageCodec.createImageEncoder("PNG",fos,null);
-		PNGEncodeParam param = new PNGEncodeParam.RGB();
-		encoder.setParam(param);
+		OutputStream fos = createFile(outfile);
+		PNGEncodeParam param = PNGEncodeParam.getDefaultEncodeParam(image);
+		PNGImageEncoder encoder = new PNGImageEncoder(fos,param);
 		try {
 			encoder.encode(image);
-			fos.close();
 		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
+			// do nothing
+		} finally{
 			try {
 				fos.close();
 			} catch (Exception e){
+				// do nothing
 			}
 		}
 	}
-	**/
-
+	
 	/**
-	 * Method takes filename and BufferedImage. It will save
-	 * the image as a BMP. BMP is generally a larger file
-	 * than PNG.
+	 * Use Batik to save a TIFF file of the graph
 	 * @param filename
 	 * @param image
-	 */	
-	/**
-	public void saveBMP(String filename, BufferedImage image){
+	 */
+	public void saveTIFFWithBatik(String filename, BufferedImage image){
 		File outfile = new File(filename);
-		FileOutputStream fos = createFile(outfile);
-		ImageEncoder encoder = ImageCodec.createImageEncoder("BMP",fos,null);
-		BMPEncodeParam param = new BMPEncodeParam();
-		encoder.setParam(param);
-		try {
-			encoder.encode(image);
-			fos.close();
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			try {
-				fos.close();
-			} catch (Exception e){
-			}
-		}
-	}
-	**/
-
-	/**
-	 * Method takes a filename and BufferedImage. It will save
-	 * the image as a TIFF.
-	 * @param filename
-	 * @param image
-	 */	
-	/**
-	public void saveTIFF(String filename, BufferedImage image){
-		File outfile = new File(filename);
-		FileOutputStream fos = createFile(outfile);
-		ImageEncoder encoder = ImageCodec.createImageEncoder("TIFF",fos,null);
+		OutputStream fos = createFile(outfile);
 		TIFFEncodeParam param = new TIFFEncodeParam();
-		encoder.setParam(param);
+		TIFFImageEncoder encoder = new TIFFImageEncoder(fos,param);
 		try {
 			encoder.encode(image);
-			fos.close();
 		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
+			// do nothing
+		} finally{
 			try {
 				fos.close();
 			} catch (Exception e){
+				// do nothing
 			}
 		}
 	}
-	**/
 	
 	/**
 	 * Create a new file for the graphics. Since the method
