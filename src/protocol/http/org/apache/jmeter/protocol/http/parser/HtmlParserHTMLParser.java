@@ -80,14 +80,15 @@ class HtmlParserHTMLParser extends HTMLParser
     /** Used to store the Logger (used for debug and error messages). */
     transient private static Logger log= LoggingManager.getLoggerForClass();
 
-    /** Stores the singleton parser to be used */
-    private static HTMLParser myParser = new HtmlParserHTMLParser();
-    
-    // Not intended to be instantiated externally
-	//TODO make private? 
-	HtmlParserHTMLParser(){
+	protected HtmlParserHTMLParser(){
 		super();
 	}
+
+	protected boolean isReusable()
+	{
+		return true;
+	}
+
     /* (non-Javadoc)
      * @see org.apache.jmeter.protocol.http.parser.HtmlParser#getEmbeddedResourceURLs(byte[], java.net.URL)
      */
@@ -236,16 +237,4 @@ class HtmlParserHTMLParser extends HTMLParser
         // add applet tag scanner
         parser.addScanner(new AppletScanner());
     }
-
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.http.parser.HTMLParser#getParserInstance()
-     */
-    public static HTMLParser getParserInstance()
-    {
-        return myParser;
-    }
-
-	public static boolean isParserReusable(){
-		return true;
-	}
 }

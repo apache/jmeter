@@ -61,8 +61,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -89,16 +87,7 @@ public abstract class HTMLParser
     /** Used to store the Logger (used for debug and error messages). */
 	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-	private static final String PARSER_METHOD = "getParserInstance";
-	private static final String PARSER_REUSABLE = "isParserReusable";
-
-    /*
-     * Cache of methods.
-     * These need to be invoked each time, in case the parser cannot be re-used 
-     */
-    private static Hashtable methods = new Hashtable(3);
-
-    // Cache of parsers - used if parsers are re-usable
+    // Cache of parsers - parsers must be re-usable
 	private static Hashtable parsers = new Hashtable(3);
     
 	private final static String PARSER_CLASSNAME = "htmlParser.className";
@@ -113,33 +102,6 @@ public abstract class HTMLParser
     protected HTMLParser() {
     }
     
-//    /**
-//     * Create the single instance.
-//     */
-//    private static void initialize()
-//    {
-//        String htmlParserClassName=
-//            JMeterUtils.getPropDefault(PARSER_CLASSNAME,DEFAULT_PARSER);
-//
-//        try
-//        {
-//            parser=
-//                (HTMLParser)Class.forName(htmlParserClassName).newInstance();
-//        }
-//        catch (InstantiationException e)
-//        {
-//            throw new Error(e);
-//        }
-//        catch (IllegalAccessException e)
-//        {
-//            throw new Error(e);
-//        }
-//        catch (ClassNotFoundException e)
-//        {
-//            throw new Error(e);
-//        }
-//        log.info("Using "+htmlParserClassName);
-//    }
 
     public static final HTMLParser getParser(){
         return getParser(JMeterUtils.getPropDefault(PARSER_CLASSNAME,DEFAULT_PARSER));
@@ -154,83 +116,32 @@ public abstract class HTMLParser
 			return pars;
 		}
 
-        // Is there a cached method for creating a parser?
-		Method meth =(Method) methods.get(htmlParserClassName);
-		if (meth != null) {
-			try
-            {
-                pars = (HTMLParser) meth.invoke(null,null);
-            }
-			catch (NullPointerException e) // method did not return anything
-			{
-				throw new Error(PARSER_METHOD+"() returned null",e);
-			}
-            catch (IllegalArgumentException e)
-            {
-				throw new Error("Should not happen",e);
-            }
-            catch (IllegalAccessException e)
-            {
-				throw new Error("Should not happen",e);
-            }
-            catch (InvocationTargetException e)
-            {
-				throw new Error("Should not happen",e);
-            };
-			log.info("Refetched "+htmlParserClassName);
-			return pars;
+		try
+        {
+        	Object clazz = Class.forName(htmlParserClassName).newInstance();
+        	if (clazz instanceof HTMLParser){
+				pars = (HTMLParser) clazz;
+        	} else {
+        		throw new Error(new ClassCastException(htmlParserClassName));
+        	}
+        }
+        catch (InstantiationException e)
+        {
+			throw new Error(e);
+        }
+        catch (IllegalAccessException e)
+        {
+			throw new Error(e);
+        }
+        catch (ClassNotFoundException e)
+        {
+			throw new Error(e);
+        }
+		log.info("Created "+htmlParserClassName);
+		if (pars.isReusable()){
+			parsers.put(htmlParserClassName,pars);// cache the parser
 		}
 		
-		// Create the method cache, and the parser cache if possible
-		try
-		{
-			Class clazz = Class.forName(htmlParserClassName);
-			meth = clazz.getMethod(PARSER_METHOD,null);
-			methods.put(htmlParserClassName,meth);// Cache the method
-			pars= (HTMLParser) meth.invoke(null,null);
-			boolean reusable=false;
-			try{
-				reusable=((Boolean)
-				           clazz.getMethod(PARSER_REUSABLE,null)
-				          .invoke(null,null))
-				          .booleanValue();
-				if (reusable){
-					parsers.put(htmlParserClassName,pars);// cache the parser
-				}
-			}
-			catch (Exception e){
-				reusable=false;
-			}
-			log.info("Created "+htmlParserClassName+(reusable? " - reusable":""));
-		}
-		catch (NullPointerException e) // method did not return anything
-		{
-			throw new Error(PARSER_METHOD+"() returned null",e);
-		}
-		catch (IllegalAccessException e)
-		{
-			throw new Error(e);
-		}
-		catch (ClassNotFoundException e)
-		{
-			throw new Error(e);
-		}
-		catch (SecurityException e)
-        {
-			throw new Error(e);
-        }
-        catch (NoSuchMethodException e)
-        {
-			throw new Error(e);
-        }
-        catch (IllegalArgumentException e)
-        {
-			throw new Error(e);
-        }
-        catch (InvocationTargetException e)
-        {
-			throw new Error(e);
-        }
     	return pars;
     }
 
@@ -282,6 +193,16 @@ public abstract class HTMLParser
 		throws HTMLParseException;
 
 
+    /**
+     * Parsers should over-ride this method if the parser class is re-usable,
+     * in which case the class will be cached for the next getParser() call.
+     * 
+     * @return true if the Parser is reusable
+     */
+    protected boolean isReusable()
+    {
+    	return false;
+    }
 
 //////////////////////////// TEST CODE FOLLOWS /////////////////////////////
 
@@ -307,7 +228,7 @@ public abstract class HTMLParser
 		}
 
 
-		private static class TestClass //Can't instantiate
+		private class TestClass //Can't instantiate
 		{
     	    private TestClass(){};	 
 		}
@@ -427,14 +348,8 @@ public abstract class HTMLParser
 			}
 			catch (Error e)
 			{
-				if (e.getCause() instanceof NoSuchMethodException)
-				{
-					 //	This is OK
-				}
-				else
-				{
-					throw e;
-				}
+				if (e.getCause() instanceof ClassCastException) return;
+				throw e;
 			}
 		}
 
@@ -445,14 +360,8 @@ public abstract class HTMLParser
 			}
 			catch (Error e)
 			{
-				if (e.getCause() instanceof NoSuchMethodException)
-				{
-					 //	This is OK
-				}
-				else
-				{
-					throw e;
-				}
+				if (e.getCause() instanceof InstantiationException) return;
+				throw e;
 			}
 		}
 
@@ -476,7 +385,6 @@ public abstract class HTMLParser
 		throws Exception
 		{
 			log.info("file   "+file);
-			log.info("parser "+p.getClass().getName());
 			File f= new File(file);
 			byte[] buffer= new byte[(int)f.length()];
 			int len= new FileInputStream(f).read(buffer);

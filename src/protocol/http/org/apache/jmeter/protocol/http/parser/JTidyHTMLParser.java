@@ -81,18 +81,15 @@ class JTidyHTMLParser extends HTMLParser
     /** Used to store the Logger (used for debug and error messages). */
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
-	/** Stores the singleton parser to be used */
-	private static HTMLParser myParser = new JTidyHTMLParser();
-
-    /**
-     * This is a singleton class
-     */
-    //TODO make private 
-    JTidyHTMLParser()
+    protected JTidyHTMLParser()
     {
         super();
     }
 
+	protected boolean isReusable()
+	{
+		return true;
+	}
 
     /* (non-Javadoc)
      * @see org.apache.jmeter.protocol.http.parser.HTMLParser#getEmbeddedResourceURLs(byte[], java.net.URL)
@@ -287,16 +284,4 @@ class JTidyHTMLParser extends HTMLParser
         log.debug("End   : getDOM");
         return node;
     }
-    
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.http.parser.HTMLParser#getParserInstance()
-     */
-    public static HTMLParser getParserInstance()
-    {
-		return myParser;
-    }
-    
-	public static boolean isParserReusable(){
-		return true;
-	}
 }
