@@ -70,8 +70,8 @@ import org.apache.log.Logger;
  * instance to perform performance test samples.
  *
  * @author     Brad Kiewel
- * @created    $Date$
- * @version    $Revision$
+ * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
+ * @version $Id$
  */
 public class JavaConfig extends ConfigTestElement implements Serializable
 {
