@@ -89,6 +89,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
 
+import org.apache.jmeter.engine.event.IterationEvent;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.GlobalMouseListener;
 import org.apache.jmeter.gui.tree.JMeterCellRenderer;
@@ -460,4 +461,10 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 		}
 	}
 	
+    /**
+     * @see org.apache.jmeter.testelement.TestListener#iterationStart(org.apache.jmeter.engine.event.IterationEvent)
+     */
+    public void testIterationStart(IterationEvent event)
+    {}
+
 }

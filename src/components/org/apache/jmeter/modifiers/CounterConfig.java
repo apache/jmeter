@@ -2,7 +2,8 @@ package org.apache.jmeter.modifiers;
 import java.io.Serializable;
 
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.testelement.ThreadListener;
+import org.apache.jmeter.engine.event.IterationEvent;
+import org.apache.jmeter.engine.event.IterationListener;
 import org.apache.jmeter.testelement.VariablesCollection;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
@@ -18,7 +19,7 @@ import org.apache.log.Logger;
  */
 public class CounterConfig
 	extends ConfigTestElement
-	implements Serializable, ThreadListener
+	implements Serializable, IterationListener
 {
 	private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.ELEMENTS);
 	private final static String START = "CounterConfig.start";
@@ -37,7 +38,7 @@ public class CounterConfig
 	/**
 	 * @see org.apache.jmeter.testelement.ThreadListener#iterationStarted(int)
 	 */
-	public synchronized void iterationStarted(int iterationCount)
+	public synchronized void iterationStart(IterationEvent event)
 	{
 		JMeterVariables variables = vars.getVariables();
 		if(!perUser)

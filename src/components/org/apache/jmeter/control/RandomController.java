@@ -58,7 +58,8 @@
 import java.io.Serializable;
 import java.util.Random;
 
-import org.apache.jmeter.testelement.ThreadListener;
+import org.apache.jmeter.engine.event.IterationEvent;
+import org.apache.jmeter.engine.event.IterationListener;
 import org.apache.jmeter.threads.JMeterVariables;
 
 /**
@@ -69,7 +70,7 @@ import org.apache.jmeter.threads.JMeterVariables;
  */
 public class RandomController
 	extends InterleaveControl
-	implements Serializable,ThreadListener
+	implements Serializable,IterationListener
 {
 	static Random rand = new Random();
 	
@@ -100,9 +101,9 @@ public class RandomController
 	/**
 	 * @see org.apache.jmeter.testelement.ThreadListener#iterationStarted(int)
 	 */
-	public void iterationStarted(int iterationCount)
+	public void iterationStart(IterationEvent event)
 	{
-		if(iterationCount == 1)
+		if(event.getIteration() == 1)
 		{
 			resetCurrent();
 		}

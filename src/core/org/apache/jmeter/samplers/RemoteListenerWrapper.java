@@ -3,6 +3,7 @@ package org.apache.jmeter.samplers;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 
+import org.apache.jmeter.engine.event.IterationEvent;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.log.Hierarchy;
@@ -112,4 +113,10 @@ public class RemoteListenerWrapper extends AbstractTestElement implements
 			log.error("",err);
 		}
 	}
+    /**
+     * @see org.apache.jmeter.testelement.TestListener#iterationStart(org.apache.jmeter.engine.event.IterationEvent)
+     */
+    public void testIterationStart(IterationEvent event)
+    {}
+
 }

@@ -59,6 +59,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.jmeter.engine.event.IterationEvent;
+import org.apache.jmeter.engine.event.IterationListener;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -77,6 +79,7 @@ import org.apache.jmeter.testelement.TestElement;
 public class GenericController extends AbstractTestElement implements Controller,
 		Serializable,PerThreadClonable
 {
+    protected List iterationListeners = new LinkedList();
 	/****************************************
 	 * !ToDo (Field description)
 	 ***************************************/
@@ -102,12 +105,16 @@ public class GenericController extends AbstractTestElement implements Controller
 	{
 		
 	}
+    
+    public void addIterationListener(IterationListener lis)
+    {
+        iterationListeners.add(lis);
+    }
 	
 	public boolean isNextFirst()
 	{
 		if(first)
         {
-            first = false;
             return true;
         }
         return false;
@@ -136,7 +143,6 @@ public class GenericController extends AbstractTestElement implements Controller
 
 	public void reInitialize()
 	{
-        first = true;
 		resetCurrent();
 	}
 
@@ -147,6 +153,7 @@ public class GenericController extends AbstractTestElement implements Controller
 
 	protected void resetCurrent()
 	{
+        first = true;
 		current = 0;
 	}
 
@@ -294,6 +301,7 @@ public class GenericController extends AbstractTestElement implements Controller
 	 ***************************************/
 	public Sampler next()
 	{
+        fireIterEventAsNeeded();     
 		TestElement controller = getCurrentController();
 		if(controller == null)
 		{
@@ -325,6 +333,30 @@ public class GenericController extends AbstractTestElement implements Controller
 			}
 		}
 	}
+
+    protected void fireIterEventAsNeeded()
+    {
+        if(isNextFirst())
+        {
+            fireIterationStart();
+            first = false;
+        }   
+    }
+    
+    protected int getIterCount()
+    {
+        return 1;
+    }
+    
+    protected void fireIterationStart()
+    {
+        Iterator iter = iterationListeners.iterator();
+        while (iter.hasNext())
+        {
+            IterationListener item = (IterationListener)iter.next();
+            item.iterationStart(new IterationEvent(this,getIterCount()));            
+        }
+    }
 
 	public static class Test extends junit.framework.TestCase
 	{

@@ -72,6 +72,7 @@ import org.apache.jmeter.control.gui.WorkBenchGui;
 import org.apache.jmeter.engine.RemoteJMeterEngine;
 import org.apache.jmeter.engine.RemoteJMeterEngineImpl;
 import org.apache.jmeter.engine.StandardJMeterEngine;
+import org.apache.jmeter.engine.event.IterationEvent;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -411,6 +412,12 @@ public class JMeter implements JMeterPlugin {
 			}
 			System.exit(0);
 		}
+        /**
+         * @see org.apache.jmeter.testelement.TestListener#iterationStart(org.apache.jmeter.engine.event.IterationEvent)
+         */
+        public void testIterationStart(IterationEvent event)
+        {}
+
 	}
 
 	private static void println(String str) {

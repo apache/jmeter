@@ -63,13 +63,13 @@ import java.util.Map;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.control.Controller;
+import org.apache.jmeter.engine.event.IterationEvent;
 import org.apache.jmeter.processor.PostProcessor;
-import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.ThreadListener;
+import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.SearchByClass;
@@ -96,7 +96,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
     String threadName;
     JMeterContext threadContext;
     JMeterVariables threadVars;
-    Collection threadListeners;
+    Collection testListeners;
     ListenerNotifier notifier;
     int threadNum = 0;
 
@@ -112,9 +112,9 @@ public class JMeterThread implements Runnable, java.io.Serializable
         testTree = test;
         compiler = new TestCompiler(testTree, threadVars);
         controller = (Controller) testTree.getArray()[0];
-        SearchByClass threadListenerSearcher = new SearchByClass(ThreadListener.class);
+        SearchByClass threadListenerSearcher = new SearchByClass(TestListener.class);
         test.traverse(threadListenerSearcher);
-        threadListeners = threadListenerSearcher.getSearchResults();
+        testListeners = threadListenerSearcher.getSearchResults();
         notifier = note;
     }
 
@@ -137,7 +137,6 @@ public class JMeterThread implements Runnable, java.io.Serializable
             threadContext = JMeterContextService.getContext();
             threadContext.setVariables(threadVars);
             threadContext.setThreadNum(getThreadNum());
-            initializeThreadListeners();
             testTree.traverse(compiler);
             running = true;
             //listeners = controller.getListeners();
@@ -152,10 +151,11 @@ public class JMeterThread implements Runnable, java.io.Serializable
                     {
                         if (controller.isNextFirst())
                         {
-                            notifyThreadListeners();
+                            notifyTestListeners();
                         }
-                        SamplePackage pack = compiler.configureSampler(controller.next());
-                        threadContext.setCurrentSampler(pack.getSampler());
+                        Sampler sam = controller.next();
+                        threadContext.setCurrentSampler(sam);
+                        SamplePackage pack = compiler.configureSampler(sam);
                         delay(pack.getTimers());
                         SampleResult result = pack.getSampler().sample(null);
                         result.setThreadName(threadName);
@@ -239,32 +239,21 @@ public class JMeterThread implements Runnable, java.io.Serializable
         }
     }
 
-    private void initializeThreadListeners()
-    {
-        Iterator iter = threadListeners.iterator();
-        while (iter.hasNext())
-        {
-            ((ThreadListener) iter.next()).setJMeterVariables(threadVars);
-        }
-    }
-
-    private void notifyThreadListeners()
+    private void notifyTestListeners()
     {
         threadVars.incIteration();
-        Iterator iter = threadListeners.iterator();
+        Iterator iter = testListeners.iterator();
         while (iter.hasNext())
         {
-            ThreadListener listener = (ThreadListener)iter.next();
+            TestListener listener = (TestListener)iter.next();
             if(listener instanceof TestElement)
             {
-                ((TestElement)listener).setRunningVersion(true);
-                listener.iterationStarted(threadVars.getIteration());
+                listener.testIterationStart(new IterationEvent(controller,threadVars.getIteration()));
                 ((TestElement)listener).recoverRunningVersion();
-                ((TestElement)listener).setRunningVersion(false);
             }
             else
             {
-                listener.iterationStarted(threadVars.getIteration());
+                listener.testIterationStart(new IterationEvent(controller,threadVars.getIteration()));
             }
             
         }
