@@ -36,9 +36,16 @@ public abstract class AbstractAction implements Command {
 		while (iter.hasNext())
 		{
 			JMeterGUIComponent item = (JMeterGUIComponent)iter.next();
-			convertSubTree(tree.get(item));
-			TestElement testElement = item.createTestElement();
-			tree.replace(item,testElement);
+			if(item.isEnabled())
+			{
+				convertSubTree(tree.get(item));
+				TestElement testElement = item.createTestElement();
+				tree.replace(item,testElement);
+			}
+			else
+			{
+				tree.remove(item);
+			}
 			
 		}
 	}

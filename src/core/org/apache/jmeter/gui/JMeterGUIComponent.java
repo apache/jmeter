@@ -48,6 +48,14 @@ public interface JMeterGUIComponent
 	 *@return   !ToDo (Return description)
 	 ***************************************/
 	public TestElement createTestElement();
+	
+	/**
+	 * Test GUI elements can be turned disabled, in which case
+	 * they do not become part of the test when run.
+	 */
+	public boolean isEnabled();
+	
+	public void setEnabled(boolean enabled);
 
 	/****************************************
 	 * !ToDo (Method description)
