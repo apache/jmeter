@@ -56,7 +56,6 @@ public class TestActionGui extends AbstractSamplerGui
 	private int duration;
 
 	//String in the panel
-	private static final String title = JMeterUtils.getResString("test_action_title");
 	private static final String targetLabel = JMeterUtils.getResString("test_action_target");
 	private static final String threadTarget = JMeterUtils.getResString("test_action_target_thread");
 	private static final String testTarget = JMeterUtils.getResString("test_action_target_test");
@@ -73,12 +72,9 @@ public class TestActionGui extends AbstractSamplerGui
         init();
     }
 
-    /**
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-     */
-    public String getStaticLabel()
+	public String getLabelResource()
     {
-        return title;
+        return  "test_action_title";
     }
     
     public void configure(TestElement element)
