@@ -139,10 +139,7 @@ public class GuiPackage
 		try
 		{
 			JMeterGUIComponent comp = getGui(treeListener.getCurrentNode().createTestElement());
-			if(!(comp instanceof UnsharedComponent))
-			{
-				comp.configure(treeListener.getCurrentNode().createTestElement());
-			}
+			comp.configure(treeListener.getCurrentNode().createTestElement());
 			return comp;
 		}
 		catch (Exception e)
@@ -183,6 +180,16 @@ public class GuiPackage
 			return null;
 		}
 	}
+    
+    public void updateCurrentGui()
+    {
+        if(currentNode != null)
+        {
+            JMeterGUIComponent comp = getGui(currentNode.createTestElement());
+            comp.configure(currentNode.createTestElement());
+        }
+    }
+    
 	public void updateCurrentNode()
 	{
 		try
