@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * @author Administrator
@@ -13,6 +16,7 @@ import org.apache.jmeter.gui.GuiPackage;
  * Window>Preferences>Java>Templates.
  */
 public class EnableComponent implements Command {
+    private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
 	
 	public static final String ENABLE = "enable";
 	public static final String DISABLE = "disable";
@@ -30,11 +34,13 @@ public class EnableComponent implements Command {
 	public void doAction(ActionEvent e) {
 		if(e.getActionCommand().equals(ENABLE))
 		{
-			GuiPackage.getInstance().getTreeListener().getCurrentNode().setEnabled(true);
+            log.debug("enabling current gui object");
+                        GuiPackage.getInstance().getCurrentGui().setEnabled(true);
 		}
 		else if(e.getActionCommand().equals(DISABLE))
 		{
-			GuiPackage.getInstance().getTreeListener().getCurrentNode().setEnabled(false);
+            log.debug("disabling current gui object");
+                        GuiPackage.getInstance().getCurrentGui().setEnabled(false);
 		}
 	}
 

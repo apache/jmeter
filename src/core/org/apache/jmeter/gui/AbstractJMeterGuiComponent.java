@@ -61,6 +61,9 @@ import javax.swing.JPanel;
 
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 /**
  * This abstract class takes care of the most basic functions necessary to create a viable
  * JMeter GUI component.  It extends JPanel and implements JMeterGUIComponent.  This
@@ -83,6 +86,7 @@ public abstract class AbstractJMeterGuiComponent
 	extends JPanel
 	implements JMeterGUIComponent
 {
+    private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
 	private boolean enabled = true;
 	private JMeterTreeNode node;
 	
@@ -120,6 +124,7 @@ public abstract class AbstractJMeterGuiComponent
 	 */
 	public void setEnabled(boolean e)
 	{
+        log.debug("Setting enabled: " + e);
 		enabled = e;
 	}
 	
@@ -155,6 +160,7 @@ public abstract class AbstractJMeterGuiComponent
 	public void configure(TestElement element)
 	{
 		setName((String) element.getProperty(TestElement.NAME));
+        enabled = element.getPropertyAsBoolean(TestElement.ENABLED);
 	}
 	
 	/**
@@ -169,6 +175,9 @@ public abstract class AbstractJMeterGuiComponent
 		mc.setProperty(TestElement.NAME, getName());
 		mc.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
 		mc.setProperty(TestElement.TEST_CLASS, mc.getClass().getName());
+                //This  stores the state of the TestElement 
+                log.debug("setting element to enabled: " + enabled);
+                mc.setProperty(TestElement.ENABLED,new Boolean(enabled).toString());
 	}
 	
 	/**
