@@ -38,66 +38,76 @@
   </ul>
   <li><a href="elements-test-plan.html">4. Elements of a Test Plan</a></li>
   <ul>
-    <li><a href="elements-test-plan.html#4.1">4.1 ThreadGroup</a></li>
-    <li><a href="elements-test-plan.html#4.2">4.2 Controllers</a></li>
+    <li><a href="thread-group.html">4.1 Thread Group</a></li>
+    <li><a href="controller.html">4.2 Controllers</a></li>
     <ul>
-      <li><a href="elements-test-plan.html#4.2.1">4.2.1 Generative Controllers</a></li>
+      <li><a href="gen-controller.html">4.2.1 Generative Controllers</a></li>
       <ul>
-        <li><a href="elements-test-plan.html#4.2.1.1">4.2.1.1 Database Testing</a></li>
-        <li><a href="elements-test-plan.html#4.2.1.2">4.2.1.2 FTP Testing</a></li>
-        <li><a href="elements-test-plan.html#4.2.1.3">4.2.1.3 Web Testing</a></li>
+        <li><a href="gen-controller.html#4.2.1.1">4.2.1.1 FTP Request</a></li>
+        <li><a href="gen-controller.html#4.2.1.2">4.2.1.2 HTTP Request</a></li>
+        <li><a href="gen-controller.html#4.2.1.3">4.2.1.3 JDBC Request</a></li>
       </ul>
-      <li><a href="elements-test-plan.html#4.2.2">4.2.2 Logic Controllers</a></li>
+      <li><a href="logic-controller.html">4.2.2 Logic Controllers</a></li>
       <ul>
-        <li><a href="elements-test-plan.html#4.2.2.1">4.2.2.1 Interleave Logic</a></li>
-        <li><a href="elements-test-plan.html#4.2.2.2">4.2.2.2 Simple Controller</a></li>
-        <li><a href="elements-test-plan.html#4.2.2.3">4.2.2.3 Loop Controller</a></li>
-        <li><a href="elements-test-plan.html#4.2.2.4">4.2.2.4 Modification Manager</a></li>
-        <li><a href="elements-test-plan.html#4.2.2.5">4.2.2.5 Once Only Logic</a></li>
+        <li><a href="logic-controller.html#4.2.2.1">4.2.2.1 Interleave Controller</a></li>
+        <li><a href="logic-controller.html#4.2.2.2">4.2.2.2 Loop Controller</a></li>
+        <li><a href="logic-controller.html#4.2.2.3">4.2.2.3 Modification Manager</a></li>
+        <li><a href="logic-controller.html#4.2.2.4">4.2.2.4 Once Only Controller</a></li>
+        <li><a href="logic-controller.html#4.2.2.5">4.2.2.5 Simple Controller</a></li>
       </ul>
     </ul>
-    <li><a href="elements-test-plan.html#4.3">4.3 Listeners</a></li>
+    <li><a href="listener.html">4.3 Listeners</a></li>
     <ul>
-      <li><a href="elements-test-plan.html#4.3.1">4.3.1 Graphs</a></li>
+      <li><a href="listener.html#4.3.1">4.3.1 Graphs</a></li>
       <ul>
-        <li><a href="elements-test-plan.html#4.3.1.1">4.3.1.1 View Graph Tree</a></li>
-        <li><a href="elements-test-plan.html#4.3.1.2">4.3.1.2 Graph Full Results</a></li>
-        <li><a href="elements-test-plan.html#4.3.1.3">4.3.1.3 Graph Results</a></li>
-        <li><a href="elements-test-plan.html#4.3.1.4">4.3.1.4 Spline Visualizer</a></li>
+        <li><a href="listener.html#4.3.1.1">4.3.1.1 View Graph Tree</a></li>
+        <li><a href="listener.html#4.3.1.2">4.3.1.2 Graph Full Results</a></li>
+        <li><a href="listener.html#4.3.1.3">4.3.1.3 Graph Results</a></li>
+        <li><a href="listener.html#4.3.1.4">4.3.1.4 Spline Visualizer</a></li>
       </ul>
-      <li><a href="elements-test-plan.html#4.3.2">4.3.2 Managers</a></li>
+      <li><a href="listener.html#4.3.2">4.3.2 Managers</a></li>
       <ul>
-        <li><a href="elements-test-plan.html#4.3.2.1">4.3.2.1 Modification Manager</a></li>
+        <li><a href="listener.html#4.3.2.1">4.3.2.1 Modification Manager</a></li>
       </ul>
-      <li><a href="elements-test-plan.html#4.3.3">4.3.3 Miscellaneous</a></li>
+      <li><a href="listener.html#4.3.3">4.3.3 Miscellaneous</a></li>
       <ul>
-        <li><a href="elements-test-plan.html#4.3.3.1">4.3.3.1 Assertion Results</a></li>
-        <li><a href="elements-test-plan.html#4.3.3.2">4.3.3.2 File Reporter</a></li>
-        <li><a href="elements-test-plan.html#4.3.3.3">4.3.3.3 View Results</a></li>
-        <li><a href="elements-test-plan.html#4.3.3.4">4.3.3.4 View Result Tree</a></li>
+        <li><a href="listener.html#4.3.3.1">4.3.3.1 Assertion Results</a></li>
+        <li><a href="listener.html#4.3.3.2">4.3.3.2 File Reporter</a></li>
+        <li><a href="listener.html#4.3.3.3">4.3.3.3 View Results</a></li>
+        <li><a href="listener.html#4.3.3.4">4.3.3.4 View Result Tree</a></li>
       </ul>
     </ul>
-    <li><a href="elements-test-plan.html#4.4">4.4 Timers</a></li>
+    <li><a href="timer.html">4.4 Timers</a></li>
     <ul>
-      <li><a href="elements-test-plan.html#4.4.1">4.4.1 Constant Timer</a></li>
-      <li><a href="elements-test-plan.html#4.4.2">4.4.2 Gaussian Random Timer</a></li>
-      <li><a href="elements-test-plan.html#4.4.3">4.4.3 Uniform Random Timer</a></li>
+      <li><a href="timer.html#4.4.1">4.4.1 Constant Timer</a></li>
+      <li><a href="timer.html#4.4.2">4.4.2 Gaussian Random Timer</a></li>
+      <li><a href="timer.html#4.4.3">4.4.3 Uniform Random Timer</a></li>
     </ul>
-    <li><a href="elements-test-plan.html#4.5">4.5 Assertions</a></li>
-    <li><a href="elements-test-plan.html#4.6">4.6 Configuration Elements</a></li>
+
+    <li><a href="assertion.html">4.5 Assertions</a></li>
+
+    <li><a href="ftp-config.html">4.6 FTP Configuration Elements</a></li>
     <ul>
-      <li><a href="elements-test-plan.html#4.6.1">4.6.1 FTP Sample</a></li>
-      <li><a href="elements-test-plan.html#4.6.2">4.6.2 Multipart-Form Sample</a></li>
-      <li><a href="elements-test-plan.html#4.6.3">4.6.3 Url Sample</a></li>
-      <li><a href="elements-test-plan.html#4.6.4">4.6.4 HTTP Authorization Manager Sample</a></li>
-      <li><a href="elements-test-plan.html#4.6.5">4.6.5 Cookie Manager</a></li>
-      <li><a href="elements-test-plan.html#4.6.6">4.6.6 Header Manager</a></li>
-      <li><a href="elements-test-plan.html#4.6.7">4.6.7 Proxy Server</a></li>
-      <li><a href="elements-test-plan.html#4.6.8">4.6.8 Database Login</a></li>
-      <li><a href="elements-test-plan.html#4.6.9">4.6.9 Database Connection Pool</a></li>
-      <li><a href="elements-test-plan.html#4.6.10">4.6.10 SQL Query</a></li>
+      <li><a href="ftp-config.html#4.6.1">4.6.1 FTP Request Defaults</a></li>
+    </ul>
+
+    <li><a href="http-config.html">4.7 HTTP Configuration Elements</a></li>
+    <ul>
+      <li><a href="http-config.html#4.7.1">4.7.1 HTTP Authorization Manager</a></li>
+      <li><a href="http-config.html#4.7.2">4.7.2 HTTP Cookie Manager</a></li>
+      <li><a href="http-config.html#4.7.3">4.7.3 HTTP Header Manager</a></li>
+      <li><a href="http-config.html#4.7.4">4.7.4 HTTP Proxy Server</a></li>
+      <li><a href="http-config.html#4.7.5">4.7.5 HTTP Request Defaults</a></li>
+    </ul>
+
+    <li><a href="jdbc-config.html">4.8 JDBC Configuration Elements</a></li>
+    <ul>
+      <li><a href="jdbc-config.html#4.8.1">4.8.1 JDBC Database Connection Pool Defaults</a></li>
+      <li><a href="jdbc-config.html#4.8.2">4.8.2 JDBC Database Login Defaults</a></li>
+      <li><a href="jdbc-config.html#4.8.3">4.8.3 JDBC SQL Query Defaults</a></li>
     </ul>
   </ul>
+
   <li><a href="build-web-test-plan.html">5. Building a Web Test Plan</a></li>
   <li><a href="build-adv-web-test-plan.html">6. Building an Advanced Web Test Plan</a></li><!-- (uses most web elements: cookies,auth, etc.)-->
   <li><a href="build-db-test-plan.html">7. Building a Database Test Plan</a></li>
