@@ -19,19 +19,24 @@
 		  <item name="TODO"                   href="/todo.html"/>
 	 </menu>
 	 <menu name="User Manual">
-		<item name="Overview"                  		href="/user_manual/index.html"/>
-		<item name="ThreadGroups"                  	href="/user_manual/threadgroups.html"/>
-		<item name="Generative Controls"          href="/user_manual/test_samples.html"/>
-		<item name="Logical Controls"               href="/user_manual/logical_controllers.html"/>
-		<item name="Visualizers"                  	href="/user_manual/visualizers.html"/>
-		<item name="Timers"                  		href="/user_manual/timers.html"/>
-		<item name="Assertions"                   href="/user_manual/assertions.html"/>
-		<item name="Running a Test"                 href="/user_manual/running.html"/>
-		<item name="Saving/Loading"                 href="/user_manual/saving.html"/>
-		<item name="Distributed JMeter"             href="/user_manual/rmi.html"/>
-		<item name="Recording Browser Activity"     href="/user_manual/proxy_server.html"/>
-		<item name="Built-in Components"     		href="/user_manual/ready_components.html"/>
-		  <item name="Using the SSL Manager"          href="/user_manual/sslmanager.html"/>
+		<item name="Table of Contents"        href="/usermanual/index.html"/>
+		<item name="Introduction"             href="/usermanual/intro.html"/>
+		<item name="Getting Started"          href="/usermanual/get-started.html"/>
+		<item name="Building a Test Plan"     href="/usermanual/build-test-plan.html"/>
+		<item name="Test Plan - Thread Group"     href="/usermanual/thread-group.html"/>
+		<item name="Test Plan - Controllers"      href="/usermanual/controller.html"/>
+		<item name="Test Plan - Listeners"        href="/usermanual/listener.html"/>
+		<item name="Test Plan - Timers"           href="/usermanual/timer.html"/>
+		<item name="Test Plan - Assertions"       href="/usermanual/assertion.html"/>
+		<item name="Test Plan - FTP Config"   href="/usermanual/ftp-config.html"/>
+		<item name="Test Plan - HTTP Config"  href="/usermanual/http-config.html"/>
+		<item name="Test Plan - JDBC Config"  href="/usermanual/jdbc-config.html"/>
+		<item name="Building a Web Test Plan"      href="/usermanual/build-web-test-plan.html"/>
+		<item name="Building an Adv. Web Test Plan" href="/usermanual/build-adv-web-test-plan.html"/>
+		<item name="Building a Database Test Plan" href="/usermanual/build-db-test-plan.html"/>
+		<item name="Building a FTP Test Plan"      href="/usermanual/build-ftp-test-plan.html"/>
+		<item name="Remote Testing"                href="/usermanual/remote-test.html"/>
+		<item name="Best Practices"                href="/usermanual/best-practices.html"/>
 	 </menu>
 	 <menu name="Community">
 		  <item name="Get Involved"           href="/site/getinvolved.html"/>
