@@ -82,7 +82,6 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.test.UnitTestManager;
-import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -100,11 +99,7 @@ public class JMeterUtils implements UnitTestManager
         private static final String VERSION="1.9.RC20030611";
         private static PatternCacheLRU patternCache = new PatternCacheLRU(1000,new Perl5Compiler());
 
-	transient private static Logger log =
-		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.util");
-	private static LoggingManager logManager;
-	private static String LOG_FILE = "log_file";
-	private static String LOG_PRIORITY = "log_level";
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 	private static final SAXParserFactory xmlFactory;
 	static {
 		SAXParserFactory temp = null;
@@ -821,8 +816,6 @@ public class JMeterUtils implements UnitTestManager
 		{
 			return new String[0];
 		}
-		StringTokenizer tokens;
-		String temp;
 		int spot;
 		while ((spot = splittee.indexOf(splitChar + splitChar)) != -1)
 		{
@@ -858,6 +851,10 @@ public class JMeterUtils implements UnitTestManager
 	 */
 	public static void reportErrorToUser(String errorMsg)
 	{
+		if (errorMsg == null){
+			errorMsg = "Unknown error - see log file";
+			log.warn("Unknown error",new Throwable("errorMsg == null"));
+		}
 		JOptionPane.showMessageDialog(
 			GuiPackage.getInstance().getMainFrame(),
 			errorMsg,
@@ -977,11 +974,6 @@ public class JMeterUtils implements UnitTestManager
 		return VERSION;
 	}
 }
-
-
-
-
-
 
 
 
