@@ -340,15 +340,28 @@ POST content.</p>
  The sampler uses Apache SOAP driver, to serialize the message and set the header
  with the correct SOAPAction. Right now the sampler doesn't support automatic WSDL
  handling, since Apache SOAP currently does not provide support for it. Both IBM
- and SUN provide WSDL drivers.</p>
+ and SUN provide WSDL drivers. There are 3 options for the post data: text area,
+ external file, or directory. If you want the sampler to randomly select a message,
+ use the directory. Otherwise, use the text area or a file.</p>
+ <p>The sampler requires mail.jar and activation.jar. This is because Apache SOAP
+ requires the libs. Because mail.jar and activation.jar are distributed by Sun,
+ you have to download it separately.</p>
 </description>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this sampler
          that is shown in the tree.</property>
+        <property name="WSDL URL" required="No">The WSDL URL with the service description.</property>
+        <property name="Webmethods" required="No">The WSDL URL with the service description.</property>
         <property name="URL" required="Yes">The URL to direct the SOAP request to.</property>
         <property name="SOAPAction" required="Yes">The SOAPAction defined in the webservice description or WSDL.</property>
-        <property name="Soap Data" required="Yes">The Soap XML message</property>
+        <property name="Soap/XML-RPC Data" required="Yes">The Soap XML message</property>
+        <property name="Soap file" required="No">File containing soap message</property>
+        <property name="Message Folder" required="No">Folder containing soap files</property>
+        <property name="Memory cache" required="Yes">caches the request data</property>
+        <property name="Use HTTP Proxy" required="No">Check box if http proxy should be used</property>
+        <property name="Proxy Host" required="No">Proxy hostname</property>
+        <property name="Proxy Port" required="No">Proxy host port</property>
         </properties>
 
 </component>
