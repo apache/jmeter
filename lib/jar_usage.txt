@@ -52,4 +52,6 @@ xml-apis
 +org.w3c.dom
 +org.xml.sax
 
+xml-batik
+- org.apache.batik.ext.awt.image.codec|org.apache.batik.ext.awt.image.codec.tiff
 The x* jars are used for XML handling (not needed for JDK1.4)
