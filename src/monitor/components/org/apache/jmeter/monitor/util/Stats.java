@@ -64,7 +64,8 @@ public class Stats
 			// w = (int)(33 * (used/max))
 			long totMem = stat.getJvm().getMemory().getTotal();
 			long freeMem = stat.getJvm().getMemory().getFree();
-			double memdiv = (double)freeMem/(double)totMem;
+			long usedMem = totMem - freeMem;
+			double memdiv = (double)usedMem/(double)totMem;
 			double memWeight = DEFAULT_MEMORY_FACTOR * memdiv;
 
 			Connector cntr = (Connector)stat.getConnector().get(0);
