@@ -1,12 +1,10 @@
 package org.apache.jmeter.visualizers.gui;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.util.Arrays;
 import java.util.Collection;
 
 import javax.swing.Box;
 import javax.swing.JCheckBox;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -62,9 +60,10 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
 
     protected Component getFilePanel()
     {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        Box panel = Box.createHorizontalBox();
         panel.add(filePanel);
         panel.add(getErrorLoggingCheckbox());
+        panel.add(Box.createHorizontalGlue());
         return panel;
     }
 
@@ -165,6 +164,8 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
     {
         Box box = super.makeTitlePanel();
         box.add(getFilePanel());
+        box.validate();
+        box.setMinimumSize(box.getPreferredSize());
         return box;
     }
 

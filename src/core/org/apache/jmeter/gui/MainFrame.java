@@ -113,7 +113,7 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 	transient private static Logger log =
 			Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 	JPanel all;
-    JScrollPane mainPanel;
+    JPanel mainPanel;
 	Box toolPanel;
 	JScrollPane treePanel;
 	JMeterMenuBar menuBar;
@@ -129,7 +129,6 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 	int previousDragYLocation = 0;
 	private Set hosts = new HashSet();
 	JDialog stoppingMessage;
-    JPanel mainPanelView = new JPanel(new GridLayout(1,1));
 
 	/****************************************
 	 * !ToDo (Constructor description)
@@ -274,10 +273,10 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 	 ***************************************/
 	public void setMainPanel(JComponent comp)
 	{
-        mainPanelView.removeAll();
-        mainPanelView.add(comp);  
-        comp.revalidate();   
-		mainPanel.repaint();
+        mainPanel.removeAll();
+        mainPanel.add(comp);  
+        mainPanel.validate();
+        mainPanel.repaint();  
 	}
 
 	/****************************************
@@ -407,7 +406,7 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 
 	private void createMainPanel()
 	{
-		mainPanel = new JScrollPane(mainPanelView);
+		mainPanel = new JPanel(new GridLayout(1,1));
 	}
 
 	private JTree makeTree()

@@ -240,6 +240,8 @@ public abstract class AbstractJMeterGuiComponent
         Box titlePanel = Box.createVerticalBox();
         titlePanel.add(createTitleLabel());
         titlePanel.add(getNamePanel());
+        titlePanel.validate();
+        titlePanel.setMinimumSize(titlePanel.getPreferredSize());
         return titlePanel;
     }
     
