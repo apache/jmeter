@@ -59,11 +59,16 @@ package org.apache.jmeter.protocol.http.parser;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Properties;
+import java.util.Vector;
 
 import junit.framework.TestCase;
 
@@ -76,11 +81,28 @@ import org.apache.log.Logger;
  */
 public abstract class HTMLParser
 {
-	/** Used to store the Logger (used for debug and error messages). */
+    /** Used to store the Logger (used for debug and error messages). */
 	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    /** Singleton */
-    static HTMLParser parser;
+//    /** Singleton */
+//    private static HTMLParser parser;
+
+	private static final String PARSER_METHOD = "getParserInstance";
+	private static final String PARSER_REUSABLE = "isParserReusable";
+
+    /*
+     * Cache of methods.
+     * These need to be invoked each time, in case the parser cannot be re-used 
+     */
+    private static Hashtable methods = new Hashtable(3);
+
+    // Cache of parsers - used if parsers are re-usable
+	private static Hashtable parsers = new Hashtable(3);
+    
+	private final static String PARSER_CLASSNAME = "htmlParser.className";
+	    
+	private final static String DEFAULT_PARSER = 
+        "org.apache.jmeter.protocol.http.parser.HtmlParserHTMLParser";
 
     /**
      * Protected constructor to prevent instantiation except
@@ -89,48 +111,139 @@ public abstract class HTMLParser
     protected HTMLParser() {
     }
     
-    /**
-     * Create the single instance.
-     */
-    private static void initialize()
-    {
-        String htmlParserClassName=
-            JMeterUtils.getPropDefault(
-                "htmlParser.className",
-                "org.apache.jmeter.protocol.http.parser.HtmlParserHTMLParser");
+//    /**
+//     * Create the single instance.
+//     */
+//    private static void initialize()
+//    {
+//        String htmlParserClassName=
+//            JMeterUtils.getPropDefault(PARSER_CLASSNAME,DEFAULT_PARSER);
+//
+//        try
+//        {
+//            parser=
+//                (HTMLParser)Class.forName(htmlParserClassName).newInstance();
+//        }
+//        catch (InstantiationException e)
+//        {
+//            throw new Error(e);
+//        }
+//        catch (IllegalAccessException e)
+//        {
+//            throw new Error(e);
+//        }
+//        catch (ClassNotFoundException e)
+//        {
+//            throw new Error(e);
+//        }
+//        log.info("Using "+htmlParserClassName);
+//    }
 
-        try
-        {
-            parser=
-                (HTMLParser)Class.forName(htmlParserClassName).newInstance();
-        }
-        catch (InstantiationException e)
-        {
-            throw new Error(e);
-        }
-        catch (IllegalAccessException e)
-        {
-            throw new Error(e);
-        }
-        catch (ClassNotFoundException e)
-        {
-            throw new Error(e);
-        }
-        log.info("Using "+htmlParserClassName);
-    }
+    public static final HTMLParser getParser(){
+		boolean reusable=false;
+		String htmlParserClassName=
+		    JMeterUtils.getPropDefault(PARSER_CLASSNAME,DEFAULT_PARSER);
 
-    /**
-     * Obtain the (singleton) HtmlParser. 
-     * 
-     * @return The single HtmlParser instance.
-     */
-    public static final synchronized HTMLParser getParser()
-    {
-        if (parser == null) {
-            initialize();
+		HTMLParser pars=(HTMLParser) parsers.get(htmlParserClassName);
+		if (pars != null){
+			log.info("Fetched "+htmlParserClassName);
+			return pars;
+		}
+		Method meth =(Method) methods.get(htmlParserClassName);
+		if (meth != null) {
+			try
+            {
+                pars = (HTMLParser) meth.invoke(null,null);
+            }
+			catch (NullPointerException e) // method did not return anything
+			{
+				throw new Error(PARSER_METHOD+"() returned null",e);
+			}
+            catch (IllegalArgumentException e)
+            {
+				throw new Error("Should not happen",e);
+            }
+            catch (IllegalAccessException e)
+            {
+				throw new Error("Should not happen",e);
+            }
+            catch (InvocationTargetException e)
+            {
+				throw new Error("Should not happen",e);
+            };
+			log.info("Using "+htmlParserClassName);
+			return pars;
+		}
+		
+		try
+		{
+			Class clazz = Class.forName(htmlParserClassName);
+			meth = clazz.getMethod(PARSER_METHOD,null);
+			pars= (HTMLParser) meth.invoke(null,null);
+			try{
+				reusable=((Boolean)
+				           clazz.getMethod(PARSER_REUSABLE,null)
+				          .invoke(null,null))
+				          .booleanValue();
+			}
+			catch (Exception e){
+				// ignored
+			}
+		}
+		catch (NullPointerException e) // method did not return anything
+		{
+			throw new Error(PARSER_METHOD+"() returned null",e);
+		}
+		catch (IllegalAccessException e)
+		{
+			throw new Error(e);
+		}
+		catch (ClassNotFoundException e)
+		{
+			throw new Error(e);
+		}
+		catch (SecurityException e)
+        {
+			throw new Error(e);
         }
-        return parser;
+        catch (NoSuchMethodException e)
+        {
+			throw new Error(e);
+        }
+        catch (IllegalArgumentException e)
+        {
+			throw new Error(e);
+        }
+        catch (InvocationTargetException e)
+        {
+			throw new Error(e);
+        }
+		log.info("Created "+htmlParserClassName+ " reusable="+reusable);
+		if (reusable){
+			parsers.put(htmlParserClassName,pars);
+		}
+		methods.put(htmlParserClassName,meth);
+    	return pars;
     }
+//    /**
+//     * Obtain the (singleton) HtmlParser. 
+//     * 
+//     * @return The single HtmlParser instance.
+//     */
+//    public static final synchronized HTMLParser xgetParser()
+//    {
+//        if (parser == null) {
+//            initialize();
+//        }
+//        return parser;
+//    }
+
+	/**
+	 * Obtain the (singleton) HtmlParser. 
+	 * 
+	 * @return The single HtmlParser instance.
+	 */
+	//public static abstract HTMLParser xgetParserInstance();
 
     /**
      * Get the URLs for all the resources that a browser would automatically
@@ -155,6 +268,7 @@ public abstract class HTMLParser
 			// the elements in the set later on. As a side-effect, this will keep
 			// them roughly in order, which should be a better model of browser
 			// behaviour.
+			// N.B. LinkedHashSet is Java 1.4
         	return getEmbeddedResourceURLs(html, baseUrl,new LinkedHashSet());
         }
 
@@ -180,40 +294,85 @@ public abstract class HTMLParser
 
     public static class HTMLParserTest extends TestCase
     {
+		private static final String TESTFILE1= "testfiles/HTMLParserTestCase.html";
+		private static final String URL1 = "http://myhost/mydir/myfile.html";
+		private static final String[] EXPECTED_RESULT1 = new String[] {
+			"http://myhost/mydir/images/image-a.gif",
+			"http://myhost/mydir/images/image-b.gif",
+			"http://myhost/mydir/images/image-c.gif",
+			"http://myhost/mydir/images/image-d.gif",
+			"http://myhost/mydir/images/image-e.gif",
+			"http://myhost/mydir/images/image-f.gif",
+			"http://myhost/mydir/images/image-a2.gif",
+			"http://myhost/mydir/images/image-b2.gif",
+			"http://myhost/mydir/images/image-c2.gif",
+			"http://myhost/mydir/images/image-d2.gif",
+			"http://myhost/mydir/images/image-e2.gif",
+			"http://myhost/mydir/images/image-f2.gif",
+		};
+		
+		private static final String[] EXPECTED_RESULT1A = new String[] {
+			"http://myhost/mydir/images/image-a.gif",
+			"http://myhost/mydir/images/image-b.gif",
+			"http://myhost/mydir/images/image-b.gif",
+			"http://myhost/mydir/images/image-c.gif",
+			"http://myhost/mydir/images/image-d.gif",
+			"http://myhost/mydir/images/image-e.gif",
+			"http://myhost/mydir/images/image-f.gif",
+			"http://myhost/mydir/images/image-a2.gif",
+			"http://myhost/mydir/images/image-b2.gif",
+			"http://myhost/mydir/images/image-c2.gif",
+			"http://myhost/mydir/images/image-d2.gif",
+			"http://myhost/mydir/images/image-d2.gif",
+			"http://myhost/mydir/images/image-e2.gif",
+			"http://myhost/mydir/images/image-f2.gif",
+		};
         public HTMLParserTest() {
             super();
         }
-        public static void testParser(HTMLParser parser) throws Exception
+        // Test if can instantiate parser using property name
+        public static void testParser(String s) throws Exception
         {
-            final String[] EXPECTED_RESULT= new String[] {
-                "http://myhost/mydir/images/image-a.gif",
-                "http://myhost/mydir/images/image-b.gif",
-                "http://myhost/mydir/images/image-c.gif",
-                "http://myhost/mydir/images/image-d.gif",
-                "http://myhost/mydir/images/image-e.gif",
-                "http://myhost/mydir/images/image-f.gif",
-                "http://myhost/mydir/images/image-a2.gif",
-                "http://myhost/mydir/images/image-b2.gif",
-                "http://myhost/mydir/images/image-c2.gif",
-                "http://myhost/mydir/images/image-d2.gif",
-                "http://myhost/mydir/images/image-e2.gif",
-                "http://myhost/mydir/images/image-f2.gif",
-            };
-            File f= new File("testfiles/HTMLParserTestCase.html");
-            byte[] buffer= new byte[(int)f.length()];
-            int len= new FileInputStream(f).read(buffer);
-            assertEquals(len, buffer.length);
-            Iterator result=
-                parser.getEmbeddedResourceURLs(
-                    buffer,
-                    new URL("http://myhost/mydir/myfile.html"));
-            Iterator expected= Arrays.asList(EXPECTED_RESULT).iterator();
-            while (expected.hasNext()) {
-                assertTrue(result.hasNext());
-                assertEquals(expected.next(), result.next().toString());
-            }
-            assertFalse(result.hasNext());
+			Properties p = JMeterUtils.getJMeterProperties();
+			if (p == null){
+				p=JMeterUtils.getProperties("jmeter.properties");
+			}
+			p.setProperty(PARSER_CLASSNAME,s);
+        	testParser(getParser());
+			testParser(getParser());// check re-usability
         }
+        
+        //TODO - this test won't work for non-reusable parsers
+        public static void testParser(HTMLParser p) throws Exception
+        {
+        	filetest(p,TESTFILE1,URL1,EXPECTED_RESULT1,null);
+			filetest(p,TESTFILE1,URL1,EXPECTED_RESULT1,null);// See if reusable
+			filetest(p,TESTFILE1,URL1,EXPECTED_RESULT1A,new Vector());
+			filetest(p,TESTFILE1,URL1,EXPECTED_RESULT1A,new Vector());
+        }
+
+		private static void filetest(HTMLParser p,String file, String url, String[] expected_result,
+		              Collection c) throws Exception
+		{
+			log.info("file   "+file);
+			log.info("parser "+p.getClass().getName());
+			File f= new File(file);
+			byte[] buffer= new byte[(int)f.length()];
+			int len= new FileInputStream(f).read(buffer);
+			assertEquals(len, buffer.length);
+			Iterator result;
+			if (c == null) {
+				result = p.getEmbeddedResourceURLs(buffer,new URL(url));
+			} else {
+			    result = p.getEmbeddedResourceURLs(buffer,new URL(url),c);
+			}
+			Iterator expected= Arrays.asList(expected_result).iterator();
+			while (expected.hasNext()) {
+				assertTrue(result.hasNext());
+				assertEquals(expected.next(), result.next().toString());
+			}
+			assertFalse(result.hasNext());
+		}
 
         public void testDefaultParser() throws Exception {
             testParser(getParser());
