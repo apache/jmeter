@@ -9,7 +9,7 @@
     <body>
     <menu name="About">
         <item name="Overview"               href="/index.html"/>
-        <item name="Usage"                  href="/how_to_use_jmeter.html"/>
+        <item name="Usage"                  href="/user_manual/index.html"/>
         <item name="Download"               href="http://jakarta.apache.org/builds/jakarta-jmeter/"/>
         <item name="Install"                href="/installing.html"/>
         <item name="Running"                href="/running.html"/>
