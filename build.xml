@@ -203,13 +203,14 @@
 		<zip zipfile="../ApacheJMeter_${version}.zip">
 			<fileset dir="../">
 				<include name="jakarta-jmeter/**"/>
-				<exclude name="**/classes/**"/>
+				<exclude name="**/classes*/**"/>
 				<exclude name="**/xdocs/**"/>
 				<exclude name="jakarta-jmeter/ext/**"/>
 				<exclude name="**/src/**"/>
 			</fileset>
 		</zip>
-		<tar tarfile="../ApacheJMeter_${version}.tar" basedir=".." includes="jakarta-jmeter/**" excludes="**/classes/**,**/xdocs/**,**/ext/**"/>
+		<tar tarfile="../ApacheJMeter_${version}.tar" basedir=".." includes="jakarta-jmeter/**"
+				excludes="**/classes*/**,**/xdocs/**,jakarta-jmeter/ext/**,**/src/**"/>
 		<gzip zipfile="$../ApacheJMeter_${version}.tar.gz" src="../ApacheJMeter_${version}.tar" />
 	</target>
 
