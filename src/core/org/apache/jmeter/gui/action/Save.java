@@ -52,7 +52,7 @@ public class Save implements Command
     public final static String SAVE_ALL_AS = "save_all_as";
     public final static String SAVE_AS = "save_as";
     public final static String SAVE = "save";
-    private String chosenFile;
+    //NOTUSED private String chosenFile;
     private String testPlanFile;
 
     private static Set commands = new HashSet();
