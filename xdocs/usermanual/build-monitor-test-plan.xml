@@ -59,7 +59,15 @@ Figure 10.1. Thread Group with Default Values</figure>
 
 </section>
 
-<section name="11.2 Adding HTTP Request" anchor="adding_request">
+<section name="11.2 HTTP Auth Manager" anchor="adding_auth">
+<p>Add the <complink name="HTTP Authorization Manager"/> to the Thread Group element
+(Add --&gt; Config element --&gt; HTTP Authorization Manager). Enter the username
+and password for your webserver. Important note: the monitor only works with
+Tomcat5 build 5.0.19 and newer. For instructions on how to setup Tomcat, please
+refer to tomcat 5 documentation.</p>
+</section>
+
+<section name="11.3 Adding HTTP Request" anchor="adding_request">
 
 <p>Add the <complink name="HTTP Request"/> to the Thread Group element
 (Add --&gt; Sampler --&gt; HTTP Request). Then, select the HTTP Request element
@@ -77,7 +85,7 @@ in the tree and edit the following properties):
 
 </section>
 
-<section name="11.3 Adding Constant Timer" anchor="adding_timer">
+<section name="11.4 Adding Constant Timer" anchor="adding_timer">
 
 <p>Add a timer to this thread group (Add --&gt; Timer --&gt; Constant Timer).
 Enter 5000 milliseconds in the "Thread Delay" box. In general, using intervals shorter
@@ -86,7 +94,7 @@ before you deploy the monitor in your production environment.</p>
 
 </section>
 
-<section name="11.4 Adding a Listener to Store the Results" anchor="adding_listener">
+<section name="11.5 Adding a Listener to Store the Results" anchor="adding_listener">
 <p>If you want to keep a record of the server's performance, add a 
  <a href="component_reference.html#listeners">Listener</a>. This element is
 responsible for storing all of the results of your HTTP requests in a file.</p>
@@ -98,7 +106,7 @@ select the Browse button and browse to a directory and then enter a filename.</p
 
 </section>
 
-<section name="11.5 Adding Monitor Results" anchor="add_monitor_listener">
+<section name="11.6 Adding Monitor Results" anchor="add_monitor_listener">
 
 <p>Add the <a href="component_reference.html#listeners">Listener</a> by selecting the
 test plan element (Add --&gt; Listener -- &gt; Monitor Results). There are two tabs in
@@ -111,7 +119,7 @@ historical view of the server's performance.
 
 </section>
 
-<section name="11.6 Saving the Test Plan" anchor="saving">
+<section name="11.7 Saving the Test Plan" anchor="saving">
 <p>Although it is not required, we recommend that you save the Test Plan to a
 file before running it.  To save the Test Plan, select Save Test Plan from the
 File menu (with the latest release, it is no longer necessary to select the
@@ -127,7 +135,7 @@ the Edit menu.
 
 </section>
 
-<section name="11.7 Running the Test Plan" anchor="running">
+<section name="11.8 Running the Test Plan" anchor="running">
 
 <p>From the Run menu, select Run.</p>
 
