@@ -58,7 +58,6 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -72,7 +71,8 @@ import java.util.zip.ZipFile;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Category;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 /************************************************************
 
  *  This class finds classes that implement one or more specified interfaces.
@@ -91,8 +91,8 @@ import org.apache.log4j.Category;
 
  ***********************************************************/
 public class ClassFinder {
-	private static Category catClass =
-		Category.getInstance(ClassFinder.class.getName());
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.util.classfinder");
 	private ClassFinder() {}
 	// static only
 	
@@ -166,16 +166,16 @@ public class ClassFinder {
 			}
 		}
 		strPathsOrJars = addJarsInPath(strPathsOrJars);
-		if (catClass.isDebugEnabled()) {
+		if (log.isDebugEnabled()) {
 			for (int k = 0; k < strPathsOrJars.length; k++) {
-				catClass.debug("strPathsOrJars : " + strPathsOrJars[k]);
+				log.debug("strPathsOrJars : " + strPathsOrJars[k]);
 			}
 		}
 		listPaths = getClasspathMatches(strPathsOrJars);
-		if (catClass.isDebugEnabled()) {
+		if (log.isDebugEnabled()) {
 			Iterator tIter = listPaths.iterator();
 			for (; tIter.hasNext();) {
-				catClass.debug("listPaths : " + tIter.next());
+				log.debug("listPaths : " + tIter.next());
 			}
 		}
 		listClasses = new ArrayList();
@@ -185,10 +185,10 @@ public class ClassFinder {
 		}
 		// first get all the classes
 		findClassesInPaths(listPaths, listClasses);
-		if (catClass.isDebugEnabled()) {
+		if (log.isDebugEnabled()) {
 			Iterator tIter = listClasses.iterator();
 			for (; tIter.hasNext();) {
-				catClass.debug("listClasses : " + tIter.next());
+				log.debug("listClasses : " + tIter.next());
 			}
 		}
 		List subClassList =
@@ -322,12 +322,12 @@ public class ClassFinder {
 				listPaths.add(strPath);
 			} else {
 				for (i = 0; i < strPathsOrJars.length; i++) {
-					if (catClass.isDebugEnabled()) {
-						catClass.debug("strPath(lower) : " + strPath.toLowerCase());
-						catClass.debug("strPathsOrJars[" + i + "] : " + strPathsOrJars[i]);
+					if (log.isDebugEnabled()) {
+						log.debug("strPath(lower) : " + strPath.toLowerCase());
+						log.debug("strPathsOrJars[" + i + "] : " + strPathsOrJars[i]);
 					}
 					if (strPath.endsWith(strPathsOrJars[i])) {
-						catClass.debug("match!!!");
+						log.debug("match!!!");
 						listPaths.add(strPath);
 					}
 				}
