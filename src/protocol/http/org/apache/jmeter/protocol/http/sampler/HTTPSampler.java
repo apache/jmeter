@@ -703,6 +703,7 @@ public class HTTPSampler extends AbstractSampler
         }
         catch (Exception e)
         {
+            log.info("Getting error message from server",e);
             in = new BufferedInputStream(conn.getErrorStream());
         }
         java.io.ByteArrayOutputStream w = new ByteArrayOutputStream();

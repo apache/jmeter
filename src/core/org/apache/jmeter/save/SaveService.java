@@ -925,21 +925,21 @@ public class SaveService implements SaveServiceConstants
             {
                 element.setProperty(
                     new TestElementProperty(
-                        children[i].getAttribute("name"),
+                        children[i].getAttribute("name",""),
                         createTestElement(children[i])));
             }
             else if (children[i].getName().equals("collection"))
             {
                 element.setProperty(
                     new CollectionProperty(
-                        children[i].getAttribute("name"),
+                        children[i].getAttribute("name",""),
                         createCollection(children[i])));
             }
             else if (children[i].getName().equals("map"))
             {
                 element.setProperty(
                     new MapProperty(
-                        children[i].getAttribute("name"),
+                        children[i].getAttribute("name",""),
                         createMap(children[i])));
             }
         }
@@ -967,11 +967,11 @@ public class SaveService implements SaveServiceConstants
             }
             else if (items[i].getName().equals("testelement"))
             {
-                coll.add(new TestElementProperty(items[i].getAttribute("name"),createTestElement(items[i])));
+                coll.add(new TestElementProperty(items[i].getAttribute("name",""),createTestElement(items[i])));
             }
             else if (items[i].getName().equals("collection"))
             {
-                coll.add(new CollectionProperty(items[i].getAttribute("name"),createCollection(items[i])));
+                coll.add(new CollectionProperty(items[i].getAttribute("name",""),createCollection(items[i])));
             }
             else if (items[i].getName().equals("string"))
             {
@@ -979,7 +979,7 @@ public class SaveService implements SaveServiceConstants
             }
             else if (items[i].getName().equals("map"))
             {
-                coll.add(new MapProperty(items[i].getAttribute("name"),createMap(items[i])));
+                coll.add(new MapProperty(items[i].getAttribute("name",""),createMap(items[i])));
             }
         }
         return coll;
@@ -1026,18 +1026,18 @@ public class SaveService implements SaveServiceConstants
             else if (items[i].getName().equals("testelement"))
             {
                 map.put(
-                    items[i].getAttribute("name"),
-                    new TestElementProperty(items[i].getAttribute("name"),createTestElement(items[i])));
+                    items[i].getAttribute("name",""),
+                    new TestElementProperty(items[i].getAttribute("name",""),createTestElement(items[i])));
             }
             else if (items[i].getName().equals("collection"))
             {
                 map.put(
                     items[i].getAttribute("name"),
-                    new CollectionProperty(items[i].getAttribute("name"),createCollection(items[i])));
+                    new CollectionProperty(items[i].getAttribute("name",""),createCollection(items[i])));
             }
             else if (items[i].getName().equals("map"))
             {
-                map.put(items[i].getAttribute("name"), new MapProperty(items[i].getAttribute("name"),createMap(items[i])));
+                map.put(items[i].getAttribute("name",""), new MapProperty(items[i].getAttribute("name",""),createMap(items[i])));
             }
         }
         return map;
