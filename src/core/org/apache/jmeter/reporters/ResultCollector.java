@@ -107,9 +107,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	 */
 	//protected List results = Collections.synchronizedList(new ArrayList());
 	private int current;
-	private DefaultConfigurationSerializer serializer;
+	transient private DefaultConfigurationSerializer serializer;
 	private boolean inLoading = false;
-	private PrintWriter out;
+	transient private PrintWriter out;
 	private boolean inTest = false;
 	private static Map files = new HashMap();
 	private Set hosts = new HashSet();

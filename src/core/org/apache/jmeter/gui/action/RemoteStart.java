@@ -108,6 +108,7 @@ public class RemoteStart extends AbstractAction
 		String action = e.getActionCommand();
 		if(action.equals("remote_stop"))
 		{
+			GuiPackage.getInstance().getMainFrame().showStoppingMessage(name);
 			JMeterEngine engine = (JMeterEngine)remoteEngines.get(name);
 			engine.stopTest();
 		}

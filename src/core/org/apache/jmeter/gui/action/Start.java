@@ -115,7 +115,7 @@ public class Start extends AbstractAction
 		}
 		else if(e.getActionCommand().equals("stop"))
 		{
-			GuiPackage.getInstance().getMainFrame().showStoppingMessage();
+			GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
 			engine.stopTest();
 			engine = null;
 		}

@@ -53,20 +53,51 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.gui;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.tree.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTree;
+import javax.swing.MenuElement;
+import javax.swing.SwingUtilities;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreeModel;
+
 import org.apache.jmeter.gui.action.ActionRouter;
-import org.apache.jmeter.gui.tree.*;
-import org.apache.jmeter.gui.util.JMeterMenuBar;
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.gui.action.Start;
-import org.apache.jmeter.gui.action.CheckDirty;
-import org.apache.jmeter.testelement.TestListener;
-import org.apache.jmeter.samplers.Remoteable;
+import org.apache.jmeter.gui.action.GlobalMouseListener;
+import org.apache.jmeter.gui.tree.JMeterCellRenderer;
+import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.util.ComponentUtil;
+import org.apache.jmeter.gui.util.JMeterMenuBar;
+import org.apache.jmeter.samplers.Remoteable;
+import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.util.JMeterUtils;
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
  *
@@ -114,6 +145,11 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 		init();
 		this.setDefaultCloseOperation(this.DO_NOTHING_ON_CLOSE);
 	}
+	
+	public MainFrame()
+	{
+	}
+	
 
 	/****************************************
 	 * !ToDo (Method description)
@@ -125,11 +161,11 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 		menuBar.setFileSaveEnabled(enabled);
 	}
 	
-	public void showStoppingMessage()
+	public void showStoppingMessage(String host)
 	{
 		stoppingMessage = new JDialog(this,
 				JMeterUtils.getResString("stopping_test_title"),true);
-		JLabel stopLabel = new JLabel(JMeterUtils.getResString("stopping_test"));
+		JLabel stopLabel = new JLabel(JMeterUtils.getResString("stopping_test")+": "+host);
 		stopLabel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 		stoppingMessage.getContentPane().add(stopLabel);
 		stoppingMessage.pack();
@@ -265,6 +301,7 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 
 	public void testStarted(String host)
 	{
+		hosts.add(host);
 		runningIndicator.setIcon(runningIcon);
 		menuBar.setRunning(true,host);
 	}
@@ -279,6 +316,11 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 	{
 		testEnded("local");
 		menuBar.setEnabled(false);
+		if(stoppingMessage != null)
+		{
+			stoppingMessage.dispose();
+			stoppingMessage = null;
+		}
 	}
 
 	public void testEnded(String host)
@@ -286,14 +328,14 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 		hosts.remove(host);
 		if(hosts.size() == 0)
 		{
-			runningIndicator.setIcon(stoppedIcon);
-			if(stoppingMessage != null)
-			{
-				stoppingMessage.dispose();
-				stoppingMessage = null;
-			}
+			runningIndicator.setIcon(stoppedIcon);			
 		}
 		menuBar.setRunning(false,host);
+		if(stoppingMessage != null)
+		{
+			stoppingMessage.dispose();
+			stoppingMessage = null;
+		}
 	}
 
 	private void init()
@@ -305,6 +347,7 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 		addThemAll();
 		addWindowListener(new WindowHappenings());
 		tree.setSelectionRow(1);
+		this.addMouseListener(new GlobalMouseListener());
 	}
 
 	private TreeCellRenderer getCellRenderer()

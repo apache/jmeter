@@ -107,7 +107,7 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
 	 ***************************************/
 	protected final boolean FILL_UP_WITH_ZEROS = false;
 
-	private SplineGraph graph = null;
+	transient private SplineGraph graph = null;
 
 	private JLabel minimumLabel = null;
 	private JLabel maximumLabel = null;
@@ -118,7 +118,7 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
 	private JLabel maximumNumberLabel = null;
 	private JLabel averageNumberLabel = null;
 	private JLabel incomingNumberLabel = null;
-	private SplineModel model;
+	transient private SplineModel model;
 
 	/****************************************
 	 * !ToDo (Constructor description)

@@ -160,6 +160,7 @@ class graphPanel extends JPanel {
 	Hashtable data;
 	Vector keys = new Vector();
 	Vector colorList = new Vector();
+	public graphPanel(){}
 	public graphPanel(Hashtable data) {
 		this.data = data;
 		Enumeration e = data.keys();

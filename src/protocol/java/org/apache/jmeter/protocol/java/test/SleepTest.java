@@ -55,6 +55,7 @@
 
 package org.apache.jmeter.protocol.java.test;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -70,7 +71,7 @@ import org.apache.log.Logger;
  * <code>JavaSamplerClient</code> interface.
  */
 
-public class SleepTest implements JavaSamplerClient {
+public class SleepTest implements JavaSamplerClient,Serializable {
 	/** Define category for logging  */
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
 	/** */

@@ -90,7 +90,7 @@ public class JDBCSampler extends AbstractSampler implements TestListener
 	public static String CONNECTIONS = "JDBCSampler.connections";
 	public static String MAXUSE = "JDBCSampler.maxuse";
 	//database connection pool manager
-	DBConnectionManager manager = DBConnectionManager.getManager();
+	transient DBConnectionManager manager = DBConnectionManager.getManager();
 	// end method
 	public final static String QUERY = "JDBCSampler.query";
 	private static Map keyMap = new HashMap();
