@@ -46,7 +46,6 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author     ?
  * @version    $Revision$ Updated on: $Date$
  */
 public class StandardJMeterEngine
@@ -63,10 +62,45 @@ public class StandardJMeterEngine
     private transient SearchByClass testListeners;
     private String host = null;
     private transient ListenerNotifier notifier;
-
+    
+    // Allow engine and threads to be stopped from outside a thread
+    // e.g. from beanshell server
+    private static transient Map allThreadNames;
+    private static StandardJMeterEngine engine;
+    public static void stopEngineNow()
+    {
+    	  engine.stopTest();
+    }
+    public static void stopEngine()
+    {
+    	  engine.askThreadsToStop();
+    }
+    public static boolean stopThread(String threadName)
+    {
+    	if (allThreadNames == null) return false;// e.g. not yet started
+    	JMeterThread thrd;
+		try {
+    	    thrd = (JMeterThread)allThreadNames.get(threadName);
+    	} catch (Exception e) {
+    		log.warn("stopThread: "+e);
+    		return false;
+    	}
+    	if (thrd!= null)
+    	{
+    		thrd.stop();
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+    
     public StandardJMeterEngine()
     {
         allThreads = new HashMap();
+        engine=this;
+        allThreadNames = new HashMap();
     }
 
     public StandardJMeterEngine(String host)
@@ -318,7 +352,8 @@ public class StandardJMeterEngine
                 threads[i].setThreadNum(i);
                 threads[i].setInitialContext(JMeterContextService.getContext());
                 threads[i].setInitialDelay((int) (perThreadDelay * (float) i));
-                threads[i].setThreadName(groupName + (groupCount) + "-" + (i + 1));
+                String threadName = groupName + " " + groupCount + "-" + (i + 1);
+                threads[i].setThreadName(threadName);
 
                 scheduleThread(threads[i], group);
                 
@@ -328,8 +363,9 @@ public class StandardJMeterEngine
 				threads[i].setOnErrorStopThread(onErrorStopThread);
 				
                 Thread newThread = new Thread(threads[i]);
-                newThread.setName(threads[i].getThreadName());
+                newThread.setName(threadName);
                 allThreads.put(threads[i], newThread);
+                allThreadNames.put(threadName,threads[i]);
                 if (serialized
                     && !iter.hasNext()
                     && i == threads.length - 1) //last thread
