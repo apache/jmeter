@@ -42,6 +42,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
 {
     private UrlConfigGui urlConfigGui;
     private JCheckBox getImages;
+    private JCheckBox isMon;
 
     public HttpTestSampleGui()
     {
@@ -54,6 +55,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         urlConfigGui.configure(element);
         //NOTUSED String testClass = element.getPropertyAsString(TestElement.TEST_CLASS);
         getImages.setSelected(((HTTPSampler) element).isImageParser());
+        isMon.setSelected(((HTTPSampler) element).isMonitor());
     }
 
     public TestElement createTestElement()
@@ -79,6 +81,11 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         else
         {
             ((HTTPSampler)sampler).setImageParser(false);
+        }
+        if (isMon.isSelected()){
+			((HTTPSampler)sampler).setMonitor("true");
+        } else {
+			((HTTPSampler)sampler).setMonitor("false");
         }
         this.configureTestElement(sampler);
     }
@@ -118,8 +125,12 @@ public class HttpTestSampleGui extends AbstractSamplerGui
             new JCheckBox(
                 JMeterUtils.getResString("web_testing_retrieve_images"));
         retrieveImagesPanel.add(getImages);
-
+        JPanel isMonitorPanel = new JPanel();
+        isMon = new JCheckBox(
+            JMeterUtils.getResString("monitor_is_title"));
+        isMonitorPanel.add(isMon);
         optionalTasksPanel.add(retrieveImagesPanel);
+		optionalTasksPanel.add(isMonitorPanel);
         return optionalTasksPanel;
     }
         
