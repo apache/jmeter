@@ -19,7 +19,6 @@
 package org.apache.jmeter.protocol.http.parser;
 
 import java.io.ByteArrayInputStream;
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -49,7 +48,7 @@ import org.xml.sax.SAXException;
  * Created   June 14, 2001
  * @version   $Revision$ Last updated: $Date$
  */
-public final class HtmlParsingUtils implements Serializable
+public final class HtmlParsingUtils
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
