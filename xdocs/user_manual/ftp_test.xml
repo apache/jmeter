@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+	 <author email="mstover1@apache.org">Michael Stover, et al.</author>
+	 <title>FTP Test</title>
+  </properties>
+<body>
+<section name="FTP Test Controller">
+<p>
+The FTP Test controller is a generative controller whose function is to create a single test case for FTP applications.
+The FTP Test allows you to configure an FTP sample:</p>
+<ul>
+<li><b>Server</b>: Host name of the server being tested.</li>
+<li><b>Filename</b>: File to be downloaded via FTP</li>
+<li><b>Username</b>: Username to use to connect to server</li>
+<li><b>Password</b>: Password to user to connect to server</li>
+</ul>
+</section>
+<section name="Example test tree">
+<img src="/images/screenshots/ftptest.gif" width="658" height="299"/>
+</section>
+</body>
+</document>

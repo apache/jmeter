@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="Velocity"
-        href="http://jakarta.apache.org/jmeter/">
+		  href="http://jakarta.apache.org/jmeter/">
 
-    <title>JMeter</title>
-    <!--
-    <logo href="/images/logo.gif">JMeter</logo>
-    -->
-    <body>
-    <menu name="About">
-        <item name="Overview"               href="/index.html"/>
-        <item name="Download"               href="http://jakarta.apache.org/builds/jakarta-jmeter/"/>
-        <item name="Install"                href="/installing.html"/>
-        <item name="Running"                href="/running.html"/>
-        <item name="Extending"              href="/extending/index.html"/>
-        <item name="Changes"                href="/changes.html"/>
-        <item name="Known Bugs"             href="/bugs.html"/>
-        <item name="License"                href="/license.html"/>
-        <item name="TODO"                   href="/todo.html"/>
-    </menu>
-    <menu name="User Manual">
-    	<item name="Overview"                  		href="/user_manual/index.html"/>
-    	<item name="ThreadGroups"                  	href="/user_manual/threadgroups.html"/>
-    	<item name="Creating Test Samples"          href="/user_manual/test_samples.html"/>
-    	<item name="Logical Controls"               href="/user_manual/logical_controllers.html"/>
-    	<item name="Visualizers"                  	href="/user_manual/visualizers.html"/>
-    	<item name="Timers"                  		href="/user_manual/timers.html"/>
-    	<item name="Running a Test"                 href="/user_manual/running.html"/>
-    	<item name="Saving/Loading"                 href="/user_manual/saving.html"/>
-    	<item name="Distributed JMeter"             href="/user_manual/rmi.html"/>
-    	<item name="Recording Browser Activity"     href="/user_manual/proxy_server.html"/>
-    	<item name="Built-in Components"     		href="/user_manual/ready_components.html"/>
-    </menu>
-    <menu name="Community">
-        <item name="Get Involved"           href="/site/getinvolved.html"/>
-        <item name="Mailing Lists"          href="/site/mail.html"/>
-        <item name="CVS Repositories"       href="/site/cvsindex.html"/>
-    </menu>
-    </body>
+	 <title>JMeter</title>
+	 <!--
+	 <logo href="/images/logo.gif">JMeter</logo>
+	 -->
+	 <body>
+	 <menu name="About">
+		  <item name="Overview"               href="/index.html"/>
+		  <item name="Download"               href="http://jakarta.apache.org/builds/jakarta-jmeter/"/>
+		  <item name="Install"                href="/installing.html"/>
+		  <item name="Running"                href="/running.html"/>
+		  <item name="Extending"              href="/extending/index.html"/>
+		  <item name="Changes"                href="/changes.html"/>
+		  <item name="Known Bugs"             href="http://nagoya.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;email1=&amp;emailtype1=substring&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=substring&amp;emailreporter2=1&amp;bugidtype=include&amp;bug_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;product=JMeter&amp;short_desc=&amp;short_desc_type=substring&amp;long_desc=&amp;long_desc_type=substring&amp;bug_file_loc=&amp;bug_file_loc_type=substring&amp;keywords=&amp;keywords_type=anywords&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;cmdtype=doit&amp;order=Reuse+same+sort+as+last+time"/>
+		  <item name="License"                href="/license.html"/>
+		  <item name="TODO"                   href="/todo.html"/>
+	 </menu>
+	 <menu name="User Manual">
+		<item name="Overview"                  		href="/user_manual/index.html"/>
+		<item name="ThreadGroups"                  	href="/user_manual/threadgroups.html"/>
+		<item name="Generative Controls"          href="/user_manual/test_samples.html"/>
+		<item name="Logical Controls"               href="/user_manual/logical_controllers.html"/>
+		<item name="Visualizers"                  	href="/user_manual/visualizers.html"/>
+		<item name="Timers"                  		href="/user_manual/timers.html"/>
+		<item name="Running a Test"                 href="/user_manual/running.html"/>
+		<item name="Saving/Loading"                 href="/user_manual/saving.html"/>
+		<item name="Distributed JMeter"             href="/user_manual/rmi.html"/>
+		<item name="Recording Browser Activity"     href="/user_manual/proxy_server.html"/>
+		<item name="Built-in Components"     		href="/user_manual/ready_components.html"/>
+	 </menu>
+	 <menu name="Community">
+		  <item name="Get Involved"           href="/site/getinvolved.html"/>
+		  <item name="Mailing Lists"          href="/site/mail.html"/>
+		  <item name="CVS Repositories"       href="/site/cvsindex.html"/>
+	 </menu>
+	 </body>
 </project>

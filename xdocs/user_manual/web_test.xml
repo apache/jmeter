@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+	 <author email="mstover1@apache.org">Michael Stover, et al.</author>
+	 <title>Web Test</title>
+  </properties>
+<body>
+<section name="Web Test Controller">
+<p>
+The Web Test controller is a generative controller whose function is to create a single test case for HTTP applications.
+The Web Test allows you to configure a URL sample:</p>
+<ul>
+<li><b>Protocol</b>: HTTP or HTTPS</li>
+<li><b>Method</b>: GET or POST</li>
+<li><b>Domain</b>: Host name of the server being tested</li>
+<li><b>Port</b>: Port to connect to the server on</li>
+<li><b>Path</b>: File path.  This represent the part of the URL following the domain name, but before any query string that may be involved</li>
+<li><b>Paramter Table</b>: These are the arguments that will make up the query string.  This string will be appended to the URL if Method=GET, and it will be sent in a separate stream if Method=POST.</li>
+</ul>
+<p>Additionally, there are two check selections that allow you to control whether JMeter will also download any images found on
+the page returned by the server, or to tell JMeter that it should upload a file using multipart-form format.  If you are uploading a file, JMeter requires three additional parameters:</p>
+<ul>
+<li><b>File</b>: The path to the file being uploaded</li>
+<li><b>Field Name</b>: The name of the upload field (ie, if it were a web page, there would be an input field with a name - this is that name)</li>
+<li><b>MimeType</b>: The mimetype of the document being uploaded</li>
+</ul>
+</section>
+<section name="Example Web Test">
+<img src="/images/screenshots/webtest.gif" width="789" height="769"/>
+</section>
+</body>
+</document>

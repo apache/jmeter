@@ -33,7 +33,7 @@ are in the process of constructing a test.
 <p>
 A <b>TestPlan</b> consists of one or more <b>ThreadGroups</b>. A
 <b>ThreadGroup</b> is a root element (it can not be nested) which may contain <b>timers</b>,
-<b>listeners</b>, <b>controllers</b>, and <b>config elements</b>.  A <b>ThreadGroup</b> also
+<b>listeners</b>, <b>controllers</b>, <b>Assertions</b>, and <b>config elements</b>.  A <b>ThreadGroup</b> also
 defines the number of threads available to the threadgroup.
 </p>
 <ul>
@@ -50,9 +50,12 @@ to file).  Listeners are also leaves in a test configuration tree.
 </li>
 <li>A <b>controller</b> is an element that controls the flow of test samples.  It also controls the process by which
 test samples are created.  Controllers implement JMeter's various testing
-protocols. They may have other controllers and/or config elements as
-sub-elements.
+protocols. <a href="logical_controllers.html">Logic Controllers</a> may have other controllers and/or config elements as
+sub-elements, and <a href="test_samples.html">Generative Controllers</a> can only have config elements or assertions as sub-elements.
 </li>
+<li>An <b>Assertion</b> states a requirement that the server's response must satisfy.  For instance, an Assertion element
+can be configured to assert that response text from a web server will include a particular string.  If it does
+not, it will be reported as a failed sample by the assertion reporter. </li>
 <li>A <b>Config Element</b> represents a coherent set of information that is
 usually specifically targeted to a particular
 protocol or controller.  For instance, setting up a database test requires three
