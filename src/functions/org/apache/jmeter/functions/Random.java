@@ -48,7 +48,7 @@ public class Random extends AbstractFunction implements Serializable
         desc.add(JMeterUtils.getResString("function_name_param"));
     }
 
-    private CompoundVariable varName, minimum, maximum;
+    private transient CompoundVariable varName, minimum, maximum;
 
     /**
      * No-arg constructor.
