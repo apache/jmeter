@@ -295,7 +295,18 @@ public class StandardJMeterEngine
         {
             ThreadGroup group = (ThreadGroup) iter.next();
             threads = new JMeterThread[group.getNumThreads()];
+            boolean onErrorStopTest = group.getOnErrorStopTest();
+			boolean onErrorStopThread = group.getOnErrorStopThread();
+			
             log.info("Starting " + threads.length + " test threads");
+			if (onErrorStopTest) {
+				log.info("Test will stop on error");
+			} else if (onErrorStopThread) {
+				log.info("Thread will stop on error");
+			} else {
+				log.info("Continue on error");
+			}
+
             for (int i = 0; running && i < threads.length; i++)
             {
                 ListedHashTree threadGroupTree =
@@ -319,8 +330,8 @@ public class StandardJMeterEngine
                 
                 // Set up variables for stop handling
                 threads[i].setEngine(this);
-				threads[i].setOnErrorStopTest(group.getOnErrorStopTest());
-				threads[i].setOnErrorStopThread(group.getOnErrorStopThread());
+				threads[i].setOnErrorStopTest(onErrorStopTest);
+				threads[i].setOnErrorStopThread(onErrorStopThread);
 				
                 Thread newThread = new Thread(threads[i]);
                 newThread.setName(threads[i].getThreadName());
