@@ -103,7 +103,14 @@ public class LoopController extends GenericController implements Serializable
 
     public int getLoops()
     {
-        return getPropertyAsInt(LOOPS);
+    	try 
+    	{
+        	return Integer.parseInt(getPropertyAsString(LOOPS));
+    	}
+    	catch (NumberFormatException e)
+    	{
+    		return 0;
+    	}
     }
 
     public String getLoopString()
