@@ -78,6 +78,8 @@ import javax.swing.MenuElement;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.action.ActionRouter;
+import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -396,7 +398,7 @@ public final class MenuFactory
             List guiClasses =
                 ClassFinder.findClassesThatExtend(
                     JMeterUtils.getSearchPaths(),
-                    new Class[] { JMeterGUIComponent.class });
+                    new Class[] { JMeterGUIComponent.class, TestBean.class });
             timers = new LinkedList();
             controllers = new LinkedList();
             samplers = new LinkedList();
@@ -419,30 +421,40 @@ public final class MenuFactory
             Iterator iter = guiClasses.iterator();
             while (iter.hasNext())
             {
+                String name= (String)iter.next();
+                
                 JMeterGUIComponent item;
                 try
                 {
-                    item =
-                        (JMeterGUIComponent) Class
-                            .forName((String) iter.next())
-                            .newInstance();
+                    Class c = Class.forName(name);
+                    if (TestBean.class.isAssignableFrom(c))
+                    {
+                        item = new TestBeanGUI(c);
+                    }
+                    else
+                    {
+                        item = (JMeterGUIComponent) c.newInstance();
+                    }
                 }
                 catch (Throwable e)
                 {
+                    log.info("Could not instantiate "+name, e);
                     continue;
                 }
-                if (elementsToSkip.contains(item.getClass().getName())
+                if (elementsToSkip.contains(name)
                     || elementsToSkip.contains(item.getStaticLabel()))
                 {
+                    log.debug("Skipping "+name);
                     continue;
                 }
                 else
                 {
-                    elementsToSkip.add(item.getClass().getName());
+                    elementsToSkip.add(name);
                 }
                 Collection categories = item.getMenuCategories();
                 if (categories == null)
                 {
+                    log.debug(name+" participates in no menus.");
                     continue;
                 }
                 if (categories.contains(TIMERS))
@@ -450,7 +462,7 @@ public final class MenuFactory
                     timers.add(
                         new MenuInfo(
                             item.getStaticLabel(),
-                            item.getClass().getName()));
+                            name));
                 }
 
                 if (categories.contains(POST_PROCESSORS))
@@ -458,7 +470,7 @@ public final class MenuFactory
                     postProcessors.add(
                         new MenuInfo(
                             item.getStaticLabel(),
-                            item.getClass().getName()));
+                            name));
                 }
 
                 if (categories.contains(PRE_PROCESSORS))
@@ -466,7 +478,7 @@ public final class MenuFactory
                     preProcessors.add(
                         new MenuInfo(
                             item.getStaticLabel(),
-                            item.getClass().getName()));
+                            name));
                 }
 
                 if (categories.contains(CONTROLLERS))
@@ -474,7 +486,7 @@ public final class MenuFactory
                     controllers.add(
                         new MenuInfo(
                             item.getStaticLabel(),
-                            item.getClass().getName()));
+                            name));
                 }
 
                 if (categories.contains(SAMPLERS))
@@ -482,7 +494,7 @@ public final class MenuFactory
                     samplers.add(
                         new MenuInfo(
                             item.getStaticLabel(),
-                            item.getClass().getName()));
+                            name));
                 }
 
                 if (categories.contains(NON_TEST_ELEMENTS))
@@ -490,7 +502,7 @@ public final class MenuFactory
                     nonTestElements.add(
                         new MenuInfo(
                             item.getStaticLabel(),
-                            item.getClass().getName()));
+                            name));
                 }
 
                 if (categories.contains(LISTENERS))
@@ -498,7 +510,7 @@ public final class MenuFactory
                     listeners.add(
                         new MenuInfo(
                             item.getStaticLabel(),
-                            item.getClass().getName()));
+                            name));
                 }
 
                 if (categories.contains(CONFIG_ELEMENTS))
@@ -506,14 +518,14 @@ public final class MenuFactory
                     configElements.add(
                         new MenuInfo(
                             item.getStaticLabel(),
-                            item.getClass().getName()));
+                            name));
                 }
                 if (categories.contains(ASSERTIONS))
                 {
                     assertions.add(
                         new MenuInfo(
                             item.getStaticLabel(),
-                            item.getClass().getName()));
+                            name));
                 }
 
             }

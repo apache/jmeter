@@ -66,6 +66,8 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
@@ -180,7 +182,19 @@ public final class GuiPackage
      */
     public JMeterGUIComponent getGui(TestElement node)
     {
-        return getGui(node, node.getPropertyAsString(TestElement.GUI_CLASS));
+        try
+        {
+            return getGui(
+                node, 
+                Class.forName(node.getPropertyAsString(TestElement.GUI_CLASS)),
+                Class.forName(node.getPropertyAsString(TestElement.TEST_CLASS)));
+        }
+        catch (ClassNotFoundException e)
+        {
+            log.error("Could not get GUI for "
+                +node.getPropertyAsString(TestElement.GUI_CLASS), e);
+            return null;
+        }
     }
 
     /**
@@ -193,20 +207,22 @@ public final class GuiPackage
      * @param node     the test element which this GUI is being created for
      * @param guiClass the fully qualifed class name of the GUI component which
      *                 will be created if it doesn't already exist
+     * @param testClass the fully qualifed class name of the test elements which
+     *                 have to be edited by the returned GUI component
      * 
      * @return         the GUI component corresponding to the specified test
      *                 element
      */
-    public JMeterGUIComponent getGui(TestElement node, String guiClass)
+    public JMeterGUIComponent getGui(
+        TestElement node, Class guiClass, Class testClass)
     {
-        log.debug("Getting gui for " + node);
         try
         {
             JMeterGUIComponent comp = (JMeterGUIComponent) nodesToGui.get(node);
             log.debug("Gui retrieved = " + comp);
             if (comp == null)
             {
-                comp = getGuiFromCache(guiClass);
+                comp = getGuiFromCache(guiClass, testClass);
                 nodesToGui.put(node, comp);
             }
             return comp;
@@ -241,7 +257,7 @@ public final class GuiPackage
             TestElement currentNode =
                 treeListener.getCurrentNode().createTestElement();
             JMeterGUIComponent comp = getGui(currentNode);
-            if(!(comp instanceof AbstractVisualizer))  // a hack that needs to be fixed for 2.0
+            if(!(comp instanceof AbstractVisualizer))  // TODO: a hack that needs to be fixed for 2.0
             {
                 comp.clear();
             }
@@ -269,14 +285,16 @@ public final class GuiPackage
      * Create a TestElement corresponding to the specified GUI class. 
      * 
      * @param guiClass the fully qualified class name of the GUI component
-     * 
+     *                  or a TestBean class for TestBeanGUIs.  
+     * @param testClass the fully qualified class name of the test elements
+     *                 edited by this GUI component.
      * @return the test element corresponding to the specified GUI class.
      */
-    public TestElement createTestElement(String guiClass)
+    public TestElement createTestElement(Class guiClass, Class testClass)
     {
         try
         {
-            JMeterGUIComponent comp = getGuiFromCache(guiClass);
+            JMeterGUIComponent comp = getGuiFromCache(guiClass, testClass);
             comp.clear();
             TestElement node = comp.createTestElement();
             nodesToGui.put(node, comp);
@@ -290,6 +308,50 @@ public final class GuiPackage
     }
 
     /**
+     * Create a TestElement for a GUI or TestBean class.
+     * <p>
+     * This is a utility method to help actions do with one single String
+     * parameter. 
+     * 
+     * @param objClass the fully qualified class name of the GUI component or of
+     *                  the TestBean subclass for which a TestBeanGUI is wanted.  
+     * @return the test element corresponding to the specified GUI class.
+     */
+    public TestElement createTestElement(String objClass)
+    {
+        JMeterGUIComponent comp;
+        Class c;
+        try
+        {
+            c= Class.forName(objClass);
+            if (TestBean.class.isAssignableFrom(c))
+            {
+                comp= getGuiFromCache(TestBeanGUI.class, c);
+            }
+            else
+            {
+                comp= getGuiFromCache(c, null);
+            }
+            comp.clear();
+            TestElement node = comp.createTestElement();
+            nodesToGui.put(node, comp);
+            return node;
+        }
+        catch (ClassNotFoundException e)
+        {
+            log.error("Problem retrieving gui for "+objClass, e);
+            throw new Error(e); // Programming error: bail out.
+        } catch (InstantiationException e)
+        {
+            log.error("Problem retrieving gui for "+objClass, e);
+            throw new Error(e); // Programming error: bail out.
+        } catch (IllegalAccessException e)
+        {
+            log.error("Problem retrieving gui for "+objClass, e);
+            throw new Error(e); // Programming error: bail out.
+        }
+    }
+    /**
      * Get an instance of the specified JMeterGUIComponent class.  If an
      * instance of the GUI class has previously been created and it is not
      * marked as an {@link UnsharedComponent}, that shared instance will be
@@ -298,7 +360,9 @@ public final class GuiPackage
      * 
      * @param guiClass the fully qualified class name of the GUI component.
      *                 This class must implement JMeterGUIComponent.
-     * 
+     * @param testClass the fully qualified class name of the test elements
+     *                 edited by this GUI component. This class must 
+     *                 implement TestElement.
      * @return         an instance of the specified class
      * 
      * @throws InstantiationException if an instance of the object cannot be
@@ -308,7 +372,7 @@ public final class GuiPackage
      * @throws ClassNotFoundException if the specified GUI class cannot be
      *                                found
      */
-    private JMeterGUIComponent getGuiFromCache(String guiClass)
+    private JMeterGUIComponent getGuiFromCache(Class guiClass, Class testClass)
         throws InstantiationException,
                IllegalAccessException,
                ClassNotFoundException
@@ -316,7 +380,14 @@ public final class GuiPackage
         JMeterGUIComponent comp = (JMeterGUIComponent) guis.get(guiClass);
         if (comp == null)
         {
-            comp = (JMeterGUIComponent) Class.forName(guiClass).newInstance();
+            if (guiClass == TestBeanGUI.class)
+            {
+                comp= new TestBeanGUI(testClass);
+            }
+            else
+            {
+                comp = (JMeterGUIComponent) guiClass.newInstance();
+            }
             if (!(comp instanceof UnsharedComponent))
             {
                 guis.put(guiClass, comp);
@@ -354,7 +425,7 @@ public final class GuiPackage
             if (currentNode != null)
             {
                 log.debug(
-                    "Updating current node " + currentNode.createTestElement());
+                    "Updating current node " + currentNode.getName());
                 JMeterGUIComponent comp =
                     getGui(currentNode.createTestElement());
                 TestElement el = currentNode.createTestElement();
