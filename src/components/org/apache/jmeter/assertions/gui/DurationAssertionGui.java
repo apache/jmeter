@@ -73,8 +73,7 @@ import org.apache.log.Logger;
 
 /**
  * @author    Michael Stover
- * @created   $Date$
- * @version   $Revision$
+ * @version   $Revision$ Last updated: $Date$
  */
 public class DurationAssertionGui
     extends AbstractAssertionGui
