@@ -105,10 +105,16 @@
       <sourcePath path="${src.functions}" />
       <class location="${lib.dir}/jorphan.jar" />
       <sourcePath path="${src.jorphan}" />
+      <sourcePath path="${src.tcp}" />
       <!--
       <class location="${lib.dir}/htmlparser.jar" />
       <sourcePath path="${src.htmlparser}" />
       -->
+      <!--
+      Uncomment the previous lines and comment the following line
+      to do a source analysis of htmlparser
+      -->
+      <auxClasspath path="${lib.dir}/htmlparser.jar" />
       <auxClasspath path="${jakarta-oro.jar}" />
       <auxClasspath path="${junit.jar}" />
       <auxClasspath path="${soap.jar}" />
@@ -118,8 +124,10 @@
       <auxClasspath path="${avalon-excalibur.jar}" />
       <auxClasspath path="${avalon-framework.jar}" />
       <auxClasspath path="${commons-collections.jar}" />
-      <auxClasspath path="${bsf.jar}" />
-      <auxClasspath path="${bsh.jar}" />
+      <auxClasspath path="${lib.dir}/${bsf.jar}" />
+      <auxClasspath path="${lib.dir}/${bsh.jar}" />
+      <auxClasspath path="${lib.opt}/${bsf.jar}" />
+      <auxClasspath path="${lib.opt}/${bsh.jar}" />
       <auxClasspath path="${js.jar}" />
       
     </findbugs>
@@ -256,15 +264,28 @@
     <include name="${lib.dir}/*.html"/>
   </patternset>
 
-  <!-- Additional, optional jars, not included in distribution -->
-  <property name="bsf.jar" value="${lib.opt}/bsf.jar"/>
-  <property name="bsh.jar" value="${lib.opt}/bsh-1.3.0.jar"/>
+  <!--
+  Optional jars, not included in distribution.
+  Any such jars need to be downloaded separately.
+  These can be put into ${lib.dir} or ${lib.opt}
+  - both of these are included in the build classpath
   
-  <!-- Build classpath -->
+  Any jars put into ${lib.dir} will be included in
+  the classpath used by JMeter to load classes.
+  Jars in ${lib.opt} are NOT normally included by JMeter.
+  
+  Placing an optional jar in ${lib.opt} means that it
+  will be included in the build classpath, but it will
+  not be included in the runtime classpath. This is intended
+  for testing JMeter without the optional Jar file(s).
+  -->
+  <property name="bsf.jar" value="bsfasf.jar"/>
+  <property name="bsh.jar" value="bsh-1.3.0.jar"/>
+  
+  <!-- Build classpath (includes the optional jar directory) -->
   <path id="classpath">
     <fileset dir="${lib.dir}" includes="*.jar"/>
-    <pathelement location="${bsh.jar}"/>
-    <pathelement location="${bsf.jar}"/>
+    <fileset dir="${lib.opt}" includes="*.jar"/>
   </path>
 
   <!-- Anakia classpath -->
@@ -297,6 +318,8 @@
     - Check for optional libraries.
     -->
   <target name="check-libs" description="Check availability of optional libraries." unless="assuming.libs.present">
+    <!-- Create the optional directory (fileset complains if it is missing) -->
+    <mkdir dir="${lib.opt}"/>
     <available classname="com.sun.net.ssl.internal.ssl.Provider" property="jsse.present">
       <classpath refid="classpath"/>
     </available>
@@ -525,10 +548,26 @@
 
   <target name="compile" depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-htmlparser" description="Compile everything."/>
 
+<!--
+N.B. Eclipse (and perhaps other Java IDEs) copies all files to the build directory, unless
+told otherwise. This means that there might be copies of property and image files in the
+build directory. To avoid including the files twice in the jar file, we include only .class
+files in the list of files to be processed.
+
+An alternative solution is to copy the extra resources to the build tree, and then
+include everything from the build tree.
+This has the disadvantage that there are then two copies of each
+properties file visible in Eclipse, and it is easy to pick the wrong one to edit,
+especially as the build directory appears first ...
+The advantage would be that JMeter could theoretically be run from the classes, without
+needing to create jar files first. However, this would mean changing the way JMeter loads
+some of its classes - at present JMeter can only run from jar files.
+-->
   <target name="package" depends="compile">
     <mkdir dir="${dest.jar}"/>
     <jar jarfile="${dest.jar}/ApacheJMeter_core.jar" excludes="**/NewDriver*" manifest="${src.core}/MANIFEST">
-      <fileset dir="${build.core}"/>
+      <!-- Only include class files - see above -->
+      <fileset dir="${build.core}" includes="**/*.class"/>
       <fileset dir="${src.core}" includes="org/apache/jmeter/images/"/>
       <fileset dir="${src.core}" includes="org/apache/jmeter/resources/">
         <exclude name="*eucJP*"/>
