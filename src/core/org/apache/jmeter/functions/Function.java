@@ -1,6 +1,7 @@
 package org.apache.jmeter.functions;
 
 import java.util.List;
+import java.util.Collection;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -24,15 +25,19 @@ public interface Function {
 	 */
 	public String execute(SampleResult previousResult,Sampler currentSampler)
 			throws InvalidVariableException;
+
 	
 	/**
-	 * A string representing a comma-delimited list of URLEncoded arguments.
-	 * You will have to split on the comma, and decode each argument.
-	 * Extend AbstractFunction to gain access to a convenience method
-	 * that does that for you.  These parameters are used to "configure"
-	 * your function.
+	 * A collection of the parameters used to configure your function. Each
+	 * parameter is a CompoundFunction and can be resolved by calling the
+	 * execute() method of the CompoundFunction (which should be done at
+	 * execution.)
+	 * 
+	 * @param parameters
+	 * @throws InvalidVariableException
 	 */
-	public void setParameters(String parameters) throws InvalidVariableException;
+	public void setParameters(Collection parameters) throws InvalidVariableException;
+
 	
 	/**
 	 * Return the name of your function.  Convention is to prepend "__"

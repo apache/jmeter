@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -55,9 +56,9 @@ public class IterationCounter extends AbstractFunction implements Serializable
 
 		JMeterVariables vars = getVariables();
 		
-		boolean perThread = new Boolean(((CompoundFunction)variables[0]).execute()).booleanValue();
+		boolean perThread = new Boolean(((CompoundVariable)variables[0]).execute()).booleanValue();
 
-		String varName = ((CompoundFunction)variables[variables.length - 1]).execute();
+		String varName = ((CompoundVariable)variables[variables.length - 1]).execute();
 		String counterString = "";
 
 		if(perThread)
@@ -77,11 +78,10 @@ public class IterationCounter extends AbstractFunction implements Serializable
 	/**
 	 * @see org.apache.jmeter.functions.Function#setParameters(String)
 	 */
-	public void setParameters(String parameters)
+	public void setParameters(Collection parameters)
 		throws InvalidVariableException {
-			
-			Collection params = this.parseArguments2(parameters);
-			variables = params.toArray();
+
+			variables = parameters.toArray();
 			
 			if ( variables.length < 2 ) {
 				throw new InvalidVariableException();

@@ -60,6 +60,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -98,8 +99,8 @@ public class JavaScript extends AbstractFunction implements Serializable {
 
 		JMeterVariables vars = getVariables();
 		
-		String script = ((CompoundFunction)values[0]).execute();
-		String varName = ((CompoundFunction)values[values.length - 1]).execute();
+		String script = ((CompoundVariable)values[0]).execute();
+		String varName = ((CompoundVariable)values[values.length - 1]).execute();
 		String resultStr = "";
 		
 		Context cx = Context.enter();
@@ -125,11 +126,10 @@ public class JavaScript extends AbstractFunction implements Serializable {
 	/**
 	 * @see org.apache.jmeter.functions.Function#setParameters(java.lang.String)
 	 */
-	public void setParameters(String parameters)
+	public void setParameters(Collection parameters)
 			throws InvalidVariableException {
 		
-		Collection params = this.parseArguments2(parameters);
-		values = params.toArray();
+		values = parameters.toArray();
 		
 		if ( values.length < 2 ) {
 			throw new InvalidVariableException();

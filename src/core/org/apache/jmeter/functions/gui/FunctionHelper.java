@@ -5,7 +5,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,6 +21,7 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.functions.Function;
+import org.apache.jmeter.functions.util.ArgumentEncoder;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
@@ -145,7 +145,7 @@ public class FunctionHelper extends JDialog implements
 				{
 					functionCall.append(",");
 				}
-				functionCall.append(URLEncoder.encode((String)arg.getValue()));
+				functionCall.append(ArgumentEncoder.encode((String)arg.getValue()));
 				first = false;
 			}
 			functionCall.append(")");
