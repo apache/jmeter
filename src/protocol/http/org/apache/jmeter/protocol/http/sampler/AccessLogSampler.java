@@ -140,7 +140,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean
          int thisCount = PARSER.parseAndConfigure(1, this);
          if (thisCount == 0)
          {
-            if(count == 0)
+            if (count == 0)
             {
                JMeterContextService.getContext().getThread().stop();
             }
@@ -313,10 +313,13 @@ public class AccessLogSampler extends HTTPSampler implements TestBean
             if (TestCloneable.class.isAssignableFrom(Class
                   .forName(filterClassName)))
             {
-               filter = (Filter) Class.forName(filterClassName).newInstance();
+               if (filter == null)
+               {
+                  filter = (Filter) Class.forName(filterClassName)
+                        .newInstance();
+               }
                s.filter = (Filter) ((TestCloneable) filter).clone();
             }
-
          }
          catch (Exception e)
          {
