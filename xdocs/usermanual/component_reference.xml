@@ -143,26 +143,6 @@ a new instance).</property>
 
 </component>
 
-<component index="13.1.4" name="JNDI Request" screenshot="">
-
-<properties>
-	<property name="java.naming.factory.initial" required=""></property>
-	<property name="java.naming.factory.object" required=""></property>
-	<property name="java.naming.factory.state" required=""></property>
-	<property name="java.naming.factory.url.pkgs" required=""></property>
-	<property name="java.naming.provider.url" required=""></property>
-	<property name="java.naming.dns.url" required=""></property>
-	<property name="java.naming.authoritative" required=""></property>
-	<property name="java.naming.batchsize" required=""></property>
-	<property name="java.naming.referral" required=""></property>
-	<property name="java.naming.security.protocol" required=""></property>
-	<property name="java.naming.security.authentication" required=""></property>
-	<property name="java.naming.security.principal" required=""></property>
-	<property name="java.naming.security.credentials" required=""></property>
-	<property name="java.naming.language" required=""></property>
-	<property name="java.naming.applet" required=""></property>
-</properties>
-</component>
 </section>
 
 <section name="13.2 Logic Controllers" anchor="logic_controllers">
@@ -269,25 +249,6 @@ is configured to store the results in a file named "loop-test.dat" in the curren
 
 </component>
 
-<component index="13.2.3" name="Modification Manager" anchor="modification_manager">
-<description>
-<p>This element has no visual elements, and needs no configuration.
-The Modification Manager acts as a container for Modifier elements (which
-are special kinds of Configuration Elements).</p>
-
-<p>The Modification Manager can be used to introduce dynamic data into a test script.  As test samples pass through the
-Modification Manager, it has the opportunity to modify them.  The Modification Manager holds Modifier elements which it
- uses to control how it modifies test samples.  If no Modifier elements are added, the Modification Manager has no effect.</p>
-
-<p>There are two types of Modifiers.  Regular Modifiers (currently there aren't any implemented Modifiers), and response
-based Modifiers (there is one HTML response based Modifier).</p>
-</description>
-
-<links>
-	<complink name="HTML Link Parser"/>
-</links>
-</component>
-
 <component index="13.2.4" name="Once Only Controller" anchor="once_only_controller"
 screenshot="../images/screenshots/logic-controller/once-only-controller.gif">
 <description>
@@ -341,9 +302,6 @@ is configured to store the results in a file named "simple-test.dat" in the curr
 
 <section name="13.3 Listeners" anchor="listeners">
 
-<component index="13.3.1" name="View Graph Tree" screenshot="">
-<description>No Description</description>
-</component>
 
 <component index="13.3.2" name="Graph Full Results" screenshot="">
 <description>No Description</description>
@@ -370,51 +328,6 @@ are part of the test plan.</p></description>
 <links>
 	<complink name="Basic Assertion"/>
 </links>
-</component>
-
-<component index="13.3.6" name="File Reporter" screenshot="../images/screenshots/file_reporter.gif">
-<description>The File Reporter records sample data to a file.</description>
-
-<properties>
-	<property name="Filename" required="Yes">Name of file to save samples to.</property>
-	<property name="Append to Existing Data File" required="No">If yes, then data is appended to the
-	end of the file.  If no, then JMeter erases the previous contents of the file when you hit "Open".</property>
-	<property name="Automatically Flush Data After Each Sample" required="No">Normally, the file is
-	not written continuously.  If selected, each sample will be written to the file as it comes in.</property>
-	<property name="Verbose Output" required="No">Sample Verbose Output:
-	<blockquote><pre>
-# Sample data created by null
-
-#       URL                    Milliseconds
-
-http://jakarta.apache.org/ 1650,
-http://jakarta.apache.org/ 1920,
-http://jakarta.apache.org/ 1200,
-http://jakarta.apache.org/ 1650,
-http://jakarta.apache.org/ 1700,
-http://jakarta.apache.org/ 1980,</pre></blockquote>
-Sample Non-Verbose Output:
-<blockquote><pre>4440
-4830
-6540
-5550
-3080
-3350</pre></blockquote></property>
-	<property name="Include Submitted Data" required="No">This will include all data JMeter sent
-	with the request, beyond the URL (ie POSTed data for web testing, SQL statements for
-	database testing).</property>
-	<property name="Open" required="Yes (in a sense)">Until you hit "Open", no sample data will be
-	recorded.  Normally, you would do this before starting the test.</property>
-	<property name="Flush" required="No">Sends all data collected to the file.  If "Automatically Flush Data After Each Sample"
-	was selected, this is unnecessary.</property>
-	<property name="Close" required="No">Closes the file, flushing all collected data at the same time.</property>
-</properties>
-</component>
-
-<component index="13.3.7" name="View Results" screenshot="../images/screenshots/view_results.gif">
-<description>The View Results visualizer displays the response from the server.  No time information
-is given.  Hit the "Next" button to view the next sample response.  Consider using the
-<complink name="View Result_Tree"/> instead.</description>
 </component>
 
 <component index="13.3.8" name="View Result Tree" screenshot="../images/screenshots/view_result_tree.gif">
@@ -693,24 +606,6 @@ instead. (see figures 9 and 10).</p>
 
 </component>
 
-<component index="13.4.11" name="JNDI Lookup Configuration" screenshot="">
-<properties>
-	<property name="Name">Descriptive name for this element that is shown in the tree.</property>
-	<property name="Remote Interface"></property>
-</properties>
-</component>
-
-<component index="13.4.12" name="JNDI Remote Method Configuration" screenshot="">
-<properties>
-	<property name="Name">Descriptive name for this element that is shown in the tree.</property>
-	<property name="Home Method Name"></property>
-	<property name="Home Method Parameters"></property>
-	<property name="Remote Interfaces"></property>
-	<property name="Remote Method Name"></property>
-	<property name="Remote Method Parameters"></property>
-	<property name="Reflect Button"></property>
-</properties>
-</component>
 </section>
 
 <section name="13.5 Assertions" anchor="assertions">
