@@ -9,18 +9,13 @@
 
 <section name="10. Remote Testing">
 
-<p>In most real world web application environments the machine running the web 
-application is not the machine which is sitting on your desk. However to get a 
-true estimate of performance you would like to be measuring the true response 
-time of your server, not any (highly variable) network bottle-necks that might 
-exist between you and the machine on which your web application is running. At 
-the same time using a GUI especially a Java GUI over the network is at best 
-painful (using Un*x and X) and at times not possible (using windows). 
-</p>
-<p>To solve this problem JMeter provides a client-server architecture for load 
-and performance testing which allows the JMeterEngine (the tester) to reside 
-and run on your application server while the configuration GUI and visualization 
-executes on the development machine. This offers a number of features: 
+<p>In the event that your JMeter client machine is unable, performance-wise, to simulate 
+enough users to stress your server, an option exists to control multiple, remote JMeter
+engines from a single JMeter GUI client.  By running JMeter remotely, you can replicate 
+a test across many low-end computers and thus simulate a larger load on the server.  One
+instance of the JMeter GUI client can control any number of remote JMeter instances, and collect
+all the data from them.  This offers the following features: 
+
 
 <ul>
 <li>True performance measurment without network bottlenecks </li>
