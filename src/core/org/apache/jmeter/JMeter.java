@@ -89,6 +89,7 @@ import org.apache.jmeter.plugin.PluginManager;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.reporters.ResultCollector;
+import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.save.SaveService;
@@ -545,6 +546,14 @@ public class JMeter implements JMeterPlugin
                 ResultCollector logger = new ResultCollector();
                 logger.setFilename(logFile);
                 tree.add(tree.getArray()[0], logger);
+            }
+            String summariserName=
+                JMeterUtils.getPropDefault("summariser.name","");//$NON-NLS-1$
+            if (summariserName.length() > 0){
+            	log.info("Creating summariser <"+summariserName+">");
+				println( "Creating summariser <"+summariserName+">");
+            	Summariser summer=new Summariser(summariserName);
+				tree.add(tree.getArray()[0], summer);
             }
             tree.add(tree.getArray()[0], new ListenToTest());
             println("Created the tree successfully");
