@@ -56,11 +56,12 @@ package org.apache.jmeter.engine;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.testelement.TestElement;
@@ -87,7 +88,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 {
 	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.engine");
-	Set allThreads;
+	Map allThreads;
 	boolean running = false;
 	ListedHashTree test;
 	SearchByClass testListeners;
@@ -99,7 +100,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 	 ***********************************************************/
 	public StandardJMeterEngine()
 	{
-		allThreads = new HashSet();
+		allThreads = new HashMap();
 	}
 
 	public StandardJMeterEngine(String host)
@@ -172,7 +173,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 					threads[i].setThreadName(group.getName()+"-"+(i+1));
 					Thread newThread = new Thread(threads[i]);
 					newThread.setName(group.getName()+"-"+(i+1));
-					allThreads.add(threads[i]);
+					allThreads.put(threads[i],newThread);
 					newThread.start();
 				}
 			}
@@ -291,11 +292,12 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 	public void stopTest()
 	{
 		running = false;
-		Iterator iter = new HashSet(allThreads).iterator();
+		Iterator iter = new HashSet(allThreads.keySet()).iterator();
 		while(iter.hasNext())
 		{
 			JMeterThread item = (JMeterThread)iter.next();
 			item.stop();
+			((Thread)allThreads.get(item)).interrupt();
 		}
 	}
 
