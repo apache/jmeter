@@ -20,14 +20,12 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-
 import java.beans.BeanInfo;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
-
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -39,6 +37,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -115,6 +114,8 @@ public class GenericTestBeanCustomizer extends JPanel
 	}
 
 	public static final String DEFAULT_GROUP= "";
+	
+	private int scrollerCount = 0;
 
     /**
      * BeanInfo object for the class of the objects being edited.
@@ -235,6 +236,10 @@ public class GenericTestBeanCustomizer extends JPanel
 					log.debug("Editor for property "+name
 							+" is wrapped in "+propertyEditor);
 				}
+            }
+            if(propertyEditor.getCustomEditor() instanceof JScrollPane)
+            {
+               scrollerCount++;
             }
             
 			editors[i]= propertyEditor;
@@ -453,7 +458,7 @@ public class GenericTestBeanCustomizer extends JPanel
 			Component customEditor= editors[i].getCustomEditor();
 
 			boolean multiLineEditor= false;
-			if (customEditor.getPreferredSize().height > 50)
+			if (customEditor.getPreferredSize().height > 50 || customEditor instanceof JScrollPane)
 			{
 				// TODO: the above works in the current situation, but it's
 				// just a hack. How to get each editor to report whether it

@@ -47,6 +47,7 @@ public class SamplePackage
     List responseModifiers;
     List configs;
     List modifiers;
+    List controllers;
     Sampler sampler;
 
     public SamplePackage()
@@ -61,7 +62,8 @@ public class SamplePackage
         List timers,
         List assertions,
         List extractors,
-        List pres)
+        List pres,
+        List controllers)
     {
         log.debug("configs is null: " + (configs == null));
         this.configs = configs;
@@ -72,6 +74,7 @@ public class SamplePackage
         this.assertions = assertions;
         this.postProcessors = extractors;
         this.preProcessors = pres;
+        this.controllers = controllers;
     }
     
     public void setRunningVersion(boolean running)
@@ -84,6 +87,7 @@ public class SamplePackage
         setRunningVersion(responseModifiers, running);
         setRunningVersion(postProcessors, running);
         setRunningVersion(preProcessors, running);
+        setRunningVersion(controllers,running);
         sampler.setRunningVersion(running);
     }
         
@@ -115,6 +119,7 @@ public class SamplePackage
         recoverRunningVersion(responseModifiers);
         recoverRunningVersion(postProcessors);
         recoverRunningVersion(preProcessors);
+        recoverRunningVersion(controllers);
         sampler.recoverRunningVersion();
     }
 

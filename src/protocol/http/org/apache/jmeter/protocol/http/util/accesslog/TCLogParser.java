@@ -280,7 +280,7 @@ public class TCLogParser implements LogParser
     {
         // we clean the line to get
         // rid of extra stuff
-        line = this.cleanURL(line);
+        String cleanedLine = this.cleanURL(line);
         // now we set request method
         this.GEN.setMethod(this.RMETHOD);
         if (FILTER != null)
@@ -292,10 +292,10 @@ public class TCLogParser implements LogParser
                 // we filter the line first, before we try
                 // to separate the URL into file and 
                 // parameters.
-                line = FILTER.filter(line);
+                line = FILTER.filter(cleanedLine);
                 if (line != null)
                 {
-                    createUrl(line);
+                    createUrl(cleanedLine);
                 }
             }
         }
@@ -305,7 +305,7 @@ public class TCLogParser implements LogParser
             COUNT++;
             // in the case when the filter is not set, we
             // parse all the lines
-            createUrl(line);
+            createUrl(cleanedLine);
         }
     }
 

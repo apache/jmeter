@@ -21,9 +21,9 @@ package org.apache.jmeter.protocol.http.util.accesslog;
 import java.util.ArrayList;
 
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
-import org.apache.oro.text.regex.Perl5Matcher;
 
 /**
  * Description:<br>
@@ -108,8 +108,6 @@ public class LogFilter implements Filter
     protected ArrayList INCPATTERNS = new ArrayList();
 
     protected String NEWFILE = null;
-
-    protected Perl5Matcher MATCHER = null;
 
     /**
      * The default constructor is empty
@@ -252,10 +250,6 @@ public class LogFilter implements Filter
             {
                 return filterPattern(path);
             }
-            else if (this.CHANGEEXT)
-            {
-                return replaceExtension(path);
-            }
             else
             {
                 return false;
@@ -294,7 +288,7 @@ public class LogFilter implements Filter
         }
         else if (this.INCFILE != null)
         {
-            return incFile(file);
+            return !incFile(file);
         }
         return false;
     }
@@ -369,13 +363,9 @@ public class LogFilter implements Filter
      */
     protected boolean filterPattern(String text)
     {
-        if (MATCHER == null)
-        {
-            MATCHER = new Perl5Matcher();
-        }
         if (this.INCPTRN != null)
         {
-            return incPattern(text);
+            return !incPattern(text);
         }
         else if (this.EXCPTRN != null)
         {
@@ -396,7 +386,7 @@ public class LogFilter implements Filter
         this.USEFILE = false;
         for (int idx = 0; idx < this.INCPATTERNS.size(); idx++)
         {
-            if (MATCHER.contains(text, (Pattern) this.INCPATTERNS.get(idx)))
+            if (JMeterUtils.getMatcher().contains(text, (Pattern) this.INCPATTERNS.get(idx)))
             {
                 this.USEFILE = true;
                 break;
@@ -418,7 +408,7 @@ public class LogFilter implements Filter
         boolean exc = false;
         for (int idx = 0; idx < this.EXCPATTERNS.size(); idx++)
         {
-            if (MATCHER.contains(text, (Pattern) this.EXCPATTERNS.get(idx)))
+            if (JMeterUtils.getMatcher().contains(text, (Pattern) this.EXCPATTERNS.get(idx)))
             {
                 exc = true;
                 this.USEFILE = false;
@@ -470,7 +460,14 @@ public class LogFilter implements Filter
     {
         if (this.CHANGEEXT)
         {
-            return this.NEWFILE;
+           if(replaceExtension(text))
+           {
+              return this.NEWFILE;
+           }
+           else
+           {
+              return text;
+           }
         }
         else if (this.USEFILE)
         {
@@ -492,8 +489,8 @@ public class LogFilter implements Filter
     {
         try
         {
-            Perl5Compiler comp = new Perl5Compiler();
-            return comp.compile(pattern, Perl5Compiler.READ_ONLY_MASK);
+            return JMeterUtils.getPatternCache().getPattern(pattern, Perl5Compiler.READ_ONLY_MASK |
+                  Perl5Compiler.SINGLELINE_MASK);
         }
         catch (Exception exception)
         {
@@ -622,7 +619,7 @@ public class LogFilter implements Filter
 			String theFile = td.file;
 			boolean expect = td.exclpatt;
 
-			testf.isFiltered(theFile);
+			assertEquals(!expect,testf.isFiltered(theFile));
 			String line = testf.filter(theFile);
 			if (line != null)
 			{
@@ -644,7 +641,7 @@ public class LogFilter implements Filter
 			String theFile = td.file;
 			boolean expect = td.inclpatt;
 
-			testf.isFiltered(theFile);
+			assertEquals(!expect,testf.isFiltered(theFile));
 			String line = testf.filter(theFile);
 			if (line != null)
 			{

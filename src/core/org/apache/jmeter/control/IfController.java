@@ -86,10 +86,7 @@ public class IfController extends GenericController implements Serializable
 	   * Condition Accessor - this is gonna be like     ${count}<10
 	   */
 	  public String getCondition() {
-	  		JMeterProperty prop = getProperty(CONDITION);
-	  		if (prop instanceof FunctionProperty)
-				((FunctionProperty)prop).setUseCache(false);
-			return prop.getStringValue();
+	  		return getPropertyAsString(CONDITION);
 	  }
 
 	  /**

@@ -139,41 +139,6 @@ public class AccessLogSampler extends HTTPSampler
 	public String getGeneratorClassName(){
 		return getPropertyAsString(GENERATOR_CLASS_NAME);
 	}
-
-	/**
-	 * Set the generator for the Sampler to use
-	 * @param gen
-	 */	
-	public void setGenerator(Generator gen){
-		if (gen == null){
-		} else {
-			GENERATOR = gen;
-		}
-	}
-
-	/**
-	 * Return the generator
-	 * @return generator
-	 */
-	public Generator getGenerator(){
-		return GENERATOR;
-	}
-	
-	/**
-	 * Set the parser for the sampler to use
-	 * @param parser
-	 */	
-	public void setParser(LogParser parser){
-		PARSER = parser;
-	}
-
-	/**
-	 * Return the parser
-	 * @return parser
-	 */
-	public LogParser getParser(){
-		return PARSER;	
-	}
 	
 	/**
 	 * sample gets a new HTTPSampler from the generator and
