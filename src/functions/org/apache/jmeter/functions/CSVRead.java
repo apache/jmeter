@@ -134,11 +134,14 @@ public class CSVRead extends AbstractFunction implements Serializable
         }
         catch (NumberFormatException e)
         {
-            log.warn("Column number error: " + columnOrNext + " "+ e.toString());
+            log.warn(Thread.currentThread().getName()+" - can't parse column number: " 
+                     + columnOrNext + " "+ e.toString());
         }
 		catch (IndexOutOfBoundsException e)
 		{
-			log.warn("Invalid column number: " + columnOrNext + " "+ e.toString());
+			log.warn(Thread.currentThread().getName()+" - invalid column number: " + columnOrNext
+			          + " at row " + FileWrapper.getCurrentRow(fileName) + " "
+			          + e.toString());
 		}
 
         log.debug("execute value: "+myValue);
