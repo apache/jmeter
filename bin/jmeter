@@ -1,5 +1,6 @@
 #!/bin/sh
 USAGE=$0" [-h proxyHost] [-p proxyPort] [-f property-file]"
+LOG4JCONFIG=log4j.configuration=log4j.conf
 
 PROPERTIES=`dirname $0`/jmeter.properties
 
@@ -22,4 +23,4 @@ do
     CLASSPATH=${CLASSPATH}:$i
 done
 
-java -classpath $CLASSPATH:`dirname $0`/ApacheJMeter.jar $JAVA_PROPS org.apache.jmeter.NewDriver $PROPERTIES
+java -classpath $CLASSPATH:`dirname $0`/ApacheJMeter.jar $JAVA_PROPS -D$LOG4JCONFIG org.apache.jmeter.NewDriver $PROPERTIES
