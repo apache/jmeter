@@ -54,9 +54,9 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * @version   $Revision$ $Date$
  */
 public class GraphVisualizer extends AbstractVisualizer
-        implements ImageVisualizer, ItemListener, GraphListener, Clearable
+        implements ImageVisualizer, ItemListener, Clearable
 {
-    GraphModel model;
+    SamplingStatCalculator model;
     private JTextField maxYField = null;
     private JTextField minYField = null;
     private JTextField noSamplesField = null;
@@ -79,8 +79,7 @@ public class GraphVisualizer extends AbstractVisualizer
      */
     public GraphVisualizer()
     {
-        model = new GraphModel();
-        model.addGraphListener(this);
+        model = new SamplingStatCalculator("Graph");
         graph = new Graph(model);
         init();
     }
@@ -99,35 +98,22 @@ public class GraphVisualizer extends AbstractVisualizer
         return result;
     }
 
-    public synchronized void updateGui()
-    {
-        graph.updateGui();
-        noSamplesField.setText(Long.toString(model.getSampleCount()));
-        dataField.setText(Long.toString(model.getCurrentData()));
-        averageField.setText(Long.toString(model.getCurrentAverage()));
-        deviationField.setText(Long.toString(model.getCurrentDeviation()));
-        throughputField.setText(
-            Float.toString(model.getCurrentThroughput()) + "/" + minute);
-        medianField.setText(Long.toString(model.getCurrentMedian()));
-        updateYAxis();
-    }
-
     public synchronized void updateGui(Sample s)
     {
         // We have received one more sample
         graph.updateGui(s);
-        noSamplesField.setText(Long.toString(model.getSampleCount()));
+        noSamplesField.setText(Long.toString(s.count));
         dataField.setText(Long.toString(s.data));
         averageField.setText(Long.toString(s.average));
         deviationField.setText(Long.toString(s.deviation));
-        throughputField.setText(Float.toString(s.throughput) + "/" + minute);
+        throughputField.setText(Double.toString(60 * s.throughput) + "/" + minute);
         medianField.setText(Long.toString(s.median));
         updateYAxis();
     }
 
     public void add(SampleResult res)
     {
-        model.addSample(res);
+        updateGui(model.addSample(res));
     }
 
     public String getLabelResource()
@@ -166,6 +152,7 @@ public class GraphVisualizer extends AbstractVisualizer
     {
         // this.graph.clear();
         model.clear();
+        graph.clear();
         dataField.setText("0000");
         averageField.setText("0000");
         deviationField.setText("0000");
@@ -185,7 +172,7 @@ public class GraphVisualizer extends AbstractVisualizer
      */
     private void updateYAxis()
     {
-        maxYField.setText(Long.toString(model.getGraphMax()));
+        maxYField.setText(Long.toString(graph.getGraphMax()));
         minYField.setText("0");
     }
 

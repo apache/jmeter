@@ -30,6 +30,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
+import org.apache.jorphan.reflect.Functor;
 
 public class HTTPArgumentsPanel extends ArgumentsPanel
 {
@@ -51,18 +52,19 @@ public class HTTPArgumentsPanel extends ArgumentsPanel
                     ArgumentsPanel.COLUMN_NAMES[1],
                     ENCODE_OR_NOT,
                     INCLUDE_EQUALS },
-                new String[] { "name", "value", "alwaysEncoded", "useEquals" },
-                new Class[] {
-                    String.class,
-                    String.class,
-                    boolean.class,
-                    boolean.class },
+                new Functor[] { new Functor("getName"), 
+                      new Functor("getValue"), 
+                      new Functor("isAlwaysEncoded"), 
+                      new Functor("isUseEquals") },
+                new Functor[] { new Functor("setName"), 
+                      new Functor("setValue"), 
+                      new Functor("setAlwaysEncoded"), 
+                      new Functor("setUseEquals") },
                 new Class[] {
                     String.class,
                     String.class,
                     Boolean.class,
-                    Boolean.class },
-                new HTTPArgument());
+                    Boolean.class });
     }
 
     protected void sizeColumns(JTable table)

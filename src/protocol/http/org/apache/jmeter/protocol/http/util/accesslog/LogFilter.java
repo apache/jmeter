@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.http.util.accesslog;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -87,7 +88,7 @@ import org.apache.oro.text.regex.Perl5Compiler;
  * Created on:	Jun 26, 2003<br>
  */
 
-public class LogFilter implements Filter
+public class LogFilter implements Filter,Serializable
 {
 
     /** protected members used by class to filter **/
@@ -654,4 +655,11 @@ public class LogFilter implements Filter
 		}
 	}
   }
+   /* (non-Javadoc)
+    * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#reset()
+    */
+   public void reset()
+   {
+
+   }
 }

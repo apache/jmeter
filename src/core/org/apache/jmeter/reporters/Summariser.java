@@ -30,7 +30,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.visualizers.RunningSample;
+import org.apache.jmeter.visualizers.SamplingStatCalculator;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -135,8 +135,8 @@ public class Summariser
 		/** Time of last summary (to prevent double reporting) */
 		private long last = 0;// set to -1 by TestEnded to prevent double reporting
 
-		private RunningSample delta = new RunningSample("DELTA",0);
-		private RunningSample total = new RunningSample("TOTAL",0);
+		private SamplingStatCalculator delta = new SamplingStatCalculator("DELTA");
+		private SamplingStatCalculator total = new SamplingStatCalculator("TOTAL");
 
         private void clear(){
         	delta.clear();
@@ -148,7 +148,7 @@ public class Summariser
          * Add the delta values to the total values and clear the delta
          */
         private synchronized void moveDelta(){
-        	total.addSample(delta);
+        	total.addSamples(delta);
         	delta.clear();
         }
 	}
@@ -191,8 +191,8 @@ public class Summariser
 
         long now = System.currentTimeMillis()/1000;// in seconds
         
-		 RunningSample myDelta=null;
-         RunningSample myTotal=null;
+		 SamplingStatCalculator myDelta=null;
+         SamplingStatCalculator myTotal=null;
 		 boolean reportNow = false;
 
 		/* Have we reached the reporting boundary?
@@ -203,9 +203,9 @@ public class Summariser
 		 	if ((now > myTotals.last + INTERVAL_WINDOW) && (now % INTERVAL <= INTERVAL_WINDOW))
             {
             	reportNow=true;
-				myDelta = new RunningSample(myTotals.delta);// copy the data to minimise ...
+				myDelta = new SamplingStatCalculator(myTotals.delta);// copy the data to minimise ...
 				myTotals.moveDelta();
-				myTotal = new RunningSample(myTotals.total);// ... the synch time
+				myTotal = new SamplingStatCalculator(myTotals.total);// ... the synch time
 				myTotals.last = now;
 			}
         }
@@ -215,7 +215,7 @@ public class Summariser
 			if (TOLOG) log.info(str);
 			if (TOOUT) System.out.println(str);
 	
-			if (myTotal.getNumSamples() != myDelta.getNumSamples()) {// Only if we have updated them
+			if (myTotal.getCount() != myDelta.getCount()) {// Only if we have updated them
 				str = format(myTotal,"=");
 				if (TOLOG) log.info(str);
 				if (TOOUT) System.out.println(str);
@@ -242,7 +242,7 @@ public class Summariser
      * @param string
      * @return
      */
-    private String format(RunningSample s, String type)
+    private String format(SamplingStatCalculator s, String type)
     {
     	StringBuffer tmp = new StringBuffer(20); // for intermediate use
         StringBuffer sb = new StringBuffer(100); // output line buffer
@@ -250,17 +250,17 @@ public class Summariser
         sb.append(" ");
         sb.append(type);
 		sb.append(" ");
-        sb.append(longToSb(tmp,s.getNumSamples(),5));
+        sb.append(longToSb(tmp,s.getCount(),5));
         sb.append(" in ");
 		sb.append(longToSb(tmp,s.getElapsed()/1000,5));
 		sb.append("s = ");
 		sb.append(doubleToSb(tmp,s.getRate(),6,1));
 		sb.append("/s Avg: ");
-		sb.append(longToSb(tmp,s.getAverage(),5));
+		sb.append(longToSb(tmp,(long)s.getMean(),5));
 		sb.append(" Min: ");
-		sb.append(longToSb(tmp,s.getMin(),5));
+		sb.append(longToSb(tmp,s.getMin().longValue(),5));
 		sb.append(" Max: ");
-		sb.append(longToSb(tmp,s.getMax(),5));
+		sb.append(longToSb(tmp,s.getMax().longValue(),5));
 		sb.append(" Err: ");
 		sb.append(longToSb(tmp,s.getErrorCount(),5));
 		sb.append(" (");
@@ -321,7 +321,7 @@ public class Summariser
 			Totals t = (Totals) accumulators.get(myName);
 			if (t.last != -1){
 				String str;
-				if (t.total.getNumSamples() != 0){//Only print delta if different from total
+				if (t.total.getCount() != 0){//Only print delta if different from total
 					str = format(t.delta,"+");
 					if (TOLOG) log.info(str);
 					if (TOOUT) System.out.println(str);

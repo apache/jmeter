@@ -85,6 +85,7 @@ public class SampleResult implements Serializable
     private Set files;
     private String dataEncoding;// (is this really the character set?) e.g. ISO-8895-1, UTF-8
     private long time = 0;
+    private long latency = 0;
     private boolean stopThread = false; //Should thread terminate?
 	private boolean stopTest = false;   //Should test terminate?
 	private boolean isMonitor = false;
@@ -123,6 +124,11 @@ public class SampleResult implements Serializable
 		setResponseHeaders(res.getResponseHeaders());
 
 		addSubResult(res); // this will add res.getTime() to getTime().
+	}
+	
+	public boolean isStampedAtStart()
+	{
+	   return startTimeStamp;
 	}
 
     /**
@@ -696,4 +702,17 @@ public class SampleResult implements Serializable
 		}
         // TODO some more invalid sequence tests needed
     }
+   
+   /**
+    * @return Returns the latency.
+    */
+   public long getLatency()
+   {
+      return latency;
+   }
+   
+   public void latencyEnd()
+   {
+      latency = System.currentTimeMillis() - startTime - idleTime;
+   }
 }

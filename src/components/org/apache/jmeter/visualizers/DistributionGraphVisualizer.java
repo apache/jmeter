@@ -55,7 +55,7 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 public class DistributionGraphVisualizer extends AbstractVisualizer
         implements ImageVisualizer, ItemListener, GraphListener, Clearable
 {
-    GraphModel model;
+    SamplingStatCalculator model;
     private JPanel graphPanel = null;
     private JTextField noSamplesField = null;
     String minute = JMeterUtils.getResString("minute");
@@ -72,8 +72,7 @@ public class DistributionGraphVisualizer extends AbstractVisualizer
      */
     public DistributionGraphVisualizer()
     {
-        model = new GraphModel();
-        model.addGraphListener(this);
+        model = new SamplingStatCalculator("Distribution");
         graph = new DistributionGraph(model);
         graph.setBackground(Color.white);
 		init();
@@ -106,17 +105,17 @@ public class DistributionGraphVisualizer extends AbstractVisualizer
     {
         // We have received one more sample
         if (delay == counter){
-			graphPanel.updateUI();
-			graph.updateGui(s);
+			updateGui();
 			counter = 0;
         } else {
         	counter++;
         }
     }
 
-    public void add(SampleResult res)
+    public synchronized void add(SampleResult res)
     {
         model.addSample(res);
+        updateGui(model.getCurrentSample());
     }
 
     public String getLabelResource()
