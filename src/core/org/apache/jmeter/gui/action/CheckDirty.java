@@ -20,7 +20,7 @@ import org.apache.jorphan.collections.ListedHashTree;
  * Window>Preferences>Java>Templates.
  */
 public class CheckDirty extends AbstractAction implements 
-		HashTreeTraverser 
+		HashTreeTraverser
 {
 	private Map previousGuiItems;
 	public static final String CHECK_DIRTY = "check_dirty";
@@ -53,7 +53,7 @@ public class CheckDirty extends AbstractAction implements
 	{
 		previousGuiItems = new HashMap();
 	}
-		
+    
 
 	/**
 	 * @see Command#doAction(ActionEvent)

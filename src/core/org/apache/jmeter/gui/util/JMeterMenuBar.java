@@ -498,6 +498,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
 			
 			for (int i = 0; i < remoteHosts.length; i++)
 			{
+                remoteHosts[i] = remoteHosts[i].trim();
 				JMenuItem item = new JMenuItem(remoteHosts[i]);
 				item.setActionCommand("remote_start");
 				item.setName(remoteHosts[i]);

@@ -338,7 +338,7 @@ public class HTTPSamplerFull
                 {
                     loadBinary(binUrl, binRes,sampler);
                 }
-                catch(IOException ioe)
+                catch(Exception ioe)
                 {
                     log.error("Error reading from URL - " + ioe);
                     binRes.setResponseData(ioe.toString().getBytes());
@@ -370,7 +370,7 @@ public class HTTPSamplerFull
      *
      * @throws IOException indicates a problem reading from the URL
      */
-    protected byte[] loadBinary(URL url, SampleResult res,HTTPSampler sampler) throws IOException
+    protected byte[] loadBinary(URL url, SampleResult res,HTTPSampler sampler) throws Exception
     {
         log.debug("Start : loadBinary");
         byte[] ret = new byte[0];
@@ -381,7 +381,7 @@ public class HTTPSamplerFull
             conn = sampler.setupConnection(url, HTTPSampler.GET);
             sampler.connect();
         }
-        catch(IOException ioe)
+        catch(Exception ioe)
         {
             // don't do anything 'cos presumably the connection will return the
             // correct http response codes

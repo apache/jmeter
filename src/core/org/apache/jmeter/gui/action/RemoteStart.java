@@ -108,7 +108,7 @@ public class RemoteStart extends AbstractAction
 	 ***************************************/
 	public void doAction(ActionEvent e)
 	{
-		String name = ((Component)e.getSource()).getName();
+		String name = ((Component)e.getSource()).getName().trim();
 		String action = e.getActionCommand();
 		if(action.equals("remote_stop"))
 		{
@@ -127,13 +127,13 @@ public class RemoteStart extends AbstractAction
 			while(st.hasMoreElements())
 			{
 				String el = (String)st.nextElement();
-				doRemoteInit(el);
+				doRemoteInit(el.trim());
 			}
 			st = new java.util.StringTokenizer(remote_hosts_string, ",");
 			while(st.hasMoreElements())
 			{
 				String el = (String)st.nextElement();
-				doRemoteStart(el);
+				doRemoteStart(el.trim());
 			}
 		}
 		else if(action.equals("remote_stop_all"))
@@ -144,7 +144,7 @@ public class RemoteStart extends AbstractAction
 			while(st.hasMoreElements())
 			{
 				String el = (String)st.nextElement();
-				doRemoteStop(el);
+				doRemoteStop(el.trim());
 			}
 		}
 	}

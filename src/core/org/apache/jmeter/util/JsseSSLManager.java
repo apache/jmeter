@@ -63,19 +63,18 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
-import javax.net.ssl.KeyManager;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509KeyManager;
-import javax.net.ssl.X509TrustManager;
-
 import org.apache.jmeter.util.keystore.JmeterKeyStore;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
 import com.sun.net.ssl.HostnameVerifier;
 import com.sun.net.ssl.HttpsURLConnection;
+import com.sun.net.ssl.KeyManager;
+import com.sun.net.ssl.KeyManagerFactory;
+import com.sun.net.ssl.SSLContext;
+import com.sun.net.ssl.TrustManager;
+import com.sun.net.ssl.X509KeyManager;
+import com.sun.net.ssl.X509TrustManager;
 /**
  *  The SSLManager handles the KeyStore information for JMeter. Basically, it
  *  handles all the logic for loading and initializing all the JSSE parameters
@@ -293,6 +292,24 @@ public class JsseSSLManager extends SSLManager
         public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException
         {}
 
+        /* (non-Javadoc)
+         * @see com.sun.net.ssl.X509TrustManager#isClientTrusted(java.security.cert.X509Certificate[])
+         */
+        public boolean isClientTrusted(X509Certificate[] arg0)
+        {
+            // TODO Auto-generated method stub
+            return true;
+        }
+
+        /* (non-Javadoc)
+         * @see com.sun.net.ssl.X509TrustManager#isServerTrusted(java.security.cert.X509Certificate[])
+         */
+        public boolean isServerTrusted(X509Certificate[] arg0)
+        {
+            // TODO Auto-generated method stub
+            return true;
+        }
+
     }
     /**
      *  This is the X509KeyManager we have defined for the sole purpose of selecing
@@ -396,7 +413,23 @@ public class JsseSSLManager extends SSLManager
          */
         public String chooseServerAlias(String arg0, Principal[] arg1, Socket arg2)
         {
-            return this.manager.chooseServerAlias(arg0, arg1, arg2);
+            return this.manager.chooseServerAlias(arg0, arg1);
+        }
+
+        /* (non-Javadoc)
+         * @see com.sun.net.ssl.X509KeyManager#chooseClientAlias(java.lang.String, java.security.Principal[])
+         */
+        public String chooseClientAlias(String arg0, Principal[] arg1)
+        {
+            return store.getAlias();
+        }
+
+        /* (non-Javadoc)
+         * @see com.sun.net.ssl.X509KeyManager#chooseServerAlias(java.lang.String, java.security.Principal[])
+         */
+        public String chooseServerAlias(String arg0, Principal[] arg1)
+        {
+            return manager.chooseServerAlias(arg0,arg1);
         }
 
     }
