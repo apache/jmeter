@@ -8,14 +8,26 @@
 <body>
 
 <section name="4.2.1 Generative Controllers">
+
 <p>Generative Controllers tell JMeter to send requests to a server. For example, 
 add an HTTP Request Generative Controller if you want JMeter to send an HTTP 
-request.  You can also customize a request by adding one or more Configuration 
+request.  You can further customize a request by adding one or more Configuration 
 Elements to a Generative Controller.</p>
 
-<p>Assertions...</p>
-<p>Defaults config element....</p>
-<p>Logging the results of the request using a Listener...</p>
+<p>If you are going to send multiple requests of the same type (for example, 
+HTTP Request) to the same server, consider using a Defaults Configuration
+Element. Each controller has its own Defaults element (see below).</p>
+
+<p>Remember to add a Listener to your Thread Group to view and/or store the
+results of your requests to disk.</p>
+
+<p>If your are interested in having JMeter perform basic validation on
+the response of your request, add an <a href="">Assertion</a> to the Request controller.  
+For example, in stress testing a web application, the server may return a successful
+"HTTP Response" code, but the page may have errors on it or may be missing sections.
+You could add assertions to check for certain HTML tags, common error strings, etc.
+JMeter lets you create these assertions using "regular expressions".</p>
+
 
 </section>
 
