@@ -74,7 +74,8 @@ resource requires query string parameters, add them below in the
 "Send Parameters With the Request" section.</property>
         <property name="Send Parameters With the Request" required="No">The query string will
         be generated from the list of parameters you provide.  Each parameter has a <i>name</i> and
-        <i>value</i>.  The query string will be generated in the correct fashion, depending on
+        <i>value</i>, the options to encode the parameter, and an option to include or exclude an equals sign (some applications
+        don't expect an equals when the value is the empty string).  The query string will be generated in the correct fashion, depending on
         the choice of "Method" you made (ie if you chose GET, the query string will be
         appended to the URL, if POST, then it will be sent separately).  Also, if you are
         sending a file using a multipart form, the query string will be created using the
@@ -285,7 +286,7 @@ Group to loop, here is the sequence in which JMeter sends the requests:
 
 <p><a href="../demos/InterleaveTestPlan.jmx">Download</a> this example (see Figure 1).  In this example,
 we configured the Thread Group to have two threads and a loop count of five, for a total of ten
-requests. See the table below for the sequence JMeter sends the HTTP Requests.</p>
+requests per thread. See the table below for the sequence JMeter sends the HTTP Requests.</p>
 
 <figure image="../images/screenshots/logic-controller/interleave.png">Figure 1 - Interleave Controller Example 1</figure>
 
@@ -447,13 +448,12 @@ be saved under the Recording Controller.</p>
 <component index="13.2.7" name="Module Controller" screenshot="../images/screenshots/module_controller.png">
 <description>
 <p>The Module Controller provides a mechanism for substituting test plan fragments into the current test plan at run-time.  To use this
-module effectively, one might have a number of Controllers under the <complink name="Workbench"/>, each with a different series of
+module effectively, one might have a number of Controllers under the <complink name="WorkBench"/>, each with a different series of
 samplers under them.  The module controller can then be used to easily switch between these multiple test cases simply by choosing
 the appropriate controller in it's drop down box.  This provides convenience for running many alternate test plans quickly and easily.
 </p>
 </description>
-<note>The Module Controller should not be used with remote testing since the Workbench test elements are not part of remote testing, and 
-the test run will fail.</note>
+<note>The Module Controller should not be used with remote testing or non-gui testing in conjunction with Workbench components since the Workbench test elements are not part of test plan .jmx files.  Any such test will fail.</note>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Module to Run" required="Yes">The module controller provides a list of all controllers loaded into the gui.  Select
@@ -810,7 +810,7 @@ cookie manager, etc.</p>
 </component>
 
 <component index="13.4.4" name="HTTP Request Defaults"
-        screenshot="../images/screenshots/http-config/http-request-defaults.gif">
+        screenshot="../images/screenshots/http-config/http-request-defaults.png">
 <description><p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are
 creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server,
 you could add a single HTTP Request Defaults element with the "Server Name or IP" field filled in.  Then, when
@@ -952,7 +952,7 @@ strings. You can attach multiple assertions to any controller for additionaly fl
 </properties>
 
 <example title="Assertion Examples" anchor="assertion_examples">
-<figure image="../images/screenshots/assertion/example1a.gif">Figure 7 - Test Plan</figure>
+<figure image="../images/screenshots/assertion/example1a.png">Figure 7 - Test Plan</figure>
 <figure image="../images/screenshots/assertion/example1b.gif">Figure 8 - Assertion Control Panel with Pattern</figure>
 <figure image="../images/screenshots/assertion/example1c-pass.gif">Figure 9 - Assertion Listener Results (Pass)</figure>
 <figure image="../images/screenshots/assertion/example1c-fail.gif">Figure 10 - Assertion Listener Results (Fail)</figure>
@@ -1110,7 +1110,7 @@ your dynamic test sample.</note>
 
 </component>
 
-<component index="13.7.2" name="HTTP URL Re-writing Modifier" screenshot="../images/screenshots/url_rewriter.gif">
+<component index="13.7.2" name="HTTP URL Re-writing Modifier" screenshot="../images/screenshots/url_rewriter.png">
 <description><p>This modifier works similarly to the HTML Link Parser, except it has a specific purpose for which
 it is easier to use than the HTML Link Parser, and more efficient.  For web applications that
 use URL Re-writing to store session ids instead of cookies, this element can be attached at the
@@ -1129,6 +1129,7 @@ Clever users will even determine that this modifier can be used to grab values t
         grab the value assigned to it, whether it's in an HREF or a form.</property>
         <property name="Path Extension" required="No">Some web apps rewrite URLs by appending
         a semi-colon plus the session id parameter.  Check this box if that is so.</property>
+        <property name="Do not use equals in path extension" required="No">Some web apps rewrite URLs without using an &quot;=&quot; sign between the parameter name and value (such as Intershop Enfinity).</property>
 </properties>
 </component>
 
@@ -1247,7 +1248,27 @@ generate the template string, and store the result into the given variable name.
 
 <section name="13.9 Miscellaneous Features" anchor="Miscellaneous_Features">
 
-<component index="13.9.1" name="SSL Manager" screenshot="">
+<component index="13.9.1" name="Test Plan" screenshot="../images/screenshots/testplan.png">
+<description><p>At the Test Plan level, static variables can be defined that allow users to abstract values that are repeated throughout their tests, such as server names.  Here, one can instruct JMeter to save the maximum sample information to file by selecting "functional testing".  Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.</p></description>
+</component>
+
+<component index="13.9.2" name="Thread Group" screenshot="../images/screenshots/threadgroup.png">
+<description><p>A Thread Group defines a pool of users that will execute a particular test case against your server.  In the Thread Group GUI, you can control the number of users simulated (num of threads), the ramp up time (how long it takes to start all the threads), the number of times to perform the test, and optionally, a start and stop time for the test.</p></description>
+
+<properties>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Number of Threads" required="Yes">Number of users to simulate.</property>
+        <property name="Ramp-up Period" required="Yes">How long JMeter should take to get all the threads started.  If there are 10 threads and a ramp-up time of 100 seconds, then each thread will begin 10 seconds after the previous thread started, for a total time of 100 seconds to get the test fully up to speed.</property>
+        <property name="Loop Count" required="No">Number of times to perform the test case.  Alternatively, "forever" can be selected causing the test to run until manually stopped.</property>
+        <property name="Start Time" required="No">If the scheduler checkbox is selected, one can choose an absolute start time.  When you start your test, JMeter will wait until the specified start time to begin testing.</property>
+        <property name="End Time" required="No">If the scheduler checkbox is selected, one can choose an absolute end time.  When you start your test, JMeter will wait until the specified start time to begin testing, and it will stop at the specified end time.</property></properties>
+</component>
+
+<component index="13.9.3" name="WorkBench" screenshot="../images/screenshots/workbench.png">
+<description><p>The WorkBench simply provides a place to temporarily store test elements while not in use, for copy/paste purposes, or any other purpose you desire.  When you save your test plan, WorkBench items are not saved with it.  Your WorkBench can be saved independently, if you like (right-click on WorkBench and choose Save).</p></description>
+</component>
+
+<component index="13.9.4" name="SSL Manager" screenshot="">
 <p>
   The SSL Manager is a way to select a client certificate so that you can test
   applications that use Public Key Infrastructure (PKI).  In order to use it,
