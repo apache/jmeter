@@ -20,6 +20,7 @@ package org.apache.jmeter.samplers;
 
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -700,4 +701,14 @@ public class SampleResult implements Serializable
 		}
         // TODO some more invalid sequence tests needed
     }
+
+	private URL location;
+
+	public void setURL(URL location) {
+	    this.location= location;
+	}
+
+	public URL getURL() {
+	    return location;
+	}
 }
