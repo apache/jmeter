@@ -175,7 +175,7 @@ public class HTTPSampler extends HTTPSamplerBase
         if (res != null)
         {
             StringBuffer sb= new StringBuffer();
-            if (method.equals(HTTPSampler.POST))
+            if (method.equals(POST))
             {
             	String q = this.getQueryString();
 				res.setQueryString(q);
@@ -199,7 +199,7 @@ public class HTTPSampler extends HTTPSamplerBase
             res.setRequestHeaders(hdrs);
         }
         setConnectionAuthorization(conn, u, getAuthManager());
-        if (method.equals(HTTPSampler.POST))
+        if (method.equals(POST))
         {
             setPostHeaders(conn);
         }
@@ -480,7 +480,7 @@ public class HTTPSampler extends HTTPSamplerBase
                 throw new BindException();
             }
             // Nice, we've got a connection. Finish sending the request:
-            if (method.equals(HTTPSampler.POST))
+            if (method.equals(POST))
             {
                 sendPostData(conn);
             }
@@ -624,7 +624,7 @@ public class HTTPSampler extends HTTPSamplerBase
                 lastRes=
                     sample(
                         new URL(lastRes.getURL(), location),
-                        HTTPSampler.GET,
+                        GET,
                         true,
                         frameDepth);
             }
@@ -725,7 +725,7 @@ public class HTTPSampler extends HTTPSamplerBase
                     HTTPSampleResult binRes=
                         sample(
                             (URL)binURL,
-                            HTTPSampler.GET,
+                            GET,
                             false,
                             frameDepth + 1);
                     res.addSubResult(binRes);
@@ -816,7 +816,7 @@ public class HTTPSampler extends HTTPSamplerBase
         {
             HTTPSampler sampler= new HTTPSampler();
             sampler.setProtocol("http");
-            sampler.setMethod(HTTPSampler.GET);
+            sampler.setMethod(GET);
             sampler.setPath("/index.html?pear");
             sampler.setDomain("www.apache.org");
             assertEquals(
@@ -828,7 +828,7 @@ public class HTTPSampler extends HTTPSamplerBase
         {
             HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSampler.GET);
+            config.setMethod(GET);
             config.addArgument("param1", "value1");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
@@ -840,7 +840,7 @@ public class HTTPSampler extends HTTPSamplerBase
         {
             HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSampler.GET);
+            config.setMethod(GET);
             config.addArgument("param1", "value1");
             config.setPath("/index.html?p1=p2");
             config.setDomain("www.apache.org");
@@ -852,7 +852,7 @@ public class HTTPSampler extends HTTPSamplerBase
         {
             HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSampler.POST);
+            config.setMethod(POST);
             config.addArgument("param1", "value1");
             config.setPath("/index.html?p1=p2");
             config.setDomain("www.apache.org");
@@ -868,7 +868,7 @@ public class HTTPSampler extends HTTPSamplerBase
         {
             HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSampler.GET);
+            config.setMethod(GET);
             config.addArgument("param1", "value1", "=");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
@@ -880,7 +880,7 @@ public class HTTPSampler extends HTTPSamplerBase
         {
             HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSampler.GET);
+            config.setMethod(GET);
             config.addArgument("param1", "", "=");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
@@ -892,7 +892,7 @@ public class HTTPSampler extends HTTPSamplerBase
         {
             HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSampler.GET);
+            config.setMethod(GET);
             config.addArgument("param1", "", "");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
@@ -908,7 +908,7 @@ public class HTTPSampler extends HTTPSamplerBase
         {
             HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSampler.GET);
+            config.setMethod(GET);
             config.parseArguments("param1=value1");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
@@ -921,7 +921,7 @@ public class HTTPSampler extends HTTPSamplerBase
         {
             HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSampler.GET);
+            config.setMethod(GET);
             config.parseArguments("param1=");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
@@ -934,7 +934,7 @@ public class HTTPSampler extends HTTPSamplerBase
         {
             HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSampler.GET);
+            config.setMethod(GET);
             config.parseArguments("param1");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
@@ -947,7 +947,7 @@ public class HTTPSampler extends HTTPSamplerBase
         {
             HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
-            config.setMethod(HTTPSampler.GET);
+            config.setMethod(GET);
             config.parseArguments("");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
