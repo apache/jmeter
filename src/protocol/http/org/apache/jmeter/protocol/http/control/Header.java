@@ -52,7 +52,6 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-
 package org.apache.jmeter.protocol.http.control;
 
 import java.io.Serializable;
@@ -67,54 +66,62 @@ import org.apache.jmeter.testelement.AbstractTestElement;
  */
 public class Header extends AbstractTestElement implements Serializable
 {
-	 private static String NAME = "Header.name";
-	 private static String VALUE = "Header.value";
+    private static String NAME = "Header.name";
+    private static String VALUE = "Header.value";
 
-	 /**
-	  * create the headeer
-	  */
-	 public Header() {
-		  this.setName("");
-		  this.setValue("");
-	 }
+    /**
+     * Create the header.
+     */
+    public Header()
+    {
+        this.setName("");
+        this.setValue("");
+    }
 
-	 /**
-	  * create the coookie
-	  */
-	 public Header(String name, String value) {
-		  this.setName(name);
-		  this.setValue(value);
-	 }
+    /**
+     * Create the coookie.
+     */
+    public Header(String name, String value)
+    {
+        this.setName(name);
+        this.setValue(value);
+    }
 
-	 public void addConfigElement(ConfigElement config){
-	 }
+    public void addConfigElement(ConfigElement config)
+    {
+    }
 
-	 public boolean expectsModification() {
-		  return false;
-	 }
+    public boolean expectsModification()
+    {
+        return false;
+    }
 
-	 public String getClassLabel() {
-		  return "Header";
-	 }
+    public String getClassLabel()
+    {
+        return "Header";
+    }
 
-	 /**
-	  * get the value for this object.
-	  */
-	 public String getValue() {
-		  return getPropertyAsString(VALUE);
-	 }
+    /**
+     * Get the value for this object.
+     */
+    public String getValue()
+    {
+        return getPropertyAsString(VALUE);
+    }
 
-	 /**
-	  * set the value for this object.
-	  */
-	 public synchronized void setValue(String value) {
-		  this.setProperty(VALUE,value);
-	 }
+    /**
+     * Set the value for this object.
+     */
+    public synchronized void setValue(String value)
+    {
+        this.setProperty(VALUE, value);
+    }
 
-	 /**
-	  * creates a string representation of this header
-	  */
-	 public String toString() {
-		  return getName() + "\t" + getValue();
-	 }
+    /**
+     * Creates a string representation of this header.
+     */
+    public String toString()
+    {
+        return getName() + "\t" + getValue();
+    }
 }

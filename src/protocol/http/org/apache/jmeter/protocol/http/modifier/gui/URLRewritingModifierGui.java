@@ -13,58 +13,64 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
  * @author mstover
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
  */
-public class URLRewritingModifierGui extends AbstractPreProcessorGui {
-	
-	JLabeledTextField argumentName;
-	JCheckBox pathExt;
-	JCheckBox pathExtNoEquals;
-	private final static String title = JMeterUtils.getResString("http_url_rewriting_modifier_title");
+public class URLRewritingModifierGui extends AbstractPreProcessorGui
+{
+    JLabeledTextField argumentName;
+    JCheckBox pathExt;
+    JCheckBox pathExtNoEquals;
+    private final static String title =
+        JMeterUtils.getResString("http_url_rewriting_modifier_title");
 
     /* (non-Javadoc)
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-	 */
-	public String getStaticLabel() {
-		return title;
-	}
-	
-	public URLRewritingModifierGui()
-	{
-		init();
-	}
-	
-	private void init()
-	{
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
+     */
+    public String getStaticLabel()
+    {
+        return title;
+    }
+
+    public URLRewritingModifierGui()
+    {
+        init();
+    }
+
+    private void init()
+    {
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
-        
+
         add(makeTitlePanel(), BorderLayout.NORTH);
 
         VerticalPanel mainPanel = new VerticalPanel();
 
-		argumentName = new JLabeledTextField(JMeterUtils.getResString("session_argument_name"), 10);
-		mainPanel.add(argumentName);
+        argumentName =
+            new JLabeledTextField(
+                JMeterUtils.getResString("session_argument_name"),
+                10);
+        mainPanel.add(argumentName);
 
-		pathExt = new JCheckBox(JMeterUtils.getResString("Path_Extension_choice"));		
-		mainPanel.add(pathExt);	
+        pathExt =
+            new JCheckBox(JMeterUtils.getResString("Path_Extension_choice"));
+        mainPanel.add(pathExt);
 
-		pathExtNoEquals = new JCheckBox(JMeterUtils.getResString("path_extension_dont_use_equals"));		
-		mainPanel.add(pathExtNoEquals);	
+        pathExtNoEquals =
+            new JCheckBox(
+                JMeterUtils.getResString("path_extension_dont_use_equals"));
+        mainPanel.add(pathExtNoEquals);
 
-		add(mainPanel, BorderLayout.CENTER);
-	}
+        add(mainPanel, BorderLayout.CENTER);
+    }
 
     /* (non-Javadoc)
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-	 */
-	public TestElement createTestElement() {
-		URLRewritingModifier modifier = new URLRewritingModifier();
-		modifyTestElement(modifier);
-		return modifier;
-	}
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+     */
+    public TestElement createTestElement()
+    {
+        URLRewritingModifier modifier = new URLRewritingModifier();
+        modifyTestElement(modifier);
+        return modifier;
+    }
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
@@ -73,18 +79,21 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
     public void modifyTestElement(TestElement modifier)
     {
         this.configureTestElement(modifier);
-        ((URLRewritingModifier)modifier).setArgumentName(argumentName.getText());
-        ((URLRewritingModifier)modifier).setPathExtension(pathExt.isSelected());
-        ((URLRewritingModifier)modifier).setPathExtensionNoEquals(pathExtNoEquals.isSelected());
+        ((URLRewritingModifier) modifier).setArgumentName(
+            argumentName.getText());
+        ((URLRewritingModifier) modifier).setPathExtension(
+            pathExt.isSelected());
+        ((URLRewritingModifier) modifier).setPathExtensionNoEquals(
+            pathExtNoEquals.isSelected());
     }
-	
-	public void configure(TestElement el)
-	{
-		argumentName.setText(((URLRewritingModifier)el).getArgumentName());
-		pathExt.setSelected(((URLRewritingModifier)el).isPathExtension());
-		pathExtNoEquals.setSelected(((URLRewritingModifier)el).isPathExtensionNoEquals());
-		
-		super.configure(el);
-	}
 
+    public void configure(TestElement el)
+    {
+        argumentName.setText(((URLRewritingModifier) el).getArgumentName());
+        pathExt.setSelected(((URLRewritingModifier) el).isPathExtension());
+        pathExtNoEquals.setSelected(
+            ((URLRewritingModifier) el).isPathExtensionNoEquals());
+
+        super.configure(el);
+    }
 }

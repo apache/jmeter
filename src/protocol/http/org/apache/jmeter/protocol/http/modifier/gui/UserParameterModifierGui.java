@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.modifier.gui;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
@@ -67,36 +68,37 @@ import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.protocol.http.modifier.UserParameterModifier;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-/************************************************************
- *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
+
+/**
  * A swing panel to allow UI with the UserParameterModifier class.
  *
- *@author     Mark Walsh
- *@created    $Date$
- *@version    1.0
- ***********************************************************/
-public class UserParameterModifierGui extends AbstractPreProcessorGui {
-	//-------------------------------------------
-	// Constants and Data Members
-	//-------------------------------------------
-	private JTextField fileNameField;
-	//-------------------------------------------
-	// Constructors
-	//-------------------------------------------
-	/************************************************************
-	 *  !ToDo (Constructor description)
-	 ***********************************************************/
-	public UserParameterModifierGui() {
-		super();
-		init();
-	}
-	public TestElement createTestElement() {
-		UserParameterModifier mod = new UserParameterModifier();
-		modifyTestElement(mod);
-		return mod;
-	}
+ * @author     Mark Walsh
+ * @version    $Revision$
+ */
+public class UserParameterModifierGui extends AbstractPreProcessorGui
+{
+    //-------------------------------------------
+    // Constants and Data Members
+    //-------------------------------------------
+    private JTextField fileNameField;
+ 
+    //-------------------------------------------
+    // Constructors
+    //-------------------------------------------
+ 
+    public UserParameterModifierGui()
+    {
+        super();
+        init();
+    }
     
+    public TestElement createTestElement()
+    {
+        UserParameterModifier mod = new UserParameterModifier();
+        modifyTestElement(mod);
+        return mod;
+    }
+
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
@@ -104,35 +106,39 @@ public class UserParameterModifierGui extends AbstractPreProcessorGui {
     public void modifyTestElement(TestElement mod)
     {
         this.configureTestElement(mod);
-        ((UserParameterModifier)mod).setXmlUri(fileNameField.getText());
+        ((UserParameterModifier) mod).setXmlUri(fileNameField.getText());
     }
-	/************************************************************
-	 *  !ToDo (Method description)
-	 ***********************************************************/
-	public void updateGui() {}
-	public String getStaticLabel() {
-		return JMeterUtils.getResString("http_user_parameter_modifier");
-	}
-	
-	public void configure(TestElement el)
-	{
-		super.configure(el);
-		fileNameField.setText(((UserParameterModifier)el).getXmlUri());
-	}
-	
-	/*----------------------------------------------------------------------------------------------
-	 * Methods Private
-	 *--------------------------------------------------------------------------------------------*/
-	private void init() {
+
+    public void updateGui()
+    {
+    }
+
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("http_user_parameter_modifier");
+    }
+
+    public void configure(TestElement el)
+    {
+        super.configure(el);
+        fileNameField.setText(((UserParameterModifier) el).getXmlUri());
+    }
+
+    /*-------------------------------------------------------------------------
+     * Methods Private
+     *------------------------------------------------------------------------*/
+    private void init()
+    {
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
         add(makeTitlePanel(), BorderLayout.NORTH);
 
         JPanel mainPanel = new JPanel(new BorderLayout(0, 5));
-		mainPanel.add(getFileLocator(), BorderLayout.NORTH);
-        
+        mainPanel.add(getFileLocator(), BorderLayout.NORTH);
+
         // We want the help text to look like a label, but wrap like a text area
-        JTextArea helpText = new JTextArea(JMeterUtils.getResString("user_param_mod_help_note"));
+        JTextArea helpText =
+            new JTextArea(JMeterUtils.getResString("user_param_mod_help_note"));
         helpText.setLineWrap(true);
         helpText.setWrapStyleWord(true);
         helpText.setBackground(getBackground());
@@ -143,22 +149,24 @@ public class UserParameterModifierGui extends AbstractPreProcessorGui {
         JScrollPane scroller = new JScrollPane(helpText);
         scroller.setBorder(BorderFactory.createEmptyBorder());
         mainPanel.add(scroller, BorderLayout.CENTER);
-        
-		add(mainPanel, BorderLayout.CENTER);
-	}
-    
-	private JPanel getFileLocator() {
-		fileNameField = new JTextField("users.xml", 15);
+
+        add(mainPanel, BorderLayout.CENTER);
+    }
+
+    private JPanel getFileLocator()
+    {
+        fileNameField = new JTextField("users.xml", 15);
         JLabel label = new JLabel(JMeterUtils.getResString("filename"));
         label.setLabelFor(fileNameField);
-        
+
         JPanel fileLocator = new JPanel(new BorderLayout());
         fileLocator.add(label, BorderLayout.WEST);
-		fileLocator.add(fileNameField, BorderLayout.CENTER);
-		return fileLocator;
-	}
-    
-    public Dimension getPreferredSize() {
+        fileLocator.add(fileNameField, BorderLayout.CENTER);
+        return fileLocator;
+    }
+
+    public Dimension getPreferredSize()
+    {
         return getMinimumSize();
     }
 }

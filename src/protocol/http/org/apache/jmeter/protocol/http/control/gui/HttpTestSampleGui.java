@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.control.gui;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
@@ -70,32 +71,20 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
+/**
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 public class HttpTestSampleGui extends AbstractSamplerGui
 {
     private UrlConfigGui urlConfigGui;
     private JCheckBox getImages;
 
-    /****************************************
-     * !ToDo (Constructor description)
-     ***************************************/
     public HttpTestSampleGui()
     {
         init();
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param element  !ToDo (Parameter description)
-     ***************************************/
     public void configure(TestElement element)
     {
         super.configure(element);
@@ -104,11 +93,6 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         getImages.setSelected(((HTTPSampler) element).isImageParser());
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public TestElement createTestElement()
     {
         HTTPSampler sampler = new HTTPSampler();
@@ -118,7 +102,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement sampler)
     {
@@ -136,11 +120,11 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         this.configureTestElement(sampler);
     }
 
-    /****************************************
-     * Gets the ClassLabel attribute of the HttpTestSample object
+    /**
+     * Gets the ClassLabel attribute of the HttpTestSample object.
      *
-     *@return   The ClassLabel value
-     ***************************************/
+     * @return   the ClassLabel value
+     */
     public String getStaticLabel()
     {
         return JMeterUtils.getResString("web_testing_title");
@@ -165,18 +149,24 @@ public class HttpTestSampleGui extends AbstractSamplerGui
     {
         // OPTIONAL TASKS
         VerticalPanel optionalTasksPanel = new VerticalPanel();
-        optionalTasksPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("optional_tasks")));
+        optionalTasksPanel.setBorder(
+            BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("optional_tasks")));
 
         // RETRIEVE IMAGES
         JPanel retrieveImagesPanel = new JPanel();
-        getImages = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images"));
+        getImages =
+            new JCheckBox(
+                JMeterUtils.getResString("web_testing_retrieve_images"));
         retrieveImagesPanel.add(getImages);
 
         optionalTasksPanel.add(retrieveImagesPanel);
         return optionalTasksPanel;
     }
         
-    public Dimension getPreferredSize() {
+    public Dimension getPreferredSize()
+    {
         return getMinimumSize();
     }
 
@@ -201,18 +191,20 @@ public class HttpTestSampleGui extends AbstractSamplerGui
             HTTPSampler clonedSampler = (HTTPSampler)sampler.clone();
             clonedSampler.setRunningVersion(true);
             sampler.getArguments().getArgument(0).setValue("new value");
-            assertEquals("Sampler didn't clone correctly","new value",sampler.getArguments().getArgument(0).getValue());
+            assertEquals(
+                "Sampler didn't clone correctly",
+                "new value",
+                sampler.getArguments().getArgument(0).getValue());
         }
     }
+
     /* (non-Javadoc)
      * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
      */
     public void clear()
     {
-        // TODO Auto-generated method stub
         super.clear();
         getImages.setSelected(false);
         urlConfigGui.clear();
     }
-
 }

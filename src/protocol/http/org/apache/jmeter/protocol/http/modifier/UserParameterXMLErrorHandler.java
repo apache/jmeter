@@ -52,73 +52,68 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+
 package org.apache.jmeter.protocol.http.modifier;
+
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-/************************************************************
- *  Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:
- *  Apache
- * <P> XML Parseing errors for XML parameters file are handled here 
- *@author     Mark Walsh
- *@created    $Date$
- *@version    1.0
- ***********************************************************/
+
+/**
+ * XML Parseing errors for XML parameters file are handled here.
+ *  
+ * @author     Mark Walsh
+ * @version    $Revision$
+ */
 public class UserParameterXMLErrorHandler implements ErrorHandler
 {
-	transient private static Logger log =
-		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
-	//-------------------------------------------
-	// Constants and Data Members
-	//-------------------------------------------
-	//-------------------------------------------
-	// Constructors
-	//-------------------------------------------
-	//-------------------------------------------
-	// Methods
-	//-------------------------------------------
-	public void warning(SAXParseException exception) throws SAXException
-	{
-		log.warn(
-			"**Parsing Warning**\n"
-				+ "  line:    "
-				+ exception.getLineNumber()
-				+ "\n"
-				+ "  URI:    :"
-				+ exception.getSystemId()
-				+ "\n"
-				+ "  Message: "
-				+ exception.getMessage());
-		throw new SAXException("Warning encountered");
-	}
-	public void error(SAXParseException exception) throws SAXException
-	{
-		log.error(
-			"**Parsing Warning**\n"
-				+ "  line:    "
-				+ exception.getLineNumber()
-				+ "\n"
-				+ "  URI:    :"
-				+ exception.getSystemId()
-				+ "\n"
-				+ "  Message: "
-				+ exception.getMessage());
-		throw new SAXException("Error encountered");
-	}
-	public void fatalError(SAXParseException exception) throws SAXException
-	{
-		log.error(
-			"**Parsing Warning**\n"
-				+ "  line:    "
-				+ exception.getLineNumber()
-				+ "\n"
-				+ "  URI:    :"
-				+ exception.getSystemId()
-				+ "\n"
-				+ "  Message: "
-				+ exception.getMessage());
-		throw new SAXException("Fatal Error encountered");
-	}
-} // end class
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+
+    public void warning(SAXParseException exception) throws SAXException
+    {
+        log.warn(
+            "**Parsing Warning**\n"
+                + "  line:    "
+                + exception.getLineNumber()
+                + "\n"
+                + "  URI:    :"
+                + exception.getSystemId()
+                + "\n"
+                + "  Message: "
+                + exception.getMessage());
+        throw new SAXException("Warning encountered");
+    }
+
+    public void error(SAXParseException exception) throws SAXException
+    {
+        log.error(
+            "**Parsing Warning**\n"
+                + "  line:    "
+                + exception.getLineNumber()
+                + "\n"
+                + "  URI:    :"
+                + exception.getSystemId()
+                + "\n"
+                + "  Message: "
+                + exception.getMessage());
+        throw new SAXException("Error encountered");
+    }
+
+    public void fatalError(SAXParseException exception) throws SAXException
+    {
+        log.error(
+            "**Parsing Warning**\n"
+                + "  line:    "
+                + exception.getLineNumber()
+                + "\n"
+                + "  URI:    :"
+                + exception.getSystemId()
+                + "\n"
+                + "  Message: "
+                + exception.getMessage());
+        throw new SAXException("Fatal Error encountered");
+    }
+}

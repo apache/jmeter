@@ -52,7 +52,6 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-
 package org.apache.jmeter.protocol.http.control;
 
 import java.io.Serializable;
@@ -71,129 +70,156 @@ import org.apache.log.Logger;
  */
 public class Cookie extends AbstractTestElement implements Serializable
 {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter.protocol.http");
-	 private static String NAME = "Cookie.name";
-	 private static String VALUE = "Cookie.value";
-	 private static String DOMAIN = "Cookie.domain";
-	 private static String EXPIRES = "Cookie.expires";
-	 private static String SECURE = "Cookie.secure";
-	 private static String PATH = "Cookie.path";
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+    private static String NAME = "Cookie.name";
+    private static String VALUE = "Cookie.value";
+    private static String DOMAIN = "Cookie.domain";
+    private static String EXPIRES = "Cookie.expires";
+    private static String SECURE = "Cookie.secure";
+    private static String PATH = "Cookie.path";
 
-	 /**
-	  * create the coookie
-	  */
-	 public Cookie() {
-		  this.setName("");
-		  this.setValue("");
-		  this.setDomain("");
-		  this.setPath("");
-		  this.setSecure(false);
-		  this.setExpires(0);
-	 }
+    /**
+     * create the coookie
+     */
+    public Cookie()
+    {
+        this.setName("");
+        this.setValue("");
+        this.setDomain("");
+        this.setPath("");
+        this.setSecure(false);
+        this.setExpires(0);
+    }
 
-	 /**
-	  * create the coookie
-	  */
-	 public Cookie(String name, String value, String domain, String path, boolean secure, long expires) {
-		  this.setName(name);
-		  this.setValue(value);
-		  this.setDomain(domain);
-		  this.setPath(path);
-		  this.setSecure(secure);
-		  this.setExpires(expires);
-	 }
+    /**
+     * create the coookie
+     */
+    public Cookie(
+        String name,
+        String value,
+        String domain,
+        String path,
+        boolean secure,
+        long expires)
+    {
+        this.setName(name);
+        this.setValue(value);
+        this.setDomain(domain);
+        this.setPath(path);
+        this.setSecure(secure);
+        this.setExpires(expires);
+    }
 
-	public void addConfigElement(ConfigElement config)
-	{
-	}
+    public void addConfigElement(ConfigElement config)
+    {
+    }
 
-	public boolean expectsModification()
-	{
-		return false;
-	}
+    public boolean expectsModification()
+    {
+        return false;
+    }
 
-	 public String getClassLabel()
-	 {
-		return "Cookie";
-	 }
+    public String getClassLabel()
+    {
+        return "Cookie";
+    }
 
-	 /**
-	  * get the value for this object.
-	  */
-	 public String getValue() {
-		  return getPropertyAsString(VALUE);
-	 }
+    /**
+     * get the value for this object.
+     */
+    public String getValue()
+    {
+        return getPropertyAsString(VALUE);
+    }
 
-	 /**
-	  * set the value for this object.
-	  */
-	 public synchronized void setValue(String value) {
-		  this.setProperty(VALUE,value);
-	 }
+    /**
+     * set the value for this object.
+     */
+    public synchronized void setValue(String value)
+    {
+        this.setProperty(VALUE, value);
+    }
 
-	 /**
-	  * get the domain for this object.
-	  */
-	 public String getDomain() {
-		  return getPropertyAsString(DOMAIN);
-	 }
+    /**
+     * get the domain for this object.
+     */
+    public String getDomain()
+    {
+        return getPropertyAsString(DOMAIN);
+    }
 
-	 /**
-	  * set the domain for this object.
-	  */
-	 public synchronized void setDomain(String domain) {
-		  setProperty(DOMAIN,domain);
-	 }
+    /**
+     * set the domain for this object.
+     */
+    public synchronized void setDomain(String domain)
+    {
+        setProperty(DOMAIN, domain);
+    }
 
-	 /**
-	  * get the expires for this object.
-	  */
-	 public long getExpires() {
-		return getPropertyAsLong(EXPIRES);
-	 }
+    /**
+     * get the expires for this object.
+     */
+    public long getExpires()
+    {
+        return getPropertyAsLong(EXPIRES);
+    }
 
-	 /**
-	  * set the expires for this object.
-	  */
-	 public synchronized void setExpires(long expires) {
-		  setProperty(new LongProperty(EXPIRES,expires));
-	 }
+    /**
+     * set the expires for this object.
+     */
+    public synchronized void setExpires(long expires)
+    {
+        setProperty(new LongProperty(EXPIRES, expires));
+    }
 
-	 /**
-	  * get the secure for this object.
-	  */
-	 public boolean getSecure() {
-	 	return getPropertyAsBoolean(SECURE);
-	 }
+    /**
+     * get the secure for this object.
+     */
+    public boolean getSecure()
+    {
+        return getPropertyAsBoolean(SECURE);
+    }
 
-	 /**
-	  * set the secure for this object.
-	  */
-	 public synchronized void setSecure(boolean secure) {
-		  setProperty(new BooleanProperty(SECURE,secure));
-	 }
+    /**
+     * set the secure for this object.
+     */
+    public synchronized void setSecure(boolean secure)
+    {
+        setProperty(new BooleanProperty(SECURE, secure));
+    }
 
-	 /**
-	  * get the path for this object.
-	  */
-	 public String getPath() {
-		  return getPropertyAsString(PATH);
-	 }
+    /**
+     * get the path for this object.
+     */
+    public String getPath()
+    {
+        return getPropertyAsString(PATH);
+    }
 
-	 /**
-	  * set the path for this object.
-	  */
-	 public synchronized void setPath(String path) {
-		  setProperty(PATH,path);
-	 }
+    /**
+     * set the path for this object.
+     */
+    public synchronized void setPath(String path)
+    {
+        setProperty(PATH, path);
+    }
 
-	 /**
-	  * creates a string representation of this cookie
-	  */
-	 public String toString() {
-	return getDomain() + "\tTRUE\t" + getPath() + "\t" +
-							 new Boolean(getSecure()).toString().toUpperCase() + "\t" +
-							 getExpires() + "\t" + getName() + "\t" + getValue();
-	 }
+    /**
+     * creates a string representation of this cookie
+     */
+    public String toString()
+    {
+        return getDomain()
+            + "\tTRUE\t"
+            + getPath()
+            + "\t"
+            + new Boolean(getSecure()).toString().toUpperCase()
+            + "\t"
+            + getExpires()
+            + "\t"
+            + getName()
+            + "\t"
+            + getValue();
+    }
 }

@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.gui;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -85,15 +86,14 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/****************************************
+/**
  * Handles input for determining if authentication services are required for a
  * Sampler. It also understands how to get AuthManagers for the files that the
  * user selects.
  *
- *@author    $Author$
- *@created   $Date$
- *@version   $Revision$
- ***************************************/
+ * @author    $Author$
+ * @version   $Revision$
+ */
 public class AuthPanel extends AbstractConfigGui implements ActionListener
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
@@ -105,226 +105,224 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener
 
     private InnerTableModel tableModel;
 
-	/****************************************
-	 * A table to show the authentication information
-	 ***************************************/
+    /**
+     * A table to show the authentication information.
+     */
     private JTable authTable;
-    
+
     private JButton addButton;
     private JButton deleteButton;
     private JButton loadButton;
-	private JButton saveButton;
+    private JButton saveButton;
 
-	/****************************************
-	 * Default Constructor
-	 ***************************************/
-	public AuthPanel()
-	{
-		tableModel = new InnerTableModel();
-		init();
-	}
+    /**
+     * Default Constructor.
+     */
+    public AuthPanel()
+    {
+        tableModel = new InnerTableModel();
+        init();
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public TestElement createTestElement()
-	{
-		AuthManager authMan = tableModel.manager;
-		configureTestElement(authMan);
-		return (TestElement)authMan.clone();
-	}
-    
+    public TestElement createTestElement()
+    {
+        AuthManager authMan = tableModel.manager;
+        configureTestElement(authMan);
+        return (TestElement) authMan.clone();
+    }
+
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement el)
     {
         el.clear();
-        el.addTestElement((TestElement)tableModel.manager.clone());
+        el.addTestElement((TestElement) tableModel.manager.clone());
         configureTestElement(el);
     }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param el  !ToDo (Parameter description)
-	 ***************************************/
-	public void configure(TestElement el)
-	{
-		super.configure(el);
+    public void configure(TestElement el)
+    {
+        super.configure(el);
         tableModel.manager.clear();
-		tableModel.manager.addTestElement((AuthManager)el.clone());
-	}
+        tableModel.manager.addTestElement((AuthManager) el.clone());
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("auth_manager_title");
-	}
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("auth_manager_title");
+    }
 
-	/****************************************
-	 * Shows the main authentication panel for this object
-	 ***************************************/
-	public void init()
-	{
+    /**
+     * Shows the main authentication panel for this object.
+     */
+    public void init()
+    {
         setLayout(new BorderLayout());
         setBorder(makeBorder());
-        
-		add(makeTitlePanel(), BorderLayout.NORTH);
-        add (createAuthTablePanel(), BorderLayout.CENTER);
-	}
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void actionPerformed(ActionEvent e)
-	{
-		String action = e.getActionCommand();
+        add(makeTitlePanel(), BorderLayout.NORTH);
+        add(createAuthTablePanel(), BorderLayout.CENTER);
+    }
 
-		if(action.equals(DELETE_COMMAND))
-		{
-			if(tableModel.getRowCount() > 0)
-			{
-				// If a table cell is being edited, we must cancel the editing before
-				// deleting the row
-				if(authTable.isEditing())
-				{
-					TableCellEditor cellEditor = authTable.getCellEditor(authTable.getEditingRow(), authTable.getEditingColumn());
-					cellEditor.cancelCellEditing();
-				}
+    public void actionPerformed(ActionEvent e)
+    {
+        String action = e.getActionCommand();
 
-				int rowSelected = authTable.getSelectedRow();
+        if (action.equals(DELETE_COMMAND))
+        {
+            if (tableModel.getRowCount() > 0)
+            {
+                // If a table cell is being edited, we must cancel the editing
+                // before deleting the row.
+                if (authTable.isEditing())
+                {
+                    TableCellEditor cellEditor =
+                        authTable.getCellEditor(
+                            authTable.getEditingRow(),
+                            authTable.getEditingColumn());
+                    cellEditor.cancelCellEditing();
+                }
 
-				if(rowSelected != -1)
-				{
-					tableModel.removeRow(rowSelected);
-					tableModel.fireTableDataChanged();
+                int rowSelected = authTable.getSelectedRow();
 
-					// Disable the DELETE and SAVE buttons if no rows remaining after delete
-					if(tableModel.getRowCount() == 0)
-					{
-						deleteButton.setEnabled(false);
-						saveButton.setEnabled(false);
-					}
+                if (rowSelected != -1)
+                {
+                    tableModel.removeRow(rowSelected);
+                    tableModel.fireTableDataChanged();
 
-					// Table still contains one or more rows, so highlight (select)
-					// the appropriate one.
-					else
-					{
-						int rowToSelect = rowSelected;
+                    // Disable the DELETE and SAVE buttons if no rows remaining
+                    // after delete.
+                    if (tableModel.getRowCount() == 0)
+                    {
+                        deleteButton.setEnabled(false);
+                        saveButton.setEnabled(false);
+                    }
 
-						if(rowSelected >= tableModel.getRowCount())
-						{
-							rowToSelect = rowSelected - 1;
-						}
+                    // Table still contains one or more rows, so highlight
+                    // (select) the appropriate one.
+                    else
+                    {
+                        int rowToSelect = rowSelected;
 
-						authTable.setRowSelectionInterval(rowToSelect, rowToSelect);
-					}
-				}
-			}
-		}
-		else if(action.equals(ADD_COMMAND))
-		{
-			// If a table cell is being edited, we should accept the current value
-			// and stop the editing before adding a new row.
-			if(authTable.isEditing())
-			{
-				TableCellEditor cellEditor = authTable.getCellEditor(authTable.getEditingRow(), authTable.getEditingColumn());
-				cellEditor.stopCellEditing();
-			}
+                        if (rowSelected >= tableModel.getRowCount())
+                        {
+                            rowToSelect = rowSelected - 1;
+                        }
 
-			tableModel.addNewRow();
-			tableModel.fireTableDataChanged();
+                        authTable.setRowSelectionInterval(
+                            rowToSelect,
+                            rowToSelect);
+                    }
+                }
+            }
+        }
+        else if (action.equals(ADD_COMMAND))
+        {
+            // If a table cell is being edited, we should accept the current
+            // value and stop the editing before adding a new row.
+            if (authTable.isEditing())
+            {
+                TableCellEditor cellEditor =
+                    authTable.getCellEditor(
+                        authTable.getEditingRow(),
+                        authTable.getEditingColumn());
+                cellEditor.stopCellEditing();
+            }
 
-			// Enable the DELETE and SAVE buttons if they are currently disabled.
-			if(!deleteButton.isEnabled())
-			{
-				deleteButton.setEnabled(true);
-			}
-			if(!saveButton.isEnabled())
-			{
-				saveButton.setEnabled(true);
-			}
+            tableModel.addNewRow();
+            tableModel.fireTableDataChanged();
 
-			// Highlight (select) the appropriate row.
-			int rowToSelect = tableModel.getRowCount() - 1;
-			authTable.setRowSelectionInterval(rowToSelect, rowToSelect);
-		}
-		else if(action.equals(LOAD_COMMAND))
-		{
-			try
-			{
-				File tmp = FileDialoger.promptToOpenFile().getSelectedFile();
-				if(tmp != null)
-				{
-					tableModel.manager.addFile(tmp.getAbsolutePath());
-					tableModel.fireTableDataChanged();
+            // Enable the DELETE and SAVE buttons if they are currently
+            // disabled.
+            if (!deleteButton.isEnabled())
+            {
+                deleteButton.setEnabled(true);
+            }
+            if (!saveButton.isEnabled())
+            {
+                saveButton.setEnabled(true);
+            }
 
-					if(tableModel.getRowCount() > 0)
-					{
-						deleteButton.setEnabled(true);
-						saveButton.setEnabled(true);
-					}
-				}
-			}
-			catch(IOException ex)
-			{
-				log.error("",ex);
-			}
-			catch(NullPointerException err){}
-		}
-		else if(action.equals(SAVE_COMMAND))
-		{
-			try
-			{
-				File tmp = FileDialoger.promptToSaveFile(null).getSelectedFile();
-				if(tmp != null)
-				{
-					tableModel.manager.save(tmp.getAbsolutePath());
-				}
-			}
-			catch(IOException ex)
-			{
-				log.error("",ex);
-			}
-			catch(NullPointerException err){}
-		}
-	}
+            // Highlight (select) the appropriate row.
+            int rowToSelect = tableModel.getRowCount() - 1;
+            authTable.setRowSelectionInterval(rowToSelect, rowToSelect);
+        }
+        else if (action.equals(LOAD_COMMAND))
+        {
+            try
+            {
+                File tmp = FileDialoger.promptToOpenFile().getSelectedFile();
+                if (tmp != null)
+                {
+                    tableModel.manager.addFile(tmp.getAbsolutePath());
+                    tableModel.fireTableDataChanged();
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public JPanel createAuthTablePanel()
-	{
-		// create the JTable that holds auth per row
-		authTable = new JTable(tableModel);
-		authTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                    if (tableModel.getRowCount() > 0)
+                    {
+                        deleteButton.setEnabled(true);
+                        saveButton.setEnabled(true);
+                    }
+                }
+            }
+            catch (IOException ex)
+            {
+                log.error("", ex);
+            }
+            catch (NullPointerException err)
+            {
+            }
+        }
+        else if (action.equals(SAVE_COMMAND))
+        {
+            try
+            {
+                File tmp =
+                    FileDialoger.promptToSaveFile(null).getSelectedFile();
+                if (tmp != null)
+                {
+                    tableModel.manager.save(tmp.getAbsolutePath());
+                }
+            }
+            catch (IOException ex)
+            {
+                log.error("", ex);
+            }
+            catch (NullPointerException err)
+            {
+            }
+        }
+    }
+
+    public JPanel createAuthTablePanel()
+    {
+        // create the JTable that holds auth per row
+        authTable = new JTable(tableModel);
+        authTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         authTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
-		TableColumn passwordColumn = authTable.getColumnModel().getColumn(2);
-		passwordColumn.setCellEditor(new DefaultCellEditor(new JPasswordField()));
-		passwordColumn.setCellRenderer(new PasswordCellRenderer());
-
+        TableColumn passwordColumn = authTable.getColumnModel().getColumn(2);
+        passwordColumn.setCellEditor(
+            new DefaultCellEditor(new JPasswordField()));
+        passwordColumn.setCellRenderer(new PasswordCellRenderer());
 
         JPanel panel = new JPanel(new BorderLayout(0, 5));
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("auths_stored")));
-		panel.add(new JScrollPane(authTable));
-		panel.add(createButtonPanel(), BorderLayout.SOUTH);
-		return panel;
-	}
+        panel.setBorder(
+            BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("auths_stored")));
+        panel.add(new JScrollPane(authTable));
+        panel.add(createButtonPanel(), BorderLayout.SOUTH);
+        return panel;
+    }
 
-    private JButton createButton(String resName, char mnemonic, String command, boolean enabled) {
+    private JButton createButton(
+        String resName,
+        char mnemonic,
+        String command,
+        boolean enabled)
+    {
         JButton button = new JButton(JMeterUtils.getResString(resName));
         button.setMnemonic(mnemonic);
         button.setActionCommand(command);
@@ -332,15 +330,16 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener
         button.addActionListener(this);
         return button;
     }
-    
-    private JPanel createButtonPanel() {
+
+    private JPanel createButtonPanel()
+    {
         boolean tableEmpty = (tableModel.getRowCount() == 0);
-        
+
         addButton = createButton("add", 'A', ADD_COMMAND, true);
         deleteButton = createButton("delete", 'D', DELETE_COMMAND, !tableEmpty);
         loadButton = createButton("load", 'L', LOAD_COMMAND, true);
         saveButton = createButton("save", 'S', SAVE_COMMAND, !tableEmpty);
-        
+
         // Button Panel
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(addButton);
@@ -350,207 +349,150 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener
         return buttonPanel;
     }
 
-	/****************************************
-	 * !ToDo (Class description)
-	 *
-	 *@author    $Author$
-	 *@created   $Date$
-	 *@version   $Revision$
-	 ***************************************/
-	private class InnerTableModel extends AbstractTableModel
-	{
-		AuthManager manager;
+    /**
+     * @version   $Revision$
+     */
+    private class InnerTableModel extends AbstractTableModel
+    {
+        AuthManager manager;
 
-		/****************************************
-		 * !ToDo (Constructor description)
-		 *
-		 *@param man  !ToDo (Parameter description)
-		 ***************************************/
-		public InnerTableModel(AuthManager man)
-		{
-			manager = man;
-		}
+        public InnerTableModel(AuthManager man)
+        {
+            manager = man;
+        }
 
-		/****************************************
-		 * !ToDo (Constructor description)
-		 ***************************************/
-		public InnerTableModel()
-		{
-			manager = new AuthManager();
-		}
+        public InnerTableModel()
+        {
+            manager = new AuthManager();
+        }
 
-		/****************************************
-		 * !ToDo (Method description)
-		 *
-		 *@param row  !ToDo (Parameter description)
-		 ***************************************/
-		public void removeRow(int row)
-		{
-			manager.remove(row);
-		}
+        public void removeRow(int row)
+        {
+            manager.remove(row);
+        }
 
-		/****************************************
-		 * !ToDo
-		 ***************************************/
-		public void addNewRow()
-		{
-			manager.addAuth();
-		}
+        public void addNewRow()
+        {
+            manager.addAuth();
+        }
 
-		/****************************************
-		 * !ToDoo (Method description)
-		 *
-		 *@param row     !ToDo (Parameter description)
-		 *@param column  !ToDo (Parameter description)
-		 *@return        !ToDo (Return description)
-		 ***************************************/
-		public boolean isCellEditable(int row, int column)
-		{
-			// all table cells are editable
-			return true;
-		}
+        public boolean isCellEditable(int row, int column)
+        {
+            // all table cells are editable
+            return true;
+        }
 
-		/****************************************
-		 * !ToDoo (Method description)
-		 *
-		 *@param column  !ToDo (Parameter description)
-		 *@return        !ToDo (Return description)
-		 ***************************************/
-		public Class getColumnClass(int column)
-		{
-			return getValueAt(0, column).getClass();
-		}
+        public Class getColumnClass(int column)
+        {
+            return getValueAt(0, column).getClass();
+        }
 
-		/****************************************
-		 * required by table model interface
-		 *
-		 *@return   !ToDo (Return description)
-		 ***************************************/
-		public int getRowCount()
-		{
-			return manager.getAuthObjects().size();
-		}
+        /**
+         * Required by table model interface.
+         */
+        public int getRowCount()
+        {
+            return manager.getAuthObjects().size();
+        }
 
-		/****************************************
-		 * required by table model interface
-		 *
-		 *@return   !ToDo (Return description)
-		 ***************************************/
-		public int getColumnCount()
-		{
-			return manager.getColumnCount();
-		}
+        /**
+         * Required by table model interface.
+         */
+        public int getColumnCount()
+        {
+            return manager.getColumnCount();
+        }
 
-		/****************************************
-		 * required by table model interface
-		 *
-		 *@param column  !ToDo (Parameter description)
-		 *@return        !ToDo (Return description)
-		 ***************************************/
-		public String getColumnName(int column)
-		{
-			return manager.getColumnName(column);
-		}
+        /**
+         * Required by table model interface.
+         */
+        public String getColumnName(int column)
+        {
+            return manager.getColumnName(column);
+        }
 
-		/****************************************
-		 * required by table model interface
-		 *
-		 *@param row     !ToDo (Parameter description)
-		 *@param column  !ToDo (Parameter description)
-		 *@return        !ToDo (Return description)
-		 ***************************************/
-		public Object getValueAt(int row, int column)
-		{
-			Authorization auth = manager.getAuthObjectAt(row);
+        /**
+         * Required by table model interface.
+         */
+        public Object getValueAt(int row, int column)
+        {
+            Authorization auth = manager.getAuthObjectAt(row);
 
-			if(column == 0)
-			{
-				return auth.getURL();
-			}
-			else if(column == 1)
-			{
-				return auth.getUser();
-			}
-			else if(column == 2)
-			{
-				return auth.getPass();
-			}
-			return null;
-		}
+            if (column == 0)
+            {
+                return auth.getURL();
+            }
+            else if (column == 1)
+            {
+                return auth.getUser();
+            }
+            else if (column == 2)
+            {
+                return auth.getPass();
+            }
+            return null;
+        }
 
-		/****************************************
-		 * !ToDo (Method description)
-		 *
-		 *@param value   !ToDo (Parameter description)
-		 *@param row     !ToDo (Parameter description)
-		 *@param column  !ToDo (Parameter description)
-		 ***************************************/
-		public void setValueAt(Object value, int row, int column)
-		{
-			Authorization auth = manager.getAuthObjectAt(row);
+        public void setValueAt(Object value, int row, int column)
+        {
+            Authorization auth = manager.getAuthObjectAt(row);
             log.debug("Setting auth value: " + value);
-			if(column == 0)
-			{
-				auth.setURL((String)value);
-			}
-			else if(column == 1)
-			{
-				auth.setUser((String)value);
-			}
-			else if(column == 2)
-			{
-				auth.setPass((String)value);
-			}
-		}
-	}
+            if (column == 0)
+            {
+                auth.setURL((String) value);
+            }
+            else if (column == 1)
+            {
+                auth.setUser((String) value);
+            }
+            else if (column == 2)
+            {
+                auth.setPass((String) value);
+            }
+        }
+    }
 
-	/****************************************
-	 * !ToDo (Class description)
-	 *
-	 *@author    $Author$
-	 *@created   $Date$
-	 *@version   $Revision$
-	 ***************************************/
-	private class PasswordCellRenderer extends JPasswordField implements TableCellRenderer
-	{
-		private Border myBorder;
+    /**
+     * @version   $Revision$
+     */
+    private class PasswordCellRenderer
+        extends JPasswordField
+        implements TableCellRenderer
+    {
+        private Border myBorder;
 
-		/****************************************
-		 * !ToDo (Constructor description)
-		 ***************************************/
-		public PasswordCellRenderer()
-		{
-			super();
-			myBorder = new EmptyBorder(1, 2, 1, 2);
-			setOpaque(true);
-			setBorder(myBorder);
-		}
+        public PasswordCellRenderer()
+        {
+            super();
+            myBorder = new EmptyBorder(1, 2, 1, 2);
+            setOpaque(true);
+            setBorder(myBorder);
+        }
 
-		/****************************************
-		 * !ToDoo (Method description)
-		 *
-		 *@param table       !ToDo (Parameter description)
-		 *@param value       !ToDo (Parameter description)
-		 *@param isSelected  !ToDo (Parameter description)
-		 *@param hasFocus    !ToDo (Parameter description)
-		 *@param row         !ToDo (Parameter description)
-		 *@param column      !ToDo (Parameter description)
-		 *@return            !ToDo (Return description)
-		 ***************************************/
-		public Component getTableCellRendererComponent(JTable table,
-				Object value, boolean isSelected, boolean hasFocus,
-				int row, int column)
-		{
-			setText((String)value);
+        public Component getTableCellRendererComponent(
+            JTable table,
+            Object value,
+            boolean isSelected,
+            boolean hasFocus,
+            int row,
+            int column)
+        {
+            setText((String) value);
 
-			setBackground(isSelected && !hasFocus ?
-					table.getSelectionBackground() : table.getBackground());
-			setForeground(isSelected && !hasFocus ?
-					table.getSelectionForeground() : table.getForeground());
+            setBackground(
+                isSelected
+                    && !hasFocus
+                        ? table.getSelectionBackground()
+                        : table.getBackground());
+            setForeground(
+                isSelected
+                    && !hasFocus
+                        ? table.getSelectionForeground()
+                        : table.getForeground());
 
-			setFont(table.getFont());
+            setFont(table.getFont());
 
-			return this;
-		}
-	}
+            return this;
+        }
+    }
 }

@@ -62,131 +62,134 @@ import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
- * Title:        JMeter
- * Description:
- * Copyright:    Copyright (c) 2000
- * Company:      Apache
  * @author Michael Stover
- * @version 1.0
+ * @version $Revision$
  */
-
 public class MultipartUrlConfig implements Serializable
 {
 
-	public static String MULTIPART_FORM = "multipart/form-data";
-	private static String BOUNDARY = "boundary";
-	private String boundary,filename,fileField,mimetype;
-	private Arguments args;
+    public static String MULTIPART_FORM = "multipart/form-data";
+    private static String BOUNDARY = "boundary";
+    private String boundary, filename, fileField, mimetype;
+    private Arguments args;
 
-	public MultipartUrlConfig()
-	{
-		args = new Arguments();
-	}
+    public MultipartUrlConfig()
+    {
+        args = new Arguments();
+    }
 
-	public MultipartUrlConfig(String boundary)
-	{
-		this();
-		this.boundary = boundary;
-	}
+    public MultipartUrlConfig(String boundary)
+    {
+        this();
+        this.boundary = boundary;
+    }
 
-	public void setBoundary(String boundary)
-	{
-		this.boundary = boundary;
-	}
+    public void setBoundary(String boundary)
+    {
+        this.boundary = boundary;
+    }
 
-	public String getBoundary()
-	{
-		return boundary;
-	}
+    public String getBoundary()
+    {
+        return boundary;
+    }
 
-	public void setFilename(String filename)
-	{
-		this.filename = filename;
-	}
+    public void setFilename(String filename)
+    {
+        this.filename = filename;
+    }
 
-	public String getFilename()
-	{
-		return filename;
-	}
-	
-	public Arguments getArguments()
-	{
-		return args;
-	}
+    public String getFilename()
+    {
+        return filename;
+    }
 
-	public void setFileFieldName(String name)
-	{
-		this.fileField = name;
-	}
+    public Arguments getArguments()
+    {
+        return args;
+    }
 
-	public String getFileFieldName()
-	{
-		return fileField;
-	}
+    public void setFileFieldName(String name)
+    {
+        this.fileField = name;
+    }
 
-	public void setMimeType(String type)
-	{
-		mimetype = type;
-	}
+    public String getFileFieldName()
+    {
+        return fileField;
+    }
 
-	public String getMimeType()
-	{
-		return mimetype;
-	}
-	
-	public void addArgument(String name,String value)
-	{
-		Arguments args = this.getArguments();
-		args.addArgument(new HTTPArgument(name,value));
-	}
+    public void setMimeType(String type)
+    {
+        mimetype = type;
+    }
 
-	public void addArgument(String name,String value,String metadata)
-	{
-		Arguments args = this.getArguments();
-		args.addArgument(new HTTPArgument(name,value,metadata));
-	}
-	
-	public void addEncodedArgument(String name,String value)
-	{
-		Arguments args = getArguments();
-		HTTPArgument arg = new HTTPArgument(name,value,true);
-		if(arg.getName().equals(arg.getEncodedName()) && arg.getValue().equals(arg.getEncodedValue()))
-		{
-			arg.setAlwaysEncoded(false);
-		}
-		args.addArgument(arg);
-	}
+    public String getMimeType()
+    {
+        return mimetype;
+    }
 
-		/**
-	 * This method allows a proxy server to send over the raw text from a browser's
-	 * output stream to be parsed and stored correctly into the UrlConfig object.
-	 */
-	public void parseArguments(String queryString)
-	{
-		String[] parts = JOrphanUtils.split(queryString,"--"+getBoundary());
-		for (int i = 0; i < parts.length; i++)
-		{
-			if(parts[i].indexOf("filename=") > -1)
-			{
-				int index = parts[i].indexOf("name=\"")+6;
-				String name = parts[i].substring(index,parts[i].indexOf("\"",index));
-				index = parts[i].indexOf("filename=\"")+10;
-				String filename = parts[i].substring(index,parts[i].indexOf("\"",index));
-				index = parts[i].indexOf("\n",index);
-				index = parts[i].indexOf(":",index)+1;
-				String mimetype = parts[i].substring(index,parts[i].indexOf("\n",index)).trim();
-				this.setFileFieldName(name);
-				this.setFilename(filename);
-				this.setMimeType(mimetype);
-			}
-			else if(parts[i].indexOf("name=") > -1)
-			{
-				int index = parts[i].indexOf("name=\"")+6;
-				String name = parts[i].substring(index,parts[i].indexOf("\"",index));
-				index = parts[i].indexOf("\n",index)+2;
-				String value = parts[i].substring(index).trim();
-				this.addEncodedArgument(name,value);
-			}
-		}
-	}
+    public void addArgument(String name, String value)
+    {
+        Arguments args = this.getArguments();
+        args.addArgument(new HTTPArgument(name, value));
+    }
+
+    public void addArgument(String name, String value, String metadata)
+    {
+        Arguments args = this.getArguments();
+        args.addArgument(new HTTPArgument(name, value, metadata));
+    }
+
+    public void addEncodedArgument(String name, String value)
+    {
+        Arguments args = getArguments();
+        HTTPArgument arg = new HTTPArgument(name, value, true);
+        if (arg.getName().equals(arg.getEncodedName())
+            && arg.getValue().equals(arg.getEncodedValue()))
+        {
+            arg.setAlwaysEncoded(false);
+        }
+        args.addArgument(arg);
+    }
+
+    /**
+    * This method allows a proxy server to send over the raw text from a
+    * browser's output stream to be parsed and stored correctly into the
+    * UrlConfig object.
+    */
+    public void parseArguments(String queryString)
+    {
+        String[] parts = JOrphanUtils.split(queryString, "--" + getBoundary());
+        for (int i = 0; i < parts.length; i++)
+        {
+            if (parts[i].indexOf("filename=") > -1)
+            {
+                int index = parts[i].indexOf("name=\"") + 6;
+                String name =
+                    parts[i].substring(index, parts[i].indexOf("\"", index));
+                index = parts[i].indexOf("filename=\"") + 10;
+                String filename =
+                    parts[i].substring(index, parts[i].indexOf("\"", index));
+                index = parts[i].indexOf("\n", index);
+                index = parts[i].indexOf(":", index) + 1;
+                String mimetype =
+                    parts[i]
+                        .substring(index, parts[i].indexOf("\n", index))
+                        .trim();
+                this.setFileFieldName(name);
+                this.setFilename(filename);
+                this.setMimeType(mimetype);
+            }
+            else if (parts[i].indexOf("name=") > -1)
+            {
+                int index = parts[i].indexOf("name=\"") + 6;
+                String name =
+                    parts[i].substring(index, parts[i].indexOf("\"", index));
+                index = parts[i].indexOf("\n", index) + 2;
+                String value = parts[i].substring(index).trim();
+                this.addEncodedArgument(name, value);
+            }
+        }
+    }
 }

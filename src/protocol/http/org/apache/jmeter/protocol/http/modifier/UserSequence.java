@@ -53,7 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.modifier;
- 
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -63,74 +63,78 @@ import java.util.Map;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
-/************************************************************
- *  Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:
- *  Apache
- * <P> This module controls the Sequence in which user details are returned.
- * <BR>
- * <P> This module uses round robin allocation of users.
- *@author     Mark Walsh
- *@created    $Date$
- *@version    1.0
- ***********************************************************/
-
-public class UserSequence implements Serializable {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter.protocol.http");
+/**
+ * This module controls the Sequence in which user details are returned.  This
+ * module uses round robin allocation of users.
+ * 
+ * @author     Mark Walsh
+ * @version    $Revision$
+ */
+public class UserSequence implements Serializable
+{
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
 
     //-------------------------------------------
     // Constants and Data Members
     //-------------------------------------------
-    private List allUsers; 
+    private List allUsers;
     private Iterator indexOfUsers;
 
     //-------------------------------------------
     // Constructors
     //-------------------------------------------
-    
+
     public UserSequence()
     {
     }
 
     /**
-     * Load all user and parameter data into the sequence module
-     * <BR>
-     * ie a Set of Mapped "parameter names and parameter values" for each user to be loader into the sequencer
+     * Load all user and parameter data into the sequence module.
+     * <P>
+     * ie a Set of Mapped "parameter names and parameter values" for each user
+     * to be loaded into the sequencer.
      */
+    public UserSequence(List allUsers)
+    {
+        this.allUsers = allUsers;
 
-    public UserSequence(List allUsers) {
-	this.allUsers = allUsers;
-
-	// initalise pointer to first user
-	indexOfUsers = allUsers.iterator();
+        // initalise pointer to first user
+        indexOfUsers = allUsers.iterator();
     }
 
     //-------------------------------------------
     // Methods
     //-------------------------------------------
+    
     /**
      * Returns the parameter data for the next user in the sequence
-     * @param Returns a Map object of parameter names and matching parameter values for the next user
+     * @return a Map object of parameter names and matching parameter
+     *         values for the next user
      */
-    public synchronized Map getNextUserMods() {
-	
-	// Use round robin allocation of user details
-	  if (!indexOfUsers.hasNext()) {
-	      indexOfUsers = allUsers.iterator();
-	  }
+    public synchronized Map getNextUserMods()
+    {
+        // Use round robin allocation of user details
+        if (!indexOfUsers.hasNext())
+        {
+            indexOfUsers = allUsers.iterator();
+        }
 
+        Map user;
+        if (indexOfUsers.hasNext())
+        {
+            user = (Map) indexOfUsers.next();
+            log.debug(
+                "UserSequence.getNextuserMods(): current parameters will be "
+                    + "changed to: "
+                    + user);
+        }
+        else
+        {
+            // no entries in all users, therefore create an empty Map object
+            user = new HashMap();
+        }
 
-	Map user;
-	if (indexOfUsers.hasNext() ) {
-	    user = (Map)indexOfUsers.next();
-	    log.debug("UserSequence.getNextuserMods(): current parameters will be changed to: " + user);
-	} else {
-	    // no entries in all users, therefore create an empty Map object
-	    user = new HashMap();
-	}
-
-	return user;
-
-    } // end method getNextUserMods
-
-} // end class
+        return user;
+    }
+}

@@ -1,7 +1,5 @@
 package org.apache.jmeter.protocol.http.proxy;
-/****************************************
- * File HttpRequestHdr.java
- ***************************************/
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,41 +23,41 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/****************************************
+/**
  * The headers of the client HTTP request.
  *
- *@author    $Author$
- *@created   $Date$
- *@version   $Revision$
- ***************************************/
+ * @version   $Revision$
+ */
 public class HttpRequestHdr
 {
     Logger log = LoggingManager.getLoggerFor(JMeterUtils.HTTP);
-    /****************************************
+
+    /**
      * Http Request method. Such as get or post.
-     ***************************************/
+     */
     public String method = new String();
-    /****************************************
+
+    /**
      * The requested url. The universal resource locator that hopefully uniquely
      * describes the object or service the client is requesting.
-     ***************************************/
+     */
     public String url = new String();
-    /****************************************
-     * Version of http being used. Such as HTTP/1.0
-     ***************************************/
+
+    /**
+     * Version of http being used. Such as HTTP/1.0.
+     */
     public String version = new String();
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
+
     public String postData = "";
     static String CR = "\r\n";
     private Map headers = new HashMap();
-    /****************************************
+ 
+    /**
      * Parses a http header from a stream.
      *
-     *@param in  The stream to parse.
-     *@return    Array of bytes from client.
-     ***************************************/
+     * @param in  the stream to parse.
+     * @return    array of bytes from client.
+     */
     public byte[] parse(InputStream in) throws IOException
     {
         boolean inHeaders = true;
@@ -103,6 +101,7 @@ public class HttpRequestHdr
         postData = line.toString().trim();
         return clientRequest.toByteArray();
     }
+    
     public void parseFirstLine(String firstLine)
     {
         log.debug("browser request: " + firstLine);
@@ -112,6 +111,7 @@ public class HttpRequestHdr
         log.debug("parsed url: " + url);
         version = getToken(tz);
     }
+    
     public int parseLine(String nextLine)
     {
         StringTokenizer tz;
@@ -134,6 +134,7 @@ public class HttpRequestHdr
         }
         return 0;
     }
+    
     public HeaderManager getHeaderManager()
     {
         HeaderManager manager = new HeaderManager();
@@ -154,6 +155,7 @@ public class HttpRequestHdr
         manager.setProperty(TestElement.GUI_CLASS, HeaderPanel.class.getName());
         return manager;
     }
+    
     public HTTPSampler getSampler()
         throws MalformedURLException, IOException, ProtocolException
     {
@@ -164,6 +166,7 @@ public class HttpRequestHdr
         result.setUseKeepAlive(true);
         return result;
     }
+    
     public String getContentType()
     {
         Header contentTypeHeader = (Header) headers.get("content-type");
@@ -173,6 +176,7 @@ public class HttpRequestHdr
         }
         return "";
     }
+    
     public static MultipartUrlConfig isMultipart(String contentType)
     {
         if (contentType != null
@@ -186,6 +190,7 @@ public class HttpRequestHdr
             return null;
         }
     }
+    
     private HTTPSampler createSampler()
     {
         MultipartUrlConfig urlConfig = null;
@@ -229,14 +234,16 @@ public class HttpRequestHdr
         }
         return sampler;
     }
+    
     //
     // Parsing Methods
     //
-    /****************************************
+
+    /**
      * Find the //server.name from an url.
      *
-     *@return   Servers internet name
-     ***************************************/
+     * @return   server's internet name
+     */
     public String serverName()
     {
         // chop to "server.name:x/thing"
@@ -260,11 +267,12 @@ public class HttpRequestHdr
         }
         return str;
     }
-    /****************************************
+
+    /**
      * Find the :PORT form http://server.ect:PORT/some/file.xxx
      *
-     *@return   Servers internet name
-     ***************************************/
+     * @return   server's port
+     */
     public int serverPort()
     {
         String str = url;
@@ -288,11 +296,12 @@ public class HttpRequestHdr
         }
         return 80;
     }
-    /****************************************
+    
+    /**
      * Find the /some/file.xxxx form http://server.ect:PORT/some/file.xxx
      *
-     *@return   the deproxied url
-     ***************************************/
+     * @return   the deproxied url
+     */
     public String serverUrl()
     {
         String str = url;
@@ -308,13 +317,13 @@ public class HttpRequestHdr
         }
         return str.substring(i);
     }
-    /****************************************
-     * Returns the next token in a string
+    
+    /**
+     * Returns the next token in a string.
      *
-     *@param tk  String that is partially tokenized.
-     *@return    !ToDo (Return description)
-     *@returns   The remainder
-     ***************************************/
+     * @param tk  String that is partially tokenized.
+     * @return   The remainder
+     */
     String getToken(StringTokenizer tk)
     {
         String str = "";
@@ -324,13 +333,13 @@ public class HttpRequestHdr
         }
         return str;
     }
-    /****************************************
-     * Returns the remainder of a tokenized string
+    
+    /**
+     * Returns the remainder of a tokenized string.
      *
-     *@param tk  String that is partially tokenized.
-     *@return    !ToDo (Return description)
-     *@returns   The remainder
-     ***************************************/
+     * @param tk  String that is partially tokenized.
+     * @return   The remainder
+     */
     String getRemainder(StringTokenizer tk)
     {
         String str = "";
@@ -359,7 +368,9 @@ public class HttpRequestHdr
         public void testRepeatedArguments() throws Exception
         {
             String TEST_REQ =
-                "GET http://localhost/matrix.html?update=yes&d=1&d=2&d=&d=&d=&d=&d=&d=1&d=2&d=1&d=&d= HTTP/1.0\n\n";
+                "GET http://localhost/matrix.html?"
+                    + "update=yes&d=1&d=2&d=&d=&d=&d=&d=&d=1&d=2&d=1&d=" +
+                        "&d= HTTP/1.0\n\n";
             HttpRequestHdr req = new HttpRequestHdr();
             req.parse(new java.io.ByteArrayInputStream(TEST_REQ.getBytes()));
             HTTPSampler s = req.getSampler();

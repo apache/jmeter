@@ -55,7 +55,6 @@
 
 package org.apache.jmeter.protocol.http.config.gui;
 
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
@@ -71,102 +70,105 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
-
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
 public class HttpDefaultsGui extends AbstractConfigGui
 {
-	JLabeledTextField protocol;
-	JLabeledTextField domain;
-	JLabeledTextField path;
-	JLabeledTextField port;
-	HTTPArgumentsPanel argPanel;
-	
-	public HttpDefaultsGui()
-	{
-		super();
-		init();
-	}
-	
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("url_config_title");
-	}
-	
-	/**
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-	 */
-	public TestElement createTestElement()
-	{
-		ConfigTestElement config = new ConfigTestElement();
-		modifyTestElement(config);
-		return config;
-	}
+    JLabeledTextField protocol;
+    JLabeledTextField domain;
+    JLabeledTextField path;
+    JLabeledTextField port;
+    HTTPArgumentsPanel argPanel;
+
+    public HttpDefaultsGui()
+    {
+        super();
+        init();
+    }
+
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("url_config_title");
+    }
+
+    /**
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+     */
+    public TestElement createTestElement()
+    {
+        ConfigTestElement config = new ConfigTestElement();
+        modifyTestElement(config);
+        return config;
+    }
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement config)
     {
         super.configureTestElement(config);
-        config.setProperty(HTTPSampler.PROTOCOL,protocol.getText());
-        config.setProperty(HTTPSampler.DOMAIN,domain.getText());
-        config.setProperty(HTTPSampler.PATH,path.getText());
-        config.setProperty(new TestElementProperty(HTTPSampler.ARGUMENTS,argPanel.createTestElement()));
-        config.setProperty(HTTPSampler.PORT,port.getText());
+        config.setProperty(HTTPSampler.PROTOCOL, protocol.getText());
+        config.setProperty(HTTPSampler.DOMAIN, domain.getText());
+        config.setProperty(HTTPSampler.PATH, path.getText());
+        config.setProperty(
+            new TestElementProperty(
+                HTTPSampler.ARGUMENTS,
+                argPanel.createTestElement()));
+        config.setProperty(HTTPSampler.PORT, port.getText());
     }
-	
-	public void configure(TestElement el)
-	{
-		super.configure(el);
-		protocol.setText(el.getPropertyAsString(HTTPSampler.PROTOCOL));
-		domain.setText(el.getPropertyAsString(HTTPSampler.DOMAIN));
-		path.setText(el.getPropertyAsString(HTTPSampler.PATH));
-		port.setText(el.getPropertyAsString(HTTPSampler.PORT));
-		argPanel.configure((TestElement)el.getProperty(HTTPSampler.ARGUMENTS).getObjectValue());
-	}
-	
-	private void init()
-	{
+
+    public void configure(TestElement el)
+    {
+        super.configure(el);
+        protocol.setText(el.getPropertyAsString(HTTPSampler.PROTOCOL));
+        domain.setText(el.getPropertyAsString(HTTPSampler.DOMAIN));
+        path.setText(el.getPropertyAsString(HTTPSampler.PATH));
+        port.setText(el.getPropertyAsString(HTTPSampler.PORT));
+        argPanel.configure(
+            (TestElement) el
+                .getProperty(HTTPSampler.ARGUMENTS)
+                .getObjectValue());
+    }
+
+    private void init()
+    {
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
 
         add(makeTitlePanel(), BorderLayout.NORTH);
 
         Box mainPanel = Box.createVerticalBox();
-        
+
         VerticalPanel urlPanel = new VerticalPanel();
-		protocol = new JLabeledTextField(JMeterUtils.getResString("url_config_protocol"));
+        protocol =
+            new JLabeledTextField(
+                JMeterUtils.getResString("url_config_protocol"));
         urlPanel.add(protocol);
-        
-		domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain"));
+
+        domain =
+            new JLabeledTextField(
+                JMeterUtils.getResString("web_server_domain"));
         urlPanel.add(domain);
-        
-		path = new JLabeledTextField(JMeterUtils.getResString("path"));
+
+        path = new JLabeledTextField(JMeterUtils.getResString("path"));
         urlPanel.add(path);
-        
-		port = new JLabeledTextField(JMeterUtils.getResString("web_server_port"));
+
+        port =
+            new JLabeledTextField(JMeterUtils.getResString("web_server_port"));
         urlPanel.add(port);
-        
+
         mainPanel.add(urlPanel);
 
         argPanel = new HTTPArgumentsPanel();
         mainPanel.add(argPanel);
-        
-		add(mainPanel, BorderLayout.CENTER);
-	}
-    
-    public Dimension getPreferredSize() {
+
+        add(mainPanel, BorderLayout.CENTER);
+    }
+
+    public Dimension getPreferredSize()
+    {
         return getMinimumSize();
     }
 }

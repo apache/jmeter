@@ -79,243 +79,309 @@ import org.apache.jmeter.util.JMeterUtils;
  * @author  <a href="mailto:giacomo@apache.org">Giacomo Pati</a>
  * @version $Revision$ $Date$
  */
-public class HeaderManager extends ConfigTestElement implements
-		Serializable
+public class HeaderManager extends ConfigTestElement implements Serializable
 {
 
-	 public static final String HEADERS = "HeaderManager.headers";
-	 /**
-	  * A vector of Headers managed by this class.
-	  * @associates <{org.apache.jmeter.controllers.Header}>
-	  */
+    public static final String HEADERS = "HeaderManager.headers";
 
+    private final static int columnCount = 2;
+    private final static String[] columnNames =
+        { JMeterUtils.getResString("name"), JMeterUtils.getResString("value")};
 
-	 private final static int columnCount = 2;
-	 private final static String[] columnNames = {
-		JMeterUtils.getResString("name"),
-		JMeterUtils.getResString("value")
-	 };
+    private static List addableList = new LinkedList();
 
-	 private static List addableList = new LinkedList();
+    public HeaderManager()
+    {
+        setProperty(new CollectionProperty(HEADERS, new ArrayList()));
+    }
 
-	 public HeaderManager () {
-		setProperty(new CollectionProperty(HEADERS,new ArrayList()));
-	 }
+    public CollectionProperty getHeaders()
+    {
+        return (CollectionProperty) getProperty(HEADERS);
+    }
 
+    public int getColumnCount()
+    {
+        return columnCount;
+    }
 
-	 public CollectionProperty getHeaders() {
-		  return (CollectionProperty)getProperty(HEADERS);
-	 }
+    public String getColumnName(int column)
+    {
+        return columnNames[column];
+    }
 
-	 public int getColumnCount() {
-			  return columnCount;
-		 }
+    public Class getColumnClass(int column)
+    {
+        return columnNames[column].getClass();
+    }
 
-	public String getColumnName(int column) {
-			  return columnNames[column];
-		 }
+    public Header getHeader(int row)
+    {
+        return (Header) getHeaders().get(row).getObjectValue();
+    }
 
-	public Class getColumnClass(int column) {
-			  return columnNames[column].getClass();
-		 }
+    /**
+     * Save the header data to a file.
+     */
+    public void save(String headFile) throws IOException
+    {
+        File file = new File(headFile);
+        if (!file.isAbsolute())
+        {
+            file =
+                new File(
+                    System.getProperty("user.dir") + File.separator + headFile);
+        }
+        PrintWriter writer = new PrintWriter(new FileWriter(file));
+        writer.println("# JMeter generated Header file");
+        for (int i = 0; i < getHeaders().size(); i++)
+        {
+            Header head = (Header) getHeaders().get(i);
+            writer.println(head.toString());
+        }
+        writer.flush();
+        writer.close();
+    }
 
-	public Header getHeader(int row)
-	{
-		return (Header)getHeaders().get(row).getObjectValue();
-	}
+    /**
+     * Add header data from a file.
+     */
+    public void addFile(String headerFile) throws IOException
+    {
+        File file = new File(headerFile);
+        if (!file.isAbsolute())
+        {
+            file =
+                new File(
+                    System.getProperty("user.dir")
+                        + File.separator
+                        + headerFile);
+        }
+        BufferedReader reader = null;
+        if (file.canRead())
+        {
+            reader = new BufferedReader(new FileReader(file));
+        }
+        else
+        {
+            throw new IOException("The file you specified cannot be read.");
+        }
 
-	 /** save the header data to a file */
-	 public void save(String headFile) throws IOException {
-		  File file = new File(headFile);
-		  if (!file.isAbsolute()) {
-				file = new File(System.getProperty("user.dir") + File.separator + headFile);
-		  }
-		  PrintWriter writer = new PrintWriter(new FileWriter(file));
-		  writer.println("# JMeter generated Header file");
-		  for (int i = 0; i < getHeaders().size(); i++) {
-				Header head = (Header) getHeaders().get(i);
-				writer.println(head.toString());
-		  }
-		  writer.flush();
-		  writer.close();
-	 }
+        String line;
+        while ((line = reader.readLine()) != null)
+        {
+            try
+            {
+                if (line.startsWith("#") || line.trim().length() == 0)
+                {
+                    continue;
+                }
+                String[] st = split(line, "\t", " ");
+                int name = 0;
+                int value = 1;
+                Header header = new Header(st[name], st[value]);
+                getHeaders().addItem(header);
+            }
+            catch (Exception e)
+            {
+                throw new IOException(
+                    "Error parsing header line\n\t'" + line + "'\n\t" + e);
+            }
+        }
+        reader.close();
+    }
 
-	 /** add header data from a file */
-	 public void addFile (String headerFile) throws IOException {
-		  File file = new File(headerFile);
-		  if (!file.isAbsolute()) {
-				file = new File(System.getProperty("user.dir") + File.separator + headerFile);
-		  }
-		  BufferedReader reader = null;
-		  if (file.canRead()) {
-				reader = new BufferedReader(new FileReader(file));
-		  } else {
-				throw new IOException("The file you specified cannot be read.");
-		  }
+    /**
+     * Add a header.
+     */
+    public void add(Header h)
+    {
+        getHeaders().addItem(h);
+    }
 
-		  String line;
-		  while ((line = reader.readLine()) != null) {
-				try {
-					 if (line.startsWith("#") || line.trim().length() == 0) {
-						  continue;
-					 }
-					 String[] st = split(line, "\t"," ");
-					 int name = 0;
-					 int value = 1;
-					 Header header = new Header(st[name], st[value]);
-					 getHeaders().addItem(header);
-				} catch (Exception e) {
-					 throw new IOException("Error parsing header line\n\t'" + line + "'\n\t" + e);
-				}
-		  }
-		  reader.close();
-	 }
+    /**
+     * Add an empty header.
+     */
+    public void add()
+    {
+        getHeaders().addItem(new Header());
+    }
 
-	 /** add a header */
-	 public void add(Header h) {
-		  getHeaders().addItem(h);
-	 }
+    /**
+     * Remove a header.
+     */
+    public void remove(int index)
+    {
+        getHeaders().remove(index);
+    }
 
-	 /** add an empty header */
-	 public void add() {
-		getHeaders().addItem(new Header());
-	 }
+    /**
+     * Return the number of headers.
+     */
+    public int size()
+    {
+        return getHeaders().size();
+    }
 
-	 /** remove a header */
-	 public void remove(int index) {
-		  getHeaders().remove(index);
-	 }
+    /**
+     * Return the header at index i.
+     */
+    public Header get(int i)
+    {
+        return (Header) getHeaders().get(i).getObjectValue();
+    }
 
-	 /** return the number headers */
-	 public int size() {
-		  return getHeaders().size();
-	 }
+    /*
+    public String getHeaderHeaderForURL(URL url)
+    {
+        if (!url.getProtocol().toUpperCase().trim().equals("HTTP")
+            && !url.getProtocol().toUpperCase().trim().equals("HTTPS"))
+        {
+            return null;
+        }
 
-	 /** return the header at index i */
-	 public Header get(int i) {
-		  return (Header) getHeaders().get(i).getObjectValue();
-	 }
+        StringBuffer sbHeader = new StringBuffer();
+        for (Iterator enum = headers.iterator(); enum.hasNext();)
+        {
+            Header header = (Header) enum.next();
+            if (url.getHost().endsWith(header.getDomain())
+                && url.getFile().startsWith(header.getPath())
+                && (System.currentTimeMillis() / 1000) <= header.getExpires())
+            {
+                if (sbHeader.length() > 0)
+                {
+                    sbHeader.append("; ");
+                }
+                sbHeader.append(header.getName()).append("=").append(
+                    header.getValue());
+            }
+        }
 
-	 /*
-	 public String getHeaderHeaderForURL(URL url) {
-		  if (!url.getProtocol().toUpperCase().trim().equals("HTTP") &&
-					 ! url.getProtocol().toUpperCase().trim().equals("HTTPS")) {
-				return null;
-		  }
+        if (sbHeader.length() != 0)
+        {
+            return sbHeader.toString();
+        }
+        else
+        {
+            return null;
+        }
+    }
+    */
+    
+    /*
+    public void addHeaderFromHeader(String headerHeader, URL url)
+    {
+        StringTokenizer st = new StringTokenizer(headerHeader, ";");
+        String nvp;
 
-		  StringBuffer sbHeader = new StringBuffer();
-		  for (Iterator enum = headers.iterator(); enum.hasNext();) {
-				Header header = (Header) enum.next();
-				if (url.getHost().endsWith(header.getDomain()) &&
-						  url.getFile().startsWith(header.getPath()) &&
-						  (System.currentTimeMillis() / 1000) <= header.getExpires()) {
-					 if (sbHeader.length() > 0) {
-						  sbHeader.append("; ");
-					 }
-					 sbHeader.append(header.getName()).append("=").append(header.getValue());
-				}
-		  }
+        // first n=v is name=value
+        nvp = st.nextToken();
+        int index = nvp.indexOf("=");
+        String name = nvp.substring(0, index);
+        String value = nvp.substring(index + 1);
+        String domain = url.getHost();
 
-		  if (sbHeader.length() != 0) {
-				return sbHeader.toString();
-		  } else {
-				return null;
-		  }
-	 }
-	 */
+        Header newHeader = new Header(name, value);
+        // check the rest of the headers
+        while (st.hasMoreTokens())
+        {
+            nvp = st.nextToken();
+            nvp = nvp.trim();
+            index = nvp.indexOf("=");
+            if (index == -1)
+            {
+                index = nvp.length();
+            }
+            String key = nvp.substring(0, index);
 
-	 /*
-	 public void addHeaderFromHeader(String headerHeader, URL url) {
-		  StringTokenizer st = new StringTokenizer(headerHeader, ";");
-		  String nvp;
+            Vector removeIndices = new Vector();
+            for (int i = headers.size() - 1; i >= 0; i--)
+            {
+                Header header = (Header) headers.get(i);
+                if (header == null)
+                {
+                    continue;
+                }
+                if (header.getName().equals(newHeader.getName()))
+                {
+                    removeIndices.addElement(new Integer(i));
+                }
+            }
 
-		  // first n=v is name=value
-		  nvp = st.nextToken();
-		  int index = nvp.indexOf("=");
-		  String name = nvp.substring(0,index);
-		  String value = nvp.substring(index+1);
-		  String domain = url.getHost();
+            for (Enumeration e = removeIndices.elements();
+                e.hasMoreElements();
+                )
+            {
+                index = ((Integer) e.nextElement()).intValue();
+                headers.remove(index);
+            }
 
-		  Header newHeader = new Header(name, value);
-		  // check the rest of the headers
-		  while (st.hasMoreTokens()) {
-				nvp = st.nextToken();
-				nvp = nvp.trim();
-				index = nvp.indexOf("=");
-				if(index == -1) {
-					 index = nvp.length();
-				}
-				String key = nvp.substring(0,index);
+        }
+        */
+    public void removeHeaderNamed(String name)
+    {
+        Vector removeIndices = new Vector();
+        for (int i = getHeaders().size() - 1; i > 0; i--)
+        {
+            Header header = (Header) getHeaders().get(i).getObjectValue();
+            if (header == null)
+            {
+                continue;
+            }
+            if (header.getName().equalsIgnoreCase(name))
+            {
+                removeIndices.addElement(new Integer(i));
+            }
+        }
 
-				Vector removeIndices = new Vector();
-				for (int i = headers.size() - 1; i >= 0; i--) {
-				Header header = (Header) headers.get(i);
-				if (header == null) {
-					 continue;
-				}
-				if (header.getName().equals(newHeader.getName())) {
-					 removeIndices.addElement(new Integer(i));
-				}
-		  }
+        for (Enumeration e = removeIndices.elements(); e.hasMoreElements();)
+        {
+            getHeaders().remove(((Integer) e.nextElement()).intValue());
+        }
+    }
 
-		  for (Enumeration e = removeIndices.elements(); e.hasMoreElements();) {
-				index = ((Integer) e.nextElement()).intValue();
-				headers.remove(index);
-		  }
+    /**
+     * Takes a String and a tokenizer character, and returns a new array of
+     * strings of the string split by the tokenizer character.
+     * 
+     * @param splittee  string to be split
+     * @param splitChar character to split the string on
+     * @param def       default value to place between two split chars that have
+     *                  nothing between them
+     * @return          array of all the tokens.
+     */
+    public String[] split(String splittee, String splitChar, String def)
+    {
+        if (splittee == null || splitChar == null)
+        {
+            return new String[0];
+        }
+        StringTokenizer tokens;
+        String temp;
+        int spot;
+        while ((spot = splittee.indexOf(splitChar + splitChar)) != -1)
+        {
+            splittee =
+                splittee.substring(0, spot + splitChar.length())
+                    + def
+                    + splittee.substring(
+                        spot + (1 * splitChar.length()),
+                        splittee.length());
+        }
+        Vector returns = new Vector();
+        tokens = new StringTokenizer(splittee, splitChar);
+        while (tokens.hasMoreTokens())
+        {
+            temp = (String) tokens.nextToken();
+            returns.addElement(temp);
+        }
+        String[] values = new String[returns.size()];
+        returns.copyInto(values);
+        return values;
+    }
 
-	 }
-	 */
-
-	 public void removeHeaderNamed(String name) {
-		  Vector removeIndices = new Vector();
-		  for (int i = getHeaders().size() - 1; i > 0; i--) {
-				Header header = (Header) getHeaders().get(i).getObjectValue();
-				if (header == null) {
-					 continue;
-				}
-				if (header.getName().equalsIgnoreCase(name)) {
-					 removeIndices.addElement(new Integer(i));
-				}
-		  }
-
-		  for (Enumeration e = removeIndices.elements(); e.hasMoreElements();) {
-				getHeaders().remove(((Integer) e.nextElement()).intValue());
-		  }
-	 }
-
-	 /******************************************************
-	  * Takes a String and a tokenizer character, and returns
-		 a new array of strings of the string split by the tokenizer
-		 character.
-		 @param splittee String to be split
-		 @param splitChar Character to split the string on
-		 @param def Default value to place between two split chars that have
-		 nothing between them
-		 @return Array of all the tokens.
-	  ******************************************************/
-	 public String[] split(String splittee, String splitChar, String def) {
-		  if(splittee == null || splitChar == null) {
-				return new String[0];
-		  }
-		  StringTokenizer tokens;
-		  String temp;
-		  int spot;
-		  while((spot=splittee.indexOf(splitChar + splitChar))!=-1) {
-				splittee=splittee.substring(0, spot + splitChar.length()) + def +
-					 splittee.substring(spot + (1*splitChar.length()), splittee.length());
-		  }
-		  Vector returns=new Vector();
-		  tokens = new StringTokenizer(splittee, splitChar);
-		  while(tokens.hasMoreTokens()) {
-				temp = (String)tokens.nextToken();
-				returns.addElement(temp);
-		  }
-		  String[] values=new String[returns.size()];
-		  returns.copyInto(values);
-		  return values;
-	 }
-
-	 public String getClassLabel() {
-		return JMeterUtils.getResString("header_manager_title");
-	 }
+    public String getClassLabel()
+    {
+        return JMeterUtils.getResString("header_manager_title");
+    }
 }

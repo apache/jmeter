@@ -2,8 +2,6 @@ package org.apache.jmeter.protocol.http.control.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import javax.swing.JPanel;
 
@@ -16,10 +14,12 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
  * @author mstover
+ * @version $Revision$
  */
 public class SoapSamplerGui extends AbstractSamplerGui
 {
-    private static final String label = JMeterUtils.getResString("soap_sampler_title");
+    private static final String label =
+        JMeterUtils.getResString("soap_sampler_title");
     private JLabeledTextField urlField;
     private JLabeledTextArea soapXml;
 
@@ -48,7 +48,7 @@ public class SoapSamplerGui extends AbstractSamplerGui
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement s)
     {
@@ -69,7 +69,10 @@ public class SoapSamplerGui extends AbstractSamplerGui
         add(makeTitlePanel(), BorderLayout.NORTH);
 
         urlField = new JLabeledTextField(JMeterUtils.getResString("url"), 10);
-        soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title"), null);
+        soapXml =
+            new JLabeledTextArea(
+                JMeterUtils.getResString("soap_data_title"),
+                null);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(urlField, BorderLayout.NORTH);
@@ -86,7 +89,8 @@ public class SoapSamplerGui extends AbstractSamplerGui
         soapXml.setText(sampler.getXmlData());
     }
     
-    public Dimension getPreferredSize() {
+    public Dimension getPreferredSize()
+    {
         return getMinimumSize();
     }
 }

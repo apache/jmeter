@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.control;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -74,359 +75,267 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
+/**
  * This class provides a way to provide Authorization in jmeter requests. The
  * format of the authorization file is: URL user pass where URL is an HTTP URL,
  * user a username to use and pass the appropriate password.
  *
- *@author    <a href="mailto:luta.raphael@networks.vivendi.com">Raphael Luta
- *      </a>
- *@created   $Date$
- *@version   0.9
- ***************************************/
-public class AuthManager extends ConfigTestElement implements ConfigElement,
-		Serializable
+ * @author <a href="mailto:luta.raphael@networks.vivendi.com">Raphael Luta</a>
+ * @version   $Revision$
+ */
+public class AuthManager
+    extends ConfigTestElement
+    implements ConfigElement, Serializable
 {
-	private final static String AUTH_LIST = "AuthManager.auth_list";
+    private final static String AUTH_LIST = "AuthManager.auth_list";
 
-	private final static int columnCount = 3;
-	private final static String[] columnNames = {
-			JMeterUtils.getResString("auth_base_url"),
-			JMeterUtils.getResString("username"),
-			JMeterUtils.getResString("password")
-			};
+    private final static int columnCount = 3;
+    private final static String[] columnNames =
+        {
+            JMeterUtils.getResString("auth_base_url"),
+            JMeterUtils.getResString("username"),
+            JMeterUtils.getResString("password")};
 
-	/****************************************
-	 * Default Constructor
-	 ***************************************/
-	public AuthManager()
-	{
-		setProperty(new CollectionProperty(AUTH_LIST, new ArrayList()));
-	}
-    
+    /**
+     * Default Constructor.
+     */
+    public AuthManager()
+    {
+        setProperty(new CollectionProperty(AUTH_LIST, new ArrayList()));
+    }
+
     public void clear()
     {
         super.clear();
         setProperty(new CollectionProperty(AUTH_LIST, new ArrayList()));
     }
 
-	/****************************************
-	 * update an authentication record
-	 *
-	 *@param index  !ToDo (Parameter description)
-	 *@param url    !ToDo (Parameter description)
-	 *@param user   !ToDo (Parameter description)
-	 *@param pass   !ToDo (Parameter description)
-	 ***************************************/
-	public void set(int index, String url, String user, String pass)
-	{
-		Authorization auth = new Authorization(url, user, pass);
-		if(index >= 0)
-		{
-			getAuthObjects().set(index, new TestElementProperty(auth.getName(),auth));
-		}
-		else
-		{
-			getAuthObjects().addItem(auth);
-		}
-	}
+    /**
+     * Update an authentication record.
+     */
+    public void set(int index, String url, String user, String pass)
+    {
+        Authorization auth = new Authorization(url, user, pass);
+        if (index >= 0)
+        {
+            getAuthObjects().set(
+                index,
+                new TestElementProperty(auth.getName(), auth));
+        }
+        else
+        {
+            getAuthObjects().addItem(auth);
+        }
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param newName  !ToDo (Parameter description)
-	 ***************************************/
-	public void setName(String newName)
-	{
-		setProperty(TestElement.NAME, newName);
-	}
+    public void setName(String newName)
+    {
+        setProperty(TestElement.NAME, newName);
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public CollectionProperty getAuthObjects()
-	{
-        return (CollectionProperty)getProperty(AUTH_LIST);
-	}
+    public CollectionProperty getAuthObjects()
+    {
+        return (CollectionProperty) getProperty(AUTH_LIST);
+    }
 
+    public int getColumnCount()
+    {
+        return columnCount;
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public int getColumnCount()
-	{
-		return columnCount;
-	}
+    public String getColumnName(int column)
+    {
+        return columnNames[column];
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@param column  !ToDo (Parameter description)
-	 *@return        !ToDo (Return description)
-	 ***************************************/
-	public String getColumnName(int column)
-	{
-		return columnNames[column];
-	}
+    public Class getColumnClass(int column)
+    {
+        return columnNames[column].getClass();
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@param column  !ToDo (Parameter description)
-	 *@return        !ToDo (Return description)
-	 ***************************************/
-	public Class getColumnClass(int column)
-	{
-		return columnNames[column].getClass();
-	}
+    public Authorization getAuthObjectAt(int row)
+    {
+        return (Authorization) getAuthObjects().get(row).getObjectValue();
+    }
 
+    public boolean isEditable()
+    {
+        return true;
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@param row  !ToDo (Parameter description)
-	 *@return     !ToDo (Return description)
-	 ***************************************/
-	public Authorization getAuthObjectAt(int row)
-	{
-		return (Authorization)getAuthObjects().get(row).getObjectValue();
-	}
+    public String getClassLabel()
+    {
+        return JMeterUtils.getResString("auth_manager_title");
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public boolean isEditable()
-	{
-		return true;
-	}
+    public Class getGuiClass()
+    {
+        return org.apache.jmeter.protocol.http.gui.AuthPanel.class;
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getClassLabel()
-	{
-		return JMeterUtils.getResString("auth_manager_title");
-	}
+    public Collection getAddList()
+    {
+        return null;
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public Class getGuiClass()
-	{
-		return org.apache.jmeter.protocol.http.gui.AuthPanel.class;
-	}
+    /**
+     * Return the record at index i
+     */
+    public Authorization get(int i)
+    {
+        return (Authorization) getAuthObjects().get(i);
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public Collection getAddList()
-	{
-		return null;
-	}
+    public String getAuthHeaderForURL(URL url)
+    {
+        if (isSupportedProtocol(url))
+        {
+            return null;
+        }
 
-	/****************************************
-	 * return the record at index i
-	 *
-	 *@param i  !ToDo (Parameter description)
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public Authorization get(int i)
-	{
-		return (Authorization)getAuthObjects().get(i);
-	}
+        StringBuffer header = new StringBuffer();
+        for (PropertyIterator enum = getAuthObjects().iterator();
+            enum.hasNext();
+            )
+        {
+            Authorization auth = (Authorization) enum.next().getObjectValue();
+            if (url.toString().startsWith(auth.getURL()))
+            {
+                header.append(
+                    "Basic "
+                        + Base64Encoder.encode(
+                            auth.getUser() + ":" + auth.getPass()));
+                break;
+            }
+        }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@param url  !ToDo (Parameter description)
-	 *@return     !ToDo (Return description)
-	 ***************************************/
-	public String getAuthHeaderForURL(URL url)
-	{
-		if(isSupportedProtocol(url))
-		{
-			return null;
-		}
+        if (header.length() != 0)
+        {
+            return header.toString();
+        }
+        else
+        {
+            return null;
+        }
+    }
 
-		StringBuffer header = new StringBuffer();
-		for(PropertyIterator enum = getAuthObjects().iterator(); enum.hasNext(); )
-		{
-			Authorization auth = (Authorization)enum.next().getObjectValue();
-			if(url.toString().startsWith(auth.getURL()))
-			{
-				header.append("Basic " + Base64Encoder.encode(auth.getUser() + ":" + auth.getPass()));
-				break;
-			}
-		}
+    public String getName()
+    {
+        return getPropertyAsString(TestElement.NAME);
+    }
 
-		if(header.length() != 0)
-		{
-			return header.toString();
-		}
-		else
-		{
-			return null;
-		}
-	}
+    public void addConfigElement(ConfigElement config)
+    {
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getName()
-	{
-		return getPropertyAsString(TestElement.NAME);
-	}
+    public void addAuth(Authorization auth)
+    {
+        getAuthObjects().addItem(auth);
+    }
 
-	/****************************************
-	 * !ToDo
-	 *
-	 *@param config  !ToDo
-	 ***************************************/
-	public void addConfigElement(ConfigElement config) { }
+    public void addAuth()
+    {
+        getAuthObjects().addItem(new Authorization());
+    }
 
-	/****************************************
-	 * !ToDo
-	 *
-	 *@param auth  !ToDo
-	 ***************************************/
-	public void addAuth(Authorization auth)
-	{
-		getAuthObjects().addItem(auth);
-	}
+    public boolean expectsModification()
+    {
+        return false;
+    }
 
-	/****************************************
-	 * !ToDo
-	 ***************************************/
-	public void addAuth()
-	{
-		getAuthObjects().addItem(new Authorization());
-	}
+    public void uncompile()
+    {
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public boolean expectsModification()
-	{
-		return false;
-	}
+    /**
+     * Save the authentication data to a file.
+     */
+    public void save(String authFile) throws IOException
+    {
+        File file = new File(authFile);
+        if (!file.isAbsolute())
+        {
+            file =
+                new File(
+                    System.getProperty("user.dir") + File.separator + authFile);
+        }
+        PrintWriter writer = new PrintWriter(new FileWriter(file));
+        writer.println("# JMeter generated Authorization file");
+        for (int i = 0; i < getAuthObjects().size(); i++)
+        {
+            Authorization auth = (Authorization) getAuthObjects().get(i);
+            writer.println(auth.toString());
+        }
+        writer.flush();
+        writer.close();
+    }
 
+    /**
+     * Add authentication data from a file.
+     */
+    public void addFile(String authFile) throws IOException
+    {
+        File file = new File(authFile);
+        if (!file.isAbsolute())
+        {
+            file =
+                new File(
+                    System.getProperty("user.dir") + File.separator + authFile);
+        }
+        BufferedReader reader = null;
+        if (file.canRead())
+        {
+            reader = new BufferedReader(new FileReader(file));
+        }
+        else
+        {
+            throw new IOException("The file you specified cannot be read.");
+        }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 ***************************************/
-	public void uncompile() { }
+        String line;
+        while ((line = reader.readLine()) != null)
+        {
+            try
+            {
+                if (line.startsWith("#") || line.trim().length() == 0)
+                {
+                    continue;
+                }
+                StringTokenizer st = new StringTokenizer(line, "\t");
+                String url = st.nextToken();
+                String user = st.nextToken();
+                String pass = st.nextToken();
+                Authorization auth = new Authorization(url, user, pass);
+                getAuthObjects().addItem(auth);
+            }
+            catch (Exception e)
+            {
+                throw new IOException(
+                    "Error parsing auth line\n\t'" + line + "'\n\t" + e);
+            }
+        }
+        reader.close();
+    }
 
-	/****************************************
-	 * save the authentication data to a file
-	 *
-	 *@param authFile         !ToDo (Parameter description)
-	 *@exception IOException  !ToDo (Exception description)
-	 ***************************************/
-	public void save(String authFile) throws IOException
-	{
-		File file = new File(authFile);
-		if(!file.isAbsolute())
-		{
-			file = new File(System.getProperty("user.dir") + File.separator + authFile);
-		}
-		PrintWriter writer = new PrintWriter(new FileWriter(file));
-		writer.println("# JMeter generated Authorization file");
-		for(int i = 0; i < getAuthObjects().size(); i++)
-		{
-			Authorization auth = (Authorization)getAuthObjects().get(i);
-			writer.println(auth.toString());
-		}
-		writer.flush();
-		writer.close();
-	}
+    /**
+     * Remove an authentication record.
+     */
+    public void remove(int index)
+    {
+        getAuthObjects().remove(index);
+    }
 
-	/****************************************
-	 * add authentication data from a file
-	 *
-	 *@param authFile         !ToDo
-	 *@exception IOException  !ToDo (Exception description)
-	 ***************************************/
-	public void addFile(String authFile) throws IOException
-	{
-		File file = new File(authFile);
-		if(!file.isAbsolute())
-		{
-			file = new File(System.getProperty("user.dir") + File.separator + authFile);
-		}
-		BufferedReader reader = null;
-		if(file.canRead())
-		{
-			reader = new BufferedReader(new FileReader(file));
-		}
-		else
-		{
-			throw new IOException("The file you specified cannot be read.");
-		}
+    /**
+     * Return the number of records.
+     */
+    public int size()
+    {
+        return getAuthObjects().size();
+    }
 
-		String line;
-		while((line = reader.readLine()) != null)
-		{
-			try
-			{
-				if(line.startsWith("#") || line.trim().length() == 0)
-				{
-					continue;
-				}
-				StringTokenizer st = new StringTokenizer(line, "\t");
-				String url = st.nextToken();
-				String user = st.nextToken();
-				String pass = st.nextToken();
-				Authorization auth = new Authorization(url, user, pass);
-				getAuthObjects().addItem(auth);
-			}
-			catch(Exception e)
-			{
-				throw new IOException("Error parsing auth line\n\t'" + line + "'\n\t" + e);
-			}
-		}
-		reader.close();
-	}
-
-	/****************************************
-	 * remove an authentication record
-	 *
-	 *@param index  !ToDo (Parameter description)
-	 ***************************************/
-	public void remove(int index)
-	{
-		getAuthObjects().remove(index);
-	}
-
-	/****************************************
-	 * return the number of records
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public int size()
-	{
-		return getAuthObjects().size();
-	}
-
-	private boolean isSupportedProtocol(URL url)
-	{
-		return !url.getProtocol().toUpperCase().equals("HTTP") &&
-				!url.getProtocol().toUpperCase().equals("HTTPS");
-	}
+    private boolean isSupportedProtocol(URL url)
+    {
+        return !url.getProtocol().toUpperCase().equals("HTTP")
+            && !url.getProtocol().toUpperCase().equals("HTTPS");
+    }
 }
-

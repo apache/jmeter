@@ -78,36 +78,38 @@ import org.w3c.tidy.Tidy;
 import org.xml.sax.SAXException;
 
 /**
- * A sampler that downloads downloadable components such as images, applets, etc.
+ * A sampler that downloads downloadable components such as images, applets,
+ * etc.
  * <p>
  * For HTML files, this class will download binary files specified in the
- * following ways (where <b>url</b> represents the binary file to be downloaded):
+ * following ways (where <b>url</b> represents the binary file to be
+ * downloaded):
  * <ul>
- *	<li>&lt;img src=<b>url</b> ... &gt;
- *	<li>&lt;applet code=<b>url</b> ... &gt;
- *	<li>&lt;input type=image src=<b>url</b> ... &gt;
- *	<li>&lt;body background=<b>url</b> ... &gt;
+ *  <li>&lt;img src=<b>url</b> ... &gt;
+ *  <li>&lt;applet code=<b>url</b> ... &gt;
+ *  <li>&lt;input type=image src=<b>url</b> ... &gt;
+ *  <li>&lt;body background=<b>url</b> ... &gt;
  * </ul>
  *
  * Note that files that are duplicated within the enclosing document will
  * only be downloaded once. Also, the processing does not take account of the
  * following parameters:
  * <ul>
- *	<li>&lt;base href=<b>url</b>&gt;
- *	<li>&lt; ... codebase=<b>url</b> ... &gt;
+ *  <li>&lt;base href=<b>url</b>&gt;
+ *  <li>&lt; ... codebase=<b>url</b> ... &gt;
  * </ul>
  *
  * The following parameters are not accounted for either (as the textbooks
  * say, they are left as an exercise for the interested reader):
  * <ul>
- *	<li>&lt;applet ... codebase=<b>url</b> ... &gt;
- *	<li>&lt;area href=<b>url</b> ... &gt;
- *	<li>&lt;embed src=<b>url</b> ... &gt;
- *	<li>&lt;embed codebase=<b>url</b> ... &gt;
- *	<li>&lt;object codebase=<b>url</b> ... &gt;
- *	<li>&lt;table background=<b>url</b> ... &gt;
- *	<li>&lt;td background=<b>url</b> ... &gt;
- *	<li>&lt;tr background=<b>url</b> ... &gt;
+ *  <li>&lt;applet ... codebase=<b>url</b> ... &gt;
+ *  <li>&lt;area href=<b>url</b> ... &gt;
+ *  <li>&lt;embed src=<b>url</b> ... &gt;
+ *  <li>&lt;embed codebase=<b>url</b> ... &gt;
+ *  <li>&lt;object codebase=<b>url</b> ... &gt;
+ *  <li>&lt;table background=<b>url</b> ... &gt;
+ *  <li>&lt;td background=<b>url</b> ... &gt;
+ *  <li>&lt;tr background=<b>url</b> ... &gt;
  * </ul>
  *
  * Due to the recent refactoring of this class, these might not be as difficult
@@ -115,10 +117,9 @@ import org.xml.sax.SAXException;
  * <p>
  * Finally, this class does not process <b>Style Sheets</b> either.
  *
- * @author	Khor Soon Hin,
- *		<a href="mailto:mramshaw@alumni.concordia.ca">Martin Ramshaw</a>
- * @version	$Id$
- * @created	$Date$
+ * @author  Khor Soon Hin
+ * @author  <a href="mailto:mramshaw@alumni.concordia.ca">Martin Ramshaw</a>
+ * @version $Id$
  */
 public class HTTPSamplerFull
 {
@@ -160,8 +161,8 @@ public class HTTPSamplerFull
      * Note that files that are duplicated within the enclosing document will
      * only be downloaded once.
      *
-     * @param entry	an entry to be sampled
-     * @return	results of the sampling
+     * @param entry an entry to be sampled
+     * @return      results of the sampling
      */
     public SampleResult sample(HTTPSampler sampler)
     {
@@ -221,7 +222,7 @@ public class HTTPSamplerFull
         
         // This will only work with an Applet .class file.
         // Ideally, this should be upgraded to work with Objects (IE)
-        //	and archives (.jar and .zip) files as well.
+        // and archives (.jar and .zip) files as well.
         
         parseNodes(html, "applet", false, "code", uniqueURLs, res,sampler);
         // look for input tags with image types
@@ -242,12 +243,13 @@ public class HTTPSamplerFull
      * Parse the DOM tree looking for the specified HTML source tags,
      * and download the appropriate binary files matching these tags.
      *
-     * @param html		the HTML document to parse
-     * @param htmlTag	the HTML tag to parse for
-     * @param type		indicates that we require 'type=image'
-     * @param srcTag	the HTML tag that indicates the source URL
-     * @param uniques	used to ensure that binary files are only downloaded once
-     * @param res		<code>SampleResult</code> to store sampling results
+     * @param html      the HTML document to parse
+     * @param htmlTag   the HTML tag to parse for
+     * @param type      indicates that we require 'type=image'
+     * @param srcTag    the HTML tag that indicates the source URL
+     * @param uniques   used to ensure that binary files are only downloaded
+     *                  once
+     * @param res       <code>SampleResult</code> to store sampling results
      */
     protected void parseNodes(Document html, String htmlTag, boolean type,
             String srcTag, Set uniques, SampleResult res,HTTPSampler sampler)
@@ -318,7 +320,8 @@ public class HTTPSamplerFull
                 log.error("MalformedURLException - " + mfue);
                 binRes.setResponseData(mfue.toString().getBytes());
                 binRes.setResponseCode(HTTPSampler.NON_HTTP_RESPONSE_CODE);
-                binRes.setResponseMessage(HTTPSampler.NON_HTTP_RESPONSE_MESSAGE);
+                binRes.setResponseMessage(
+                    HTTPSampler.NON_HTTP_RESPONSE_MESSAGE);
                 binRes.setSuccessful(false);
                 res.addSubResult(binRes);
                 break;
@@ -343,7 +346,8 @@ public class HTTPSamplerFull
                     log.error("Error reading from URL - " + ioe);
                     binRes.setResponseData(ioe.toString().getBytes());
                     binRes.setResponseCode(HTTPSampler.NON_HTTP_RESPONSE_CODE);
-                    binRes.setResponseMessage(HTTPSampler.NON_HTTP_RESPONSE_MESSAGE);
+                    binRes.setResponseMessage(
+                        HTTPSampler.NON_HTTP_RESPONSE_MESSAGE);
                     binRes.setSuccessful(false);
                 }
                 log.debug("Adding result");
@@ -364,13 +368,14 @@ public class HTTPSamplerFull
     /**
      * Download the binary file from the given <code>URL</code>.
      *
-     * @param url	<code>URL</code> from where binary is to be downloaded
-     * @param res	<code>SampleResult</code> to store sampling results
-     * @return	binary downloaded
+     * @param url   <code>URL</code> from where binary is to be downloaded
+     * @param res   <code>SampleResult</code> to store sampling results
+     * @return      binary downloaded
      *
      * @throws IOException indicates a problem reading from the URL
      */
-    protected byte[] loadBinary(URL url, SampleResult res,HTTPSampler sampler) throws Exception
+    protected byte[] loadBinary(URL url, SampleResult res, HTTPSampler sampler)
+        throws Exception
     {
         log.debug("Start : loadBinary");
         byte[] ret = new byte[0];
@@ -495,7 +500,7 @@ public class HTTPSamplerFull
     /**
      * Returns <code>tidy</code> as HTML parser.
      *
-     * @return	a <code>tidy</code> HTML parser
+     * @return  a <code>tidy</code> HTML parser
      */
     protected static Tidy getParser()
     {
@@ -515,8 +520,8 @@ public class HTTPSamplerFull
     /**
      * Returns a node representing a whole xml given an xml document.
      *
-     * @param text	an xml document
-     * @return	a node representing a whole xml
+     * @param text  an xml document
+     * @return      a node representing a whole xml
      *
      * @throws SAXException indicates an error parsing the xml document
      */
@@ -546,8 +551,8 @@ public class HTTPSamplerFull
      * Returns the encoding type which is different for different jdks
      * even though they mean the same thing (for example, UTF8 or UTF-8).
      *
-     * @return	either UTF8 or UTF-8 depending on the jdk version
-     * @see		#utfEncodingName
+     * @return  either UTF8 or UTF-8 depending on the jdk version
+     * @see     #utfEncodingName
      */
     protected static String getUTFEncodingName()
     {
@@ -648,9 +653,11 @@ public class HTTPSamplerFull
                     "<img src=\"/tomcat.gif\">\n" +
                     "<img src=\"/tomcat.gif\">\n" +
                     "<a href=\"NervousText.java\"> Read my code <a>\n" +
-                    "<p><applet code=NervousText.class width=400 height=200>\n" +
+                    "<p><applet code=NervousText.class width=400 " +
+                    "height=200>\n" +
                     "</applet>\n" +
-                    "<p><applet code=NervousText.class width=400 height=200>\n" +
+                    "<p><applet code=NervousText.class width=400 " +
+                    "height=200>\n" +
                     "</applet>\n" +
                     "</table>\n" +
                     "<form>\n" +
@@ -671,8 +678,8 @@ public class HTTPSamplerFull
             }
             catch(IOException ioe)
             {
-                fail("Cannot create HTTPSamplerFullTestFile.txt in current directory " +
-                        "for testing - " + ioe);
+                fail("Cannot create HTTPSamplerFullTestFile.txt in current " +
+                    "directory for testing - " + ioe);
             }
             // !ToDo
             // hsf.sample(entry);
@@ -688,4 +695,3 @@ public class HTTPSamplerFull
         }
     }
 }
-
