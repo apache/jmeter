@@ -320,13 +320,15 @@ public final class SaveService implements SaveServiceConstants
      */
     public static SampleResult makeResultFromDelimitedString(String delim)
     {
-        SampleResult result = new SampleResult();
+        SampleResult result = null;
+        long timeStamp = 0;
+        long elapsed = 0;
         StringTokenizer splitter = new StringTokenizer(delim,defaultDelimiter);
         String text = null;
         if (printMilliseconds)
         {
             text = splitter.nextToken();
-            result.setTimeStamp(Long.parseLong(text));
+            timeStamp = Long.parseLong(text);
         }
            else if (formatter != null)
            {
@@ -334,7 +336,7 @@ public final class SaveService implements SaveServiceConstants
                try
             {
                 Date stamp = formatter.parse(text);
-                   result.setTimeStamp(stamp.getTime());
+				timeStamp = stamp.getTime();
             }
             catch (ParseException e)
             {
@@ -345,9 +347,11 @@ public final class SaveService implements SaveServiceConstants
            if (saveTime)
            {
                text = splitter.nextToken();
-               result.setTime(Long.parseLong(text));
+               elapsed = Long.parseLong(text);
            }
         
+		   result = new SampleResult(timeStamp,elapsed);
+		   
            if (saveLabel)
            {
                text = splitter.nextToken();
@@ -493,14 +497,14 @@ public final class SaveService implements SaveServiceConstants
 
     public static SampleResult getSampleResult(Configuration config)
     {
-        SampleResult result = new SampleResult();
+        SampleResult result = new SampleResult(
+		                          config.getAttributeAsLong(TIME_STAMP, 0L),
+		                          config.getAttributeAsLong(TIME, 0L));
 
         result.setThreadName(config.getAttribute(THREAD_NAME, ""));
         result.setDataType(config.getAttribute(DATA_TYPE, ""));
         result.setResponseCode(config.getAttribute(RESPONSE_CODE, ""));
         result.setResponseMessage(config.getAttribute(RESPONSE_MESSAGE, ""));
-        result.setTime(config.getAttributeAsLong(TIME, 0L));
-        result.setTimeStamp(config.getAttributeAsLong(TIME_STAMP, 0L));
         result.setSuccessful(config.getAttributeAsBoolean(SUCCESSFUL, false));
         result.setSampleLabel(config.getAttribute(LABEL, ""));
         result.setResponseData(getBinaryData(config.getChild(BINARY)));

@@ -79,7 +79,7 @@ public class HTTPSampleResult extends SampleResult
      */
     public HTTPSampleResult(HTTPSampleResult res)
     {
-        super();
+        super(res.getTime());
 
         setSampleLabel(res.getSampleLabel());
         setHTTPMethod(res.getHTTPMethod());
@@ -88,7 +88,6 @@ public class HTTPSampleResult extends SampleResult
         setResponseData(res.getResponseData());
         setResponseCode(res.getResponseCode());
         setSuccessful(res.isSuccessful());
-        setTime(res.getTime());
         setResponseMessage(res.getResponseMessage());
         setDataType(res.getDataType());
         setResponseHeaders(res.getResponseHeaders());
@@ -151,7 +150,6 @@ public class HTTPSampleResult extends SampleResult
     public String getSamplerData()
     {
         StringBuffer sb= new StringBuffer();
-        // TODO Auto-generated method stub
         sb.append(getHTTPMethod());
         URL u= getURL();
         if (u != null)
