@@ -18,7 +18,8 @@
 
 package org.apache.jmeter.protocol.java.sampler;
 
-import org.apache.bsf.*;
+import org.apache.bsf.BSFEngine;
+import org.apache.bsf.BSFManager;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
