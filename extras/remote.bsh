@@ -1,0 +1,9 @@
+// remote.bsh
+// Sample remote file for use with bsh.remote
+//
+print("Remote starting");
+print(args);
+printprop("user.home");
+printprop("user.dir");
+// loglevel("DEBUG","jmeter");
+print("Remote ended");
