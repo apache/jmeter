@@ -340,8 +340,9 @@ public class CSVRead extends AbstractFunction implements Serializable
         values = parameters.toArray();
 
         if (values.length > 2)
+        {
             throw new InvalidVariableException();
-
+        }
     }
 
     /**
