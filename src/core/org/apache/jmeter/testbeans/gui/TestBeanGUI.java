@@ -74,6 +74,7 @@ import java.util.Map;
 
 import javax.swing.JPopupMenu;
 
+import org.apache.commons.collections.LRUMap;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.control.Controller;
@@ -139,9 +140,11 @@ public class TestBeanGUI
     private Customizer customizer= null;
 
     /**
-     * TestElement to Customizer map if customizer is null.
+     * TestElement to Customizer map if customizer is null. This is necessary to avoid
+     * the cost of creating a new customizer on each edit. The cache size needs to be
+     * limited, though, to avoid memory issues when editing very large test plans.
      */
-    private Map customizers= new HashMap();
+    private Map customizers= new LRUMap(20);
 
     /**
      * Index of the customizer in the JPanel's child component list:
