@@ -114,8 +114,8 @@ public class RemoteListenerWrapper extends AbstractTestElement implements
 			log.error("",err);
 		}
 	}
-    /**
-     * @see org.apache.jmeter.testelement.TestListener#iterationStart(org.apache.jmeter.engine.event.IterationEvent)
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(LoopIterationEvent)
      */
     public void testIterationStart(LoopIterationEvent event)
     {}

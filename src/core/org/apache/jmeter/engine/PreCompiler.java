@@ -28,8 +28,8 @@ public class PreCompiler implements HashTreeTraverser
     {
         replacer = new ValueReplacer();
     }
-    /**
-     * @see ListedHashTreeVisitor#addNode(Object, ListedHashTree)
+    /* (non-Javadoc)
+     * @see HashTreeTraverser#addNode(Object, HashTree)
      */
     public void addNode(Object node, HashTree subTree)
     {
@@ -54,13 +54,13 @@ public class PreCompiler implements HashTreeTraverser
             }
         }
     }
-    /**
-     * @see ListedHashTreeVisitor#subtractNode()
+    /* (non-Javadoc)
+     * @see HashTreeTraverser#subtractNode()
      */
     public void subtractNode()
     {}
-    /**
-     * @see ListedHashTreeVisitor#processPath()
+    /* (non-Javadoc)
+     * @see HashTreeTraverser#processPath()
      */
     public void processPath()
     {}

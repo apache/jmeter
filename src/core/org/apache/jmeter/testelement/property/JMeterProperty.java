@@ -4,12 +4,6 @@ import java.io.Serializable;
 
 import org.apache.jmeter.testelement.TestElement;
 
-/**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- */
 public interface JMeterProperty extends Serializable, Cloneable, Comparable
 {
     /**

@@ -12,12 +12,6 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MapProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
-/**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- */
 public class TestElementSaver implements TestElementTraverser, SaveServiceConstants
 {
     String name;
@@ -35,8 +29,8 @@ public class TestElementSaver implements TestElementTraverser, SaveServiceConsta
         return rootConfig;
     }
 
-    /**
-     * @see org.apache.jmeter.testelement.TestElementTraverser#startTestElement(org.apache.jmeter.testelement.TestElement)
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestElementTraverser#startTestElement(TestElement)
      */
     public void startTestElement(TestElement el)
     {
@@ -66,15 +60,15 @@ public class TestElementSaver implements TestElementTraverser, SaveServiceConsta
         }
     }
 
-    /**
-     * @see org.apache.jmeter.testelement.TestElementTraverser#endTestElement(org.apache.jmeter.testelement.TestElement)
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestElementTraverser#endTestElement(TestElement)
      */
     public void endTestElement(TestElement el)
     {
     }
 
-    /**
-     * @see org.apache.jmeter.testelement.TestElementTraverser#simplePropertyValue(java.lang.Object)
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestElementTraverser#simplePropertyValue(JMeterProperty)
      */
     public void simplePropertyValue(JMeterProperty value)
     {
@@ -106,8 +100,8 @@ public class TestElementSaver implements TestElementTraverser, SaveServiceConsta
         {}
     }
 
-    /**
-     * @see org.apache.jmeter.testelement.TestElementTraverser#startMap(java.util.Map)
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestElementTraverser#startMap(MapProperty)
      */
     public void startMap(MapProperty map)
     {
@@ -118,16 +112,16 @@ public class TestElementSaver implements TestElementTraverser, SaveServiceConsta
         stack.add(config);
     }
 
-    /**
-     * @see org.apache.jmeter.testelement.TestElementTraverser#endMap(java.util.Map)
-     */
+    /* It appears that this method is no longer used.
+     * jeremy_a@bigfoot.com  02 May 2003 
     public void endMap(MapProperty map)
     {
         finishConfig();
     }
-
-    /**
-     * @see org.apache.jmeter.testelement.TestElementTraverser#startCollection(java.util.Collection)
+     */
+     
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestElementTraverser#startCollection(CollectionProperty)
      */
     public void startCollection(CollectionProperty col)
     {
@@ -138,16 +132,16 @@ public class TestElementSaver implements TestElementTraverser, SaveServiceConsta
         stack.add(config);
     }
 
-    /**
-     * @see org.apache.jmeter.testelement.TestElementTraverser#endCollection(java.util.Collection)
-     */
+    /* It appears that this method is no longer used.
+     * jeremy_a@bigfoot.com  02 May 2003 
     public void endCollection(CollectionProperty col)
     {
         finishConfig();
     }
-
-    /**
-     * @see org.apache.jmeter.testelement.TestElementTraverser#endProperty(org.apache.jmeter.testelement.property.JMeterProperty)
+     */
+     
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestElementTraverser#endProperty(JMeterProperty)
      */
     public void endProperty(JMeterProperty key)
     {
@@ -163,8 +157,8 @@ public class TestElementSaver implements TestElementTraverser, SaveServiceConsta
         }
     }
 
-    /**
-     * @see org.apache.jmeter.testelement.TestElementTraverser#startProperty(org.apache.jmeter.testelement.property.JMeterProperty)
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestElementTraverser#startProperty(JMeterProperty)
      */
     public void startProperty(JMeterProperty key)
     {

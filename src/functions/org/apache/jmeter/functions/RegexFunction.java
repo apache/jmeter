@@ -77,9 +77,6 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	}
 	
 
-	/**
-	 * @see Variable#getValue(SampleResult, Sampler)
-	 */
 	public String execute(SampleResult previousResult,Sampler currentSampler) 
 		throws InvalidVariableException {
 			

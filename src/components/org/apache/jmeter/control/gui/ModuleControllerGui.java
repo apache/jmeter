@@ -107,18 +107,16 @@ public class ModuleControllerGui extends AbstractControllerGui /*implements Unsh
 	}
 
 
-	/** 
+    /* (non-Javadoc)
 	 * @see	org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-	 * @see	String
 	 */
 	public String getStaticLabel()	{
 		return STATIC_LABEL;
 	}
 
 	
-	/**
-	 * @see	org.apache.jmeter.AbstractControllerGui#configure()
-	 * @see	org.apache.jmeter.testelement.TestElement
+	/* (non-Javadoc)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
 	 */
 	public void configure(TestElement el) {
 		super.configure(el);
@@ -126,9 +124,8 @@ public class ModuleControllerGui extends AbstractControllerGui /*implements Unsh
 		reinitialize();
 	}
 
-	/**
+    /* (non-Javadoc)
 	 * @see	org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-	 * @see	org.apache.jmeter.testelement.TestElement
 	 */
 	public TestElement createTestElement() {
 		ModuleController mc = new ModuleController();
@@ -141,8 +138,8 @@ public class ModuleControllerGui extends AbstractControllerGui /*implements Unsh
 		return mc;
 	}
 
-	/**
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
+    /* (non-Javadoc)
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
 	 */
 	public void modifyTestElement(TestElement element) {
 		configureTestElement(element);
