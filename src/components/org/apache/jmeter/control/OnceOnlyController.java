@@ -57,7 +57,6 @@ public class OnceOnlyController
 
     protected Sampler nextIsNull() throws NextIsNullException
     {
-		setDone(true);
         return null;
     }
 
