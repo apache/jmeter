@@ -9,6 +9,9 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+/**
+ * @version $Revision$
+ */
 public abstract class AbstractProperty implements JMeterProperty
 {
     protected static Logger log = LoggingManager.getLoggerForClass();
@@ -39,7 +42,7 @@ public abstract class AbstractProperty implements JMeterProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#isRunningVersion()
+     * @see JMeterProperty#isRunningVersion()
      */
     public boolean isRunningVersion()
     {
@@ -47,7 +50,7 @@ public abstract class AbstractProperty implements JMeterProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getName()
+     * @see JMeterProperty#getName()
      */
     public String getName()
     {
@@ -60,7 +63,7 @@ public abstract class AbstractProperty implements JMeterProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
+     * @see JMeterProperty#setRunningVersion(boolean)
      */
     public void setRunningVersion(boolean runningVersion)
     {
@@ -68,7 +71,7 @@ public abstract class AbstractProperty implements JMeterProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#isTemporary(TestElement)
+     * @see JMeterProperty#isTemporary(TestElement)
      */
     public boolean isTemporary(TestElement owner)
     {
@@ -88,13 +91,13 @@ public abstract class AbstractProperty implements JMeterProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#mergeIn(JMeterProperty)
+     * @see JMeterProperty#mergeIn(JMeterProperty)
      */
     public void mergeIn(JMeterProperty prop)
     {}
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#setTemporary(boolean, TestElement)
+     * @see JMeterProperty#setTemporary(boolean, TestElement)
      */
     public void setTemporary(boolean temporary, TestElement owner)
     {
@@ -124,13 +127,14 @@ public abstract class AbstractProperty implements JMeterProperty
     }
 
     /* (non-Javadoc)
-     * @see java.lang.Object#clone()
+     * @see Object#clone()
      */
     public Object clone()
     {
         try
         {
-            AbstractProperty prop = (AbstractProperty) this.getClass().newInstance();
+            AbstractProperty prop =
+                (AbstractProperty) this.getClass().newInstance();
             prop.name = name;
             prop.runningVersion = runningVersion;
             prop.ownerMap = ownerMap;
@@ -147,8 +151,8 @@ public abstract class AbstractProperty implements JMeterProperty
     }
 
     /**
-     * returns 0 if string is invalid or null.
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getIntValue()
+     * Returns 0 if string is invalid or null.
+     * @see JMeterProperty#getIntValue()
      */
     public int getIntValue()
     {
@@ -168,8 +172,8 @@ public abstract class AbstractProperty implements JMeterProperty
     }
 
     /**
-     * returns 0 if string is invalid or null.
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getLongValue()
+     * Returns 0 if string is invalid or null.
+     * @see JMeterProperty#getLongValue()
      */
     public long getLongValue()
     {
@@ -189,8 +193,8 @@ public abstract class AbstractProperty implements JMeterProperty
     }
 
     /**
-     * returns 0 if string is invalid or null.
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getDoubleValue()
+     * Returns 0 if string is invalid or null.
+     * @see JMeterProperty#getDoubleValue()
      */
     public double getDoubleValue()
     {
@@ -211,14 +215,15 @@ public abstract class AbstractProperty implements JMeterProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(TestElement)
+     * @see JMeterProperty#recoverRunningVersion(TestElement)
      */
     public void recoverRunningVersion(TestElement owner)
-    {}
+    {
+    }
 
     /**
-     * returns 0 if string is invalid or null.
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getFloatValue()
+     * Returns 0 if string is invalid or null.
+     * @see JMeterProperty#getFloatValue()
      */
     public float getFloatValue()
     {
@@ -240,7 +245,7 @@ public abstract class AbstractProperty implements JMeterProperty
 
     /**
      * Returns false if string is invalid or null.
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getBooleanValue()
+     * @see JMeterProperty#getBooleanValue()
      */
     public boolean getBooleanValue()
     {
@@ -259,7 +264,7 @@ public abstract class AbstractProperty implements JMeterProperty
     }
 
     /* (non-Javadoc)
-     * @see java.lang.Comparable#compareTo(Object)
+     * @seeComparable#compareTo(Object)
      */
     public int compareTo(Object arg0)
     {
@@ -270,14 +275,18 @@ public abstract class AbstractProperty implements JMeterProperty
             // any other value.  Log a warning so we can try to find the root
             // cause of the null value.
             String val = getStringValue();
-            if (val == null) {
+            if (val == null)
+            {
                 log.warn(
                     "Warning: Unexpected null value for property: " + name);
                 
-                if (((JMeterProperty)arg0).getStringValue() == null) {
+                if (((JMeterProperty)arg0).getStringValue() == null)
+                {
                     // Two null values -- return equal
                     return 0;
-                } else {
+                }
+                else
+                {
                     return -1;
                 }
             }
@@ -294,7 +303,6 @@ public abstract class AbstractProperty implements JMeterProperty
     /**
      * Get the property type for this property.  Used to convert raw values into
      * JMeterProperties.
-     * @return Class
      */
     protected Class getPropertyType()
     {
@@ -305,7 +313,8 @@ public abstract class AbstractProperty implements JMeterProperty
     {
         try
         {
-            JMeterProperty prop = (JMeterProperty) getPropertyType().newInstance();
+            JMeterProperty prop =
+                (JMeterProperty) getPropertyType().newInstance();
             if (prop instanceof NullProperty)
             {
                 return new StringProperty();
@@ -351,8 +360,6 @@ public abstract class AbstractProperty implements JMeterProperty
     /**
      * Given a Map, it converts the Map into a collection of JMeterProperty
      * objects, appropriate for a MapProperty object.
-     * @param coll
-     * @return Map
      */
     protected Map normalizeMap(Map coll)
     {
@@ -393,11 +400,15 @@ public abstract class AbstractProperty implements JMeterProperty
         }
         else if (item instanceof TestElement)
         {
-            return new TestElementProperty(((TestElement) item).getPropertyAsString(TestElement.NAME), (TestElement) item);
+            return new TestElementProperty(
+                ((TestElement) item).getPropertyAsString(TestElement.NAME),
+                (TestElement) item);
         }
         else if (item instanceof Collection)
         {
-            return new CollectionProperty("" + item.hashCode(),(Collection) item);
+            return new CollectionProperty(
+                "" + item.hashCode(),
+                (Collection) item);
         }
         else if (item instanceof Map)
         {

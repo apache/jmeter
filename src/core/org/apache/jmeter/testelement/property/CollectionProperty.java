@@ -7,9 +7,11 @@ import java.util.List;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testelement.TestElement;
 
+/**
+ * @version $Revision$
+ */
 public class CollectionProperty extends MultiProperty
 {
-
     protected Collection value;
     private Collection savedValue;
 
@@ -100,7 +102,7 @@ public class CollectionProperty extends MultiProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getStringValue()
+     * @see JMeterProperty#getStringValue()
      */
     public String getStringValue()
     {
@@ -108,7 +110,7 @@ public class CollectionProperty extends MultiProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getObjectValue()
+     * @see JMeterProperty#getObjectValue()
      */
     public Object getObjectValue()
     {
@@ -121,7 +123,7 @@ public class CollectionProperty extends MultiProperty
     }
 
     /* (non-Javadoc)
-     * @see java.lang.Object#clone()
+     * @see Object#clone()
      */
     public Object clone()
     {
@@ -180,7 +182,7 @@ public class CollectionProperty extends MultiProperty
     /**
      * Figures out what kind of properties this collection is holding and
      * returns the class type.
-     * @see org.apache.jmeter.testelement.property.AbstractProperty#getPropertyType()
+     * @see AbstractProperty#getPropertyType()
      */
     protected Class getPropertyType()
     {
@@ -195,7 +197,7 @@ public class CollectionProperty extends MultiProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+     * @see JMeterProperty#recoverRunningVersion(TestElement)
      */
     public void recoverRunningVersion(TestElement owner)
     {
@@ -220,7 +222,9 @@ public class CollectionProperty extends MultiProperty
             coll.addItem("joe");
             coll.addProperty(new FunctionProperty());
             assertEquals("joe",coll.get(0).getName());
-            assertEquals("org.apache.jmeter.testelement.property.FunctionProperty",coll.get(1).getClass().getName());
+            assertEquals(
+                "org.apache.jmeter.testelement.property.FunctionProperty",
+                coll.get(1).getClass().getName());
         }
     }
 

@@ -5,10 +5,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.threads.JMeterContextService;
 
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
 public class FunctionProperty extends AbstractProperty
 {
@@ -55,11 +52,12 @@ public class FunctionProperty extends AbstractProperty
      * Executes the function (and caches the value for the duration of the test
      * iteration) if the property is a running version.  Otherwise, the raw
      * string representation of the function is provided.
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getStringValue()
+     * @see JMeterProperty#getStringValue()
      */
     public String getStringValue()
     {
-        if (!isRunningVersion() || !JMeterContextService.getContext().isSamplingStarted())
+        if (!isRunningVersion()
+            || !JMeterContextService.getContext().isSamplingStarted())
         {
             log.debug("Not running version, return raw function string");
             return function.getRawParameters();
@@ -67,7 +65,8 @@ public class FunctionProperty extends AbstractProperty
         else
         {
             log.debug("Running version, executing function");
-            int iter = JMeterContextService.getContext().getVariables().getIteration();
+            int iter =
+                JMeterContextService.getContext().getVariables().getIteration();
             if (iter < testIteration)
             {
                 testIteration = -1;
@@ -82,7 +81,7 @@ public class FunctionProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getObjectValue()
+     * @see JMeterProperty#getObjectValue()
      */
     public Object getObjectValue()
     {
@@ -99,12 +98,11 @@ public class FunctionProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+     * @see JMeterProperty#recoverRunningVersion(TestElement)
      */
     public void recoverRunningVersion(TestElement owner)
     {
         super.recoverRunningVersion(owner);
         cacheValue = null;
     }
-
 }

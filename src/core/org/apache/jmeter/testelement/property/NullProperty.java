@@ -4,6 +4,8 @@ import org.apache.jmeter.testelement.TestElement;
 
 /**
  * A null property.
+ * 
+ * @version $Revision$
  */
 public class NullProperty extends AbstractProperty
 {
@@ -20,7 +22,7 @@ public class NullProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getStringValue()
+     * @see JMeterProperty#getStringValue()
      */
     public String getStringValue()
     {
@@ -36,7 +38,7 @@ public class NullProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getObjectValue()
+     * @see JMeterProperty#getObjectValue()
      */
     public Object getObjectValue()
     {
@@ -44,7 +46,7 @@ public class NullProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#isRunningVersion()
+     * @see JMeterProperty#isRunningVersion()
      */
     public boolean isRunningVersion()
     {
@@ -52,7 +54,7 @@ public class NullProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#isTemporary(org.apache.jmeter.testelement.TestElement)
+     * @see JMeterProperty#isTemporary(TestElement)
      */
     public boolean isTemporary(TestElement owner)
     {
@@ -60,7 +62,7 @@ public class NullProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#mergeIn(org.apache.jmeter.testelement.property.JMeterProperty)
+     * @see JMeterProperty#mergeIn(JMeterProperty)
      */
     public void mergeIn(JMeterProperty prop)
     {
@@ -68,7 +70,7 @@ public class NullProperty extends AbstractProperty
     }
 
     /**
-     * @see java.lang.Object#clone()
+     * @see Object#clone()
      */
     public Object clone()
     {
@@ -76,7 +78,7 @@ public class NullProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getBooleanValue()
+     * @see JMeterProperty#getBooleanValue()
      */
     public boolean getBooleanValue()
     {
@@ -84,7 +86,7 @@ public class NullProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getDoubleValue()
+     * @see JMeterProperty#getDoubleValue()
      */
     public double getDoubleValue()
     {
@@ -92,7 +94,7 @@ public class NullProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getFloatValue()
+     * @see JMeterProperty#getFloatValue()
      */
     public float getFloatValue()
     {
@@ -100,7 +102,7 @@ public class NullProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getIntValue()
+     * @see JMeterProperty#getIntValue()
      */
     public int getIntValue()
     {
@@ -108,7 +110,7 @@ public class NullProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getLongValue()
+     * @see JMeterProperty#getLongValue()
      */
     public long getLongValue()
     {
@@ -116,7 +118,7 @@ public class NullProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+     * @see JMeterProperty#recoverRunningVersion(TestElement)
      */
     public void recoverRunningVersion(TestElement owner)
     {

@@ -1,10 +1,8 @@
 package org.apache.jmeter.testelement.property;
 
+
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
 public class LongProperty extends NumberProperty
 {
@@ -37,7 +35,7 @@ public class LongProperty extends NumberProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getStringValue()
+     * @see JMeterProperty#getStringValue()
      */
     public String getStringValue()
     {
@@ -45,7 +43,7 @@ public class LongProperty extends NumberProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getObjectValue()
+     * @see JMeterProperty#getObjectValue()
      */
     public Object getObjectValue()
     {
@@ -63,7 +61,7 @@ public class LongProperty extends NumberProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getBooleanValue()
+     * @see JMeterProperty#getBooleanValue()
      */
     public boolean getBooleanValue()
     {
@@ -71,7 +69,7 @@ public class LongProperty extends NumberProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getDoubleValue()
+     * @see JMeterProperty#getDoubleValue()
      */
     public double getDoubleValue()
     {
@@ -79,7 +77,7 @@ public class LongProperty extends NumberProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getFloatValue()
+     * @see JMeterProperty#getFloatValue()
      */
     public float getFloatValue()
     {
@@ -87,7 +85,7 @@ public class LongProperty extends NumberProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getIntValue()
+     * @see JMeterProperty#getIntValue()
      */
     public int getIntValue()
     {
@@ -95,11 +93,10 @@ public class LongProperty extends NumberProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getLongValue()
+     * @see JMeterProperty#getLongValue()
      */
     public long getLongValue()
     {
         return value;
     }
-
 }

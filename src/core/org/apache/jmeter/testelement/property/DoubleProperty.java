@@ -1,15 +1,11 @@
 package org.apache.jmeter.testelement.property;
 
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
 public class DoubleProperty extends NumberProperty
 {
-
-     double value;
+    double value;
     
     public DoubleProperty(String name,double value)
     {
@@ -27,16 +23,17 @@ public class DoubleProperty extends NumberProperty
     }
     
     protected void setNumberValue(Number n)
-        {
-            value = n.doubleValue();
-        }
-    
-        protected void setNumberValue(String n) throws NumberFormatException
-        {
-            value = Double.parseDouble(n);
-        }
+    {
+        value = n.doubleValue();
+    }
+
+    protected void setNumberValue(String n) throws NumberFormatException
+    {
+        value = Double.parseDouble(n);
+    }
+
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getStringValue()
+     * @see JMeterProperty#getStringValue()
      */
     public String getStringValue()
     {
@@ -44,7 +41,7 @@ public class DoubleProperty extends NumberProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getObjectValue()
+     * @see JMeterProperty#getObjectValue()
      */
     public Object getObjectValue()
     {
@@ -52,7 +49,7 @@ public class DoubleProperty extends NumberProperty
     }
 
     /**
-     * @see java.lang.Object#clone()
+     * @see Object#clone()
      */
     public Object clone() 
     {
@@ -62,7 +59,7 @@ public class DoubleProperty extends NumberProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getBooleanValue()
+     * @see JMeterProperty#getBooleanValue()
      */
     public boolean getBooleanValue()
     {
@@ -70,7 +67,7 @@ public class DoubleProperty extends NumberProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getDoubleValue()
+     * @see JMeterProperty#getDoubleValue()
      */
     public double getDoubleValue()
     {
@@ -78,7 +75,7 @@ public class DoubleProperty extends NumberProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getFloatValue()
+     * @see JMeterProperty#getFloatValue()
      */
     public float getFloatValue()
     {
@@ -86,7 +83,7 @@ public class DoubleProperty extends NumberProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getIntValue()
+     * @see JMeterProperty#getIntValue()
      */
     public int getIntValue()
     {
@@ -94,11 +91,10 @@ public class DoubleProperty extends NumberProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getLongValue()
+     * @see JMeterProperty#getLongValue()
      */
     public long getLongValue()
     {
         return (long)value;
     }
-
 }

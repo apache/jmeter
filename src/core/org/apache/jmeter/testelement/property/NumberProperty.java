@@ -1,45 +1,36 @@
 /*
  * Created on May 5, 2003
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
  */
 package org.apache.jmeter.testelement.property;
 
 /**
  * @author ano ano
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * @version $Revision$
  */
 public abstract class NumberProperty extends AbstractProperty
 {
+    public NumberProperty()
+    {
+        super();
+    }
 
     public NumberProperty(String name)
     {
         super(name);
     }
 
-    public NumberProperty()
-    {
-        super();
-    }
-
     /**
      * Set the value of the property with a Number object.
-     * @param n
      */
     protected abstract void setNumberValue(Number n);
 
     /**
      * Set the value of the property with a String object.
-     * @param n
-     * @throws NumberFormatException
      */
-    protected abstract void setNumberValue(String n) throws NumberFormatException;
+    protected abstract void setNumberValue(String n)
+        throws NumberFormatException;
 
     public void setObjectValue(Object v)
-    
     {
         if (v instanceof Number)
         {
@@ -52,18 +43,21 @@ public abstract class NumberProperty extends AbstractProperty
                 setNumberValue(v.toString());
             }
             catch (RuntimeException e)
-            {}
+            {
+            }
         }
     }
     
     /**
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     * @see Comparable#compareTo(Object)
      */
     public int compareTo(Object arg0)
     {
         if(arg0 instanceof JMeterProperty)
         {
-            double compareValue = getDoubleValue() - ((JMeterProperty)arg0).getDoubleValue();
+            double compareValue =
+                getDoubleValue() - ((JMeterProperty) arg0).getDoubleValue();
+
             if(compareValue < 0)
             {
                 return -1;
@@ -82,5 +76,4 @@ public abstract class NumberProperty extends AbstractProperty
             return -1;
         }
     }
-
 }

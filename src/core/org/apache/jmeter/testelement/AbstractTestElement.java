@@ -1,4 +1,5 @@
 package org.apache.jmeter.testelement;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,14 +18,10 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
+/**
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 public abstract class AbstractTestElement implements TestElement, Serializable
 {
     protected static Logger log = LoggingManager.getLoggerForClass();
@@ -33,11 +30,6 @@ public abstract class AbstractTestElement implements TestElement, Serializable
 
     private boolean runningVersion = false;
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public Object clone()
     {
         TestElement clonedElement = null;
@@ -79,41 +71,25 @@ public abstract class AbstractTestElement implements TestElement, Serializable
         }
     }
 
-    /****************************************
-     * !ToDo
-     *
-     *@param el  !ToDo
-     ***************************************/
     public void addTestElement(TestElement el)
     {
         mergeIn(el);
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param name  !ToDo (Parameter description)
-     ***************************************/
     public void setName(String name)
     {
         setProperty(new StringProperty(TestElement.NAME, name));
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public String getName()
     {
         return getProperty(TestElement.NAME).getStringValue();
     }
 
-    /****************************************
-     * Get the named property.  If it doesn't
-     * exist, a NullProperty object is
+    /**
+     * Get the named property.  If it doesn't exist, a NullProperty object is
      * returned.
-     * **************************************/
+     */
     public JMeterProperty getProperty(String key)
     {
         JMeterProperty prop = (JMeterProperty) propMap.get(key);
@@ -135,7 +111,9 @@ public abstract class AbstractTestElement implements TestElement, Serializable
         traverser.endTestElement(this);
     }
 
-    protected void traverseProperty(TestElementTraverser traverser, JMeterProperty value)
+    protected void traverseProperty(
+        TestElementTraverser traverser,
+        JMeterProperty value)
     {
         traverser.startProperty(value);
         if (value instanceof TestElementProperty)
@@ -162,7 +140,9 @@ public abstract class AbstractTestElement implements TestElement, Serializable
         }
     }
 
-    protected void traverseCollection(CollectionProperty col, TestElementTraverser traverser)
+    protected void traverseCollection(
+        CollectionProperty col,
+        TestElementTraverser traverser)
     {
         PropertyIterator iter = col.iterator();
         while (iter.hasNext())
@@ -212,7 +192,10 @@ public abstract class AbstractTestElement implements TestElement, Serializable
             property.clearTemporary(this);
         }
         JMeterProperty prop = getProperty(property.getName());
-        if (prop instanceof NullProperty || (prop instanceof StringProperty && prop.getStringValue().equals("")))
+
+        if (prop instanceof NullProperty
+            || (prop instanceof StringProperty
+                && prop.getStringValue().equals("")))
         {
             propMap.put(property.getName(), property);
         }
@@ -224,7 +207,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable
 
     /**
      * Log the properties of the test element
-     * @see org.apache.jmeter.testelement.TestElement#setProperty(JMeterProperty)
+     * @see TestElement#setProperty(JMeterProperty)
      */
     protected void logProperties()
     {
@@ -234,7 +217,13 @@ public abstract class AbstractTestElement implements TestElement, Serializable
             while (iter.hasNext())
             {
                 JMeterProperty prop = iter.next();
-                log.debug("Property " + prop.getName() + " is temp? " + prop.isTemporary(this) + " and is a " + prop.getObjectValue());
+                log.debug(
+                    "Property "
+                        + prop.getName()
+                        + " is temp? "
+                        + prop.isTemporary(this)
+                        + " and is a "
+                        + prop.getObjectValue());
             }
         }
     }
@@ -249,7 +238,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable
             }
             else
             {
-                getProperty(property.getName()).setObjectValue(property.getObjectValue());
+                getProperty(property.getName()).setObjectValue(
+                    property.getObjectValue());
             } 
         }
         else
@@ -268,11 +258,6 @@ public abstract class AbstractTestElement implements TestElement, Serializable
         return new PropertyIteratorImpl(propMap.values());
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param element  !ToDo (Parameter description)
-     ***************************************/
     protected void mergeIn(TestElement element)
     {
         PropertyIterator iter = element.propertyIterator();
@@ -282,9 +267,9 @@ public abstract class AbstractTestElement implements TestElement, Serializable
             addProperty(prop);
         }
     }
+
     /**
      * Returns the runningVersion.
-     * @return boolean
      */
     public boolean isRunningVersion()
     {
@@ -293,11 +278,15 @@ public abstract class AbstractTestElement implements TestElement, Serializable
 
     /**
      * Sets the runningVersion.
-     * @param runningVersion The runningVersion to set
+     * @param runningVersion the runningVersion to set
      */
     public void setRunningVersion(boolean runningVersion)
     {
-        log.debug("Setting " + this.getClass() + " to running version: " + runningVersion);
+        log.debug(
+            "Setting "
+                + this.getClass()
+                + " to running version: "
+                + runningVersion);
         this.runningVersion = runningVersion;
         PropertyIterator iter = propertyIterator();
         while (iter.hasNext())
@@ -324,7 +313,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable
         }
     }
 
-	protected Sampler nextIsNull() throws NextIsNullException {
-		return null;
-	}
+    protected Sampler nextIsNull() throws NextIsNullException
+    {
+        return null;
+    }
 }

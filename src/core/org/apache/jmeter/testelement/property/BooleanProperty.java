@@ -1,10 +1,7 @@
 package org.apache.jmeter.testelement.property;
 
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
 public class BooleanProperty extends AbstractProperty
 {
@@ -34,7 +31,7 @@ public class BooleanProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getStringValue()
+     * @see JMeterProperty#getStringValue()
      */
     public String getStringValue()
     {
@@ -42,7 +39,7 @@ public class BooleanProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getObjectValue()
+     * @see JMeterProperty#getObjectValue()
      */
     public Object getObjectValue()
     {
@@ -50,7 +47,7 @@ public class BooleanProperty extends AbstractProperty
     }
 
     /**
-     * @see java.lang.Object#clone()
+     * @see Object#clone()
      */
     public Object clone()
     {
@@ -60,11 +57,10 @@ public class BooleanProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getBooleanValue()
+     * @see JMeterProperty#getBooleanValue()
      */
     public boolean getBooleanValue()
     {
         return value;
     }
-
 }
