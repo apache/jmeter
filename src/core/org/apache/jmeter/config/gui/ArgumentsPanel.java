@@ -178,7 +178,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 		while(model.next())
 		{
 			args.addArgument((String)model.getColumnValue(Arguments.COLUMN_NAMES[0]),
-					model.getColumnValue(Arguments.COLUMN_NAMES[1]));
+					model.getColumnValue(Arguments.COLUMN_NAMES[1]),"=");
 		}
 		this.configureTestElement(args);
 		return (TestElement)args.clone();
@@ -391,7 +391,13 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 		labelPanel.add(tableLabel);
 		this.add(labelPanel,BorderLayout.NORTH);
 		this.addInnerPanel();
+        table.revalidate();
+        sizeColumns(table);
 	}
+    
+    protected void sizeColumns(JTable table)
+    {
+    }
 
 	
 	
