@@ -1,12 +1,13 @@
 package org.apache.jmeter.protocol.http.util;
 
-import java.io.Serializable;
-import java.net.URLEncoder;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import junit.framework.TestCase;
+import java.net.URLEncoder;
+import java.net.URLDecoder;
+
+import java.util.List;
+import java.util.LinkedList;
+import java.util.Iterator;
+import java.io.Serializable;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
@@ -60,17 +61,38 @@ public class HTTPArgument extends Argument  implements Serializable {
 	
 	public HTTPArgument(String name, Object value, boolean alreadyEncoded)
 	{
-		super(name,value);
 		if(alreadyEncoded)
 		{
+			try
+			{
+				setName(URLDecoder.decode(name));
+			}
+			catch(IllegalArgumentException e)
+			{
+				setName(name);
+			}
+			try
+			{
+				setValue(URLDecoder.decode(value.toString()));
+			}
+			catch(IllegalArgumentException e)
+			{
+				setValue(value.toString());
+			}
 			setProperty(ENCODED_NAME,name);
 			setProperty(ENCODED_VALUE,value.toString());
 		}
 		else
 		{
-			encodeName(name);
-			encodeValue(value);
+			setName(name);
+			setValue(value);
 		}
+	}
+	
+	public HTTPArgument(String name,Object value,Object metaData,boolean alreadyEncoded)
+	{
+		this(name,value,alreadyEncoded);
+		setMetaData(metaData);
 	}
 	
 	public HTTPArgument(Argument arg)
@@ -90,8 +112,11 @@ public class HTTPArgument extends Argument  implements Serializable {
 	 ***************************************/
 	public void setName(String newName)
 	{
-		super.setName(newName);
-		encodeName(newName);
+		if(newName == null || !newName.equals(getName()))
+		{
+			super.setName(newName);
+			encodeName(newName);
+		}
 	}
 	
 	public String getEncodedValue()
@@ -111,8 +136,11 @@ public class HTTPArgument extends Argument  implements Serializable {
 	 ***************************************/
 	public void setValue(Object newValue)
 	{
-		super.setValue(newValue);
-		encodeValue(newValue);
+		if(newValue == null || !newValue.equals(getValue()))
+		{
+			super.setValue(newValue);
+			encodeValue(newValue);
+		}
 	}
 	
 	public static void convertArgumentsToHTTP(Arguments args)
