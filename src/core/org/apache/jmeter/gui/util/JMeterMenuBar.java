@@ -51,10 +51,6 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- * 
- * @author    Michael Stover
- * @author	<a href="mailto:klancast@swbell.net">Keith Lancaster</a>
- * @version $Id$
  */
 package org.apache.jmeter.gui.util;
 import java.awt.Component;
@@ -81,6 +77,11 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+/**
+ * @author  Michael Stover
+ * @author  <a href="mailto:klancast@swbell.net">Keith Lancaster</a>
+ * @version $Revision$ updated on $Date$
+ */
 public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();

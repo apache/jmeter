@@ -51,10 +51,6 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
- * @author  David La France
- * @author  <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
- * @version $Id$
  */
  
 package org.apache.jmeter.protocol.http.modifier;
@@ -67,6 +63,10 @@ import org.apache.jmeter.testelement.property.LongProperty;
 /**
  * This object defines with what a parameter has its value replaced, and the
  * policies for how that value changes. Used in {@link ParamModifier}.
+ *
+ * @author  David La France
+ * @author  <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
+ * @version $Revision$ updated on $Date$
  */
 public class ParamMask extends AbstractTestElement implements Serializable
 {

@@ -51,9 +51,6 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Id$
  */
 package org.apache.jmeter.protocol.http.parser;
 
@@ -62,6 +59,8 @@ package org.apache.jmeter.protocol.http.parser;
  * The main rationale for the class is to support chained
  * Errors in JDK 1.3
  * 
+ * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
+ * @version $Revision$ updated on $Date$
  */
 public class HTMLParseError extends Error
 {

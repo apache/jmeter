@@ -51,10 +51,6 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
- * @author  Brendan Burns
- * @author	<a href="mailto:klancast@swbell.net">Keith Lancaster</a>
- * @version $Id$
  */
 package org.apache.jmeter.gui.action;
 
@@ -67,6 +63,11 @@ import javax.swing.JOptionPane;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 
+/**
+ * @author  Brendan Burns
+ * @author  <a href="mailto:klancast@swbell.net">Keith Lancaster</a>
+ * @version $Revision$ updated on $Date$
+ */
 public class ExitCommand implements Command
 {
 

@@ -51,10 +51,6 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
- * @author mstover
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Id$
  */
 
 package org.apache.jmeter.protocol.http.modifier;
@@ -79,6 +75,11 @@ import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 
+/**
+ * @author mstover
+ * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
+ * @version $Revision$ updated on $Date$
+ */
 public class URLRewritingModifier
     extends AbstractTestElement
     implements Serializable, PreProcessor

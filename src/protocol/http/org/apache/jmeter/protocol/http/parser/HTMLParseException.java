@@ -51,12 +51,13 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Id$
  */
 package org.apache.jmeter.protocol.http.parser;
 
+/**
+ * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
+ * @version $Revision$ updated on $Date$
+ */
 public class HTMLParseException extends Exception
 {
 	private Throwable savedCause; //Support JDK1.4 getCause() on JDK1.3
