@@ -241,7 +241,7 @@
   <!-- 3rd party libraries to be included in the binary distribution -->
   <property name="avalon-excalibur.jar" value="${lib.dir}/avalon-excalibur-4.1.jar"/>
   <property name="avalon-framework.jar" value="${lib.dir}/avalon-framework-4.1.4.jar"/>
-  <property name="jakarta-oro.jar" value="${lib.dir}/jakarta-oro-2.0.7.jar"/>
+  <property name="jakarta-oro.jar" value="${lib.dir}/jakarta-oro-2.0.8.jar"/>
   <property name="commons-collections.jar" value="${lib.dir}/commons-collections.jar"/>
   <property name="junit.jar" value="${lib.dir}/junit.jar"/>
   <property name="logkit.jar" value="${lib.dir}/logkit-1.2.jar"/>
