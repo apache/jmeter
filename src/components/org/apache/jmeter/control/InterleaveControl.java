@@ -70,7 +70,11 @@ import org.apache.jmeter.util.JMeterUtils;
 public class InterleaveControl extends GenericController implements Serializable
 {
 
+	private static final String STYLE = "InterleaveControl.style";
+	public static final int DEFAULT_STYLE = 0;
+	public static final int NEW_STYLE = 1;
 	private boolean interleave;
+	private boolean doNotIncrement = false;
 
 	/****************************************
 	 * Constructor for the InterleaveControl object
@@ -93,22 +97,108 @@ public class InterleaveControl extends GenericController implements Serializable
 
 	public boolean hasNext()
 	{
-		if(!interleave)
+		boolean retVal;
+		Object controller = getCurrentController();
+		if(controller == null)
 		{
-			return super.hasNext();
+			retVal = hasNextAtEnd();
+		}
+		else if(controller instanceof Controller)
+		{
+			if(((Controller)controller).hasNext())
+			{
+				retVal = true;
+			}
+			else
+			{
+				currentHasNextIsFalse();
+				retVal = hasNext();
+			}
 		}
 		else
 		{
+			retVal = true;
+		}
+		if(controller == null)
+		{
+			reInitialize();
+		}
+		if(interleave)
+		{
 			interleave = false;
-			super.hasNext();
 			return false;
 		}
+		return retVal;
+	}
+	
+	protected void removeCurrentController()
+	{
+		if(getStyle() == NEW_STYLE)
+		{
+			interleave = true;
+		}
+		super.removeCurrentController();
+	}
+
+	protected void incrementCurrent()
+	{
+		if(getStyle() == NEW_STYLE)
+		{
+			interleave = true;
+		}
+		super.incrementCurrent();
+	}
+	
+	public void setStyle(int style)
+	{
+		setProperty(STYLE,new Integer(style));
+	}
+	
+	public int getStyle()
+	{
+		return getPropertyAsInt(STYLE);
 	}
 
 	public Sampler next()
 	{
-		interleave = true;
-		return super.next();
+		if(getStyle() == DEFAULT_STYLE)
+		{
+			interleave = true;
+		}
+		TestElement controller = getCurrentController();
+		if(controller == null)
+		{
+			nextAtEnd();
+			return next();
+		}
+		if(controller instanceof Sampler)
+		{
+			incrementCurrent();
+			return (Sampler)controller;
+		}
+		else
+		{
+			Controller c = (Controller)controller;
+			if(c.hasNext())
+			{
+				Sampler s = c.next();
+				if(getStyle() == DEFAULT_STYLE)
+				{
+					incrementCurrent();
+				}
+				return s;
+			}
+			else if(c.isDone())
+			{
+				removeCurrentController();
+				return next();
+			}
+			else
+			{
+				incrementCurrent();
+				return next();
+			}
+		}
 	}
 
 	public static class Test extends junit.framework.TestCase
@@ -121,7 +211,8 @@ public class InterleaveControl extends GenericController implements Serializable
 		public void testProcessing() throws Exception
 		{
 			GenericController controller = new GenericController();
-			GenericController sub_1 = new InterleaveControl();
+			InterleaveControl sub_1 = new InterleaveControl();
+			sub_1.setStyle(DEFAULT_STYLE);
 			sub_1.addTestElement(makeSampler("one"));
 			sub_1.addTestElement(makeSampler("two"));
 			controller.addTestElement(sub_1);
@@ -154,6 +245,127 @@ public class InterleaveControl extends GenericController implements Serializable
 					{
 						assertEquals(order[counter],sampler.getProperty(TestElement.NAME));
 					}
+					counter++;
+				}
+			}
+		}
+		
+		public void testProcessing2() throws Exception
+		{
+			GenericController controller = new GenericController();
+			InterleaveControl sub_1 = new InterleaveControl();
+			sub_1.setStyle(DEFAULT_STYLE);
+			sub_1.addTestElement(makeSampler("one"));
+			sub_1.addTestElement(makeSampler("two"));
+			controller.addTestElement(sub_1);
+			controller.addTestElement(makeSampler("three"));
+			LoopController sub_2 = new LoopController();
+			sub_2.setLoops(3);
+			GenericController sub_3 = new GenericController();
+			sub_2.addTestElement(makeSampler("four"));
+			sub_3.addTestElement(makeSampler("five"));
+			sub_3.addTestElement(makeSampler("six"));
+			sub_2.addTestElement(sub_3);
+			sub_2.addTestElement(makeSampler("seven"));
+			sub_1.addTestElement(sub_2);
+			String[] order = new String[]{"one","three","two","three","four","three",
+						"one","three","two","three","five","three","one","three",
+						"two","three","six","three","one","three"};
+			int counter = 0;
+			while (counter < order.length)
+			{
+				while(controller.hasNext())
+				{
+					TestElement sampler = controller.next();
+					assertEquals("failed on "+counter,
+							order[counter],sampler.getProperty(TestElement.NAME));
+					counter++;
+				}
+			}
+		}
+		
+		public void testProcessing3() throws Exception
+		{
+			GenericController controller = new GenericController();
+			InterleaveControl sub_1 = new InterleaveControl();
+			sub_1.setStyle(NEW_STYLE);
+			sub_1.addTestElement(makeSampler("one"));
+			sub_1.addTestElement(makeSampler("two"));
+			controller.addTestElement(sub_1);
+			controller.addTestElement(makeSampler("three"));
+			LoopController sub_2 = new LoopController();
+			sub_2.setLoops(3);
+			GenericController sub_3 = new GenericController();
+			sub_2.addTestElement(makeSampler("four"));
+			sub_3.addTestElement(makeSampler("five"));
+			sub_3.addTestElement(makeSampler("six"));
+			sub_2.addTestElement(sub_3);
+			sub_2.addTestElement(makeSampler("seven"));
+			sub_1.addTestElement(sub_2);
+			String[] order = new String[]{"one","three","two","three","four","five",
+						"six","seven","four","five","six","seven","four","five",
+						"six","seven","three","one","three","two","three"};
+			int counter = 0;
+			while (counter < order.length)
+			{
+				while(controller.hasNext())
+				{
+					TestElement sampler = controller.next();
+					assertEquals("failed on "+counter,order[counter],sampler.getProperty(TestElement.NAME));
+					counter++;
+				}
+			}
+		}
+		
+		public void testProcessing4() throws Exception
+		{
+			GenericController controller = new GenericController();
+			InterleaveControl sub_1 = new InterleaveControl();
+			sub_1.setStyle(DEFAULT_STYLE);
+			controller.addTestElement(sub_1);
+			GenericController sub_2 = new GenericController();
+			sub_2.addTestElement(makeSampler("one"));
+			sub_2.addTestElement(makeSampler("two"));
+			sub_1.addTestElement(sub_2);
+			GenericController sub_3 = new GenericController();
+			sub_3.addTestElement(makeSampler("three"));
+			sub_3.addTestElement(makeSampler("four"));
+			sub_1.addTestElement(sub_3);
+			String[] order = new String[]{"one","three","two","four"};
+			int counter = 0;
+			while (counter < order.length)
+			{
+				while(controller.hasNext())
+				{
+					TestElement sampler = controller.next();
+					assertEquals("failed on "+counter,order[counter],sampler.getProperty(TestElement.NAME));
+					counter++;
+				}
+			}
+		}
+		
+		public void testProcessing5() throws Exception
+		{
+			GenericController controller = new GenericController();
+			InterleaveControl sub_1 = new InterleaveControl();
+			sub_1.setStyle(NEW_STYLE);
+			controller.addTestElement(sub_1);
+			GenericController sub_2 = new GenericController();
+			sub_2.addTestElement(makeSampler("one"));
+			sub_2.addTestElement(makeSampler("two"));
+			sub_1.addTestElement(sub_2);
+			GenericController sub_3 = new GenericController();
+			sub_3.addTestElement(makeSampler("three"));
+			sub_3.addTestElement(makeSampler("four"));
+			sub_1.addTestElement(sub_3);
+			String[] order = new String[]{"one","two","three","four"};
+			int counter = 0;
+			while (counter < order.length)
+			{
+				while(controller.hasNext())
+				{
+					TestElement sampler = controller.next();
+					assertEquals("failed on "+counter,order[counter],sampler.getProperty(TestElement.NAME));
 					counter++;
 				}
 			}
