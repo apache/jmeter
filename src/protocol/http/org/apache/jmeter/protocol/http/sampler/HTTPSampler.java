@@ -936,10 +936,13 @@ public class HTTPSampler extends AbstractSampler
 				}
 				else
 				{
-					redirectUrl(conn, u);
 					time = System.currentTimeMillis() - time;
-					res = sample(redirects+1);
-					time += res.getTime();
+
+					HTTPSampler redirect= (HTTPSampler)this.clone();
+					redirect.redirectUrl(conn, u);
+					SampleResult redirectResult= redirect.sample(redirects+1);
+					res.addSubResult(redirectResult);
+					time += redirectResult.getTime();
 				}
 			}
 			else
