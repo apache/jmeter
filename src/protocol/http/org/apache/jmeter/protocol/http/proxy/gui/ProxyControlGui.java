@@ -467,7 +467,7 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
         JPanel buttonPanel = new JPanel();
 
         JButton addButton = new JButton(JMeterUtils.getResString("add"));
-        addButton.setActionCommand(ADD_INCLUDE);
+        addButton.setActionCommand(addCommand);
         addButton.addActionListener(this);
         buttonPanel.add(addButton);
 
