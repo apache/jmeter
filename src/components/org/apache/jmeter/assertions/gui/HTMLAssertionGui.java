@@ -70,11 +70,9 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
     init();
   }
 
-  /**
-   * Returns the label to be shown within the JTree-Component.
-   */
-  public String getStaticLabel() {
-    return "HTML Assertion";
+  public String getLabelResource()
+  {
+	  return "html_assertion_label"; //$NON-NLS-1$
   }
 
   /**
