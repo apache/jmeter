@@ -187,8 +187,7 @@ public class RunningSample
 
     /**
      * Records a sample.
-     * @arg aTimeInMillis Time in milliseconds that this sample took to process
-     * @arg aSuccessFlag Flag for if this sample was successful or not
+     * 
      */
     public synchronized void addSample(SampleResult res)
     {
