@@ -246,7 +246,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent
 
     public void setNode(JMeterTreeNode node)
     {
-        namePanel.setNode(node);
+        getNamePanel().setNode(node);
     }
     
     public Dimension getPreferredSize() {

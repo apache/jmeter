@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -60,19 +60,13 @@ import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
-/****************************************
- * Implementing this interface indicates that the class is
- * a JMeter GUI Component.  A JMeter GUI Component is essentially 
- * the GUI display code associated with a JMeter Test Element.  The writer of
- * the component must take care to make the component be consistent with the
- * rest of JMeter's GUI look and feel and behavior.  Use of the provided abstract
- * classes is highly recommended to make this task easier.
- * 
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- * 
- * 
+/**
+ * Implementing this interface indicates that the class is a JMeter GUI
+ * Component.  A JMeter GUI Component is essentially the GUI display code
+ * associated with a JMeter Test Element.  The writer of the component must
+ * take care to make the component be consistent with the rest of JMeter's
+ * GUI look and feel and behavior.  Use of the provided abstract classes is
+ * highly recommended to make this task easier.
  * 
  * @see AbstractJMeterGuiComponent
  * @see org.apache.jmeter.config.gui.AbstractConfigGui
@@ -81,99 +75,111 @@ import org.apache.jmeter.testelement.TestElement;
  * @see org.apache.jmeter.timers.gui.AbstractTimerGui
  * @see org.apache.jmeter.visualizers.gui.AbstractVisualizer
  * @see org.apache.jmeter.samplers.gui.AbstractSamplerGui
- ***************************************/
+ *
+ * @author    Michael Stover
+ * @version   $Revision$
+ * 
+ */
 
 public interface JMeterGUIComponent
 {
 
-	/****************************************
-	 * Sets the name of the JMeter GUI Component.  The name
-	 * of the component is used in the Test Tree as the name of the
-	 * tree node.
-	 *
-	 *@param name  )
-	 ***************************************/
-	public void setName(String name);
+    /**
+     * Sets the name of the JMeter GUI Component.  The name
+     * of the component is used in the Test Tree as the name of the
+     * tree node.
+     *
+     * @param name  the name of the component
+     */
+    void setName(String name);
 
-	/****************************************
-	 * Gets the name of the JMeter GUI component.  The name
-	 * of the component is used in the Test Tree as the name of the tree node.
-	 *
-	 *@return   The name of the component)
-	 ***************************************/
-	public String getName();
+    /**
+     * Gets the name of the JMeter GUI component.  The name
+     * of the component is used in the Test Tree as the name of the tree node.
+     *
+     * @return   the name of the component
+     */
+    String getName();
 
-	/****************************************
-	 * Get the component's label.  This label is used in drop down
-	 * lists that give the user the option of choosing one type of
-	 * component in a list of many.  It should therefore be a descriptive
-	 * name for the end user to see.
-	 *
-	 *@return   GUI label for the component.
-	 ***************************************/
-	public String getStaticLabel();
+    /**
+     * Get the component's label.  This label is used in drop down
+     * lists that give the user the option of choosing one type of
+     * component in a list of many.  It should therefore be a descriptive
+     * name for the end user to see.
+     *
+     * @return   GUI label for the component.
+     */
+    String getStaticLabel();
 
-	/****************************************
-	 * When a test is started, GUI components are converted into
-	 * test elements.  This is the method called on each component
-	 * to get the test element equivalent.  
-	 *
-	 *@return  The Test Element object that the GUI component 
-	 * represents.
-	 ***************************************/
-	public TestElement createTestElement();
+    /**
+     * When a test is started, GUI components are converted into
+     * test elements.  This is the method called on each component
+     * to get the test element equivalent.  
+     *
+     * @return  the Test Element object that the GUI component represents.
+     */
+    TestElement createTestElement();
     
     /**
      * GUI components should be able to set a given TestElement's data to
      * what is represented by the GUI.
-     * @param element
+     * 
+     * @param element the TestElement to modify
      */
-    public void modifyTestElement(TestElement element);
+    void modifyTestElement(TestElement element);
 
-	/**
-	 * Test GUI elements can be  disabled, in which case
-	 * they do not become part of the test when run.
-	 */
-	public boolean isEnabled();
+    /**
+     * Test GUI elements can be disabled, in which case
+     * they do not become part of the test when run.
+     * 
+     * @return true if the element should be part of the test run, false
+     * otherwise
+     */
+    boolean isEnabled();
 
-	/**
-	 * Set whether this component is enabled.
-	 * @param enabled true for enabled, false for disabled.
-	 */
-	public void setEnabled(boolean enabled);
+    /**
+     * Set whether this component is enabled.
+     * 
+     * @param enabled true for enabled, false for disabled.
+     */
+    void setEnabled(boolean enabled);
 
-	/****************************************
-	 * When a user right-clicks on the component in the test tree, or
-	 * selects the edit menu when the component is selected, the 
-	 * component will be asked to return a JPopupMenu that provides
-	 * all the options available to the user from this component.
-	 *
-	 *@return   A JPopupMenu appropriate for the component.
-	 ***************************************/
-	public JPopupMenu createPopupMenu();
+    /**
+     * When a user right-clicks on the component in the test tree, or
+     * selects the edit menu when the component is selected, the 
+     * component will be asked to return a JPopupMenu that provides
+     * all the options available to the user from this component.
+     *
+     * @return   a JPopupMenu appropriate for the component.
+     */
+    JPopupMenu createPopupMenu();
 
-	/****************************************
-	 * A newly created component can be initialized with the contents of
-	 * a Test Element object by calling this method.  The component is
-	 * responsible for querying the Test Element object for the
-	 * relevant information to display in its GUI.
-	 *
-	 *@param element 
-	 ***************************************/
-	public void configure(TestElement element);
+    /**
+     * A newly created component can be initialized with the contents of
+     * a Test Element object by calling this method.  The component is
+     * responsible for querying the Test Element object for the
+     * relevant information to display in its GUI.
+     *
+     * @param element the TestElement to configure 
+     */
+    void configure(TestElement element);
 
-	/****************************************
-	 * This is the list of menu categories this gui component will be available
-	 * under. For instance, if this represents a Controller, then the
-	 * MenuFactory.CONTROLLERS category should be in the returned collection.
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public Collection getMenuCategories();
+    /**
+     * This is the list of menu categories this gui component will be available
+     * under. For instance, if this represents a Controller, then the
+     * MenuFactory.CONTROLLERS category should be in the returned collection.
+     *
+     * @return   a Collection of Strings, where each element is one of the
+     *           constants defined in MenuFactory
+     * 
+     * @see org.apache.jmeter.gui.util.MenuFactory
+     */
+    Collection getMenuCategories();
 
-	/**
-	 * 
-	 *@param node
-	 */
-    public void setNode(JMeterTreeNode node);
+    /**
+     * Sets the tree node which this component is associated with.
+     * 
+     * @param node the tree node corresponding to this component
+     */
+    void setNode(JMeterTreeNode node);
 }
