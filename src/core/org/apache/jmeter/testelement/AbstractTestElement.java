@@ -126,14 +126,17 @@ public abstract class AbstractTestElement implements TestElement, Serializable
     }
 
     /**
-     * Get the named property.  If it doesn't exist, a NullProperty object is
-     * returned.
+     * Get the named property. 
+     * If it doesn't exist, a new NullProperty object is created
+     * with the same name and returned.
      */
     public JMeterProperty getProperty(String key)
     {
         JMeterProperty prop = (JMeterProperty) propMap.get(key);
         if (prop == null)
         {
+// TODO URGENT - does it make sense to create "different" NullProperty items for each key?
+// Or would it be better to create them all with a key of "" ?
             prop = new NullProperty(key);
         }
         return prop;
