@@ -64,8 +64,7 @@ import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.control.gui.TestPlanGui;
 import org.apache.jmeter.control.gui.WorkBenchGui;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
-import org.apache.jmeter.gui.JMeterGUIComponent;
-import org.apache.jmeter.gui.NamePanel;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jorphan.collections.HashTree;
@@ -86,11 +85,8 @@ public class JMeterTreeModel extends DefaultTreeModel
 	 ***************************************/
 	public JMeterTreeModel()
 	{
-		super(new JMeterTreeNode(new NamePanel(), null));
-		this.insertNodeInto(new JMeterTreeNode(new TestPlanGui(), this),
-				(JMeterTreeNode)getRoot(), 0);
-		this.insertNodeInto(new JMeterTreeNode(new WorkBenchGui(), this),
-				(JMeterTreeNode)getRoot(), 1);
+		super(new JMeterTreeNode(new WorkBenchGui().createTestElement(), null));
+		initTree();
 	}
 
 	/****************************************
@@ -121,11 +117,11 @@ public class JMeterTreeModel extends DefaultTreeModel
 		Iterator iter = subTree.list().iterator();
 		while(iter.hasNext())
 		{
-			JMeterGUIComponent item = (JMeterGUIComponent)iter.next();
-			if(item instanceof TestPlanGui)
+			TestElement item = (TestElement)iter.next();
+			if(item instanceof TestPlan)
 			{
 				current = (JMeterTreeNode)((JMeterTreeNode)getRoot()).getChildAt(0);
-				current.configure(item.createTestElement());
+				((TestElement)current.getUserObject()).addTestElement(item);
 				addSubTree(subTree.getTree(item), current);
 				ret = true;
 			}
@@ -145,14 +141,14 @@ public class JMeterTreeModel extends DefaultTreeModel
 	 *@return                                !ToDo (Return description)
 	 *@exception IllegalUserActionException  !ToDo (Exception description)
 	 ***************************************/
-	public JMeterTreeNode addComponent(Object component, JMeterTreeNode node)
+	public JMeterTreeNode addComponent(TestElement component, JMeterTreeNode node)
 			 throws IllegalUserActionException
 	{
 		if(node.getUserObject() instanceof AbstractConfigGui)
 		{
 			throw new IllegalUserActionException("This node cannot hold sub-elements");
 		}
-		JMeterTreeNode newNode = new JMeterTreeNode((JMeterGUIComponent)component, this);
+		JMeterTreeNode newNode = new JMeterTreeNode((TestElement)component, this);
 		this.insertNodeInto(newNode, node, node.getChildCount());
 		return newNode;
 	}
@@ -205,10 +201,24 @@ public class JMeterTreeModel extends DefaultTreeModel
 	public void clearTestPlan()
 	{
 		super.removeNodeFromParent((JMeterTreeNode)getChild(getRoot(), 0));
-		this.insertNodeInto(new JMeterTreeNode(new TestPlanGui(), this),
+		initTree();
+	}
+
+	private void initTree()
+	{
+		TestElement tp = new TestPlanGui().createTestElement();
+		TestElement wb = new WorkBenchGui().createTestElement();
+		this.insertNodeInto(new JMeterTreeNode(tp, this),
 				(JMeterTreeNode)getRoot(), 0);
-		super.removeNodeFromParent((JMeterTreeNode)getChild(getRoot(), 1));
-		this.insertNodeInto(new JMeterTreeNode(new WorkBenchGui(), this),
+		try
+		{
+			super.removeNodeFromParent((JMeterTreeNode)getChild(getRoot(), 1));
+		}
+		catch (RuntimeException e)
+		{
+		
+		}
+		this.insertNodeInto(new JMeterTreeNode(wb, this),
 				(JMeterTreeNode)getRoot(), 1);
 	}
 }

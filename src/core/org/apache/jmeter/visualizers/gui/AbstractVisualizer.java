@@ -10,6 +10,7 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
+import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.reporters.AbstractListenerElement;
@@ -29,7 +30,7 @@ import org.apache.log.Logger;
  ***************************************/
 
 public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent
-	implements Visualizer, ChangeListener {
+	implements Visualizer, ChangeListener,UnsharedComponent {
 		
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.gui");

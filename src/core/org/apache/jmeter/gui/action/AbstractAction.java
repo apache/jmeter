@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 
-import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.collections.HashTree;
 
@@ -33,7 +33,7 @@ public abstract class AbstractAction implements Command {
 		Iterator iter = new LinkedList(tree.list()).iterator();
 		while (iter.hasNext())
 		{
-			JMeterGUIComponent item = (JMeterGUIComponent)iter.next();
+			JMeterTreeNode item = (JMeterTreeNode)iter.next();
 			if(item.isEnabled())
 			{
 				convertSubTree(tree.getTree(item));

@@ -54,17 +54,18 @@
  */
 package org.apache.jmeter.gui.tree;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
-import javax.swing.JPopupMenu;
 import java.util.Collection;
-import org.apache.jmeter.gui.JMeterGUIComponent;
-import org.apache.jmeter.gui.GUIFactory;
 
-import java.awt.event.MouseListener;
-import java.awt.event.MouseEvent;
-import org.apache.jmeter.testelement.TestElement;
 import javax.swing.ImageIcon;
+import javax.swing.JPopupMenu;
+import javax.swing.tree.DefaultMutableTreeNode;
+
+import org.apache.jmeter.gui.GUIFactory;
+import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.testelement.TestElement;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /************************************************************
  *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -77,54 +78,81 @@ import javax.swing.ImageIcon;
 public class JMeterTreeNode extends DefaultMutableTreeNode
 	implements JMeterGUIComponent
 {
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+					"jmeter.gui");
     JMeterTreeModel treeModel;
+    boolean enabled = true;
 
 
-	public JMeterTreeNode(JMeterGUIComponent userObj, JMeterTreeModel treeModel)
+	public JMeterTreeNode(TestElement userObj, JMeterTreeModel treeModel)
 	{
 		super(userObj);
 		this.treeModel = treeModel;
-		userObj.setNode(this);
 	}
 
 	public boolean isEnabled()
 	{
-		return ((JMeterGUIComponent)getUserObject()).isEnabled();
+		return enabled;
 	}
 
 	public void setEnabled(boolean enabled)
 	{
-		((JMeterGUIComponent)getUserObject()).setEnabled(enabled);
+		this.enabled = enabled;
 	}
 
 	public ImageIcon getIcon()
 	{
-		return GUIFactory.getIcon(getUserObject().getClass());
+		try
+		{
+			return GUIFactory.getIcon(Class.forName(createTestElement().getPropertyAsString(TestElement.GUI_CLASS)));
+		}
+		catch (ClassNotFoundException e)
+		{
+			log.warn("Can't get icon for class " + 
+					createTestElement(),e);
+			return null;
+		}
 	}
 
 	public Collection getMenuCategories()
 	{
-		return ((JMeterGUIComponent)getUserObject()).getMenuCategories();
+		try
+		{
+			return GuiPackage.getInstance().getGui(createTestElement()).getMenuCategories();
+		}
+		catch (Exception e)
+		{
+			log.error("Can't get popup menu for gui",e);
+			return null;
+		}
 	}
 
 	public JPopupMenu createPopupMenu()
 	{
-		return ((JMeterGUIComponent)getUserObject()).createPopupMenu();
+		try
+		{
+			return GuiPackage.getInstance().getGui(createTestElement()).createPopupMenu();
+		}
+		catch (Exception e)
+		{
+			log.error("Can't get popup menu for gui",e);
+			return null;
+		}
 	}
 
 	public void configure(TestElement element)
 	{
-		((JMeterGUIComponent)getUserObject()).configure(element);
+		
 	}
 
 	public TestElement createTestElement()
 	{
-		return ((JMeterGUIComponent)getUserObject()).createTestElement();
+		return (TestElement)getUserObject();
 	}
 
 	public String getStaticLabel()
 	{
-		return ((JMeterGUIComponent)getUserObject()).getStaticLabel();
+		return ((TestElement)getUserObject()).getPropertyAsString(TestElement.NAME);
 	}
 
 	/************************************************************
@@ -134,7 +162,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode
 	 ***********************************************************/
 	public void setName(String name)
 	{
-		((JMeterGUIComponent)getUserObject()).setName(name);
+		((TestElement)getUserObject()).setProperty(TestElement.NAME,name);
 	}
 
 	/************************************************************
@@ -144,13 +172,13 @@ public class JMeterTreeNode extends DefaultMutableTreeNode
 	 ***********************************************************/
 	public String getName()
 	{
-		return ((JMeterGUIComponent)getUserObject()).getName();
+		return ((TestElement)getUserObject()).getPropertyAsString(TestElement.NAME);
 	}
 
 
     public void setNode(JMeterTreeNode node)
     {
-        ((JMeterGUIComponent)getUserObject()).setNode(node);
+        
     }
 
 

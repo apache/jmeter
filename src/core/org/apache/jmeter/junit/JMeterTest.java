@@ -12,13 +12,14 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Logger;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
+import org.apache.log.Logger;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -57,7 +58,7 @@ public class JMeterTest extends TestCase
 			{
 				continue;
 			}
-			this.assertEquals("Failed on " + item.getClass().getName(), 
+			assertEquals("Failed on " + item.getClass().getName(), 
 					item.getStaticLabel(), item.getName());
 			TestElement el = item.createTestElement();
 			assertEquals("GUI-CLASS: Failed on " + item.getClass().getName(), item.getClass().getName(),
@@ -69,8 +70,11 @@ public class JMeterTest extends TestCase
 			el.setProperty(TestElement.NAME, "hey, new name!:");
 			el.setProperty("NOT","Shouldn't be here");
 			TestElement el2 = item.createTestElement();
-			assertNull("GUI-CLASS: Failed on " + item.getClass().getName(),
-			el2.getProperty("NOT"));
+			if(!(item instanceof UnsharedComponent))
+			{
+				assertNull("GUI-CLASS: Failed on " + item.getClass().getName(),
+						el2.getProperty("NOT"));
+			}
 			el = SaveService.createTestElement(SaveService.getConfigForTestElement(null,
 					el));
 			item.configure(el);
@@ -178,8 +182,8 @@ public class JMeterTest extends TestCase
 
 	private void cloneTesting(TestElement item, TestElement clonedItem)
 	{
-		this.assertTrue(item != clonedItem);
-		this.assertEquals("CLONE-SAME-CLASS: testing " + item.getClass().getName(),
+		assertTrue(item != clonedItem);
+		assertEquals("CLONE-SAME-CLASS: testing " + item.getClass().getName(),
 				item.getClass().getName(), clonedItem.getClass().getName());
 	}
 
