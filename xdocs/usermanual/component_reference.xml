@@ -339,7 +339,7 @@ is configured to store the results in a file named "simple-test.dat" in the curr
 </example>
 </component>
 
-<component index="13.2.6" name="Random Controller">
+<component index="13.2.6" name="Random Controller" screenshot="../images/screenshots/logic-controller/random-controller.gif">
 <description>
 <p>The Random Logic Controller acts similarly to the Interleave Controller, except that
 instead of going in order through its sub-controllers and samplers, it picks one
