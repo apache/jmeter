@@ -144,14 +144,25 @@ public class JMeterTest extends TestCase
 		List objects = new LinkedList();
 		while(classes.hasNext())
 		{
-			String className = (String)classes.next();
+		    Class c= Class.forName((String)classes.next());
+		    try
+		    {
 			try
 			{
-				objects.add(Class.forName(className).newInstance());
+			    objects.add(c.newInstance());
 			}
-			catch (IllegalAccessException e)
+			catch (InstantiationException e)
 			{
+			    objects.add(c.getConstructor(
+				  new Class[] {Object.class}).newInstance(
+				      new Object[] {this} ));
 			}
+		    }
+		    catch (IllegalAccessException e)
+		    {
+		      // We won't test serialization of restricted-access
+		      // classes.
+		    }
 		}
 		return objects;
 	}
