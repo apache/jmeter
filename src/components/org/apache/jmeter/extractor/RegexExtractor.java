@@ -79,7 +79,7 @@ public class RegexExtractor
     public void process()
     {
         initTemplate();
-        JMeterContext context = JMeterContextService.getContext();
+        JMeterContext context = getThreadContext();
         if (context.getPreviousResult() == null
             || context.getPreviousResult().getResponseData() == null)
         {
@@ -377,9 +377,13 @@ public class RegexExtractor
             super(name);
         }
 
+        private JMeterContext jmctx = null;
+
         public void setUp()
         {
+        	jmctx = JMeterContextService.getContext();
             extractor = new RegexExtractor();
+            extractor.setThreadContext(jmctx);// This would be done by the run command
             extractor.setRefName("regVal");
             result = new SampleResult();
             String data =
@@ -400,8 +404,8 @@ public class RegexExtractor
                 "</company-xmlext-query-ret>";
             result.setResponseData(data.getBytes());
             vars = new JMeterVariables();
-            JMeterContextService.getContext().setVariables(vars);
-            JMeterContextService.getContext().setPreviousResult(result);
+            jmctx.setVariables(vars);
+            jmctx.setPreviousResult(result);
         }
 
         public void testVariableExtraction() throws Exception

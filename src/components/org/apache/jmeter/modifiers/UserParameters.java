@@ -30,7 +30,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -108,7 +107,7 @@ public class UserParameters
         if (threadValues.size() > 0)
         {
             return (CollectionProperty) threadValues.get(
-                JMeterContextService.getContext().getThreadNum()
+                getThreadContext().getThreadNum()
                     % threadValues.size());
         }
         else
@@ -149,8 +148,7 @@ public class UserParameters
 			}
             PropertyIterator namesIter = getNames().iterator();
             PropertyIterator valueIter = getValues().iterator();
-            JMeterVariables jmvars =
-                JMeterContextService.getContext().getVariables();
+            JMeterVariables jmvars = getThreadContext().getVariables();
             while (namesIter.hasNext() && valueIter.hasNext())
             {
                 String name = namesIter.next().getStringValue();

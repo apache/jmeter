@@ -57,9 +57,9 @@ public class URLRewritingModifier
 
     public void process()
     {
-        Sampler sampler = JMeterContextService.getContext().getCurrentSampler();
-        SampleResult responseText =
-            JMeterContextService.getContext().getPreviousResult();
+    	JMeterContext ctx = getThreadContext();
+        Sampler sampler = ctx.getCurrentSampler();
+        SampleResult responseText = ctx.getPreviousResult();
         if(responseText == null)
         {
             return;
@@ -183,8 +183,11 @@ public class URLRewritingModifier
     }
     public static class Test extends TestCase
     {
-        SampleResult response;
-        JMeterContext context;
+        private SampleResult response = null;
+        
+        private JMeterContext context = null;
+        private URLRewritingModifier mod = null;
+
         public Test(String name)
         {
             super(name);
@@ -192,6 +195,8 @@ public class URLRewritingModifier
         public void setUp()
         {
             context = JMeterContextService.getContext();
+            mod = new URLRewritingModifier();
+            mod.setThreadContext(context);
         }
         public void testGrabSessionId() throws Exception
         {
@@ -200,7 +205,6 @@ public class URLRewritingModifier
                     + "?session_id=jfdkjdkf%20jddkfdfjkdjfdf%22;";
             response = new SampleResult();
             response.setResponseData(html.getBytes());
-            URLRewritingModifier mod = new URLRewritingModifier();
             mod.setArgumentName("session_id");
             HTTPSampler sampler = createSampler();
             sampler.addArgument("session_id", "adfasdfdsafasdfasd");
@@ -224,7 +228,6 @@ public class URLRewritingModifier
                     + "session_id=jfdkjdkfjddkfdfjkdjfdf\">";
             response = new SampleResult();
             response.setResponseData(html.getBytes());
-            URLRewritingModifier mod = new URLRewritingModifier();
             mod.setArgumentName("session_id");
             HTTPSampler sampler = createSampler();
             context.setCurrentSampler(sampler);
@@ -251,7 +254,6 @@ public class URLRewritingModifier
             String html = "href='index.html?session_id=jfdkjdkfjddkfdfjkdjfdf'";
             response = new SampleResult();
             response.setResponseData(html.getBytes());
-            URLRewritingModifier mod = new URLRewritingModifier();
             mod.setArgumentName("session_id");
             HTTPSampler sampler = createSampler();
             context.setCurrentSampler(sampler);
@@ -269,7 +271,6 @@ public class URLRewritingModifier
             String html = "href='index.html?session_id=jfdkjdkfjddkfdfjkdjfdf\t";
             response = new SampleResult();
             response.setResponseData(html.getBytes());
-            URLRewritingModifier mod = new URLRewritingModifier();
             mod.setArgumentName("session_id");
             HTTPSampler sampler = createSampler();
             context.setCurrentSampler(sampler);
@@ -288,7 +289,6 @@ public class URLRewritingModifier
                 "href='index.html;%24sid%24KQNq3AAADQZoEQAxlkX8uQV5bjqVBPbT'";
             response = new SampleResult();
             response.setResponseData(html.getBytes());
-            URLRewritingModifier mod = new URLRewritingModifier();
             mod.setArgumentName("%24sid%24");
             mod.setPathExtension(true);
             mod.setPathExtensionNoEquals(true);
@@ -316,6 +316,7 @@ public class URLRewritingModifier
                 response = new SampleResult();
                 response.setResponseData(html[i].getBytes());
                 URLRewritingModifier mod = new URLRewritingModifier();
+                mod.setThreadContext(context);
                 mod.setArgumentName("sid");
                 mod.setPathExtension(false);
                 HTTPSampler sampler = createSampler();
