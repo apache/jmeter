@@ -290,15 +290,22 @@ public class StandardJMeterEngine
         notifier = new ListenerNotifier();
         schcdule_run = true;
         JMeterContextService.getContext().setSamplingStarted(true);
-        int groupCount = 1;
+        int groupCount = 0;
         while (iter.hasNext())
         {
+        	groupCount++;
             ThreadGroup group = (ThreadGroup) iter.next();
-            threads = new JMeterThread[group.getNumThreads()];
-            boolean onErrorStopTest = group.getOnErrorStopTest();
+			int numThreads = group.getNumThreads();
+			boolean onErrorStopTest = group.getOnErrorStopTest();
 			boolean onErrorStopThread = group.getOnErrorStopThread();
+			String groupName = group.getName();
+			int rampUp = group.getRampUp();
+			float perThreadDelay = ((float) (rampUp * 1000) / (float) numThreads);
+            threads = new JMeterThread[numThreads];
 			
-            log.info("Starting " + threads.length + " test threads");
+            log.info("Starting " + numThreads + " threads for group "+ groupName
+                + ". Ramp up = "+ rampUp + ".");
+            
 			if (onErrorStopTest) {
 				log.info("Test will stop on error");
 			} else if (onErrorStopThread) {
@@ -319,12 +326,8 @@ public class StandardJMeterEngine
                         notifier);
                 threads[i].setThreadNum(i);
                 threads[i].setInitialContext(JMeterContextService.getContext());
-                threads[i].setInitialDelay(
-                    (int) (((float) (group.getRampUp() * 1000)
-                        / (float) group.getNumThreads())
-                        * (float) i));
-                threads[i].setThreadName(
-                    group.getName() + (groupCount++) + "-" + (i + 1));
+                threads[i].setInitialDelay((int) (perThreadDelay * (float) i));
+                threads[i].setThreadName(groupName + (groupCount) + "-" + (i + 1));
 
                 scheduleThread(threads[i], group);
                 
