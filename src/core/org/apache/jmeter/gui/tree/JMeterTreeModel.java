@@ -64,6 +64,8 @@ import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.control.gui.TestPlanGui;
 import org.apache.jmeter.control.gui.WorkBenchGui;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
+import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
@@ -166,6 +168,9 @@ public class JMeterTreeModel extends DefaultTreeModel
         {
             throw new IllegalUserActionException("This node cannot hold sub-elements");
         }
+        JMeterGUIComponent guicomp = GuiPackage.getInstance().getGui(component);
+        guicomp.configure(component);
+        guicomp.modifyTestElement(component);
         JMeterTreeNode newNode = new JMeterTreeNode((TestElement) component, this);
         
         //This check the state of the TestElement and if returns false it disable the loaded node
