@@ -145,7 +145,7 @@ public class JDBCSampler extends AbstractSampler
         ResultSet rs = null;
         Statement stmt = null;
         Data data = new Data();
-        res.setSampleLabel(getQuery());
+        res.setSampleLabel(getName());
         start = System.currentTimeMillis();
         try
         {
