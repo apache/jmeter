@@ -49,7 +49,7 @@ public class IterationCounter extends AbstractFunction
 	/**
 	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
 	 */
-	public String execute(SampleResult previousResult, Sampler currentSampler)
+	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 		throws InvalidVariableException {
 		counter++;
 		JMeterVariables vars = getVariables();
