@@ -23,11 +23,11 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.gui.action.ActionRouter;
-import org.apache.jmeter.gui.util.ComponentUtil;
-import org.apache.jmeter.gui.util.JLabeledChoice;
-import org.apache.jmeter.gui.util.JLabeledTextField;
-import org.apache.jmeter.util.ClassFinder;
 import org.apache.jmeter.util.JMeterUtils;
+import org.jorphan.gui.ComponentUtil;
+import org.jorphan.gui.JLabeledChoice;
+import org.jorphan.gui.JLabeledTextField;
+import org.jorphan.reflect.ClassFinder;
 
 /**
  * @author Administrator
@@ -79,6 +79,7 @@ public class FunctionHelper extends JDialog implements
 	{
 		try {
 			List functionClasses = ClassFinder.findClassesThatExtend(
+					JMeterUtils.getSearchPaths(),
 					new Class[]{Function.class},true);
 			Iterator iter = functionClasses.iterator();
 			String[] functionNames = new String[functionClasses.size()];

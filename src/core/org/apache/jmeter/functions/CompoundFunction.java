@@ -12,12 +12,13 @@ import junit.framework.TestCase;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jmeter.util.ClassFinder;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 import org.apache.oro.text.perl.Perl5Util;
 import org.apache.oro.text.regex.PatternCompiler;
 import org.apache.oro.text.regex.Perl5Compiler;
+import org.jorphan.reflect.ClassFinder;
 
 /**
  * @author mstover
@@ -46,7 +47,8 @@ public class CompoundFunction implements Function
 	{
 		try
 		{
-			List classes = ClassFinder.findClassesThatExtend(new Class[]{Function.class},true);
+			List classes = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
+					new Class[]{Function.class},true);
 			Iterator iter = classes.iterator();
 			while(iter.hasNext())
 			{

@@ -63,16 +63,15 @@ import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.samplers.SampleEvent;
-import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.timers.Timer;
-import org.apache.jmeter.util.ListedHashTree;
-import org.apache.jmeter.util.SearchByClass;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.collections.HashTree;
+import org.jorphan.collections.SearchByClass;
 /****************************************
  * The JMeter interface to the sampling process, allowing JMeter to see the
  * timing, add listeners for sampling events and to stop the sampling process.
@@ -88,7 +87,7 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 	int initialDelay = 0;
 	Controller controller;
 	private boolean running;
-	ListedHashTree testTree;
+	HashTree testTree;
 	TestCompiler compiler;
 	JMeterThreadMonitor monitor;
 	String threadName;
@@ -100,7 +99,7 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 	 * !ToDo (Constructor description)
 	 ***************************************/
 	public JMeterThread() {}
-	public JMeterThread(ListedHashTree test, JMeterThreadMonitor monitor,ListenerNotifier note) {
+	public JMeterThread(HashTree test, JMeterThreadMonitor monitor,ListenerNotifier note) {
 		this.monitor = monitor;
 		threadVars = new JMeterVariables();
 		testTree = test;

@@ -3,11 +3,11 @@ import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
-import org.apache.jmeter.gui.util.JLabeledTextField;
-import org.apache.jmeter.gui.util.VerticalLayout;
 import org.apache.jmeter.modifiers.CounterConfig;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.jorphan.gui.JLabeledTextField;
+import org.jorphan.gui.layout.VerticalLayout;
 /**
  * @author Administrator
  *

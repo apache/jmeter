@@ -419,9 +419,11 @@
 	</target>
 
 	<target name="test" depends="install">
-	  <java classname="org.apache.jmeter.junit.AllTests" fork="yes" dir="${basedir}/bin">
+	  <java classname="org.jorphan.test.AllTests" fork="yes" dir="${basedir}/bin">
 		 <classpath refid="testClasspath"/>
+		 <arg value="../lib/ext"/>
 		 <arg value="./jmeter.properties"/>
+		 <arg value="org.apache.jmeter.util.JMeterUtils"/>
 	  </java>
   </target>
 

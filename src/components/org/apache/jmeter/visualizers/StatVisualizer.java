@@ -75,12 +75,12 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-import org.apache.jmeter.gui.util.VerticalLayout;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.jorphan.gui.layout.VerticalLayout;
 /****************************************
  * Title: StatVisualizer.java Description: Aggregrate Table-Based Reporting
  * Visualizer for JMeter Props to the people who've done the other visualizers

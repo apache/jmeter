@@ -59,10 +59,11 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 import org.apache.jmeter.testelement.TestListener;
-import org.apache.jmeter.util.ListedHashTree;
-import org.apache.jmeter.util.SearchByClass;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.collections.HashTree;
+import org.jorphan.collections.ListedHashTree;
+import org.jorphan.collections.SearchByClass;
 
 
 /************************************************************
@@ -77,7 +78,7 @@ public class ClientJMeterEngine implements JMeterEngine
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.engine");
 	RemoteJMeterEngine remote;
-	ListedHashTree test;
+	HashTree test;
 	SearchByClass testListeners;
 	ConvertListeners sampleListeners;
 	private String host;
@@ -107,12 +108,12 @@ public class ClientJMeterEngine implements JMeterEngine
 		this.remote = remote;
 	}
 	
-	protected ListedHashTree getTestTree()
+	protected HashTree getTestTree()
 	{
 		return test;
 	}
 
-	public void configure(ListedHashTree testTree)
+	public void configure(HashTree testTree)
 	{
 		test = testTree;
 	}

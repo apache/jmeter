@@ -9,12 +9,12 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
-import org.apache.jmeter.gui.util.JLabeledTextField;
-import org.apache.jmeter.gui.util.VerticalLayout;
 import org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.jorphan.gui.JLabeledTextField;
+import org.jorphan.gui.layout.VerticalLayout;
 /**
  * @author Administrator
  *

@@ -67,15 +67,15 @@ import javax.swing.border.EmptyBorder;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
-import org.apache.jmeter.gui.util.VerticalLayout;
 import org.apache.jmeter.protocol.java.config.JavaConfig;
 import org.apache.jmeter.protocol.java.sampler.JavaSampler;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerClient;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.ClassFinder;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.gui.layout.VerticalLayout;
+import org.jorphan.reflect.ClassFinder;
 
 
 /**
@@ -162,7 +162,9 @@ public class JavaConfigGui extends AbstractConfigGui
 			
 			// Find all the classes which implement the JavaSamplerClient interface
 		
-			possibleClasses = ClassFinder.findClassesThatExtend(new Class[]{JavaSamplerClient.class});
+			possibleClasses = ClassFinder.findClassesThatExtend(
+					JMeterUtils.getSearchPaths(),
+					new Class[]{JavaSamplerClient.class});
 			
 			// Remove the JavaConfig class from the list since it only implements the interface for
 			// error conditions.

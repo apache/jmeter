@@ -15,10 +15,10 @@ import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.ClassFinder;
-import org.apache.jmeter.util.LoggingManager;
-import org.apache.log.Hierarchy;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Logger;
+import org.jorphan.logging.LoggingManager;
+import org.jorphan.reflect.ClassFinder;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -30,7 +30,7 @@ import org.apache.log.Logger;
 
 public class JMeterTest extends TestCase
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(LoggingManager.TEST);
+	private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.TEST);
 
 	/****************************************
 	 * !ToDo (Constructor description)
@@ -138,7 +138,9 @@ public class JMeterTest extends TestCase
 	 ***************************************/
 	protected Collection getObjects(Class extendsClass) throws Exception
 	{
-		Iterator classes = ClassFinder.findClassesThatExtend(new Class[]{extendsClass}).iterator();
+		Iterator classes = ClassFinder.findClassesThatExtend(
+				JMeterUtils.getSearchPaths(),
+				new Class[]{extendsClass}).iterator();
 		List objects = new LinkedList();
 		while(classes.hasNext())
 		{

@@ -81,8 +81,8 @@ import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.gui.util.TextAreaCellRenderer;
 import org.apache.jmeter.gui.util.TextAreaTableCellEditor;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.Data;
 import org.apache.jmeter.util.JMeterUtils;
+import org.jorphan.collections.Data;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache

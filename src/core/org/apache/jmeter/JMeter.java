@@ -57,8 +57,6 @@
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.Authenticator;
 
 import org.apache.avalon.excalibur.cli.CLArgsParser;
@@ -75,14 +73,14 @@ import org.apache.jmeter.gui.action.CheckDirty;
 import org.apache.jmeter.gui.action.Load;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
-import org.apache.jmeter.gui.util.ComponentUtil;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.util.ListedHashTree;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.collections.HashTree;
+import org.jorphan.gui.ComponentUtil;
 
 /**
  * @author mstover
@@ -203,7 +201,7 @@ public class JMeter {
 			{
 				File f = new File(testFile.getArgument());
 				FileInputStream reader = new FileInputStream(f);
-				ListedHashTree tree = SaveService.loadSubTree(reader);
+				HashTree tree = SaveService.loadSubTree(reader);
 				new Load().insertLoadedTree(1,tree);
 			}
 			catch (Exception e)
@@ -335,7 +333,7 @@ public class JMeter {
 
 			reader = new FileInputStream(f);
 
-			ListedHashTree tree = SaveService.loadSubTree(reader);
+			HashTree tree = SaveService.loadSubTree(reader);
 			if(logFile != null)
 			{
 				ResultCollector logger = new ResultCollector();
