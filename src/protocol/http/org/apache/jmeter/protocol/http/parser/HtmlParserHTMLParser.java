@@ -126,7 +126,10 @@ class HtmlParserHTMLParser extends HTMLParser
                     BaseHrefTag baseHref= (BaseHrefTag)node;
                     try
                     {
-                        baseUrl= new URL(baseUrl, baseHref.getBaseUrl()+"/");
+                    	if(!baseHref.equals(""))// Bugzilla 30713
+                    	{
+                    		baseUrl= new URL(baseUrl, baseHref.getBaseUrl()+"/");
+                    	}
                     }
                     catch (MalformedURLException e1)
                     {
