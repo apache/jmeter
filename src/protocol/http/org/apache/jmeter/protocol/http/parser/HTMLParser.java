@@ -71,7 +71,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
-import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -207,21 +206,25 @@ public abstract class HTMLParser
 //////////////////////////// TEST CODE FOLLOWS /////////////////////////////
 
 
-    public static class HTMLParserTest extends JMeterTestCase
+    public static class Test extends JMeterTestCase
     {
 		private String parserName;
         private int testNumber=0;
 
-        public HTMLParserTest(String name) {
+		public Test() {
+			super();
+		}
+
+        public Test(String name) {
 			super(name);
 		}
 
-		public HTMLParserTest(String name, int test) {
+		public Test(String name, int test) {
 			super(name);
 			testNumber = test;
 		}
 
-		public HTMLParserTest(String name, String parser, int test) {
+		public Test(String name, String parser, int test) {
 			super(name);
 			testNumber = test;
 			parserName = parser;
@@ -285,20 +288,20 @@ public abstract class HTMLParser
 						 ),
         };
 
-        public static Test suite(){
+        public static junit.framework.Test suite(){
         	TestSuite suite = new TestSuite();
-        	suite.addTest(new HTMLParserTest("testDefaultParser"));
-			suite.addTest(new HTMLParserTest("testParserDefault"));
-			suite.addTest(new HTMLParserTest("testParserMissing"));
-			suite.addTest(new HTMLParserTest("testNotParser"));
-			suite.addTest(new HTMLParserTest("testNotCreatable"));
+        	suite.addTest(new Test("testDefaultParser"));
+			suite.addTest(new Test("testParserDefault"));
+			suite.addTest(new Test("testParserMissing"));
+			suite.addTest(new Test("testNotParser"));
+			suite.addTest(new Test("testNotCreatable"));
 			for (int i = 0;i<PARSERS.length;i++){
 				TestSuite ps = new TestSuite(PARSERS[i]);// Identify the subtests
-				ps.addTest(new HTMLParserTest("testParserProperty",PARSERS[i],0));
+				ps.addTest(new Test("testParserProperty",PARSERS[i],0));
 				for (int j=0;j<TESTS.length;j++){
 					TestSuite ts = new TestSuite(TESTS[j].fileName);
-					ts.addTest(new HTMLParserTest("testParserSet",PARSERS[i],j));
-					ts.addTest(new HTMLParserTest("testParserList",PARSERS[i],j));
+					ts.addTest(new Test("testParserSet",PARSERS[i],j));
+					ts.addTest(new Test("testParserList",PARSERS[i],j));
 					ps.addTest(ts);
 				}
 				suite.addTest(ps);
@@ -385,7 +388,7 @@ public abstract class HTMLParser
 		throws Exception
 		{
 			log.info("file   "+file);
-			File f= new File(file);
+			File f= findFile(file);
 			byte[] buffer= new byte[(int)f.length()];
 			int len= new FileInputStream(f).read(buffer);
 			assertEquals(len, buffer.length);
@@ -411,7 +414,7 @@ public abstract class HTMLParser
 			if (file != null && file.length() > 0){
 			  BufferedReader br = 
 			    new BufferedReader(
-			        new FileReader(new File(file)));
+			        new FileReader(findFile(file)));
 			  String line = br.readLine();
 			  while (line != null){
 				al.add(line);
@@ -420,6 +423,18 @@ public abstract class HTMLParser
 			  br.close();
 			}
 			return al;
+		}
+		// Helper method to find a file
+		private static File findFile(String file)
+		{
+			File f= new File(file);
+			if (!f.exists() && !f.isAbsolute()) // Try adding user.dir
+			{
+				//System.out.println(f.getPath()+" E="+f.exists()+" A="+f.isAbsolute());
+				f=f.getAbsoluteFile();
+				//System.out.println(f.getPath()+" E="+f.exists()+" A="+f.isAbsolute());
+			}
+			return f;
 		}
     }
 }
