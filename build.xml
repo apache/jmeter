@@ -1,58 +1,92 @@
 <project name="JMeter" default="all" basedir=".">
-<target name="init">
-<property name="build.compiler" value="classic"/>
-<!-- Where the class files should live -->
-<property name="classes.dest.dir" value="bin/classes"/>
-<!-- Where the Sources live -->
-<property name="sources.src.dir" value="src"/>
-<!-- Where the API documentation lives -->
-<property name="docs.api.dest.dir" value="docs/api"/>
-<property name="version" value="_1.5beta"/>
-</target>
-<target name="compile" depends="init">
-<mkdir dir="${classes.dest.dir}"/>
-<javac srcdir="${sources.src.dir}" 
-       destdir="${classes.dest.dir}"
-       optimize="on">
-       <exclude name="**/*.df*"/>
-       <exclude name="**/*.html"/>
-       <exclude name="**/*.tpr"/>
-       <exclude name="**/*.tws"/>
-       <exclude name="**/make*"/>
-       <exclude name="**/Makefile"/>
-       <exclude name="**/Changelog*"/>
-       <exclude name="**/*.orig"/>
-</javac>
-</target>
-<target name="api-docs" depends="init">
-<javadoc
-	sourcepath="${sources.src.dir}" 
-	destdir="${docs.api.dest.dir}"
-	private="yes" author="yes" version="yes"
-	doctitle="Apache JMeter APIs Specification"
-	footer="Copyright (c) 1998-99 The Java Apache Project" 
-	packagenames="org.apache.jmeter.*, 
+	<!--
+	- Initializes properties for other targets
+	-->
+	<target name="init">
+		<property name="build.compiler" value="classic"/>
+		<!-- Where the class files should live -->
+		<property name="classes.dest.dir" value="bin/classes"/>
+		<!-- Where the Sources live -->
+		<property name="sources.src.dir" value="src"/>
+		<!-- Where the API documentation lives -->
+		<property name="docs.api.dest.dir" value="docs/api"/>
+		<property name="version" value="_1.5beta"/>
+	</target>
+
+	<!--
+	- Compiles the source into class files - dumping results into the 
+	- bin/clases directory
+	-->
+	<target name="compile" depends="init">
+		<mkdir dir="${classes.dest.dir}"/>
+		<javac srcdir="${sources.src.dir}" 
+       			destdir="${classes.dest.dir}"
+       			optimize="on">
+       			<exclude name="**/*.df*"/>
+       			<exclude name="**/*.html"/>
+       			<exclude name="**/*.tpr"/>
+       			<exclude name="**/*.tws"/>
+       			<exclude name="**/make*"/>
+       			<exclude name="**/Makefile"/>
+       			<exclude name="**/Changelog*"/>
+       			<exclude name="**/*.orig"/>
+		</javac>
+	</target>
+
+	<!--
+	- Generates java-docs
+	-->
+	<target name="api-docs" depends="init">
+		<javadoc
+			sourcepath="${sources.src.dir}" 
+			destdir="${docs.api.dest.dir}"
+			private="yes" author="yes" version="yes"
+			doctitle="Apache JMeter APIs Specification"
+			footer="Copyright (c) 1998-99 The Java Apache Project" 
+			packagenames="org.apache.jmeter.*, 
 			org.apache.jmeter.timers.*,
 			org.apache.jmeter.visualizers.*,
 			org.apache.jmeter.samplers.*"/>
-</target>
-<target name="package" depends="compile">
-<jar jarfile="ApacheJMeter.jar" 
-	basedir="${classes.dest.dir}" manifest="src/MANIFEST"/>
-</target>
-<target name="install" depends="package">
-<copyfile src="ApacheJMeter.jar" dest="bin/ApacheJMeter.jar"/>
-<delete file="ApacheJMeter.jar"/>
-</target>
-<target name="all" depends="install"/>
-<target name="dist" depends="install">
-<jar jarfile="../ApacheJMeter${version}.jar" basedir="../" includes="jmeter/**"/>
-<zip zipfile="../ApacheJMeter${version}.zip" basedir="../" includes="jmeter/**"/>
-<tar tarfile="../ApacheJMeter${version}.tar" basedir="../" includes="jmeter/**" /> 
-<gzip zipfile="$../ApacheJMeter${version}.tar.gz" src="../ApacheJMeter${version}.tar" />
-</target> 
-<target name="clean">
-<delete file="ApacheJMeter.jar"/>
-<deltree dir="${classes.dest.dir}"/>
-</target>
+	</target>
+
+	<!--
+	- Creates the ApacheJMeter.jar file.
+	-->
+	<target name="package" depends="compile">
+		<jar jarfile="ApacheJMeter.jar" 
+			basedir="${classes.dest.dir}" manifest="src/MANIFEST"/>
+	</target>
+
+	<!--
+	- Copies the jar file to bin/ and everything else needed to run JMeter
+	- from bin/.
+	-->
+	<target name="install" depends="package">
+		<copyfile src="ApacheJMeter.jar" dest="bin/ApacheJMeter.jar"/>
+		<copyfile src="src/org/apache/jmeter/jmeter.properties" dest="bin/jmeter.properties"/>
+		<delete file="ApacheJMeter.jar"/>
+	</target>
+
+	<!--
+	- Another name for install(?)
+	-->
+	target name="all" depends="install"/>
+
+	<!--
+	- Creates the distribution packages
+	-->
+	<target name="dist" depends="install">
+		<jar jarfile="../ApacheJMeter${version}.jar" basedir="../" includes="jmeter/**"/>
+		<zip zipfile="../ApacheJMeter${version}.zip" basedir="../" includes="jmeter/**"/>
+		<tar tarfile="../ApacheJMeter${version}.tar" basedir="../" includes="jmeter/**" /> 
+		<gzip zipfile="$../ApacheJMeter${version}.tar.gz" src="../ApacheJMeter${version}.tar" />
+	</target> 
+
+	<!--
+	- Deletes old build files.
+	-->
+	<target name="clean">
+		<delete file="ApacheJMeter.jar"/>
+		<deltree dir="${classes.dest.dir}"/>
+	</target>
 </project>
