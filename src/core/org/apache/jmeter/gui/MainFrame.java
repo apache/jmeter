@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -113,7 +113,7 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 	transient private static Logger log =
 			Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 	JPanel all;
-    JPanel mainPanel;
+    private JScrollPane mainPanel;
 	Box toolPanel;
 	JScrollPane treePanel;
 	JMeterMenuBar menuBar;
@@ -273,10 +273,16 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 	 ***************************************/
 	public void setMainPanel(JComponent comp)
 	{
-        mainPanel.removeAll();
-        mainPanel.add(comp);  
-        mainPanel.validate();
-        mainPanel.repaint();  
+        // Set the preferred size to the minimum size of the component.  The
+        // scroll pane (mainPanel) will always try to put the component at its
+        // preferred size (but allow it to grow larger if there is extra space).
+        // We don't want the scroll bars to show up until the component has
+        // shrunk as much as it can -- to its minimum size.  That way, if the
+        // component contains its own scroll panes, then those will get used
+        // and the mainPanel scroll bars won't show up unless the component is
+        // still too large for the area.
+        comp.setPreferredSize(comp.getMinimumSize());
+        mainPanel.setViewportView(comp);
 	}
 
 	/****************************************
@@ -406,7 +412,7 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 
 	private void createMainPanel()
 	{
-		mainPanel = new JPanel(new GridLayout(1,1));
+        mainPanel = new JScrollPane();
 	}
 
 	private JTree makeTree()
