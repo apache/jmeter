@@ -21,7 +21,6 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testelement.PerSampleClonable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jorphan.collections.HashTree;
@@ -296,9 +295,9 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
             assertEquals("A test value", sampler.getPropertyAsString("test.property"));
         }
 
-        class TestSampler extends AbstractSampler implements PerSampleClonable
+        class TestSampler extends AbstractSampler
         {
-            public org.apache.jmeter.samplers.SampleResult sample(org.apache.jmeter.samplers.Entry e)
+            public SampleResult sample(org.apache.jmeter.samplers.Entry e)
             {
                 return null;
             }

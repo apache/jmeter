@@ -62,7 +62,6 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.PerSampleClonable;
 
 /************************************************************
  *  A sampler which understands FTP file requests
@@ -72,7 +71,7 @@ import org.apache.jmeter.testelement.PerSampleClonable;
  *@version    $Revision$
  ***********************************************************/
 
-public class FTPSampler extends AbstractSampler implements PerSampleClonable {
+public class FTPSampler extends AbstractSampler {
 	public final static String SERVER = "FTPSampler.server";
 	public final static String FILENAME = "FTPSampler.filename";
 
