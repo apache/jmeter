@@ -57,8 +57,6 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
-import junit.framework.TestSuite;
-
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.samplers.Sampler;
