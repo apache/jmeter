@@ -186,7 +186,9 @@ public class AccessLogSamplerGui
 			int port = Integer.parseInt(PORT.getText());
 			return port;
 		} catch (NumberFormatException exception){
-			exception.printStackTrace();
+                        // since we return 80, there's not point
+                        // in printing out the stack trace or 
+                        // an exception.
 			return 80;
 		}
 	}
