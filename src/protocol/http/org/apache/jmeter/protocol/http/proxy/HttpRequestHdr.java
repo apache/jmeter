@@ -166,6 +166,9 @@ public class HttpRequestHdr
     public HTTPSampler getSampler()
         throws MalformedURLException, IOException, ProtocolException
     {
+    	// Damn! A whole new GUI just to instantiate a test element?
+    	// This also seems to be the cause for bug#24704, which is VERY anoying.
+    	// Isn't there a beter way? 
         HttpTestSampleGui tempGui = new HttpTestSampleGui();
         tempGui.configure(createSampler());
         HTTPSampler result = (HTTPSampler) tempGui.createTestElement();
