@@ -34,8 +34,10 @@ public class RunTime extends GenericController implements Serializable
     //NOTUSED private static Logger log = LoggingManager.getLoggerForClass();
 
     private final static String SECONDS = "RunTime.seconds";
-    private long startTime = 0;
+    private volatile long startTime = 0;
 
+	private int loopCount = 0; // for getIterCount
+	
     public RunTime()
     {
     }
@@ -72,13 +74,13 @@ public class RunTime extends GenericController implements Serializable
      */
     public boolean isDone()
     {
-        if (System.currentTimeMillis()-startTime < 1000*getRuntime())
+        if (getRuntime() > 0 && getSubControllers().size() > 0)
         {
             return super.isDone();
         }
         else
         {
-            return true;
+            return true; // Runtime is zero - no point staying around
         }
     }
 
@@ -87,6 +89,11 @@ public class RunTime extends GenericController implements Serializable
         return System.currentTimeMillis()-startTime >= 1000*getRuntime();
     }
 
+	public Sampler next()
+	{
+		if (startTime == 0) startTime=System.currentTimeMillis();
+		return super.next();
+	}
     /* (non-Javadoc)
      * @see org.apache.jmeter.control.GenericController#nextIsNull()
      */
@@ -95,7 +102,7 @@ public class RunTime extends GenericController implements Serializable
         reInitialize();
         if (endOfLoop())
         {
-            setDone(true);
+            resetLoopCount();
             return null;
         }
         else
@@ -104,8 +111,27 @@ public class RunTime extends GenericController implements Serializable
         }
     }
 
-	protected void resetIterCount()
+	protected void incrementLoopCount()
 	{
-		startTime=System.currentTimeMillis();
+		loopCount++;
+	}
+	protected void resetLoopCount()
+	{
+		loopCount=0;
+		startTime=0;
+	}
+	/*
+	 * This is needed for OnceOnly to work like other Loop Controllers
+	 */
+	protected int getIterCount()
+	{
+		return loopCount + 1;
+	}
+	protected void reInitialize()
+	{
+		setFirst(true);
+		resetCurrent();
+		incrementLoopCount();
+        recoverRunningVersion();
 	}
 }

@@ -142,34 +142,6 @@ public class ModuleControllerGui
         nodesModel = new DefaultComboBoxModel();
         nodes = new JComboBox(nodesModel);
         reinitialize();
-        
-		/* This listener subscription prevents freeing up the GUI when it's no longer in use
-		 * (e.g. on locale change)...
-		 * ... plus I don't think it's really necessary: configure(TestElement) already takes
-		 * care of reinitializing the target combo when we come back to it. And I can't see how
-		 * the tree can change in a relevant way without we leaving this GUI.
-		 * I'll comment it out for the time being:
-		 * TODO: remove once we're convinced it's really unnecessary.
-		 */
-        /*try
-        {
-            Class addToTree =
-                Class.forName("org.apache.jmeter.gui.action.AddToTree");
-            Class remove = Class.forName("org.apache.jmeter.gui.action.Remove");
-            ActionListener listener = new ActionListener()
-            {
-                public void actionPerformed(ActionEvent e)
-                {
-                    reinitialize();
-                }
-            };
-            ActionRouter ar = ActionRouter.getInstance();
-            ar.addPostActionListener(addToTree, listener);
-            ar.addPostActionListener(remove, listener);
-        }
-        catch (ClassNotFoundException e)
-        {
-        }*/
         modulesPanel.add(nodes);
         add(modulesPanel);
     }

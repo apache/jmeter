@@ -182,8 +182,12 @@ public class PackageTest extends JMeterTestCase
     	    fail("Expected InvalidVariableException");
 		}  	catch (InvalidVariableException e) {}
 		
-		bsh = BSHFParams("","",null);
-		assertEquals("",bsh.execute());
+		try {
+			bsh = BSHFParams("","",null);
+			assertEquals("",bsh.execute());
+		} catch (InvalidVariableException e) {
+			fail("BeanShell not present");
+		}
 		
 		bsh = BSHFParams("1",null,null);
 		assertEquals("1",bsh.execute());

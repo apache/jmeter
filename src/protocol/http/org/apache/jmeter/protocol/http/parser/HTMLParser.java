@@ -338,11 +338,11 @@ public abstract class HTMLParser
                      "testfiles/HTMLScript.all"
                      ),
             new TestData(
-                     "testfiles/HTMLParserTestCaseFrames.html",
-                     "http://localhost/",
-                     "testfiles/HTMLParserTestCaseFrames.set",
-                     "testfiles/HTMLParserTestCaseFrames.all"
-                     ),
+		                 "testfiles/HTMLParserTestFrames.html",
+		                 "http://localhost/",
+		                 "testfiles/HTMLParserTestFrames.all",
+		                 "testfiles/HTMLParserTestFrames.all"
+		                 ),
         };
 
         public static junit.framework.Test suite(){

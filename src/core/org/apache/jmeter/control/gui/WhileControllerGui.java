@@ -137,7 +137,7 @@ public class WhileControllerGui extends AbstractControllerGui
 		conditionPanel.add(conditionLabel, BorderLayout.WEST);
 
 		// TEXT FIELD
-		theCondition = new JTextField("N/A");
+		theCondition = new JTextField(""); // This means exit if last sample failed
 		theCondition.setName(CONDITION);
 		conditionLabel.setLabelFor(theCondition);
 		conditionPanel.add(theCondition, BorderLayout.CENTER);

@@ -214,32 +214,26 @@ public class JMeterThread implements Runnable, java.io.Serializable
         this.threadName = threadName;
     }
 
+	/*
+	 * See below for reason for this change.
+	 * Just in case this causes problems, allow the change to be backed out
+	*/
+	private static final boolean startEarlier =
+		org.apache.jmeter.util.JMeterUtils.getPropDefault("jmeterthread.startearlier",true);
+	
+	static{
+		if (startEarlier){
+			log.warn("jmeterthread.startearlier=true (see jmeter.properties)");
+		} else {
+			log.info("jmeterthread.startearlier=false (see jmeter.properties)");			
+		}
+	}
+	
     public void run()
     {
         try
         {
-            JMeterContextService.incrNumberOfThreads();
-            threadContext = JMeterContextService.getContext();
-            threadContext.setVariables(threadVars);
-            threadContext.setThreadNum(getThreadNum());
-            threadContext.getVariables().put(LAST_SAMPLE_OK,"true");
-            threadContext.setThread(this);
-            testTree.traverse(compiler);
-            //listeners = controller.getListeners();
-
-            if (scheduler)
-            {
-                //set the scheduler to start
-                startScheduler();
-            }
-
-			rampUpDelay();
-            
-            log.info("Thread " + Thread.currentThread().getName() + " started");
-            controller.initialize();
-            controller.addIterationListener(new IterationListener());
-            threadContext.setSamplingStarted(true);
-            threadStarted();
+            initRun();
             while (running)
             {
                 Sampler sam;
@@ -316,6 +310,12 @@ public class JMeterThread implements Runnable, java.io.Serializable
         {
             log.error("Test failed!", e);
         }
+		catch (ThreadDeath e){
+			throw e; // Must not ignore this one
+		}
+		catch (Error e){// Make sure errors are output to the log file
+			log.error("Test failed!", e);
+		}
         finally
         {
             threadContext.clear();
@@ -323,6 +323,38 @@ public class JMeterThread implements Runnable, java.io.Serializable
             monitor.threadFinished(this);
             threadFinished();
         }
+    }
+
+    /**
+     * 
+     */
+    protected void initRun()
+    {
+        JMeterContextService.incrNumberOfThreads();
+        threadContext = JMeterContextService.getContext();
+        threadContext.setVariables(threadVars);
+        threadContext.setThreadNum(getThreadNum());
+        threadContext.getVariables().put(LAST_SAMPLE_OK,"true");
+        threadContext.setThread(this);
+        testTree.traverse(compiler);
+        //listeners = controller.getListeners();
+        if (scheduler)
+        {
+            //set the scheduler to start
+            startScheduler();
+        }
+        rampUpDelay();
+        log.info("Thread " + Thread.currentThread().getName() + " started");
+        /*
+         *  Setting SamplingStarted before the contollers are initialised
+         *  allows them to access the running values of functions and variables
+         *  (however it does not seem to help with the listeners)
+         */
+        if (startEarlier) threadContext.setSamplingStarted(true);
+        controller.initialize();
+        controller.addIterationListener(new IterationListener());
+        if (!startEarlier) threadContext.setSamplingStarted(true);
+        threadStarted();
     }
 
 	/**

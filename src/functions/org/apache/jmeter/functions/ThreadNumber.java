@@ -42,7 +42,7 @@ public class ThreadNumber implements Function, Serializable
         throws InvalidVariableException
     {
         return Thread.currentThread().getName().substring(
-            Thread.currentThread().getName().indexOf("-") + 1);
+            Thread.currentThread().getName().lastIndexOf("-") + 1);
     }
 
     /* (non-Javadoc)
