@@ -876,16 +876,9 @@ some of its classes - at present JMeter can only run from jar files.
     <property name="assuming.libs.present" value="true"/>
     <property name="jsse.present" value="assume"/>
     <property name="javamail.complete" value="assume"/>
-    <!-- Test: while Gump builds are being sorted out
     <property name="beanshell.present" value="assume"/>
-    -->
-    <!-- Check for Gump option depends -->
-    <available classname="bsh.Interpreter" property="beanshell.present">
-      <classpath refid="classpath"/>
-    </available>
-    <available classname="org.apache.bsf.BSFManager" property="bsf.present">
-      <classpath refid="classpath"/>
-    </available>
+    <property name="bsf.present" value="assume"/>
+    <property name="jms.present" value="assume"/>
   </target>
 
   <!-- list of files needed for a binary distribution -->
