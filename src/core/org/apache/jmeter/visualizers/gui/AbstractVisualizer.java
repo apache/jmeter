@@ -1,7 +1,6 @@
 package org.apache.jmeter.visualizers.gui;
 import java.awt.Component;
 import java.awt.FlowLayout;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -12,7 +11,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.util.FilePanel;
@@ -96,6 +94,14 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
     {
         log.info("getting new collector");
         collector = (ResultCollector) createTestElement();
+        try
+        {
+            collector.loadExistingFile();
+        }
+        catch(Exception err)
+        {
+            log.debug("Error occurred while loading file",err);
+        }
     }
 
     /****************************************
@@ -129,25 +135,7 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
         {
             ResultCollector rc = (ResultCollector) c;
             rc.setErrorLogging(errorLogging.isSelected());
-            try
-            {
-                if (!getFile().equals(""))
-                {
-                    try
-                    {
-                        rc.setFilename(getFile());
-                    }
-                    catch (IllegalUserActionException e)
-                    {
-                        JMeterUtils.reportErrorToUser(e.getMessage());
-                        setFile("");
-                    }
-                }
-            }
-            catch (IOException e)
-            {
-                log.error("", e);
-            }
+            rc.setFilename(getFile());
             collector = rc;
         }
     }

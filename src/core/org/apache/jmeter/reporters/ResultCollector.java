@@ -75,7 +75,6 @@ import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
 import org.apache.jmeter.engine.event.IterationEvent;
 import org.apache.jmeter.engine.util.NoThreadClone;
-import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.SampleEvent;
@@ -84,7 +83,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.io.TextFile;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
@@ -152,26 +150,13 @@ public class ResultCollector extends AbstractListenerElement
      *
      * @param f The new filename value.
      */
-    public void setFilename(String f) throws IOException, IllegalUserActionException
+    public void setFilename(String f)
     {
         if (inTest)
         {
-            throw new IllegalUserActionException(JMeterUtils.getResString("busy_testing"));
+            return;
         }
-        try
-        {
-            setFilenameProperty(f);
-            loadExistingFile();
-        }
-        catch (SAXException e)
-        {
-            log.error("", e);
-            throw new IOException("File " + f + " was improperly formatted");
-        }
-        catch (ConfigurationException e)
-        {
-            throw new IOException("File " + f + " was improperly formatted");
-        }
+        setFilenameProperty(f);
     }
 
     public void testEnded(String host)
@@ -213,11 +198,10 @@ public class ResultCollector extends AbstractListenerElement
         inLoading = true;
         if (new File(getFilename()).exists())
         {
-            clear();
             try
             {
                 Configuration savedSamples = getConfiguration(getFilename());
-
+                clear();
                 readSamples(savedSamples);
             }
             catch (Exception e)
