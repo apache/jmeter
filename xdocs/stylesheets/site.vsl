@@ -127,8 +127,89 @@
 	 </div>
 #end
 
+#macro (properties $properties)
+<p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+	#foreach ($items in $properties.getChildren("property"))
+		<tr>
+			<td>$items.getAttributeValue("name")</td>
+			<td>$xmlout.outputString($items,true)</td>
+			<td>
+					#if($items.getAttributeValue("required") != "")
+						$items.getAttributeValue("required")
+					#else
+						No
+					#end
+			</td>
+		</tr>
+	#end
+	</table>
+	</p>
+#end
+
+#macro (seeAlso $seeAlso)
+	<p><b>See Also:</b>
+	<br/>
+	#foreach ($items in $seeAlso.getChildren("link"))
+		<a href="$items.getAttributeValue("href")">$xmlout.outputString($items,true)</a>,
+	#end
+	</p>
+#end
+
+#macro (figure $figure)
+	<table border="0" cellspacing="0" cellpadding="0"><tr><td><img src="$figure.getAttributeValue("image")"><br/>
+	<font size="-1">$xmlout.outputString($figure,true)</font></td></tr></table>
+#end
+
+#macro (example $example)
+	<a name="$example.getAttributeValue("anchor")"/>
+	<p><b>$example.getAttributeValue("title")</b></p>
+	#foreach ($items in $example.getChildren())
+		#if ($items.getName().equals("figure"))
+			#figure ($items)
+		#else
+			$xmlout.outputString($items)
+		#end
+	#end
+#end
+
+#macro ( component $component)
+	#set ($screenshot = "")
+	#set ($screenshot = $component.getAttributeValue("screenshot") )
+	<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="$component.getAttributeValue("anchor")"><h3>$component.getAttributeValue("name")</h3></a>
+		  </font>
+		</td></tr>
+		<tr><td>
+		  #foreach ( $items in $component.getChildren() )
+				#if ($items.getName().equals("description"))
+					$xmlout.outputString($items,true)
+					<p><b>Control Panel</b></p>
+					#if ($screenshot != "")
+						<div align="center"><img src="$screenshot"></div>
+					#end
+				#elseif ($items.getName().equals("links"))
+					 #seeAlso ($items)
+				#elseif ($items.getName().equals("properties"))
+					 #properties ($items)
+				#elseif ($items.getName().equals("example"))
+					#example ($items)
+				#else
+					 $xmlout.outputString($items)
+				#end
+		  #end
+		</td></tr>
+		<tr><td><br/></td></tr>
+	 </table>
+	<hr>
+#end
+
 #macro ( subsection $subsection)
-	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+	 <table border="0" cellspacing="0" cellpadding="2">
 		<tr><td bgcolor="$subbannerbg">
 		  <font color="$subbannerfg" face="arial,helvetica,sanserif">
 			 <a name="$subsection.getAttributeValue("anchor")"><strong>$subsection.getAttributeValue("name")</strong></a>
@@ -143,6 +224,8 @@
 					 #source ($items)
 				#elseif ($items.getName().equals("table"))
 					 #table ($items)
+				#elseif ($items.getName().equals("component"))
+					#component($items)
 				#else
 					 $xmlout.outputString($items)
 				#end
@@ -171,6 +254,8 @@
 					 #table ($items)
 				#elseif ($items.getName().equals("subsection"))
 					 #subsection ($items)
+				#elseif ($items.getName().equals("component"))
+					#component($items)
 				#else
 					 $xmlout.outputString($items)
 				#end
