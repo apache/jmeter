@@ -58,14 +58,41 @@ import java.io.Serializable;
 
 public class DBKey implements Serializable
 {
+    private final String driver;
+    private final String url;
+    private final String username;
+    private final String password;
 
-    public DBKey()
-    {
-    }
+    /**
+     * Cache for the hashCode value since this class will frequently be used
+     * as a Map key.
+     */ 
+    private transient int hashCode = 0;
 
-    public void setUrl(String newUrl)
+    
+    public DBKey(
+        String driver,
+        String url,
+        String username,
+        String password)
     {
-        url = newUrl;
+        if (driver == null)
+        {
+            throw new IllegalArgumentException(
+                    "DBKey 'driver' must be non-null");
+        }
+
+        if (url == null)
+        {
+            throw new IllegalArgumentException("DBKey 'url' must be non-null");
+        }
+
+        // Other fields are allowed to be null
+        
+        this.driver = driver;
+        this.url = url;
+        this.username = username;
+        this.password = password;
     }
 
     public String getUrl()
@@ -73,19 +100,9 @@ public class DBKey implements Serializable
         return url;
     }
 
-    public void setUsername(String newUsername)
-    {
-        username = newUsername;
-    }
-
     public String getUsername()
     {
         return username;
-    }
-
-    public void setPassword(String newPassword)
-    {
-        password = newPassword;
     }
 
     public String getPassword()
@@ -93,56 +110,95 @@ public class DBKey implements Serializable
         return password;
     }
 
-    public void setDriver(String newDriver)
-    {
-        driver = newDriver;
-    }
-
     public String getDriver()
     {
         return driver;
     }
 
-    public void setMaxUsage(int newMaxUsage)
-    {
-        maxUsage = newMaxUsage;
-    }
-
-    public int getMaxUsage()
-    {
-        return maxUsage;
-    }
-
-    public void setMaxConnections(int newMaxConnections)
-    {
-        maxConnections = newMaxConnections;
-    }
-
-    public int getMaxConnections()
-    {
-        return maxConnections;
-    }
-
     /**
      * Determines if the two DBKey objects have the same property values.
-     * @param key DBKey to compare with this one.
+     * @param o2 DBKey to compare with this one.
      * @return bool True if equal, false otherwise.
      */
-    public boolean equals(Object key)
+    public boolean equals(Object o2)
     {
-        if (key instanceof DBKey)
+        if (this == o2)
         {
-            return url.equals(((DBKey) key).getUrl());
+            return true;
         }
-        else
+        
+        if (!(o2 instanceof DBKey))
         {
             return false;
         }
+        
+        DBKey key = (DBKey)o2;
+        
+        if (!driver.equals(key.driver))
+        {
+            return false;
+        }
+        
+        if (!url.equals(key.url))
+        {
+            return false;
+        }
+        
+        if (username == null)
+        {
+            if (key.username != null)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (!username.equals(key.username))
+            {
+                return false;
+            }
+        }
+        
+        if (password == null)
+        {
+            if (key.password != null)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (!password.equals(key.password))
+            {
+                return false;
+            }
+        }
+        
+        return true;
     }
 
     public int hashCode()
     {
-        return url.hashCode() * 11;
+        if (hashCode == 0)
+        {
+            hashCode = calculateHashCode();
+        }
+        return hashCode;
+    }
+    
+    private int calculateHashCode()
+    {
+        // Implementation based on Joshua Bloch's _Effective Java_
+        // http://developer.java.sun.com/developer/Books/effectivejava/Chapter3.pdf
+        int c;
+        int result = 17;
+        
+        result = 37 * result + driver.hashCode();
+        result = 37 * result + url.hashCode();
+        result = 37 * result + (username == null ? 0 : username.hashCode());
+        result = 37 * result + (password == null ? 0 : password.hashCode());
+        
+        return result;
     }
 
     public String toString()
@@ -152,19 +208,7 @@ public class DBKey implements Serializable
         ret.append("driver=" + driver + "\n");
         ret.append("url=" + url + "\n");
         ret.append("username=" + username + "\n");
-        ret.append("Number of connections=" + maxConnections + "\n");
-        ret.append(
-            "Max times each connection used before renewing="
-                + maxUsage
-                + "\n");
         ret.append(")");
         return ret.toString();
     }
-
-    private String url;
-    private String username;
-    private String password;
-    private String driver;
-    private int maxUsage;
-    private int maxConnections;
 }
