@@ -58,6 +58,8 @@ package org.apache.jmeter.util;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import junit.framework.TestCase;
+
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -92,6 +94,7 @@ public class BeanShellServer implements Runnable {
     	serverport=0;
     	serverfile="";
     }
+    // For use by the server script
 	private static String getprop(String s){
 		return JMeterUtils.getPropDefault(s,s);
 	}
@@ -138,7 +141,8 @@ public class BeanShellServer implements Runnable {
 					if (t != null) log.warn(t.toString());
 				}
 			}
-			eval.invoke(instance, new Object[]{"server(portnum)"});
+			eval.invoke(instance, new Object[]{"setAccessibility(true);"});
+			eval.invoke(instance, new Object[]{"server(portnum);"});
 
 		}
 		catch(ClassNotFoundException e ){
@@ -149,5 +153,29 @@ public class BeanShellServer implements Runnable {
 			log.error("Problem starting BeanShell server ",e);
 		}
 	}
+	public static class BeanShellServerTest extends TestCase
+	{
+		//private static Logger log = LoggingManager.getLoggerForClass();
 
+		public BeanShellServerTest()
+		{
+			super();
+		}
+
+        public void testServer() throws Exception
+        {
+        	BeanShellServer bshs = new BeanShellServer(9876,"");
+        	assertNotNull(bshs);
+        	// Not sure we can test anything else here
+        }
+        
+		public void testProps() throws Exception
+		{
+			if (JMeterUtils.getJMeterProperties() != null){//Can't test standalone
+			assertNotNull("Property user.dir should not be null",getprop("user.dir"));
+			setprop("beanshelltest","xyz");
+			assertEquals("xyz",getprop("beanshelltest"));
+			}
+		}
+	}
 }
