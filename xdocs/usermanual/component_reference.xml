@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<document index="yes" index-level-2="yes" colbreak="13.5" prev="boss.html" next="functions.html" date="$Date$">
+<document index="yes" index-level-2="yes" colbreak="13.5"
+  prev="boss.html" next="functions.html" date="$Date$">
 
 <properties>
   <title>User's Manual: Component Reference</title>
@@ -7,6 +8,15 @@
 
 <body>
 
+<!--
+	Because this is an XML document, all tags must be properly closed, including ones
+	which are passed unchanged into the HTML output, e.g. <br/>, not just <br>.
+	
+	Unfortunately Java does not currently allow for this - it outputs the trailing > -
+	which messes up the Help display. 
+	To avoid these artefacts, use the form <br></br>, which Java does seem to handle OK.
+
+ -->
 
 <section name="13.1 Samplers" anchor="samplers">
 
@@ -327,7 +337,7 @@ requests per thread. See the table below for the sequence JMeter sends the HTTP 
 <tr valign="top"><td>2</td><td>Log Page</td></tr>
 <tr valign="top"><td>3</td><td>Gump Page</td></tr>
 <tr valign="top"><td>2</td><td>Log Page</td></tr>
-<tr valign="top"><td>4</td><td>Because there are no more requests in the controller,<br/> JMeter starts over and sends the first HTTP Request, which is the News Page.</td></tr>
+<tr valign="top"><td>4</td><td>Because there are no more requests in the controller,<br> </br> JMeter starts over and sends the first HTTP Request, which is the News Page.</td></tr>
 <tr valign="top"><td>2</td><td>Log Page</td></tr>
 <tr valign="top"><td>5</td><td>FAQ Page</td></tr>
 <tr valign="top"><td>2</td><td>Log Page</td></tr>
@@ -758,7 +768,7 @@ be able to run it.  However, you can use it as a reference in constructing your 
 
 <component index="13.4.2" name="HTTP Cookie Manager" screenshot="http-config/http-cookie-manager.gif">
 
-<description><p>The Cookie Manager element has two functions:<br/>
+<description><p>The Cookie Manager element has two functions:<br></br>
 First, it stores and sends cookies just like a web browser. If you have an HTTP Request and
 the response contains a cookie, the Cookie Manager automatically stores that cookie and will
 use it for all future requests to that particular web site.  Each JMeter thread has its own
@@ -1170,10 +1180,10 @@ parameter to the requests list of arguments.</p>
 <note>The value of the argument in your HTTP Request must be a '*' in order for the HTML Parameter Mask
 Modifier to replace it.</note>
 <p>As an example, the username for a login script could be modified to send a series of values
-such as:<br/>
-user_1<br/>
-user_2<br/>
-user_3<br/>
+such as:<br></br>
+user_1<br></br>
+user_2<br></br>
+user_3<br></br>
 user_4, etc.</p></description>
 
 <properties>
@@ -1396,7 +1406,7 @@ replacement string") parsed by this function</li>
         <property name="Fourth argument" required="No">If 'ALL' was selected for the above argument
         value, then this argument will be inserted between each appended copy of the template value.</property>
         <property name="Fifth argument" required="No">Default value returned if no match is found</property>
-    <property name="Sixth argument" required="No">A reference name for reusing the values parsed by this function.<br/>
+    <property name="Sixth argument" required="No">A reference name for reusing the values parsed by this function.<br></br>
         Stored values are ${refName} (the replacement template string) and ${refName_g#} where "#" is the
         group number from the regular expression ("0" can be used to refer to the entire match).</property>
 </properties>
@@ -1413,7 +1423,7 @@ counting how many times that request was run.</p></description>
         <property name="First argument" required="Yes">TRUE if you wish each simulated user's counter
         to be kept independent and separate from the other users.  FALSE for a global counter.</property>
 
-<property name="Second argument" required="No">A reference name for reusing the value created by this function.<br/>
+<property name="Second argument" required="No">A reference name for reusing the value created by this function.<br></br>
                 Stored values are of the form ${refName}.  This allows you to keep one counter and refer to its value in
                 multiple places.</property>
 </properties>
