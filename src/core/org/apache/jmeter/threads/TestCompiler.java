@@ -391,12 +391,12 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 		while(iter.hasNext())
 		{
 			ConfigTestElement config = (ConfigTestElement)iter.next();
-			config = (ConfigTestElement)cloneIfNecessary(config);
+			TestElement clonedConfig = (TestElement)cloneIfNecessary(config);
 			if(objectsWithFunctions.contains(config))
 			{
-				replaceValues(config);
+				replaceValues(clonedConfig);
 			}
-			sam.addTestElement(config);
+			sam.addTestElement(clonedConfig);
 		}
 	}
 	
@@ -406,12 +406,12 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 		while(iter.hasNext())
 		{
 			Modifier mod = (Modifier)iter.next();
-			mod = (Modifier)cloneIfNecessary(mod);
+			TestElement cloned = (TestElement)cloneIfNecessary(mod);
 			if(objectsWithFunctions.contains(mod))
 			{
-				replaceValues((TestElement)mod);
+				replaceValues(cloned);
 			}
-			mod.modifyEntry(sam);
+			((Modifier)cloned).modifyEntry(sam);
 		}
 	}
 	
@@ -421,14 +421,14 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 		while(iter.hasNext())
 		{
 			ResponseBasedModifier mod = (ResponseBasedModifier)iter.next();
-			mod = (ResponseBasedModifier)cloneIfNecessary(mod);
+			TestElement cloned = (TestElement)cloneIfNecessary(mod);
 			if(objectsWithFunctions.contains(mod))
 			{
-				replaceValues((TestElement)mod);
+				replaceValues(cloned);
 			}
 			if(previousResult != null)
 			{
-				mod.modifyEntry(sam,previousResult);
+				((ResponseBasedModifier)cloned).modifyEntry(sam,previousResult);
 			}
 		}
 	}
@@ -451,35 +451,35 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 		while(iter.hasNext())
 		{
 			Assertion assertion = (Assertion)iter.next();
-			assertion = (Assertion)cloneIfNecessary(assertion);
+			TestElement cloned = (TestElement)cloneIfNecessary(assertion);
 			if(objectsWithFunctions.contains(assertion))
 			{
-				replaceValues((TestElement)assertion);
+				replaceValues(cloned);
 			}
-			ret.addAssertion(assertion);
+			ret.addAssertion((Assertion)cloned);
 		}
 		iter = configs.getTimers().iterator();
 		while(iter.hasNext())
 		{
 			Timer timer = (Timer)iter.next();
-			timer = (Timer)cloneIfNecessary(timer);
+			TestElement cloned = (TestElement)cloneIfNecessary(timer);
 			if(objectsWithFunctions.contains(timer))
 			{
-				replaceValues((TestElement)timer);
+				replaceValues(cloned);
 			}
-			ret.addTimer(timer);
+			ret.addTimer((Timer)cloned);
 		}
 		
 		iter = configs.getListeners().iterator();
 		while(iter.hasNext())
 		{
 			SampleListener lis = (SampleListener)iter.next();
-			lis = (SampleListener)cloneIfNecessary(lis);
+			TestElement cloned = (TestElement)cloneIfNecessary(lis);
 			if(objectsWithFunctions.contains(lis))
 			{
-				replaceValues((TestElement)lis);
+				replaceValues(cloned);
 			}
-			ret.addSampleListener(lis);
+			ret.addSampleListener((SampleListener)cloned);
 		}
 	}
 	

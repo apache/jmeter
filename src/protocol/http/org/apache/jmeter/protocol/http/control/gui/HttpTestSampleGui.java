@@ -164,7 +164,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
 		mainPanel.add(titlePanel,BorderLayout.NORTH);
 
 		// URL CONFIG
-		urlConfigGui = new MultipartUrlConfigGui(false);
+		urlConfigGui = new MultipartUrlConfigGui();
 		mainPanel.add(urlConfigGui,BorderLayout.CENTER);
 
 		// OPTIONAL TASKS
