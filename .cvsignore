@@ -8,3 +8,4 @@ printable_docs
 jmeter-fb.*
 .classpath
 .project
+.externalToolBuilders
