@@ -218,11 +218,17 @@
   <target name="compile-rmi" depends="compile-jorphan,compile-core" description="Compile RMI stubs and skeletons.">
     <rmic base="${build.core}" classname="org.apache.jmeter.engine.RemoteJMeterEngineImpl">
       <classpath>
+        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement path="${build.core}"/>
       </classpath>
     </rmic>
-    <rmic classpath="${build.core}" base="${build.core}" classname="org.apache.jmeter.samplers.RemoteSampleListenerImpl"/>
+    <rmic base="${build.core}" classname="org.apache.jmeter.samplers.RemoteSampleListenerImpl">
+      <classpath>
+        <path refid="classpath"/>
+        <pathelement path="${build.core}"/>
+      </classpath>
+    </rmic>
   </target>
 
   <target name="compile" depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi" description="Compile everything."/>
