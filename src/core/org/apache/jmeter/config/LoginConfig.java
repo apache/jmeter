@@ -110,4 +110,9 @@ public class LoginConfig extends ConfigTestElement implements Serializable
     {
         return getPropertyAsString(ConfigTestElement.PASSWORD);
     }
+    
+    public String toString()
+    {
+        return getUsername() + "=" + getPassword();
+    }
 }
