@@ -395,8 +395,11 @@ public class ResultCollector extends AbstractListenerElement
             {
                 if (SaveService.getOutputFormat() == SaveService.SAVE_AS_CSV)
                 {
-                    String savee = SaveService.resultToDelimitedString(result);
-                    out.println(savee);
+                    if (out != null) {
+                        String savee =
+                                SaveService.resultToDelimitedString(result);
+                        out.println(savee);
+                    }
                 }
                 // Save results as XML
                 else

@@ -963,6 +963,7 @@ public class HTTPSampler extends AbstractSampler
                     SampleResult redirectResult = redirect.sample(redirects + 1);
                     res.addSubResult(redirectResult);
                     res.setResponseData(redirectResult.getResponseData());
+                    res.setSuccessful(redirectResult.isSuccessful());
                     time += redirectResult.getTime();
                 }
             }
