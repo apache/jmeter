@@ -114,7 +114,6 @@ public class Proxy extends Thread
             */
             headers = request.getHeaderManager();
             sampler.setHeaderManager(headers);
-
             result = sampler.sample();
             writeToClient(
                 result,
@@ -167,7 +166,8 @@ public class Proxy extends Thread
     {
         try
         {
-        	out.write((res.getResponseHeaders()+"\n").getBytes());
+            String responseHeaders = massageResponseHeaders(res,res.getResponseHeaders());
+        	out.write((responseHeaders+"\n").getBytes());
             out.write(res.getResponseData());
             out.flush();
             log.debug("Done writing to client");
@@ -188,6 +188,30 @@ public class Proxy extends Thread
                 log.warn("Error while closing socket", ex);
             }
         }
+    }
+    
+    /**
+     * In the event the content was gzipped and unpacked, the content-encoding header must be
+     * removed and the content-length header should be corrected.
+     * @param res
+     * @param headers
+     * @return
+     */
+    private String massageResponseHeaders(SampleResult res,String headers)
+    {
+        int encodingHeaderLoc = headers.indexOf(": gzip");
+        String newHeaders = headers;
+        if(encodingHeaderLoc > -1)
+        {
+            int end = headers.indexOf("\n",encodingHeaderLoc);
+            int begin = headers.lastIndexOf("\n",encodingHeaderLoc);
+            newHeaders = newHeaders.substring(0,begin) + newHeaders.substring(end);
+            int lengthIndex = newHeaders.indexOf("ength: ");
+            end = newHeaders.indexOf("\n",lengthIndex);
+            newHeaders = newHeaders.substring(0,lengthIndex+7) + res.getResponseData().length +
+            		newHeaders.substring(end);
+        }
+        return newHeaders;
     }
 
     /**

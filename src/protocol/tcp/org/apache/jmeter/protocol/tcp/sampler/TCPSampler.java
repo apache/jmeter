@@ -54,6 +54,7 @@ public class TCPSampler extends AbstractSampler implements TestListener
 	public final static String CLASSNAME  = "TCPSampler.classname";//$NON-NLS-1$
 	public final static String NODELAY    = "TCPSampler.nodelay";  //$NON-NLS-1$
 	public final static String TIMEOUT    = "TCPSampler.timeout";  //$NON-NLS-1$
+	public final static String REQUEST    = "TCPSampler.request";  //$NON-NLS-1$
 
 	private final static String TCPKEY = "TCP"; //$NON-NLS-1$ key for HashMap
 	private final static String ERRKEY = "ERR"; //$NON-NLS-1$ key for HashMap
@@ -67,9 +68,12 @@ public class TCPSampler extends AbstractSampler implements TestListener
 		}
 	};
 
+	private transient TCPClient protocolHandler;
+	
 	public TCPSampler()
 	{
 		log.debug("Created "+this);
+		protocolHandler=getProtocol();
 	}
 
 	private String getError(){
@@ -147,6 +151,17 @@ public class TCPSampler extends AbstractSampler implements TestListener
 	}
 
 
+	public void setRequestData(String newRequestData)
+	{
+		this.setProperty(REQUEST, newRequestData);
+	}
+	
+	public String getRequestData()
+	{
+		return getPropertyAsString(REQUEST);
+	}
+
+
 	public void setTimeout(String newTimeout)
 	{
 		this.setProperty(FILENAME, newTimeout);
@@ -161,6 +176,7 @@ public class TCPSampler extends AbstractSampler implements TestListener
 	{
 		this.setProperty(NODELAY, newNoDelay);
 	}
+	
 	public boolean getNoDelay()
 	{
 		return getPropertyAsBoolean(NODELAY);
@@ -211,12 +227,12 @@ public class TCPSampler extends AbstractSampler implements TestListener
         
 	}
 
-    private Object getProtocol(){
-    	Object TCPClient = null;
+    private TCPClient getProtocol(){
+    	TCPClient TCPClient = null;
     	Class javaClass = getClass(getClassname());
 		try
 		{
-			TCPClient = javaClass.newInstance();
+			TCPClient = (TCPClient) javaClass.newInstance();
 			if (log.isDebugEnabled())
 			{
 				log.debug(this
@@ -250,11 +266,11 @@ public class TCPSampler extends AbstractSampler implements TestListener
 			} else {
 				InputStream is = sock.getInputStream();
 				OutputStream os = sock.getOutputStream();
-				TCPClient proto = (TCPClient) getProtocol();
-	        	log.debug("Found class "+ proto.toString());
-				String req=proto.write(os);
+				String req = getRequestData();
+				//TODO handle filenames
 				res.setSamplerData(req);
-				String in = proto.read(is);
+				protocolHandler.write(os,req);
+				String in = protocolHandler.read(is);
 	            res.setResponseData(in.getBytes());
 	            res.setDataType(SampleResult.TEXT);
 	            res.setResponseCode("200");

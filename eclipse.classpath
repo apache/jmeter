@@ -17,6 +17,7 @@
         excluding="org/apache/jmeter/protocol/java/**/BeanShell*.java|org/apache/jmeter/protocol/java/**/BSF*.java"
         kind="src" output="build/protocol/java" path="src/protocol/java"/>
     <classpathentry kind="src" output="build/protocol/ldap" path="src/protocol/ldap"/>
+    <classpathentry kind="src" output="build/protocol/mail" path="src/protocol/mail"/>
     <classpathentry kind="src" output="build/protocol/tcp" path="src/protocol/tcp"/>
 	<classpathentry kind="src" output="build/monitor/model" path="src/monitor/model"/>
 	<classpathentry kind="src" output="build/monitor/components" path="src/monitor/components"/>

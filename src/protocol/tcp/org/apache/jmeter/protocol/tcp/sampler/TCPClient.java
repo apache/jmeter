@@ -38,13 +38,31 @@ public interface TCPClient
 	/**
 	 * 
 	 * @param os - OutputStream for socket
-	 * @return String written to socket
+	 * @param is - InputStream to be written to Socket
 	 */
-	String write(OutputStream os);
+	void write(OutputStream os, InputStream is);
+
+	/**
+	 * 
+	 * @param os - OutputStream for socket
+	 * @param s - String to write
+	 */
+	void write(OutputStream os, String s);
+
 	/**
 	 * 
 	 * @param is - InputStream for socket
 	 * @return String read from socket
 	 */
 	String read(InputStream is);
+	
+	/**
+	 * @return Returns the eolByte.
+	 */
+	public byte getEolByte();
+
+	/**
+	 * @param eolByte The eolByte to set.
+	 */
+	public void setEolByte(byte eolByte);
 }
