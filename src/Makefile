@@ -30,9 +30,9 @@ DOCDIR       = ../docs/api
 # Javadoc 1.2
 JAVADOC    = /usr/local/jdk1.2/bin/javadoc
 JAVADOCOPT = -d $(DOCDIR) -version -private \
-        -windowtitle "Apache JMeter API" \
-        -splitindex -use \
-        -link http://java.sun.com/products/jdk/1.2/docs/api
+	-windowtitle "Apache JMeter API" \
+	-splitindex -use \
+	-link http://java.sun.com/products/jdk/1.2/docs/api
 
 ################################################################################
 # You should not need to change anything below here.
@@ -42,37 +42,37 @@ JAVADOCOPT = -d $(DOCDIR) -version -private \
 BASE = org.apache.jmeter
 VERSION = 1.1
 PACKAGES = \
-        $(BASE) \
-        $(BASE).timers \
-        $(BASE).visualizers \
-        $(BASE).samplers \
-        
+	$(BASE) \
+	$(BASE).timers \
+	$(BASE).visualizers \
+	$(BASE).samplers \
+
 DIRECTORIES   = $(subst .,/,$(PACKAGES))
 BASEDIRECTORY = $(subst .,/,$(BASE))
 ALLSOURCES    = $(foreach dir,$(DIRECTORIES),$(wildcard $(dir)/*.java))
 BUILDDIR      = $(PWD)
 
 jar: $(ALLSOURCES)
-        test -d $(CLASSDIR) || mkdir $(CLASSDIR)
-        $(JAVAC) $(JAVACOPTS) -d $(CLASSDIR) $(ALLSOURCES)
-        cp -pr $(BASEDIRECTORY)/images $(CLASSDIR)/$(BASEDIRECTORY)
-        cp -pr $(BASEDIRECTORY)/*.properties $(CLASSDIR)/$(BASEDIRECTORY)
-        (cd $(CLASSDIR); $(JAR) cmf $(BUILDDIR)/MANIFEST ApacheJMeter.jar *)
-        mv $(CLASSDIR)/ApacheJMeter.jar $(BINDIR)
+	test -d $(CLASSDIR) || mkdir $(CLASSDIR)
+	$(JAVAC) $(JAVACOPTS) -d $(CLASSDIR) $(ALLSOURCES)
+	cp -pr $(BASEDIRECTORY)/images $(CLASSDIR)/$(BASEDIRECTORY)
+	cp -pr $(BASEDIRECTORY)/*.properties $(CLASSDIR)/$(BASEDIRECTORY)
+	(cd $(CLASSDIR); $(JAR) cmf $(BUILDDIR)/MANIFEST ApacheJMeter.jar *)
+	mv $(CLASSDIR)/ApacheJMeter.jar $(BINDIR)
 
 javadoc:
-        test -d $(DOCDIR) || mkdir $(DOCDIR)
-        $(JAVADOC) $(JAVADOCOPT) $(PACKAGES)
+	test -d $(DOCDIR) || mkdir $(DOCDIR)
+	$(JAVADOC) $(JAVADOCOPT) $(PACKAGES)
 
 all: jar javadoc
 
 dist:   jar javadoc
-        @echo Creating distribution...
-        (cd ..; tar cvfz Apache_JMeter_$(VERSION).tar.gz .)
+	@echo Creating distribution...
+	(cd ..; tar cvfz Apache_JMeter_$(VERSION).tar.gz .)
 
 test:
-        @echo ALLSOURCES: $(ALLSOURCES)
-        @echo BUILDDIR: $(BUILDDIR)
+	@echo ALLSOURCES: $(ALLSOURCES)
+	@echo BUILDDIR: $(BUILDDIR)
 
 clean:
-        rm -rf $(CLASSDIR) $(DOCDIR) $(BINDIR)/ApacheJMeter.jar
+	rm -rf $(CLASSDIR) $(DOCDIR) $(BINDIR)/ApacheJMeter.jar
