@@ -75,7 +75,7 @@ public class HTTPSampleResult extends SampleResult
      * Construct a 'parent' result for an already-existing result, essentially
      * cloning it:
      *  
-     * @param result
+     * @param res existing sample result
      */
     public HTTPSampleResult(HTTPSampleResult res)
     {
