@@ -625,20 +625,6 @@ public class TCLogParser implements LogParser
                 // do nothing
             }
         }
-        TCGenerator gen = new TCGenerator("d:/temp/rs.txt");
-        gen.setHost("tao.altern8.net");
-        gen.setPort(80);
-
-        TCLogParser parser =
-            new TCLogParser("d:/tomcat4.1.16/logs/localhost_access_log.2003-05-05.txt");
-        parser.setUseParsedFile(true);
-        parser.setGenerator(gen);
-        int parsed = parser.parse(count);
-        // parser.parse();
-
-        System.out.println("parsed count: " + parsed);
-        parser.close();
-        gen.close();
     }
 
 }
