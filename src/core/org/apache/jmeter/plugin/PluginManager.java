@@ -61,7 +61,6 @@ import java.net.URL;
 import javax.swing.*;
 
 import org.apache.jmeter.gui.GUIFactory;
-import org.apache.jmeter.util.JMeterUtils;
 
 
 /**
@@ -77,34 +76,45 @@ public class PluginManager
     {
     }
 
-
-    public static void install(JMeterPlugin plugin)
+	/**
+	 * Installs a plugin.
+	 * @param plugin The plugin to install.
+	 * @param useGui Indication of whether or not the gui will be used.
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
+    public static void install(JMeterPlugin plugin, boolean useGui)
             throws ClassNotFoundException, InstantiationException,
-		   IllegalAccessException
+		    IllegalAccessException
     {
-        instance.installPlugin(plugin);
+    	if (useGui)
+    	{
+            instance.installPlugin(plugin);
+    	}
     }
 
 
     private void installPlugin(JMeterPlugin plugin)
             throws ClassNotFoundException, InstantiationException,
-		   IllegalAccessException
+		    IllegalAccessException
     {
         String[][] icons = plugin.getIconMappings();
         ClassLoader classloader = plugin.getClass().getClassLoader();
 
         for (int i = 0; i < icons.length; i++)
-	{
+		{
             URL resource = classloader.getResource(icons[i][1].trim());
 
             if (resource == null)
-	    {
+		    {
                 // todo: log or throw exception
             }
-	    else
-	    {
+	    	else
+	    	{
                 GUIFactory.registerIcon(icons[i][0], new ImageIcon(resource));
             }
         }
     }
+    
 }
