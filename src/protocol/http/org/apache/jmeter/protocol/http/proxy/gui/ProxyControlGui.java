@@ -457,12 +457,14 @@ public class ProxyControlGui
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         
-        Box portTargetPanel = Box.createVerticalBox();
-        portTargetPanel.add(createPortPanel());
-        portTargetPanel.add(Box.createVerticalStrut(5));
-        portTargetPanel.add(createTargetPanel());
-        portTargetPanel.add(Box.createVerticalStrut(5));
-        mainPanel.add(portTargetPanel, BorderLayout.NORTH);
+        Box myBox = Box.createVerticalBox();
+        myBox.add(createPortPanel());
+        myBox.add(Box.createVerticalStrut(5));
+        myBox.add(createTargetPanel());
+        myBox.add(Box.createVerticalStrut(5));
+        myBox.add(createGroupingPanel());
+        myBox.add(Box.createVerticalStrut(5));
+        mainPanel.add(myBox, BorderLayout.NORTH);
         
         Box includeExcludePanel = Box.createVerticalBox();
         includeExcludePanel.add(createIncludePanel());
@@ -573,13 +575,19 @@ public class ProxyControlGui
             // This should never happen -- throw an Error:
             throw new Error(e);
         }
+        
+        return panel;        
+    }
 
+    private JPanel createGroupingPanel()
+    {
         DefaultComboBoxModel m= new DefaultComboBoxModel();
         m.addElement(JMeterUtils.getResString("grouping_no_groups"));
         m.addElement(JMeterUtils.getResString("grouping_add_separators"));
         // TODO: enable when implemented:
         //m.addElement(JMeterUtils.getResString("grouping_in_controllers"));
-        //m.addElement(JMeterUtils.getResString("grouping_store_first_only"));
+        m.addElement("[not implemented]");
+        m.addElement(JMeterUtils.getResString("grouping_store_first_only"));
         groupingMode = new JComboBox(m);
         groupingMode.setName(ProxyControl.GROUPING_MODE);
         groupingMode.setSelectedIndex(0);
@@ -589,6 +597,7 @@ public class ProxyControlGui
         JLabel label2 = new JLabel(JMeterUtils.getResString("grouping_mode"));
         label2.setLabelFor(groupingMode);
         
+        HorizontalPanel panel = new HorizontalPanel();
         panel.add(label2);
         panel.add(groupingMode);
         

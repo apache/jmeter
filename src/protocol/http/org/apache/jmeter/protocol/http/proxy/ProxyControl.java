@@ -122,9 +122,9 @@ public class ProxyControl extends GenericController implements Serializable
 
     public static final int GROUPING_NO_GROUPS = 0;
     public static final int GROUPING_ADD_SEPARATORS = 1;
-    // TODO: implement these two:
+    // TODO: implement thin one:
     //public static final int GROUPING_IN_CONTROLLERS = 2;
-    //public static final int GROUPING_STORE_FIRST_ONLY = 3;
+    public static final int GROUPING_STORE_FIRST_ONLY = 3;
 
 	private long lastTime = 0;//When was the last sample seen?
 	private static final long sampleGap = 
@@ -445,6 +445,16 @@ public class ProxyControl extends GenericController implements Serializable
                 }
                 lastTime = System.currentTimeMillis();
 
+                if (groupingMode==GROUPING_STORE_FIRST_ONLY)
+                {
+                    if (!firstInBatch) return; // Huh! don't store this one!
+                    
+                    // If we're not storing subsequent samplers, we'll need the
+                    // first sampler to do all the work...:
+                    sampler.setFollowRedirects(true);
+                    sampler.setImageParser(true);
+                }
+                
                 JMeterTreeNode newNode =
                     treeModel.addComponent(sampler, target);
                             
