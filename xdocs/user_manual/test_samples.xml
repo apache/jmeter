@@ -34,6 +34,12 @@ NO URL config elements have been added to the controller).
 Although one can add cookie managers and authorization managers, it's almost always
 preferable to add such elements at the ThreadGroup level.
 </p>
+<h3>Currently supported protocols</h3>
+<ul>
+<li>HTTP</li>
+<li>JDBC</li>
+<li>FTP</li>
+</ul>
 
 </section>
 </body>
