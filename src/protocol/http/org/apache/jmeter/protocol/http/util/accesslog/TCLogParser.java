@@ -58,6 +58,8 @@ package org.apache.jmeter.protocol.http.util.accesslog;
 import java.io.*;
 import java.util.*;
 
+import org.apache.jmeter.junit.JMeterTestCase;
+
 /**
  * Title:		JMeter Access Log utilities<br>
  * Copyright:	Apache.org<br>
@@ -148,6 +150,8 @@ public class TCLogParser implements LogParser
     protected Generator GEN = null;
     protected Filter FILTER = null;
 
+//TODO downcase UPPER case variables
+ 
     /**
      * 
      */
@@ -610,25 +614,41 @@ public class TCLogParser implements LogParser
             // do nothing
         }
     }
+    //TODO write some more tests
+    
+    ///////////////////////////// Start of Test Code //////////////////////////
+	
+	public static class Test extends JMeterTestCase
+	{
+		private static final TCLogParser tclp = new TCLogParser();
 
-    /**
-     * Main method for running and testing the class. This isn't meant to be
-     * the access point for the tool.<p>
-     */
-    public static void main(String[] args)
-    {
-        int count = -1;//TODO not used
-        if (args != null && args[0] != null && args[0].length() > 0)
-        {
-            try
-            {
-                count = Integer.parseInt(args[0]);
-            }
-            catch (Exception ex)
-            {
-                // do nothing
-            }
-        }
-    }
+		private static final String URL1 =
+		"127.0.0.1 - - [08/Jan/2003:07:03:54 -0500] \"GET /addrbook/ HTTP/1.1\" 200 1981";
+
+		private static final String URL2 =
+		"127.0.0.1 - - [08/Jan/2003:07:03:54 -0500] \"GET /addrbook?x=y HTTP/1.1\" 200 1981";
+
+		public void testConstruct() throws Exception
+		{
+			TCLogParser tcp;
+			tcp = new TCLogParser();
+			assertNull("Should not have set the filename",tcp.FILENAME);
+
+			String file = "testfiles/access.log";
+			tcp = new TCLogParser(file);
+			assertEquals("Filename should have been saved",file,tcp.FILENAME);
+		}
+		
+		public void testcleanURL() throws Exception
+		{
+			String res = tclp.cleanURL(URL1);
+			assertEquals("/addrbook/",res);
+		}
+		public void testcheckURL() throws Exception
+		{
+			assertFalse("URL is not have a query",tclp.checkURL(URL1));
+			assertTrue("URL is a query",tclp.checkURL(URL2));
+		}
+	}
 
 }
