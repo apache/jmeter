@@ -36,6 +36,8 @@ public class RunTime extends GenericController implements Serializable
     private final static String SECONDS = "RunTime.seconds";
     private volatile long startTime = 0;
 
+	private int loopCount = 0; // for getIterCount
+	
     public RunTime()
     {
     }
@@ -84,17 +86,12 @@ public class RunTime extends GenericController implements Serializable
 
     private boolean endOfLoop()
     {
-		if (startTime == 0) startTime=System.currentTimeMillis();
         return System.currentTimeMillis()-startTime >= 1000*getRuntime();
     }
 
 	public Sampler next()
 	{
-		if (endOfLoop()){
-			startTime=0; // Make sure it will be reset next time
-			reInitialize();
-			return null;
-		}
+		if (startTime == 0) startTime=System.currentTimeMillis();
 		return super.next();
 	}
     /* (non-Javadoc)
@@ -105,8 +102,7 @@ public class RunTime extends GenericController implements Serializable
         reInitialize();
         if (endOfLoop())
         {
-			startTime=0; // Make sure it will be reset next time
-            //setDone(true);
+            resetLoopCount();
             return null;
         }
         else
@@ -115,4 +111,26 @@ public class RunTime extends GenericController implements Serializable
         }
     }
 
+	protected void incrementLoopCount()
+	{
+		loopCount++;
+	}
+	protected void resetLoopCount()
+	{
+		loopCount=0;
+		startTime=0;
+	}
+	/*
+	 * This is needed for OnceOnly to work like other Loop Controllers
+	 */
+	protected int getIterCount()
+	{
+		return loopCount + 1;
+	}
+	protected void reInitialize()
+	{
+		setFirst(true);
+		resetCurrent();
+		incrementLoopCount();
+	}
 }
