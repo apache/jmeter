@@ -113,8 +113,8 @@ public class StringFromFile extends AbstractFunction implements Serializable
     private String myValue = ERR_IND;
     private String myName = "StringFromFile_";//$NON-NLS-1$ - Name to store the value in
     private Object[] values;
-    private BufferedReader myBread; // Buffered reader
-	private FileReader fis; // keep this round to close it
+	transient private BufferedReader myBread; // Buffered reader
+	transient private FileReader fis; // keep this round to close it
     private boolean firstTime = false; // should we try to open the file?
     private boolean reopenFile = true; // Set from parameter list one day ...
     private String fileName; // needed for error messages
