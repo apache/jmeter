@@ -135,6 +135,10 @@ public final class AllTests
     {
     }
 
+    private static void logprop(String prop)
+    {
+    	log.info(prop+"="+System.getProperty(prop));
+    }
     /**
      * Starts a run through all unit tests found in the specified classpaths.
      * The first argument should be a list of paths to search.  The second
@@ -159,6 +163,10 @@ public final class AllTests
         initializeManager(args);
         // end : added - 11 July 2001
 
+        logprop("java.version");
+		logprop("java.vendor");
+		logprop("java.class.version");
+		logprop("java.class.path");
 //++
 // GUI tests throw the error 
 // testArgumentCreation(org.apache.jmeter.config.gui.ArgumentsPanel$Test)java.lang.NoClassDefFoundError
