@@ -214,7 +214,12 @@ public class HTTPSampler extends AbstractSampler
 	public void addEncodedArgument(String name,String value,String metaData)
 	{
 		Arguments args = getArguments();
-		args.addArgument(new HTTPArgument(name,value,metaData,true));
+		HTTPArgument arg = new HTTPArgument(name,value,metaData,true);
+		if(arg.getName().equals(arg.getEncodedName()) && arg.getValue().equals(arg.getEncodedValue()))
+		{
+			arg.setAlwaysEncode(false);
+		}
+		args.addArgument(arg);
 	}
 	
 	public void addArgument(String name,String value)

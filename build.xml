@@ -35,7 +35,6 @@
 	 <include name="**/lib/*.jar"/>
 	<include name="**/ext/*.jar"/>
 	</fileset>
-		<pathelement location="${build.dir}"/>
 	  <pathelement location="${tools.jar}"/>
   </path>
 
@@ -183,7 +182,10 @@
 					  unless="javamail.complete"/>
 		  <exclude name="org/apache/jmeter/reporters/MailerResultCollector.java"
 					  unless="javamail.complete"/>
-		  <classpath refid="classpath"/>
+		  <classpath>
+		  	<path refid="classpath"/>
+		  	<pathelement location="${build.dir}"/>
+		  </classpath>
 		</javac>
 		<copy tofile="${src.core}/org/apache/jmeter/util/JMeterUtils.java"
 				file="${src.core}/org/apache/jmeter/util/JMeterUtils.java_temp"
@@ -202,7 +204,10 @@
 					  unless="javamail.complete"/>
 		  <exclude name="org/apache/jmeter/reporters/MailerResultCollector.java"
 					  unless="javamail.complete"/>
-		  <classpath refid="classpath"/>
+		  <classpath>
+		  	<path refid="classpath"/>
+		  	<pathelement location="${build.dir}"/>
+		  </classpath>
 		</javac>
 	</target>
 	
@@ -213,7 +218,10 @@
 				 debug="on"
 				 target="1.3">
 		  <include name="**/*.java"/>
-		  <classpath refid="classpath"/>
+		  <classpath>
+		  	<path refid="classpath"/>
+		  	<pathelement location="${build.dir}"/>
+		  </classpath>
 		</javac>
 	</target>
 	
@@ -224,7 +232,10 @@
 				 debug="on"
 				 target="1.3">
 		  <include name="**/*.java"/>
-		  <classpath refid="classpath"/>
+		  <classpath>
+		  	<path refid="classpath"/>
+		  	<pathelement location="${build.dir}"/>
+		  </classpath>
 		</javac>
 	</target>
 	
@@ -235,7 +246,10 @@
 				 debug="on"
 				 target="1.3">
 		  <include name="**/*.java"/>
-		  <classpath refid="classpath"/>
+		  <classpath>
+		  	<path refid="classpath"/>
+		  	<pathelement location="${build.dir}"/>
+		  </classpath>
 		</javac>
 	</target>
 	
@@ -246,7 +260,10 @@
 				 debug="on"
 				 target="1.3">
 		  <include name="**/*.java"/>
-		  <classpath refid="classpath"/>
+		  <classpath>
+		  	<path refid="classpath"/>
+		  	<pathelement location="${build.dir}"/>
+		  </classpath>
 		</javac>
 	</target>
 	
@@ -257,13 +274,16 @@
 				 debug="on"
 				 target="1.3">
 		  <include name="**/*.java"/>
-		  <classpath refid="classpath"/>
+		  <classpath>
+		  	<path refid="classpath"/>
+		  	<pathelement location="${build.dir}"/>
+		  </classpath>
 		</javac>
 	</target>
 	
-	<target name="compile_protocols" depends="compile_http,compile_ftp,compile_jdbc,compile_java"/>
+	<target name="compile_protocols" depends="clean,compile_http,compile_ftp,compile_jdbc,compile_java"/>
 	
-	<target name="compile" depends="compile_core,compile_components,compile_functions,compile_protocols"/>
+	<target name="compile" depends="clean,compile_core,compile_components,compile_functions,compile_protocols"/>
 
 	<target name="rmi" depends="compile">
 	  <rmic base="${build.core}" classname="org.apache.jmeter.engine.RemoteJMeterEngineImpl">

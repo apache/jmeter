@@ -22,6 +22,8 @@ public class HTTPArgument extends Argument  implements Serializable {
 	
 	private static final String ENCODED_NAME = "HTTPArgument.encoded_name";
 	private static final String ENCODED_VALUE = "HTTPArgument.encoded_value";
+	private static final String ALWAYS_ENCODE = "HTTPArgument.always_encode";
+	
 	
 	/****************************************
 	 * Constructor for the Argument object
@@ -38,14 +40,32 @@ public class HTTPArgument extends Argument  implements Serializable {
 	
 	private void encodeName(String name)
 	{
-		setProperty(ENCODED_NAME,URLEncoder.encode(name));
+		if(getAlwaysEncode())
+		{
+			name = URLEncoder.encode(name);
+		}
+		setProperty(ENCODED_NAME,name);
+	}
+	
+	public void setAlwaysEncode(boolean ae)
+	{
+		setProperty(ALWAYS_ENCODE,new Boolean(ae));
+	}
+	
+	public boolean getAlwaysEncode()
+	{
+		return getPropertyAsBoolean(ALWAYS_ENCODE);
 	}
 	
 	private void encodeValue(Object value)
 	{
 		if(value != null)
 		{
-			setProperty(ENCODED_VALUE,URLEncoder.encode(value.toString()));
+			if(getAlwaysEncode())
+			{
+				value = URLEncoder.encode(value.toString());
+			}
+			setProperty(ENCODED_VALUE,value.toString());
 		}
 	}
 	/****************************************
@@ -61,6 +81,7 @@ public class HTTPArgument extends Argument  implements Serializable {
 	
 	public HTTPArgument(String name, Object value, boolean alreadyEncoded)
 	{
+		setAlwaysEncode(true);
 		if(alreadyEncoded)
 		{
 			try

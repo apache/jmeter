@@ -75,6 +75,7 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.util.VerticalLayout;
+import org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -99,7 +100,7 @@ public class UrlConfigGui extends AbstractConfigGui
 	/****************************************
 	 * !ToDo (Field description)
 	 ***************************************/
-	protected ArgumentsPanel argsPanel;
+	protected HTTPArgumentsPanel argsPanel;
 	private static String DOMAIN = "domain";
 	private static String PORT = "port";
 	private static String PATH = "path";
@@ -406,7 +407,7 @@ public class UrlConfigGui extends AbstractConfigGui
 	 ***************************************/
 	protected JPanel getParameterPanel()
 	{
-		argsPanel = new ArgumentsPanel();
+		argsPanel = new HTTPArgumentsPanel();
 
 		return argsPanel;
 	}
