@@ -24,11 +24,14 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -39,6 +42,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.save.SaveGraphicsService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
@@ -53,7 +57,7 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * @version   $Revision: 
  */
 public class DistributionGraphVisualizer extends AbstractVisualizer
-        implements ImageVisualizer, ItemListener, GraphListener, Clearable
+        implements ImageVisualizer, ItemListener, GraphListener, ActionListener, Clearable
 {
     SamplingStatCalculator model;
     private JPanel graphPanel = null;
@@ -62,6 +66,7 @@ public class DistributionGraphVisualizer extends AbstractVisualizer
 
     private DistributionGraph graph;
     private JTextField noteField;
+    private JButton saveButton;
     private int delay = 10;
     private int counter = 0;
     //NOTREAD private int cwidth = 0;
@@ -269,6 +274,23 @@ public class DistributionGraphVisualizer extends AbstractVisualizer
 		graphInfoPanel.add(
 			this.createInfoLabel("distribution_note1",this.noteField)
 		);
+		graphInfoPanel.add(createSaveButton());
 		return graphInfoPanel;
+    }
+    
+    private JButton createSaveButton(){
+		saveButton = new JButton("Save Graph");
+		saveButton.addActionListener(this);
+    	return saveButton;
+    }
+    
+    public void actionPerformed(ActionEvent event){
+    	Object src = event.getSource();
+    	// only save if the source was the save button
+    	if (src == saveButton){
+    		SaveGraphicsService service = new SaveGraphicsService();
+			//service.saveJComponent("distributionGraph.jpg",this.graphPanel);
+			service.saveJComponentWithJAI("distributionGraph.png",this.graphPanel);
+    	}
     }
 }
