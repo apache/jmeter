@@ -4,3 +4,4 @@ testresults.txt
 *.bak
 *.jtl
 *.log
+*.jmx
