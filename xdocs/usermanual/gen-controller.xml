@@ -8,22 +8,165 @@
 <body>
 
 <section name="4.2.1 Generative Controllers">
-<p>Put description text here...</p>
+<p>Generative Controllers tell JMeter to send requests to a server. For example, 
+add an HTTP Request Generative Controller if you want JMeter to send an HTTP 
+request.  You can also customize a request by adding one or more Configuration 
+Elements to a Generative Controller.</p>
+
+<p>Assertions...</p>
+<p>Defaults config element....</p>
+<p>Logging the results of the request using a Listener...</p>
+
 </section>
 
 <section name="4.2.1.1 FTP Request">
-<p>Put description text here...</p>
-<p><img src="../images/screenshots/gen-controller/ftp-request.gif" width="419" height="265"></img></p>
+<p>This controller lets you send an FTP "retrieve file" request to an FTP server. 
+If you are going to send multiple requests to the same FTP server, consider
+using a <a href="">FTP Request Defaults</a> Configuration Element so you
+do not have to enter the same information for each FTP Request Generative 
+Controller. </p>
+<p><img src="../images/screenshots/gen-controller/ftp-request.gif" width="407" height="238"></img></p>
+<p><b>Property Descriptions:</b>
+<ul>
+  <li><b>Name</b> - Descriptive name for this controller that is shown in the tree. </li>
+  <li><b>Server Name or IP</b> - Domain name or IP address of the FTP server. 
+JMeter assumes the FTP server is listening on the default port.</li>
+  <li><b>File to Retrieve From Server</b> - Path and name of the file to retrieve.</li>
+  <li><i>Login Configuration</i></li>
+  <ul>
+    <li><b>Username</b> - FTP account username.</li>
+    <li><b>Password</b> - FTP account password.</li>
+  </ul>
+</ul>
+</p>
+
+<p><b>See Also:</b>
+<br></br><a href="">Assertion</a>, 
+<a href="">FTP Request Defaults</a>, 
+<a href="build-ftp-test-plan.html">Building an FTP Test Plan</a></p>
+
 </section>
 
 <section name="4.2.1.2 HTTP Request">
-<p>Put description text here...</p>
-<p><img src="../images/screenshots/gen-controller/http-request.gif" width="577" height="658"></img></p>
+<p>This controller lets you send an HTTP/HTTPS request to a web server.  It 
+also lets you control whether or not JMeter parses HTML files for images and 
+Java applets and sends HTTP requests to retrieve them.</p>
+<p>If you are going to send multiple requests to the same web server, consider
+using an <a href="">HTTP Request Defaults</a> Configuration Element so you
+do not have to enter the same information for each HTTP Request controller.</p>
+<p>Or, instead of manually adding HTTP Request controllers, you may want to use
+JMeter's <a href="">HTTP Proxy Server</a> to create them.  This can save you
+time if you have a lot of HTTP requests or requests with many parameters.</p>
+<p>If the request requires a login authorization, you will also have to add an
+<a href="">HTTP Authorization Manager</a> Configuration Element. And, if the
+request uses cookies, then you will also need an <a href="">HTTP Cookie Manager</a>.  
+You can add either of these elements to the Thread Group or the HTTP Request.  
+If you have more than one HTTP Request that needs authorizations or cookies, 
+then add the elements to the Thread Group.  That way, all HTTP Request 
+controllers will share the same Authorization Manager and Cookie Manager 
+elements.</p>
+<p>If the request uses a technique called "URL Rewriting" to maintain sessions,
+then see section <a href="">xxx HTTP Requests and Sessions Using URL Rewriting</a> 
+for additional configuration steps.</p>
+<p><img src="../images/screenshots/gen-controller/http-request.gif" width="562" height="635"></img></p>
+<p><b>Property Descriptions:</b>
+<ul>
+  <li><b>Name</b> - Descriptive name for this controller that is shown in the tree. </li>
+  <li><i>Web Server</i></li>
+  <ul>
+     <li><b>Server</b> - Domain name or IP address of the web server.</li>
+     <li><b>Port</b> - (optional) Port the web server is listening.  If you leave this field 
+empty, JMeter assumes the default port.</li>
+  </ul>
+  <li><i>HTTP Request</i></li>
+  <ul>
+    <li><b>Protocol</b> - HTTP or HTTPS.</li>
+    <li><b>Method</b> - HTTP GET or HTTP POST.</li>
+    <li><b>Path</b> - The path to resource (for example, /servlets/myServlet). If the 
+resource requires query string parameters, add them below in the 
+"Send Parameters With the Request" section.</li>
+    <li><i>Send Parameters With the Request</i></li>
+    <ul>
+      <li><b>Name</b> - Parameter name</li>
+      <li><b>Value</b> - Parameter value. You do not have to enter the value in 
+URL-Encoded format. JMeter will URL-Encode it for you when it sends
+the HTTP request.</li>
+      <li><b>Add</b> Button - Add a parameter.</li>
+      <li><b>Delete</b> Button - Delete the currently selected parameter.</li>
+    </ul>
+    <li><i>Send a File With the Request</i></li>
+    <ul>
+      <li><b>Filename</b> - Name of the file to send.</li>
+      <li><b>Browse</b> Button - Select this button to browse the file system for a 
+filename.</li>
+      <li><b>Parameter Name</b> - Name of the parameter.</li>
+      <li><b>MIME Type</b> - MIME type (for example, text/plain).</li>
+    </ul>
+  </ul>
+  <li><i>Optional Tasks</i></li>
+  <ul>
+    <li><b>Retrieve All Images and Java Applets</b> - Tell JMeter to parse the HTML file 
+and send HTTP/HTTPS requests for all images and Java applets referenced in the file.</li>  
+  </ul>
+</ul>
+</p>
+
+<p><b>See Also:</b>
+<br></br>
+<a href="">Assertion</a>, 
+<a href="build-web-test-plan.html">Building a Web Test Plan</a>, 
+<a href="build-web-test-plan.html">Building an Advanced Web Test Plan</a>,
+<a href="">HTTP Authorization Manager</a>, 
+<a href="">HTTP Cookie Manager</a>, 
+<a href="">HTTP Header Manager</a>, 
+<a href="">HTTP HTML Link Parser</a>, 
+<a href="">HTTP Proxy Server</a>, 
+<a href="">HTTP Request Defaults</a>
+</p>
+
 </section>
 
 <section name="4.2.1.3 JDBC Request">
-<p>Put description text here...</p>
+<p>This controller lets you send an JDBC Request to a database.  JMeter... 
+Query (no updates, only send query).</p>
+
 <p><img src="../images/screenshots/gen-controller/jdbc-request.gif" width="466" height="454"></img></p>
+
+<p><b>Property Descriptions:</b>
+<ul>
+  <li><b>Name</b> - Descriptive name for this controller that is shown in the tree. </li>
+  <li><i>Database URL and JDBC Driver</i></li>
+  <ul>
+     <li><b>JDBC URL</b> - URL to the database (for example, ...). Refer to the JDBC documentation for
+your database.</li>
+     <li><b>Driver Class</b> - The Java class for your database driver (for example, ...). 
+Refer to the JDBC documentation for
+your database.</li>
+  </ul>
+  <li><i>Login Configuration</i></li>
+  <ul>
+    <li><b>Username</b> - FTP account username.</li>
+    <li><b>Password</b> - FTP account password.</li>
+  </ul>
+  <li><i>Database Connection Pool</i></li>
+  <ul>
+    <li><b>Number of Connections in Pool</b> - ... The maximum value depends on your database. 
+Also, JMeter imposes a maximum of 100 connections.</li>
+    <li><b>Max Usage For Each Connection</b> - </li>
+  </ul>
+  <li><b>SQL Query String</b> - SQL query (for example, "select * from t_customers").</li>
+</ul>
+</p>
+
+<p><b>See Also:</b>
+<br></br>
+<a href="">Assertion</a>, 
+<a href="build-jdbc-test-plan.html">Building a JDBC Test Plan</a>, 
+<a href="">JDBC Database Login Defaults</a>, 
+<a href="">JDBC Database Connection Pool Defaults</a>, 
+<a href="">JDBC SQL Query Defaults</a>
+</p>
+
 </section>
 
 
