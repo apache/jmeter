@@ -557,7 +557,7 @@ public final class SaveService implements SaveServiceConstants
 
         try
         {
-            config.setValue(new String(bin, "utf-8"));
+            config.setValue(new String(bin, "UTF-8"));
         }
         catch (UnsupportedEncodingException e)
         {
@@ -574,7 +574,7 @@ public final class SaveService implements SaveServiceConstants
         }
         try
         {
-            return config.getValue("").getBytes("utf-8");
+            return config.getValue("").getBytes("UTF-8");
         }
         catch (UnsupportedEncodingException e)
         {
