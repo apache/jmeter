@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.jdbc.config.gui;
+
 import java.awt.BorderLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -70,57 +71,46 @@ import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
+/**
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 public class PoolConfigGui extends AbstractConfigGui implements FocusListener
 {
-	private static String CONNECTIONS = "connections";
-	private static String MAXUSE = "maxuse";
-	private static String DEFAULT_MAX_USE = "50";
-	private static String DEFAULT_NUM_CONNECTIONS = "1";
-	private JTextField connField;
-	private JTextField maxUseField;
+    private static String CONNECTIONS = "connections";
+    private static String MAXUSE = "maxuse";
+    private static String DEFAULT_MAX_USE = "50";
+    private static String DEFAULT_NUM_CONNECTIONS = "1";
+    private JTextField connField;
+    private JTextField maxUseField;
 
-	private boolean displayName;
+    private boolean displayName;
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public PoolConfigGui()
-	{
-		this(true);
-	}
+    public PoolConfigGui()
+    {
+        this(true);
+    }
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 *
-	 *@param displayName  !ToDo (Parameter description)
-	 ***************************************/
-	public PoolConfigGui(boolean displayName)
-	{
-		this.displayName = displayName;
-		init();
-	}
+    public PoolConfigGui(boolean displayName)
+    {
+        this.displayName = displayName;
+        init();
+    }
 
-	public void configure(TestElement element)
-	{
-		super.configure(element);
-		connField.setText(element.getProperty(JDBCSampler.CONNECTIONS).toString());
-		maxUseField.setText(element.getProperty(JDBCSampler.MAXUSE).toString());
-	}
+    public void configure(TestElement element)
+    {
+        super.configure(element);
+        connField.setText(
+            element.getProperty(JDBCSampler.CONNECTIONS).toString());
+        maxUseField.setText(element.getProperty(JDBCSampler.MAXUSE).toString());
+    }
 
-	public TestElement createTestElement()
-	{
-		ConfigTestElement element = new ConfigTestElement();
-		modifyTestElement(element);
-		return element;
-	}
+    public TestElement createTestElement()
+    {
+        ConfigTestElement element = new ConfigTestElement();
+        modifyTestElement(element);
+        return element;
+    }
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
@@ -129,79 +119,80 @@ public class PoolConfigGui extends AbstractConfigGui implements FocusListener
     public void modifyTestElement(TestElement element)
     {
         configureTestElement(element);
-        element.setProperty(JDBCSampler.CONNECTIONS,connField.getText());
-        element.setProperty(JDBCSampler.MAXUSE,maxUseField.getText());
+        element.setProperty(JDBCSampler.CONNECTIONS, connField.getText());
+        element.setProperty(JDBCSampler.MAXUSE, maxUseField.getText());
     }
 
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("database_conn_pool_title");
-	}
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("database_conn_pool_title");
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void focusGained(FocusEvent e) { }
+    public void focusGained(FocusEvent e)
+    {
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void focusLost(FocusEvent e)
-	{
-		String name = e.getComponent().getName();
+    public void focusLost(FocusEvent e)
+    {
+        String name = e.getComponent().getName();
 
-		if(name.equals(CONNECTIONS))
-		{
-			try
-			{
-				Integer.parseInt(connField.getText());
-			}
-			catch(NumberFormatException nfe)
-			{
-				if(connField.getText().length() > 0)
-				{
-					JOptionPane.showMessageDialog(this, "You must enter a valid number",
-							"Invalid data", JOptionPane.WARNING_MESSAGE);
-				}
-				connField.setText(DEFAULT_NUM_CONNECTIONS);
-			}
-		}
-		else if(name.equals(MAXUSE))
-		{
-			try
-			{
-				Integer.parseInt(maxUseField.getText());
-			}
-			catch(NumberFormatException nfe)
-			{
-				if(maxUseField.getText().length() > 0)
-				{
-					JOptionPane.showMessageDialog(this, "You must enter a valid number",
-							"Invalid data", JOptionPane.WARNING_MESSAGE);
-				}
-				maxUseField.setText(DEFAULT_NUM_CONNECTIONS);
-			}
-		}
-	}
+        if (name.equals(CONNECTIONS))
+        {
+            try
+            {
+                Integer.parseInt(connField.getText());
+            }
+            catch (NumberFormatException nfe)
+            {
+                if (connField.getText().length() > 0)
+                {
+                    JOptionPane.showMessageDialog(
+                        this,
+                        "You must enter a valid number",
+                        "Invalid data",
+                        JOptionPane.WARNING_MESSAGE);
+                }
+                connField.setText(DEFAULT_NUM_CONNECTIONS);
+            }
+        }
+        else if (name.equals(MAXUSE))
+        {
+            try
+            {
+                Integer.parseInt(maxUseField.getText());
+            }
+            catch (NumberFormatException nfe)
+            {
+                if (maxUseField.getText().length() > 0)
+                {
+                    JOptionPane.showMessageDialog(
+                        this,
+                        "You must enter a valid number",
+                        "Invalid data",
+                        JOptionPane.WARNING_MESSAGE);
+                }
+                maxUseField.setText(DEFAULT_NUM_CONNECTIONS);
+            }
+        }
+    }
 
-	private void init()
-	{
+    private void init()
+    {
         setLayout(new BorderLayout(0, 5));
-        
-		if (displayName) {
-            setBorder(makeBorder());            
+
+        if (displayName)
+        {
+            setBorder(makeBorder());
             add(makeTitlePanel(), BorderLayout.NORTH);
         }
 
-		VerticalPanel poolPanel = new VerticalPanel();
-		poolPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("database_conn_pool_props")));
+        VerticalPanel poolPanel = new VerticalPanel();
+        poolPanel.setBorder(
+            BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("database_conn_pool_props")));
 
-		poolPanel.add(createConnPanel());
-		poolPanel.add(createMaxUsePanel());
+        poolPanel.add(createConnPanel());
+        poolPanel.add(createMaxUsePanel());
 
         // The Center component will fill all available space.  Since poolPanel
         // has a titled border, this means that the border would extend to the
@@ -209,37 +200,40 @@ public class PoolConfigGui extends AbstractConfigGui implements FocusListener
         // second panel to fix this.
         VerticalPanel mainPanel = new VerticalPanel();
         mainPanel.add(poolPanel);
-                
-		add(mainPanel, BorderLayout.CENTER);
-	}
 
-	private JPanel createConnPanel()
-	{
+        add(mainPanel, BorderLayout.CENTER);
+    }
+
+    private JPanel createConnPanel()
+    {
         connField = new JTextField(DEFAULT_NUM_CONNECTIONS, 5);
-		connField.setName(CONNECTIONS);
-		connField.addFocusListener(this);
+        connField.setName(CONNECTIONS);
+        connField.addFocusListener(this);
 
-        JLabel label = new JLabel(JMeterUtils.getResString("database_conn_pool_size"));
+        JLabel label =
+            new JLabel(JMeterUtils.getResString("database_conn_pool_size"));
         label.setLabelFor(connField);
 
         JPanel panel = new JPanel(new BorderLayout(5, 0));
         panel.add(label, BorderLayout.WEST);
         panel.add(connField, BorderLayout.CENTER);
-		return panel;
-	}
+        return panel;
+    }
 
-	private JPanel createMaxUsePanel()
-	{
-		maxUseField = new JTextField(DEFAULT_MAX_USE, 5);
-		maxUseField.setName(MAXUSE);
-		maxUseField.addFocusListener(this);
+    private JPanel createMaxUsePanel()
+    {
+        maxUseField = new JTextField(DEFAULT_MAX_USE, 5);
+        maxUseField.setName(MAXUSE);
+        maxUseField.addFocusListener(this);
 
-        JLabel label = new JLabel(JMeterUtils.getResString("database_conn_pool_max_usage"));
+        JLabel label =
+            new JLabel(
+                JMeterUtils.getResString("database_conn_pool_max_usage"));
         label.setLabelFor(maxUseField);
 
         JPanel panel = new JPanel(new BorderLayout(5, 0));
         panel.add(label, BorderLayout.WEST);
         panel.add(maxUseField, BorderLayout.CENTER);
         return panel;
-	}
+    }
 }

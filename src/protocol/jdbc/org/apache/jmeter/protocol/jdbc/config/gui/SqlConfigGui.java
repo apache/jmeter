@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.jdbc.config.gui;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
@@ -68,55 +69,43 @@ import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
+/**
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 public class SqlConfigGui extends AbstractConfigGui
 {
     private JTextArea sqlField;
-	private boolean displayName;
+    private boolean displayName;
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public SqlConfigGui()
-	{
-		this(true);
-	}
+    public SqlConfigGui()
+    {
+        this(true);
+    }
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 *
-	 *@param displayName  !ToDo (Parameter description)
-	 ***************************************/
-	public SqlConfigGui(boolean displayName)
-	{
-		this.displayName = displayName;
-		init();
-	}
+    public SqlConfigGui(boolean displayName)
+    {
+        this.displayName = displayName;
+        init();
+    }
 
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("database_sql_query_title");
-	}
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("database_sql_query_title");
+    }
 
-	public void configure(TestElement element)
-	{
-		sqlField.setText(element.getProperty(JDBCSampler.QUERY).toString());
-		super.configure(element);
-	}
+    public void configure(TestElement element)
+    {
+        sqlField.setText(element.getProperty(JDBCSampler.QUERY).toString());
+        super.configure(element);
+    }
 
-	public TestElement createTestElement()
-	{
-		ConfigTestElement element = new ConfigTestElement();
-		modifyTestElement(element);
-		return element;
-	}
+    public TestElement createTestElement()
+    {
+        ConfigTestElement element = new ConfigTestElement();
+        modifyTestElement(element);
+        return element;
+    }
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
@@ -125,44 +114,50 @@ public class SqlConfigGui extends AbstractConfigGui
     public void modifyTestElement(TestElement element)
     {
         configureTestElement(element);
-        
+
         String text = sqlField.getText();
         // Remove any line feeds from the text
         text = text.replace('\n', ' ');
         element.setProperty(JDBCSampler.QUERY, text);
     }
 
-	private void init()
-	{
+    private void init()
+    {
         setLayout(new BorderLayout(0, 5));
 
-		if(displayName) {
+        if (displayName)
+        {
             setBorder(makeBorder());
             add(makeTitlePanel(), BorderLayout.NORTH);
         }
 
         JPanel panel = createSqlPanel();
-		add(panel, BorderLayout.CENTER);
+        add(panel, BorderLayout.CENTER);
         // Don't let the SQL field shrink too much
-        add(Box.createVerticalStrut(panel.getPreferredSize().height), BorderLayout.WEST);
-	}
+        add(
+            Box.createVerticalStrut(panel.getPreferredSize().height),
+            BorderLayout.WEST);
+    }
 
-	private JPanel createSqlPanel() {
+    private JPanel createSqlPanel()
+    {
         sqlField = new JTextArea();
         sqlField.setRows(4);
         sqlField.setLineWrap(true);
         sqlField.setWrapStyleWord(true);
-        
-        JLabel label = new JLabel(JMeterUtils.getResString("database_sql_query_string"));
+
+        JLabel label =
+            new JLabel(JMeterUtils.getResString("database_sql_query_string"));
         label.setLabelFor(sqlField);
-        
+
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(label, BorderLayout.NORTH);
-		panel.add(new JScrollPane(sqlField), BorderLayout.CENTER);
-		return panel;
-	}
+        panel.add(new JScrollPane(sqlField), BorderLayout.CENTER);
+        return panel;
+    }
 
-    public Dimension getPreferredSize() {
+    public Dimension getPreferredSize()
+    {
         return getMinimumSize();
     }
 }
