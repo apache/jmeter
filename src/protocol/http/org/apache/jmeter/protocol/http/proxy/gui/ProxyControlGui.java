@@ -360,14 +360,7 @@ public class ProxyControlGui
             log.debug("Change target "+targetNodes.getSelectedItem());
             log.debug("In model "+model);
             TreeNodeWrapper nw= (TreeNodeWrapper)targetNodes.getSelectedItem();
-            if (nw == null)
-            {
-                model.setTarget(null); 
-            }
-            else
-            {
-                model.setTarget(nw.getTreeNode());
-            }
+            model.setTarget(nw.getTreeNode());
         }
     }
 
@@ -556,8 +549,8 @@ public class ProxyControlGui
     {
         targetNodesModel= new DefaultComboBoxModel();
         targetNodes = new JComboBox(targetNodesModel);
-        targetNodes.addActionListener(this);
         targetNodes.setActionCommand(CHANGE_TARGET);
+        // Action listener will be added later
         
         JLabel label = new JLabel(JMeterUtils.getResString("proxy_target"));
         label.setLabelFor(targetNodes);
@@ -655,6 +648,10 @@ public class ProxyControlGui
 
     private void reinitializeTargetCombo() {
         log.debug("Reinitializing target combo");
+
+        // Stop action notifications while we shuffle this around:
+        targetNodes.removeActionListener(this);
+        
         targetNodesModel.removeAllElements();
         GuiPackage gp = GuiPackage.getInstance();
         JMeterTreeNode root;
@@ -671,17 +668,21 @@ public class ProxyControlGui
                     JMeterUtils.getResString("use_recording_controller")));
             buildNodesModel(root, "", 0);
         }
+        TreeNodeWrapper choice = null;
         for (int i = 0; i < targetNodesModel.getSize(); i++)
         {
-            TreeNodeWrapper choice = 
-                (TreeNodeWrapper) targetNodesModel.getElementAt(i);
+            choice = (TreeNodeWrapper) targetNodesModel.getElementAt(i);
             if (choice.getTreeNode() == model.getTarget()) // .equals caused NPE
             {
                 log.debug("Selecting item "+choice);
-                targetNodesModel.setSelectedItem(choice);
                 break;
             }
         }
+        // Reinstate action notifications:
+        targetNodes.removeActionListener(this);
+        // Set the current value:
+        targetNodesModel.setSelectedItem(choice);        
+        
         log.debug("Reinitialization complete");
     }
     
