@@ -190,6 +190,7 @@ public class JDBCSampler extends AbstractSampler implements TestListener
             stmt.close();
             manager.releaseConnection(con);
             res.setResponseData(data.toString().getBytes());
+            res.setDataType(res.TEXT);
             res.setSuccessful(true);
         }
         catch (Exception ex)
