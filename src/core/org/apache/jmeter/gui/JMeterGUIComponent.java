@@ -124,6 +124,13 @@ public interface JMeterGUIComponent
 	 * represents.
 	 ***************************************/
 	public TestElement createTestElement();
+    
+    /**
+     * GUI components should be able to set a given TestElement's data to
+     * what is represented by the GUI.
+     * @param element
+     */
+    public void modifyTestElement(TestElement element);
 
 	/**
 	 * Test GUI elements can be  disabled, in which case

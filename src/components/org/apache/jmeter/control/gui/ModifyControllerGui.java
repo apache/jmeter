@@ -158,9 +158,18 @@ public class ModifyControllerGui extends AbstractControllerGui
 	public TestElement createTestElement()
 	{
 		ModifyController mc = new ModifyController();
-		configureTestElement(mc);
+		modifyTestElement(mc);
 		return mc;
 	}
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement mc)
+    {
+        configureTestElement(mc);
+    }
 
 	private void init()
 	{

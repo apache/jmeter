@@ -23,80 +23,99 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class SoapSamplerGui extends AbstractSamplerGui {
-	private static final String label = JMeterUtils.getResString("soap_sampler_title");
-	JLabeledTextField urlField = new JLabeledTextField(JMeterUtils.getResString("url"));
-	JLabeledTextArea soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title"),
-			null);
+public class SoapSamplerGui extends AbstractSamplerGui
+{
+    private static final String label = JMeterUtils.getResString("soap_sampler_title");
+    JLabeledTextField urlField = new JLabeledTextField(JMeterUtils.getResString("url"));
+    JLabeledTextArea soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title"), null);
 
-	public SoapSamplerGui()
-	{
-		init();
-	}
-	
-	/**
-	 * @see JMeterGUIComponent#getStaticLabel()
-	 */
-	public String getStaticLabel() {
-		return label;
-	}
+    public SoapSamplerGui()
+    {
+        init();
+    }
 
-	/**
-	 * @see JMeterGUIComponent#createTestElement()
-	 */
-	public TestElement createTestElement() {
-		SoapSampler sampler = new SoapSampler();
-		this.configureTestElement(sampler);
-		try {
-			URL url = new URL(urlField.getText());
-			sampler.setDomain(url.getHost());
-			sampler.setPort(url.getPort());
-			sampler.setProtocol(url.getProtocol());
-			sampler.setMethod(SoapSampler.POST);
-			sampler.setPath(url.getPath());
-			sampler.setXmlData(soapXml.getText());
-		} catch(MalformedURLException e) {
-		}
-		return sampler;
-	}
-	
-	private void init()
-	{
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+    /**
+     * @see JMeterGUIComponent#getStaticLabel()
+     */
+    public String getStaticLabel()
+    {
+        return label;
+    }
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+    /**
+     * @see JMeterGUIComponent#createTestElement()
+     */
+    public TestElement createTestElement()
+    {
+        SoapSampler sampler = new SoapSampler();
+        modifyTestElement(sampler);
+        return sampler;
+    }
 
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(label);
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
-		// NAME
-		mainPanel.add(getNamePanel());
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement s)
+    {
+        this.configureTestElement(s);
+        if (s instanceof SoapSampler)
+        {
+            SoapSampler sampler = (SoapSampler) s;
+            try
+            {
+                URL url = new URL(urlField.getText());
+                sampler.setDomain(url.getHost());
+                sampler.setPort(url.getPort());
+                sampler.setProtocol(url.getProtocol());
+                sampler.setMethod(SoapSampler.POST);
+                sampler.setPath(url.getPath());
+                sampler.setXmlData(soapXml.getText());
+            }
+            catch (MalformedURLException e)
+            {}
+        }
+    }
 
-		mainPanel.add(urlField);
+    private void init()
+    {
+        this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
 
-		// OPTIONAL TASKS
-		mainPanel.add(soapXml);
+        // MAIN PANEL
+        JPanel mainPanel = new JPanel();
+        Border margin = new EmptyBorder(10, 10, 5, 10);
+        mainPanel.setBorder(margin);
+        mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-		this.add(mainPanel);
-	}
-	
-	public void configure(TestElement el)
-	{
-		super.configure(el);
-		SoapSampler sampler = (SoapSampler)el;
-		try {
-			urlField.setText(sampler.getUrl().toString());
-		} catch(MalformedURLException e) {
-		}
-		soapXml.setText(sampler.getXmlData());
-	}
+        // TITLE
+        JLabel panelTitleLabel = new JLabel(label);
+        Font curFont = panelTitleLabel.getFont();
+        int curFontSize = curFont.getSize();
+        curFontSize += 4;
+        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
+        mainPanel.add(panelTitleLabel);
+        // NAME
+        mainPanel.add(getNamePanel());
+
+        mainPanel.add(urlField);
+
+        // OPTIONAL TASKS
+        mainPanel.add(soapXml);
+
+        this.add(mainPanel);
+    }
+
+    public void configure(TestElement el)
+    {
+        super.configure(el);
+        SoapSampler sampler = (SoapSampler) el;
+        try
+        {
+            urlField.setText(sampler.getUrl().toString());
+        }
+        catch (MalformedURLException e)
+        {}
+        soapXml.setText(sampler.getXmlData());
+    }
 
 }

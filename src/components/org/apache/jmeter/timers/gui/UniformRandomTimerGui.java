@@ -132,11 +132,21 @@ public class UniformRandomTimerGui extends AbstractTimerGui implements KeyListen
 	public TestElement createTestElement()
 	{
 		RandomTimer timer = new UniformRandomTimer();
-		this.configureTestElement(timer);
-		timer.setDelay(delayField.getText());
-		timer.setRange(Double.parseDouble(rangeField.getText()));
+		modifyTestElement(timer);
 		return timer;
 	}
+
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement timer)
+    {
+        this.configureTestElement(timer);
+        ((RandomTimer)timer).setDelay(delayField.getText());
+        ((RandomTimer)timer).setRange(Double.parseDouble(rangeField.getText()));
+    }
 
 	/**
 	 * Configure this GUI component from the underlying TestElement.

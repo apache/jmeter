@@ -151,11 +151,22 @@ public class NamePanel extends JPanel implements JMeterGUIComponent
 	public TestElement createTestElement()
 	{
 		WorkBench wb = new WorkBench();
-		wb.setProperty(TestElement.NAME, getName());
-		wb.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
-		wb.setProperty(TestElement.TEST_CLASS, WorkBench.class.getName());
+		modifyTestElement(wb);
 		return wb;
 	}
+
+    /**
+         * Modifies a given TestElement to mirror the data in the gui components.
+         * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+         */
+    public void modifyTestElement(TestElement wb)
+    {
+        wb.setProperty(TestElement.NAME, getName());
+        wb.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
+        wb.setProperty(TestElement.TEST_CLASS, WorkBench.class.getName());
+    }
+    
+    
 
 	/****************************************
 	 * !ToDoo (Method description)

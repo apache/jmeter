@@ -111,11 +111,20 @@ public class LoginConfigGui extends AbstractConfigGui
 	public TestElement createTestElement()
 	{
 		ConfigTestElement element = new ConfigTestElement();
-		configureTestElement(element);
-		element.setProperty(ConfigTestElement.USERNAME,username.getText());
-		element.setProperty(ConfigTestElement.PASSWORD,password.getText());
+		modifyTestElement(element);
 		return element;
 	}
+
+    /**
+         * Modifies a given TestElement to mirror the data in the gui components.
+         * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+         */
+    public void modifyTestElement(TestElement element)
+    {
+        configureTestElement(element);
+        element.setProperty(ConfigTestElement.USERNAME,username.getText());
+        element.setProperty(ConfigTestElement.PASSWORD,password.getText());
+    }
 
 	private void init()
 	{

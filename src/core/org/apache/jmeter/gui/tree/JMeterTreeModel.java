@@ -80,145 +80,164 @@ import org.apache.jorphan.collections.ListedHashTree;
 public class JMeterTreeModel extends DefaultTreeModel
 {
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public JMeterTreeModel()
-	{
-		super(new JMeterTreeNode(new WorkBenchGui().createTestElement(), null));
-		initTree();
-	}
+    /****************************************
+     * !ToDo (Constructor description)
+     ***************************************/
+    public JMeterTreeModel()
+    {
+        super(new JMeterTreeNode(new WorkBenchGui().createTestElement(), null));
+        initTree();
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@param type  !ToDo (Parameter description)
-	 *@return      !ToDo (Return description)
-	 ***************************************/
-	public List getNodesOfType(Class type)
-	{
-		List nodeList = new LinkedList();
-		traverseAndFind(type, (JMeterTreeNode)this.getRoot(), nodeList);
-		return nodeList;
-	}
+    /****************************************
+     * !ToDoo (Method description)
+     *
+     *@param type  !ToDo (Parameter description)
+     *@return      !ToDo (Return description)
+     ***************************************/
+    public List getNodesOfType(Class type)
+    {
+        List nodeList = new LinkedList();
+        traverseAndFind(type, (JMeterTreeNode) this.getRoot(), nodeList);
+        return nodeList;
+    }
 
-	/****************************************
-	 * Adds the sub tree at the given node.  Returns a boolean indicating
-	 * whether the added sub tree was a full test plan.
-	 *
-	 *@param subTree                         !ToDo
-	 *@param current                         !ToDo
-	 *@exception IllegalUserActionException  !ToDo (Exception description)
-	 ***************************************/
-	public boolean addSubTree(HashTree subTree, JMeterTreeNode current)
-			 throws IllegalUserActionException
-	{
-		boolean ret = false;
-		Iterator iter = subTree.list().iterator();
-		while(iter.hasNext())
-		{
-			TestElement item = (TestElement)iter.next();
-			if(item instanceof TestPlan)
-			{
-				current = (JMeterTreeNode)((JMeterTreeNode)getRoot()).getChildAt(0);
-				((TestElement)current.getUserObject()).addTestElement(item);
-				addSubTree(subTree.getTree(item), current);
-				ret = true;
-			}
-			else
-			{
-				addSubTree(subTree.getTree(item), addComponent(item, current));
-			}
-		}
-		return ret;
-	}
+    /**
+     * Get the node for a given TestElement object.
+     * @param userObject
+     * @return JMeterTreeNode
+     */
+    public JMeterTreeNode getNodeOf(TestElement userObject)
+    {
+        List nodeList = new LinkedList();
+        return traverseAndFind(userObject, (JMeterTreeNode) this.getRoot(), nodeList);
+    }
 
-	/****************************************
-	 * !ToDo
-	 *
-	 *@param component                       !ToDo
-	 *@param node                            !ToDo
-	 *@return                                !ToDo (Return description)
-	 *@exception IllegalUserActionException  !ToDo (Exception description)
-	 ***************************************/
-	public JMeterTreeNode addComponent(TestElement component, JMeterTreeNode node)
-			 throws IllegalUserActionException
-	{
-		if(node.getUserObject() instanceof AbstractConfigGui)
-		{
-			throw new IllegalUserActionException("This node cannot hold sub-elements");
-		}
-		JMeterTreeNode newNode = new JMeterTreeNode((TestElement)component, this);
-		this.insertNodeInto(newNode, node, node.getChildCount());
-		return newNode;
-	}
+    /****************************************
+     * Adds the sub tree at the given node.  Returns a boolean indicating
+     * whether the added sub tree was a full test plan.
+     *
+     *@param subTree                         !ToDo
+     *@param current                         !ToDo
+     *@exception IllegalUserActionException  !ToDo (Exception description)
+     ***************************************/
+    public boolean addSubTree(HashTree subTree, JMeterTreeNode current) throws IllegalUserActionException
+    {
+        boolean ret = false;
+        Iterator iter = subTree.list().iterator();
+        while (iter.hasNext())
+        {
+            TestElement item = (TestElement) iter.next();
+            if (item instanceof TestPlan)
+            {
+                current = (JMeterTreeNode) ((JMeterTreeNode) getRoot()).getChildAt(0);
+                ((TestElement) current.getUserObject()).addTestElement(item);
+                addSubTree(subTree.getTree(item), current);
+                ret = true;
+            }
+            else
+            {
+                addSubTree(subTree.getTree(item), addComponent(item, current));
+            }
+        }
+        return ret;
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param node  !ToDo (Parameter description)
-	 ***************************************/
-	public void removeNodeFromParent(JMeterTreeNode node)
-	{
-		if(!(node.getUserObject() instanceof TestPlan) &&
-				!(node.getUserObject() instanceof WorkBench))
-		{
-			super.removeNodeFromParent(node);
-		}
-	}
+    /****************************************
+     * !ToDo
+     *
+     *@param component                       !ToDo
+     *@param node                            !ToDo
+     *@return                                !ToDo (Return description)
+     *@exception IllegalUserActionException  !ToDo (Exception description)
+     ***************************************/
+    public JMeterTreeNode addComponent(TestElement component, JMeterTreeNode node) throws IllegalUserActionException
+    {
+        if (node.getUserObject() instanceof AbstractConfigGui)
+        {
+            throw new IllegalUserActionException("This node cannot hold sub-elements");
+        }
+        JMeterTreeNode newNode = new JMeterTreeNode((TestElement) component, this);
+        this.insertNodeInto(newNode, node, node.getChildCount());
+        return newNode;
+    }
 
-	private void traverseAndFind(Class type, JMeterTreeNode node, List nodeList)
-	{
-		if(type.isInstance(node.getUserObject()))
-		{
-			nodeList.add(node);
-		}
-		Enumeration enum = node.children();
-		while(enum.hasMoreElements())
-		{
-			JMeterTreeNode child = (JMeterTreeNode)enum.nextElement();
-			traverseAndFind(type, child, nodeList);
-		}
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@param node  !ToDo (Parameter description)
+     ***************************************/
+    public void removeNodeFromParent(JMeterTreeNode node)
+    {
+        if (!(node.getUserObject() instanceof TestPlan) && !(node.getUserObject() instanceof WorkBench))
+        {
+            super.removeNodeFromParent(node);
+        }
+    }
 
-	public HashTree getCurrentSubTree(JMeterTreeNode node)
-	{
-		ListedHashTree hashTree = new ListedHashTree(node);
-		Enumeration enum = node.children();
-		while(enum.hasMoreElements())
-		{
-			JMeterTreeNode child = (JMeterTreeNode)enum.nextElement();
-			hashTree.add(node,getCurrentSubTree(child));
-		}
-		return hashTree;
-	}
+    private void traverseAndFind(Class type, JMeterTreeNode node, List nodeList)
+    {
+        if (type.isInstance(node.getUserObject()))
+        {
+            nodeList.add(node);
+        }
+        Enumeration enum = node.children();
+        while (enum.hasMoreElements())
+        {
+            JMeterTreeNode child = (JMeterTreeNode) enum.nextElement();
+            traverseAndFind(type, child, nodeList);
+        }
+    }
 
-	public HashTree getTestPlan()
-	{
-		return getCurrentSubTree((JMeterTreeNode)((JMeterTreeNode)this.getRoot()).getChildAt(0));
-	}
+    private JMeterTreeNode traverseAndFind(TestElement userObject, JMeterTreeNode node, List nodeList)
+    {
+        if (userObject == node.getUserObject())
+        {
+            return node;
+        }
+        Enumeration enum = node.children();
+        while (enum.hasMoreElements())
+        {
+            JMeterTreeNode child = (JMeterTreeNode) enum.nextElement();
+            return traverseAndFind(userObject, child, nodeList);
+        }
+        return null;
+    }
 
-	public void clearTestPlan()
-	{
-		super.removeNodeFromParent((JMeterTreeNode)getChild(getRoot(), 0));
-		initTree();
-	}
+    public HashTree getCurrentSubTree(JMeterTreeNode node)
+    {
+        ListedHashTree hashTree = new ListedHashTree(node);
+        Enumeration enum = node.children();
+        while (enum.hasMoreElements())
+        {
+            JMeterTreeNode child = (JMeterTreeNode) enum.nextElement();
+            hashTree.add(node, getCurrentSubTree(child));
+        }
+        return hashTree;
+    }
 
-	private void initTree()
-	{
-		TestElement tp = new TestPlanGui().createTestElement();
-		TestElement wb = new WorkBenchGui().createTestElement();
-		this.insertNodeInto(new JMeterTreeNode(tp, this),
-				(JMeterTreeNode)getRoot(), 0);
-		try
-		{
-			super.removeNodeFromParent((JMeterTreeNode)getChild(getRoot(), 1));
-		}
-		catch (RuntimeException e)
-		{
-		
-		}
-		this.insertNodeInto(new JMeterTreeNode(wb, this),
-				(JMeterTreeNode)getRoot(), 1);
-	}
+    public HashTree getTestPlan()
+    {
+        return getCurrentSubTree((JMeterTreeNode) ((JMeterTreeNode) this.getRoot()).getChildAt(0));
+    }
+
+    public void clearTestPlan()
+    {
+        super.removeNodeFromParent((JMeterTreeNode) getChild(getRoot(), 0));
+        initTree();
+    }
+
+    private void initTree()
+    {
+        TestElement tp = new TestPlanGui().createTestElement();
+        TestElement wb = new WorkBenchGui().createTestElement();
+        this.insertNodeInto(new JMeterTreeNode(tp, this), (JMeterTreeNode) getRoot(), 0);
+        try
+        {
+            super.removeNodeFromParent((JMeterTreeNode) getChild(getRoot(), 1));
+        }
+        catch (RuntimeException e)
+        {}
+        this.insertNodeInto(new JMeterTreeNode(wb, this), (JMeterTreeNode) getRoot(), 1);
+    }
 }

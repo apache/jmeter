@@ -87,7 +87,6 @@ import org.apache.jmeter.gui.util.TextAreaTableCellEditor;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-
 /****************************************
  * Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:
  * Apache
@@ -99,349 +98,354 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class AssertionGui extends AbstractAssertionGui implements FocusListener
 {
-	static final String COL_NAME = JMeterUtils.getResString("assertion_patterns_to_test");
-	
-	private JRadioButton responseStringButton, labelButton, containsBox, matchesBox;
-	private JCheckBox notBox;
-	private JTable stringTable;
-	private JButton addPattern,deletePattern;
-	PowerTableModel tableModel;
+    static final String COL_NAME = JMeterUtils.getResString("assertion_patterns_to_test");
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public AssertionGui()
-	{
-		init();
-	}
+    private JRadioButton responseStringButton, labelButton, containsBox, matchesBox;
+    private JCheckBox notBox;
+    private JTable stringTable;
+    private JButton addPattern, deletePattern;
+    PowerTableModel tableModel;
 
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("assertion_title");
-	}
+    /****************************************
+     * !ToDo (Constructor description)
+     ***************************************/
+    public AssertionGui()
+    {
+        init();
+    }
 
-	public TestElement createTestElement()
-	{
-		ResponseAssertion el = new ResponseAssertion();
-		String[] testStrings = tableModel.getData().getColumn(COL_NAME);
-		for(int i = 0;i < testStrings.length;i++)
-		{
-			el.addTestString(testStrings[i]);
-		}
-		configureTestElement(el);
-		if(labelButton.isSelected())
-		{
-			el.setTestField(ResponseAssertion.SAMPLE_LABEL);
-		}
-		else
-		{
-			el.setTestField(ResponseAssertion.RESPONSE_DATA);
-		}
-		if(containsBox.isSelected())
-		{
-			el.setToContainsType();
-		}
-		else
-		{
-			el.setToMatchType();
-		}
-		if(notBox.isSelected())
-		{
-			el.setToNotType();
-		}
-		else
-		{
-			el.unsetNotType();
-		}
-		return el;
-	}
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("assertion_title");
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 ***************************************/
-	public void configure(TestElement el)
-	{
-		super.configure(el);
-		ResponseAssertion model = (ResponseAssertion)el;
-		if(model.isContainsType())
-		{
-			containsBox.setSelected(true);
-			matchesBox.setSelected(false);
-		}
-		else
-		{
-			containsBox.setSelected(false);
-			matchesBox.setSelected(true);
-		}
-		if(model.isNotType())
-		{
-			notBox.setSelected(true);
-		}
-		else
-		{
-			notBox.setSelected(false);
-		}
+    public TestElement createTestElement()
+    {
+        ResponseAssertion el = new ResponseAssertion();
+        modifyTestElement(el);
+        return el;
+    }
 
-		if(ResponseAssertion.RESPONSE_DATA.equals(model.getTestField()))
-		{
-			responseStringButton.setSelected(true);
-			labelButton.setSelected(false);
-		}
-		else
-		{
-			responseStringButton.setSelected(false);
-			labelButton.setSelected(true);
-		}
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement el)
+    {
+        configureTestElement(el);
+        if (el instanceof ResponseAssertion)
+        {
+            ResponseAssertion ra = (ResponseAssertion) el;
+            String[] testStrings = tableModel.getData().getColumn(COL_NAME);
+            for (int i = 0; i < testStrings.length; i++)
+            {
+                ra.addTestString(testStrings[i]);
+            }
+            if (labelButton.isSelected())
+            {
+                ra.setTestField(ResponseAssertion.SAMPLE_LABEL);
+            }
+            else
+            {
+                ra.setTestField(ResponseAssertion.RESPONSE_DATA);
+            }
+            if (containsBox.isSelected())
+            {
+                ra.setToContainsType();
+            }
+            else
+            {
+                ra.setToMatchType();
+            }
+            if (notBox.isSelected())
+            {
+                ra.setToNotType();
+            }
+            else
+            {
+                ra.unsetNotType();
+            }
+        }
+    }
+
+    /****************************************
+     * !ToDo (Method description)
+     ***************************************/
+    public void configure(TestElement el)
+    {
+        super.configure(el);
+        ResponseAssertion model = (ResponseAssertion) el;
+        if (model.isContainsType())
+        {
+            containsBox.setSelected(true);
+            matchesBox.setSelected(false);
+        }
+        else
+        {
+            containsBox.setSelected(false);
+            matchesBox.setSelected(true);
+        }
+        if (model.isNotType())
+        {
+            notBox.setSelected(true);
+        }
+        else
+        {
+            notBox.setSelected(false);
+        }
+
+        if (ResponseAssertion.RESPONSE_DATA.equals(model.getTestField()))
+        {
+            responseStringButton.setSelected(true);
+            labelButton.setSelected(false);
+        }
+        else
+        {
+            responseStringButton.setSelected(false);
+            labelButton.setSelected(true);
+        }
         tableModel.clearData();
-		Iterator tests = model.getTestStrings().iterator();
-		while(tests.hasNext())
-		{
-			tableModel.addRow(new Object[]{tests.next()});
-		}
-		tableModel.fireTableDataChanged();
-	}
+        Iterator tests = model.getTestStrings().iterator();
+        while (tests.hasNext())
+        {
+            tableModel.addRow(new Object[] { tests.next()});
+        }
+        tableModel.fireTableDataChanged();
+    }
 
-	private void init()
-	{
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.gridheight = 1;
-		gbc.gridwidth = 1;
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.weightx = 1;
-		gbc.weighty = 1;
+    private void init()
+    {
+        this.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridheight = 1;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		add(mainPanel,gbc.clone());
-		//gbc.fill = gbc.NONE;
-		gbc.weighty = 0;
-		mainPanel.setLayout(new GridBagLayout());
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
+        // MAIN PANEL
+        JPanel mainPanel = new JPanel();
+        add(mainPanel, gbc.clone());
+        //gbc.fill = gbc.NONE;
+        gbc.weighty = 0;
+        mainPanel.setLayout(new GridBagLayout());
+        Border margin = new EmptyBorder(10, 10, 5, 10);
+        mainPanel.setBorder(margin);
 
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("assertion_title"));
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel,gbc.clone());
-		gbc.gridy++;
+        // TITLE
+        JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("assertion_title"));
+        Font curFont = panelTitleLabel.getFont();
+        int curFontSize = curFont.getSize();
+        curFontSize += 4;
+        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
+        mainPanel.add(panelTitleLabel, gbc.clone());
+        gbc.gridy++;
 
-		// NAME
-		mainPanel.add(getNamePanel(),gbc.clone());
-		gbc.gridx++;
-		//gbc.fill = gbc.HORIZONTAL;
-		mainPanel.add(Box.createHorizontalGlue(),gbc.clone());
-		gbc.gridx--;
-		//gbc.fill = gbc.NONE;
-		gbc.gridy++;
-		mainPanel.add(createFieldPanel(),gbc.clone());
-		gbc.gridy++;
-		mainPanel.add(createTypePanel(),gbc.clone());
-		gbc.gridy++;
-		//gbc.fill = gbc.BOTH;
-		gbc.weighty = 1;
-		gbc.gridwidth = 2;
-		mainPanel.add(createStringPanel(),gbc.clone());
-	}
+        // NAME
+        mainPanel.add(getNamePanel(), gbc.clone());
+        gbc.gridx++;
+        //gbc.fill = gbc.HORIZONTAL;
+        mainPanel.add(Box.createHorizontalGlue(), gbc.clone());
+        gbc.gridx--;
+        //gbc.fill = gbc.NONE;
+        gbc.gridy++;
+        mainPanel.add(createFieldPanel(), gbc.clone());
+        gbc.gridy++;
+        mainPanel.add(createTypePanel(), gbc.clone());
+        gbc.gridy++;
+        //gbc.fill = gbc.BOTH;
+        gbc.weighty = 1;
+        gbc.gridwidth = 2;
+        mainPanel.add(createStringPanel(), gbc.clone());
+    }
 
-	private JPanel createFieldPanel()
-	{
-		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-				JMeterUtils.getResString("assertion_resp_field")));
-		responseStringButton = new JRadioButton(JMeterUtils.getResString("assertion_text_resp"));
-		labelButton = new JRadioButton(JMeterUtils.getResString("assertion_url_samp"));
-		ButtonGroup group = new ButtonGroup();
-		group.add(responseStringButton);
-		group.add(labelButton);
-		panel.add(responseStringButton);
-		panel.add(labelButton);
-		responseStringButton.setSelected(true);
-		return panel;
-	}
+    private JPanel createFieldPanel()
+    {
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("assertion_resp_field")));
+        responseStringButton = new JRadioButton(JMeterUtils.getResString("assertion_text_resp"));
+        labelButton = new JRadioButton(JMeterUtils.getResString("assertion_url_samp"));
+        ButtonGroup group = new ButtonGroup();
+        group.add(responseStringButton);
+        group.add(labelButton);
+        panel.add(responseStringButton);
+        panel.add(labelButton);
+        responseStringButton.setSelected(true);
+        return panel;
+    }
 
-	private JPanel createTypePanel()
-	{
-		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-				JMeterUtils.getResString("assertion_pattern_match_rules")));
-		containsBox = new JRadioButton(JMeterUtils.getResString("assertion_contains"));
-		matchesBox = new JRadioButton(JMeterUtils.getResString("assertion_matches"));
-		notBox = new JCheckBox(JMeterUtils.getResString("assertion_not"));
-		ButtonGroup group = new ButtonGroup();
-		group.add(matchesBox);
-		group.add(containsBox);
-		panel.add(containsBox);
-		panel.add(matchesBox);
-		panel.add(notBox);
-		containsBox.setSelected(true);
-		return panel;
-	}
-	
-	/****************************************
-	 * Description of the Method
-	 *
-	 *@param e  Description of Parameter
-	 ***************************************/
-	public void focusLost(FocusEvent e)
-	{
-		try
-		{
-			stringTable.getCellEditor().stopCellEditing();
-		}
-		catch(NullPointerException err){}
-	}
+    private JPanel createTypePanel()
+    {
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("assertion_pattern_match_rules")));
+        containsBox = new JRadioButton(JMeterUtils.getResString("assertion_contains"));
+        matchesBox = new JRadioButton(JMeterUtils.getResString("assertion_matches"));
+        notBox = new JCheckBox(JMeterUtils.getResString("assertion_not"));
+        ButtonGroup group = new ButtonGroup();
+        group.add(matchesBox);
+        group.add(containsBox);
+        panel.add(containsBox);
+        panel.add(matchesBox);
+        panel.add(notBox);
+        containsBox.setSelected(true);
+        return panel;
+    }
 
-	/****************************************
-	 * Description of the Method
-	 *
-	 *@param e  Description of Parameter
-	 ***************************************/
-	public void focusGained(FocusEvent e) { }
+    /****************************************
+     * Description of the Method
+     *
+     *@param e  Description of Parameter
+     ***************************************/
+    public void focusLost(FocusEvent e)
+    {
+        try
+        {
+            stringTable.getCellEditor().stopCellEditing();
+        }
+        catch (NullPointerException err)
+        {}
+    }
 
-	private JPanel createStringPanel()
-	{
-		JPanel panel = new JPanel();
-		stringTable = new JTable(0,1);
-		stringTable.addFocusListener(this);
-		tableModel = new PowerTableModel(new String[]{COL_NAME},new Class[]{String.class});
-		stringTable.setModel(tableModel);
-		TextAreaCellRenderer renderer = new TextAreaCellRenderer();
-		stringTable.setDefaultEditor(String.class,new TextAreaTableCellEditor());
-		stringTable.setRowHeight(renderer.getPreferredHeight());
-		stringTable.setDefaultRenderer(String.class,renderer);
-		panel.setLayout(new BorderLayout());
-		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-				JMeterUtils.getResString("assertion_patterns_to_test")));
-		panel.add(new JScrollPane(stringTable),BorderLayout.CENTER);
-		addPattern = new JButton(JMeterUtils.getResString("add"));
-		deletePattern = new JButton(JMeterUtils.getResString("delete"));
-		addPattern.addActionListener(new AddPatternListener());
-		deletePattern.addActionListener(new ClearPatternsListener());
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.add(addPattern);
-		buttonPanel.add(deletePattern);
-		panel.add(buttonPanel,BorderLayout.SOUTH);
-		deletePattern.setEnabled(false);
-		
-		return panel;
-	}
+    /****************************************
+     * Description of the Method
+     *
+     *@param e  Description of Parameter
+     ***************************************/
+    public void focusGained(FocusEvent e)
+    {}
 
-	/****************************************
-	 * !ToDo (Class description)
-	 *
-	 *@author    $Author$
-	 *@created   $Date$
-	 *@version   $Revision$
-	 ***************************************/
-	private class ClearPatternsListener implements ActionListener
-	{
-		/****************************************
-		 * !ToDo (Method description)
-		 *
-		 *@param e  !ToDo (Parameter description)
-		 ***************************************/
-		public void actionPerformed(ActionEvent e)
-		{
-			int index = stringTable.getSelectedRow();
-			stringTable.getCellEditor(index,stringTable.getSelectedColumn()).cancelCellEditing();
-			if(index > -1)
-			{
-				tableModel.removeRow(index);
-				tableModel.fireTableDataChanged();
-			}
-			if(stringTable.getModel().getRowCount() == 0)
-			{
-				deletePattern.setEnabled(false);
-			}
-		}
-	}
+    private JPanel createStringPanel()
+    {
+        JPanel panel = new JPanel();
+        stringTable = new JTable(0, 1);
+        stringTable.addFocusListener(this);
+        tableModel = new PowerTableModel(new String[] { COL_NAME }, new Class[] { String.class });
+        stringTable.setModel(tableModel);
+        TextAreaCellRenderer renderer = new TextAreaCellRenderer();
+        stringTable.setDefaultEditor(String.class, new TextAreaTableCellEditor());
+        stringTable.setRowHeight(renderer.getPreferredHeight());
+        stringTable.setDefaultRenderer(String.class, renderer);
+        panel.setLayout(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("assertion_patterns_to_test")));
+        panel.add(new JScrollPane(stringTable), BorderLayout.CENTER);
+        addPattern = new JButton(JMeterUtils.getResString("add"));
+        deletePattern = new JButton(JMeterUtils.getResString("delete"));
+        addPattern.addActionListener(new AddPatternListener());
+        deletePattern.addActionListener(new ClearPatternsListener());
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(addPattern);
+        buttonPanel.add(deletePattern);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+        deletePattern.setEnabled(false);
 
-	/****************************************
-	 * !ToDo (Class description)
-	 *
-	 *@author    $Author$
-	 *@created   $Date$
-	 *@version   $Revision$
-	 ***************************************/
-	private class AddPatternListener implements ActionListener
-	{
-		/****************************************
-		 * !ToDo (Method description)
-		 *
-		 *@param e  !ToDo (Parameter description)
-		 ***************************************/
-		public void actionPerformed(ActionEvent e)
-		{
-			tableModel.addNewRow();
-			deletePattern.setEnabled(true);
-			tableModel.fireTableDataChanged();
-		}
-	}
+        return panel;
+    }
 
-	/****************************************
-	 * !ToDo (Class description)
-	 *
-	 *@author    $Author$
-	 *@created   $Date$
-	 *@version   $Revision$
-	 ***************************************/
-	private class PatternRenderer extends DefaultListCellRenderer
-	{
-		/****************************************
-		 * !ToDoo (Method description)
-		 *
-		 *@param list          !ToDo (Parameter description)
-		 *@param value         !ToDo (Parameter description)
-		 *@param index         !ToDo (Parameter description)
-		 *@param isSelected    !ToDo (Parameter description)
-		 *@param cellHasFocus  !ToDo (Parameter description)
-		 *@return              !ToDo (Return description)
-		 ***************************************/
-		public Component getListCellRendererComponent(JList list,
-				Object value,
-				int index,
-				boolean isSelected,
-				boolean cellHasFocus)
-		{
-			String displayText = value.toString();
-			if(displayText.length() > 10)
-			{
-				displayText = displayText.substring(0, 10);
-			}
+    /****************************************
+     * !ToDo (Class description)
+     *
+     *@author    $Author$
+     *@created   $Date$
+     *@version   $Revision$
+     ***************************************/
+    private class ClearPatternsListener implements ActionListener
+    {
+        /****************************************
+         * !ToDo (Method description)
+         *
+         *@param e  !ToDo (Parameter description)
+         ***************************************/
+        public void actionPerformed(ActionEvent e)
+        {
+            int index = stringTable.getSelectedRow();
+            stringTable.getCellEditor(index, stringTable.getSelectedColumn()).cancelCellEditing();
+            if (index > -1)
+            {
+                tableModel.removeRow(index);
+                tableModel.fireTableDataChanged();
+            }
+            if (stringTable.getModel().getRowCount() == 0)
+            {
+                deletePattern.setEnabled(false);
+            }
+        }
+    }
 
-			JLabel label = new JLabel(displayText);
+    /****************************************
+     * !ToDo (Class description)
+     *
+     *@author    $Author$
+     *@created   $Date$
+     *@version   $Revision$
+     ***************************************/
+    private class AddPatternListener implements ActionListener
+    {
+        /****************************************
+         * !ToDo (Method description)
+         *
+         *@param e  !ToDo (Parameter description)
+         ***************************************/
+        public void actionPerformed(ActionEvent e)
+        {
+            tableModel.addNewRow();
+            deletePattern.setEnabled(true);
+            tableModel.fireTableDataChanged();
+        }
+    }
 
-			if(isSelected)
-			{
-				label.setBackground(Color.blue);
-				label.setForeground(Color.white);
-				label.setOpaque(true);
-			}
-			else
-			{
-				label.setForeground(Color.black);
-				label.setBackground(Color.white);
-			}
+    /****************************************
+     * !ToDo (Class description)
+     *
+     *@author    $Author$
+     *@created   $Date$
+     *@version   $Revision$
+     ***************************************/
+    private class PatternRenderer extends DefaultListCellRenderer
+    {
+        /****************************************
+         * !ToDoo (Method description)
+         *
+         *@param list          !ToDo (Parameter description)
+         *@param value         !ToDo (Parameter description)
+         *@param index         !ToDo (Parameter description)
+         *@param isSelected    !ToDo (Parameter description)
+         *@param cellHasFocus  !ToDo (Parameter description)
+         *@return              !ToDo (Return description)
+         ***************************************/
+        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+        {
+            String displayText = value.toString();
+            if (displayText.length() > 10)
+            {
+                displayText = displayText.substring(0, 10);
+            }
 
-			if(cellHasFocus)
-			{
-				label.setBorder(BorderFactory.createEtchedBorder());
-			}
+            JLabel label = new JLabel(displayText);
 
-			label.setText(displayText);
+            if (isSelected)
+            {
+                label.setBackground(Color.blue);
+                label.setForeground(Color.white);
+                label.setOpaque(true);
+            }
+            else
+            {
+                label.setForeground(Color.black);
+                label.setBackground(Color.white);
+            }
 
-			return label;
-		}
-	}
+            if (cellHasFocus)
+            {
+                label.setBorder(BorderFactory.createEtchedBorder());
+            }
 
-	
-	
-	
+            label.setText(displayText);
+
+            return label;
+        }
+    }
+
 }

@@ -116,18 +116,27 @@ public class DurationAssertionGui extends AbstractAssertionGui implements FocusL
 	{
 		//ResponseAssertion el = new ResponseAssertion();
 		DurationAssertion el = new DurationAssertion();
-		configureTestElement(el);
-		String durationString = duration.getText();
-		long assertionDuration = 0;
-		try {
-			assertionDuration = Long.parseLong(durationString);
-		}
-		catch (NumberFormatException e) {
-			assertionDuration = Long.MAX_VALUE;
-		}
-		el.setAllowedDuration(assertionDuration);
+		modifyTestElement(el);
 		return el;
 	}
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement el)
+    {
+        configureTestElement(el);
+        String durationString = duration.getText();
+        long assertionDuration = 0;
+        try {
+        	assertionDuration = Long.parseLong(durationString);
+        }
+        catch (NumberFormatException e) {
+        	assertionDuration = Long.MAX_VALUE;
+        }
+        ((DurationAssertion)el).setAllowedDuration(assertionDuration);
+    }
 
 	/****************************************
 	 * !ToDo (Method description)

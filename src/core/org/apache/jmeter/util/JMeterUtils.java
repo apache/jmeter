@@ -84,6 +84,8 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.test.UnitTestManager;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.apache.oro.text.PatternCacheLRU;
+import org.apache.oro.text.regex.Perl5Compiler;
 import org.xml.sax.XMLReader;
 /**
  *  This class contains the static utility methods used by JMeter.
@@ -95,6 +97,7 @@ import org.xml.sax.XMLReader;
 public class JMeterUtils implements UnitTestManager
 {
         private static final String VERSION="1.8.1";
+        private static PatternCacheLRU patternCache = new PatternCacheLRU(1000,new Perl5Compiler());
 
 	transient private static Logger log =
 		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.util");
@@ -160,6 +163,12 @@ public class JMeterUtils implements UnitTestManager
 		else setLocale(Locale.getDefault());
 		return p;
 	}
+    
+    public static PatternCacheLRU getPatternCache()
+    {
+        return patternCache;
+    }
+    
 	public void initializeProperties(String file)
 	{
 		System.out.println("Initializing Properties: " + file);

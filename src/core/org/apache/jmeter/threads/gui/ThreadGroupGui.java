@@ -88,185 +88,200 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class ThreadGroupGui extends JPanel implements JMeterGUIComponent
 {
-	LoopControlPanel loopPanel;
+    LoopControlPanel loopPanel;
 
-	private final static String THREAD_NAME = "Thread Field";
-	private final static String RAMP_NAME = "Ramp Up Field";
+    private final static String THREAD_NAME = "Thread Field";
+    private final static String RAMP_NAME = "Ramp Up Field";
 
-	private JTextField threadInput;
-	private JTextField rampInput;
-	private NamePanel namePanel;
+    private JTextField threadInput;
+    private JTextField rampInput;
+    private NamePanel namePanel;
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public ThreadGroupGui()
-	{
-		init();
-		setName(getStaticLabel());
-	}
+    /****************************************
+     * !ToDo (Constructor description)
+     ***************************************/
+    public ThreadGroupGui()
+    {
+        init();
+        setName(getStaticLabel());
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public Collection getMenuCategories()
-	{
-		return null;
-	}
+    /****************************************
+     * !ToDoo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public Collection getMenuCategories()
+    {
+        return null;
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param name  !ToDo (Parameter description)
-	 ***************************************/
-	public void setName(String name)
-	{
-		super.setName(name);
-		namePanel.setName(name);
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@param name  !ToDo (Parameter description)
+     ***************************************/
+    public void setName(String name)
+    {
+        super.setName(name);
+        namePanel.setName(name);
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getName()
-	{
-		return namePanel.getName();
-	}
+    /****************************************
+     * !ToDoo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public String getName()
+    {
+        return namePanel.getName();
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public TestElement createTestElement()
-	{
-		ThreadGroup tg = new ThreadGroup();
-		tg.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
-		tg.setProperty(TestElement.TEST_CLASS, ThreadGroup.class.getName());
-		tg.setSamplerController((LoopController)loopPanel.createTestElement());
-		tg.setProperty(TestElement.NAME, namePanel.getName());
-		tg.setProperty(ThreadGroup.NUM_THREADS, threadInput.getText());
-		tg.setProperty(ThreadGroup.RAMP_TIME, rampInput.getText());
-		return tg;
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public TestElement createTestElement()
+    {
+        ThreadGroup tg = new ThreadGroup();
+        modifyTestElement(tg);
+        return tg;
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param tg  !ToDo (Parameter description)
-	 ***************************************/
-	public void configure(TestElement tg)
-	{
-		setName((String)tg.getProperty(TestElement.NAME));
-		threadInput.setText(tg.getProperty(ThreadGroup.NUM_THREADS).toString());
-		rampInput.setText(tg.getProperty(ThreadGroup.RAMP_TIME).toString());
-		loopPanel.configure((TestElement)tg.getProperty(ThreadGroup.MAIN_CONTROLLER));
-	}
+    /**
+         * Modifies a given TestElement to mirror the data in the gui components.
+         * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+         */
+    public void modifyTestElement(TestElement tg)
+    {
+        tg.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
+        tg.setProperty(TestElement.TEST_CLASS, ThreadGroup.class.getName());
+        if (tg instanceof ThreadGroup)
+        {
+            ((ThreadGroup) tg).setSamplerController((LoopController) loopPanel.createTestElement());
+        }
+        tg.setProperty(TestElement.NAME, namePanel.getName());
+        tg.setProperty(ThreadGroup.NUM_THREADS, threadInput.getText());
+        tg.setProperty(ThreadGroup.RAMP_TIME, rampInput.getText());
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public JPopupMenu createPopupMenu()
-	{
-		JPopupMenu pop = new JPopupMenu();
-		pop.add(MenuFactory.makeMenus(new String[]{MenuFactory.CONTROLLERS,
-				MenuFactory.LISTENERS, MenuFactory.SAMPLERS, MenuFactory.TIMERS,
-				MenuFactory.CONFIG_ELEMENTS}, JMeterUtils.getResString("Add"),
-				"Add"));
-		MenuFactory.addEditMenu(pop, true);
-		MenuFactory.addFileMenu(pop);
-		return pop;
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@param tg  !ToDo (Parameter description)
+     ***************************************/
+    public void configure(TestElement tg)
+    {
+        setName((String) tg.getProperty(TestElement.NAME));
+        threadInput.setText(tg.getProperty(ThreadGroup.NUM_THREADS).toString());
+        rampInput.setText(tg.getProperty(ThreadGroup.RAMP_TIME).toString());
+        loopPanel.configure((TestElement) tg.getProperty(ThreadGroup.MAIN_CONTROLLER));
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public JPanel createControllerPanel()
-	{
-		loopPanel = new LoopControlPanel(false);
-		LoopController looper= (LoopController)loopPanel.createTestElement();
-		looper.setLoops(-1);
-		loopPanel.configure(looper);
-		return loopPanel;
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public JPopupMenu createPopupMenu()
+    {
+        JPopupMenu pop = new JPopupMenu();
+        pop.add(
+            MenuFactory.makeMenus(
+                new String[] { MenuFactory.CONTROLLERS, MenuFactory.LISTENERS, MenuFactory.SAMPLERS, MenuFactory.TIMERS, MenuFactory.CONFIG_ELEMENTS },
+                JMeterUtils.getResString("Add"),
+                "Add"));
+        MenuFactory.addEditMenu(pop, true);
+        MenuFactory.addFileMenu(pop);
+        return pop;
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("ThreadGroup");
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public JPanel createControllerPanel()
+    {
+        loopPanel = new LoopControlPanel(false);
+        LoopController looper = (LoopController) loopPanel.createTestElement();
+        looper.setLoops(-1);
+        loopPanel.configure(looper);
+        return loopPanel;
+    }
 
-	private void init()
-	{
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+    /****************************************
+     * !ToDoo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("ThreadGroup");
+    }
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+    private void init()
+    {
+        this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
 
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("thread_group_title"));
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
+        // MAIN PANEL
+        JPanel mainPanel = new JPanel();
+        Border margin = new EmptyBorder(10, 10, 5, 10);
+        mainPanel.setBorder(margin);
+        mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-		// NAME
-		namePanel = new NamePanel();
-		mainPanel.add(namePanel);
+        // TITLE
+        JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("thread_group_title"));
+        Font curFont = panelTitleLabel.getFont();
+        int curFontSize = curFont.getSize();
+        curFontSize += 4;
+        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
+        mainPanel.add(panelTitleLabel);
 
-		// THREAD PROPERTIES
-		JPanel threadPropsPanel = new JPanel();
-		margin = new EmptyBorder(5, 10, 10, 10);
-		threadPropsPanel.setLayout(new VerticalLayout(0, VerticalLayout.LEFT));
-		threadPropsPanel.setBorder(new CompoundBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("thread_delay_properties")), margin));
+        // NAME
+        namePanel = new NamePanel();
+        mainPanel.add(namePanel);
 
-		// NUMBER OF THREADS
-		JPanel threadPanel = new JPanel();
-		JLabel threadLabel = new JLabel(JMeterUtils.getResString("number_of_threads"));
-		threadPanel.add(threadLabel);
-		threadInput = new JTextField(5);
-		threadInput.setText("1");
-		threadInput.addFocusListener(NumberFieldErrorListener.getNumberFieldErrorListener());
-		threadInput.setName(THREAD_NAME);
-		threadPanel.add(threadInput);
-		threadPropsPanel.add(threadPanel);
-		new FocusRequester(threadInput);
+        // THREAD PROPERTIES
+        JPanel threadPropsPanel = new JPanel();
+        margin = new EmptyBorder(5, 10, 10, 10);
+        threadPropsPanel.setLayout(new VerticalLayout(0, VerticalLayout.LEFT));
+        threadPropsPanel.setBorder(
+            new CompoundBorder(
+                BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("thread_delay_properties")),
+                margin));
 
-		// RAMP-UP
-		JPanel rampPanel = new JPanel();
-		JLabel rampLabel = new JLabel(JMeterUtils.getResString("ramp_up"));
-		rampPanel.add(rampLabel);
-		rampInput = new JTextField(5);
-		rampInput.setText("1");
-		rampInput.setName(RAMP_NAME);
-		rampInput.addFocusListener(NumberFieldErrorListener.getNumberFieldErrorListener());
-		rampPanel.add(rampInput);
-		threadPropsPanel.add(rampPanel);
+        // NUMBER OF THREADS
+        JPanel threadPanel = new JPanel();
+        JLabel threadLabel = new JLabel(JMeterUtils.getResString("number_of_threads"));
+        threadPanel.add(threadLabel);
+        threadInput = new JTextField(5);
+        threadInput.setText("1");
+        threadInput.addFocusListener(NumberFieldErrorListener.getNumberFieldErrorListener());
+        threadInput.setName(THREAD_NAME);
+        threadPanel.add(threadInput);
+        threadPropsPanel.add(threadPanel);
+        new FocusRequester(threadInput);
 
-		// LOOP COUNT
-		threadPropsPanel.add(createControllerPanel());
+        // RAMP-UP
+        JPanel rampPanel = new JPanel();
+        JLabel rampLabel = new JLabel(JMeterUtils.getResString("ramp_up"));
+        rampPanel.add(rampLabel);
+        rampInput = new JTextField(5);
+        rampInput.setText("1");
+        rampInput.setName(RAMP_NAME);
+        rampInput.addFocusListener(NumberFieldErrorListener.getNumberFieldErrorListener());
+        rampPanel.add(rampInput);
+        threadPropsPanel.add(rampPanel);
 
-		mainPanel.add(threadPropsPanel);
+        // LOOP COUNT
+        threadPropsPanel.add(createControllerPanel());
 
-		this.add(mainPanel);
-	}
+        mainPanel.add(threadPropsPanel);
 
+        this.add(mainPanel);
+    }
 
     public void setNode(JMeterTreeNode node)
     {

@@ -58,13 +58,26 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
     public TestElement createTestElement()
     {
         RegexExtractor extractor = new RegexExtractor();
-        extractor.setRefName(refNameField.getText());
-        extractor.setRegex(regexField.getText());
-        extractor.setTemplate(templateField.getText());
+        modifyTestElement(extractor);
+        return extractor;
+    }
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement extractor)
+    {
         super.configureTestElement(extractor);
         extractor.setProperty(RegexExtractor.MATCH_NUMBER,matchNumberField.getText());
-        extractor.setDefaultValue(defaultField.getText());
-        return extractor;
+        if(extractor instanceof RegexExtractor)
+        {
+            RegexExtractor regex = (RegexExtractor)extractor;
+            regex.setRefName(refNameField.getText());
+            regex.setRegex(regexField.getText());
+            regex.setTemplate(templateField.getText());
+            regex.setDefaultValue(defaultField.getText());
+        }
     }
     
     private void init()

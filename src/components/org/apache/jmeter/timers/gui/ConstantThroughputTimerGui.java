@@ -114,9 +114,18 @@ public class ConstantThroughputTimerGui
     public TestElement createTestElement()
     {
 		ConstantThroughputTimer timer = new ConstantThroughputTimer();
-		this.configureTestElement(timer);
-		timer.setThroughput(Long.parseLong(throughputField.getText()));
+		modifyTestElement(timer);
 		return timer;
+    }
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement timer)
+    {
+        this.configureTestElement(timer);
+        ((ConstantThroughputTimer)timer).setThroughput(Long.parseLong(throughputField.getText()));
     }
 
 	/**
