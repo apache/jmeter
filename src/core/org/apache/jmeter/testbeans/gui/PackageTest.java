@@ -67,6 +67,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -75,7 +76,7 @@ import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.log.Logger;
 
 import junit.framework.Test;
-import junit.framework.TestCase;
+//import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /*
@@ -85,7 +86,7 @@ import junit.framework.TestSuite;
  *   except for beans whose name contains "Experimental" or "Alpha".
  * TODO: - Check property files don't have duplicate keys (is this important)
  */
-public class PackageTest extends TestCase
+public class PackageTest extends JMeterTestCase
 {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
@@ -109,7 +110,7 @@ public class PackageTest extends TestCase
 
 	public void setUp()
 	{
-		JMeterUtils.setLocale(new Locale(language));
+		JMeterUtils.setLocale(new Locale(language,""));
 		try
 		{
 			beanInfo= Introspector.getBeanInfo(testBeanClass, TestBean.class);
@@ -198,7 +199,7 @@ public class PackageTest extends TestCase
 		while (iter.hasNext())
 		{
 			Class testBeanClass= Class.forName((String)iter.next());
-			JMeterUtils.setLocale(new Locale(defaultLanguage));
+			JMeterUtils.setLocale(new Locale(defaultLanguage,""));
 			ResourceBundle defaultBundle;
 			try
 			{
