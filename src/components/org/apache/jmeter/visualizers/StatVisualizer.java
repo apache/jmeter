@@ -227,7 +227,7 @@ public class StatVisualizer extends AbstractVisualizer
      *
      *@param s  !ToDo (Parameter description)
      ***************************************/
-    public void updateGui(RunningSample s)
+    public synchronized void updateGui(RunningSample s)
     {
         myStatTableModel.rowChanged(s.getIndex());
     }

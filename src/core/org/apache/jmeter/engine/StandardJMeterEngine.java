@@ -163,7 +163,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor,
 				notifyTestListenersOfStart();
 			}
 			notifier = new ListenerNotifier();
-			notifier.start();
+			//notifier.start();
 			while(iter.hasNext())
 			{
 				ThreadGroup group = (ThreadGroup)iter.next();
@@ -238,9 +238,9 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor,
 
 	protected void notifyTestListenersOfEnd()
 	{
-		notifier.stop();
+		//notifier.stop();
 		Iterator iter = testListeners.getSearchResults().iterator();
-		while(!notifier.isStopped())
+		/*while(!notifier.isStopped())
 		{
 			try
 			{
@@ -250,7 +250,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor,
 			{
 			}
 			log.debug("Waiting for notifier thread to stop");
-		}
+		}*/
 		while(iter.hasNext())
 		{
 			if(host == null)
