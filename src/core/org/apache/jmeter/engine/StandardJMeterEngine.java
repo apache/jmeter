@@ -299,7 +299,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         }
         notifier = new ListenerNotifier();
         schcdule_run = true;
-
+        JMeterContextService.getContext().setSamplingStarted(true);
         while (iter.hasNext())
         {
             ThreadGroup group = (ThreadGroup) iter.next();

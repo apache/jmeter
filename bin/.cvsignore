@@ -2,3 +2,4 @@ ApacheJMeter.jar
 HTTPSamplerFullTestFile.txt
 jmeter.log
 testresults.txt
+*.bak
