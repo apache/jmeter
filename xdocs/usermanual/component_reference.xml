@@ -848,15 +848,15 @@ The While Controller runs its children until the condition is "false".
 
 <p>Possible condition values:</p>
 <ul>
-<li>blank - exit loop when last sample in loop fails</li>
+<li>blank - exit loop when last sample in loop fails. Will run loop at least once.</li>
 <li>LAST - exit loop when last sample in loop fails. 
 If the last sample just before the loop failed, don't enter loop.</li>
-<li>Otherwise - exit (or don't enter) the loop when the condition is "false"</li>
+<li>Otherwise - exit (or don't enter) the loop when the condition evaluates to the string "false" (case is ignored)</li>
 </ul>
 	</description>
 <properties>
 	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
-	<property name="Condition" required="No">blank, LAST, or variable/function</property>
+	<property name="Condition" required="Yes">blank, LAST, or variable/function</property>
 </properties>
 </component>
 
