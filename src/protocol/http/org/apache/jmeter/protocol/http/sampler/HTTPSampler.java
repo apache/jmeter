@@ -141,7 +141,8 @@ public class HTTPSampler extends AbstractSampler
     protected static String encoding = "iso-8859-1";
     private static final PostWriter postWriter = new PostWriter();
     transient protected HttpURLConnection conn;
-    private HTTPSamplerFull imageSampler;
+    /** 10-20-2003 changed HTTPSampler to use NewHTTPSamplerFulll Peter Lin **/
+	private NewHTTPSamplerFull imageSampler;
 
     static {
         System.setProperty(
@@ -1139,7 +1140,10 @@ public class HTTPSampler extends AbstractSampler
             {
                 if (imageSampler == null)
                 {
-                    imageSampler = new HTTPSamplerFull();
+                	// change to NewHTTPSamplerFull, which uses
+                	// htmlparser to get the images and bin
+                	// files.
+                    imageSampler = new NewHTTPSamplerFull();
                 }
                 res = imageSampler.parseForImages(res, this);
             }
