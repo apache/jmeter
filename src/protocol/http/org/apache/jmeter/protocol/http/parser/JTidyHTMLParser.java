@@ -124,11 +124,13 @@ class JTidyHTMLParser extends HTMLParser
 	 * @param node - initial node
 	 * @param urls - container for URLs
 	 * @param baseUrl - used to create absolute URLs
+     * 
+     * @return new base URL
 	 */
-	private void scanNodes(Node node, Collection urls, URL baseUrl)
+	private URL scanNodes(Node node, Collection urls, URL baseUrl) throws HTMLParseException
 	{
 		if ( node == null ) {
-		  return;
+		  return baseUrl;
 	    }
 
 	    String name = node.getNodeName();
@@ -149,11 +151,11 @@ class JTidyHTMLParser extends HTMLParser
 		  	String tmp=getValue(attrs,"href");
 		  	if (tmp!=null) try
             {
-                baseUrl=new URL(tmp);
+                baseUrl= new URL(baseUrl, tmp);
             }
             catch (MalformedURLException e)
             {
-            	log.warn("Invalid BASE tag "+tmp);
+            	throw new HTMLParseException(e);
             }
 		  	break;
 		  }
@@ -193,7 +195,7 @@ class JTidyHTMLParser extends HTMLParser
 		  if ( children != null ) {
 			 int len = children.getLength();
 			 for ( int i = 0; i < len; i++ ) {
-				scanNodes(children.item(i),urls,baseUrl);
+				baseUrl= scanNodes(children.item(i),urls,baseUrl);
 			 }
 		  }
 		  break;
@@ -202,6 +204,8 @@ class JTidyHTMLParser extends HTMLParser
 //		  break;
 
 	   }
+       
+       return baseUrl;
 
 	}
 
