@@ -88,6 +88,7 @@ import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
+import org.apache.jmeter.protocol.java.BeanShellServer;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
@@ -302,10 +303,12 @@ public class JMeter implements JMeterPlugin
             else if (parser.getArgumentById(SERVER_OPT) != null)
             {
                 startServer();
+                startBSH();
             }
             else if (parser.getArgumentById(NONGUI_OPT) == null)
             {
                 startGui(parser.getArgumentById(TESTFILE_OPT));
+				startBSH();
             }
             else
             {
@@ -313,6 +316,7 @@ public class JMeter implements JMeterPlugin
                     parser.getArgumentById(TESTFILE_OPT),
                     parser.getArgumentById(LOGFILE_OPT),
                     parser.getArgumentById(REMOTE_OPT));
+				startBSH();
             }
         }
         catch (IllegalUserActionException e)
@@ -330,6 +334,19 @@ public class JMeter implements JMeterPlugin
     }
 
     /**
+	 * 
+	 */
+	private void startBSH() {
+		int    bshport = JMeterUtils.getPropDefault("beanshell.server.port",0);
+		String bshfile = JMeterUtils.getPropDefault("beanshell.server.file","");
+		if (bshport > 0 ){
+			log.info("Starting Beanshell server ("+bshport+","+bshfile+")");
+		    Runnable t = new BeanShellServer(bshport,bshfile);
+		    t.run();
+		}
+	}
+
+	/**
      * Sets a proxy server for the JVM if the command line arguments are
      * specified.
      */
