@@ -83,14 +83,33 @@ import org.apache.log.Logger;
  * <li>Modifies the property descriptors, bean descriptor, etc. at will.
  * </ol>
  * <p>
- * Without any such modifications, the property descriptors will already
- * have localized display names and short descriptions, and the bean
- * descriptor will have a "resourceBoundle" attribute to be used for further
- * localization.
+ * Even before any such modifications, a resource bundle named xxxResources
+ * (where xxx is the fully qualified bean class name) will be obtained if
+ * available and used to localize the following:
+ * <ul>
+ * <li>Bean's display name -- from property <b>displayName</b>.
+ * <li>Properties' display names -- from properties 
+ * <b><i>propertyName</i>.displayName</b>.
+ * <li>Properties' short descriptions -- from properties
+ * <b><i>propertyName</i>.shortDescription</b>.
+ * </ul>
+ * <p>
+ * The resource bundle will be stored as the bean descriptor's "resourceBundle"
+ * attribute, so that it can be used for further localization. TestBeanGUI, for
+ * example, uses it to obtain the group's display names from properties
+ * <b><i>groupName</i>.displayName</b>.
  */
 public abstract class BeanInfoSupport implements BeanInfo {
 
 	private static transient Logger log = LoggingManager.getLoggerForClass();
+
+	// Some known attribute names, just for convenience:
+	public static final String TAGS= TestBeanGUI.TAGS;
+	public static final String NOT_UNDEFINED= TestBeanGUI.NOT_UNDEFINED;
+	public static final String NOT_EXPRESSION= TestBeanGUI.NOT_EXPRESSION;
+	public static final String NOT_OTHER= TestBeanGUI.NOT_OTHER;
+	public static final String DEFAULT= TestBeanGUI.DEFAULT;
+	public static final String RESOURCE_BUNDLE= TestBeanGUI.RESOURCE_BUNDLE;
 
 	/**
 	 * The class for which we're providing the bean info.
@@ -124,7 +143,7 @@ public abstract class BeanInfoSupport implements BeanInfo {
 				JMeterUtils.getLocale()); 
 
 			// Store the resource bundle as an attribute of the BeanDescriptor:
-			getBeanDescriptor().setValue("resourceBundle", resourceBundle);
+			getBeanDescriptor().setValue(RESOURCE_BUNDLE, resourceBundle);
 
 			// Localize the bean name
 			try
@@ -174,8 +193,7 @@ public abstract class BeanInfoSupport implements BeanInfo {
 		}
 		catch (MissingResourceException e)
 		{
-			log.warn("Localized strings not available for bean "+beanClass
-							+" on locale "+JMeterUtils.getLocale());
+			log.warn("Localized strings not available for bean "+beanClass);
 		}
 	}
 	
@@ -215,11 +233,11 @@ public abstract class BeanInfoSupport implements BeanInfo {
 		for (int i=0; i<names.length; i++)
 		{
 			PropertyDescriptor p= property(names[i]);
-			p.setValue("group", group);
-			p.setValue("order", new Integer(i));
+			p.setValue(TestBeanGUI.GROUP, group);
+			p.setValue(TestBeanGUI.ORDER, new Integer(i));
 		}
 		numCreatedGroups++;
-		getBeanDescriptor().setValue("group."+group+".order",
+		getBeanDescriptor().setValue(TestBeanGUI.ORDER(group),
 			new Integer(numCreatedGroups));
 	}
 
