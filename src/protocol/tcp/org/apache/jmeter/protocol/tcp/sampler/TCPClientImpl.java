@@ -45,11 +45,11 @@ public class TCPClientImpl implements TCPClient
 {
 	private static Logger log = LoggingManager.getLoggerForClass();
 	private byte eolByte = (byte) JMeterUtils.getPropDefault("tcp.eolByte",0);
-
+	
     public TCPClientImpl()
     {
         super();
-        log.info("Created "+this);
+		log.info("Using eolByte="+eolByte);
     }
 
 
@@ -59,7 +59,6 @@ public class TCPClientImpl implements TCPClient
 	public void setupTest()
 	{
 		log.info("setuptest");
-        
 	}
 
     /* (non-Javadoc)
