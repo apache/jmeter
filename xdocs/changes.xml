@@ -26,7 +26,7 @@
 (least recent)</b></p>  
 
 <b>Changes: for more info, contact <a href="mailto:mstover1@apache.org">Michael Stover</a></b>
-<h3>Version 2.0.2</h3>
+<h3>Version 2.0.3</h3>
 <h4>New functionality:</h4>
 <ul>
 <li>Better checking of parameter count in JavaScript function</li>
@@ -34,6 +34,15 @@
 <h4>Bug fixes:</h4>
 <ul>
 <li>Regex Extractor nested constant not put in correct place (32395)</li>
+<li>Start time reset to now if necessary so that delay works OK.</li>
+<li>Missing start/end times in scheduler are assumed to be now, not 1970</li>
+<li>Bug 28661 - 304 responses not appearing in listeners</li>
+<li>DOS scripts now handle differen disks better</li>
+<li>Bug 32345 - HTTP Rewriter does not work with HTTP Request default</li>
+</ul>
+<h4>Other changes:</h4>
+<ul>
+<li>Thread Group now defaults to 1 loop instead of forever</li>
 </ul>
 
 <h3>Version 2.0.2</h3>
