@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,6 +56,7 @@
  package org.apache.jorphan.gui;
 
 import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 /**
  * Title:
@@ -85,8 +86,8 @@ public class JLabeledPasswordField extends JLabeledTextField
 		  super(pLabel);
 	 }
 
-	 protected void createTextField()
+	 protected JTextField createTextField(int size)
 	 {
-		mTextField = new JPasswordField(30);
+		return new JPasswordField(size);
 	 }
 }

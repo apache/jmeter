@@ -73,20 +73,38 @@ import java.awt.event.FocusEvent;
  *
  * @author S.Coleman
  */
-public class JLabeledTextArea extends JPanel implements JLabeledField
+public class JLabeledTextArea extends JPanel implements JLabeledField, FocusListener
 {
-	 private JLabel mLabel = new JLabel();
-	 private JTextArea mTextArea = new JTextArea(4,40);
-	 private ArrayList mChangeListeners = new ArrayList(3);  // Maybe move to vector if MT problems occur
+    private JLabel mLabel;
+    private JTextArea mTextArea;
+    private ArrayList mChangeListeners = new ArrayList(3);
+    // Maybe move to vector if MT problems occur
 
-	 /**
-	  * Default constructor, The label and the Text field are left empty.
-	  */
-	 public JLabeledTextArea()
-	 {
-		  super();
-		  init();
-	 }
+    // A temporary cache for the focus listener
+    private String oldValue = "";
+    
+
+    /**
+     * Default constructor, The label and the Text field are left empty.
+     */
+    public JLabeledTextArea() {
+        this("", null);
+    }
+
+    /**
+     * Constructs a new component with the label displaying the
+     * passed text.
+     *
+     * @param pLabel The text to in the label.
+     */
+    public JLabeledTextArea(String pLabel, Document docModel) {
+        super();
+        mLabel = new JLabel(pLabel);
+        if (docModel != null) {
+            setDocumentModel(docModel);
+        }
+        init();
+    }
 
 	 public List getComponentList()
 	 {
@@ -96,72 +114,53 @@ public class JLabeledTextArea extends JPanel implements JLabeledField
 		return comps;
 	 }
 
-	 /**
-	  * Constructs a new component with the label displaying the
-	  * passed text.
-	  *
-	  * @param pLabel The text to in the label.
-	  */
-	 public JLabeledTextArea(String pLabel,Document docModel)
-	 {
-		  super();
-		  mLabel.setText(pLabel);
-		  if(docModel != null)
-		  {
-			setDocumentModel(docModel);
-		  }
-		  init();
-	 }
-
 	 public void setDocumentModel(Document docModel)
 	 {
 		mTextArea.setDocument(docModel);
 	 }
 
-	 /**
-	  * Initialises all of the components on this panel.
-	  */
-	 private void init()
-	 {
-		this.setLayout(new BorderLayout());
-		mTextArea.setLineWrap(true);
-		mTextArea.setWrapStyleWord(true);
-		  // Register the handler for focus listening. This handler will
-		  // only notify the registered when the text changes from when
-		  // the focus is gained to when it is lost.
-		  mTextArea.addFocusListener(new FocusListener(){
+    /**
+     * Initialises all of the components on this panel.
+     */
+    private void init() {
+        setLayout(new BorderLayout());
 
-				String oldValue = ""; // A temporary cache.
+        mTextArea = new JTextArea();
+        mTextArea.setRows(4);
+        mTextArea.setLineWrap(true);
+        mTextArea.setWrapStyleWord(true);
+        // Register the handler for focus listening. This handler will
+        // only notify the registered when the text changes from when
+        // the focus is gained to when it is lost.
+        mTextArea.addFocusListener(this);
 
-				/**
-				 * Callback method when the focus to the Text Field component
-				 * is lost.
-				 *
-				 * @param pFocusEvent The focus event that occured.
-				 */
-				public void focusLost(FocusEvent pFocusEvent)
-				{
-					 // Compare if the value has changed, since we received focus.
-					 if (oldValue.equals(mTextArea.getText()) == false)
-					 {
-						  notifyChangeListeners();
-					 }
-				}
+        // Add the sub components
+        this.add(mLabel, BorderLayout.NORTH);
+        this.add(new JScrollPane(mTextArea), BorderLayout.CENTER);
+    }
 
-				/**
-				 * Catch what the value was when focus was gained.
-				 */
-				public void focusGained(FocusEvent pFocusEvent)
-				{
-					 oldValue = mTextArea.getText();
-				}
-		  });
-		  mTextArea.setBorder(BorderFactory.createLoweredBevelBorder());
-
-		  // Add the sub components
-		  this.add(mLabel,BorderLayout.NORTH);
-		  this.add(mTextArea,BorderLayout.CENTER);
-	 }
+    /**
+     * Callback method when the focus to the Text Field component
+     * is lost.
+     *
+     * @param pFocusEvent The focus event that occured.
+     */
+    public void focusLost(FocusEvent pFocusEvent)
+    {
+         // Compare if the value has changed, since we received focus.
+         if (oldValue.equals(mTextArea.getText()) == false)
+         {
+              notifyChangeListeners();
+         }
+    }
+    
+    /**
+     * Catch what the value was when focus was gained.
+     */
+    public void focusGained(FocusEvent pFocusEvent)
+    {
+         oldValue = mTextArea.getText();
+    }
 
 	 /**
 	  * Set the text displayed in the label.
