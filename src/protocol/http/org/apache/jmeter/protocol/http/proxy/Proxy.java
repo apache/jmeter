@@ -64,6 +64,7 @@ import java.net.UnknownHostException;
 
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -133,7 +134,7 @@ public class Proxy extends Thread
     public void run()
     {
         HttpRequestHdr request = new HttpRequestHdr();
-        byte[] serverResponse = new byte[0];
+        SampleResult result = null;
         HeaderManager headers = null;
 
         HTTPSampler sampler = new HTTPSampler();
@@ -152,9 +153,9 @@ public class Proxy extends Thread
             headers = request.getHeaderManager();
             sampler.setHeaderManager(headers);
 
-            serverResponse = sampler.sample().getResponseData();
+            result = sampler.sample();
             writeToClient(
-                serverResponse,
+                result.getResponseData(),
                 new BufferedOutputStream(clientSocket.getOutputStream()));
             /*
              * We don't want to store any cookies in the generated test plan
@@ -178,7 +179,7 @@ public class Proxy extends Thread
                                   new TestElement[] { 
                                   	captureHttpHeaders ? headers : null 
                                   	},
-                                  serverResponse);
+                                  result);
             try
             {
                 clientSocket.close();
