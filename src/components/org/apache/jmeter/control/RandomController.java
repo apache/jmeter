@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,38 +59,39 @@ import java.io.Serializable;
 import java.util.Random;
 
 /**
- *@author Michael Stover
+ * @author Michael Stover
+ * @version $Revision$
  */
-public class RandomController
-	extends InterleaveControl
-	implements Serializable
+public class RandomController extends InterleaveControl implements Serializable
 {
-	static Random rand = new Random();
-	
-	public RandomController() {}
-	
-	/**
-	 * @see org.apache.jmeter.control.GenericController#resetCurrent()
-	 */
-	protected void resetCurrent()
-	{
-		if(getSubControllers().size() > 0)
-		{
-			current = rand.nextInt(this.getSubControllers().size());
-		}
-		else
-		{
-			current = 0;
-		}
-	}
-	
-	/**
-	 * @see org.apache.jmeter.control.GenericController#incrementCurrent()
-	 */
-	protected void incrementCurrent()
-	{
-		super.incrementCurrent();
-		current = rand.nextInt(this.getSubControllers().size());
-	}
+    static Random rand = new Random();
+
+    public RandomController()
+    {
+    }
+
+    /**
+     * @see org.apache.jmeter.control.GenericController#resetCurrent()
+     */
+    protected void resetCurrent()
+    {
+        if (getSubControllers().size() > 0)
+        {
+            current = rand.nextInt(this.getSubControllers().size());
+        }
+        else
+        {
+            current = 0;
+        }
+    }
+
+    /**
+     * @see org.apache.jmeter.control.GenericController#incrementCurrent()
+     */
+    protected void incrementCurrent()
+    {
+        super.incrementCurrent();
+        current = rand.nextInt(this.getSubControllers().size());
+    }
 
 }

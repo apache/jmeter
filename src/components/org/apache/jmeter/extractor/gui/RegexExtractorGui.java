@@ -14,7 +14,9 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
-
+/**
+ * @version $Revision$
+ */
 public class RegexExtractorGui extends AbstractPostProcessorGui
 {
     private JLabeledTextField regexField;
@@ -43,7 +45,8 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
         regexField.setText(el.getPropertyAsString(RegexExtractor.REGEX));
         templateField.setText(el.getPropertyAsString(RegexExtractor.TEMPLATE));
         defaultField.setText(el.getPropertyAsString(RegexExtractor.DEFAULT));
-        matchNumberField.setText(el.getPropertyAsString(RegexExtractor.MATCH_NUMBER));
+        matchNumberField.setText(
+            el.getPropertyAsString(RegexExtractor.MATCH_NUMBER));
         refNameField.setText(el.getPropertyAsString(RegexExtractor.REFNAME));
     }
 
@@ -59,12 +62,14 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement extractor)
     {
         super.configureTestElement(extractor);
-        extractor.setProperty(RegexExtractor.MATCH_NUMBER,matchNumberField.getText());
+        extractor.setProperty(
+            RegexExtractor.MATCH_NUMBER,
+            matchNumberField.getText());
         if(extractor instanceof RegexExtractor)
         {
             RegexExtractor regex = (RegexExtractor)extractor;
@@ -86,11 +91,17 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
     
     private JPanel makeParameterPanel()
     {
-        regexField = new JLabeledTextField(JMeterUtils.getResString("regex_field"));
-        templateField = new JLabeledTextField(JMeterUtils.getResString("template_field"));
-        defaultField = new JLabeledTextField(JMeterUtils.getResString("default_value_field"));
-        refNameField = new JLabeledTextField(JMeterUtils.getResString("ref_name_field"));
-        matchNumberField = new JLabeledTextField(JMeterUtils.getResString("match_num_field"));
+        regexField =
+            new JLabeledTextField(JMeterUtils.getResString("regex_field"));
+        templateField =
+            new JLabeledTextField(JMeterUtils.getResString("template_field"));
+        defaultField =
+            new JLabeledTextField(
+                JMeterUtils.getResString("default_value_field"));
+        refNameField =
+            new JLabeledTextField(JMeterUtils.getResString("ref_name_field"));
+        matchNumberField =
+            new JLabeledTextField(JMeterUtils.getResString("match_num_field"));
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -108,7 +119,10 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
         return panel;
     }
     
-    private void addField(JPanel panel,JLabeledTextField field,GridBagConstraints gbc)
+    private void addField(
+        JPanel panel,
+        JLabeledTextField field,
+        GridBagConstraints gbc)
     {
         List item = field.getComponentList();
         panel.add((Component)item.get(0),gbc.clone());
@@ -135,5 +149,4 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
         gbc.weightx = 0;
         gbc.weighty = 0;
     }
-
 }

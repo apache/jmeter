@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control.gui;
+
 import javax.swing.JCheckBox;
 
 import org.apache.jmeter.control.InterleaveControl;
@@ -60,87 +61,75 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Kevin Hammond
- *@created   $Date$
- *@version   $Revision$
- ***************************************/
-
+/**
+ * @author    Kevin Hammond
+ * @version   $Revision$
+ */
 public class InterleaveControlGui extends AbstractControllerGui
 {
-	private InterleaveControl model;
-	private JCheckBox style;
+    private InterleaveControl model;
+    private JCheckBox style;
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public InterleaveControlGui()
-	{
-		init();
-	}
+    public InterleaveControlGui()
+    {
+        init();
+    }
 
-	public void configure(TestElement el)
-	{
-		super.configure(el);
-		if(((InterleaveControl)el).getStyle() == InterleaveControl.IGNORE_SUB_CONTROLLERS)
-		{
-			style.setSelected(true);
-		}
-		else
-		{
-			style.setSelected(false);
-		}
-	}
+    public void configure(TestElement el)
+    {
+        super.configure(el);
+        if (((InterleaveControl) el).getStyle()
+            == InterleaveControl.IGNORE_SUB_CONTROLLERS)
+        {
+            style.setSelected(true);
+        }
+        else
+        {
+            style.setSelected(false);
+        }
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public TestElement createTestElement()
-	{
-		InterleaveControl ic = new InterleaveControl();
-		modifyTestElement(ic);
-		return ic;
-	}
+    public TestElement createTestElement()
+    {
+        InterleaveControl ic = new InterleaveControl();
+        modifyTestElement(ic);
+        return ic;
+    }
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement ic)
     {
         configureTestElement(ic);
-        if(style.isSelected())
+        if (style.isSelected())
         {
-        	((InterleaveControl)ic).setStyle(InterleaveControl.IGNORE_SUB_CONTROLLERS);
+            ((InterleaveControl) ic).setStyle(
+                InterleaveControl.IGNORE_SUB_CONTROLLERS);
         }
         else
         {
-        	((InterleaveControl)ic).setStyle(InterleaveControl.USE_SUB_CONTROLLERS);
+            ((InterleaveControl) ic).setStyle(
+                InterleaveControl.USE_SUB_CONTROLLERS);
         }
     }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("interleave_control_title");
-	}
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("interleave_control_title");
+    }
 
-	private void init()
-	{
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+    private void init()
+    {
+        setLayout(
+            new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
         setBorder(makeBorder());
 
-		add(makeTitlePanel());
+        add(makeTitlePanel());
 
-		style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers"));
-		add(style);
-	}
+        style =
+            new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers"));
+        add(style);
+    }
 }
