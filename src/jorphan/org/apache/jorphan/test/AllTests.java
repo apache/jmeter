@@ -167,25 +167,25 @@ public final class AllTests
 //
 //  Try to find out why this is ...
 
-        String e = "java.awt.headless";
-		String g="java.awt.graphicsenv";
-		System.out.println("+++++++++++");
-        System.out.println(e+"="+System.getProperty(e));
-        String n=System.getProperty(g);
-		System.out.println(g+"="+n);
-
-		try {//
-			Class c = Class.forName(n);
-			System.out.println("Found class:  "+n);
-//			c.newInstance();
-//			System.out.println("Instantiated: "+n);
-		} catch (Exception e1) {
-			System.out.println("Error finding class "+n+" "+e1);
-		} catch (java.lang.InternalError e1){
-			System.out.println("Error finding class "+n+" "+e1);
-		}
-
-		System.out.println("------------");
+//        String e = "java.awt.headless";
+//		String g="java.awt.graphicsenv";
+//		System.out.println("+++++++++++");
+//        System.out.println(e+"="+System.getProperty(e));
+//        String n=System.getProperty(g);
+//		System.out.println(g+"="+n);
+//
+//		try {//
+//			Class c = Class.forName(n);
+//			System.out.println("Found class:  "+n);
+////			c.newInstance();
+////			System.out.println("Instantiated: "+n);
+//		} catch (Exception e1) {
+//			System.out.println("Error finding class "+n+" "+e1);
+//		} catch (java.lang.InternalError e1){
+//			System.out.println("Error finding class "+n+" "+e1);
+//		}
+//
+//		System.out.println("------------");
 // don't call isHeadless() here, as it has a side effect.
 //--
         TestSuite suite = suite(args[0]);
@@ -198,21 +198,21 @@ public final class AllTests
         TestRunner.run(suite);
 //++
 //      Recheck settings:
-		System.out.println("+++++++++++");
-		System.out.println(e+"="+System.getProperty(e));
-		System.out.println(g+"="+System.getProperty(g));
-		System.out.println("Headless? "+java.awt.GraphicsEnvironment.isHeadless());
-		try {
-			Class c = Class.forName(n);
-			System.out.println("Found class:  "+n);
-			c.newInstance();
-			System.out.println("Instantiated: "+n);
-		} catch (Exception e1) {
-			System.out.println("Error with class "+n+" "+e1);
-		} catch (java.lang.InternalError e1){
-		    System.out.println("Error with class "+n+" "+e1);
-	    }
-		System.out.println("------------");
+//		System.out.println("+++++++++++");
+//		System.out.println(e+"="+System.getProperty(e));
+//		System.out.println(g+"="+System.getProperty(g));
+//		System.out.println("Headless? "+java.awt.GraphicsEnvironment.isHeadless());
+//		try {
+//			Class c = Class.forName(n);
+//			System.out.println("Found class:  "+n);
+//			c.newInstance();
+//			System.out.println("Instantiated: "+n);
+//		} catch (Exception e1) {
+//			System.out.println("Error with class "+n+" "+e1);
+//		} catch (java.lang.InternalError e1){
+//		    System.out.println("Error with class "+n+" "+e1);
+//	    }
+//		System.out.println("------------");
 //--
         System.exit(0);
     }
