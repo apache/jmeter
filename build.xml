@@ -279,6 +279,7 @@
     <mkdir dir="${docs.api.dest}"/>
     <javadoc sourcepathref="srcpaths" destdir="${docs.api.dest}" Protected="yes" author="yes" version="yes" doctitle="Apache JMeter APIs Specification" windowtitle="Apache JMeter API Specification" header="&lt;b&gt;Apache JMeter&lt;/b&gt;&lt;br&gt;&lt;font size='-1'&gt;1.7&lt;/font&gt;" bottom="Copyright &#xA9; 1998-2003 Apache Software Foundation. All Rights Reserved." packagenames="org.apache.jmeter.*">
       <classpath refid="classpath"/>
+      <link href="http://java.sun.com/products/jdk/1.2/docs/api/"/>
     </javadoc>
   </target>
 
