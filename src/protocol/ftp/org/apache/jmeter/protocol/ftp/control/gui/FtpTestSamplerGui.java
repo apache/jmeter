@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,18 +53,17 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.ftp.control.gui;
+import java.awt.BorderLayout;
+
 import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.config.gui.LoginConfigGui;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.ftp.config.gui.FtpConfigGui;
 import org.apache.jmeter.protocol.ftp.sampler.FTPSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Title: Apache JMeter Description: Copyright: Copyright (c) 2000 Company:
@@ -122,25 +121,20 @@ public class FtpTestSamplerGui extends AbstractSamplerGui
 
 	private void init()
 	{
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+        add (makeTitlePanel(), BorderLayout.NORTH);
 
-		// NAME
-		mainPanel.add(makeTitlePanel());
-
+        VerticalPanel mainPanel = new VerticalPanel();
+        
+        ftpDefaultPanel = new FtpConfigGui(false);
+        mainPanel.add(ftpDefaultPanel);
+        
 		loginPanel = new LoginConfigGui(false);
-		ftpDefaultPanel = new FtpConfigGui(false);
-		//ftpDefaultPanel.setBorder(BorderFactory.createTitledBorder("Default Values"));
-		loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config")));
+        loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config")));
+        mainPanel.add(loginPanel);
 
-		mainPanel.add(getNamePanel());
-		mainPanel.add(ftpDefaultPanel);
-		mainPanel.add(loginPanel);
-		this.add(mainPanel);
+		add(mainPanel, BorderLayout.CENTER);
 	}
 }
