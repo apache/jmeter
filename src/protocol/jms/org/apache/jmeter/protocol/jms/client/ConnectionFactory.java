@@ -17,19 +17,20 @@
  
 package org.apache.jmeter.protocol.jms.client;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import javax.naming.Context;
 import javax.naming.NamingException;
 
 import javax.jms.JMSException;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
 import javax.jms.TopicConnectionFactory;
 import javax.jms.TopicConnection;
-import javax.jms.QueueConnection;
 
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
+
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * @author pete
@@ -40,6 +41,8 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 public class ConnectionFactory implements TestListener {
 
 	private static TopicConnectionFactory factory = null;
+	private static QueueConnectionFactory qfactory = null;
+	static Logger log = LoggingManager.getLoggerForClass();
 	
     /**
      * 
@@ -75,30 +78,77 @@ public class ConnectionFactory implements TestListener {
 	public void testIterationStart(LoopIterationEvent event){
 	}
 
+	/**
+	 * 
+	 * @param ctx
+	 * @param fac
+	 * @return
+	 */
 	public static synchronized TopicConnectionFactory getTopicConnectionFactory(
 	Context ctx, String fac){
 		while (factory == null){
 			try {
-				factory = (TopicConnectionFactory)ctx.lookup(fac);
+				Object objfac = ctx.lookup(fac);
+				if (objfac instanceof TopicConnectionFactory){
+					factory = (TopicConnectionFactory)objfac;
+				}
 			} catch (NamingException e){
-				e.printStackTrace();
+				log.error(e.getMessage());
 			}
 		}
 		return factory;
 	}
+
+	/**
+	 * 
+	 * @param ctx
+	 * @param fac
+	 * @return
+	 */
+	public static synchronized QueueConnectionFactory getQueueConnectionFactory(
+	Context ctx, String fac){
+		while (qfactory == null){
+			try {
+				Object objfac = ctx.lookup(fac);
+				if (objfac instanceof QueueConnectionFactory){
+					qfactory = (QueueConnectionFactory)objfac;
+				}
+			} catch (NamingException e){
+				log.error(e.getMessage());
+			}
+		}
+		return qfactory;
+	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public static synchronized TopicConnection getTopicConnection(){
 		if (factory != null){
 			try {
 				return factory.createTopicConnection();
 			} catch (JMSException e){
-				e.printStackTrace();
+				log.error(e.getMessage());
 			}
 		}
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @param ctx
+	 * @param queueConn
+	 * @return
+	 */
 	public static QueueConnection getQueueConnection(Context ctx, String queueConn){
+		if (factory != null){
+			try {
+				return qfactory.createQueueConnection();
+			} catch (JMSException e){
+				log.error(e.getMessage());
+			}
+		}
 		return null;
 	}
 }
