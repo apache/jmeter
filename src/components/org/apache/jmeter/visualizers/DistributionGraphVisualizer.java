@@ -283,14 +283,19 @@ public class DistributionGraphVisualizer extends AbstractVisualizer
 		saveButton.addActionListener(this);
     	return saveButton;
     }
-    
+
+	/**
+	 * Handle the action
+	 */    
     public void actionPerformed(ActionEvent event){
     	Object src = event.getSource();
     	// only save if the source was the save button
     	if (src == saveButton){
+    		// this is temporary until I get familiar with the
+    		// action stuff in JMeter.
     		SaveGraphicsService service = new SaveGraphicsService();
-			//service.saveJComponent("distributionGraph.jpg",this.graphPanel);
-			service.saveJComponentWithJAI("distributionGraph.png",this.graphPanel);
+			service.saveJComponent("distributionGraph",
+				SaveGraphicsService.PNG,this.graphPanel);
     	}
     }
 }
