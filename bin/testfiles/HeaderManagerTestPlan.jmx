@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<TestPlan>
+<threadgroups>
+<ThreadGroup name="Thread Group" numThreads="1" rampUp="0">
+<controllers>
+<LoopController type="org.apache.jmeter.control.LoopController" name="Loop Controller" iterations="1">
+<configElements>
+<HeaderManager name="HTTP Header Manager">
+<ConfigElement type="org.apache.jmeter.protocol.http.control.Header">
+<property name="name">User-Agent</property>
+<property name="value">Mozilla/4.0 (compatible; MSIE 5.5; Windows 98)</property>
+</ConfigElement>
+</HeaderManager>
+
+</configElements>
+<controllers>
+<HttpTestSample type="org.apache.jmeter.protocol.http.control.HttpTestSample" name="HTTP Request" getImages="false">
+<defaultUrl>
+<ConfigElement type="org.apache.jmeter.protocol.http.config.MultipartUrlConfig">
+<property name="PROTOCOL">http</property>
+<property name="domain">jakarta.apache.org</property>
+<property name="arguments"><Arguments>
+</Arguments>
+</property>
+<property name="path">/</property>
+<property name="method">GET</property>
+</ConfigElement></defaultUrl>
+<configElements>
+</configElements>
+<controllers>
+</controllers>
+</HttpTestSample>
+
+</controllers>
+</LoopController>
+</controllers>
+<timers>
+</timers>
+<listeners>
+<Filer type="org.apache.jmeter.reporters.Filer" name="File Reporter" verbose="true" append="false" autoFlush="false" viewSubmitData="true" file="header-manager.dat"/>
+</listeners>
+</ThreadGroup>
+
+</threadgroups>
+<configElements>
+</configElements>
+</TestPlan>
