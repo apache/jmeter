@@ -19,6 +19,7 @@ return JMeterUtils.getPropDefault(p,"");
 }
 
 setprop(p,v){// set a JMeter property
+System.out.println("Setting property '"+p+"' to '"+v+"'.");
 JMeterUtils.getJMeterProperties().setProperty(p, v);
 }
 
@@ -30,12 +31,34 @@ loglevel(String priority, String category){
 LoggingManager.setPriority(priority, category);
 }
 
-logdebug(String category){
-loglevel("DEBUG",category);
+logdebug(String text){
+loglevel("DEBUG",text);
 }
 
-loginfo(String category){
-loglevel("INFO",category);
+loginfo(String text){
+loglevel("INFO",text);
 }
 
+// Define routines to stop the test or a thread
+stopEngine(){// Stop the JMeter test
+System.out.println("Stop Engine called");
+org.apache.jmeter.engine.StandardJMeterEngine.stopEngine();
+}
+
+stopEngineNow(){// Stop the JMeter test now
+System.out.println("Stop Engine NOW called");
+org.apache.jmeter.engine.StandardJMeterEngine.stopEngineNow();
+}
+
+stopThread(t){// Stop a JMeter thread
+System.out.println("Stop Thread "+t+" called");
+ok=org.apache.jmeter.engine.StandardJMeterEngine.stopThread(t);
+if (ok){print("Thread requested to stop");} else { print("Thread not found");}
+}
+
+stopThreadNow(t){// Stop a JMeter thread
+System.out.println("Stop Thread Now "+t+" called");
+ok=org.apache.jmeter.engine.StandardJMeterEngine.stopThreadNow(t);
+if (ok){print("Thread stopped");} else { print("Thread not found");}
+}
 print("Startup script completed");
