@@ -27,10 +27,6 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-import org.apache.jmeter.util.JMeterUtils;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
 
 /**
  * @author unascribed
@@ -47,22 +43,14 @@ public class RemoteListenerWrapper
     transient private static Logger log = LoggingManager.getLoggerForClass();
     private RemoteSampleListener listener = null;
     
-    private boolean holdSamples; //Hold samples to end of test?
-    private List sampleStore; // Samples stored here
-
-    private void setUpStore(){
-		holdSamples = JMeterUtils.getPropDefault("hold_samples",false);
-		if (holdSamples){
-			sampleStore = new ArrayList();
-			log.info("Using Sample store for this test run");
-		}
-    }
+    SampleSender mode;
 
     public RemoteListenerWrapper(RemoteSampleListener l)
     {
         listener = l;
+        // Get appropriate class governed by the behaviour set in the Jmeter property mode.
+        this.mode = SampleSenderFactory.getInstance(listener);
     }
-
 
     public RemoteListenerWrapper() //TODO: not used - make private?
     {
@@ -71,7 +59,6 @@ public class RemoteListenerWrapper
     public void testStarted()
     {
     	log.info("Test Started()");
-    	setUpStore();
         try
         {
            listener.testStarted();
@@ -84,30 +71,12 @@ public class RemoteListenerWrapper
     }
     public void testEnded()
     {
-    	log.info("Test ended()");
-        try
-        {
-        	if (holdSamples){
-        	    synchronized(sampleStore){
-					Iterator i = sampleStore.iterator();
-					while (i.hasNext()) {
-					  SampleEvent se = (SampleEvent) i.next();
-					  listener.sampleOccurred(se);
-					}
-				}
-        	}
-            listener.testEnded();
-            sampleStore = null;
-        }
-        catch (Throwable ex)
-        {
-            log.warn("testEnded()", ex);
-        }
+        mode.testEnded();
     }
+
     public void testStarted(String host)
     {
 		log.info("Test Started on "+host); // should this be debug?
-		setUpStore();
         try
         {
             listener.testStarted(host);
@@ -117,45 +86,15 @@ public class RemoteListenerWrapper
             log.error("testStarted(host)", ex);
         }
     }
+
     public void testEnded(String host)
     {
-    	log.info("Test Ended on " + host); // should this be debug?
-        try
-        {
-        	if (holdSamples){
-				Iterator i = sampleStore.iterator();
-				while (i.hasNext()) {
-				  SampleEvent se = (SampleEvent) i.next();
-				  listener.sampleOccurred(se);
-				}
-        	}
-            listener.testEnded(host);
-            sampleStore = null;
-        }
-        catch (Throwable ex)
-        {
-            log.error("testEnded(host)", ex);
-        }
+        mode.testEnded(host);
     }
 
     public void sampleOccurred(SampleEvent e)
     {
-    	log.debug("Sample occurred");
-        try
-        {
-          if (holdSamples) {
-          	synchronized(sampleStore)
-            {
-            	sampleStore.add(e);
-            }
-          } else { 
-            listener.sampleOccurred(e);
-          }
-        }
-        catch (RemoteException err)
-        {
-            log.error("sampleOccurred", err);
-        }
+        mode.SampleOccurred(e);
     }
 
 //	Note that sampleStarted() and sampleStopped() is not made to appear
