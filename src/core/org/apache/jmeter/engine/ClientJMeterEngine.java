@@ -72,7 +72,7 @@ import org.apache.log.Logger;
  *@created    $Date$
  *@version    $Revision$
  ***********************************************************/
-public class ClientJMeterEngine implements JMeterEngine
+public class ClientJMeterEngine implements JMeterEngine,Runnable
 {
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.engine");
@@ -127,20 +127,9 @@ public class ClientJMeterEngine implements JMeterEngine
 	 ***********************************************************/
 	public void runTest()
 	{
-		testListeners = new SearchByClass(TestListener.class);
-		getTestTree().traverse(testListeners);
-		sampleListeners = new ConvertListeners();
-		getTestTree().traverse(sampleListeners);
-		try
-		{
-			remote.setHost(host);
-			remote.configure(test);
-			remote.runTest();
-		}
-		catch(Exception ex)
-		{
-			log.error("",ex);
-		}
+        log.warn("about to run remote test");
+		new Thread(this).start();
+        log.warn("done initiating run command");
 	}
 
 	/************************************************************
@@ -172,5 +161,31 @@ public class ClientJMeterEngine implements JMeterEngine
 			log.error("",ex);
 		}
 	}
+
+    /* (non-Javadoc)
+     * @see java.lang.Runnable#run()
+     */
+    public void run()
+    {
+        log.warn("running clientengine run method");
+        testListeners = new SearchByClass(TestListener.class);
+        getTestTree().traverse(testListeners);
+        sampleListeners = new ConvertListeners();
+        getTestTree().traverse(sampleListeners);
+        try
+        {
+            remote.setHost(host);
+            log.warn("sent host info");
+            remote.configure(test);
+            log.warn("sent test");
+            remote.runTest();
+            log.warn("sent run command");
+        }
+        catch(Exception ex)
+        {
+            log.error("",ex);
+        }
+
+    }
 
 }
