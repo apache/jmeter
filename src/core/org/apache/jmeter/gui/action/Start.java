@@ -65,6 +65,7 @@ import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.TreeCloner;
 import org.apache.jmeter.engine.util.DisabledComponentRemover;
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -79,11 +80,13 @@ import org.apache.log.Logger;
 public class Start extends AbstractAction
 {
     private static Logger log = LoggingManager.getLoggerForClass();
+    
 
     private static Set commands = new HashSet();
     static {
-        commands.add("start");
-        commands.add("stop");
+        commands.add(JMeterMenuBar.ACTION_START);
+        commands.add(JMeterMenuBar.ACTION_STOP);
+        commands.add(JMeterMenuBar.ACTION_SHUTDOWN);
     }
 
     private StandardJMeterEngine engine;
@@ -107,15 +110,21 @@ public class Start extends AbstractAction
 
     public void doAction(ActionEvent e)
     {
-        if (e.getActionCommand().equals("start"))
+        if (e.getActionCommand().equals(JMeterMenuBar.ACTION_START))
         {
             startEngine();
         }
-        else if (e.getActionCommand().equals("stop"))
+        else if (e.getActionCommand().equals(JMeterMenuBar.ACTION_STOP))
         {
             GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
             engine.stopTest();
             engine = null;
+        }
+        else if (e.getActionCommand().equals(JMeterMenuBar.ACTION_SHUTDOWN))
+        {
+        	GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
+        	engine.askThreadsToStop();
+        	engine = null;
         }
     }
 
