@@ -116,7 +116,7 @@ import org.htmlparser.tags.*;
  * @author	Khor Soon Hin,
  *		<a href="mailto:mramshaw@alumni.concordia.ca">Martin Ramshaw</a>
  * @version	$Id$
- * @created	$Date$
+ * created	$Date$
  */
 public class NewHTTPSamplerFull
 {
