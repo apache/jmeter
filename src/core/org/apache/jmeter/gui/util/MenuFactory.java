@@ -51,6 +51,10 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
+ * 
+ * @author    Michael Stover
+ * @author	<a href="mailto:klancast@swbell.net">Keith Lancaster</a>
+ * @version $Id$
  */
 package org.apache.jmeter.gui.util;
 
@@ -80,10 +84,6 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author    Michael Stover
- * @version   $Revision$
- */
 public final class MenuFactory
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
@@ -195,7 +195,7 @@ public final class MenuFactory
         menu.add(
             makeMenuItem(JMeterUtils.getResString("open"), "Open", "open"));
         menu.add(
-            makeMenuItem(JMeterUtils.getResString("save"), "Save", "save_as"));
+            makeMenuItem(JMeterUtils.getResString("save_as"), "Save As", "save_as"));
         JMenuItem disabled =
             makeMenuItem(
                 JMeterUtils.getResString("disable"),
