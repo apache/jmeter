@@ -82,7 +82,8 @@ public class GraphModel implements Clearable, Serializable
     private long previous = 0;
     private boolean bigChange = false;
     private Sample current = new Sample(0, 0, 0, 0, 0,false);
-    private long startTime = 0;
+    private long startTime = Long.MAX_VALUE;
+    private long endTime = Long.MIN_VALUE;
     private int throughputMax = 20;
     private long graphMax = 20;
     private StatCalculator statCalc = new StatCalculator();
@@ -309,16 +310,20 @@ public class GraphModel implements Clearable, Serializable
             average = (float) statCalc.getMean();
             deviation = (long) statCalc.getStandardDeviation();
             median = statCalc.getMedian().longValue();
-        }
-
-        if (samples.size() == 0)
-        {
-            startTime = timeStamp - sample;
+            long start = timeStamp - sample;
+            if (startTime > start)
+            {
+                startTime = start;
+            }
+            if(endTime < timeStamp)
+            {
+                endTime = timeStamp;
+            }
         }
 
         float throughput = 0;
 
-        if (timeStamp - startTime > 0)
+        if (endTime - startTime > 0)
         {
             throughput = (float) (((float) (samples.size() + 1)) / ((float) (timeStamp - startTime)) * 60000);
         }
