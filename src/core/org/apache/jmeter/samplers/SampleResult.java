@@ -67,7 +67,7 @@ public class SampleResult implements Serializable
 	private static final SampleResult [] EMPTY_SR = new SampleResult[0];
 	private static final AssertionResult [] EMPTY_AR = new AssertionResult[0];
 
-    private byte[] responseData;
+    private byte[] responseData = EMPTY_BA;
     private String responseCode;
     private String label;
     private String samplerData;
