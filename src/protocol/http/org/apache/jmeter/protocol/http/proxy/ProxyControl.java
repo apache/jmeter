@@ -63,8 +63,10 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.gui.GuiPackage;
@@ -97,8 +99,10 @@ import org.apache.oro.text.regex.Perl5Matcher;
 public class ProxyControl extends ConfigTestElement implements Serializable
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
-    Daemon server;
-    private static final int DEFAULT_PORT = 8080;
+    private Daemon server;
+    public static final int DEFAULT_PORT = 8080;
+	public static final String DEFAULT_PORT_S =
+	         Integer.toString(DEFAULT_PORT);// Used by GUI
     private static PatternCacheLRU patternCache =
         new PatternCacheLRU(1000, new Perl5Compiler());
     transient Perl5Matcher matcher;
@@ -106,6 +110,15 @@ public class ProxyControl extends ConfigTestElement implements Serializable
     public static final String EXCLUDE_LIST = "ProxyControlGui.exclude_list";
     public static final String INCLUDE_LIST = "ProxyControlGui.include_list";
     public static final String CAPTURE_HTTP_HEADERS = "ProxyControlGui.capture_http_headers";
+	public static final String ADD_ASSERTIONS = "ProxyControlGui.add_assertion";
+	public static final String ADD_SEPARATORS = "ProxyControlGui.add_separator";
+
+
+	private long lastTime = 0;//When was the last sample seen?
+	private static final long sampleGap = 
+	JMeterUtils.getPropDefault("proxy.pause",1000);//Detect if user has pressed a new link
+	private boolean addAssertions;
+	private boolean addSeparators;
 
     public ProxyControl()
     {
@@ -130,6 +143,18 @@ public class ProxyControl extends ConfigTestElement implements Serializable
     {
         setProperty(new BooleanProperty(CAPTURE_HTTP_HEADERS,capture));
     }
+
+	public void setSeparators(boolean b)
+	{
+		addSeparators=b;
+		setProperty(new BooleanProperty(ADD_SEPARATORS,b));
+	}
+
+	public void setAssertions(boolean b)
+	{
+		addAssertions=b;
+		setProperty(new BooleanProperty(ADD_ASSERTIONS,b));
+	}
 
     public void setIncludeList(Collection list)
     {
@@ -269,6 +294,37 @@ public class ProxyControl extends ConfigTestElement implements Serializable
         return ok;
     }
 
+    /*
+     * Helper method to add a Response Assertion 
+     */
+    private void addAssertion(JMeterTreeModel model,JMeterTreeNode node)
+        throws IllegalUserActionException
+    {
+		if (addAssertions){
+			ResponseAssertion ra = new ResponseAssertion();
+			ra.setProperty(TestElement.GUI_CLASS,
+				"org.apache.jmeter.assertions.gui.AssertionGui");
+			ra.setProperty(TestElement.NAME,"Check response");
+			ra.setTestField(ResponseAssertion.RESPONSE_DATA);
+			model.addComponent(ra,node);
+		}
+    }
+    
+	/*
+	 * Helper method to add a Divider 
+	 */
+	private void addDivider(JMeterTreeModel model,JMeterTreeNode node)
+	    throws IllegalUserActionException
+	{
+		if (addSeparators){
+			TestElement sc = new GenericController();
+			sc.setProperty(TestElement.GUI_CLASS,
+			    "org.apache.jmeter.control.gui.LogicControllerGui");
+			sc.setProperty(TestElement.NAME,"-------------------");
+			model.addComponent(sc,node);
+	    }
+	}
+    
     private void placeConfigElement(
         HTTPSampler sampler,
         TestElement[] subConfigs)
@@ -318,8 +374,26 @@ public class ProxyControl extends ConfigTestElement implements Serializable
                         "org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui");
                     try
                     {
+						boolean firstInBatch=false;
+						if (lastTime == 0){
+							lastTime = System.currentTimeMillis();
+							firstInBatch=true;
+						}
+						long now = System.currentTimeMillis();
+						if (now - lastTime > sampleGap){
+							addDivider(treeModel,node);
+                        	firstInBatch=true;//Remember to save the new node
+						}
+						lastTime = System.currentTimeMillis();
+
                         JMeterTreeNode newNode =
                             treeModel.addComponent(sampler, node);
+                            
+                        if(firstInBatch){
+                        	addAssertion(treeModel,newNode);
+							firstInBatch=false;
+                        }
+
                         for (int i = 0;
                             subConfigs != null && i < subConfigs.length;
                             i++)
@@ -367,6 +441,14 @@ public class ProxyControl extends ConfigTestElement implements Serializable
                 .equals(urlConfig.getPropertyAsString(HTTPSampler.PATH)))
             {
                 sampler.setPath("");
+            }
+            
+            if (sampler
+                .getProtocol()
+                .equalsIgnoreCase(urlConfig.getPropertyAsString(HTTPSampler.PROTOCOL))
+                )
+            {
+            	sampler.setProtocol("");
             }
         }
     }
