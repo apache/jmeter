@@ -44,7 +44,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * The GUI class is not invoked in non-GUI mode, so it should not
  * perform any additional setup that a test would need at run-time
  * 
- * @author sebb AT apache DOT org
  * @version $Revision$ $Date$
  */
 public class ExampleSamplerGui extends AbstractSamplerGui
@@ -60,9 +59,9 @@ public class ExampleSamplerGui extends AbstractSamplerGui
     /* (non-Javadoc)
      * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
      */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-		return JMeterUtils.getResString("example_title");
+		return "example_title";
     }
 
     /* (non-Javadoc)
