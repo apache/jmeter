@@ -56,8 +56,6 @@
 package org.apache.jmeter.control.gui;
 
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -69,7 +67,6 @@ import javax.swing.JPopupMenu;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.ModuleController;
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
@@ -186,8 +183,16 @@ public class ModuleControllerGui
         nodesModel = new DefaultComboBoxModel();
         nodes = new JComboBox(nodesModel);
         reinitialize();
-
-        try
+        
+		/* This listener subscription prevents freeing up the GUI when it's no longer in use
+		 * (e.g. on locale change)...
+		 * ... plus I don't think it's really necessary: configure(TestElement) already takes
+		 * care of reinitializing the target combo when we come back to it. And I can't see how
+		 * the tree can change in a relevant way without we leaving this GUI.
+		 * I'll comment it out for the time being:
+		 * TODO: remove once we're convinced it's really unnecessary.
+		 */
+        /*try
         {
             Class addToTree =
                 Class.forName("org.apache.jmeter.gui.action.AddToTree");
@@ -205,7 +210,7 @@ public class ModuleControllerGui
         }
         catch (ClassNotFoundException e)
         {
-        }
+        }*/
         modulesPanel.add(nodes);
         add(modulesPanel);
     }
