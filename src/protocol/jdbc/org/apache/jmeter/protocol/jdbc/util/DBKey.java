@@ -94,6 +94,10 @@ public class DBKey implements Serializable
         this.username = username;
         this.password = password;
     }
+    // Dummy constructor to allow JMeter test suite to work
+    DBKey(){
+    	this("","","","");
+    }
 
     public String getUrl()
     {
