@@ -122,6 +122,17 @@ public class ProxyControlGui
     */
     private JCheckBox httpHeaders;
 
+    /**
+     * Add separators between page requests - if there is a large enough time
+     * difference between samples, assume that a new link has been clicked
+     */
+	private JCheckBox addSeparators;
+
+	/**
+	 * Add an Assertion to the first sample of each set
+	 */
+	private JCheckBox addAssertions;
+
     private ProxyControl model;
 
     private JTable excludeTable;
@@ -185,6 +196,8 @@ public class ProxyControlGui
             setIncludeListInProxyControl(model);
             setExcludeListInProxyControl(model);
             model.setCaptureHttpHeaders(httpHeaders.isSelected());
+			model.setSeparators(addSeparators.isSelected());
+			model.setAssertions(addAssertions.isSelected());
         }
     }
 
@@ -228,6 +241,8 @@ public class ProxyControlGui
         model = (ProxyControl)element;
         portField.setText(model.getPropertyAsString(ProxyControl.PORT));
 		httpHeaders.setSelected(model.getPropertyAsBoolean(ProxyControl.CAPTURE_HTTP_HEADERS));
+		addSeparators.setSelected(model.getPropertyAsBoolean(ProxyControl.ADD_SEPARATORS));
+		addAssertions.setSelected(model.getPropertyAsBoolean(ProxyControl.ADD_ASSERTIONS));
         populateTable(includeModel, model.getIncludePatterns().iterator());
         populateTable(excludeModel, model.getExcludePatterns().iterator());
         repaint();
@@ -286,6 +301,14 @@ public class ProxyControlGui
         {
             enableRestart();
         }
+		else if (command.equals(ProxyControl.ADD_ASSERTIONS))
+		{
+			enableRestart();
+		}
+		else if (command.equals(ProxyControl.ADD_SEPARATORS))
+		{
+			enableRestart();
+		}
         else if (command.equals(ADD_EXCLUDE))
         {
             excludeModel.addNewRow();
@@ -442,7 +465,7 @@ public class ProxyControlGui
 
     private JPanel createPortPanel()
     {
-        portField = new JTextField("8080", 8);
+        portField = new JTextField(ProxyControl.DEFAULT_PORT_S, 8);
         portField.setName(ProxyControl.PORT);
         portField.addKeyListener(this);
 
@@ -455,12 +478,30 @@ public class ProxyControlGui
         httpHeaders.addActionListener(this);
         httpHeaders.setActionCommand(ProxyControl.CAPTURE_HTTP_HEADERS);
 
+		addSeparators = new JCheckBox(JMeterUtils.getResString("proxy_separators"));
+		addSeparators.setName(ProxyControl.ADD_SEPARATORS);
+		addSeparators.setSelected(false);
+		addSeparators.addActionListener(this);
+		addSeparators.setActionCommand(ProxyControl.ADD_SEPARATORS);
+
+		addAssertions = new JCheckBox(JMeterUtils.getResString("proxy_assertions"));
+		addAssertions.setName(ProxyControl.ADD_ASSERTIONS);
+		addAssertions.setSelected(false);
+		addAssertions.addActionListener(this);
+		addAssertions.setActionCommand(ProxyControl.ADD_ASSERTIONS);
+
         HorizontalPanel panel = new HorizontalPanel();
         panel.add(label);
         panel.add(portField);
 
         panel.add(Box.createHorizontalStrut(10));
         panel.add(httpHeaders);
+
+		panel.add(Box.createHorizontalStrut(10));
+		panel.add(addSeparators);
+
+		panel.add(Box.createHorizontalStrut(10));
+		panel.add(addAssertions);
 
         return panel;
     }
