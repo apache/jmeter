@@ -52,7 +52,7 @@ that has a compliant Java implementation.</p>
 <subsection name="2.2.2 SAX XML Parser" anchor="opt_sax">
 <p>JMeter comes with Apache's <a href="http://xml.apache.org/">Xerces XML parser</a>. You have the option of telling JMeter
 to use a different XML parser. To do so, include the classes for the third-party parser in JMeter's <a href="#classpath">classpath</a>,
-and update the <a href="configuring_jmeter.html">jmeter.properties</a> file with the full classname of the parser
+and update the <a href="#configuring_jmeter">jmeter.properties</a> file with the full classname of the parser
 implementation.</p>
 </subsection>
 
@@ -64,7 +64,7 @@ To enable Email support, add Sun's JavaMail packages to JMeter's <a href="#class
 <subsection name="2.2.4 SSL Encryption" anchor="opt_ssl">
 <p>To test a web server using SSL encryption (HTTPS), JMeter requires that an
 implementation of SSL be provided (such as Sun's <a href="http://java.sun.com/products/jsse/index.html">Java Secure Sockets Extension -- JSSE</a>).
-Include the necessary encryption packages in JMeter's <a href="#classpath">classpath</a>.  Also, update <a href="configuring_jmeter.html">jmeter.properties</a>
+Include the necessary encryption packages in JMeter's <a href="#classpath">classpath</a>.  Also, update <a href="#configuring_jmeter">jmeter.properties</a>
 by registering the SSL Provider.</p>
 <p>Note: if you are running JDK1.4, then you do not have to download JSSE because Sun integrated it into JDK1.4 as a standard library.</p>
 </subsection>
@@ -128,6 +128,30 @@ nongui.bat/nongui.sh script has one required parameter:</p>
 -p [proxy server port]</p>
 <p><b>Example</b>: nongui -o my_test.jmx -h my.proxy.server -p 8000</p>
 </subsection>
+</section>
+
+<section name="2.5 Configuring JMeter" anchor="configuring_jmeter">
+<p>If you wish to modify the properties with which JMeter runs you need to
+  either modify the jmeter.properties inside of the /bin directory or create
+  your own copy of the jmeter.properties and specify it in the command line
+  (jmeter [properties file]).
+  </p>
+  <properties>
+	<property name="search_paths">If you have developed new extensions to JMeter,
+		you can tell JMeter where to find your classes by adding the name of the
+  jar, or the directory where your classes live.</property>
+  <property name="user.dir">The directory JMeter will first go to for saving and
+	loading test scripts.</property>
+  <property name="remote_hosts">Comma-delimited list of remote JMeter hosts.
+	If you are running JMeter in a distributed environment, list the machines where
+  you have JMeter remote servers running.  This will allow you to control those
+	servers from this machine's GUI</property>
+  <property name="not_in_menu">A list of components you do not want to see in
+	JMeter's menus.  As JMeter has more and more components added, you may wish to
+  customize your JMeter to show only those components you are interested in.
+  You may list their classname or their class label (the string that appears
+  in JMeter's UI) here, and they will no longer appear in the menu's.</property>
+  </properties>
 </section>
 
 </body>

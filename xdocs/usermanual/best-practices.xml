@@ -11,12 +11,57 @@
 </section>
 
 <section name="11.1 Limit the Number of Threads" anchor="limit_threads">
+<p>Your hardware's capabilities will limit the number of threads you can effectively
+run with JMeter.  It will also depend on how fast your server is (a faster server
+gives makes JMeter work harder since it returns request quicker).  The more
+JMeter works, the less accurate its timing information will be.  The more work
+JMeter does, the more each thread has to wait to get access to the CPU, the more
+inflated the timing information gets.  If you need large-scale load testing, consider
+<a href="remote-test.html">running JMeter remotely</a> across multiple machines.</p>
 </section>
 
 <section name="11.2 Where to Put the Cookie Manager" anchor="put_cookie_manager">
+<p>See <a href="build-web-test-plan.html#adding_cookie_support">Building a Web Test</a>
+for information.</p>
 </section>
 
 <section name="11.3 Where to Put the Authorization Manager" anchor="put_auth_manager">
+<p>See <a href="build-adv-web-test-plan.html#header_manager">Building an Advanced
+Web Test</a> for information.</p>
+</section>
+
+<section name="11.4 Using the Proxy Server" anchor="proxy_server">
+<p>Refer to <complink name="HTTP Proxy Server"/> for details on setting up the proxy
+server.  The most important thing to do is filter out all requests you aren't
+interested in.  For instance, there's no point in recording image requests (JMeter can
+be instructed to download all images on a page - see <complink name="HTTP Request"/>).
+These will just clutter your test plan.  Most likely, there is an extension all your files
+share, such as .jsp, .asp, .php, .html or the like. These you should "include" by
+entering ".*\.jsp" as an "Include Pattern". </p>
+<p>Alternatively, you can exclude images by entering ".*\.gif" as an "Exclude Pattern".
+Depending on your application, this may or may not be a better way to go.  You may
+also have to exclude stylesheets, javascript files, and other included files.  Test
+out your settings to verify you are recording what you want, and then erase and start
+fresh.</p>
+<p>Although JMeter will record directly to the ThreadGroup if no Logical Controller is
+present, it's recommended that you add a <complink name="Simple Controller"/> so that all
+samples are recorded there.  This conveniently packages all your samples under one
+controller, which can be given a name that describes the test case.</p>
+<p>Now, go through the steps of a Test Case.  If you have no pre-defined test cases, use
+JMeter to record your actions to define some test cases.  Once you have finished a
+definite series of steps, save the entire test case in an appropriately named file.  Then, wipe
+clean and start a new test case.  By doing this, you can quickly record a large number of
+test case "rough drafts".</p>
+<p>The test cases will likely need to be further modified.  For instance, there may
+have been some dynamic data in one or more of the samples.  If so, these samples will
+ need to be put under a <complink name="Modification Manager"/>.  Currently, there is
+ no convenient way to do this other than saving the samples temporarily, deleting them, adding
+the Modification Manager, and then reloading the saved samples into the Modification Manager.
+This will be fixed in 1.8.</p>
+<p>You may also want to put any login pages within a <complink name="Once Only Controller"/>,
+so that the login action is done only once per test.  Alternatively, you might put all
+the samples but the login page within a <complink name="Loop Controller"/>, to execute
+X number of times before repeating the login request.</p>
 </section>
 
 </body>

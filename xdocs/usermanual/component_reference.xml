@@ -142,6 +142,27 @@ a new instance).</property>
 </links>
 
 </component>
+
+<component index="13.1.4" name="JNDI Request" screenshot="">
+
+<properties>
+	<property name="java.naming.factory.initial" required=""></property>
+	<property name="java.naming.factory.object" required=""></property>
+	<property name="java.naming.factory.state" required=""></property>
+	<property name="java.naming.factory.url.pkgs" required=""></property>
+	<property name="java.naming.provider.url" required=""></property>
+	<property name="java.naming.dns.url" required=""></property>
+	<property name="java.naming.authoritative" required=""></property>
+	<property name="java.naming.batchsize" required=""></property>
+	<property name="java.naming.referral" required=""></property>
+	<property name="java.naming.security.protocol" required=""></property>
+	<property name="java.naming.security.authentication" required=""></property>
+	<property name="java.naming.security.principal" required=""></property>
+	<property name="java.naming.security.credentials" required=""></property>
+	<property name="java.naming.language" required=""></property>
+	<property name="java.naming.applet" required=""></property>
+</properties>
+</component>
 </section>
 
 <section name="13.2 Logic Controllers" anchor="logic_controllers">
@@ -670,6 +691,25 @@ instead. (see figures 9 and 10).</p>
 <figure image="../images/screenshots/http-config/header-manager-example1b.gif">Figure 10 - Header Manager Control Panel</figure>
 </example>
 
+</component>
+
+<component index="13.4.11" name="JNDI Lookup Configuration" screenshot="">
+<properties>
+	<property name="Name">Descriptive name for this element that is shown in the tree.</property>
+	<property name="Remote Interface"></property>
+</properties>
+</component>
+
+<component index="13.4.12" name="JNDI Remote Method Configuration" screenshot="">
+<properties>
+	<property name="Name">Descriptive name for this element that is shown in the tree.</property>
+	<property name="Home Method Name"></property>
+	<property name="Home Method Parameters"></property>
+	<property name="Remote Interfaces"></property>
+	<property name="Remote Method Name"></property>
+	<property name="Remote Method Parameters"></property>
+	<property name="Reflect Button"></property>
+</properties>
 </component>
 </section>
 
