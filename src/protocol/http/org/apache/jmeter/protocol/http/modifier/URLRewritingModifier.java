@@ -53,7 +53,7 @@
  * <http://www.apache.org/>.
  *
  * @author mstover
- * @author <a href="mailto:jsalvata@atg.com">Jordi Salvat i Alabart</a>
+ * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Id$
  */
 
