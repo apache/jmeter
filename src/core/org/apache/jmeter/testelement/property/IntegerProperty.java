@@ -6,42 +6,40 @@ package org.apache.jmeter.testelement.property;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class IntegerProperty extends AbstractProperty
+public class IntegerProperty extends NumberProperty
 {
     int value;
-    
-    public IntegerProperty(String name,int value)
+
+    public IntegerProperty(String name, int value)
     {
         super(name);
         this.value = value;
     }
-    
+
+    public IntegerProperty(String name)
+    {
+        super(name);
+    }
+
     public IntegerProperty()
     {
         super();
     }
-    
+
     public void setValue(int value)
     {
         this.value = value;
     }
-    
-    public void setObjectValue(Object v)
-        {
-            if(v instanceof Number)
-            {
-                value = ((Number)v).intValue();
-            }
-            else
-            {
-                try
-                {
-                    value = Integer.parseInt(v.toString());
-                }
-                catch (RuntimeException e)
-                {}
-            }
-        }
+
+    protected void setNumberValue(Number n)
+    {
+        value = n.intValue();
+    }
+
+    protected void setNumberValue(String n) throws NumberFormatException
+    {
+        value = Integer.parseInt(n);
+    }
 
     /**
      * @see org.apache.jmeter.testelement.property.JMeterProperty#getStringValue()
@@ -64,36 +62,9 @@ public class IntegerProperty extends AbstractProperty
      */
     public Object clone()
     {
-        IntegerProperty prop = (IntegerProperty)super.clone();
+        IntegerProperty prop = (IntegerProperty) super.clone();
         prop.value = value;
         return prop;
-    }
-
-    /**
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
-    public int compareTo(Object arg0)
-    {
-        if(arg0 instanceof JMeterProperty)
-        {
-            int argValue = ((JMeterProperty)arg0).getIntValue();
-            if(value < argValue)
-            {
-                return -1;
-            }
-            else if(value == argValue)
-            {
-                return 0;
-            }
-            else
-            {
-                return 1;
-            }
-        }
-        else
-        {
-            return -1;
-        }
     }
 
     /**
@@ -109,7 +80,7 @@ public class IntegerProperty extends AbstractProperty
      */
     public double getDoubleValue()
     {
-        return (double)value;
+        return (double) value;
     }
 
     /**
@@ -117,7 +88,7 @@ public class IntegerProperty extends AbstractProperty
      */
     public float getFloatValue()
     {
-        return (float)value;
+        return (float) value;
     }
 
     /**
@@ -133,7 +104,7 @@ public class IntegerProperty extends AbstractProperty
      */
     public long getLongValue()
     {
-        return (long)value;
+        return (long) value;
     }
 
 }

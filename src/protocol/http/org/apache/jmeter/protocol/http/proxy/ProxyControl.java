@@ -67,6 +67,7 @@ import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
+import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -432,10 +433,17 @@ public class ProxyControl extends ConfigTestElement implements Serializable
 
     protected void replaceValues(TestElement sampler, TestElement[] configs)
         {
-            GuiPackage.getInstance().getReplacer().reverseReplace(sampler);
-            for (int i = 0; i < configs.length; i++)
+            try
             {
-                GuiPackage.getInstance().getReplacer().reverseReplace(configs[i]);
+                GuiPackage.getInstance().getReplacer().reverseReplace(sampler);
+                for (int i = 0; i < configs.length; i++)
+                {
+                    GuiPackage.getInstance().getReplacer().reverseReplace(configs[i]);
+                }
+            }
+            catch (InvalidVariableException e)
+            {
+                log.warn("Invalid variables included for replacement into recorded sample",e);
             }
         }
     public static class Test extends TestCase

@@ -48,6 +48,10 @@ public class Copy extends AbstractAction {
 	
 	public static JMeterTreeNode getCopiedNode() 
 	{
+        if(copiedNode == null)
+        {
+            return null;
+        }
 		return cloneTreeNode(copiedNode);
 	}
 
