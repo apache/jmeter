@@ -180,10 +180,8 @@
     <javac srcdir="${src.core}" destdir="${build.core}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <exclude name="org/apache/jmeter/util/JsseSSLManager.java" unless="jsse.present"/>
-      <exclude name="org/apache/jmeter/util/IaikSSLManager.java" unless="isasilk.present"/>
       <exclude name="org/apache/jmeter/util/keystore/PKCS12KeyStore.java" unless="isasilk.present"/>
       <exclude name="org/apache/jmeter/util/keystore/DefaultKeyStore.java" unless="jsse.present"/>
-      <exclude name="org/apache/jmeter/reporters/MailerResultCollector.java" unless="javamail.complete"/>
       <classpath>
         <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
