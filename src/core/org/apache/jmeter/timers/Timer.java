@@ -73,33 +73,4 @@ public interface Timer extends Serializable
      * @return the computed delay value.
      */
     public long delay();
-
-    /**
-     * Set the range value.
-     * 
-     * @param range
-     */
-    public void setRange(double range);
-
-    /**
-     * Get the range value.
-     * 
-     * @return double
-     */
-    public double getRange();
-
-    /**
-     * Set the delay value.
-     * 
-     * @param delay the delay value (this is a String as it can be set using a
-     * variable).
-     */
-    public void setDelay(String delay);
-
-    /**
-     * Get the delay value for display. 
-     * 
-     * @return String
-     */
-    public String getDelay();
 }
