@@ -39,9 +39,12 @@ public class JMeterVersion
 	/*
 	 * The VERSION string is updated by the Ant build file, which looks for the
 	 * pattern: VERSION = <quote>.*<quote>
-	 * 
+	 *
+	 * The string is made private so the compiler can't propagate it into JMeterUtils
+	 * This ensures that JMeterUtils always gets the correct version, even if it is
+	 * not re-compiled during the build.
 	 */
-	static final String VERSION = "2.0.2";
+	private static final String VERSION = "2.0.2-20050108";
 
 	static final String COPYRIGHT = "Copyright (c) 1998-2005 The Apache Software Foundation";
 	
@@ -50,4 +53,7 @@ public class JMeterVersion
         super();
     }
 
+	static final String getVERSION() {
+		return VERSION;
+	}
 }
