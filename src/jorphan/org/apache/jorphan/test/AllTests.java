@@ -158,6 +158,21 @@ public final class AllTests
         initializeManager(args);
         // end : added - 11 July 2001
 
+//++
+// GUI tests throw the error 
+// testArgumentCreation(org.apache.jmeter.config.gui.ArgumentsPanel$Test)java.lang.NoClassDefFoundError
+// 	at java.lang.Class.forName0(Native Method)
+// 	at java.lang.Class.forName(Class.java:141)
+// 	at java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment(GraphicsEnvironment.java:62)
+//
+//  Try to find out why this is ...
+
+        String e = "java.awt.headless";
+		String g="java.awt.graphicsenv";
+        System.out.println(e+"="+System.getProperty(e));
+		System.out.println(g+"="+System.getProperty(g));
+// don't call any graphics routines here, as some have side effects
+//--
         TestSuite suite = suite(args[0]);
         // Jeremy Arnold: This method used to attempt to write results to
         // a file, but it had a bug and instead just wrote to System.out.
@@ -166,6 +181,12 @@ public final class AllTests
         // behaving as it did before.  It would be simple to make it write
         // to a file instead if that is the desired behavior.
         TestRunner.run(suite);
+//++
+//      Recheck settings:
+		System.out.println(e+"="+System.getProperty(e));
+		System.out.println(g+"="+System.getProperty(g));
+		System.out.println("Headless? "+java.awt.GraphicsEnvironment.isHeadless());
+//--
         System.exit(0);
     }
 
