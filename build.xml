@@ -87,7 +87,8 @@
 		  token="@VERSION@" value="${version}"/>
 		  <javac srcdir="${sources.src.dir}"
 				destdir="${classes.dest.dir}"
-				optimize="${optimize}">
+				optimize="${optimize}"
+                                debug="on">
 				<exclude name="**/*.df*"/>
 				<exclude name="**/*.html"/>
 				<exclude name="**/*.tpr"/>
