@@ -1,5 +1,4 @@
 package org.apache.jmeter.junit;
-import java.awt.GraphicsEnvironment;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
@@ -155,9 +154,11 @@ public class JMeterTest extends TestCase
                     new Class[] { extendsClass })
                 .iterator();
         List objects = new LinkedList();
+        String n="";
+    try {
         while (classes.hasNext())
         {
-        	String n = (String) classes.next();
+        	n = (String) classes.next();
         	//TODO - improve this check
         	if (n.endsWith("RemoteJMeterEngineImpl"))
         	{
@@ -200,7 +201,7 @@ public class JMeterTest extends TestCase
             {
             	if (e instanceof RemoteException)
 				{
-					log.warn(e.toString());
+					System.out.println("\nError creating "+n+" "+e.toString());
 				}
 				else
 				{
@@ -208,6 +209,10 @@ public class JMeterTest extends TestCase
 				}
             }
         }
+    } finally {
+    	System.out.println("\nLast class="+n);
+    	System.out.println("objects.size="+objects.size());
+    }
         return objects;
     }
 
