@@ -46,7 +46,17 @@ public class MonitorGraph
 
 	private int COUNT = 0;
 	private int GRAPHMAX = 0;
+
     /**
+     * 
+     * @deprecated Only for use in unit testing
+     */
+    public MonitorGraph()
+	{
+    	//log.warn("Only for use in unit testing");
+    }
+
+	/**
      * 
      */
     public MonitorGraph(MonitorAccumModel model)

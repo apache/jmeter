@@ -49,7 +49,9 @@ public class MonitorHandler extends DefaultHandler
 	 * each element (such as allocating a new tree node or writing
 	 * output to a file).</p>
 	 *
-	 * @param name The element type name.
+	 * @param uri
+	 * @param localName The element type name.
+	 * @param qName
 	 * @param attributes The specified or defaulted attributes.
 	 * @exception org.xml.sax.SAXException Any SAX exception, possibly
 	 *            wrapping another exception.
@@ -71,8 +73,9 @@ public class MonitorHandler extends DefaultHandler
 	 * each element (such as finalising a tree node or writing
 	 * output to a file).</p>
 	 *
-	 * @param name The element type name.
-	 * @param attributes The specified or defaulted attributes.
+	 * @param uri
+	 * @param localName The element type name.
+	 * @param qName
 	 * @exception org.xml.sax.SAXException Any SAX exception, possibly
 	 *            wrapping another exception.
 	 * @see org.xml.sax.ContentHandler#endElement

@@ -92,6 +92,15 @@ public class MonitorPerformancePanel extends JSplitPane
 
 	protected Font plaintext = new Font("plain", Font.TRUETYPE_FONT, 10);
 
+	/**
+     * 
+     * @deprecated Only for use in unit testing
+     */
+    public MonitorPerformancePanel()
+	{
+    	//log.warn("Only for use in unit testing");
+    }
+
     /**
      * 
      */
