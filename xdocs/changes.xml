@@ -10,6 +10,27 @@
 (least recent)</b></p>  
 
 <b>Changes: for more info, contact <a href="mailto:mstover1@apache.org">Michael Stover</a></b>
+<h3>Version 1.8</h3>
+<ul>
+<li>Improvement to Aggregate report's calculations.</li>
+<li>Simplified application logging.</li>
+<li>New Duration Assertion.</li>
+<li>Fixed and improved Mailer Visualizer.</li>
+<li>Improvements to HTTP Sampler's recovery of resources (sockets and file handles).</li>
+<li>Improving JMeter's internal handling of test start/stop.</li>
+<li>Fixing and adding options to behavior of Interleave and Random Controllers.</li>
+<li>New Counter config element.</li>
+<li>New User Parameters config element.</li>
+<li>Improved performance of file opener.</li>
+<li>Functions and other elements can access global variables.</li>
+<li>Help system available within JMeter's GUI.</li>
+<li>Test Elements can be disabled.</li>
+<li>Language/Locale can be changed while running JMeter (mostly).</li>
+<li>View Results Tree can be configured to record only errors.</li>
+<li>Various bug fixes.</li>
+</ul>
+
+<b>Changes: for more info, contact <a href="mailto:mstover1@apache.org">Michael Stover</a></b>
 <h3>Version 1.7.3</h3>
 <ul>
 <li>New Functions that provide more ability to change requests dynamically during test runs.</li>
