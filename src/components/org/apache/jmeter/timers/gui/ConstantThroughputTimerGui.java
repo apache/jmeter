@@ -55,12 +55,8 @@
  
 package org.apache.jmeter.timers.gui;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import javax.swing.Box;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.testelement.TestElement;
@@ -77,7 +73,6 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  */
 public class ConstantThroughputTimerGui
 	extends AbstractTimerGui
-	implements KeyListener
 {
     private final String DEFAULT_THROUGHPUT = "60";
     private final String THROUGHPUT_FIELD = "Throughput Field";
@@ -122,7 +117,7 @@ public class ConstantThroughputTimerGui
     public void modifyTestElement(TestElement timer)
     {
         this.configureTestElement(timer);
-        ((ConstantThroughputTimer)timer).setThroughput(Long.parseLong(throughputField.getText()));
+        ((ConstantThroughputTimer)timer).setThroughput(throughputField.getText());
     }
 
 	/**
@@ -134,57 +129,7 @@ public class ConstantThroughputTimerGui
     {
 		super.configure(el);
 		ConstantThroughputTimer e= (ConstantThroughputTimer)el;
-		throughputField.setText(String.valueOf(e.getThroughput()));
-    }
-
-    /**
-     * Checks the key just entered in the Throughput text input field makes a
-     * valid number, cleans the input field otherwise.
-     *
-     * @param e  KeyEvent - handled only if it happens in the Throughput field.
-     */
-    public void keyReleased(KeyEvent e)
-    {
-		String n = e.getComponent().getName();
-		if(n.equals(THROUGHPUT_FIELD))
-		{
-		    try
-		    {
-			Long.parseLong(throughputField.getText());
-		    }
-		    catch(NumberFormatException nfe)
-		    {
-			if(throughputField.getText().length() > 0)
-			{
-			    JOptionPane.showMessageDialog(this,
-				    "You must enter a valid number",
-				    "Invalid data", JOptionPane.WARNING_MESSAGE);
-			    // We reset the text to be an empty string instead
-			    // of the default value. If we reset it to the
-			    // default value, then the user has to delete
-			    // that value and reenter his/her own. That's
-			    // too much trouble for the user.
-			}
-		    }
-		}
-    }
-
-	/**
-	 * Process a KeyEvent.
-	 *
-	 * @param e the event to handle.
-	 */
-    public void keyPressed(KeyEvent e)
-    {
-    }
-
-	/**
-	 * Process a KeyEvent.
-	 *
-	 * @param e the event to handle.
-	 */
-    public void keyTyped(KeyEvent e)
-    {
+		throughputField.setText(e.getThroughputString());
     }
 
     /**
@@ -206,7 +151,6 @@ public class ConstantThroughputTimerGui
 
 		throughputField = new JTextField(6);
 		throughputField.setText(DEFAULT_THROUGHPUT);
-        throughputField.addKeyListener(this);
         throughputField.setName(THROUGHPUT_FIELD);
 		throughputPanel.add(throughputField);
         

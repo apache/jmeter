@@ -56,8 +56,8 @@ package org.apache.jmeter.visualizers;
 
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -156,28 +156,17 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
         this.setLayout(new BorderLayout());
 
         // MAIN PANEL
-        JPanel mainPanel = new JPanel();
         Border margin = new EmptyBorder(10, 10, 5, 10);
 
-        mainPanel.setBorder(margin);
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        this.setBorder(margin);
 
-        // TITLE
-        JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("assertion_visualizer_title"));
-        Font curFont = panelTitleLabel.getFont();
-        int curFontSize = curFont.getSize();
-
-        curFontSize += 4;
-        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-        mainPanel.add(panelTitleLabel);
 
         // NAME
-        mainPanel.add(getNamePanel());
-        mainPanel.add(getFilePanel());
+        this.add(makeTitlePanel(),BorderLayout.NORTH);
 
         // TEXTAREA LABEL
         JLabel textAreaLabel = new JLabel(JMeterUtils.getResString("assertion_textarea_label"));
-
+        Box mainPanel = Box.createVerticalBox();
         mainPanel.add(textAreaLabel);
 
         // TEXTAREA
@@ -190,6 +179,7 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
         areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         mainPanel.add(areaScrollPane);
+        mainPanel.add(Box.createVerticalGlue());
         this.add(mainPanel, BorderLayout.CENTER);
     }
 }

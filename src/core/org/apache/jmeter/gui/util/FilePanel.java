@@ -52,8 +52,8 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */package org.apache.jmeter.gui.util;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
@@ -124,12 +124,12 @@ public class FilePanel extends JPanel implements ActionListener
 	 */
 	private void init()
 	{
-		setLayout(new BorderLayout());
+		setLayout(new FlowLayout(FlowLayout.LEFT));
 		setBorder(BorderFactory.createTitledBorder(title));
-		add(label, BorderLayout.WEST);
-		add(filename, BorderLayout.CENTER);
+		add(label);
+		add(filename);
 		filename.addActionListener(this);
-		add(browse, BorderLayout.EAST);
+		add(browse);
 		browse.setActionCommand("browse");
 		browse.addActionListener(this);
         

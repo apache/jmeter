@@ -57,13 +57,11 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -183,16 +181,7 @@ public class StatVisualizer extends AbstractVisualizer
         mainPanel.setBorder(margin);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        // TITLE
-        JLabel panelTitleLabel = new JLabel(VISUALIZER_NAME);
-        Font curFont = panelTitleLabel.getFont();
-        int curFontSize = curFont.getSize();
-
-        curFontSize += 4;
-        panelTitleLabel.setFont(
-                new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-        mainPanel.add(panelTitleLabel);
-        mainPanel.add(getFilePanel());
+        mainPanel.add(makeTitlePanel());
         myStatTableModel = new StatTableModel(model);
         // SortFilterModel mySortedModel = new SortFilterModel(myStatTableModel);
         myJTable = new JTable(myStatTableModel);

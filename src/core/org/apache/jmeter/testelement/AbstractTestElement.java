@@ -29,7 +29,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable
 
     private Map propMap = Collections.synchronizedMap(new HashMap());
 
-    private boolean runningVersion;
+    private boolean runningVersion = false;
 
     /****************************************
      * !ToDo (Method description)
@@ -51,6 +51,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable
         {
             clonedElement.setProperty((JMeterProperty) iter.next().clone());
         }
+        clonedElement.setRunningVersion(runningVersion);
         return clonedElement;
     }
 
@@ -295,7 +296,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable
         PropertyIterator iter = propertyIterator();
         while (iter.hasNext())
         {
-            iter.next().setRunningVersion(true);
+            iter.next().setRunningVersion(runningVersion);
         }
     }
 

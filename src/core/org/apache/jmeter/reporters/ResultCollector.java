@@ -74,6 +74,7 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
 import org.apache.jmeter.engine.event.IterationEvent;
+import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.Remoteable;
@@ -98,7 +99,7 @@ import org.xml.sax.SAXException;
  * @version $Id$
  */
 public class ResultCollector extends AbstractListenerElement
-        implements SampleListener, Clearable, Serializable, TestListener, Remoteable
+        implements SampleListener, Clearable, Serializable, TestListener, Remoteable,NoThreadClone
 {
     transient private static Logger log =
             Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");

@@ -65,6 +65,8 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import junit.framework.TestCase;
+
 import org.apache.jmeter.protocol.http.config.gui.MultipartUrlConfigGui;
 import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
@@ -199,5 +201,30 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         optionalTasksPanel.add(retrieveImagesPanel);
 
         return optionalTasksPanel;
+    }
+    
+    public static class Test extends TestCase
+    {
+        HttpTestSampleGui gui;
+        
+        public Test(String name)
+        {
+            super(name);
+        }
+        
+        public void setUp()
+        {
+            gui = new HttpTestSampleGui();
+        }
+        
+        public void testCloneSampler() throws Exception
+        {
+            HTTPSampler sampler = (HTTPSampler)gui.createTestElement();
+            sampler.addArgument("param","value");
+            HTTPSampler clonedSampler = (HTTPSampler)sampler.clone();
+            clonedSampler.setRunningVersion(true);
+            sampler.getArguments().getArgument(0).setValue("new value");
+            assertEquals("Sampler didn't clone correctly","new value",sampler.getArguments().getArgument(0).getValue());
+        }
     }
 }

@@ -492,9 +492,6 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
         treeSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, treePane, getBottomPane());
 
         Box titlePanel = makeTitlePanel();
-        JCheckBox errorCheckBox = getErrorLoggingCheckbox();
-        errorCheckBox.setAlignmentX(JCheckBox.CENTER_ALIGNMENT);
-        titlePanel.add(errorCheckBox);
 
         add(titlePanel, BorderLayout.NORTH);
         add(treeSplitPane, BorderLayout.CENTER);
