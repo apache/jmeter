@@ -182,6 +182,10 @@ public class JMeterTest extends JMeterTestCase
     		Object key = i.next();
     		if (!m.get(key).equals(Boolean.TRUE)) 
             {
+				if(key.equals("SSL Manager"))// Not a true GUI component
+				{
+					continue;
+				}
             	if (unseen == 0)// first time
             	{
 					System.out.println("\nNames remaining in "+t+" Map:");
@@ -261,7 +265,8 @@ public class JMeterTest extends JMeterTestCase
 					//JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
 		            TestSuite ts = new TestSuite(item.getClass().getName());
 					ts.addTest(new JMeterTest("GUIComponents2",item));
-		            suite.addTest(ts);
+					ts.addTest(new JMeterTest("runGUITitle",item));
+					suite.addTest(ts);
 				}
 				catch(IllegalArgumentException e)
 				{
