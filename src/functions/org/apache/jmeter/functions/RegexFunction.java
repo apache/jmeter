@@ -109,7 +109,6 @@ public class RegexFunction extends AbstractFunction {
 		}
 		else if(valueIndex.equals(RAND))
 		{
-			System.out.println("Number of matches = "+collectAllMatches.size());
 			MatchResult result = (MatchResult)collectAllMatches.get(
 					rand.nextInt(collectAllMatches.size()));
 			return generateResult(result);
@@ -182,7 +181,6 @@ public class RegexFunction extends AbstractFunction {
 			if(tk.hasNext())
 			{
 				valueIndex = (String)tk.next();
-				System.out.println("Value index = "+valueIndex);
 			}
 			if(tk.hasNext())
 			{

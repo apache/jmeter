@@ -58,9 +58,12 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.jmeter.reporters.ResultCollector;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.JMeterThread;
@@ -130,6 +133,8 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 			System.out.println("Running the test!");
 			running = true;
 			compileTree();
+			List testLevelElements = new LinkedList(getTestTree().list(getTestTree().getArray()[0]));
+			removeThreadGroups(testLevelElements);
 			SearchByClass searcher = new SearchByClass(ThreadGroup.class);
 			testListeners = new SearchByClass(TestListener.class);
 			setMode();
@@ -151,7 +156,9 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 				threads = new JMeterThread[group.getNumThreads()];
 				for(int i = 0;running && i < threads.length; i++)
 				{
-					threads[i] = new JMeterThread(cloneTree(searcher.getSubTree(group)),this);
+					ListedHashTree threadGroupTree = searcher.getSubTree(group);
+					threadGroupTree.add(group,testLevelElements);
+					threads[i] = new JMeterThread(cloneTree(threadGroupTree),this);
 					threads[i].setInitialDelay((int)(((float)(group.getRampUp() * 1000) /
 							(float)group.getNumThreads()) * (float)i));
 					threads[i].setThreadName(group.getName()+"-"+(i+1));
@@ -169,6 +176,23 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 			PrintWriter writer = new PrintWriter(string);
 			err.printStackTrace(writer);
 			throw new JMeterEngineException(string.toString());
+		}
+	}
+	
+	private void removeThreadGroups(List elements)
+	{
+		Iterator iter = elements.iterator();
+		while(iter.hasNext())
+		{
+			Object item = iter.next();
+			if(item instanceof ThreadGroup)
+			{
+				iter.remove();
+			}
+			else if(!(item instanceof TestElement))
+			{
+				iter.remove();
+			}
 		}
 	}
 	
