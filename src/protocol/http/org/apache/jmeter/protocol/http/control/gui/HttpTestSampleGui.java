@@ -204,4 +204,15 @@ public class HttpTestSampleGui extends AbstractSamplerGui
             assertEquals("Sampler didn't clone correctly","new value",sampler.getArguments().getArgument(0).getValue());
         }
     }
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+     */
+    public void clear()
+    {
+        // TODO Auto-generated method stub
+        super.clear();
+        getImages.setSelected(false);
+        urlConfigGui.clear();
+    }
+
 }
