@@ -40,12 +40,13 @@ JAVADOCOPT = -d $(DOCDIR) -version -private \
 
 # Packages is the list of packages inside our base package.
 BASE = org.apache.jmeter
-VERSION = 1.0.2
+VERSION = 1.1
 PACKAGES = \
         $(BASE) \
         $(BASE).timers \
-        $(BASE).visualisers \
-
+        $(BASE).visualizers \
+        $(BASE).samplers \
+        
 DIRECTORIES   = $(subst .,/,$(PACKAGES))
 BASEDIRECTORY = $(subst .,/,$(BASE))
 ALLSOURCES    = $(foreach dir,$(DIRECTORIES),$(wildcard $(dir)/*.java))
