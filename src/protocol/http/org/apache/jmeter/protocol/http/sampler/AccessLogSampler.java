@@ -24,7 +24,7 @@ import java.net.URL;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.protocol.http.util.accesslog.LogParser;
 import org.apache.jmeter.protocol.http.util.accesslog.Generator;
-import org.apache.jmeter.protocol.http.util.accesslog.LogFilter;
+//import org.apache.jmeter.protocol.http.util.accesslog.LogFilter;
 import org.apache.jmeter.samplers.SampleResult;
 
 /**
