@@ -121,13 +121,15 @@ class RegexpHTMLParser extends HTMLParser
      * images, etc.:
      */
     private static final String REGEXP=
-        "<BASE(?=\\s)[^\\>]*\\sHREF\\s*=\\s*\"([^\">]*)\""
-            + "|<(?:IMG|SCRIPT)(?=\\s)[^\\>]*\\sSRC\\s*=\\s*\"([^\">]*)\""
-            + "|<APPLET(?=\\s)[^\\>]*\\sCODE(?:BASE)?\\s*=\\s*\"([^\">]*)\""
-            + "|<(?:EMBED|OBJECT)(?=\\s)[^\\>]*\\s(?:SRC|CODEBASE)\\s*=\\s*\"([^\">]*)\""
-            + "|<(?:BODY|TABLE|TR|TD)(?=\\s)[^\\>]*\\sBACKGROUND\\s*=\\s*\"([^\">]*)\""
-            + "|<INPUT(?=\\s)(?:[^\\>]*\\s(?:SRC\\s*=\\s*\"([^\">]*)\"|TYPE\\s*=\\s*\"image\")){2,}"
-            + "|<LINK(?=\\s)(?:[^\\>]*\\s(?:HREF\\s*=\\s*\"([^\">]*)\"|REL\\s*=\\s*\"stylesheet\")){2,}";
+        "<(?:"
+            +  "BASE(?=\\s)[^\\>]*\\sHREF\\s*=\\s*\"([^\">]*)\""
+            + "|(?:IMG|SCRIPT)(?=\\s)[^\\>]*\\sSRC\\s*=\\s*\"([^\">]*)\""
+            + "|APPLET(?=\\s)[^\\>]*\\sCODE(?:BASE)?\\s*=\\s*\"([^\">]*)\""
+            + "|(?:EMBED|OBJECT)(?=\\s)[^\\>]*\\s(?:SRC|CODEBASE)\\s*=\\s*\"([^\">]*)\""
+            + "|(?:BODY|TABLE|TR|TD)(?=\\s)[^\\>]*\\sBACKGROUND\\s*=\\s*\"([^\">]*)\""
+            + "|INPUT(?=\\s)(?:[^\\>]*\\s(?:SRC\\s*=\\s*\"([^\">]*)\"|TYPE\\s*=\\s*\"image\")){2,}"
+            + "|LINK(?=\\s)(?:[^\\>]*\\s(?:HREF\\s*=\\s*\"([^\">]*)\"|REL\\s*=\\s*\"stylesheet\")){2,}"
+            + ")";
 
     /**
      * Compiled regular expression.
