@@ -58,17 +58,18 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.net.URL;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.io.*;
-import javax.swing.table.AbstractTableModel;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
-import org.apache.jmeter.config.*;
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.testelement.AbstractTestElement;
 
 /**
  * This class provides an interface to headers file to
@@ -77,7 +78,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
  * @author  <a href="mailto:giacomo@apache.org">Giacomo Pati</a>
  * @version $Revision$ $Date$
  */
-public class HeaderManager extends AbstractTestElement implements
+public class HeaderManager extends ConfigTestElement implements
 		Serializable
 {
 

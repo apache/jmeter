@@ -76,7 +76,7 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.Vector;
 
-import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testelement.PerThreadClonable;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -87,7 +87,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * @author  <a href="mailto:sdowd@arcmail.com">Sean Dowd</a>
  * @version $Revision$ $Date$
  */
-public class CookieManager extends AbstractTestElement implements
+public class CookieManager extends ConfigTestElement implements
 		  Serializable,PerThreadClonable
 {
 
