@@ -67,6 +67,7 @@ public class JMeterColor extends Color {
 	public final static Color dark_green = new JMeterColor(0F,.5F,0F);
 	public final static Color YELLOW = new JMeterColor(1F,1F,0);
 	public final static Color LAVENDER = new JMeterColor(206F/255F,207F/255F,1F);
+    public final static Color purple = new JMeterColor(150/255F,0,150/255F);
 	
 	public JMeterColor(float r,float g,float b)
 	{
