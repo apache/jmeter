@@ -205,6 +205,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
     {
         List configs = new LinkedList();
         List modifiers = new LinkedList();
+        List controllers = new LinkedList();
         List responseModifiers = new LinkedList();
         List listeners = new LinkedList();
         List timers = new LinkedList();
@@ -243,6 +244,10 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
                 {
                     tempPre.add(item);
                 }
+                if(item instanceof Controller)
+                {
+                   controllers.add(item);
+                }
             }
             pres.addAll(0,tempPre);
             posts.addAll(0,tempPost);
@@ -257,7 +262,8 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
                 timers,
                 assertions,
                 posts,
-                pres);
+                pres,
+                controllers);
         pack.setSampler(sam);
         pack.setRunningVersion(true);
         samplerConfigMap.put(sam, pack);

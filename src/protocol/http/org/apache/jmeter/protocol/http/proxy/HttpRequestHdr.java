@@ -190,7 +190,7 @@ public class HttpRequestHdr
         tempGui.modifyTestElement(result);
         result.setFollowRedirects(false);
         result.setUseKeepAlive(true);
-        log.debug("getSampler: sampler path = " + result.getEncodedPath());
+        log.debug("getSampler: sampler path = " + result.getPath());
         return result;
     }
     
@@ -264,7 +264,7 @@ public class HttpRequestHdr
         {
             sampler.parseArguments(postData);
         }
-        log.debug("sampler path = " + sampler.getEncodedPath());
+        log.debug("sampler path = " + sampler.getPath());
         return sampler;
     }
     

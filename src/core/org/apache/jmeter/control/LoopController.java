@@ -25,7 +25,6 @@ import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.FunctionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -66,8 +65,6 @@ public class LoopController extends GenericController implements Serializable
         try
         {
         	JMeterProperty prop = getProperty(LOOPS);
-        	if (prop instanceof FunctionProperty)
-        		((FunctionProperty)prop).setUseCache(false);
             return Integer.parseInt(prop.getStringValue());
         }
         catch (NumberFormatException e)
