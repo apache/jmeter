@@ -61,6 +61,15 @@ import org.apache.log.Logger;
 /**
  * Example Sampler (non-Bean version)
  * 
+ * JMeter creates an instance of a sampler class for every
+ * occurrence of the element in every thread.
+ * [some additional copies may be created before the test run starts]
+ *
+ * Thus each sampler is guaranteed to be called by a single thread -
+ * there is no need to synchronize access to instance variables.
+ * 
+ * However, access to class fields must be synchronized.
+ *  
  * @author sebb AT apache DOT org
  * @version $revision$ $date$
  */
@@ -72,8 +81,13 @@ public class ExampleSampler extends AbstractSampler
     // The name of the property used to hold our data
 	public final static String DATA = "ExampleSampler.data";   //$NON-NLS-1$
 	
+	private transient static int classCount=0; // keep track of classes created
+	// (for instructional purposes only!)
+	
 	public ExampleSampler()
 	{
+		classCount++;
+		trace("ExampleSampler()");
 	}
 
     /* (non-Javadoc)
@@ -83,6 +97,7 @@ public class ExampleSampler extends AbstractSampler
      */
     public SampleResult sample(Entry e)
     {
+    	trace("sample()");
 		SampleResult res = new SampleResult();
 		boolean isOK = false; // Did sample succeed?
 		String data=getData(); // Sampler data
@@ -127,7 +142,7 @@ public class ExampleSampler extends AbstractSampler
      */
     private String getTitle()
     {
-        return "ExampleSample";
+        return this.getName();
     }
     
     /**
@@ -137,4 +152,15 @@ public class ExampleSampler extends AbstractSampler
     {
     	return getPropertyAsString(DATA);
     }
+    
+    /*
+     * Helper method
+     */
+	private void trace(String s)
+	{
+		String tl = getTitle();
+		String tn = Thread.currentThread().getName();
+		String th = this.toString();
+		log.debug(tn+" ("+classCount+") "+tl+" "+s+" "+th);
+	}
 }
