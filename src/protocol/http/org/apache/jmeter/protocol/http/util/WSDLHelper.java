@@ -35,6 +35,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import org.apache.jmeter.protocol.http.control.AuthManager;
 
 /**
  * For now I use DOM for WSDLHelper, but it would be more efficient to use JAXB
@@ -62,6 +63,7 @@ public class WSDLHelper
     public String BINDNAME = null;
     protected Object[] SOAPOPS = null;
     protected HashMap ACTIONS = new HashMap();
+    protected AuthManager AUTH = null;
 
     /**
      * Default constructor takes a string URL
@@ -78,6 +80,12 @@ public class WSDLHelper
         }
     }
 
+	public WSDLHelper(String url, AuthManager auth)
+	throws MalformedURLException{
+		this(url);
+		this.AUTH = auth;
+	}
+	
     /**
      * Returns the URL
      * @return the URL
@@ -147,6 +155,14 @@ public class WSDLHelper
         try
         {
             CONN = (HttpURLConnection) WSDLURL.openConnection();
+            // in the rare case the WSDL is protected and requires
+            // authentication, use the AuthManager to set the
+            // authorization. Basic and Digest authorization are
+            // pretty weak and don't provide real security.
+            if (this.AUTH != null && this.AUTH.getAuthHeaderForURL(this.WSDLURL) != null){
+				CONN.setRequestProperty("Authorization",
+				this.AUTH.getAuthHeaderForURL(this.WSDLURL));
+            }
         }
         catch (IOException exception)
         {
