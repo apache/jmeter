@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.extractor.RegexExtractor;
@@ -14,19 +15,14 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
-/**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- */
+
 public class RegexExtractorGui extends AbstractPostProcessorGui
 {
-    JLabeledTextField regexField;
-    JLabeledTextField templateField;
-    JLabeledTextField defaultField;
-    JLabeledTextField matchNumberField;
-    JLabeledTextField refNameField;
+    private JLabeledTextField regexField;
+    private JLabeledTextField templateField;
+    private JLabeledTextField defaultField;
+    private JLabeledTextField matchNumberField;
+    private JLabeledTextField refNameField;
     
     public RegexExtractorGui()
     {
@@ -82,33 +78,32 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
     
     private void init()
     {
-        regexField = new JLabeledTextField(JMeterUtils.getResString("regex_field"));
-        templateField = new JLabeledTextField(JMeterUtils.getResString("template_field"));
-        defaultField = new JLabeledTextField(JMeterUtils.getResString("default_value_field"));
-        refNameField = new JLabeledTextField(JMeterUtils.getResString("ref_name_field"));
-        matchNumberField = new JLabeledTextField(JMeterUtils.getResString("match_num_field"));
         setLayout(new BorderLayout());
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+        
         add(makeTitlePanel(),BorderLayout.NORTH);
         add(makeParameterPanel(),BorderLayout.CENTER);
     }
     
     private JPanel makeParameterPanel()
     {
+        regexField = new JLabeledTextField(JMeterUtils.getResString("regex_field"));
+        templateField = new JLabeledTextField(JMeterUtils.getResString("template_field"));
+        defaultField = new JLabeledTextField(JMeterUtils.getResString("default_value_field"));
+        refNameField = new JLabeledTextField(JMeterUtils.getResString("ref_name_field"));
+        matchNumberField = new JLabeledTextField(JMeterUtils.getResString("match_num_field"));
+
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         initConstraints(gbc);
         addField(panel,refNameField,gbc);
         resetContraints(gbc);
-        gbc.gridy++;
         addField(panel,regexField,gbc);
         resetContraints(gbc);
-        gbc.gridy++;
         addField(panel,templateField,gbc);
         resetContraints(gbc);
-        gbc.gridy++;
         addField(panel,matchNumberField,gbc);
         resetContraints(gbc);
-        gbc.gridy++;
         gbc.weighty = 1;
         addField(panel,defaultField,gbc);
         return panel;
