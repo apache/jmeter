@@ -572,7 +572,8 @@ public class CompoundVariable implements Function
 
         public void testParseExample1() throws Exception
         {
-            function.setParameters("${__regexFunction(<html>\\(.*\\)</html>,$1$)}");
+            function.setParameters(
+                "${__regexFunction(<html>\\(.*\\)</html>,$1$)}");
             function.setJMeterVariables(new JMeterVariables());
             assertEquals(1, function.compiledComponents.size());
             assertEquals(
@@ -618,7 +619,9 @@ public class CompoundVariable implements Function
         public void testParseExample3() throws Exception
         {
             function.setParameters(
-                "${__regexFunction(<html>\\(.*\\)</html>,$1$)}${__regexFunction(<html>\\(.*o\\)\\(.*o\\)\\(.*\\)</html>,$1$$3$)}");
+                "${__regexFunction(<html>\\(.*\\)</html>,$1$)}" +
+                "${__regexFunction(<html>\\(.*o\\)\\(.*o\\)\\(.*\\)</html>," +
+                "$1$$3$)}");
             function.setJMeterVariables(new JMeterVariables());
             assertEquals(2, function.compiledComponents.size());
             assertTrue(function.hasFunction());
@@ -676,7 +679,9 @@ public class CompoundVariable implements Function
         public void testNestedExample1() throws Exception
         {
             function.setParameters(
-                "${__regexFunction(<html>\\(\\$\\{my_regex\\}\\)</html>,$1$)}${__regexFunction(<html>\\(.*o\\)\\(.*o\\)\\(.*\\)</html>,$1$$3$)}");
+                "${__regexFunction(<html>\\(\\$\\{my_regex\\}\\)</html>," +
+                "$1$)}${__regexFunction(<html>\\(.*o\\)\\(.*o\\)\\(.*\\)" +
+                "</html>,$1$$3$)}");
             function.setJMeterVariables(new JMeterVariables());
             assertEquals(2, function.compiledComponents.size());
             assertTrue(function.hasFunction());
