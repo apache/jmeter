@@ -66,8 +66,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.UnsupportedEncodingException;
 
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -125,10 +127,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
     transient protected JEditorPane htmlEditPane;
 
     protected JPanel resultPanel;
-    protected JScrollPane treePane;
-    protected JScrollPane resultPane;
-    protected JSplitPane treeSplitPane;
-
+    private JSplitPane treeSplitPane;
+    
     /** The text area where the response is displayed.  **/
     protected JTextArea textArea;
     protected JTree jTree;
@@ -241,14 +241,18 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
         DefaultMutableTreeNode node =
                 (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
 
-        if (log.isDebugEnabled())
+        if (log.isDebugEnabled()) {
             log.debug("valueChanged : selected node - " + node);
+        }
+        
         if (node != null)
         {
             SampleResult res = (SampleResult) node.getUserObject();
 
-            if (log.isDebugEnabled())
+            if (log.isDebugEnabled()) {
                 log.debug("valueChanged1 : sample result - " + res);
+            }
+            
             if (res != null)
             {
                 resultPanel.removeAll();
@@ -382,6 +386,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         textArea.setTabSize(4);
+        textArea.setRows(4);
         gridBag.setConstraints(textArea, gbc);
         resultPanel.add(textArea);
         gbc.gridy++;
@@ -476,12 +481,14 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
      ***************************************/
     protected void init()
     {
-        this.setLayout(new BorderLayout());
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
+        
         SampleResult rootSampleResult = new SampleResult();
-
         rootSampleResult.setSampleLabel("Root");
         rootSampleResult.setSuccessful(true);
         root = new DefaultMutableTreeNode(rootSampleResult);
+        
         treeModel = new DefaultTreeModel(root);
         jTree = new JTree(treeModel);
         jTree.setCellRenderer(new ResultsNodeRenderer());
@@ -489,19 +496,30 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                 TreeSelectionModel.SINGLE_TREE_SELECTION);
         jTree.addTreeSelectionListener(this);
         jTree.setShowsRootHandles(true);
-        treePane = new JScrollPane(jTree);
-        treePane.setPreferredSize(new Dimension(100, 100));
+
+        JScrollPane treePane = new JScrollPane(jTree);
+        treePane.setPreferredSize(new Dimension(100, 70));
+
         gridBag = new GridBagLayout();
         gbc = new GridBagConstraints();
         resultPanel = new JPanel(gridBag);
-        resultPane = new JScrollPane(resultPanel);
+        JScrollPane resultPane = new JScrollPane(resultPanel);
+resultPane.setMinimumSize(new Dimension(100, 70));
+resultPane.setPreferredSize(resultPane.getMinimumSize());
+
         initHtmlOrTextButton();
         initTextArea();
         initHtmlEditPane();
+
         treeSplitPane =
                 new JSplitPane(JSplitPane.VERTICAL_SPLIT, treePane, resultPane);
-        getFilePanel().add(getErrorLoggingCheckbox(), BorderLayout.SOUTH);
-        add(getFilePanel(), BorderLayout.NORTH);
+
+        Box titlePanel = makeTitlePanel();
+        JCheckBox errorCheckBox = getErrorLoggingCheckbox();
+        errorCheckBox.setAlignmentX(JCheckBox.CENTER_ALIGNMENT);
+        titlePanel.add (errorCheckBox);
+        
+        add(titlePanel, BorderLayout.NORTH);
         add(treeSplitPane, BorderLayout.CENTER);
     }
     private class ResultsNodeRenderer extends DefaultTreeCellRenderer
