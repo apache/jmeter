@@ -238,11 +238,9 @@ public class StatVisualizerModel implements Clearable
         private SampleResult sample(String label, long timestamp,
                 long time, boolean ok)
         {
-            SampleResult res = new SampleResult();
+            SampleResult res = new SampleResult(timestamp,time);
 
             res.setSampleLabel(label);
-            res.setTimeStamp(timestamp);
-            res.setTime(time);
             res.setSuccessful(ok);
             return res;
         }
