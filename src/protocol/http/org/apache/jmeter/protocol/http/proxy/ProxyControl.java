@@ -281,7 +281,7 @@ public class ProxyControl extends GenericController implements Serializable
     /**
      * Receives the recorded sampler from the proxy server for placing in the
      * test tree.
-     * @param serverResponse added to allow saving of the server's response
+     * param serverResponse to be added to allow saving of the server's response
      *                       while recording.  A future consideration.
      */
     public void deliverSampler(
