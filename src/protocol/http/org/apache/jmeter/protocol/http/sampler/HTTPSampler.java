@@ -465,12 +465,6 @@ public class HTTPSampler extends AbstractSampler
     transient private static Logger log= LoggingManager.getLoggerForClass();
 
     /**
-     * Holds a list of URLs sampled - so we're not flooding stdout with debug
-     * information
-     */
-    //private ArrayList m_sampledURLs = new ArrayList();
-
-    /**
      * Constructor for the HTTPSampler object.
      */
     public HTTPSampler()
@@ -521,6 +515,7 @@ public class HTTPSampler extends AbstractSampler
      * during sampling, and how long it took to detect the error.
      * 
      * @param e Exception representing the error.
+     * @param time time spent detecting the error (0 for client-only issues)
      * @return a sampling result useful to inform the user about the exception.
      */
     private HTTPSampleResult errorResult(Throwable e, long time)
@@ -535,6 +530,12 @@ public class HTTPSampler extends AbstractSampler
         return res;
     }
 
+    /**
+     * Get the URL, built from its component parts.
+     * 
+     * @return The URL to be requested by this sampler.
+     * @throws MalformedURLException
+     */
     public URL getUrl() throws MalformedURLException
     {
         String pathAndQuery= null;
@@ -629,7 +630,7 @@ public class HTTPSampler extends AbstractSampler
     /**
      * Send POST data from <code>Entry</code> to the open connection.
      *
-     * @param connection <code>URLConnection</code> of where POST data should
+     * @param connection <code>URLConnection</code> where POST data should
      *                   be sent
      * @exception IOException  if an I/O exception occurs
      */
@@ -639,13 +640,16 @@ public class HTTPSampler extends AbstractSampler
     }
 
     /**
-     * Returns a <code>HttpURLConnection</code> with request method(GET or
-     * POST), headers, cookies, authorization properly set for the URL request.
+     * Returns an <code>HttpURLConnection</code> fully ready to attempt 
+     * connection. This means it sets the request method (GET or
+     * POST), headers, cookies, and authorization for the URL request.
+     * <p>
+     * The request infos are saved into the sample result if one is provided.
      *
      * @param u                <code>URL</code> of the URL request
      * @param method            http/https
-     * @param res               the sample result
-     * @return                 <code>HttpURLConnection</code> of the URL request
+     * @param res               sample result to save request infos to 
+     * @return                 <code>HttpURLConnection</code> ready for .connect
      * @exception IOException  if an I/O Exception occurs
      */
     protected HttpURLConnection setupConnection(
@@ -812,7 +816,7 @@ public class HTTPSampler extends AbstractSampler
      * Reads the response from the URL connection.
      *
      * @param conn             URL from which to read response
-     * @return                 response in <code>String</code>
+     * @return                 response content
      * @exception IOException  if an I/O exception occurs
      */
     protected byte[] readResponse(HttpURLConnection conn) throws IOException
@@ -861,11 +865,11 @@ public class HTTPSampler extends AbstractSampler
         w.close();
         return w.toByteArray();
     }
+
     /**
      * Gets the ResponseHeaders from the URLConnection
      *
      * @param conn  connection from which the headers are read
-     * 
      * @return string containing the headers, one per line
      */
     protected String getResponseHeaders(HttpURLConnection conn)
@@ -895,8 +899,8 @@ public class HTTPSampler extends AbstractSampler
     }
 
     /**
-     * Extracts all the required cookies for that particular URL request and set
-     * them in the <code>HttpURLConnection</code> passed in.
+     * Extracts all the required cookies for that particular URL request and
+     * sets them in the <code>HttpURLConnection</code> passed in.
      *
      * @param conn          <code>HttpUrlConnection</code> which represents the
      *                      URL request
@@ -922,8 +926,8 @@ public class HTTPSampler extends AbstractSampler
     }
 
     /**
-     * Extracts all the required headers for that particular URL request and set
-     * them in the <code>HttpURLConnection</code> passed in
+     * Extracts all the required headers for that particular URL request and
+     * sets them in the <code>HttpURLConnection</code> passed in
      *
      *@param conn           <code>HttpUrlConnection</code> which represents the
      *                      URL request
@@ -955,7 +959,7 @@ public class HTTPSampler extends AbstractSampler
 
     /**
      * Extracts all the required authorization for that particular URL request
-     * and set them in the <code>HttpURLConnection</code> passed in.
+     * and sets it in the <code>HttpURLConnection</code> passed in.
      *
      * @param conn        <code>HttpUrlConnection</code> which represents the
      *                    URL request
@@ -978,19 +982,13 @@ public class HTTPSampler extends AbstractSampler
         }
     }
 
-    public void removeArguments()
-    {
-        setProperty(
-            new TestElementProperty(HTTPSampler.ARGUMENTS, new Arguments()));
-    }
-
     /**
      * Samples the URL passed in and stores the result in
      * <code>HTTPSampleResult</code>, following redirects and downloading
      * page resources as appropriate.
      * <p>
      * When getting a redirect target, redirects are not followed and 
-     * resources are not downloaded. The calling sample will take care of this.
+     * resources are not downloaded. The caller will take care of this.
      *
      * @param url               URL to sample
      * @param method            HTTP method: GET, POST,...
@@ -1024,18 +1022,20 @@ public class HTTPSampler extends AbstractSampler
                 try
                 {
                     conn= setupConnection(url, method, res);
+                    // Ready to attempt connect - [re]start the chrono:
                     t0= System.currentTimeMillis();
+                    // Attempt the connection:
                     conn.connect();
                     break;
                 }
                 catch (BindException e)
                 {
-                    log.debug("Bind exception, try again");
                     if (retry == 10)
                     {
                         log.error("Can't connect", e);
                         throw e;
                     }
+                    log.debug("Bind exception, try again");
                     conn.disconnect();
                     this.setUseKeepAlive(false);
                     continue; // try again
@@ -1052,12 +1052,15 @@ public class HTTPSampler extends AbstractSampler
                 // This should never happen, but...
                 throw new BindException();
             }
+            // Nice, we've got a connection. Finish sending the request:
             if (getMethod().equals(HTTPSampler.POST))
             {
                 sendPostData(conn);
             }
+            // Request sent. Now get the response:
             byte[] responseData= readResponse(conn);
-            long t1= System.currentTimeMillis(); // response read finish time
+            // Done - stop the chrono:
+            long t1= System.currentTimeMillis();
             // Done with the sampling proper.
 
             // Now collect the results into the HTTPSampleResult:
@@ -1092,6 +1095,7 @@ public class HTTPSampler extends AbstractSampler
             // Store any cookies received in the cookie manager:
             saveConnectionCookies(conn, url, getCookieManager());
 
+            // Follow redirects and download page resources if appropriate:
             if (!areFollowingRedirect)
             {
                 boolean didFollowRedirects= false;
@@ -1132,19 +1136,24 @@ public class HTTPSampler extends AbstractSampler
         }
         finally
         {
-            try
-            {
-                // calling disconnect doesn't close the connection immediately,
-                // but indicates we're through with it.  The JVM should close
-                // it when necessary.
-                disconnect(conn);
-            }
-            catch (Exception e)
-            {
-            }
+            // calling disconnect doesn't close the connection immediately,
+            // but indicates we're through with it.  The JVM should close
+            // it when necessary.
+            disconnect(conn);
         }
     }
 
+    /**
+     * Iteratively download the redirect targets of a redirect response.
+     * <p>
+     * The returned result will contain one subsample for each request issued,
+     * including the original one that was passed in. It will be an
+     * HTTPSampleResult that should mostly look as if the final destination
+     * of the redirect chain had been obtained in a single shot.
+     * 
+     * @param res result of the initial request - must be a redirect response
+     * @return "Container" result with one subsample per request issued
+     */
     private HTTPSampleResult followRedirects(HTTPSampleResult res)
     {
         HTTPSampleResult totalRes= new HTTPSampleResult(res);
@@ -1188,6 +1197,10 @@ public class HTTPSampler extends AbstractSampler
 
         totalRes.setSampleLabel(
             totalRes.getSampleLabel() + "->" + lastRes.getSampleLabel());
+        // The following three can be discussed: should they be from the
+        // first request or from the final one? I chose to do it this way
+        // because that's what browsers do: they show the final URL of the
+        // redirect chain in the location field. 
         totalRes.setURL(lastRes.getURL());
         totalRes.setHTTPMethod(lastRes.getHTTPMethod());
         totalRes.setRequestHeaders(lastRes.getRequestHeaders());
@@ -1201,6 +1214,21 @@ public class HTTPSampler extends AbstractSampler
         return totalRes;
     }
 
+    /**
+     * Download the resources of an HTML page.
+     * <p>
+     * If createContainerResult is true, the returned result will contain one 
+     * subsample for each request issued, including the original one that was 
+     * passed in. It will otherwise look exactly like that original one.
+     * <p>
+     * If createContainerResult is false, one subsample will be added to the
+     * provided result for each requests issued.
+     * 
+     * @param res result of the initial request - must contain an HTML response
+     * @param createContainerResult whether to create a "container" or just
+     *        use the provided <code>res</code> for that purpose
+     * @return "Container" result with one subsample per request issued
+     */
     private HTTPSampleResult downloadPageResources(
         HTTPSampleResult res,
         boolean createContainerResult)
