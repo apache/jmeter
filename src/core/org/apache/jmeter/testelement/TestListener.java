@@ -1,6 +1,6 @@
 package org.apache.jmeter.testelement;
 
-import org.apache.jmeter.engine.event.IterationEvent;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 
 /**
  * <p>Title: </p>
@@ -27,5 +27,5 @@ public interface TestListener
      * fired.
      * @param event
      */
-    public void testIterationStart(IterationEvent event);
+    public void testIterationStart(LoopIterationEvent event);
 }

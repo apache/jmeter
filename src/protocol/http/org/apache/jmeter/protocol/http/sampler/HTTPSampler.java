@@ -82,6 +82,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Hierarchy;
@@ -137,6 +138,12 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable
     private static final PostWriter postWriter = new PostWriter();
     transient protected HttpURLConnection conn;
     private HTTPSamplerFull imageSampler;
+    
+    static
+    {
+        System.setProperty("java.protocol.handler.pkgs", JMeterUtils.getPropDefault("ssl.pkgs","com.sun.net.ssl.internal.www.protocol"));
+                System.setProperty("javax.net.ssl.debug", "all");
+    }
 
     private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
 

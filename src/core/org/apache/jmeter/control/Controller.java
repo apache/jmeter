@@ -52,8 +52,10 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+ 
 package org.apache.jmeter.control;
-import org.apache.jmeter.engine.event.IterationListener;
+
+import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 
@@ -68,17 +70,13 @@ import org.apache.jmeter.testelement.TestElement;
  * }
  *
  *@author    Michael Stover
+ *@author    Thad Smith
  *@created   $Date$
  *@version   1.0
  ***************************************/
 public interface Controller extends TestElement
 {
-    
-    /**
-     * Controllers have to notify listeners of when they begin an iteration
-     * through their sub-elements.
-     */
-    public void addIterationListener(IterationListener lis);
+   
 	/**
 	 * Delivers the next Sampler.
 	 * @return org.apache.jmeter.samplers.Sampler
@@ -86,30 +84,21 @@ public interface Controller extends TestElement
 	public Sampler next();
 
 	/**
-	 * Indicates whether the Controller has another Sampler to deliver during the
-	 * current test iteration.
-	 * @return boolean
-	 */
-	public boolean hasNext();
-
-	/**
-	 * Indicates whether the Controller is done delivering Samplers for the rest
-	 * of the test.
+	 * Indicates whether the Controller is done delivering Samplers for 
+	 * the rest of the test.
 	 * @return boolean
 	 */
 	public boolean isDone();
-	
+
 	/**
-	 * By using this method, one can ask the controller if the next Sampler is the
-	 * first in the Controller's list.
-	 * @return boolean
+	 * Controllers have to notify listeners of when they begin an iteration
+	 * through their sub-elements.
 	 */
-	public boolean isNextFirst();
-	
+	public void addIterationListener(LoopIterationListener listener);
+
 	/**
-	 * Returns the number of samplers that the controller has returned
-	 * via next() during the current iteration
-	 * @return int
+	 * Called to initialize a controller at the beginning of a test
+	 * iteration.
 	 */
-	public int samplersReturned();
+	public void initialize();
 }

@@ -63,7 +63,7 @@ import java.util.Map;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.control.Controller;
-import org.apache.jmeter.engine.event.IterationEvent;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
@@ -143,17 +143,19 @@ public class JMeterThread implements Runnable, java.io.Serializable
             Sampler entry = null;
             rampUpDelay();
             log.info("Thread " + Thread.currentThread().getName() + " started");
+            controller.initialize();
+            int i=0;
             while (running)
             {
-                while (controller.hasNext() && running)
+            	Sampler sam;
+                while (running && (sam=controller.next())!=null)
                 {
                     try
                     {
-                        if (controller.isNextFirst())
+                        if (i==0)
                         {
                             notifyTestListeners();
                         }
-                        Sampler sam = controller.next();
                         threadContext.setCurrentSampler(sam);
                         SamplePackage pack = compiler.configureSampler(sam);
                         delay(pack.getTimers());
@@ -165,6 +167,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
                         runPostProcessors(pack.getPostProcessors());
                         notifyListeners(pack.getSampleListeners(), result);
                         compiler.done(pack);
+                        i++;
                     }
                     catch (Exception e)
                     {
@@ -174,6 +177,11 @@ public class JMeterThread implements Runnable, java.io.Serializable
                 if (controller.isDone())
                 {
                     running = false;
+                }
+                else
+                {
+                	i=0;
+                	controller.initialize();
                 }
             }
         }
@@ -248,12 +256,12 @@ public class JMeterThread implements Runnable, java.io.Serializable
             TestListener listener = (TestListener)iter.next();
             if(listener instanceof TestElement)
             {
-                listener.testIterationStart(new IterationEvent(controller,null,threadVars.getIteration()));
+                listener.testIterationStart(new LoopIterationEvent(controller,threadVars.getIteration()));
                 ((TestElement)listener).recoverRunningVersion();
             }
             else
             {
-                listener.testIterationStart(new IterationEvent(controller,null,threadVars.getIteration()));
+                listener.testIterationStart(new LoopIterationEvent(controller,threadVars.getIteration()));
             }
             
         }

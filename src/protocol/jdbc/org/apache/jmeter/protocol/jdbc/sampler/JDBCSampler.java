@@ -62,7 +62,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.engine.event.IterationEvent;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.jdbc.util.DBConnectionManager;
 import org.apache.jmeter.protocol.jdbc.util.DBKey;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -310,7 +310,7 @@ public class JDBCSampler extends AbstractSampler
     /**
      * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.IterationEvent)
      */
-    public void testIterationStart(IterationEvent event)
+    public void testIterationStart(LoopIterationEvent event)
     {}
 
 }

@@ -103,18 +103,18 @@ public class RandomControlGui extends AbstractControllerGui
         configureTestElement(ic);
         if(style.isSelected())
         {
-        	((RandomController)ic).setStyle(InterleaveControl.DEFAULT_STYLE);
+        	((RandomController)ic).setStyle(InterleaveControl.IGNORE_SUB_CONTROLLERS);
         }
         else
         {
-        	((RandomController)ic).setStyle(InterleaveControl.NEW_STYLE);
+        	((RandomController)ic).setStyle(InterleaveControl.USE_SUB_CONTROLLERS);
         }
     }
 	
 	public void configure(TestElement el)
 	{
 		super.configure(el);
-		if(((RandomController)el).getStyle() == InterleaveControl.DEFAULT_STYLE)
+		if(((RandomController)el).getStyle() == InterleaveControl.IGNORE_SUB_CONTROLLERS)
 		{
 			style.setSelected(true);
 		}
