@@ -38,7 +38,7 @@ import org.apache.log.Logger;
 public class BeanShellAssertion extends AbstractTestElement
     implements Serializable, Assertion
 {
-	protected static Logger log = LoggingManager.getLoggerForClass();
+	protected static final Logger log = LoggingManager.getLoggerForClass();
 
     public static final String FILENAME   = "BeanShellAssertion.filename"; //$NON-NLS-1$
 	public static final String SCRIPT     = "BeanShellAssertion.query"; //$NON-NLS-1$
