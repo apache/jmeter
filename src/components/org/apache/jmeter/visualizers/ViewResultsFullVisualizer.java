@@ -366,7 +366,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 					sel,expanded,leaf,row,hasFocus);
 			if(!((SampleResult)((DefaultMutableTreeNode)value).getUserObject()).isSuccessful())
 			{
-				this.setForeground(Color.RED);
+				this.setForeground(Color.red);
 			}
 			return this;
 		}

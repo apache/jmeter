@@ -272,9 +272,14 @@ public class JMeterMenuBar extends JMenuBar
 		// HELP MENU
 		helpMenu = new JMenu(JMeterUtils.getResString("help"));
 		helpMenu.setMnemonic('H');
+		JMenuItem contextHelp = new JMenuItem(JMeterUtils.getResString("help"),'H');
+		contextHelp.setActionCommand("help");
+		contextHelp.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H,KeyEvent.CTRL_MASK));
+		contextHelp.addActionListener(ActionRouter.getInstance());
 		help_about = new JMenuItem(JMeterUtils.getResString("about"), 'A');
 		help_about.setActionCommand("about");
 		help_about.addActionListener(ActionRouter.getInstance());
+		helpMenu.add(contextHelp);
 		helpMenu.add(help_about);
 	}
 	private void makeOptionsMenu()
