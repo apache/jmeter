@@ -23,6 +23,8 @@ public class ListenerNotifier extends LinkedList implements Runnable
 	 */
 	boolean running;
 	boolean isStopped;
+	static private int ABS_MAX = 500;
+	static private int MAX = 200;
 	int sleepTime = 2000;
 	public ListenerNotifier()
 	{
@@ -39,11 +41,7 @@ public class ListenerNotifier extends LinkedList implements Runnable
 			if (res != null)
 			{
 				List listeners = (List) this.removeFirst();
-				iter = listeners.iterator();
-				while (iter.hasNext())
-				{
-					((SampleListener) iter.next()).sampleOccurred(res);
-				}
+				notifyListeners(res, listeners);
 			}
 			try
 			{
@@ -52,7 +50,7 @@ public class ListenerNotifier extends LinkedList implements Runnable
 			catch (InterruptedException e)
 			{
 			}
-			if (size() > 200 && Thread.currentThread().getPriority() == Thread.NORM_PRIORITY)
+			if (size() > MAX && Thread.currentThread().getPriority() == Thread.NORM_PRIORITY)
 			{
 				log.debug("Notifier thread priority going from normal to max, size = "+size());
 				Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
@@ -61,15 +59,31 @@ public class ListenerNotifier extends LinkedList implements Runnable
 		log.debug("Listener Notifier stopped");
 		isStopped = true;
 	}
+	private void notifyListeners(SampleEvent res, List listeners)
+	{
+		Iterator iter;
+		iter = listeners.iterator();
+		while (iter.hasNext())
+		{
+			((SampleListener) iter.next()).sampleOccurred(res);
+		}
+	}
 	public boolean isStopped()
 	{
 		return isStopped;
 	}
 	public synchronized void addLast(SampleEvent item, List listeners)
 	{
-		super.addLast(item);
-		super.addLast(listeners);
-		sleepTime = 0;
+		if(size() > ABS_MAX)
+		{
+			notifyListeners(item,listeners);		
+		}
+		else
+		{
+			super.addLast(item);
+			super.addLast(listeners);
+			sleepTime = 0;
+		}
 	}
 	public synchronized Object removeFirst()
 	{

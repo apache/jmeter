@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.jmeter.assertions.Assertion;
-import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.Modifier;
 import org.apache.jmeter.config.ResponseBasedModifier;
@@ -24,11 +23,11 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.PerSampleClonable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.Timer;
-import org.apache.log.Hierarchy;
-import org.apache.log.Logger;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.collections.ListedHashTree;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /****************************************
  * <p>
