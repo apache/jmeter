@@ -67,83 +67,79 @@ import org.xml.sax.SAXException;
  * typically saved in an XML file, but other storage mechanisms may also be
  * used, for instance, CSV files or databases.
  *
- * @author     Mike Stover
- * @author     <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell</a>
  * @version    $Revision$ $Date$
  */
 public final class SaveService implements SaveServiceConstants
 {
     transient private static final Logger log = LoggingManager.getLoggerForClass();
 
-//TODO: make most/all of these fields private?
-
-    protected static final int SAVE_NO_ASSERTIONS = 0;
-    protected static final int SAVE_FIRST_ASSERTION = SAVE_NO_ASSERTIONS + 1;
-    protected static final int SAVE_ALL_ASSERTIONS = SAVE_FIRST_ASSERTION + 1;
+    private static final int SAVE_NO_ASSERTIONS = 0;
+    private static final int SAVE_FIRST_ASSERTION = SAVE_NO_ASSERTIONS + 1;
+    private static final int SAVE_ALL_ASSERTIONS = SAVE_FIRST_ASSERTION + 1;
 
     /** A formatter for the time stamp. */
-    protected static SimpleDateFormat formatter = null;
+    private static SimpleDateFormat formatter = null;
 
     /** A flag to indicate which output format to use for results. */
-    protected static int outputFormat = SAVE_AS_XML;
+    private static int outputFormat = SAVE_AS_XML;
 
     /** A flag to indicate whether to print the field names for delimited
         result files. */
-    protected static boolean printFieldNames = false;
+    private static boolean printFieldNames = false;
 
     /** A flag to indicate whether the data type should
         be saved to the test results. */
-    protected static boolean saveDataType = true;
+    private static boolean saveDataType = true;
 
     /** A flag to indicate whether the assertion result's failure message
         should be saved to the test results. */
-    protected static boolean saveAssertionResultsFailureMessage = false;
+    private static boolean saveAssertionResultsFailureMessage = false;
 
     /** A flag to indicate whether the label should be saved to the test
         results. */
-    protected static boolean saveLabel = true;
+    private static boolean saveLabel = true;
 
     /** A flag to indicate whether the response code should be saved to the
         test results. */
-    protected static boolean saveResponseCode = false;
+    private static boolean saveResponseCode = false;
 
     /** A flag to indicate whether the response data should be saved to the
         test results. */
-    protected static boolean saveResponseData = false;
+    private static boolean saveResponseData = false;
 
     /** A flag to indicate whether the response message should be saved to the
         test results. */
-    protected static boolean saveResponseMessage = false;
+    private static boolean saveResponseMessage = false;
 
     /** A flag to indicate whether the success indicator should be saved to the
         test results. */
-    protected static boolean saveSuccessful = true;
+    private static boolean saveSuccessful = true;
 
     /** A flag to indicate whether the thread name should be saved to the test
         results. */
-    protected static boolean saveThreadName = true;
+    private static boolean saveThreadName = true;
 
     /** A flag to indicate whether the time should be saved to the test
         results. */
-    protected static boolean saveTime = true;
+    private static boolean saveTime = true;
 
     /** A flag to indicate the format of the time stamp within the test
         results. */
-    protected static String timeStampFormat = MILLISECONDS;
+    private static String timeStampFormat = MILLISECONDS;
 
     /** A flag to indicate whether the time stamp should be printed in
         milliseconds. */
-    protected static boolean printMilliseconds = true;
+    private static boolean printMilliseconds = true;
 
     /** A flag to indicate which assertion results should be saved to the test
         results.  Legitimate values include none, first, all. */
-    protected static String whichAssertionResults = FIRST;
+    private static String whichAssertionResults = FIRST;
 
-    protected static int assertionsResultsToSave = SAVE_NO_ASSERTIONS;
+    private static int assertionsResultsToSave = SAVE_NO_ASSERTIONS;
 
     /** The string used to separate fields when stored to disk, for example,
         the comma for CSV files. */
-    protected static String defaultDelimiter = ",";
+    private static String defaultDelimiter = ",";
 
     private static DefaultConfigurationBuilder builder =
         new DefaultConfigurationBuilder();
@@ -163,7 +159,7 @@ public final class SaveService implements SaveServiceConstants
     /**
      * Read in the properties having to do with saving from a properties file.
      */
-    protected static void readProperties()
+    private static void readProperties()
     {
         Properties systemProps = System.getProperties();
         Properties props = new Properties(systemProps);
