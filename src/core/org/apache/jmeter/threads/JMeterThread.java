@@ -330,6 +330,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
 	private void threadStarted() {
 		Traverser startup = new Traverser(true);
         testTree.traverse(startup);
+        JMeterContextService.incrNumberOfThreads();
 	}
 
     /**
@@ -338,6 +339,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
 	private void threadFinished() {
 		Traverser shut = new Traverser(false);
         testTree.traverse(shut);
+        JMeterContextService.decrNumberOfThreads();
 	}
 
     private class Traverser implements HashTreeTraverser

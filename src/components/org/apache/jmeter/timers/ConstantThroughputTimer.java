@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.timers;
 
@@ -21,6 +21,7 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -29,123 +30,132 @@ import org.apache.log.Logger;
  * This class implements a constant throughput timer. A Constant Throughtput
  * Timer paces the samplers under it's influence so that the total number of
  * samples per unit of time approaches a given constant as much as possible.
- *
+ *  
  */
-public class ConstantThroughputTimer
-        extends AbstractTestElement
-        implements Timer, TestListener,TestBean
+public class ConstantThroughputTimer extends AbstractTestElement implements Timer, TestListener,
+      TestBean
 {
-	private static final Logger log = LoggingManager.getLoggerForClass();
 
-    /**
-     * Target time for the start of the next request. The delay provided by
-     * the timer will be calculated so that the next request happens at this
-     * time.
-     */
-    private long targetTime= 0;
+   private static final Logger log = LoggingManager.getLoggerForClass();
 
-	/**
-	 * Desired throughput, in samples per minute.
-	 */
-	private double throughput;
+   /**
+    * Target time for the start of the next request. The delay provided by the
+    * timer will be calculated so that the next request happens at this time.
+    */
+   private long previousTime = 0;
 
-    /**
-     * Constructor for a non-configured ConstantThroughputTimer.
-     */
-    public ConstantThroughputTimer()
-    {
-    }
+   /**
+    * Desired throughput, in samples per minute.
+    */
+   private double throughput;
 
-    /**
-     * Sets the desired throughput.
-     *
-     * @param throughput Desired sampling rate, in samples per minute.
-     */
-    public void setThroughput(double throughput)
-    {
-       log.info("setting throughput to: " + throughput);
-    	this.throughput= throughput;
-    }
+   /**
+    * Constructor for a non-configured ConstantThroughputTimer.
+    */
+   public ConstantThroughputTimer()
+   {
+   }
 
-    /**
-     * Gets the configured desired throughput.
-     *
-     * @return the rate at which samples should occur, in samples per minute.
-     */
-    public double getThroughput()
-    {
-       log.info("Getting throughput, which is: " + throughput);
-    	return throughput;
-    }
-    
-    /**
-     * Retrieve the delay to use during test execution.
-     * 
-     * @see org.apache.jmeter.timers.Timer#delay()
-     */
-    public synchronized long delay()
-    {
-       log.info("in Delay, using throughput, which is " + getThroughput());
-        long currentTime = System.currentTimeMillis();
-        long currentTarget = targetTime == 0 ? currentTime : targetTime;
-        targetTime = currentTarget + (long)( 60000.0 / getThroughput() );
-        if (currentTime > currentTarget)
-        {
-            // We're behind schedule -- try to catch up:
-            return 0;
-        }
-        return currentTarget - currentTime;
-    }
+   /**
+    * Sets the desired throughput.
+    * 
+    * @param throughput
+    *           Desired sampling rate, in samples per minute.
+    */
+   public void setThroughput(double throughput)
+   {
+      this.throughput = throughput;
+   }
 
-    /**
-     * Provide a description of this timer class.
-     * 
-     * TODO: Is this ever used? I can't remember where. Remove if it isn't --
-     * TODO: or obtain text from bean's displayName or shortDescription.
-     *
-     * @return the description of this timer class.
-     */
-    public String toString()
-    {
-        return JMeterUtils.getResString("constant_throughput_timer_memo");
-    }
+   /**
+    * Gets the configured desired throughput.
+    * 
+    * @return the rate at which samples should occur, in samples per minute.
+    */
+   public double getThroughput()
+   {
+      return throughput;
+   }
 
-    /**
-     * Get the timer ready to compute delays for a new test.
-     * 
-     * @see org.apache.jmeter.testelement.TestListener#testStarted()
-     */
-    public synchronized void testStarted()//synch to protect targetTime
-    {
-    	log.debug("Test started - reset throughput calculation.");
-    	targetTime= 0;
-    }
+   /**
+    * Retrieve the delay to use during test execution.
+    * 
+    * @see org.apache.jmeter.timers.Timer#delay()
+    */
+   public synchronized long delay()
+   {
+      long currentTime = System.currentTimeMillis();
+      long currentTarget = 
+            (previousTime == 0) ? currentTime
+            + ((JMeterContextService.getContext().getThreadNum() + 1) * (long) (60000.0 / getThroughput()))
+            : previousTime
+                  + (JMeterContextService.getNumberOfThreads() * (long) (60000.0 / getThroughput()));
+      previousTime = currentTarget;
+      if (currentTime > currentTarget)
+      {
+         // We're behind schedule -- try to catch up:
+         return 0;
+      }
+      return currentTarget - currentTime;
+   }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.TestListener#testEnded()
-     */
-    public void testEnded()
-    {
-    }
+   /**
+    * Provide a description of this timer class.
+    * 
+    * TODO: Is this ever used? I can't remember where. Remove if it isn't --
+    * TODO: or obtain text from bean's displayName or shortDescription.
+    * 
+    * @return the description of this timer class.
+    */
+   public String toString()
+   {
+      return JMeterUtils.getResString("constant_throughput_timer_memo");
+   }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
-     */
-    public void testStarted(String host)
-    {
-    }
+   /**
+    * Get the timer ready to compute delays for a new test.
+    * 
+    * @see org.apache.jmeter.testelement.TestListener#testStarted()
+    */
+   public synchronized void testStarted()//synch to protect targetTime
+   {
+      log.debug("Test started - reset throughput calculation.");
+      previousTime = 0;
+   }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
-     */
-    public void testEnded(String host)
-    {
-    }
+   /*
+    * (non-Javadoc)
+    * 
+    * @see org.apache.jmeter.testelement.TestListener#testEnded()
+    */
+   public void testEnded()
+   {
+   }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
-     */
-    public void testIterationStart(LoopIterationEvent event)
-    {
-    }
+   /*
+    * (non-Javadoc)
+    * 
+    * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
+    */
+   public void testStarted(String host)
+   {
+   }
+
+   /*
+    * (non-Javadoc)
+    * 
+    * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
+    */
+   public void testEnded(String host)
+   {
+   }
+
+   /*
+    * (non-Javadoc)
+    * 
+    * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+    */
+   public void testIterationStart(LoopIterationEvent event)
+   {
+   }
 }

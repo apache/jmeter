@@ -34,6 +34,7 @@ public final class JMeterContextService implements Serializable
     };
     
     private static long testStart = 0;
+    private static int numberOfThreads = 0;
 
     /**
      * Private constructor to prevent instantiation.
@@ -51,6 +52,7 @@ public final class JMeterContextService implements Serializable
     {
        if(testStart == 0)
        {
+          numberOfThreads = 0;
 	       testStart = System.currentTimeMillis();
 	       threadContext = new ThreadLocal(){
 	          public Object initialValue()
@@ -61,9 +63,25 @@ public final class JMeterContextService implements Serializable
        }
     }
     
+    static public void incrNumberOfThreads()
+    {
+       numberOfThreads++;
+    }
+    
+    static public void decrNumberOfThreads()
+    {
+       numberOfThreads--;
+    }
+    
+    static public int getNumberOfThreads()
+    {
+       return numberOfThreads;
+    }
+    
     static public void endTest()
     {
        testStart = 0;
+       numberOfThreads = 0;
     }
     
     static public long getTestStartTime()
