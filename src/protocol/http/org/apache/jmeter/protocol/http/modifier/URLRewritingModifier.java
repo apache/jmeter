@@ -41,6 +41,10 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
     {
         Sampler sampler = JMeterContextService.getContext().getCurrentSampler();
         SampleResult responseText = JMeterContextService.getContext().getPreviousResult();
+        if(responseText == null)
+        {
+            return;
+        }
         initRegex(getArgumentName());
         String text = new String(responseText.getResponseData());
         Perl5Matcher matcher = JMeterUtils.getMatcher();
