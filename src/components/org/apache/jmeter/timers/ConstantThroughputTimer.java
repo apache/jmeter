@@ -138,6 +138,9 @@ public class ConstantThroughputTimer
     /**
      * Provide a description of this timer class.
      * 
+     * TODO: Is this ever used? I can't remember where. Remove if it isn't --
+     * TODO: or obtain text from bean's displayName or shortDescription.
+     *
      * @return the description of this timer class.
      */
     public String toString()
