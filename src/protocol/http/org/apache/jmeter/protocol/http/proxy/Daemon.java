@@ -39,6 +39,7 @@ public class Daemon extends Thread
 	private boolean running;
 	ProxyControl target;
 	private Socket ClientSocket;
+	static private Class proxyClass = Proxy.class;
 
 	public Daemon()
 	{
@@ -48,6 +49,12 @@ public class Daemon extends Thread
 	{
 		this.target = target;
 		configureProxy(port);
+	}
+	
+	public Daemon(int port,ProxyControl target,Class proxyClass) throws UnknownHostException
+	{
+		this(port,target);
+		Daemon.proxyClass = proxyClass;
 	}
 
 	/************************************************************
@@ -146,7 +153,8 @@ public class Daemon extends Thread
 				// Listen on main socket
 				Socket ClientSocket = MainSocket.accept();
 				// Pass request to new proxy thread
-				Proxy thd = new Proxy(ClientSocket, cache, config,target,cookieManager);
+				Proxy thd = (Proxy)proxyClass.newInstance();
+				thd.configure(ClientSocket, cache, config,target,cookieManager);
 				thd.start();
 			}
 			log.info("Proxy Server stopped");
