@@ -84,6 +84,10 @@ public class XMLAssertion
     {
         // no error as default
         AssertionResult result = new AssertionResult();
+        if(response.getResponseData() == null)
+             {
+                 return setResultForNull(result);
+             }
         result.setFailure(false);
 
         // the result data
@@ -124,6 +128,14 @@ public class XMLAssertion
 
         return result;
     }
+    
+    protected AssertionResult setResultForNull(AssertionResult result)
+        {
+            result.setError(false);
+            result.setFailure(true);
+            result.setFailureMessage("Response was null");
+            return result;
+        }
 
     /**
      * Return the body of the http return.

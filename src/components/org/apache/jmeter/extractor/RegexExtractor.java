@@ -58,6 +58,10 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
     {
         initTemplate();
         JMeterContext context = JMeterContextService.getContext();
+        if(context.getPreviousResult() == null || context.getPreviousResult().getResponseData() == null)
+        {
+            return;
+        }
         log.debug("RegexExtractor processing result");
         context.getVariables().put(getRefName(), getDefaultValue());
         Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
