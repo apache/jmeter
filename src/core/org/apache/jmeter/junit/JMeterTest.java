@@ -661,7 +661,7 @@ public class JMeterTest extends JMeterTestCase
 		    for (int i=0;i<ss.length;i++){
 			    System.out.println(ss[i]);
 			}
-		    if (!classPathShown=false){// Only dump it once
+		    if (!classPathShown){// Only dump it once
 		        System.out.println("Class path is:");
 		        String cp=System.getProperty("java.class.path");
 				String cpe[]= JOrphanUtils.split(cp,java.io.File.pathSeparator);
