@@ -60,6 +60,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -160,9 +161,10 @@ public class JMeterUtils implements UnitTestManager
         {
             try
             {
-                p.load(
-                    ClassLoader.getSystemResourceAsStream(
-                        "org/apache/jmeter/jmeter.properties"));
+				InputStream is = ClassLoader.getSystemResourceAsStream(
+					"org/apache/jmeter/jmeter.properties");
+                if (is == null) throw new RuntimeException("Could not read JMeter properties file"); 
+                p.load(is);
             }
             catch (IOException ex)
             {
@@ -278,12 +280,31 @@ public class JMeterUtils implements UnitTestManager
 
     /**
      * Gets the resource string for this key.
+     * 
+     * If the resource is not found, a warning is logged
+     * 
      * @param key the key in the resource file
      * @return    the resource string if the key is found; otherwise, return
-     *            an empty string
+     *            "[res_key="+key+"]"
      */
     public static String getResString(String key)
     {
+    	return getResString(key,"[res_key="+key+"]");
+    }
+    
+	/**
+	 * Gets the resource string for this key.
+     * 
+     * If the resource is not found, a warning is logged
+     * 
+	 * @param key the key in the resource file
+	 * @param default - the default value
+	 * 
+	 * @return    the resource string if the key is found;
+	 *             otherwise, return the default
+	 */
+	public static String getResString(String key, String defaultValue)
+	{
         if (key == null)
         {
             return null;
@@ -298,7 +319,7 @@ public class JMeterUtils implements UnitTestManager
         catch (MissingResourceException mre)
         {
             log.warn("ERROR! Resource string not found: [" + key + "]");
-            resString = "[res_key="+key+"]";
+            resString = defaultValue;
         }
         return resString;
     }
