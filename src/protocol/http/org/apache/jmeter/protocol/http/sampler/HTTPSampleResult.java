@@ -152,10 +152,15 @@ public class HTTPSampleResult extends SampleResult
         StringBuffer sb= new StringBuffer();
         // TODO Auto-generated method stub
         sb.append(getHTTPMethod());
-        sb.append(' ');
-        sb.append(getURL().toString());
+        URL u= getURL();
+        if (u != null)
+        {
+            sb.append(' ');
+            sb.append(u.toString());
+        }
         String s= super.getSamplerData();
-        if (s != null) {
+        if (s != null)
+        {
             sb.append('\n');
             sb.append(s);
         }
