@@ -26,7 +26,6 @@ import java.util.Date;
 
 import org.apache.commons.httpclient.ConnectMethod;
 import org.apache.commons.httpclient.DefaultMethodRetryHandler;
-import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpConnection;
 import org.apache.commons.httpclient.HttpMethod;
@@ -304,7 +303,7 @@ public class HTTPSampler2 extends HTTPSamplerBase
         throws IOException
     {
         StringBuffer headerBuf= new StringBuffer();
-        Header rh[]=method.getResponseHeaders();
+        org.apache.commons.httpclient.Header rh[] = method.getResponseHeaders();
 		headerBuf.append(method.getStatusLine());//header[0] is not the status line... 
         headerBuf.append("\n");
 
@@ -372,7 +371,8 @@ public class HTTPSampler2 extends HTTPSamplerBase
                 PropertyIterator i= headers.iterator();
                 while (i.hasNext())
                 {
-                    Header header= (Header)i.next().getObjectValue();
+                    org.apache.jmeter.protocol.http.control.Header header =
+                    	(org.apache.jmeter.protocol.http.control.Header)i.next().getObjectValue();
                     String n=header.getName();
                     String v=header.getValue();
                     method.setRequestHeader(n,v);
@@ -494,7 +494,8 @@ public class HTTPSampler2 extends HTTPSamplerBase
             res.setResponseMessage(httpMethod.getStatusText());
 
             String ct=null;
-            Header h = httpMethod.getResponseHeader("Content-Type");
+            org.apache.commons.httpclient.Header h = 
+            	httpMethod.getResponseHeader("Content-Type");
             if (h!=null)// Can be missing, e.g. on redirect
             {
                 ct= h.getValue();
