@@ -71,10 +71,7 @@ public class JMeterTreeNode
     {
         getTestElement().setProperty(
             new BooleanProperty(TestElement.ENABLED, enabled));
-    }
-
-    public void clear()
-    {
+		treeModel.nodeChanged(this);
     }
 
     public ImageIcon getIcon()
@@ -144,19 +141,6 @@ public class JMeterTreeNode
         }
     }
 
-    public void configure(TestElement element)
-    {
-
-    }
-
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     */
-    public void modifyTestElement(TestElement el)
-    {
-
-    }
-
     public TestElement getTestElement()
     {
         return (TestElement) getUserObject();
@@ -180,11 +164,6 @@ public class JMeterTreeNode
     {
         return ((TestElement) getUserObject()).getPropertyAsString(
             TestElement.NAME);
-    }
-
-    public void setNode(JMeterTreeNode node)
-    {
-
     }
 
     public void nameChanged()
