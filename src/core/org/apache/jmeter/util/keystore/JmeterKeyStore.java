@@ -65,13 +65,13 @@ import java.security.cert.X509Certificate;
  * @author <a href="bloritsch@apache.org">Berin Loritsch</a>
  * @version CVS $Revision$ $Date$
  */
-public abstract class JmeterKeyStore {
+public abstract class JmeterKeyStore
+{
 
     /**
      * Process the input stream
      */
-    public abstract void load(InputStream is, String password)
-    throws Exception;
+    public abstract void load(InputStream is, String password) throws Exception;
 
     /**
      * Get the ordered certificate chain.
@@ -85,22 +85,22 @@ public abstract class JmeterKeyStore {
      */
     public abstract PrivateKey getPrivateKey();
 
-    public static final JmeterKeyStore getInstance(String type)
-    throws Exception {
-        if ("PKCS12".equalsIgnoreCase(type)) {
-            try {
-                Class PKCS12 = Class.forName
-                    ("org.apache.jmeter.util.keystore.PKCS12KeyStore");
-                Constructor con = PKCS12.getConstructor(
-                    new Class[] {String.class});
-                return (JmeterKeyStore) con.newInstance(new Object[] {type});
-            } catch (Exception e) {}
+    public static final JmeterKeyStore getInstance(String type) throws Exception
+    {
+        if ("PKCS12".equalsIgnoreCase(type))
+        {
+            try
+            {
+                Class PKCS12 = Class.forName("org.apache.jmeter.util.keystore.PKCS12KeyStore");
+                Constructor con = PKCS12.getConstructor(new Class[] { String.class });
+                return (JmeterKeyStore) con.newInstance(new Object[] { type });
+            }
+            catch (Exception e)
+            {}
         }
 
-        Class keyStore = Class.forName
-            ("org.apache.jmeter.util.keystore.DefaultKeyStore");
-        Constructor con = keyStore.getConstructor(
-            new Class[] {String.class});
-        return (JmeterKeyStore) con.newInstance(new Object[] {type});
+        Class keyStore = Class.forName("org.apache.jmeter.util.keystore.DefaultKeyStore");
+        Constructor con = keyStore.getConstructor(new Class[] { String.class });
+        return (JmeterKeyStore) con.newInstance(new Object[] { type });
     }
 }
