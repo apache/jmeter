@@ -55,6 +55,7 @@
 package org.apache.jmeter.gui;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,6 +64,7 @@ import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
+import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -621,5 +623,6 @@ public final class GuiPackage implements LocaleChangeListener
         guis= new HashMap();
         nodesToGui= new HashMap();
         testBeanGUIs= new HashMap();
+		ActionRouter.getInstance().actionPerformed(new ActionEvent(this, 3333, "edit"));
     }
 }
