@@ -107,7 +107,7 @@ public class FileEditor implements PropertyEditor, ActionListener
 		editor= new WrapperEditor(
 			new SimpleFileEditor(),
 			new ComboStringEditor(),
-			true, true);
+			true, true, true);
 
 		// Create a panel containing the combo and the button:
 		panel= new JPanel(new BorderLayout(5,0));
