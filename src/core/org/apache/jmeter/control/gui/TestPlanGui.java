@@ -13,6 +13,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
@@ -33,6 +34,8 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
      * do functional testing.
      */
     private JCheckBox functionalMode;
+    
+    private JCheckBox serializedMode;
     
     /** A panel allowing the user to define variables. */
     private ArgumentsPanel argsPanel;
@@ -92,6 +95,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
         {
             TestPlan tp = (TestPlan) plan;
             tp.setFunctionalMode(functionalMode.isSelected());
+            tp.setSerialized(serializedMode.isSelected());
             tp.setUserDefinedVariables(
                 (Arguments) argsPanel.createTestElement());
         }
@@ -130,6 +134,10 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
         functionalMode.setSelected(
             ((AbstractTestElement) el).getPropertyAsBoolean(
                 TestPlan.FUNCTIONAL_MODE));
+        
+        serializedMode.setSelected(
+        	((AbstractTestElement) el).getPropertyAsBoolean(
+        		TestPlan.SERIALIZE_THREADGROUPS));
 
         if (el.getProperty(TestPlan.USER_DEFINED_VARIABLES) != null)
         {
@@ -166,17 +174,19 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
 
         add(createVariablePanel(), BorderLayout.CENTER);
 
-        JPanel southPanel = new JPanel(new BorderLayout());
+		VerticalPanel southPanel = new VerticalPanel();
+        serializedMode = 
+        	new JCheckBox(JMeterUtils.getResString("testplan.serialized"));
+		southPanel.add(serializedMode);
         functionalMode =
             new JCheckBox(JMeterUtils.getResString("functional_mode"));
-        southPanel.add(functionalMode, BorderLayout.NORTH);
-
+        southPanel.add(functionalMode);
         JTextArea explain =
             new JTextArea(
                 JMeterUtils.getResString("functional_mode_explanation"));
         explain.setEditable(false);
         explain.setBackground(this.getBackground());
-        southPanel.add(explain, BorderLayout.CENTER);
+        southPanel.add(explain);
 
         add(southPanel, BorderLayout.SOUTH);
     }
