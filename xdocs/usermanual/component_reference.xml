@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<document index="yes" prev="boss.html" next="functions.html" date="$Date$">
+<document index="yes" index-level-2="yes" colbreak="13.5" prev="boss.html" next="functions.html" date="$Date$">
 
 <properties>
   <title>User's Manual: Component Reference</title>
@@ -326,7 +326,7 @@ requests per thread. See the table below for the sequence JMeter sends the HTTP 
 <tr valign="top"><td>2</td><td>Log Page</td></tr>
 <tr valign="top"><td>3</td><td>Gump Page</td></tr>
 <tr valign="top"><td>2</td><td>Log Page</td></tr>
-<tr valign="top"><td>4</td><td>Because there are no more requests in controller, JMeter start over and sends the first HTTP Request, which is the News Page.</td></tr>
+<tr valign="top"><td>4</td><td>Because there are no more requests in the controller,<br/> JMeter starts over and sends the first HTTP Request, which is the News Page.</td></tr>
 <tr valign="top"><td>2</td><td>Log Page</td></tr>
 <tr valign="top"><td>5</td><td>FAQ Page</td></tr>
 <tr valign="top"><td>2</td><td>Log Page</td></tr>
@@ -534,10 +534,10 @@ output results like:.</p>
 <p>
 <code>
 <pre>
-    timeStamp|time|label|responseCode|threadName|dataType|success|failureMessage
-    02/06/03 08:21:42|1187|Backoffice Home|200|Thread Group-1|text|true|
-    02/06/03 08:21:42|47|Login BO|200|Thread Group-1|text|false|Test Failed, expected to contain: password
-    etc.
+timeStamp|time|label|responseCode|threadName|dataType|success|failureMessage
+02/06/03 08:21:42|1187|Backoffice Home|200|Thread Group-1|text|true|
+02/06/03 08:21:42|47|Login BO|200|Thread Group-1|text|false|Test Failed, 
+	expected to contain: password etc.
 </pre>
 </code></p>
 <p>
@@ -1261,7 +1261,7 @@ this element will execute after each Sample request in its <scope/>, applying th
 generate the template string, and store the result into the given variable name.</p></description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.</property>
+        <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as [refname]_g#, where [refname] is the string you entered as the reference name, and # is the group number, where group 0 is the entire match, group 1 is the match from the first set of parentheses, etc.</property>
         <property name="Regular Expression" required="Yes">The regular expression used to parse the response data.</property>
         <property name="Template" required="Yes">The template used to create a string from the matches found.  This is an arbitrary string
         with special elements to refer to groups within the regular expression.  The syntax to refer to a group is: '$1$' to refer to
@@ -1463,13 +1463,58 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
         	(The path can be relative to the JMeter launch directory)
         </property>
         <property name="Second argument" required="No">
-        	A reference name - refName - for reusing the value created by this function.
-			Stored values are of the form ${refName}.
+A reference name - refName - for reusing the value created by this function. Stored values are of the form ${refName}.
         </property>
 </properties>
 <p>The file name parameter is resolved when the file is opened or re-opened.</p>
 <p>The reference name parameter (if supplied) is resolved every time the function is executed.</p>
 </component>
+
+<component index="13.10.6" name="__machineName">
+<description><p>The machineName function returns the local host name</p></description>
+
+<properties>
+        <property name="Name of function" required="Yes">A reference name for reusing the value
+                computed by this function.</property>
+</properties>
+</component>
+
+<component index="13.10.7" name="__javaScript">
+<description><p>The javaScript function executes a piece of JavaScript (not Java!) code and returns its value</p>
+	</description>
+
+<properties>
+        <property name="Expression" required="Yes">The JavaScript expression to be executed.</property>
+        <property name="Name of function" required="Yes">A reference name for reusing the value
+                computed by this function.</property>
+</properties>
+</component>
+
+<component index="13.10.8" name="__Random">
+<description><p>The random function returns a random number that lies between the given min and max values.</p></description>
+
+<properties>
+        <property name="Minimum value" required="Yes">A number</property>
+        <property name="Maximum value" required="Yes">A bigger number</property>
+        <property name="Name of function" required="Yes">A reference name for reusing the value
+                computed by this function.</property>
+</properties>
+</component>
+
+<component index="13.10.8" name="__CSVFile">
+<description><p>The CSVFile function returns a string from a CSV file (c.f. <a href="#_StringFromFile">StringFromFile</a>)</p>
+	<p>NOTE: A single instance of the file is opened and used for all threads.</p></description>
+
+<properties>
+        <property name="File Name" required="Yes">The file to read from</property>
+        <property name="Column number" required="Yes">
+        	The column number in the file.
+        	0 = first column, 1 = second etc.
+        	"next" - go to next line of file.
+        	</property>
+</properties>
+</component>
+
 </section>
 </body>
 </document>
