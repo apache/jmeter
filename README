@@ -58,20 +58,18 @@
   also included, in HTML format, in the docs/ directory, and it may
   be browsed starting from the file called index.html.
 
-  If you have downloaded a nightly build, please cd to the jakarta-jmeter directory and type
-  "build install" (Unix/Linux only).  This should compile the application and enable you to run jmeter from the /bin
-directory.
+  If you have downloaded a nightly build, please cd to the jakarta-jmeter
+  directory and type "./build.sh" (Unix/Linux) or "build" (Windows). This
+  should compile the application and enable you to run jmeter from the /bin
+  directory.
 
-        NOTES for 1.6.1
-        ---------------
+  NOTES for 1.7.1
+  ---------------
 
-        JDBC testing does not appear to be working correctly in this version.
+  JDBC testing is working correctly in this version.
 
-        Saving and reloading test scripts has been fixed in this version.  Saving and testing of listeners and timers is
-also working.
-
-        HTTP testing now supports HTTPS.  Alternate ports can also be tested in this version.  Minor bugs with cookies
-has been fixed.
+  Recording HTTP sampes via the proxy server has been improved.  It is more robust.
+  The HTML Link Parser has been improved to be more forgiving.
 
 
 
