@@ -7,7 +7,7 @@
   <property name="sources.src.dir" value="src"/>
   <!-- Where the API documentation lives -->
   <property name="docs.api.dest.dir" value="docs/api"/>
-  <property name="version" value="_1.6Alpha"/>
+  <property name="version" value="_1.6.1"/>
   <property name="docs.src" value="./xdocs"/>
   <property name="docs.dest" value="./docs"/>
 
