@@ -68,7 +68,6 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.CellEditorListener;
@@ -344,9 +343,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, 
         //		table.setRowHeight(renderer.getPreferredHeight());
         //		table.setDefaultRenderer(String.class,renderer);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane pane = new JScrollPane(table);
-        pane.setPreferredSize(pane.getMinimumSize());
-        return pane;
+        return makeScrollPane(table);
     }
 
     private JPanel makeButtonPanel() {
