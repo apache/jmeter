@@ -270,7 +270,7 @@ public class StatVisualizer
 		private final String[] columnNames =
 			{ "URL", "Count", "Average", "Min", "Max", "Error%", "Rate" };
 		private final Class[] columnClasses =
-			{ String.class, Long.class, Double.class, Long.class, Long.class, String.class, String.class };
+			{ String.class, Long.class, Long.class, Long.class, Long.class, String.class, String.class };
 		private final String TOTAL_LABEL= JMeterUtils.getResString("aggregate_report_total_label");
 
 		private transient StatVisualizerModel model;
@@ -354,7 +354,7 @@ public class StatVisualizer
 			switch (col) {
 			  case 0: return s.getLabel();
 			  case 1: return new Long(s.getNumSamples());
-			  case 2: return new Double(s.getAverage());
+			  case 2: return new Long(s.getAverage());
 			  case 3: return new Long(s.getMin());
 			  case 4: return new Long(s.getMax());
 			  case 5: return s.getErrorPercentageString();
