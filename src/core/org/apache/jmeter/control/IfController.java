@@ -162,21 +162,27 @@ public class IfController extends GenericController implements Serializable
 	   *    - if its the first time this is run. The first time is special
 	   *       cause it is called prior the iteration even starts !
 	   */
-	  public Sampler next() {
-			boolean result = false;
-			try {
-				result = evaluateCondition();
-			}
-			catch (Exception e)
-			{
-				logger.error(e.getMessage(),e);
-			}
-			if (result)
-				return super.next();
-			else
-				return null;
-				
-	  }
+	public Sampler next() 
+	{
+		boolean result = false;
+		try {
+			result = evaluateCondition();
+		}
+		catch (Exception e)
+		{
+			logger.error(e.getMessage(),e);
+		}
+		if (result)
+		   return super.next();
+		else try
+		{
+		   return nextIsNull();
+		}
+		catch (NextIsNullException e1)
+		{
+		   return null;
+		}
+	}
 
 ////////////////////////////// Start of Test Code ///////////////////////////
 
