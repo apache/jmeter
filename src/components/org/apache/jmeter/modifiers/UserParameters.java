@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.processor.PreProcessor;
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -21,7 +21,7 @@ import org.apache.jmeter.threads.JMeterVariables;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class UserParameters extends ConfigTestElement implements Serializable, PreProcessor, LoopIterationListener
+public class UserParameters extends AbstractTestElement implements Serializable, PreProcessor, LoopIterationListener
 {
 
     public static final String NAMES = "UserParameters.names";
@@ -156,26 +156,6 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
         UserParameters up = (UserParameters) super.clone();
         up.lock = lock;
         return up;
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.TestElement#recoverRunningVersion()
-     */
-    public void recoverRunningVersion()
-    {
-        log.warn("Recover UP running version: " + this);
-        // TODO Auto-generated method stub
-        super.recoverRunningVersion();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.TestElement#setRunningVersion(boolean)
-     */
-    public void setRunningVersion(boolean runningVersion)
-    {
-        log.warn("set UP running version to: " + runningVersion + " for " +  this);
-        // TODO Auto-generated method stub
-        super.setRunningVersion(runningVersion);
     }
 
     /* (non-Javadoc)
