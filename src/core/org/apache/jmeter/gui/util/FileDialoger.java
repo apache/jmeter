@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -51,7 +51,9 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- */package org.apache.jmeter.gui.util;
+ */
+package org.apache.jmeter.gui.util;
+
 import java.io.File;
 
 import javax.swing.JFileChooser;
@@ -61,127 +63,122 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
+/**
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 public class FileDialoger
 {
-	/****************************************
-	 * The last directory visited by the user while choosing Files.
-	 ***************************************/
-	public static String lastJFCDirectory = null;
-	public static JFileChooser jfc = new JFileChooser();
+    /**
+     * The last directory visited by the user while choosing Files.
+     */
+    public static String lastJFCDirectory = null;
+    public static JFileChooser jfc = new JFileChooser();
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public FileDialoger() { }
+    public FileDialoger()
+    {
+    }
 
-	/****************************************
-	 * Prompts the user to choose a file from their filesystems for our own devious
-	 * uses. This method maintains the last directory the user visited before
-	 * dismissing the dialog. This does NOT imply they actually chose a file from
-	 * that directory, only that they closed the dialog there. It is the caller's
-	 * responsibility to check to see if the selected file is non-null.
-	 *
-	 *@return    !ToDo (Return description)
-	 *@returns   The JFileChooser that interacted with the user, after they are
-	 *      finished using it (accept or otherwise).
-	 ***************************************/
-	public static JFileChooser promptToOpenFile(String[] exts)
-	{
-		//JFileChooser jfc = null;
+    /**
+     * Prompts the user to choose a file from their filesystems for our own
+     * devious uses. This method maintains the last directory the user visited
+     * before dismissing the dialog. This does NOT imply they actually chose a
+     * file from that directory, only that they closed the dialog there. It is
+     * the caller's responsibility to check to see if the selected file is
+     * non-null.
+     *
+     * @return   the JFileChooser that interacted with the user, after they are
+     *           finished using it (accept or otherwise).
+     */
+    public static JFileChooser promptToOpenFile(String[] exts)
+    {
+        //JFileChooser jfc = null;
 
-		if(lastJFCDirectory == null)
-		{
-			String start = JMeterUtils.getPropDefault("user.dir", "");
+        if (lastJFCDirectory == null)
+        {
+            String start = JMeterUtils.getPropDefault("user.dir", "");
 
-			if(!start.equals(""))
-			{
-				jfc.setCurrentDirectory(new File(start));
-			}
-		}
-		clearFileFilters();
-		jfc.addChoosableFileFilter(new JMeterFileFilter(exts));
-		int retVal = jfc.showOpenDialog(GuiPackage.getInstance().getMainFrame());
-		lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
+            if (!start.equals(""))
+            {
+                jfc.setCurrentDirectory(new File(start));
+            }
+        }
+        clearFileFilters();
+        jfc.addChoosableFileFilter(new JMeterFileFilter(exts));
+        int retVal =
+            jfc.showOpenDialog(GuiPackage.getInstance().getMainFrame());
+        lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
 
-		if(retVal == JFileChooser.APPROVE_OPTION)
-		{
-			return jfc;
-		}
-		else 
-		{
-			return null;
-		}
-	}
+        if (retVal == JFileChooser.APPROVE_OPTION)
+        {
+            return jfc;
+        }
+        else
+        {
+            return null;
+        }
+    }
 
-	private static void clearFileFilters()
-	{
-		FileFilter[] filters = jfc.getChoosableFileFilters();
-		for(int x = 0;x < filters.length;x++)
-		{
-			jfc.removeChoosableFileFilter(filters[x]);
-		}
-	}
-	
-	public static JFileChooser promptToOpenFile()
-	{
-		return promptToOpenFile(new String[0]);
-	}
+    private static void clearFileFilters()
+    {
+        FileFilter[] filters = jfc.getChoosableFileFilters();
+        for (int x = 0; x < filters.length; x++)
+        {
+            jfc.removeChoosableFileFilter(filters[x]);
+        }
+    }
 
-	/****************************************
-	 * Prompts the user to choose a file from their filesystems for our own devious
-	 * uses. This method maintains the last directory the user visited before
-	 * dismissing the dialog. This does NOT imply they actually chose a file from
-	 * that directory, only that they closed the dialog there. It is the caller's
-	 * responsibility to check to see if the selected file is non-null.
-	 *
-	 *@param filename  !ToDo (Parameter description)
-	 *@return          !ToDo (Return description)
-	 *@returns         The JFileChooser that interacted with the user, after they
-	 *      are finished using it (accept or otherwise).
-	 *@see             #promptToOpenFile
-	 ***************************************/
-	public static JFileChooser promptToSaveFile(String filename)
-	{
-		if(lastJFCDirectory == null)
-		{
-			String start = JMeterUtils.getPropDefault("user.dir", "");
-			if(!start.equals(""))
-			{
-				jfc = new JFileChooser(new File(start));
-			}
-			lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
-		}
-		String ext = ".jmx";
-		if(filename != null)
-		{
-			jfc.setSelectedFile(new File(lastJFCDirectory, filename));
-			int i = -1;
-			if((i = filename.indexOf(".")) > -1)
-			{
-				ext = filename.substring(i);
-			}
-		}		
-		clearFileFilters();
-		jfc.addChoosableFileFilter(new JMeterFileFilter(new String[]{ext}));
+    public static JFileChooser promptToOpenFile()
+    {
+        return promptToOpenFile(new String[0]);
+    }
 
+    /**
+     * Prompts the user to choose a file from their filesystems for our own
+     * devious uses. This method maintains the last directory the user visited
+     * before dismissing the dialog. This does NOT imply they actually chose a
+     * file from that directory, only that they closed the dialog there. It is
+     * the caller's responsibility to check to see if the selected file is
+     * non-null.
+     *
+     * @return   the JFileChooser that interacted with the user, after they
+     *           are finished using it (accept or otherwise).
+     * @see             #promptToOpenFile
+     */
+    public static JFileChooser promptToSaveFile(String filename)
+    {
+        if (lastJFCDirectory == null)
+        {
+            String start = JMeterUtils.getPropDefault("user.dir", "");
+            if (!start.equals(""))
+            {
+                jfc = new JFileChooser(new File(start));
+            }
+            lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
+        }
+        String ext = ".jmx";
+        if (filename != null)
+        {
+            jfc.setSelectedFile(new File(lastJFCDirectory, filename));
+            int i = -1;
+            if ((i = filename.indexOf(".")) > -1)
+            {
+                ext = filename.substring(i);
+            }
+        }
+        clearFileFilters();
+        jfc.addChoosableFileFilter(new JMeterFileFilter(new String[] { ext }));
 
-		int retVal = jfc.showSaveDialog(GuiPackage.getInstance().getMainFrame());
-		lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
-		if(retVal == JFileChooser.APPROVE_OPTION)
-		{
-			return jfc;
-		}
-		else 
-		{
-			return null;
-		}
-	}
+        int retVal =
+            jfc.showSaveDialog(GuiPackage.getInstance().getMainFrame());
+        lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
+        if (retVal == JFileChooser.APPROVE_OPTION)
+        {
+            return jfc;
+        }
+        else
+        {
+            return null;
+        }
+    }
 }

@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,7 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.gui.util;
+package org.apache.jmeter.gui.util;
 
 import java.awt.Component;
 import java.awt.TextComponent;
@@ -66,46 +66,43 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * @author mstover
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
-public class NumberFieldErrorListener extends FocusAdapter {
-	
-	private static NumberFieldErrorListener listener = new NumberFieldErrorListener();
-	
-	public static NumberFieldErrorListener getNumberFieldErrorListener()
-	{
-		return listener;
-	}
-	
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void focusLost(FocusEvent e)
-	{
-		Component source = (Component)e.getSource();
-		String text = "";
-		if(source instanceof JTextComponent)
-		{
-			text = ((JTextComponent)source).getText();
-		}
-		else if(source instanceof TextComponent)
-		{
-			text = ((TextComponent)source).getText();
-		}
-		try
-		{
-			Integer.parseInt(text);
-		}
-		catch(NumberFormatException nfe)
-		{
-			JOptionPane.showMessageDialog(source, JMeterUtils.getResString("You must enter a valid number"),
-						JMeterUtils.getResString("Invalid data"), JOptionPane.WARNING_MESSAGE);
-			new FocusRequester(source);
-		}		
-	}
+public class NumberFieldErrorListener extends FocusAdapter
+{
 
+    private static NumberFieldErrorListener listener =
+        new NumberFieldErrorListener();
+
+    public static NumberFieldErrorListener getNumberFieldErrorListener()
+    {
+        return listener;
+    }
+
+    public void focusLost(FocusEvent e)
+    {
+        Component source = (Component) e.getSource();
+        String text = "";
+        if (source instanceof JTextComponent)
+        {
+            text = ((JTextComponent) source).getText();
+        }
+        else if (source instanceof TextComponent)
+        {
+            text = ((TextComponent) source).getText();
+        }
+        try
+        {
+            Integer.parseInt(text);
+        }
+        catch (NumberFormatException nfe)
+        {
+            JOptionPane.showMessageDialog(
+                source,
+                JMeterUtils.getResString("You must enter a valid number"),
+                JMeterUtils.getResString("Invalid data"),
+                JOptionPane.WARNING_MESSAGE);
+            new FocusRequester(source);
+        }
+    }
 }

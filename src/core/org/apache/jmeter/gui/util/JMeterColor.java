@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,31 +52,30 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.gui.util;
+package org.apache.jmeter.gui.util;
 
 import java.awt.Color;
 
 /**
  * @author mstover
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
-public class JMeterColor extends Color {
-	
-	public final static Color dark_green = new JMeterColor(0F,.5F,0F);
-	public final static Color YELLOW = new JMeterColor(1F,1F,0);
-	public final static Color LAVENDER = new JMeterColor(206F/255F,207F/255F,1F);
-    public final static Color purple = new JMeterColor(150/255F,0,150/255F);
-	
-	public JMeterColor(float r,float g,float b)
-	{
-		super(r,g,b);
-	}
-	
-	public JMeterColor()
-	{
-		super(0,0,0);
-	}
+public class JMeterColor extends Color
+{
+    public final static Color dark_green = new JMeterColor(0F, .5F, 0F);
+    public final static Color YELLOW = new JMeterColor(1F, 1F, 0);
+    public final static Color LAVENDER =
+        new JMeterColor(206F / 255F, 207F / 255F, 1F);
+    public final static Color purple =
+        new JMeterColor(150 / 255F, 0, 150 / 255F);
 
+    public JMeterColor(float r, float g, float b)
+    {
+        super(r, g, b);
+    }
+
+    public JMeterColor()
+    {
+        super(0, 0, 0);
+    }
 }

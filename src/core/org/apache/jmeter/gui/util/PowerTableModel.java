@@ -8,252 +8,282 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.jorphan.collections.Data;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+
 /**
  * @author mstover
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
-public class PowerTableModel extends DefaultTableModel {
+public class PowerTableModel extends DefaultTableModel
+{
     private static Logger log = LoggingManager.getLoggerForClass();
-	Data model = new Data();
-	Class[] columnClasses;
+    Data model = new Data();
+    Class[] columnClasses;
 
-	public PowerTableModel(String[] headers, Class[] cc) {
-		model.setHeaders(headers);
-		columnClasses = cc;
-	}
-	
-	public PowerTableModel()
-	{
-	}
+    public PowerTableModel(String[] headers, Class[] cc)
+    {
+        model.setHeaders(headers);
+        columnClasses = cc;
+    }
 
-	public void setRowValues(int row, Object[] values) {
-		model.setCurrentPos(row);
-		for (int i = 0; i < values.length; i++) {
-			model.addColumnValue(model.getHeaders()[i], values[i]);
-		}
-	}
+    public PowerTableModel()
+    {
+    }
 
-	public Data getData() {
-		return model;
-	}
-	
-	public void addNewColumn(String colName,Class colClass)
-	{
-		model.addHeader(colName);
-		Class[] newClasses = new Class[columnClasses.length+1];
-		System.arraycopy(columnClasses,0,newClasses,0,columnClasses.length);
-		newClasses[newClasses.length-1] = colClass;
-		columnClasses = newClasses;
-		Object defaultValue = createDefaultValue(columnClasses.length-1);
-		model.setColumnData(colName,defaultValue);
-		this.fireTableStructureChanged();
-	}
+    public void setRowValues(int row, Object[] values)
+    {
+        model.setCurrentPos(row);
+        for (int i = 0; i < values.length; i++)
+        {
+            model.addColumnValue(model.getHeaders()[i], values[i]);
+        }
+    }
 
-	/****************************************
-		 * Description of the Method
-		 *
-		 *@param row  Description of Parameter
-		 ***************************************/
-	public void removeRow(int row) {
+    public Data getData()
+    {
+        return model;
+    }
+
+    public void addNewColumn(String colName, Class colClass)
+    {
+        model.addHeader(colName);
+        Class[] newClasses = new Class[columnClasses.length + 1];
+        System.arraycopy(columnClasses, 0, newClasses, 0, columnClasses.length);
+        newClasses[newClasses.length - 1] = colClass;
+        columnClasses = newClasses;
+        Object defaultValue = createDefaultValue(columnClasses.length - 1);
+        model.setColumnData(colName, defaultValue);
+        this.fireTableStructureChanged();
+    }
+
+    public void removeRow(int row)
+    {
         log.debug("remove row: " + row);
-		if (model.size() > row) {
+        if (model.size() > row)
+        {
             log.debug("Calling remove row on Data");
-			model.removeRow(row);
-		}
-	}
-	
-	public void removeColumn(int col)
-	{
-		model.removeColumn(col);
-		this.fireTableStructureChanged();
-	}
-	
-	public void setColumnData(int col,List data)
-	{
-		model.setColumnData(col,data);
-	}
-	
-	
-	public List getColumnData(String colName)
-	{
-		return model.getColumnAsObjectArray(colName);
-	}
-	
-	public void clearData()
-	{
-		String[] headers = model.getHeaders();
-		model = new Data();
-		model.setHeaders(headers);
-		this.fireTableDataChanged();
-	}
+            model.removeRow(row);
+        }
+    }
 
-	public void addRow(Object data[]) {
-		model.setCurrentPos(model.size());
-		for (int i = 0; i < data.length; i++) {
-			model.addColumnValue(model.getHeaders()[i], data[i]);
-		}
-	}
+    public void removeColumn(int col)
+    {
+        model.removeColumn(col);
+        this.fireTableStructureChanged();
+    }
 
-	/****************************************
-	 ***************************************/
-	public void addNewRow() {		
-		addRow(createDefaultRow());
-	}
-	
-	private Object[] createDefaultRow()
-	{
-		Object[] rowData = new Object[getColumnCount()];
-		for(int i = 0;i < rowData.length;i++)
-		{
-			rowData[i] = createDefaultValue(i);
-		}
-		return rowData;
-	}
-	
-	public Object[] getRowData(int row)
-	{
-		Object[] rowData = new Object[getColumnCount()];
-		for(int i = 0;i < rowData.length;i++)
-		{
-			rowData[i] = model.getColumnValue(i,row);
-		}
-		return rowData;
-	}
-	
-	private Object createDefaultValue(int i)
-	{
-		Class colClass = getColumnClass(i);
-		try {
-			return colClass.newInstance();
-		} catch(Exception e) {
-			try {
-				Constructor constr = colClass.getConstructor(new Class[]{String.class});
-				return constr.newInstance(new Object[]{""});
-			} catch(Exception err) {
-			} 
-			try {
-				Constructor constr = colClass.getConstructor(new Class[]{Integer.TYPE});
-				return constr.newInstance(new Object[]{new Integer(0)});
-			} catch(Exception err) {
-			} 
-			try {
-				Constructor constr = colClass.getConstructor(new Class[]{Long.TYPE});
-				return constr.newInstance(new Object[]{new Long(0L)});
-			} catch(Exception err) {
-			}
-			try {
-				Constructor constr = colClass.getConstructor(new Class[]{Boolean.TYPE});
-				return constr.newInstance(new Object[]{new Boolean(false)});
-			} catch(Exception err) {
-			}
-			try {
-				Constructor constr = colClass.getConstructor(new Class[]{Float.TYPE});
-				return constr.newInstance(new Object[]{new Float(0F)});
-			} catch(Exception err) {
-			}
-			try {
-				Constructor constr = colClass.getConstructor(new Class[]{Double.TYPE});
-				return constr.newInstance(new Object[]{new Double(0D)});
-			} catch(Exception err) {
-			}
-			try {
-				Constructor constr = colClass.getConstructor(new Class[]{Character.TYPE});
-				return constr.newInstance(new Object[]{new Character(' ')});
-			} catch(Exception err) {
-			}
-			try {
-				Constructor constr = colClass.getConstructor(new Class[]{Byte.TYPE});
-				return constr.newInstance(new Object[]{new Byte(Byte.MIN_VALUE)});
-			} catch(Exception err) {
-			}
-			try {
-				Constructor constr = colClass.getConstructor(new Class[]{Short.TYPE});
-				return constr.newInstance(new Object[]{new Short(Short.MIN_VALUE)});
-			} catch(Exception err) {
-			}
-		}
-		return "";		
-	}
+    public void setColumnData(int col, List data)
+    {
+        model.setColumnData(col, data);
+    }
 
-	/****************************************
-	 * required by table model interface
-	 *
-	 *@return   The RowCount value
-	 ***************************************/
-	public int getRowCount() {
-		if (model == null) {
-			return 0;
-		}
-		return model.size();
-	}
+    public List getColumnData(String colName)
+    {
+        return model.getColumnAsObjectArray(colName);
+    }
 
-	/****************************************
-	 * required by table model interface
-	 *
-	 *@return   The ColumnCount value
-	 ***************************************/
-	public int getColumnCount() {
-		return model.getHeaders().length;
-	}
+    public void clearData()
+    {
+        String[] headers = model.getHeaders();
+        model = new Data();
+        model.setHeaders(headers);
+        this.fireTableDataChanged();
+    }
 
-	/****************************************
-	 * required by table model interface
-	 *
-	 *@param column  Description of Parameter
-	 *@return        The ColumnName value
-	 ***************************************/
-	public String getColumnName(int column) {
-		return model.getHeaders()[column];
-	}
+    public void addRow(Object data[])
+    {
+        model.setCurrentPos(model.size());
+        for (int i = 0; i < data.length; i++)
+        {
+            model.addColumnValue(model.getHeaders()[i], data[i]);
+        }
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@param row     !ToDo (Parameter description)
-	 *@param column  !ToDo (Parameter description)
-	 *@return        !ToDo (Return description)
-	 ***************************************/
-	public boolean isCellEditable(int row, int column) {
-		// all table cells are editable
-		return true;
-	}
+    public void addNewRow()
+    {
+        addRow(createDefaultRow());
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@param column  !ToDo (Parameter description)
-	 *@return        !ToDo (Return description)
-	 ***************************************/
-	public Class getColumnClass(int column) {
-		return columnClasses[column];
-	}
+    private Object[] createDefaultRow()
+    {
+        Object[] rowData = new Object[getColumnCount()];
+        for (int i = 0; i < rowData.length; i++)
+        {
+            rowData[i] = createDefaultValue(i);
+        }
+        return rowData;
+    }
 
-	/****************************************
-	 * required by table model interface
-	 *
-	 *@param row     Description of Parameter
-	 *@param column  Description of Parameter
-	 *@return        The ValueAt value
-	 ***************************************/
-	public Object getValueAt(int row, int column) {
-		return model.getColumnValue(column, row);
-	}
+    public Object[] getRowData(int row)
+    {
+        Object[] rowData = new Object[getColumnCount()];
+        for (int i = 0; i < rowData.length; i++)
+        {
+            rowData[i] = model.getColumnValue(i, row);
+        }
+        return rowData;
+    }
 
-	/****************************************
-	 * Sets the ValueAt attribute of the Arguments object
-	 *
-	 *@param value   The new ValueAt value
-	 *@param row     The new ValueAt value
-	 *@param column  !ToDo (Parameter description)
-	 ***************************************/
-	public void setValueAt(Object value, int row, int column) {
-		if(row < model.size())
-		{
-			model.setCurrentPos(row);
-			model.addColumnValue(model.getHeaders()[column], value);
-		}
-	}
+    private Object createDefaultValue(int i)
+    {
+        Class colClass = getColumnClass(i);
+        try
+        {
+            return colClass.newInstance();
+        }
+        catch (Exception e)
+        {
+            try
+            {
+                Constructor constr =
+                    colClass.getConstructor(new Class[] { String.class });
+                return constr.newInstance(new Object[] { "" });
+            }
+            catch (Exception err)
+            {
+            }
+            try
+            {
+                Constructor constr =
+                    colClass.getConstructor(new Class[] { Integer.TYPE });
+                return constr.newInstance(new Object[] { new Integer(0)});
+            }
+            catch (Exception err)
+            {
+            }
+            try
+            {
+                Constructor constr =
+                    colClass.getConstructor(new Class[] { Long.TYPE });
+                return constr.newInstance(new Object[] { new Long(0L)});
+            }
+            catch (Exception err)
+            {
+            }
+            try
+            {
+                Constructor constr =
+                    colClass.getConstructor(new Class[] { Boolean.TYPE });
+                return constr.newInstance(new Object[] { new Boolean(false)});
+            }
+            catch (Exception err)
+            {
+            }
+            try
+            {
+                Constructor constr =
+                    colClass.getConstructor(new Class[] { Float.TYPE });
+                return constr.newInstance(new Object[] { new Float(0F)});
+            }
+            catch (Exception err)
+            {
+            }
+            try
+            {
+                Constructor constr =
+                    colClass.getConstructor(new Class[] { Double.TYPE });
+                return constr.newInstance(new Object[] { new Double(0D)});
+            }
+            catch (Exception err)
+            {
+            }
+            try
+            {
+                Constructor constr =
+                    colClass.getConstructor(new Class[] { Character.TYPE });
+                return constr.newInstance(new Object[] { new Character(' ')});
+            }
+            catch (Exception err)
+            {
+            }
+            try
+            {
+                Constructor constr =
+                    colClass.getConstructor(new Class[] { Byte.TYPE });
+                return constr.newInstance(
+                    new Object[] { new Byte(Byte.MIN_VALUE)});
+            }
+            catch (Exception err)
+            {
+            }
+            try
+            {
+                Constructor constr =
+                    colClass.getConstructor(new Class[] { Short.TYPE });
+                return constr.newInstance(
+                    new Object[] { new Short(Short.MIN_VALUE)});
+            }
+            catch (Exception err)
+            {
+            }
+        }
+        return "";
+    }
 
+    /**
+     * Required by table model interface.
+     *
+     * @return   the RowCount value
+     */
+    public int getRowCount()
+    {
+        if (model == null)
+        {
+            return 0;
+        }
+        return model.size();
+    }
+
+    /**
+     * Required by table model interface.
+     *
+     * @return   the ColumnCount value
+     */
+    public int getColumnCount()
+    {
+        return model.getHeaders().length;
+    }
+
+    /**
+     * Required by table model interface.
+     *
+     * @return        the ColumnName value
+     */
+    public String getColumnName(int column)
+    {
+        return model.getHeaders()[column];
+    }
+
+    public boolean isCellEditable(int row, int column)
+    {
+        // all table cells are editable
+        return true;
+    }
+
+    public Class getColumnClass(int column)
+    {
+        return columnClasses[column];
+    }
+
+    /**
+     * Required by table model interface.
+     * return        the ValueAt value
+     */
+    public Object getValueAt(int row, int column)
+    {
+        return model.getColumnValue(column, row);
+    }
+
+    /**
+     * Sets the ValueAt attribute of the Arguments object.
+     *
+     * @param value   the new ValueAt value
+     */
+    public void setValueAt(Object value, int row, int column)
+    {
+        if (row < model.size())
+        {
+            model.setCurrentPos(row);
+            model.addColumnValue(model.getHeaders()[column], value);
+        }
+    }
 }
