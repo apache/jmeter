@@ -1,72 +1,117 @@
-<?xml version="1.0"?>
-
-<TestPlan>
-<threadgroups>
-<ThreadGroup name="Jakarta Users" numThreads="1" rampUp="0">
-<controllers>
-<LoopController type="org.apache.jmeter.control.LoopController" name="Loop Controller" iterations="1">
-<configElements>
-<ConfigElement type="org.apache.jmeter.protocol.http.config.UrlConfig">
-<property name="name">Defaults</property>
-<property name="PROTOCOL">http</property>
-<property name="domain">jakarta.apache.org</property>
-<property name="arguments"><Arguments>
-</Arguments>
-</property>
-<property name="path">/</property>
-<property name="method">GET</property>
-</ConfigElement>
-</configElements>
-<controllers>
-<HttpTestSample type="org.apache.jmeter.protocol.http.control.HttpTestSample" name="Home Page" getImages="false">
-<defaultUrl>
-<ConfigElement type="org.apache.jmeter.protocol.http.config.MultipartUrlConfig">
-<property name="PROTOCOL">http</property>
-<property name="arguments"><Arguments>
-</Arguments>
-</property>
-<property name="path">/</property>
-<property name="method">GET</property>
-</ConfigElement></defaultUrl>
-<configElements>
-</configElements>
-<controllers>
-</controllers>
-</HttpTestSample>
-
-<LoopController type="org.apache.jmeter.control.LoopController" name="Loop Controller" iterations="5">
-<configElements>
-</configElements>
-<controllers>
-<HttpTestSample type="org.apache.jmeter.protocol.http.control.HttpTestSample" name="News Page" getImages="false">
-<defaultUrl>
-<ConfigElement type="org.apache.jmeter.protocol.http.config.MultipartUrlConfig">
-<property name="PROTOCOL">http</property>
-<property name="arguments"><Arguments>
-</Arguments>
-</property>
-<property name="path">/site/news.html</property>
-<property name="method">GET</property>
-</ConfigElement></defaultUrl>
-<configElements>
-</configElements>
-<controllers>
-</controllers>
-</HttpTestSample>
-
-</controllers>
-</LoopController>
-</controllers>
-</LoopController>
-</controllers>
-<timers>
-</timers>
-<listeners>
-<Filer type="org.apache.jmeter.reporters.Filer" name="File Reporter" verbose="true" append="false" autoFlush="false" viewSubmitData="true" file="loop-test.dat"/>
-</listeners>
-</ThreadGroup>
-
-</threadgroups>
-<configElements>
-</configElements>
-</TestPlan>
+<?xml version="1.0" encoding="UTF-8"?>
+<node>
+<testelement class="org.apache.jmeter.testelement.TestPlan">
+<property name="TestElement.test_class">org.apache.jmeter.testelement.TestPlan</property>
+<property name="TestElement.name">Test Plan</property>
+<property name="TestPlan.functional_mode">false</property>
+<collection name="TestPlan.thread_groups" class="java.util.LinkedList"/>
+<testelement name="TestPlan.user_defined_variables" class="org.apache.jmeter.config.Arguments">
+<property name="TestElement.name">Argument List</property>
+<property name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
+<collection name="Arguments.arguments" class="java.util.ArrayList"/>
+<property name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
+</testelement>
+<property name="TestElement.gui_class">org.apache.jmeter.control.gui.TestPlanGui</property>
+</testelement>
+<node>
+<testelement class="org.apache.jmeter.threads.ThreadGroup">
+<property name="TestElement.name">Jakarta Users</property>
+<property name="TestElement.test_class">org.apache.jmeter.threads.ThreadGroup</property>
+<testelement name="ThreadGroup.main_controller" class="org.apache.jmeter.control.LoopController">
+<property name="TestElement.test_class">org.apache.jmeter.control.LoopController</property>
+<property name="TestElement.name">Loop Controller</property>
+<property name="LoopController.continue_forever">false</property>
+<property name="LoopController.loops">1</property>
+<property name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</property>
+</testelement>
+<property name="ThreadGroup.num_threads">1</property>
+<property name="ThreadGroup.ramp_time">0</property>
+<property name="TestElement.gui_class">org.apache.jmeter.threads.gui.ThreadGroupGui</property>
+</testelement>
+<node>
+<testelement class="org.apache.jmeter.config.ConfigTestElement">
+<property name="HTTPSampler.method">GET</property>
+<property name="HTTPSampler.port"> </property>
+<property name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</property>
+<property name="TestElement.name">Defaults</property>
+<testelement name="HTTPsampler.Arguments" class="org.apache.jmeter.config.Arguments">
+<property name="TestElement.name"> </property>
+<property name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
+<collection name="Arguments.arguments" class="java.util.LinkedList"/>
+<property name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
+</testelement>
+<property name="HTTPSampler.follow_redirects">false</property>
+<property name="HTTPSampler.protocol">http</property>
+<property name="HTTPSampler.path">/</property>
+<property name="HTTPSampler.use_keepalive">false</property>
+<property name="HTTPSampler.domain">jakarta.apache.org</property>
+<property name="TestElement.gui_class">org.apache.jmeter.protocol.http.config.gui.UrlConfigGui</property>
+</testelement>
+</node>
+<node>
+<testelement class="org.apache.jmeter.protocol.http.sampler.HTTPSampler">
+<property name="TestElement.name">Home Page</property>
+<property name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
+<property name="HTTPSampler.port"> </property>
+<property name="HTTPSampler.method">GET</property>
+<property name="HTTPSampler.mimetype"> </property>
+<collection name="AbstractSampler.assertions" class="java.util.ArrayList"/>
+<testelement name="HTTPsampler.Arguments" class="org.apache.jmeter.config.Arguments">
+<property name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
+<property name="TestElement.name"> </property>
+<collection name="Arguments.arguments" class="java.util.ArrayList"/>
+<property name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
+</testelement>
+<property name="HTTPSampler.follow_redirects">true</property>
+<property name="HTTPSampler.protocol">http</property>
+<property name="HTTPSampler.FILE_FIELD"> </property>
+<property name="HTTPSampler.path">/</property>
+<property name="HTTPSampler.domain"> </property>
+<property name="HTTPSampler.use_keepalive">false</property>
+<property name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
+<property name="HTTPSampler.FILE_NAME"> </property>
+</testelement>
+</node>
+<node>
+<testelement class="org.apache.jmeter.control.LoopController">
+<property name="TestElement.test_class">org.apache.jmeter.control.LoopController</property>
+<property name="TestElement.name">Loop Controller</property>
+<property name="LoopController.continue_forever">true</property>
+<property name="LoopController.loops">5</property>
+<property name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</property>
+</testelement>
+<node>
+<testelement class="org.apache.jmeter.protocol.http.sampler.HTTPSampler">
+<property name="TestElement.name">News Page</property>
+<property name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
+<property name="HTTPSampler.port"> </property>
+<property name="HTTPSampler.method">GET</property>
+<property name="HTTPSampler.mimetype"> </property>
+<collection name="AbstractSampler.assertions" class="java.util.ArrayList"/>
+<testelement name="HTTPsampler.Arguments" class="org.apache.jmeter.config.Arguments">
+<property name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
+<property name="TestElement.name"> </property>
+<collection name="Arguments.arguments" class="java.util.ArrayList"/>
+<property name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
+</testelement>
+<property name="HTTPSampler.follow_redirects">true</property>
+<property name="HTTPSampler.protocol">http</property>
+<property name="HTTPSampler.FILE_FIELD"> </property>
+<property name="HTTPSampler.path">/site/news.html</property>
+<property name="HTTPSampler.domain"> </property>
+<property name="HTTPSampler.use_keepalive">false</property>
+<property name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
+<property name="HTTPSampler.FILE_NAME"> </property>
+</testelement>
+</node>
+</node>
+<node>
+<testelement class="org.apache.jmeter.reporters.ResultCollector">
+<property name="TestElement.name">File Reporter</property>
+<property name="TestElement.test_class">org.apache.jmeter.reporters.ResultCollector</property>
+<property name="filename">loop-test.dat</property>
+<property name="TestElement.gui_class">org.apache.jmeter.visualizers.GraphVisualizer</property>
+</testelement>
+</node>
+</node>
+</node>
