@@ -15,7 +15,7 @@
 	<li><a HREF="logical_controllers.html">Creating Flow Logic Controls</a></li>
 	<li><a HREF="visualizers.html">Using Visualizers</a></li>
 	<li><a HREF="timers.html">Using Timers</a></li>
-	<li><a HREF="Running.html">Running the test script</a></li>
+	<li><a HREF="running.html">Running the test script</a></li>
 	<li><a href="saving.html">Saving test script elements</a></li>
 	<li><a href="rmi.html">Running JMeter over RMI</a></li>
 
