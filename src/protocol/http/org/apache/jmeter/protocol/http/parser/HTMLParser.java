@@ -61,7 +61,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 
 import junit.framework.TestCase;
 
@@ -145,8 +147,36 @@ public abstract class HTMLParser
      * @param url  Base URL from which the HTML code was obtained
      * @return an Iterator for the resource URLs 
      */
-    public abstract Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl)
-        throws HTMLParseException;
+    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl)
+        throws HTMLParseException
+        {    
+        	// The Set is used to ignore duplicated binary files.
+			// Using a LinkedHashSet to avoid unnecessary overhead in iterating
+			// the elements in the set later on. As a side-effect, this will keep
+			// them roughly in order, which should be a better model of browser
+			// behaviour.
+        	return getEmbeddedResourceURLs(html, baseUrl,new LinkedHashSet());
+        }
+
+	/**
+	 * Get the URLs for all the resources that a browser would automatically
+	 * download following the download of the HTML content, that is: images,
+	 * stylesheets, javascript files, applets, etc...
+	 * <p>
+	 * All URLs should be added to the Collection.
+	 * <p>
+	 * Malformed URLs can be reported to the caller by having the Iterator
+	 * return the corresponding RL String. Overall problems parsing the html
+	 * should be reported by throwing an HTMLParseException. 
+	 * 
+	 * @param html HTML code
+	 * @param url  Base URL from which the HTML code was obtained
+	 * @param coll Collection
+	 * @return an Iterator for the resource URLs 
+	 */
+	public abstract Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl,
+	                                                  Collection coll)
+		throws HTMLParseException;
 
     public static class HTMLParserTest extends TestCase
     {

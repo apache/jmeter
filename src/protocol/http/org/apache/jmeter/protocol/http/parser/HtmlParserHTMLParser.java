@@ -61,9 +61,8 @@ package org.apache.jmeter.protocol.http.parser;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 import junit.framework.TestCase;
 
@@ -86,7 +85,7 @@ class HtmlParserHTMLParser extends HTMLParser
     /* (non-Javadoc)
      * @see org.apache.jmeter.protocol.http.parser.HtmlParser#getEmbeddedResourceURLs(byte[], java.net.URL)
      */
-    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl)
+    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, Collection urls)
         throws HTMLParseException
     {
         Parser htmlParser= null;
@@ -104,9 +103,6 @@ class HtmlParserHTMLParser extends HTMLParser
         }
 
         // Now parse the DOM tree
-
-        // This is used to ignore duplicated binary files.
-        Set uniqueURLs= new LinkedHashSet();
 
         // look for applets
 
@@ -169,13 +165,13 @@ class HtmlParserHTMLParser extends HTMLParser
 
                 try
                 {
-                    uniqueURLs.add(new URL(baseUrl, binUrlStr));
+                    urls.add(new URL(baseUrl, binUrlStr));
                 }
                 catch (MalformedURLException mfue)
                 {
                     // Can't build the URL? May be a site error: return the
                     // string.
-                    uniqueURLs.add(binUrlStr);
+                    urls.add(binUrlStr);
                 }
             }
             log.debug("End   : NewHTTPSamplerFull parseNodes");
@@ -184,7 +180,7 @@ class HtmlParserHTMLParser extends HTMLParser
         {
         }
 
-        return uniqueURLs.iterator();
+        return urls.iterator();
     }
 
     /**
