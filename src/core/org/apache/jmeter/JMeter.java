@@ -291,6 +291,7 @@ public class JMeter implements JMeterPlugin
             initializeProperties(parser);
             setProxy(parser);
             log.info("Version " + JMeterUtils.getJMeterVersion());
+			log.info("java.version="+System.getProperty("java.version"));
             if (parser.getArgumentById(VERSION_OPT) != null)
             {
                 System.out.println(
