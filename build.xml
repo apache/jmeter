@@ -838,24 +838,33 @@ some of its classes - at present JMeter can only run from jar files.
   		<patternset refid="dist.binaries"/>
   		<patternset refid="external.jars"/>
   		<include name="${dest.printable_docs}/**"/>
-  		<exclude name="docs/api/**"/>
+  		<include name="${dest.docs}/**"/>
+  		<exclude name="${dest.docs}/api/**"/>
   	</patternset>
+	<!-- TODO: find way to share images etc between the two document sets -->
 
 	<!-- Files to be included in source download -->
 	<patternset id="dist_src_files">
   		<!--patternset refid="external.jars"/-->
   		<patternset refid="dist.sources"/>
+  		<include name="${dest.docs}/api/**"/>
   	</patternset>
 
-	<!-- Invoke with -Djmeter.version=m.n -->
+	<!-- Invoke with -Djmeter.version=m.n 
+	     N.B. Included in distribution target
+	-->
 	<target name="site" 
-		depends="init-version,docs-site,pack-site"
-		description="Build JMeter site documentation to go with distribution"/>
+		depends="init-version,docs-site,docs-api,pack-site"
+		description="Build site documentation separately (see: distribution)"/>
 
-	<!-- Invoke with -Djmeter.version=m.n -->
+	<!-- Invoke with -Djmeter.version=m.n 
+	Creates clean build and all documentation
+	Creates runtime and source distributions
+	Creates archives for updating web-site
+	-->
 	<target name="distribution" 
-		depends="assume-libs-present,clean,install,docs-all,test,_distribution"
-		description="Build JMeter for end-user distribution (see: site)"/>
+		depends="assume-libs-present,clean,install,docs-all,test,_distribution,site"
+		description="Build JMeter for end-user distribution (includes site)"/>
 
 	<!-- Internal target -->
 	<target name="_distribution">
