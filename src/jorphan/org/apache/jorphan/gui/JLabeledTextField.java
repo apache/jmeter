@@ -52,7 +52,6 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-
 package org.apache.jorphan.gui;
 
 import java.awt.BorderLayout;
@@ -75,11 +74,12 @@ import javax.swing.event.ChangeListener;
  * change listeners are only called when the text has changed.
  *
  * @author S.Coleman
+ * @version $Revision$
  */
 public class JLabeledTextField
     extends JPanel
-    implements JLabeledField, FocusListener {
-
+    implements JLabeledField, FocusListener
+{
     private JLabel mLabel;
     private JTextField mTextField;
 
@@ -92,7 +92,8 @@ public class JLabeledTextField
     /**
      * Default constructor, The label and the Text field are left empty.
      */
-    public JLabeledTextField() {
+    public JLabeledTextField()
+    {
         this("", 20);
     }
 
@@ -102,11 +103,13 @@ public class JLabeledTextField
      *
      * @param pLabel The text to in the label.
      */
-    public JLabeledTextField(String pLabel) {
+    public JLabeledTextField(String pLabel)
+    {
         this(pLabel, 20);
     }
 
-    public JLabeledTextField(String pLabel, int size) {
+    public JLabeledTextField(String pLabel, int size)
+    {
         super();
         mTextField = createTextField(size);
         mLabel = new JLabel(pLabel);
@@ -114,26 +117,30 @@ public class JLabeledTextField
         init();
     }
 
-    public List getComponentList() {
+    public List getComponentList()
+    {
         List comps = new LinkedList();
         comps.add(mLabel);
         comps.add(mTextField);
         return comps;
     }
 
-    public void setEnabled(boolean enable) {
+    public void setEnabled(boolean enable)
+    {
         super.setEnabled(enable);
         mTextField.setEnabled(enable);
     }
 
-    protected JTextField createTextField(int size) {
+    protected JTextField createTextField(int size)
+    {
         return new JTextField(size);
     }
     
     /**
      * Initialises all of the components on this panel.
      */
-    private void init() {
+    private void init()
+    {
         setLayout(new BorderLayout(5, 0));
         // Register the handler for focus listening. This handler will
         // only notify the registered when the text changes from when
@@ -151,9 +158,11 @@ public class JLabeledTextField
      *
      * @param pFocusEvent The focus event that occured.
      */
-    public void focusLost(FocusEvent pFocusEvent) {
+    public void focusLost(FocusEvent pFocusEvent)
+    {
         // Compare if the value has changed, since we received focus.
-        if (oldValue.equals(mTextField.getText()) == false) {
+        if (oldValue.equals(mTextField.getText()) == false)
+        {
             notifyChangeListeners();
         }
     }
@@ -161,7 +170,8 @@ public class JLabeledTextField
     /**
      * Catch what the value was when focus was gained.
      */
-    public void focusGained(FocusEvent pFocusEvent) {
+    public void focusGained(FocusEvent pFocusEvent)
+    {
         oldValue = mTextField.getText();
     }
 
@@ -170,7 +180,8 @@ public class JLabeledTextField
      *
      * @param pLabel The new label text.
      */
-    public void setLabel(String pLabel) {
+    public void setLabel(String pLabel)
+    {
         mLabel.setText(pLabel);
     }
 
@@ -179,7 +190,8 @@ public class JLabeledTextField
      *
      * @param pText The new text to display in the text field.
      */
-    public void setText(String pText) {
+    public void setText(String pText)
+    {
         mTextField.setText(pText);
     }
 
@@ -188,7 +200,8 @@ public class JLabeledTextField
      *
      * @return The text in the Text Field.
      */
-    public String getText() {
+    public String getText()
+    {
         return mTextField.getText();
     }
 
@@ -197,7 +210,8 @@ public class JLabeledTextField
      *
      * @return The text of the label.
      */
-    public String getLabel() {
+    public String getLabel()
+    {
         return mLabel.getText();
     }
 
@@ -209,7 +223,8 @@ public class JLabeledTextField
      *
      * @param pChangeListener The listener to add
      */
-    public void addChangeListener(ChangeListener pChangeListener) {
+    public void addChangeListener(ChangeListener pChangeListener)
+    {
         mChangeListeners.add(pChangeListener);
     }
 
@@ -218,7 +233,8 @@ public class JLabeledTextField
      *
      * @param pChangeListener The change listener to remove.
      */
-    public void removeChangeListener(ChangeListener pChangeListener) {
+    public void removeChangeListener(ChangeListener pChangeListener)
+    {
         mChangeListeners.remove(pChangeListener);
     }
 
@@ -226,9 +242,11 @@ public class JLabeledTextField
      * Notify all registered change listeners that the
      * text in the text field has changed.
      */
-    protected void notifyChangeListeners() {
+    protected void notifyChangeListeners()
+    {
         ChangeEvent ce = new ChangeEvent(this);
-        for (int index = 0; index < mChangeListeners.size(); index++) {
+        for (int index = 0; index < mChangeListeners.size(); index++)
+        {
             ((ChangeListener) mChangeListeners.get(index)).stateChanged(ce);
         }
     }

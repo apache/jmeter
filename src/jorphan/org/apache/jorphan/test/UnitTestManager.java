@@ -52,23 +52,24 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- 
 package org.apache.jorphan.test;
+
 /**
- * Implement this interface to work with the AllTests class.  This interface allows
- * AllTests to pass a configuration file to your application before running the 
- * junit unit tests.
+ * Implement this interface to work with the AllTests class.  This interface
+ * allows AllTests to pass a configuration file to your application before
+ * running the junit unit tests.
  * 
- * @author Michael Stover (mstover at apache.org)
  * @see AllTests
+ * @author Michael Stover (mstover at apache.org)
+ * @version $Revision$
  */
 public interface UnitTestManager
 {
-	/**
-	 * Your implementation will be handed the filename that was provided to AllTests as
-	 * a configuration file.  It can hold whatever properties you need to configure
-	 * your system prior to the unit tests running.
-	 * @param filename
-	 */
-	public void initializeProperties(String filename);
+    /**
+     * Your implementation will be handed the filename that was provided to
+     * AllTests as a configuration file.  It can hold whatever properties you
+     * need to configure your system prior to the unit tests running.
+     * @param filename
+     */
+    public void initializeProperties(String filename);
 }

@@ -52,28 +52,20 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- 
- package org.apache.jorphan.gui;
+package org.apache.jorphan.gui;
 
 import java.util.List;
 
 import javax.swing.event.ChangeListener;
 
 /**
- * Title:
- * Description:
- * Copyright:    Copyright (c) 2000
- * Company:
- * @author
- * @version 1.0
+ * @version $Revision$
  */
-
 public interface JLabeledField
 {
-
-	public String getText();
-	public void setText(String text);
-	public void setLabel(String pLabel);
-	public void addChangeListener(ChangeListener pChangeListener);
-	public List getComponentList();
+    public String getText();
+    public void setText(String text);
+    public void setLabel(String pLabel);
+    public void addChangeListener(ChangeListener pChangeListener);
+    public List getComponentList();
 }

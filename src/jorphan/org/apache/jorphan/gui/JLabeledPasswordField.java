@@ -52,42 +52,35 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- 
- package org.apache.jorphan.gui;
+package org.apache.jorphan.gui;
 
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 /**
- * Title:
- * Description:
- * Copyright:    Copyright (c) 2000
- * Company:
- * @author
- * @version 1.0
+ * @version $Revision$
  */
-
 public class JLabeledPasswordField extends JLabeledTextField
 {
 
-	public JLabeledPasswordField()
-	{
-		super();
-	}
+    public JLabeledPasswordField()
+    {
+        super();
+    }
 
-	/**
-	  * Constructs a new component with the label displaying the
-	  * passed text.
-	  *
-	  * @param pLabel The text to in the label.
-	  */
-	 public JLabeledPasswordField(String pLabel)
-	 {
-		  super(pLabel);
-	 }
+    /**
+     * Constructs a new component with the label displaying the
+     * passed text.
+     *
+     * @param pLabel The text to in the label.
+     */
+    public JLabeledPasswordField(String pLabel)
+    {
+        super(pLabel);
+    }
 
-	 protected JTextField createTextField(int size)
-	 {
-		return new JPasswordField(size);
-	 }
+    protected JTextField createTextField(int size)
+    {
+        return new JPasswordField(size);
+    }
 }
