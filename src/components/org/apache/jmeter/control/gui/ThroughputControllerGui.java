@@ -217,6 +217,6 @@ public class ThroughputControllerGui
 				}
 			}
 		);
-//		add(perthread);
+		add(perthread);
 	}
 }
