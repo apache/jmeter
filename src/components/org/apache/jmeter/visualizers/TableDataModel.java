@@ -92,6 +92,12 @@ public class TableDataModel extends GraphModel implements TableModel
 	{
 		return TableVisualizer.class;
 	}
+	
+	public void clear()
+	{
+		super.clear();
+		urlList.clear();
+	}
 
 	/**
 	 * Gets the ClassLabel attribute of the GraphModel object
