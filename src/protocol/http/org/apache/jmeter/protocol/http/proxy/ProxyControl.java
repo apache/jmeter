@@ -312,47 +312,53 @@ public class ProxyControl extends ConfigTestElement implements Serializable
 			nodes = treeModel.getNodesOfType(ThreadGroupGui.class);
 		}
 		Iterator iter = nodes.iterator();
-		if (iter.hasNext())
+		while (iter.hasNext())
 		{
 			JMeterTreeNode node = (JMeterTreeNode) iter.next();
-			Enumeration enum = node.children();
-			while (enum.hasMoreElements())
-			{
-				JMeterTreeNode subNode = (JMeterTreeNode) enum.nextElement();
-				JMeterGUIComponent sample =
-					(JMeterGUIComponent) subNode.getUserObject();
-				if (sample instanceof UrlConfigGui)
-				{
-					urlConfig = sample.createTestElement();
-					break;
-				}
-			}
-			if (areMatched(sampler, urlConfig))
-			{
-				removeValuesFromSampler(sampler, urlConfig);
-				replacer.reverseReplace(sampler);
-				HttpTestSampleGui test = new HttpTestSampleGui();
-				test.configure(sampler);
-				try
-				{
-					JMeterTreeNode newNode = treeModel.addComponent(test, node);
-					for (int i = 0; subConfigs != null && i < subConfigs.length; i++)
-					{
-						if (subConfigs[i] instanceof HeaderManager)
-						{
-							HeaderPanel comp = new HeaderPanel();
-							replacer.reverseReplace(subConfigs[i]);
-							comp.configure(subConfigs[i]);
-							treeModel.addComponent(comp, newNode);
-						}
-					}
-				}
-				catch (IllegalUserActionException e)
-				{
-					JMeterUtils.reportErrorToUser(e.getMessage());
-				}
-			}
-		}
+
+            if (! node.isEnabled()) {
+                continue;
+            } else {
+                Enumeration enum = node.children();
+                while (enum.hasMoreElements())
+                {
+                    JMeterTreeNode subNode = (JMeterTreeNode) enum.nextElement();
+                    JMeterGUIComponent sample =
+                        (JMeterGUIComponent) subNode.getUserObject();
+                    if (sample instanceof UrlConfigGui)
+                    {
+                        urlConfig = sample.createTestElement();
+                        break;
+                    }
+                }
+                if (areMatched(sampler, urlConfig))
+                {
+                    removeValuesFromSampler(sampler, urlConfig);
+                    replacer.reverseReplace(sampler);
+                    HttpTestSampleGui test = new HttpTestSampleGui();
+                    test.configure(sampler);
+                    try
+                    {
+                        JMeterTreeNode newNode = treeModel.addComponent(test, node);
+                        for (int i = 0; subConfigs != null && i < subConfigs.length; i++)
+                        {
+                            if (subConfigs[i] instanceof HeaderManager)
+                            {
+                                HeaderPanel comp = new HeaderPanel();
+                                replacer.reverseReplace(subConfigs[i]);
+                                comp.configure(subConfigs[i]);
+                                treeModel.addComponent(comp, newNode);
+                            }
+                        }
+                    }
+                    catch (IllegalUserActionException e)
+                    {
+                        JMeterUtils.reportErrorToUser(e.getMessage());
+                    }
+                }
+                return;
+            }
+        }
 	}
 	private void removeValuesFromSampler(
 		HTTPSampler sampler,
