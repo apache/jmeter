@@ -620,7 +620,7 @@ public class HTTPSampler extends AbstractSampler
 		{
 			w.write(buffer, 0, x);
 		}
-		//in.close();
+		in.close();
 		w.flush();
 		w.close();
 		return w.toByteArray();
@@ -930,16 +930,9 @@ public class HTTPSampler extends AbstractSampler
 		}
 		catch (IOException ex)
 		{
-			log.error("", ex);
+			log.warn(ex.getMessage(), ex);
 			res.setDataType(res.TEXT);
-			try
-			{
-				res.setResponseData(readResponse(conn));
-			}
-			catch (IOException e)
-			{
-				res.setResponseData(ex.toString().getBytes());
-			}
+			res.setResponseData(ex.toString().getBytes());
 			res.setResponseCode(NON_HTTP_RESPONSE_CODE);
 			res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
 			res.setTime(System.currentTimeMillis() - time);
