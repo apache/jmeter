@@ -21,6 +21,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 
+import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -65,6 +66,9 @@ public class JMSPublisherGui
 	private String not_req = JMeterUtils.getResString("jms_auth_not_required");
 	private String[] auth_items = {required,not_req};
 	
+	JCheckBox useProperties =
+		new JCheckBox(JMeterUtils.getResString("jms_use_properties_file"), false);
+
 	JLabeledRadio configChoice = 
 		new JLabeledRadio(JMeterUtils.getResString("jms_config"),items,use_text);
 
@@ -126,6 +130,7 @@ public class JMSPublisherGui
     {
 		PublisherSampler sampler = new PublisherSampler();
         this.configureTestElement(sampler);
+        sampler.setUseJNDIProperties(String.valueOf(useProperties.isSelected()));
 		sampler.setJNDIIntialContextFactory(jndiICF.getText());
 		sampler.setProviderUrl(urlField.getText());
 		sampler.setConnectionFactory(jndiConnFac.getText());
@@ -150,6 +155,7 @@ public class JMSPublisherGui
     {
     	PublisherSampler sampler = (PublisherSampler)s;
     	this.configureTestElement(sampler);
+		sampler.setUseJNDIProperties(String.valueOf(useProperties.isSelected()));
 		sampler.setJNDIIntialContextFactory(jndiICF.getText());
 		sampler.setProviderUrl(urlField.getText());
 		sampler.setConnectionFactory(jndiConnFac.getText());
@@ -195,6 +201,8 @@ public class JMSPublisherGui
         lookup = new JPanel();
         lookup.setLayout(new VerticalLayout(6,VerticalLayout.LEFT));
         mainPanel.add(lookup);
+		lookup.add(useProperties);
+		useProperties.addChangeListener(this);
 		lookup.add(jndiICF);
 		lookup.add(urlField);
 		lookup.add(jndiConnFac);
@@ -236,6 +244,7 @@ public class JMSPublisherGui
     {
         super.configure(el);
 		PublisherSampler sampler = (PublisherSampler)el;
+		useProperties.setSelected(sampler.getUseJNDIPropertiesAsBoolean());
 		jndiICF.setText(sampler.getJNDIInitialContextFactory());
 		urlField.setText(sampler.getProviderUrl());
 		jndiConnFac.setText(sampler.getConnectionFactory());
@@ -269,6 +278,14 @@ public class JMSPublisherGui
 			updateConfig(this.configChoice.getText());
 		} else if (event.getSource() == this.msgChoice){
 			updateMessageType(this.msgChoice.getText());
+		} else if (event.getSource() == useProperties){
+			if (useProperties.isSelected()){
+				this.jndiICF.setEnabled(false);
+				this.urlField.setEnabled(false);
+			} else {
+				this.jndiICF.setEnabled(true);
+				this.urlField.setEnabled(true);
+			}
 		}
 	}
 	

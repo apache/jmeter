@@ -50,6 +50,8 @@ public class JMSSubscriberGui
     implements java.awt.event.ActionListener, ChangeListener
 {
 
+	JCheckBox useProperties =
+		new JCheckBox(JMeterUtils.getResString("jms_use_properties_file"), false);
 	JLabeledTextField jndiICF =
 		new JLabeledTextField(
 			JMeterUtils.getResString("jms_initial_context_factory"));
@@ -109,6 +111,7 @@ public class JMSSubscriberGui
     {
         SubscriberSampler sampler = new SubscriberSampler();
         this.configureTestElement(sampler);
+		sampler.setUseJNDIProperties(String.valueOf(useProperties.isSelected()));
 		sampler.setJNDIIntialContextFactory(jndiICF.getText());
 		sampler.setProviderUrl(urlField.getText());
 		sampler.setConnectionFactory(jndiConnFac.getText());
@@ -130,6 +133,7 @@ public class JMSSubscriberGui
     {
 		SubscriberSampler sampler = (SubscriberSampler)s;
     	this.configureTestElement(sampler);
+		sampler.setUseJNDIProperties(String.valueOf(useProperties.isSelected()));
 		sampler.setJNDIIntialContextFactory(jndiICF.getText());
 		sampler.setProviderUrl(urlField.getText());
 		sampler.setConnectionFactory(jndiConnFac.getText());
@@ -172,6 +176,8 @@ public class JMSSubscriberGui
         lookup = new JPanel();
         lookup.setLayout(new VerticalLayout(6,VerticalLayout.LEFT));
         mainPanel.add(lookup);
+        lookup.add(useProperties);
+        useProperties.addChangeListener(this);
 		lookup.add(jndiICF);
 		lookup.add(urlField);
 		lookup.add(jndiConnFac);
@@ -201,6 +207,7 @@ public class JMSSubscriberGui
     {
         super.configure(el);
 		SubscriberSampler sampler = (SubscriberSampler)el;
+		useProperties.setSelected(sampler.getUseJNDIPropertiesAsBoolean());
 		jndiICF.setText(sampler.getJNDIInitialContextFactory());
 		urlField.setText(sampler.getProviderUrl());
 		jndiConnFac.setText(sampler.getConnectionFactory());
@@ -220,8 +227,19 @@ public class JMSSubscriberGui
      */
     public void actionPerformed(ActionEvent event)
     {
+    	if (event.getSource() == useProperties){
+    	}
     }
 
 	public void stateChanged(ChangeEvent event){
+		if (event.getSource() == useProperties){
+			if (useProperties.isSelected()){
+				this.jndiICF.setEnabled(false);
+				this.urlField.setEnabled(false);
+			} else {
+				this.jndiICF.setEnabled(true);
+				this.urlField.setEnabled(true);
+			}
+		}
 	}
 }
