@@ -57,9 +57,7 @@ package org.apache.jmeter.protocol.http.config.gui;
 
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -151,14 +149,8 @@ public class HttpDefaultsGui extends AbstractConfigGui
 		path = new JLabeledTextField(JMeterUtils.getResString("path"));
 		port = new JLabeledTextField(JMeterUtils.getResString("web_server_port"));
 		JPanel topPanel = new JPanel(new VerticalLayout(5,VerticalLayout.LEFT));
-		JLabel title = new JLabel(JMeterUtils.getResString("url_config_title"));
-		Font curFont = title.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		title.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		
-		topPanel.add(title);
-		topPanel.add(getNamePanel());
+
+		topPanel.add(makeTitlePanel());
 		topPanel.add(protocol);
 		topPanel.add(domain);
 		topPanel.add(path);

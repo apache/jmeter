@@ -1,10 +1,8 @@
 package org.apache.jmeter.protocol.http.control.gui;
 
-import java.awt.Font;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -86,16 +84,8 @@ public class SoapSamplerGui extends AbstractSamplerGui
         Border margin = new EmptyBorder(10, 10, 5, 10);
         mainPanel.setBorder(margin);
         mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-        // TITLE
-        JLabel panelTitleLabel = new JLabel(label);
-        Font curFont = panelTitleLabel.getFont();
-        int curFontSize = curFont.getSize();
-        curFontSize += 4;
-        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-        mainPanel.add(panelTitleLabel);
         // NAME
-        mainPanel.add(getNamePanel());
+        mainPanel.add(makeTitlePanel());
 
         mainPanel.add(urlField);
 

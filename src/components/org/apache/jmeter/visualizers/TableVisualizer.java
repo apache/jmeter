@@ -57,7 +57,6 @@ package org.apache.jmeter.visualizers;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -197,17 +196,8 @@ public class TableVisualizer extends AbstractVisualizer implements GraphListener
         mainPanel.setBorder(margin);
         mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-        // TITLE
-        JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("view_results_in_table"));
-        Font curFont = panelTitleLabel.getFont();
-        int curFontSize = curFont.getSize();
-
-        curFontSize += 4;
-        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-        mainPanel.add(panelTitleLabel);
-
         // NAME
-        mainPanel.add(getNamePanel());
+        mainPanel.add(makeTitlePanel());
         mainPanel.add(getFilePanel());
 
         // Set up the table itself

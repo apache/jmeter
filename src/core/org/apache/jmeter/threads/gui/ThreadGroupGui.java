@@ -53,7 +53,6 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.threads.gui;
-import java.awt.Font;
 import java.util.Collection;
 
 import javax.swing.BorderFactory;
@@ -206,17 +205,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent
         mainPanel.setBorder(margin);
         mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-        // TITLE
-        JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("thread_group_title"));
-        Font curFont = panelTitleLabel.getFont();
-        int curFontSize = curFont.getSize();
-        curFontSize += 4;
-        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-        mainPanel.add(panelTitleLabel);
-
-        // NAME
-        namePanel = getNamePanel();
-        mainPanel.add(namePanel);
+        mainPanel.add(makeTitlePanel());
 
         // THREAD PROPERTIES
         JPanel threadPropsPanel = new JPanel();

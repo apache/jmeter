@@ -58,7 +58,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -112,7 +111,8 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 {
 	transient private static Logger log =
 			Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
-	JPanel all, mainPanel;
+	JPanel all;
+    JScrollPane mainPanel;
 	Box toolPanel;
 	JScrollPane treePanel;
 	JMeterMenuBar menuBar;
@@ -272,10 +272,8 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 	 ***************************************/
 	public void setMainPanel(JComponent comp)
 	{
-		mainPanel.removeAll();
-		comp.validate();
-		mainPanel.add(comp);
-		mainPanel.revalidate();
+        mainPanel.setViewportView(comp);  
+        mainPanel.validate();      
 		mainPanel.repaint();
 	}
 
@@ -364,7 +362,7 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 		}
 		JSplitPane treeAndMain = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		treeAndMain.setLeftComponent(treePanel);
-		treeAndMain.setRightComponent(new JScrollPane(mainPanel));
+		treeAndMain.setRightComponent(mainPanel);
 
 		// The setResizeWeight() method was added to JDK1.3. For now, JMeter should
 		// remain compatible with JDK1.2.
@@ -406,9 +404,7 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 
 	private void createMainPanel()
 	{
-		mainPanel = new JPanel();
-		mainPanel.setLayout(new GridLayout(1, 1));
-		mainPanel.add(Box.createGlue());
+		mainPanel = new JScrollPane(Box.createGlue());
 	}
 
 	private JTree makeTree()

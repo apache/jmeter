@@ -129,18 +129,7 @@ public class JndiConfigGui extends JPanel implements ModelSupported,
       mainPanel.setBorder(margin);
       mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-      // title
-      JLabel panelTitleLabel = new JLabel(
-	JMeterUtils.getResString("jndi_config_title"));
-      Font curFont = panelTitleLabel.getFont();
-      int curFontSize = curFont.getSize();
-      curFontSize += 4;
-      panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-      mainPanel.add(panelTitleLabel);
-
-      // name
-      namePanel = new NamePanel(model);
-      mainPanel.add(namePanel);
+      mainPanel.add(makeTitlePanel());
 
       // jndi properties
       JPanel urlJNDIPanel = new JPanel();

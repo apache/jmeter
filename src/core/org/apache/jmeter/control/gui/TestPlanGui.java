@@ -142,8 +142,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
         this.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 5));
         
         Box northPanel = Box.createVerticalBox();
-        northPanel.add(createTitleLabel());
-        northPanel.add(getNamePanel());
+        northPanel.add(makeTitlePanel());
         add(northPanel, BorderLayout.NORTH);
 
         JPanel southPanel = new JPanel(new BorderLayout());

@@ -1,6 +1,5 @@
 package org.apache.jmeter.protocol.http.modifier.gui;
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -156,17 +155,8 @@ public class ParamModifierGui extends AbstractModifierGui implements FocusListen
         mainPanel.setBorder(margin);
         mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-        // TITLE
-        //JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("url_config_title"));
-        JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("HTML Parameter Mask"));
-        Font curFont = panelTitleLabel.getFont();
-        int curFontSize = curFont.getSize();
-        curFontSize += 4;
-        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-        mainPanel.add(panelTitleLabel);
-
         // NAME
-        mainPanel.add(getNamePanel());
+        mainPanel.add(makeTitlePanel());
 
         // PARAMETER MASK
         mainPanel.add(getParameterMaskPanel());
