@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.Iterator;
 
 import javax.swing.event.ChangeEvent;
+import javax.swing.table.TableCellEditor;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
@@ -26,10 +27,11 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 	private static final String ENCODED_VALUE = JMeterUtils.getResString("encoded_value");
 	private static final String ENCODE_OR_NOT = JMeterUtils.getResString("encode?");
 	
+	
 	protected void initializeTableModel() {
 		tableModel = new PowerTableModel(new String[]{Arguments.COLUMN_NAMES[0],Arguments.COLUMN_NAMES[1],
-				ENCODED_VALUE,ENCODE_OR_NOT},
-				new Class[]{String.class,String.class,String.class,Boolean.class});
+				ENCODE_OR_NOT},
+				new Class[]{String.class,String.class,Boolean.class});
 	}
 	
 	public HTTPArgumentsPanel()
@@ -66,21 +68,6 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 		return (TestElement)args.clone();
 	}
 	
-	private void updateEncodedColumn(int row)
-	{
-		if(((Boolean)tableModel.getValueAt(row,3)).booleanValue())
-		{
-			tableModel.setValueAt(URLEncoder.encode((String)tableModel.getValueAt(row,0))+"="+
-					URLEncoder.encode((String)tableModel.getValueAt(row,1)),row,2);
-		}
-		else
-		{
-			tableModel.setValueAt(tableModel.getValueAt(row,0)+"="+
-					tableModel.getValueAt(row,1),row,2);
-		}
-		tableModel.fireTableDataChanged();
-	}
-	
 	/****************************************
 	 * !ToDo (Method description)
 	 *
@@ -98,29 +85,9 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 			{
 				HTTPArgument arg = (HTTPArgument)iter.next();
 				tableModel.addRow(new Object[]{arg.getName(),arg.getValue(),
-						arg.getEncodedName()+arg.getMetaData()+arg.getEncodedValue(),
 						new Boolean(arg.getAlwaysEncode())});
 			}
 		}
 		checkDeleteStatus();
 	}
-	
-	public void focusLost(FocusEvent e)
-	{
-		super.focusLost(e);
-		for(int x = 0; x < tableModel.getRowCount();x++)
-		{
-			updateEncodedColumn(x);
-		}
-	}
-	
-	public void editingCanceled(ChangeEvent e)
-	{
-	}
-	
-	public void editingStopped(ChangeEvent e)
-	{
-		updateEncodedColumn(((TextAreaTableCellEditor)e.getSource()).getRow());
-	}
-
 }

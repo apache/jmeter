@@ -69,6 +69,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
@@ -308,10 +309,10 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 		TextAreaCellRenderer renderer = new TextAreaCellRenderer();
 		table.setRowHeight(renderer.getPreferredHeight());
 		table.setDefaultRenderer(String.class,renderer);
-		//table.setCellSelectionEnabled(true);
+		table.setCellSelectionEnabled(true);
 		table.setRowSelectionAllowed(true);
-		//table.setColumnSelectionAllowed(false);
-		//table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setColumnSelectionAllowed(false);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		JScrollPane scroller = new JScrollPane(table);
 		Dimension tableDim = scroller.getPreferredSize();
@@ -396,7 +397,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 			gui.tableModel.addNewRow();
 			gui.tableModel.setValueAt("howdy",0,0);
 			gui.tableModel.setValueAt("doody",0,1);
-			assertNull(((Argument)((Arguments)gui.createTestElement()).getArguments().get(0)).getMetaData());
+			assertEquals("=",((Argument)((Arguments)gui.createTestElement()).getArguments().get(0)).getMetaData());
 		}
 	}
 }
