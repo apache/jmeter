@@ -25,7 +25,6 @@ import org.apache.jmeter.testbeans.BeanInfoSupport;
 /**
  * BeanInfo for the ConstantThroughputTimer.
  *
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision$ updated on $Date$
  */
 public class ConstantThroughputTimerBeanInfo extends BeanInfoSupport

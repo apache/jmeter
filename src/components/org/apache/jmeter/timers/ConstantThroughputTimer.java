@@ -30,8 +30,6 @@ import org.apache.log.Logger;
  * Timer paces the samplers under it's influence so that the total number of
  * samples per unit of time approaches a given constant as much as possible.
  *
- * @author <a href="mailto:jsalvata@atg.com">Jordi Salvat i Alabart</a>
- * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
  */
 public class ConstantThroughputTimer
