@@ -307,6 +307,17 @@ public class JMeterTest extends JMeterTestCase
 			System.out.println("objects.size="+objects.size());
     	}
     }
+    if (objects.size() == 0){
+    	System.out.println("No classes found. Check the following:");
+    	System.out.println("Search paths are:");
+	    String ss[] = JMeterUtils.getSearchPaths();
+	    for (int i=0;i<ss.length;i++){
+		    System.out.println(ss[i]);
+		}
+        System.out.println("Class path is:");
+	    System.out.println(System.getProperty("java.class.path"));
+	}
+
         assertTrue("Expected to find some classes that extend "+exName,objects.size() > 0);
         return objects;
     }
