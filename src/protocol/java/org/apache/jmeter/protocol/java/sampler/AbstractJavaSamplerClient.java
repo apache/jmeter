@@ -55,7 +55,7 @@
 package org.apache.jmeter.protocol.java.sampler;
 
 import org.apache.jmeter.config.Arguments;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -98,8 +98,7 @@ public abstract class AbstractJavaSamplerClient implements JavaSamplerClient
      * 
      * @see #getLogger()
      */
-    private static transient Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
+    private static transient Logger log = LoggingManager.getLoggerForClass();
 
     /* Implements JavaSamplerClient.setupTest(JavaSamplerContext) */
     public void setupTest(JavaSamplerContext context)

@@ -68,8 +68,8 @@ import javax.swing.SwingUtilities;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
-import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
 /**
@@ -85,7 +85,7 @@ public class ActionRouter implements ActionListener
     private Map commands = new HashMap();
     private static ActionRouter router;
     private static AddToTree add = new AddToTree();
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     private Map preActionListeners = new HashMap();
     private Map postActionListeners = new HashMap();
 

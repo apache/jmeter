@@ -14,7 +14,7 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.PropertyIteratorImpl;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /****************************************
@@ -27,7 +27,7 @@ import org.apache.log.Logger;
 
 public abstract class AbstractTestElement implements TestElement, Serializable
 {
-    protected static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+    protected static Logger log = LoggingManager.getLoggerForClass();
 
     private Map propMap = Collections.synchronizedMap(new HashMap());
 

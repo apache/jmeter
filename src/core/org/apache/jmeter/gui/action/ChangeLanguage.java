@@ -73,7 +73,7 @@ public class ChangeLanguage implements Command
 {
 	private static final Set commands = new HashSet();
 	public final static String CHANGE_LANGUAGE = "change_language";
-	private Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
+	private Logger log = LoggingManager.getLoggerForClass();
 	
 	static
 	{

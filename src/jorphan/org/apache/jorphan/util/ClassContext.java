@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,86 +53,51 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.jmeter.gui.action;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.testelement.TestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
-
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
+/*
+ * Created on 05-Jun-2003
  *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
+ */
+package org.apache.jorphan.util;
 
-public class AddParent implements Command
-{
-	transient private static Logger log = LoggingManager.getLoggerForClass();
-	private static Set commands = new HashSet();
-	static
-	{
-		commands.add("Add Parent");
+/**
+ * Class to get access to the protected getClassContext() method of SecurityManager,
+ * thus obtaining the call stack.
+ * 
+ * May not work with applications that install their own security managers
+ * 
+ * @author
+ * @version $Id$
+ *
+ */
+public class ClassContext extends SecurityManager {
+	private ClassContext(){// don't allow others to instantiate this
 	}
-
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public AddParent() { }
-
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void doAction(ActionEvent e)
+	
+	private static ClassContext _instance= new ClassContext();
+	
+	/*
+	 * N.B. Both static routines pick up the instance context directly
+	 * This ensures that both return the same stack depth
+	 */
+	 
+	/**
+	 * Gets the calling context as an array of classes
+	 * Class[0] is this class.
+	 *  
+	 * @return Class[] - list of classes in the callers context
+	 */
+	public static Class[] getMyClassContext()
 	{
-		String name = ((Component)e.getSource()).getName();
-		try
-		{
-			TestElement controller = (TestElement)GuiPackage.getInstance().createTestElement(name);
-			addParentToTree(controller);
-		}
-		catch(Exception err)
-		{
-			log.error("",err);
-		}
-
+		return _instance.getClassContext();
 	}
-
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public Set getActionNames()
-	{
-		return commands;
-	}
-
-	/****************************************
-	 * !ToDo
-	 *
-	 *@param newParent  !ToDo
-	 ***************************************/
-	protected void addParentToTree(TestElement newParent)
-	{
-		GuiPackage guiPackage = GuiPackage.getInstance();
-		JMeterTreeNode newNode = new JMeterTreeNode(newParent, guiPackage.getTreeModel());
-		JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
-		JMeterTreeNode parentNode = (JMeterTreeNode)currentNode.getParent();
-		int index = parentNode.getIndex(currentNode);
-		guiPackage.getTreeModel().removeNodeFromParent(currentNode);
-		guiPackage.getTreeModel().insertNodeInto(newNode,
-				(JMeterTreeNode)parentNode, index);
-		guiPackage.getTreeModel().insertNodeInto(currentNode, newNode,
-				newNode.getChildCount());
+	/**
+	 * Get the name of the class at a particular stack depth
+	 * i=0 gives this class
+	 * 
+	 * @param i - stack depth
+	 * @return String - name of class at depth i
+	 */
+	public static String getCallerClassNameAt(int i){
+		return _instance.getClassContext()[i].getName();
 	}
 }
