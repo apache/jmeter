@@ -99,7 +99,7 @@ public class MailReaderSamplerGui
 	public void configure(TestElement element)
 	{
 		MailReaderSampler mrs = (MailReaderSampler)element;
-		if(mrs.getServerType() == MailReaderSampler.TYPE_POP3)
+		if(mrs.getServerType().equals(MailReaderSampler.TYPE_POP3))
 		{
 			serverTypeBox.setSelectedItem(POP3Label);
 			folderBox.setText("INBOX");
@@ -149,7 +149,7 @@ public class MailReaderSamplerGui
 		
 		MailReaderSampler mrs = (MailReaderSampler)te;
 		
-		if(((String)serverTypeBox.getSelectedItem()) == POP3Label) 
+		if(((String)serverTypeBox.getSelectedItem()).equals(POP3Label)) 
 			mrs.setServerType(MailReaderSampler.TYPE_POP3);
 		else
 			mrs.setServerType(MailReaderSampler.TYPE_IMAP);
