@@ -23,7 +23,6 @@ overall performance under different load types. You can use it to make a
 graphical analysis of performance or to test your server/script/object
 behavior under heavy concurrent load.
 </p>
-<p><a HREF="usermanual/index.html">Using JMeter</a></p>
 <h2>What does it do?</h2>
 <p>Apache JMeter features include:</p>
 <ul>
@@ -42,8 +41,16 @@ behavior under heavy concurrent load.
 		<li>Several load statistics may be choosen with <b>pluggable timers</b>.</li>
 		<li>Data analysis and <b>visualization plugins</b> allow great extendibility
 		as well as personalization.</li>
+		<li>Functions (which include JavaScript) can be used to provide dynamic input to a test</li>
+		<li>Scriptable Samplers (BeanShell is supported in version 1.9.2 and above)</li>
 	  </ul>
 	</li>
+</ul>
+<h2>How do I do it?</h2>
+<ul>
+<li><a href="usermanual/index.html">Using JMeter</a></li>
+<li><a href="extending/index.html">Extending JMeter (Developer Manual)</a></li>
+<li><a href="api/index.html">Javadoc API documentation</a></li>
 </ul>
 </section>
 </body>
