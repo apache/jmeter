@@ -286,6 +286,10 @@ public class ResponseAssertion
       boolean pass = true;
       boolean not = (NOT & getTestType()) > 0;
       AssertionResult result = new AssertionResult();
+      if(response.getResponseData() == null)
+      {
+          return setResultForNull(result);
+      }
       String responseString = new String(response.getResponseData());
       try
       {
@@ -334,6 +338,13 @@ public class ResponseAssertion
       }
       return result;
    }
+protected AssertionResult setResultForNull(AssertionResult result)
+{
+    result.setError(false);
+      result.setFailure(true);
+      result.setFailureMessage("Response was null");
+      return result;
+}
    public static class Test extends junit.framework.TestCase
    {
       int threadsRunning;
