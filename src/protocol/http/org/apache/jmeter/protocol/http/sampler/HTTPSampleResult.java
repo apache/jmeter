@@ -80,26 +80,15 @@ public class HTTPSampleResult extends SampleResult
      * Construct a 'parent' result for an already-existing result, essentially
      * cloning it
      * 
-     * The start-time is set from the existing sample.
-     *  
      * @param res existing sample result
      */
     public HTTPSampleResult(HTTPSampleResult res)
     {
-        setStartTime(res.getStartTime());
+    	super(res);
 
-        setSampleLabel(res.getSampleLabel());
         setHTTPMethod(res.getHTTPMethod());
         setURL(res.getURL());
-        setRequestHeaders(res.getRequestHeaders());
-        setResponseData(res.getResponseData());
-        setResponseCode(res.getResponseCode());
-        setSuccessful(res.isSuccessful());
-        setResponseMessage(res.getResponseMessage());
-        setDataType(res.getDataType());
-        setResponseHeaders(res.getResponseHeaders());
         setCookies(res.getCookies());
-        addSubResult(res);
     }
 
     private URL location;
