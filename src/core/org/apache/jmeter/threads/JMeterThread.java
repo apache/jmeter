@@ -92,6 +92,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
     TestCompiler compiler;
     JMeterThreadMonitor monitor;
     String threadName;
+	JMeterContext threadContext;
     JMeterVariables threadVars;
     Collection threadListeners;
     ListenerNotifier notifier;
@@ -125,6 +126,8 @@ public class JMeterThread implements Runnable, java.io.Serializable
     {
         try
         {
+        	threadContext = JMeterContextService.getContext();
+        	threadContext.setVariables(threadVars);
             initializeThreadListeners();
             testTree.traverse(compiler);
             running = true;
@@ -147,6 +150,8 @@ public class JMeterThread implements Runnable, java.io.Serializable
                         SampleResult result = pack.getSampler().sample(null);
                         result.setThreadName(threadName);
                         result.setTimeStamp(System.currentTimeMillis());
+						threadContext.setPreviousResult(result);
+						threadContext.setCurrentSampler(pack.getSampler());
                         checkAssertions(pack.getAssertions(), result);
                         runExtractors(pack.getExtractors(), result);
                         notifyListeners(pack.getSampleListeners(), result);
@@ -198,8 +203,8 @@ public class JMeterThread implements Runnable, java.io.Serializable
         Iterator iter = extractors.iterator();
         while (iter.hasNext())
         {
-            PostProcessor ex = (PostProcessor) iter.next();
-            ex.process(result);
+			PostProcessor ex = (PostProcessor) iter.next();
+			ex.process(result);
         }
     }
 
