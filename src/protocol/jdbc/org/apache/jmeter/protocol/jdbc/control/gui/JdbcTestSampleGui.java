@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,10 +53,12 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.jdbc.control.gui;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 
+import javax.swing.JPanel;
+
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.jdbc.config.gui.DbConfigGui;
 import org.apache.jmeter.protocol.jdbc.config.gui.PoolConfigGui;
 import org.apache.jmeter.protocol.jdbc.config.gui.SqlConfigGui;
@@ -64,7 +66,6 @@ import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Title: Description: Copyright: Copyright (c) 2001 Company:
@@ -77,9 +78,9 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 public class JdbcTestSampleGui extends AbstractSamplerGui
 {
 
-	PoolConfigGui poolGui;
-	DbConfigGui dbGui;
-	SqlConfigGui sqlGui;
+	private PoolConfigGui poolGui;
+	private DbConfigGui dbGui;
+	private SqlConfigGui sqlGui;
 
 
 	/****************************************
@@ -125,29 +126,29 @@ public class JdbcTestSampleGui extends AbstractSamplerGui
 
 	private void init()
 	{
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
+        
+		add(makeTitlePanel(), BorderLayout.NORTH);
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+        JPanel mainPanel = new JPanel(new BorderLayout(0, 5));
 
-		// NAME
-		mainPanel.add(makeTitlePanel());
-
-		// DATABASE
+        VerticalPanel connPanel = new VerticalPanel();        
 		dbGui = new DbConfigGui(false);
-		mainPanel.add(dbGui);
+		connPanel.add(dbGui);
 
-		// CONNECTION POOL
 		poolGui = new PoolConfigGui(false);
-		mainPanel.add(poolGui);
+		connPanel.add(poolGui);
 
-		// SQL
+        mainPanel.add(connPanel, BorderLayout.NORTH);
+        
 		sqlGui = new SqlConfigGui(false);
-		mainPanel.add(sqlGui);
+		mainPanel.add(sqlGui, BorderLayout.CENTER);
 
-		this.add(mainPanel);
+		add(mainPanel, BorderLayout.CENTER);
 	}
+    
+    public Dimension getPreferredSize() {
+        return getMinimumSize();
+    }
 }
