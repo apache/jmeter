@@ -118,6 +118,13 @@ public class ResponseAssertion
       setTestType(type);
       getTestStrings().add(string);
    }
+   
+   public void clear()
+   {
+       super.clear();
+       setProperty(TEST_STRINGS, new ArrayList());
+   }
+   
    /************************************************************
     *  !ToDo (Method description)
     *

@@ -136,6 +136,7 @@ public class AssertionGui extends AbstractAssertionGui implements FocusListener
         if (el instanceof ResponseAssertion)
         {
             ResponseAssertion ra = (ResponseAssertion) el;
+            ra.clearTestStrings();
             String[] testStrings = tableModel.getData().getColumn(COL_NAME);
             for (int i = 0; i < testStrings.length; i++)
             {

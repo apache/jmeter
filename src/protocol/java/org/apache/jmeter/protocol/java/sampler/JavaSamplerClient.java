@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,41 +54,111 @@
  */
 package org.apache.jmeter.protocol.java.sampler;
 
-import java.util.HashMap;
-
+import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.SampleResult;
+
 /**
- *<code>JavaSamplerClient</code> provides a standard
- * interface to execute external Java programs within JMeter.
+ * This interface defines the interactions between the JavaSampler
+ * and external Java programs which can be executed by JMeter.  Any
+ * Java class which wants to be executed as a JMeter test must
+ * implement this interface (either directly or indirectly through
+ * AbstractJavaSamplerClient).
+ * <p>
+ * JMeter will create one instance of a JavaSamplerClient implementation
+ * for each user/thread in the test.  Additional instances may be
+ * created for internal use by JMeter (for example, to find out
+ * what parameters are supported by the client).
+ * <p>
+ * When the test is started, setupTest() will be called on each
+ * thread's JavaSamplerClient instance to initialize the client.
+ * Then runTest() will be called for each iteration of the test.
+ * Finally, teardownTest() will be called to allow the client
+ * to do any necessary clean-up.
+ * <p>
+ * The JMeter JavaSampler GUI allows a list of parameters to be
+ * defined for the test.  These are passed to the various test
+ * methods through the JavaSamplerContext.  A list of default
+ * parameters can be defined through the getDefaultParameters()
+ * method.  These parameters and any default values associated
+ * with them will be shown in the GUI.  Users can add other
+ * parameters as well.
+ * <p>
+ * While it may be necessary to make changes to the JavaSamplerClient
+ * interface from time to time (therefore requiring changes to any
+ * implementations of this interface), we intend to make this abstract
+ * class provide reasonable implementations of any new methods so that
+ * subclasses do not necessarily need to be updated for new versions.
+ * Therefore, when creating a new JavaSamplerClient implementation,
+ * developers are encouraged to subclass this abstract class rather
+ * than implementing the JavaSamplerClient interface directly.
+ * Implementing JavaSamplerClient directly will continue to be
+ * supported for cases where extending this class is not possible
+ * (for example, when the client class is already a subclass of some
+ * other class).
+ * 
+ * @see JavaSamplerContext
  * 
  * @author Brad Kiewel
+ * @author Jeremy Arnold
  * @version $Revision$
  */
 
 public interface JavaSamplerClient {
-	
-	/**
-	 * Setup any resources need for each test run.
-	 */
 
-	public void setupTest(HashMap arguments);
-	
-	/**
-	 * Perform any clean up at the end of a test run.
-	 */
+    /**
+     * Do any initialization required by this client.  It is
+     * generally recommended to do any initialization such as
+     * getting parameter values in the setupTest method rather
+     * than the runTest method in order to add as little overhead
+     * as possible to the test.
+     * 
+     * @param context  the context to run with. This provides access
+     *                  to initialization parameters.
+     */
+    public void setupTest(JavaSamplerContext context);
 
-	public void teardownTest(HashMap arguments);
-	
-	/**
-	 * Performs test for each iteration.
-	 * 
-	 * The <code>runTest()</code> method performs one test interation 
-	 * each time it is called.  The method returns a SampleResult object.
-	 * The method should, has a minimum, place the response time in 
-	 * the SampleResult object.
-	 * 
-	 * @return SampleResult object with results of the test run.
-	 */
+    /**
+     * Perform a single sample for each iteration.  This method
+     * returns a <code>SampleResult</code> object.
+     * <code>SampleResult</code> has many fields which can be
+     * used.  At a minimum, the test should use
+     * <code>SampleResult.setTime</code> to set the time that
+     * the test required to execute.  It is also a good idea to
+     * set the sampleLabel and the successful flag.
+     * 
+     * @see org.apache.jmeter.samplers.SampleResult.setTime(long)
+     * @see org.apache.jmeter.samplers.SampleResult.setSuccessful(boolean)
+     * @see org.apache.jmeter.samplers.SampleResult.setSampleLabel(java.lang.String)
+     * 
+     * @param context  the context to run with. This provides access
+     *                 to initialization parameters.
+     * 
+     * @return         a SampleResult giving the results of this
+     *                 sample.
+     */
+    public SampleResult runTest(JavaSamplerContext context);
 
-	public SampleResult runTest(HashMap arguments);
+    /**
+     * Do any clean-up required by this test at the end of a test run.
+     * 
+     * @param context  the context to run with. This provides access
+     *                  to initialization parameters.
+     */
+    public void teardownTest(JavaSamplerContext context);
+
+    /**
+     * Provide a list of parameters which this test supports.  Any
+     * parameter names and associated values returned by this method
+     * will appear in the GUI by default so the user doesn't have
+     * to remember the exact names.  The user can add other parameters
+     * which are not listed here.  If this method returns null then
+     * no parameters will be listed.  If the value for some parameter
+     * is null then that parameter will be listed in the GUI with
+     * an empty value.
+     * 
+     * @return  a specification of the parameters used by this
+     *          test which should be listed in the GUI, or null
+     *          if no parameters should be listed.
+     */
+    public Arguments getDefaultParameters();
 }
