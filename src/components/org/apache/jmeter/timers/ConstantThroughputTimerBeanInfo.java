@@ -59,7 +59,7 @@ package org.apache.jmeter.timers;
 
 import java.beans.PropertyDescriptor;
 
-import org.apache.jmeter.testbeans.gui.BeanInfoSupport;
+import org.apache.jmeter.testbeans.BeanInfoSupport;
 
 public class ConstantThroughputTimerBeanInfo extends BeanInfoSupport
 {
