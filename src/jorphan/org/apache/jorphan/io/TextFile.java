@@ -71,8 +71,7 @@ import org.apache.log.Logger;
  */
 public class TextFile extends File
 {
-    transient private static Logger log =
-        LoggingManager.getLoggerFor("jorphan.io");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     public TextFile(File filename)
     {

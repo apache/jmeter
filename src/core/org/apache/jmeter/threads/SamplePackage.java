@@ -11,7 +11,6 @@ import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.Timer;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -21,7 +20,7 @@ import org.apache.log.Logger;
  */
 public class SamplePackage
 {
-    private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.ENGINE);
+    private static Logger log = LoggingManager.getLoggerForClass();
     List sampleListeners = new LinkedList();
     List timers = new LinkedList();
     List assertions = new LinkedList();

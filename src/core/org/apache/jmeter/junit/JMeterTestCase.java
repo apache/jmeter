@@ -8,7 +8,6 @@ package org.apache.jmeter.junit;
 
 import junit.framework.TestCase;
 
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -26,7 +25,6 @@ public abstract class JMeterTestCase extends TestCase
         super(name);
     }
     
-    protected static Logger testLog = 
-LoggingManager.getLoggerFor(JMeterUtils.TEST);
+    protected static Logger testLog = LoggingManager.getLoggerForClass();
 }
 

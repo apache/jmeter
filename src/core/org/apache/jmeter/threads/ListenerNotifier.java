@@ -7,7 +7,6 @@ import org.apache.commons.collections.BufferUtils;
 import org.apache.commons.collections.UnboundedFifoBuffer;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -30,8 +29,7 @@ import org.apache.log.Logger;
  */
 public class ListenerNotifier
 {
-    private static Logger log =
-        LoggingManager.getLoggerFor(JMeterUtils.ENGINE);
+    private static Logger log = LoggingManager.getLoggerForClass();
 
     /**
      * The number of milliseconds between batches of notifications.

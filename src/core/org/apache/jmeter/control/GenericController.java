@@ -70,7 +70,6 @@ import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -83,8 +82,7 @@ public class GenericController
     extends AbstractTestElement
     implements Controller, Serializable
 {
-    protected static Logger log =
-        LoggingManager.getLoggerFor(JMeterUtils.ELEMENTS);
+    protected static Logger log = LoggingManager.getLoggerForClass();
 
     protected LinkedList iterationListeners = new LinkedList();
     protected List subControllersAndSamplers = new ArrayList();

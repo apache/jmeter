@@ -10,7 +10,6 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -21,8 +20,7 @@ public class CounterConfig
     extends AbstractTestElement
     implements Serializable, LoopIterationListener, NoThreadClone
 {
-    private static Logger log =
-        LoggingManager.getLoggerFor(JMeterUtils.ELEMENTS);
+    private static Logger log = LoggingManager.getLoggerForClass();
     public final static String START = "CounterConfig.start";
     public final static String END = "CounterConfig.end";
     public final static String INCREMENT = "CounterConfig.incr";

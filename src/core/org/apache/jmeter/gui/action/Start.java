@@ -78,7 +78,7 @@ import org.apache.log.Logger;
  */
 public class Start extends AbstractAction
 {
-    private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
+    private static Logger log = LoggingManager.getLoggerForClass();
 
     private static Set commands = new HashSet();
     static {
