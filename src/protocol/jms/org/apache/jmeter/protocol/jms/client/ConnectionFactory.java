@@ -93,7 +93,7 @@ public class ConnectionFactory implements TestListener {
 					factory = (TopicConnectionFactory)objfac;
 				}
 			} catch (NamingException e){
-				log.error(e.getMessage());
+				log.error(e.getCause().toString());
 			}
 		}
 		return factory;
