@@ -67,6 +67,7 @@ public class JMeterTest extends JMeterTestCase
     private static Logger log = LoggingManager.getLoggerForClass();
     
     private static Map guiTitles;
+    private static Map guiTags;
 	private static Map funcTitles;
 
     public JMeterTest(String name)
@@ -142,6 +143,7 @@ public class JMeterTest extends JMeterTestCase
 
     	TestSuite suite = new TestSuite();
     	suite.addTest(new JMeterTest("createTitleSet"));
+    	suite.addTest(new JMeterTest("createTagSet"));
     	suite.addTest(suiteGUIComponents());
 		suite.addTest(suiteSerializableElements());
 		suite.addTest(suiteTestElements());
@@ -177,6 +179,29 @@ public class JMeterTest extends JMeterTestCase
 		// Add titles that don't need to be documented
 		guiTitles.put("Root",Boolean.FALSE);
 		guiTitles.put("Example Sampler",Boolean.FALSE);
+    }
+
+    /*
+     * Extract titles from component_reference.xml
+     */
+    public void createTagSet() throws Exception
+    {
+		guiTags = new HashMap(90);
+		
+    	String compref = "../xdocs/usermanual/component_reference.xml";
+		SAXBuilder bldr = new SAXBuilder();
+		Document doc;
+        doc = bldr.build(compref);
+		Element root = doc.getRootElement();
+		Element body = root.getChild("body");
+		List sections = body.getChildren("section");
+		for (int i = 0; i< sections.size();i++){
+			List components = ((Element) sections.get(i)).getChildren("component");
+			for (int j = 0; j <components.size();j++){
+				Element comp = (Element) components.get(j);
+				guiTags.put(comp.getAttributeValue("tag"),Boolean.FALSE); 
+			}
+		}
     }
 
 	/*
@@ -384,6 +409,12 @@ public class JMeterTest extends JMeterTestCase
             "Name should be same as static label for " + name,
             guiItem.getStaticLabel(),
             guiItem.getName());
+        if (!name.endsWith("TestBeanGUI"))
+        {
+        	String label = guiItem.getLabelResource();
+            assertTrue(label.length() > 0);
+            assertFalse(JMeterUtils.getResString(label).startsWith(JMeterUtils.RES_KEY_PFX));
+        }
     }
 
 
