@@ -1,6 +1,6 @@
 //$Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Copyright 2003-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -511,8 +511,6 @@ public class LDAPExtSampler extends AbstractSampler  {
      ***********************************************************/
     public ModificationItem[] getUserModAttributes() {
         ModificationItem[] mods =new  ModificationItem[getLDAPArguments().getArguments().size()];
-        boolean add =true;
-        BasicAttributes attrs = new BasicAttributes(true);
         BasicAttribute attr;
         PropertyIterator iter = getLDAPArguments().iterator();
         int count =0;
