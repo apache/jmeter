@@ -873,6 +873,23 @@ For example:
 </properties>
 </component>
 
+<component name="Switch Controller" index="15.2.14" screenshot="">
+	<description>
+<note>ALPHA CODE</note>
+<p>
+The Switch Controller acts like the <complink name="Interleave Controller"/> 
+in that it runs one of the subordinate elements on each iteration, but rather than
+run them in sequence, the controller runs the element number defined by the switch value.
+</p>
+<p>If the switch value is out of range, it will run the zeroth element, 
+which therefore acts as the default.</p>
+</description>
+<properties>
+	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+	<property name="Switch Value" required="Yes">The number of the subordinate element to be invoked. Elements are numbered from 0.</property>
+</properties>
+</component>
+
 </section>
 
 <section name="15.3 Listeners" anchor="listeners">
