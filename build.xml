@@ -1,6 +1,7 @@
 <project name="JMeter" default="all" basedir=".">
 <target name="init">
 <property name="build.compiler" value="classic"/>
+<property name="version" value="_1.5beta"/>
 </target>
 <target name="compile" depends="init">
 <mkdir dir="bin/classes"/>
@@ -26,7 +27,10 @@
 </target>
 <target name="all" depends="install"/>
 <target name="dist" depends="install">
-<jar jarfile="../ApacheJMeter${version}.jar" basedir="../" items="jmeter"/>
+<jar jarfile="../ApacheJMeter${version}.jar" basedir="../" includes="jmeter/**"/>
+<zip zipfile="../ApacheJMeter${version}.zip" basedir="../" includes="jmeter/**"/>
+<tar tarfile="../ApacheJMeter${version}.tar" basedir="../" includes="jmeter/**" /> 
+<gzip zipfile="$../ApacheJMeter${version}.tar.gz" src="../ApacheJMeter${version}.tar" />
 </target> 
 <target name="clean">
 <delete file="ApacheJMeter.jar"/>
