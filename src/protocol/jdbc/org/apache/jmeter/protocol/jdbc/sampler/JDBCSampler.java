@@ -187,6 +187,8 @@ public class JDBCSampler extends AbstractSampler implements TestListener
 			}
 			stmt.close();
 			manager.releaseConnection(con);
+			res.setResponseData(data.toString().getBytes());
+			res.setSuccessful(true);
 		}
 		catch (Exception ex)
 		{
@@ -213,15 +215,15 @@ public class JDBCSampler extends AbstractSampler implements TestListener
 				}
 			}
 			manager.releaseConnection(con);
-			log.error("", ex);
+			log.error("Error in JDBC sampling", ex);
+			res.setResponseData(new byte[0]);
+			res.setSuccessful(false);
 		}
 		// Calculate response time
 		end = System.currentTimeMillis();
 		time += end - start;
 		res.setTime(time);
-		res.setResponseData(data.toString().getBytes());
 		res.setSamplerData(this);
-		res.setSuccessful(true);
 		return res;
 	}
 	public String getUrl()
