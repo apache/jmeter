@@ -53,21 +53,26 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.visualizers;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
-import junit.framework.*;
-import org.apache.jmeter.gui.*;
-import org.apache.jmeter.gui.tree.*;
-import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFull;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
+
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.samplers.Sampler;
-import org.apache.log4j.*;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 /****************************************
  * Allows the tester to view the textual response from sampling an Entry. This
  * also allows to "single step through" the sampling process via a nice
@@ -123,8 +128,7 @@ public abstract class TreeVisualizer extends JPanel
 
 	ResultCollector model;
 
-	private static Category catClass =
-			Category.getInstance(TreeVisualizer.class.getName());
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
 	//----- TreeSelectionListener interface : end -----
 
@@ -135,8 +139,8 @@ public abstract class TreeVisualizer extends JPanel
 	{
 		super();
 		this.setLayout(new GridLayout(1, 1));
-		catClass.debug("Start : TreeVisualizer1");
-		catClass.debug("End : TreeVisualizer1");
+		log.debug("Start : TreeVisualizer1");
+		log.debug("End : TreeVisualizer1");
 	}
 
 	//----- ModelSupported interface : start -----
@@ -148,11 +152,11 @@ public abstract class TreeVisualizer extends JPanel
 	 ***************************************/
 	public void setModel(Object model)
 	{
-		catClass.debug("Start : setModel1");
+		log.debug("Start : setModel1");
 		this.model = (ResultCollector)model;
 		this.model.setListener(this);
 		init();
-		catClass.debug("End : setModel1");
+		log.debug("End : setModel1");
 	}
 
 	/****************************************
@@ -176,11 +180,11 @@ public abstract class TreeVisualizer extends JPanel
 	 ***************************************/
 	public void clear()
 	{
-		catClass.debug("Start : clear1");
+		log.debug("Start : clear1");
 		int totalChild = root.getChildCount();
-		if(catClass.isDebugEnabled())
+		if(log.isDebugEnabled())
 		{
-			catClass.debug("clear1 : total child - " + totalChild);
+			log.debug("clear1 : total child - " + totalChild);
 		}
 		for(int i = 0; i < totalChild; i++)
 		{
@@ -193,7 +197,7 @@ public abstract class TreeVisualizer extends JPanel
 		resultPanel.repaint();
 		// reset the child index
 		childIndex = 0;
-		catClass.debug("End : clear1");
+		log.debug("End : clear1");
 	}
 
 	/****************************************
@@ -208,7 +212,7 @@ public abstract class TreeVisualizer extends JPanel
 	 ***************************************/
 	protected void init()
 	{
-		catClass.debug("Start : init1");
+		log.debug("Start : init1");
 		SampleResult rootSampleResult = new SampleResult();
 		rootSampleResult.setSampleLabel("Root");
 		root = new DefaultMutableTreeNode(rootSampleResult);
@@ -226,6 +230,6 @@ public abstract class TreeVisualizer extends JPanel
 		treeSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 				treePane, resultPane);
 		add(treeSplitPane);
-		catClass.debug("End : init1");
+		log.debug("End : init1");
 	}
 }

@@ -54,23 +54,27 @@
  */
 package org.apache.jmeter.protocol.http.sampler;
 
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
-import org.apache.jmeter.protocol.http.config.*;
-import org.apache.jmeter.samplers.*;
-
-import java.util.*;
-import java.net.*;
-
-import javax.swing.ImageIcon;
-
-import org.apache.log4j.*;
+import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import junit.framework.TestResult;
 
-import java.io.*;
-import org.w3c.dom.*;
+import org.apache.jmeter.samplers.Entry;
+import org.apache.jmeter.samplers.SampleResult;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
 import org.xml.sax.SAXException;
 
@@ -120,8 +124,7 @@ import org.xml.sax.SAXException;
 public class HTTPSamplerFull extends HTTPSampler
 {
 	/** Used to store the Logger (used for debug and error messages). */
-	protected static Category catClass =
-		Category.getInstance(HTTPSamplerFull.class.getName());
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
 
 	/**
 	 * Used to store the UTF encoding name (which is version dependent).
@@ -144,8 +147,8 @@ public class HTTPSamplerFull extends HTTPSampler
 	public HTTPSamplerFull()
 	{
 		super();
-		catClass.debug("Start : HTTPSamplerFull");
-		catClass.debug("End   : HTTPSamplerFull");
+		log.debug("Start : HTTPSamplerFull");
+		log.debug("End   : HTTPSamplerFull");
 	}
 
 	/**
@@ -163,11 +166,11 @@ public class HTTPSamplerFull extends HTTPSampler
 	public SampleResult sample(Entry e)
 	{
 		// Sample the container page.
-		catClass.debug("Start : HTTPSamplerFull sample");
+		log.debug("Start : HTTPSamplerFull sample");
 		SampleResult res = super.sample(e);
-		if(catClass.isDebugEnabled())
+		if(log.isDebugEnabled())
 		{
-			catClass.debug("Main page loading time - " + res.getTime());
+			log.debug("Main page loading time - " + res.getTime());
 		}
 
 		// Now parse the HTML page
@@ -176,15 +179,15 @@ public class HTTPSamplerFull extends HTTPSampler
 		try
 		{
 			baseUrl = getUrl();
-			if(catClass.isDebugEnabled())
+			if(log.isDebugEnabled())
 			{
-				catClass.debug("baseUrl - " + baseUrl.toString());
+				log.debug("baseUrl - " + baseUrl.toString());
 			}
 			html = (Document)getDOM(new String(res.getResponseData()));
 		}
 		catch(SAXException se)
 		{
-			catClass.error("Error parsing document - " + se);
+			log.error("Error parsing document - " + se);
 			res.setResponseData(se.toString().getBytes());
 			res.setResponseCode(NON_HTTP_RESPONSE_CODE);
 			res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
@@ -193,8 +196,8 @@ public class HTTPSamplerFull extends HTTPSampler
 		}
 		catch(MalformedURLException mfue)
 		{
-			catClass.error("Error creating URL '" + displayName + "'");
-			catClass.error("MalformedURLException - " + mfue);
+			log.error("Error creating URL '" + displayName + "'");
+			log.error("MalformedURLException - " + mfue);
 			res.setResponseData(mfue.toString().getBytes());
 			res.setResponseCode(NON_HTTP_RESPONSE_CODE);
 			res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
@@ -222,11 +225,11 @@ public class HTTPSamplerFull extends HTTPSampler
 		parseNodes(html, "body", false, "background", uniqueURLs, res);
 
 		// Okay, we're all done now
-		if(catClass.isDebugEnabled())
+		if(log.isDebugEnabled())
 		{
-			catClass.debug("Total time - " + res.getTime());
+			log.debug("Total time - " + res.getTime());
 		}
-		catClass.debug("End   : HTTPSamplerFull sample");
+		log.debug("End   : HTTPSamplerFull sample");
 		return res;
 	}
 
@@ -244,7 +247,7 @@ public class HTTPSamplerFull extends HTTPSampler
 	protected void parseNodes(Document html, String htmlTag, boolean type, String srcTag,
 					Set uniques, SampleResult res)
 	{
-		catClass.debug("Start : HTTPSamplerFull parseNodes");
+		log.debug("Start : HTTPSamplerFull parseNodes");
 		NodeList nodeList = html.getElementsByTagName(htmlTag);
 		boolean uniqueBinary;
 		SampleResult binRes = null;
@@ -252,9 +255,9 @@ public class HTTPSamplerFull extends HTTPSampler
 		{
 			uniqueBinary = true;
 			Node tempNode = nodeList.item(i);
-			if(catClass.isDebugEnabled())
+			if(log.isDebugEnabled())
 			{
-				catClass.debug("'" + htmlTag + "' tag: " + tempNode);
+				log.debug("'" + htmlTag + "' tag: " + tempNode);
 			}
 
 			// get the url of the Binary
@@ -267,13 +270,13 @@ public class HTTPSamplerFull extends HTTPSampler
 				namedItem = nnm.getNamedItem("type");
 				if(namedItem == null)
 				{
-					catClass.debug("namedItem 'null' - ignoring");
+					log.debug("namedItem 'null' - ignoring");
 					break;
 				}
 				String inputType = namedItem.getNodeValue();
-				if(catClass.isDebugEnabled())
+				if(log.isDebugEnabled())
 				{
-					catClass.debug("Input type - " + inputType);
+					log.debug("Input type - " + inputType);
 				}
 				if(inputType != null && inputType.equalsIgnoreCase("image"))
 				{
@@ -281,7 +284,7 @@ public class HTTPSamplerFull extends HTTPSampler
 				}
 				else
 				{
-					catClass.debug("type != 'image' - ignoring");
+					log.debug("type != 'image' - ignoring");
 					break;
 				}
 			}
@@ -305,9 +308,9 @@ public class HTTPSamplerFull extends HTTPSampler
 			}
 			catch(MalformedURLException mfue)
 			{
-				catClass.error("Error creating URL '" + baseUrl +
+				log.error("Error creating URL '" + baseUrl +
 						" , " + binUrlStr + "'");
-				catClass.error("MalformedURLException - " + mfue);
+				log.error("MalformedURLException - " + mfue);
 				binRes.setResponseData(mfue.toString().getBytes());
 				binRes.setResponseCode(NON_HTTP_RESPONSE_CODE);
 				binRes.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
@@ -315,10 +318,10 @@ public class HTTPSamplerFull extends HTTPSampler
 				res.addSubResult(binRes);
 				break;
 			}
-			if(catClass.isDebugEnabled())
+			if(log.isDebugEnabled())
 			{
-				catClass.debug("Binary url - " + binUrlStr);
-				catClass.debug("Full Binary url - " + binUrl);
+				log.debug("Binary url - " + binUrlStr);
+				log.debug("Full Binary url - " + binUrl);
 			}
 			binRes.setSampleLabel(binUrl.toString());
 			uniqueBinary = uniques.add(binUrl.toString());
@@ -332,7 +335,7 @@ public class HTTPSamplerFull extends HTTPSampler
 				}
 				catch(IOException ioe)
 				{
-					catClass.error("Error reading from URL - " + ioe);
+					log.error("Error reading from URL - " + ioe);
 					binRes.setResponseData(ioe.toString().getBytes());
 					binRes.setResponseCode(NON_HTTP_RESPONSE_CODE);
 					binRes.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
@@ -341,18 +344,18 @@ public class HTTPSamplerFull extends HTTPSampler
 			}
 			else
 			{
-				  if(catClass.isDebugEnabled())
+				  if(log.isDebugEnabled())
 				  {
-				 	 catClass.debug("Skipping duplicate - " + binUrl);
+				 	 log.debug("Skipping duplicate - " + binUrl);
 				  }
 				  break;
 			}
-			catClass.debug("Adding result");
+			log.debug("Adding result");
 			// Note that this only happens for unique binaries
 			res.addSubResult(binRes);
 			res.setTime(res.getTime() + binRes.getTime());
 		}
-		catClass.debug("End   : HTTPSamplerFull parseNodes");
+		log.debug("End   : HTTPSamplerFull parseNodes");
 	}
 
 	/**
@@ -366,7 +369,7 @@ public class HTTPSamplerFull extends HTTPSampler
 	 */
 	protected byte[] loadBinary(URL url, SampleResult res) throws IOException
 	{
-		catClass.debug("Start : loadBinary");
+		log.debug("Start : loadBinary");
 		byte[] ret = new byte[0];
 		res.setSamplerData(new HTTPSampler(url));
 		HttpURLConnection conn = null;
@@ -379,9 +382,9 @@ public class HTTPSamplerFull extends HTTPSampler
 		{
 			// don't do anything 'cos presumably the connection will return the
 			// correct http response codes
-			if(catClass.isDebugEnabled())
+			if(log.isDebugEnabled())
 			{
-				catClass.debug("loadBinary : error in setupConnection " + ioe);
+				log.debug("loadBinary : error in setupConnection " + ioe);
 			}
 			throw ioe;
 		 }
@@ -389,9 +392,9 @@ public class HTTPSamplerFull extends HTTPSampler
 		 try
 		 {
 			long time = System.currentTimeMillis();
-			if(catClass.isDebugEnabled())
+			if(log.isDebugEnabled())
 			{
-				catClass.debug("loadBinary : start time - " + time);
+				log.debug("loadBinary : start time - " + time);
 			}
 			int errorLevel = getErrorLevel(conn, res);
 			if (errorLevel == 2)
@@ -399,9 +402,9 @@ public class HTTPSamplerFull extends HTTPSampler
 				ret = readResponse(conn);
 				res.setSuccessful(true);
 				long endTime = System.currentTimeMillis();
-				if(catClass.isDebugEnabled())
+				if(log.isDebugEnabled())
 				{
-					catClass.debug("loadBinary : end   time - " + endTime);
+					log.debug("loadBinary : end   time - " + endTime);
 				}
 				res.setTime(endTime - time);
 			 }
@@ -412,15 +415,15 @@ public class HTTPSamplerFull extends HTTPSampler
 					((HttpURLConnection)conn).getResponseCode();
 				String responseMsg =
 					((HttpURLConnection)conn).getResponseMessage();
-				catClass.error("loadBinary : failed code - " + responseCode);
-				catClass.error("loadBinary : failed message - " + responseMsg);
+				log.error("loadBinary : failed code - " + responseCode);
+				log.error("loadBinary : failed message - " + responseMsg);
 			}
-			if(catClass.isDebugEnabled())
+			if(log.isDebugEnabled())
 			{
-				catClass.debug("loadBinary : binary - " + ret[0]+ret[1]);
-				catClass.debug("loadBinary : loadTime - " + res.getTime());
+				log.debug("loadBinary : binary - " + ret[0]+ret[1]);
+				log.debug("loadBinary : loadTime - " + res.getTime());
 			}
-			catClass.debug("End   : loadBinary");
+			log.debug("End   : loadBinary");
 			res.setResponseData(ret);
 			res.setDataType(SampleResult.BINARY);
 			return ret;
@@ -452,7 +455,7 @@ public class HTTPSamplerFull extends HTTPSampler
 	 */
 	protected int getErrorLevel(HttpURLConnection conn, SampleResult res)
 	{
-		catClass.debug("Start : getErrorLevel");
+		log.debug("Start : getErrorLevel");
 		int errorLevel = 2;
 		try
 		{
@@ -463,11 +466,11 @@ public class HTTPSamplerFull extends HTTPSampler
 			errorLevel = responseCode/100;
 			res.setResponseCode(String.valueOf(responseCode));
 			res.setResponseMessage(responseMessage);
-			if(catClass.isDebugEnabled())
+			if(log.isDebugEnabled())
 			{
-				catClass.debug("getErrorLevel : responseCode - " +
+				log.debug("getErrorLevel : responseCode - " +
 					responseCode);
-				catClass.debug("getErrorLevel : responseMessage - " +
+				log.debug("getErrorLevel : responseMessage - " +
 					responseMessage);
 			}
 		}
@@ -475,14 +478,14 @@ public class HTTPSamplerFull extends HTTPSampler
 		{
 			System.out.println("getErrorLevel : " + conn.getHeaderField(0));
 			System.out.println("getErrorLevel : " + conn.getHeaderFieldKey(0));
-			catClass.error("getErrorLevel : " +
+			log.error("getErrorLevel : " +
 				"Error getting response code for HttpUrlConnection - " + e2);
 			res.setResponseData(e2.toString().getBytes());
 			res.setResponseCode(NON_HTTP_RESPONSE_CODE);
 			res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
 			res.setSuccessful(false);
 		}
-		catClass.debug("End   : getErrorLevel");
+		log.debug("End   : getErrorLevel");
 		return errorLevel;
 	}
 
@@ -500,16 +503,16 @@ public class HTTPSamplerFull extends HTTPSampler
 	 */
 	protected static Tidy getParser()
 	{
-		catClass.debug("Start : getParser");
+		log.debug("Start : getParser");
 		Tidy tidy = new Tidy();
 		tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
 		tidy.setQuiet(true);
 		tidy.setShowWarnings(false);
-		if(catClass.isDebugEnabled())
+		if(log.isDebugEnabled())
 		{
-			catClass.debug("getParser : tidy parser created - " + tidy);
+			log.debug("getParser : tidy parser created - " + tidy);
 		}
-		catClass.debug("End   : getParser");
+		log.debug("End   : getParser");
 		return tidy;
 	}
 
@@ -523,22 +526,22 @@ public class HTTPSamplerFull extends HTTPSampler
 	 */
 	protected static Node getDOM(String text) throws SAXException
 	{
-		catClass.debug("Start : getDOM");
+		log.debug("Start : getDOM");
 		try
 		{
 			Node node = getParser().parseDOM(new
 			  ByteArrayInputStream(text.getBytes(getUTFEncodingName())), null);
-			if(catClass.isDebugEnabled())
+			if(log.isDebugEnabled())
 			{
-				catClass.debug("node : " + node);
+				log.debug("node : " + node);
 			}
-			catClass.debug("End   : getDOM");
+			log.debug("End   : getDOM");
 			return node;
 		 }
 		 catch(UnsupportedEncodingException e)
 		 {
-			catClass.error("getDOM1 : Unsupported encoding exception - " + e);
-			catClass.debug("End   : getDOM");
+			log.error("getDOM1 : Unsupported encoding exception - " + e);
+			log.debug("End   : getDOM");
 			throw new RuntimeException("UTF-8 encoding failed - " + e);
 		}
 	}
@@ -552,13 +555,13 @@ public class HTTPSamplerFull extends HTTPSampler
 	 */
 	protected static String getUTFEncodingName()
 	{
-		catClass.debug("Start : getUTFEncodingName");
+		log.debug("Start : getUTFEncodingName");
 		if (utfEncodingName == null)
 		{
 			String versionNum = System.getProperty( "java.version" );
-			if(catClass.isDebugEnabled())
+			if(log.isDebugEnabled())
 			{
-				catClass.debug("getUTFEncodingName : version = " + versionNum);
+				log.debug("getUTFEncodingName : version = " + versionNum);
 			}
 			if (versionNum.startsWith( "1.1" ))
 			{
@@ -569,11 +572,11 @@ public class HTTPSamplerFull extends HTTPSampler
 				utfEncodingName = "UTF-8";
 			}
 		}
-		if(catClass.isDebugEnabled())
+		if(log.isDebugEnabled())
 		{
-			catClass.debug("getUTFEncodingName : Encoding = " + utfEncodingName);
+			log.debug("getUTFEncodingName : Encoding = " + utfEncodingName);
 		}
-		catClass.debug("End   : getUTFEncodingName");
+		log.debug("End   : getUTFEncodingName");
 		return utfEncodingName;
 	}
 
@@ -581,8 +584,7 @@ public static class Test extends TestCase
 {
 	private HTTPSamplerFull hsf;
 
-	private static Category catClass =
-		Category.getInstance(Test.class.getName());
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.test");
 
 	public Test(String name)
 	{
@@ -591,19 +593,19 @@ public static class Test extends TestCase
 
 	protected void setUp()
 	{
-		catClass.debug("Start : setUp1");
+		log.debug("Start : setUp1");
 		hsf = new HTTPSamplerFull();
 		hsf.setMethod(HTTPSampler.GET);
 		hsf.setProtocol("file");
 	//      urlConfigFull.setPort(8080);
 	//      urlConfigFull.setDomain("jakarta.apache.org");
 		hsf.setPath("HTTPSamplerFullTestFile.txt");
-		catClass.debug("End   : setUp1");
+		log.debug("End   : setUp1");
 	 }
 
 	 public void testGetUTFEncodingName()
 	 {
-		catClass.debug("Start : testGetUTFEncodingName");
+		log.debug("Start : testGetUTFEncodingName");
 		String javaVersion = System.getProperty("java.version");
 		System.setProperty("java.version", "1.1");
 		assertEquals("UTF8", HTTPSamplerFull.getUTFEncodingName());
@@ -613,18 +615,18 @@ public static class Test extends TestCase
 		System.setProperty("java.version", "1.2");
 		assertEquals("UTF-8", HTTPSamplerFull.getUTFEncodingName());
 		System.setProperty("java.version", javaVersion);
-		catClass.debug("End   : testGetUTFEncodingName");
+		log.debug("End   : testGetUTFEncodingName");
 	 }
 
 	 public void testGetUrlConfig()
 	 {
-		catClass.debug("Start : testGetUrlConfig");
+		log.debug("Start : testGetUrlConfig");
 		assertEquals(HTTPSampler.GET, hsf.getMethod());
 		assertEquals("file", hsf.getProtocol());
 	//      assertEquals(8080, urlConfig.getPort());
 	//      assertEquals("jakarta.apache.org", urlConfig.getDomain());
 		assertEquals("HTTPSamplerFullTestFile.txt", hsf.getPath());
-		catClass.debug("End   : testGetUrlConfig");
+		log.debug("End   : testGetUrlConfig");
 	 }
 
 	 // Can't think of a self-contained way to test this 'cos it requires
@@ -632,7 +634,7 @@ public static class Test extends TestCase
 	 // specifically requires http.
 	 public void testSampleMain()
 	 {
-		catClass.debug("Start : testSampleMain");
+		log.debug("Start : testSampleMain");
 		// !ToDo : Have to wait till the day SampleResult is extended to
 		// store results of all downloaded stuff e.g. images, applets etc
 		String fileInput = "<html>\n\n" +
@@ -680,22 +682,14 @@ public static class Test extends TestCase
 		// !ToDo
 		// hsf.sample(entry);
 		assertNull("Cannot think of way to test sample", null);
-		catClass.debug("End   : testSampleMain");
+		log.debug("End   : testSampleMain");
 	}
 
 	protected void tearDown()
 	{
-		catClass.debug("Start : tearDown");
+		log.debug("Start : tearDown");
 		hsf = null;
-		catClass.debug("End   : tearDown");
-	}
-
-	public static void main(String[] args)
-	{
-		BasicConfigurator.configure();
-		TestSuite suite = new TestSuite(Test.class);
-		junit.textui.TestRunner runner = new junit.textui.TestRunner();
-		runner.run(suite);
+		log.debug("End   : tearDown");
 	}
 }
 }

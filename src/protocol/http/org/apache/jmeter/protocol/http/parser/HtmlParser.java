@@ -53,20 +53,31 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.parser;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import org.w3c.dom.*;
-import org.w3c.tidy.Tidy;
-import org.xml.sax.SAXException;
+import java.io.ByteArrayInputStream;
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 import junit.framework.TestCase;
-import org.apache.jmeter.config.*;
+
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
-import org.apache.jmeter.samplers.Entry;
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log4j.*;
-import org.apache.oro.text.regex.*;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
+import org.apache.oro.text.regex.MalformedPatternException;
+import org.apache.oro.text.regex.Perl5Compiler;
+import org.apache.oro.text.regex.Perl5Matcher;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.tidy.Tidy;
+import org.xml.sax.SAXException;
 
 /****************************************
  * Title: Description: Copyright: Copyright (c) 2001 Company:
@@ -82,8 +93,8 @@ public class HtmlParser implements Serializable
 	/****************************************
 	 * !ToDo (Field description)
 	 ***************************************/
-	protected static Category catClass =
-			Category.getInstance(HtmlParser.class.getName());
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.protocol.http");
 
 	/****************************************
 	 * !ToDo (Field description)
@@ -188,16 +199,16 @@ public class HtmlParser implements Serializable
 	 ***************************************/
 	public static Tidy getParser()
 	{
-		catClass.debug("Start : getParser1");
+		log.debug("Start : getParser1");
 		Tidy tidy = new Tidy();
 		tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
 		tidy.setQuiet(true);
 		tidy.setShowWarnings(false);
 
-		if(catClass.isDebugEnabled())
-			catClass.debug("getParser1 : tidy parser created - " + tidy);
+		if(log.isDebugEnabled())
+			log.debug("getParser1 : tidy parser created - " + tidy);
 
-		catClass.debug("End : getParser1");
+		log.debug("End : getParser1");
 
 		return tidy;
 	}
@@ -211,24 +222,24 @@ public class HtmlParser implements Serializable
 	 ***************************************/
 	public static Node getDOM(String text) throws SAXException
 	{
-		catClass.debug("Start : getDOM1");
+		log.debug("Start : getDOM1");
 
 		try
 		{
 			Node node = getParser().parseDOM(new
 					ByteArrayInputStream(text.getBytes(getUTFEncodingName())), null);
 
-			if(catClass.isDebugEnabled())
-				catClass.debug("node : " + node);
+			if(log.isDebugEnabled())
+				log.debug("node : " + node);
 
-			catClass.debug("End : getDOM1");
+			log.debug("End : getDOM1");
 
 			return node;
 		}
 		catch(UnsupportedEncodingException e)
 		{
-			catClass.error("getDOM1 : Unsupported encoding exception - " + e);
-			catClass.debug("End : getDOM1");
+			log.error("getDOM1 : Unsupported encoding exception - " + e);
+			log.debug("End : getDOM1");
 			throw new RuntimeException("UTF-8 encoding failed");
 		}
 	}
@@ -241,14 +252,14 @@ public class HtmlParser implements Serializable
 	 ***************************************/
 	public static String getUTFEncodingName()
 	{
-		catClass.debug("Start : getUTFEncodingName1");
+		log.debug("Start : getUTFEncodingName1");
 
 		if(utfEncodingName == null)
 		{
 			String versionNum = System.getProperty("java.version");
 
-			if(catClass.isDebugEnabled())
-				catClass.debug("getUTFEncodingName1 : versionNum - " + versionNum);
+			if(log.isDebugEnabled())
+				log.debug("getUTFEncodingName1 : versionNum - " + versionNum);
 
 			if(versionNum.startsWith("1.1"))
 				utfEncodingName = "UTF8";
@@ -258,11 +269,11 @@ public class HtmlParser implements Serializable
 
 		}
 
-		if(catClass.isDebugEnabled())
-			catClass.debug("getUTFEncodingName1 : Returning utfEncodingName - " +
+		if(log.isDebugEnabled())
+			log.debug("getUTFEncodingName1 : Returning utfEncodingName - " +
 					utfEncodingName);
 
-		catClass.debug("End : getUTFEncodingName1");
+		log.debug("End : getUTFEncodingName1");
 
 		return utfEncodingName;
 	}
@@ -500,8 +511,7 @@ public class HtmlParser implements Serializable
 	 ***************************************/
 	public static class Test extends TestCase
 	{
-		private static Category catClass =
-				Category.getInstance(Test.class.getName());
+		private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.test");
 
 		/****************************************
 		 * !ToDo (Constructor description)
@@ -518,7 +528,7 @@ public class HtmlParser implements Serializable
 		 ***************************************/
 		public void testGetUTFEncodingName()
 		{
-			catClass.debug("Start : testGetUTFEncodingName1");
+			log.debug("Start : testGetUTFEncodingName1");
 			String javaVersion = System.getProperty("java.version");
 			utfEncodingName = null;
 			System.setProperty("java.version", "1.1");
@@ -529,7 +539,7 @@ public class HtmlParser implements Serializable
 			System.setProperty("java.version", "1.2");
 			assertEquals("UTF-8", HtmlParser.getUTFEncodingName());
 			System.setProperty("java.version", javaVersion);
-			catClass.debug("End : testGetUTFEncodingName1");
+			log.debug("End : testGetUTFEncodingName1");
 		}
 
 		/****************************************

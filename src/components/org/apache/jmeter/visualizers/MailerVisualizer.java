@@ -63,17 +63,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Properties;
-import java.util.StringTokenizer;
-import java.util.Vector;
 
-import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -84,13 +75,14 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.log4j.Category;
 import org.apache.jmeter.gui.util.VerticalLayout;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /*
  * TODO :
@@ -128,7 +120,7 @@ public class MailerVisualizer extends AbstractVisualizer
 
 	private MailerModel model;
 
-	private static Category logger = Category.getInstance("org.apache.jmeter.visualizers.MailerVisualizer");
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
 	/**
 	 * Constructs the MailerVisualizer and initializes its GUI.
@@ -341,15 +333,6 @@ public class MailerVisualizer extends AbstractVisualizer
 	}
 
 	/**
-	 * Method used to log a String.
-	 *
-	 * @param str String to be logged.
-	 */
-	private static void log(String str) {
-		logger.info(str);
-	}
-
-	/**
 	 * Does the actual EventHandling. Gets called by EventHandlers
 	 * for either ActionEvents or FocusEvents.
 	 *
@@ -376,7 +359,7 @@ public class MailerVisualizer extends AbstractVisualizer
 				model.setFailureLimit(Long.parseLong(this.failureLimitField.getText()));
 			}
 			catch (NumberFormatException e) {
-				log("failureLimitField=" + failureLimitField.getText());
+				log.warn("failureLimitField=" + failureLimitField.getText(),e);
 				JOptionPane.showMessageDialog(null, JMeterUtils.getResString("you_must_enter_a_valid_number"), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
@@ -385,7 +368,7 @@ public class MailerVisualizer extends AbstractVisualizer
 				model.setSuccessLimit(Long.parseLong(this.successLimitField.getText()));
 			}
 			catch (NumberFormatException e) {
-			log("successLimitField=" + successLimitField.getText());
+			log.warn("successLimitField=" + successLimitField.getText(),e);
 			JOptionPane.showMessageDialog(null, JMeterUtils.getResString("you_must_enter_a_valid_number"), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
@@ -412,9 +395,9 @@ public class MailerVisualizer extends AbstractVisualizer
 									"Via:  " + model.getSmtpHost() + "\n" +
 									"Fail Subject:  " + model.getFailureSubject() + "\n" +
 									"Success Subject:  " + model.getSuccessSubject();
-				log(testString);
+				log.debug(testString);
 				model.sendMail(model.getFromAddress(), model.getAddressVector(), "Testing mail-addresses", testString, model.getSmtpHost());
-				log("Mail sent successfully!!");
+				log.info("Mail sent successfully!!");
 			}
 			else {
 				doEventHandling(c);
@@ -422,12 +405,12 @@ public class MailerVisualizer extends AbstractVisualizer
 		}
 		catch (UnknownHostException e1)
 		{
-			log("Invalid Mail Server " + e1.toString());
+			log.error("Invalid Mail Server ",e1);
 			displayMessage(JMeterUtils.getResString("invalid_mail_server"), true);
 		}
 		catch (Exception ex)
 		{
-			log("Couldn't send mail..." + ex.toString());
+			log.error("Couldn't send mail...",ex);
 			displayMessage(JMeterUtils.getResString("invalid_mail_server"), true);
 		}
 	}

@@ -62,8 +62,10 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.MissingResourceException;
@@ -77,7 +79,9 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.SAXParserFactory;
+
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.log.Priority;
 import org.xml.sax.XMLReader;
 
 
@@ -91,7 +95,9 @@ import org.xml.sax.XMLReader;
 
 public class JMeterUtils
 {
-
+	private static LoggingManager logManager;
+	private static String LOG_FILE = "log_file";
+	private static String LOG_PRIORITY = "log_level";
 	 private static final SAXParserFactory xmlFactory;
 
 	 static {
@@ -139,7 +145,34 @@ public class JMeterUtils
 				}
 		  }
 		  appProperties = p;
+		  logManager = new LoggingManager();
+		  try
+		  {
+		  	logManager.setTarget(new PrintWriter(new FileWriter(getPropDefault(LOG_FILE,"jmeter.log"))));
+		  }
+		  catch(IOException e)
+		  {
+		  	System.out.println("bad log file");
+		  }
+		  logManager.setPriority(Priority.getPriorityForName(getPropDefault(LOG_PRIORITY,"WARN")),"jmeter");
+		  setLoggingLevels();
 		  return p;
+	 }
+	 
+	 private static void setLoggingLevels()
+	 {
+	 	Enumeration names = appProperties.keys();
+		  while (names.hasMoreElements())
+		  {
+				String prop = (String) names.nextElement();
+				if (prop.startsWith(LOG_PRIORITY))
+				{
+					String name = prop.substring(LOG_PRIORITY.length()+1);
+					 logManager.setPriority(
+					 		Priority.getPriorityForName(
+					 		getPropDefault(prop,"WARN")),name);
+				}
+		  }
 	 }
 
 	 /**

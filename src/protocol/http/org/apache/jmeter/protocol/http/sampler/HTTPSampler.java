@@ -61,7 +61,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -79,7 +78,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
-import org.apache.log4j.Category;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /****************************************
  * A sampler which understands all the parts necessary to read statistics about
@@ -374,8 +374,7 @@ public class HTTPSampler extends AbstractSampler
 	protected final static String NON_HTTP_RESPONSE_MESSAGE =
 			"Non HTTP response message";
 
-	private static Category catClass = Category.getInstance(
-			HTTPSampler.class.getName());
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
 
 	/****************************************
 	 * Holds a list of URLs sampled - so we're not flooding stdout with debug
@@ -842,7 +841,7 @@ public class HTTPSampler extends AbstractSampler
 	 ***************************************/
 	private SampleResult sample(boolean redirected)
 	{
-		catClass.debug("Start : sample2");
+		log.debug("Start : sample2");
 		long time = 0L;
 		SampleResult res = new SampleResult();
 		if(redirected)
@@ -868,9 +867,9 @@ public class HTTPSampler extends AbstractSampler
 			 * END - cached logging hack
 			 ***************************************/
 
-			if(catClass.isDebugEnabled())
+			if(log.isDebugEnabled())
 			{
-				catClass.debug("sample2 : sampling url - " + u);
+				log.debug("sample2 : sampling url - " + u);
 			}
 			conn = setupConnection(u,getMethod());
 			// [Jordi <jsalvata@atg.com>]
@@ -925,7 +924,7 @@ public class HTTPSampler extends AbstractSampler
 				res.setSuccessful(false);
 			}
 			res.setTime(time);
-			catClass.debug("End : sample2");
+			log.debug("End : sample2");
 			return res;
 		}
 		catch(IOException ex)
@@ -957,7 +956,7 @@ public class HTTPSampler extends AbstractSampler
 			}
 			catch(Exception e){}
 		}
-		catClass.debug("End : sample2");
+		log.debug("End : sample2");
 		return res;
 	}
 
