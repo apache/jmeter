@@ -11,14 +11,6 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @author default
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
- */
 public class IterationCounter extends AbstractFunction implements Serializable
 {
 	
@@ -46,7 +38,7 @@ public class IterationCounter extends AbstractFunction implements Serializable
 		return newCounter;
 	}
 
-	/**
+    /* (non-Javadoc)
 	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
 	 */
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
@@ -75,8 +67,8 @@ public class IterationCounter extends AbstractFunction implements Serializable
 	}
 
 
-	/**
-	 * @see org.apache.jmeter.functions.Function#setParameters(String)
+    /* (non-Javadoc)
+	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
 	 */
 	public void setParameters(Collection parameters)
 		throws InvalidVariableException {
@@ -88,14 +80,14 @@ public class IterationCounter extends AbstractFunction implements Serializable
 			}
 	}
 
-	/**
+    /* (non-Javadoc)
 	 * @see org.apache.jmeter.functions.Function#getReferenceKey()
 	 */
 	public String getReferenceKey() {
 		return KEY;
 	}
 
-	/**
+    /* (non-Javadoc)
 	 * @see org.apache.jmeter.functions.Function#getArgumentDesc()
 	 */
 	public List getArgumentDesc() {

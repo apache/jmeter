@@ -91,8 +91,8 @@ public class JavaScript extends AbstractFunction implements Serializable {
 		return newJavaScript;
 	}
 
-	/**
-	 * @see org.apache.jmeter.functions.Function#execute(org.apache.jmeter.samplers.SampleResult, org.apache.jmeter.samplers.Sampler)
+    /* (non-Javadoc)
+	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
 	 */
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 			throws InvalidVariableException {
@@ -123,8 +123,8 @@ public class JavaScript extends AbstractFunction implements Serializable {
 	}
 
 
-	/**
-	 * @see org.apache.jmeter.functions.Function#setParameters(java.lang.String)
+    /* (non-Javadoc)
+	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
 	 */
 	public void setParameters(Collection parameters)
 			throws InvalidVariableException {
@@ -138,7 +138,7 @@ public class JavaScript extends AbstractFunction implements Serializable {
 	}
 
 
-	/**
+    /* (non-Javadoc)
 	 * @see org.apache.jmeter.functions.Function#getReferenceKey()
 	 */
 	public String getReferenceKey() {
@@ -146,7 +146,7 @@ public class JavaScript extends AbstractFunction implements Serializable {
 	}
 
 
-	/**
+    /* (non-Javadoc)
 	 * @see org.apache.jmeter.functions.Function#getArgumentDesc()
 	 */
 	public List getArgumentDesc() {
@@ -154,6 +154,3 @@ public class JavaScript extends AbstractFunction implements Serializable {
 	}
 
 }
-
-
-
