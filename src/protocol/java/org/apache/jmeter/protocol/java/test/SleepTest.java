@@ -132,23 +132,30 @@ public class SleepTest
             
 			// Generate a random value using the current time.
             long start = System.currentTimeMillis();
-            long ct = start % getSleepMask();
+            long sleep = getSleepTime() + (start % getSleepMask());
 
+            results.setSampleLabel(
+                    "Sleep Test: time = " + sleep);
+            
             // Execute the sample.  In this case sleep for the
             // specified time.
-            Thread.sleep(getSleepTime() + ct);
+            Thread.sleep(sleep);
 
-            // Populate the results.
-
-            results.sampleEnd();
             results.setSuccessful(true);
-            results.setSampleLabel(
-                "Sleep Test: time = " + (getSleepTime() + ct));
+        }
+        catch (InterruptedException e)
+        {
+            getLogger().warn("SleepTest: interrupted.");
+            results.setSuccessful(true);
         }
         catch (Exception e)
         {
             getLogger().error("SleepTest: error during sample", e);
             results.setSuccessful(false);
+        }
+        finally
+		{
+            results.sampleEnd();        	
         }
 
         if (getLogger().isDebugEnabled())
