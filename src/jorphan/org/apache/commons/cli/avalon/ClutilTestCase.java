@@ -19,13 +19,6 @@ package org.apache.commons.cli.avalon;
 
 import java.util.List;
 
-//import org.apache.avalon.excalibur.cli.AbstractParserControl;
-//import org.apache.avalon.excalibur.cli.CLArgsParser;
-//import org.apache.avalon.excalibur.cli.CLOption;
-//import org.apache.avalon.excalibur.cli.CLOptionDescriptor;
-//import org.apache.avalon.excalibur.cli.CLUtil;
-//import org.apache.avalon.excalibur.cli.ParserControl;
-
 import junit.framework.TestCase;
 
 /**
@@ -53,7 +46,7 @@ public final class ClutilTestCase
     private static final String[] ARGLIST4 = new String[]
     {
         //incompatable (blee/all)
-        "-Dstupid=idiot", "are", "--all", "--blee", "here"
+        "-Dstupid","idiot", "are", "--all", "--blee", "here"
     };
 
     private static final String[] ARGLIST5 = new String[]
@@ -78,6 +71,12 @@ public final class ClutilTestCase
                     CLOptionDescriptor.ARGUMENTS_REQUIRED_2,
                     DEFINE_OPT,
                     "define" );
+    private static final CLOptionDescriptor DEFINE_MANY =
+        new CLOptionDescriptor( "define",
+             CLOptionDescriptor.ARGUMENTS_REQUIRED_2|CLOptionDescriptor.DUPLICATES_ALLOWED,
+             DEFINE_OPT,
+             "define" );
+
     private static final CLOptionDescriptor CASE_CHECK =
             new CLOptionDescriptor( "charCheck",
                     CLOptionDescriptor.ARGUMENT_DISALLOWED,
@@ -118,7 +117,7 @@ public final class ClutilTestCase
                     TAINT_OPT,
                     "turn on tainting checks (optional level)." );
 
-    public ClutilTestCase()
+	public ClutilTestCase()
     {
         this( "Command Line Interpreter Test Case" );
     }
@@ -126,12 +125,6 @@ public final class ClutilTestCase
     public ClutilTestCase( String name )
     {
         super( name );
-    }
-
-    public static void main( final String[] args )
-    {
-        final ClutilTestCase test = new ClutilTestCase();
-        test.testShortOptArgUnenteredBeforeOtherOpt();
     }
 
     public void testOptionalArgWithSpace()
@@ -428,6 +421,90 @@ public final class ClutilTestCase
         assertEquals( "myfile.txt", ((CLOption)clOptions.get( 0 )).getArgument() );
     }
 
+    public void testSingleArg6()
+    {
+        final CLOptionDescriptor[] options = new CLOptionDescriptor[]
+        {
+            FILE
+        };
+
+        final CLArgsParser parser = new CLArgsParser( 
+				new String[]{"-f","-=-"}
+				, options );
+
+        assertNull( parser.getErrorString(), parser.getErrorString() );
+
+        final List clOptions = parser.getArguments();
+        final int size = clOptions.size();
+
+        assertEquals( 1, size );
+        assertEquals( FILE_OPT, ((CLOption)clOptions.get( 0 )).getDescriptor().getId() );
+        assertEquals( "-=-", ((CLOption)clOptions.get( 0 )).getArgument() );
+    }
+
+    public void testSingleArg7()
+    {
+        final CLOptionDescriptor[] options = new CLOptionDescriptor[]
+        {
+            FILE
+        };
+
+        final CLArgsParser parser = new CLArgsParser( 
+				new String[]{"--file=-=-"}
+				, options );
+
+        assertNull( parser.getErrorString(), parser.getErrorString() );
+
+        final List clOptions = parser.getArguments();
+        final int size = clOptions.size();
+
+        assertEquals( 1, size );
+        assertEquals( FILE_OPT, ((CLOption)clOptions.get( 0 )).getDescriptor().getId() );
+        assertEquals( "-=-", ((CLOption)clOptions.get( 0 )).getArgument() );
+    }
+
+    public void testSingleArg8()
+    {
+        final CLOptionDescriptor[] options = new CLOptionDescriptor[]
+        {
+            FILE
+        };
+
+        final CLArgsParser parser = new CLArgsParser( 
+				new String[]{"--file","-=-"}
+				, options );
+
+        assertNull( parser.getErrorString(), parser.getErrorString() );
+
+        final List clOptions = parser.getArguments();
+        final int size = clOptions.size();
+
+        assertEquals( 1, size );
+        assertEquals( FILE_OPT, ((CLOption)clOptions.get( 0 )).getDescriptor().getId() );
+        assertEquals( "-=-", ((CLOption)clOptions.get( 0 )).getArgument() );
+    }
+
+    public void testSingleArg9()
+    {
+        final CLOptionDescriptor[] options = new CLOptionDescriptor[]
+        {
+            FILE
+        };
+
+        final CLArgsParser parser = new CLArgsParser( 
+				new String[]{"--file","-=-"}
+				, options );
+
+        assertNull( parser.getErrorString(), parser.getErrorString() );
+
+        final List clOptions = parser.getArguments();
+        final int size = clOptions.size();
+
+        assertEquals( 1, size );
+        assertEquals( FILE_OPT, ((CLOption)clOptions.get( 0 )).getDescriptor().getId() );
+        assertEquals( "-=-", ((CLOption)clOptions.get( 0 )).getArgument() );
+    }
+
     public void testCombinedArgs1()
     {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[]
@@ -569,7 +646,6 @@ public final class ClutilTestCase
         assertEquals( "d-e,f", option.getArgument( 1 ) );
     }
 
-	 // Should be same as above, but currently causes a parse error
     public void test2ArgsParse3()
     {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[]
@@ -578,7 +654,7 @@ public final class ClutilTestCase
         };
 
         final CLArgsParser parser = new CLArgsParser( 
-				new String[] {"-D","a-b,c=d-e,f"}, 
+				new String[] {"-D","A-b,c","G-e,f"}, 
 				options );
 
         assertNull( parser.getErrorString(), parser.getErrorString() );
@@ -590,8 +666,48 @@ public final class ClutilTestCase
         assertEquals( DEFINE_OPT, ((CLOption)clOptions.get( 0 )).getDescriptor().getId() );
 
         final CLOption option = (CLOption)clOptions.get( 0 );
-        assertEquals( "a-b,c", option.getArgument( 0 ) );
-        assertEquals( "d-e,f", option.getArgument( 1 ) );
+        assertEquals( "A-b,c", option.getArgument( 0 ) );
+        assertEquals( "G-e,f", option.getArgument( 1 ) );
+    }
+
+    public void test2ArgsParse4()
+    {
+        final CLOptionDescriptor[] options = new CLOptionDescriptor[]
+        {
+            DEFINE_MANY
+        };
+
+        final CLArgsParser parser = new CLArgsParser( 
+				new String[] {"-Dval1=-1","-D","val2=-2",
+						"--define=val-3=-3","--define","val4-=-4"}, 
+				options );
+
+        assertNull( parser.getErrorString(), parser.getErrorString() );
+
+        final List clOptions = parser.getArguments();
+        final int size = clOptions.size();
+
+        assertEquals( 4, size );
+		for (int i=0;i<size;i++){
+        assertEquals( DEFINE_OPT, ((CLOption)clOptions.get( i )).getDescriptor().getId() );
+		}
+
+        CLOption option; 
+        option = (CLOption)clOptions.get( 0 );
+        assertEquals( "val1", option.getArgument( 0 ) );
+        assertEquals( "-1", option.getArgument( 1 ) );
+
+		option = (CLOption)clOptions.get( 1 );
+        assertEquals( "val2", option.getArgument( 0 ) );
+        assertEquals( "-2", option.getArgument( 1 ) );
+
+		option = (CLOption)clOptions.get( 2 );
+        assertEquals( "val-3", option.getArgument( 0 ) );
+        assertEquals( "-3", option.getArgument( 1 ) );
+		
+		option = (CLOption)clOptions.get( 3 );
+        assertEquals( "val4-", option.getArgument( 0 ) );
+        assertEquals( "-4", option.getArgument( 1 ) );
     }
 
     public void testPartParse()
@@ -780,7 +896,7 @@ public final class ClutilTestCase
             DEFINE, CLEAR1
         };
 
-        final String[] args = new String[]{"-Dstupid", "-c"};
+        final String[] args = new String[]{"-DStupid", "-c"};
 
         final CLArgsParser parser = new CLArgsParser( args, options );
 
@@ -793,7 +909,7 @@ public final class ClutilTestCase
         assertEquals( ((CLOption)clOptions.get( 1 )).getDescriptor().getId(), CLEAR1_OPT );
         final CLOption option = (CLOption)clOptions.get( 0 );
         assertEquals( option.getDescriptor().getId(), DEFINE_OPT );
-        assertEquals( option.getArgument( 0 ), "stupid" );
+        assertEquals( option.getArgument( 0 ), "Stupid" );
         assertEquals( option.getArgument( 1 ), "" );
     }
 
