@@ -84,6 +84,12 @@ will become the limiting factor. So it's worth using the best hardware and
 software that you have available. Remember to include the hardware/software
 configuration in your published benchmarks.
 </p>
+<p>Don't forget JMeter batch mode. This can be useful if you have a powerful server 
+that supports Java but perhaps does not have a fast graphics implementation,
+or where you need to login remotely.
+Batch mode can reduce the network traffic compared with using a remote display or client-server mode.
+The batch log file can then be loaded into JMeter on a workstation for analysis, or you can
+use CSV output and import the data into a spreadsheet.</p>
 </subsection>
 <subsection name="12.4 Tools">
 <p>The following tools will all prove useful. It is definitely worthwhile to

@@ -345,16 +345,31 @@
 #end
 
 #macro (makeIndex $subsections)
+#set ($level2 = $root.getAttributeValue("index-level-2"))
+#set ($colbreak = $root.getAttributeValue("colbreak"))
+#if  ("$!colbreak" != "")
+<table width="100%">
+<tr><td valign="top">
+#end
 	<ul>
 	#foreach ($sect in $subsections)
+	#if (("$!colbreak" != "") && ($sect.getAttributeValue("name").startsWith("$colbreak")))
+	</ul></td><td valign="top"><ul>
+	#end
 		<li><a href="#$sect.getAttributeValue("anchor")">$sect.getAttributeValue("name")</a></li>
+		#if ("$!level2" != "no")
 		<ul>
 		#foreach ($comp in $sect.getChildren("component"))
 			<li><a href="#$comp.getAttributeValue("name").replace($space,$udsc)">$comp.getAttributeValue("name")</a></li>
 		#end
 		</ul>
+		#end
 	#end
 	</ul>
+#if ("$!colbreak" != "")
+	</td></tr>
+</table>
+#end
 #end
 
 #macro (getProjectImage)
@@ -419,6 +434,8 @@
 						  #foreach ( $section in $allSections )
 								#section ($section)
 						  #end
+						  <br/>
+						  #pagelinks()
 						  </td>
 					 </tr>
 

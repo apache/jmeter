@@ -139,8 +139,7 @@ Cookie Manager, either from the Edit Menu, or from the right-click pop-up menu.<
 Jakarta home page (http://jakarta.apache.org/), and the second one is for the
 Project Guidelines page (http://jakarta.apache.org/site/guidelines.html).</p>
 
-<note>JMeter sends requests in the order that you add them
-to the tree.</note>
+<note>JMeter sends requests in the order that they appear in the tree.</note>
 
 <p>Start by adding the first <complink name="HTTP Request"/>
 to the Jakarta Users element (Add --&gt; Sampler --&gt; HTTP Request).
@@ -181,7 +180,7 @@ a visual model of the data.</p>
 output file.  You can either type it into the filename field, or select the
 Browse button and browse to a directory and then enter a filename.</p>
 
-<figure image="../images/screenshots/graph_results.gif">
+<figure image="../images/screenshots/graph_results.png">
 Figure 5.7. Graph Results Listener</figure>
 
 </section>

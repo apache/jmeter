@@ -2,7 +2,7 @@
 <document prev="build-test-plan.html" next="build-web-test-plan.html" date="$Date$">
 
 <properties>
-  <title>User's Manual: Thread Group</title>
+  <title>User's Manual: Elements of a Test Plan</title>
 </properties>
 
 <body>
@@ -41,6 +41,13 @@ and a ramp-up period of 120 seconds, then each successive thread will be delayed
 <p>By default, a thread group is configured to loop indefinitely through its elements.
 Alternatively, you can set the number of times the thread group will loop before ending.  If the number
 is set at one, then JMeter will execute the test only once before stopping.</p>
+
+<p>Version 1.9 introduces a test run <b>scheduler</b>. 
+	Click the checkbox at the bottom of the Thread Group panel to reveal two extra fields
+	 in which you can enter the start and end times of the run. 
+	 When the test is started, JMeter will wait if necessary until the start-time has been reached.
+	 At the end of each cycle, JMeter checks if the end-time has been reached, and if so, the run is stopped,
+	 otherwise the test is allowed to continue until the iteration limit is reached.</p>
 </subsection>
 
 <subsection name="4.2 Controllers" anchor="controllers">
@@ -66,8 +73,17 @@ see <a href="#logic_controller">Logical Controllers</a>.</p>
 <subsection name="4.2.1 Samplers" anchor="samplers">
 
 <p>Samplers tell JMeter to send requests to a server. JMeter
-currently has four such samplers: FTP Request, HTTP Request, JDBC Request, and
-the Java object request.  Each sampler has several properties you can set.
+currently has the following samplers:
+<ul>
+	<li>FTP Request</li>
+	<li>HTTP Request</li>
+	<li>JDBC Request</li>
+	<li>Java object request</li>
+	<li>LDAP Request</li>
+	<li>SOAP/XML-RPC Request</li>
+	<li>WebService (SOAP) Request (Alpha Code)</li>
+</ul>
+Each sampler has several properties you can set.
 You can further customize a sampler by adding one or more Configuration Elements to it.
 Also, note that JMeter sends requests in the order that you add them to the tree.</p>
 

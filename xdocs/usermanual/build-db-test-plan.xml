@@ -10,7 +10,7 @@
 
 <section name="7. Building a Database Test Plan" anchor="building">
 <p>In this section, you will learn how to create a basic
-<a href="build-test-plan.html">Test Plan</a> to test an database server.
+<a href="build-test-plan.html">Test Plan</a> to test a database server.
 You will create ten users that send five SQL requests to the database server.
 Also, you will tell the users to run their tests three times. So, the total number
 of requests is (10 users) x (2 requests) x (repeat 3 times) = 60 JDBC requests.
@@ -19,7 +19,7 @@ To construct the Test Plan, you will use the following elements:
 <complink name="JDBC Request"/>, <complink name="Graph Results"/>.</p>
 
 <note>This example uses the PostgreSQL <b>org.postgresql.Driver</b> database driver.
-To use this driver, its' containing .jar file must be copied to the extension
+To use this driver, its containing .jar file must be copied to the extension
 .../lib/ directory (see <a href="get-started.html#classpath">JMeter's Classpath</a>
 for more details). Otherwise, expect a substantial amount of stack traces when
 running this test plan.</note>
