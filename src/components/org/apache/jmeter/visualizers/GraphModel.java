@@ -253,6 +253,8 @@ public class GraphModel implements Clearable, Serializable
         bigChange = true;
         current = new Sample(0, 0, 0, 0, 0,false);
         statCalc.clear();
+        startTime = Long.MAX_VALUE;
+        endTime = Long.MIN_VALUE;
         this.fireDataChanged();
     }
 

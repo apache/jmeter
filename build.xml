@@ -113,6 +113,7 @@
     <include name="${tidy.jar}"/>
     <include name="${commons-collections.jar}"/>
     <include name="lib/*.html"/>
+    <include name="${jdom.jar}"/>
   </patternset>
 
   <!-- Directory where these 3rd party libraries will live -->
@@ -229,6 +230,7 @@
     <mkdir dir="${build.http}"/>
     <javac srcdir="${src.http}" destdir="${build.http}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
+      <exclude name="org/apache/jmeter/protocol/http/sampler/WebServiceSampler.java" unless="javamail.complete"/>
       <classpath>
         <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
@@ -387,7 +389,7 @@
     <include name="*"/>
   </patternset>
 
-  <target name="dist" depends="assume-libs-present,clean,install,all-docs,test" description="Create the distribution packages.">
+  <target name="dist" depends="assume-libs-present,clean,install,all-docs,test,src_dist" description="Create the distribution packages.">
     <property name="dist.name" value="jakarta-jmeter-${version}"/>
     <mkdir dir="${dist.dir}"/>
 
