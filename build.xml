@@ -406,12 +406,6 @@
   <target name="docs" depends="init-docs" if="AnakiaTask.present" description="Generate browsable HTML documentation.">
     <taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask"/>
     <anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" style="./xdocs/stylesheets/site.vsl" projectFile="./stylesheets/project.xml" excludes="**/stylesheets/**" includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${docs.src}/velocity.properties"/>
-    <copy todir="${docs.dest}">
-      <fileset dir="${docs.src}">
-        <include name="images/**"/>
-        <include name="demos/**"/>
-      </fileset>
-    </copy>
   </target>
 
   <target name="printable-docs" depends="init-docs" if="AnakiaTask.present" description="Generate printable HTML documentation.">

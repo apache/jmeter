@@ -171,8 +171,8 @@ Constructor.
 		  maxConnections=absoluteMaxConnections;
 		  key.setMaxConnections(maxConnections);
 		}
-	 }catch(Exception e){log.error("",e);
-		maxConnections=1;}
+	 }catch(Exception e){log.error("Couldn't open connections to database",e);
+		maxConnections=0;}
 	 connectionArray=new ConnectionObject[maxConnections];
 	 int count=-1;
 	 while(++count<maxConnections)
@@ -195,9 +195,13 @@ Constructor.
   Rents out a database connection object.
 @return Connection object.
   ******************************************************/
-  public Connection getConnection(DBKey key)      //deleted synchronized
+  public Connection getConnection(DBKey key) throws NoConnectionsAvailableException     //deleted synchronized
   {
 	 ConnectionObject[] connectionArray=(ConnectionObject[])connections.get(key);
+     if(connectionArray == null || connectionArray.length == 0)
+     {
+         throw new NoConnectionsAvailableException();
+     }
 	 int maxConnections=key.getMaxConnections();
 	 Connection c=null;
 	 int index=(int)(100*Math.random());

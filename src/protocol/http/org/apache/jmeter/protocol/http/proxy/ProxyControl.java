@@ -347,7 +347,6 @@ public class ProxyControl extends ConfigTestElement implements Serializable
                         JMeterUtils.reportErrorToUser(e.getMessage());
                     }
                 }
-                return;
             }
         }
     }
@@ -355,18 +354,18 @@ public class ProxyControl extends ConfigTestElement implements Serializable
     {
         if (urlConfig != null)
         {
-            if (sampler.getDomain().equals(urlConfig.getProperty(HTTPSampler.DOMAIN)))
+            if (sampler.getDomain().equals(urlConfig.getPropertyAsString(HTTPSampler.DOMAIN)))
             {
                 sampler.setDomain("");
             }
             
             // Need to add some kind of "ignore-me" value
-            if (("" + sampler.getPort()).equals(urlConfig.getProperty(HTTPSampler.PORT)))
+            if (sampler.getPort() == urlConfig.getPropertyAsInt(HTTPSampler.PORT))
             {
                 sampler.setPort(HTTPSampler.UNSPECIFIED_PORT);
             }
             
-            if (sampler.getPath().equals(urlConfig.getProperty(HTTPSampler.PATH)))
+            if (sampler.getPath().equals(urlConfig.getPropertyAsString(HTTPSampler.PATH)))
             {
                 sampler.setPath("");
             }
@@ -375,12 +374,10 @@ public class ProxyControl extends ConfigTestElement implements Serializable
     private boolean areMatched(HTTPSampler sampler, TestElement urlConfig)
     {
         return urlConfig == null
-            || (urlConfig.getProperty(HTTPSampler.DOMAIN) == null
-                || urlConfig.getProperty(HTTPSampler.DOMAIN).equals("")
-                || urlConfig.getProperty(HTTPSampler.DOMAIN).equals(sampler.getDomain()))
-            && (urlConfig.getProperty(HTTPSampler.PATH) == null
-                || urlConfig.getProperty(HTTPSampler.PATH).equals("")
-                || urlConfig.getProperty(HTTPSampler.PATH).equals(sampler.getPath()));
+            || (urlConfig.getPropertyAsString(HTTPSampler.DOMAIN).equals("")
+                || urlConfig.getPropertyAsString(HTTPSampler.DOMAIN).equals(sampler.getDomain()))
+            && (urlConfig.getPropertyAsString(HTTPSampler.PATH).equals("")
+                || urlConfig.getPropertyAsString(HTTPSampler.PATH).equals(sampler.getPath()));
     }
     private boolean checkIncludes(HTTPSampler sampler)
     {

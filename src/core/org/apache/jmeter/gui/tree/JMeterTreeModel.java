@@ -122,9 +122,8 @@ public class JMeterTreeModel extends DefaultTreeModel
      *@param current                         !ToDo
      *@exception IllegalUserActionException  !ToDo (Exception description)
      ***************************************/
-    public boolean addSubTree(HashTree subTree, JMeterTreeNode current) throws IllegalUserActionException
+    public HashTree addSubTree(HashTree subTree, JMeterTreeNode current) throws IllegalUserActionException
     {
-        boolean ret = false;
         Iterator iter = subTree.list().iterator();
         while (iter.hasNext())
         {
@@ -134,14 +133,13 @@ public class JMeterTreeModel extends DefaultTreeModel
                 current = (JMeterTreeNode) ((JMeterTreeNode) getRoot()).getChildAt(0);
                 ((TestElement) current.getUserObject()).addTestElement(item);
                 addSubTree(subTree.getTree(item), current);
-                ret = true;
             }
             else
             {
                 addSubTree(subTree.getTree(item), addComponent(item, current));
             }
         }
-        return ret;
+        return getCurrentSubTree(current);
     }
 
     /****************************************

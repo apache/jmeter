@@ -63,6 +63,7 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import javax.swing.JFileChooser;
+import javax.swing.tree.TreePath;
 
 import junit.framework.TestCase;
 
@@ -70,9 +71,11 @@ import org.apache.jmeter.control.gui.WorkBenchGui;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.log.Hierarchy;
@@ -157,10 +160,14 @@ public class Load implements Command
 	 * */
 	public boolean insertLoadedTree(int id, HashTree tree) throws Exception, IllegalUserActionException {
 		//convertTree(tree);
-		boolean isTestPlan = GuiPackage.getInstance().addSubTree(tree);
+        boolean isTestPlan = tree.getArray()[0] instanceof TestPlan;
+		HashTree newTree = GuiPackage.getInstance().addSubTree(tree);
+        GuiPackage.getInstance().getMainFrame().getTree().setSelectionPath(
+        new TreePath(((JMeterTreeNode)newTree.getArray()[0]).getPath()));
 		tree = GuiPackage.getInstance().getCurrentSubTree();				
 		ActionRouter.getInstance().actionPerformed(new ActionEvent(
 			tree.get(tree.getArray()[tree.size()-1]),id,CheckDirty.SUB_TREE_LOADED));
+        
 		return isTestPlan;
 	}
 

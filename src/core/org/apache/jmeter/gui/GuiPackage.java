@@ -258,7 +258,7 @@ public class GuiPackage
     {
         return dirty;
     }
-    public boolean addSubTree(HashTree subTree) throws IllegalUserActionException
+    public HashTree addSubTree(HashTree subTree) throws IllegalUserActionException
     {
         return treeModel.addSubTree(subTree, treeListener.getCurrentNode());
     }

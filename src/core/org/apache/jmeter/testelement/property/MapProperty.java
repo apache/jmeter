@@ -27,6 +27,18 @@ public class MapProperty extends AbstractProperty
         super();
     }
 
+    public boolean equals(Object o)
+    {
+        if (o instanceof MapProperty)
+        {
+            if (value != null)
+            {
+                return value.equals(((JMeterProperty) o).getObjectValue());
+            }
+        }
+        return false;
+    }
+
     public void setObjectValue(Object v)
     {
         if (v instanceof Map)

@@ -26,18 +26,30 @@ public class FunctionProperty extends AbstractProperty
     {
         super();
     }
-    
+
     public void setObjectValue(Object v)
+    {
+        if (v instanceof CompoundVariable && !isRunningVersion())
         {
-            if(v instanceof CompoundVariable && !isRunningVersion())
+            function = (CompoundVariable) v;
+        }
+        else
+        {
+            cacheValue = v.toString();
+        }
+    }
+
+    public boolean equals(Object o)
+    {
+        if (o instanceof FunctionProperty)
+        {
+            if (function != null)
             {
-                function = (CompoundVariable)v;
-            }
-            else
-            {
-                cacheValue = v.toString();
+                return function.equals(((JMeterProperty) o).getObjectValue());
             }
         }
+        return false;
+    }
 
     /**
      * Executes the function (and caches the value for the duration of the test
@@ -47,7 +59,7 @@ public class FunctionProperty extends AbstractProperty
      */
     public String getStringValue()
     {
-        if(!isRunningVersion())
+        if (!isRunningVersion())
         {
             log.debug("Not running version, return raw function string");
             return function.getRawParameters();
@@ -56,11 +68,11 @@ public class FunctionProperty extends AbstractProperty
         {
             log.debug("Running version, executing function");
             int iter = JMeterContextService.getContext().getVariables().getIteration();
-            if(iter < testIteration)
+            if (iter < testIteration)
             {
                 testIteration = -1;
             }
-            if(iter > testIteration || cacheValue == null)
+            if (iter > testIteration || cacheValue == null)
             {
                 testIteration = iter;
                 cacheValue = function.execute();
@@ -76,10 +88,10 @@ public class FunctionProperty extends AbstractProperty
     {
         return function;
     }
-    
+
     public Object clone()
     {
-        FunctionProperty prop = (FunctionProperty)super.clone();
+        FunctionProperty prop = (FunctionProperty) super.clone();
         prop.cacheValue = cacheValue;
         prop.testIteration = testIteration;
         prop.function = function;
