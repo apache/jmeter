@@ -96,6 +96,7 @@ public class ThreadGroup
     public final static String SCHEDULER = "ThreadGroup.scheduler";
     public final static String START_TIME= "ThreadGroup.start_time";
     public final static String END_TIME= "ThreadGroup.end_time";
+	public final static String DURATION = "ThreadGroup.duration";
 
 
     /* Action to be taken when a Sampler error occurs*/
@@ -178,6 +179,26 @@ public class ThreadGroup
     {
         return getPropertyAsLong(START_TIME);
     }
+
+	/**
+	 * Get the duration
+	 *
+	 * @return the duration (in secs)
+	 */
+	public long getDuration()
+	{
+		return getPropertyAsLong(DURATION);
+	}
+
+	/**
+	 * Set the duration
+	 *
+	 * @param duration in seconds
+	 */
+	public void setDuration(long duration)
+	{
+		setProperty(new LongProperty(DURATION,duration));
+	}
 
     /**
      * Set the EndTime value.
