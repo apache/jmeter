@@ -18,6 +18,8 @@
         kind="src" output="build/protocol/java" path="src/protocol/java"/>
     <classpathentry kind="src" output="build/protocol/ldap" path="src/protocol/ldap"/>
     <classpathentry kind="src" output="build/protocol/tcp" path="src/protocol/tcp"/>
+	<classpathentry kind="src" output="build/monitor/model" path="src/monitor/model"/>
+	<classpathentry kind="src" output="build/monitor/components" path="src/monitor/components"/>
     <classpathentry kind="src" path="src/examples"/>
     <classpathentry kind="src" output="build/htmlparser" path="src/htmlparser"/>
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
