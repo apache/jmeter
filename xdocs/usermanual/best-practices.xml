@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<document>
+
+<properties>
+  <title>User's Manual: Best Practices</title>
+</properties>
+
+<body>
+
+<section name="10. Best Practices">
+</section>
+
+<section name="10.1 Limit the Number of Threads">
+</section>
+
+<section name="10.2 Where to Put the Cookie Manager">
+</section>
+
+<section name="10.3 Where to Put the Auth">
+</section>
+
+</body>
+</document>
