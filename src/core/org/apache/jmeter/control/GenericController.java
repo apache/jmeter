@@ -113,11 +113,7 @@ public class GenericController extends AbstractTestElement implements Controller
 	
 	public boolean isNextFirst()
 	{
-		if(first)
-        {
-            return true;
-        }
-        return false;
+		return first;
 	}
 
 	/****************************************

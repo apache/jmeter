@@ -60,6 +60,7 @@ public class FunctionProperty extends AbstractProperty
             {
                 testIteration = iter;
                 cacheValue = function.execute();
+                log.debug("Executing function",new Exception());
             }
             return cacheValue;
         }
