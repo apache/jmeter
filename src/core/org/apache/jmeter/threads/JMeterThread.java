@@ -44,6 +44,7 @@ import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterStopTestException;
 import org.apache.jorphan.util.JMeterStopThreadException;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -64,8 +65,8 @@ public class JMeterThread implements Runnable, java.io.Serializable
     TestCompiler compiler;
     JMeterThreadMonitor monitor;
     String threadName;
-    JMeterContext threadContext;
-    JMeterVariables threadVars;
+    JMeterContext threadContext; // current working thread context
+    JMeterVariables threadVars;// Initial thread variables
     Collection testListeners;
     ListenerNotifier notifier;
     int threadNum = 0;
@@ -79,7 +80,9 @@ public class JMeterThread implements Runnable, java.io.Serializable
 	private boolean onErrorStopTest;
 	private boolean onErrorStopThread;
     
-    public static final String PACKAGE_OBJECT = "JMeterThread.pack";
+    public static final String PACKAGE_OBJECT = "JMeterThread.pack"; // $NON-NLS-1$
+    public static final String LAST_SAMPLE_OK = "JMeterThread.last_sample_ok"; // $NON-NLS-1$
+	public static final String ALL_SAMPLES_OK = "JMeterThread.all_samples_ok"; // $NON-NLS-1$
 
     public JMeterThread()
     {
@@ -390,6 +393,8 @@ public class JMeterThread implements Runnable, java.io.Serializable
     private void checkAssertions(List assertions, SampleResult result)
     {
         Iterator iter = assertions.iterator();
+        boolean last_sample_ok=true;
+        boolean all_samples_ok=true;
         while (iter.hasNext())
         {
         	Assertion assertion= (Assertion)iter.next();
@@ -399,7 +404,11 @@ public class JMeterThread implements Runnable, java.io.Serializable
                 result.isSuccessful()
                     && !(assertionResult.isError() || assertionResult.isFailure()));
             result.addAssertionResult(assertionResult);
+            last_sample_ok = result.isSuccessful();
+            all_samples_ok &= last_sample_ok;
         }
+        threadContext.getVariables().put(LAST_SAMPLE_OK,JOrphanUtils.booleanToString(last_sample_ok));
+        threadContext.getVariables().put(ALL_SAMPLES_OK,JOrphanUtils.booleanToString(all_samples_ok));
     }
 
     private void runPostProcessors(List extractors)
