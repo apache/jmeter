@@ -58,6 +58,7 @@ public class LdapExtClient
     .getLoggerFor("jmeter.protocol.ldap");
    public final static String CONNECTOR = "ldap_con";
    public NamingEnumeration answer;
+   public NamingEnumeration compareAnswer;
     /**
      *  Constructor for the LdapClient object
      */
@@ -121,6 +122,7 @@ public class LdapExtClient
         throws Exception{
         SearchControls searchcontrols= null;
         searchcontrols = new SearchControls(scope, countlim, timelim, attrs, retobj, deref); 
+        log.debug("scope, countlim, timelim, attrs, retobj, deref= "+searchFilter+scope+ countlim+ timelim+ attrs+ retobj+ deref);
         answer=dirContext.search(searchBase, searchFilter, searchcontrols);
     }
 
@@ -132,7 +134,7 @@ public class LdapExtClient
      ***********************************************************/
    public void compare(DirContext dirContext, String filter, String entrydn) throws Exception{
        SearchControls searchcontrols = new SearchControls(0, 1, 0, new String[0], false, false); 
-       dirContext.search(entrydn, filter, searchcontrols);
+       compareAnswer=dirContext.search(entrydn, filter, searchcontrols);
     }
 
    /************************************************************
@@ -142,6 +144,7 @@ public class LdapExtClient
      *@param  search filter filter this value from the base  
      ***********************************************************/
    public void moddnOp(DirContext dirContext, String ddn, String newdn) throws Exception{
+       log.debug("ddn and newDn= "+ddn+"@@@@"+newdn);
        dirContext.rename(ddn, newdn);
     }
 
