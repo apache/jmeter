@@ -115,8 +115,25 @@ import org.apache.oro.text.regex.MalformedPatternException;
  */
 class RegexpHTMLParser extends HTMLParser
 {
-	/** Stores the singleton parser to be used */
+    /** Stores the singleton parser to be used */
     private static HTMLParser myParser = new RegexpHTMLParser();
+
+    /**
+     * Regexp fragment matching a tag attribute's value (including
+     * the equals sign and any spaces before it). Note it matches
+     * unquoted values, which to my understanding, are not conformant
+     * to any of the HTML specifications, but are still quite common
+     * in the web and all browsers seem to understand them.
+     */
+    private static final String VALUE=
+        "\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\"'\\s][^\\s]*))";
+            // Note there's 3 capturing groups per value
+
+    /**
+     * Regexp fragment matching the separation between two tag attributes. 
+     */
+    private static final String SEP=
+        "\\s(?:[^>]*\\s)?";
 
     /**
      * Regular expression used against the HTML code to find the URIs of
@@ -124,14 +141,17 @@ class RegexpHTMLParser extends HTMLParser
      */
     private static final String REGEXP=
         "<(?:"
-            +  "BASE(?=\\s)[^\\>]*\\sHREF\\s*=\\s*\"([^\">]*)\""
-            + "|(?:IMG|SCRIPT|FRAME|IFRAME)(?=\\s)[^\\>]*\\sSRC\\s*=\\s*\"([^\">]*)\""
-            + "|APPLET(?=\\s)[^\\>]*\\sCODE(?:BASE)?\\s*=\\s*\"([^\">]*)\""
-            + "|(?:EMBED|OBJECT)(?=\\s)[^\\>]*\\s(?:SRC|CODEBASE)\\s*=\\s*\"([^\">]*)\""
-            + "|(?:BODY|TABLE|TR|TD)(?=\\s)[^\\>]*\\sBACKGROUND\\s*=\\s*\"([^\">]*)\""
-            + "|INPUT(?=\\s)(?:[^\\>]*\\s(?:SRC\\s*=\\s*\"([^\">]*)\"|TYPE\\s*=\\s*\"image\")){2,}"
-            + "|LINK(?=\\s)(?:[^\\>]*\\s(?:HREF\\s*=\\s*\"([^\">]*)\"|REL\\s*=\\s*\"stylesheet\")){2,}"
+            +  "BASE"+SEP+"HREF"+VALUE
+            + "|(?:IMG|SCRIPT|FRAME|IFRAME)"+SEP+"SRC"+VALUE
+            + "|APPLET"+SEP+"CODE(?:BASE)?"+VALUE
+            + "|(?:EMBED|OBJECT)"+SEP+"(?:SRC|CODEBASE)"+VALUE
+            + "|(?:BODY|TABLE|TR|TD)"+SEP+"BACKGROUND"+VALUE
+            + "|INPUT(?:"+SEP+"(?:SRC"+VALUE+"|TYPE\\s*=\\s*[\"']?image(?=[\"'\\s>]))){2,}"
+            + "|LINK(?:"+SEP+"(?:HREF"+VALUE+"|REL\\s*=\\s*[\"']?stylesheet(?=[\"'\\s>]))){2,}"
             + ")";
+
+    // Number of capturing groups possibly containing Base HREFs:
+    private static final int NUM_BASE_GROUPS= 3;
 
     /**
      * Compiled regular expression.
@@ -161,7 +181,7 @@ class RegexpHTMLParser extends HTMLParser
     };
 
     /** Used to store the Logger (used for debug and error messages). */
-    transient private static Logger log= LoggingManager.getLoggerForClass();
+    transient private static Logger log;
 
     /**
      * Make sure to compile the regular expression upon instantiation:
@@ -169,6 +189,10 @@ class RegexpHTMLParser extends HTMLParser
     //TODO make private? 
     RegexpHTMLParser() {
         super();
+
+        // Define this here to ensure it's ready to report any trouble
+        // with the regexp:
+        log= LoggingManager.getLoggerForClass();
         
         // Compile the regular expression:
         try
@@ -209,33 +233,36 @@ class RegexpHTMLParser extends HTMLParser
             if (log.isDebugEnabled())
                 log.debug("match groups " + match.groups());
             // Check for a BASE HREF:
-            s= match.group(1);
-            if (s != null)
+            for (int g=1; g <= NUM_BASE_GROUPS && g <= match.groups(); g++)
             {
-                if (log.isDebugEnabled())
+                s= match.group(g);
+                if (s != null)
                 {
-                    log.debug("new baseUrl: " + s + " - " + baseUrl.toString());
-                }
-                try
-                {
-                    baseUrl= new URL(baseUrl, s);
-                }
-                catch (MalformedURLException e)
-                {
-                    // Doesn't even look like a URL?
-                    // Maybe it isn't: Ignore the exception.
                     if (log.isDebugEnabled())
                     {
-                        log.debug(
-                            "Can't build base URL from RL "
-                                + s
-                                + " in page "
-                                + baseUrl,
-                            e);
+                        log.debug("new baseUrl: " + s + " - " + baseUrl.toString());
+                    }
+                    try
+                    {
+                        baseUrl= new URL(baseUrl, s);
+                    }
+                    catch (MalformedURLException e)
+                    {
+                        // Doesn't even look like a URL?
+                        // Maybe it isn't: Ignore the exception.
+                        if (log.isDebugEnabled())
+                        {
+                            log.debug(
+                                "Can't build base URL from RL "
+                                    + s
+                                    + " in page "
+                                    + baseUrl,
+                                e);
+                        }
                     }
                 }
             }
-            for (int g= 2; g < match.groups(); g++)
+            for (int g= NUM_BASE_GROUPS+1; g <= match.groups(); g++)
             {
                 s= match.group(g);
                 if (log.isDebugEnabled())
@@ -274,13 +301,13 @@ class RegexpHTMLParser extends HTMLParser
             super();
         }
         public void testParser() throws Exception {
-			log.info("testParser");
+            log.info("testParser");
             HTMLParserTest.testParser(getParserInstance());
         }
         public void testParserClass() throws Exception {
-		    log.info("testParserClass");
-		    HTMLParserTest.testParser("org.apache.jmeter.protocol.http.parser.RegexpHTMLParser");
-	    }
+            log.info("testParserClass");
+            HTMLParserTest.testParser("org.apache.jmeter.protocol.http.parser.RegexpHTMLParser");
+        }
     }
 
     /* (non-Javadoc)
@@ -291,8 +318,8 @@ class RegexpHTMLParser extends HTMLParser
         return myParser;
     }
 
-	public static boolean isParserReusable(){
-		return true;
-	}
+    public static boolean isParserReusable(){
+        return true;
+    }
 
 }
