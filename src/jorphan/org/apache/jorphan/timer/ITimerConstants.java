@@ -54,18 +54,17 @@
  */
 package org.apache.jorphan.timer;
 
-// ----------------------------------------------------------------------------
 /**
- * A package-private collection of constants used by {@link ITimer} implementations
- * in <code>HRTimer</code> and <code>JavaSystemTimer</code> classes.
+ * A package-private collection of constants used by {@link ITimer}
+ * implementations in <code>HRTimer</code> and <code>JavaSystemTimer</code>
+ * classes.
  *
- * @author (C) <a href="mailto:vroubtsov@illinoisalumni.org">Vlad Roubtsov</a>, 2002
+ * @author <a href="mailto:vroubtsov@illinoisalumni.org">Vlad Roubtsov</a>
  * @author Originally published in <a href="http://www.javaworld.com/javaworld/javaqa/2003-01/01-qa-0110-timing.html">JavaWorld</a>
+ * @version $Revision$
  */
 interface ITimerConstants
 {
-    // public: ................................................................
-    
     /**
      * Conditional compilation flag to enable/disable state checking in timer
      * implementations. Just about the only reason you might want to disable
@@ -83,6 +82,4 @@ interface ITimerConstants
      * User-friendly timer state names indexed by their state values.
      */
     static final String [] STATE_NAMES = {"READY", "STARTED", "STOPPED"};
-
-} // end of interface
-// ----------------------------------------------------------------------------
+}
