@@ -111,6 +111,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
 	private boolean onErrorStopTest;
 	private boolean onErrorStopThread;
     
+    public static final String PACKAGE_OBJECT = "JMeterThread.pack";
 
     public JMeterThread()
     {
@@ -274,6 +275,10 @@ public class JMeterThread implements Runnable, java.io.Serializable
                     {
                         threadContext.setCurrentSampler(sam);
                         SamplePackage pack = compiler.configureSampler(sam);
+                        
+                        //Hack: save the package for any transaction controllers
+                        threadContext.getVariables().putObject(PACKAGE_OBJECT,pack);
+                        
                         delay(pack.getTimers());                        
                         SampleResult result = pack.getSampler().sample(null);
                         result.setThreadName(threadName);
