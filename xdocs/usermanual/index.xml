@@ -125,6 +125,7 @@
 			<li>13.4.7 <complink name="JDBC Database Login Defaults"/></li>
 			<li>13.4.8 <complink name="JDBC SQL Query Defaults"/></li>
 			<li>13.4.9 <complink name="HTML Link Parser"/></li>
+			<li>13.4.10 <complink name="HTTP Header Manager"/></li>
 		</ul>
 		<li><a href="component_reference.html#assertions">13.5 Assertions</a></li>
 		<ul>

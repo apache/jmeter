@@ -16,7 +16,7 @@
 <component index="13.1.1" name="FTP Request" screenshot="../images/screenshots/gen-controller/ftp-request.gif">
 <description>This controller lets you send an FTP "retrieve file" request to an FTP server.
 If you are going to send multiple requests to the same FTP server, consider
-using a <a href="ftp-config.html#request_defaults">FTP Request Defaults</a> Configuration
+using a <complink name="FTP Request Defaults"/> Configuration
 Element so you do not have to enter the same information for each FTP Request Generative
 Controller. </description>
 <properties>
@@ -28,8 +28,8 @@ JMeter assumes the FTP server is listening on the default port.</property>
 	<property name="Password" required="Usually">FTP account password.</property>
 </properties>
 <links>
-	<link href="assertion.html">Assertion</link>
-	<link href="#ftp_request_defaults">FTP Request Defaults</link>
+	<link href="test_plan.html#assertions">Assertions</link>
+	<complink name="FTP Request Defaults"/>
 	<link href="build-ftp-test-plan.html">Building an FTP Test Plan</link>
 </links>
 
@@ -442,7 +442,7 @@ cookie table entries.</property>
 
 </component>
 
-<component index="13.4.3" name="HTTP Proxy Server" screenshot="../images/screenshots/proxy_control.gif">
+<component index="13.4.3" name="HTTP Proxy Server" screenshot="../images/screenshots/http-config/http-proxy-server.gif">
 
 <description><p>The Proxy Server allows JMeter to watch and record your actions while you browse your web application
 with your normal browser (such as Internet Explorer).  JMeter will create test sample objects and store them
@@ -456,15 +456,17 @@ appear under the Configuration Element menu list (Add->Config Elements->HTTP Pro
 	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
 	<property name="Port" required="Yes">The port that the Proxy Server listens to.  8080 is the default, but you can change it
 if that port is already in use on your machine.</property>
-	<property name="Include" required="No">Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
+	<property name="Patterns to Include" required="No">Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
 	those that meet the requirements of the Include/Exclude fields are <i>recorded</i>.  If both Include and Exclude are
 	left empty, then everything is recorded (which can result in dozens of samples recorded for each page, as images, stylesheets,
 	etc are recorded).  <b>If there is at least one entry in the Include field, then only requests that match one or more Include patterns are
 	recorded</b>.</property>
-	<property name="Exclude" required="No">Regular expressions that are matched against the URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
-	those that meet the requirements of the Include/Exclude fields are <i>recorded</i>.  If both Include and Exclude are
-	left empty, then everything is recorded (which can result in dozens of samples recorded for each page, as images, stylesheets,
-	etc are recorded).  <b>Any requests that match one or more Exclude pattern are <i>not</i> recorded</b>.</property>
+	<property name="Patterns to Exclude" required="No">Regular expressions that are matched against the URL that is sampled.
+	<b>Any requests that match one or more Exclude pattern are <i>not</i> recorded</b>.</property>
+	<property name="Clear Buttons" required="N/A">Remove all regular expressions from the list.</property>
+  <property name="Start Button" required="N/A">Start the proxy server.  JMeter writes the following message to the console once the proxy server
+has started up and is ready to take requests: "Proxy up and running!".</property>
+  <property name="Stop Button" required="N/A">Stop the proxy server.</property>
 </properties>
 
 <p>To add an entry to the Include or Exclude field, type the entry into the text field, and hit &quot;Enter&quot; when done.
@@ -479,15 +481,16 @@ combination of includes and excludes, you should be able to record what you are 
 not.</p>
 
 <p>When you are ready to begin, hit &quot;start&quot;.</p>
+<note>You will need to edit the proxy settings of your browser to point at the
+appropriate server and port, where the server is the machine JMeter is running on, and
+the port # is from the Proxy Control Panel shown above.</note>
 
 <b>Where Do Samples Get Recorded?</b>
-<p>The samples will be recorded as Web Test controllers under any Simple Controller elements in your tree (note, if you have more than one
-Simple Controller, they will all have duplicate Web Test controllers created for them).  If your Simple Controller has a
-Url Sample element with domain or path settings, then your Web Test controllers will be created with blank domain and/or path settings (provided
-they match, of course).  This allows you to simply create test plans with a single top level config element to control which server name is
-being tested.</p>
-
-<p>If there are no Simple Controllers in your test plan, then no samples will be recorded.</p>
+<p>JMeter places the recorded samples in the Thread Group, or if you have a Simple Logic Controller,  JMeter places
+them there.  Also, if you have a HTTP Request Defaults element, then the recorded samples will have empty fields for
+the default values you specified.</p>
+<note>If you have more than one Simple Logic Controller, JMeter records the samples to each
+of your Simple Logic Controllers.  We plan to correct this in a future release.</note>
 
 <p>When you are done recording your test samples, stop the proxy server (hit the &quot;stop&quot; button).  Remember to reset
 your browser's proxy settings.  Now, you may want to sort and re-order the test script, add timers, listeners, a
@@ -495,24 +498,52 @@ cookie manager, etc.</p>
 
 </component>
 
-<component index="13.4.4" name="HTTP Request Defaults" screenshot="">
+<component index="13.4.4" name="HTTP Request Defaults"
+	screenshot="../images/screenshots/http-config/http-request-defaults.gif">
+<description><p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are
+creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server,
+you could add a single HTTP Request Defaults element with the "Server Name or IP" field filled in.  Then, when
+you add the 25 HTTP Request controllers, leave the "Server Name or IP" field empty.  The controllers will inherit
+this field value from the HTTP Request Defaults element.</p>
+</description>
 
+<properties>
+	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+	<property name="Server" required="Yes">Domain name or IP address of the web server.</property>
+	<property name="Port" required="No (defaults to 80)">Port the web server is listening to.</property>
+	<property name="Protocol" required="Yes">HTTP or HTTPS.</property>
+	<property name="Method" required="Yes">HTTP GET or HTTP POST.</property>
+	<property name="Path" required="Yes">The path to resource (for example, /servlets/myServlet). If the
+resource requires query string parameters, add them below in the
+"Send Parameters With the Request" section.</property>
+	<property name="Send Parameters With the Request" required="No">The query string will
+	be generated from the list of parameters you provide.  Each parameter has a <i>name</i> and
+	<i>value</i>.  The query string will be generated in the correct fashion, depending on
+	the choice of "Method" you made (ie if you chose GET, the query string will be
+	appended to the URL, if POST, then it will be sent separately).  Also, if you are
+	sending a file using a multipart form, the query string will be created using the
+	multipart form specifications.</property>
+</properties>
 </component>
 
-<component index="13.4.5" name="FTP Request Defaults" screenshot="../images/screenshots/ftp-config/ftp-request-defaults.gif">
-
+<component index="13.4.5" name="FTP Request Defaults"
+		screenshot="../images/screenshots/ftp-config/ftp-request-defaults.gif">
+<description></description>
 </component>
 
-<component index="13.4.6" name="JDBC Database Connection Pool Defaults" screenshot="">
-
+<component index="13.4.6" name="JDBC Database Connection Pool Defaults"
+		screenshot="../images/screenshots/jdbc-config/jdbc-db-conn-pool.gif">
+<description></description>
 </component>
 
-<component index="13.4.7" name="JDBC Database Login Defaults" screenshot="">
-
+<component index="13.4.7" name="JDBC Database Login Defaults"
+		screenshot="../images/screenshots/jdbc-config/jdbc-db-login.gif">
+<description></description>
 </component>
 
-<component index="13.4.8" name="JDBC SQL Query Defaults" screenshot="">
-
+<component index="13.4.8" name="JDBC SQL Query Defaults"
+		screenshot="../images/screenshots/jdbc-config/jdbc-sql-query.gif">
+<description></description>
 </component>
 
 <component index="13.4.9" name="HTML Link Parser" anchor="html_link_parser">
@@ -556,11 +587,40 @@ anything, the modifier will probably have a list of radio buttons to choose from
 will choose at random, and replace the value in your URL test sample.  Each time through
 the test, a new random value will be chosen.</p>
 
-<figure image="../images/screenshots/modification.gif">Figure 6 - Online Poll Example</figure>
+<figure image="../images/screenshots/modification.gif">Figure 8 - Online Poll Example</figure>
 
 <note>One important thing to remember is that you must create a test sample immediately
 prior that will return an HTML page with the links and forms that are relevant to
 your dynamic test sample.</note>
+</example>
+
+</component>
+
+<component index="13.4.10" name="HTTP Header Manager" screenshot="../images/screenshots/http-config/http-header-manager.gif">
+<description><p>The Header Manager lets you add or override HTTP request headers.</p>
+</description>
+
+<properties>
+	<property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
+  <property name="Name (Header)" required="No (You should have at least one, however)">Name of the request header.
+	Two common request headers you may want to experiment with
+are "User-Agent" and "Referer".</property>
+  <property name="Value" required="No (You should have at least one, however)">Request header value.</property>
+  <property name="Add Button" required="N/A">Add an entry to the header table.</property>
+  <property name="Delete Button" required="N/A">Delete the currently selected table entry.</property>
+  <property name="Load Button" required="N/A">Load a previously saved header table and add the entries to the existing
+header table entries.</property>
+  <property name="Save As Button" required="N/A">Save the current header table to a file.</property>
+</properties>
+
+<example title="Header Manager example" anchor="header_manager_example">
+
+<p><a href="../demos/HeaderManagerTestPlan.jmx">Download</a> this example.  In this example, we created a Test Plan
+that tells JMeter to override the default "User-Agent" request header and use a particular Internet Explorer agent string
+instead. (see figures 9 and 10).</p>
+
+<figure image="../images/screenshots/http-config/header-manager-example1a.gif">Figure 9 - Test Plan</figure>
+<figure image="../images/screenshots/http-config/header-manager-example1b.gif">Figure 10 - Header Manager Control Panel</figure>
 </example>
 
 </component>
