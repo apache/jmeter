@@ -305,18 +305,14 @@ public class ProxyControlGui
             model = (ProxyControl) createTestElement();
             startProxy();
         }
-        else if (command.equals(ProxyControl.CAPTURE_HTTP_HEADERS))
+        else if ( command.equals(ProxyControl.CAPTURE_HTTP_HEADERS)
+		        || command.equals(ProxyControl.ADD_ASSERTIONS)
+                || command.equals(ProxyControl.ADD_SEPARATORS)
+                || command.equals(ProxyControl.USE_KEEPALIVE)
+                 )
         {
             enableRestart();
         }
-		else if (command.equals(ProxyControl.ADD_ASSERTIONS))
-		{
-			enableRestart();
-		}
-		else if (command.equals(ProxyControl.ADD_SEPARATORS))
-		{
-			enableRestart();
-		}
         else if (command.equals(ADD_EXCLUDE))
         {
             excludeModel.addNewRow();
@@ -499,10 +495,10 @@ public class ProxyControlGui
 		addAssertions.setActionCommand(ProxyControl.ADD_ASSERTIONS);
 
 		useKeepAlive = new JCheckBox(JMeterUtils.getResString("proxy_usekeepalive"));
-		useKeepAlive.setName(ProxyControl.ADD_ASSERTIONS);
-		useKeepAlive.setSelected(false);
+		useKeepAlive.setName(ProxyControl.USE_KEEPALIVE);
+		useKeepAlive.setSelected(true);
 		useKeepAlive.addActionListener(this);
-		useKeepAlive.setActionCommand(ProxyControl.ADD_ASSERTIONS);
+		useKeepAlive.setActionCommand(ProxyControl.USE_KEEPALIVE);
 
         HorizontalPanel panel = new HorizontalPanel();
         panel.add(label);
@@ -511,13 +507,8 @@ public class ProxyControlGui
         panel.add(Box.createHorizontalStrut(10));
         panel.add(httpHeaders);
 
-		panel.add(Box.createHorizontalStrut(10));
 		panel.add(useKeepAlive);
-
-		panel.add(Box.createHorizontalStrut(10));
 		panel.add(addSeparators);
-
-		panel.add(Box.createHorizontalStrut(10));
 		panel.add(addAssertions);
 
         return panel;
