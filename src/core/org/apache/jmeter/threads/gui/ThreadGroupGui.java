@@ -117,11 +117,11 @@ public class ThreadGroupGui
         tg.setProperty(
             new LongProperty(
                 ThreadGroup.START_TIME,
-                ((Date) start.getDate()).getTime()));
+                start.getDate().getTime()));
         tg.setProperty(
             new LongProperty(
                 ThreadGroup.END_TIME,
-                ((Date) end.getDate()).getTime()));
+                end.getDate().getTime()));
         tg.setProperty(
             new BooleanProperty(ThreadGroup.SCHEDULER, scheduler.isSelected()));
         tg.setProperty(

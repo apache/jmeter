@@ -82,7 +82,7 @@ public class ConstantTimer
      */
     public double getRange()
     {
-        return (double) 0;
+        return 0;
     }
 
     /**
