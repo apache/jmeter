@@ -136,8 +136,7 @@ public abstract class SSLManager
                 {
                     this.defaultpw =
                         JMeterUtils.getJMeterProperties().getProperty(
-                            "javax.net.ssl.keyStorePassword",
-                            "password");
+                            "javax.net.ssl.keyStorePassword");
 
                     if (null == defaultpw)
                     {

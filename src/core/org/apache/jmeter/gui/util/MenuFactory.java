@@ -69,6 +69,30 @@ public final class MenuFactory
     private static Map menuMap = new HashMap();
     private static Set elementsToSkip = new HashSet();
 
+    // MENU_ADD_xxx - controls which items are in the ADD menu
+    // MENU_PARENT_xxx - controls which items are in the Insert Parent menu
+	private static final String[] MENU_ADD_CONTROLLER = new String[] {
+            MenuFactory.CONTROLLERS,
+            MenuFactory.SAMPLERS,
+            MenuFactory.CONFIG_ELEMENTS,
+            MenuFactory.TIMERS,
+            MenuFactory.LISTENERS,
+            MenuFactory.PRE_PROCESSORS,
+            MenuFactory.POST_PROCESSORS };
+    private static final String[] MENU_PARENT_CONTROLLER = new String[] {
+    		MenuFactory.CONTROLLERS };
+    
+    private static final String[] MENU_ADD_SAMPLER = new String[] {
+            MenuFactory.CONFIG_ELEMENTS,
+            MenuFactory.ASSERTIONS,
+            MenuFactory.TIMERS,
+            MenuFactory.LISTENERS,
+            MenuFactory.PRE_PROCESSORS,
+            MenuFactory.POST_PROCESSORS };
+    private static final String[] MENU_PARENT_SAMPLER = new String[] { 
+    		MenuFactory.CONTROLLERS };
+
+    
     private static List timers,
         controllers,
         samplers,
@@ -224,20 +248,13 @@ public final class MenuFactory
         JPopupMenu pop = new JPopupMenu();
         pop.add(
             MenuFactory.makeMenus(
-                new String[] {
-                    MenuFactory.CONTROLLERS,
-                    MenuFactory.SAMPLERS,
-                    MenuFactory.CONFIG_ELEMENTS,
-                    MenuFactory.TIMERS,
-                    MenuFactory.LISTENERS,
-                    MenuFactory.PRE_PROCESSORS,
-                    MenuFactory.POST_PROCESSORS },
-                JMeterUtils.getResString("Add"),
+                MENU_ADD_CONTROLLER,
+                JMeterUtils.getResString("Add"),// $NON-NLS-1$
                 "Add"));
         pop.add(
             makeMenus(
-                new String[] { MenuFactory.CONTROLLERS },
-                JMeterUtils.getResString("insert_parent"),
+                MENU_PARENT_CONTROLLER,
+                JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
                 "Add Parent"));
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
@@ -249,19 +266,13 @@ public final class MenuFactory
         JPopupMenu pop = new JPopupMenu();
         pop.add(
             MenuFactory.makeMenus(
-                new String[] {
-                    MenuFactory.CONFIG_ELEMENTS,
-                    MenuFactory.ASSERTIONS,
-                    MenuFactory.TIMERS,
-                    MenuFactory.LISTENERS,
-                    MenuFactory.PRE_PROCESSORS,
-                    MenuFactory.POST_PROCESSORS },
-                JMeterUtils.getResString("Add"),
+                MENU_ADD_SAMPLER,
+                JMeterUtils.getResString("Add"),// $NON-NLS-1$
                 "Add"));
         pop.add(
             makeMenus(
-                new String[] { MenuFactory.CONTROLLERS },
-                JMeterUtils.getResString("insert_parent"),
+                MENU_PARENT_SAMPLER,
+                JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
                 "Add Parent"));
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);

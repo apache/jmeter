@@ -57,16 +57,6 @@ public class HTTPSampleResult extends SampleResult
         setCookies(res.getCookies());
     }
 
-    private URL location;
-    
-    public void setURL(URL location) {
-        this.location= location;
-    }
-    
-    public URL getURL() {
-        return location;
-    }
-    
     private String method;
     
     public void setHTTPMethod(String method) {
@@ -112,7 +102,7 @@ public class HTTPSampleResult extends SampleResult
     {
         StringBuffer sb= new StringBuffer();
         sb.append(getHTTPMethod());
-        URL u= getURL();
+        URL u= super.getURL();
         if (u != null)
         {
             sb.append(' ');

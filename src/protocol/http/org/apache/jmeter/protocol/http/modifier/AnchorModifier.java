@@ -222,6 +222,11 @@ public class AnchorModifier
         HTTPSamplerBase config,
         List potentialLinks)
     {
+    	String base="";
+    	NodeList baseList = html.getElementsByTagName("base");
+    	if (baseList.getLength()>0){
+    		base=baseList.item(0).getAttributes().getNamedItem("href").getNodeValue();
+    	}
         NodeList nodeList = html.getElementsByTagName("a");
         for (int i = 0; i < nodeList.getLength(); i++)
         {
@@ -237,7 +242,7 @@ public class AnchorModifier
             {
                 HTTPSamplerBase newUrl =
                     HtmlParsingUtils.createUrlFromAnchor(
-                        hrefStr, result.getURL());
+                        hrefStr, new URL(result.getURL(),base));
                 newUrl.setMethod(HTTPSamplerBase.GET);
                 log.debug("possible match: " + newUrl);
                 if (HtmlParsingUtils.isAnchorMatched(newUrl, config))
@@ -343,12 +348,12 @@ public class AnchorModifier
             testProcessingHTMLFile(
                 "/testfiles/jmeter_home_page_with_relative_links.html");
         }
-/* Feature not yet implemented. TODO: implement it.
+//* Feature not yet implemented. TODO: implement it.
         public void testModifySamplerWithBaseHRef() throws Exception
         {
             testProcessingHTMLFile(
                 "/testfiles/jmeter_home_page_with_base_href.html");
         }
-*/
+//*/
     }
 }

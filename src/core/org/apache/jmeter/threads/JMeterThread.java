@@ -42,6 +42,9 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterStopTestException;
+import org.apache.jorphan.util.JMeterStopThreadException;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -77,7 +80,9 @@ public class JMeterThread implements Runnable, java.io.Serializable
 	private boolean onErrorStopTest;
 	private boolean onErrorStopThread;
     
-    public static final String PACKAGE_OBJECT = "JMeterThread.pack";
+    public static final String PACKAGE_OBJECT = "JMeterThread.pack"; // $NON-NLS-1$
+    public static final String LAST_SAMPLE_OK = "JMeterThread.last_sample_ok"; // $NON-NLS-1$
+	public static final String ALL_SAMPLES_OK = "JMeterThread.all_samples_ok"; // $NON-NLS-1$
 
     public JMeterThread()
     {
@@ -275,6 +280,16 @@ public class JMeterThread implements Runnable, java.io.Serializable
                         }
 
                     }
+                    catch (JMeterStopTestException e)
+					{
+                    	log.info("Stopping Test: "+e.toString());
+                    	stopTest();
+					}
+                    catch (JMeterStopThreadException e)
+					{
+                    	log.info("Stopping Thread: "+e.toString());
+                    	stopThread();
+					}
                     catch (Exception e)
                     {
                         log.error("", e);
@@ -286,9 +301,19 @@ public class JMeterThread implements Runnable, java.io.Serializable
                 }
             }
         }
-        catch(Exception e)
+        // Might be found by contoller.next()
+        catch (JMeterStopTestException e)
+		{
+        	log.info("Stopping Test: "+e.toString());
+        	stopTest();
+		}
+        catch (JMeterStopThreadException e)
+		{
+        	log.info("Stop Thread seen: "+e.toString());
+		}
+        catch (Exception e)
         {
-           log.error("Test failed!",e);
+            log.error("Test failed!", e);
         }
         finally
         {
@@ -381,6 +406,8 @@ public class JMeterThread implements Runnable, java.io.Serializable
     private void checkAssertions(List assertions, SampleResult result)
     {
         Iterator iter = assertions.iterator();
+        boolean last_sample_ok=true;
+        boolean all_samples_ok=true;
         while (iter.hasNext())
         {
         	Assertion assertion= (Assertion)iter.next();
@@ -390,7 +417,11 @@ public class JMeterThread implements Runnable, java.io.Serializable
                 result.isSuccessful()
                     && !(assertionResult.isError() || assertionResult.isFailure()));
             result.addAssertionResult(assertionResult);
+            last_sample_ok = result.isSuccessful();
+            all_samples_ok &= last_sample_ok;
         }
+        threadContext.getVariables().put(LAST_SAMPLE_OK,JOrphanUtils.booleanToString(last_sample_ok));
+        threadContext.getVariables().put(ALL_SAMPLES_OK,JOrphanUtils.booleanToString(all_samples_ok));
     }
 
     private void runPostProcessors(List extractors)

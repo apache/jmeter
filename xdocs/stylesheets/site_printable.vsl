@@ -38,7 +38,7 @@
 	 #set ($space = $space.charAt(0))
 	 #set ($udsc = "_")
 	 #set ($udsc = $udsc.charAt(0))	 
-	 #set ($imgdir = "$relativePath/images")
+	 #set ($imgdir = "$relativePath/../docs/images")
 	 #set ($sshotdir = "$imgdir/screenshots")
 
 <!-- start the processing -->
@@ -403,7 +403,7 @@
 #macro (getProjectImage)
 #if ($project.getChild("logo"))
 <td align="left">
-<a href="http://jakarta.apache.org"><img src="$relativePath/images/jakarta-logo.gif" border="0"></a>
+<a href="http://jakarta.apache.org"><img src="$imgdir/jakarta-logo.gif" border="0"></a>
 </td>
 <td align="right">
 #set ( $logoString = $project.getChild("logo").getAttributeValue("href") )
@@ -415,7 +415,7 @@
 </td>
 #else
 <td colspan="2">
-<a href="http://jakarta.apache.org"><img src="$relativePath/images/jakarta-logo.gif" align="left" border="0"></a>
+<a href="http://jakarta.apache.org"><img src="$imgdir/jakarta-logo.gif" align="left" border="0"></a>
 </td>
 #end
 #end

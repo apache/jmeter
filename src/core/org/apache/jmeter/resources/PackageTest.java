@@ -91,11 +91,15 @@ public class PackageTest extends TestCase
     	}
     }
 	
+	private void check(String resname) throws Exception
+	{
+		check(resname, true);// check that there aren't any extra entries
+	}
 	/*
 	 * perform the checks on the resources
 	 * 
 	 */
-	private void check(String resname) throws Exception
+	private void check(String resname, boolean checkUnexpected) throws Exception
 	{
 		ArrayList alf = new ArrayList(500);// holds keys from file
 		String res = getResName(resname);
@@ -117,7 +121,7 @@ public class PackageTest extends TestCase
 		{
 			defaultPRB = getRAS(res);
 		}
-		else
+		else if (checkUnexpected)
 		{
 			// Check all the keys are in the default props file
 			Enumeration enum = getRAS(res).getKeys();

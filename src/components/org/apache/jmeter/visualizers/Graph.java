@@ -41,12 +41,12 @@ import org.apache.log.Logger;
  */
 public class Graph extends JComponent implements Scrollable, Clearable
 {
-   private static Logger log = LoggingManager.getLoggerForClass();
-   private boolean data = true;
-   private boolean average = true;
-   private boolean deviation = true;
-   private boolean throughput = true;
-   private boolean median = true;
+    private static Logger log = LoggingManager.getLoggerForClass();
+    private boolean wantData = true;
+    private boolean wantAverage = true;
+    private boolean wantDeviation = true;
+    private boolean wantThroughput = true;
+    private boolean wantMedian = true;
 
    private SamplingStatCalculator model;
    private static int width = 2000;
@@ -141,30 +141,30 @@ public class Graph extends JComponent implements Scrollable, Clearable
       throughputMax = 1;
    }
 
-   public void enableData(boolean value)
-   {
-      this.data = value;
-   }
+    public void enableData(boolean value)
+    {
+        this.wantData = value;
+    }
 
-   public void enableAverage(boolean value)
-   {
-      this.average = value;
-   }
+    public void enableAverage(boolean value)
+    {
+        this.wantAverage = value;
+    }
 
-   public void enableMedian(boolean value)
-   {
-      this.median = value;
-   }
+    public void enableMedian(boolean value)
+    {
+        this.wantMedian = value;
+    }
 
-   public void enableDeviation(boolean value)
-   {
-      this.deviation = value;
-   }
+    public void enableDeviation(boolean value)
+    {
+        this.wantDeviation = value;
+    }
 
-   public void enableThroughput(boolean value)
-   {
-      throughput = value;
-   }
+    public void enableThroughput(boolean value)
+    {
+        this.wantThroughput = value;
+    }
 
    public void updateGui(final Sample oneSample)
    {
@@ -224,7 +224,7 @@ public class Graph extends JComponent implements Scrollable, Clearable
       //int width = getWidth();
       int height = getHeight();
       log.debug("Drawing a sample at " + x);
-      if (data)
+      if (wantData)
       {
          int data = (int) (oneSample.data * height / graphMax);
 
@@ -240,7 +240,7 @@ public class Graph extends JComponent implements Scrollable, Clearable
          log.debug("Drawing coords = " + (x % width) + "," + (height - data));
       }
 
-      if (average)
+      if (wantAverage)
       {
          int average = (int) (oneSample.average * height / graphMax);
 
@@ -249,7 +249,7 @@ public class Graph extends JComponent implements Scrollable, Clearable
                (height - average - 1));
       }
 
-      if (median)
+      if (wantMedian)
       {
          int median = (int) (oneSample.median * height / graphMax);
 
@@ -258,7 +258,7 @@ public class Graph extends JComponent implements Scrollable, Clearable
                (height - median - 1));
       }
 
-      if (deviation)
+      if (wantDeviation)
       {
          int deviation = (int) (oneSample.deviation * height / graphMax);
 
@@ -266,7 +266,7 @@ public class Graph extends JComponent implements Scrollable, Clearable
          g.drawLine(x % width, height - deviation, x % width, (height
                - deviation - 1));
       }
-      if (throughput)
+      if (wantThroughput)
       {
          int throughput = (int) (oneSample.throughput * height / throughputMax);
 
