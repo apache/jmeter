@@ -47,7 +47,7 @@ public class TCPConfigGui extends AbstractConfigGui
 
     private JTextField server;
     private JTextField port;
-	private JTextField filename;
+	//NOTUSED yet private JTextField filename;
 	private JTextField timeout;
     private JCheckBox setNoDelay;
 
@@ -174,20 +174,20 @@ public class TCPConfigGui extends AbstractConfigGui
 		return reqDataPanel;
 
 	}
-    private JPanel createFilenamePanel()//Not used yet
-	{
-		
-		JLabel label = new JLabel(JMeterUtils.getResString("file_to_retrieve"));
-
-		filename = new JTextField(10);
-		filename.setName(FILENAME);
-		label.setLabelFor(filename);
-
-		JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
-		filenamePanel.add(label, BorderLayout.WEST);
-		filenamePanel.add(filename, BorderLayout.CENTER);
-		return filenamePanel;
-	}
+//    private JPanel createFilenamePanel()//Not used yet
+//	{
+//		
+//		JLabel label = new JLabel(JMeterUtils.getResString("file_to_retrieve"));
+//
+//		filename = new JTextField(10);
+//		filename.setName(FILENAME);
+//		label.setLabelFor(filename);
+//
+//		JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
+//		filenamePanel.add(label, BorderLayout.WEST);
+//		filenamePanel.add(filename, BorderLayout.CENTER);
+//		return filenamePanel;
+//	}
 
     private void init()
     {
