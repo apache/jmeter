@@ -56,6 +56,8 @@
 package org.apache.jmeter.protocol.http.util.accesslog;
 
 import java.util.ArrayList;
+
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.oro.text.regex.*;
 
 /**
@@ -544,101 +546,159 @@ public class LogFilter implements Filter
         }
     }
 
-    /**
-     * This is a quick unit test using the
-     * main method. It tests replace and
-     * file filters. Pattern filters have
-     * not been implemented yet, so the
-     * the main method doesn't test it.
-     * @param args
-     */
-    public static void main(String[] args)
-    {
-        LogFilter testf = new LogFilter();
-        String teststr = "/test/helloworld.html";
-        if (args != null && args[0] != null)
-        {
-            teststr = args[0];
-        }
+/////////////////////// Start of Test Code //////////////////////
 
-        testf.setReplaceExtension("html", "jsp");
-        System.out.println("isfilter: " + testf.isFiltered(teststr));
-        System.out.println("original string: " + teststr);
-        System.out.println("new string: " + testf.filter(teststr));
-        System.out.println(" ------------ end of first test -------------");
-        testf = new LogFilter();
-        String[] incl = { "hello.html", "index.html", "/index.jsp" };
-        String[] thefiles =
-            {
-                "/test/hello.jsp",
-                "/test/one/hello.html",
-                "hello.jsp",
-                "hello.htm",
-                "/test/open.jsp",
-                "/test/open.html",
-                "/index.jsp",
-                "/index.jhtml",
-                "newindex.jsp",
-                "oldindex.jsp",
-                "oldindex1.jsp",
-                "oldindex2.jsp",
-                "oldindex3.jsp",
-                "oldindex4.jsp",
-                "oldindex5.jsp",
-                "oldindex6.jsp",
-                "/test/index.htm" };
-        testf.excludeFiles(incl);
-        System.out.println(" ------------ exclude test -------------");
-        for (int idx = 0; idx < thefiles.length; idx++)
-        {
-            boolean fl = testf.isFiltered(thefiles[idx]);//TODO not used
-            String line = testf.filter(thefiles[idx]);
-            if (line != null)
-            {
-                System.out.println("the file: " + line);
-            }
-        }
-        testf = new LogFilter();
-        testf.includeFiles(incl);
-        System.out.println(" ------------ include test -------------");
-        for (int idx = 0; idx < thefiles.length; idx++)
-        {
-            boolean fl = testf.isFiltered(thefiles[idx]);//TODO not used
-            String line = testf.filter(thefiles[idx]);
-            if (line != null)
-            {
-                System.out.println("the file: " + line);
-            }
-        }
+  public static class Test extends JMeterTestCase
+  {
 
-        // start pattern tests
-        // start the exclude pattern test
-        testf = new LogFilter();
-        String[] ptrns = { "index", ".jtml" };
-        testf.excludePattern(ptrns);
-        System.out.println(" ------------ exclude Pattern test -------------");
-        for (int idx = 0; idx < thefiles.length; idx++)
-        {
-            boolean fl = testf.isFiltered(thefiles[idx]);//TODO not used
-            String line = testf.filter(thefiles[idx]);
-            if (line != null)
-            {
-                System.out.println("the file: " + line);
-            }
+	private static final String TESTSTR = "/test/helloworld.html";
+	private static final String TESTSTROUT = "/test/helloworld.jsp";
+	
+	private static class TestData{
+		private final String file;
+		private final boolean exclfile;
+		private final boolean inclfile;
+		private final boolean exclpatt;
+		private final boolean inclpatt;
+        TestData(String f, boolean exf, boolean inf, boolean exp, boolean inp){
+        	file = f;
+        	exclfile = exf;
+			inclfile = inf;
+			exclpatt = exp;
+			inclpatt = inp;
         }
+	}
+	
+	private static final String[] INCL = { "hello.html", "index.html", "/index.jsp" };
+	private static final String[] PATTERNS = { "index", ".jtml" };
+	private static final TestData[] TESTDATA = {
+		             // file                    exclf   inclf   exclp   inclp
+		new TestData("/test/hello.jsp",		true,	false,	true,	false),
+		new TestData("/test/one/hello.html",	false,	true,	true,	false),
+		new TestData("hello.jsp",				true,	false,	true,	false),
+		new TestData("hello.htm",				true,	false,	true,	false),
+		new TestData("/test/open.jsp",			true,	false,	true,	false),
+		new TestData("/test/open.html",		true,	false,	true,	false),
+		new TestData("/index.jsp",				false,	true,	false,	true),
+		new TestData("/index.jhtml",			true,	false,	false,	true),
+		new TestData("newindex.jsp",			true,	false,	false,	true),
+		new TestData("oldindex.jsp",			true,	false,	false,	true),
+		new TestData("oldindex1.jsp",			true,	false,	false,	true),
+		new TestData("oldindex2.jsp",			true,	false,	false,	true),
+		new TestData("oldindex3.jsp",			true,	false,	false,	true),
+		new TestData("oldindex4.jsp",			true,	false,	false,	true),
+		new TestData("oldindex5.jsp",			true,	false,	false,	true),
+		new TestData("oldindex6.jsp",			true,	false,	false,	true),
+		new TestData("/test/index.htm",		true,	false,	false,	true)
+	};
+	
 
-        // start the include pattern test
-        testf = new LogFilter();
-        testf.includePattern(ptrns);
-        System.out.println(" ------------ include Pattern test -------------");
-        for (int idx = 0; idx < thefiles.length; idx++)
-        {
-            boolean fl = testf.isFiltered(thefiles[idx]);//TODO not used
-            String line = testf.filter(thefiles[idx]);
-            if (line != null)
-            {
-                System.out.println("the file: " + line);
-            }
-        }
-    }
+   	public void testConstruct()
+  	{
+  		new LogFilter();
+  	}
+  	
+  	private LogFilter testf;
+
+  	public void setUp()
+  	{
+  		testf = new LogFilter();
+  	}
+  	
+  	public void testReplaceExtension()
+  	{
+		testf.setReplaceExtension("html", "jsp");
+		testf.isFiltered(TESTSTR);// set the required variables
+  		assertEquals(TESTSTROUT,testf.filter(TESTSTR));
+	}
+  	
+	public void testExcludeFiles()
+	{
+		testf.excludeFiles(INCL);
+		for (int idx = 0; idx < TESTDATA.length; idx++)
+		{
+			TestData td = TESTDATA[idx];
+			String theFile = td.file;
+			boolean expect = td.exclfile;
+
+			testf.isFiltered(theFile);
+			String line = testf.filter(theFile);
+			if (line != null)
+			{
+				assertTrue("Expect to accept "+theFile,expect);
+			}
+			else
+			{
+				assertFalse("Expect to reject "+theFile,expect);
+			}
+		}
+  	}
+
+	public void testIncludeFiles()
+	{
+		testf.includeFiles(INCL);
+		for (int idx = 0; idx < TESTDATA.length; idx++)
+		{
+			TestData td = TESTDATA[idx];
+			String theFile = td.file;
+			boolean expect = td.inclfile;
+
+			testf.isFiltered(theFile);
+			String line = testf.filter(theFile);
+			if (line != null)
+			{
+				assertTrue("Expect to accept "+theFile,expect);
+			}
+			else
+			{
+				assertFalse("Expect to reject "+theFile,expect);
+			}
+		}
+
+	}
+
+	public void testExcludePattern()
+	{
+		testf.excludePattern(PATTERNS);
+		for (int idx = 0; idx < TESTDATA.length; idx++)
+		{
+			TestData td = TESTDATA[idx];
+			String theFile = td.file;
+			boolean expect = td.exclpatt;
+
+			testf.isFiltered(theFile);
+			String line = testf.filter(theFile);
+			if (line != null)
+			{
+				assertTrue("Expect to accept "+theFile,expect);
+			}
+			else
+			{
+				assertFalse("Expect to reject "+theFile,expect);
+			}
+		}
+	}
+
+	public void testIncludePattern()
+	{
+		testf.includePattern(PATTERNS);
+		for (int idx = 0; idx < TESTDATA.length; idx++)
+		{
+			TestData td = TESTDATA[idx];
+			String theFile = td.file;
+			boolean expect = td.inclpatt;
+
+			testf.isFiltered(theFile);
+			String line = testf.filter(theFile);
+			if (line != null)
+			{
+				assertTrue("Expect to accept "+theFile,expect);
+			}
+			else
+			{
+				assertFalse("Expect to reject "+theFile,expect);
+			}
+		}
+	}
+  }
 }
