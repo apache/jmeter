@@ -7,7 +7,7 @@
 
 <body>
 
-<section name="4.7 HTTP Configuration Elements">
+<section name="4.7 HTTP Configuration Elements" anchor="elements">
 <p>A configuration element works closely with a Generative Controller.  Although it does not send requests 
 (except for Proxy Server), it can add to or modify requests and handle responses.</p>
 <p>A configuration element is accessible from only inside the tree branch where you place the element.  
@@ -25,7 +25,7 @@ requests will use "Web Defaults 2", since we placed it in the Thread Group (the 
 
 </section>
 
-<section name="4.7.1 HTTP Authorization Manager">
+<section name="4.7.1 HTTP Authorization Manager" anchor="auth_manager">
 <p>The Authorization Manager lets you specify one or more user logins for web pages that are 
 restricted using Basic HTTP Authentication.  You see this type of authentication when you use 
 your browser to access a restricted page, and your browser displays a login dialog box.  JMeter 
@@ -96,7 +96,7 @@ be able to run it.  However, you can use it as a reference in constructing your 
 
 </section>
 
-<section name="4.7.2 HTTP Cookie Manager">
+<section name="4.7.2 HTTP Cookie Manager" anchor="cookie_manager">
 <p>The Cookie Manager element has two functions.</p>
 <p>First, it stores and sends cookies just like a web browser. If you 
 have an HTTP Request and the response contains a cookie, the Cookie Manager automatically stores that cookie and will use 
@@ -127,7 +127,7 @@ authorization table entries.</li>
 
 </section>
 
-<section name="4.7.3 HTTP Header Manager">
+<section name="4.7.3 HTTP Header Manager" anchor="header_manager">
 <p>The Header Manager lets you add or override HTTP request headers.</p>
 <p><b>Control Panel</b></p>
 <p><img src="../images/screenshots/http-config/http-header-manager.gif" width="574" height="341"></img>
@@ -161,7 +161,7 @@ instead. (see figures 7 and 8).</p>
 
 </section>
 
-<section name="4.7.4 HTTP Proxy Server">
+<section name="4.7.4 HTTP Proxy Server" anchor="proxy_server">
 <p>The Proxy Server acts as a gateway between your web browser and the Internet (or your ISP's proxy server, if applicable).  
 Instead of manually creating HTTP Request controllers, you can use a web browser.  In order to do this, you need to configure 
 your browser to use the JMeter proxy server.  This proxy server listens to your browser's HTTP requests and creates the necessary HTTP Request 
@@ -215,7 +215,7 @@ that tells JMeter to create a proxy server (see figure 10).</p>
 
 </section>
 
-<section name="4.7.5 HTTP Request Defaults">
+<section name="4.7.5 HTTP Request Defaults" anchor="request_defaults">
 <p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are 
 creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server, 
 you could add a single HTTP Request Defaults element with the "Server Name or IP" field filled in.  Then, when 
