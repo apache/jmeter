@@ -196,6 +196,27 @@ public class FileWrapper
     }
 
     /**
+     * Gets the current row number (mainly for error reporting)
+     * 
+     * @param file
+     * @return the current row number for this thread
+     */
+    public static int getCurrentRow(String file)
+    {
+    	
+		Map my = (Map) filePacks.get();
+		FileWrapper fw = (FileWrapper) (my).get(file);
+		if (fw == null) // Not yet open
+		{
+			return -1;
+		}
+		else
+		{
+			return fw.currentRow;
+		}
+    }
+    
+    /**
      * 
      */
     public static void clearAll()
