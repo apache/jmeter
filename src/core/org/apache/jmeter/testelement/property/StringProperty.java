@@ -86,7 +86,6 @@ public class StringProperty extends AbstractProperty
             value = savedValue;
             savedValue = null;
         }
-        // TODO Auto-generated method stub
         super.recoverRunningVersion(owner);
     }
 
