@@ -887,6 +887,26 @@ some of its classes - at present JMeter can only run from jar files.
     </java>
   </target>
 
+<!--
+    In order to run JUnit, both junit.jar and optional.jar need to be on the Ant classpath
+    optional.jar is normally found in ANT_HOME/lib
+-->
+  <target name="junit"  description="Run individual JUnit test">
+  <property name="test.case" value="org.apache.jmeter.junit.JMeterTest"/>
+  <junit fork="true"
+   dir="${basedir}/bin"
+   showoutput="true"
+   printsummary="withOutAndErr">
+  <formatter type="brief" usefile="no"/>
+      <classpath>
+        <path refid="classpath"/>
+        <fileset dir="${dest.jar}" includes="*.jar"/>
+        <fileset dir="${lib.opt}" includes="optional.jar"/>
+      </classpath>
+  <test name="${test.case}"/>
+  </junit>
+  </target>
+
   <!-- Run the HTML Parser unit tests -->
   <target name="testparser" description="run the JUnit tests">
     <echo message="**********************************"/>
