@@ -614,6 +614,8 @@ some of its classes - at present JMeter can only run from jar files.
     projects/jakarta-jmeter.xml
   -->
   <target name="assume-libs-present">
+    <!-- try to avoid Gump classpath complaint -->
+    <mkdir dir="${lib.opt}"/>
     <property name="assuming.libs.present" value="true"/>
     <property name="jsse.present" value="assume"/>
     <property name="javamail.complete" value="assume"/>
@@ -831,47 +833,60 @@ some of its classes - at present JMeter can only run from jar files.
 
   <target name="docs-all" depends="docs-site,docs-printable,docs-api" description="Generate documentation."/>
 
-  <target name="test" depends="install,test-only" description="Run tests"/>
+  <target name="test" depends="install,_test" description="Run tests"/>
   
-  <target name="test-only" depends="test-headless,test-headed"/>
-  
+  <target name="test-both" depends="test-headless,test-headed"/>
+
   <target name="test-headless">
-   <echo >
+    <antcall target="_test">
+      <param name="test.headless" value="true"/>
+    </antcall>
+  </target>
+
+  <target name="test-headed">
+    <antcall target="_test">
+      <param name="test.headless" value="false"/>
+    </antcall>
+  </target>
+  
+   <!-- Generic test target, not intended to be called directly -->
+   <target name="_test">
+   <!-- 
+   The property java.awt.headless is not automatically passed on,
+   because the tests are run in a separate JVM from the build.
+   
+   It is assumed that Gump sets java.awt.headless if required.
+   
+   Set test.headless from the java.awt property, if that
+   is defined, otherwise it us set to "".
+   N.B. if test.headless is already set, it will not be changed
+   This allows the property to be over-ridden by test-headless etc.
+   -->
+    <condition property="test.headless" value="${java.awt.headless}">
+      <isset property="java.awt.headless"/>
+    </condition>
+     <!-- make sure test.headless is set to something -->
+     <condition property="test.headless" value="">
+      <not><isset property="java.awt.headless"/></not>
+     </condition>
+   
+   <echo>
    gump.run = ${gump.run}
-   Test with headless=true
+   java.awt.headless = ${java.awt.headless}
+   test.headless = ${test.headless}
    </echo>
    <java classname="org.apache.jorphan.test.AllTests" fork="yes" dir="${basedir}/bin">
       <classpath>
 	<path refid="classpath"/>
 	<fileset dir="${dest.jar}" includes="*.jar"/>
       </classpath>
-      <!-- Run headless if running under Gump
-      <sysproperty key="java.awt.headless" value="${gump.run}"/>
-      -->
-      <sysproperty key="java.awt.headless" value="true"/>
-      <arg value="../lib/ext"/>
-      <arg value="./jmetertest.properties"/>
-      <arg value="org.apache.jmeter.util.JMeterUtils"/>
-    </java>
-    </target>
-    <target name="test-headed">
-   <!-- TEMP test again non-headless-->
-   <echo >
-   gump.run = ${gump.run}
-   Test with headless=false (rather than omitted)
-   </echo>
-   <java classname="org.apache.jorphan.test.AllTests" fork="yes" dir="${basedir}/bin">
-      <classpath>
-	<path refid="classpath"/>
-	<fileset dir="${dest.jar}" includes="*.jar"/>
-      </classpath>
-      <sysproperty key="java.awt.headless" value="false"/>
+      <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <arg value="../lib/ext"/>
       <arg value="./jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>
   </target>
-  
+
   <!-- Run the HTML Parser unit tests -->
   <target name="testparser" description="run the JUnit tests">
     <echo message="**********************************"/>
