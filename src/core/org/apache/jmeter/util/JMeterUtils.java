@@ -993,6 +993,6 @@ public class JMeterUtils
 	  */
 	 public static String getJMeterVersion()
 	 {
-		  return "1.7.2";
+		  return "@VERSION@";
 	 }
 }
