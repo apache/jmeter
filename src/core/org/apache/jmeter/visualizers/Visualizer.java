@@ -38,4 +38,11 @@ public interface Visualizer
      * the visualizer about the arrival of a new sample.
      */
     public void add(SampleResult sample);
+    
+    /**
+     * This method is used to indicate a visualizer generates
+     * statistics.
+     * @return
+     */
+    public boolean isStats();
 }

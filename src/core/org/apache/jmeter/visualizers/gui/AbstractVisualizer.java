@@ -122,6 +122,7 @@ public abstract class AbstractVisualizer
     SampleSaveConfiguration saveConfig;
     
     protected ResultCollector collector = new ResultCollector();
+	private boolean isStats = true;
 
     public AbstractVisualizer()
     {
@@ -150,6 +151,10 @@ public abstract class AbstractVisualizer
         filePanel.add(saveConfigButton);
                 
     }
+
+	public boolean isStats(){
+        return isStats;
+	}
 
     /**
      * Gets the checkbox which selects whether or not only errors should be
