@@ -722,7 +722,8 @@ public class HTTPSampler extends AbstractSampler
                 sb.append('\n');
             }
             if (cookies != null)
-            { //TODO put these in requestHeaders.
+            { 
+            	res.setCookies(cookies);
                 sb.append("\nCookie Data:\n");
                 sb.append(cookies);
                 sb.append('\n');
