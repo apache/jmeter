@@ -65,14 +65,12 @@ import org.apache.jmeter.util.JMeterUtils;
  * duration is larger than the timeframe the Assertion is considered
  * a failure.
  *
- Copyright: Copyright (c) 2001
- * Company: Apache
- *
  * @author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
- *
  * @version $Revision$, $Date$
  */
-public class DurationAssertion extends AbstractTestElement implements Serializable, Assertion
+public class DurationAssertion
+    extends AbstractTestElement
+    implements Serializable, Assertion
 {
    /** Key for storing assertion-informations in the jmx-file. */
    private static final String DURATION_KEY = "DurationAssertion.duration";
@@ -87,35 +85,46 @@ public class DurationAssertion extends AbstractTestElement implements Serializab
       AssertionResult result = new AssertionResult();
       result.setFailure(false);
       // has the Sample lasted to long?
-      if (((response.getTime() > getAllowedDuration()) && (getAllowedDuration() > 0)))
+    if (((response.getTime() > getAllowedDuration())
+        && (getAllowedDuration() > 0)))
       {
          result.setFailure(true);
-         Object[] arguments = { new Long(response.getTime()), new Long(getAllowedDuration())};
-         String message = MessageFormat.format(JMeterUtils.getResString("duration_assertion_failure"), arguments);
+        Object[] arguments =
+            { new Long(response.getTime()), new Long(getAllowedDuration())};
+        String message =
+            MessageFormat.format(
+                JMeterUtils.getResString("duration_assertion_failure"),
+                arguments);
          result.setFailureMessage(message);
       }
       return result;
    }
+   
    /**
-    * Returns the duration to be asserted. A duration of 0 indicates this assertion is to 
-    * be ignored.
+    * Returns the duration to be asserted. A duration of 0 indicates this
+    * assertion is to be ignored.
     */
    public long getAllowedDuration()
    {
       return getPropertyAsLong(DURATION_KEY);
    }
+   
    /**
     * Set the duration that shall be asserted.
     *
-    * @param duration A period of time in milliseconds. Is not allowed to be negative. Use Double.MAX_VALUE to indicate illegal or empty inputs. This will result to not checking the assertion.
+    * @param duration a period of time in milliseconds. Is not allowed to be
+    *                 negative. Use Double.MAX_VALUE to indicate illegal or
+    *                 empty inputs. This will result to not checking the
+    *                 assertion.
     *
-    * @throws IllegalArgumentException If <code>duration</code> is negative.
+    * @throws IllegalArgumentException if <code>duration</code> is negative.
     */
    public void setAllowedDuration(long duration) throws IllegalArgumentException
    {
       if (duration < 0L)
       {
-         throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative"));
+        throw new IllegalArgumentException(
+            JMeterUtils.getResString("argument_must_not_be_negative"));
       }
       if (duration == Long.MAX_VALUE)
       {

@@ -60,21 +60,15 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 
-/****************************************
- * Title: Jakarta-JMeter
- * Description:
- * Copyright: Copyright (c) 2001
- * Company: Apache
- *
+/**
  * @author <a href="mailto:gottfried@szing.at">Gottfried Szing</a>
  * @version $Revision$, $Date$
- *  ***************************************/
-
+ */
 public class XMLAssertionGui extends AbstractAssertionGui
 {
-    /****************************************
-     *  the constructor
-     ***************************************/
+    /**
+     * The constructor.
+     */
     public XMLAssertionGui()
     {
         init();
@@ -88,10 +82,6 @@ public class XMLAssertionGui extends AbstractAssertionGui
         return JMeterUtils.getResString("xml_assertion_title");
     }
 
-    /**
-     *
-     * @return
-     */
     public TestElement createTestElement()
     {
         XMLAssertion el = new XMLAssertion();
@@ -109,8 +99,8 @@ public class XMLAssertionGui extends AbstractAssertionGui
         configureTestElement(el);
     }
 
-    /****************************************
-     * configures the associated test element
+    /**
+     * Configures the associated test element.
      * @param el
      */
     public void configure(TestElement el)
@@ -120,11 +110,12 @@ public class XMLAssertionGui extends AbstractAssertionGui
 
 
     /**
-     * inits the GUI
+     * Inits the GUI.
      */
     private void init()
     {
-        setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setLayout(
+            new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
         setBorder(makeBorder());
 
         add(makeTitlePanel());

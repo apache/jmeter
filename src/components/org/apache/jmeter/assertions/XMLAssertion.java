@@ -64,12 +64,12 @@ import org.jdom.input.SAXBuilder;
 /**
  * Checks if the result is a well-formed XML content.
  *
- * Copyright: Copyright (c) 2001
- *
  * @author <a href="mailto:gottfried@szing.at">Gottfried Szing</a>
  * @version $Revision$, $Date$
  */
-public class XMLAssertion extends AbstractTestElement implements Serializable, Assertion
+public class XMLAssertion
+    extends AbstractTestElement
+    implements Serializable, Assertion
 {
     // one builder for all requests
     private static SAXBuilder  builder = null;
@@ -87,7 +87,8 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
         result.setFailure(false);
 
         // the result data
-        String resultData = new String(getResultBody(response.getResponseData()));
+        String resultData =
+            new String(getResultBody(response.getResponseData()));
 
         // create parser like (!) a singleton
         if (builder  == null)
@@ -133,7 +134,10 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
         {
             if (resultData[i] == '\n' && resultData[i + 1] == '\n')
             {
-                return getByteArraySlice(resultData, (i + 2), resultData.length - 1);
+                return getByteArraySlice(
+                    resultData,
+                    (i + 2),
+                    resultData.length - 1);
             }
         }
         return resultData;
