@@ -51,6 +51,10 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
+ * 
+ * @author    Michael Stover
+ * @author	<a href="mailto:klancast@swbell.net">Keith Lancaster</a>
+ * @version $Id$
  */
 package org.apache.jmeter.gui.util;
 import java.awt.Component;
@@ -77,15 +81,11 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author    Michael Stover
- * @version   $Revision$ Updated on $Date$
- */
 public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
     JMenu fileMenu;
-    JMenuItem file_save_all;
+    JMenuItem file_save_as;
     JMenuItem file_load;
     JMenuItem file_exit;
     JMenuItem file_new;
@@ -132,7 +132,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
 
     public void setFileSaveEnabled(boolean enabled)
     {
-        file_save_all.setEnabled(enabled);
+        file_save_as.setEnabled(enabled);
     }
 
     public void setFileLoadEnabled(boolean enabled)
@@ -239,7 +239,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
      */
     public void createMenuBar()
     {
-        createFileMenu();
+        makeFileMenu();
         makeEditMenu();
         makeRunMenu();
         makeOptionsMenu();
@@ -422,26 +422,26 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
         editMenu.setEnabled(false);
     }
     
-    private void createFileMenu()
+    private void makeFileMenu()
     {
         // FILE MENU
         fileMenu = new JMenu(JMeterUtils.getResString("file"));
         fileMenu.setMnemonic('F');
         JMenuItem file_save =
-            new JMenuItem(JMeterUtils.getResString("save_all"), 'S');
+            new JMenuItem(JMeterUtils.getResString("save"), 'S');
         file_save.setAccelerator(
             KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK));
         file_save.setActionCommand("save");
         file_save.addActionListener(ActionRouter.getInstance());
         file_save.setEnabled(true);
 
-        file_save_all =
+        file_save_as =
             new JMenuItem(JMeterUtils.getResString("save_all_as"), 'A');
-        file_save_all.setAccelerator(
+        file_save_as.setAccelerator(
             KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK));
-        file_save_all.setActionCommand("save_all");
-        file_save_all.addActionListener(ActionRouter.getInstance());
-        file_save_all.setEnabled(true);
+        file_save_as.setActionCommand("save_all_as");
+        file_save_as.addActionListener(ActionRouter.getInstance());
+        file_save_as.setEnabled(true);
         file_load = new JMenuItem(JMeterUtils.getResString("open"), 'O');
         file_load.setAccelerator(
             KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_MASK));
@@ -463,7 +463,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
         fileMenu.add(file_new);
         fileMenu.add(file_load);
         fileMenu.add(file_save);
-        fileMenu.add(file_save_all);
+        fileMenu.add(file_save_as);
         fileMenu.addSeparator();
         fileMenu.add(file_exit);
     }

@@ -51,6 +51,10 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
+ *
+ * @author  Michael Stover
+ * @author	<a href="mailto:klancast@swbell.net">Keith Lancaster</a>
+ * @version $Id$
  */
 package org.apache.jmeter.gui.action;
 
@@ -71,30 +75,26 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author    Michael Stover
- * Created     February 13, 2001
- * @version   $Revision$ Last updated: $Date$
- */
 public class Save implements Command
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
-    public final static String SAVE_ALL = "save_all";
-    public final static String SAVE = "save_as";
-    public final static String SAVE_TO_PREVIOUS = "save";
+    public final static String SAVE_ALL_AS = "save_all_as";
+    public final static String SAVE_AS = "save_as";
+    public final static String SAVE = "save";
     private String chosenFile;
     private String testPlanFile;
 
     private static Set commands = new HashSet();
     static {
+        commands.add(SAVE_AS);
+        commands.add(SAVE_ALL_AS);
         commands.add(SAVE);
-        commands.add(SAVE_ALL);
-        commands.add(SAVE_TO_PREVIOUS);
     }
 
     /**
@@ -117,23 +117,27 @@ public class Save implements Command
     public void setTestPlanFile(String f)
     {
         testPlanFile = f;
+        GuiPackage.getInstance().getMainFrame().setTitle(JMeterUtils.getExtendedFrameTitle(testPlanFile)); 
     }
 
     public void doAction(ActionEvent e) throws IllegalUserActionException
     {
         HashTree subTree = null;
-        if (e.getActionCommand().equals(SAVE))
+        if (!commands.contains(e.getActionCommand()))
+        {
+            throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
+        }
+        if (e.getActionCommand().equals(SAVE_AS))
         {
             subTree = GuiPackage.getInstance().getCurrentSubTree();
         }
-        else if (
-            e.getActionCommand().equals(SAVE_ALL)
-                || e.getActionCommand().equals(SAVE_TO_PREVIOUS))
+        else
         {
             subTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
         }
 
-        if (!SAVE_TO_PREVIOUS.equals(e.getActionCommand())
+        String updateFile = testPlanFile; 
+        if (!SAVE.equals(e.getActionCommand())
             || testPlanFile == null)
         {
             JFileChooser chooser =
@@ -148,22 +152,15 @@ public class Save implements Command
             {
                 return;
             }
-            if (e.getActionCommand().equals(SAVE_ALL)
-                || e.getActionCommand().equals(SAVE_TO_PREVIOUS))
+            updateFile = chooser.getSelectedFile().getAbsolutePath();
+            if (!e.getActionCommand().equals(SAVE_AS))
             {
-                testPlanFile = chooser.getSelectedFile().getAbsolutePath();
-                chosenFile = testPlanFile;
-            }
-            else
-            {
-                chosenFile = chooser.getSelectedFile().getAbsolutePath();
+                testPlanFile = updateFile;
             }
         }
-        else
-        {
-            chosenFile = testPlanFile;
-        }
-
+        // TODO: doesn't putting this here mark the tree as
+        // saved even though a failure may occur later? 
+        
         ActionRouter.getInstance().doActionNow(
             new ActionEvent(subTree, e.getID(), CheckDirty.SUB_TREE_SAVED));
         try
@@ -176,7 +173,7 @@ public class Save implements Command
         OutputStream writer = null;
         try
         {
-            writer = new FileOutputStream(chosenFile);
+            writer = new FileOutputStream(updateFile);
             SaveService.saveSubTree(subTree, writer);
         }
         catch (Throwable ex)
@@ -184,11 +181,15 @@ public class Save implements Command
             testPlanFile = null;
             log.error("", ex);
             throw new IllegalUserActionException(
-                "Couldn't save test plan to file: " + chosenFile);
+                "Couldn't save test plan to file: " + updateFile);
         }
         finally
         {
             closeWriter(writer);
+            if(testPlanFile != null)
+            {
+                GuiPackage.getInstance().getMainFrame().setTitle(JMeterUtils.getExtendedFrameTitle(testPlanFile));
+            }
             GuiPackage.getInstance().getMainFrame().repaint();
         }
     }
