@@ -28,7 +28,16 @@ executes on the development machine. This offers a number of features:
 <li>Saving of test samples to a local machine </li>
 <li>Managment of multiple JMeterEngines from a single machine </li>
 </ul>
+</p>
 
+<p>Note that while you can indeed execute the JMeterEngine on your application 
+server, you need to be mindful of the fact that this will be adding processing 
+overhead on the application server and thus your testing results will be 
+somewhat tainted.  The recommended approach is to have one or more machines on
+the same Ethernet segment as your application server that you configure to run
+the JMeterEngine.  This will minimize the impact of the network on the test 
+results without impacting the performance of the application serer 
+itself.
 </p>
 
 <p><b>Step 1: Start the RMI Registry</b></p>
