@@ -111,7 +111,7 @@ public abstract class HTMLParser
         // Is there a cached parser?
 		HTMLParser pars=(HTMLParser) parsers.get(htmlParserClassName);
 		if (pars != null){
-			log.info("Fetched "+htmlParserClassName);
+			log.debug("Fetched "+htmlParserClassName);
 			return pars;
 		}
 
@@ -426,7 +426,7 @@ public abstract class HTMLParser
 		                               boolean orderMatters) //Does the order matter?
 		throws Exception
 		{
-			log.info("file   "+file);
+			log.debug("file   "+file);
 			File f= findTestFile(file);
 			byte[] buffer= new byte[(int)f.length()];
 			int len= new FileInputStream(f).read(buffer);
