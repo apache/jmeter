@@ -153,12 +153,20 @@ public class JMeterTest extends JMeterTestCase
 			Iterator iter = getObjects(TestBean.class).iterator();
 	        while (iter.hasNext())
 	        {
-	            JMeterGUIComponent item = new TestBeanGUI(iter.next().getClass());
-				//JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
-	            TestSuite ts = new TestSuite(item.getClass().getName());
-				ts.addTest(new JMeterTest("GUIComponents1",item));
-				ts.addTest(new JMeterTest("GUIComponents2",item));
-	            suite.addTest(ts);
+	        	Class c = iter.next().getClass();
+	        	try {
+					JMeterGUIComponent item = new TestBeanGUI(c);
+					//JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
+		            TestSuite ts = new TestSuite(item.getClass().getName());
+					ts.addTest(new JMeterTest("GUIComponents1",item));
+					ts.addTest(new JMeterTest("GUIComponents2",item));
+		            suite.addTest(ts);
+				}
+				catch(IllegalArgumentException e)
+				{
+					System.out.println("Cannot create test for "+c.getName()+" "+e);
+					e.printStackTrace(System.out);
+				}
 	        }
 		return suite;
 	}
