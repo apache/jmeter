@@ -387,6 +387,10 @@ public class JMeterUtils implements UnitTestManager
             }
             return text.toString();
         }
+		catch (NullPointerException e) // Cannot find file
+		{
+			return "";
+		}
         catch (IOException e)
         {
             return "";
