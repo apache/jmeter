@@ -1,4 +1,4 @@
-// $Header: 
+// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -17,7 +17,6 @@
 */
 package org.apache.jmeter.save;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -27,12 +26,11 @@ import java.io.FileOutputStream;
 
 import javax.swing.JComponent;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
+import com.sun.media.jai.codec.BMPEncodeParam;
 import com.sun.media.jai.codec.ImageCodec;
 import com.sun.media.jai.codec.ImageEncoder;
 import com.sun.media.jai.codec.PNGEncodeParam;
+import com.sun.media.jai.codec.TIFFEncodeParam;
 
 /**
  * Class is responsible for taking a component and saving it
@@ -44,43 +42,18 @@ import com.sun.media.jai.codec.PNGEncodeParam;
  */
 public class SaveGraphicsService implements SaveServiceConstants {
 
+	public static final int PNG = 0;
+	public static final int BMP = 1;
+	public static final int TIFF = 2;
+	public static final String PNG_EXTENSION = ".png";
+	public static final String BMP_EXTENSION = ".bmp";
+	public static final String TIFF_EXTENSION = ".tif";
+	
 	/**
 	 * 
 	 */
 	public SaveGraphicsService() {
 		super();
-	}
-
-	/**
-	 * Method saves a given component to a file as a
-	 * JPeg. I should remove this method later, once
-	 * everything is worked out.
-	 * @param filename
-	 * @param component
-	 */
-	public void saveJComponent(String filename, JComponent component)
-	{
-		Dimension size = component.getSize();
-		BufferedImage image = new BufferedImage(size.width, size.height,
-			BufferedImage.TYPE_INT_RGB);
-		Graphics2D grp = image.createGraphics();
-		component.setBackground(Color.white);
-		component.paint(grp);
-		
-		File outfile = new File(filename);
-		FileOutputStream fos = createFile(outfile);
-		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(fos);
-		JPEGEncodeParam param = JPEGCodec.getDefaultJPEGEncodeParam(image);
-
-		param.setQuality(1,false);
-		encoder.setJPEGEncodeParam(param);
-		try {
-			encoder.encode(image);
-			fos.close();
-		} catch (Exception e){
-			// for now do nothing with the exception
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -95,7 +68,6 @@ public class SaveGraphicsService implements SaveServiceConstants {
 		BufferedImage image = new BufferedImage(size.width, size.height,
 			BufferedImage.TYPE_INT_RGB);
 		Graphics2D grp = image.createGraphics();
-		component.setBackground(Color.white);
 		component.paint(grp);
 		
 		File outfile = new File(filename);
@@ -105,6 +77,94 @@ public class SaveGraphicsService implements SaveServiceConstants {
 		encoder.setParam(param);
 		try {
 			encoder.encode(image);
+			fos.close();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Method will save the JComponent as an image. The
+	 * formats are PNG, BMP, and TIFF.
+	 * @param filename
+	 * @param type
+	 * @param component
+	 */
+	public void saveJComponent(String filename, int type, JComponent component){	
+		Dimension size = component.getSize();
+		BufferedImage image = new BufferedImage(size.width, size.height,
+			BufferedImage.TYPE_INT_RGB);
+		Graphics2D grp = image.createGraphics();
+		component.paint(grp);
+		
+		if (type == PNG){
+			filename += PNG_EXTENSION;
+			this.savePNG(filename,image);
+		} else if (type == BMP){
+			filename += BMP_EXTENSION;
+			this.saveBMP(filename,image);
+		} else if (type == TIFF){
+			filename = filename + TIFF_EXTENSION;
+			this.saveTIFF(filename,image);
+		}
+	}
+
+	/**
+	 * Method takes a filename and BufferedImage. It will save
+	 * the image as PNG.
+	 * @param filename
+	 * @param image
+	 */	
+	public void savePNG(String filename, BufferedImage image){
+		File outfile = new File(filename);
+		FileOutputStream fos = createFile(outfile);
+		ImageEncoder encoder = ImageCodec.createImageEncoder("PNG",fos,null);
+		PNGEncodeParam param = new PNGEncodeParam.RGB();
+		encoder.setParam(param);
+		try {
+			encoder.encode(image);
+			fos.close();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Method takes filename and BufferedImage. It will save
+	 * the image as a BMP. BMP is generally a larger file
+	 * than PNG.
+	 * @param filename
+	 * @param image
+	 */	
+	public void saveBMP(String filename, BufferedImage image){
+		File outfile = new File(filename);
+		FileOutputStream fos = createFile(outfile);
+		ImageEncoder encoder = ImageCodec.createImageEncoder("BMP",fos,null);
+		BMPEncodeParam param = new BMPEncodeParam();
+		encoder.setParam(param);
+		try {
+			encoder.encode(image);
+			fos.close();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Method takes a filename and BufferedImage. It will save
+	 * the image as a TIFF.
+	 * @param filename
+	 * @param image
+	 */	
+	public void saveTIFF(String filename, BufferedImage image){
+		File outfile = new File(filename);
+		FileOutputStream fos = createFile(outfile);
+		ImageEncoder encoder = ImageCodec.createImageEncoder("TIFF",fos,null);
+		TIFFEncodeParam param = new TIFFEncodeParam();
+		encoder.setParam(param);
+		try {
+			encoder.encode(image);
+			fos.close();
 		} catch (Exception e){
 			e.printStackTrace();
 		}
