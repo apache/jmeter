@@ -65,7 +65,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLConnection;
-import java.util.Iterator;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;

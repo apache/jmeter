@@ -8,7 +8,6 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.IterationEvent;
 import org.apache.jmeter.engine.event.IterationListener;
 import org.apache.jmeter.processor.PreProcessor;
-import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;

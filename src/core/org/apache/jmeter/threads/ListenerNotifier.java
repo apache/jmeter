@@ -1,16 +1,15 @@
 package org.apache.jmeter.threads;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.collections.Buffer;
+import org.apache.commons.collections.BufferUtils;
+import org.apache.commons.collections.UnboundedFifoBuffer;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-import org.apache.commons.collections.Buffer;
-import org.apache.commons.collections.BufferUtils;
-import org.apache.commons.collections.UnboundedFifoBuffer;
 
 /**
  * The <code>ListenerNotifier</code> thread is responsible for performing
