@@ -375,8 +375,7 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
         setBorder (BorderFactory.createEmptyBorder(10, 10, 5, 10));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
-        add(createTitleLabel());
-        add(getNamePanel());
+        add(makeTitlePanel());
         add(createPortPanel());
         add(createIncludePanel());
         add(createExcludePanel());

@@ -57,7 +57,6 @@ package org.apache.jmeter.visualizers;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -185,17 +184,8 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         mainPanel.setBorder(margin);
         mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-        // TITLE
-        JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_title"));
-        Font curFont = panelTitleLabel.getFont();
-        int curFontSize = curFont.getSize();
-
-        curFontSize += 4;
-        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-        mainPanel.add(panelTitleLabel);
-
         // NAME
-        mainPanel.add(getNamePanel());
+        mainPanel.add(makeTitlePanel());
         mainPanel.add(getFilePanel());
         maximumLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_maximum"));
         maximumLabel.setForeground(MAXIMUM_COLOR);

@@ -169,9 +169,7 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent
 		Border margin = new EmptyBorder(10, 10, 5, 10);
 		mainPanel.setBorder(margin);
 		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-		mainPanel.add(createTitleLabel());
-		mainPanel.add(getNamePanel());
+		mainPanel.add(makeTitlePanel());
 
 		this.add(mainPanel);
 	}

@@ -54,9 +54,6 @@
  */
 package org.apache.jmeter.protocol.java.control.gui;
 
-import java.awt.Font;
-
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -125,16 +122,9 @@ public class JavaTestSamplerGui extends AbstractSamplerGui {
 		mainPanel.setBorder(margin);
 		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("protocol_java_test_title"));
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
 		
 		// NAME
-		mainPanel.add(getNamePanel());
+		mainPanel.add(makeTitlePanel());
 
 		javaPanel = new JavaConfigGui(false);
 		

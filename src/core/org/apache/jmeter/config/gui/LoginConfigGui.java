@@ -133,7 +133,7 @@ public class LoginConfigGui extends AbstractConfigGui
 
 		if(displayName)
 		{
-			this.add(getNamePanel());
+			this.add(makeTitlePanel());
 		}
 
 		this.add(createUsernamePanel());

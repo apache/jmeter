@@ -53,7 +53,6 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.jdbc.config.gui;
-import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
@@ -202,16 +201,8 @@ public class PoolConfigGui extends AbstractConfigGui implements FocusListener
 			mainPanel.setBorder(margin);
 			mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-			// TITLE
-			JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("database_conn_pool_title"));
-			Font curFont = panelTitleLabel.getFont();
-			int curFontSize = curFont.getSize();
-			curFontSize += 4;
-			panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-			mainPanel.add(panelTitleLabel);
-
 			// NAME
-			mainPanel.add(getNamePanel());
+			mainPanel.add(makeTitlePanel());
 
 			// CONNECTION POOL
 			JPanel connPoolPanel = new JPanel();

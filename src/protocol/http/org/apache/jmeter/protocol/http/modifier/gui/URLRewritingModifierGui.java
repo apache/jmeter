@@ -1,9 +1,6 @@
 package org.apache.jmeter.protocol.http.modifier.gui;
 
-import java.awt.Font;
-
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -49,16 +46,9 @@ public class URLRewritingModifierGui extends AbstractResponseBasedModifierGui {
 		mainPanel.setBorder(margin);
 		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(title);
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
 
 		// NAME
-		mainPanel.add(getNamePanel());
+		mainPanel.add(makeTitlePanel());
 		argumentName = new JLabeledTextField(JMeterUtils.getResString("session_argument_name"));
 		mainPanel.add(argumentName);
 		pathExt = new JCheckBox(JMeterUtils.getResString("Path_Extension_choice"));

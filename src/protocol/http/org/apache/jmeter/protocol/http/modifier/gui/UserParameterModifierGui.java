@@ -53,8 +53,6 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.modifier.gui;
-import java.awt.Font;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -129,18 +127,8 @@ public class UserParameterModifierGui extends AbstractModifierGui {
 		Border margin = new EmptyBorder(10, 10, 5, 10);
 		mainPanel.setBorder(margin);
 		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-		// TITLE
-		//JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("user_parameter_modifier_title"));
-		JLabel panelTitleLabel =
-			new JLabel(JMeterUtils.getResString("HTTP User Parameter Modifier"));
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(
-			new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
 		// NAME
-		mainPanel.add(getNamePanel());
+		mainPanel.add(makeTitlePanel());
 		// FILE LOCATOR
 		mainPanel.add(getFileLocator());
 		mainPanel.add(new JLabel(JMeterUtils.getResString("user_param_mod_help_note")));
