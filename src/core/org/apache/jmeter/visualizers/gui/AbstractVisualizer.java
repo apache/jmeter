@@ -1,5 +1,6 @@
 package org.apache.jmeter.visualizers.gui;
 import java.awt.Component;
+import java.awt.Container;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -160,12 +161,10 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
     /**
      * override parent method to add the file panel to the title panel.
      */
-    protected Box makeTitlePanel()
+    protected Container makeTitlePanel()
     {
-        Box box = super.makeTitlePanel();
+        Container box = super.makeTitlePanel();
         box.add(getFilePanel());
-        box.validate();
-        box.setMinimumSize(box.getPreferredSize());
         return box;
     }
 
