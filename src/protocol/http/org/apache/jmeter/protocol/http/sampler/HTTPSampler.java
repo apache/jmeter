@@ -211,6 +211,12 @@ public class HTTPSampler extends AbstractSampler
 		return getPropertyAsBoolean(USE_KEEPALIVE);
 	}
 	
+	public void addEncodedArgument(String name,String value,String metaData)
+	{
+		Arguments args = getArguments();
+		args.addArgument(new HTTPArgument(name,value,metaData,true));
+	}
+	
 	public void addArgument(String name,String value)
 	{
 		Arguments args = this.getArguments();
@@ -602,7 +608,7 @@ public class HTTPSampler extends AbstractSampler
 				// we need to add a try/catch around the method call.
 				try
 				{
-					addArgument(URLDecoder.decode(name), URLDecoder.decode(value), metaData);
+					addEncodedArgument(name,value, metaData);
 				}
 				catch (Exception e)
 				{
