@@ -75,12 +75,12 @@ public class StandardJMeterEngine
     public static void stopEngineNow()
     {
     	if (engine != null) // May be null if called from Unit test
-    	  engine.stopTest();
+    	  engine.stopTest(true);
     }
     public static void stopEngine()
     {
     	if (engine != null)  // May be null if called from Unit test
-    	  engine.askThreadsToStop();
+    		engine.stopTest(false);
     }
     public static boolean stopThread(String threadName)
     {
@@ -277,22 +277,46 @@ public class StandardJMeterEngine
         stopThread.start();
     }
 
+    public synchronized void stopTest(boolean b)
+    {
+        Thread stopThread = new Thread(new StopTest(b));
+        stopThread.start();
+    }
+    
+    public void askThreadsToStop()
+    {
+    	engine.stopTest(false);
+    }
+    
     private class StopTest implements Runnable
     {
+    	boolean now;
+    	private StopTest(){
+    		now=true;
+    	}
+    	private StopTest(boolean b){
+    		now=b;
+    	}
         public void run()
         {
             if (running)
             {
                 running = false;
-                tellThreadsToStop();
+                if (now){
+                	tellThreadsToStop();
+                } else {
+                	stopAllThreads();
+                }
                 try
                 {
                     Thread.sleep(10 * allThreads.size());
                 }
                 catch (InterruptedException e)
                 {}
-                verifyThreadsStopped();
-                notifyTestListenersOfEnd();
+                boolean stopped=verifyThreadsStopped();
+                if (stopped || now){
+                    notifyTestListenersOfEnd();
+                }
             }
         }
     }
@@ -463,8 +487,9 @@ public class StandardJMeterEngine
         }
     }
 
-    private void verifyThreadsStopped()
+    private boolean verifyThreadsStopped()
     {
+    	boolean stoppedAll=true;
         Iterator iter = new HashSet(allThreads.keySet()).iterator();
         while (iter.hasNext())
         {
@@ -479,10 +504,12 @@ public class StandardJMeterEngine
                 {}
                 if (t.isAlive())
                 {
+                	stoppedAll=false;
                     log.info("Thread won't die: " + t.getName());
                 }
             }
         }
+        return stoppedAll;
     }
 
     private void tellThreadsToStop()
@@ -505,7 +532,7 @@ public class StandardJMeterEngine
         }
     }
     
-	public void askThreadsToStop()
+	private void stopAllThreads()
 	{
 		Iterator iter = new HashSet(allThreads.keySet()).iterator();
 		while (iter.hasNext())
@@ -513,7 +540,6 @@ public class StandardJMeterEngine
 			JMeterThread item = (JMeterThread) iter.next();
 			item.stop();
 		}
-		verifyThreadsStopped();
 	}
 
     // Remote exit
