@@ -1,3 +1,3 @@
 @echo off
 
-javaw -classpath %classpath%;ApacheJMeter.jar org.apache.jmeter.JMeter
+java -classpath %classpath%;ApacheJMeter.jar org.apache.jmeter.JMeter
