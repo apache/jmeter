@@ -44,11 +44,11 @@ public class Stats
 	public static final int WARNING = 1;
 	public static final int HEALTHY = 3;
 
-	public static int DEFAULT_MEMORY_FACTOR = 50;
-	public static int DEFAULT_THREAD_FACTOR = 50;
-	public static double HEALTHY_PER = 0.00;
-	public static double ACTIVE_PER = 0.25;
-	public static double WARNING_PER = 0.67;
+	public static final int DEFAULT_MEMORY_FACTOR = 50;
+	public static final int DEFAULT_THREAD_FACTOR = 50;
+	public static final double HEALTHY_PER = 0.00;
+	public static final double ACTIVE_PER = 0.25;
+	public static final double WARNING_PER = 0.67;
 
 	/**
 	 * The method is responsible for taking a status
