@@ -67,9 +67,7 @@ import org.apache.log.Logger;
  */
 public class FileDataContainer
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor(
-            "jmeter.FileDataContainer");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     private ArrayList fileData;
 
