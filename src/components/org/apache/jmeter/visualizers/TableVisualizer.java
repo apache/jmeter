@@ -56,7 +56,8 @@ public class TableVisualizer
          JMeterUtils.getResString("table_visualizer_sample_num"),
          JMeterUtils.getResString("url"),
          JMeterUtils.getResString("table_visualizer_sample_time"),
-         JMeterUtils.getResString("Success?")};
+         JMeterUtils.getResString("Success?"),
+         JMeterUtils.getResString("table_visualizer_bytes")};
     private ObjectTableModel model = null;
     private JTable table = null;
     private JTextField dataField = null;
@@ -77,9 +78,10 @@ public class TableVisualizer
               new Functor[]{new Functor("getCount"),
               		new Functor("getLabel"),
               		new Functor("getData"),
-              		new Functor("isSuccess")},
-              new Functor[]{null,null,null,null},
-              new Class[]{Long.class,String.class,Long.class,Boolean.class});
+              		new Functor("isSuccess"),
+                    new Functor("getBytes")},
+              new Functor[]{null,null,null,null,null},
+              new Class[]{Long.class,String.class,Long.class,Boolean.class,Integer.class});
         init();
     }
 
@@ -103,6 +105,7 @@ public class TableVisualizer
            calc.addValue(res.getTime());
            Sample newS = new Sample(res.getSampleLabel(),res.getTime(),0,0,0,0,0,0,res.isSuccessful(),
                  calc.getCount(),res.getTimeStamp());
+           newS.setBytes(res.getResponseData().length);
            model.addRow(newS);
         }
         currentData = res.getTime();
