@@ -126,7 +126,7 @@ class RegexpHTMLParser extends HTMLParser
      * in the web and all browsers seem to understand them.
      */
     private static final String VALUE=
-        "\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\"'\\s][^\\s]*))";
+        "\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\"'\\s>][^\\s>]*)(?=[\\s>]))";
             // Note there's 3 capturing groups per value
 
     /**
@@ -146,8 +146,8 @@ class RegexpHTMLParser extends HTMLParser
             + "|APPLET"+SEP+"CODE(?:BASE)?"+VALUE
             + "|(?:EMBED|OBJECT)"+SEP+"(?:SRC|CODEBASE)"+VALUE
             + "|(?:BODY|TABLE|TR|TD)"+SEP+"BACKGROUND"+VALUE
-            + "|INPUT(?:"+SEP+"(?:SRC"+VALUE+"|TYPE\\s*=\\s*[\"']?image(?=[\"'\\s>]))){2,}"
-            + "|LINK(?:"+SEP+"(?:HREF"+VALUE+"|REL\\s*=\\s*[\"']?stylesheet(?=[\"'\\s>]))){2,}"
+            + "|INPUT(?:"+SEP+"(?:SRC"+VALUE+"|TYPE\\s*=\\s*(?:\"image\"|'image'|image(?=[\\s>])))){2,}"
+            + "|LINK(?:"+SEP+"(?:HREF"+VALUE+"|REL\\s*=\\s*(?:\"stylesheet\"|'stylesheet'|stylesheet(?=[\\s>])))){2,}"
             + ")";
 
     // Number of capturing groups possibly containing Base HREFs:
