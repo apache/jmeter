@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
-<!-- 
+<!--
+ $Header$
+ 
  * Copyright 2001-2004 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
+ * @version $Id$
  -->
 <document index="yes" index-level-2="yes" colbreak="15.4"
   prev="boss.html" next="functions.html" date="$Date$">
@@ -35,9 +38,7 @@
  -->
 
 <section name="15.1 Samplers" anchor="samplers">
-<description>
-	<br></br>
-</description>
+
 <component name="FTP Request" index="15.1.1" screenshot="gen-controller/ftp-request.gif">
 <description>This controller lets you send an FTP "retrieve file" request to an FTP server.
 If you are going to send multiple requests to the same FTP server, consider
@@ -141,7 +142,8 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
 <description><p>This sampler lets you send an JDBC Request (an SQL query) to a database.</p>
 <p>If you are going to send multiple requests to the same database, consider
 using one or more of the Defaults Configuration Elements:
-<complink name="JDBC Connection Configuration"/>,
+<complink name="JDBC Database Login Defaults"/>,
+<complink name="JDBC Database Connection Pool Defaults"/>,
 <complink name="JDBC SQL Query Defaults"/>.
 This way, you do not have to enter the same information for each JDBC Request
 controller.</p></description>
@@ -168,7 +170,8 @@ a new instance).</property>
 <links>
         <link href="test_plan.html#assertions">Assertion</link>
         <link href="build-db-test-plan.html">Building a Database Test Plan</link>
-        <complink name="JDBC Connection Configuration"/>
+        <complink name="JDBC Database Login Defaults"/>
+        <complink name="JDBC Database Connection Pool Defaults"/>
         <complink name="JDBC SQL Query Defaults"/>
 </links>
 
@@ -297,134 +300,6 @@ XML.</p>
                                       </links>
 
 </component>
-<component name="LDAP Extended Request" index="15.1.6b" screenshot="ldapext_request.png">
-  <description>This Sampler can send all 8 different LDAP request to a LDAP server. It is an extended version of the LDAP sampler,
-  therefore it is harder to configure, but can be made much closer resembling a real LDAP session.
-    <p>If you are going to send multiple requests to the same LDAP server, consider
-      using an <complink name="LDAP Extended Request Defaults (ALPHA)"/>
-      Configuration Element so you do not have to enter the same information for each
-      LDAP Request.</p> </description>
-
-   <p>There are nine test operations defined. These operations are given below:</p>
-    <ol>
-      <li>Thread bind</li>
-      <p>Any LDAP request is part of a LDAP session, so the first thing that should be done is starting a session to the LDAP server.
-       For starting this session a thread bind is used, which is equal to the LDAP "bind" operation.
-       The user is requested to give a username (Distinghuised name) and password, 
-       which will be used to initiate a session.
-       When no password, or the wrong password is specified, an anonymous session is started. Take care,
-       omitting the password will not fail this test, a wrong password will. </p>
-     <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-     <property name="Servername" required="Yes">The name (or IP-address) of the LDAP server.</property>
-     <property name="Port" required="No">The port number that the LDAP server is listening to. If this is omitted 
-     JMeter assumes the LDAP server is listening on the default port(389).</property>
-     <property name="DN" required="No">The distinghuished name of the base object that will be used for any subsequent operation. 
-     It can be used as a starting point for all operations. You cannot start any operation on a higher level than this DN!</property>
-     <property name="Username" required="No">Full distinghuished name of the user as which you want to bind.</property>
-     <property name="Password" required="No">Password for the above user. If omitted it will result in an anonymous bind. 
-     If is is incorrect, the sampler will return an error and revert to an anonymous bind.</property>
-    </properties>
-         
-      <li>Thread unbind</li>
-      <p>This is simply the operation to end a session. 
-      It is equal to the LDAP "unbind" operation.</p>
-     <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-    </properties>
-     
-      <li>Single bind/unbind</li>
-		<p> This is a combination of the LDAP "bind" and "unbind" operations.
-		It can be used for an authentication request/password check for any user. It will open an new session, just to
-		check the validity of the user/password combination, and end the session again.</p>
-    <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Username" required="Yes">Full distinghuished name of the user as which you want to bind.</property>
-     <property name="Password" required="No">Password for the above user. If omitted it will result in an anonymous bind. 
-     If is is incorrect, the sampler will return an error.</property>
-     </properties>
-		
-      <li>Rename entry</li>
-       <p>This is the LDAP "moddn" operation. It can be used to rename an entry, but 
-       also for moving an entry or a complete subtree to a different place in 
-       the LDAP tree.  </p>
-    <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Old entry name" required="Yes">The current distinghuished name of the object you want to rename or move, 
-      relative to the given DN in the thread bind operation.</property>
-     <property name="New distinghuished name" required="Yes">The new distinghuished name of the object you want to rename or move, 
-      relative to the given DN in the thread bind operation.</property>
-     </properties>
-       
-        <li>Add test</li>
-       <p>This is the ldap "add" operation. It can be used to add any kind of 
-       object to the LDAP server.  </p>
-    <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Entry DN" required="Yes">Distinghuised name of the object you want to add, relative to the given DN in the thread bind operation.</property>
-     <property name="Add test" required="Yes">A list of attributes and their values you want to use for the object.
-     If you need to add a multiple value attribute, you need to add the same attribute with their respective 
-     values several times to the list.</property>
-     </properties>
-       
-      <li>Delete test</li>
-       <p> This is the LDAP "delete" operation, it can be used to delete an 
-       object from the LDAP tree </p>
-    <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Delete" required="Yes">Distinghuished name of the object you want to delete, relative to the given DN in the thread bind operation.</property>
-      </properties>
-       
-      <li>Search test</li>
-       <p>This is the LDAP "search" operation, and will be used for defining searches.  </p>
-    <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Search base" required="No">Distinghuished name of the subtree you want your 
-      search to look in, relative to the given DN in the thread bind operation.</property>
-      <property name="Search Filter" required="Yes">searchfilter, must be specified in LDAP syntax.</property>
-      <property name="Scope" required="No">Use 0 for baseobject-, 1 for onelevel- and 2 for a subtree search. (Default=0)</property>
-      <property name="Size Limit" required="No">Specify the maximum number of results you want back from the server. (default=0, which means no limit.) When the sampler hits the maximum number of results, it will fail with errorcode 4</property>
-      <property name="Time Limit" required="No">Specify the maximum amount of (cpu)time (in miliseconds) that the server can spend on your search. Take care, this does not say anything about the responsetime. (default is 0, which means no limit)</property>
-      <property name="Attributes" required="No">Specify the attributes you want to have returned, seperated by a semicolon. An empty field will return all attributes</property>
-      <property name="Return object" required="No">Whether the object will be returned (true) or not (false). Default=false</property>
-      <property name="Dereference aliases" required="No">If true, it will dereference aliases, if false, it will not follow them (default=false)</property>
-     </properties>
-       .
-      <li>Modification test</li>
-       <p>This is the LDAP "modify" operation. It can be used to modify an object. It
-       can be used to add, delete or replace values of an attribute. </p>
-    <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Entry name" required="Yes">Distinghuished name of the object you want to modify, relative 
-      to the given DN in the thread bind operation</property>
-     <property name="Modification test" required="Yes">The attribute-value-opCode triples. The opCode can be any 
-     valid LDAP operationCode (add, delete or replace). If you don't specify a value with a delete operation,
-     all values of the given attribute will be deleted. If you do specify a value in a delete operation, only 
-     the given value will be deleted. If this value is non-existent, the sampler will fail the test.</property>
-     </properties>
-       
-      <li>compare</li>
-       <p>This is the LDAP "compare" operation. It can be used to compare the value 
-       of a given attribute with some already known value. In reality this is mostly 
-       used to check whether a given person is a member of some group. In such a case
-        you can compare the DN of the user as a given value, with the values in the
-         attribute "member" of an object of the type groupOfNames.
-         If the compare operation fails, this test fails with errorcode 49.</p>
-    <properties>
-     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Entry DN" required="Yes">The current distinghuished name of the object of 
-      which you want  to compare an attribute, relative to the given DN in the thread bind operation.</property>
-     <property name="Compare filter" required="Yes">In the form "attribute=value"</property>
-     </properties>
-    </ol>
-       
-    <links>
-      <link href="build-ldapext-test-plan.html">Building a Ldap Test Plan</link>
-      <complink name="LDAP Extended Request Defaults"/>
-    </links>
-
-</component>
-
 
 <component name="WebService(SOAP) Request (Beta Code)" index="15.1.7" screenshot="webservice_sampler.png">
 
@@ -473,7 +348,7 @@ XML.</p>
 
 </component>
 
-<component name="Access Log Sampler" index="15.1.8" screenshot="">
+<component name="Tomcat Access Log Sampler" index="15.1.8" screenshot="">
 <center><h2>(Alpha Code)</h2></center>
 <description><p>AccessLogSampler was designed to read access logs and generate http requests.
 For those not familiar with the access log, it is the log the webserver maintains of every
@@ -612,14 +487,7 @@ TBC
 </component>
 
 <component name="TCP Sampler" index="15.1.11" screenshot="">
-<description>TBA
-</description>
-<properties>
-  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-</properties>
-</component>
-
-<component name="Test Action" index="15.1.12" screenshot="test_action.png">
+	<center><h2>(ALPHA Code)</h2></center>
 <description>TBA
 </description>
 <properties>
@@ -630,9 +498,6 @@ TBC
 </section>
 
 <section name="15.2 Logic Controllers" anchor="logic_controllers">
-<description>
-	<br></br>
-</description>
 
 <component index="15.2.1" name="Interleave Controller" screenshot="logic-controller/interleave-controller.png">
 <description><p>If you add Generative or Logic Controllers to an Interleave Controller, JMeter will alternate among each of the
@@ -899,11 +764,8 @@ with the return variable having the respective above values, which can then be u
 It is especially suited for running with the regular expression post-processor. 
 This can "create" the necessary input variables out of the result data of a previous request.
 </p>
-<p>Known bugs/problems</p>
-<ul>
-<li>When the inputVar_1 does not exist, the loop will start anyway, which is not the correct behaviour.</li>
-<li>It will stop the foreach loop as soon as it encounters a null reference, so any empty variable in the list is not allowed.</li>
-</ul>
+<note>The ForEach Controller does not run any samples if inputVar_1 is null.
+This would be the case if the Regular Expression returned no matches.</note>
 </description>
 
 <properties>
@@ -928,7 +790,25 @@ another HTTP Request to the ForEach Controller.</p>
 out of the return page and puts them in the inputVar variable</p>
 <p>In the ForEach loop, a HTTP sampler is added which requests all the links that were extracted from the first returned HTML page.
 </p></example>
-
+<example title="ForEach Example" anchor="foreach_example2">
+<p>Here is <a href="../demos/ForEachTest2.jmx">another example</a> you can download. 
+This has two Regular Expressions and ForEach Controllers.
+The first RE matches, but the second does not match, 
+so no samples are run by the second ForEach Controller</p>
+<figure image="logic-controller/foreach-example2.png">Figure 11 - ForEach Controller Example 2</figure>
+<p>The Thread Group has a single thread and a loop count of two.
+</p><p>
+Sample 1 uses the JavaTest Sampler to return the string "a b c d".
+</p><p>The Regex Extractor uses the expression <b>(\w)\s</b> which matches a letter followed by a space,
+and returns the letter (not the space). Any matches are prefixed with the string "inputVar".
+</p><p>The ForEach Controller extracts all variables with the prefix "inputVar_", and executes its
+sample, passing the value in the variable "returnVar". In this case it will set the variable to the values "a" "b" and "c" in turn.
+</p><p>The For 1 Sampler is another Java Sampler which uses the return variable "returnVar" as part of the sample Label
+and as the sampler Data.
+</p><p>Sample 2, Regex 2 and For 2 are almost identical, except that the Regex has been changed to "(\w)\sx",
+which clearly won't match. Thus the For 2 Sampler will not be run.
+</p>
+</example>
 </component>
 
 <component name="Transaction Controller" index="15.2.12" screenshot="">
@@ -953,16 +833,31 @@ out of the return page and puts them in the inputVar variable</p>
 	<property name="Runtime (seconds)" required="Yes">Desired runtime in seconds</property>
 </properties>
 </component>
+<component name="While Controller" index="15.2.13" screenshot="">
+	<description>
+<note>ALPHA CODE: the current release does not evaluate the condition on initial entry</note>
+		<p>The While Controller runs its children until the condion is false
+		</p>
+
+<p>Possible condition values:</p>
+<ul>
+<li>LAST (or blank) - true whilst last sample is successful</li>
+<li>Otherwise - the condition is evaluated as a string, which is compared with "true"</li>
+</ul>
+	</description>
+<properties>
+	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+	<property name="Condition" required="No">blank, LAST, or variable/function</property>
+</properties>
+</component>
 
 </section>
 
 <section name="15.3 Listeners" anchor="listeners">
 <description>
-	<br></br>
 Most of the listeners perform several roles in addition to "listening"
 to the test results.  They frequently also provide means to view,
 save, and read saved test results.
-<p>Note that Listeners are processed at the end of the scope in which they are found.</p>
 <p>
 The saving and reading of test results is generic.  The various
 listeners generally have a panel whereby one can specify the file to
@@ -1046,7 +941,6 @@ make it impossible for JMeter to interpret the value when it is read
 in later for viewing purposes.</p>
 <p>
 The internal viewing capabilities are described in the following subsections.</p>
-	<br></br>
 
 </description>
 <component index="15.3.1" name="Mailer Visualizer" screenshot="mailer_vis.png">
@@ -1122,8 +1016,8 @@ approximation that is helpful for initial result evaluation.</p>
 
 <component index="15.3.7" name="Aggregate Report" screenshot="aggregate_report.png">
 <description>The aggregate report creates a table row for each differently named request in your test.  For each
-request, it totals the response information and provides request count, min, max, average, error rate, and 
-estimated throughput calculation. Once the test is complete, the throughput is the real rate.</description>
+request, it totals the response information and provides request count, min, max, average, error rate, and an
+idealized throughput calculation.</description>
 </component>
 
 <component index="15.3.8" name="View Results in Table" screenshot="table_results.png">
@@ -1161,36 +1055,14 @@ the performance history of each machine for the last hour.</p>
 </description>
 </component>
 
-<component index="15.3.11" name="Distribution Graph (alpha)" screenshot="distribution_graph.png">
-<description>
-<p>The distribution graph will display a bar for every unique response time. Since the
-granularity of System.currentTimeMillis() is 10 milliseconds, the 90% threshold should be
-within the width of the graph. The graph will draw two threshold lines: 50% and 90%.
-What this means is 50% of the response times finished between 0 and the line. The same
-is true of 90% line. Several tests with Tomcat were performed using 30 threads for 600K
-requests. The graph was able to display the distribution without any problems and both
-the 50% and 90% line were within the width of the graph. A performant application will
-generally produce results that clump together. A poorly written application that has
-memory leaks may result in wild fluctuations. In those situations, the threshold lines
-may be beyond the width of the graph. The recommended solution to this specific problem
-is fix the webapp so it performs well. If your test plan produces distribution graphs
-with no apparent clumping or pattern, it may indicate a memory leak. The only way to
-know for sure is to use a profiling tool.</p>
-</description>
-</component>
-
-
 </section>
 
 <section name="15.4 Configuration Elements" anchor="config_elements">
-<description>
-	<br></br>
-	Configuration elements can be used to set up defaults and variables for later use by samplers.
-	Note that these elements are processed at the start of the scope in which they are found, 
-	i.e. before any samplers in the same scope.
-	<br></br>
-</description>
+
 <component index="15.4.1" name="HTTP Authorization Manager" screenshot="http-config/http-auth-manager.gif">
+
+<note>If there is more than one Authorization Manager in the scope of a Sampler,
+there is currently no way to sepcify which one is to be used.</note>
 
 <description>
 <p>The Authorization Manager lets you specify one or more user logins for web pages that are
@@ -1250,6 +1122,9 @@ be able to run it.  However, you can use it as a reference in constructing your 
 </component>
 
 <component index="15.4.2" name="HTTP Cookie Manager" screenshot="http-config/http-cookie-manager.gif">
+
+<note>If there is more than one Cookie Manager in the scope of a Sampler,
+there is currently no way to sepcify which one is to be used.</note>
 
 <description><p>The Cookie Manager element has two functions:<br></br>
 First, it stores and sends cookies just like a web browser. If you have an HTTP Request and
@@ -1404,28 +1279,26 @@ resource requires query string parameters, add them below in the
 <description></description>
 </component>
 
-<component index="15.4.6" name="JDBC Connection Configuration"
-                screenshot="jdbc-config/jdbc-conn-config.png">
-	<description>Defines the JDBC Connection settings to be used by 
-		the <complink name="JDBC Request"/>Sampler.
-	</description>
+<component index="15.4.6" name="JDBC Database Connection Pool Defaults"
+                screenshot="jdbc-config/jdbc-db-conn-pool.gif">
+<description></description>
 </component>
 
-<component index="15.4.7" name="JDBC SQL Query Defaults"
-	screenshot="jdbc-config/jdbc-sql-query.png">
-<description>Defines a default query for the <complink name="JDBC Request"/>Sampler.
-	<br></br>
-	 Connection settings are defined by the <complink name="JDBC Connection Configuration"/>element.
-	</description>
+<component index="15.4.7" name="JDBC Database Login Defaults"
+                screenshot="jdbc-config/jdbc-db-login.gif">
+<description></description>
 </component>
 
-<component index="15.4.8" name="Mail Reader Sampler">
-<description>TBA</description>
+<component index="15.4.8" name="JDBC SQL Query Defaults"
+                screenshot="jdbc-config/jdbc-sql-query.gif">
+<description></description>
 </component>
 
 
 
 <component index="15.4.9" name="HTTP Header Manager" screenshot="http-config/http-header-manager.gif">
+<note>If there is more than one Header Manager in the scope of a Sampler,
+there is currently no way to sepcify which one is to be used.</note>
 <description><p>The Header Manager lets you add or override HTTP request headers.</p>
 </description>
 
@@ -1487,13 +1360,6 @@ GUI that they can use while developing new JMeter components.</p>
 
 </component>
 
-<component index="15.4.12b" name="LDAP Extended Request Defaults" screenshot="ldapext_defaults.png">
-<description><p>The LDAP Extended Request Defaults component lets you set default values for extended LDAP testing.  See the <complink name="LDAP Extended Request"/>.</p>
-</description>
-
-</component>
-
-
 <component index="15.4.13" name="Java Request Defaults" screenshot="java_defaults.png">
 <description><p>The Java Request Defaults component lets you set default values for Java testing.  See the <complink name="Java Request"/>.</p>
 </description>
@@ -1503,6 +1369,7 @@ GUI that they can use while developing new JMeter components.</p>
 <component index="15.4.14" name="User Defined Variables" screenshot="user_defined_variables.png">
 <description><p>The User Defined Variables lets you define variables for use in other test elements, just as in the <complink name="Test Plan"/>.
 The variables in User Defined Variables components will take precedence over those defined closer to the tree root -- including those defined in the Test Plan.</p>
+<p>Note that the variable's values have to be static: you can't currently use other variables in their definition.</p>
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -1523,12 +1390,7 @@ The variables in User Defined Variables components will take precedence over tho
 </section>
 
 <section name="15.5 Assertions" anchor="assertions">
-<description>
-	<br></br>
-	Assertions are used to perform additional checks on samplers, and are processed after <b>each sampler</b>
-	in the same scope.
-	<br></br>
-</description>
+
 <component index="15.5.1" name="Response Assertion" anchor="basic_assertion" screenshot="assertion/assertion.gif">
 
 <description><p>The response assertion control panel lets you add pattern strings to be compared against various
@@ -1634,18 +1496,21 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 <property name="Script file" required="No">A file containing the BeanShell script to run</property>
 <property name="Script" required="No">The BeanShell script to run</property>
 </properties>
-<p>The following variables are defined to the script:
+<p>There's a <a href="../demos/BeanShellAssertion.bsh">sample script</a> you can try.</p>
+<p>The following variables are defined to the script. 
+These are strings unless otherwise noted:
 <ul>
+<li>log - the Logger Object. (e.g.) log.warn("Message"[,Throwable])</li>
 	<li>Response - the response Object; read-write</li>
 	<li>Failure - boolean; read-write; used to set the Assertion status</li>
 	<li>FailureMessage - String; read-write; used to set the Assertion message</li>
-	<li>ResponseData - the response body</li>
+	<li>ResponseData - the response body (byte [])</li>
 	<li>ResponseCode - e.g. 200</li>
 	<li>ResponseMessage - e.g. OK</li>
 	<li>ResponseHeaders - contains the HTTP headers</li>
-	<li>RequestHeaders - containse the HTTP headers sent to the server</li>
+	<li>RequestHeaders - contains the HTTP headers sent to the server</li>
 	<li>SampleLabel</li>
-	<li>SamplerData</li>
+	<li>SamplerData - data that was sent to the server</li>
 </ul>
 </p>
 </component>
@@ -1678,16 +1543,7 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 </section>
 
 <section name="15.6 Timers" anchor="timers">
-<description>
-	<br></br>
-	Note that timers are processed at the start of the scope in which they are found;
-	if there are several timers in the same scope, all the timers will be processed.
-	To apply a timer to a single sampler, add the timer as a child element to the sampler.
-	The timer will be applied before the sampler is executed.
-	To apply a timer after a sampler, either add it to the next sampler, or add it as the
-	child of a simple logic controller immediately after the sampler.
-	<br></br>
-</description>
+
 <component index="15.6.1" name="Constant Timer" anchor="constant" screenshot="timers/constant_timer.gif">
 <description>
 <p>If you want to have each thread pause for the same amount of time between
@@ -1747,11 +1603,6 @@ to the random delay.</property>
 </section>
 
 <section name="15.7 Pre Processors" anchor="preprocessors">
-	<description>
-	<br></br>
-		Preprocessors are used to modify the Samplers in their scope.
-	<br></br>
-	</description>
 <component index="15.7.1" name="HTML Link Parser" anchor="html_link_parser">
 <description>
 <p>This modifier parses HTML response from the server and extracts
@@ -1920,13 +1771,6 @@ with the start, continuing on like that until the test is ended.  </p></descript
 </section>
 
 <section name="15.8 Post-Processors" anchor="postprocessors">
-	<description>
-	<br></br>
-		As the name suggests, Post-Processors are applied after samplers. Note that they are
-		applied to <b>all</b> the samplers in the same scope, so to ensure that a post-processor
-		is applied only to a particular sampler, add it as a child of the sampler.
-	<br></br>
-	</description>
 <component index="15.8.1" name="Regular Expression Extractor" screenshot="regex_extractor.png">
 <description><p>Allows the user to extract values from a server response using a Perl-type regular expression.  As a post-processor,
 this element will execute after each Sample request in its <scope/>, applying the regular expression, extracting the requested values,
@@ -2001,9 +1845,7 @@ This is mainly intended for batch (non-GUI) runs.
 </section>
 
 <section name="15.9 Miscellaneous Features" anchor="Miscellaneous_Features">
-<description>
-		<br></br>
-</description>
+
 <component index="15.9.1" name="Test Plan" screenshot="testplan.png">
 <description><p>At the Test Plan level, static variables can be defined that allow users to abstract values that are repeated throughout their tests, such as server names.  Here, one can instruct JMeter to save the maximum sample information to file by selecting "functional testing".  Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.</p></description>
 </component>
