@@ -77,6 +77,7 @@ public class InterleaveControl extends GenericController implements Serializable
 	public static final int NEW_STYLE = 1;
 	private boolean interleave;
 	private boolean doNotIncrement = false;
+	private Controller start = null;
 
 	/****************************************
 	 * Constructor for the InterleaveControl object
@@ -108,6 +109,17 @@ public class InterleaveControl extends GenericController implements Serializable
 		}
 		else if(controller instanceof Controller)
 		{
+			if (start != null )
+			{ 	
+				if (((Controller)controller).equals(start))
+				{
+					return false;
+				} 
+			} else 
+			{
+				start = (Controller)controller;
+			}
+			
 			if(((Controller)controller).hasNext())
 			{
 				retVal = true;
@@ -122,6 +134,7 @@ public class InterleaveControl extends GenericController implements Serializable
 		{
 			retVal = true;
 		}
+
 		if(controller == null)
 		{
 			reInitialize();
@@ -132,6 +145,12 @@ public class InterleaveControl extends GenericController implements Serializable
 			return false;
 		}
 		return retVal;
+	}
+	
+	protected boolean hasNextAtEnd()
+	{
+		resetCurrent();
+		return hasNext();
 	}
 	
 	protected void removeCurrentController()
@@ -166,7 +185,7 @@ public class InterleaveControl extends GenericController implements Serializable
 
 	public Sampler next()
 	{
-        fireIterEventAsNeeded();
+        fireIterEvents();
 		setInterleave(DEFAULT_STYLE);
 		TestElement controller = getCurrentController();
 		if(controller == null)
