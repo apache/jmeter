@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,29 +52,59 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.jmeter.gui;
-import java.util.*;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import org.apache.jmeter.control.Controller;
-import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.testelement.WorkBench;
+
+package org.apache.jmeter.plugin;
+
+
+import java.net.URL;
+
+import javax.swing.*;
+
+import org.apache.jmeter.gui.GUIFactory;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
 
-public class GuiFactory
+/**
+ * @author Oliver Rossmueller
+ */
+public class PluginManager
 {
 
-	private static Map guiComponents = new HashMap();
-	private static Map icons = new HashMap();
+    private static final PluginManager instance = new PluginManager();
 
-	private GuiFactory() { }
 
+    private PluginManager()
+    {
+    }
+
+
+    public static void install(JMeterPlugin plugin)
+            throws ClassNotFoundException, InstantiationException,
+		   IllegalAccessException
+    {
+        instance.installPlugin(plugin);
+    }
+
+
+    private void installPlugin(JMeterPlugin plugin)
+            throws ClassNotFoundException, InstantiationException,
+		   IllegalAccessException
+    {
+        String[][] icons = plugin.getIconMappings();
+        ClassLoader classloader = plugin.getClass().getClassLoader();
+
+        for (int i = 0; i < icons.length; i++)
+	{
+            URL resource = classloader.getResource(icons[i][1].trim());
+
+            if (resource == null)
+	    {
+                // todo: log or throw exception
+            }
+	    else
+	    {
+                GUIFactory.registerIcon(icons[i][0], new ImageIcon(resource));
+            }
+        }
+    }
 }

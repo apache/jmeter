@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -80,16 +80,16 @@ import org.apache.jorphan.collections.ListedHashTree;
 
 public class JMeterTreeModel extends DefaultTreeModel
 {
-	
+
 	/****************************************
 	 * !ToDo (Constructor description)
 	 ***************************************/
 	public JMeterTreeModel()
 	{
-		super(new JMeterTreeNode(new NamePanel()));
-		this.insertNodeInto(new JMeterTreeNode(new TestPlanGui()),
+		super(new JMeterTreeNode(new NamePanel(), null));
+		this.insertNodeInto(new JMeterTreeNode(new TestPlanGui(), this),
 				(JMeterTreeNode)getRoot(), 0);
-		this.insertNodeInto(new JMeterTreeNode(new WorkBenchGui()),
+		this.insertNodeInto(new JMeterTreeNode(new WorkBenchGui(), this),
 				(JMeterTreeNode)getRoot(), 1);
 	}
 
@@ -107,7 +107,7 @@ public class JMeterTreeModel extends DefaultTreeModel
 	}
 
 	/****************************************
-	 * Adds the sub tree at the given node.  Returns a boolean indicating 
+	 * Adds the sub tree at the given node.  Returns a boolean indicating
 	 * whether the added sub tree was a full test plan.
 	 *
 	 *@param subTree                         !ToDo
@@ -152,7 +152,7 @@ public class JMeterTreeModel extends DefaultTreeModel
 		{
 			throw new IllegalUserActionException("This node cannot hold sub-elements");
 		}
-		JMeterTreeNode newNode = new JMeterTreeNode((JMeterGUIComponent)component);
+		JMeterTreeNode newNode = new JMeterTreeNode((JMeterGUIComponent)component, this);
 		this.insertNodeInto(newNode, node, node.getChildCount());
 		return newNode;
 	}
@@ -201,14 +201,14 @@ public class JMeterTreeModel extends DefaultTreeModel
 	{
 		return getCurrentSubTree((JMeterTreeNode)((JMeterTreeNode)this.getRoot()).getChildAt(0));
 	}
-	
+
 	public void clearTestPlan()
 	{
 		super.removeNodeFromParent((JMeterTreeNode)getChild(getRoot(), 0));
-		this.insertNodeInto(new JMeterTreeNode(new TestPlanGui()),
+		this.insertNodeInto(new JMeterTreeNode(new TestPlanGui(), this),
 				(JMeterTreeNode)getRoot(), 0);
 		super.removeNodeFromParent((JMeterTreeNode)getChild(getRoot(), 1));
-		this.insertNodeInto(new JMeterTreeNode(new WorkBenchGui()),
+		this.insertNodeInto(new JMeterTreeNode(new WorkBenchGui(), this),
 				(JMeterTreeNode)getRoot(), 1);
 	}
 }

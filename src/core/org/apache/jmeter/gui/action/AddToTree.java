@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -87,7 +87,7 @@ public class AddToTree implements Command
 		allJMeterComponentCommands = new HashMap();
 		allJMeterComponentCommands.put("Add","Add");
 		List classes;
-		
+
 	}
 
 
@@ -109,7 +109,7 @@ public class AddToTree implements Command
 	 *@param  guiPackage  Description of Parameter
 	 */
 	public void doAction(ActionEvent e)
-	{		
+	{
 		try
 		{
 			JMeterGUIComponent gui = (JMeterGUIComponent) Class.forName(((JComponent)e.getSource()).getName()).newInstance();
@@ -124,7 +124,7 @@ public class AddToTree implements Command
 	protected void addObjectToTree(JMeterGUIComponent guiObject)
 	{
 		GuiPackage guiPackage = GuiPackage.getInstance();
-		JMeterTreeNode node = new JMeterTreeNode(guiObject);
+		JMeterTreeNode node = new JMeterTreeNode(guiObject, guiPackage.getTreeModel());
 		guiPackage.getTreeModel().insertNodeInto(node,
 				guiPackage.getTreeListener().getCurrentNode(),
 				guiPackage.getTreeListener().getCurrentNode().getChildCount());

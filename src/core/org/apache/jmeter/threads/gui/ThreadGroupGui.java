@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -69,6 +69,7 @@ import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.control.gui.LoopControlPanel;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.NamePanel;
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.NumberFieldErrorListener;
@@ -193,7 +194,7 @@ public class ThreadGroupGui extends JPanel implements JMeterGUIComponent
 		loopPanel = new LoopControlPanel(false);
 		LoopController looper= (LoopController)loopPanel.createTestElement();
 		looper.setLoops(-1);
-		loopPanel.configure(looper);		
+		loopPanel.configure(looper);
 		return loopPanel;
 	}
 
@@ -265,4 +266,10 @@ public class ThreadGroupGui extends JPanel implements JMeterGUIComponent
 
 		this.add(mainPanel);
 	}
+
+
+    public void setNode(JMeterTreeNode node)
+    {
+        namePanel.setNode(node);
+    }
 }
