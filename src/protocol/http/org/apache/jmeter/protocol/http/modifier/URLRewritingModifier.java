@@ -37,6 +37,10 @@ public class URLRewritingModifier
 	 */
 	public boolean modifyEntry(Sampler sampler, SampleResult responseText)
 	{
+		if(case1 == null)
+		{
+			initRegex(getArgumentName());
+		}
 		String text = new String(responseText.getResponseData());
 		Perl5Matcher matcher = new Perl5Matcher();
 		String value = "";
@@ -79,6 +83,10 @@ public class URLRewritingModifier
 	public void setArgumentName(String argName)
 	{
 		setProperty(ARGUMENT_NAME, argName);
+		case1 = case2 = case3 = null;
+	}
+	private void initRegex(String argName)
+	{
 		try
 		{
 			case1 = compiler.compile(argName + "=([^\">& \n\r]*)[& \\n\\r\">]?$?");
