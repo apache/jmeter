@@ -86,11 +86,11 @@
 
   <!-- 3rd party libraries to be included in the binary distribution -->
   <property name="avalon-excalibur.jar" value="lib/avalon-excalibur-4.1.jar"/>
-  <property name="avalon-framework.jar" value="lib/avalon-framework.jar"/>
+  <property name="avalon-framework.jar" value="lib/avalon-framework-4.1.4.jar"/>
   <property name="jakarta-oro.jar" value="lib/jakarta-oro-2.0.7.jar"/>
   <property name="commons-collections.jar" value="lib/commons-collections.jar"/>
   <property name="junit.jar" value="lib/junit.jar"/>
-  <property name="logkit.jar" value="lib/logkit-1.0.1.jar"/>
+  <property name="logkit.jar" value="lib/logkit-1.2.jar"/>
   <property name="xalan.jar" value="lib/xalan.jar"/>
   <property name="xerces.jar" value="lib/xercesImpl.jar"/>
   <property name="xml-apis.jar" value="lib/xml-apis.jar"/>
