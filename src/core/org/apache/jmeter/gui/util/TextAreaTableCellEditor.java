@@ -5,9 +5,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.util.EventObject;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,7 +26,8 @@ public class TextAreaTableCellEditor implements TableCellEditor,FocusListener {
 	JScrollPane pane;
 	JTextArea editor;
 	String value = "";
-	Set listeners = new HashSet();
+	LinkedList listeners = new LinkedList();
+	int row,col;
 	
 	public Component getTableCellEditorComponent(JTable table,
                                              Object value,
@@ -42,7 +43,19 @@ public class TextAreaTableCellEditor implements TableCellEditor,FocusListener {
     	pane = new JScrollPane(editor,JScrollPane.VERTICAL_SCROLLBAR_NEVER,
     			JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     	pane.validate();
+    	this.row = row;
+    	this.col = col;
     	return pane;
+    }
+    
+    public int getColumn()
+    {
+    	return col;
+    }
+    
+    public int getRow()
+    {
+    	return row;
     }
     
     public void focusLost(FocusEvent fe)
@@ -72,7 +85,7 @@ public class TextAreaTableCellEditor implements TableCellEditor,FocusListener {
     
     public void cancelCellEditing()
     {
-    	Iterator iter = listeners.iterator();
+    	Iterator iter = ((List)listeners.clone()).iterator();
     	while(iter.hasNext())
     	{
     		((CellEditorListener)iter.next()).editingCanceled(new ChangeEvent(this));
@@ -81,7 +94,7 @@ public class TextAreaTableCellEditor implements TableCellEditor,FocusListener {
     
     public boolean stopCellEditing()
     {
-    	Iterator iter = listeners.iterator();
+    	Iterator iter = ((List)listeners.clone()).iterator();
     	while(iter.hasNext())
     	{
     		((CellEditorListener)iter.next()).editingStopped(new ChangeEvent(this));

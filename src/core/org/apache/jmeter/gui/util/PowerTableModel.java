@@ -36,10 +36,17 @@ public class PowerTableModel extends DefaultTableModel {
 		 *@param row  Description of Parameter
 		 ***************************************/
 	public void removeRow(int row) {
-		System.out.println("Removing row: "+row);
 		if (model.size() > row) {
 			model.removeRow(row);
 		}
+	}
+	
+	public void clearData()
+	{
+		String[] headers = model.getHeaders();
+		model = new Data();
+		model.setHeaders(headers);
+		this.fireTableDataChanged();
 	}
 
 	public void addRow(Object data[]) {

@@ -149,6 +149,11 @@ public class MultipartUrlConfig implements Serializable
 	public void addEncodedArgument(String name,String value)
 	{
 		Arguments args = getArguments();
+		HTTPArgument arg = new HTTPArgument(name,value,true);
+		if(arg.getName().equals(arg.getEncodedName()) && arg.getValue().equals(arg.getEncodedValue()))
+		{
+			arg.setAlwaysEncode(false);
+		}
 		args.addArgument(new HTTPArgument(name,value,true));
 	}
 

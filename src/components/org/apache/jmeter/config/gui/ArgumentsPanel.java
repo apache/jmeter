@@ -61,6 +61,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.Collection;
+import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -68,14 +69,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 import junit.framework.TestCase;
+
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.gui.util.TextAreaCellRenderer;
 import org.apache.jmeter.gui.util.TextAreaTableCellEditor;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.Data;
 import org.apache.jmeter.util.JMeterUtils;
 
 /****************************************
@@ -87,12 +92,12 @@ import org.apache.jmeter.util.JMeterUtils;
  ***************************************/
 
 public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
-		ActionListener
+		ActionListener,CellEditorListener
 {
 	JTable table;
 	JButton add;
 	JButton delete;
-	InnerTableModel tableModel;
+	protected PowerTableModel tableModel;
 	String name;
 	JLabel tableLabel;
 
@@ -107,11 +112,33 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 		this(JMeterUtils.getResString("paramtable"));
 	}
 	
+	public void editingCanceled(ChangeEvent e)
+	{
+	}
+	
+	public void editingStopped(ChangeEvent e)
+	{
+	}
+	
 	public ArgumentsPanel(String label)
 	{
-		tableModel = new InnerTableModel();
 		tableLabel = new JLabel(label);
 		init();
+	}
+	
+	protected JTable getTable()
+	{
+		return table;
+	}
+	
+	protected JButton getDeleteButton()
+	{
+		return delete;
+	}
+	
+	protected JButton getAddButton()
+	{
+		return add;
 	}
 
 	/****************************************
@@ -141,8 +168,16 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 	 ***************************************/
 	public TestElement createTestElement()
 	{
-		this.configureTestElement(tableModel.args);
-		return (TestElement)tableModel.args.clone();
+		Data model = tableModel.getData();
+		Arguments args = new Arguments();
+		model.reset();
+		while(model.next())
+		{
+			args.addArgument((String)model.getColumnValue(Arguments.COLUMN_NAMES[0]),
+					model.getColumnValue(Arguments.COLUMN_NAMES[1]));
+		}
+		this.configureTestElement(args);
+		return (TestElement)args.clone();
 	}
 
 	/****************************************
@@ -155,7 +190,13 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 		super.configure(el);
 		if(el instanceof Arguments)
 		{
-			tableModel.setUnderlyingModel((Arguments)el.clone());
+			tableModel.clearData();
+			Iterator iter = ((Arguments)el).getArguments().iterator();
+			while(iter.hasNext())
+			{
+				Argument arg = (Argument)iter.next();
+				tableModel.addRow(new Object[]{arg.getName(),arg.getValue()});
+			}
 		}
 		checkDeleteStatus();
 	}
@@ -167,13 +208,6 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 	 ***************************************/
 	public void focusLost(FocusEvent e)
 	{
-		try
-		{
-			table.getCellEditor().stopCellEditing();
-			table.revalidate();
-			table.repaint();
-		}
-		catch(NullPointerException err){}
 	}
 
 	/****************************************
@@ -193,61 +227,69 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 		String action = e.getActionCommand();
 		if(action.equals(DELETE))
 		{
-			// If a table cell is being edited, we must cancel the editing before
-			// deleting the row
-			if(table.isEditing())
-			{
-				TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
-				cellEditor.cancelCellEditing();
-			}
-
-			int rowSelected = table.getSelectedRow();
-			if(rowSelected >= 0)
-			{
-				tableModel.removeRow(rowSelected);
-				tableModel.fireTableDataChanged();
-
-				// Disable DELETE if there are no rows in the table to delete.
-				if(tableModel.getRowCount() == 0)
-				{
-					delete.setEnabled(false);
-				}
-
-				// Table still contains one or more rows, so highlight (select)
-				// the appropriate one.
-				else
-				{
-					int rowToSelect = rowSelected;
-
-					if(rowSelected >= tableModel.getRowCount())
-					{
-						rowToSelect = rowSelected - 1;
-					}
-
-					table.setRowSelectionInterval(rowToSelect, rowToSelect);
-				}
-			}
+			deleteArgument();
 		}
 		else if(action.equals(ADD))
 		{
-			// If a table cell is being edited, we should accept the current value
-			// and stop the editing before adding a new row.
-			if(table.isEditing())
-			{
-				TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
-				cellEditor.stopCellEditing();
-			}
-
-			tableModel.addNewRow();
-			tableModel.fireTableDataChanged();
-
-			// Enable DELETE (which may already be enabled, but it won't hurt)
-			delete.setEnabled(true);
-
-			// Highlight (select) the appropriate row.
-			int rowToSelect = tableModel.getRowCount() - 1;
-			table.setRowSelectionInterval(rowToSelect, rowToSelect);
+			addArgument();
 		}
+	}
+
+	protected void deleteArgument() {
+		// If a table cell is being edited, we must cancel the editing before
+		// deleting the row
+		if(table.isEditing())
+		{
+			TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
+			cellEditor.cancelCellEditing();
+		}
+		
+		int rowSelected = table.getSelectedRow();
+		if(rowSelected >= 0)
+		{
+			tableModel.removeRow(rowSelected);
+			tableModel.fireTableDataChanged();
+		
+			// Disable DELETE if there are no rows in the table to delete.
+			if(tableModel.getRowCount() == 0)
+			{
+				delete.setEnabled(false);
+			}
+		
+			// Table still contains one or more rows, so highlight (select)
+			// the appropriate one.
+			else
+			{
+				int rowToSelect = rowSelected;
+		
+				if(rowSelected >= tableModel.getRowCount())
+				{
+					rowToSelect = rowSelected - 1;
+				}
+		
+				table.setRowSelectionInterval(rowToSelect, rowToSelect);
+			}
+		}
+	}
+
+	protected void addArgument() {
+		// If a table cell is being edited, we should accept the current value
+		// and stop the editing before adding a new row.
+		if(table.isEditing())
+		{
+			TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
+			cellEditor.stopCellEditing();
+		}
+		
+		tableModel.addNewRow();
+		tableModel.fireTableDataChanged();
+		
+		// Enable DELETE (which may already be enabled, but it won't hurt)
+		delete.setEnabled(true);
+		
+		// Highlight (select) the appropriate row.
+		int rowToSelect = tableModel.getRowCount() - 1;
+		table.setRowSelectionInterval(rowToSelect, rowToSelect);
 	}
 
 	/****************************************
@@ -255,11 +297,14 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 	 ***************************************/
 	public void addInnerPanel()
 	{
+		initializeTableModel();
 		table = new JTable(tableModel);
 		table.setEnabled(true);
 		table.addFocusListener(this);
+		TextAreaTableCellEditor editor = new TextAreaTableCellEditor();
 		table.setDefaultEditor(String.class,
-				new TextAreaTableCellEditor());
+				editor);
+		editor.addCellEditorListener(this);
 		TextAreaCellRenderer renderer = new TextAreaCellRenderer();
 		table.setRowHeight(renderer.getPreferredHeight());
 		table.setDefaultRenderer(String.class,renderer);
@@ -294,7 +339,12 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 		this.add(buttonPanel,BorderLayout.SOUTH);
 	}
 
-	private void checkDeleteStatus() {
+	protected void initializeTableModel() {
+		tableModel = new PowerTableModel(new String[]{Arguments.COLUMN_NAMES[0],Arguments.COLUMN_NAMES[1]},
+				new Class[]{String.class,String.class});
+	}
+
+	protected void checkDeleteStatus() {
 		// Disable DELETE if there are no rows in the table to delete.
 		if(tableModel.getRowCount() == 0)
 		{
@@ -331,169 +381,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 		this.addInnerPanel();
 	}
 
-	/****************************************
-	 * Inner class to handle table model calls
-	 *
-	 *@author    $Author$
-	 *@created   $Date$
-	 *@version   $Revision$
-	 ***************************************/
-	private class InnerTableModel extends DefaultTableModel
-	{
-		Arguments args;
-
-		/****************************************
-		 * !ToDo (Constructor description)
-		 *
-		 *@param args  !ToDo (Parameter description)
-		 ***************************************/
-		public InnerTableModel(Arguments args)
-		{
-			this.args = args;
-		}
-
-		/****************************************
-		 * !ToDo (Constructor description)
-		 ***************************************/
-		public InnerTableModel()
-		{
-			args = new Arguments();
-		}
-
-		/****************************************
-		 * !ToDo (Method description)
-		 *
-		 *@param args  !ToDo (Parameter description)
-		 ***************************************/
-		public void setUnderlyingModel(Arguments args)
-		{
-			this.args = args;
-			this.fireTableDataChanged();
-		}
-
-		/****************************************
-		 * Description of the Method
-		 *
-		 *@param row  Description of Parameter
-		 ***************************************/
-		public void removeRow(int row)
-		{
-			args.removeArgument(row);
-		}
-
-		/****************************************
-		 * Description of the Method
-		 ***************************************/
-		public void removeAllRows()
-		{
-			args.removeAllArguments();
-		}
-
-		/****************************************
-		 * Adds a feature to the NewRow attribute of the Arguments object
-		 ***************************************/
-		public void addNewRow()
-		{
-			args.addEmptyArgument();
-		}
-
-		/****************************************
-		 * required by table model interface
-		 *
-		 *@return   !ToDo (Return description)
-		 ***************************************/
-		public int getRowCount()
-		{
-			if(args != null)
-			{
-				return args.getArgumentCount();
-			}
-			else
-			{
-				return 0;
-			}
-		}
-
-		/****************************************
-		 * required by table model interface
-		 *
-		 *@return   !ToDo (Return description)
-		 ***************************************/
-		public int getColumnCount()
-		{
-			return 2;
-		}
-
-		/****************************************
-		 * required by table model interface
-		 *
-		 *@param column  !ToDo (Parameter description)
-		 *@return        !ToDo (Return description)
-		 ***************************************/
-		public String getColumnName(int column)
-		{
-			return Arguments.COLUMN_NAMES[column];
-		}
-
-		/****************************************
-		 * required by table model interface
-		 *
-		 *@param column  !ToDo (Parameter description)
-		 *@return        !ToDo (Return description)
-		 ***************************************/
-		public Class getColumnClass(int column)
-		{
-			return java.lang.String.class;
-		}
-
-		/****************************************
-		 * required by table model interface
-		 *
-		 *@param row     !ToDo (Parameter description)
-		 *@param column  !ToDo (Parameter description)
-		 *@return        !ToDo (Return description)
-		 ***************************************/
-		public Object getValueAt(int row, int column)
-		{
-			Argument arg = (Argument)args.getArgument(row);
-			if(arg == null)
-			{
-				return null;
-			}
-			if(column == 0)
-			{
-				return arg.getName();
-			}
-			else
-			{
-				return arg.getValue();
-			}
-		}
-
-		/****************************************
-		 * Sets the ValueAt attribute of the Arguments object
-		 *
-		 *@param value  The new ValueAt value
-		 *@param row    The new ValueAt value
-		 *@param col    The new ValueAt value
-		 ***************************************/
-		public void setValueAt(Object value, int row, int col)
-		{
-			Argument arg = (Argument)args.getArgument(row);
-			if(arg == null)
-			{
-				return;
-			}
-			if(col == 0)
-			{
-				arg.setName((String)value);
-			}
-			else
-			{
-				arg.setValue((String)value);
-			}
-		}
-	}
+	
 	
 	public static class Test extends TestCase {
 		
