@@ -52,16 +52,15 @@ variable in a test element is done by bracketing the variable name with '${' and
 parameters begin with "__" to avoid conflict with user value names<sup>*</sup>.  Some functions take arguments to
 configure them, and these go in parentheses, comma-delimited.  If the function takes no arguments, the parentheses can
 be left out.  A further complication for argument values that themselves contain commas is that the value
-should be encoded the way HTTP parameters are encoded.  JMeter provides a tool to help you construct
-function calls for various built-in functions, which you can then copy-paste.  If your argument values
-do not contain commas, encoding is not required.</p>
+should be escaped as necessary.  Thus, if you need to include a comma in your parameter value, escape it like so: '\,'.  JMeter provides a tool to help you construct
+function calls for various built-in functions, which you can then copy-paste.  It will not automatically escape values for you, since functions can be parameters to other functions, and you should only escape values you intend as literal.</p>
 <note><sup>*</sup>If you define a user-defined static variable with the same name as a built-in function, your static
 variable will override the built-in function.</note>
 </subsection>
 
 <subsection name="14.4 The Function Helper Dialog" anchor="function_helper">
 <p>The Function Helper dialog is available from JMeter's Tools menu.</p>
-<figure image="../images/screenshots/function_helper_dialog.png">Function Helper Dialog</figure>
+<figure image="function_helper_dialog.png">Function Helper Dialog</figure>
 <p>Using the Function Helper, you can select a function from the pull down, and assign
 values for its arguments.  The left column in the table provides a brief description of the
 argument, and the right column is where you write in the value for that argument.  Different
