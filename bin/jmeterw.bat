@@ -59,4 +59,4 @@ set PERM=-XX:PermSize=64m -XX:MaxPermSize=64m
 set DEBUG=-verbose:gc -XX:+PrintTenuringDistribution
 set ARGS=%HEAP% %NEW% %SURVIVOR% %TENURING% %EVACUATION% %RMIGC% %PERM% %DEBUG%
 
-start "JMeter" javaw %ARGS% -jar ApacheJMeter.jar %JMETER_CMD_LINE_ARGS%
+start "JMeter" javaw %JVM_ARGS% %ARGS% -jar ApacheJMeter.jar %JMETER_CMD_LINE_ARGS%
