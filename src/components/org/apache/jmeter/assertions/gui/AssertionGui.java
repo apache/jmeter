@@ -53,9 +53,8 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.assertions.gui;
+
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -63,11 +62,8 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -81,38 +77,69 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
- * Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:
- * Apache
+/**
+ * GUI interface for a {@link ResponseAssertion}.
  *
- *@author    Michael Stover
- *@created   $Date$
- *@version   $Revision$
- ***************************************/
-
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 public class AssertionGui extends AbstractAssertionGui
 {
-    static final String COL_NAME = JMeterUtils.getResString("assertion_patterns_to_test");
+    /** The name of the table column in the list of patterns. */
+    private static final String COL_NAME =
+        JMeterUtils.getResString("assertion_patterns_to_test");
 
-    private JRadioButton responseStringButton, labelButton, containsBox, matchesBox;
+    /** Radio button indicating that the text response should be tested. */
+    private JRadioButton responseStringButton;
+
+    /** Radio button indicating that the URL should be tested. */
+    private JRadioButton labelButton;
+
+    /**
+     * Radio button indicating to test if the field contains one of the
+     * patterns.
+     */
+    private JRadioButton containsBox;
+
+    /**
+     * Radio button indicating to test if the field matches one of the
+     * patterns.
+     */
+    private JRadioButton matchesBox;
+
+    /**
+     * Checkbox indicating to test that the field does NOT contain/match
+     * the patterns.
+     */
     private JCheckBox notBox;
-    private JTable stringTable;
-    private JButton addPattern, deletePattern;
-    PowerTableModel tableModel;
 
-    /****************************************
-     * !ToDo (Constructor description)
-     ***************************************/
+    /** A table of patterns to test against. */
+    private JTable stringTable;
+
+    /** Button to add a new pattern. */
+    private JButton addPattern;
+
+    /** Button to delete a pattern. */
+    private JButton deletePattern;
+
+    /** Table model for the pattern table. */
+    private PowerTableModel tableModel;
+
+    /**
+     * Create a new AssertionGui panel.
+     */
     public AssertionGui()
     {
         init();
     }
 
+    /* Implements JMeterGUIComponent.getStaticLabel() */
     public String getStaticLabel()
     {
         return JMeterUtils.getResString("assertion_title");
     }
 
+    /* Implements JMeterGUIComponent.createTestElement() */
     public TestElement createTestElement()
     {
         ResponseAssertion el = new ResponseAssertion();
@@ -120,22 +147,21 @@ public class AssertionGui extends AbstractAssertionGui
         return el;
     }
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
+    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
     public void modifyTestElement(TestElement el)
     {
         configureTestElement(el);
         if (el instanceof ResponseAssertion)
         {
             ResponseAssertion ra = (ResponseAssertion) el;
+
             ra.clearTestStrings();
             String[] testStrings = tableModel.getData().getColumn(COL_NAME);
             for (int i = 0; i < testStrings.length; i++)
             {
                 ra.addTestString(testStrings[i]);
             }
+
             if (labelButton.isSelected())
             {
                 ra.setTestField(ResponseAssertion.SAMPLE_LABEL);
@@ -144,6 +170,7 @@ public class AssertionGui extends AbstractAssertionGui
             {
                 ra.setTestField(ResponseAssertion.RESPONSE_DATA);
             }
+
             if (containsBox.isSelected())
             {
                 ra.setToContainsType();
@@ -152,6 +179,7 @@ public class AssertionGui extends AbstractAssertionGui
             {
                 ra.setToMatchType();
             }
+
             if (notBox.isSelected())
             {
                 ra.setToNotType();
@@ -163,13 +191,19 @@ public class AssertionGui extends AbstractAssertionGui
         }
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     ***************************************/
+    /**
+     * A newly created component can be initialized with the contents of
+     * a Test Element object by calling this method.  The component is
+     * responsible for querying the Test Element object for the
+     * relevant information to display in its GUI.
+     *
+     * @param el the TestElement to configure
+     */
     public void configure(TestElement el)
     {
         super.configure(el);
         ResponseAssertion model = (ResponseAssertion) el;
+
         if (model.isContainsType())
         {
             containsBox.setSelected(true);
@@ -180,6 +214,7 @@ public class AssertionGui extends AbstractAssertionGui
             containsBox.setSelected(false);
             matchesBox.setSelected(true);
         }
+
         if (model.isNotType())
         {
             notBox.setSelected(true);
@@ -199,12 +234,14 @@ public class AssertionGui extends AbstractAssertionGui
             responseStringButton.setSelected(false);
             labelButton.setSelected(true);
         }
+
         tableModel.clearData();
         PropertyIterator tests = model.getTestStrings().iterator();
         while (tests.hasNext())
         {
             tableModel.addRow(new Object[] { tests.next().getStringValue()});
         }
+
         if(model.getTestStrings().size() == 0)
         {
             deletePattern.setEnabled(false);
@@ -213,9 +250,13 @@ public class AssertionGui extends AbstractAssertionGui
         {
             deletePattern.setEnabled(true);
         }
+
         tableModel.fireTableDataChanged();
     }
 
+    /**
+     * Initialize the GUI components and layout.
+     */
     private void init()
     {
         setLayout(new BorderLayout());
@@ -229,52 +270,94 @@ public class AssertionGui extends AbstractAssertionGui
         add(createStringPanel(),BorderLayout.CENTER);
     }
 
+    /**
+     * Create a panel allowing the user to choose which response field should
+     * be tested.
+     *
+     * @return a new panel for selecting the response field
+     */
     private JPanel createFieldPanel()
     {
         JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("assertion_resp_field")));
-        responseStringButton = new JRadioButton(JMeterUtils.getResString("assertion_text_resp"));
-        labelButton = new JRadioButton(JMeterUtils.getResString("assertion_url_samp"));
+        panel.setBorder(
+            BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("assertion_resp_field")));
+
+        responseStringButton =
+            new JRadioButton(JMeterUtils.getResString("assertion_text_resp"));
+        labelButton =
+            new JRadioButton(JMeterUtils.getResString("assertion_url_samp"));
+
         ButtonGroup group = new ButtonGroup();
         group.add(responseStringButton);
         group.add(labelButton);
         panel.add(responseStringButton);
         panel.add(labelButton);
+
         responseStringButton.setSelected(true);
+
         return panel;
     }
 
+    /**
+     * Create a panel allowing the user to choose what type of test should be
+     * performed.
+     *
+     * @return a new panel for selecting the type of assertion test
+     */
     private JPanel createTypePanel()
     {
         JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("assertion_pattern_match_rules")));
-        containsBox = new JRadioButton(JMeterUtils.getResString("assertion_contains"));
-        matchesBox = new JRadioButton(JMeterUtils.getResString("assertion_matches"));
-        notBox = new JCheckBox(JMeterUtils.getResString("assertion_not"));
+        panel.setBorder(
+            BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("assertion_pattern_match_rules")));
+
         ButtonGroup group = new ButtonGroup();
-        group.add(matchesBox);
+
+        containsBox =
+            new JRadioButton(JMeterUtils.getResString("assertion_contains"));
         group.add(containsBox);
-        panel.add(containsBox);
-        panel.add(matchesBox);
-        panel.add(notBox);
         containsBox.setSelected(true);
+        panel.add(containsBox);
+
+        matchesBox =
+            new JRadioButton(JMeterUtils.getResString("assertion_matches"));
+        group.add(matchesBox);
+        panel.add(matchesBox);
+
+        notBox = new JCheckBox(JMeterUtils.getResString("assertion_not"));
+        panel.add(notBox);
+
         return panel;
     }
 
+    /**
+     * Create a panel allowing the user to supply a list of string patterns to
+     * test against.
+     *
+     * @return a new panel for adding string patterns
+     */
     private JPanel createStringPanel()
     {
-        tableModel = new PowerTableModel(new String[] { COL_NAME }, new Class[] { String.class });
+        tableModel =
+            new PowerTableModel(
+                new String[] { COL_NAME },
+                new Class[] { String.class });
         stringTable = new JTable(tableModel);
+
         TextAreaCellRenderer renderer = new TextAreaCellRenderer();
         stringTable.setRowHeight(renderer.getPreferredHeight());
         stringTable.setDefaultRenderer(String.class, renderer);
-        stringTable.setDefaultEditor(String.class, new TextAreaTableCellEditor());
+        stringTable.setDefaultEditor(
+            String.class,
+            new TextAreaTableCellEditor());
         stringTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
-        
-        JPanel panel = new JPanel();
 
+        JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("assertion_patterns_to_test")));
+        panel.setBorder(
+            BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("assertion_patterns_to_test")));
 
         panel.add(new JScrollPane(stringTable), BorderLayout.CENTER);
         panel.add(createButtonPanel(), BorderLayout.SOUTH);
@@ -282,40 +365,42 @@ public class AssertionGui extends AbstractAssertionGui
         return panel;
     }
 
-    private JPanel createButtonPanel() {
+    /**
+     * Create a panel with buttons to add and delete string patterns.
+     *
+     * @return the new panel with add and delete buttons
+     */
+    private JPanel createButtonPanel()
+    {
         addPattern = new JButton(JMeterUtils.getResString("add"));
         addPattern.addActionListener(new AddPatternListener());
-        
+
         deletePattern = new JButton(JMeterUtils.getResString("delete"));
         deletePattern.addActionListener(new ClearPatternsListener());
         deletePattern.setEnabled(false);
-        
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(addPattern);
         buttonPanel.add(deletePattern);
         return buttonPanel;
     }
 
-    /****************************************
-     * !ToDo (Class description)
+    /**
+     * An ActionListener for deleting a pattern.
      *
-     *@author    $Author$
-     *@created   $Date$
-     *@version   $Revision$
-     ***************************************/
+     * @author    $Author$
+     * @version   $Revision$
+     */
     private class ClearPatternsListener implements ActionListener
     {
-        /****************************************
-         * !ToDo (Method description)
-         *
-         *@param e  !ToDo (Parameter description)
-         ***************************************/
         public void actionPerformed(ActionEvent e)
         {
             int index = stringTable.getSelectedRow();
             if (index > -1)
             {
-                stringTable.getCellEditor(index, stringTable.getSelectedColumn()).cancelCellEditing();
+                stringTable
+                    .getCellEditor(index, stringTable.getSelectedColumn())
+                    .cancelCellEditing();
                 tableModel.removeRow(index);
                 tableModel.fireTableDataChanged();
             }
@@ -326,20 +411,14 @@ public class AssertionGui extends AbstractAssertionGui
         }
     }
 
-    /****************************************
-     * !ToDo (Class description)
+    /**
+     * An ActionListener for adding a pattern.
      *
-     *@author    $Author$
-     *@created   $Date$
-     *@version   $Revision$
-     ***************************************/
+     * @author    $Author$
+     * @version   $Revision$
+     */
     private class AddPatternListener implements ActionListener
     {
-        /****************************************
-         * !ToDo (Method description)
-         *
-         *@param e  !ToDo (Parameter description)
-         ***************************************/
         public void actionPerformed(ActionEvent e)
         {
             tableModel.addNewRow();
@@ -347,57 +426,4 @@ public class AssertionGui extends AbstractAssertionGui
             tableModel.fireTableDataChanged();
         }
     }
-
-    /****************************************
-     * !ToDo (Class description)
-     *
-     *@author    $Author$
-     *@created   $Date$
-     *@version   $Revision$
-     ***************************************/
-    private class PatternRenderer extends DefaultListCellRenderer
-    {
-        /****************************************
-         * !ToDoo (Method description)
-         *
-         *@param list          !ToDo (Parameter description)
-         *@param value         !ToDo (Parameter description)
-         *@param index         !ToDo (Parameter description)
-         *@param isSelected    !ToDo (Parameter description)
-         *@param cellHasFocus  !ToDo (Parameter description)
-         *@return              !ToDo (Return description)
-         ***************************************/
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
-        {
-            String displayText = value.toString();
-            if (displayText.length() > 10)
-            {
-                displayText = displayText.substring(0, 10);
-            }
-
-            JLabel label = new JLabel(displayText);
-
-            if (isSelected)
-            {
-                label.setBackground(Color.blue);
-                label.setForeground(Color.white);
-                label.setOpaque(true);
-            }
-            else
-            {
-                label.setForeground(Color.black);
-                label.setBackground(Color.white);
-            }
-
-            if (cellHasFocus)
-            {
-                label.setBorder(BorderFactory.createEtchedBorder());
-            }
-
-            label.setText(displayText);
-
-            return label;
-        }
-    }
-
 }
