@@ -79,153 +79,167 @@ import org.apache.jmeter.util.LocaleChangeEvent;
 
 public class NamePanel extends JPanel implements JMeterGUIComponent
 {
+    /** A text field containing the name. */
     private JTextField nameField = new JTextField(15);
+    
+    /** The label for the text field. */
     private JLabel nameLabel;
+    
+    /** The node which this component is providing the name for. */
     private JMeterTreeNode node;
 
-
-        /****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public NamePanel()
-	{
-		setName(getStaticLabel());
-		init();
-	}
-
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param name  !ToDo (Parameter description)
-	 ***************************************/
-	public void setName(String name)
-	{
-		super.setName(name);
-		nameField.setText(name);
-	}
-
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param testElement  !ToDo (Parameter description)
-	 ***************************************/
-	public void configure(TestElement testElement)
-	{
-		setName(testElement.getPropertyAsString(TestElement.NAME));
-	}
-
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public JPopupMenu createPopupMenu()
-	{
-		return null;
-	}
-
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("root");
-	}
-
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public Collection getMenuCategories()
-	{
-		return null;
-	}
-
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public TestElement createTestElement()
-	{
-		WorkBench wb = new WorkBench();
-		modifyTestElement(wb);
-		return wb;
-	}
+    /**
+     * Create a new NamePanel with the default name.
+     */
+    public NamePanel()
+    {
+        setName(getStaticLabel());
+        init();
+    }
 
     /**
-         * Modifies a given TestElement to mirror the data in the gui components.
-         * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-         */
-    public void modifyTestElement(TestElement wb)
+     * Initialize the GUI components and layout.
+     */
+    private void init()
     {
-        wb.setProperty(new StringProperty(TestElement.NAME, getName()));
-        wb.setProperty(new StringProperty(TestElement.GUI_CLASS, this.getClass().getName()));
-        wb.setProperty(new StringProperty(TestElement.TEST_CLASS, WorkBench.class.getName()));
-    }
-    
-    
-
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getName()
-	{
-		return nameField.getText();
-	}
-
-    private void init() {
         setLayout(new BorderLayout(5, 0));
 
         nameLabel = new JLabel(JMeterUtils.getResString("name"));
         nameLabel.setName("name");
         nameLabel.setLabelFor(nameField);
 
-        nameField.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) {
+        nameField.getDocument().addDocumentListener(new DocumentListener()
+        {
+            public void insertUpdate(DocumentEvent e)
+            {
                 updateName(nameField.getText());
             }
 
-
-            public void removeUpdate(DocumentEvent e) {
+            public void removeUpdate(DocumentEvent e)
+            {
                 updateName(nameField.getText());
             }
 
-
-            public void changedUpdate(DocumentEvent e) {
+            public void changedUpdate(DocumentEvent e)
+            {
                 // not for text fields
             }
         });
-  
-        add (nameLabel, BorderLayout.WEST);
-        add (nameField, BorderLayout.CENTER);
+
+        add(nameLabel, BorderLayout.WEST);
+        add(nameField, BorderLayout.CENTER);
     }
 
 
-    private void updateName(String newValue) {
-        if (getNode() != null) {
-            getNode().nameChanged();
-        }
+    /**
+     * Get the currently displayed name.
+     * 
+     * @return the current name
+     */
+    public String getName()
+    {
+        return nameField.getText();
     }
 
-
-    public void localeChanged(LocaleChangeEvent event) {
-        nameLabel.setText(JMeterUtils.getResString(nameLabel.getName()));
+    /**
+     * Set the name displayed in this component.
+     * 
+     * @param name the name to display
+     */
+    public void setName(String name)
+    {
+        super.setName(name);
+        nameField.setText(name);
     }
 
+    /**
+     * Get the tree node which this component provides the name for.
+     * 
+     * @return the tree node corresponding to this component
+     */
+    protected JMeterTreeNode getNode()
+    {
+        return node;
+    }
+
+    /**
+     * Set the tree node which this component provides the name for.
+     * 
+     * @param node the tree node corresponding to this component
+     */
     public void setNode(JMeterTreeNode node)
     {
         this.node = node;
     }
 
-
-    protected JMeterTreeNode getNode()
+    /* Implements JMeterGUIComponent.configure(TestElement) */
+    public void configure(TestElement testElement)
     {
-        return node;
+        setName(testElement.getPropertyAsString(TestElement.NAME));
+    }
+
+    /* Implements JMeterGUIComponent.createPopupMenu() */
+    public JPopupMenu createPopupMenu()
+    {
+        return null;
+    }
+
+    /* Implements JMeterGUIComponent.getStaticLabel() */
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("root");
+    }
+
+    /* Implements JMeterGUIComponent.getMenuCategories() */
+    public Collection getMenuCategories()
+    {
+        return null;
+    }
+
+    /* Implements JMeterGUIComponent.createTestElement() */
+    public TestElement createTestElement()
+    {
+        WorkBench wb = new WorkBench();
+        modifyTestElement(wb);
+        return wb;
+    }
+
+    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+    public void modifyTestElement(TestElement wb)
+    {
+        wb.setProperty(new StringProperty(TestElement.NAME, getName()));
+        wb.setProperty(
+            new StringProperty(
+                TestElement.GUI_CLASS,
+                this.getClass().getName()));
+        wb.setProperty(
+            new StringProperty(
+                TestElement.TEST_CLASS,
+                WorkBench.class.getName()));
+    }
+
+    /**
+     * Called when the name changes.  The tree node which this component names
+     * will be notified of the change.
+     * 
+     * @param newValue the new name
+     */
+    private void updateName(String newValue)
+    {
+        if (getNode() != null)
+        {
+            getNode().nameChanged();
+        }
+    }
+
+    /**
+     * Called when the locale is changed so that the label can be updated.
+     * This method is not currently used.
+     * 
+     * @param event the event to be handled
+     */
+    public void localeChanged(LocaleChangeEvent event)
+    {
+        nameLabel.setText(JMeterUtils.getResString(nameLabel.getName()));
     }
 }
