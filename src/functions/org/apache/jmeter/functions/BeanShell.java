@@ -44,7 +44,7 @@ import org.apache.log.Logger;
 public class BeanShell extends AbstractFunction implements Serializable
 {
 
-	protected static Logger log = LoggingManager.getLoggerForClass();
+	protected static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final List desc = new LinkedList();
     private static final String KEY = "__BeanShell";
