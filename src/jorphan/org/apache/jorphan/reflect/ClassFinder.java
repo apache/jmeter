@@ -80,7 +80,7 @@ import org.apache.log.Logger;
  * @author  Michael Stover (mstover1 at apache.org)
  * @version $Revision$
  */
-public class ClassFinder
+public final class ClassFinder
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
     private ClassFinder()
@@ -490,12 +490,15 @@ public class ClassFinder
                 {
                     // Class.forName() doesn't like nulls
                     if (strClassName == null)
+                    {
                         continue;
+                    }
                     c =
                         Class.forName(
                             strClassName,
                             false,
                             Thread.currentThread().getContextClassLoader());
+
                     if (!c.isInterface()
                         && !Modifier.isAbstract(c.getModifiers()))
                     {

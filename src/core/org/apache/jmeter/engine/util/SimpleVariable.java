@@ -46,9 +46,14 @@ public class SimpleVariable
         JMeterVariables vars = getVariables();
 
         if (vars != null)
+        {
             ret = vars.get(name);
+        }
+
         if (ret == null)
+        {
             return "${" + name + "}";
+        }
 
         return ret;
     }

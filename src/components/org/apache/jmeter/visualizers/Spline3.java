@@ -215,7 +215,10 @@ public class Spline3
             {
                 _A[i][j] = 0;
             }
-            for (j = 0; j < 4; j++) _coefficients[i][j] = 0;
+            for (j = 0; j < 4; j++)
+            {
+                _coefficients[i][j] = 0;
+            } 
         }
         for (i = 0; i < _n; i++)
         {
@@ -345,7 +348,7 @@ public class Spline3
 
         for (i = 0; i < _n; i++)
         {
-            if (converge == true)
+            if (converge)
             {
                 lineSum = 0;
                 for (j = 0; j < _n; j++)
@@ -472,8 +475,15 @@ public class Spline3
         for (int i = 0; i < width; i++)
         {
             y[i] = value(((float) i) * (_m - 1) / width);
-            if (y[i] < min) min = y[i];
-            if (y[i] > max) max = y[i];
+            if (y[i] < min)
+            {
+                min = y[i];
+            }
+             
+            if (y[i] > max)
+            {
+                max = y[i];
+            } 
         }
         if (min < 0)
         {

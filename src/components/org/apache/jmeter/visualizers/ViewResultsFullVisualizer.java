@@ -159,7 +159,9 @@ public class ViewResultsFullVisualizer
     {
         log.debug("Start : updateGui1");
         if (log.isDebugEnabled())
+        {
             log.debug("updateGui1 : sample result - " + res);
+        }
         DefaultMutableTreeNode currNode = new DefaultMutableTreeNode(res);
 
         treeModel.insertNodeInto(currNode, root, root.getChildCount());
@@ -182,7 +184,9 @@ public class ViewResultsFullVisualizer
                 SampleResult child = subResults[i];
 
                 if (log.isDebugEnabled())
+                {
                     log.debug("updateGui1 : child sample result - " + child);
+                }
                 DefaultMutableTreeNode leafNode =
                     new DefaultMutableTreeNode(child);
 
@@ -201,7 +205,9 @@ public class ViewResultsFullVisualizer
         int totalChild = root.getChildCount();
 
         if (log.isDebugEnabled())
+        {
             log.debug("clear1 : total child - " + totalChild);
+        }
         for (int i = 0; i < totalChild; i++)
         {
             // the child to be removed will always be 0 'cos as the nodes are
@@ -224,7 +230,9 @@ public class ViewResultsFullVisualizer
         String desc = "Shows the text results of sampling in tree form";
 
         if (log.isDebugEnabled())
+        {
             log.debug("toString1 : Returning description - " + desc);
+        }
         return desc;
     }
 

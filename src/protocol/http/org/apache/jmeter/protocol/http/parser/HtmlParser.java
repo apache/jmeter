@@ -86,7 +86,7 @@ import org.xml.sax.SAXException;
  * @created   June 14, 2001
  * @version   $Revision$
  */
-public class HtmlParser implements Serializable
+public final class HtmlParser implements Serializable
 {
     transient private static Logger log =
         Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
@@ -109,9 +109,9 @@ public class HtmlParser implements Serializable
     };
 
     /**
-     * Constructor for the HtmlParser object.
+     * Private constructor to prevent instantiation.
      */
-    public HtmlParser()
+    private HtmlParser()
     {
     }
 
@@ -171,7 +171,9 @@ public class HtmlParser implements Serializable
                         patternCache.getPattern(
                             config.getDomain(),
                             Perl5Compiler.READ_ONLY_MASK))))
+            {
                 return false;
+            }
         }
 
         if (!newLink.getPath().equals(config.getPath())
@@ -180,7 +182,9 @@ public class HtmlParser implements Serializable
                 patternCache.getPattern(
                     "[/]*" + config.getPath(),
                     Perl5Compiler.READ_ONLY_MASK)))
+        {
             return false;
+        }
 
         if (!(ok =
             ok
@@ -189,7 +193,9 @@ public class HtmlParser implements Serializable
                     patternCache.getPattern(
                         config.getProtocol(),
                         Perl5Compiler.READ_ONLY_MASK))))
+        {
             return false;
+        }
 
         return ok;
     }
@@ -229,7 +235,9 @@ public class HtmlParser implements Serializable
         tidy.setShowWarnings(false);
 
         if (log.isDebugEnabled())
+        {
             log.debug("getParser1 : tidy parser created - " + tidy);
+        }
 
         log.debug("End : getParser1");
 
@@ -255,7 +263,9 @@ public class HtmlParser implements Serializable
                     null);
 
             if (log.isDebugEnabled())
+            {
                 log.debug("node : " + node);
+            }
 
             log.debug("End : getDOM1");
 
@@ -338,20 +348,27 @@ public class HtmlParser implements Serializable
         String contextFile = context.getPath();
         int indexContextQuery = contextFile.lastIndexOf('?');
         if (indexContextQuery != -1)
+        {
             contextPath = contextFile.substring(0, indexContextQuery);
-
+        }
         else
+        {
             contextPath = contextFile;
+        }
 
         int queryStarts = parsedUrlString.indexOf("?");
 
         if (queryStarts == -1)
+        {
             queryStarts = parsedUrlString.length();
+        }
 
         if (parsedUrlString.startsWith("/"))
+        {
             url.setPath(parsedUrlString.substring(0, queryStarts));
-
+        }
         else if (parsedUrlString.startsWith(".."))
+        {
             url.setPath(
                 contextPath.substring(
                     0,
@@ -360,13 +377,14 @@ public class HtmlParser implements Serializable
                         contextPath.lastIndexOf("/")).lastIndexOf(
                         "/"))
                     + parsedUrlString.substring(2, queryStarts));
-
+        }
         else if (!parsedUrlString.toLowerCase().startsWith("http"))
+        {
             url.setPath(
                 contextPath.substring(0, contextPath.lastIndexOf("/"))
                     + "/"
                     + parsedUrlString.substring(0, queryStarts));
-
+        }
         else
         {
             URL u = new URL(parsedUrlString);
@@ -376,10 +394,13 @@ public class HtmlParser implements Serializable
             String uFile = u.getFile();
             int indexUQuery = uFile.lastIndexOf('?');
             if (indexUQuery != -1)
+            {
                 uPath = uFile.substring(0, indexUQuery);
-
+            }
             else
+            {
                 uPath = uFile;
+            }
 
             url.setPath(uPath);
             url.setDomain(u.getHost());
@@ -388,7 +409,9 @@ public class HtmlParser implements Serializable
         }
 
         if (queryStarts < parsedUrlString.length())
+        {
             url.parseArguments(parsedUrlString.substring(queryStarts + 1));
+        }
 
         return url;
     }
@@ -442,8 +465,8 @@ public class HtmlParser implements Serializable
                         getAttributeValue(nodeAtts, "name"),
                         getAttributeValue(nodeAtts, "value"));
                 }
-
                 else if (tag.equalsIgnoreCase("textarea"))
+                {
                     try
                     {
                         url.addArgument(
@@ -456,10 +479,11 @@ public class HtmlParser implements Serializable
                             getAttributeValue(nodeAtts, "name"),
                             "");
                     }
-
+                }
                 else if (tag.equalsIgnoreCase("select"))
+                {
                     selectName = getAttributeValue(nodeAtts, "name");
-
+                }
                 else if (tag.equalsIgnoreCase("option"))
                 {
                     String value = getAttributeValue(nodeAtts, "value");
@@ -588,7 +612,9 @@ public class HtmlParser implements Serializable
     {
         NamedNodeMap atts = tempNode.getAttributes();
         if (atts.getNamedItem("action") == null)
+        {
             throw new MalformedURLException();
+        }
         String action = atts.getNamedItem("action").getNodeValue();
         HTTPSampler url = createUrlFromAnchor(action, context);
         return url;

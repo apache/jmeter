@@ -93,9 +93,13 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
     public void add(SampleResult sample)
     {
         if(null != sample.getSamplerData())
+        {
             textArea.append(sample.getSamplerData().toString());
+        }
         else
+        {
             textArea.append(sample.getSampleLabel());
+        }
         textArea.append(getAssertionResult(sample));
         textArea.append("\n");
     }

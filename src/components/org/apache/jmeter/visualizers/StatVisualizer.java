@@ -216,7 +216,10 @@ public class StatVisualizer extends AbstractVisualizer
                             TableModelEvent.INSERT);
                     currentRowCount = index + 2;
                 }
-                else event = new TableModelEvent(this, index);
+                else
+                {
+                    event = new TableModelEvent(this, index);
+                } 
             }
             // Fire the event:
             fireTableChanged(event);
@@ -247,7 +250,10 @@ public class StatVisualizer extends AbstractVisualizer
 
             if (row == model.getRunningSampleCount())
             {
-                if (col == 0) return TOTAL_LABEL;
+                if (col == 0)
+                {
+                    return TOTAL_LABEL;
+                } 
                 s = model.getRunningSampleTotal();
             }
             else

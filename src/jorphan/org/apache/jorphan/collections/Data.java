@@ -119,11 +119,20 @@ public class Data implements Serializable
         String[] headers = getHeaders();
         String[] dHeaders = d.getHeaders();
         if (headers.length != dHeaders.length)
+        {
             valid = false;
+        }
         else
+        {
             for (int count = 0; count < dHeaders.length; count++)
+            {
                 if (!header.contains(dHeaders[count]))
+                {
                     valid = false;
+                }
+            }
+        }
+
         if (valid)
         {
             currentPos = size;
@@ -131,9 +140,11 @@ public class Data implements Serializable
             while (d.next())
             {
                 for (int count = 0; count < headers.length; count++)
+                {
                     addColumnValue(
                         headers[count],
                         d.getColumnValue(headers[count]));
+                }
             }
         }
     }
@@ -252,17 +263,26 @@ public class Data implements Serializable
             ((List) data.get(column)).get((int) ((x + y) / 2)).toString();
         Object temp;
         if (x == y)
+        {
             return;
+        }
+
         while (x <= y)
         {
             while (x < end
                 && ((List) data.get(column)).get(x).toString().compareTo(basis)
                     < 0)
+            {
                 x++;
+            }
+
             while (y >= (start - 1)
                 && ((List) data.get(column)).get(y).toString().compareTo(basis)
                     > 0)
+            {
                 y--;
+            }
+
             if (x <= y)
             {
                 swapRows(x, y);
@@ -270,13 +290,23 @@ public class Data implements Serializable
                 y--;
             }
         }
+
         if (x == y)
+        {
             x++;
+        }
+
         y = end - x;
+
         if (x > 0)
+        {
             sortData(column, start, x);
+        }
+
         if (y > 0)
+        {
             sortData(column, x, end);
+        }
     }
 
     /**
@@ -304,18 +334,29 @@ public class Data implements Serializable
         }
         int s = tempList.size();
         if (currentPos == -1)
+        {
             currentPos = size;
+        }
+
         if (currentPos >= size)
+        {
             size = currentPos + 1;
+        }
+
         while (currentPos > s)
         {
             s++;
             tempList.add(null);
         }
+
         if (currentPos == s)
+        {
             tempList.add(value);
+        }
         else
+        {
             tempList.set(currentPos, value);
+        }
     }
 
     /**
@@ -348,8 +389,12 @@ public class Data implements Serializable
             tempList = new ArrayList();
             data.put(column, tempList);
         }
+
         if (currentPos == -1)
+        {
             currentPos = 0;
+        }
+
         if (currentPos >= size)
         {
             size++;
@@ -360,7 +405,9 @@ public class Data implements Serializable
             tempList.add(value);
         }
         else
+        {
             tempList.set(currentPos, value);
+        }
     }
 
     /**
@@ -379,10 +426,7 @@ public class Data implements Serializable
      */
     public boolean next()
     {
-        if (++currentPos >= size)
-            return false;
-        else
-            return true;
+        return (++currentPos < size);
     }
 
     /**
@@ -391,10 +435,7 @@ public class Data implements Serializable
      */
     public boolean previous()
     {
-        if (--currentPos < 0)
-            return false;
-        else
-            return true;
+        return (--currentPos >= 0);
     }
 
     /**
@@ -416,9 +457,13 @@ public class Data implements Serializable
         try
         {
             if (currentPos < size)
+            {
                 return ((List) data.get(column)).get(currentPos);
+            }
             else
+            {
                 return null;
+            }
         }
         catch (Exception e)
         {
@@ -437,9 +482,13 @@ public class Data implements Serializable
         try
         {
             if (currentPos < size)
+            {
                 return ((List) data.get(columnName)).get(currentPos);
+            }
             else
+            {
                 return null;
+            }
         }
         catch (Exception e)
         {
@@ -528,14 +577,20 @@ public class Data implements Serializable
                 if (o != null)
                 {
                     if (o instanceof String)
+                    {
                         returnValue[index++] = (String) o;
+                    }
                     else
+                    {
                         returnValue[index++] = o.toString();
+                    }
                 }
             }
         }
         else
+        {
             returnValue = new String[0];
+        }
         return returnValue;
     }
 
@@ -620,9 +675,13 @@ public class Data implements Serializable
         {
             tempList = (List) data.get(h[count]);
             if (count < line.length && line[count].length() > 0)
+            {
                 tempList.add(line[count]);
+            }
             else
+            {
                 tempList.add("N/A");
+            }
         }
         size++;
     }
@@ -644,9 +703,13 @@ public class Data implements Serializable
         {
             tempList = (List) data.get(h[count]);
             if (count < line.length && line[count].length() > 0)
+            {
                 tempList.add(line[count]);
+            }
             else
+            {
                 tempList.add(deflt);
+            }
         }
         size++;
     }
@@ -667,7 +730,9 @@ public class Data implements Serializable
         {
             temp.append(elements[count]);
             if (count + 1 < elements.length)
+            {
                 temp.append("\t");
+            }
         }
         line[0] = temp.toString();
         reset();
@@ -679,7 +744,9 @@ public class Data implements Serializable
             {
                 temp.append(getColumnValue(count));
                 if (count + 1 < elements.length)
+                {
                     temp.append("\t");
+                }
             }
             line[index++] = temp.toString();
         }
@@ -694,9 +761,13 @@ public class Data implements Serializable
         for (int x = 0; x < contents.length; x++)
         {
             if (!first)
+            {
                 sb.append("\n");
+            }
             else
+            {
                 first = false;
+            }
             sb.append(contents[x]);
         }
         return sb.toString();

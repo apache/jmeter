@@ -75,7 +75,9 @@ public class LookAndFeelCommand implements Command
     static {
         UIManager.LookAndFeelInfo[] lfs = UIManager.getInstalledLookAndFeels();
         for (int i = 0; i < lfs.length; i++)
+        {
             commands.add("laf:" + lfs[i].getClassName());
+        }
 
         try
         {

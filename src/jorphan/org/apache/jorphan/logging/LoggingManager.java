@@ -73,7 +73,7 @@ import org.apache.log.output.io.WriterTarget;
  * @author Michael Stover (mstover1 at apache.org)
  * @version $Revision$
  */
-public class LoggingManager
+public final class LoggingManager
 {
     private static PatternFormatter format =
         new PatternFormatter(

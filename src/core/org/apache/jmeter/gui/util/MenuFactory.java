@@ -84,7 +84,7 @@ import org.apache.log.Logger;
  * @author    Michael Stover
  * @version   $Revision$
  */
-public class MenuFactory
+public final class MenuFactory
 {
     transient private static Logger log =
         Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
@@ -141,7 +141,10 @@ public class MenuFactory
         }
     }
 
-    public MenuFactory()
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private MenuFactory()
     {
     }
 
