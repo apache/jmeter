@@ -5,7 +5,7 @@
         excluding="org/apache/jmeter/images/|org/apache/jmeter/resources/*.properties|org/apache/jmeter/util/keystore/DefaultKeyStore.java|org/apache/jmeter/util/JsseSSLManager.java|org/apache/jmeter/util/keystore/PKCS12KeyStore.java"
         kind="src" output="build/core" path="src/core"/>
     <classpathentry
-        excluding="org/apache/jmeter/reporters/MailerModel.java|org/apache/jmeter/reporters/MailerResultCollector.java|org/apache/jmeter/visualizers/MailerVisualizer.java|org/apache/jmeter/assertions/**/BeanShell*.java"
+        excluding="org/apache/jmeter/reporters/MailerModel.java|org/apache/jmeter/reporters/MailerResultCollector.java|org/apache/jmeter/visualizers/MailerVisualizer.java"
         kind="src" output="build/components" path="src/components"/>
     <classpathentry kind="src" output="build/functions" path="src/functions"/>
     <classpathentry
@@ -14,7 +14,7 @@
     <classpathentry kind="src" output="build/protocol/ftp" path="src/protocol/ftp"/>
     <classpathentry kind="src" output="build/protocol/jdbc" path="src/protocol/jdbc"/>
     <classpathentry
-        excluding="org/apache/jmeter/protocol/java/**/BeanShell*.java|org/apache/jmeter/protocol/java/**/BSF*.java"
+        excluding="org/apache/jmeter/protocol/java/**/BSF*.java"
         kind="src" output="build/protocol/java" path="src/protocol/java"/>
     <classpathentry kind="src" output="build/protocol/ldap" path="src/protocol/ldap"/>
     <classpathentry kind="src" output="build/protocol/tcp" path="src/protocol/tcp"/>
