@@ -23,8 +23,10 @@ import java.util.Iterator;
 /**
  * @author pete
  *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * ClientPool holds the client instances in an ArrayList. The
+ * main purpose of this is to make it easier to clean up all
+ * the instances at the end of a test. If we didn't do this,
+ * threads might become zombie.
  */
 public class ClientPool {
 
