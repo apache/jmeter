@@ -68,9 +68,8 @@ import org.apache.log4j.Category;
  * Stores the configuration for remote method execution
  *
  * @author	Khor Soon Hin
- * @version	1.0
- * @created	2001 Dec 24
- * @modified	2001 Dec 24
+ * Created	2001 Dec 24
+ * @version $Revision$ Last Updated: $Date$
  */
 public class MethodConfig extends AbstractConfigElement implements Serializable
 {

@@ -74,8 +74,8 @@ import org.apache.log.Logger;
  * Samples the JNDI performance and records them
  *
  * @author	Khor Soon Hin
- * @created	2001 Dec 18
- * @modified	2002 Feb 16
+ * Created	2001 Dec 18
+ * @version $Revision$ Last Updated: $Date$
  */
 public class JNDISampler implements Sampler
 {

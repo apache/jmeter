@@ -68,8 +68,8 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
  * 
  * @author    T.Elanjchezhiyan(chezhiyan@siptech.co.in) - Sip Technologies and
  *            Exports Ltd.
- * @created   Apr 29 2003 11:45 AM
- * @version   $Revision$
+ * Created     Apr 29 2003 11:45 AM
+ * @version   $Revision$ Last Updated: $Date$
  */
 public class LdapConfig extends ConfigTestElement implements Serializable
 {
