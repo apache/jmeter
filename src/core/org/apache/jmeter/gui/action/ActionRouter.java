@@ -52,7 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.gui.action;
+package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -85,6 +85,10 @@ public class ActionRouter implements ActionListener
 	private static AddToTree add = new AddToTree();
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.gui");
+//	private static EventListenerList preActionListeners = new EventListenerList();
+//	private static EventListenerList postActionListeners = new EventListenerList();
+	private Map preActionListeners = new HashMap();
+	private Map postActionListeners = new HashMap();
 
 
 	private ActionRouter()
@@ -107,7 +111,10 @@ public class ActionRouter implements ActionListener
 			{
 				try
 				{
-					((Command)iter.next()).doAction(e);
+					Command c = (Command)iter.next();
+					preActionPerformed(c.getClass(), e);
+					c.doAction(e);
+					postActionPerformed(c.getClass(), e);
 				}
 				catch(Exception err)
 				{
@@ -162,6 +169,60 @@ public class ActionRouter implements ActionListener
 			}
 		}
 		return null;
+	}
+	
+	public void addPreActionListener(Class action, ActionListener listener) 
+	{
+		if ( action != null ) {
+			HashSet set = (HashSet)preActionListeners.get(action.getName());
+			if ( set == null ) 
+			{
+				set = new HashSet();
+			}
+			set.add(listener);
+			preActionListeners.put(action.getName(), set);
+		}
+	}
+	
+	public void addPostActionListener(Class action, ActionListener listener) 
+	{
+		if ( action != null ) {
+			HashSet set = (HashSet)postActionListeners.get(action.getName());
+			if ( set == null ) 
+			{
+				set = new HashSet();
+			}
+			set.add(listener);
+			postActionListeners.put(action.getName(), set);
+		}
+	}
+	
+	protected void preActionPerformed(Class action, ActionEvent e) 
+	{
+		if ( action != null ) {
+			HashSet listenerSet = (HashSet)preActionListeners.get(action.getName());
+			if ( listenerSet != null && listenerSet.size() > 0 ) {
+				Object[] listeners = listenerSet.toArray();
+				for ( int i=0; i<listeners.length; i++ ) 
+				{
+					((ActionListener)listeners[i]).actionPerformed(e);
+				}
+			}
+		}
+	}
+	
+	protected void postActionPerformed(Class action, ActionEvent e) 
+	{
+		if ( action != null ) {
+			HashSet listenerSet = (HashSet)postActionListeners.get(action.getName());
+			if ( listenerSet != null && listenerSet.size() > 0 ) {
+				Object[] listeners = listenerSet.toArray();
+				for ( int i=0; i<listeners.length; i++ ) 
+				{
+					((ActionListener)listeners[i]).actionPerformed(e);
+				}
+			}
+		}
 	}
 
 	private void populateCommandMap()
