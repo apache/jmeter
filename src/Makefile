@@ -40,12 +40,14 @@ JAVADOCOPT = -d $(DOCDIR) -version -private \
 
 # Packages is the list of packages inside our base package.
 BASE = org.apache.jmeter
-VERSION = 1.4.1-dev
+VERSION = 1.5-dev
 PACKAGES = \
 	$(BASE) \
 	$(BASE).timers \
 	$(BASE).visualizers \
 	$(BASE).samplers \
+	$(BASE).threads \
+	$(BASE).controllers \
 
 DIRECTORIES   = $(subst .,/,$(PACKAGES))
 BASEDIRECTORY = $(subst .,/,$(BASE))
@@ -57,7 +59,7 @@ jar: $(ALLSOURCES)
 	$(JAVAC) $(JAVACOPTS) -d $(CLASSDIR) $(ALLSOURCES)
 	cp -pr $(BASEDIRECTORY)/images $(CLASSDIR)/$(BASEDIRECTORY)
 	cp -pr $(BASEDIRECTORY)/*.properties $(CLASSDIR)/$(BASEDIRECTORY)
-	(cd $(CLASSDIR); $(JAR) cmf $(BUILDDIR)/MANIFEST ApacheJMeter.jar *)
+	(cd $(CLASSDIR); $(JAR) cmf ../MANIFEST ApacheJMeter.jar *)
 	mv $(CLASSDIR)/ApacheJMeter.jar $(BINDIR)
 
 javadoc:
