@@ -27,6 +27,7 @@
 		<li><a href="get-started.html#opt_email">2.2.3 Email Support</a></li>
 		<li><a href="get-started.html#opt_ssl">2.2.4 SSL Encryption</a></li>
 		<li><a href="get-started.html#opt_jdbc">2.2.5 JDBC Driver</a></li>
+		<li><a href="get-started.html#opt_soap">2.2.6 Apache SOAP</a></li>
 	 </ul>
 	 <li><a href="get-started.html#install">2.3 Installation</a></li>
 	 <ul>
