@@ -169,7 +169,7 @@
 #end
 
 #macro (figure $figure)
-	<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img src="$figure.getAttributeValue("image")"><br/>
+	<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img src="$figure.getAttributeValue("image")"><br>
 	<font size="-1">#runloop($figure)</font></td></tr></table></p>
 #end
 
@@ -270,7 +270,7 @@
 				#end
 		  #end
 		</td></tr>
-		<tr><td><br/></td></tr>
+		<tr><td><br></td></tr>
 	 </table>
 	<hr>
 #end
@@ -293,7 +293,7 @@
 		  #end
 		  </blockquote>
 		</td></tr>
-		<tr><td><br/></td></tr>
+		<tr><td><br></td></tr>
 	 </table>
 #end
 
@@ -316,7 +316,7 @@
 		  </blockquote>
 		  </p>
 		</td></tr>
-		<tr><td><br/></td></tr>
+		<tr><td><br></td></tr>
 	 </table>
 #end
 
@@ -410,7 +410,6 @@
 						  </td>
 					 </tr>
 
-					 <!-- FOOTER -->
 					 <tr><td colspan="2">
 						  <hr noshade="" size="1"/>
 					 </td></tr>
