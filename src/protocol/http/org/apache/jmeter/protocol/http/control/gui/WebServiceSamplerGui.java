@@ -19,7 +19,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.layout.VerticalLayout;
-import org.apache.jorphan.io.TextFile;
 
 /**
  * @author peter lin

@@ -239,7 +239,7 @@ POST content.</p>
  	should be available in the LDAP Server. The execution time is calculated.</p></li></ol></ol>
 </component>
 
-<component name="Webservice Request" index="13.1.7" screenshot="../images/screenshots/webservice_sampler.png">
+<component name="Webservice(SOAP) Request" index="13.1.7" screenshot="../images/screenshots/webservice_sampler.png">
 
 <description><p>This sampler has been tested with IIS Webservice running .NET 1.0. It hasn't been tested with SUN or IBM webservices providers, but it should work. The sampler uses Apache SOAP driver, to serialize the message and set the header with the correct SOAPAction. Right now the sampler doesn't support automatic WSDL handling, since Apache SOAP currently doesn't provide support for it. Both IBM and SUN provide WSDL drivers.</p>
 </description>
@@ -597,7 +597,7 @@ failed responses from the server.</p></description>
 <description>No Description</description>
 </component>
 
-<component index="13.3.3" name="Graph Results" screenshot="../images/screenshots/graph_results.gif">
+<component index="13.3.3" name="Graph Results" screenshot="../images/screenshots/graph_results.png">
 <description><p>The Graph Results listener generates a simple graph that plots all sample times.  Along
 the bottom of the graph, the current sample (black), the current average of all samples(blue), the
 current standard deviation (red), and the current throughput rate (green) are displayed in milliseconds.</p>
@@ -610,7 +610,7 @@ that factored out delays and JMeter's processing, it would be unclear what you c
 number.</p></description>
 </component>
 
-<component index="13.3.4" name="Spline Visualizer" screenshot="../images/screenshots/spline_visualizer.gif">
+<component index="13.3.4" name="Spline Visualizer" screenshot="../images/screenshots/spline_visualizer.png">
 <description><p>The Spline Visualizer provides a view of all sample times from the start
 of the test till the end, regardless of how many samples have been taken.  The spline
 has 10 points, each representing 10% of the samples, and connected using spline
@@ -647,7 +647,7 @@ request, it totals the response information and provides request count, min, max
 idealized throughput calculation.</description>
 </component>
 
-<component index="13.3.8" name="View Results in Table" screenshot="../images/screenshots/table_results.gif">
+<component index="13.3.8" name="View Results in Table" screenshot="../images/screenshots/table_results.png">
 <description>This visualizer creates a row for every sample result.  Each sample result's URL,
 time in milliseconds, success/failure is displayed.  Like the <complink name="View Results Tree"/>,
 this visualizer uses a lot of memory.</description>
@@ -882,6 +882,45 @@ instead. (see figures 9 and 10).</p>
 <figure image="../images/screenshots/http-config/header-manager-example1a.gif">Figure 9 - Test Plan</figure>
 <figure image="../images/screenshots/http-config/header-manager-example1b.gif">Figure 10 - Header Manager Control Panel</figure>
 </example>
+
+</component>
+
+<component index="13.4.10" name="Login Config Element" screenshot="../images/screenshots/login-config.png">
+<description><p>The Login Config Element lets you add or override username and password settings in samplers that use username and password as part of their setup.</p>
+</description>
+
+<properties>
+        <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
+  <property name="Username" required="No">The default username to use.</property>
+  <property name="Password" required="No">The default password to use.</property>
+</properties>
+
+</component>
+
+<component index="13.4.11" name="Simple Config Element" screenshot="../images/screenshots/simple_config_element.png">
+<description><p>The Simple Config Element lets you add or override arbitrary values in samplers.  You can choose the name of the value
+and the value itself.  Although some adventurous users might find a use for this element, it's here primarily for developers as a basic
+GUI that they can use while developing new JMeter components.</p>
+</description>
+
+<properties>
+        <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
+  <property name="Parameter Name" required="Yes">The name of each parameter.  These values are internal to JMeter's workings and
+  are not generally documented.  Only those familiar with the code will know these values.</property>
+  <property name="Parameter Value" required="Yes">The value to apply to that parameter.</property>
+</properties>
+
+</component>
+
+<component index="13.4.12" name="LDAP Request Defaults" screenshot="../images/screenshots/ldap_defaults.png">
+<description><p>The LDAP Request Defaults component lets you set default values for LDAP testing.  See the <complink name="LDAP Request"/>.</p>
+</description>
+
+</component>
+
+<component index="13.4.13" name="Java Request Defaults" screenshot="../images/screenshots/java_defaults.png">
+<description><p>The Java Request Defaults component lets you set default values for Java testing.  See the <complink name="Java Request"/>.</p>
+</description>
 
 </component>
 
