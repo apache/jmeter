@@ -935,6 +935,8 @@ public class HashTree implements Serializable, Map
         }
         else
         {
+			//TODO - what is supposed to be happening here?
+			//the loop will only happen once (if at all), and the if/else is redundant
             Iterator it = list().iterator();
             while (it.hasNext())
             {
