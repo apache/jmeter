@@ -145,7 +145,16 @@ public class ClientJMeterEngine implements JMeterEngine,Runnable
         testListeners = new SearchByClass(TestListener.class);
         getTestTree().traverse(testListeners);
         sampleListeners = new ConvertListeners();
-        getTestTree().traverse(sampleListeners);
+        
+        //TODO this is a temporary fix - see bug 23487 
+        try {
+            getTestTree().traverse(sampleListeners);
+        }
+        catch(IndexOutOfBoundsException e)
+        {
+        	log.warn("Error replacing sample listeners",e);
+        }
+        
         try
         {
             remote.setHost(host);
