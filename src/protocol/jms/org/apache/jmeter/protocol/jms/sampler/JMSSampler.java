@@ -1,0 +1,377 @@
+package org.apache.jmeter.protocol.jms.sampler;
+
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Queue;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.QueueSender;
+import javax.jms.QueueSession;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.samplers.AbstractSampler;
+import org.apache.jmeter.samplers.Entry;
+import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.TestElementProperty;
+
+/**
+ * Sampler for JMS Communication.
+ * 
+ * @author MBlankestijn
+ *
+ */
+public class JMSSampler extends AbstractSampler {
+
+	public static final String JNDI_INITIAL_CONTEXT_FACTORY = "JMSSampler.initialContextFactory";
+	public static final String JNDI_CONTEXT_PROVIDER_URL = "JMSSampler.contextProviderUrl";
+
+	private static final int DEFAULT_TIMEOUT = 2000;
+	public final static String TIMEOUT = "JMSSampler.timeout";
+	public static final String IS_ONE_WAY = "JMSSampler.isFireAndForget";
+	public static final String JMS_PROPERTIES = "arguments";
+	public static final String RECEIVE_QUEUE = "JMSSampler.ReceiveQueue";
+	public static final String XML_DATA = "HTTPSamper.xml_data";
+	public final static String SEND_QUEUE = "JMSSampler.SendQueue";
+	public final static String QUEUE_CONNECTION_FACTORY_JNDI =
+		"JMSSampler.queueconnectionfactory";
+
+	private static final Log LOGGER = LogFactory.getLog(JMSSampler.class);
+	private QueueConnectionFactory factory;
+	private Queue receiveQueue;
+	private QueueSession session;
+	private QueueConnection connection;
+	private Queue sendQueue;
+	private boolean oneway;
+
+	private QueueExecutor executor;
+
+	private QueueSender producer;
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
+	 */
+	public SampleResult sample(Entry entry) {
+		SampleResult res = new SampleResult();
+		res.setSampleLabel(getName());
+		res.setSamplerData(getContent());
+		res.setDataType(SampleResult.TEXT);
+		res.sampleStart();
+
+		try {
+			TextMessage msg = session.createTextMessage();
+			msg.setText(getContent());
+			addJMSProperties(msg);
+
+			if (getPropertyAsBoolean(IS_ONE_WAY)) {
+				producer.send(msg);
+				res.setSuccessful(true);
+				res.setResponseData("Oneway request has no response data".getBytes());
+			} else {
+				if (!useTemporyQueue()) {
+					msg.setJMSReplyTo(receiveQueue);
+				}
+
+				Message replyMsg = executor.sendAndReceive(msg);
+				if (replyMsg == null) {
+					res.setSuccessful(false);
+					LOGGER.debug("No reply message received");
+				} else {
+					if (replyMsg instanceof TextMessage) {
+						res.setResponseData(
+							((TextMessage) replyMsg).getText().getBytes());
+					} else {
+						res.setResponseData(replyMsg.toString().getBytes());
+					}
+
+					res.setSuccessful(true);
+					//LOGGER.debug("ReplyMsg CorrId=" + replyMsg.getJMSCorrelationID());
+				}
+			}
+		} catch (Exception e) {
+			LOGGER.warn(e);
+			res.setResponseData(new byte[0]);
+			res.setSuccessful(false);
+		}
+		res.sampleEnd();
+		return res;
+	}
+
+	private void addJMSProperties(TextMessage msg) throws JMSException {
+		Map map = getArguments().getArgumentsAsMap();
+		Iterator argIt = map.keySet().iterator();
+		while (argIt.hasNext()) {
+			String name = (String) argIt.next();
+			String value = (String) map.get(name);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Adding property [" + name + "=" + value + "]");
+			}
+			msg.setStringProperty(name, value);
+		}
+	}
+
+	public String getQueueConnectionFactory() {
+		return getPropertyAsString(QUEUE_CONNECTION_FACTORY_JNDI);
+	}
+
+	public void setQueueConnectionFactory(String qcf) {
+		setProperty(QUEUE_CONNECTION_FACTORY_JNDI, qcf);
+	}
+
+	public String getSendQueue() {
+		return getPropertyAsString(SEND_QUEUE);
+	}
+
+	public void setSendQueue(String name) {
+		setProperty(SEND_QUEUE, name);
+	}
+
+	public String getReceiveQueue() {
+		return getPropertyAsString(RECEIVE_QUEUE);
+	}
+
+	public void setReceiveQueue(String name) {
+		setProperty(RECEIVE_QUEUE, name);
+	}
+
+	public String getContent() {
+		return getPropertyAsString(XML_DATA);
+	}
+
+	public void setContent(String content) {
+		setProperty(XML_DATA, content);
+	}
+
+	public boolean getIsOneway() {
+		return getPropertyAsBoolean(IS_ONE_WAY);
+	}
+
+	public String getInitialContextFactory() {
+		return getPropertyAsString(JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY);
+	}
+	public String getContextProvider() {
+		return getPropertyAsString(JMSSampler.JNDI_CONTEXT_PROVIDER_URL);
+	}
+
+	public void setIsOneway(boolean isOneway) {
+		setProperty(new BooleanProperty(IS_ONE_WAY, isOneway));
+	}
+
+	public String toString() {
+		return getQueueConnectionFactory() + ", queue: " + getSendQueue();
+	}
+
+	public synchronized void testStarted() {
+		LOGGER.debug(
+			"testStarted, thread: " + Thread.currentThread().getName());
+
+	}
+
+	public synchronized void testEnded() {
+		LOGGER.debug(
+			"testEndded(), thread: " + Thread.currentThread().getName());
+	}
+
+	public void testIterationStart(LoopIterationEvent event) {
+//		LOGGER.debug("testIterationStart");
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.testelement.TestElement#threadStarted()
+	 */
+	public void threadStarted() {
+		logThreadStart();
+		super.threadStarted();
+
+
+		Context context = null;
+		try {
+			context = getInitialContext();
+			QueueConnectionFactory factory =
+				(QueueConnectionFactory) context.lookup(
+					getQueueConnectionFactory());
+			Queue queue = (Queue) context.lookup(getSendQueue());
+
+			sendQueue = queue;
+			if (!useTemporyQueue()) {
+				receiveQueue = (Queue) context.lookup(getReceiveQueue());
+				Receiver.createReceiver(factory, receiveQueue);
+			}
+
+			connection = factory.createQueueConnection();
+
+			session =
+				connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Session created");
+			}
+
+			if (getPropertyAsBoolean(IS_ONE_WAY)) {
+				producer = session.createSender(sendQueue);
+			} else {
+
+				if (useTemporyQueue()) {
+					executor = new TemporaryQueueExecutor(session, sendQueue);
+				} else {
+					producer = session.createSender(sendQueue);
+					executor = new FixedQueueExecutor(producer, getTimeout());
+				}
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Starting connection");
+			}
+
+			connection.start();
+		} catch (JMSException e) {
+			LOGGER.warn(e);
+		} catch (NamingException e) {
+			LOGGER.warn(e);
+		} finally {
+			if (context != null) {
+				try {
+
+					context.close();
+				} catch (NamingException e1) {
+					// ignore
+				}
+			}
+		}
+	}
+
+	private Context getInitialContext() throws NamingException {
+		Hashtable table = new Hashtable();
+
+		if (getInitialContextFactory()!=null && getInitialContextFactory().trim().length()>0
+		) {
+			if (LOGGER.isDebugEnabled()) LOGGER.debug("Using InitialContext [" + getInitialContextFactory() + "]");
+			table.put(Context.INITIAL_CONTEXT_FACTORY, getInitialContextFactory());
+		}
+		if (LOGGER.isDebugEnabled()) LOGGER.debug("Using Provider [" + getContextProvider() + "]");
+		if (getContextProvider()!=null && getContextProvider().trim().length()>0) {
+			if (LOGGER.isDebugEnabled()) LOGGER.debug("Using Provider [" + getContextProvider() + "]");
+			table.put(Context.PROVIDER_URL, getContextProvider());
+		}
+		Context context = new InitialContext(table);
+		if (LOGGER.isDebugEnabled()) {
+			printEnvironment(context);
+		}
+		return context;
+	}
+
+	private void printEnvironment(Context context) throws NamingException {
+		Hashtable env = context.getEnvironment();
+		LOGGER.debug("Initial Context Properties");
+		Enumeration keys = env.keys();
+		while (keys.hasMoreElements()) {
+			String key = (String) keys.nextElement();
+			LOGGER.debug(key + "=" + env.get(key));				
+		}
+	}
+
+	private void logThreadStart() {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Thread started " + new Date());
+			LOGGER.debug(
+				"JMSSampler: ["
+					+ Thread.currentThread().getName()
+					+ "], hashCode=["
+					+ hashCode()
+					+ "]");
+			LOGGER.debug(
+				"QCF: ["
+					+ getQueueConnectionFactory()
+					+ "], sendQueue=["
+					+ getSendQueue()
+					+ "]");
+			LOGGER.debug("Timeout             = " + getTimeout() + "]");
+			LOGGER.debug("Use temporary queue =" + useTemporyQueue() + "]");
+			LOGGER.debug("Reply queue         =" + getReceiveQueue() + "]");
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	public int getTimeout() {
+		if (getPropertyAsInt(TIMEOUT) < 1) {
+			return DEFAULT_TIMEOUT;
+		}
+		return getPropertyAsInt(TIMEOUT);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.testelement.TestElement#threadFinished()
+	 */
+	public void threadFinished() {
+		LOGGER.debug("Thread ended " + new Date());
+		super.threadFinished();
+
+			if (session != null)
+				try {
+					session.close();
+				} catch (JMSException e) {
+					LOGGER.info(e);
+
+				}
+			if (connection != null)
+				try {
+					connection.close();
+				} catch (JMSException e) {
+					LOGGER.info(e);
+				}
+	}
+
+	private boolean useTemporyQueue() {
+		String recvQueue = getReceiveQueue();
+		return recvQueue == null || recvQueue.trim().length() == 0;
+	}
+
+	public void setArguments(Arguments args) {
+		setProperty(new TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
+	}
+
+	public Arguments getArguments() {
+		return (Arguments) getProperty(JMSSampler.JMS_PROPERTIES).getObjectValue();
+	}
+
+	/**
+	 * @param i
+	 */
+	public void setTimeout(int i) {
+		setProperty(JMSSampler.TIMEOUT, String.valueOf(i));
+
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setInitialContextFactory(String string) {
+		setProperty(JNDI_INITIAL_CONTEXT_FACTORY, string);
+		
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setContextProvider(String string) {
+		setProperty(JNDI_CONTEXT_PROVIDER_URL, string);
+		
+	}
+
+}
