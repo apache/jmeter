@@ -43,10 +43,15 @@ public class ClientJMeterEngine implements JMeterEngine,Runnable
     ConvertListeners sampleListeners;
     private String host;
 
+    private static RemoteJMeterEngine getEngine(String h) throws MalformedURLException, RemoteException, NotBoundException
+    {
+        return (RemoteJMeterEngine) Naming.lookup("//" + h + "/JMeterEngine");
+    }
+
     public ClientJMeterEngine(String host)
         throws MalformedURLException, NotBoundException, RemoteException
     {
-        this((RemoteJMeterEngine) Naming.lookup("//" + host + "/JMeterEngine"));
+        this(getEngine(host));
         this.host = host;
     }
 
@@ -93,7 +98,12 @@ public class ClientJMeterEngine implements JMeterEngine,Runnable
     {
         try
         {
-            remote.reset();
+            try {
+				remote.reset();
+			} catch (java.rmi.ConnectException e) {
+				remote=getEngine(host);
+				remote.reset();
+			}
         }
         catch (Exception ex)
         {
