@@ -99,7 +99,7 @@ public class ThroughputController
     private transient Object counterLock;
 
     /**
-     * Number of completed executions.
+     * Number of iterations on which we've chosen to deliver samplers.
      */
     private int numExecutions = 0;
     
@@ -123,38 +123,6 @@ public class ThroughputController
         setMaxThroughput(1);
         setPercentThroughput(100);
         runThisTime = false;
-    }
-
-    public void reInitialize()
-    {
-        runThisTime = false;
-        super.reInitialize();
-        
-        int executions, iterations;
-        boolean retval = false;
-
-        executions = getExecutions();
-        iterations = getIteration();
-        if (getStyle() == BYNUMBER)
-        {
-            if (executions < getMaxThroughputAsInt())
-            {
-                runThisTime = true;
-            }
-        }
-        else
-        {
-            if (iterations == 0 && getPercentThroughputAsFloat() > 0)
-            {
-                runThisTime = true;
-            }
-            else if (
-                ((float) executions / iterations) * 100
-                    <= getPercentThroughputAsFloat())
-            {
-                runThisTime = true;
-            }
-        }
     }
 
     public void setStyle(int style)
@@ -306,13 +274,31 @@ public class ThroughputController
      */
     public Sampler next()
     {
-        if (runThisTime
-            && getSubControllers().size() > 0
-            && current < getSubControllers().size())
+        if (runThisTime)
         {
             return super.next();
         }
         return null;
+    }
+
+    /**
+     * Decide whether to return any samplers on this iteration.
+     */
+    private boolean decide()
+    {
+        int executions, iterations;
+
+        executions = getExecutions();
+        iterations = getIteration();
+        if (getStyle() == BYNUMBER)
+        {
+            return executions < getMaxThroughputAsInt();
+        }
+        else
+        {
+            return (100.0*executions+50.0) / (iterations+1)
+                    < getPercentThroughputAsFloat();
+        }
     }
 
     /**
@@ -326,7 +312,8 @@ public class ThroughputController
         }
         else if (
             getStyle() == BYNUMBER
-                && getExecutions() >= getMaxThroughputAsInt())
+                && getExecutions() >= getMaxThroughputAsInt()
+                && current >= getSubControllers().size())
         {
             return true;
         }
@@ -365,26 +352,16 @@ public class ThroughputController
             synchronized (counterLock)
             {
                 increaseIteration();
-
-                // Count the previous iteration as executed iif it was run:
-                if (runThisTime)
-                {
-                    increaseExecutions();
-                }
+                runThisTime= decide();
+                if (runThisTime) increaseExecutions();
             }
         }
         else
         {
             increaseIteration();
-
-            // Count the previous iteration as executed iif it was run:
-            if (runThisTime)
-            {
-                increaseExecutions();
-            }
+            runThisTime= decide();
+            if (runThisTime) increaseExecutions();
         }
-        
-        reInitialize();
     }
 
     /*
@@ -581,7 +558,7 @@ public class ThroughputController
             sub_1.addTestElement(new TestSampler("two"));
 
             LoopController controller = new LoopController();
-            controller.setLoops(7);
+            controller.setLoops(6);
             controller.addTestElement(new TestSampler("zero"));
             controller.addTestElement(sub_1);
             controller.addIterationListener(sub_1);
@@ -606,8 +583,7 @@ public class ThroughputController
                     "three",
                     "zero", // 2/6 vs. 3/6 -> 33.33 is closer to 33.33
                     "three",
-                    "zero", // 2/7 vs. 3/7 --> 28.57 is closer to 33.33
-                    "three",
+                    // etc...
                 };
             int counter= 0;
             sub_1.testStarted();
