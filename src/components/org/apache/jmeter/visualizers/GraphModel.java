@@ -2,7 +2,7 @@
  *  ====================================================================
  *  The Apache Software License, Version 1.1
  *
- *  Copyright (c) 2001 The Apache Software Foundation.  All rights
+ *  Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  *  reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -81,8 +81,8 @@ public class GraphModel implements Clearable, Serializable
     private String name;
     private List samples;
     private List listeners;
-    private long averageSum = 0;
-    private long variationSum = 0;
+    private long sum = 0;
+    private long sumOfSquares = 0;
     private long counter = 0;
     private long previous = 0;
     private long max = 1;
@@ -247,8 +247,8 @@ public class GraphModel implements Clearable, Serializable
     public void clear()
     {
         samples.clear();
-        averageSum = 0;
-        variationSum = 0;
+        sum = 0;
+        sumOfSquares = 0;
         counter = 0;
         previous = 0;
         max = 1;
@@ -310,11 +310,18 @@ public class GraphModel implements Clearable, Serializable
         {
             max = sample;
         }
-        averageSum += sample;
-        long average = averageSum / ++counter;
 
-        variationSum += Math.pow(sample - average, 2);
-        long deviation = (long) Math.pow(variationSum / counter, 0.5);
+        counter++;
+
+        sum += sample;
+        float average = ((float)sum) / counter;
+
+        sumOfSquares += sample * sample;
+        // Standard deviation is the mean of the squares minus the square
+        // of the mean
+        long deviation = (long)Math.sqrt(
+	        (sumOfSquares / counter) - average * average);
+
         float throughput = 0;
 
         if (timeStamp - startTime > 0)
@@ -330,14 +337,15 @@ public class GraphModel implements Clearable, Serializable
         if (average > graphMax)
         {
             bigChange = true;
-            graphMax = average * 3;
+            graphMax = (long)average * 3;
         }
         if (deviation > graphMax)
         {
             bigChange = true;
             graphMax = deviation * 3;
         }
-        Sample s = new Sample(sample, average, deviation, throughput, !success);
+        Sample s = new Sample(sample, (long)average, deviation,
+                        throughput, !success);
 
         previous = sample;
         current = s;

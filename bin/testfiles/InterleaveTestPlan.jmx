@@ -56,6 +56,7 @@
 <property xml:space="preserve" name="HTTPSampler.mimetype"/>
 <property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
 <property xml:space="preserve" name="HTTPSampler.path">/site/news.html</property>
+<property xml:space="preserve" name="HTTPSampler.encoded_path">/site/news.html</property>
 <collection class="java.util.ArrayList" name="AbstractSampler.assertions"/>
 <property xml:space="preserve" name="HTTPSampler.FILE_FIELD"/>
 <property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
@@ -80,6 +81,7 @@
 <property xml:space="preserve" name="HTTPSampler.mimetype"/>
 <property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
 <property xml:space="preserve" name="HTTPSampler.path">/site/faqs.html</property>
+<property xml:space="preserve" name="HTTPSampler.encoded_path">/site/faqs.html</property>
 <collection class="java.util.ArrayList" name="AbstractSampler.assertions"/>
 <property xml:space="preserve" name="HTTPSampler.FILE_FIELD"/>
 <property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
@@ -104,6 +106,7 @@
 <property xml:space="preserve" name="HTTPSampler.mimetype"/>
 <property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
 <property xml:space="preserve" name="HTTPSampler.path">/gump</property>
+<property xml:space="preserve" name="HTTPSampler.encoded_path">/gump</property>
 <collection class="java.util.ArrayList" name="AbstractSampler.assertions"/>
 <property xml:space="preserve" name="HTTPSampler.FILE_FIELD"/>
 <property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
