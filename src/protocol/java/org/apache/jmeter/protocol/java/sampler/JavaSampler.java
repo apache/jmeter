@@ -60,6 +60,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.engine.event.IterationEvent;
 import org.apache.jmeter.protocol.java.config.JavaConfig;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
@@ -327,4 +328,10 @@ public class JavaSampler extends AbstractSampler
             return results;
         }
     }
+    /**
+     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.IterationEvent)
+     */
+    public void testIterationStart(IterationEvent event)
+    {}
+
 }

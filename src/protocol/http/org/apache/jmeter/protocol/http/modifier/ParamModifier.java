@@ -3,13 +3,15 @@ package org.apache.jmeter.protocol.http.modifier;
 import java.io.Serializable;
 
 import org.apache.jmeter.config.Argument;
-import org.apache.jmeter.config.Modifier;
+import org.apache.jmeter.engine.event.IterationEvent;
+import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.threads.JMeterContextService;
 
 /**
  *  <P>
@@ -35,7 +37,7 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
  *@created    Jan 18, 2002
  *@see        ParamMask
  */
-public class ParamModifier extends AbstractTestElement implements TestListener,Modifier, Serializable
+public class ParamModifier extends AbstractTestElement implements TestListener,PreProcessor, Serializable
 {
 
 	/*
@@ -97,12 +99,13 @@ public class ParamModifier extends AbstractTestElement implements TestListener,M
 	 *@param  entry  Entry object containing information about the current test
 	 *@return        <code>True</code> if modified, else <code>false</code>
 	 */
-	public boolean modifyEntry(Sampler sam)
+	public void process()
 	{
+        Sampler sam = JMeterContextService.getContext().getCurrentSampler();
 		HTTPSampler sampler = null;
 		if(!(sam instanceof HTTPSampler))
 		{
-			return false;
+			return;
 		}
 		else
 		{
@@ -119,7 +122,6 @@ public class ParamModifier extends AbstractTestElement implements TestListener,M
 				break;
 			}
 		}
-		return modified;
 	}
 
 
@@ -149,4 +151,10 @@ public class ParamModifier extends AbstractTestElement implements TestListener,M
 		}
 		return false;
 	}
+    /**
+     * @see org.apache.jmeter.testelement.TestListener#iterationStart(org.apache.jmeter.engine.event.IterationEvent)
+     */
+    public void testIterationStart(IterationEvent event)
+    {}
+
 }

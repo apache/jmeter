@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control;
+import org.apache.jmeter.engine.event.IterationListener;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 
@@ -72,6 +73,12 @@ import org.apache.jmeter.testelement.TestElement;
  ***************************************/
 public interface Controller extends TestElement
 {
+    
+    /**
+     * Controllers have to notify listeners of when they begin an iteration
+     * through their sub-elements.
+     */
+    public void addIterationListener(IterationListener lis);
 	/**
 	 * Delivers the next Sampler.
 	 */
