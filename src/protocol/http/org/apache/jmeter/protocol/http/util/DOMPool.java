@@ -46,7 +46,7 @@ public final class DOMPool
      * test on an old system will likely run into memory or CPU problems long
      * before the HashMap is an issue.
      */
-    protected static HashMap MEMCACHE = new HashMap(50);
+    private static HashMap MEMCACHE = new HashMap(50);
 
     /**
      * Return a document.

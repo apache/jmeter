@@ -52,7 +52,7 @@ public final class HtmlParsingUtils
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    protected static String utfEncodingName;
+    private static String utfEncodingName;
     /* NOTUSED 
     private int compilerOptions =
         Perl5Compiler.CASE_INSENSITIVE_MASK
