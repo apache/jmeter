@@ -15,8 +15,9 @@
 
   <!-- Build classpath -->
   <path id="classpath">
-	<fileset dir="./lib">
-	 <include name="**/*.jar"/>
+	<fileset dir=".">
+	 <include name="**/lib/*.jar"/>
+	<include name="**/ext/*.jar"/>
 	</fileset>
 	  <pathelement location="${tools.jar}"/>
   </path>
