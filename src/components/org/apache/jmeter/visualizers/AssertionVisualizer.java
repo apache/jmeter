@@ -70,44 +70,26 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
 
-/****************************************
- * Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:
- * Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
+/**
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 {
 
     private JTextArea textArea;
 
-    /****************************************
-     * !ToDo (Constructor description)
-     ***************************************/
     public AssertionVisualizer()
     {
         init();
         setName(getStaticLabel());
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public String getStaticLabel()
     {
         return JMeterUtils.getResString("assertion_visualizer_title");
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param sample  !ToDo (Parameter description)
-     ***************************************/
     public void add(SampleResult sample)
     {
         if(null != sample.getSamplerData())
@@ -118,9 +100,6 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
         textArea.append("\n");
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     ***************************************/
     public void clear()
     {
         textArea.setText("");
@@ -132,8 +111,10 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
         {
             StringBuffer display = new StringBuffer();
             AssertionResult assertionResults[] = res.getAssertionResults();
-            if (assertionResults != null) {
-                for (int i = 0; i < assertionResults.length; i++) {
+            if (assertionResults != null)
+            {
+                for (int i = 0; i < assertionResults.length; i++)
+                {
                     AssertionResult item = assertionResults[i];
 
                     if (item.isFailure() || item.isError())
@@ -162,7 +143,8 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
         this.add(makeTitlePanel(),BorderLayout.NORTH);
 
         // TEXTAREA LABEL
-        JLabel textAreaLabel = new JLabel(JMeterUtils.getResString("assertion_textarea_label"));
+        JLabel textAreaLabel =
+            new JLabel(JMeterUtils.getResString("assertion_textarea_label"));
         Box mainPanel = Box.createVerticalBox();
         mainPanel.add(textAreaLabel);
 
@@ -172,8 +154,10 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
         textArea.setLineWrap(false);
         JScrollPane areaScrollPane = new JScrollPane(textArea);
 
-        areaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        areaScrollPane.setVerticalScrollBarPolicy(
+            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        areaScrollPane.setHorizontalScrollBarPolicy(
+            JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         mainPanel.add(areaScrollPane);
         mainPanel.add(Box.createVerticalGlue());

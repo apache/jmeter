@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,7 +52,6 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-
 package org.apache.jmeter.timers;
 
 import java.io.Serializable;
@@ -105,7 +104,7 @@ public class ConstantThroughputTimer
      */
     public void setThroughput(String throughput)
     {
-		setProperty(THROUGHPUT,throughput);
+        setProperty(THROUGHPUT,throughput);
     }
 
     /**
@@ -135,7 +134,7 @@ public class ConstantThroughputTimer
      */
     public String getDelay()
     {
-		return "";
+        return "";
     }
 
     /**
@@ -145,7 +144,7 @@ public class ConstantThroughputTimer
      */
     public long getThroughput()
     {
-		return  getPropertyAsLong(THROUGHPUT);
+        return  getPropertyAsLong(THROUGHPUT);
     }
     
     public String getThroughputString()
@@ -153,32 +152,32 @@ public class ConstantThroughputTimer
         return getPropertyAsString(THROUGHPUT);
     }
 
-	/**
-	 * Retrieve the delay to use during test execution.
-	 * 
-	 * @see org.apache.jmeter.timers.Timer#delay()
-	 */
+    /**
+     * Retrieve the delay to use during test execution.
+     * 
+     * @see org.apache.jmeter.timers.Timer#delay()
+     */
     public synchronized long delay()
     {
-		long currentTime = System.currentTimeMillis();
-		long currentTarget = targetTime == 0 ? currentTime : targetTime;
-		targetTime = currentTarget + 60000/getThroughput();
-		if (currentTime > currentTarget)
-		{
-		    // We're behind schedule -- try to catch up:
-		    return 0;
-		}
-		return currentTarget - currentTime;
+        long currentTime = System.currentTimeMillis();
+        long currentTarget = targetTime == 0 ? currentTime : targetTime;
+        targetTime = currentTarget + 60000 / getThroughput();
+        if (currentTime > currentTarget)
+        {
+            // We're behind schedule -- try to catch up:
+            return 0;
+        }
+        return currentTarget - currentTime;
     }
 
-	/**
-	 * Provide a description of this timer class.
-	 * 
-	 * @return the description of this timer class.
-	 */
+    /**
+     * Provide a description of this timer class.
+     * 
+     * @return the description of this timer class.
+     */
     public String toString()
     {
-	    return JMeterUtils.getResString("constant_throughput_timer_memo");
+        return JMeterUtils.getResString("constant_throughput_timer_memo");
     }
 
     /**
@@ -188,10 +187,11 @@ public class ConstantThroughputTimer
      *
      * @return a fresh copy of this ConstantThroughputTimer
      */
-    public Object clone() {
-        ConstantThroughputTimer result = (ConstantThroughputTimer)super.clone();
+    public Object clone()
+    {
+        ConstantThroughputTimer result =
+            (ConstantThroughputTimer) super.clone();
         result.targetTime = 0;
         return result;
     }
-    
 }

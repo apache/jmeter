@@ -70,41 +70,43 @@ import org.apache.jmeter.testelement.property.StringProperty;
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
  */
-public abstract class RandomTimer extends ConstantTimer implements Timer, Serializable
+public abstract class RandomTimer
+    extends ConstantTimer
+    implements Timer, Serializable
 {
-	public final static String RANGE = "RandomTimer.range";
+    public final static String RANGE = "RandomTimer.range";
 
-	protected Random random;
+    protected Random random;
 
-	/**
-	 * No-arg constructor.
-	 */
-	public RandomTimer()
-	{
-		this.random = new Random();
-	}
-
-	/**
-	 * Set the range value.
-	 */
-	public void setRange(double range)
-	{
-		setProperty(new DoubleProperty(RANGE,range));
-	}
-    
-    public void setRange(String range)
+    /**
+     * No-arg constructor.
+     */
+    public RandomTimer()
     {
-        setProperty(new StringProperty(RANGE,range));
+        this.random = new Random();
     }
 
-	/**
-	 * Get the range value.
-	 * 
-	 * @return double
-	 */
-	public double getRange()
-	{
-		return this.getPropertyAsDouble(RANGE);
-	}
-	
+    /**
+     * Set the range value.
+     */
+    public void setRange(double range)
+    {
+        setProperty(new DoubleProperty(RANGE, range));
+    }
+
+    public void setRange(String range)
+    {
+        setProperty(new StringProperty(RANGE, range));
+    }
+
+    /**
+     * Get the range value.
+     * 
+     * @return double
+     */
+    public double getRange()
+    {
+        return this.getPropertyAsDouble(RANGE);
+    }
+
 }

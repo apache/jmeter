@@ -81,15 +81,15 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
 
-/****************************************
+/**
  * This class implements a statistical analyser that calculates both the average
  * and the standard deviation of the sampling process and outputs them as
  * autoscaling plots.
  *
- *@author    <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
- *@created   February 8, 2001
- *@version   $Revision$ $Date$
- ***************************************/
+ * @author    <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
+ * @created   February 8, 2001
+ * @version   $Revision$ $Date$
+ */
 public class GraphVisualizer extends AbstractVisualizer
         implements ImageVisualizer, ItemListener, GraphListener, Clearable
 {
@@ -112,9 +112,9 @@ public class GraphVisualizer extends AbstractVisualizer
     private JTextField medianField;
     private boolean perSecond = false;
 
-    /****************************************
-     * Constructor for the GraphVisualizer object
-     ***************************************/
+    /**
+     * Constructor for the GraphVisualizer object.
+     */
     public GraphVisualizer()
     {
         model = new GraphModel();
@@ -123,11 +123,11 @@ public class GraphVisualizer extends AbstractVisualizer
         init();
     }
 
-    /****************************************
-     * Gets the Image attribute of the GraphVisualizer object
+    /**
+     * Gets the Image attribute of the GraphVisualizer object.
      *
-     *@return   The Image value
-     ***************************************/
+     * @return   the Image value
+     */
     public Image getImage()
     {
         Image result = graph.createImage(graph.getWidth(), graph.getHeight());
@@ -137,9 +137,6 @@ public class GraphVisualizer extends AbstractVisualizer
         return result;
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     ***************************************/
     public synchronized void updateGui()
     {
         graph.updateGui();
@@ -147,16 +144,12 @@ public class GraphVisualizer extends AbstractVisualizer
         dataField.setText(Long.toString(model.getCurrentData()));
         averageField.setText(Long.toString(model.getCurrentAverage()));
         deviationField.setText(Long.toString(model.getCurrentDeviation()));
-        throughputField.setText(Float.toString(model.getCurrentThroughput()) + "/" + minute);
+        throughputField.setText(
+            Float.toString(model.getCurrentThroughput()) + "/" + minute);
         medianField.setText(Long.toString(model.getCurrentMedian()));
         updateYAxis();
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param s  !ToDo (Parameter description)
-     ***************************************/
     public synchronized void updateGui(Sample s)
     {
         // We have received one more sample
@@ -170,31 +163,16 @@ public class GraphVisualizer extends AbstractVisualizer
         updateYAxis();
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param res  !ToDo (Parameter description)
-     ***************************************/
     public void add(SampleResult res)
     {
         model.addSample(res);
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public String getStaticLabel()
     {
         return JMeterUtils.getResString("graph_results_title");
     }
 
-    /****************************************
-     * Description of the Method
-     *
-     *@param e  Description of Parameter
-     ***************************************/
     public void itemStateChanged(ItemEvent e)
     {
         if (e.getItem() == data)
@@ -207,11 +185,13 @@ public class GraphVisualizer extends AbstractVisualizer
         }
         else if (e.getItem() == deviation)
         {
-            this.graph.enableDeviation(e.getStateChange() == ItemEvent.SELECTED);
+            this.graph.enableDeviation(
+                e.getStateChange() == ItemEvent.SELECTED);
         }
         else if (e.getItem() == throughput)
         {
-            this.graph.enableThroughput(e.getStateChange() == ItemEvent.SELECTED);
+            this.graph.enableThroughput(
+                e.getStateChange() == ItemEvent.SELECTED);
         }
         else if(e.getItem() == median)
         {
@@ -220,9 +200,6 @@ public class GraphVisualizer extends AbstractVisualizer
         this.graph.repaint();
     }
 
-    /****************************************
-     * Description of the Method
-     ***************************************/
     public synchronized void clear()
     {
         // this.graph.clear();
@@ -236,28 +213,23 @@ public class GraphVisualizer extends AbstractVisualizer
         repaint();
     }
 
-    /****************************************
-     * Description of the Method
-     *
-     *@return   Description of the Returned Value
-     ***************************************/
     public String toString()
     {
         return "Show the samples analysis as dot plots";
     }
 
-    /****************************************
-     * Update the max and min value of the Y axis
-     ***************************************/
+    /**
+     * Update the max and min value of the Y axis.
+     */
     private void updateYAxis()
     {
         maxYField.setText(Long.toString(model.getGraphMax()));
         minYField.setText("0");
     }
 
-    /****************************************
-     * Initialize the GUI
-     ***************************************/
+    /**
+     * Initialize the GUI.
+     */
     private void init()
     {
         this.setLayout(new BorderLayout());
@@ -287,7 +259,8 @@ public class GraphVisualizer extends AbstractVisualizer
      * 
      * @return the Y axis panel
      */
-    private JPanel createYAxis() {
+    private JPanel createYAxis()
+    {
         JPanel graphYAxisPanel = new JPanel();
         
         graphYAxisPanel.setLayout(new BorderLayout());
@@ -319,7 +292,8 @@ public class GraphVisualizer extends AbstractVisualizer
      * 
      * @return a text field configured to be used in the Y axis
      */
-    private JTextField createYAxisField(int length) {
+    private JTextField createYAxisField(int length)
+    {
         JTextField field = new JTextField(length);
         field.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
         field.setEditable(false);
@@ -340,7 +314,8 @@ public class GraphVisualizer extends AbstractVisualizer
      * @return a panel containing both the dynamic and static parts
      *          of a Y axis label
      */
-    private JPanel createYAxisPanel(String labelResourceName, JTextField field) {
+    private JPanel createYAxisPanel(String labelResourceName, JTextField field)
+    {
         JPanel panel = new JPanel(new FlowLayout());
         JLabel label = new JLabel(JMeterUtils.getResString(labelResourceName));
         
@@ -358,7 +333,8 @@ public class GraphVisualizer extends AbstractVisualizer
      * @return a panel allowing the user to choose which graphs
      *          to display
      */
-    private JPanel createChoosePanel() {
+    private JPanel createChoosePanel()
+    {
         JPanel chooseGraphsPanel = new JPanel();
         
         chooseGraphsPanel.setLayout(new FlowLayout());
@@ -369,7 +345,8 @@ public class GraphVisualizer extends AbstractVisualizer
         deviation = createChooseCheckBox("graph_results_deviation", Color.red);
         throughput = createChooseCheckBox("graph_results_throughput",
                         JMeterColor.dark_green);
-        median = createChooseCheckBox("graph_results_median", JMeterColor.purple);
+        median =
+            createChooseCheckBox("graph_results_median", JMeterColor.purple);
 
         chooseGraphsPanel.add(selectGraphsLabel);
         chooseGraphsPanel.add(data);
@@ -396,7 +373,10 @@ public class GraphVisualizer extends AbstractVisualizer
      * @return       a checkbox allowing the user to select whether or
      *                not a kind of graph data will be displayed
      */
-    private JCheckBox createChooseCheckBox(String labelResourceName, Color color) {
+    private JCheckBox createChooseCheckBox(
+        String labelResourceName,
+        Color color)
+    {
         JCheckBox checkBox = new JCheckBox(
                         JMeterUtils.getResString(labelResourceName));
         checkBox.setSelected(true);
@@ -412,10 +392,13 @@ public class GraphVisualizer extends AbstractVisualizer
      * 
      * @return a scroll pane containing the graph
      */
-    private Component createGraphPanel() {
-        JScrollPane graphScrollPanel = makeScrollPane(graph, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
-                    JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
+    private Component createGraphPanel()
+    {
+        JScrollPane graphScrollPanel =
+            makeScrollPane(
+                graph,
+                JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         graphScrollPanel.setViewportBorder(
                 BorderFactory.createEmptyBorder(2, 2, 2, 2));
         graphScrollPanel.setPreferredSize(graphScrollPanel.getMinimumSize());
@@ -430,7 +413,8 @@ public class GraphVisualizer extends AbstractVisualizer
      * 
      * @return a panel showing the current graph values
      */
-    private Box createGraphInfoPanel() {
+    private Box createGraphInfoPanel()
+    {
         Box graphInfoPanel = Box.createHorizontalBox();
 
         noSamplesField = createInfoField(Color.black, 6);
@@ -440,27 +424,29 @@ public class GraphVisualizer extends AbstractVisualizer
         throughputField = createInfoField(JMeterColor.dark_green, 15);
         medianField = createInfoField(JMeterColor.purple,5);
 
-        graphInfoPanel.add(createInfoColumn(
-                    createInfoLabel("graph_results_no_samples", noSamplesField),
-                    noSamplesField,
-                    createInfoLabel("graph_results_deviation", deviationField),
-                    deviationField));
+        graphInfoPanel.add(
+            createInfoColumn(
+                createInfoLabel("graph_results_no_samples", noSamplesField),
+                noSamplesField,
+                createInfoLabel("graph_results_deviation", deviationField),
+                deviationField));
         graphInfoPanel.add(Box.createHorizontalGlue());
 
-        graphInfoPanel.add(createInfoColumn(
-                    createInfoLabel("graph_results_latest_sample", dataField),
-                    dataField,
-                    createInfoLabel("graph_results_throughput", throughputField),
-                    throughputField));
+        graphInfoPanel.add(
+            createInfoColumn(
+                createInfoLabel("graph_results_latest_sample", dataField),
+                dataField,
+                createInfoLabel("graph_results_throughput", throughputField),
+                throughputField));
         graphInfoPanel.add(Box.createHorizontalGlue());
 
-        graphInfoPanel.add(createInfoColumn(
-                    createInfoLabel("graph_results_average", averageField),
-                    averageField,
-        createInfoLabel("graph_results_median", medianField),
-        medianField));
+        graphInfoPanel.add(
+            createInfoColumn(
+                createInfoLabel("graph_results_average", averageField),
+                averageField,
+                createInfoLabel("graph_results_median", medianField),
+                medianField));
         graphInfoPanel.add(Box.createHorizontalGlue());
-
         return graphInfoPanel;
     }
 
@@ -477,7 +463,8 @@ public class GraphVisualizer extends AbstractVisualizer
      * @return        a text field configured to display one of the
      *                 current graph values
      */
-    private JTextField createInfoField(Color color, int length) {
+    private JTextField createInfoField(Color color, int length)
+    {
         JTextField field = new JTextField(length);
         field.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         field.setEditable(false);
@@ -503,7 +490,8 @@ public class GraphVisualizer extends AbstractVisualizer
      *                {@link JMeterUtils#getResString(String)}.
      * @param field  the field this label is being created for.
      */
-    private JLabel createInfoLabel(String labelResourceName, JTextField field) {
+    private JLabel createInfoLabel(String labelResourceName, JTextField field)
+    {
         JLabel label = new JLabel(
                 JMeterUtils.getResString(labelResourceName));
         label.setForeground(field.getForeground());
@@ -534,13 +522,16 @@ public class GraphVisualizer extends AbstractVisualizer
      *                 of the panel. If this parameter is null, this
      *                 section of the panel will be left blank.
      */
-    private Box createInfoColumn(JLabel label1, JTextField field1,
-            JLabel label2, JTextField field2) {
-
+    private Box createInfoColumn(
+        JLabel label1,
+        JTextField field1,
+        JLabel label2,
+        JTextField field2)
+    {
         // This column actually consists of a row with two sub-columns
         // The first column contains the labels, and the second
         // column contains the fields.
-        Box row = Box.createHorizontalBox();		
+        Box row = Box.createHorizontalBox();
         Box col = Box.createVerticalBox();
         col.add(label1 != null ? label1 : Box.createVerticalGlue());
         col.add(label2 != null ? label2 : Box.createVerticalGlue());
@@ -557,12 +548,4 @@ public class GraphVisualizer extends AbstractVisualizer
 
         return row;
     }
-    /* (non-Javadoc)
-     * @see java.awt.Component#getPreferredSize()
-    
-    public Dimension getPreferredSize()
-    {
-        return getMinimumSize();
-    } */
-
 }

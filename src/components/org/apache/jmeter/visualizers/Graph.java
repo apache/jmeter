@@ -71,15 +71,15 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- *  Title: Apache JMeter Description: Implements a simple graph for displaying
- *  performance results Copyright: Copyright (c) 2000 Company: Apache Foundation
+ * Implements a simple graph for displaying performance results.
  *
- *@author     Michael Stover
- *@created    March 21, 2002
- *@version    1.0
+ * @author     Michael Stover
+ * @created    March 21, 2002
+ * @version    $Revision$
  */
-
-public class Graph extends JComponent implements Scrollable, GraphListener, Clearable
+public class Graph
+    extends JComponent
+    implements Scrollable, GraphListener, Clearable
 {
     private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
     private boolean data = true;
@@ -92,7 +92,7 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
     private static int width = 2000;
 
     /**
-     *  Constructor for the Graph object
+     * Constructor for the Graph object.
      */
     public Graph()
     {
@@ -100,9 +100,7 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
     }
 
     /**
-     *  Constructor for the Graph object
-     *
-     *@param  model  Description of Parameter
+     * Constructor for the Graph object.
      */
     public Graph(GraphModel model)
     {
@@ -111,9 +109,7 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
     }
 
     /**
-     *  Sets the Model attribute of the Graph object
-     *
-     *@param  model  The new Model value
+     * Sets the Model attribute of the Graph object.
      */
     private void setModel(Object model)
     {
@@ -123,9 +119,9 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
     }
 
     /**
-     *  Gets the PreferredScrollableViewportSize attribute of the Graph object
+     * Gets the PreferredScrollableViewportSize attribute of the Graph object.
      *
-     *@return    The PreferredScrollableViewportSize value
+     * @return the PreferredScrollableViewportSize value
      */
     public Dimension getPreferredScrollableViewportSize()
     {
@@ -134,35 +130,33 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
     }
 
     /**
-     *  Gets the ScrollableUnitIncrement attribute of the Graph object
-     *
-     *@param  visibleRect  Description of Parameter
-     *@param  orientation  Description of Parameter
-     *@param  direction    Description of Parameter
-     *@return              The ScrollableUnitIncrement value
+     * Gets the ScrollableUnitIncrement attribute of the Graph object.
+     *@return              the ScrollableUnitIncrement value
      */
-    public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
+    public int getScrollableUnitIncrement(
+        Rectangle visibleRect,
+        int orientation,
+        int direction)
     {
         return 5;
     }
 
     /**
-     *  Gets the ScrollableBlockIncrement attribute of the Graph object
-     *
-     *@param  visibleRect  Description of Parameter
-     *@param  orientation  Description of Parameter
-     *@param  direction    Description of Parameter
-     *@return              The ScrollableBlockIncrement value
+     * Gets the ScrollableBlockIncrement attribute of the Graph object.
+     * @return              the ScrollableBlockIncrement value
      */
-    public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
+    public int getScrollableBlockIncrement(
+        Rectangle visibleRect,
+        int orientation,
+        int direction)
     {
         return (int) (visibleRect.width * .9);
     }
 
     /**
-     *  Gets the ScrollableTracksViewportWidth attribute of the Graph object
+     * Gets the ScrollableTracksViewportWidth attribute of the Graph object.
      *
-     *@return    The ScrollableTracksViewportWidth value
+     * @return    the ScrollableTracksViewportWidth value
      */
     public boolean getScrollableTracksViewportWidth()
     {
@@ -170,9 +164,9 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
     }
 
     /**
-     *  Gets the ScrollableTracksViewportHeight attribute of the Graph object
+     * Gets the ScrollableTracksViewportHeight attribute of the Graph object.
      *
-     *@return    The ScrollableTracksViewportHeight value
+     * @return    the ScrollableTracksViewportHeight value
      */
     public boolean getScrollableTracksViewportHeight()
     {
@@ -180,26 +174,16 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
     }
 
     /**
-     *  Clears this graph
+     * Clears this graph.
      */
     public void clear()
     {}
 
-    /**
-     *  Description of the Method
-     *
-     *@param  value  Description of Parameter
-     */
     public void enableData(boolean value)
     {
         this.data = value;
     }
 
-    /**
-     *  Description of the Method
-     *
-     *@param  value  Description of Parameter
-     */
     public void enableAverage(boolean value)
     {
         this.average = value;
@@ -210,11 +194,6 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
         this.median = value;
     }
 
-    /**
-     *  Description of the Method
-     *
-     *@param  value  Description of Parameter
-     */
     public void enableDeviation(boolean value)
     {
         this.deviation = value;
@@ -225,19 +204,11 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
         throughput = value;
     }
 
-    /**
-     *  Description of the Method
-     */
     public void updateGui()
     {
         repaint();
     }
 
-    /**
-     *  Description of the Method
-     *
-     *@param  oneSample  Description of Parameter
-     */
     public void updateGui(final Sample oneSample)
     {
         final int xPos = model.getSampleCount();
@@ -256,11 +227,6 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
         });
     }
 
-    /**
-     *  Description of the Method
-     *
-     *@param  g  Description of Parameter
-     */
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
@@ -280,13 +246,6 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
         }
     }
 
-    /**
-     *  Description of the Method
-     *
-     *@param  x          Description of Parameter
-     *@param  oneSample  Description of Parameter
-     *@param  g          Description of Parameter
-     */
     private void drawSample(int x, Sample oneSample, Graphics g)
     {
         //int width = getWidth();
@@ -305,38 +264,61 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
                 g.setColor(JMeterColor.YELLOW);
             }
             g.drawLine(x % width, height - data, x % width, height - data - 1);
-            log.debug("Drawing coords = " + (x % width) + "," + (height - data));
+            log.debug(
+                "Drawing coords = " + (x % width) + "," + (height - data));
         }
 
         if (average)
         {
-            int average = (int) (oneSample.average * height / model.getGraphMax());
+            int average =
+                (int) (oneSample.average * height / model.getGraphMax());
 
             g.setColor(Color.blue);
-            g.drawLine(x % width, height - average, x % width, (height - average - 1));
+            g.drawLine(
+                x % width,
+                height - average,
+                x % width,
+                (height - average - 1));
         }
 
         if (median)
         {
-            int median = (int) (oneSample.median * height / model.getGraphMax());
+            int median =
+                (int) (oneSample.median * height / model.getGraphMax());
 
             g.setColor(JMeterColor.purple);
-            g.drawLine(x % width, height - median, x % width, (height - median - 1));
+            g.drawLine(
+                x % width,
+                height - median,
+                x % width,
+                (height - median - 1));
         }
 
         if (deviation)
         {
-            int deviation = (int) (oneSample.deviation * height / model.getGraphMax());
+            int deviation =
+                (int) (oneSample.deviation * height / model.getGraphMax());
 
             g.setColor(Color.red);
-            g.drawLine(x % width, height - deviation, x % width, (height - deviation - 1));
+            g.drawLine(
+                x % width,
+                height - deviation,
+                x % width,
+                (height - deviation - 1));
         }
         if (throughput)
         {
-            int throughput = (int) (oneSample.throughput * height / model.getThroughputMax());
+            int throughput =
+                (int) (oneSample.throughput
+                    * height
+                    / model.getThroughputMax());
 
             g.setColor(JMeterColor.dark_green);
-            g.drawLine(x % width, height - throughput, x % width, (height - throughput - 1));
+            g.drawLine(
+                x % width,
+                height - throughput,
+                x % width,
+                (height - throughput - 1));
         }
     }
 }

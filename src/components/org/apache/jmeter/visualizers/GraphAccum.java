@@ -78,67 +78,43 @@ import org.apache.log.Logger;
 
 
 /**
- *  Draws the graph
+ * Draws the graph.
  *
- *@author     Khor Soon Hin
- *@created    2001/08/11
- *@version    1.0
+ * @author     Khor Soon Hin
+ * @created    2001/08/11
+ * @version    $Revision$
  */
-
 public class GraphAccum extends JComponent implements Scrollable,
         GraphAccumListener
 {
-
-    /**
-     *  Description of the Field
-     */
     protected GraphAccumModel model;
+    protected GraphAccumVisualizer visualizer;
+
+    /** Ensure that the legends are only drawn once. */
+    protected boolean noLegendYet = true;
 
     /**
-     *  Description of the Field
-     */
-    protected GraphAccumVisualizer visualizer;
-    // how far from each other to plot
-    // the points
-    /**
-     *  Description of the Field
-     */
-    protected boolean noLegendYet = true;
-    // ensure that the legends are only
-    // drawn once
-    /**
-     *  Description of the Field
+     * Keep track of previous point.  Needed to draw a line joining the
+     * previous point with the current one.
      */
     protected Point[] previousPts;
-    // keep track of previous point
-    // needed to draw a line joining
-    // the previous point with the current
-    // one
+
     /**
-     *  Description of the Field
+     * Ensure that previousPts is allocated once only.  It'll be reused at each
+     * drawSample.  It can't be allocated outside drawSample 'cos the sample
+     * is only passed in here.
      */
     protected boolean previousPtsAlloc = false;
 
-    /**
-     *  Description of the Field
-     */
     protected static int width = 2000;
 
-    /**
-     *  Description of the Field
-     */
     protected final static int PLOT_X_WIDTH = 10;
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
-    // Ensure that previousPts is allocated
-
-    // once only.  It'll be reused at each
-    // drawSample.  It can't be allocated
-    // outside drawSample 'cos the sample
-    // is only passed in here.
 
     /**
-     *  Constructor
+     * Constructor.
      */
     public GraphAccum()
     {
@@ -147,9 +123,9 @@ public class GraphAccum extends JComponent implements Scrollable,
     }
 
     /**
-     *  Constructor with model set
-     *
-     *@param  model  Description of Parameter
+     * Constructor with model set.
+     * 
+     * @param  model  model which this object represents
      */
     public GraphAccum(GraphAccumModel model)
     {
@@ -160,9 +136,9 @@ public class GraphAccum extends JComponent implements Scrollable,
     }
 
     /**
-     *  Set model which this object represents
+     * Set model which this object represents.
      *
-     *@param  model  model which this object represents
+     * @param  model  model which this object represents
      */
     private void setModel(Object model)
     {
@@ -174,9 +150,9 @@ public class GraphAccum extends JComponent implements Scrollable,
     }
 
     /**
-     *  Set the visualizer
+     * Set the visualizer.
      *
-     *@param  visualizer  visualizer of this object
+     * @param  visualizer  visualizer of this object
      */
     public void setVisualizer(Object visualizer)
     {
@@ -188,11 +164,11 @@ public class GraphAccum extends JComponent implements Scrollable,
     }
 
     /**
-     *  The legend is only printed once during sampling. This sets the variable
-     *  that indicates whether the legend has been printed yet or not.
+     * The legend is only printed once during sampling. This sets the variable
+     * that indicates whether the legend has been printed yet or not.
      *
-     *@param  value  variable that indicates whether the legend has been printed
-     *      yet
+     * @param  value  variable that indicates whether the legend has been
+     *                printed yet
      */
     public void setNoLegendYet(boolean value)
     {
@@ -200,9 +176,9 @@ public class GraphAccum extends JComponent implements Scrollable,
     }
 
     /**
-     *  Gets the PreferredScrollableViewportSize attribute of the Graph object
+     * Gets the PreferredScrollableViewportSize attribute of the Graph object.
      *
-     *@return    The PreferredScrollableViewportSize value
+     * @return    the PreferredScrollableViewportSize value
      */
     public Dimension getPreferredScrollableViewportSize()
     {
@@ -210,35 +186,33 @@ public class GraphAccum extends JComponent implements Scrollable,
     }
 
     /**
-     *  Gets the ScrollableUnitIncrement attribute of the Graph object
-     *
-     *@param  visibleRect  Description of Parameter
-     *@param  orientation  Description of Parameter
-     *@param  direction    Description of Parameter
-     *@return              The ScrollableUnitIncrement value
+     * Gets the ScrollableUnitIncrement attribute of the Graph object.
+     * @return              the ScrollableUnitIncrement value
      */
-    public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
+    public int getScrollableUnitIncrement(
+        Rectangle visibleRect,
+        int orientation,
+        int direction)
     {
         return 5;
     }
 
     /**
-     *  Gets the ScrollableBlockIncrement attribute of the Graph object
-     *
-     *@param  visibleRect  Description of Parameter
-     *@param  orientation  Description of Parameter
-     *@param  direction    Description of Parameter
-     *@return              The ScrollableBlockIncrement value
+     * Gets the ScrollableBlockIncrement attribute of the Graph object.
+     * @return              the ScrollableBlockIncrement value
      */
-    public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
+    public int getScrollableBlockIncrement(
+        Rectangle visibleRect,
+        int orientation,
+        int direction)
     {
         return (int) (visibleRect.width * .9);
     }
 
     /**
-     *  Gets the ScrollableTracksViewportWidth attribute of the Graph object
+     * Gets the ScrollableTracksViewportWidth attribute of the Graph object.
      *
-     *@return    The ScrollableTracksViewportWidth value
+     * @return    the ScrollableTracksViewportWidth value
      */
     public boolean getScrollableTracksViewportWidth()
     {
@@ -246,9 +220,9 @@ public class GraphAccum extends JComponent implements Scrollable,
     }
 
     /**
-     *  Gets the ScrollableTracksViewportHeight attribute of the Graph object
+     * Gets the ScrollableTracksViewportHeight attribute of the Graph object.
      *
-     *@return    The ScrollableTracksViewportHeight value
+     * @return    the ScrollableTracksViewportHeight value
      */
     public boolean getScrollableTracksViewportHeight()
     {
@@ -256,11 +230,11 @@ public class GraphAccum extends JComponent implements Scrollable,
     }
 
     /**
-     *  The legend is only printed once during sampling. This returns the variable
-     *  that indicates whether the legend has been printed yet or not.
+     * The legend is only printed once during sampling. This returns the
+     * variable that indicates whether the legend has been printed yet or not.
      *
-     *@return    value variable that indicates whether the legend has been printed
-     *      yet
+     * @return   value variable that indicates whether the legend has been
+     *           printed yet
      */
     public boolean getNoLegendYet()
     {
@@ -268,7 +242,7 @@ public class GraphAccum extends JComponent implements Scrollable,
     }
 
     /**
-     *  Redraws the gui
+     * Redraws the gui.
      */
     public void updateGui()
     {
@@ -278,9 +252,9 @@ public class GraphAccum extends JComponent implements Scrollable,
     }
 
     /**
-     *  Redraws the gui if no rescaling of the graph is needed
+     * Redraws the gui if no rescaling of the graph is needed.
      *
-     *@param  oneSample  sample to be added
+     * @param  oneSample  sample to be added
      */
     public void updateGui(final SampleResult oneSample)
     {
@@ -304,11 +278,6 @@ public class GraphAccum extends JComponent implements Scrollable,
         log.debug("End : updateGui2");
     }
 
-    /**
-     *  Description of the Method
-     *
-     *@param  g  Description of Parameter
-     */
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
@@ -317,8 +286,8 @@ public class GraphAccum extends JComponent implements Scrollable,
 
         synchronized (model.getList())
         {
-            // for repainting set this to false because all the points needs to be redrawn
-            // so no need(shouldn't) use the previousPts
+            // For repainting set this to false because all the points needs to
+            // be redrawn so no need(shouldn't) use the previousPts.
             previousPtsAlloc = false;
             Iterator e = model.getList().iterator();
 
@@ -333,7 +302,7 @@ public class GraphAccum extends JComponent implements Scrollable,
     }
 
     /**
-     *  Clears this graph
+     * Clears this graph.
      */
     public void clear()
     {
@@ -342,26 +311,20 @@ public class GraphAccum extends JComponent implements Scrollable,
         previousPts = null;
     }
 
-    /**
-     *  Description of the Method
-     *
-     *@param  x          Description of Parameter
-     *@param  oneSample  Description of Parameter
-     *@param  g          Description of Parameter
-     */
     private void drawSample(int x, SampleResult oneSample, Graphics g)
     {
         log.debug("Start : drawSample1");
+
+        // Used to keep track of accumulated load times of components.
         int lastLevel = 0;
-        // used to keep track of accumulated load times of
-        // components
+
+        // Number of components
         int compCount = 0;
-        // number of components
 
         SampleResult[] resultList = oneSample.getSubResults();
-        // allocate previousPts only the first time
         int resultListCount = 0;
 
+        // Allocate previousPts only the first time
         if (!previousPtsAlloc)
         {
             if (resultList != null)
@@ -380,11 +343,12 @@ public class GraphAccum extends JComponent implements Scrollable,
         legendPanel.setLayout(gridBag);
         lPanel.add(legendPanel);
         Dimension d = this.getSize();
-        // set the total time to load the sample
+
+        // Set the total time to load the sample
         long totalTime = oneSample.getTime();
 
-        // if the page has other components then set the total time to be that including
-        // all its components' load time
+        // If the page has other components then set the total time to be that
+        // including all its components' load time.
         if (log.isDebugEnabled())
         {
             log.debug("drawSample1 : total time - " + totalTime);
@@ -394,16 +358,21 @@ public class GraphAccum extends JComponent implements Scrollable,
         g.setColor(currColor);
         if (!previousPtsAlloc)
         {
-            // if first dot, just draw the point
-            g.drawLine(x % width, d.height - data, x % width, d.height - data - 1);
+            // If first dot, just draw the point.
+            g.drawLine(
+                x % width,
+                d.height - data,
+                x % width,
+                d.height - data - 1);
         }
         else
         {
-            // otherwise, draw from previous point
+            // Otherwise, draw from previous point.
             g.drawLine((previousPts[0].x) % width, previousPts[0].y, x % width,
                     d.height - data);
         }
-        // store current total time point
+        
+        // Store current total time point
         previousPts[0] = new Point(x % width, d.height - data);
         if (legendPanel != null && noLegendYet)
         {
@@ -412,32 +381,39 @@ public class GraphAccum extends JComponent implements Scrollable,
             gbc.anchor = GridBagConstraints.WEST;
             gbc.weightx = 1.0;
             gbc.insets = new Insets(0, 10, 0, 0);
-            JLabel totalTimeLabel = new JLabel("Total time - " + oneSample.toString());
+            JLabel totalTimeLabel =
+                new JLabel("Total time - " + oneSample.toString());
 
             totalTimeLabel.setForeground(currColor);
             gridBag.setConstraints(totalTimeLabel, gbc);
             legendPanel.add(totalTimeLabel);
         }
-        // plot the time of the page itself without all its components
+
+        // Plot the time of the page itself without all its components
         if (log.isDebugEnabled())
         {
-            log.debug("drawSample1 : main page load time - " + oneSample.getTime());
+            log.debug(
+                "drawSample1 : main page load time - " + oneSample.getTime());
         }
         data = (int) (oneSample.getTime() * d.height / model.getMax());
         currColor = ColorHelper.changeColorCyclicIncrement(currColor, 40);
         g.setColor(currColor);
         if (!previousPtsAlloc)
         {
-            // if first dot, just draw the point
-            g.drawLine(x % width, d.height - data, x % width, d.height - data - 1);
+            // If first dot, just draw the point
+            g.drawLine(
+                x % width,
+                d.height - data,
+                x % width,
+                d.height - data - 1);
         }
         else
         {
-            // otherwise, draw from previous point
+            // Otherwise, draw from previous point
             g.drawLine((previousPts[1].x) % width, previousPts[1].y, x % width,
                     d.height - data);
         }
-        // store load time without components
+        // Store load time without components
         previousPts[1] = new Point(x % width, d.height - data);
         if (legendPanel != null && noLegendYet)
         {
@@ -453,7 +429,7 @@ public class GraphAccum extends JComponent implements Scrollable,
             legendPanel.add(mainTimeLabel);
         }
         lastLevel += data;
-        // plot the times of the total times components
+        // Plot the times of the total times components
         int currPreviousPts = 2;
 
         if (resultList != null)
@@ -464,25 +440,39 @@ public class GraphAccum extends JComponent implements Scrollable,
 
                 if (log.isDebugEnabled())
                 {
-                    log.debug("drawSample1 : componentRes - " + componentRes.getSampleLabel() + " loading time - " + componentRes.getTime());
+                    log.debug(
+                        "drawSample1 : componentRes - "
+                            + componentRes.getSampleLabel()
+                            + " loading time - "
+                            + componentRes.getTime());
                 }
-                data = (int) (componentRes.getTime() * d.height / model.getMax());
+                data =
+                    (int) (componentRes.getTime() * d.height / model.getMax());
                 data += lastLevel;
-                currColor = ColorHelper.changeColorCyclicIncrement(currColor, 100);
+                currColor =
+                    ColorHelper.changeColorCyclicIncrement(currColor, 100);
                 g.setColor(currColor);
                 if (!previousPtsAlloc)
                 {
-                    // if first dot, just draw the point
-                    g.drawLine(x % width, d.height - data, x % width, d.height - data - 1);
+                    // If first dot, just draw the point
+                    g.drawLine(
+                        x % width,
+                        d.height - data,
+                        x % width,
+                        d.height - data - 1);
                 }
                 else
                 {
-                    // otherwise, draw from previous point
-                    g.drawLine((previousPts[currPreviousPts].x) % width,
-                            previousPts[currPreviousPts].y, x % width, d.height - data);
+                    // Otherwise, draw from previous point
+                    g.drawLine(
+                        (previousPts[currPreviousPts].x) % width,
+                        previousPts[currPreviousPts].y,
+                        x % width,
+                        d.height - data);
                 }
-                // store the current plot
-                previousPts[currPreviousPts++] = new Point(x % width, d.height - data);
+                // Store the current plot
+                previousPts[currPreviousPts++] =
+                    new Point(x % width, d.height - data);
                 if (legendPanel != null && noLegendYet)
                 {
                     gbc.gridx = 0;
@@ -490,7 +480,8 @@ public class GraphAccum extends JComponent implements Scrollable,
                     gbc.anchor = GridBagConstraints.WEST;
                     gbc.weightx = 1.0;
                     gbc.insets = new Insets(0, 10, 0, 0);
-                    JLabel compTimeLabel = new JLabel(componentRes.getSampleLabel());
+                    JLabel compTimeLabel =
+                        new JLabel(componentRes.getSampleLabel());
 
                     compTimeLabel.setForeground(currColor);
                     gridBag.setConstraints(compTimeLabel, gbc);
@@ -499,16 +490,18 @@ public class GraphAccum extends JComponent implements Scrollable,
                 lastLevel = data;
             }
         }
+
         if (noLegendYet)
         {
             noLegendYet = false;
             lPanel.repaint();
             lPanel.revalidate();
         }
-        // set the previousPtsAlloc to true here and not after
-        // allocation because the rest of the codes also depend
-        // on previousPtsAlloc to be false if first time plotting
-        // the graph i.e. there are no previous points
+        
+        // Set the previousPtsAlloc to true here and not after allocation
+        // because the rest of the codes also depend on previousPtsAlloc to be
+        // false if first time plotting the graph i.e. there are no previous
+        // points.
         if (!previousPtsAlloc)
         {
             previousPtsAlloc = true;

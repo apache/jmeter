@@ -70,13 +70,14 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class GaussianRandomTimer extends RandomTimer implements Serializable
 {
+    public long delay()
+    {
+        return (long) Math.abs(
+            (this.random.nextGaussian() * getRange()) + super.delay());
+    }
 
-	 public long delay() {
-		  return (long) Math.abs((this.random.nextGaussian() * getRange()) + super.delay());
-	 }
-
-	 public String toString() {
-		  return JMeterUtils.getResString("gaussian_timer_memo");
-	 }
-	 
+    public String toString()
+    {
+        return JMeterUtils.getResString("gaussian_timer_memo");
+    }
 }
