@@ -12,7 +12,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
@@ -103,7 +102,7 @@ public class URLRewritingModifier
     {
         case1 =
             JMeterUtils.getPatternCache().getPattern(
-                argName + "=([^\"'>& \n\r;]*)[& \\n\\r\"'>;]?$?",
+                argName + "=([^\"'>&\\s;]*)[&\\s\"'>;]?$?",
                 Perl5Compiler.MULTILINE_MASK);
         case2 =
             JMeterUtils.getPatternCache().getPattern(
@@ -126,7 +125,7 @@ public class URLRewritingModifier
         // pattern? Maybe not: note the semicolons
         case4 =
             JMeterUtils.getPatternCache().getPattern(
-                argName + "([^\"'>& \n\r]*)[& \\n\\r\"'>]?$?",
+                argName + "([^\"'>&\\s]*)[&\\s\"'>]?$?",
                 Perl5Compiler.MULTILINE_MASK);
     }
     public String getArgumentName()
@@ -233,6 +232,24 @@ public class URLRewritingModifier
                     .getValue());
         }
 
+        public void testGrabSessionIdEndedInTab() throws Exception
+        {
+            String html = "href='index.html?session_id=jfdkjdkfjddkfdfjkdjfdf\t";
+            response = new SampleResult();
+            response.setResponseData(html.getBytes());
+            URLRewritingModifier mod = new URLRewritingModifier();
+            mod.setArgumentName("session_id");
+            HTTPSampler sampler = createSampler();
+            context.setCurrentSampler(sampler);
+            context.setPreviousResult(response);
+            mod.process();
+            Arguments args = sampler.getArguments();
+            assertEquals(
+                "jfdkjdkfjddkfdfjkdjfdf",
+                ((Argument) args.getArguments().get(0).getObjectValue())
+                    .getValue());
+        }
+        
         public void testGrabSessionId4() throws Exception
         {
             String html =
