@@ -86,6 +86,7 @@
 				<exclude name="**/Changelog*"/>
 				<exclude name="**/*.orig"/>
 				<exclude name="org/apache/jmeter/protocol/http/util/SSLStaticProvider.java" unless="jsse.present"/>
+                <exclude name="**/SSLManager*" unless="jsse.present"/>
 				<exclude name="org/apache/jmeter/visualizers/MailerVisualizer.java" unless="javamail.complete"/>
 				<exclude name="org/apache/jmeter/reporters/MailerResultCollector.java" unless="javamail.complete"/>
 				<classpath refid="classpath"/>
