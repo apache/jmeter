@@ -81,7 +81,7 @@ public class ResultCollector
     //private int current;
     transient private DefaultConfigurationSerializer serializer;
     //private boolean inLoading = false;
-    transient private PrintWriter out;
+    transient private volatile PrintWriter out;
     private boolean inTest = false;
     private static Map files = new HashMap();
     private Set hosts = new HashSet();
