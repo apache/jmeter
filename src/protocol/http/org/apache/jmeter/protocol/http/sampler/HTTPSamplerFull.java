@@ -134,7 +134,7 @@ public class HTTPSamplerFull
     }
 
     /**
-     * Samples the <code>Entry</code> passed in and stores the result in
+     * Samples the <code>HTTPSampler</code> passed in and stores the result in
      * <code>SampleResult</code>. The original file (which is assumed to be
      * an HTML file) is parsed into a DOM tree and examined for embedded binary
      * files.
@@ -142,7 +142,8 @@ public class HTTPSamplerFull
      * Note that files that are duplicated within the enclosing document will
      * only be downloaded once.
      *
-     * @param entry an entry to be sampled
+     * @param sampler an HTTPSampler to be sampled
+     * 
      * @return      results of the sampling
      */
     public SampleResult sample(HTTPSampler sampler)
@@ -160,9 +161,9 @@ public class HTTPSamplerFull
     }
 
     /**
-     * @param res
-     * @param sampler
-     * @return
+     * @param res - the current sample result
+     * @param sampler - the HTTP sampler
+     * @return the sample result, with possible additional sub results
      */
     protected SampleResult parseForImages(SampleResult res, HTTPSampler sampler)
     {

@@ -99,7 +99,7 @@ public interface LogParser {
 	/**
 	 * the method will parse the given number of
 	 * lines. Pass "-1" to parse the entire file.
-	 * @param int count
+	 * @param count
 	 * @return int
 	 */
 	public int parse(int count);

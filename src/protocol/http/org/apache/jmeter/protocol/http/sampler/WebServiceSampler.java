@@ -161,7 +161,7 @@ public class WebServiceSampler extends HTTPSampler
     /**
      * it's kinda obvious, but we state it anyways.  Set the xml file with a
      * string path.
-     * @param String filename
+     * @param filename
      */
     public void setXmlFile(String filename)
     {
@@ -237,7 +237,7 @@ public class WebServiceSampler extends HTTPSampler
 
     /**
      * Set the XML data.
-     * @param String data
+     * @param data
      */
     public void setXmlData(String data)
     {
@@ -255,7 +255,7 @@ public class WebServiceSampler extends HTTPSampler
 
     /**
      * Set the soap action which should be in the form of an URN.
-     * @param String data
+     * @param data
      */
     public void setSoapAction(String data)
     {
@@ -273,7 +273,7 @@ public class WebServiceSampler extends HTTPSampler
 
     /**
      * Set the memory cache.
-     * @param boolean cache
+     * @param cache
      */
     public void setMemoryCache(boolean cache)
     {
@@ -291,7 +291,7 @@ public class WebServiceSampler extends HTTPSampler
 
     /**
      * Set whether the sampler should read the response or not.
-     * @param boolean read
+     * @param read
      */
     public void setReadResponse(boolean read)
     {
@@ -334,6 +334,7 @@ public class WebServiceSampler extends HTTPSampler
 
     /**
      * Open the file and create a Document.
+     * @param key
      * @return Document
      */
     protected Document openDocument(String key)
@@ -369,7 +370,8 @@ public class WebServiceSampler extends HTTPSampler
 
     /**
      * sample(Entry e) simply calls sample().
-     * @param Entry e
+     * @param e - ignored
+     * @return the sample Result
      */
     public SampleResult sample(Entry e)
     {

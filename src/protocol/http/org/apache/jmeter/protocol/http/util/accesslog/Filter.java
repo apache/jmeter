@@ -89,20 +89,20 @@ package org.apache.jmeter.protocol.http.util.accesslog;
 public interface Filter {
 
 	/**
-	 * @param String old extension
-	 * @param String new extension
+	 * @param oldextension
+	 * @param newextension
 	 */
 	public void setReplaceExtension(String oldextension, String newextension);
 	
 	/**
 	 * Include all files in the array.
-	 * @param String filenames
+	 * @param filenames
 	 */
 	public void includeFiles(String[] filenames);
 	
 	/**
 	 * Exclude all files in the array
-	 * @param String filenames
+	 * @param filenames
 	 */
 	public void excludeFiles(String[] filenames);
 	
@@ -110,7 +110,7 @@ public interface Filter {
 	 * Include any log entry that contains
 	 * the following regular expression
 	 * pattern.
-	 * @param String regexp
+	 * @param regexp
 	 */
 	public void includePattern(String[] regexp);
 	

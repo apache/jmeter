@@ -76,7 +76,7 @@ public class WSDLException extends Exception
     }
 
     /**
-     * @param message
+     * @param exception
      */
     public WSDLException(Exception exception)
     {

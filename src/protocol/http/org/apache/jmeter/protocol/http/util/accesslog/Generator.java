@@ -105,7 +105,7 @@ public interface Generator {
 
 	/**
 	 * The host is the name of the server.
-	 * @param String host
+	 * @param host
 	 */	
 	public void setHost(String host);
 
@@ -113,20 +113,20 @@ public interface Generator {
 	 * This is the label for the request,
 	 * which is used in the logs and
 	 * results.
-	 * @param String label
+	 * @param label
 	 */
 	public void setLabel(String label);
 
 	/**
 	 * The method is the HTTP request
 	 * method. It's normally POST or GET.
-	 * @param String post_get
+	 * @param post_get
 	 */	
 	public void setMethod(String post_get);
 
 	/**
 	 * Set the request parameters
-	 * @param NVPairs params
+	 * @param params
 	 */	
 	public void setParams(NVPair[] params);
 
@@ -141,7 +141,7 @@ public interface Generator {
 	 * The default port for HTTP is 80,
 	 * but not all servers run on that
 	 * port.
-	 * @param port
+	 * @param port - port number
 	 */	
 	public void setPort(int port);
 
@@ -155,7 +155,7 @@ public interface Generator {
 	/**
 	 * The source logs is the location
 	 * where the access log resides.
-	 * @param String sourcefile
+	 * @param sourcefile
 	 */
 	public void setSourceLogs(String sourcefile);
 
@@ -164,7 +164,7 @@ public interface Generator {
 	 * or a Sampler. We make it generic, so
 	 * that later on we can use these classes
 	 * directly from a HTTPSampler.
-	 * @param Object target
+	 * @param target
 	 */	
 	public void setTarget(Object target);
 
