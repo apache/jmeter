@@ -1,7 +1,6 @@
 package org.apache.jmeter.control;
 
 import java.io.Serializable;
-import junit.framework.TestSuite;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -9,7 +8,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
-import org.apache.jmeter.control.GenericController;
+import org.apache.jmeter.junit.JMeterTestCase;
 
 /**
  * 
@@ -153,26 +152,12 @@ public class IfController extends GenericController implements Serializable
 			}
 	  }
 
-	  /**
-	   * Tester
-	   */
-	  public static void main(String args[]) {
-			junit.textui.TestRunner.run(suite());
-	  }
-
-	  /**
-	   * For JUnit test
-	   */
-	  public static TestSuite suite() {
-			TestSuite suite = new TestSuite();
-			suite.addTest(new Test("testProcessing"));
-			return suite;
-	  }
+////////////////////////////// Start of Test Code ///////////////////////////
 
 	  /**
 	   * JUnit test
 	   */
-	  public static class Test extends junit.framework.TestCase {
+	  public static class Test extends JMeterTestCase {
 			public Test(String name) {
 				  super(name);
 			}

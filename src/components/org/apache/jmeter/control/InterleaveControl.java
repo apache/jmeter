@@ -223,6 +223,22 @@ public class InterleaveControl extends GenericController implements Serializable
     {
         this.skipNext = skipNext;
     }
+    
+    
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.control.GenericController#incrementCurrent()
+	 */
+	protected void incrementCurrent()
+	{
+		if (currentReturnedAtLeastOne)
+		{
+			skipNext = true;
+		}
+		stillSame = false;
+		super.incrementCurrent();
+	}
+
+/////////////// Start of Test Code ////////////////////////////////
 
     public static class Test extends JMeterTestCase
     {
@@ -499,35 +515,5 @@ public class InterleaveControl extends GenericController implements Serializable
                 }
             }
         }
-    }
-
-    public static void main(String args[])
-    {
-        junit.textui.TestRunner.run(suite());
-    }
-
-    public static TestSuite suite()
-    {
-        TestSuite suite = new TestSuite();
-        suite.addTest(new Test("testProcessing"));
-        suite.addTest(new Test("testProcessing2"));
-        suite.addTest(new Test("testProcessing3"));
-        suite.addTest(new Test("testProcessing4"));
-        suite.addTest(new Test("testProcessing5"));
-        //suite.addTestSuite(Test.class);
-        return suite;
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.control.GenericController#incrementCurrent()
-     */
-    protected void incrementCurrent()
-    {
-        if (currentReturnedAtLeastOne)
-        {
-            skipNext = true;
-        }
-        stillSame = false;
-        super.incrementCurrent();
     }
 }
