@@ -12,6 +12,11 @@
 	 #set ($subbannerfg = "#ffffff")
 	 #set ($tablethbg = "#039acc")
 	 #set ($tabletdbg = "#a0ddf0")
+	 #set ($notebackground = "#bbbb00")
+	 #set ($space = " ")
+	 #set ($space = $space.charAt(0))
+	 #set ($udsc = "_")
+	 #set ($udsc = $udsc.charAt(0))
 
 <!-- start the processing -->
 #document()
@@ -160,7 +165,7 @@
 
 #macro (figure $figure)
 	<table border="0" cellspacing="0" cellpadding="0"><tr><td><img src="$figure.getAttributeValue("image")"><br/>
-	<font size="-1">$xmlout.outputString($figure,true)</font></td></tr></table>
+	<font size="-1">$xmlout.outputString($figure,true)</font></td></tr></table><br/>
 #end
 
 #macro (example $example)
@@ -170,7 +175,49 @@
 		#if ($items.getName().equals("figure"))
 			#figure ($items)
 		#else
-			$xmlout.outputString($items)
+			#unknown($items)
+		#end
+	#end
+#end
+
+#macro (note $note)
+	<table border="1" bgcolor="$notebackground" cellspacing="0" cellpadding="2">
+		<tr><td>#runloop($note)</td></tr>
+	</table>
+#end
+
+#macro (unknown $node)
+	#if($node.getName() == "note")
+		#note($node)
+	#elseif($node.getName() == "complink")
+		<a href="$relativePath/usermanual/component_reference.html#$node.getAttributeValue("name").replace($space,$udsc)">$node.getAttributeValue("name")</a>
+	#elseif($node.getName() == "figure")
+		#figure($node)
+	#else
+		#outputTag($node)
+		#runloop($node)
+		#outputEndTag($node)
+	#end
+#end
+
+#macro (outputTag $tag)
+	<$tag.getName()#getAtts($tag)>
+#end
+
+#macro (getAtts $tag)
+	#foreach ($att in $tag.getAttributes()) $att.getName()="$att.getValue()"#end
+#end
+
+#macro (outputEndTag $tag)
+	</$tag.getName()>
+#end
+
+#macro (runloop $item)
+	#foreach ($node in $item.getMixedContent())
+		#if($node.getClass().getName().indexOf("Element") > -1)
+			#unknown($node)
+		#else
+			$node
 		#end
 	#end
 #end
@@ -181,7 +228,7 @@
 	<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
-			 <a name="$component.getAttributeValue("anchor")"><h3>$component.getAttributeValue("name")</h3></a>
+			 <a name="$component.getAttributeValue("name").replace($space,$udsc)"><h3>$!component.getAttributeValue("index") $component.getAttributeValue("name")</h3></a>
 		  </font>
 		</td></tr>
 		<tr><td>
@@ -199,7 +246,7 @@
 				#elseif ($items.getName().equals("example"))
 					#example ($items)
 				#else
-					 $xmlout.outputString($items)
+					 #unknown($items)
 				#end
 		  #end
 		</td></tr>
@@ -227,7 +274,7 @@
 				#elseif ($items.getName().equals("component"))
 					#component($items)
 				#else
-					 $xmlout.outputString($items)
+					 #unknown($items)
 				#end
 		  #end
 		  </blockquote>
@@ -240,7 +287,7 @@
 	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 		<tr><td bgcolor="$bannerbg">
 		  <font color="$bannerfg" face="arial,helvetica,sanserif">
-			 <a name="$section.getAttributeValue("anchor")"><strong>$section.getAttributeValue("name")</strong></a>
+			 <a name="$!section.getAttributeValue("anchor")"><strong>$section.getAttributeValue("name")</strong></a>
 		  </font>
 		</td></tr>
 		<tr><td>
@@ -257,7 +304,7 @@
 				#elseif ($items.getName().equals("component"))
 					#component($items)
 				#else
-					 $xmlout.outputString($items)
+					 #unknown($items)
 				#end
 		  #end
 		  </blockquote>
