@@ -119,4 +119,39 @@ public final class JOrphanUtils
         returns.copyInto(values);
         return values;
     }
+
+	private static final String SPACES = "                                 ";
+	private static final int SPACES_LEN = SPACES.length(); 
+
+    /**
+     * Right aligns some text in a StringBuffer
+     * N.B. modifies the input buffer
+     * 
+     * @param in StringBuffer containing some text
+     * @param len output length desired
+     * @return input StringBuffer, with leading spaces
+     */
+	public static StringBuffer rightAlign(StringBuffer in, int len){
+		int pfx = len - in.length(); 
+		if (pfx <= 0 ) return in;
+		if (pfx > SPACES_LEN) pfx = SPACES_LEN;
+		in.insert(0,SPACES.substring(0,pfx));
+		return in;
+	}
+	
+	/**
+	 * Left aligns some text in a StringBuffer
+	 * N.B. modifies the input buffer
+	 * 
+	 * @param in StringBuffer containing some text
+	 * @param len output length desired
+	 * @return input StringBuffer, with trailing spaces
+	 */
+	public static StringBuffer leftAlign(StringBuffer in, int len){
+		int sfx = len - in.length(); 
+		if (sfx <= 0 ) return in;
+		if (sfx > SPACES_LEN) sfx = SPACES_LEN;
+		in.append(SPACES.substring(0,sfx));
+		return in;
+	}
 }
