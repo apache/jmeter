@@ -132,6 +132,12 @@ public abstract class SSLManager
 
             if (null == password)
             {
+                if (null == defaultpw)
+                {
+                    this.defaultpw =
+                        JMeterUtils.getJMeterProperties().getProperty(
+                            "javax.net.ssl.keyStorePassword");
+
                     if (null == defaultpw)
                     {
                         synchronized (this)
@@ -146,6 +152,7 @@ public abstract class SSLManager
                                 "javax.net.ssl.keyStorePassword",
                                 this.defaultpw);
                         }
+                    }
                 }
 
                 password = this.defaultpw;
