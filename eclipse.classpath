@@ -22,7 +22,7 @@
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
     <classpathentry kind="lib" path="lib/avalon-excalibur-4.1.jar"/>
     <classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
-    <classpathentry kind="lib" path="lib/jakarta-oro-2.0.7.jar"/>
+    <classpathentry kind="lib" path="lib/jakarta-oro-2.0.8.jar"/>
     <classpathentry kind="lib" path="lib/js.jar"/>
     <classpathentry kind="lib" path="lib/junit.jar"/>
     <classpathentry kind="lib" path="lib/logkit-1.2.jar"/>
