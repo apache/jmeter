@@ -132,6 +132,12 @@ public class ProxyControlGui
 	 * Add an Assertion to the first sample of each set
 	 */
 	private JCheckBox addAssertions;
+	
+	/**
+	 * Set/clear the Use Keep-Alive box on the samplers
+	 * (default is true)
+	 */
+	private JCheckBox useKeepAlive;
 
     private ProxyControl model;
 
@@ -198,6 +204,7 @@ public class ProxyControlGui
             model.setCaptureHttpHeaders(httpHeaders.isSelected());
 			model.setSeparators(addSeparators.isSelected());
 			model.setAssertions(addAssertions.isSelected());
+			model.setUseKeepAlive(useKeepAlive.isSelected());
         }
     }
 
@@ -243,6 +250,7 @@ public class ProxyControlGui
 		httpHeaders.setSelected(model.getPropertyAsBoolean(ProxyControl.CAPTURE_HTTP_HEADERS));
 		addSeparators.setSelected(model.getPropertyAsBoolean(ProxyControl.ADD_SEPARATORS));
 		addAssertions.setSelected(model.getPropertyAsBoolean(ProxyControl.ADD_ASSERTIONS));
+		useKeepAlive.setSelected(model.getPropertyAsBoolean(ProxyControl.USE_KEEPALIVE,true));
         populateTable(includeModel, model.getIncludePatterns().iterator());
         populateTable(excludeModel, model.getExcludePatterns().iterator());
         repaint();
@@ -490,12 +498,21 @@ public class ProxyControlGui
 		addAssertions.addActionListener(this);
 		addAssertions.setActionCommand(ProxyControl.ADD_ASSERTIONS);
 
+		useKeepAlive = new JCheckBox(JMeterUtils.getResString("proxy_usekeepalive"));
+		useKeepAlive.setName(ProxyControl.ADD_ASSERTIONS);
+		useKeepAlive.setSelected(false);
+		useKeepAlive.addActionListener(this);
+		useKeepAlive.setActionCommand(ProxyControl.ADD_ASSERTIONS);
+
         HorizontalPanel panel = new HorizontalPanel();
         panel.add(label);
         panel.add(portField);
 
         panel.add(Box.createHorizontalStrut(10));
         panel.add(httpHeaders);
+
+		panel.add(Box.createHorizontalStrut(10));
+		panel.add(useKeepAlive);
 
 		panel.add(Box.createHorizontalStrut(10));
 		panel.add(addSeparators);
