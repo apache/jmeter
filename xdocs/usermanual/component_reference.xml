@@ -69,7 +69,7 @@ JMeter assumes the FTP server is listening on the default port.</property>
 
         <p>If the request uses a technique called "URL Rewriting" to maintain sessions,
         then see section
-        <a href="build-adv-web-test-plan.html#url_rewriting">6.1 Handling User Sessions With URL Rewriting</a>
+        <a href="build-adv-web-test-plan.html#session_url_rewriting">6.1 Handling User Sessions With URL Rewriting</a>
         for additional configuration steps.</p>
 </description>
 
@@ -113,7 +113,7 @@ and send HTTP/HTTPS requests for all images and Java applets referenced in the f
         <complink name="HTML Link Parser"/>
         <complink name="HTTP Proxy Server"/>
         <complink name="HTTP Request Defaults"/>
-        <link href="build-adv-web-test-plan.html#url_rewriting">HTTP Requests and Session ID's: URL Rewriting</link>
+        <link href="build-adv-web-test-plan.html#session_url_rewriting">HTTP Requests and Session ID's: URL Rewriting</link>
 </links>
 
 </component>
@@ -727,7 +727,7 @@ is shown).  It also reports failures of any <a href="test_plan.html#assertions">
 are part of the test plan.</p></description>
 
 <links>
-        <complink name="Basic Assertion"/>
+        <complink name="Response Assertion"/>
 </links>
 </component>
 

@@ -67,7 +67,7 @@ field that you can modify. In this example, leave this field with the default va
 </section>
 
 
-	<section name="9.4 Adding LDAP Requests" anchot="add_requests">
+	<section name="9.4 Adding LDAP Requests" anchor="add_requests">
                 <p>In our Test Plan, we need to make four LDAP requests.</p>
                 <ol>
 			<li>Inbuilt Add Test</li>
