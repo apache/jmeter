@@ -6,16 +6,18 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.apache.jmeter.functions.AbstractFunction;
+import org.apache.jmeter.engine.util.CompoundVariable;
+import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
@@ -45,7 +47,8 @@ public class JMeterTest extends JMeterTestCase
 {
     private static Logger log = LoggingManager.getLoggerForClass();
     
-    private static Set guiTitles,funcTitles;
+    private static Map guiTitles;
+	private static Map funcTitles;
 
     public JMeterTest(String name)
     {
@@ -89,8 +92,8 @@ public class JMeterTest extends JMeterTestCase
 	}
     
 	// Constructor for Function tests
-	private AbstractFunction funcItem;
-	public JMeterTest(String testName, AbstractFunction fi)
+	private Function funcItem;
+	public JMeterTest(String testName, Function fi)
 	{
 		super(testName);// Save the method name
 		funcItem=fi;
@@ -113,6 +116,8 @@ public class JMeterTest extends JMeterTestCase
 		suite.addTest(suiteBeanComponents());
 		suite.addTest(new JMeterTest("createFunctionSet"));
 		suite.addTest(suiteFunctions());
+		suite.addTest(new JMeterTest("checkGuiSet"));
+		suite.addTest(new JMeterTest("checkFunctionSet"));
         return suite;
     }
     
@@ -121,7 +126,7 @@ public class JMeterTest extends JMeterTestCase
      */
     public void createTitleSet() throws Exception
     {
-		guiTitles = new HashSet(90);
+		guiTitles = new HashMap(90);
 		
     	String compref = "../xdocs/usermanual/component_reference.xml";
 		SAXBuilder bldr = new SAXBuilder();
@@ -134,12 +139,12 @@ public class JMeterTest extends JMeterTestCase
 			List components = ((Element) sections.get(i)).getChildren("component");
 			for (int j = 0; j <components.size();j++){
 				Element comp = (Element) components.get(j);
-				guiTitles.add(comp.getAttributeValue("name")); 
+				guiTitles.put(comp.getAttributeValue("name"),Boolean.FALSE); 
 			}
 		}
 		// Add titles that don't need to be documented
-		guiTitles.add("Root");
-		guiTitles.add("Example Sampler");
+		guiTitles.put("Root",Boolean.FALSE);
+		guiTitles.put("Example Sampler",Boolean.FALSE);
     }
 
 	/*
@@ -147,7 +152,7 @@ public class JMeterTest extends JMeterTestCase
 	 */
 	public void createFunctionSet() throws Exception
 	{
-		funcTitles = new HashSet(20);
+		funcTitles = new HashMap(20);
 		
 		String compref = "../xdocs/usermanual/functions.xml";
 		SAXBuilder bldr = new SAXBuilder();
@@ -161,11 +166,41 @@ public class JMeterTest extends JMeterTestCase
 			List components = ((Element) sections.get(i)).getChildren("component");
 			for (int j = 0; j <components.size();j++){
 				Element comp = (Element) components.get(j);
-				funcTitles.add(comp.getAttributeValue("name"));
+				funcTitles.put(comp.getAttributeValue("name"),Boolean.FALSE);
 			}
 		}
 	}
 
+    private int scanprintMap(Map m, String t)
+    {
+    	Set s = m.keySet();
+    	int unseen = 0;
+    	if (s.size() == 0) return 0;
+    	Iterator i = s.iterator();
+    	while (i.hasNext())
+    	{   
+    		Object key = i.next();
+    		if (!m.get(key).equals(Boolean.TRUE)) 
+            {
+            	if (unseen == 0)// first time
+            	{
+					System.out.println("\nNames remaining in "+t+" Map:");
+            	}
+            	unseen++;
+				System.out.println(key);
+    		}
+    	}
+    	return unseen;
+    }
+    public void checkGuiSet() throws Exception
+    {
+		assertEquals("Should not have any names left over",0,scanprintMap(guiTitles,"GUI"));
+    }
+
+	public void checkFunctionSet() throws Exception
+	{
+		assertEquals("Should not have any names left over",0,scanprintMap(funcTitles,"Function"));
+	}
 	/*
 	 * Test GUI elements - create the suite of tests
 	 */
@@ -195,12 +230,16 @@ public class JMeterTest extends JMeterTestCase
 	private static Test suiteFunctions() throws Exception
 	{
 		TestSuite suite = new TestSuite("Functions");
-		Iterator iter = getObjects(AbstractFunction.class).iterator();
+		Iterator iter = getObjects(Function.class).iterator();
 		while (iter.hasNext())
 		{
 			Object item = iter.next();
+			if (item.getClass().equals(CompoundVariable.class))
+			{
+				continue;
+			}
 			TestSuite ts = new TestSuite(item.getClass().getName());
-			ts.addTest(new JMeterTest("runFunction",(AbstractFunction) item));
+			ts.addTest(new JMeterTest("runFunction",(Function) item));
 			suite.addTest(ts);
 		}
 		return suite;
@@ -240,7 +279,8 @@ public class JMeterTest extends JMeterTestCase
 	{
 		if (guiTitles.size() > 0) {
 			String title = guiItem.getStaticLabel();
-			boolean ct =guiTitles.contains(title); 
+			boolean ct =guiTitles.containsKey(title); 
+			if (ct) guiTitles.put(title,Boolean.TRUE);// So we can detect extra entries
 			if (// Is this a work in progress ?
 			    (title.indexOf("(ALPHA") == -1)
 			    &&
@@ -259,7 +299,8 @@ public class JMeterTest extends JMeterTestCase
 	{
 		if (funcTitles.size() > 0) {
 			String title = funcItem.getReferenceKey();
-			boolean ct =funcTitles.contains(title); 
+			boolean ct =funcTitles.containsKey(title); 
+			if (ct) funcTitles.put(title,Boolean.TRUE);// For detecting extra entries
 			if (// Is this a work in progress ?
 				(title.indexOf("(ALPHA") == -1)
 				&&
