@@ -222,7 +222,6 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent
         threadPanel.add(threadLabel);
         threadInput = new JTextField(5);
         threadInput.setText("1");
-        threadInput.addFocusListener(NumberFieldErrorListener.getNumberFieldErrorListener());
         threadInput.setName(THREAD_NAME);
         threadPanel.add(threadInput);
         threadPropsPanel.add(threadPanel);
@@ -235,7 +234,6 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent
         rampInput = new JTextField(5);
         rampInput.setText("1");
         rampInput.setName(RAMP_NAME);
-        rampInput.addFocusListener(NumberFieldErrorListener.getNumberFieldErrorListener());
         rampPanel.add(rampInput);
         threadPropsPanel.add(rampPanel);
 

@@ -112,6 +112,11 @@ public class LoopController extends GenericController implements Serializable
 	{
 		return getPropertyAsInt(LOOPS);
 	}
+    
+    public String getLoopString()
+    {
+        return getPropertyAsString(LOOPS);
+    }
 
 	/****************************************
 	 * !ToDo (Method description)

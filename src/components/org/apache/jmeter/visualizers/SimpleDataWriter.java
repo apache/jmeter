@@ -122,7 +122,6 @@ public class SimpleDataWriter
 
         // NAME
         mainPanel.add(makeTitlePanel());
-        mainPanel.add(getFilePanel());
 
         this.add(mainPanel, BorderLayout.NORTH);
     }

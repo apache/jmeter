@@ -55,9 +55,6 @@
  
 package org.apache.jmeter.timers.gui;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JComponent;
@@ -80,7 +77,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
  */
-public class UniformRandomTimerGui extends AbstractTimerGui implements KeyListener
+public class UniformRandomTimerGui extends AbstractTimerGui
 {
 
 	private final String DELAY_FIELD = "Delay Field";
@@ -158,50 +155,6 @@ public class UniformRandomTimerGui extends AbstractTimerGui implements KeyListen
 	}
 
 	/**
-	 * Process a KeyEvent.
-	 *
-	 * @param e the event to handle.
-	 */
-	public void keyReleased(KeyEvent e)
-	{
-		String temp = e.getComponent().getName();
-
-		if (temp.equals(RANGE_FIELD))
-		{
-			try
-			{
-				Double.parseDouble(rangeField.getText());
-			}
-			catch(NumberFormatException nfe)
-			{
-				if(rangeField.getText().length() > 0)
-				{
-					JOptionPane.showMessageDialog(this, "You must enter a valid number",
-							"Invalid data", JOptionPane.WARNING_MESSAGE);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Process a KeyEvent.
-	 *
-	 * @param e the event to handle.
-	 */
-	public void keyPressed(KeyEvent e) 
-	{ 
-	}
-
-	/**
-	 * Process a KeyEvent.
-	 *
-	 * @param e the event to handle.
-	 */
-	public void keyTyped(KeyEvent e) 
-	{ 
-	}
-
-	/**
 	 * Initialize this component.
 	 */
 	private void init()
@@ -224,7 +177,6 @@ public class UniformRandomTimerGui extends AbstractTimerGui implements KeyListen
 		rangeField = new JTextField(6);
 		rangeField.setText(DEFAULT_RANGE);
 		rangeField.setName(RANGE_FIELD);
-		rangeField.addKeyListener(this);
 		delayDevPanel.add(rangeField);
 
 		threadDelayPropsPanel.add(delayDevPanel);
@@ -237,7 +189,6 @@ public class UniformRandomTimerGui extends AbstractTimerGui implements KeyListen
 		delayField = new JTextField(6);
 		delayField.setText(DEFAULT_DELAY);
 		delayField.setName(DELAY_FIELD);
-		delayField.addKeyListener(this);
 		avgDelayPanel.add(delayField);
         
 		threadDelayPropsPanel.add(avgDelayPanel);

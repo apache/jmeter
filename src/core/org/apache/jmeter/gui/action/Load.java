@@ -142,6 +142,7 @@ public class Load implements Command
 		}
 		finally
 		{
+            GuiPackage.getInstance().updateCurrentGui();
 			GuiPackage.getInstance().getMainFrame().repaint();
 		}
 		if(isTestPlan && f != null)

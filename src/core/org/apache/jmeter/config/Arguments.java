@@ -275,7 +275,7 @@ public class Arguments extends ConfigTestElement implements Serializable
 
 		if(row < getArguments().size())
 		{
-			argument = (Argument)getArguments().get(row);
+			argument = (Argument)getArguments().get(row).getObjectValue();
 		}
 
 		return argument;

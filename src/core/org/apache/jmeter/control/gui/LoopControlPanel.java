@@ -1,13 +1,10 @@
 package org.apache.jmeter.control.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -25,7 +22,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *@version   1.0
  ***************************************/
 
-public class LoopControlPanel extends AbstractControllerGui implements KeyListener, ActionListener
+public class LoopControlPanel extends AbstractControllerGui implements ActionListener
 {
 
     JCheckBox infinite;
@@ -65,7 +62,7 @@ public class LoopControlPanel extends AbstractControllerGui implements KeyListen
         super.configure(element);
         if (element instanceof LoopController)
         {
-            setState(((LoopController) element).getLoops());
+            setState(((LoopController) element).getLoopString());
         }
         else
         {
@@ -125,51 +122,6 @@ public class LoopControlPanel extends AbstractControllerGui implements KeyListen
     }
 
     /****************************************
-     * Description of the Method
-     *
-     *@param e  Description of Parameter
-     ***************************************/
-    public void keyPressed(KeyEvent e)
-    {}
-
-    /****************************************
-     * Description of the Method
-     *
-     *@param e  Description of Parameter
-     ***************************************/
-    public void keyTyped(KeyEvent e)
-    {}
-
-    /****************************************
-     * Description of the Method
-     *
-     *@param e  Description of Parameter
-     ***************************************/
-    public void keyReleased(KeyEvent e)
-    {
-        String temp = e.getComponent().getName();
-        if (temp.equals(LOOPS))
-        {
-            try
-            {
-                Integer.parseInt(loops.getText());
-            }
-            catch (NumberFormatException ex)
-            {
-                if (loops.getText().length() > 0)
-                {
-                    // We need a standard warning/error dialog. The problem with
-                    // having it here is that the dialog is centered over this
-                    // LoopControlPanel instead of begin centered in the entire
-                    // JMeter GUI window.
-                    JOptionPane.showMessageDialog(this, "You must enter a valid number", "Invalid data", JOptionPane.WARNING_MESSAGE);
-                    loops.setText("");
-                }
-            }
-        }
-    }
-
-    /****************************************
      * !ToDoo (Method description)
      *
      *@return   !ToDo (Return description)
@@ -214,7 +166,6 @@ public class LoopControlPanel extends AbstractControllerGui implements KeyListen
         loops = new JTextField(5);
         loopPanel.add(loops);
         loops.setName(LOOPS);
-        loops.addKeyListener(this);
         loops.setText("1");
 
         // FOREVER CHECKBOX
@@ -224,6 +175,13 @@ public class LoopControlPanel extends AbstractControllerGui implements KeyListen
         loopPanel.add(infinite);
 
         return loopPanel;
+    }
+    
+    private void setState(String loopCount)
+    {
+        loops.setText(loopCount);
+        infinite.setSelected(false);
+        loops.setEnabled(true);
     }
 
     private void setState(int loopCount)
