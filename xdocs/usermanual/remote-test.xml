@@ -88,6 +88,28 @@ Use the "-s" option with the jmeter startup script ("jmeter -s").</p>
 
 <p>Steps 2 and 3 remain the same.</p>
 </subsection>
+<subsection name="13.2 Tips" anchor="tips">
+<p>If you're running Suse Linux, these tips may help. The default installation may enable the firewall. In that case, remote testing will not work properly. The following tips were contributed by Sergey Ten.</p>
+<p>If you see connectios refused, turn on debugging by passing the following options.</p>
+     rmiregistry -J-Dsun.rmi.log.debug=true
+     -J-Dsun.rmi.server.exceptionTrace=true
+     -J-Dsun.rmi.loader.logLevel=verbose
+     -J-Dsun.rmi.dgc.logLevel=verbose
+     -J-Dsun.rmi.transport.logLevel=verbose
+     -J-Dsun.rmi.transport.tcp.logLevel=verbose
+<p>The solution to the problem is to remove the loopbacks 127.0.0.1 and 127.0.0.2 from etc/hosts. What happens is jmeter-server can't connect to rmiregistry if 127.0.0.2 loopback is not available. Use the following settings to fix the problem.<p>
+<p> Replace</p>
+<ul>
+    <li> `dirname $0`/jmeter  -s "$@"</li>
+</ul>
+<p>With</p>
+<ul>
+    <li> HOST="-Djava.rmi.server.hostname=<computer_name><computer_domain></li>
+    <li> -Djava.security.policy=`dirname $0`/<policy_file>"</li>
+    <li> `dirname $0`/jmeter $HOST -s "$@"</li>
+</ul>
+<p>Also create a policy file and add <computer_name><computer_domain> line to /etc/hosts.</p>
+</subsection>
 
 
 
