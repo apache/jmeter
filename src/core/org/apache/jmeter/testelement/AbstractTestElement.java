@@ -59,16 +59,16 @@ public abstract class AbstractTestElement implements TestElement, Serializable
         try
         {
             clonedElement = (TestElement) this.getClass().newInstance();
+
+			PropertyIterator iter = propertyIterator();
+			while (iter.hasNext())
+			{
+				clonedElement.setProperty((JMeterProperty) iter.next().clone());
+			}
+			clonedElement.setRunningVersion(runningVersion);
         }
         catch (Exception e)
         {}
-
-        PropertyIterator iter = propertyIterator();
-        while (iter.hasNext())
-        {
-            clonedElement.setProperty((JMeterProperty) iter.next().clone());
-        }
-        clonedElement.setRunningVersion(runningVersion);
         return clonedElement;
     }
 
@@ -94,6 +94,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable
         }
     }
 
+    // Ensure equals agrees with hash
+    public int hashCode()
+    {
+    	return propMap.hashCode();
+    	
+    }
     public void addTestElement(TestElement el)
     {
         mergeIn(el);
