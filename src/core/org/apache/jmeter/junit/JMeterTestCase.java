@@ -21,6 +21,9 @@ import org.apache.log.Logger;
  */
 public abstract class JMeterTestCase extends TestCase
 {
+	public JMeterTestCase(){
+		super();
+	}
     
     public JMeterTestCase(String name)
     {
@@ -43,6 +46,9 @@ public abstract class JMeterTestCase extends TestCase
 			if (!f.canRead()){
 				System.out.println("Can't find "+file+" - trying bin directory");
 				file="bin/"+file;// JMeterUtils assumes Unix-style separators
+				// Also need to set working directory so test files can be found
+				System.setProperty("user.dir",System.getProperty("user.dir")+File.separatorChar+"bin");
+				System.out.println("Setting user.dir="+System.getProperty("user.dir"));
 			}
     		JMeterUtils jmu = new JMeterUtils();
     		jmu.initializeProperties(file);
