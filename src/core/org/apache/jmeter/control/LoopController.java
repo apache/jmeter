@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -68,22 +68,20 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: 
-Apache
- *
- *@author    Michael Stover
- *@author    Thad Smith
- *@created   $Date$
- *@version   1.0
- ***************************************/
 
+/**
+ * @author    Michael Stover
+ * @author    Thad Smith
+ * @version   $Revision$
+ */
 public class LoopController extends GenericController implements Serializable
 {
-    private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.ELEMENTS);
+    private static Logger log =
+        LoggingManager.getLoggerFor(JMeterUtils.ELEMENTS);
 
     private final static String LOOPS = "LoopController.loops";
-    private final static String CONTINUE_FOREVER = "LoopController.continue_forever";
+    private final static String CONTINUE_FOREVER =
+        "LoopController.continue_forever";
     private int loopCount = 0;
 
     public LoopController()
@@ -103,14 +101,14 @@ public class LoopController extends GenericController implements Serializable
 
     public int getLoops()
     {
-    	try 
-    	{
-        	return Integer.parseInt(getPropertyAsString(LOOPS));
-    	}
-    	catch (NumberFormatException e)
-    	{
-    		return 0;
-    	}
+        try
+        {
+            return Integer.parseInt(getPropertyAsString(LOOPS));
+        }
+        catch (NumberFormatException e)
+        {
+            return 0;
+        }
     }
 
     public String getLoopString()
@@ -215,7 +213,22 @@ public class LoopController extends GenericController implements Serializable
             sub_2.addTestElement(new TestSampler("seven"));
             controller.addTestElement(sub_2);
             String[] order =
-                new String[] { "one", "two", "three", "four", "five", "six", "seven", "four", "five", "six", "seven", "four", "five", "six", "seven" };
+                new String[] {
+                    "one",
+                    "two",
+                    "three",
+                    "four",
+                    "five",
+                    "six",
+                    "seven",
+                    "four",
+                    "five",
+                    "six",
+                    "seven",
+                    "four",
+                    "five",
+                    "six",
+                    "seven" };
             int counter = 15;
             controller.initialize();
             for (int i = 0; i < 2; i++)
@@ -225,7 +238,9 @@ public class LoopController extends GenericController implements Serializable
                 TestElement sampler = null;
                 while ((sampler = controller.next()) != null)
                 {
-                    assertEquals(order[counter++], sampler.getPropertyAsString(TestElement.NAME));
+                    assertEquals(
+                        order[counter++],
+                        sampler.getPropertyAsString(TestElement.NAME));
                 }
             }
         }
