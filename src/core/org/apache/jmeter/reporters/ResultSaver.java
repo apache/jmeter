@@ -75,18 +75,7 @@ public class ResultSaver
 	}
 	
 	/**
-	 * Contains the items needed to collect stats for a summariser
-	 * 
-	 * @author sebb AT apache DOT org
-	 * @version $revision$ Last updated: $date$
-	 */
-	private static class Totals{
-
-	}
-	
-	/**
-	 * Accumulates the sample in two SampleResult objects
-	 * - one for running totals, and the other for deltas
+	 * Saves the sample result (and any sub results) in files
 	 * 
 	 * @see org.apache.jmeter.samplers.SampleListener#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)
 	 */
