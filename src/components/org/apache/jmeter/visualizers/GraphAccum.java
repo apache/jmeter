@@ -81,8 +81,8 @@ import org.apache.log.Logger;
  * Draws the graph.
  *
  * @author     Khor Soon Hin
- * @created    2001/08/11
- * @version    $Revision$
+ * Created      2001/08/11
+ * @version    $Revision$ Last updated: $Date$
  */
 public class GraphAccum extends JComponent implements Scrollable,
         GraphAccumListener
@@ -372,7 +372,7 @@ public class GraphAccum extends JComponent implements Scrollable,
         
         // Store current total time point
         previousPts[0] = new Point(x % width, d.height - data);
-        if (legendPanel != null && noLegendYet)
+        if (noLegendYet)
         {
             gbc.gridx = 0;
             gbc.gridy = compCount++;
@@ -413,7 +413,7 @@ public class GraphAccum extends JComponent implements Scrollable,
         }
         // Store load time without components
         previousPts[1] = new Point(x % width, d.height - data);
-        if (legendPanel != null && noLegendYet)
+        if (noLegendYet)
         {
             gbc.gridx = 0;
             gbc.gridy = compCount++;
@@ -471,7 +471,7 @@ public class GraphAccum extends JComponent implements Scrollable,
                 // Store the current plot
                 previousPts[currPreviousPts++] =
                     new Point(x % width, d.height - data);
-                if (legendPanel != null && noLegendYet)
+                if (noLegendYet)
                 {
                     gbc.gridx = 0;
                     gbc.gridy = compCount++;

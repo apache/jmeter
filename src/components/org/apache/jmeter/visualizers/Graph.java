@@ -73,8 +73,8 @@ import org.apache.log.Logger;
  * Implements a simple graph for displaying performance results.
  *
  * @author     Michael Stover
- * @created    March 21, 2002
- * @version    $Revision$
+ * Created      March 21, 2002
+ * @version    $Revision$ Last updated: $Date$
  */
 public class Graph
     extends JComponent

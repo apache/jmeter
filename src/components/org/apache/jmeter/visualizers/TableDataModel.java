@@ -72,8 +72,8 @@ import org.apache.log.Logger;
  * GraphModel.
  *
  * @author     <a href="mailto:alf@i100.no">Alf Hogemark</a>Hogemark
- * @created    March 10, 2002
- * @version    $Revision$
+ * Created      March 10, 2002
+ * @version    $Revision$ Last updated: $Date$
  */
 public class TableDataModel extends GraphModel implements TableModel
 {
@@ -228,7 +228,7 @@ public class TableDataModel extends GraphModel implements TableModel
         {
             if ((rowIndex >= 0) && (rowIndex < urlList.size()))
             {
-                return new Boolean(
+                return Boolean.valueOf(
                     !((Sample) getSamples().get(rowIndex)).error);
             }
         }

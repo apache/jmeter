@@ -74,8 +74,8 @@ import org.apache.jmeter.samplers.SampleResult;
  * you!
  * 
  * @author    James Boutcher
- * @created   March 21, 2002
- * @version   $Revision$
+ * Created     March 21, 2002
+ * @version   $Revision$ Last updated: $Date$
  */
 public class StatVisualizerModel implements Clearable
 {
