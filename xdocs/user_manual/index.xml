@@ -17,54 +17,71 @@
 	<li><a HREF="timers.html">Using Timers</a></li>
 	<li><a HREF="Running.html">Running the test script</a></li>
 	<li><a href="saving.html">Saving test script elements</a></li>
+	<li><a href="rmi.html">Running JMeter over RMI</a></li>
+
 </UL>
 
 <p>
-<a NAME="overview"></a>
-<H2>Overview</H2>
-JMeter 1.6 has a new UI layout.  The screen is divided into two sections.  On the left is
-a tree which represents your test configuration.  Trees are good for representing
-data that is hierarchical and ordered, and your test data is both. On the right,
-or the main window, control panels will be shown allowing you to enter your test data for
-each element in the tree.  It is also the window for you to view the data visualizers.
-</p>
-<p>
+<i>
 Throughout this documentation, examples will most often be given in terms of testing
 web applications, although JMeter is capable of testing most any type of server-client
 application.
+</i>
 </p>
+<p>
+<a NAME="overview"></a>
+<H2>Overview</H2>
+JMeter 1.6 has a new UI layout.  The window is divided into two sections.  On the left is
+a tree which represents a test configuration.  The tree represents both 
+the hierarchical and ordered nature of the test.  A test can be made up of 
+one or many subtests and each of these subtests may have a particular 
+ordering.
+The main display is on the right side of the window. 
+Whenever an element in the tree is selected, its control panel is shown in 
+the main display allowing you to enter your test data.
+When a visualizer is selected the main display will contain the 
+visualizer's view of the current test.
+
 <table border="5"><tr><td><b>Most functions in the UI are available from popup menus
-that appear when you right-click on the element you wish to affect</b></td></tr></table>
+that appear when you right-click on an element in the test tree.</b></td></tr></table>
 <p>
-The tree begins with two elements - TestPlan and WorkBench.  Under the testplan element
-will go all the elements involved with your test.  The workbench is simply an area to
-store test elements while you work.
+The test configuration tree begins with two elements - <b>TestPlan</b> 
+and <b>WorkBench</b>.  The <b>TestPlan</b> element
+will contain all the elements which make up your test.  
+The <b>WorkBench</b> is simply an area to store test elements while you 
+are in the process of constructing a test.
 </p>
 <p>
-A testplan consists of one or more ThreadGroups. A ThreadGroup may contain <b>timers</b>,
-<b>listeners</b>, <b>controllers</b>, and <b>config elements</b>.  It also defines a number of threads
-to be used for the threadgroup.  ThreadGroups cannot be nested.
+A <b>TestPlan</b> consists of one or more <b>ThreadGroups</b>. A 
+<b>ThreadGroup</b> is a root element (it can not be nested) which may contain <b>timers</b>,
+<b>listeners</b>, <b>controllers</b>, and <b>config elements</b>.  A <b>ThreadGroup</b> also 
+defines the number of threads available to the threadgroup.
 </p>
 <ul>
 <li>A <b>timer</b> is a simple element that controls how long JMeter should delay between each test
-sample when it runs.  This allows JMeter to simulate human actions more closely.  Timers do not
-contain sub-elements in the tree.
+sample when it runs.  This allows JMeter to simulate human actions more closely.  
+Timer element's are leaves in the test tree they can not contain 
+sub-elements.
 </li>
 <li>A <b>listener</b> receives information about response data while JMeter runs.  For instance, during testing
 of a website, a listener receives and collects sample data that indicates how many
 milliseconds it took the web server to respond to each request.  Normally, these listeners
 are visualizers (represent the data visually in the main window), or reporters (store the data
-to file).  Listeners also do not contain sub-elements in the tree.
+to file).  Listeners are also leaves in a test configuration tree.
 </li>
 <li>A <b>controller</b> is an element that controls the flow of test samples.  It also controls the process by which
-test samples are created.  They are the heart of JMeter. Controllers may have other controllers and/or config elements as
-sub-elements in the tree.
+test samples are created.  Controllers implement JMeter's various testing 
+protocols. They may have other controllers and/or config elements as
+sub-elements.
 </li>
-<li>A <b>Config Element</b> represents a coherent set of information that is usually specifically targeted at a particular
-protocol.  For instance, setting up a database test requires three config elements - one to configure the basic
-information about the database (what host, what driver, login and password to use), one to configure the SQL query
-to be tested, and one to configure the pool of database connections (how many connections to store in pool, etc).
-Config Elements do not have sub-elements in the tree.
+<li>A <b>Config Element</b> represents a coherent set of information that is 
+usually specifically targeted to a particular
+protocol or controller.  For instance, setting up a database test requires three 
+config elements - one to configure the basic information about the database (what host, 
+what driver, login and password to use), one to configure the SQL query
+to be tested, and one to configure the pool of database connections (how many connections 
+to store in pool, etc).
+Config Elements are leaves in the test configuration tree.
 </li>
 </ul>
 
@@ -76,8 +93,10 @@ all of its ThreadGroups to the engine.  The engine creates threads, and each thr
 iterates through the test cases.
 </p>
 <p>
-It's important to understand that all elements in the tree will be applied to all elements at
-that level and below.  This is why it makes sense to add a URL Config Element to the
+When a test is run, every element in the tree receives every element that 
+is above it in the test configuration.  That is a Timer inserted into the 
+test configuration tree at the highest level will apply to every element 
+that lies below it.  This is why it makes sense to add a URL Config Element to the
 ThreadGroup in addition to a Web Test Controller with multiple test samples.  If the
 top level config element has only a host name, the host name will be applied to all
 URL test samples that are used within the ThreadGroup.
