@@ -88,7 +88,7 @@ public class FileEditor implements PropertyEditor, ActionListener
 
 		File file = chooser.getSelectedFile();
 
-		setValue(file);
+		setValue(file.getPath());
     }
 
     /**
