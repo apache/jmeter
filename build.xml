@@ -10,7 +10,7 @@
 		<property name="sources.src.dir" value="src"/>
 		<!-- Where the API documentation lives -->
 		<property name="docs.api.dest.dir" value="docs/api"/>
-		<property name="version" value="_1.5"/>
+		<property name="version" value="_1.5.1"/>
 	</target>
 
 	<!--
@@ -18,8 +18,10 @@
 	- bin/clases directory
 	-->
 	<target name="compile" depends="init">
+        <delete dir="${classes.dest.dir}"/>
 		<mkdir dir="${classes.dest.dir}"/>
-		<javac srcdir="${sources.src.dir}" 
+		<javac srcdir="${sources.src.dir}"
+        		classpath="${basedir}/lib/junit.jar:${basedir}/lib/xerces.jar"
        			destdir="${classes.dest.dir}"
        			optimize="on">
        			<exclude name="**/*.df*"/>
@@ -30,10 +32,6 @@
        			<exclude name="**/Makefile"/>
        			<exclude name="**/Changelog*"/>
        			<exclude name="**/*.orig"/>
-                <exclude name="**/New*.java"/>
-                <exclude name="**/Sampler/**"/>
-                <exclude name="**/config/**"/>
-                <exclude name="**/ThreadGroup.java"/>
 		</javac>
 	</target>
 
