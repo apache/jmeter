@@ -72,9 +72,9 @@ import org.apache.jmeter.testelement.property.StringProperty;
 
 public class Argument extends AbstractTestElement implements Serializable
 {
-	protected final static String NAME = "Argument.name";
-	protected final static String VALUE = "Argument.value";
-        private final static String METADATA = "Argument.metadata";
+	public final static String NAME = "Argument.name";
+	public final static String VALUE = "Argument.value";
+        public final static String METADATA = "Argument.metadata";
     
 	/****************************************
 	 * Constructor for the Argument object

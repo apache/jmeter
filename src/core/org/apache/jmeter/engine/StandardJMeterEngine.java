@@ -267,7 +267,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor,
 
 	private ListedHashTree cloneTree(ListedHashTree tree)
 	{
-		TreeCloner cloner = new TreeCloner(false);
+		TreeCloner cloner = new TreeCloner(true);
 		tree.traverse(cloner);
 		return cloner.getClonedTree();
 	}

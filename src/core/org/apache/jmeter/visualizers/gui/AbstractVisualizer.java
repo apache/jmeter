@@ -1,9 +1,13 @@
 package org.apache.jmeter.visualizers.gui;
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.swing.Box;
 import javax.swing.JCheckBox;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -58,9 +62,12 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
         return collector;
     }
 
-    protected FilePanel getFilePanel()
+    protected Component getFilePanel()
     {
-        return filePanel;
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panel.add(filePanel);
+        panel.add(getErrorLoggingCheckbox());
+        return panel;
     }
 
     public void setFile(String filename)
@@ -72,6 +79,8 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
     {
         return filePanel.getFilename();
     }
+    
+    
 
     /****************************************
      * !ToDo (Method description)
@@ -161,4 +170,14 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
         super.configureTestElement(mc);
         mc.setListener(this);
     }
+    /**
+     * override parent method to add the file panel to the title panel.
+     */
+    protected Box makeTitlePanel()
+    {
+        Box box = super.makeTitlePanel();
+        box.add(getFilePanel());
+        return box;
+    }
+
 }

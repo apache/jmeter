@@ -60,7 +60,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -104,10 +103,9 @@ public class ConstantThroughputTimer
      *
      * @param throughput Desired sampling rate, in samples per minute.
      */
-    public void setThroughput(long throughput)
+    public void setThroughput(String throughput)
     {
-		setProperty(new LongProperty(THROUGHPUT,throughput));
-		delay= 60000/throughput;
+		setProperty(THROUGHPUT,throughput);
     }
 
     /**
@@ -149,6 +147,11 @@ public class ConstantThroughputTimer
     {
 		return  getPropertyAsLong(THROUGHPUT);
     }
+    
+    public String getThroughputString()
+    {
+        return getPropertyAsString(THROUGHPUT);
+    }
 
 	/**
 	 * Retrieve the delay to use during test execution.
@@ -159,7 +162,7 @@ public class ConstantThroughputTimer
     {
 		long currentTime = System.currentTimeMillis();
 		long currentTarget = targetTime == 0 ? currentTime : targetTime;
-		targetTime = currentTarget + delay;
+		targetTime = currentTarget + 60000/getThroughput();
 		if (currentTime > currentTarget)
 		{
 		    // We're behind schedule -- try to catch up:

@@ -198,7 +198,6 @@ public class TableVisualizer extends AbstractVisualizer implements GraphListener
 
         // NAME
         mainPanel.add(makeTitlePanel());
-        mainPanel.add(getFilePanel());
 
         // Set up the table itself
         table = new JTable(model);

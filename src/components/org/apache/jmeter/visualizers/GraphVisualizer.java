@@ -59,7 +59,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -270,18 +269,8 @@ public class GraphVisualizer extends AbstractVisualizer
         mainPanel.setBorder(margin);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        // TITLE
-        JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("graph_results_title"));
-        Font curFont = panelTitleLabel.getFont();
-        int curFontSize = curFont.getSize();
-
-        curFontSize += 4;
-        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-        mainPanel.add(panelTitleLabel);
-
         // NAME
-        mainPanel.add(getNamePanel());
-        mainPanel.add(this.getFilePanel());
+        mainPanel.add(makeTitlePanel());
 
 
         // Set up the graph with header, footer, Y axis and graph display

@@ -186,7 +186,6 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
 
         // NAME
         mainPanel.add(makeTitlePanel());
-        mainPanel.add(getFilePanel());
         maximumLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_maximum"));
         maximumLabel.setForeground(MAXIMUM_COLOR);
         maximumLabel.setBackground(backColor);

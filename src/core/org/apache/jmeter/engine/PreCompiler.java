@@ -45,6 +45,7 @@ public class PreCompiler implements HashTreeTraverser
             try
             {
                 replacer.replaceValues((TestElement) node);
+                ((TestElement)node).setRunningVersion(true);
             }
             catch (InvalidVariableException e)
             {
