@@ -9,8 +9,7 @@ package org.apache.jmeter.protocol.jdbc.sampler;
 import java.beans.PropertyDescriptor;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
-
-import sun.beans.editors.StringEditor;
+import org.apache.jmeter.testbeans.gui.TextAreaEditor;
 
 /**
  * @author mstover
@@ -39,5 +38,7 @@ public class JDBCSamplerBeanInfo extends BeanInfoSupport
       p = property("query");
       p.setValue(NOT_UNDEFINED, Boolean.TRUE);
       p.setValue(DEFAULT, "");
+      p.setPropertyEditorClass(TextAreaEditor.class);
+      
    }
 }
