@@ -57,70 +57,15 @@
  */
 package org.apache.jmeter.testbeans.gui;
 
-import java.awt.Component;
-import java.beans.PropertyEditorSupport;
-
-import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.JMeterGUIComponent;
-import org.apache.jmeter.testelement.TestElement;
+import java.beans.Customizer;
 
 /**
- * Helper class to support using a TestElement GUI as a PropertyEditor when an
- * element is embedded as a property of another (e.g. Arguments on TestPlan or
- * on HTTPSampler).
+ * Tagging interface to mark a customizer class as shareable among elements
+ * of the same type.
+ * <p>
+ * The interface is equivalent to Customizer -- the only difference is that setElement
+ * can be called multiple times to change the element it works on.
  */
-public abstract class TestElementEditor extends PropertyEditorSupport {
-
-	private Class guiClass;
-    private JMeterGUIComponent guiComponent;
-    private TestElement element;
-    
-	/**
-	 * Create a property editor from a given Component subclass implementing
-	 * JMeterGuiComponent -- most often an AbstractJMeterGuiComponent subclass.
-	 * 
-	 * @param guiClass the JMeterGuiComponent class on which to build the editor.
-	 */
-	public TestElementEditor(Class guiClass) {
-		super();
-		
-		this.guiClass= guiClass;
-		
-		guiComponent= GuiPackage.getInstance().getGui(null, guiClass, null);
-	}
-
-	/* (non-Javadoc)
-	 * @see java.beans.PropertyEditor#getCustomEditor()
-	 */
-	public Component getCustomEditor() {
-		return (Component)guiComponent;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.beans.PropertyEditor#getValue()
-	 */
-	public Object getValue() {
-		guiComponent.modifyTestElement(element);
-        return element;
-	}
-
-	/**
-	 * @param value the TestElementProperty to edit 
-	 * @see java.beans.PropertyEditor#setValue(java.lang.Object)
-	 */
-	public void setValue(Object value) {
-		if (value != null)
-		{
-            element= (TestElement)value;
-			guiComponent.configure(element);
-			firePropertyChange();
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see java.beans.PropertyEditor#supportsCustomEditor()
-	 */
-	public boolean supportsCustomEditor() {
-		return true;
-	}
+public interface SharedCustomizer extends Customizer
+{
 }
