@@ -53,6 +53,9 @@
 <li>Fix JTidy and HTMLParser parsers to handle form src= and link rel=stylesheet</li>
 <li>Catch and log Errors in JMeterThread</li>
 <li>Ensure WhileController condition is dynamically checked</li>
+<li>Bug 32790 ensure If Controller condition is re-evaluated each time</li>
+<li>Bug 30266 - document how to display proxy recording responses</li>
+<li>Bug 33921 - merge should not change file name</li>
 </ul>
 <h4>Other changes:</h4>
 <ul>
