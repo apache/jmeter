@@ -52,7 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- 
+
 package org.apache.jmeter.timers.gui;
 
 import javax.swing.Box;
@@ -71,8 +71,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
  */
-public class ConstantThroughputTimerGui
-	extends AbstractTimerGui
+public class ConstantThroughputTimerGui extends AbstractTimerGui
 {
     private final String DEFAULT_THROUGHPUT = "60";
     private final String THROUGHPUT_FIELD = "Throughput Field";
@@ -85,51 +84,52 @@ public class ConstantThroughputTimerGui
      */
     public ConstantThroughputTimerGui()
     {
-		init();
+        init();
     }
 
-	/**
-	 * Get the title to display for this component.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-	 */
+    /**
+     * Get the title to display for this component.
+     * 
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
+     */
     public String getStaticLabel()
     {
-		return JMeterUtils.getResString("constant_throughput_timer_title");
+        return JMeterUtils.getResString("constant_throughput_timer_title");
     }
 
-	/**
-	 * Create the test element underlying this GUI component.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-	 */
+    /**
+     * Create the test element underlying this GUI component.
+     * 
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+     */
     public TestElement createTestElement()
     {
-		ConstantThroughputTimer timer = new ConstantThroughputTimer();
-		modifyTestElement(timer);
-		return timer;
+        ConstantThroughputTimer timer = new ConstantThroughputTimer();
+        modifyTestElement(timer);
+        return timer;
     }
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement timer)
     {
         this.configureTestElement(timer);
-        ((ConstantThroughputTimer)timer).setThroughput(throughputField.getText());
+        ((ConstantThroughputTimer) timer).setThroughput(
+            throughputField.getText());
     }
 
-	/**
-	 * Configure this GUI component from the underlying TestElement.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
-	 */
+    /**
+     * Configure this GUI component from the underlying TestElement.
+     * 
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
+     */
     public void configure(TestElement el)
     {
-		super.configure(el);
-		ConstantThroughputTimer e= (ConstantThroughputTimer)el;
-		throughputField.setText(e.getThroughputString());
+        super.configure(el);
+        ConstantThroughputTimer e = (ConstantThroughputTimer) el;
+        throughputField.setText(e.getThroughputString());
     }
 
     /**
@@ -137,23 +137,25 @@ public class ConstantThroughputTimerGui
      */
     private void init()
     {
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT,
-			    			  VerticalLayout.TOP));
-	
-		setBorder(makeBorder());
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-        
+        setLayout(
+            new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+
+        setBorder(makeBorder());
+        setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+
         add(makeTitlePanel());
 
         Box throughputPanel = Box.createHorizontalBox();
-        throughputPanel.add (new JLabel(
-		      JMeterUtils.getResString("constant_throughput_timer_throughput")));
+        throughputPanel.add(
+            new JLabel(
+                JMeterUtils.getResString(
+                    "constant_throughput_timer_throughput")));
 
-		throughputField = new JTextField(6);
-		throughputField.setText(DEFAULT_THROUGHPUT);
+        throughputField = new JTextField(6);
+        throughputField.setText(DEFAULT_THROUGHPUT);
         throughputField.setName(THROUGHPUT_FIELD);
-		throughputPanel.add(throughputField);
-        
-		add(throughputPanel);
-    }    
+        throughputPanel.add(throughputField);
+
+        add(throughputPanel);
+    }
 }

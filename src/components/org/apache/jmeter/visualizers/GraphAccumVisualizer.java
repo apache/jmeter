@@ -76,38 +76,28 @@ import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
 
-/****************************************
+/**
  * This class implements a statistical analyser that plots the accumulated time
  * taken to load each set of pages. The number of plots is equivalent to the
  * number of times the set of pages is configured to load.
  *
- *@author    Khor Soon Hin
- *@created   2001/08/11
- *@version   $Revision$ $Date$
- ***************************************/
+ * @author    Khor Soon Hin
+ * @created   2001/08/11
+ * @version   $Revision$ $Date$
+ */
 public class GraphAccumVisualizer extends AbstractVisualizer
         implements ImageVisualizer, GraphAccumListener, Clearable
 {
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
     protected transient GraphAccumModel model;
-
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
     protected transient GraphAccum graph;
-
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
     transient protected JPanel legendPanel;
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
-    /****************************************
-     * Constructor
-     ***************************************/
+    /**
+     * Constructor.
+     */
     public GraphAccumVisualizer()
     {
         super();
@@ -118,42 +108,31 @@ public class GraphAccumVisualizer extends AbstractVisualizer
         log.debug("End : GraphAccumVisualizer1");
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public String getStaticLabel()
     {
         return JMeterUtils.getResString("graph_full_results_title");
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param res  !ToDo (Parameter description)
-     ***************************************/
     public void add(SampleResult res)
     {
         model.addNewSample(res);
     }
 
-    /****************************************
-     * Returns the panel where labels can be added
+    /**
+     * Returns the panel where labels can be added.
      *
-     *@return    !ToDo (Return description)
-     *@returns   a panel where labels can be added
-     ***************************************/
+     * @return  a panel where labels can be added
+     */
     public Object getWhiteCanvas()
     {
         return legendPanel;
     }
 
-    /****************************************
-     * Gets the Image attribute of the GraphVisualizer object
+    /**
+     * Gets the Image attribute of the GraphVisualizer object.
      *
-     *@return   The Image value
-     ***************************************/
+     * @return   the Image value
+     */
     public Image getImage()
     {
         log.debug("Start : getImage1");
@@ -164,9 +143,9 @@ public class GraphAccumVisualizer extends AbstractVisualizer
         return result;
     }
 
-    /****************************************
-     * Updates the gui to reflect changes
-     ***************************************/
+    /**
+     * Updates the gui to reflect changes.
+     */
     public void updateGui()
     {
         log.debug("Start : updateGui1");
@@ -174,20 +153,20 @@ public class GraphAccumVisualizer extends AbstractVisualizer
         log.debug("End : updateGui1");
     }
 
-    /****************************************
-     * Updates gui to reflect small changes
+    /**
+     * Updates gui to reflect small changes.
      *
-     *@param s  sample to be added to plot
-     ***************************************/
+     * @param s  sample to be added to plot
+     */
     public void updateGui(SampleResult s)
     {
         log.debug("Start : updateGui2");
         log.debug("End : updateGui2");
     }
 
-    /****************************************
-     * Clear this visualizer data
-     ***************************************/
+    /**
+     * Clear this visualizer data.
+     */
     public synchronized void clear()
     {
         model.clear();
@@ -197,11 +176,11 @@ public class GraphAccumVisualizer extends AbstractVisualizer
         log.debug("End : clear1");
     }
 
-    /****************************************
-     * Returns a description of this instance
+    /**
+     * Returns a description of this instance.
      *
-     *@return   description of this instance
-     ***************************************/
+     * @return   description of this instance
+     */
     public String toString()
     {
         String toString = "Show the samples analysys as dot plots";
@@ -210,9 +189,9 @@ public class GraphAccumVisualizer extends AbstractVisualizer
         return toString;
     }
 
-    /****************************************
-     * Setup all the swing components
-     ***************************************/
+    /**
+     * Setup all the swing components.
+     */
     private void init()
     {
         log.debug("Start : init1");
@@ -229,12 +208,14 @@ public class GraphAccumVisualizer extends AbstractVisualizer
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
         // TITLE
-        JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("graph_full_results_title"));
+        JLabel panelTitleLabel =
+            new JLabel(JMeterUtils.getResString("graph_full_results_title"));
         Font curFont = panelTitleLabel.getFont();
         int curFontSize = curFont.getSize();
 
         curFontSize += 4;
-        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
+        panelTitleLabel.setFont(
+            new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
         mainPanel.add(panelTitleLabel);
 
         mainPanel.add(getNamePanel());
