@@ -136,10 +136,8 @@ public class TestElementProperty extends MultiProperty
      */
     public void mergeIn(JMeterProperty prop)
     {
-        log.debug("merging in " + prop);
         if (isEqualType(prop))
         {
-            log.debug("was of equal type");
             value.addTestElement((TestElement) prop.getObjectValue());
         }
     }
