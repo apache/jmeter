@@ -186,7 +186,7 @@ public class FunctionHelper
                 {
                     functionCall.append(",");
                 }
-                functionCall.append((String) arg.getValue());
+                functionCall.append(arg.getValue());
                 first = false;
             }
             functionCall.append(")");

@@ -62,7 +62,7 @@ public class PostWriter
                 writeFormMultipartStyle(
                     out,
                     arg.getName(),
-                    (String) arg.getValue());
+                    arg.getValue());
                 writeln(out, "--" + BOUNDARY);
             }
             writeFileToURL(

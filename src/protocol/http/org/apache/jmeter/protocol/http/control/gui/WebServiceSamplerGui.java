@@ -406,7 +406,7 @@ public class WebServiceSamplerGui
             this.urlField.setText(buf.toString());
         }
         this.soapAction.setText(
-            HELPER.getSoapAction((String) this.wsdlMethods.getText()));
+            HELPER.getSoapAction(this.wsdlMethods.getText()));
     }
 
     /**

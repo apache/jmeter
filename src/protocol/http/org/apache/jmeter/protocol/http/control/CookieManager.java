@@ -488,7 +488,7 @@ public class CookieManager
         tokens = new StringTokenizer(splittee, splitChar);
         while (tokens.hasMoreTokens())
         {
-            temp = (String) tokens.nextToken();
+            temp = tokens.nextToken();
             returns.addElement(temp);
         }
         String[] values = new String[returns.size()];

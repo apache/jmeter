@@ -148,7 +148,7 @@ public class UrlConfigGui extends JPanel
                 .getObjectValue());
         domain.setText(el.getPropertyAsString(HTTPSamplerBase.DOMAIN));
         
-        String portString = (String) el.getPropertyAsString(HTTPSamplerBase.PORT);
+        String portString = el.getPropertyAsString(HTTPSamplerBase.PORT);
 
         // Only display the port number if it is meaningfully specified
         if (portString.equals("" + HTTPSamplerBase.UNSPECIFIED_PORT))

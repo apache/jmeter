@@ -349,7 +349,7 @@ public class TCLogParser implements LogParser
             tokens = this.tokenize(entry, "\"");
             while (tokens.hasMoreTokens())
             {
-                String toke = (String) tokens.nextToken();
+                String toke = tokens.nextToken();
                 // if checkMethod on the token is true
                 // we tokenzie it using space and escape
                 // the while loop. Only the first matching
