@@ -95,6 +95,12 @@ public class AssertionGui extends AbstractAssertionGui
     /** Radio button indicating that the URL should be tested. */
     private JRadioButton labelButton;
 
+	/** Radio button indicating that the responseMessage should be tested. */
+	private JRadioButton responseMessageButton;
+
+	/** Radio button indicating that the responseCode should be tested. */
+	private JRadioButton responseCodeButton;
+
     /**
      * Radio button indicating to test if the field contains one of the
      * patterns.
@@ -166,6 +172,14 @@ public class AssertionGui extends AbstractAssertionGui
             {
                 ra.setTestField(ResponseAssertion.SAMPLE_LABEL);
             }
+            else if (responseCodeButton.isSelected())
+            {
+				ra.setTestField(ResponseAssertion.RESPONSE_CODE);
+            }
+			else if (responseMessageButton.isSelected())
+			{
+				ra.setTestField(ResponseAssertion.RESPONSE_MESSAGE);
+			}
             else
             {
                 ra.setTestField(ResponseAssertion.RESPONSE_DATA);
@@ -227,11 +241,17 @@ public class AssertionGui extends AbstractAssertionGui
         if (ResponseAssertion.RESPONSE_DATA.equals(model.getTestField()))
         {
             responseStringButton.setSelected(true);
-            labelButton.setSelected(false);
         }
-        else
+		else if (ResponseAssertion.RESPONSE_CODE.equals(model.getTestField()))
+		{
+			responseCodeButton.setSelected(true);
+		}
+		else if (ResponseAssertion.RESPONSE_MESSAGE.equals(model.getTestField()))
+		{
+			responseMessageButton.setSelected(true);
+		}
+        else // Assume it is the URL
         {
-            responseStringButton.setSelected(false);
             labelButton.setSelected(true);
         }
 
@@ -287,13 +307,22 @@ public class AssertionGui extends AbstractAssertionGui
             new JRadioButton(JMeterUtils.getResString("assertion_text_resp"));
         labelButton =
             new JRadioButton(JMeterUtils.getResString("assertion_url_samp"));
+		responseCodeButton =
+			new JRadioButton(JMeterUtils.getResString("assertion_code_resp"));
+		responseMessageButton =
+			new JRadioButton(JMeterUtils.getResString("assertion_message_resp"));
 
         ButtonGroup group = new ButtonGroup();
         group.add(responseStringButton);
         group.add(labelButton);
+		group.add(responseCodeButton);
+		group.add(responseMessageButton);
+		
         panel.add(responseStringButton);
         panel.add(labelButton);
-
+		panel.add(responseCodeButton);
+		panel.add(responseMessageButton);
+		
         responseStringButton.setSelected(true);
 
         return panel;
