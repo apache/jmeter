@@ -1,6 +1,7 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,7 +21,7 @@ import org.apache.jorphan.collections.ListedHashTree;
  * Window>Preferences>Java>Templates.
  */
 public class CheckDirty extends AbstractAction implements 
-		HashTreeTraverser
+		HashTreeTraverser,ActionListener
 {
 	private static Map previousGuiItems;
 	public static final String CHECK_DIRTY = "check_dirty";
@@ -43,16 +44,22 @@ public class CheckDirty extends AbstractAction implements
 		commands.add(SUB_TREE_SAVED);
 		commands.add(SUB_TREE_LOADED);
 		commands.add(ADD_ALL);
-		commands.add(SAVE);
-		commands.add(SAVE_ALL);
 		commands.add(REMOVE);
-		commands.add(SAVE_TO_PREVIOUS);
 	}
 	
 	public CheckDirty()
 	{
 		previousGuiItems = new HashMap();
+        ActionRouter.getInstance().addPreActionListener(ExitCommand.class,this);
 	}
+    
+    public void actionPerformed(ActionEvent e)
+    {
+        if(e.getActionCommand().equals(ExitCommand.EXIT))
+        {
+            doAction(e);
+        }
+    }
     
 
 	/**
@@ -60,14 +67,9 @@ public class CheckDirty extends AbstractAction implements
 	 */
 	public void doAction(ActionEvent e) {
 		String action = e.getActionCommand();
-		if(action.equals(SUB_TREE_SAVED) || action.equals(SAVE))
+		if(action.equals(SUB_TREE_SAVED))
 		{
-			HashTree subTree = GuiPackage.getInstance().getCurrentSubTree();
-			subTree.traverse(this);
-		}
-		else if(action.equals(SAVE_ALL) || action.equals(SAVE_TO_PREVIOUS))
-		{
-			HashTree subTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
+			HashTree subTree = (HashTree)e.getSource();
 			subTree.traverse(this);
 		}
 		else if(action.equals(SUB_TREE_LOADED))
@@ -91,15 +93,12 @@ public class CheckDirty extends AbstractAction implements
 			}
 			removeMode = false;
 		}
-		else if(action.equals(CHECK_DIRTY))
-		{
-			checkMode = true;
-			dirty = false;
-			HashTree wholeTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
-			wholeTree.traverse(this);
-			GuiPackage.getInstance().setDirty(dirty);
-			checkMode = false;
-		}		
+		checkMode = true;
+		dirty = false;
+		HashTree wholeTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
+		wholeTree.traverse(this);
+		GuiPackage.getInstance().setDirty(dirty);
+		checkMode = false;
 	}
 	
 	/**

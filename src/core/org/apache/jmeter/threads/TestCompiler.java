@@ -1,4 +1,5 @@
 package org.apache.jmeter.threads;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -58,6 +59,8 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
     Sampler currentSampler;
     JMeterVariables threadVars;
     private static Set pairing = new HashSet();
+
+    List loopIterListeners = new ArrayList();
 
     /****************************************
      * !ToDo (Constructor description)
@@ -122,17 +125,17 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         //replaceStatics(ret);
         return pack;
     }
-    
+
     private void runPreProcessors(List preProcessors)
-       {
-           ListIterator iter = preProcessors.listIterator(preProcessors.size());
-           while (iter.hasPrevious())
-           {
-               PreProcessor ex = (PreProcessor) iter.previous();
-               ex.process();
-           }
-       }
-    
+    {
+        ListIterator iter = preProcessors.listIterator(preProcessors.size());
+        while (iter.hasPrevious())
+        {
+            PreProcessor ex = (PreProcessor) iter.previous();
+            ex.process();
+        }
+    }
+
     public void done(SamplePackage pack)
     {
         pack.recoverRunningVersion();
@@ -157,6 +160,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
     {
         log.debug("Subtracting node, stack size = " + stack.size());
         TestElement child = (TestElement) stack.getLast();
+        trackIterationListeners(child);
         if (child instanceof Sampler)
         {
             log.debug("Saving configs for sampler: " + child);
@@ -165,11 +169,28 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         stack.removeLast();
         if (stack.size() > 0)
         {
-            ObjectPair pair = new ObjectPair((TestElement)child, (TestElement)stack.getLast());
+            ObjectPair pair = new ObjectPair((TestElement) child, (TestElement) stack.getLast());
             if (!pairing.contains(pair))
             {
                 pair.addTestElements();
                 pairing.add(pair);
+            }
+        }
+    }
+
+    private void trackIterationListeners(TestElement child)
+    {
+        if (child instanceof LoopIterationListener)
+        {
+            loopIterListeners.add(child);
+        }
+        if (child instanceof Controller)
+        {
+            Iterator iter = loopIterListeners.iterator();
+            while (iter.hasNext())
+            {
+                ((Controller) child).addIterationListener((LoopIterationListener) iter.next());
+                iter.remove();
             }
         }
     }
@@ -225,18 +246,16 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
                     extractors.add(item);
                 }
                 if (item instanceof PreProcessor)
-                                {
-                                    pres.add(item);
-                                }
+                {
+                    pres.add(item);
+                }
             }
         }
-        SamplePackage pack = new SamplePackage(configs, modifiers, responseModifiers, listeners, timers, assertions, extractors,pres);
+        SamplePackage pack = new SamplePackage(configs, modifiers, responseModifiers, listeners, timers, assertions, extractors, pres);
         pack.setSampler(sam);
         pack.setRunningVersion(true);
         samplerConfigMap.put(sam, pack);
     }
-
-    
 
     /****************************************
      * !ToDo (Class description)
@@ -281,7 +300,8 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
             assertEquals("A test value", sampler.getPropertyAsString("test.property"));
         }
 
-        class TestSampler extends AbstractSampler implements PerSampleClonable {
+        class TestSampler extends AbstractSampler implements PerSampleClonable
+        {
             public void addCustomTestElement(TestElement t)
             {}
             public org.apache.jmeter.samplers.SampleResult sample(org.apache.jmeter.samplers.Entry e)
@@ -317,16 +337,12 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
             this.child = one;
             this.parent = two;
         }
-        
+
         public void addTestElements()
         {
-            if(parent instanceof Controller && (child instanceof Sampler || child instanceof Controller))
+            if (parent instanceof Controller && (child instanceof Sampler || child instanceof Controller))
             {
                 parent.addTestElement(child);
-            }
-            if(parent instanceof Controller && child instanceof LoopIterationListener)
-            {
-                ((Controller)parent).addIterationListener((LoopIterationListener)child);
             }
         }
 

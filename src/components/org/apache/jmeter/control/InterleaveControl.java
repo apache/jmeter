@@ -82,6 +82,7 @@ public class InterleaveControl extends GenericController implements Serializable
     private boolean doNotIncrement = false;
     private TestElement searchStart = null;
     private boolean currentReturnedAtLeastOne;
+    private boolean stillSame = true;
 
     /****************************************
      * Constructor for the InterleaveControl object
@@ -96,6 +97,7 @@ public class InterleaveControl extends GenericController implements Serializable
     {
         currentReturnedAtLeastOne = false;
         searchStart = null;
+        stillSame = true;
         skipNext = false;
         incrementIterCount();
     }
@@ -185,8 +187,9 @@ public class InterleaveControl extends GenericController implements Serializable
         {
             searchStart = currentElement;
         }
-        else if (searchStart == currentElement && (!currentReturnedAtLeastOne && getStyle() == USE_SUB_CONTROLLERS)) // we've gone through the whole list and are now back at the start point of our search.
+        else if (searchStart == currentElement && !stillSame) // we've gone through the whole list and are now back at the start point of our search.
         {
+            reInitialize();
             throw new NextIsNullException();
         }
     }
@@ -203,10 +206,6 @@ public class InterleaveControl extends GenericController implements Serializable
         else if(getStyle() == USE_SUB_CONTROLLERS)
         {
             incrementCurrent();
-        }
-        if (getStyle() == USE_SUB_CONTROLLERS && currentReturnedAtLeastOne)
-        {
-            skipNext = true;
         }
     }
 
@@ -275,6 +274,32 @@ public class InterleaveControl extends GenericController implements Serializable
                 }
             }
         }
+        
+        public void testProcessing6() throws Exception
+               {
+                   testLog.debug("Testing Interleave Controller 6");
+                   GenericController controller = new GenericController();
+                   InterleaveControl sub_1 = new InterleaveControl();
+                   controller.addTestElement(new TestSampler("one"));
+                   sub_1.setStyle(IGNORE_SUB_CONTROLLERS);
+                   controller.addTestElement(sub_1);
+                   LoopController sub_2 = new LoopController();
+                   sub_1.addTestElement(sub_2);
+                   sub_2.setLoops(3);
+                   int counter = 1;
+                   controller.initialize();
+                   for (int i = 0; i < 4; i++)
+                   {
+                       assertEquals(1, counter);
+                       counter = 0;
+                       TestElement sampler = null;
+                       while ((sampler = controller.next()) != null)
+                       {
+                               assertEquals("one", sampler.getPropertyAsString(TestElement.NAME));
+                           counter++;
+                       }
+                   }
+               }
 
         public void testProcessing2() throws Exception
         {
@@ -463,6 +488,19 @@ public class InterleaveControl extends GenericController implements Serializable
         suite.addTest(new Test("testProcessing5"));
         //suite.addTestSuite(Test.class);
         return suite;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.control.GenericController#incrementCurrent()
+     */
+    protected void incrementCurrent()
+    {
+        if (currentReturnedAtLeastOne)
+        {
+            skipNext = true;
+        }
+        stillSame = false;
+        super.incrementCurrent();
     }
 
 }
