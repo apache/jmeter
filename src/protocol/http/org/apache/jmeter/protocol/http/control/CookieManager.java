@@ -85,7 +85,7 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -98,7 +98,7 @@ import org.apache.log.Logger;
 public class CookieManager extends ConfigTestElement 
 	implements TestListener, Serializable
 {
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
 	public static final String CLEAR = "CookieManager.clearEachIteration";
     public static final String COOKIES = "CookieManager.cookies";
@@ -106,7 +106,7 @@ public class CookieManager extends ConfigTestElement
     	* A vector of Cookies managed by this class.
     	* @associates <{org.apache.jmeter.controllers.Cookie}>
     	*/
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd-MMM-yyyy HH:mm:ss zzz");
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd-MMM-yy HH:mm:ss zzz");
 
     private static List addableList = new LinkedList();
 
@@ -356,7 +356,10 @@ public class CookieManager extends ConfigTestElement
                 {
                     String expires = nvp.substring(index + 1);
                     Date date = dateFormat.parse(expires);
-                    newCookie.setExpires(date.getTime());
+                    if(date.getTime() > System.currentTimeMillis())
+                    {
+                        newCookie.setExpires(date.getTime());
+                    }
                 }
                 catch (ParseException pe)
                 {}
@@ -489,6 +492,17 @@ public class CookieManager extends ConfigTestElement
             sampler.setMethod(HTTPSampler.GET);
             assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
         }
+        
+        public void testSendCookie2() throws Exception
+                {
+                    CookieManager man = new CookieManager();
+                    man.add(new Cookie("id","value",".apache.org","/",false,9999999999L));
+                    HTTPSampler sampler = new HTTPSampler();
+                    sampler.setDomain("jakarta.apache.org");
+                    sampler.setPath("/index.html");
+                    sampler.setMethod(HTTPSampler.GET);
+                    assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
+                }
     }
 
 }
