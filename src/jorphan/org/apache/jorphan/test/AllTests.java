@@ -205,7 +205,7 @@ public final class AllTests
 		System.out.println("+++++++++++");
 //		System.out.println(e+"="+System.getProperty(e));
 //		System.out.println(g+"="+System.getProperty(g));
-		System.out.println("Headless? "+java.awt.GraphicsEnvironment.isHeadless());
+//		System.out.println("Headless? "+java.awt.GraphicsEnvironment.isHeadless());//JDK 1.4
 //		try {
 //			Class c = Class.forName(n);
 //			System.out.println("Found class:  "+n);

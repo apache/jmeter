@@ -88,6 +88,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.test.UnitTestManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -213,7 +214,7 @@ public class JMeterUtils implements UnitTestManager
         String[] result= new String[1];
         
         if (p!=null) {
-            String[] paths= p.split(";");
+            String[] paths= JOrphanUtils.split(p,";");// was p.split(";") - JDK1.4
             result= new String[paths.length+1];
             for (int i=1; i<result.length; i++)
             {
@@ -612,7 +613,7 @@ public class JMeterUtils implements UnitTestManager
         {
             String strVal =
                 appProperties
-                    .getProperty(propName, (Boolean.valueOf(defaultVal)).toString())
+                    .getProperty(propName, JOrphanUtils.booleanToString(defaultVal))
                     .trim();
             if (strVal.equalsIgnoreCase("true")
                 || strVal.equalsIgnoreCase("t"))

@@ -569,7 +569,7 @@ public class ProxyControlGui
         catch (ClassNotFoundException e)
         {
             // This should never happen -- throw an Error:
-            throw new Error(e);
+            throw new Error(e.toString());//JDK1.4: remove .toString()
         }
         
         return panel;        

@@ -59,7 +59,6 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -68,6 +67,7 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.MalformedPatternException;
@@ -127,13 +127,13 @@ public final class HtmlParsingUtils implements Serializable
         String query = null;
         try
         {
-            query = URLDecoder.decode(newLink.getQueryString(),"UTF-8");
+            query = JOrphanUtils.decode(newLink.getQueryString(),"UTF-8");
         }
         catch (UnsupportedEncodingException e)
         {
             // UTF-8 unsupported? You must be joking!
             log.error("UTF-8 encoding not supported!");
-            throw new Error(e);
+            throw new Error("Should not happen: "+e.toString());
         }
 
         if (query == null && config.getArguments().getArgumentCount() > 0)
