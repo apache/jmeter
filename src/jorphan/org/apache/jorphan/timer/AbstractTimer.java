@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,23 +55,80 @@
 package org.apache.jorphan.timer;
 
 /**
- * A package-private collection of constants used by {@link ITimer}
- * implementations in <code>HRTimer</code> and <code>JavaSystemTimer</code>
- * classes.
- *
- * @author <a href="mailto:vroubtsov@illinoisalumni.org">Vlad Roubtsov</a>
- * @author Originally published in <a href="http://www.javaworld.com/javaworld/javaqa/2003-01/01-qa-0110-timing.html">JavaWorld</a>
+ * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
  * @version $Revision$
  */
-interface ITimerConstants
+public abstract class AbstractTimer implements ITimer, ITimerConstants
 {
-    /**
-     * Timer state enumeration. 
-     */
-    static final int STATE_READY = 0, STATE_STARTED = 1, STATE_STOPPED = 2;
+    /** Used to keep track of timer state. */    
+    private int m_state;
     
-    /**
-     * User-friendly timer state names indexed by their state values.
+    /** Timing data. */
+    private double m_data;
+
+
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.timer.ITimer#start()
      */
-    static final String [] STATE_NAMES = {"READY", "STARTED", "STOPPED"};
+    public void start()
+    {
+        if (m_state != STATE_READY)
+        {
+            throw new IllegalStateException(
+                this
+                    + ": start() must be called from READY state, "
+                    + "current state is "
+                    + STATE_NAMES[m_state]);
+        }
+        
+        m_state = STATE_STARTED;
+        m_data = getCurrentTime();
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.timer.ITimer#stop()
+     */
+    public void stop()
+    {
+        // Latch stop time in a local var before doing anything else
+        final double data = getCurrentTime();
+        
+        if (m_state != STATE_STARTED)
+        {
+            throw new IllegalStateException(
+                this
+                    + ": stop() must be called from STARTED state, "
+                    + "current state is "
+                    + STATE_NAMES[m_state]);
+        } 
+        
+        m_data = data - m_data;
+        m_state = STATE_STOPPED;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.timer.ITimer#getDuration()
+     */
+    public double getDuration()
+    {
+        if (m_state != STATE_STOPPED)
+        {
+            throw new IllegalStateException(
+                this
+                    + ": getDuration() must be called from STOPPED state, "
+                    + "current state is "
+                    + STATE_NAMES[m_state]);
+        }
+        return m_data;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jorphan.timer.ITimer#reset()
+     */
+    public void reset()
+    {
+        m_state = STATE_READY;
+    }
+    
+    protected abstract double getCurrentTime();
 }
