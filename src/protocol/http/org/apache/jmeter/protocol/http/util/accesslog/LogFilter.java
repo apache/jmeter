@@ -537,7 +537,7 @@ public class LogFilter implements Filter
         try
         {
             Perl5Compiler comp = new Perl5Compiler();
-            return comp.compile(pattern);
+            return comp.compile(pattern, Perl5Compiler.READ_ONLY_MASK);
         }
         catch (Exception exception)
         {
