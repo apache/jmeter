@@ -86,9 +86,9 @@ public class Save implements Command
 {
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.gui");
-	private final static String SAVE_ALL = "save_all";
-	private final static String SAVE = "save_as";
-	private final static String SAVE_TO_PREVIOUS = "save";
+	public final static String SAVE_ALL = "save_all";
+	public final static String SAVE = "save_as";
+	public final static String SAVE_TO_PREVIOUS = "save";
 	private String chosenFile;
 	private String testPlanFile;
 
