@@ -62,8 +62,6 @@
   should compile the application and enable you to run jmeter from the /bin
   directory.
 
-
-
   Changes since 1.8
   -----------------
 
