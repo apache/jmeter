@@ -133,7 +133,7 @@
    <!--
    - Generates java-docs
    -->
-   <target name="api-docs" depends="compile">
+   <target name="api-docs">
      <mkdir dir="${docs.api.dest.dir}"/>
      <javadoc sourcepath="${sources.src.dir}"
               destdir="${docs.api.dest.dir}"
@@ -142,7 +142,7 @@
               windowtitle="Apache JMeter API Specification"
               header="&lt;b&gt;Apache JMeter&lt;/b&gt;&lt;br&gt;&lt;font size='-1'&gt;1.7&lt;/font&gt;"
               bottom="Copyright &#169; 1998-2001 Apache Software Foundation. All Rights Reserved."
-              packagenames="org.apache.jmeter.**">
+              packagenames="org.apache.jmeter.*">
        <classpath refid="classpath"/>
      </javadoc>
    </target>
