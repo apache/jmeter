@@ -129,7 +129,7 @@ counting how many times that request was run.</p></description>
         <property name="First argument" required="Yes">TRUE if you wish each simulated user's counter
         to be kept independent and separate from the other users.  FALSE for a global counter.</property>
 
-<property name="Second argument" required="No">A reference name for reusing the value created by this function.<br></br>
+<property name="Second argument" required="Yes">A reference name for reusing the value created by this function.<br></br>
                 Stored values are of the form ${refName}.  This allows you to keep one counter and refer to its value in
                 multiple places.</property>
 </properties>
