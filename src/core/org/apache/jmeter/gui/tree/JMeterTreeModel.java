@@ -105,11 +105,9 @@ public class JMeterTreeModel extends DefaultTreeModel
      */
     public JMeterTreeNode getNodeOf(TestElement userObject)
     {
-        List nodeList = new LinkedList();
         return traverseAndFind(
             userObject,
-            (JMeterTreeNode) this.getRoot(),
-            nodeList);
+            (JMeterTreeNode)getRoot());
     }
 
     /**
@@ -225,8 +223,7 @@ public class JMeterTreeModel extends DefaultTreeModel
 
     private JMeterTreeNode traverseAndFind(
         TestElement userObject,
-        JMeterTreeNode node,
-        List nodeList)
+        JMeterTreeNode node)
     {
         if (userObject == node.getUserObject())
         {
@@ -236,7 +233,8 @@ public class JMeterTreeModel extends DefaultTreeModel
         while (enum.hasMoreElements())
         {
             JMeterTreeNode child = (JMeterTreeNode) enum.nextElement();
-            return traverseAndFind(userObject, child, nodeList);
+            JMeterTreeNode result= traverseAndFind(userObject, child);
+            if (result != null) return result;
         }
         return null;
     }
