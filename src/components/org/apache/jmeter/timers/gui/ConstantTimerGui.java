@@ -78,9 +78,9 @@ public class ConstantTimerGui extends AbstractTimerGui
     /**
      * The default value for the delay.
      */
-    private final String DEFAULT_DELAY = "300";
+    private static final String DEFAULT_DELAY = "300";
 
-    private final String DELAY_FIELD = "Delay Field";
+    private static final String DELAY_FIELD = "Delay Field";
 
     private JTextField delayField;
 

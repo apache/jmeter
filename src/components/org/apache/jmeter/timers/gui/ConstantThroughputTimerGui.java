@@ -73,8 +73,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  */
 public class ConstantThroughputTimerGui extends AbstractTimerGui
 {
-    private final String DEFAULT_THROUGHPUT = "60";
-    private final String THROUGHPUT_FIELD = "Throughput Field";
+    private static final String DEFAULT_THROUGHPUT = "60";
+    private static final String THROUGHPUT_FIELD = "Throughput Field";
 
     private JTextField throughputField;
 
