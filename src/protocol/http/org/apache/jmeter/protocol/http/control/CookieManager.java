@@ -323,6 +323,13 @@ public class CookieManager
         return time;
     }
 
+    /**
+     * Find cookies applicable to the given URL and build the Cookie header from
+     * them.
+     * 
+     * @param url URL of the request to which the returned header will be added.
+     * @return the value string for the cookie header (goes after "Cookie: "). 
+     */
     public String getCookieHeaderForURL(URL url)
     {
         if (!url.getProtocol().toUpperCase().trim().equals("HTTP")
@@ -333,7 +340,11 @@ public class CookieManager
         for (PropertyIterator enum = getCookies().iterator(); enum.hasNext();)
         {
             Cookie cookie = (Cookie) enum.next().getObjectValue();
-            if (url.getHost().endsWith(cookie.getDomain())
+            // Add a leading dot to the host name so that host X matches
+            // domain .X. This is a breach of the standard, but it's how
+            // browsers behave:
+            String host= "."+url.getHost();
+            if (host.endsWith(cookie.getDomain())
                 && url.getFile().startsWith(cookie.getPath())
                 && (System.currentTimeMillis() / 1000) <= cookie.getExpires())
             {
@@ -356,6 +367,13 @@ public class CookieManager
         }
     }
 
+    /**
+     * Parse the set-cookie header value and store the cookies for later
+     * retrieval.
+     *
+     * @param cookieHeader found after the "Set-Cookie: " in the response header
+     * @param url URL used in the request for the above-mentioned response.
+     */
     public void addCookieFromHeader(String cookieHeader, URL url)
     {
         StringTokenizer st = new StringTokenizer(cookieHeader, ";");
@@ -366,8 +384,10 @@ public class CookieManager
         int index = nvp.indexOf("=");
         String name = nvp.substring(0, index);
         String value = nvp.substring(index + 1);
-        String domain = url.getHost();
-        String path = "/";
+        String domain = "."+url.getHost(); // this is the default
+                // the leading dot breaks the standard, but helps in
+                // reproducing actual browser behaviour.
+        String path = "/"; // this is the default
 
         Cookie newCookie =
             new Cookie(
@@ -405,7 +425,17 @@ public class CookieManager
             }
             else if (key.equalsIgnoreCase("domain"))
             {
-                newCookie.setDomain(nvp.substring(index + 1));
+                domain= nvp.substring(index + 1);
+                
+                // The standard dictates domains must have a leading dot,
+                // but the new standard (Cookie2) tells us to add it if it's not
+                // there:
+                if (!domain.startsWith("."))
+                {
+                    domain= "."+domain;
+                }
+                
+                newCookie.setDomain(domain);
             }
             else if (key.equalsIgnoreCase("path"))
             {
@@ -568,6 +598,31 @@ public class CookieManager
             sampler.setPath("/index.html");
             sampler.setMethod(HTTPSampler.GET);
             assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
+        }
+        
+        /**
+         * Test that the cookie domain field is actually handled as
+         * browsers do (i.e.: host X matches domain .X):
+         */
+        public void testDomainHandling() throws Exception
+        {
+            CookieManager man= new CookieManager();
+            URL url= new URL("http://jakarta.apache.org/");
+            man.addCookieFromHeader("test=1;domain=.jakarta.apache.org", url);
+            assertNotNull(man.getCookieHeaderForURL(url));
+        }
+        
+        /**
+         * Test that we won't be tricked by similar host names (this was a past
+         * bug, although it never got reported in the bug database):
+         */
+        public void testSimilarHostNames() throws Exception
+        {
+            CookieManager man= new CookieManager();
+            URL url= new URL("http://ache.org/");
+            man.addCookieFromHeader("test=1", url);
+            url= new URL("http://jakarta.apache.org/");
+            assertNull(man.getCookieHeaderForURL(url));
         }
     }
 }
