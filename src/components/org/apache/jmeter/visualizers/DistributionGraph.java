@@ -27,7 +27,6 @@ import java.util.Collection;
 
 import javax.swing.JComponent;
 import javax.swing.Scrollable;
-import javax.swing.SwingUtilities;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jorphan.logging.LoggingManager;
@@ -49,7 +48,7 @@ import org.apache.log.Logger;
  */
 public class DistributionGraph
     extends JComponent
-    implements Scrollable, GraphListener, Clearable
+    implements Scrollable, Clearable
 {
     private static Logger log = LoggingManager.getLoggerForClass();
 
@@ -163,37 +162,9 @@ public class DistributionGraph
     {}
 
 	/**
-	 * method simply calls repaint()
-	 */
-    public void updateGui()
-    {
-        repaint();
-    }
-
-	/**
-	 * updateGui is called by GraphModel. Unlike Graph
-	 * class, distribution graph can delay drawing
+	 * Method is responsible for calling drawSample and updating
 	 * the graph.
 	 */
-    public void updateGui(final Sample oneSample)
-    {
-        final SamplingStatCalculator m = this.model;
-        SwingUtilities.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                Graphics g = getGraphics();
-
-                if (g != null)
-                {
-                	synchronized(m){
-						drawSample(m, g);
-                	}
-                }
-            }
-        });
-    }
-
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
