@@ -13,17 +13,27 @@
   <ul>
     <li><a href="get-started.html#requirements">2.1 Requirements</a></li>
     <ul>
-      <li><a href="get-started.html#java_versions">2.1.1 Java Versions<!--: JDK1.2 and higher (has not been tested w/JDK 1.4)--></a></li>
+      <li><a href="get-started.html#java_versions">2.1.1 Java Version</a></li>
       <li><a href="get-started.html#os">2.1.2 Operating Systems<!--: any (has been tested on Windows 98, ...)--></a></li>
-      <li><a href="get-started.html#jdbc">2.1.3 JDBC Driver (for testing databases)</a></li>
-      <li><a href="get-started.html#xml">2.1.4 SAX XML Parser</a></li>
     </ul>
-    <li><a href="get-started.html#install">2.2 Installation<!--(includes configuration)--></a></li>
+    <li><a href="get-started.html#optional">2.2 Optional</a></li>
     <ul>
-      <li><a href="get-started.html#download_latest">2.2.1 Downloading the Latest Release</a></li>
-      <li><a href="get-started.html#download_nightly">2.2.2 Downloading Nightly Builds<!-- (include build instructions)--></a></li>
-      <li><a href="get-started.html#unix">2.2.3 UNIX Instructions</a></li>
-      <li><a href="get-started.html#windows">2.2.4 MS-Windows Instructions</a></li>
+      <li><a href="get-started.html#opt_compiler">2.2.1 Java Compiler</a></li>
+      <li><a href="get-started.html#opt_sax">2.2.2 SAX XML Parser</a></li>
+      <li><a href="get-started.html#opt_email">2.2.3 Email Support</a></li>
+      <li><a href="get-started.html#opt_ssl">2.2.4 SSL Encryption</a></li>
+      <li><a href="get-started.html#opt_jdbc">2.2.5 JDBC Driver</a></li>
+    </ul>
+    <li><a href="get-started.html#install">2.3 Installation</a></li>
+    <ul>
+      <li><a href="get-started.html#download_release">2.3.1 Downloading the Latest Release</a></li>
+      <li><a href="get-started.html#download_nightly">2.3.2 Downloading Nightly Builds</a></li>
+    </ul>
+    <li><a href="get-started.html#running">2.4 Running JMeter</a></li>
+    <ul>
+      <li><a href="get-started.html#classpath">2.4.1 JMeter's Classpath</a></li>
+      <li><a href="get-started.html#proxy_server">2.4.2 Using a Proxy Server</a></li>
+      <li><a href="get-started.html#non_gui">2.4.3 Non-GUI Mode</a></li>
     </ul>
   </ul>
   <li><a href="build-test-plan.html">3. Building a Test Plan</a></li>
