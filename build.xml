@@ -898,13 +898,14 @@ some of its classes - at present JMeter can only run from jar files.
 -->
   <target name="junit"  description="Run individual JUnit test">
   <mkdir dir="reports"/>
+  <property name="test.format" value="brief"/>
   <property name="test.case1" value="org.apache.jmeter.junit.JMeterTest"/>
   <property name="test.case" value="org.apache.jorphan.test.AllTests"/>
   <junit fork="true"
    dir="${basedir}/bin"
    showoutput="true"
    printsummary="withOutAndErr">
-  <formatter type="brief" usefile="no"/>
+  <formatter type="${test.format}" usefile="no"/>
   <formatter type="xml"/>
       <classpath>
         <path refid="classpath"/>
