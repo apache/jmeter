@@ -357,9 +357,9 @@ public class JMeterTest extends JMeterTestCase
 			boolean ct =guiTitles.containsKey(title); 
 			if (ct) guiTitles.put(title,Boolean.TRUE);// So we can detect extra entries
 			if (// Is this a work in progress ?
-			    (title.indexOf("(ALPHA") == -1)
+			    (title.toUpperCase().indexOf("(ALPHA") == -1)
 			    &&
-			    (title.indexOf("(BETA")  == -1)
+			    (title.toUpperCase().indexOf("(BETA")  == -1)
 				&&
 				(!title.equals("Example1")) // Skip the example samplers ...
 				&&
