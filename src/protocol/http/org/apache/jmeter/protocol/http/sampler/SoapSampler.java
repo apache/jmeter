@@ -34,7 +34,7 @@ public class SoapSampler extends HTTPSampler
 	 *@param connection       <code>URLConnection</code> to set headers on
 	 *@exception IOException  if an I/O exception occurs
 	 ***************************************/
-	public void setHeaders(URLConnection connection)
+	public void setPostHeaders(URLConnection connection)
 	  		throws IOException
 	{
 		((HttpURLConnection)connection).setRequestMethod("POST");
