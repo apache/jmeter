@@ -17,14 +17,13 @@
         excluding="org/apache/jmeter/protocol/java/**/BeanShell*.java|org/apache/jmeter/protocol/java/**/BSF*.java"
         kind="src" output="build/protocol/java" path="src/protocol/java"/>
     <classpathentry kind="src" output="build/protocol/ldap" path="src/protocol/ldap"/>
-    <classpathentry kind="src" output="build/protocol/mail" path="src/protocol/mail"/>
     <classpathentry kind="src" output="build/protocol/tcp" path="src/protocol/tcp"/>
 	<classpathentry kind="src" output="build/monitor/model" path="src/monitor/model"/>
 	<classpathentry kind="src" output="build/monitor/components" path="src/monitor/components"/>
     <classpathentry kind="src" path="src/examples"/>
     <classpathentry kind="src" output="build/htmlparser" path="src/htmlparser"/>
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-    <classpathentry kind="lib" path="lib/excalibur-campatibility-1.1.jar"/>
+    <classpathentry kind="lib" path="lib/excalibur-compatibility-1.1.jar"/>
     <classpathentry kind="lib" path="lib/excalibur-i18n-1.1.jar"/>
     <classpathentry kind="lib" path="lib/excalibur-logger-1.1.jar"/>
     <classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
@@ -36,5 +35,10 @@
     <classpathentry kind="lib" path="lib/commons-collections.jar"/>
     <classpathentry kind="lib" path="lib/soap.jar"/>
     <classpathentry kind="lib" path="lib/jdom-b9.jar"/>
+    <classpathentry kind="lib" path="lib/xalan.jar"/>
+	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
+	<classpathentry kind="lib" path="lib/commons-httpclient-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
     <classpathentry kind="output" path="build/default"/>
 </classpath>
