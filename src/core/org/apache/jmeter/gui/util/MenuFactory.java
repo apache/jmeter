@@ -488,6 +488,10 @@ public class MenuFactory
 				{
 					continue;
 				}
+                else
+                {
+                    elementsToSkip.add(item.getClass().getName());
+                }
 				Collection categories = item.getMenuCategories();
 				if(categories == null)
 				{
