@@ -57,6 +57,7 @@ package org.apache.jmeter.functions;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -90,58 +91,90 @@ import org.apache.log.Logger;
  * - the file name is resolved at file (re-)open time
  * - the output variable name is resolved every time the function is invoked
  * 
- * @author default
+ * @author sebb AT apache DOT org
  *
- * @version $Id$
+ * @version $Revision$ Updated on: $Date$
  */
 public class StringFromFile extends AbstractFunction implements Serializable
 {
     private static Logger log = LoggingManager.getLoggerForClass();
 
     private static final List desc = new LinkedList();
-    private static final String KEY = "_StringFromFile";
+    private static final String KEY = "_StringFromFile";//$NON-NLS-1$
     // Function name (only 1 _)
-
+    
+	private static final String ERR_IND = "**ERR**";//$NON-NLS-1$
+    
     static {
-        desc.add(JMeterUtils.getResString("string_from_file_file_name"));
-        desc.add(JMeterUtils.getResString("function_name_param"));
+        desc.add(JMeterUtils.getResString("string_from_file_file_name"));//$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("function_name_param"));//$NON-NLS-1$
     }
 
-    private String myValue = "<please supply a file>"; // Default value
-    private String myName = "StringFromFile_"; // Name to store value in
+    private String myValue = ERR_IND;
+    private String myName = "StringFromFile_";//$NON-NLS-1$ - Name to store the value in
     private Object[] values;
     private BufferedReader myBread; // Buffered reader
+	private FileReader fis; // keep this round to close it
     private boolean firstTime = false; // should we try to open the file?
     private boolean reopenFile = true; // Set from parameter list one day ...
     private String fileName; // needed for error messages
 
     public StringFromFile()
     {
+		if (log.isDebugEnabled())
+		{
+			log.debug("++++++++ Construct "+this);
+		}
     }
+
+	protected void finalize() throws Throwable{
+		if (log.isDebugEnabled())
+		{
+		    log.debug("-------- Finalize "+this);
+		}
+	}
 
     public Object clone()
     {
         StringFromFile newReader = new StringFromFile();
         if (log.isDebugEnabled())
         { // Skip expensive paramter creation ..
-            log.debug(this +"::StringFromFile.clone()", new Throwable("debug"));
+            log.debug(this +"::StringFromFile.clone()", new Throwable("debug"));//$NON-NLS-1$
         }
 
         return newReader;
     }
+    
+/*
+ * Warning: the file will generally be left open at the end of a test run.
+ * This is because functions don't have any way to find out when a test has
+ * ended ... 
+ */
+    private void closeFile(){
+    	String tn = Thread.currentThread().getName();
+    	log.info(tn + " closing file " + fileName);//$NON-NLS-1$
+    	try {
+    		myBread.close();
+			fis.close();
+		} catch (IOException e) {
+			log.error("closeFile() error: " + e.toString());//$NON-NLS-1$
+		}
+    }
 
     private void openFile()
     {
+		String tn = Thread.currentThread().getName();
         fileName = ((CompoundVariable) values[0]).execute();
+		log.info(tn + " opening file " + fileName);//$NON-NLS-1$
         try
         {
-            FileReader fis = new FileReader(fileName);
+            fis = new FileReader(fileName);
             myBread = new BufferedReader(fis);
-            log.info("Opened " + fileName);
         }
         catch (Exception e)
         {
-            log.error("openFile() error: " + e.toString());
+            log.error("openFile() error: " + e.toString());//$NON-NLS-1$
+            myBread=null;
         }
     }
 
@@ -161,7 +194,7 @@ public class StringFromFile extends AbstractFunction implements Serializable
             myName = ((CompoundVariable) values[1]).execute();
         }
 
-        myValue = "**ERR**";
+        myValue = ERR_IND;
         
         /*
          * To avoid re-opening the file repeatedly after an error,
@@ -181,22 +214,27 @@ public class StringFromFile extends AbstractFunction implements Serializable
                 String line = myBread.readLine();
                 if (line == null && reopenFile)
                 { // EOF, re-open file
-                    log.info("Reached EOF on " + fileName);
-                    myBread.close();
+                    log.info("Reached EOF on " + fileName);//$NON-NLS-1$
+                    closeFile();
                     openFile();
-                    line = myBread.readLine();
+                    if (myBread != null) {
+						line = myBread.readLine();
+                    } else {
+                    	line = ERR_IND;
+                    }
                 }
                 myValue = line;
             }
             catch (Exception e)
             {
-                log.error("Error reading file " + e.toString());
+				String tn = Thread.currentThread().getName();
+                log.error(tn + " error reading file " + e.toString());//$NON-NLS-1$
             }
         }
 
         vars.put(myName, myValue);
 
-        log.debug(this +"::StringFromFile.execute() name:" + myName + " value:" + myValue);
+        log.debug(this +"::StringFromFile.execute() name:" + myName + " value:" + myValue);//$NON-NLS-1$
 
         return myValue;
 
@@ -213,22 +251,22 @@ public class StringFromFile extends AbstractFunction implements Serializable
         throws InvalidVariableException
     {
 
-        log.debug(this +"::StringFromFile.setParameters()");
+        log.debug(this +"::StringFromFile.setParameters()");//$NON-NLS-1$
 
         values = parameters.toArray();
 
         if ((values.length > 2) || (values.length < 1))
         {
-            throw new InvalidVariableException("Wrong number of parameters");
+            throw new InvalidVariableException("Wrong number of parameters");//$NON-NLS-1$
         }
 
 		StringBuffer sb = new StringBuffer(40);
-		sb.append("setParameters(");
+		sb.append("setParameters(");//$NON-NLS-1$
 		for (int i = 0; i< values.length;i++){
 			if (i > 0) sb.append(",");
 			sb.append(((CompoundVariable) values[i]).getRawParameters());
 		}
-		sb.append(")");
+		sb.append(")");//$NON-NLS-1$
 		log.info(sb.toString());
 		
 		
