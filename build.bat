@@ -1,4 +1,4 @@
-echo off
+@echo off
 
 set LOCALCLASSPATH=%JAVA_HOME%\lib\tools.jar
 
