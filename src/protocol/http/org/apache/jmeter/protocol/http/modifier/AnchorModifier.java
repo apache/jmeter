@@ -65,11 +65,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import junit.framework.TestCase;
-
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigElement;
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.protocol.http.parser.HtmlParsingUtils;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
@@ -290,7 +289,7 @@ public class AnchorModifier
         }
     }
 
-    public static class Test extends TestCase
+    public static class Test extends JMeterTestCase
     {
         public Test(String name)
         {

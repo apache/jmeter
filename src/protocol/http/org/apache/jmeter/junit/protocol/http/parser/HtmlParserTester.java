@@ -3,8 +3,7 @@ package org.apache.jmeter.junit.protocol.http.parser;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import junit.framework.TestCase;
-
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.modifier.AnchorModifier;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
@@ -14,7 +13,7 @@ import org.apache.jmeter.threads.JMeterContextService;
  * Created    June 14, 2001
  * @version    $Revision$ Last updated: $Date$
  */
-public class HtmlParserTester extends TestCase
+public class HtmlParserTester extends JMeterTestCase
 {
     AnchorModifier parser = new AnchorModifier();
 
