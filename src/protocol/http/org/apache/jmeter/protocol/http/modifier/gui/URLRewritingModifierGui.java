@@ -1,16 +1,15 @@
 package org.apache.jmeter.protocol.http.modifier.gui;
 
+import java.awt.BorderLayout;
+
 import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.config.gui.AbstractResponseBasedModifierGui;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.modifier.URLRewritingModifier;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
  * @author mstover
@@ -38,24 +37,20 @@ public class URLRewritingModifierGui extends AbstractResponseBasedModifierGui {
 	
 	private void init()
 	{
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
+        
+        add(makeTitlePanel(), BorderLayout.NORTH);
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+        VerticalPanel mainPanel = new VerticalPanel();
 
-
-		// NAME
-		mainPanel.add(makeTitlePanel());
-		argumentName = new JLabeledTextField(JMeterUtils.getResString("session_argument_name"));
+		argumentName = new JLabeledTextField(JMeterUtils.getResString("session_argument_name"), 10);
 		mainPanel.add(argumentName);
-		pathExt = new JCheckBox(JMeterUtils.getResString("Path_Extension_choice"));
-		
+
+		pathExt = new JCheckBox(JMeterUtils.getResString("Path_Extension_choice"));		
 		mainPanel.add(pathExt);	
 
-		this.add(mainPanel);
+		add(mainPanel, BorderLayout.CENTER);
 	}
 
 	/**

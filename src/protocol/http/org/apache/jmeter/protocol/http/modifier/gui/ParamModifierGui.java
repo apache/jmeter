@@ -1,8 +1,6 @@
 package org.apache.jmeter.protocol.http.modifier.gui;
+import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
@@ -11,15 +9,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.config.gui.AbstractModifierGui;
+import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.protocol.http.modifier.ParamMask;
 import org.apache.jmeter.protocol.http.modifier.ParamModifier;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * A swing panel to allow UI with the ParamModifier class.
@@ -147,22 +143,12 @@ public class ParamModifierGui extends AbstractModifierGui implements FocusListen
      ***************************************/
     protected void init()
     {
-        this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-
-        // MAIN PANEL
-        JPanel mainPanel = new JPanel();
-        Border margin = new EmptyBorder(10, 10, 5, 10);
-        mainPanel.setBorder(margin);
-        mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-        // NAME
-        mainPanel.add(makeTitlePanel());
-
-        // PARAMETER MASK
-        mainPanel.add(getParameterMaskPanel());
-
-        this.add(mainPanel);
-        this.updateUI();
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
+        
+        add(makeTitlePanel(), BorderLayout.NORTH);
+        add(getParameterMaskPanel(), BorderLayout.CENTER);
+        // this.updateUI();
     }
 
     /****************************************
@@ -180,112 +166,51 @@ public class ParamModifierGui extends AbstractModifierGui implements FocusListen
         _suffix.setText(model.getMask().getSuffix());
     }
 
+    private JPanel createLabeledField(String labelResName, JTextField field) {
+        JLabel label = new JLabel(JMeterUtils.getResString(labelResName));
+        label.setLabelFor(field);
+        
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(label, BorderLayout.NORTH);
+        panel.add(field, BorderLayout.CENTER);        
+        return panel;
+    }
+    
     private JPanel getParameterMaskPanel()
     {
-        JPanel paramMaskPanel = new JPanel();
-        paramMaskPanel.setLayout(new GridBagLayout());
-        //paramMaskPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("web_request")));
-        paramMaskPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("HTML Parameter Mask")));
+        HorizontalPanel panel = new HorizontalPanel(10, HorizontalPanel.TOP_ALIGNMENT);
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("HTML Parameter Mask")));
 
-        GridBagConstraints gridBagConstraints;
-
-        JLabel name = new JLabel(JMeterUtils.getResString("Name"));
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 40;
-        gridBagConstraints.insets = new Insets(5, 15, 0, 0);
-        paramMaskPanel.add(name, gridBagConstraints);
-
-        JLabel prefix = new JLabel(JMeterUtils.getResString("ID Prefix"));
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 40;
-        gridBagConstraints.insets = new Insets(5, 15, 0, 0);
-        paramMaskPanel.add(prefix, gridBagConstraints);
-
-        JLabel start = new JLabel(JMeterUtils.getResString("Lower Bound"));
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new Insets(5, 15, 0, 0);
-        paramMaskPanel.add(start, gridBagConstraints);
-
-        JLabel stop = new JLabel(JMeterUtils.getResString("Upper Bound"));
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new Insets(5, 15, 0, 0);
-        paramMaskPanel.add(stop, gridBagConstraints);
-
-        JLabel increment = new JLabel(JMeterUtils.getResString("Increment"));
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new Insets(5, 15, 0, 0);
-        paramMaskPanel.add(increment, gridBagConstraints);
-
-        JLabel suffix = new JLabel(JMeterUtils.getResString("ID Suffix"));
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 40;
-        gridBagConstraints.insets = new Insets(5, 15, 0, 0);
-        paramMaskPanel.add(suffix, gridBagConstraints);
-
-        _fieldName = new JTextField("", 10);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new Insets(10, 15, 0, 0);
+        _fieldName = new JTextField(10);
         _fieldName.setName(NAME);
-        paramMaskPanel.add(_fieldName, gridBagConstraints);
+        panel.add(createLabeledField("Name", _fieldName));        
 
-        _prefix = new JTextField("", 5);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new Insets(10, 15, 0, 0);
+        _prefix = new JTextField(5);
         _prefix.setName(PREFIX);
-        paramMaskPanel.add(_prefix, gridBagConstraints);
+        panel.add(createLabeledField("ID Prefix", _prefix));
 
         _lowerBound = new JTextField("0", 5);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new Insets(10, 15, 0, 0);
         _lowerBound.addFocusListener(this);
         _lowerBound.setName(LOWERBOUND);
-        paramMaskPanel.add(_lowerBound, gridBagConstraints);
-
+        panel.add(createLabeledField("Lower Bound", _lowerBound));
+        
         _upperBound = new JTextField("10", 5);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new Insets(10, 15, 0, 0);
         _upperBound.addFocusListener(this);
         _upperBound.setName(UPPERBOUND);
-        paramMaskPanel.add(_upperBound, gridBagConstraints);
-
+        panel.add(createLabeledField("Upper Bound", _upperBound));
+        
         _increment = new JTextField("1", 3);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new Insets(10, 15, 0, 0);
         _increment.addFocusListener(this);
         _increment.setName(INCREMENT);
-        paramMaskPanel.add(_increment, gridBagConstraints);
-
-        _suffix = new JTextField("", 5);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new Insets(10, 15, 0, 0);
+        panel.add(createLabeledField("Increment", _increment));
+        
+        _suffix = new JTextField(5);
         _suffix.setName(SUFFIX);
-        paramMaskPanel.add(_suffix, gridBagConstraints);
+        panel.add(createLabeledField("ID Suffix", _suffix));
 
-        return paramMaskPanel;
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(panel, BorderLayout.NORTH);
+        return mainPanel;
     }
 
     /****************************************
