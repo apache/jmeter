@@ -107,6 +107,7 @@ public class Remove implements Command
 		for (int i = nodes.length - 1; i >= 0; i--)
 		{
 				guiPackage.getTreeModel().removeNodeFromParent(nodes[i]);
+				guiPackage.removeNode(nodes[i].createTestElement());
 		}
 		guiPackage.getTreeListener().getJTree().setSelectionRow(1);
 

@@ -64,20 +64,17 @@ import junit.framework.TestCase;
 
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.protocol.http.control.gui.RecordController;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.functions.ValueReplacer;
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.control.RecordingController;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.threads.gui.ThreadGroupGui;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
@@ -301,10 +298,10 @@ public class ProxyControl extends ConfigTestElement implements Serializable
 		ValueReplacer replacer = GuiPackage.getInstance().getReplacer();
 		TestElement urlConfig = null;
 		JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
-		List nodes = treeModel.getNodesOfType(RecordController.class);
+		List nodes = treeModel.getNodesOfType(RecordingController.class);
 		if (nodes.size() == 0)
 		{
-			nodes = treeModel.getNodesOfType(ThreadGroupGui.class);
+			nodes = treeModel.getNodesOfType(ThreadGroup.class);
 		}
 		Iterator iter = nodes.iterator();
 		while (iter.hasNext())
@@ -318,11 +315,12 @@ public class ProxyControl extends ConfigTestElement implements Serializable
                 while (enum.hasMoreElements())
                 {
                     JMeterTreeNode subNode = (JMeterTreeNode) enum.nextElement();
-                    JMeterGUIComponent sample =
-                        (JMeterGUIComponent) subNode.getUserObject();
-                    if (sample instanceof UrlConfigGui)
+                    TestElement sample =
+                        (TestElement) subNode.createTestElement();
+                    if (sample.getPropertyAsString(TestElement.GUI_CLASS).equals(
+									"org.apache.jmeter.protocol.http.config.gui.UrlConfigGui"))
                     {
-                        urlConfig = sample.createTestElement();
+                        urlConfig = sample;
                         break;
                     }
                 }
@@ -332,9 +330,10 @@ public class ProxyControl extends ConfigTestElement implements Serializable
                     replacer.reverseReplace(sampler);
                     HttpTestSampleGui test = new HttpTestSampleGui();
                     test.configure(sampler);
+                    sampler = (HTTPSampler)test.createTestElement();
                     try
                     {
-                        JMeterTreeNode newNode = treeModel.addComponent(test, node);
+                        JMeterTreeNode newNode = treeModel.addComponent(sampler, node);
                         for (int i = 0; subConfigs != null && i < subConfigs.length; i++)
                         {
                             if (subConfigs[i] instanceof HeaderManager)
@@ -342,7 +341,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
                                 HeaderPanel comp = new HeaderPanel();
                                 replacer.reverseReplace(subConfigs[i]);
                                 comp.configure(subConfigs[i]);
-                                treeModel.addComponent(comp, newNode);
+                                treeModel.addComponent(comp.createTestElement(), newNode);
                             }
                         }
                     }

@@ -1,8 +1,11 @@
 package org.apache.jmeter.gui.action;
 import java.awt.event.ActionEvent;
-import java.util.*;
-import org.apache.jmeter.gui.*;
-import org.apache.jmeter.util.JMeterUtils;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.NamePanel;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -35,10 +38,10 @@ public class EditCommand implements Command
 	{
 		GuiPackage guiPackage = GuiPackage.getInstance();
 		guiPackage.getMainFrame().setMainPanel((javax.swing.JComponent)
-					guiPackage.getTreeListener().getCurrentNode().getUserObject());
+					guiPackage.getCurrentGui());
 		guiPackage.getMainFrame().setEditMenu(
-				((JMeterGUIComponent)guiPackage.getTreeListener().getCurrentNode().getUserObject()).createPopupMenu());
-		if(!(guiPackage.getTreeListener().getCurrentNode().getUserObject() instanceof NamePanel))
+				((JMeterGUIComponent)guiPackage.getTreeListener().getCurrentNode()).createPopupMenu());
+		if(!(guiPackage.getCurrentGui() instanceof NamePanel))
 		{
 			guiPackage.getMainFrame().setFileLoadEnabled(true);
 			guiPackage.getMainFrame().setFileSaveEnabled(true);

@@ -60,8 +60,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
@@ -98,7 +98,7 @@ public class AddParent implements Command
 		String name = ((Component)e.getSource()).getName();
 		try
 		{
-			JMeterGUIComponent controller = (JMeterGUIComponent)Class.forName(name).newInstance();
+			TestElement controller = (TestElement)GuiPackage.getInstance().createTestElement(name);
 			addParentToTree(controller);
 		}
 		catch(Exception err)
@@ -123,7 +123,7 @@ public class AddParent implements Command
 	 *
 	 *@param newParent  !ToDo
 	 ***************************************/
-	protected void addParentToTree(JMeterGUIComponent newParent)
+	protected void addParentToTree(TestElement newParent)
 	{
 		GuiPackage guiPackage = GuiPackage.getInstance();
 		JMeterTreeNode newNode = new JMeterTreeNode(newParent, guiPackage.getTreeModel());

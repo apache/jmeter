@@ -87,12 +87,12 @@ import org.apache.jmeter.functions.ValueReplacer;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.NamePanel;
+import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.protocol.http.proxy.ProxyControl;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 
 /****************************************
@@ -105,7 +105,7 @@ import org.apache.jmeter.util.JMeterUtils;
  ***************************************/
 
 public class ProxyControlGui extends JPanel implements JMeterGUIComponent, ActionListener,
-		KeyListener,FocusListener
+		KeyListener,FocusListener,UnsharedComponent
 {
 
 	NamePanel namePanel;
@@ -148,14 +148,17 @@ public class ProxyControlGui extends JPanel implements JMeterGUIComponent, Actio
 
 	public TestElement createTestElement()
 	{
-		ProxyControl element = new ProxyControl();
-		element.setProperty(TestElement.NAME,getName());
-		element.setPort(Integer.parseInt(portField.getText()));
-		setIncludeListInProxyControl(element);
-		setExcludeListInProxyControl(element);
-		element.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
-		element.setProperty(TestElement.TEST_CLASS, element.getClass().getName());
-		return element;
+		if(model == null)
+		{
+			model = new ProxyControl();
+			model.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
+			model.setProperty(TestElement.TEST_CLASS, model.getClass().getName());
+		}
+		model.setProperty(TestElement.NAME,getName());
+		model.setPort(Integer.parseInt(portField.getText()));
+		setIncludeListInProxyControl(model);
+		setExcludeListInProxyControl(model);
+		return model;
 	}
 
 	protected void setIncludeListInProxyControl(ProxyControl element) {
@@ -209,6 +212,7 @@ public class ProxyControlGui extends JPanel implements JMeterGUIComponent, Actio
 		portField.setText(element.getProperty(ProxyControl.PORT).toString());
 		populateTable(includeModel,el.getIncludePatterns().iterator());
 		populateTable(excludeModel,el.getExcludePatterns().iterator());
+		model = el;
 	}
 
 	private void populateTable(PowerTableModel model,Iterator iter) {
@@ -307,7 +311,7 @@ public class ProxyControlGui extends JPanel implements JMeterGUIComponent, Actio
 
 	private void enableRestart()
 	{
-		if(model != null)
+		if(stop.isEnabled())
 		{
 			restart.setEnabled(true);
 		}

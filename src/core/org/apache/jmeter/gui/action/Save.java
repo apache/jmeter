@@ -63,15 +63,16 @@ import java.util.Set;
 
 import javax.swing.JFileChooser;
 
+import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.log.Hierarchy;
-import org.apache.log.Logger;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -188,7 +189,7 @@ public class Save implements Command
 		Iterator iter = new LinkedList(tree.list()).iterator();
 		while (iter.hasNext())
 		{
-			JMeterGUIComponent item = (JMeterGUIComponent)iter.next();
+			JMeterTreeNode item = (JMeterTreeNode)iter.next();
 			convertSubTree(tree.getTree(item));
 			TestElement testElement = item.createTestElement();
 			tree.replace(item,testElement);
@@ -211,7 +212,7 @@ public class Save implements Command
 		public void testTreeConversion() throws Exception
 		{
 			HashTree tree = new ListedHashTree();
-			JMeterGUIComponent root = new org.apache.jmeter.config.gui.ArgumentsPanel();
+			JMeterTreeNode root = new JMeterTreeNode(new Arguments(),null);
 			tree.add(root,root);
 			tree.getTree(root).add(root,root);
 			save.convertSubTree(tree);
