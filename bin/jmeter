@@ -12,4 +12,4 @@ while getopts h:p:f: x; do
 	 esac;
 done
 echo `dirname $0`
-java -classpath $CLASSPATH:`dirname $0`/../lib/xerces.jar:`dirname $0`/../lib/util.jar:`dirname $0`/ApacheJMeter.jar org.apache.jmeter.NewDriver $JAVA_PROPS $PROPERTIES
+java -classpath $CLASSPATH:`dirname $0`/../lib/xerces.jar:`dirname $0`/../lib/util.jar:`dirname $0`/ApacheJMeter.jar:`dirname $0`/../lib/Tidy.jar:`dirname $0`/../lib/log4j-core.jar org.apache.jmeter.NewDriver $JAVA_PROPS $PROPERTIES
