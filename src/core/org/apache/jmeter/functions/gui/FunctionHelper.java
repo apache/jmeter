@@ -21,7 +21,6 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.functions.Function;
-import org.apache.jmeter.functions.util.ArgumentEncoder;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
@@ -145,7 +144,7 @@ public class FunctionHelper extends JDialog implements
 				{
 					functionCall.append(",");
 				}
-				functionCall.append(ArgumentEncoder.encode((String)arg.getValue()));
+				functionCall.append((String)arg.getValue());
 				first = false;
 			}
 			functionCall.append(")");
