@@ -34,7 +34,7 @@ public class RunTime extends GenericController implements Serializable
     //NOTUSED private static Logger log = LoggingManager.getLoggerForClass();
 
     private final static String SECONDS = "RunTime.seconds";
-    private long startTime = 0;
+    private volatile long startTime = 0;
 
     public RunTime()
     {
@@ -72,21 +72,31 @@ public class RunTime extends GenericController implements Serializable
      */
     public boolean isDone()
     {
-        if (System.currentTimeMillis()-startTime < 1000*getRuntime())
+        if (getRuntime() > 0 && getSubControllers().size() > 0)
         {
             return super.isDone();
         }
         else
         {
-            return true;
+            return true; // Runtime is zero - no point staying around
         }
     }
 
     private boolean endOfLoop()
     {
+		if (startTime == 0) startTime=System.currentTimeMillis();
         return System.currentTimeMillis()-startTime >= 1000*getRuntime();
     }
 
+	public Sampler next()
+	{
+		if (endOfLoop()){
+			startTime=0; // Make sure it will be reset next time
+			reInitialize();
+			return null;
+		}
+		return super.next();
+	}
     /* (non-Javadoc)
      * @see org.apache.jmeter.control.GenericController#nextIsNull()
      */
@@ -95,7 +105,8 @@ public class RunTime extends GenericController implements Serializable
         reInitialize();
         if (endOfLoop())
         {
-            setDone(true);
+			startTime=0; // Make sure it will be reset next time
+            //setDone(true);
             return null;
         }
         else
@@ -104,8 +115,4 @@ public class RunTime extends GenericController implements Serializable
         }
     }
 
-	protected void resetIterCount()
-	{
-		startTime=System.currentTimeMillis();
-	}
 }
