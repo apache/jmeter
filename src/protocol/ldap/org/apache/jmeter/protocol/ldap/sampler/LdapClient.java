@@ -57,13 +57,15 @@ package org.apache.jmeter.protocol.ldap.sampler;
 import java.util.Hashtable;
 
 import javax.naming.Context;
+import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
-import javax.naming.NoPermissionException;
+//import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchControls;
+//import javax.naming.directory.SearchResult;
 
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -81,7 +83,7 @@ import org.apache.log.Logger;
 public class LdapClient
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
-    DirContext dirContext;
+    private DirContext dirContext = null;
 
     /**
      *  Constructor for the LdapClient object.
@@ -99,7 +101,7 @@ public class LdapClient
         String rootdn,
         String username,
         String password)
-        throws Exception
+        throws NamingException
     {
         Hashtable env = new Hashtable();
         env.put(
@@ -119,9 +121,12 @@ public class LdapClient
     {
         try
         {
-            dirContext=null;
+        	if (dirContext != null){
+				dirContext.close();
+				dirContext=null;
+        	}
         }
-        catch (Exception e)
+        catch (NamingException e)
         {
             log.error("Ldap client - ",e);
         }
@@ -133,12 +138,29 @@ public class LdapClient
      * @param  searchBase   where the search should start
      * @param  searchFilter filter this value from the base  
      */
-    public void searchTest(String searchBase, String searchFilter)
-        throws NoPermissionException, NamingException
+    public boolean searchTest(String searchBase, String searchFilter)
+        throws NamingException
     {
+    	//System.out.println("Base="+searchBase+" Filter="+searchFilter);
         SearchControls searchcontrols =
-            new SearchControls(2, 1L, 0, null, false, false);
+            new SearchControls(SearchControls.SUBTREE_SCOPE,
+					            1L, //count limit
+					            0,  //time limit
+					            null,//attributes (null = all)
+					            false,// return object ?
+					            false);// dereference links?
+        NamingEnumeration ne = 
         dirContext.search(searchBase, searchFilter, searchcontrols);
+		//System.out.println("Loop "+ne.toString()+" "+ne.hasMore());
+//		while (ne.hasMore()){
+//			Object tmp = ne.next();
+//			System.out.println(tmp.getClass().getName());
+//			SearchResult sr = (SearchResult) tmp;
+//			Attributes at = sr.getAttributes();
+//			System.out.println(at.get("cn"));
+//		}
+		//System.out.println("Done "+ne.hasMore());
+        return ne.hasMore();
     }
 
     /**
@@ -148,7 +170,7 @@ public class LdapClient
      * @param string  the  string (dn) value 
      */
     public void modifyTest(ModificationItem[] mods, String string)
-        throws NoPermissionException, NamingException
+        throws NamingException
     {
         dirContext.modifyAttributes(string, mods);
     }
@@ -160,8 +182,9 @@ public class LdapClient
      * @param  string           the  string (dn) value 
      */
     public void createTest(BasicAttributes basicattributes, String string)
-        throws NoPermissionException, NamingException
+        throws NamingException
     {
+    	//DirContext dc = //TODO perhaps return this?
         dirContext.createSubcontext(string, basicattributes);
     }
         
@@ -171,7 +194,7 @@ public class LdapClient
      * @param  string  the string (dn) value 
      */
     public void deleteTest(String string)
-        throws NoPermissionException, NamingException
+        throws NamingException
     {
         dirContext.destroySubcontext(string);
     }
