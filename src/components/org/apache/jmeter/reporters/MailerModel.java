@@ -52,7 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.jmeter.visualizers;
+package org.apache.jmeter.reporters;
 
 
 import java.io.Serializable;
@@ -69,11 +69,11 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
@@ -87,34 +87,24 @@ import org.apache.log.Logger;
  */
 public class MailerModel extends AbstractTestElement implements Serializable
 {
-
-    private String addressie;
-    private String fromAddress;
-    private String smtpHost;
-    private String failureSubject;
-    private String successSubject;
     private long failureCount = 0;
     private long successCount = 0;
-    private long failureLimit = 2;
-    private long successLimit = 2;
     private boolean failureMsgSent = false;
     private boolean siteDown = false;
     private boolean successMsgSent = false;
 
-    private Properties appProperties;
-
     private static final String FROM_KEY = "MailerModel.fromAddress";
     private static final String TO_KEY = "MailerModel.addressie";
     private static final String HOST_KEY = "MailerModel.smtpHost";
-    private static final String SUCCESS_KEY = "MailerModel.successSubject";
-    private static final String FAILURE_KEY = "MailerModel.failureSubject";
+    private static final String SUCCESS_SUBJECT = "MailerModel.successSubject";
+    private static final String FAILURE_SUBJECT = "MailerModel.failureSubject";
     private static final String FAILURE_LIMIT_KEY = "MailerModel.failureLimit";
     private static final String SUCCESS_LIMIT_KEY = "MailerModel.successLimit";
 
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ELEMENTS);
 
     /** The listener for changes. */
-    ModelListener changeListener;
+    ChangeListener changeListener;
 
     /**
      * Constructs a MailerModel.
@@ -123,26 +113,20 @@ public class MailerModel extends AbstractTestElement implements Serializable
     {
         super();
 
-        // Properties connection.
-        this.appProperties = JMeterUtils.getJMeterProperties();
-
-        // retrieve successLimit from properties
-        try
-        {
-            successLimit = Long.parseLong(appProperties.getProperty("mailer.successlimit"));
-        }
-        catch (Exception ex)
-        {// Ignore any garbage
-        }
-
-        // retrieve failureLimit from properties
-        try
-        {
-            failureLimit = Long.parseLong(appProperties.getProperty("mailer.failurelimit"));
-        }
-        catch (Exception ex)
-        {// Ignore any garbage
-        }
+        setProperty(SUCCESS_LIMIT_KEY,JMeterUtils.getPropDefault("mailer.successlimit","2"));
+        setProperty(FAILURE_LIMIT_KEY,JMeterUtils.getPropDefault("mailer.failurelimit","2"));
+    }
+    
+    public void addChangeListener(ChangeListener list)
+    {
+        changeListener = list;
+    }
+    
+    public Object clone()
+    {
+        MailerModel m = (MailerModel)super.clone();
+        m.changeListener = changeListener;
+        return m;
     }
 
     /**
@@ -152,7 +136,15 @@ public class MailerModel extends AbstractTestElement implements Serializable
      */
     public synchronized boolean isFailing()
     {
-        return (failureCount > failureLimit);
+        return (failureCount > getFailureLimit());
+    }
+    
+    public void notifyChangeListeners()
+    {
+        if(changeListener != null)
+        {
+            changeListener.stateChanged(new ChangeEvent(this));
+        }
     }
 
     /**
@@ -208,6 +200,7 @@ public class MailerModel extends AbstractTestElement implements Serializable
         if (!sample.isSuccessful())
         {
             failureCount++;
+            successCount = 0;
         }
         else
         {
@@ -223,7 +216,7 @@ public class MailerModel extends AbstractTestElement implements Serializable
             {
                 try
                 {
-                    sendMail(fromAddress, addressVector, failureSubject, "URL Failed: " + sample.getSampleLabel(), smtpHost);
+                    sendMail(getFromAddress(), addressVector, getFailureSubject(), "URL Failed: " + sample.getSampleLabel(), getSmtpHost());
                 }
                 catch (Exception e)
                 {
@@ -232,19 +225,20 @@ public class MailerModel extends AbstractTestElement implements Serializable
                 siteDown = true;
                 failureMsgSent = true;
                 successCount = 0;
+                successMsgSent = false;
             }
         }
 
         if (siteDown && (sample.getTime() != -1) & !successMsgSent)
         {
             // Send the mail ...
-            if (successCount > successLimit)
+            if (successCount > getSuccessLimit())
             {
                 Vector addressVector = getAddressVector();
 
                 try
                 {
-                    sendMail(fromAddress, addressVector, successSubject, "URL Restarted: " + sample.getSampleLabel(), smtpHost);
+                    sendMail(getFromAddress(), addressVector, getSuccessSubject(), "URL Restarted: " + sample.getSampleLabel(), getSmtpHost());
                 }
                 catch (Exception e)
                 {
@@ -252,6 +246,8 @@ public class MailerModel extends AbstractTestElement implements Serializable
                 }
                 siteDown = false;
                 successMsgSent = true;
+                failureCount = 0;
+                failureMsgSent = false;
             }
         }
 
@@ -334,18 +330,6 @@ public class MailerModel extends AbstractTestElement implements Serializable
         Transport.send(msg);
     }
 
-    /**
-     * Returns a String for the title of the attributes-panel
-     * as set up in the properties-file using the lookup-constant
-     * "mailer_attributes_panel".
-     *
-     * @return  The title of the component.
-     */
-    public String getAttributesTitle()
-    {
-        return JMeterUtils.getResString("mailer_attributes_panel");
-    }
-
     // ////////////////////////////////////////////////////////////
     //
     // setter/getter - JavaDoc-Comments not needed...
@@ -354,173 +338,92 @@ public class MailerModel extends AbstractTestElement implements Serializable
 
     public void setToAddress(String str)
     {
-        this.addressie = str;
+       setProperty(TO_KEY,str);
     }
 
     public void setFromAddress(String str)
     {
-        this.fromAddress = str;
+        setProperty(FROM_KEY,str);
     }
 
     public void setSmtpHost(String str)
     {
-        this.smtpHost = str;
+        setProperty(HOST_KEY,str);
     }
 
     public void setFailureSubject(String str)
     {
-        this.failureSubject = str;
+        setProperty(FAILURE_SUBJECT,str);
     }
 
     public void setSuccessSubject(String str)
     {
-        this.successSubject = str;
+        setProperty(SUCCESS_SUBJECT,str);
     }
 
-    public void setSuccessLimit(long limit)
+    public void setSuccessLimit(String limit)
     {
-        this.successLimit = limit;
+        setProperty(SUCCESS_LIMIT_KEY,limit);
     }
 
-    public void setSuccessCount(long count)
+    private  void setSuccessCount(long count)
     {
         this.successCount = count;
     }
 
-    public void setFailureLimit(long limit)
+    public void setFailureLimit(String limit)
     {
-        this.failureLimit = limit;
+        setProperty(FAILURE_LIMIT_KEY,limit);
     }
 
-    public void setFailureCount(long count)
+    private void setFailureCount(long count)
     {
         this.failureCount = count;
     }
 
     public String getToAddress()
     {
-        return this.addressie;
+        return getPropertyAsString(TO_KEY);
     }
 
     public String getFromAddress()
     {
-        return this.fromAddress;
+        return getPropertyAsString(FROM_KEY);
     }
 
     public String getSmtpHost()
     {
-        return this.smtpHost;
+        return getPropertyAsString(HOST_KEY);
     }
 
     public String getFailureSubject()
     {
-        return this.failureSubject;
+        return getPropertyAsString(FAILURE_SUBJECT);
     }
 
     public String getSuccessSubject()
     {
-        return this.successSubject;
+        return getPropertyAsString(SUCCESS_SUBJECT);
     }
 
     public long getSuccessLimit()
     {
-        return this.successLimit;
+        return getPropertyAsLong(SUCCESS_LIMIT_KEY);
     }
 
     public long getSuccessCount()
     {
-        return this.successCount;
+        return successCount;
     }
 
     public long getFailureLimit()
     {
-        return this.failureLimit;
+        return getPropertyAsLong(FAILURE_LIMIT_KEY);
     }
 
     public long getFailureCount()
     {
         return this.failureCount;
-    }
-
-    // ////////////////////////////////////////////////////////////
-    //
-    // Storing and retrieving of model...
-    //
-    // ////////////////////////////////////////////////////////////
-
-    /**
-     * Stores the attributes of the model as elements of the
-     * given TestElement-object.
-     *
-     * @param element The TestElement to collect the model-attributes.
-     */
-    public void storeModel(TestElement element)
-    {
-        element.setProperty(TO_KEY, getToAddress());
-        element.setProperty(FROM_KEY, getFromAddress());
-        element.setProperty(HOST_KEY, getSmtpHost());
-        element.setProperty(SUCCESS_KEY, getSuccessSubject());
-        element.setProperty(FAILURE_KEY, getFailureSubject());
-        element.setProperty(new LongProperty(FAILURE_LIMIT_KEY,getFailureLimit()));
-        element.setProperty(new LongProperty(SUCCESS_LIMIT_KEY,getSuccessLimit()));
-    }
-
-    /**
-     * Retrieves the attribute of the model as elements of the
-     * given TestElement-object.
-     *
-     * @param element The TestElement to collect the model-attributes.
-     */
-    public void retrieveModel(TestElement element)
-    {
-        try
-        {
-            setToAddress(element.getPropertyAsString(TO_KEY));
-            setFromAddress(element.getPropertyAsString(FROM_KEY));
-            setSmtpHost(element.getPropertyAsString(HOST_KEY));
-            setSuccessSubject(element.getPropertyAsString(SUCCESS_KEY));
-            setFailureSubject(element.getPropertyAsString(FAILURE_KEY));
-            setFailureLimit(element.getPropertyAsLong(FAILURE_LIMIT_KEY));
-            setSuccessLimit(element.getPropertyAsLong(SUCCESS_LIMIT_KEY));
-        }
-        catch (Exception e)
-        {
-            log.error("Couldn't load MailerVisualizer...");
-        }
-    }
-
-    // ////////////////////////////////////////////////////////////
-    //
-    // Notification of GUI.
-    //
-    // ////////////////////////////////////////////////////////////
-
-    /**
-     * Adds a ModelListener that is to be notified if model changes.
-     *
-     * @param listener The callback-object to receive notifications if state changes.
-     */
-    public void addModelListener(ModelListener listener)
-    {
-        this.changeListener = listener;
-    }
-
-    /**
-     * Notify the assoziated ModelListener that the model has changed.
-     */
-    private void notifyChangeListeners()
-    {
-        this.changeListener.updateVisualizer();
-    }
-
-    /**
-     * Notify the assoziated ModelListener that the model has changed.
-     *
-     * @param messageString The message to be displayed.
-     */
-    private void notifyChangeListenersAboutMessage(String messageString)
-    {
-        this.changeListener.displayMessage(messageString, true);
     }
 }
 
