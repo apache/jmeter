@@ -345,8 +345,8 @@ public class ThreadGroup
         }
     }
     
-    /**
-     * @see org.apache.jmeter.control.Controller#addIterationListener(org.apache.jmeter.engine.event.IterationListener)
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.control.Controller#addIterationListener(LoopIterationListener)
      */
     public void addIterationListener(LoopIterationListener lis)
     {

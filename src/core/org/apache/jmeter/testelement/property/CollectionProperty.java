@@ -5,12 +5,6 @@ import java.util.List;
 
 import org.apache.jmeter.testelement.TestElement;
 
-/**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- */
 public class CollectionProperty extends AbstractProperty
 {
 
@@ -105,7 +99,7 @@ public class CollectionProperty extends AbstractProperty
         return new PropertyIteratorImpl(value);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.jmeter.testelement.property.JMeterProperty#getStringValue()
      */
     public String getStringValue()
@@ -113,7 +107,7 @@ public class CollectionProperty extends AbstractProperty
         return value.toString();
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.jmeter.testelement.property.JMeterProperty#getObjectValue()
      */
     public Object getObjectValue()
@@ -126,7 +120,7 @@ public class CollectionProperty extends AbstractProperty
         return value.size();
     }
 
-    /**
+    /* (non-Javadoc)
      * @see java.lang.Object#clone()
      */
     public Object clone()
@@ -160,7 +154,7 @@ public class CollectionProperty extends AbstractProperty
         value = coll;
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.jmeter.testelement.property.JMeterProperty#mergeIn(org.apache.jmeter.testelement.property.JMeterProperty)
      */
     public void mergeIn(JMeterProperty prop)
@@ -232,8 +226,8 @@ public class CollectionProperty extends AbstractProperty
         }
     }
 
-    /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion()
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
      */
     public void recoverRunningVersion(TestElement owner)
     {
@@ -257,8 +251,8 @@ public class CollectionProperty extends AbstractProperty
         }
     }
 
-    /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#setTemporary(boolean, org.apache.jmeter.testelement.TestElement)
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.property.JMeterProperty#setTemporary(boolean, TestElement)
      */
     public void setTemporary(boolean temporary, TestElement owner)
     {

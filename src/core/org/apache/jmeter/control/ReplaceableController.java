@@ -11,7 +11,7 @@ import org.apache.jorphan.collections.HashTree;
  *	during the compilation phase of test execution in an arbitrary
  *	way.
  *
- *	@see	org.apache.jmeter.gui.action.AbstractAction.java
+ *	@see	org.apache.jmeter.gui.action.AbstractAction
  */
 public interface ReplaceableController {
 	

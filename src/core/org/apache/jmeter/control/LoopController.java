@@ -121,7 +121,7 @@ public class LoopController extends GenericController implements Serializable
         return getPropertyAsBoolean(CONTINUE_FOREVER);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.jmeter.control.Controller#isDone()
      */
     public boolean isDone()
@@ -141,8 +141,8 @@ public class LoopController extends GenericController implements Serializable
         return (getLoops() > -1) && loopCount >= getLoops();
     }
 
-    /**
-     * @see org.apache.jmeter.control.GenericController#nextIfCurrentNull()
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.control.GenericController#nextIsNull()
      */
     protected Sampler nextIsNull() throws NextIsNullException
     {
@@ -175,7 +175,7 @@ public class LoopController extends GenericController implements Serializable
         loopCount = 0;
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.jmeter.control.GenericController#getIterCount()
      */
     protected int getIterCount()
@@ -245,4 +245,4 @@ public class LoopController extends GenericController implements Serializable
         incrementLoopCount();
     }
 
-};
+}

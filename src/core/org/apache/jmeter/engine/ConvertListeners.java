@@ -27,8 +27,8 @@ public class ConvertListeners implements HashTreeTraverser {
 
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.engine");
-	/**
-	 * @see ListedHashTreeVisitor#addNode(Object, ListedHashTree)
+    /* (non-Javadoc)
+	 * @see HashTreeTraverser#addNode(Object, HashTree)
 	 */
 	public void addNode(Object node, HashTree subTree) {
 		if(node instanceof ThreadGroup)
@@ -69,14 +69,14 @@ public class ConvertListeners implements HashTreeTraverser {
 		}
 	}
 
-	/**
-	 * @see ListedHashTreeVisitor#subtractNode()
+    /* (non-Javadoc)
+	 * @see HashTreeTraverser#subtractNode()
 	 */
 	public void subtractNode() {
 	}
 
-	/**
-	 * @see ListedHashTreeVisitor#processPath()
+    /* (non-Javadoc)
+	 * @see HashTreeTraverser#processPath()
 	 */
 	public void processPath() {
 	}

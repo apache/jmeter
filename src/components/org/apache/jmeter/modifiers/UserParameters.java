@@ -123,7 +123,7 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
     }
 
     /**
-     * @see org.apache.jmeter.engine.event.IterationListener#iterationStarted(org.apache.jmeter.engine.event.IterationEvent)
+     * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationStart(LoopIterationEvent)
      */
     public void iterationStart(LoopIterationEvent event)
     {
