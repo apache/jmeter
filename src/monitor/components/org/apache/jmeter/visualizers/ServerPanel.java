@@ -80,7 +80,7 @@ public class ServerPanel extends JPanel
 	public static final ImageIcon LOAD_10 =
 		JMeterUtils.getImage("monitor-load-10.gif");
 	
-	private MonitorModel DATA;
+	//private MonitorModel DATA;
 	
     /**
      * 
@@ -88,7 +88,7 @@ public class ServerPanel extends JPanel
     public ServerPanel(MonitorModel model)
     {
         super();
-        DATA = model;
+        //DATA = model;
         init(model);
     }
 
@@ -181,8 +181,8 @@ public class ServerPanel extends JPanel
 	 * method to lookup the images.
 	 */
 	public void updateGui(MonitorModel stat){
-		this.DATA = null;
-		this.DATA = stat;
+		//this.DATA = null;
+		//this.DATA = stat;
 		loadIcon.setIcon(getLoadImageIcon(stat.getLoad()));
 		healthIcon.setIcon(getHealthyImageIcon(stat.getHealth()));
 		timestampField.setText(stat.getTimestampString());
