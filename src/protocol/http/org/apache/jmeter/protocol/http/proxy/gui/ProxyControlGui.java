@@ -690,7 +690,7 @@ public class ProxyControlGui
             {
                 StringBuffer name = new StringBuffer();
                 JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
-                TestElement te = cur.createTestElement();
+                TestElement te = cur.getTestElement();
                 if (te instanceof ThreadGroup)
                 {
                     name.append(parent_name);
