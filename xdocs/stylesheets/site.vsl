@@ -252,8 +252,8 @@
 		  #foreach ( $c_items in $component.getChildren() )
 				#if ($c_items.getName().equals("description"))
 					#runloop($c_items)
-					<p><b>Control Panel</b></p>
-					#if ($screenshot != "")
+					#if ($screenshot != "")						
+						<p><b>Control Panel</b></p>
 						<div align="center"><img src="$screenshot"></div>
 					#end
 				#else

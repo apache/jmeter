@@ -59,6 +59,17 @@ do not contain commas, encoding is not required.</p>
 variable will override the built-in function.</note>
 </subsection>
 
+<subsection name="14.4 The Function Helper Dialog" anchor="function_helper">
+<p>The Function Helper dialog is available from JMeter's Tools menu.</p>
+<figure image="../images/screenshots/function_helper_dialog.png">Function Helper Dialog</figure>
+<p>Using the Function Helper, you can select a function from the pull down, and assign
+values for its arguments.  The left column in the table provides a brief description of the
+argument, and the right column is where you write in the value for that argument.  Different
+functions take different arguments.</p>
+<p>Once you have done this, click the "generate" button, and the appropriate string is generated
+for you to copy-paste into your test plan wherever you like.</p>
+</subsection>
+
 </section>
 
 </body>

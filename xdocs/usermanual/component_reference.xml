@@ -356,7 +356,28 @@ what results any given interaction will give</note>
 </section>
 
 <section name="13.3 Listeners" anchor="listeners">
+<component index="13.3.1" name="Mailer Visualizer" screenshot="../images/screenshots/mailer_vis.png">
+<description><p>The mailer visualizer can be set up to send email if a test run receives too many 
+failed responses from the server.</p></description>
 
+<properties>
+	<property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+	<property name="From" required="Yes">Email address to send messages from.</property>
+	<property name="Addressie(s)" required="Yes">Email address to send messages to.</property>
+	<property name="SMTP Host" required="No">IP address or host name of SMTP (email redirector)
+	server.</property>
+	<property name="Failure Subject" required="No">Email subject line for fail messages.</property>
+	<property name="Success Subject" required="No">Email subject line for success messages.</property>
+	<property name="Failure Limit" required="Yes">Once this number of failed responses are received, a failure
+	email is sent.</property>
+	<property name="Success Limit" required="Yes">Once this number of successful responses are
+	received <strong>after previously reaching the failure limit</strong>, a success email
+	is sent.  The mailer will thus only send out messages in a sequence of failed-succeeded-failed-succeeded, etc.</property>
+	<property name="Test Mail" required="No"></property>
+	<property name="Failures" required="No">A field that keeps a running total of number
+	of failures so far received.</property>
+</properties>
+</component>
 
 <component index="13.3.2" name="Graph Full Results" screenshot="">
 <description>No Description</description>
@@ -385,7 +406,7 @@ are part of the test plan.</p></description>
 </links>
 </component>
 
-<component index="13.3.8" name="View Result Tree" screenshot="../images/screenshots/view_results_tree.png">
+<component index="13.3.6" name="View Result Tree" screenshot="../images/screenshots/view_results_tree.png">
 <description>The View Results Tree shows a tree of all sample responses, allowing you to view the
 response for any sample.  In addition to showing the response, you can see the time it took to get
 this response, and some response codes.</description>
@@ -621,9 +642,9 @@ instead. (see figures 9 and 10).</p>
 
 <section name="13.5 Assertions" anchor="assertions">
 
-<component index="13.5.1" name="Basic Assertion" anchor="basic_assertion" screenshot="../images/screenshots/assertion/assertion.gif">
+<component index="13.5.1" name="Response Assertion" anchor="basic_assertion" screenshot="../images/screenshots/assertion/assertion.gif">
 
-<description><p>The assertion control panel let's you add strings to be tested. These strings can
+<description><p>The response assertion control panel let's you add strings to be tested. These strings can
 be regular expressions. You can also choose whether the strings will be expected
 to match the entire response, or if the response is only expected to contain the
 strings. You can attach multiple assertions to any controller for additionaly flexibility.</p>
@@ -649,6 +670,19 @@ strings. You can attach multiple assertions to any controller for additionaly fl
 </example>
 
 
+</component>
+
+<component index="13.5.2" name="Duration Assertion" screenshot="../images/screenshots/duration_assertion.png">
+<description><p>The Duration Assertion tests that each response was received within a given amount
+of time.  Any response that takes longer than the given number of milliseconds (specified by the
+user) is marked as a failed response.</p></description>
+
+<properties>
+<property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+	<property name="Duration in Milliseconds" required="Yes">The maximum number of milliseconds
+	each response is allowed before being marked as failed.</property>
+	
+</properties>
 </component>
 
 </section>
@@ -874,6 +908,66 @@ any other thread</note></description>
   installed.
 </p>
 </component>
+</section>
+
+<section name="13.9 Functions" anchor="functions">
+<p>Please read the <a href="functions.html">general description</a> of how functions work.  Here is given only the details of
+specific functions.</p>
+
+<component index="13.9.1" name="Regex Function">
+<description><p>The Regex Function is used to parse the previous response using any regular 
+expression (provided by user).  The function returns the template string with variable values filled
+in.</p></description>
+
+<properties>
+	<property name="First arguement" required="Yes">The first argument is the regular expression
+	to be applied to the response data.  It will grab all matches.  Any parts of this expression
+	that you wish to use in your template string, be sure to surround in parentheses.  Example:
+	&amp;lt;a href="(.*)"&amp;gt;.  This will grab the value of the link and store it as the first group (there is
+	only 1 group).  Another example: &amp;lt;input type="hidden" name="(.*)" value="(.*)"&amp;gt;.  This will
+	grab the name as the first group, and the value as the second group.  These values can be used
+	in your template string</property>
+	<property name="Second argument" required="Yes">This is the template string that will replace
+	the function at run-time.  To refer to a group captured in the regular expression, use the syntax:
+	$[group_number]$.  Ie: $1$, or $2$.  Your template can be any string.</property>
+	<property name="Third argument" required="Yes">The third argument tells JMeter which match
+	to use.  Your regular expression might find numerous matches.  You have four choices:
+		<ul><li>An integer - Tells JMeter to use that match.  '1' for the first found match, '2' for the 
+		second, and so on</li>
+		<li>RAND - Tells JMeter to choose a match at random.</li>
+		<li>ALL - Tells JMeter to use all matches, and create a template string for each one and then
+		append them all together.  This option is little used.</li>
+		<li>A float number between 0 and 1 - tells JMeter to find the Xth match using the formula:
+		(number_of_matches_found * float_number) rounded to nearest integer.</li>
+		</ul></property>
+	<property name="Fourth argument" required="No">If 'ALL' was selected for the above argument
+	value, then this argument will be inserted between each appended copy of the template value.</property>
+	<property name="Fifth argument" required="No">Default value returned if no match is found</property>
+</properties>
+</component>
+
+<component index="13.9.2" name="Counter Function">
+<description><p>The counter generates a new number each time it is called, starting with 1
+and incrementing by +1 each time.  The counter can be configured to keep each simulated user's values
+separate, or to use the same counter for all user.  If each user's values is incremented separately,
+that is like counting the number of iterations through the test plan.  A global counter is like
+counting how many times that request was run.</p></description>
+
+<properties>
+	<property name="First argument" required="Yes">TRUE if you wish each simulated user's counter 
+	to be kept independent and separate from the other users.  FALSE for a global counter.</property>
+</properties>
+</component>
+
+<component index="13.9.3" name="Thread Number Function">
+<description><p>The thread number function simply returns the number of the thread currently 
+being executed.  These numbers are independent of ThreadGroup, meaning thread #1 in one threadgroup
+is indistinguishable from thread #1 in another threadgroup, from the point of view of this function.</p>
+
+<p>There are no arguments for this function.</p>
+</description>
+</component>
+
 </section>
 </body>
 </document>
