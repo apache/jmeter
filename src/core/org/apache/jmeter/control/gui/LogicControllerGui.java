@@ -53,12 +53,11 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control.gui;
-import javax.swing.BorderFactory;
+import java.awt.BorderLayout;
 
 import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -109,8 +108,8 @@ public class LogicControllerGui extends AbstractControllerGui
 
 	private void init()
 	{
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-		setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
-		add(makeTitlePanel());
+		setLayout(new BorderLayout());
+		setBorder(makeBorder());
+		add(makeTitlePanel(), BorderLayout.NORTH);
 	}
 }
