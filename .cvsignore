@@ -10,3 +10,4 @@ jmeter-fb.*
 .externalToolBuilders
 .settings
 reports
+local
