@@ -39,7 +39,8 @@ import junit.framework.TestCase;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -547,10 +548,10 @@ public class CookieManager
                     "/",
                     false,
                     9999999999L));
-            HTTPSampler sampler = new HTTPSampler();
+            HTTPSamplerBase sampler = new HTTPNullSampler();
             sampler.setDomain("jakarta.apache.org");
             sampler.setPath("/index.html");
-            sampler.setMethod(HTTPSampler.GET);
+            sampler.setMethod(HTTPSamplerBase.GET);
             assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
         }
 
@@ -564,10 +565,10 @@ public class CookieManager
                     "/",
                     false,
                     9999999999L));
-            HTTPSampler sampler = new HTTPSampler();
+            HTTPSamplerBase sampler = new HTTPNullSampler();
             sampler.setDomain("jakarta.apache.org");
             sampler.setPath("/index.html");
-            sampler.setMethod(HTTPSampler.GET);
+            sampler.setMethod(HTTPSamplerBase.GET);
             assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
         }
         
