@@ -1,9 +1,21 @@
+// $Header$
 /*
- * Created on Apr 30, 2003
+ * Copyright 2003-2004 The Apache Software Foundation.
  *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- */
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+*/
+
 package org.apache.jmeter.junit;
 
 import java.io.File;
@@ -11,7 +23,6 @@ import java.io.File;
 import junit.framework.TestCase;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -67,13 +78,13 @@ public abstract class JMeterTestCase extends TestCase
 			logprop("os.name");
 			logprop("os.version");
 			logprop("os.arch");
-			//logprop("java.class.path");
-			String cp = System.getProperty("java.class.path");
-			String cpe[]= JOrphanUtils.split(cp,File.pathSeparator);
-			System.out.println("java.class.path=");
-			for (int i=0;i<cpe.length;i++){
-				System.out.println(cpe[i]);
-			}
+			logprop("java.class.path");
+//			String cp = System.getProperty("java.class.path");
+//			String cpe[]= JOrphanUtils.split(cp,File.pathSeparator);
+//			System.out.println("java.class.path=");
+//			for (int i=0;i<cpe.length;i++){
+//				System.out.println(cpe[i]);
+//			}
     	} else {
     		filePrefix="";
     	}
