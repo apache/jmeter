@@ -385,11 +385,11 @@ public abstract class AbstractProperty implements JMeterProperty
         }
         else if (item instanceof Collection)
         {
-            return new CollectionProperty("" + item.hashCode(), normalizeList((Collection) item));
+            return new CollectionProperty("" + item.hashCode(),(Collection) item);
         }
         else if (item instanceof Map)
         {
-            return new MapProperty("" + item.hashCode(), normalizeMap((Map) item));
+            return new MapProperty("" + item.hashCode(), (Map) item);
         }
         else
         {

@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testelement.ThreadListener;
+import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -18,11 +20,12 @@ import org.apache.jmeter.threads.JMeterVariables;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class UserParameters extends ConfigTestElement implements Serializable, PreProcessor
+public class UserParameters extends ConfigTestElement implements Serializable, PreProcessor,ThreadListener
 {
 
     public static final String NAMES = "UserParameters.names";
     public static final String THREAD_VALUES = "UserParameters.thread_values";
+    public static final String PER_ITERATION = "UserParameters.per_iteration";
     private int counter = 0;
     /**
      * @see org.apache.jmeter.config.Modifier#modifyEntry(Sampler)
@@ -87,15 +90,33 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
         CollectionProperty threadValues = (CollectionProperty) getProperty(THREAD_VALUES);
         if (threadValues.size() > 0)
         {
-            return (CollectionProperty) threadValues.get(counter % threadValues.size());
+            return (CollectionProperty) threadValues.get(JMeterContextService.getContext().getThreadNum() % threadValues.size());
         }
         else
         {
             return new CollectionProperty("noname", new LinkedList());
         }
     }
+    
+    public boolean isPerIteration()
+    {
+        return getPropertyAsBoolean(PER_ITERATION);
+    }
+    
+    public void setPerIteration(boolean perIter)
+    {
+        setProperty(new BooleanProperty(PER_ITERATION,perIter));
+    }
 
     public void process()
+    {
+        if(!isPerIteration())
+        {
+            setValues();
+        }
+    }
+
+    private void setValues()
     {
         PropertyIterator namesIter = getNames().iterator();
         PropertyIterator valueIter = getValues().iterator();
@@ -107,5 +128,22 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
             jmvars.put(name, value);
         }
     }
+
+    /**
+     * @see org.apache.jmeter.testelement.ThreadListener#iterationStarted(int)
+     */
+    public void iterationStarted(int iterationCount)
+    {
+        if(isPerIteration())
+        {
+            setValues();
+        }
+    }
+
+    /**
+     * @see org.apache.jmeter.testelement.ThreadListener#setJMeterVariables(org.apache.jmeter.threads.JMeterVariables)
+     */
+    public void setJMeterVariables(JMeterVariables jmVars)
+    {}
 
 }

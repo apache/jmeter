@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -23,6 +24,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * @author Administrator
@@ -32,6 +35,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class UserParametersGui extends AbstractConfigGui {
 
+    private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
 	private String THREAD_COLUMNS =
 		JMeterUtils.getResString("user");
 
@@ -42,6 +46,7 @@ public class UserParametersGui extends AbstractConfigGui {
 		addUserButton,
 		deleteRowButton,
 		deleteColumnButton;
+    private JCheckBox perIterationCheck;
 
 	public UserParametersGui() {
 		super();
@@ -73,9 +78,10 @@ public class UserParametersGui extends AbstractConfigGui {
 		{
 			String colName = THREAD_COLUMNS+"_"+count;
 			tableModel.addNewColumn(colName,String.class);
-			tableModel.setColumnData(count,(List)iter.next());
+			tableModel.setColumnData(count,(List)iter.next().getObjectValue());
 			count++;
 		}
+        perIterationCheck.setSelected(params.isPerIteration());
 		super.configure(el);
 	}
 
@@ -97,10 +103,15 @@ public class UserParametersGui extends AbstractConfigGui {
         ((UserParameters)params).setNames(new CollectionProperty(UserParameters.NAMES,
                 tableModel.getColumnData(JMeterUtils.getResString("name"))));
         CollectionProperty threadLists = new CollectionProperty(UserParameters.THREAD_VALUES,new ArrayList());
+        log.debug("making threadlists from gui = " + threadLists);
         for (int x = 1; x < tableModel.getColumnCount(); x++) {
         	threadLists.addItem(tableModel.getColumnData(THREAD_COLUMNS + "_" + x));
+            log.debug("Adding column to threadlist: " + tableModel.getColumnData(THREAD_COLUMNS + "_" + x));
+            log.debug("Threadlists now = " + threadLists);
         }
+        log.debug("In the end, threadlists = " + threadLists);
         ((UserParameters)params).setThreadLists(threadLists);
+        ((UserParameters)params).setPerIteration(perIterationCheck.isSelected());
         super.configureTestElement(params);
     }
 
@@ -109,6 +120,16 @@ public class UserParametersGui extends AbstractConfigGui {
 		add(makeTitlePanel(), BorderLayout.NORTH);
 		add(makeParameterPanel(), BorderLayout.CENTER);
 	}
+    
+    protected JPanel makeTitlePanel()
+    {
+        perIterationCheck = new JCheckBox(JMeterUtils.getResString("update_per_iter"));
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(super.makeTitlePanel(),BorderLayout.NORTH);
+        panel.add(perIterationCheck,BorderLayout.SOUTH);
+        perIterationCheck.setSelected(true);
+        return panel;
+    }
 
 	private JPanel makeParameterPanel() {
 		JPanel paramPanel = new JPanel(new BorderLayout());

@@ -18,6 +18,7 @@ public class JMeterContext {
 	SampleResult previousResult;
 	Sampler currentSampler;
     Sampler previousSampler;
+    private int threadNum;
 	
 	JMeterContext() {
 		variables = null;
@@ -70,6 +71,24 @@ public class JMeterContext {
     public void setPreviousSampler(Sampler previousSampler)
     {
         this.previousSampler = previousSampler;
+    }
+
+    /**
+     * Returns the threadNum.
+     * @return int
+     */
+    public int getThreadNum()
+    {
+        return threadNum;
+    }
+
+    /**
+     * Sets the threadNum.
+     * @param threadNum The threadNum to set
+     */
+    public void setThreadNum(int threadNum)
+    {
+        this.threadNum = threadNum;
     }
 
 }
