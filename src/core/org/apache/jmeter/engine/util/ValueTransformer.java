@@ -23,7 +23,7 @@ interface ValueTransformer
     /**
      * Transform the given property and return the new version.
      * @param property
-     * @return
+     * @return the transformed property
      */
     public JMeterProperty transformValue(JMeterProperty property) throws InvalidVariableException;
     

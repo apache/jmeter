@@ -25,8 +25,10 @@ public abstract class MultiProperty extends AbstractProperty
         super();
     }
     /**
-     * Get the property iterator to iterate through the sub-values of this JMeterProperty
-     * @return
+     * Get the property iterator to iterate through the sub-values of this
+     * JMeterProperty.
+     * 
+     * @return an iterator for the sub-values of this property
      */
     public abstract PropertyIterator iterator();
     
