@@ -178,9 +178,15 @@ public class FileWrapper
 		FileWrapper fw = (FileWrapper) (my).get(file);
 		if (fw == null) // First call
 		{
-			log.info("Attaching "+file);
-			open(file,file);
-			fw = (FileWrapper) my.get(file);
+			if (file.startsWith("*")) {
+				log.warn("Cannot perform initial open using alias "+file);
+			}
+			else
+			{
+				log.info("Attaching "+file);
+				open(file,file);
+				fw = (FileWrapper) my.get(file);
+			}
 			//TODO improve the error handling
 			if (fw == null) return "";
 		}
