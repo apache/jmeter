@@ -6,7 +6,7 @@ package org.apache.jmeter.testelement.property;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class DoubleProperty extends AbstractProperty
+public class DoubleProperty extends NumberProperty
 {
 
      double value;
@@ -26,23 +26,15 @@ public class DoubleProperty extends AbstractProperty
         this.value = value;
     }
     
-    public void setObjectValue(Object v)
-    {
-        if(v instanceof Number)
+    protected void setNumberValue(Number n)
         {
-            value = ((Number)v).doubleValue();
+            value = n.doubleValue();
         }
-        else
+    
+        protected void setNumberValue(String n) throws NumberFormatException
         {
-            try
-            {
-                value = Double.parseDouble(v.toString());
-            }
-            catch (RuntimeException e)
-            {}
+            value = Double.parseDouble(n);
         }
-    }
-
     /**
      * @see org.apache.jmeter.testelement.property.JMeterProperty#getStringValue()
      */
@@ -67,33 +59,6 @@ public class DoubleProperty extends AbstractProperty
         DoubleProperty prop = (DoubleProperty)super.clone();
         prop.value = value;
         return prop;
-    }
-
-    /**
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
-    public int compareTo(Object arg0)
-    {
-        if(arg0 instanceof JMeterProperty)
-        {
-            double argValue = ((JMeterProperty)arg0).getDoubleValue();
-            if(value < argValue)
-            {
-                return -1;
-            }
-            else if(value == argValue)
-            {
-                return 0;
-            }
-            else
-            {
-                return 1;
-            }
-        }
-        else
-        {
-            return -1;
-        }
     }
 
     /**

@@ -52,6 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */package org.apache.jmeter.gui.util;
+import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -65,6 +66,7 @@ import java.util.Set;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 
 import org.apache.jmeter.gui.GuiPackage;
@@ -199,11 +201,11 @@ public class MenuFactory
 		addSeparator(menu);
 		if(removable)
 		{
-			menu.add(makeMenuItem(JMeterUtils.getResString("remove"), "Remove","remove"));
+			menu.add(makeMenuItem(JMeterUtils.getResString("remove"), "Remove","remove",KeyStroke.getKeyStroke(KeyEvent.VK_DELETE,0)));
 		}
-		menu.add(makeMenuItem(JMeterUtils.getResString("cut"), "Cut", "Cut"));
-		menu.add(makeMenuItem(JMeterUtils.getResString("copy"), "Copy", "Copy"));
-		menu.add(makeMenuItem(JMeterUtils.getResString("paste"), "Paste", "Paste"));
+		menu.add(makeMenuItem(JMeterUtils.getResString("cut"), "Cut", "Cut",KeyStroke.getKeyStroke(KeyEvent.VK_X,KeyEvent.CTRL_MASK)));
+		menu.add(makeMenuItem(JMeterUtils.getResString("copy"), "Copy", "Copy",KeyStroke.getKeyStroke(KeyEvent.VK_C,KeyEvent.CTRL_MASK)));
+		menu.add(makeMenuItem(JMeterUtils.getResString("paste"), "Paste", "Paste",KeyStroke.getKeyStroke(KeyEvent.VK_V,KeyEvent.CTRL_MASK)));
 		menu.add(makeMenuItem(JMeterUtils.getResString("paste_insert"), "Paste Insert", "Paste Insert"));
 	}
 
@@ -438,6 +440,13 @@ public class MenuFactory
 
 		return newMenuChoice;
 	}
+    
+    public static JMenuItem makeMenuItem(String label,String name,String actionCommand,KeyStroke accel)
+    {
+        JMenuItem item = makeMenuItem(label,name,actionCommand);
+        item.setAccelerator(accel);
+        return item;
+    }
 
 	private static void initializeMenus()
 	{

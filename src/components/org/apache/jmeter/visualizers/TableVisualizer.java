@@ -164,6 +164,7 @@ public class TableVisualizer extends AbstractVisualizer implements GraphListener
      ***************************************/
     public synchronized void clear()
     {
+        log.warn("Clear called",new Exception());
         // this.graph.clear();
         model.clear();
         dataField.setText("0000");

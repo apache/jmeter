@@ -2,7 +2,7 @@ package org.apache.jmeter.testelement.property;
 
 import org.apache.jmeter.testelement.TestElement;
 
-public class TestElementProperty extends AbstractProperty
+public class TestElementProperty extends MultiProperty
 {
     TestElement value;
     TestElement savedValue = null;
@@ -113,16 +113,28 @@ public class TestElementProperty extends AbstractProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#setTemporary(boolean, TestElement)
+     * @see org.apache.jmeter.testelement.property.MultiProperty#addProperty(org.apache.jmeter.testelement.property.JMeterProperty)
      */
-    public void setTemporary(boolean temporary, TestElement owner)
+    public void addProperty(JMeterProperty prop)
     {
-        super.setTemporary(temporary, owner);
-        PropertyIterator iter = value.propertyIterator();
-        while (iter.hasNext())
-        {
-            iter.next().setTemporary(temporary, owner);
-        }
+        value.setProperty(prop);
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.property.MultiProperty#clear()
+     */
+    public void clear()
+    {
+        value.clear();
 
     }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.property.MultiProperty#iterator()
+     */
+    public PropertyIterator iterator()
+    {
+        return value.propertyIterator();
+    }
+
 }

@@ -377,6 +377,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
 		run_clearAll = new JMenuItem(JMeterUtils.getResString("clear_all"), 'a');
 		run_clearAll.addActionListener(ActionRouter.getInstance());
 		run_clearAll.setActionCommand(org.apache.jmeter.gui.action.Clear.CLEAR_ALL);
+        run_clearAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,KeyEvent.CTRL_MASK));
 		runMenu.add(run_start);
 		if (remote_start != null)
 		{
@@ -396,7 +397,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
 		}
 		remote_stop_all = new JMenuItem(JMeterUtils.getResString("remote_stop_all"), 'X');
 		remote_stop_all.setAccelerator(
-			KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_MASK));
+			KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.ALT_MASK));
 		remote_stop_all.addActionListener(ActionRouter.getInstance());
 		remote_stop_all.setActionCommand("remote_stop_all");
 		runMenu.add(remote_stop_all);

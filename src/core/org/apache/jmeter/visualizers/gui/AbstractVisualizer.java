@@ -33,7 +33,7 @@ import org.apache.log.Logger;
 public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent implements Visualizer, ChangeListener, UnsharedComponent
 {
 
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    transient protected static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
     private FilePanel filePanel;
     private JCheckBox errorLogging;
