@@ -82,7 +82,7 @@ import org.apache.log.Logger;
 public class JDBCSampler extends AbstractSampler implements TestListener
 {
     transient private static Logger log =
-            Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.jdbc");
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.jdbc");
     public final static String URL = "JDBCSampler.url";
     public final static String DRIVER = "JDBCSampler.driver";
     public static String CONNECTIONS = "JDBCSampler.connections";
@@ -252,12 +252,14 @@ public class JDBCSampler extends AbstractSampler implements TestListener
         DBKey key = (DBKey) keyMap.get(getUrl());
         if (key == null)
         {
-            key = manager.getKey(getUrl(),
-                                 getUsername(),
-                                 getPassword(),
-                                 getDriver(),
-                                 getMaxUse(),
-                                 getNumConnections());
+            key =
+                manager.getKey(
+                    getUrl(),
+                    getUsername(),
+                    getPassword(),
+                    getDriver(),
+                    getMaxUse(),
+                    getNumConnections());
             keyMap.put(getUrl(), key);
         }
         return key;
@@ -304,12 +306,10 @@ public class JDBCSampler extends AbstractSampler implements TestListener
 
     public String toString()
     {
-        return getUrl()+", user: "+getUsername()+"\n"+getQuery();
+        return getUrl() + ", user: " + getUsername() + "\n" + getQuery();
     }
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(LoopIterationEvent)
-     */
-    public void testIterationStart(LoopIterationEvent event)
-    {}
 
+    public void testIterationStart(LoopIterationEvent event)
+    {
+    }
 }

@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,7 +52,6 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-
 package org.apache.jmeter.protocol.jdbc.util;
 
 import java.io.IOException;
@@ -60,119 +59,122 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-public class DBKey implements Serializable{
+public class DBKey implements Serializable
+{
 
+    public DBKey()
+    {
+    }
 
-  public DBKey()
-  {
-  }
+    void readObject(ObjectInputStream ois)
+        throws ClassNotFoundException, IOException
+    {
+        ois.defaultReadObject();
+    }
 
-  void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException
-  {
-	 ois.defaultReadObject();
-  }
+    void writeObject(ObjectOutputStream oos) throws IOException
+    {
+        oos.defaultWriteObject();
+    }
 
-  void writeObject(ObjectOutputStream oos) throws IOException
-  {
-	 oos.defaultWriteObject();
-  }
+    public void setUrl(String newUrl)
+    {
+        url = newUrl;
+    }
 
-  public void setUrl(String newUrl)
-  {
-	 url = newUrl;
-  }
+    public String getUrl()
+    {
+        return url;
+    }
 
-  public String getUrl()
-  {
-	 return url;
-  }
+    public void setUsername(String newUsername)
+    {
+        username = newUsername;
+    }
 
-  public void setUsername(String newUsername)
-  {
-	 username = newUsername;
-  }
+    public String getUsername()
+    {
+        return username;
+    }
 
-  public String getUsername()
-  {
-	 return username;
-  }
+    public void setPassword(String newPassword)
+    {
+        password = newPassword;
+    }
 
-  public void setPassword(String newPassword)
-  {
-	 password = newPassword;
-  }
+    public String getPassword()
+    {
+        return password;
+    }
 
-  public String getPassword()
-  {
-	 return password;
-  }
+    public void setDriver(String newDriver)
+    {
+        driver = newDriver;
+    }
 
-  public void setDriver(String newDriver)
-  {
-	 driver = newDriver;
-  }
+    public String getDriver()
+    {
+        return driver;
+    }
 
-  public String getDriver()
-  {
-	 return driver;
-  }
+    public void setMaxUsage(int newMaxUsage)
+    {
+        maxUsage = newMaxUsage;
+    }
 
-  public void setMaxUsage(int newMaxUsage)
-  {
-	 maxUsage = newMaxUsage;
-  }
+    public int getMaxUsage()
+    {
+        return maxUsage;
+    }
 
-  public int getMaxUsage()
-  {
-	 return maxUsage;
-  }
+    public void setMaxConnections(int newMaxConnections)
+    {
+        maxConnections = newMaxConnections;
+    }
 
-  public void setMaxConnections(int newMaxConnections)
-  {
-	 maxConnections = newMaxConnections;
-  }
+    public int getMaxConnections()
+    {
+        return maxConnections;
+    }
 
-  public int getMaxConnections()
-  {
-	 return maxConnections;
-  }
+    /**
+     * Determines if the two DBKey objects have the same property values.
+     * @param key DBKey to compare with this one.
+     * @return bool True if equal, false otherwise.
+     */
+    public boolean equals(Object key)
+    {
+        if (key instanceof DBKey)
+            return url.equals(((DBKey) key).getUrl());
+        else
+            return false;
+    }
 
-/**************************************************************
-  Determines if the two DBKey objects have the same property values.
-@param key DBKey to compare with this one.
-@return bool True if equal, false otherwise.
-****************************************************************/
-  public boolean equals(Object key)
-  {
-	 if(key instanceof DBKey)
-		return url.equals(((DBKey)key).getUrl());
-	 else
-		return false;
-  }
+    public int hashCode()
+    {
+        return url.hashCode() * 11;
+    }
 
-  public int hashCode()
-  {
-	 return url.hashCode()*11;
-  }
+    public String toString()
+    {
+        StringBuffer ret = new StringBuffer();
+        ret.append("Class=DBKey(" + "\n");
+        ret.append("driver=" + driver + "\n");
+        ret.append("url=" + url + "\n");
+        ret.append("username=" + username + "\n");
+        ret.append("Number of connections=" + maxConnections + "\n");
+        ret.append(
+            "Max times each connection used before renewing="
+                + maxUsage
+                + "\n");
+        ret.append(")");
+        return ret.toString();
+    }
 
-  public String toString()
-  {
-	 StringBuffer ret = new StringBuffer();
-	 ret.append("Class=DBKey("+"\n");
-	 ret.append("driver="+driver+"\n");
-	 ret.append("url="+url+"\n");
-	 ret.append("username="+username+"\n");
-	 ret.append("Number of connections="+maxConnections+"\n");
-	 ret.append("Max times each connection used before renewing="+maxUsage+"\n");
-	 ret.append(")");
-	 return ret.toString();
-  }
-
-  private String url;
-  private String username;
-  private String password;
-  private String driver;
-  private int maxUsage;
-  private int maxConnections;
+    private String url;
+    private String username;
+    private String password;
+    private String driver;
+    private int maxUsage;
+    private int maxConnections;
 }
-
