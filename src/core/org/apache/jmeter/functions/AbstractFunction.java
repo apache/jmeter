@@ -18,22 +18,21 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.UnsupportedEncodingException;
+//import java.io.UnsupportedEncodingException;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.StringTokenizer;
+//import java.util.LinkedList;
+//import java.util.List;
+//import java.util.StringTokenizer;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jorphan.util.JOrphanUtils;
+//import org.apache.jorphan.util.JOrphanUtils;
 
 /**
- * @author mstover
- * @version $Revision$
+ * @version $Revision$ on $Date$
  */
 public abstract class AbstractFunction implements Function
 {
@@ -66,43 +65,44 @@ public abstract class AbstractFunction implements Function
      */
     abstract public String getReferenceKey();
 
-    /**
-     * Provides a convenient way to parse the given argument string into a
-     * collection of individual arguments.  Takes care of splitting the string
-     * based on commas, generates blank strings for values between adjacent
-     * commas, and decodes the string using URLDecoder.
-     * 
-     * @deprecated
-     */
-    protected Collection parseArguments(String params)
-    {
-        StringTokenizer tk = new StringTokenizer(params, ",", true);
-        List arguments = new LinkedList();
-        String previous = "";
-        while (tk.hasMoreTokens())
-        {
-            String arg = tk.nextToken();
-
-            if (arg.equals(",") && previous.equals(","))
-            {
-                arguments.add("");
-            }
-            else if (!arg.equals(","))
-            {
-                try
-                {
-                    arguments.add(JOrphanUtils.decode(arg, "UTF-8"));
-                }
-                catch (UnsupportedEncodingException e)
-                {
-                    // UTF-8 unsupported? You must be joking!
-                    throw new Error("Should not happen: "+e.toString());
-                }
-            }
-            previous = arg;
-        }
-        return arguments;
-    }
+// Not used    
+//    /**
+//     * Provides a convenient way to parse the given argument string into a
+//     * collection of individual arguments.  Takes care of splitting the string
+//     * based on commas, generates blank strings for values between adjacent
+//     * commas, and decodes the string using URLDecoder.
+//     * 
+//     * @deprecated
+//     */
+//    protected Collection parseArguments(String params)
+//    {
+//        StringTokenizer tk = new StringTokenizer(params, ",", true);
+//        List arguments = new LinkedList();
+//        String previous = "";
+//        while (tk.hasMoreTokens())
+//        {
+//            String arg = tk.nextToken();
+//
+//            if (arg.equals(",") && previous.equals(","))
+//            {
+//                arguments.add("");
+//            }
+//            else if (!arg.equals(","))
+//            {
+//                try
+//                {
+//                    arguments.add(JOrphanUtils.decode(arg, "UTF-8"));
+//                }
+//                catch (UnsupportedEncodingException e)
+//                {
+//                    // UTF-8 unsupported? You must be joking!
+//                    throw new Error("Should not happen: "+e.toString());
+//                }
+//            }
+//            previous = arg;
+//        }
+//        return arguments;
+//    }
 
     /**
      * Provides a convenient way to parse the given argument string into a
