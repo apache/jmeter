@@ -21,6 +21,8 @@ package org.apache.jorphan.math;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -99,6 +101,34 @@ public class StatCalculator implements Serializable
     public Number getPercentPoint(double percent)
     {
         return (Number) values.get((int)(values.size() * percent));
+    }
+    
+    /**
+     * The method has a limit of 1% as the finest granularity. We do
+     * this to make sure we get a whole number for iterating.
+     * @param percentRange
+     * @return
+     */
+    public synchronized HashMap getDistribution(){
+    	HashMap items = new HashMap();
+    	Iterator itr = this.values.iterator();
+		Long n = new Long(0);
+		Number[] dis = new Number[0];
+    	while(itr.hasNext()){
+    		Long nx = (Long)itr.next();
+    		if (items.containsKey(nx)){
+    			dis = (Number[])items.get(nx);
+				dis[1] = new Integer(dis[1].intValue() + 1);
+				items.put(nx,dis);
+    		} else {
+    			n = nx;
+    			dis = new Number[2];
+    			dis[0] = n;
+    			dis[1] = new Integer(1);
+    			items.put(n,dis);
+    		}
+    	}
+    	return items;
     }
     
     public double getMean()
