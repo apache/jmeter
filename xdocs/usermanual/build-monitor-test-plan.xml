@@ -34,6 +34,10 @@ monitor provides an easy way to monitor multiple servers from one console.
 The monitor was designed to work with the status servlet in Tomcat 5. In
 theory, any servlet container that supports JMX (Java Management Extension)
 can port the status servlet to provide the same information.</p>
+<p>For those who want to use the monitor with other servlet or EJB containers,
+Tomcat's status servlet should work with other containers for the memory
+statistics without any modifications. To get thread information, you will
+need to change the MBeanServer lookup to retrieve the correct MBeans.</p>
 
 </section>
 
