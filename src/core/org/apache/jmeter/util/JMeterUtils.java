@@ -289,7 +289,7 @@ public class JMeterUtils implements UnitTestManager
      */
     public static String getResString(String key)
     {
-    	return getResString(key,"[res_key="+key+"]");
+    	return getResStringDefault(key,"[res_key="+key+"]");
     }
     
 	/**
@@ -302,8 +302,18 @@ public class JMeterUtils implements UnitTestManager
 	 * 
 	 * @return    the resource string if the key is found;
 	 *             otherwise, return the default
+	 * @deprecated Only intended for us in development; use getResStrig(String) normally
 	 */
 	public static String getResString(String key, String defaultValue)
+	{
+		return getResStringDefault(key,defaultValue);
+	}
+	
+	/*
+	 * Helper method to do the actual work of fetching resources;
+	 * allows getResString(S,S) to be deprecated without affecting getResString(S);
+	 */
+	private static String getResStringDefault(String key, String defaultValue)
 	{
         if (key == null)
         {
