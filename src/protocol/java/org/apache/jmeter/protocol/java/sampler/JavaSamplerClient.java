@@ -101,7 +101,7 @@ import org.apache.jmeter.samplers.SampleResult;
  * 
  * @author Brad Kiewel
  * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
- * @version $Id$
+ * @version $Revision$
  */
 public interface JavaSamplerClient
 {

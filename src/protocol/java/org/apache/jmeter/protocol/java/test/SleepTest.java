@@ -78,7 +78,7 @@ import org.apache.jmeter.samplers.SampleResult;
  * to the sleep time.
  * 
  * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
- * @version $Id$
+ * @version $Revision$
  */
 public class SleepTest
     extends AbstractJavaSamplerClient

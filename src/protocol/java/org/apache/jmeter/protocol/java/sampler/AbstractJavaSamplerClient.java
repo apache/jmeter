@@ -88,7 +88,7 @@ import org.apache.log.Logger;
  * @see JavaSamplerClient#runTest(JavaSamplerContext)
  * 
  * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
- * @version $Id$
+ * @version $Revision$
  */
 public abstract class AbstractJavaSamplerClient implements JavaSamplerClient
 {
