@@ -56,18 +56,8 @@ public class SoapSamplerGui extends AbstractSamplerGui
         if (s instanceof SoapSampler)
         {
             SoapSampler sampler = (SoapSampler) s;
-            try
-            {
-                URL url = new URL(urlField.getText());
-                sampler.setDomain(url.getHost());
-                sampler.setPort(url.getPort());
-                sampler.setProtocol(url.getProtocol());
-                sampler.setMethod(SoapSampler.POST);
-                sampler.setPath(url.getPath());
-                sampler.setXmlData(soapXml.getText());
-            }
-            catch (MalformedURLException e)
-            {}
+            sampler.setURLData(urlField.getText());
+            sampler.setXmlData(soapXml.getText());
         }
     }
 
@@ -92,12 +82,7 @@ public class SoapSamplerGui extends AbstractSamplerGui
     {
         super.configure(el);
         SoapSampler sampler = (SoapSampler) el;
-        try
-        {
-            urlField.setText(sampler.getUrl().toString());
-        }
-        catch (MalformedURLException e)
-        {}
+        urlField.setText(sampler.getURLData());
         soapXml.setText(sampler.getXmlData());
     }
     
