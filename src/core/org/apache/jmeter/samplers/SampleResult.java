@@ -62,15 +62,15 @@ import java.util.Set;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.jmeter.assertions.AssertionResult;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+//import org.apache.jorphan.logging.LoggingManager;
+//import org.apache.log.Logger;
 
 /**
  * This is a nice packaging for the various information returned from taking a
  * sample of an entry.
  *
- * @author     $Author$
- * @version    $Revision$
+ * @author     mstover?
+ * @version    $Revision$ $Date$
  */
 public class SampleResult implements Serializable
 {
@@ -107,10 +107,12 @@ public class SampleResult implements Serializable
     private Set files;
     private String dataEncoding;
     private long time;
+    private boolean stopThread = false; //Should thread terminate?
+	private boolean stopTest = false;   //Should test terminate?
 
     private final static String TOTAL_TIME = "totalTime";
 
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+    //transient private static Logger log = LoggingManager.getLoggerForClass();
 
     public void setMarked(String filename)
     {
@@ -346,4 +348,36 @@ public class SampleResult implements Serializable
     {
         this.dataEncoding = dataEncoding;
     }
+    /**
+     * @return
+     */
+    public boolean isStopTest()
+    {
+        return stopTest;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isStopThread()
+    {
+        return stopThread;
+    }
+
+    /**
+     * @param b
+     */
+    public void setStopTest(boolean b)
+    {
+        stopTest = b;
+    }
+
+    /**
+     * @param b
+     */
+    public void setStopThread(boolean b)
+    {
+        stopThread = b;
+    }
+
 }
