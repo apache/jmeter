@@ -62,6 +62,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -75,7 +76,7 @@ public class MachineName extends AbstractFunction implements Serializable {
 	private static final String KEY = "__machineName";
 	
 	static {
-		desc.add("Use fully qualified host name: TRUE/FALSE (Default FALSE)");
+//		desc.add("Use fully qualified host name: TRUE/FALSE (Default FALSE)");
 		desc.add(JMeterUtils.getResString("function_name_param"));
 	}
 	
@@ -93,22 +94,24 @@ public class MachineName extends AbstractFunction implements Serializable {
 
 		JMeterVariables vars = getVariables();
 
-		boolean fullHostName = false;
-		if ( ((CompoundFunction)values[0]).execute().toLowerCase().equals("true") )
-					fullHostName = true;
+//		boolean fullHostName = false;
+//		if ( ((CompoundFunction)values[0]).execute().toLowerCase().equals("true") )
+//					fullHostName = true;
 					
-		String varName = ((CompoundFunction)values[values.length - 1]).execute();
+		String varName = ((CompoundVariable)values[values.length - 1]).execute();
 		String machineName = "";
 
 		try {
 			
 			InetAddress Address = InetAddress.getLocalHost();
 			
-			if ( fullHostName ) {
-				machineName = Address.getCanonicalHostName();
-			} else {
+			//fullHostName disabled until we move up to 1.4 as the support jre
+//			if ( fullHostName ) {
+//				machineName = Address.getCanonicalHostName();
+
+//			} else {
 				machineName = Address.getHostName();
-			}
+//			}
 			
 		} catch ( UnknownHostException e ) {
 		}
@@ -118,11 +121,10 @@ public class MachineName extends AbstractFunction implements Serializable {
 
 	}
 
-	public void setParameters(String parameters)
+	public void setParameters(Collection parameters)
 			throws InvalidVariableException {
-				
-		Collection params = this.parseArguments2(parameters);
-		values = params.toArray();
+
+		values = parameters.toArray();
 		
 		if ( values.length < 2 ) {
 			throw new InvalidVariableException();
