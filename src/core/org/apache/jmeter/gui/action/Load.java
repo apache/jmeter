@@ -113,7 +113,8 @@ public class Load implements Command
             GuiPackage.getInstance().updateCurrentGui();
             GuiPackage.getInstance().getMainFrame().repaint();
         }
-        if (isTestPlan && f != null)
+        // don't change name if merging
+        if (!merging && isTestPlan && f != null)
         {
             (
                 (Save) ActionRouter.getInstance().getAction(
