@@ -84,56 +84,41 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class HttpTestSampleGui extends AbstractSamplerGui
 {
-	private UrlConfigGui urlConfigGui;
-	private JCheckBox getImages;
+    private UrlConfigGui urlConfigGui;
+    private JCheckBox getImages;
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public HttpTestSampleGui()
-	{
-		init();
-	}
+    /****************************************
+     * !ToDo (Constructor description)
+     ***************************************/
+    public HttpTestSampleGui()
+    {
+        init();
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param element  !ToDo (Parameter description)
-	 ***************************************/
-	public void configure(TestElement element)
-	{
-		super.configure(element);
-		urlConfigGui.configure(element);
-		String testClass = element.getPropertyAsString(TestElement.TEST_CLASS);
-		if(testClass != null && testClass.endsWith("Full"))
-		{
-			getImages.setSelected(true);
-		}
-		else
-		{
-			getImages.setSelected(false);
-		}
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@param element  !ToDo (Parameter description)
+     ***************************************/
+    public void configure(TestElement element)
+    {
+        super.configure(element);
+        urlConfigGui.configure(element);
+        String testClass = element.getPropertyAsString(TestElement.TEST_CLASS);
+        getImages.setSelected(((HTTPSampler) element).isImageParser());
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public TestElement createTestElement()
-	{
-		HTTPSampler sampler;
-        if(getImages.isSelected())
-        {
-            sampler = new HTTPSamplerFull();
-        }
-        else
-        {
-            sampler = new HTTPSampler();
-        }
-		modifyTestElement(sampler);
-		return sampler;
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public TestElement createTestElement()
+    {
+        HTTPSampler sampler = new HTTPSampler();
+        modifyTestElement(sampler);
+        return sampler;
+    }
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
@@ -141,73 +126,79 @@ public class HttpTestSampleGui extends AbstractSamplerGui
      */
     public void modifyTestElement(TestElement sampler)
     {
-        TestElement el = urlConfigGui.createTestElement();	
+        TestElement el = urlConfigGui.createTestElement();
         sampler.clear();
         sampler.addTestElement(el);
+        if (getImages.isSelected())
+        {
+            ((HTTPSampler)sampler).setImageParser(true);
+        }
+        else
+        {
+            ((HTTPSampler)sampler).setImageParser(false);
+        }
         this.configureTestElement(sampler);
     }
-    
 
+    /****************************************
+     * Gets the ClassLabel attribute of the HttpTestSample object
+     *
+     *@return   The ClassLabel value
+     ***************************************/
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("web_testing_title");
+    }
 
-	/****************************************
-	 * Gets the ClassLabel attribute of the HttpTestSample object
-	 *
-	 *@return   The ClassLabel value
-	 ***************************************/
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("web_testing_title");
-	}
+    private void init()
+    {
+        this.setLayout(new GridLayout(1, 1));
 
-	private void init()
-	{
-		this.setLayout(new GridLayout(1,1));
+        // MAIN PANEL
+        JPanel mainPanel = new JPanel();
+        Border margin = new EmptyBorder(10, 10, 5, 10);
+        mainPanel.setBorder(margin);
+        mainPanel.setLayout(new BorderLayout());
+        JPanel titlePanel = new JPanel(new BorderLayout());
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new BorderLayout());
-		JPanel titlePanel = new JPanel(new BorderLayout());
+        // TITLE
+        JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("web_testing_title"));
+        Font curFont = panelTitleLabel.getFont();
+        int curFontSize = curFont.getSize();
+        curFontSize += 4;
+        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
+        titlePanel.add(panelTitleLabel, BorderLayout.NORTH);
 
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("web_testing_title"));
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		titlePanel.add(panelTitleLabel,BorderLayout.NORTH);
+        // NAME
+        titlePanel.add(getNamePanel(), BorderLayout.SOUTH);
+        mainPanel.add(titlePanel, BorderLayout.NORTH);
 
-		// NAME
-		titlePanel.add(getNamePanel(),BorderLayout.SOUTH);
-		mainPanel.add(titlePanel,BorderLayout.NORTH);
+        // URL CONFIG
+        urlConfigGui = new MultipartUrlConfigGui();
+        mainPanel.add(urlConfigGui, BorderLayout.CENTER);
 
-		// URL CONFIG
-		urlConfigGui = new MultipartUrlConfigGui();
-		mainPanel.add(urlConfigGui,BorderLayout.CENTER);
+        // OPTIONAL TASKS
+        mainPanel.add(createOptionalTasksPanel(), BorderLayout.SOUTH);
 
-		// OPTIONAL TASKS
-		mainPanel.add(createOptionalTasksPanel(),BorderLayout.SOUTH);
+        this.add(mainPanel);
+    }
 
-		this.add(mainPanel);
-	}
+    private JPanel createOptionalTasksPanel()
+    {
+        // OPTIONAL TASKS
+        JPanel optionalTasksPanel = new JPanel();
+        optionalTasksPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        optionalTasksPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("optional_tasks")));
 
-	private JPanel createOptionalTasksPanel()
-	{
-		// OPTIONAL TASKS
-		JPanel optionalTasksPanel = new JPanel();
-		optionalTasksPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-		optionalTasksPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("optional_tasks")));
+        // RETRIEVE IMAGES
+        JPanel retrieveImagesPanel = new JPanel();
+        retrieveImagesPanel.setLayout(new BoxLayout(retrieveImagesPanel, BoxLayout.X_AXIS));
+        retrieveImagesPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        getImages = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images"));
+        retrieveImagesPanel.add(getImages);
 
-		// RETRIEVE IMAGES
-		JPanel retrieveImagesPanel = new JPanel();
-		retrieveImagesPanel.setLayout(new BoxLayout(retrieveImagesPanel, BoxLayout.X_AXIS));
-		retrieveImagesPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-		getImages = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images"));
-		retrieveImagesPanel.add(getImages);
+        optionalTasksPanel.add(retrieveImagesPanel);
 
-		optionalTasksPanel.add(retrieveImagesPanel);
-
-		return optionalTasksPanel;
-	}
+        return optionalTasksPanel;
+    }
 }

@@ -189,6 +189,16 @@ public class CookieManager extends ConfigTestElement implements
 			 }
 			 reader.close();
 	  }
+      
+      public void recoverRunningVersion()
+      {
+          //do nothing, the cookie manager has to accept changes.
+      }
+      
+      public void setRunningVersion(boolean running)
+      {
+          //do nothing, the cookie manager has to accept changes.
+      }
 
 	  /** add a cookie */
 	  public void add(Cookie c) {
@@ -315,7 +325,7 @@ public class CookieManager extends ConfigTestElement implements
 
 			 Vector removeIndices = new Vector();
 			 for (int i = getCookies().size() - 1; i >= 0; i--) {
-					 Cookie cookie = (Cookie) getCookies().get(i);
+					 Cookie cookie = (Cookie) getCookies().get(i).getObjectValue();
 					 if (cookie == null)
 							continue;
 					 if (cookie.getPath().equals(newCookie.getPath()) &&
@@ -339,7 +349,7 @@ public class CookieManager extends ConfigTestElement implements
 	  public void removeCookieNamed(String name) {
 			 Vector removeIndices = new Vector();
 			 for (int i = getCookies().size() - 1; i > 0; i--) {
-					 Cookie cookie = (Cookie) getCookies().get(i);
+					 Cookie cookie = (Cookie) getCookies().get(i).getObjectValue();
 					 if (cookie == null)
 							continue;
 					 if (cookie.getName().equals(name))
