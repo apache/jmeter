@@ -16,10 +16,16 @@
  */
 package org.apache.jmeter.monitor.model;
 
+
 import org.apache.jmeter.monitor.parser.Parser;
 import org.apache.jmeter.monitor.parser.ParserImpl;
 import org.apache.jmeter.samplers.SampleResult;
 
+/**
+ * ObjectFactory is a simple factory class which creates
+ * new instances of objects. It also provides convienant
+ * method to parse XML status results.
+ */
 public class ObjectFactory
 {
 
@@ -29,7 +35,7 @@ public class ObjectFactory
     /**
      * 
      */
-    public ObjectFactory()
+    protected ObjectFactory()
     {
         super();
 		PARSER = new MonitorParser(this);
@@ -43,52 +49,105 @@ public class ObjectFactory
 	}
 	
 	public Status parseBytes(byte[] bytes){
-		return null;
+		return PARSER.parseBytes(bytes);
 	}
 	
 	public Status parseString(String content){
-		return null;
+		return PARSER.parseString(content);
 	}
 
 	public Status parseSampleResult(SampleResult result){
-		return null;
+		return PARSER.parseSampleResult(result);
 	}
 	
-	public static Status createStatus(){
-		return null;
+	public Status createStatus(){
+		return new StatusImpl();
 	}
 	
-	public static Connector createConnector(){
-		return null;
+	public Connector createConnector(){
+		return new ConnectorImpl();
 	}
 
-	public static Jvm createJvm(){
-		return null;
+	public Jvm createJvm(){
+		return new JvmImpl();
 	}
 
-	public static Memory createMemory(){
-		return null;	
+	public Memory createMemory(){
+		return new MemoryImpl();	
 	}
 	
-	public static RequestInfo createRequestInfo(){
-		return null;
+	public RequestInfo createRequestInfo(){
+		return new RequestInfoImpl();
 	}
 	
-	public static ThreadInfo createThreadInfo(){
-		return null;
+	public ThreadInfo createThreadInfo(){
+		return new ThreadInfoImpl();
 	}
 	
-	public static Worker createWorker(){
-		return null;
+	public Worker createWorker(){
+		return new WorkerImpl();
 	}
 	
-	public static Workers createWorkers(){
-		return null;
+	public Workers createWorkers(){
+		return new WorkersImpl();
 	}
 	
 	protected class MonitorParser extends ParserImpl {
 		public MonitorParser(ObjectFactory factory){
 			super(factory);
+		}
+	}
+
+	/**
+	 * Basic method for testing the class
+	 * @param args
+	 */	
+	public static void main(String[] args){
+		if (args != null & args.length == 2){
+			String file = null;
+			int count = 1;
+			if (args[0] != null){
+				file = args[0];
+			}
+			if (args[1] != null){
+				count = Integer.parseInt(args[1]);
+			}
+			try {
+				ObjectFactory of = ObjectFactory.getInstance();
+				java.io.File infile = new java.io.File(file);
+				java.io.FileInputStream fis =
+					new java.io.FileInputStream(infile);
+				java.io.InputStreamReader isr =
+					new java.io.InputStreamReader(fis);
+				StringBuffer buf = new StringBuffer();
+				java.io.BufferedReader br = new java.io.BufferedReader(isr);
+				String line = null;
+				while ((line = br.readLine()) != null){
+					buf.append(line);
+				}
+				System.out.println("contents: ");
+				System.out.println(buf.toString());
+				System.out.println("----------------------");
+				Status st = of.parseBytes(buf.toString().getBytes());
+				if (st == null){
+					System.out.println("parse failed");
+				} else {
+					System.out.println("parse successful:");
+					System.out.println(st.getJvm().getMemory().getFree());
+					System.out.println(st.getJvm().getMemory().getTotal());
+					System.out.println(st.getJvm().getMemory().getMax());
+					System.out.println("connector size: " +
+						st.getConnector().size());
+					Connector conn = (Connector)st.getConnector().get(0);
+					System.out.println("conn: " +
+						conn.getThreadInfo().getMaxThreads());
+				}
+			} catch (java.io.FileNotFoundException e){
+				e.printStackTrace();
+			} catch (java.io.IOException e){
+				e.printStackTrace();
+			}
+		} else {
 		}
 	}
 }
