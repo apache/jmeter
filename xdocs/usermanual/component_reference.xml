@@ -98,6 +98,12 @@ JMeter assumes the FTP server is listening on the default port.</property>
         <property name="Port" required="No (defaults to 80)">Port the web server is listening to.</property>
         <property name="Protocol" required="Yes">HTTP or HTTPS.</property>
         <property name="Method" required="Yes">HTTP GET or HTTP POST.</property>
+		<property name="Redirect Automatically" required="No">Set the http connection to automatically follow redirects. 
+                  If set, the redirects will not appear as samples, as JMeter never sees them.
+        </property>
+		<property name="Follow Redirects" required="No">If set, the JMeter sampler will follow redirects, which will thus appear as samples.</property>
+		<property name="Use KeepAlive" required="No">JMeter sets the Connection: keep-alive header. This does not work properly with the default HTTP implementation, as connection re-use is not under user-control. 
+                  It does work with the Jakarta httpClient implementation.</property>
         <property name="Path" required="Yes">The path to resource (for example, /servlets/myServlet). If the
 resource requires query string parameters, add them below in the
 "Send Parameters With the Request" section.</property>
@@ -120,6 +126,7 @@ resource requires query string parameters, add them below in the
         <property name="MIME Type" required="No (Yes if Filename filled in)">MIME type (for example, text/plain).</property>
         <property name="Retrieve All Embedded Resources from HTML Files" required="No">Tell JMeter to parse the HTML file
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.</property>
+        <property name="Use as monitor" required="No">For use with the <complink name="Monitor Results"/> listener.</property>
 </properties>
 
 <links>
