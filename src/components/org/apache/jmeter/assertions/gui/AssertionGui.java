@@ -63,7 +63,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
+import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
@@ -220,13 +220,15 @@ public class AssertionGui extends AbstractAssertionGui implements FocusListener
 
     private void init()
     {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BorderLayout());
+        Box box = Box.createVerticalBox();
         setBorder(makeBorder());
 
-        add(makeTitlePanel());
-        add(createFieldPanel());
-        add(createTypePanel());
-        add(createStringPanel());
+        box.add(makeTitlePanel());
+        box.add(createFieldPanel());
+        box.add(createTypePanel());
+        box.add(createStringPanel());
+        add(box,BorderLayout.NORTH);
     }
 
     private JPanel createFieldPanel()

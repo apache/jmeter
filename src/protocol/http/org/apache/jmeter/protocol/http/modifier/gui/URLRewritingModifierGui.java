@@ -21,6 +21,7 @@ public class URLRewritingModifierGui extends AbstractResponseBasedModifierGui {
 	
 	JLabeledTextField argumentName;
 	JCheckBox pathExt;
+	JCheckBox pathExtNoEquals;
 	private final static String title = JMeterUtils.getResString("http_url_rewriting_modifier_title");
 
 	/**
@@ -50,6 +51,9 @@ public class URLRewritingModifierGui extends AbstractResponseBasedModifierGui {
 		pathExt = new JCheckBox(JMeterUtils.getResString("Path_Extension_choice"));		
 		mainPanel.add(pathExt);	
 
+		pathExtNoEquals = new JCheckBox(JMeterUtils.getResString("path_extension_dont_use_equals"));		
+		mainPanel.add(pathExtNoEquals);	
+
 		add(mainPanel, BorderLayout.CENTER);
 	}
 
@@ -71,12 +75,15 @@ public class URLRewritingModifierGui extends AbstractResponseBasedModifierGui {
         this.configureTestElement(modifier);
         ((URLRewritingModifier)modifier).setArgumentName(argumentName.getText());
         ((URLRewritingModifier)modifier).setPathExtension(pathExt.isSelected());
+        ((URLRewritingModifier)modifier).setPathExtensionNoEquals(pathExtNoEquals.isSelected());
     }
 	
 	public void configure(TestElement el)
 	{
 		argumentName.setText(((URLRewritingModifier)el).getArgumentName());
 		pathExt.setSelected(((URLRewritingModifier)el).isPathExtension());
+		pathExtNoEquals.setSelected(((URLRewritingModifier)el).isPathExtensionNoEquals());
+		
 		super.configure(el);
 	}
 
