@@ -95,7 +95,7 @@ public class StatVisualizer extends AbstractVisualizer
     protected JScrollPane myScrollPane;
     private final static String VISUALIZER_NAME =
             JMeterUtils.getResString("aggregate_report");
-    private long sleepTill = 0;
+    //private long sleepTill = 0;
     transient private StatVisualizerModel model;
     transient private StatTableModel myStatTableModel;
 
@@ -137,7 +137,7 @@ public class StatVisualizer extends AbstractVisualizer
     {
         TestElement t = super.createTestElement();
 
-        sleepTill = 0;
+        //sleepTill = 0;
         return t;
     }
 

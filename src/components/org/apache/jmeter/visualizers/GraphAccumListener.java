@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,13 +59,9 @@ import org.apache.jmeter.samplers.SampleResult;
 
 
 /**
- * Title:        JMeter
- * Description:
- * Copyright:    Copyright (c) 2000
- * Company:      Apache
- * @author Khor Soon Hin
- * @created 2001/08/12
- * @version 1.0
+ * @author  Khor Soon Hin
+ * Created   2001/08/12
+ * @version $Revision$  Last updated: $Date$
  */
 
 

@@ -69,7 +69,6 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  *  recording data by eliminating GUI overhead.
  *
  *@author     <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell</a>
- *@created    $Date$
  *@version    $Revision$ $Date$
  ***********************************************************/
 

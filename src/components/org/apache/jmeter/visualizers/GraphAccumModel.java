@@ -69,8 +69,8 @@ import org.apache.log.Logger;
  * The model that collects the average of the set of pages to be sampled.
  *
  * @author     Khor Soon Hin
- * @created    2001/08/11
- * @version    $Revision$
+ * Created      2001/08/11
+ * @version    $Revision$ Last updated: $Date$
  */
 
 public class GraphAccumModel implements Clearable, Serializable
