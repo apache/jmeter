@@ -22,6 +22,7 @@ import org.apache.avalon.framework.logger.LogKitLogger;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -32,8 +33,8 @@ import org.apache.log.Logger;
  * To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Generation - Code and Comments
  */
-public class DataSourceElement extends TestBean implements ConfigElement,
-      TestListener
+public class DataSourceElement extends AbstractTestElement implements ConfigElement,
+      TestListener,TestBean
 {
    static Logger log = LoggingManager.getLoggerForClass();
    String dataSource, driver, dbUrl, username, password, checkQuery, poolMax,

@@ -20,6 +20,7 @@ package org.apache.jmeter.timers;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -33,8 +34,8 @@ import org.apache.log.Logger;
  * @version $Id$
  */
 public class ConstantThroughputTimer
-        extends TestBean
-        implements Timer, TestListener
+        extends AbstractTestElement
+        implements Timer, TestListener,TestBean
 {
 	protected static final Logger log = LoggingManager.getLoggerForClass();
 

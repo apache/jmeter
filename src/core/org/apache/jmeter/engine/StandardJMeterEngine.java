@@ -31,6 +31,7 @@ import java.util.Map;
 
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.TestPlan;
@@ -146,7 +147,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
       while (iter.hasNext())
       {
          TestListener tl = (TestListener) iter.next();
-         if (tl instanceof TestBean) ((TestBean) tl).prepare();
+         if(tl instanceof TestBean)TestBeanHelper.prepare((TestElement)tl);
          if (host == null)
          {
             tl.testStarted();
@@ -164,7 +165,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
       while (iter.hasNext())
       {
          TestListener tl = (TestListener) iter.next();
-         if (tl instanceof TestBean) ((TestBean) tl).prepare();
+         if(tl instanceof TestBean)TestBeanHelper.prepare((TestElement)tl);
          if (host == null)
          {
             tl.testEnded();
@@ -255,7 +256,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
       testListeners = new SearchByClass(TestListener.class);
       getTestTree().traverse(testListeners);
       notifyTestListenersOfStart();
-      
       getTestTree().traverse(new TurnElementsOn());
       
       List testLevelElements = new LinkedList(getTestTree().list(
