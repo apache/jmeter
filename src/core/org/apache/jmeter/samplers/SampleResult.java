@@ -103,6 +103,8 @@ public class SampleResult implements Serializable
     private boolean stopThread = false; //Should thread terminate?
 	private boolean stopTest = false;   //Should test terminate?
 	private boolean isMonitor = false;
+	private int sampleCount = 1;
+	private int bytes = 0;
 	//TODO do contentType and/or dataEncoding belong in HTTPSampleResult instead?
 
     private final static String TOTAL_TIME = "totalTime";
@@ -651,6 +653,42 @@ public class SampleResult implements Serializable
 	 */
 	public boolean isMonitor(){
 		return isMonitor;
+	}
+	
+	/**
+	 * For the JMS sampler, it can perform multiple samples
+	 * for greater degree of accuracy.
+	 * @param count
+	 */
+	public void setSampleCount(int count){
+		sampleCount = count;
+	}
+	
+	/**
+	 * return the sample count. by default, the value is 1.
+	 * @return
+	 */
+	public int getSampleCount(){
+		return sampleCount;
+	}
+	
+	/**
+	 * In the event the sampler does want to pass back the
+	 * actual contents, we still want to calculate the 
+	 * throughput. The bytes is the bytes of the response
+	 * data.
+	 * @param length
+	 */
+	public void setBytes(int length){
+		bytes = length;
+	}
+	
+	/**
+	 * return the bytes returned by the response.
+	 * @return
+	 */
+	public int getBytes(){
+		return bytes;
 	}
 	
 ////////////////////////////// Start of Test Code ///////////////////////////
