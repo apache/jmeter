@@ -243,7 +243,7 @@ public final class GuiPackage implements LocaleChangeListener
         try
         {
             TestElement currentNode =
-                treeListener.getCurrentNode().createTestElement();
+                treeListener.getCurrentNode().getTestElement();
             JMeterGUIComponent comp = getGui(currentNode);
             if(!(comp instanceof AbstractVisualizer))  // TODO: a hack that needs to be fixed for 2.0
             {
@@ -398,7 +398,7 @@ public final class GuiPackage implements LocaleChangeListener
     public void updateCurrentGui()
     {
         currentNode= treeListener.getCurrentNode();
-		TestElement element = currentNode.createTestElement();
+		TestElement element = currentNode.getTestElement();
 		JMeterGUIComponent comp = getGui(element);
 		comp.configure(element);
     }
@@ -417,8 +417,8 @@ public final class GuiPackage implements LocaleChangeListener
                 log.debug(
                     "Updating current node " + currentNode.getName());
                 JMeterGUIComponent comp =
-                    getGui(currentNode.createTestElement());
-                TestElement el = currentNode.createTestElement();
+                    getGui(currentNode.getTestElement());
+                TestElement el = currentNode.getTestElement();
                 comp.modifyTestElement(el);
             }
             currentNode = treeListener.getCurrentNode();
@@ -431,7 +431,7 @@ public final class GuiPackage implements LocaleChangeListener
     
     public TestElement getCurrentElement()
     {
-        return treeListener.getCurrentNode().createTestElement();
+        return treeListener.getCurrentNode().getTestElement();
     }
 
     /**

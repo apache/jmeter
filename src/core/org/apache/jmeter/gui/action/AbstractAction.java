@@ -61,7 +61,7 @@ public abstract class AbstractAction implements Command
                 if (item.getUserObject() instanceof ReplaceableController)
                 {
                     ReplaceableController rc =
-                        (ReplaceableController) item.createTestElement();
+                        (ReplaceableController) item.getTestElement();
                     HashTree subTree = tree.getTree(item);
 
                     if (subTree != null)
@@ -74,7 +74,7 @@ public abstract class AbstractAction implements Command
                 else
                 {
                     convertSubTree(tree.getTree(item));
-                    TestElement testElement = item.createTestElement();
+                    TestElement testElement = item.getTestElement();
                     tree.replace(item, testElement);
                 }
             }

@@ -394,7 +394,7 @@ public class ProxyControl extends GenericController implements Serializable
             JMeterTreeNode templateNode= (JMeterTreeNode)children.nextElement();
             if (templateNode.isEnabled())
             {
-                TestElement template= templateNode.createTestElement();
+                TestElement template= templateNode.getTestElement();
                 if (template instanceof Timer)
                 {
                     TestElement timer= (TestElement)template.clone();
@@ -594,7 +594,7 @@ public class ProxyControl extends GenericController implements Serializable
                 for (int i= myTarget.getChildCount()-1; i>=0; i--)
                 {
                     JMeterTreeNode c= (JMeterTreeNode)myTarget.getChildAt(i);
-                    if (c.createTestElement() instanceof GenericController)
+                    if (c.getTestElement() instanceof GenericController)
                     {
                         myTarget= c;
                         break;
@@ -783,7 +783,7 @@ public class ProxyControl extends GenericController implements Serializable
                 (JMeterTreeNode) enum.nextElement();
             if (subNode.isEnabled()) {
                 TestElement testElement =
-                    (TestElement) subNode.createTestElement();
+                    (TestElement) subNode.getTestElement();
                 if (testElement instanceof SampleListener) {
                     ((SampleListener)testElement).sampleOccurred(event);
                 }
@@ -806,7 +806,7 @@ public class ProxyControl extends GenericController implements Serializable
                 (JMeterTreeNode) enum.nextElement();
             if (subNode.isEnabled()) {
                 TestElement testElement =
-                    (TestElement) subNode.createTestElement();
+                    (TestElement) subNode.getTestElement();
                 if (testElement instanceof TestListener) {
                     ((TestListener)testElement).testStarted();
                 }
@@ -829,7 +829,7 @@ public class ProxyControl extends GenericController implements Serializable
                 (JMeterTreeNode) enum.nextElement();
             if (subNode.isEnabled()) {
                 TestElement testElement =
-                    (TestElement) subNode.createTestElement();
+                    (TestElement) subNode.getTestElement();
                 if (testElement instanceof TestListener) {
                     ((TestListener)testElement).testEnded();
                 }
