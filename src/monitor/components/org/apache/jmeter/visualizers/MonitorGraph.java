@@ -126,9 +126,10 @@ public class MonitorGraph
 
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.MonitorGuiListener#updateGui(org.apache.jmeter.visualizers.MonitorModel)
-     */
+	/**
+	 * The method will fist check to see if the graph is
+	 * visible. If it is, it will repaint the graph.
+	 */
     public void updateGui(final MonitorModel model)
     {
     	if (this.isShowing()){
@@ -137,6 +138,12 @@ public class MonitorGraph
     	}
     }
 
+	/**
+	 * painComponent is responsible for drawing the actual
+	 * graph. This is because of how screen works. Tried
+	 * to use clipping, but I don't understand it well
+	 * enough to get the desired effect.
+	 */
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -167,17 +174,17 @@ public class MonitorGraph
 		}
 	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.MonitorGuiListener#updateGui()
-     */
+	/**
+	 * updateGui() will call repaint
+	 */
     public void updateGui()
     {
     	repaint();
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.samplers.Clearable#clear()
-     */
+	/**
+	 * clear will repaint the graph
+	 */
     public void clear()
     {
     	paintComponent(getGraphics());
@@ -189,12 +196,12 @@ public class MonitorGraph
 	{
 		double width = (double)getWidth();
 		double height = (double)getHeight() - 10.0;
-		// int xaxis = (int)(x % width);
-		// int lastx = (int)((x - 1) % width);
 		int xaxis = (int)(width * (x /width));
 		int lastx = (int)(width * ((x - 1)/width));
 		
-		// draw grid
+		// draw grid only when x is 1. If we didn't
+		// the grid line would draw over the data
+		// lines making it look bad.
 		if (YGRID && x == 1){
 			int q1 = (int)(height * 0.25);
 			int q2 = (int)(height * 0.50);
