@@ -40,10 +40,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
      */
     public boolean modifyEntry(Sampler sampler, SampleResult responseText)
     {
-        if (case1 == null)
-        {
-            initRegex(getArgumentName());
-        }
+        initRegex(getArgumentName());
         String text = new String(responseText.getResponseData());
         Perl5Matcher matcher = JMeterUtils.getMatcher();
         String value = "";
@@ -97,7 +94,6 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
     public void setArgumentName(String argName)
     {
         setProperty(ARGUMENT_NAME, argName);
-        case1 = case2 = case3 = case4 = null;
     }
     private void initRegex(String argName)
     {

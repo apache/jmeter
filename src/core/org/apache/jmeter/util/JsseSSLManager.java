@@ -135,8 +135,16 @@ public class JsseSSLManager extends SSLManager
      */
     public void setContext(HttpURLConnection conn)
     {
-        //HttpsURLConnection secureConn = (HttpsURLConnection) conn;
-        //secureConn.setSSLSocketFactory(this.getContext().getSocketFactory());
+        if(conn instanceof com.sun.net.ssl.HttpsURLConnection)
+        {
+            com.sun.net.ssl.HttpsURLConnection secureConn = (com.sun.net.ssl.HttpsURLConnection) conn;
+            secureConn.setSSLSocketFactory(this.getContext().getSocketFactory());
+        }
+        else if(conn instanceof sun.net.www.protocol.https.HttpsURLConnectionImpl)
+        {
+            sun.net.www.protocol.https.HttpsURLConnectionImpl secureConn = (sun.net.www.protocol.https.HttpsURLConnectionImpl)conn;
+            secureConn.setSSLSocketFactory(this.getContext().getSocketFactory());
+        }
         
     }
     /**
