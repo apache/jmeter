@@ -151,6 +151,7 @@ public class PackageTest extends TestCase
 		ts.addTest(new PackageTest("atestDE"));
 		ts.addTest(new PackageTest("atestNO"));
 		ts.addTest(new PackageTest("atestJA"));
+		ts.addTest(new PackageTest("atestFR"));
 		return ts;
 	}
 
@@ -174,6 +175,10 @@ public class PackageTest extends TestCase
 	public void atestNO() throws Exception
 	{
 		check("NO");
+	}
+	public void atestFR() throws Exception
+	{
+		check("FR");
 	}
 	public void atestDefault() throws Exception
 	{
