@@ -26,7 +26,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.UnknownHostException;
-import java.util.Vector;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
@@ -276,6 +275,7 @@ public class MailerVisualizer extends AbstractVisualizer
 			{
 				MailerModel model=((MailerResultCollector)getModel()).getMailerModel();
 				model.sendTestMail();
+				displayMessage(JMeterUtils.getResString("mail_sent"), false);
 			}
 			catch (UnknownHostException e1)
 			{
@@ -285,12 +285,14 @@ public class MailerVisualizer extends AbstractVisualizer
 			catch (AddressException ex)
 			{
 				log.error("Invalid mail address ", ex);
-				displayMessage(JMeterUtils.getResString("invalid_mail_address"), true);
+				displayMessage(JMeterUtils.getResString("invalid_mail_address")
+						+ "\n" + ex.getMessage(), true);
 			}
 			catch (MessagingException ex)
 			{
 				log.error("Couldn't send mail...", ex);
-				displayMessage(JMeterUtils.getResString("invalid_mail"), true);
+				displayMessage(JMeterUtils.getResString("invalid_mail")
+						+"\n"+ex.getMessage(), true);
 			}
 		}
     }
@@ -367,7 +369,7 @@ public class MailerVisualizer extends AbstractVisualizer
     /**
      * Shows a message using a DialogBox.
      */
-    public void displayMessage(String message, boolean isError)
+    private void displayMessage(String message, boolean isError)
     {
         int type = 0;
 
@@ -379,7 +381,8 @@ public class MailerVisualizer extends AbstractVisualizer
         {
             type = JOptionPane.INFORMATION_MESSAGE;
         }
-        JOptionPane.showMessageDialog(null, message, "Error", type);
+        JOptionPane.showMessageDialog(null, message, 
+        		isError? "Error" : "Information", type);
     }
 
     /* (non-Javadoc)
