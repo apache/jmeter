@@ -60,8 +60,8 @@ import org.apache.jmeter.testelement.TestElement;
  * Classes which are able to generate information about an entry should
  * implement this interface.
  *
- * @author     $Author$
- * @version    $Revision$
+ * @author     
+ * @version    $Revision$ Last updated: $Date$
  */
 public interface Sampler extends java.io.Serializable, TestElement
 {
