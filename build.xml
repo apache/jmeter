@@ -24,7 +24,6 @@
 
   <path id="testClasspath">
 		<path refid="classpath"/>
-		<pathelement location="./bin/ApacheJMeter.jar"/>
 		<pathelement location="./lib/ext/ApacheJMeter_core.jar"/>
   </path>
 
