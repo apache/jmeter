@@ -76,7 +76,7 @@ import org.apache.log.Logger;
 
 public class Clear implements Command
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.gui");
 	public final static String CLEAR = "action.clear";
 	public final static String CLEAR_ALL = "action.clear_all";

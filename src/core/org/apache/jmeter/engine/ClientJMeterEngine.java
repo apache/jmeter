@@ -74,7 +74,7 @@ import org.apache.log.Logger;
  ***********************************************************/
 public class ClientJMeterEngine implements JMeterEngine
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.engine");
 	RemoteJMeterEngine remote;
 	ListedHashTree test;

@@ -1,10 +1,9 @@
 package org.apache.jmeter.functions;
 
+import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -19,7 +18,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * To enable and disable the creation of type comments go to
  * Window>Preferences>Java>Code Generation.
  */
-public class IterationCounter extends AbstractFunction
+public class IterationCounter extends AbstractFunction implements Serializable
 {
 	private static int counter;
 	private static final List desc = new LinkedList();

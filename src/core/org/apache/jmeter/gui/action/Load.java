@@ -94,7 +94,7 @@ import org.xml.sax.XMLReader;
  ***************************************/
 public class Load implements Command
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.gui");
 	private static Set commands = new HashSet();
 

@@ -76,7 +76,7 @@ import org.xml.sax.Attributes;
 
 public class JdbcTestSampleHandler extends TagHandler
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.protocol.jdbc");
 	
 	JDBCSampler sampler;

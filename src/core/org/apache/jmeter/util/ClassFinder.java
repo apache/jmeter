@@ -91,7 +91,7 @@ import org.apache.log.Logger;
 
  ***********************************************************/
 public class ClassFinder {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.util.classfinder");
 	private ClassFinder() {}
 	// static only

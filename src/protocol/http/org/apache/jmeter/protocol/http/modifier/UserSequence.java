@@ -75,7 +75,7 @@ import org.apache.log.Logger;
  ***********************************************************/
 
 public class UserSequence implements Serializable {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.protocol.http");
 
     //-------------------------------------------

@@ -82,7 +82,7 @@ import org.apache.log.Logger;
 
 public class Save implements Command
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.gui");
 	private final static String SAVE_ALL = "save_all";
 	private final static String SAVE = "save";

@@ -121,7 +121,7 @@ public class GraphAccum extends JComponent implements Scrollable,
 	 *  Description of the Field
 	 */
 	protected final static int PLOT_X_WIDTH = 10;
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
 	// Ensure that previousPts is allocated
 

@@ -26,7 +26,7 @@ public class UserParameters
 
 	VariablesCollection vars = new VariablesCollection();
 	int counter = 0;
-	Iterator threadValues;
+	transient Iterator threadValues;
 	/**
 	 * @see org.apache.jmeter.config.Modifier#modifyEntry(Sampler)
 	 */

@@ -23,7 +23,7 @@ import org.apache.log.Logger;
 
 public class Cache
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.protocol.http");
 	//
 	// Members variables

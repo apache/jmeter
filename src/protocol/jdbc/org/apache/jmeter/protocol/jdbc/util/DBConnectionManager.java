@@ -77,7 +77,7 @@ import org.apache.log.Logger;
  *****************************************************************/
 public class DBConnectionManager
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.protocol.jdbc");
   int absoluteMaxConnections=100;
   long accessInterval=1800000;

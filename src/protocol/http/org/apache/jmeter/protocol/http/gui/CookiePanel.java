@@ -99,7 +99,7 @@ import org.apache.log.Logger;
  ***************************************/
 public class CookiePanel extends AbstractConfigGui implements ActionListener
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.protocol.http");
 	private final static int columnCount = 6;
 	private final static String[] columnNames = {

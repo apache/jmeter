@@ -24,7 +24,7 @@ import org.apache.log.Logger;
  */
 public class ValueReplacer
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(LoggingManager.ELEMENTS);
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(LoggingManager.ELEMENTS);
 	CompoundFunction masterFunction = new CompoundFunction();
 	Map variables = new HashMap();
 	

@@ -78,7 +78,7 @@ import org.apache.log.Logger;
  */
 public class AddToTree implements Command
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.gui");
 	private Map allJMeterComponentCommands;
 

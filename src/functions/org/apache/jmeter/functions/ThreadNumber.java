@@ -1,5 +1,6 @@
 package org.apache.jmeter.functions;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,9 +16,9 @@ import org.apache.jmeter.threads.JMeterVariables;
  * To enable and disable the creation of type comments go to
  * Window>Preferences>Java>Code Generation.
  */
-public class ThreadNumber implements Function {
+public class ThreadNumber implements Function,Serializable {
 	
-	private JMeterVariables vars;
+	transient private JMeterVariables vars;
 	private static final String KEY = "__threadNum";
 
 	/**

@@ -82,7 +82,7 @@ import org.apache.log.Logger;
  */
 public class FtpClient
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.protocol.ftp");
 	File f = new File("e:\\");
 	BufferedWriter out;

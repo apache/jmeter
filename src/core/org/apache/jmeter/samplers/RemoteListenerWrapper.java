@@ -20,7 +20,7 @@ import org.apache.log.Logger;
 public class RemoteListenerWrapper extends AbstractTestElement implements
 		SampleListener,TestListener,Serializable
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.elements");
 	RemoteSampleListener listener;
 

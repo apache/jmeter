@@ -83,7 +83,7 @@ import org.apache.log.Logger;
 public class ThreadGroup extends AbstractTestElement implements SampleListener,
 		Serializable,Controller,PerThreadClonable
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.elements");
 	/****************************************
 	 * !ToDo (Field description)

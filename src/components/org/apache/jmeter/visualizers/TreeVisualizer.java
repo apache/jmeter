@@ -128,7 +128,7 @@ public abstract class TreeVisualizer extends JPanel
 
 	ResultCollector model;
 
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
 	//----- TreeSelectionListener interface : end -----
 

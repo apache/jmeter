@@ -27,7 +27,7 @@ import org.apache.log.Logger;
  ***********************************************************/
 class Config
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.protocol.http");
 
 	//

@@ -96,7 +96,7 @@ import org.xml.sax.SAXException;
 public class ResultCollector extends AbstractListenerElement implements SampleListener, Clearable,
 		Serializable,TestListener,Remoteable
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.elements");
 	private final static String COLLECTED = "collected";
 	public final static String FILENAME = "filename";

@@ -83,7 +83,7 @@ import org.apache.log.Logger;
  ***********************************************************/
 public class JDBCSampler extends AbstractSampler implements TestListener
 {
-	private static Logger log =
+	transient private static Logger log =
 		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.jdbc");
 	public final static String URL = "JDBCSampler.url";
 	public final static String DRIVER = "JDBCSampler.driver";

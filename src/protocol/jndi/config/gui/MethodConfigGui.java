@@ -99,7 +99,7 @@ public class MethodConfigGui
 	extends JPanel
 	implements ModelSupported, ActionListener, TreeSelectionListener
 {
-	private static Logger log =
+	transient private static Logger log =
 		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.jndi");
 	protected static final String REFLECT = "MethodConfigGui.reflect";
 	protected static final String INVOKE = "MethodConfigGui.invoke";

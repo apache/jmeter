@@ -92,7 +92,7 @@ import org.xml.sax.SAXException;
 public class AnchorModifier extends AbstractTestElement implements ResponseBasedModifier,
 		Serializable
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.protocol.http");
 	private static Random rand = new Random();
 

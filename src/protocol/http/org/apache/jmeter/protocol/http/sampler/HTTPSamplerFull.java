@@ -124,7 +124,7 @@ import org.xml.sax.SAXException;
 public class HTTPSamplerFull extends HTTPSampler
 {
 	/** Used to store the Logger (used for debug and error messages). */
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
 
 	/**
 	 * Used to store the UTF encoding name (which is version dependent).
@@ -583,7 +583,7 @@ public static class Test extends TestCase
 {
 	private HTTPSamplerFull hsf;
 
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.test");
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.test");
 
 	public Test(String name)
 	{

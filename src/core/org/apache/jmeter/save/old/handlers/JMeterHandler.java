@@ -80,7 +80,7 @@ import org.apache.log.Logger;
 
 public class JMeterHandler
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.util");
 	private static String TOKENS = "&'\"<>\n\r\t\f\b\\";
 	private static Map guiClassMap = new HashMap();

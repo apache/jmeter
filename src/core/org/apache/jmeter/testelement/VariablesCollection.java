@@ -1,5 +1,6 @@
 package org.apache.jmeter.testelement;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +12,7 @@ import org.apache.jmeter.threads.JMeterVariables;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class VariablesCollection {
+public class VariablesCollection implements Serializable {
 	private Map varMap = new HashMap();
 	
 	public void addJMeterVariables(JMeterVariables jmVars)

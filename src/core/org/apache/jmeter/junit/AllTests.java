@@ -79,7 +79,7 @@ import org.apache.log.Logger;
  ***********************************************************/
 public class AllTests
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.test");
 	/************************************************************
 	 *  Constructor for the AllTests object

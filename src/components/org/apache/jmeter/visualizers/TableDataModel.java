@@ -76,7 +76,7 @@ import org.apache.log.Logger;
  */
 public class TableDataModel extends GraphModel implements TableModel
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.gui");
 	List urlList = new ArrayList();
 
