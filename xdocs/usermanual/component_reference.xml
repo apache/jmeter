@@ -1074,6 +1074,19 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 </description>
 </component>
 
+<component index="13.9.4" name="__sumInt">
+<description><p>The sumInt function can be used to compute the sum of two or more integer values.
+</p></description>
+
+<properties>
+	<property name="First argument" required="Yes">The first int value.</property>
+	<property name="Second argument" required="Yes">The second int value.</property>
+	<property name="nth argument" required="No">The nth int value.</property>
+	<property name="last argument" required="Yes">A reference name for reusing the value
+		computed by this function.</property>
+</properties>
+</component>
+
 </section>
 </body>
 </document>
