@@ -68,14 +68,12 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 
 /**
- * @author  Michael Stover
- * @author  <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision$ updated on $Date$
  */
 public class ProxyControl extends GenericController implements Serializable
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
-    private Daemon server;
+    private transient Daemon server;
     public static final int DEFAULT_PORT = 8080;
 	public static final String DEFAULT_PORT_S =
 	         Integer.toString(DEFAULT_PORT);// Used by GUI
