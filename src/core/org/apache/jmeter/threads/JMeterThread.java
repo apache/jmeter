@@ -82,7 +82,7 @@ import org.apache.log.Logger;
  * The JMeter interface to the sampling process, allowing JMeter to see the
  * timing, add listeners for sampling events and to stop the sampling process.
  *
- * @author    
+ * @author    unattributed
  * @version   $Revision$ Last updated: $Date$
  */
 public class JMeterThread implements Runnable, java.io.Serializable

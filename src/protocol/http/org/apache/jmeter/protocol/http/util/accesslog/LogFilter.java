@@ -220,7 +220,7 @@ public class LogFilter implements Filter
      * been fully implemented and test yet. The
      * implementation is not complete.
      * @param String[]
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#includePattern(java.lang.String)
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#includePattern(String[])
      */
     public void includePattern(String[] regexp)
     {
@@ -242,7 +242,7 @@ public class LogFilter implements Filter
      * to filter with for exclusion. This method hasn't
      * been fully implemented and test yet. The
      * implementation is not complete.
-     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#excludePattern(java.lang.String)
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#excludePattern(String[])
      */
     public void excludePattern(String[] regexp)
     {
@@ -407,7 +407,7 @@ public class LogFilter implements Filter
      */
     protected boolean filterPattern(String text)
     {
-        boolean match = false;
+        boolean match = false;//TODO not used
         if (MATCHER == null)
         {
             MATCHER = new Perl5Matcher();
@@ -428,7 +428,7 @@ public class LogFilter implements Filter
      * not included, unless it matches. In that case,
      * it will return true.
      * @param text
-     * @return
+     * @return true if text is included
      */
     protected boolean incPattern(String text)
     {
@@ -449,7 +449,7 @@ public class LogFilter implements Filter
      * not excluded. If the text matches the
      * pattern, it will then return true.
      * @param text
-     * @return
+     * @return true if text is excluded
      */
     protected boolean excPattern(String text)
     {
@@ -588,7 +588,7 @@ public class LogFilter implements Filter
         System.out.println(" ------------ exclude test -------------");
         for (int idx = 0; idx < thefiles.length; idx++)
         {
-            boolean fl = testf.isFiltered(thefiles[idx]);
+            boolean fl = testf.isFiltered(thefiles[idx]);//TODO not used
             String line = testf.filter(thefiles[idx]);
             if (line != null)
             {
@@ -600,7 +600,7 @@ public class LogFilter implements Filter
         System.out.println(" ------------ include test -------------");
         for (int idx = 0; idx < thefiles.length; idx++)
         {
-            boolean fl = testf.isFiltered(thefiles[idx]);
+            boolean fl = testf.isFiltered(thefiles[idx]);//TODO not used
             String line = testf.filter(thefiles[idx]);
             if (line != null)
             {
@@ -616,7 +616,7 @@ public class LogFilter implements Filter
         System.out.println(" ------------ exclude Pattern test -------------");
         for (int idx = 0; idx < thefiles.length; idx++)
         {
-            boolean fl = testf.isFiltered(thefiles[idx]);
+            boolean fl = testf.isFiltered(thefiles[idx]);//TODO not used
             String line = testf.filter(thefiles[idx]);
             if (line != null)
             {
@@ -630,7 +630,7 @@ public class LogFilter implements Filter
         System.out.println(" ------------ include Pattern test -------------");
         for (int idx = 0; idx < thefiles.length; idx++)
         {
-            boolean fl = testf.isFiltered(thefiles[idx]);
+            boolean fl = testf.isFiltered(thefiles[idx]);//TODO not used
             String line = testf.filter(thefiles[idx]);
             if (line != null)
             {

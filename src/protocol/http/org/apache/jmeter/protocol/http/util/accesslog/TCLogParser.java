@@ -421,7 +421,7 @@ public class TCLogParser implements LogParser
      * methods currently. The other methods
      * aren't supported yet.
      * @param text
-     * @return
+     * @return if method is supported
      */
     public boolean checkMethod(String text)
     {
@@ -613,7 +613,7 @@ public class TCLogParser implements LogParser
      */
     public static void main(String[] args)
     {
-        int count = -1;
+        int count = -1;//TODO not used
         if (args != null && args[0] != null && args[0].length() > 0)
         {
             try

@@ -117,7 +117,7 @@ public class WSDLHelper
 
     /**
      * Returns the URL
-     * @return
+     * @return the URL
      */
     public URL getURL()
     {

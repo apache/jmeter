@@ -166,7 +166,7 @@ public class WebServiceSamplerGui
     }
 
     /**
-     * @see JMeterGUIComponent#getStaticLabel()
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
      */
     public String getStaticLabel()
     {
@@ -174,7 +174,7 @@ public class WebServiceSamplerGui
     }
 
     /**
-     * @see JMeterGUIComponent#createTestElement()
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
     public TestElement createTestElement()
     {
@@ -210,7 +210,7 @@ public class WebServiceSamplerGui
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * @see JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement s)
     {

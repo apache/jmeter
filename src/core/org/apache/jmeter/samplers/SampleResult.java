@@ -349,7 +349,7 @@ public class SampleResult implements Serializable
         this.dataEncoding = dataEncoding;
     }
     /**
-     * @return
+     * @return whether to stop the test
      */
     public boolean isStopTest()
     {
@@ -357,7 +357,7 @@ public class SampleResult implements Serializable
     }
 
     /**
-     * @return
+     * @return whether to stop this thread
      */
     public boolean isStopThread()
     {

@@ -79,7 +79,7 @@ import org.apache.log.Logger;
  * other abstract classes that create different classes of GUI components for
  * JMeter (Visualizers, Timers, Samplers, Modifiers, Controllers, etc).
  * 
- * @see JMeterGUIComponent
+ * @see org.apache.jmeter.gui.JMeterGUIComponent
  * @see org.apache.jmeter.config.gui.AbstractConfigGui
  * @see org.apache.jmeter.assertions.gui.AbstractAssertionGui
  * @see org.apache.jmeter.control.gui.AbstractControllerGui

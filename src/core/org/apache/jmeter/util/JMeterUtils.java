@@ -422,6 +422,7 @@ public class JMeterUtils implements UnitTestManager
      *@param  properties  The properties with information about the samplers
      *@return             The Controllers value
      */
+    //TODO - does not appear to be called directly
     public static Vector getControllers(Properties properties)
     {
         String name = "controller.";
@@ -687,12 +688,12 @@ public class JMeterUtils implements UnitTestManager
     {
         if (className != null)
         {
-            className.trim();
+            className.trim();//TODO does nothing - presumably should be s=className.trim()
         }
 
         if (impls != null)
         {   // FIXME: Shouldn't this be impls.trim()?
-            className.trim();
+            className.trim();//TODO does nothing!!
         }
 
         try
@@ -1046,7 +1047,7 @@ public class JMeterUtils implements UnitTestManager
     public static final String PROPERTIES = "jmeter.elements.properties";
     /**
      * Gets the JMeter Version.
-     * @returns the JMeter version.
+     * @return the JMeter version string
      */
     public static String getJMeterVersion()
     {
