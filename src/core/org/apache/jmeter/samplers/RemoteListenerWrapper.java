@@ -27,7 +27,7 @@ public class RemoteListenerWrapper
     implements SampleListener, TestListener, Serializable, NoThreadClone
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
-    RemoteSampleListener listener;
+    private RemoteSampleListener listener = null;
     
     private boolean holdSamples; //Hold samples to end of test?
     private List sampleStore; // Samples stored here
@@ -52,21 +52,21 @@ public class RemoteListenerWrapper
 
     public void testStarted()
     {
-    	log.info("Test Started()"); // should this be debug?
+    	log.info("Test Started()");
     	setUpStore();
         try
         {
            listener.testStarted();
         }
-        catch (Exception ex)
+        catch (Throwable ex)
         {
-            log.error("", ex);
+            log.warn("testStarted()", ex);
         }
 
     }
     public void testEnded()
     {
-    	log.debug("Test ended");
+    	log.info("Test ended()");
         try
         {
         	if (holdSamples){
@@ -79,9 +79,9 @@ public class RemoteListenerWrapper
             listener.testEnded();
             sampleStore = null;
         }
-        catch (Exception ex)
+        catch (Throwable ex)
         {
-            log.error("", ex);
+            log.warn("testEnded()", ex);
         }
     }
     public void testStarted(String host)
@@ -92,14 +92,14 @@ public class RemoteListenerWrapper
         {
             listener.testStarted(host);
         }
-        catch (Exception ex)
+        catch (Throwable ex)
         {
-            log.error("", ex);
+            log.error("testStarted(host)", ex);
         }
     }
     public void testEnded(String host)
     {
-    	log.info("Test Ended"); // should this be debug?
+    	log.info("Test Ended on " + host); // should this be debug?
         try
         {
         	if (holdSamples){
@@ -112,9 +112,9 @@ public class RemoteListenerWrapper
             listener.testEnded(host);
             sampleStore = null;
         }
-        catch (Exception ex)
+        catch (Throwable ex)
         {
-            log.error("", ex);
+            log.error("testEnded(host)", ex);
         }
     }
 
@@ -131,7 +131,7 @@ public class RemoteListenerWrapper
         }
         catch (RemoteException err)
         {
-            log.error("", err);
+            log.error("sampleOccurred", err);
         }
     }
 
@@ -152,7 +152,7 @@ public class RemoteListenerWrapper
         }
         catch (RemoteException err)
         {
-            log.error("", err);
+            log.error("sampleStarted", err);
         }
     }
     public void sampleStopped(SampleEvent e)
@@ -164,7 +164,7 @@ public class RemoteListenerWrapper
         }
         catch (RemoteException err)
         {
-            log.error("", err);
+            log.error("sampleStopped", err);
         }
     }
     /* (non-Javadoc)
