@@ -1402,7 +1402,7 @@ The variables in User Defined Variables components will take precedence over tho
 to <b>match</b> the entire response, or if the response is only expected to <b>contain</b> the
 pattern. You can attach multiple assertions to any controller for additional flexibility.</p>
 <p>Note that the pattern string should not include the enclosing delimiters, 
-	i.e. use <b>Price: (\d+)</b> not <b>/Price: (\d+)/</b>.
+	i.e. use <b>Price: \d+</b> not <b>/Price: \d+/</b>.
 	By default, the pattern is in multi-line mode, which means that the "." meta-character does not match newline.
     In multi-line mode, "^" and "$" match the start or end of any line anywhere within the string 
     - not just the start and end of the entire string.
@@ -1431,7 +1431,7 @@ pattern. You can attach multiple assertions to any controller for additional fle
                 </p>
                 HTTP Responses with statuses in the 4xx and 5xx ranges are normally
                 regarded as unsuccessful. 
-                The checkbox can be used to regard a 404 status as successful.
+                The "Ignore status" checkbox can be used to set the status successful before performing further checks.
                 </property>
         <property name="Pattern Matching Rules" required="Yes">Indicates whether the text being tested
         must CONTAIN or MATCH the test patterns.  NOT may also be selected to indicate the text
@@ -1786,10 +1786,12 @@ generate the template string, and store the result into the given variable name.
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
         <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as [refname]_g#, where [refname] is the string you entered as the reference name, and # is the group number, where group 0 is the entire match, group 1 is the match from the first set of parentheses, etc.</property>
-        <property name="Regular Expression" required="Yes">The regular expression used to parse the response data.</property>
+        <property name="Regular Expression" required="Yes">The regular expression used to parse the response data. 
+        This must contain at least one set of parentheses "()" to capture a portion of the string, unless using the group $0$.
+        </property>
         <property name="Template" required="Yes">The template used to create a string from the matches found.  This is an arbitrary string
         with special elements to refer to groups within the regular expression.  The syntax to refer to a group is: '$1$' to refer to
-        group 1, '$2$' to refer to group 2, etc.</property>
+        group 1, '$2$' to refer to group 2, etc. $0$ refers to whatever the entire expression matches.</property>
         <property name="Match No." required="Yes">Indicates which match to use.  The regular expression may match multiple times.  
         	<ul>
         		<li>Use a value of zero to indicate JMeter should choose a match at random.</li>
