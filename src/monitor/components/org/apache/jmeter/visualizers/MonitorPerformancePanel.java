@@ -245,22 +245,23 @@ public class MonitorPerformancePanel extends JSplitPane
 	 * MonitorAccumModel will call this method to notify
 	 * the component data has changed.
 	 */
-	public void addSample(MonitorModel model){
-		if (!SERVERMAP.containsKey(model.getURL())){
-			DefaultMutableTreeNode newnode =
-				new DefaultMutableTreeNode(model);
-			newnode.setAllowsChildren(false);
-			SERVERMAP.put(model.getURL(),newnode);
-			ROOTNODE.add(newnode);
-			this.TREEPANE.updateUI();
-		}
-		DefaultMutableTreeNode node =
-			(DefaultMutableTreeNode) SERVERTREE.getLastSelectedPathComponent();
-		Object usrobj = node.getUserObject();
-		if (usrobj instanceof MonitorModel){
-			GRAPH.updateGui((MonitorModel)usrobj);
-		}
-	}
+    public synchronized void addSample(MonitorModel model) {
+        if (!SERVERMAP.containsKey(model.getURL())) {
+            DefaultMutableTreeNode newnode = new DefaultMutableTreeNode(model);
+            newnode.setAllowsChildren(false);
+            SERVERMAP.put(model.getURL(), newnode);
+            ROOTNODE.add(newnode);
+            this.TREEPANE.updateUI();
+        }
+        DefaultMutableTreeNode node =
+            (DefaultMutableTreeNode)SERVERTREE.getLastSelectedPathComponent();
+        if (node != null) {
+            Object usrobj = node.getUserObject();
+            if (usrobj instanceof MonitorModel) {
+                GRAPH.updateGui((MonitorModel)usrobj);
+            }
+        }
+    }
 	
 	/**
 	 * When the user selects a different node in the

@@ -27,13 +27,14 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.gui.util.VerticalPanel;
-import org.apache.jmeter.reporters.ResultCollector;
-import org.apache.jmeter.testelement.TestElement;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * For performance reasons, I am using tabs for the
@@ -55,18 +56,24 @@ public class MonitorHealthVisualizer extends AbstractVisualizer
 	private MonitorGraph GRAPH;
 	
 	public static final String BUFFER = "monitor.buffer.size";
+	private static transient Logger log = LoggingManager.getLoggerForClass();
 	
     /**
      * Constructor for the GraphVisualizer object.
      */
     public MonitorHealthVisualizer()
     {
-    	MODEL = new MonitorAccumModel();
-    	GRAPH = new MonitorGraph(MODEL);
+    	this.isStats = true;
+		initModel();
     	init();
-		MODEL.setBufferSize(JMeterUtils.getPropDefault(BUFFER,800));
     }
 
+	public void initModel(){
+		MODEL = new MonitorAccumModel();
+		GRAPH = new MonitorGraph(MODEL);
+		MODEL.setBufferSize(JMeterUtils.getPropDefault(BUFFER,800));
+	}
+	
     public String getLabelResource()
     {
         return "monitor_health_title";
@@ -79,10 +86,16 @@ public class MonitorHealthVisualizer extends AbstractVisualizer
 	 * to run for a very long time without eating up
 	 * all the memory.
 	 */
-	public void add(SampleResult res)
-	{
-		MODEL.addSample(res);
-	}
+    public void add(SampleResult res) {
+        MODEL.addSample(res);
+        try {
+            collector.recordStats(
+                this.MODEL.getLastSample().cloneMonitorStats());
+        } catch (Exception e) {
+            // for now just swallow the exception
+            log.debug("StatsModel was null", e);
+        }
+    }
 	
 	public Image getImage()
 	{
@@ -154,7 +167,7 @@ public class MonitorHealthVisualizer extends AbstractVisualizer
 		VerticalPanel titlePanel = new VerticalPanel();
 		titlePanel.add(createTitleLabel());
 		titlePanel.add(getNamePanel());
-		titlePanel.add(super.getFilePanel());
+		titlePanel.add(getFilePanel());
 		return titlePanel;
 	}
 
@@ -168,13 +181,4 @@ public class MonitorHealthVisualizer extends AbstractVisualizer
 		this.PERFPANE.clear();
 	}
 	
-	public TestElement createTestElement()
-	{
-		if (collector == null)
-		{
-			collector = new ResultCollector();
-		}
-		modifyTestElement(collector);
-		return (TestElement) collector.clone();
-	}
 }
