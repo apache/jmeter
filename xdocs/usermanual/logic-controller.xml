@@ -8,174 +8,89 @@
 <body>
 
 <section name="4.2.2 Logic Controllers" anchor="logic_controller">
-<p>Logic Controllers let you customize the logic that JMeter uses to 
-decide when to send requests.  JMeter currently has five such controllers:
+<p>Logic Controllers let you customize the logic that JMeter uses to
+decide when to send requests.  Logic Controllers may have as child elements any
+of the following: Generative Controllers (requests), Configuration Elements, and other Logic
+Controllers.  Logic Controllers can change the order of requests coming from their
+child elements.  They can modify the requests themselves, cause JMeter to repeat
+requests, etc.
+</p>
+
+<p>To understand the effect of Logic Controllers on a test plan, consider the
+following test tree:</p>
+
+<p>
 <ul>
-  <li><b>Interleave Controller</b> <br></br>Alternates among each of the other controllers for each loop iteration.</li> 
-
-  <li><b>Loop Controller</b> <br></br>Repeats a controller a certain number of times.</li> 
-
-  <li><b>Modification Manager</b> <br></br>Parses the results of a previous
-request, and use them to dynamically create the next request.</li> 
-
-  <li><b>Once Only Controller</b> <br></br>Processes a a controller only the first time.</li> 
-
-  <li><b>Simple Controller</b> <br></br>Organizes your other controllers.</li> 
+<li>Test Plan</li>
+	<ul>
+	<li>Thread Group</li>
+		<ul>
+		<li>Once Only Controller</li>
+			<ul>
+			<li>Login Request (an <a href="component_reference.html#http_request">HTTP Generative Controller</a>)</li>
+			</ul>
+		<li>Load Search Page (HTTP Generative Controller)</li>
+		<li>Interleave Controller</li>
+			<ul>
+			<li>Search "A" (HTTP Generative Controller)</li>
+			<li>Search "B" (HTTP Generative Controller)</li>
+			<li>HTTP default request (Configuration Element)</li>
+			</ul>
+		<li>HTTP default request (Configuration Element)</li>
+		<li>Cookie Manager (Configuration Element)</li>
+		</ul>
+	</ul>
 </ul>
 </p>
 
-<p>You can add Generative Controllers (requests), Configuration Elements, and even
-other Logic Controllers to a Logic Controller. </p>  
+<p>The first thing about this test is that the login request will be executed only
+the first time through.  Subsequent iterations will skip it.  This is due to the
+effects of the <a href="component_referenct.html#once_only_controller">Once Only Controller</a>.</p>
+
+<p>After the login, the next Generative Controller loads the search page (imagine a
+web application where the user logs in, and then goes to a search page to do a search).  This
+is just a simple request, not filtered through any Logic Controller.</p>
+
+<p>After loading the search page, we want to do a search.  Actually, we want to do
+two different searches.  However, we want to re-load the search page itself between
+each search.  We could do this by having 4 simple HTTP request elements (load search,
+search "A", load search, search "B").  Instead, we use the <a href="component_reference.html#interleave_controller">Interleave
+Controller</a> which passes on one child request each time through the test.  It keeps the
+ordering (ie - it doesn't pass one on at random, but "remembers" its place) of its
+child elements.  Interleaving 2 child requests may be overkill, but there could easily have
+been 8, or 20 child requests.</p>
+
+<p>Note the <a href="component_reference.html#http_default_request">HTTP default request</a> that
+belongs to the Interleave Controller.  Imagine that "Search A" and "Search B" share
+the same PATH info (an HTTP request specification includes domain, port, method, protocol,
+path, and arguments, plus other optional items).  This makes sense - both are search requests,
+ hitting the same back-end search engine (a servlet or cgi-script, let's say).  Rather than
+ configure both HTTP Generative Controllers with the same information in their PATH field, we
+ can abstract that information out to a single Configuration Element.  When the Interleave
+ Controller "passes on" requests from "Search A" or "Search B", it will fill in the blanks with
+ values from the HTTP default request Configuration Element.  So, we leave the PATH field
+ blank for those requests, and put that information into the Configuration Element.  In this
+case, this is a minor benefit at best, but it demonstrates the feature.</p>
+
+<p>The next element in the tree is another HTTP default request, this time added to the
+Thread Group itself.  The Thread Group has a built-in Logic Controller, and thus, it uses
+this Configuration Element exactly as described above.  It fills in the blanks of any
+Request that passes through.  It is extremely useful in web testing to leave the DOMAIN
+field blank in all your HTTP Generative Controller elements, and instead, put that information
+into an HTTP default request element, added to the Thread Group.  By doing so, you can
+test your application on a different server simply by changing one field in your Test Plan.
+Otherwise, you'd have to edit each and every Generative Controller.</p>
+
+<p>The last element is a <a href="component_reference.html#cookie_manager">Cookie
+Manager</a>.  A Cookie Manager should be added to all web tests - otherwise JMeter will
+ignore cookies.  By adding it at the Thread Group level, we ensure that all HTTP requests
+will share the same cookies.</p>
+
+<p>Logic Controllers can be combined to achieve various results.  See the list of <a href="component_reference.html#logic_controllers">built-in
+Logic Controllers</a>.</p>
 </section>
 
-<section name="4.2.2.1 Interleave Controller" anchor="interleave">
-<p>If you add Generative or Logic Controllers to an Interleave Controller, JMeter will alternate among each of the 
-other controllers for each loop iteration. </p>
 
-<p><b>Control Panel</b></p>
-<p><img src="../images/screenshots/logic-controller/interleave-controller.gif" width="390" height="62"></img>
-<br>Figure 1- Interleave Controller Control Panel</br></p>
-<p>Properties:
-<ul>
-  <li>Name - Descriptive name for this controller that is shown in the tree. </li>
-</ul>
-</p>
-<!--
-For example, if you 
-add three HTTP Requests to an Interleave Controller and configure the Thread
-Group to loop, here is the sequence in which JMeter sends the requests:
-</p>
-<table border="1" cellspacing="0" cellpadding="4">
-<tr valign="top"><td>Loop Iteration</td><td>Description</td></tr>
-<tr valign="top"><td>1</td><td>JMeter sends the first HTTP Request.</td></tr>
-<tr valign="top"><td>2</td><td>JMeter sends the second HTTP Request.</td></tr>
-<tr valign="top"><td>3</td><td>JMeter sends the third HTTP Request.</td></tr>
-<tr valign="top"><td>4</td><td>Because there are no more requests in controller, JMeter start over and sends the first HTTP Request.</td></tr>
-<tr valign="top"><td>5</td><td>JMeter sends the second HTTP Request.</td></tr>
-<tr valign="top"><td>(and so on)</td><td>...</td></tr>
-</table>
--->
-<p><b>Example</b></p>
-
-<p><a href="../demos/InterleaveTestPlan.jmx">Download</a> this example (see Figure 2).  In this example, 
-we configured the Thread Group to have two threads and a loop count of five, for a total of ten 
-requests. See the table below for the sequence JMeter sends the HTTP Requests.</p>
-
-<table border="1" cellspacing="0" cellpadding="4">
-<tr valign="top"><td>Loop Iteration</td><td>Each JMeter Thread Sends These HTTP Requests</td></tr>
-<tr valign="top"><td>1</td><td>News Page</td></tr>
-<tr valign="top"><td>2</td><td>FAQ Page</td></tr>
-<tr valign="top"><td>3</td><td>Gump Page</td></tr>
-<tr valign="top"><td>4</td><td>Because there are no more requests in controller, JMeter start over and sends the first HTTP Request, which is the News Page.</td></tr>
-<tr valign="top"><td>5</td><td>FAQ Page</td></tr>
-</table>
-
-<p>Note, the File Reporter is configured to store the results in a file named 
-"interleave-test.dat" in the current directory.</p>
-
-<p><img src="../images/screenshots/logic-controller/interleave.gif" width="368" height="210"></img>
-<br>Figure 2 - Interleave Controller Example 1</br></p>
-
-<p><b>Example</b></p>
-
-<p><a href="../demos/InterleaveTestPlan2.jmx">Download</a> another example (see Figure 3).  In this 
-example, we configured the Thread Group 
-to have a single thread and a loop count of eight.  Notice that the Test Plan has an outer Interleave Controller with
-two Interleave Controllers inside of it.</p>
-
-<p>The outer Interleave Controller alternates between the
-two inner ones.  Then, each inner Interleave Controller alternates between each of the HTTP Requests.  Each JMeter
-thread will send the requests in the following order: Home Page, Bug Page, CVS Page, and FAQ Page.
-Note, the File Reporter is configured to store the results in a file named "interleave-test2.dat" in the current directory.</p>
-
-<p><img src="../images/screenshots/logic-controller/interleave2.gif" width="368" height="262"></img>
-<br>Figure 3 - Interleave Controller Example 2</br></p>
-
-</section>
-
-<section name="4.2.2.2 Loop Controller" anchor="loop">
-<p>If you add Generative or Logic Controllers to a Loop Controller, JMeter will 
-loop through them a certain number of times, in addition to the loop value you 
-specified for the Thread Group.  For example, if you add one HTTP Request to a 
-Loop Controller with a loop count of two, and configure the Thread Group loop 
-count to three, JMeter will send a total of 2 * 3 = 6 HTTP Requests.
-</p>
-<p><b>Control Panel</b></p>
-<p><img src="../images/screenshots/logic-controller/loop-controller.gif" width="397" height="111"></img>
-<br>Figure 4 - Loop Controller Control Panel</br></p>
-
-<p><b>Example</b></p>
-<p><a href="../demos/LoopTestPlan.jmx">Download</a> this example (see Figure 5).  
-In this example, we created a Test Plan that sends a particular HTTP Request 
-only once and sends another HTTP Request five times.</p>
-<p>We configured the Thread Group for a single thread and a loop count value of 
-one. Instead of letting the Thread Group control the looping, we used a Loop 
-Controller.  You can see that we added one HTTP Request to the Thread Group and
-another HTTP Request to a Loop Controller.  We configured the Loop Controller 
-with a loop count value of five.</p>
-
-<p>JMeter will send the requests in the following order: Home Page, News Page, 
-News Page, News Page, News Page, and News Page. Note, the File Reporter
-is configured to store the results in a file named "loop-test.dat" in the current directory.</p>
-
-<p><img src="../images/screenshots/logic-controller/loop-example.gif" width="368" height="185"></img>
-<br>Figure 5 - Loop Controller Example</br></p>
-
-</section>
-
-<section name="4.2.2.3 Modification Manager" anchor="mod_manager">
-<p>Put description text here...</p>
-<p>This element has no visual elements.</p>
-</section>
-
-<section name="4.2.2.4 Once Only Controller" anchor="once_only">
-<p>The Once Only Logic Controller tells JMeter to process the controller(s) inside it only once, regardless of the loop 
-count value you specify in the Thread Group or Loop Controller.</p>
-
-<p>For testing that requires a login, consider placing the login request in this controller since each thread only needs
-to login once to establish a session.</p>
-
-<p><b>Control Panel</b></p>
-<p><img src="../images/screenshots/logic-controller/once-only-controller.gif" width="390" height="62"></img>
-<br>Figure x - Once Only Controller Control Panel</br></p>
-
-<p><b>Example</b></p>
-<p><a href="../demos/OnceOnlyTestPlan.jmx">Download</a> this example (see Figure x).  
-In this example, we created a Test Plan that has two threads that send HTTP request.
-Each thread sends one request to the Home Page, followed by three requests to the Bug Page.
-Although we configured the Thread Group to iterate three times, each JMeter thread only
-sends one request to the Home Page because this request lives inside a Once Only Controller.</p>
-
-<p>Each JMeter thread will send the requests in the following order: Home Page, Bug Page, 
-Bug Page, Bug Page. Note, the File Reporter is configured to store the results in a file named "loop-test.dat" in the current directory.</p>
-
-<p><img src="../images/screenshots/logic-controller/once-only-example.gif" width="368" height="190"></img>
-<br>Figure x. Once Only Controller Example</br></p>
-</section>
-
-<section name="4.2.2.5 Simple Controller" anchor="simple">
-
-<p>The Simple Logic Controller lets  you organize your Generative Controllers and other
-Logic Controllers.  Unlike other Logic Controllers, this controller provides no functionality beyond that of a 
-storage device.</p>
-
-<p><b>Control Panel</b></p>
-<p><img src="../images/screenshots/logic-controller/simple-controller.gif" width="390" height="62"></img>
-<br>Figure x. Simple Controller Control Panel</br></p>
-
-<p><b>Example</b></p>
-<p><a href="../demos/SimpleTestPlan.jmx">Download</a> this example (see Figure x).  
-In this example, we created a Test Plan that sends two Ant HTTP requests and two 
-Log4J HTTP requests.  We grouped the Ant and Log4J requests by placing them inside 
-Simple Logic Controllers.  Remember, the Simple Logic Controller has no effect on how JMeter 
-processes the controller(s) you add to it.  So, in this example, JMeter sends the requests in the 
-following order: Ant Home Page, Ant News Page, Log4J Home Page, Log4J History Page.   
-Note, the File Reporter
-is configured to store the results in a file named "simple-test.dat" in the current directory.</p>
-
-<p><img src="../images/screenshots/logic-controller/simple-example.gif" width="368" height="245"></img>
-<br>Figure x Simple Controller Example</br></p>
-</section>
 
 </body>
 </document>
