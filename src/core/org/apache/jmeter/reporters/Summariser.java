@@ -160,8 +160,8 @@ public class Summariser
 	 * These do not need to be synchronised, as they are not shared
 	 * between threads
 	 */
-	private Totals myTotals = null;
-	private String myName;
+	transient private Totals myTotals = null;
+	transient private String myName;
 
 
     /**
