@@ -50,9 +50,9 @@ public class BeanShellAssertionGui extends AbstractAssertionGui
 
     public void configure(TestElement element)
     {
-    	scriptField.setText(element.getProperty(BeanShellAssertion.SCRIPT).toString());
-		filename.setText(element.getProperty(BeanShellAssertion.FILENAME).toString());
-		parameters.setText(element.getProperty(BeanShellAssertion.PARAMETERS).toString());
+    	scriptField.setText(element.getPropertyAsString(BeanShellAssertion.SCRIPT));
+		filename.setText(element.getPropertyAsString(BeanShellAssertion.FILENAME));
+		parameters.setText(element.getPropertyAsString(BeanShellAssertion.PARAMETERS));
         super.configure(element);
     }
 
