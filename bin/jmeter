@@ -77,4 +77,4 @@ SERVER="-server"
 
 ARGS="$SERVER $HEAP $NEW $SURVIVOR $TENURING $EVACUATION $RMIGC $PERM $DEBUG"
 
-/usr/java/j2sdk1.4.2_05/jre/bin/java $ARGS -jar `dirname $0`/ApacheJMeter.jar "$@"
+java $ARGS -jar `dirname $0`/ApacheJMeter.jar "$@"
