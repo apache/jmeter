@@ -101,9 +101,11 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
 	JMenu runMenu;
 	JMenuItem run_start;
 	JMenu remote_start;
+	JMenuItem remote_start_all;
 	Collection remote_engine_start;
 	JMenuItem run_stop;
 	JMenu remote_stop;
+	JMenuItem remote_stop_all;
 	Collection remote_engine_stop;
 	JMenuItem run_clear;
 	JMenuItem run_clearAll;
@@ -380,11 +382,23 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
 		{
 			runMenu.add(remote_start);
 		}
+		remote_start_all = new JMenuItem(JMeterUtils.getResString("remote_start_all"), 'Z');
+		remote_start_all.setAccelerator(
+			KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_MASK));
+		remote_start_all.addActionListener(ActionRouter.getInstance());
+		remote_start_all.setActionCommand("remote_start_all");
+		runMenu.add(remote_start_all);
 		runMenu.add(run_stop);
 		if (remote_stop != null)
 		{
 			runMenu.add(remote_stop);
 		}
+		remote_stop_all = new JMenuItem(JMeterUtils.getResString("remote_stop_all"), 'X');
+		remote_stop_all.setAccelerator(
+			KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_MASK));
+		remote_stop_all.addActionListener(ActionRouter.getInstance());
+		remote_stop_all.setActionCommand("remote_stop_all");
+		runMenu.add(remote_stop_all);
 		runMenu.addSeparator();
 		runMenu.add(run_clear);
 		runMenu.add(run_clearAll);
@@ -481,6 +495,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
 		{
 			remote_start = new JMenu(JMeterUtils.getResString("remote_start"));
 			remote_stop = new JMenu(JMeterUtils.getResString("remote_stop"));
+			
 			for (int i = 0; i < remoteHosts.length; i++)
 			{
 				JMenuItem item = new JMenuItem(remoteHosts[i]);
