@@ -45,12 +45,12 @@ public class GenericController
 {
     protected static final Logger log = LoggingManager.getLoggerForClass();
 
-    protected LinkedList iterationListeners = new LinkedList();
-    protected List subControllersAndSamplers = new ArrayList();
+    protected transient LinkedList iterationListeners = new LinkedList();
+    protected transient List subControllersAndSamplers = new ArrayList();
 
-    protected int current;
-    private int iterCount;
-    private boolean done, first;
+    protected transient int current;
+    private transient int iterCount;
+    private transient boolean done, first;
 
     /**
      * Creates a Generic Controller

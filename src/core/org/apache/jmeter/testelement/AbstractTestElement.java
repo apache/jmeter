@@ -50,9 +50,9 @@ public abstract class AbstractTestElement implements TestElement, Serializable
     protected static final Logger log = LoggingManager.getLoggerForClass();
 
     private Map propMap = Collections.synchronizedMap(new HashMap());
-    private Set temporaryProperties;
+    private transient Set temporaryProperties;
 
-    private boolean runningVersion = false;
+    private transient boolean runningVersion = false;
 
     // Thread-specific variables saved here to save recalculation
     private transient JMeterContext threadContext = null;

@@ -43,7 +43,7 @@ public class BeanShellSampler extends AbstractSampler
 	public static final String SCRIPT     = "BeanShellSampler.query"; //$NON-NLS-1$
 	public static final String PARAMETERS = "BeanShellSampler.parameters"; //$NON-NLS-1$
 
-    private Interpreter bshInterpreter;
+    private transient Interpreter bshInterpreter;
 	
 	public BeanShellSampler()
 	{

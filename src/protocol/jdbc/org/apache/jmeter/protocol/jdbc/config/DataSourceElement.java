@@ -37,9 +37,9 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
       TestListener,TestBean
 {
    static Logger log = LoggingManager.getLoggerForClass();
-   String dataSource, driver, dbUrl, username, password, checkQuery, poolMax,
+   transient String dataSource, driver, dbUrl, username, password, checkQuery, poolMax,
          connectionAge, timeout, trimInterval;
-   boolean keepAlive, autocommit;
+   transient boolean keepAlive, autocommit;
    transient ResourceLimitingJdbcDataSource excaliburSource;
    transient boolean[] started;
 

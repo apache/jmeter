@@ -185,6 +185,7 @@
   <property name="src.core" value="src/core"/>
   <property name="src.http" value="src/protocol/http"/>
   <property name="src.ftp" value="src/protocol/ftp"/>
+  <property name="src.test" value="test/src"/>
   <property name="src.jdbc" value="src/protocol/jdbc"/>
   <property name="src.java" value="src/protocol/java"/>
   <property name="src.components" value="src/components"/>
@@ -239,6 +240,7 @@
   <property name="build.examples" location="build/examples"/>
   <property name="build.monitor.components" location="build/monitor/components"/>
   <property name="build.monitor.model" location="build/monitor/model"/>
+  <property name="build.test" location="build/test"/>
   
   <!-- Path prefix to allow Anakia to find stylesheets if running under Eclipse -->
   <!--
@@ -533,6 +535,29 @@
         <pathelement location="${build.core}"/>
         <pathelement location="${build.components}"/>
         <pathelement location="${build.htmlparser}"/>
+      </classpath>
+    </javac>
+  </target>
+  
+  <target name="compile-tests" depends="compile" description="Compile components specific to HTTP sampling.">
+    <mkdir dir="${build.test}"/>
+    <javac srcdir="${src.test}" destdir="${build.test}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+      <classpath>
+        <path refid="classpath"/>
+        <pathelement location="${build.jorphan}"/>
+        <pathelement location="${build.core}"/>
+        <pathelement location="${build.components}"/>
+        <pathelement location="${build.htmlparser}"/>
+        <pathelement location="${build.http}"/>
+        <pathelement location="${build.ftp}"/>
+        <pathelement location="${build.functions}"/>
+        <pathelement location="${build.java}"/>
+        <pathelement location="${build.jdbc}"/>
+        <pathelement location="${build.ldap}"/>
+        <pathelement location="${build.mail}"/>
+        <pathelement location="${build.monitor.components}"/>
+        <pathelement location="${build.monitor.model}"/>
+        <pathelement location="${build.tcp}"/>
       </classpath>
     </javac>
   </target>
@@ -1172,7 +1197,7 @@ some of its classes - at present JMeter can only run from jar files.
 
   <target name="docs-all" depends="docs-site,docs-printable,docs-api" description="Generate documentation."/>
 
-  <target name="test" depends="install,_test" description="Run tests"/>
+  <target name="test" depends="install,compile-tests,_test" description="Run tests"/>
   
   <target name="test-both" depends="test-headless,test-headed"/>
 

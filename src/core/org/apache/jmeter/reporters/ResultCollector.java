@@ -47,7 +47,7 @@ import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.save.SaveService;
+import org.apache.jmeter.save.OldSaveService;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jorphan.logging.LoggingManager;
@@ -183,7 +183,7 @@ public class ResultCollector
                 String line;
                 while((line = dataReader.readLine()) != null)
                 {
-                    sendToVisualizer(SaveService.makeResultFromDelimitedString(line));
+                    sendToVisualizer(OldSaveService.makeResultFromDelimitedString(line));
                 }
             }
             catch (Exception e)
@@ -200,16 +200,16 @@ public class ResultCollector
 
     private static void writeFileStart(PrintWriter writer)
     {
-        if (SaveService.getOutputFormat() == SaveService.SAVE_AS_XML)
+        if (OldSaveService.getOutputFormat() == OldSaveService.SAVE_AS_XML)
         {
             writer.println(XML_HEADER);
             writer.println(TESTRESULTS_START);
         }
-        else if (SaveService.getOutputFormat() == SaveService.SAVE_AS_CSV)
+        else if (OldSaveService.getOutputFormat() == OldSaveService.SAVE_AS_CSV)
         {
-            if (SaveService.getPrintFieldNames())
+            if (OldSaveService.getPrintFieldNames())
             {
-                writer.println(SaveService.printableFieldNamesToString());
+                writer.println(OldSaveService.printableFieldNamesToString());
             }
         }
     }
@@ -217,7 +217,7 @@ public class ResultCollector
 
     private static void writeFileEnd(PrintWriter pw)
     {
-        if (SaveService.getOutputFormat() == SaveService.SAVE_AS_XML)
+        if (OldSaveService.getOutputFormat() == OldSaveService.SAVE_AS_XML)
         {
             pw.print("\n");
             pw.print(TESTRESULTS_END);
@@ -236,7 +236,7 @@ public class ResultCollector
 
         if (writer == null)
         {
-        	 if (SaveService.getOutputFormat() == SaveService.SAVE_AS_XML)
+        	 if (OldSaveService.getOutputFormat() == OldSaveService.SAVE_AS_XML)
         	 {
         	 	trimmed = trimLastLine(filename);	
         	 }
@@ -326,7 +326,7 @@ public class ResultCollector
 
         serializer.serialize(
             tempOut,
-            SaveService.getConfiguration(result, getFunctionalMode()));
+            OldSaveService.getConfiguration(result, getFunctionalMode()));
         String serVer = tempOut.toString();
 
         return serVer.substring(
@@ -340,7 +340,7 @@ public class ResultCollector
 
         for (int i = 0; i < samples.length; i++)
         {
-            SampleResult result = SaveService.getSampleResult(samples[i]);
+            SampleResult result = OldSaveService.getSampleResult(samples[i]);
 
             sendToVisualizer(result);
             recordResult(result);
@@ -397,12 +397,12 @@ public class ResultCollector
 
             try
             {
-                if (SaveService.getOutputFormat() == SaveService.SAVE_AS_CSV)
+                if (OldSaveService.getOutputFormat() == OldSaveService.SAVE_AS_CSV)
                 {
                     if (out != null)
                     {
                         String savee =
-                                SaveService.resultToDelimitedString(result);
+                                OldSaveService.resultToDelimitedString(result);
                         out.println(savee);
                     }
                 }

@@ -272,7 +272,7 @@ public class AnchorModifier
         {
             HTTPSampler config =
                 (HTTPSampler) SaveService
-                    .loadSubTree(
+                    .loadTree(
                         new FileInputStream(
                             System.getProperty("user.dir")
                                 + "/testfiles/load_bug_list.jmx"))
@@ -281,7 +281,7 @@ public class AnchorModifier
             HTTPSampleResult result = new HTTPSampleResult();
             HTTPSampler context =
                 (HTTPSampler) SaveService
-                    .loadSubTree(
+                    .loadTree(
                         new FileInputStream(
                             System.getProperty("user.dir")
                                 + "/testfiles/Load_JMeter_Page.jmx"))

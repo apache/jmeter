@@ -30,7 +30,7 @@ import org.apache.jmeter.visualizers.Visualizer;
 
 public abstract class AbstractListenerElement extends AbstractTestElement
 {
-    private Visualizer listener;
+    transient private Visualizer listener;
 
     public AbstractListenerElement()
     {}

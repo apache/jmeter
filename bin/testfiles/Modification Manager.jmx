@@ -1,97 +1,103 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<node>
-<testelement class="org.apache.jmeter.testelement.TestPlan">
-<property name="TestPlan.functional_mode" propType="org.apache.jmeter.testelement.property.BooleanProperty" xml:space="preserve">false</property>
-<property name="TestElement.test_class" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">org.apache.jmeter.testelement.TestPlan</property>
-<property name="TestElement.enabled" propType="org.apache.jmeter.testelement.property.BooleanProperty" xml:space="preserve">true</property>
-<property name="TestElement.gui_class" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">org.apache.jmeter.control.gui.TestPlanGui</property>
-<testelement name="TestPlan.user_defined_variables" class="org.apache.jmeter.config.Arguments">
-<property name="TestElement.test_class" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">org.apache.jmeter.config.Arguments</property>
-<property name="TestElement.gui_class" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">org.apache.jmeter.config.gui.ArgumentsPanel</property>
-<property name="TestElement.enabled" propType="org.apache.jmeter.testelement.property.BooleanProperty" xml:space="preserve">true</property>
-<property name="TestElement.name" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">Argument List</property>
-<collection name="Arguments.arguments" class="java.util.ArrayList" propType="org.apache.jmeter.testelement.property.CollectionProperty"/>
-</testelement>
-<collection name="TestPlan.thread_groups" class="java.util.LinkedList" propType="org.apache.jmeter.testelement.property.CollectionProperty"/>
-<property name="TestElement.name" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">Test Plan</property>
-<property name="TestPlan.serialize_threadgroups" propType="org.apache.jmeter.testelement.property.BooleanProperty" xml:space="preserve">false</property>
-</testelement>
-<node>
-<testelement class="org.apache.jmeter.control.GenericController">
-<property name="TestElement.test_class" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">org.apache.jmeter.control.GenericController</property>
-<property name="TestElement.gui_class" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">org.apache.jmeter.control.gui.LogicControllerGui</property>
-<property name="TestElement.enabled" propType="org.apache.jmeter.testelement.property.BooleanProperty" xml:space="preserve">true</property>
-<property name="TestElement.name" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">Modification Manager</property>
-</testelement>
-<node>
-<testelement class="org.apache.jmeter.control.GenericController">
-<property name="TestElement.test_class" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">org.apache.jmeter.control.GenericController</property>
-<property name="TestElement.gui_class" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">org.apache.jmeter.control.gui.LogicControllerGui</property>
-<property name="TestElement.enabled" propType="org.apache.jmeter.testelement.property.BooleanProperty" xml:space="preserve">true</property>
-<property name="TestElement.name" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">Simple Controller</property>
-</testelement>
-<node>
-<testelement class="org.apache.jmeter.protocol.http.sampler.HTTPSampler">
-<property name="HTTPSampler.mimetype" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve"/>
-<property name="HTTPSampler.follow_redirects" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">false</property>
-<property name="HTTPSampler.domain" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve"/>
-<property name="HTTPSampler.protocol" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">http</property>
-<property name="HTTPSampler.encoded_path" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">/xdx/admin/inspect_job.jsp</property>
-<property name="HTTPSampler.FILE_FIELD" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve"/>
-<testelement name="HTTPsampler.Arguments" class="org.apache.jmeter.config.Arguments">
-<property name="TestElement.test_class" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">org.apache.jmeter.config.Arguments</property>
-<property name="TestElement.gui_class" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</property>
-<property name="TestElement.name" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve"/>
-<collection name="Arguments.arguments" class="java.util.LinkedList" propType="org.apache.jmeter.testelement.property.CollectionProperty">
-<testelement name="" class="org.apache.jmeter.protocol.http.util.HTTPArgument">
-<property name="HTTPArgument.encoded_value" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">.*</property>
-<property name="HTTPArgument.always_encode" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">true</property>
-<property name="HTTPArgument.use_equals" propType="org.apache.jmeter.testelement.property.BooleanProperty" xml:space="preserve">true</property>
-<property name="Argument.value" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">.*</property>
-<property name="Argument.name" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">request.job_id</property>
-<property name="Argument.metadata" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">=</property>
-<property name="HTTPArgument.encoded_name" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">request.job_id</property>
-</testelement>
-<testelement name="" class="org.apache.jmeter.protocol.http.util.HTTPArgument">
-<property name="HTTPArgument.encoded_value" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">opjobadmin.action.inspect</property>
-<property name="HTTPArgument.always_encode" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">true</property>
-<property name="HTTPArgument.use_equals" propType="org.apache.jmeter.testelement.property.BooleanProperty" xml:space="preserve">true</property>
-<property name="Argument.value" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">opjobadmin.action.inspect</property>
-<property name="Argument.name" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">request.action1</property>
-<property name="Argument.metadata" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">=</property>
-<property name="HTTPArgument.encoded_name" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">request.action1</property>
-</testelement>
-</collection>
-</testelement>
-<property name="TestElement.enabled" propType="org.apache.jmeter.testelement.property.BooleanProperty" xml:space="preserve">true</property>
-<property name="HTTPSampler.FILE_NAME" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve"/>
-<property name="HTTPSampler.path" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">/xdx/admin/inspect_job.jsp</property>
-<property name="TestElement.name" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">Web Testing</property>
-<collection name="AbstractSampler.assertions" class="java.util.ArrayList" propType="org.apache.jmeter.testelement.property.CollectionProperty"/>
-<property name="HTTPSampler.port" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">80</property>
-<property name="HTTPSampler.method" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">GET</property>
-<property name="TestElement.gui_class" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
-<property name="HTTPSampler.use_keepalive" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">false</property>
-<property name="TestElement.test_class" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
-</testelement>
-</node>
-<node>
-<testelement class="org.apache.jmeter.config.ConfigTestElement">
-<property name="HTTPSampler.domain" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">13.231.197.158</property>
-<property name="HTTPSampler.port" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">80</property>
-<property name="TestElement.test_class" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">org.apache.jmeter.config.ConfigTestElement</property>
-<property name="TestElement.gui_class" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui</property>
-<property name="TestElement.enabled" propType="org.apache.jmeter.testelement.property.BooleanProperty" xml:space="preserve">true</property>
-<property name="HTTPSampler.path" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve"/>
-<property name="TestElement.name" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">HTTP Request Defaults</property>
-<testelement name="HTTPsampler.Arguments" class="org.apache.jmeter.config.Arguments">
-<property name="TestElement.test_class" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">org.apache.jmeter.config.Arguments</property>
-<property name="TestElement.gui_class" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</property>
-<property name="TestElement.name" propType="org.apache.jmeter.testelement.property.StringProperty" xml:space="preserve"/>
-<collection name="Arguments.arguments" class="java.util.LinkedList" propType="org.apache.jmeter.testelement.property.CollectionProperty"/>
-</testelement>
-</testelement>
-</node>
-</node>
-</node>
-</node>
+<jmeterTestPlan version="2.0.20040619">
+  <hashTree>
+    <org.apache.jmeter.testelement.TestPlan>
+      <collectionProp name="TestPlan.thread_groups"/>
+      <elementProp name="TestPlan.user_defined_variables" elementType="org.apache.jmeter.config.Arguments">
+        <stringProp name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</stringProp>
+        <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
+        <collectionProp name="Arguments.arguments"/>
+        <stringProp name="TestElement.name">User Defined Variables</stringProp>
+        <boolProp name="TestElement.enabled">true</boolProp>
+      </elementProp>
+      <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.TestPlanGui</stringProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <stringProp name="TestElement.test_class">org.apache.jmeter.testelement.TestPlan</stringProp>
+      <stringProp name="TestElement.name">Test Plan</stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestElement.enabled">true</boolProp>
+      <stringProp name="TestPlan.comments"></stringProp>
+    </org.apache.jmeter.testelement.TestPlan>
+    <hashTree>
+      <org.apache.jmeter.control.GenericController>
+        <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
+        <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
+        <stringProp name="TestElement.name">Modification Manager</stringProp>
+        <boolProp name="TestElement.enabled">true</boolProp>
+      </org.apache.jmeter.control.GenericController>
+      <hashTree>
+        <org.apache.jmeter.control.GenericController>
+          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
+          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
+          <stringProp name="TestElement.name">Simple Controller</stringProp>
+          <boolProp name="TestElement.enabled">true</boolProp>
+        </org.apache.jmeter.control.GenericController>
+        <hashTree>
+          <org.apache.jmeter.protocol.http.sampler.HTTPSampler>
+            <stringProp name="HTTPSampler.path">/xdx/admin/inspect_job.jsp</stringProp>
+            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
+            <stringProp name="HTTPSampler.protocol">http</stringProp>
+            <boolProp name="TestElement.enabled">true</boolProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
+            <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+            <stringProp name="HTTPSampler.port">80</stringProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="org.apache.jmeter.config.Arguments">
+              <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</stringProp>
+              <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="org.apache.jmeter.protocol.http.util.HTTPArgument">
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <stringProp name="Argument.value">.*</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">request.job_id</stringProp>
+                  <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                  <stringProp name="HTTPArgument.encoded_name">request.job_id</stringProp>
+                  <stringProp name="HTTPArgument.encoded_value">.*</stringProp>
+                </elementProp>
+                <elementProp name="" elementType="org.apache.jmeter.protocol.http.util.HTTPArgument">
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <stringProp name="Argument.value">opjobadmin.action.inspect</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  <stringProp name="Argument.name">request.action1</stringProp>
+                  <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                  <stringProp name="HTTPArgument.encoded_name">request.action1</stringProp>
+                  <stringProp name="HTTPArgument.encoded_value">opjobadmin.action.inspect</stringProp>
+                </elementProp>
+              </collectionProp>
+              <stringProp name="TestElement.name"></stringProp>
+              <boolProp name="TestElement.enabled">true</boolProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.mimetype"></stringProp>
+            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</stringProp>
+            <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
+            <stringProp name="TestElement.name">Web Testing</stringProp>
+            <stringProp name="HTTPSampler.monitor">false</stringProp>
+            <stringProp name="HTTPSampler.domain"></stringProp>
+            <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          </org.apache.jmeter.protocol.http.sampler.HTTPSampler>
+          <hashTree/>
+          <org.apache.jmeter.config.ConfigTestElement>
+            <stringProp name="HTTPSampler.path"></stringProp>
+            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui</stringProp>
+            <stringProp name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</stringProp>
+            <stringProp name="TestElement.name">HTTP Request Defaults</stringProp>
+            <stringProp name="HTTPSampler.domain">13.231.197.158</stringProp>
+            <stringProp name="HTTPSampler.protocol"></stringProp>
+            <boolProp name="TestElement.enabled">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="org.apache.jmeter.config.Arguments">
+              <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</stringProp>
+              <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
+              <collectionProp name="Arguments.arguments"/>
+              <stringProp name="TestElement.name"></stringProp>
+              <boolProp name="TestElement.enabled">true</boolProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.port">80</stringProp>
+          </org.apache.jmeter.config.ConfigTestElement>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

@@ -26,7 +26,7 @@ import org.apache.jmeter.testelement.TestElement;
 public class TestElementProperty extends MultiProperty
 {
     TestElement value;
-    TestElement savedValue = null;
+    transient TestElement savedValue = null;
 
     public TestElementProperty(String name, TestElement value)
     {
