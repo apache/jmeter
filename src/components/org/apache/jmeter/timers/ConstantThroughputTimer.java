@@ -66,13 +66,13 @@ import org.apache.jmeter.testelement.AbstractTestElement;
  * Timer paces the samplers under it's influence so that the total number of
  * samples per unit of time approaches a given constant as much as possible.
  *
- * @author  <a href="mailto:jsalvata@atg.com">Jordi Salvat i Alabart</a>
- * @created $Date$
- * @version $Revision$ $Date$
+ * @author <a href="mailto:jsalvata@atg.com">Jordi Salvat i Alabart</a>
+ * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
+ * @version $Id$
  */
 public class ConstantThroughputTimer
-	extends AbstractTestElement
-	implements Timer, Serializable
+        extends AbstractTestElement
+        implements Timer, Serializable
 {
     public final static String THROUGHPUT= "ConstantThroughputTimer.throughput";
     private static List addableList= new LinkedList();
@@ -104,8 +104,8 @@ public class ConstantThroughputTimer
      */
     public void setThroughput(long throughput)
     {
-	setProperty(THROUGHPUT,new Long(throughput));
-	delay= 60000/throughput;
+		setProperty(THROUGHPUT,new Long(throughput));
+		delay= 60000/throughput;
     }
 
     /**
@@ -120,22 +120,22 @@ public class ConstantThroughputTimer
      */
     public double getRange()
     {
-	return (double)0;
+        return (double)0;
     }
 
     /**
      * Not implemented.
      */
-    public void setDelay(long delay)
+    public void setDelay(String delay)
     {
     }
 
     /**
      * Not implemented.
      */
-    public long getDelay()
+    public String getDelay()
     {
-	return 0;
+		return "";
     }
 
     /**
@@ -145,38 +145,43 @@ public class ConstantThroughputTimer
      */
     public long getThroughput()
     {
-	Object throughput = getProperty(THROUGHPUT);
-	if(throughput instanceof Long)
-	{
-	    return ((Long)throughput).longValue();
-	}
-	else
-	{
-	    return Long.parseLong((String)throughput);
-	}
+		Object throughput = getProperty(THROUGHPUT);
+		if(throughput instanceof Long)
+		{
+		    return ((Long)throughput).longValue();
+		}
+		else
+		{
+		    return Long.parseLong((String)throughput);
+		}
     }
 
+	/**
+	 * Retrieve the delay to use during test execution.
+	 * 
+	 * @see org.apache.jmeter.timers.Timer#delay()
+	 */
     public synchronized long delay()
     {
-	long currentTime= System.currentTimeMillis();
-	long currentTarget= targetTime==0 ? currentTime : targetTime;
-	targetTime=currentTarget+delay;
-	if (currentTime > currentTarget)
-	{
-	    // We're behind schedule -- try to catch up:
-	    return 0;
-	}
-	return currentTarget-currentTime;
+		long currentTime = System.currentTimeMillis();
+		long currentTarget = targetTime == 0 ? currentTime : targetTime;
+		targetTime = currentTarget + delay;
+		if (currentTime > currentTarget)
+		{
+		    // We're behind schedule -- try to catch up:
+		    return 0;
+		}
+		return currentTarget - currentTime;
     }
 
-    /************************************************************
-     *  !ToDo (Method description)
-     *
-     *@return    !ToDo (Return description)
-     ***********************************************************/
+	/**
+	 * Provide a description of this timer class.
+	 * 
+	 * @return the description of this timer class.
+	 */
     public String toString()
     {
-	return JMeterUtils.getResString("constant_throughput_timer_memo");
+	    return JMeterUtils.getResString("constant_throughput_timer_memo");
     }
 
     /**
@@ -187,8 +192,9 @@ public class ConstantThroughputTimer
      * @return a fresh copy of this ConstantThroughputTimer
      */
     public Object clone() {
-      ConstantThroughputTimer result= (ConstantThroughputTimer)super.clone();
-      result.targetTime= 0;
-      return result;
+        ConstantThroughputTimer result = (ConstantThroughputTimer)super.clone();
+        result.targetTime = 0;
+        return result;
     }
+    
 }
