@@ -6,9 +6,11 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -25,6 +27,9 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.log.Logger;
 
+import org.jdom.*;
+import org.jdom.input.SAXBuilder;
+
 /**
  * @author    Michael Stover
  * @author    sebb at apache dot org (refactor into suites)
@@ -33,6 +38,8 @@ import org.apache.log.Logger;
 public class JMeterTest extends JMeterTestCase
 {
     private static Logger log = LoggingManager.getLoggerForClass();
+    
+    private static Set guiTitles;
 
     public JMeterTest(String name)
     {
@@ -80,12 +87,36 @@ public class JMeterTest extends JMeterTestCase
 	 */
     public static Test suite() throws Exception{
     	TestSuite suite = new TestSuite();
+    	suite.addTest(new JMeterTest("createTitleSet"));
     	suite.addTest(suiteGUIComponents());
 		suite.addTest(suiteSerializableElements());
 		suite.addTest(suiteTestElements());
         return suite;
     }
     
+    /*
+     * Extract titles from component_reference.xml
+     */
+    public void createTitleSet() throws JDOMException
+    {
+		guiTitles = new HashSet(90);
+		
+    	String compref = "../xdocs/usermanual/component_reference.xml";
+		SAXBuilder bldr = new SAXBuilder();
+		Document doc;
+        doc = bldr.build(compref);
+		Element root = doc.getRootElement();
+		Element body = root.getChild("body");
+		List sections = body.getChildren("section");
+		for (int i = 0; i< sections.size();i++){
+			List components = ((Element) sections.get(i)).getChildren("component");
+			for (int j = 0; j <components.size();j++){
+				Element comp = (Element) components.get(j);
+				guiTitles.add(comp.getAttributeValue("name")); 
+			}
+		}
+		guiTitles.add("Root");// Not documented ...
+    }
 	/*
 	 * Test GUI elements - create the suite of tests
 	 */
@@ -102,9 +133,22 @@ public class JMeterTest extends JMeterTestCase
 			}
 			TestSuite ts = new TestSuite(item.getClass().getName());
 			ts.addTest(new JMeterTest("runGUIComponents",item));
+			ts.addTest(new JMeterTest("runGUITitle",item));
 			suite.addTest(ts);
 		}
 		return suite;
+	}
+	
+	/*
+	 * Test GUI elements - run the test
+	 */
+	public void runGUITitle() throws Exception
+	{
+		if (guiTitles.size() > 0) {
+			String title = guiItem.getStaticLabel();
+			assertTrue("Component ref should contain entry for "+title,
+			    guiTitles.contains(title));
+		}
 	}
 	
 	/*
