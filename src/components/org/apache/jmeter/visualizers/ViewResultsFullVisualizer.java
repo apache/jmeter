@@ -124,7 +124,6 @@ public class ViewResultsFullVisualizer
             log.debug("updateGui1 : sample result - " + res);
         }
         DefaultMutableTreeNode currNode = new DefaultMutableTreeNode(res);
-
         treeModel.insertNodeInto(currNode, root, root.getChildCount());
         addSubResults(currNode, res);
         log.debug("End : updateGui1");
@@ -160,13 +159,12 @@ public class ViewResultsFullVisualizer
     public void clear()
     {
         log.debug("Start : clear1");
-        int totalChild = root.getChildCount();
 
         if (log.isDebugEnabled())
         {
-            log.debug("clear1 : total child - " + totalChild);
+            log.debug("clear1 : total child - " + root.getChildCount());
         }
-        for (int i = 0; i < totalChild; i++)
+        while (root.getChildCount() > 0)
         {
             // the child to be removed will always be 0 'cos as the nodes are
             // removed the nth node will become (n-1)th
