@@ -89,7 +89,7 @@ public class JavaTestSamplerGui extends AbstractSamplerGui
     /* Implements JMeterGuiComponent.getStaticLabel() */
     public String getStaticLabel()
     {
-        return JMeterUtils.getResString("Java Request");
+        return JMeterUtils.getResString("java_request");
     }
 
     /**

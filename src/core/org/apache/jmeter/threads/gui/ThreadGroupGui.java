@@ -101,9 +101,9 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
     private JTextField threadInput;
     private JTextField rampInput;
 
-    private final static String SCHEDULER = "scheduler";
-    private final static String START_TIME= "start_time";
-    private final static String END_TIME= "end_time";
+    //private final static String SCHEDULER = "scheduler";
+    //private final static String START_TIME= "start_time";
+    //private final static String END_TIME= "end_time";
 
     private JDateField start;
     private JDateField end;
@@ -263,7 +263,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
      ***************************************/
     public String getStaticLabel()
     {
-        return JMeterUtils.getResString("ThreadGroup");
+        return JMeterUtils.getResString("threadgroup");
     }
 
     private void init()
