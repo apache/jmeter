@@ -269,7 +269,7 @@ public class HeaderManager extends ConfigTestElement implements
 	 public void removeHeaderNamed(String name) {
 		  Vector removeIndices = new Vector();
 		  for (int i = getHeaders().size() - 1; i > 0; i--) {
-				Header header = (Header) getHeaders().get(i);
+				Header header = (Header) getHeaders().get(i).getObjectValue();
 				if (header == null) {
 					 continue;
 				}
