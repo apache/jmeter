@@ -54,7 +54,6 @@
  */
 package org.apache.jmeter.protocol.http.proxy;
 import java.io.Serializable;
-import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;

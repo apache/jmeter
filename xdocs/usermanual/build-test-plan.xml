@@ -63,7 +63,7 @@ The JMeter test tree contains elements that are both hierarchical and ordered.  
 <p>Assertion #1 is applied only to Request One, while Assertion #2 is applied to Requests Two and Three.</p>
 <p>Another example, this time using Timers:</p>
 <figure image="scoping3.png">complex example</figure>
-<p>In this example, the requests or named to reflect the order in which they will be executed.  Timer #1 will apply to Requests Two, Three, and Four (notice how order is irrelevant for hierarchical elements).  Assertion #1 will apply only to Request Three.  Timer #2 will affect all the requests.</p>
+<p>In this example, the requests are named to reflect the order in which they will be executed.  Timer #1 will apply to Requests Two, Three, and Four (notice how order is irrelevant for hierarchical elements).  Assertion #1 will apply only to Request Three.  Timer #2 will affect all the requests.</p>
 <p>Hopefully these examples make it clear how configuration (hierarchical) elements are applied.  If you imagine each Request being passed up the tree branches, to its parent, then to its parent's parent, etc, and each time collecting all the configuration elements of that parent, then you will see how it works.  </p>
 </section>
 

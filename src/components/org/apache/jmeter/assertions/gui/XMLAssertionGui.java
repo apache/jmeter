@@ -54,9 +54,9 @@
  */
 package org.apache.jmeter.assertions.gui;
 
+import org.apache.jmeter.assertions.XMLAssertion;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.assertions.XMLAssertion;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 

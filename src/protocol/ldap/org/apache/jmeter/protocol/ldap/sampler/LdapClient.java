@@ -55,15 +55,16 @@
 package org.apache.jmeter.protocol.ldap.sampler;
 
 import java.util.Hashtable;
+
 import javax.naming.Context;
-import javax.naming.NoPermissionException;
 import javax.naming.NamingException;
+import javax.naming.NoPermissionException;
+import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
-import javax.naming.directory.BasicAttributes;
-import javax.naming.directory.BasicAttribute;
-import javax.naming.directory.SearchControls;
 import javax.naming.directory.ModificationItem;
+import javax.naming.directory.SearchControls;
+
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 

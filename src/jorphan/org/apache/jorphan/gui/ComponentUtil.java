@@ -64,8 +64,8 @@ package org.apache.jorphan.gui;
  * @version 1.0
  */
 
-import java.awt.Dimension;
 import java.awt.Component;
+import java.awt.Dimension;
 
 /**
  * This class is a Util for awt Component and could be

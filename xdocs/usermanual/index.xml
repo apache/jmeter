@@ -62,6 +62,8 @@
 	 <li><a href="test_plan.html#timers">4.4 Timers</a></li>
 	 <li><a href="test_plan.html#assertions">4.5 Assertions</a></li>
 	 <li><a href="test_plan.html#config_elements">4.6 Configuration Elements</a></li>
+	 <li><a href="test_plan.html#preprocessors">4.7 Pre-Processor Elements</a></li>
+	 <li><a href="test_plan.html#postprocessors">4.8 Post-Processor Elements</a></li>
 	</ul>
   <li><a href="build-web-test-plan.html">5. Building a Web Test Plan</a></li>
 	 <ul>

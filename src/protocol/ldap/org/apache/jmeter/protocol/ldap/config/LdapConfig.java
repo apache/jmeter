@@ -55,11 +55,12 @@
 package org.apache.jmeter.protocol.ldap.config;
 
 import java.io.Serializable;
-import org.apache.jmeter.config.ConfigTestElement;
+
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.ldap.sampler.LDAPSampler;
-import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache

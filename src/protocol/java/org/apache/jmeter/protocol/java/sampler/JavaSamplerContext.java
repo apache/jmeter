@@ -54,8 +54,6 @@
  */
 package org.apache.jmeter.protocol.java.sampler;
 
-import java.lang.Long; // Import needed for some versions of JavaDoc to
-                       // properly handle @see tag below.
 import java.util.Iterator;
 import java.util.Map;
 

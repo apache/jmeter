@@ -828,11 +828,8 @@ appropriate server and port, where the server is the machine JMeter is running o
 the port # is from the Proxy Control Panel shown above.</note>
 
 <b>Where Do Samples Get Recorded?</b>
-<p>JMeter places the recorded samples in the Thread Group, or if you have a Simple Logic Controller,  JMeter places
-them there.  Also, if you have a HTTP Request Defaults element, then the recorded samples will have empty fields for
-the default values you specified.</p>
-<note>If you have more than one Simple Logic Controller, JMeter records the samples to each
-of your Simple Logic Controllers.  We plan to correct this in a future release.</note>
+<p>JMeter places the recorded samples in a Recording Controller found under a Thread Group (so be sure to add a ThreadGroup and then a Recording Controller before you start recording).  Also, if you have a HTTP Request Defaults element, then the recorded samples will have empty fields for
+the default values you specified.  Additionally, you can specify user-defined values that will replaced in your samples as they are recorded.  See <a href="best-practices.html#proxy_server">Best Practices with the Proxy Server</a> for more info.</p>
 
 <p>When you are done recording your test samples, stop the proxy server (hit the &quot;stop&quot; button).  Remember to reset
 your browser's proxy settings.  Now, you may want to sort and re-order the test script, add timers, listeners, a

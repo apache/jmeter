@@ -59,8 +59,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.jmeter.threads.JMeterContext;
-
 /**
  * @author Thad Smith
  *

@@ -54,9 +54,16 @@
  */
 package org.apache.jmeter.protocol.http.modifier;
 
-import org.xml.sax.*;
-import java.util.*;
-import java.io.*;
+import java.io.CharArrayWriter;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
 
 /************************************************************
  *  Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:
