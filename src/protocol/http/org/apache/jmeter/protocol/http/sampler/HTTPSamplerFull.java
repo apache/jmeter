@@ -378,7 +378,7 @@ public class HTTPSamplerFull
         HttpURLConnection conn;
         try
         {
-            conn = sampler.setupConnection(url, HTTPSampler.GET);
+            conn = sampler.setupConnection(url, HTTPSampler.GET,res);
             sampler.connect();
         }
         catch(Exception ioe)
