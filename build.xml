@@ -14,27 +14,58 @@
 	</target>
 
 	<!--
-	- Compiles the source into class files - dumping results into the 
+	- Check for optional libraries, JavaMail and JSSE
+	- Need two targets as JavaMail depends on JAF as well.
+	-->
+	<target name="check.optional.libs1">
+			  <available classname="com.sun.net.ssl.internal.ssl.Provider" property="jsse.present"/>
+			  <available classname="javax.mail.Transport" property="javamail.present"/>
+	</target>
+
+	<!--
+	- Check for optional libraries, JAF
+	- Need two targets as JavaMail depends on JAF as well.
+	-->
+	<target name="check.optional.libs2" depends="check.optional.libs1" if="javamail.present">
+			  <available classname="javax.activation.DataHandler" property="javamail.complete"/>
+
+
+	</target>
+
+	<target name="ssl.message" depends="check.optional.libs1" unless="jsse.present">
+			  <echo message="Classes for SSL not available"/>
+	</target>
+
+	<target name="mail.message" depends="check.optional.libs2" unless="javamail.complete">
+			  <echo message="Classes for Mail support not available"/>
+	</target>
+
+
+	<!--
+	- Compiles the source into class files - dumping results into the
 	- bin/clases directory
 	-->
-	<target name="compile" depends="init">
+	<target name="compile" depends="init,mail.message,ssl.message">
+			  <delete dir="${classes.dest.dir}"/>
 		<mkdir dir="${classes.dest.dir}"/>
 		<javac srcdir="${sources.src.dir}"
-        		classpath="${basedir}/lib/junit.jar:${basedir}/lib/xerces.jar"
-       			destdir="${classes.dest.dir}"
-       			optimize="on">
-       			<exclude name="**/*.df*"/>
-       			<exclude name="**/*.html"/>
-       			<exclude name="**/*.tpr"/>
-       			<exclude name="**/*.tws"/>
-       			<exclude name="**/make*"/>
-       			<exclude name="**/Makefile"/>
-       			<exclude name="**/Changelog*"/>
-       			<exclude name="**/*.orig"/>
+				classpath="${basedir}/lib/junit.jar:${basedir}/lib/xerces.jar"
+					destdir="${classes.dest.dir}"
+					optimize="on">
+					<exclude name="**/*.df*"/>
+					<exclude name="**/*.html"/>
+					<exclude name="**/*.tpr"/>
+					<exclude name="**/*.tws"/>
+					<exclude name="**/make*"/>
+					<exclude name="**/Makefile"/>
+					<exclude name="**/Changelog*"/>
+					<exclude name="**/*.orig"/>
+					<exclude name="org/apache/jmeter/protocol/http/util/SSLStaticProvider.java" unless="jsse.present"/>
+					<exclude name="org/apache/jmeter/visualizers/MailerVisualizer.java" unless="javamail.complete"/>
 		</javac>
 	</target>
 	<target name="rmi" depends="compile">
-	        <rmic classpath="bin/classes" base="bin/classes" classname="org.apache.jmeter.engine.RemoteJMeterEngineImpl"/>
+			  <rmic classpath="bin/classes" base="bin/classes" classname="org.apache.jmeter.engine.RemoteJMeterEngineImpl"/>
 		<rmic classpath="bin/classes" base="bin/classes" classname="org.apache.jmeter.samplers.RemoteSampleListenerImpl"/>
 	</target>
 
@@ -43,12 +74,12 @@
 	-->
 	<target name="api-docs" depends="init">
 		<javadoc
-			sourcepath="${sources.src.dir}" 
+			sourcepath="${sources.src.dir}"
 			destdir="${docs.api.dest.dir}"
 			private="yes" author="yes" version="yes"
 			doctitle="Apache JMeter APIs Specification"
-			footer="Copyright (c) 1998-99 The Java Apache Project" 
-			packagenames="org.apache.jmeter.*, 
+			footer="Copyright (c) 1998-99 The Java Apache Project"
+			packagenames="org.apache.jmeter.*,
 			org.apache.jmeter.timers.*,
 			org.apache.jmeter.visualizers.*,
 			org.apache.jmeter.samplers.*,
@@ -93,15 +124,16 @@
 	<target name="dist" depends="install">
 		<jar jarfile="../ApacheJMeter${version}.jar" basedir="../" includes="jmeter/**" excludes="**/classes/**"/>
 		<zip zipfile="../ApacheJMeter${version}.zip" basedir="../" includes="jmeter/**" excludes="**/classes/**"/>
-  		<tar tarfile="../ApacheJMeter${version}.tar" basedir="../" excludes="**/classes/**" includes="jmeter/**" />
-        <gzip zipfile="$../ApacheJMeter${version}.tar.gz" src="../ApacheJMeter${version}.tar" /> 	
-    </target> 
+		<tar tarfile="../ApacheJMeter${version}.tar" basedir="../" excludes="**/classes/**" includes="jmeter/**" />
+		  <gzip zipfile="$../ApacheJMeter${version}.tar.gz" src="../ApacheJMeter${version}.tar" />
+	 </target>
 
 	<!--
 	- Deletes old build files.
 	-->
-	<target name="clean">
+	<target name="clean" depends="init">
 		<delete file="bin/ApacheJMeter.jar"/>
 		<delete dir="${classes.dest.dir}"/>
+		<delete dir="${docs.api.dest.dir}"/>
 	</target>
 </project>
