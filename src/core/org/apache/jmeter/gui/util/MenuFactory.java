@@ -78,6 +78,7 @@ import javax.swing.MenuElement;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.action.ActionRouter;
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.util.JMeterUtils;
@@ -555,5 +556,44 @@ public final class MenuFactory
         {
             menu.addSeparator();
         }
+    }
+
+////////////////////////////// Test code ////////////////////////////////////
+
+    public static class Test extends JMeterTestCase
+    {
+
+		public Test() {
+			super();
+		}
+
+		public Test(String name) {
+			super(name);
+		}
+
+		private static void check(String s,int i) throws Exception
+		{
+			assertFalse("The number of "+s+" should not be 0",0==i);
+		}
+		
+    	public void testMenu() throws Exception
+    	{
+    		check("menumap",menuMap.size());
+    		
+    		check("assertions",assertions.size());
+			check("configElements",configElements.size());
+			check("controllers",controllers.size());
+			check("listeners",listeners.size());
+			check("nonTestElements",nonTestElements.size());
+			check("postProcessors",postProcessors.size());
+			check("preProcessors",preProcessors.size());
+			check("samplers",samplers.size());
+			check("timers",timers.size());
+    		
+    		
+    		check("elementstoskip",elementsToSkip.size());
+
+
+    	}
     }
 }
