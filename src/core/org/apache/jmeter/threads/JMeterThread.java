@@ -208,7 +208,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
      *
      * author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
-    public void stopScheduler()
+    private void stopScheduler()
     {
         long delay = System.currentTimeMillis() - endTime;
         if ((delay >= 0))
@@ -218,27 +218,22 @@ public class JMeterThread implements Runnable, java.io.Serializable
     }
 
     /**
-     * Start the scheduler with the specified time
+     * Wait until the scheduled start time if necessary
      *
      * Author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
-    public void startScheduler()
+    private void startScheduler()
     {
         long delay = (startTime - System.currentTimeMillis());
         if (delay > 0)
         {
             try
             {
-                running = true;
                 Thread.sleep(delay);
             }
             catch (Exception e)
             {
             }
-        }
-        else
-        {
-            running = false;
         }
     }
 
