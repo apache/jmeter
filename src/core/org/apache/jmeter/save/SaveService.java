@@ -808,10 +808,12 @@ public class SaveService implements SaveServiceConstants
         }
         catch (ConfigurationException e)
         {
+            log.error("Problem loading using Avalon Configuration tools", e);
             throw new IOException("Problem loading using Avalon Configuration tools");
         }
         catch (SAXException e)
         {
+            log.error("Problem with SAX implementation", e);
             throw new IOException("Problem with SAX implementation");
         }
     }
