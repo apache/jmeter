@@ -139,12 +139,22 @@ public class PackageTest extends TestCase
 		}
 	}
 	
+	/*
+	 * Add makeSuite to allow test to be run from AllTests.java
+	 */
+	public static Test makeSuite(){
+		return suite();
+	}
+	
+	/*
+	 * Use a suite to ensure that the default is done first
+	 */
 	public static Test suite(){
 		TestSuite ts=new TestSuite();
-		ts.addTest(new PackageTest("testDefault"));
-		ts.addTest(new PackageTest("testDE"));
-		ts.addTest(new PackageTest("testNO"));
-		ts.addTest(new PackageTest("testJA"));
+		ts.addTest(new PackageTest("atestDefault"));
+		ts.addTest(new PackageTest("atestDE"));
+		ts.addTest(new PackageTest("atestNO"));
+		ts.addTest(new PackageTest("atestJA"));
 		return ts;
 	}
 
@@ -156,20 +166,20 @@ public class PackageTest extends TestCase
         subTestFailures=0;
     }
 
-    public void testDE() throws Exception
+    public void atestDE() throws Exception
 	{
 		check("DE");
 	}
 
-    public void testJA() throws Exception
+    public void atestJA() throws Exception
 	{
 		check("JA");
 	}
-	public void testNO() throws Exception
+	public void atestNO() throws Exception
 	{
 		check("NO");
 	}
-	public void testDefault() throws Exception
+	public void atestDefault() throws Exception
 	{
 		check("");
 	}
