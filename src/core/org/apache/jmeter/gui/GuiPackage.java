@@ -464,6 +464,11 @@ public final class GuiPackage implements LocaleChangeListener
             log.error("Problem retrieving gui", e);
         }
     }
+    
+    public TestElement getCurrentElement()
+    {
+        return treeListener.getCurrentNode().createTestElement();
+    }
 
     /**
      * The dirty property is a flag that indicates whether there are parts of
