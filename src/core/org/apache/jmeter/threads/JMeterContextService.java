@@ -63,17 +63,17 @@ public final class JMeterContextService implements Serializable
        }
     }
     
-    static public void incrNumberOfThreads()
+    static synchronized void incrNumberOfThreads()
     {
        numberOfThreads++;
     }
     
-    static public void decrNumberOfThreads()
+    static synchronized void decrNumberOfThreads()
     {
        numberOfThreads--;
     }
     
-    static public int getNumberOfThreads()
+    static public synchronized int getNumberOfThreads()
     {
        return numberOfThreads;
     }

@@ -35,7 +35,7 @@ import org.apache.log.Logger;
 public class ConstantThroughputTimer extends AbstractTestElement implements Timer, TestListener,
       TestBean
 {
-
+    private static final long serialVersionUID = 1;
    private static final Logger log = LoggingManager.getLoggerForClass();
 
    /**
@@ -43,7 +43,23 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     * timer will be calculated so that the next request happens at this time.
     */
    private long previousTime = 0;
+   
+   private boolean legacyMode = true;
 
+/**
+ * @return Returns the legacyMode.
+ */
+public boolean isLegacyMode()
+{
+    return legacyMode;
+}
+/**
+ * @param legacyMode The legacyMode to set.
+ */
+public void setLegacyMode(boolean legacyMode)
+{
+    this.legacyMode = legacyMode;
+}
    /**
     * Desired throughput, in samples per minute.
     */
@@ -85,11 +101,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
    public synchronized long delay()
    {
       long currentTime = System.currentTimeMillis();
-      long currentTarget = 
-            (previousTime == 0) ? currentTime
-            + ((JMeterContextService.getContext().getThreadNum() + 1) * (long) (60000.0 / getThroughput()))
-            : previousTime
-                  + (JMeterContextService.getNumberOfThreads() * (long) (60000.0 / getThroughput()));
+      long currentTarget = calculateCurrentTarget(currentTime);
       previousTime = currentTarget;
       if (currentTime > currentTarget)
       {
@@ -100,6 +112,29 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
    }
 
    /**
+ * @param currentTime
+ * @return
+ */
+protected long calculateCurrentTarget(long currentTime)
+{
+    long currentTarget = currentTime;
+    if(previousTime == 0)
+    {
+        currentTarget = currentTime + (
+        		(legacyMode) ? (long) (60000.0 / getThroughput()) :
+        		    (JMeterContextService.getContext().getThreadNum() + 1) * (long) (60000.0 / getThroughput())
+        		);
+    }
+    else
+    {
+        currentTarget = currentTime + (
+        		(legacyMode) ? (long) (60000.0 / getThroughput()) :
+        		    (JMeterContextService.getNumberOfThreads()) * (long) (60000.0 / getThroughput())
+        		);
+    }
+    return currentTarget;
+}
+/**
     * Provide a description of this timer class.
     * 
     * TODO: Is this ever used? I can't remember where. Remove if it isn't --

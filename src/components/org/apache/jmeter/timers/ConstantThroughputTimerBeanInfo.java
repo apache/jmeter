@@ -33,10 +33,16 @@ public class ConstantThroughputTimerBeanInfo extends BeanInfoSupport
     {
         super(ConstantThroughputTimer.class);
         
-        createPropertyGroup("delay", new String[] { "throughput" });
+        createPropertyGroup("delay", new String[] { "throughput", "legacyMode" });
 
         PropertyDescriptor p= property("throughput");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, new Double(0.0));
+        
+        p = property("legacyMode");
+        p.setValue(NOT_UNDEFINED,Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_OTHER,Boolean.TRUE);
+        p.setValue(NOT_EXPRESSION,Boolean.TRUE);
     }
 }
