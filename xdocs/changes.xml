@@ -29,6 +29,16 @@
 <h3>Version 2.0.2</h3>
 <h4>New functionality:</h4>
 <ul>
+<li>Better checking of parameter count in JavaScript function</li>
+</ul>
+<h4>Bug fixes:</h4>
+<ul>
+<li>Regex Extractor nested constant not put in correct place (32395)</li>
+</ul>
+
+<h3>Version 2.0.2</h3>
+<h4>New functionality:</h4>
+<ul>
 <li>While Controller</li>
 <li>BeanShell intilisation scripts</li>
 <li>Result Saver can optionally save failed results only</li>
