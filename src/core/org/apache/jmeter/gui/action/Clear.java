@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -66,79 +66,68 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/************************************************************
- *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author     Michael Stover
- *@created    $Date$
- *@version    1.0
- ***********************************************************/
-
+/**
+ * @author     Michael Stover
+ * @version    $Revision$
+ */
 public class Clear implements Command
 {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
-	public final static String CLEAR = "action.clear";
-	public final static String CLEAR_ALL = "action.clear_all";
+    transient private static Logger log = LoggingManager.getLoggerForClass();
+    public final static String CLEAR = "action.clear";
+    public final static String CLEAR_ALL = "action.clear_all";
 
-	private static Set commands = new HashSet();
+    private static Set commands = new HashSet();
+    static
+    {
+        commands.add(CLEAR);
+        commands.add(CLEAR_ALL);
+    }
 
-	/************************************************************
-	 *  !ToDo (Constructor description)
-	 ***********************************************************/
-	public Clear()
-	{
-	}
+    public Clear()
+    {
+    }
 
-	/************************************************************
-	 *  !ToDoo (Method description)
-	 *
-	 *@return    !ToDo (Return description)
-	 ***********************************************************/
-	public Set getActionNames()
-	{
-		return commands;
-	}
+    public Set getActionNames()
+    {
+        return commands;
+    }
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 *
-	 *@param  e  !ToDo (Parameter description)
-	 ***********************************************************/
-	public void doAction(ActionEvent e)
-	{
-		GuiPackage guiPackage = GuiPackage.getInstance();
-		if (e.getActionCommand().equals(CLEAR))
-		{
-			JMeterGUIComponent model = guiPackage.getCurrentGui();
-			try
-			{
-				((Clearable)model).clear();
-			}
-			catch (Throwable ex)
-			{
-				log.error("",ex);
-			}
-		}
-		else
-		{
-			Iterator iter = guiPackage.getTreeModel().getNodesOfType(Clearable.class).iterator();
-			while (iter.hasNext())
-			{
-				try
-				{
-					Clearable item = (Clearable)guiPackage.getGui(((JMeterTreeNode)iter.next()).createTestElement());
-					item.clear();
-				}
-				catch (Exception ex)
-				{
-					log.error("",ex);
-				}
-			}
-		}
-	}
-	static
-	{
-		commands.add(CLEAR);
-		commands.add(CLEAR_ALL);
-	}
+    public void doAction(ActionEvent e)
+    {
+        GuiPackage guiPackage = GuiPackage.getInstance();
+        if (e.getActionCommand().equals(CLEAR))
+        {
+            JMeterGUIComponent model = guiPackage.getCurrentGui();
+            try
+            {
+                ((Clearable) model).clear();
+            }
+            catch (Throwable ex)
+            {
+                log.error("", ex);
+            }
+        }
+        else
+        {
+            Iterator iter =
+                guiPackage
+                    .getTreeModel()
+                    .getNodesOfType(Clearable.class)
+                    .iterator();
+            while (iter.hasNext())
+            {
+                try
+                {
+                    Clearable item =
+                        (Clearable) guiPackage.getGui(
+                            ((JMeterTreeNode) iter.next()).createTestElement());
+                    item.clear();
+                }
+                catch (Exception ex)
+                {
+                    log.error("", ex);
+                }
+            }
+        }
+    }
 }

@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.gui.action;
+
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
@@ -70,88 +71,84 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/****************************************
- * Title: Apache JMeter Description: Copyright: Copyright (c) 2000 Company:
- * Apache Foundation
- *
- *@author    Michael Stover
- *@created   March 1, 2001
- *@version   1.0
- ***************************************/
-
+/**
+ * @author    Michael Stover
+ * @created   March 1, 2001
+ * @version   $Revision$
+ */
 public class Start extends AbstractAction
 {
     private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
-	private static Set commands = new HashSet();
 
-	private StandardJMeterEngine engine;
-	static
-	{
-		commands.add("start");
-		commands.add("stop");
-	}
+    private static Set commands = new HashSet();
+    static {
+        commands.add("start");
+        commands.add("stop");
+    }
 
+    private StandardJMeterEngine engine;
 
-	/****************************************
-	 * Constructor for the Start object
-	 ***************************************/
-	public Start() { }
+    /**
+     * Constructor for the Start object.
+     */
+    public Start()
+    {
+    }
 
+    /**
+     * Gets the ActionNames attribute of the Start object.
+     *
+     *@return   the ActionNames value
+     */
+    public Set getActionNames()
+    {
+        return commands;
+    }
 
-	/****************************************
-	 * Gets the ActionNames attribute of the Start object
-	 *
-	 *@return   The ActionNames value
-	 ***************************************/
-	public Set getActionNames()
-	{
-		return commands;
-	}
+    public void doAction(ActionEvent e)
+    {
+        if (e.getActionCommand().equals("start"))
+        {
+            startEngine();
+        }
+        else if (e.getActionCommand().equals("stop"))
+        {
+            GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
+            engine.stopTest();
+            engine = null;
+        }
+    }
 
-
-	/****************************************
-	 * Description of the Method
-	 *
-	 *@param e  Description of Parameter
-	 ***************************************/
-	public void doAction(ActionEvent e)
-	{
-		if(e.getActionCommand().equals("start"))
-		{
-			startEngine();
-		}
-		else if(e.getActionCommand().equals("stop"))
-		{
-			GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
-			engine.stopTest();
-			engine = null;
-		}
-	}
-
-	/****************************************
-	 * Description of the Method
-	 *
-	 ***************************************/
-	protected void startEngine()
-	{
-		GuiPackage gui = GuiPackage.getInstance();
-		engine = new StandardJMeterEngine();
-		HashTree testTree = gui.getTreeModel().getTestPlan();
-		convertSubTree(testTree);
-        DisabledComponentRemover remover = new DisabledComponentRemover(testTree);
+    protected void startEngine()
+    {
+        GuiPackage gui = GuiPackage.getInstance();
+        engine = new StandardJMeterEngine();
+        HashTree testTree = gui.getTreeModel().getTestPlan();
+        convertSubTree(testTree);
+        DisabledComponentRemover remover =
+            new DisabledComponentRemover(testTree);
         testTree.traverse(remover);
-		testTree.add(testTree.getArray()[0],gui.getMainFrame());
-        log.debug("test plan before cloning is running version: "+((TestPlan)testTree.getArray()[0]).isRunningVersion());
+        testTree.add(testTree.getArray()[0], gui.getMainFrame());
+        log.debug(
+            "test plan before cloning is running version: "
+                + ((TestPlan) testTree.getArray()[0]).isRunningVersion());
         TreeCloner cloner = new TreeCloner(false);
         testTree.traverse(cloner);
-		engine.configure(cloner.getClonedTree());
-		try {
-			engine.runTest();
-		} catch(JMeterEngineException e) {
-			JOptionPane.showMessageDialog(gui.getMainFrame(),e.getMessage(),
-					JMeterUtils.getResString("Error Occurred"),JOptionPane.ERROR_MESSAGE);
-		}
-        log.debug("test plan after cloning and running test is running version: "+((TestPlan)testTree.getArray()[0]).isRunningVersion());
-	}
-
+        engine.configure(cloner.getClonedTree());
+        try
+        {
+            engine.runTest();
+        }
+        catch (JMeterEngineException e)
+        {
+            JOptionPane.showMessageDialog(
+                gui.getMainFrame(),
+                e.getMessage(),
+                JMeterUtils.getResString("Error Occurred"),
+                JOptionPane.ERROR_MESSAGE);
+        }
+        log.debug(
+            "test plan after cloning and running test is running version: "
+                + ((TestPlan) testTree.getArray()[0]).isRunningVersion());
+    }
 }

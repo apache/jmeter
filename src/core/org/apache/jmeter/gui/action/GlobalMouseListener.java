@@ -5,18 +5,17 @@ import java.awt.event.MouseEvent;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
 public class GlobalMouseListener extends MouseAdapter
 {
-	transient private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
-	
-	public void mousePressed(MouseEvent e)
-	{
-		log.debug("global mouse event");
-	}
+    transient private static Logger log =
+        LoggingManager.getLoggerFor(JMeterUtils.GUI);
+
+    public void mousePressed(MouseEvent e)
+    {
+        log.debug("global mouse event");
+    }
 }
