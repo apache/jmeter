@@ -221,10 +221,9 @@ public class AssertionGui extends AbstractAssertionGui implements FocusListener
     private void init()
     {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+        setBorder(makeBorder());
 
-        add(createTitleLabel());
-        add(getNamePanel());
+        add(makeTitlePanel());
         add(createFieldPanel());
         add(createTypePanel());
         add(createStringPanel());

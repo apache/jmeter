@@ -188,10 +188,9 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 	private void init()
 	{
         setLayout (new VerticalLayout (5, VerticalLayout.LEFT, VerticalLayout.TOP));
-        setBorder (BorderFactory.createEmptyBorder(10, 10, 5, 10));
+        setBorder (makeBorder());
 
-        add (createTitleLabel());        
-		add(getNamePanel());
+        add (makeTitlePanel());        
 
 		// USER_INPUT
 		JPanel sizePanel = new JPanel();

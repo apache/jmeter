@@ -56,7 +56,6 @@ package org.apache.jmeter.control.gui;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.control.ModifyController;
@@ -145,9 +144,8 @@ public class ModifyControllerGui extends AbstractControllerGui
 	private void init()
 	{
 		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+        setBorder(makeBorder());
         
-		add(createTitleLabel());
-        add(getNamePanel());
+		add(makeTitlePanel());
 	}
 }

@@ -53,7 +53,6 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control.gui;
-import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 
 import org.apache.jmeter.control.InterleaveControl;
@@ -137,10 +136,9 @@ public class InterleaveControlGui extends AbstractControllerGui
 	private void init()
 	{
 		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+        setBorder(makeBorder());
 
-		add(createTitleLabel());
-        add(getNamePanel());
+		add(makeTitlePanel());
 
 		style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers"));
 		add(style);

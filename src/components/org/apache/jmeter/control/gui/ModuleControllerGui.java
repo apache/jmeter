@@ -60,7 +60,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -177,10 +176,9 @@ public class ModuleControllerGui extends AbstractControllerGui /*implements Unsh
 	private void init() {
 		
 		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+        setBorder(makeBorder());
 
-		add(createTitleLabel());
-        add(getNamePanel());
+		add(makeTitlePanel());
 			
 		// DROP-DOWN MENU
 		JPanel modulesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
