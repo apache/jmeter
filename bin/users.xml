@@ -7,7 +7,7 @@
 
 		<thread>
 			<parameter>
-                             <paramname>user_id</paramname>
+                             <paramname>username</paramname>
                              <paramvalue>dduck</paramvalue>
                         </parameter>
 			<parameter>
@@ -17,7 +17,7 @@
 		</thread>
 		<thread>
 			<parameter>
-                             <paramname>user_id</paramname>
+                             <paramname>username</paramname>
                              <paramvalue>mmouse</paramvalue>
                         </parameter>
 			<parameter>
@@ -27,7 +27,7 @@
 		</thread>
 		<thread>
 			<parameter>
-                             <paramname>user_id</paramname>
+                             <paramname>username</paramname>
                              <paramvalue>bbunney</paramvalue>
                         </parameter>
 			<parameter>

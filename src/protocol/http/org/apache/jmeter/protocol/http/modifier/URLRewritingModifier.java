@@ -151,7 +151,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
             mod.process();
             Arguments args = sampler.getArguments();
             assertEquals("jfdkjdkf jddkfdfjkdjfdf\"", ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
-            assertEquals("http://server.com:80/index.html?session_id=jfdkjdkf+jddkfdfjkdjfdf%22", sampler.toString());
+            assertEquals("http://server.com/index.html?session_id=jfdkjdkf+jddkfdfjkdjfdf%22", sampler.toString());
         }
         public void testGrabSessionId2() throws Exception
         {

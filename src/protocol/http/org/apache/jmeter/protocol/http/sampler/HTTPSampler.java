@@ -1092,7 +1092,7 @@ public class HTTPSampler extends AbstractSampler
             sampler.setMethod(HTTPSampler.GET);
             sampler.setPath("/index.html?pear");
             sampler.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org:80/index.html?pear", sampler.getUrl().toString());
+            assertEquals("http://www.apache.org/index.html?pear", sampler.getUrl().toString());
         }
 
         public void testMakingUrl() throws Exception
@@ -1103,7 +1103,7 @@ public class HTTPSampler extends AbstractSampler
             config.addArgument("param1", "value1");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org:80/index.html?param1=value1", config.getUrl().toString());
+            assertEquals("http://www.apache.org/index.html?param1=value1", config.getUrl().toString());
         }
         public void testMakingUrl2() throws Exception
         {
@@ -1113,7 +1113,7 @@ public class HTTPSampler extends AbstractSampler
             config.addArgument("param1", "value1");
             config.setPath("/index.html?p1=p2");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org:80/index.html?param1=value1&p1=p2", config.getUrl().toString());
+            assertEquals("http://www.apache.org/index.html?param1=value1&p1=p2", config.getUrl().toString());
         }
         public void testMakingUrl3() throws Exception
         {
@@ -1123,7 +1123,7 @@ public class HTTPSampler extends AbstractSampler
             config.addArgument("param1", "value1");
             config.setPath("/index.html?p1=p2");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org:80/index.html?p1=p2", config.getUrl().toString());
+            assertEquals("http://www.apache.org/index.html?p1=p2", config.getUrl().toString());
         }
         // test cases for making Url, and exercise method addArgument(String name,String value,String metadata)
         public void testMakingUrl4() throws Exception
@@ -1134,7 +1134,7 @@ public class HTTPSampler extends AbstractSampler
             config.addArgument("param1", "value1", "=");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org:80/index.html?param1=value1", config.getUrl().toString());
+            assertEquals("http://www.apache.org/index.html?param1=value1", config.getUrl().toString());
         }
         public void testMakingUrl5() throws Exception
         {
@@ -1144,7 +1144,7 @@ public class HTTPSampler extends AbstractSampler
             config.addArgument("param1", "", "=");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org:80/index.html?param1=", config.getUrl().toString());
+            assertEquals("http://www.apache.org/index.html?param1=", config.getUrl().toString());
         }
         public void testMakingUrl6() throws Exception
         {
@@ -1154,7 +1154,7 @@ public class HTTPSampler extends AbstractSampler
             config.addArgument("param1", "", "");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org:80/index.html?param1", config.getUrl().toString());
+            assertEquals("http://www.apache.org/index.html?param1", config.getUrl().toString());
         }
         // test cases for making Url, and exercise method parseArguments(String queryString)
         public void testMakingUrl7() throws Exception
@@ -1165,7 +1165,7 @@ public class HTTPSampler extends AbstractSampler
             config.parseArguments("param1=value1");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org:80/index.html?param1=value1", config.getUrl().toString());
+            assertEquals("http://www.apache.org/index.html?param1=value1", config.getUrl().toString());
         }
         public void testMakingUrl8() throws Exception
         {
@@ -1175,7 +1175,7 @@ public class HTTPSampler extends AbstractSampler
             config.parseArguments("param1=");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org:80/index.html?param1=", config.getUrl().toString());
+            assertEquals("http://www.apache.org/index.html?param1=", config.getUrl().toString());
         }
         public void testMakingUrl9() throws Exception
         {
@@ -1185,7 +1185,7 @@ public class HTTPSampler extends AbstractSampler
             config.parseArguments("param1");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org:80/index.html?param1", config.getUrl().toString());
+            assertEquals("http://www.apache.org/index.html?param1", config.getUrl().toString());
         }
         public void testMakingUrl10() throws Exception
         {
@@ -1195,7 +1195,7 @@ public class HTTPSampler extends AbstractSampler
             config.parseArguments("");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org:80/index.html", config.getUrl().toString());
+            assertEquals("http://www.apache.org/index.html", config.getUrl().toString());
         }
     }
 }
