@@ -71,7 +71,6 @@ public class CounterConfig
             if (value == null)
             {
                 variables.put(getVarName(), Integer.toString(start));
-                value = variables.get(getVarName());
             }
             else
             {
