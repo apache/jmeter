@@ -457,7 +457,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable
 	public void setThreadName(String inthreadName) {
 		if (threadName != null)
 		{
-			if (inthreadName != threadName)
+			if (!threadName.equals(inthreadName))
 			throw new RuntimeException("Attempting to reset the thread name");
 		}
 		this.threadName = inthreadName;
