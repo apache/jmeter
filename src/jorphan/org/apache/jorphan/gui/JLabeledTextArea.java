@@ -177,6 +177,11 @@ public class JLabeledTextArea
         return mLabel.getText();
     }
 
+	public void setEnabled(boolean enable){
+		super.setEnabled(enable);
+		mTextArea.setEnabled(enable);
+	}
+	
     /**
      * Adds a change listener, that will be notified when the text in the
      * text field is changed. The ChangeEvent that will be passed
