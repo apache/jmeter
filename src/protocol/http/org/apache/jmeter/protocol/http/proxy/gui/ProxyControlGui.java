@@ -51,6 +51,11 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
+ *
+ * @author  Michael Stover
+ * @author	Thad Smith (controller combo code, taken from ModuleController)
+ * @author	<a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
+ * @version $Id$
  */
 package org.apache.jmeter.protocol.http.proxy.gui;
 
@@ -69,8 +74,10 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -79,29 +86,26 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
+import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.protocol.http.proxy.ProxyControl;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestPlan;
+import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-
-/****************************************
- * Title: Jakarta-JMeter
- *
- *@author    Michael Stover
- *@version $Revision$ Last updated: $Date$
- ***************************************/
 
 public class ProxyControlGui
     extends AbstractJMeterGuiComponent
@@ -139,13 +143,20 @@ public class ProxyControlGui
 	 */
 	private JCheckBox useKeepAlive;
 
+    /**
+     * List of available target controllers
+     */
+    private JComboBox targetNodes;
+    private DefaultComboBoxModel targetNodesModel;
+    
     private ProxyControl model;
 
     private JTable excludeTable;
     private PowerTableModel excludeModel;
     private JTable includeTable;
     private PowerTableModel includeModel;
-
+    private static final String CHANGE_TARGET = "change_target";
+        
     private JButton stop, start, restart;
     private static final String STOP = "stop";
     private static final String START = "start";
@@ -205,6 +216,15 @@ public class ProxyControlGui
 			model.setSeparators(addSeparators.isSelected());
 			model.setAssertions(addAssertions.isSelected());
 			model.setUseKeepAlive(useKeepAlive.isSelected());
+            TreeNodeWrapper nw= (TreeNodeWrapper)targetNodes.getSelectedItem();
+            if (nw == null)
+            {
+                model.setTarget(null);
+            }
+            else
+            {
+                model.setTarget(nw.getTreeNode());
+            }
         }
     }
 
@@ -251,6 +271,9 @@ public class ProxyControlGui
 		addSeparators.setSelected(model.getPropertyAsBoolean(ProxyControl.ADD_SEPARATORS));
 		addAssertions.setSelected(model.getPropertyAsBoolean(ProxyControl.ADD_ASSERTIONS));
 		useKeepAlive.setSelected(model.getPropertyAsBoolean(ProxyControl.USE_KEEPALIVE,true));
+        
+        reinitializeTargetCombo();
+
         populateTable(includeModel, model.getIncludePatterns().iterator());
         populateTable(excludeModel, model.getExcludePatterns().iterator());
         repaint();
@@ -293,6 +316,7 @@ public class ProxyControlGui
             model.stopProxy();
             stop.setEnabled(false);
             start.setEnabled(true);
+            restart.setEnabled(false);
         }
         else if (command.equals(START))
         {
@@ -336,6 +360,20 @@ public class ProxyControlGui
             includeModel.removeRow(includeTable.getSelectedRow());
             includeModel.fireTableDataChanged();
             enableRestart();
+        }
+        else if (command.equals(CHANGE_TARGET))
+        {
+            log.debug("Change target "+targetNodes.getSelectedItem());
+            log.debug("In model "+model);
+            TreeNodeWrapper nw= (TreeNodeWrapper)targetNodes.getSelectedItem();
+            if (nw == null)
+            {
+                model.setTarget(null); 
+            }
+            else
+            {
+                model.setTarget(nw.getTreeNode());
+            }
         }
     }
 
@@ -431,8 +469,14 @@ public class ProxyControlGui
         add(makeTitlePanel(), BorderLayout.NORTH);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.add(createPortPanel(), BorderLayout.NORTH);
-
+        
+        Box portTargetPanel = Box.createVerticalBox();
+        portTargetPanel.add(createPortPanel());
+        portTargetPanel.add(Box.createVerticalStrut(5));
+        portTargetPanel.add(createTargetPanel());
+        portTargetPanel.add(Box.createVerticalStrut(5));
+        mainPanel.add(portTargetPanel, BorderLayout.NORTH);
+        
         Box includeExcludePanel = Box.createVerticalBox();
         includeExcludePanel.add(createIncludePanel());
         includeExcludePanel.add(createExcludePanel());
@@ -514,6 +558,45 @@ public class ProxyControlGui
         return panel;
     }
 
+    private JPanel createTargetPanel()
+    {
+        targetNodesModel= new DefaultComboBoxModel();
+        targetNodes = new JComboBox(targetNodesModel);
+        targetNodes.addActionListener(this);
+        targetNodes.setActionCommand(CHANGE_TARGET);
+        
+        JLabel label = new JLabel(JMeterUtils.getResString("proxy_target"));
+        label.setLabelFor(targetNodes);
+        
+        HorizontalPanel panel = new HorizontalPanel();
+        panel.add(label);
+        panel.add(targetNodes);
+
+        try
+        {
+            Class addToTree =
+                Class.forName("org.apache.jmeter.gui.action.AddToTree");
+            Class remove = Class.forName("org.apache.jmeter.gui.action.Remove");
+            ActionListener listener = new ActionListener()
+            {
+                public void actionPerformed(ActionEvent e)
+                {
+                    reinitializeTargetCombo();
+                }
+            };
+            ActionRouter ar = ActionRouter.getInstance();
+            ar.addPostActionListener(addToTree, listener);
+            ar.addPostActionListener(remove, listener);
+        }
+        catch (ClassNotFoundException e)
+        {
+            // This should never happen -- throw an Error:
+            throw new Error(e);
+        }
+
+        return panel;        
+    }
+
     private JPanel createIncludePanel()
     {
         includeModel = new PowerTableModel(
@@ -576,17 +659,118 @@ public class ProxyControlGui
         return buttonPanel;
     }
 
+    private void reinitializeTargetCombo() {
+        log.debug("Reinitializing target combo");
+        targetNodesModel.removeAllElements();
+        GuiPackage gp = GuiPackage.getInstance();
+        JMeterTreeNode root;
+        if (gp != null)
+        {
+            root =
+                (JMeterTreeNode) GuiPackage
+                    .getInstance()
+                    .getTreeModel()
+                    .getRoot();
+            targetNodesModel.addElement(
+                new TreeNodeWrapper(null, "Use Recording Controller"));
+            buildNodesModel(root, "", 0);
+        }
+        for (int i = 0; i < targetNodesModel.getSize(); i++)
+        {
+            TreeNodeWrapper choice = 
+                (TreeNodeWrapper) targetNodesModel.getElementAt(i);
+            if (choice.getTreeNode() == model.getTarget()) // .equals caused NPE
+            {
+                log.debug("Selecting item "+choice);
+                targetNodesModel.setSelectedItem(choice);
+                break;
+            }
+        }
+        log.debug("Reinitialization complete");
+    }
+    
+    private void buildNodesModel(
+        JMeterTreeNode node,
+        String parent_name,
+        int level)
+    {
+        String seperator = " > ";
+        if (node != null)
+        {
+            for (int i = 0; i < node.getChildCount(); i++)
+            {
+                StringBuffer name = new StringBuffer();
+                JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
+                TestElement te = cur.createTestElement();
+                if (te instanceof ThreadGroup)
+                {
+                    name.append(parent_name);
+                    name.append(cur.getName());
+                    name.append(seperator);
+                    buildNodesModel(cur, name.toString(), level);
+                }
+                else if (te instanceof Controller)
+                {
+                    name.append(spaces(level));
+                    name.append(parent_name);
+                    name.append(cur.getName());
+                    TreeNodeWrapper tnw =
+                        new TreeNodeWrapper(cur, name.toString());
+                    targetNodesModel.addElement(tnw);
+                    name = new StringBuffer();
+                    name.append(cur.getName());
+                    name.append(seperator);
+                    buildNodesModel(cur, name.toString(), level + 1);
+                }
+                else if (te instanceof TestPlan || te instanceof WorkBench)
+                {
+                    name.append(cur.getName());
+                    name.append(seperator);
+                    buildNodesModel(cur, name.toString(), 0);
+                }
+            }
+        }
+    }
+
+    private String spaces(int level)
+    {
+        int multi = 4;
+        StringBuffer spaces = new StringBuffer(level * multi);
+        for (int i = 0; i < level * multi; i++)
+        {
+            spaces.append(" ");
+        }
+        return spaces.toString();
+    }
+    
     public void setNode(JMeterTreeNode node)
     {
         getNamePanel().setNode(node);
     }
+}
 
-    /**
-     * Returns the portField.
-     * @return JTextField
-     */
-    protected JTextField getPortField()
+class TreeNodeWrapper
+{
+    private JMeterTreeNode tn;
+    private String label;
+
+    private TreeNodeWrapper()
     {
-        return portField;
+    };
+
+    public TreeNodeWrapper(JMeterTreeNode tn, String label)
+    {
+        this.tn = tn;
+        this.label = label;
+    }
+
+    public JMeterTreeNode getTreeNode()
+    {
+        return tn;
+    }
+
+    public String toString()
+    {
+        return label;
     }
 }
