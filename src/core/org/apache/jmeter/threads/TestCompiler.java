@@ -147,7 +147,6 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
     public void addNode(Object node, HashTree subTree)
     {
         stack.addLast(node);
-        log.debug("Added " + node + " to stack.  Stack size = " + stack.size());
     }
 
     /****************************************
@@ -160,7 +159,6 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         trackIterationListeners(stack);
         if (child instanceof Sampler)
         {
-            log.debug("Saving configs for sampler: " + child);
             saveSamplerConfigs((Sampler) child);
         }
         stack.removeLast();
