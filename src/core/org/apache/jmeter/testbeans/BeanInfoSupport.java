@@ -251,7 +251,6 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo
 	}
 
 	public PropertyDescriptor[] getPropertyDescriptors() {
-	   log.debug("Shouldn't be here if in DataSourceElementBeanInfo");
 		return rootBeanInfo.getPropertyDescriptors();
 	}
 }

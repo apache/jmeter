@@ -40,7 +40,7 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.Timer;
@@ -130,7 +130,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
                 	"Running preprocessor: "
                     	+ ((AbstractTestElement) ex).getName());
             }
-             if (ex instanceof TestBean) ((TestBean)ex).prepare();
+            TestBeanHelper.prepare((TestElement)ex);
             ex.process();
         }
     }

@@ -18,6 +18,9 @@
 
  package org.apache.jmeter.testelement;
 
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
@@ -474,4 +477,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable
 	 */
 	public void threadStarted() {
 	}
+   /**
+    * 
+    */
+   public AbstractTestElement()
+   {
+      super();
+      // TODO Auto-generated constructor stub
+   }
 }

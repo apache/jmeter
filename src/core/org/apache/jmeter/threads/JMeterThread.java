@@ -34,7 +34,7 @@ import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.timers.Timer;
@@ -251,7 +251,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
                         Sampler sampler= pack.getSampler();
                         sampler.setThreadContext(threadContext);
                         sampler.setThreadName(threadName);
-                        if (sampler instanceof TestBean) ((TestBean)sampler).prepare();               
+                        TestBeanHelper.prepare(sampler);               
                         SampleResult result = sampler.sample(null); // TODO: remove this useless Entry parameter
                         if (result != null)
                         {
@@ -285,6 +285,10 @@ public class JMeterThread implements Runnable, java.io.Serializable
                     running = false;
                 }
             }
+        }
+        catch(Exception e)
+        {
+           log.error("Test failed!",e);
         }
         finally
         {
@@ -380,7 +384,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
         while (iter.hasNext())
         {
         	Assertion assertion= (Assertion)iter.next();
-        	if (assertion instanceof TestBean) ((TestBean)assertion).prepare();
+        	TestBeanHelper.prepare((TestElement)assertion);
             AssertionResult assertionResult = assertion.getResult(result);
             result.setSuccessful(
                 result.isSuccessful()
@@ -395,7 +399,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
         while (iter.hasPrevious())
         {
             PostProcessor ex = (PostProcessor) iter.previous();
-            if (ex instanceof TestBean) ((TestBean)ex).prepare();
+            TestBeanHelper.prepare((TestElement)ex);
             ex.process();
         }
     }
@@ -407,7 +411,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
         while (iter.hasNext())
         {
         	Timer timer= (Timer) iter.next();
-        	if (timer instanceof TestBean) ((TestBean)timer).prepare();
+        	TestBeanHelper.prepare((TestElement)timer);
             sum += timer.delay();
         }
         if (sum > 0)
