@@ -7,6 +7,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.VariablesCollection;
@@ -28,7 +29,7 @@ import org.apache.oro.text.regex.Util;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class RegexExtractor extends AbstractTestElement implements Extractor, Serializable
+public class RegexExtractor extends AbstractTestElement implements PostProcessor, Serializable
 {
     transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ELEMENTS);
     public static final String REGEX = "RegexExtractor.regex";
@@ -51,9 +52,9 @@ public class RegexExtractor extends AbstractTestElement implements Extractor, Se
     /**
      * Parses the response data using regular expressions and saving the results
      * into variables for use later in the test.
-     * @see org.apache.jmeter.config.Extractor#processResult(org.apache.jmeter.samplers.SampleResult)
+     * @see org.apache.jmeter.config.PostProcessor#processResult(org.apache.jmeter.samplers.SampleResult)
      */
-    public void processResult(SampleResult result)
+    public void process(SampleResult result)
     {
         log.debug("RegexExtractor processing result");
         vars.getVariables().put(getRefName(), getDefaultValue());
@@ -301,7 +302,7 @@ public class RegexExtractor extends AbstractTestElement implements Extractor, Se
             extractor.setTemplate("$2$");
             extractor.setMatchNumber(2);
             extractor.setJMeterVariables(vars);
-            extractor.processResult(result);
+            extractor.process(result);
             assertEquals("5", vars.get("regVal"));
         }
 
@@ -311,7 +312,7 @@ public class RegexExtractor extends AbstractTestElement implements Extractor, Se
             extractor.setTemplate("$1$");
             extractor.setMatchNumber(3);
             extractor.setJMeterVariables(vars);
-            extractor.processResult(result);
+            extractor.process(result);
             assertEquals("pinposition3", vars.get("regVal"));
         }
 
@@ -322,7 +323,7 @@ public class RegexExtractor extends AbstractTestElement implements Extractor, Se
             extractor.setMatchNumber(4);
             extractor.setDefaultValue("default");
             extractor.setJMeterVariables(vars);
-            extractor.processResult(result);
+            extractor.process(result);
             assertEquals("default", vars.get("regVal"));
         }
 
@@ -332,7 +333,7 @@ public class RegexExtractor extends AbstractTestElement implements Extractor, Se
             extractor.setTemplate("_$1$");
             extractor.setMatchNumber(2);
             extractor.setJMeterVariables(vars);
-            extractor.processResult(result);
+            extractor.process(result);
             assertEquals("_pinposition2", vars.get("regVal"));
         }
     }

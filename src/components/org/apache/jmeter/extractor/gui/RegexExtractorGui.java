@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.extractor.RegexExtractor;
+import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
@@ -19,7 +20,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class RegexExtractorGui extends AbstractExtractorGui
+public class RegexExtractorGui extends AbstractPostProcessorGui
 {
     JLabeledTextField regexField;
     JLabeledTextField templateField;

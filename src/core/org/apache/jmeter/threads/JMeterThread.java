@@ -62,7 +62,7 @@ import java.util.Map;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.control.Controller;
-import org.apache.jmeter.extractor.Extractor;
+import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -198,8 +198,8 @@ public class JMeterThread implements Runnable, java.io.Serializable
         Iterator iter = extractors.iterator();
         while (iter.hasNext())
         {
-            Extractor ex = (Extractor) iter.next();
-            ex.processResult(result);
+            PostProcessor ex = (PostProcessor) iter.next();
+            ex.process(result);
         }
     }
 
