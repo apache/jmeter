@@ -6,7 +6,7 @@
   <property name="sources.src.dir" value="src"/>
   <!-- Where the API documentation lives -->
   <property name="docs.api.dest.dir" value="docs/api"/>
-  <property name="version" value="1.7Beta2"/>
+  <property name="version" value="1.7Beta3"/>
   <property name="docs.src" value="./xdocs"/>
   <property name="docs.dest" value="./docs"/>
   <property name="printable_docs.dest" value="./printable_docs"/>
@@ -73,7 +73,7 @@
    <target name="ssl.message" depends="check.optional.libs1,iaik.message" unless="jsse.present">
      <echo message="Classes for SSL not found in classpath"/>
    </target>
-     
+
    <target name="iaik.message" depends="check.optional.libs1" unless="isasilk.present">
      <echo message="Classes for IAIK iSaSiLk not found in classpath"/>
    </target>
