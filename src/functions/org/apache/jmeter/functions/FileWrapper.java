@@ -125,7 +125,7 @@ public class FileWrapper
     	{
     		frcc = new FileRowColContainer(file);
     		fileContainers.put(alias,frcc);
-			log.info("Saved "+file+" as "+alias);
+			log.info("Saved "+file+" as "+alias+" delimiter=<"+frcc.getDelimiter()+">");
 			if (defaultFile.length() == 0){
 				defaultFile = file;// Save in case needed later
 			}
