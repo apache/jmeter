@@ -123,7 +123,7 @@ public abstract class TestBean extends AbstractTestElement
             {
                 log.error("Can't get beanInfo for "+this.getClass().getName(),
                     e);
-                throw new Error(e); // Programming error. Don't continue.
+                throw new Error(e.toString()); // Programming error. Don't continue.
             }
         }
     }
@@ -177,17 +177,17 @@ public abstract class TestBean extends AbstractTestElement
 		catch (IllegalArgumentException e)
 		{
 			log.error("This should never happen.", e);
-			throw new Error(e); // Programming error: bail out.
+			throw new Error(e.toString()); // Programming error: bail out.
 		}
 		catch (IllegalAccessException e)
 		{
 			log.error("This should never happen.", e);
-			throw new Error(e); // Programming error: bail out.
+			throw new Error(e.toString()); // Programming error: bail out.
 		}
 		catch (InvocationTargetException e)
 		{
 			log.error("This should never happen.", e);
-			throw new Error(e); // Programming error: bail out.
+			throw new Error(e.toString()); // Programming error: bail out.
 		}
 	}
 
