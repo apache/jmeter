@@ -46,10 +46,9 @@
 	- bin/clases directory
 	-->
 	<target name="compile" depends="init,mail.message,ssl.message">
-			  <delete dir="${classes.dest.dir}"/>
 		<mkdir dir="${classes.dest.dir}"/>
 		<javac srcdir="${sources.src.dir}"
-				classpath="${basedir}/lib/junit.jar:${basedir}/lib/xerces.jar"
+				classpath="${basedir}/lib/junit.jar:${basedir}/lib/xerces.jar:${basedir}/lib/util.jar"
 					destdir="${classes.dest.dir}"
 					optimize="on">
 					<exclude name="**/*.df*"/>
