@@ -364,7 +364,6 @@ public class JMeterThread implements Runnable, java.io.Serializable
             {
                 listener.testIterationStart(new LoopIterationEvent(controller,threadVars.getIteration()));
             }
-            
         }
     }
 
