@@ -53,6 +53,8 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.gui;
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
@@ -162,12 +164,14 @@ public abstract class AbstractJMeterGuiComponent
      * 
      * @return a JLabel which subclasses can add to their GUI
      */
-    protected JLabel createTitleLabel() {
+    protected Component createTitleLabel() {
         JLabel titleLabel = new JLabel(getStaticLabel());
         Font curFont = titleLabel.getFont();
         titleLabel.setFont(curFont.deriveFont((float)curFont.getSize() + 4));
-        titleLabel.setAlignmentX(0.5f);
-        return titleLabel;
+        //titleLabel.setAlignmentX(0.5f);
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panel.add(titleLabel);
+        return panel;
     }
 
 	/**

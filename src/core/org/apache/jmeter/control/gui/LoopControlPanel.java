@@ -191,9 +191,7 @@ public class LoopControlPanel extends AbstractControllerGui implements KeyListen
         {
             setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
             setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
-            
-            add(createTitleLabel());
-            add(getNamePanel());
+            add(makeTitlePanel());
             add(createLoopCountPanel());
         }
 

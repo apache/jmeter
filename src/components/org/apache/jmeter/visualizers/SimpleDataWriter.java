@@ -56,9 +56,7 @@ package org.apache.jmeter.visualizers;
 
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -122,21 +120,8 @@ public class SimpleDataWriter
         mainPanel.setBorder(margin);
         mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-        // TITLE
-        //JLabel panelTitleLabel = new JLabel("Simple Data Writer");
-        JLabel panelTitleLabel =
-            new JLabel(JMeterUtils.getResString("simple_data_writer_title"));
-        Font curFont = panelTitleLabel.getFont();
-        int curFontSize = curFont.getSize();
-
-        curFontSize += 4;
-        panelTitleLabel.setFont(new Font(curFont.getFontName(),
-                                         curFont.getStyle(),
-                                         curFontSize));
-        mainPanel.add(panelTitleLabel);
-
         // NAME
-        mainPanel.add(getNamePanel());
+        mainPanel.add(makeTitlePanel());
         mainPanel.add(getFilePanel());
 
         this.add(mainPanel, BorderLayout.NORTH);

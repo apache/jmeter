@@ -54,7 +54,6 @@
  */
 package org.apache.jmeter.visualizers;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -90,9 +89,9 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.JLabeledTextArea;
+import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-
 
 /****************************************
  * Allows the tester to view the textual response from sampling an Entry. This
@@ -103,8 +102,7 @@ import org.apache.log.Logger;
  *@created   2001/07/25
  *@version   $Revision$ $Date$
  ***************************************/
-public class ViewResultsFullVisualizer extends AbstractVisualizer
-        implements ActionListener, TreeSelectionListener, Clearable
+public class ViewResultsFullVisualizer extends AbstractVisualizer implements ActionListener, TreeSelectionListener, Clearable
 {
     public final static Color SERVER_ERROR_COLOR = Color.red;
     public final static Color CLIENT_ERROR_COLOR = Color.blue;
@@ -115,6 +113,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
     protected DefaultTreeModel treeModel;
     protected GridBagLayout gridBag;
     protected GridBagConstraints gbc;
+    private JScrollPane textScrollArea;
 
     /** The button that will pop up the response as rendered HTML or
      text.  **/
@@ -125,17 +124,18 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 
     /** The pane where the rendered HTML response is displayed.  **/
     transient protected JEditorPane htmlEditPane;
-
-    protected JPanel resultPanel;
     private JSplitPane treeSplitPane;
-    
+
     /** The text area where the response is displayed.  **/
     protected JTextArea textArea;
     protected JTree jTree;
     protected int childIndex;
-    transient private static Logger log =
-            Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
+    private JLabel loadTimeLabel;
+    private JLabeledTextArea postDataField;
+    private JLabel responseCodeLabel;
+    private JLabel responseMsgLabel;
     /****************************************
      * !ToDo (Constructor description)
      ***************************************/
@@ -172,8 +172,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
         log.debug("End : updateGui1");
     }
 
-    private void addSubResults(DefaultMutableTreeNode currNode,
-            SampleResult res)
+    private void addSubResults(DefaultMutableTreeNode currNode, SampleResult res)
     {
         SampleResult[] subResults = res.getSubResults();
 
@@ -205,12 +204,11 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 
         if (log.isDebugEnabled())
             log.debug("clear1 : total child - " + totalChild);
-        for (int i = 0; i < totalChild; i++)                    // the child to be removed will always be 0 'cos as the nodes are removed
-                // the nth node will become (n-1)th
-            treeModel.removeNodeFromParent(
-                    (DefaultMutableTreeNode) root.getChildAt(0));
-        resultPanel.removeAll();
-        resultPanel.revalidate();
+        for (int i = 0; i < totalChild; i++) // the child to be removed will always be 0 'cos as the nodes are removed
+            // the nth node will become (n-1)th
+            treeModel.removeNodeFromParent((DefaultMutableTreeNode) root.getChildAt(0));
+            textArea.setText("");
+        textScrollArea.setViewportView(textArea);
         // reset the child index
         childIndex = 0;
         log.debug("End : clear1");
@@ -238,29 +236,28 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
     public void valueChanged(TreeSelectionEvent e)
     {
         log.debug("Start : valueChanged1");
-        DefaultMutableTreeNode node =
-                (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
 
-        if (log.isDebugEnabled()) {
+        if (log.isDebugEnabled())
+        {
             log.debug("valueChanged : selected node - " + node);
         }
-        
+
         if (node != null)
         {
             SampleResult res = (SampleResult) node.getUserObject();
 
-            if (log.isDebugEnabled()) {
+            if (log.isDebugEnabled())
+            {
                 log.debug("valueChanged1 : sample result - " + res);
             }
-            
+
             if (res != null)
             {
-                resultPanel.removeAll();
                 // load time label
-                JLabel loadTime = new JLabel();
 
                 log.debug("valueChanged1 : load time - " + res.getTime());
-                loadTime.setText("Load time : " + res.getTime());
+                loadTimeLabel.setText("Load time : " + res.getTime());
                 gbc.gridx = 0;
                 gbc.gridy = 0;
                 // keep all of the labels to the left
@@ -271,18 +268,11 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                 gbc.insets = new Insets(0, 10, 0, 0);
                 if (res != null && res.getSamplerData() != null)
                 {
-                    JLabeledTextArea postData =
-                            new JLabeledTextArea(
-                            JMeterUtils.getResString("request_data"),
-                            null);
 
-                    postData.setText(res.getSamplerData().toString());
-                    resultPanel.add(postData, gbc.clone());
-                    gbc.gridy++;
+                    postDataField.setText(res.getSamplerData().toString());
                 }
-                resultPanel.add(loadTime, gbc.clone());
                 // response code label
-                JLabel httpResponseCode = new JLabel();
+                
                 String responseCode = res.getResponseCode();
 
                 log.debug("valueChanged1 : response code - " + responseCode);
@@ -294,43 +284,33 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                         responseLevel = Integer.parseInt(responseCode) / 100;
                     }
                     catch (NumberFormatException numberFormatException)
-                    {// no need to change the foreground color
+                    {
+                        // no need to change the foreground color
                     }
                 switch (responseLevel)
                 {
-                case 3:
-                    httpResponseCode.setForeground(REDIRECT_COLOR);
+                    case 3 :
+                        responseCodeLabel.setForeground(REDIRECT_COLOR);
 
-                case 4:
-                    httpResponseCode.setForeground(CLIENT_ERROR_COLOR);
+                    case 4 :
+                        responseCodeLabel.setForeground(CLIENT_ERROR_COLOR);
 
-                case 5:
-                    httpResponseCode.setForeground(SERVER_ERROR_COLOR);
+                    case 5 :
+                        responseCodeLabel.setForeground(SERVER_ERROR_COLOR);
                 }
-                httpResponseCode.setText(
-                        JMeterUtils.getResString("HTTP response code") + " : " + responseCode);
-                gbc.gridx = 0;
-                gbc.gridy++;
-                gridBag.setConstraints(httpResponseCode, gbc);
-                resultPanel.add(httpResponseCode);
+                responseCodeLabel.setText(JMeterUtils.getResString("HTTP response code") + " : " + responseCode);
                 // response message label
-                JLabel httpResponseMsg = new JLabel();
+                
                 String responseMsgStr = res.getResponseMessage();
 
                 log.debug("valueChanged1 : response message - " + responseMsgStr);
-                httpResponseMsg.setText("HTTP response message : " + responseMsgStr);
-                gbc.gridx = 0;
-                gbc.gridy++;
-                gridBag.setConstraints(httpResponseMsg, gbc);
-                resultPanel.add(httpResponseMsg);
-                gbc.gridy++;
+                responseMsgLabel.setText("HTTP response message : " + responseMsgStr);
                 // get the text response and image icon
                 // to determine which is NOT null
                 byte[] responseBytes = (byte[]) res.getResponseData();
                 ImageIcon icon = null;
 
-                if (res.getDataType() != null
-                        && res.getDataType().equals(SampleResult.TEXT))
+                if (res.getDataType() != null && res.getDataType().equals(SampleResult.TEXT))
                 {
                     try
                     {
@@ -347,12 +327,6 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                 }
                 if (response != null)
                 {
-                    gbc.gridx = 0;
-                    gbc.gridy++;
-                    gridBag.setConstraints(htmlOrTextButton,
-                            gbc);
-                    resultPanel.add(htmlOrTextButton);
-
                     // Text display <=> HTML labeled button
                     if (HTML_BUTTON_LABEL.equals(htmlOrTextButton.getText()))
                     {
@@ -369,12 +343,10 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
                     JLabel image = new JLabel();
 
                     image.setIcon(icon);
-                    gbc.gridx = 0;
-                    gridBag.setConstraints(image, gbc);
-                    resultPanel.add(image);
+                    showImage(image);
                 }
-                resultPanel.repaint();
-                resultPanel.revalidate();
+                treeSplitPane.revalidate();
+                treeSplitPane.repaint();
             }
         }
         log.debug("End : valueChanged1");
@@ -387,21 +359,18 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
         textArea.setWrapStyleWord(true);
         textArea.setTabSize(4);
         textArea.setRows(4);
-        gridBag.setConstraints(textArea, gbc);
-        resultPanel.add(textArea);
-        gbc.gridy++;
+    }
+    
+    protected void showImage(JLabel image)
+    {
+        textScrollArea.setViewportView(image);
     }
 
     protected void showTextResponse(String response)
     {
-        resultPanel.remove(htmlEditPane);
-
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gridBag.setConstraints(textArea, gbc);
         textArea.setText(response);
         textArea.setCaretPosition(0);
-        resultPanel.add(textArea);
+        textScrollArea.setViewportView(textArea);
     }
 
     /**********************************************************************
@@ -452,7 +421,6 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
         // If there is text, render it
         if (htmlIndex > -1)
         {
-            resultPanel.remove(textArea);
             String html = response.substring(htmlIndex, response.length());
 
             htmlEditPane.setText(html);
@@ -463,10 +431,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
             htmlEditPane.setText(response);
         }
         htmlEditPane.setCaretPosition(0);
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gridBag.setConstraints(htmlEditPane, gbc);
-        resultPanel.add(htmlEditPane);
+        textScrollArea.setViewportView(htmlEditPane);
 
     }
 
@@ -476,6 +441,26 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
         htmlOrTextButton.addActionListener(this);
     }
 
+    protected Component getBottomPane()
+    {
+        JPanel outerPanel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new VerticalLayout(5, VerticalLayout.LEFT));
+        postDataField = new JLabeledTextArea(JMeterUtils.getResString("request_data"), null);
+        loadTimeLabel = new JLabel();
+        panel.add(postDataField);
+        panel.add(loadTimeLabel);
+        responseCodeLabel = new JLabel();
+        panel.add(responseCodeLabel);
+        responseMsgLabel = new JLabel();
+        panel.add(responseMsgLabel);
+        initHtmlOrTextButton();
+        panel.add(htmlOrTextButton);
+        textScrollArea = new JScrollPane();
+        outerPanel.add(panel,BorderLayout.NORTH);
+        outerPanel.add(textScrollArea,BorderLayout.CENTER);
+        return outerPanel;
+    }
+
     /****************************************
      * Initialize this visualizer
      ***************************************/
@@ -483,17 +468,16 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
     {
         setLayout(new BorderLayout());
         setBorder(makeBorder());
-        
+
         SampleResult rootSampleResult = new SampleResult();
         rootSampleResult.setSampleLabel("Root");
         rootSampleResult.setSuccessful(true);
         root = new DefaultMutableTreeNode(rootSampleResult);
-        
+
         treeModel = new DefaultTreeModel(root);
         jTree = new JTree(treeModel);
         jTree.setCellRenderer(new ResultsNodeRenderer());
-        jTree.getSelectionModel().setSelectionMode(
-                TreeSelectionModel.SINGLE_TREE_SELECTION);
+        jTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         jTree.addTreeSelectionListener(this);
         jTree.setShowsRootHandles(true);
 
@@ -502,45 +486,24 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 
         gridBag = new GridBagLayout();
         gbc = new GridBagConstraints();
-        resultPanel = new JPanel(gridBag);
-        JScrollPane resultPane = new JScrollPane(resultPanel);
-resultPane.setMinimumSize(new Dimension(100, 70));
-resultPane.setPreferredSize(resultPane.getMinimumSize());
-
-        initHtmlOrTextButton();
         initTextArea();
         initHtmlEditPane();
 
-        treeSplitPane =
-                new JSplitPane(JSplitPane.VERTICAL_SPLIT, treePane, resultPane);
+        treeSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, treePane, getBottomPane());
 
         Box titlePanel = makeTitlePanel();
         JCheckBox errorCheckBox = getErrorLoggingCheckbox();
         errorCheckBox.setAlignmentX(JCheckBox.CENTER_ALIGNMENT);
-        titlePanel.add (errorCheckBox);
-        
+        titlePanel.add(errorCheckBox);
+
         add(titlePanel, BorderLayout.NORTH);
         add(treeSplitPane, BorderLayout.CENTER);
     }
     private class ResultsNodeRenderer extends DefaultTreeCellRenderer
     {
-        public Component getTreeCellRendererComponent(
-                JTree tree,
-                Object value,
-                boolean sel,
-                boolean expanded,
-                boolean leaf,
-                int row,
-                boolean hasFocus)
+        public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus)
         {
-            super.getTreeCellRendererComponent(
-                    tree,
-                    value,
-                    sel,
-                    expanded,
-                    leaf,
-                    row,
-                    hasFocus);
+            super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
             if (!((SampleResult) ((DefaultMutableTreeNode) value).getUserObject()).isSuccessful())
             {
                 this.setForeground(Color.red);

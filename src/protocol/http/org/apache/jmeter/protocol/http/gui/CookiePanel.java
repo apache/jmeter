@@ -54,7 +54,6 @@
  */
 package org.apache.jmeter.protocol.http.gui;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -63,7 +62,6 @@ import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -340,26 +338,13 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
 		// set the layout of the control panel
 		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-		cookieManagerPanel = new JPanel();
-
 		Border margin = new EmptyBorder(10, 10, 5, 10);
-		cookieManagerPanel.setBorder(margin);
+		this.setBorder(margin);
 
-		cookieManagerPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("cookie_manager_title"));
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		cookieManagerPanel.add(panelTitleLabel);
-
-		cookieManagerPanel.add(getNamePanel());
+		this.add(makeTitlePanel());
 
 		JPanel cookieTablePanel = createCookieTablePanel();
-		cookieManagerPanel.add(cookieTablePanel);
-
-		this.add(cookieManagerPanel);
+		this.add(cookieTablePanel);
 	}
 
 	/****************************************

@@ -56,7 +56,6 @@ package org.apache.jmeter.visualizers;
 
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -194,17 +193,8 @@ public class MailerVisualizer extends AbstractVisualizer
         mainPanel.setBorder(margin);
         mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-        // TITLE
-        JLabel panelTitleLabel = new JLabel(getStaticLabel());
-        Font curFont = panelTitleLabel.getFont();
-        int curFontSize = curFont.getSize();
-
-        curFontSize += 4;
-        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-        mainPanel.add(panelTitleLabel);
-
         // NAME
-        mainPanel.add(getNamePanel());
+        mainPanel.add(makeTitlePanel());
 
         // mailer panel
         JPanel mailerPanel = new JPanel();

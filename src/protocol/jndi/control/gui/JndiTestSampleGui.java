@@ -54,7 +54,7 @@
  */
 package org.apache.jmeter.ejb.jndi.control.gui;
 
-import java.awt.Font;
+
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
@@ -109,19 +109,8 @@ public class JndiTestSampleGui extends JPanel implements ModelSupported
     mainPanel.setBorder(margin);
     mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-    // title
-    JLabel panelTitleLabel = new JLabel(
-	JMeterUtils.getResString("jndi_testing_title"));
-    Font curFont = panelTitleLabel.getFont();
-    int curFontSize = curFont.getSize();
-    curFontSize += 4;
-    panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(),
-	curFontSize));
-    mainPanel.add(panelTitleLabel);
-
-    // name
-    namePanel = new NamePanel(model);
-    mainPanel.add(namePanel);
+ 
+    mainPanel.add(makeTitlePanel());
 
     // jndi
     jndiConfigGui = new JndiConfigGui(false);

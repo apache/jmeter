@@ -194,14 +194,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener,Foc
 
 		headerManagerPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("header_manager_title"));
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		headerManagerPanel.add(panelTitleLabel);
-
-		headerManagerPanel.add(getNamePanel());
+		headerManagerPanel.add(makeTitlePanel());
 
 		JPanel headerTablePanel = createHeaderTablePanel();
 		headerManagerPanel.add(headerTablePanel);

@@ -55,7 +55,6 @@
 package org.apache.jmeter.protocol.http.gui;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -65,7 +64,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
@@ -86,9 +84,9 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Handles input for determining if authentication services are required for a
@@ -177,26 +175,13 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener
 		// set the layout of the control panel
 		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-		authManagerPanel = new JPanel();
-
 		Border margin = new EmptyBorder(10, 10, 5, 10);
-		authManagerPanel.setBorder(margin);
+		this.setBorder(margin);
 
-		authManagerPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("auth_manager_title"));
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		authManagerPanel.add(panelTitleLabel);
-
-		authManagerPanel.add(getNamePanel());
+		this.add(makeTitlePanel());
 
 		JPanel authTablePanel = createAuthTablePanel();
-		authManagerPanel.add(authTablePanel);
-
-		this.add(authManagerPanel);
+		this.add(authTablePanel);
 	}
 
 	/****************************************
