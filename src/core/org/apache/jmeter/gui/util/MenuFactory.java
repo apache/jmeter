@@ -422,6 +422,17 @@ public final class MenuFactory
             while (iter.hasNext())
             {
                 String name= (String)iter.next();
+
+                /*
+                 * JMeterTreeNode and TestBeanGUI are special GUI classes,
+                 * and aren't intended to be added to menus
+                 * 
+                 * TODO: find a better way of checking this
+                 */
+                if (name.endsWith("JMeterTreeNode") || name.endsWith("TestBeanGUI"))
+                {
+                	continue;// Don't try to instantiate these
+                }
                 
                 JMeterGUIComponent item;
                 try
@@ -438,13 +449,13 @@ public final class MenuFactory
                 }
                 catch (Throwable e)
                 {
-                    log.debug("Could not instantiate "+name, e);
+                    log.info("Could not instantiate "+name, e);
                     continue;
                 }
                 if (elementsToSkip.contains(name)
                     || elementsToSkip.contains(item.getStaticLabel()))
                 {
-                    log.debug("Skipping "+name);
+                    log.info("Skipping "+name);
                     continue;
                 }
                 else
