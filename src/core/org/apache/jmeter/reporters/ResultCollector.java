@@ -101,6 +101,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	private final static String COLLECTED = "collected";
 	public final static String FILENAME = "filename";
 	private static boolean functionalMode = false;
+	public static final String ERROR_LOGGING = "ResultCollector.error_logging";
 
 	/**
 	 *  !ToDo (Field description)
@@ -122,6 +123,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	{
 		current = -1;
 		serializer = new DefaultConfigurationSerializer();
+		setErrorLogging(false);
 	}
 	
 	private void setFilenameProperty(String f)
@@ -132,6 +134,16 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	public String getFilename()
 	{
 		return getPropertyAsString(FILENAME);
+	}
+	
+	public boolean isErrorLogging()
+	{
+		return getPropertyAsBoolean(ERROR_LOGGING);
+	}
+	
+	public void setErrorLogging(boolean errorLogging)
+	{
+		setProperty(ERROR_LOGGING,new Boolean(errorLogging));
 	}
 
 	/**
@@ -268,6 +280,11 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	{
 		functionalMode = mode;
 	}
+	
+	public boolean getFunctionalMode()
+	{
+		return functionalMode || isErrorLogging();
+	}
 
 	/**
 	 *  Gets the serializedSampleResult attribute of the ResultCollector object
@@ -279,7 +296,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 			IOException,ConfigurationException
 	{
 		ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
-		serializer.serialize(tempOut, SaveService.getConfiguration(result,functionalMode));
+		serializer.serialize(tempOut, SaveService.getConfiguration(result,getFunctionalMode()));
 		String serVer = tempOut.toString();
 		return serVer.substring(serVer.indexOf(System.getProperty("line.separator")));
 	}
@@ -357,14 +374,17 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	 */
 	public void sampleOccurred(SampleEvent e)
 	{
-		sendToVisualizer(e.getResult());
-		try
+		if(!isErrorLogging() || !e.getResult().isSuccessful())
 		{
-			recordResult(e.getResult());
-		}
-		catch(Exception err)
-		{
-			log.error("",err); //should throw exception back to caller
+			sendToVisualizer(e.getResult());
+			try
+			{
+				recordResult(e.getResult());
+			}
+			catch(Exception err)
+			{
+				log.error("",err); //should throw exception back to caller
+			}
 		}
 	}
 

@@ -52,11 +52,22 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */package org.apache.jmeter.gui.util;
-import javax.swing.*;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
-import javax.swing.event.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -71,24 +82,33 @@ import org.apache.jmeter.util.JMeterUtils;
 public class FilePanel extends JPanel implements ActionListener
 {
 
-	JTextField filename = new JTextField(30);
+	JTextField filename = new JTextField(20);
 	JLabel label = new JLabel(JMeterUtils.getResString("file_visualizer_filename"));
 	JButton browse = new JButton(JMeterUtils.getResString("browse"));
 	List listeners = new LinkedList();
+	String title;
 	
 	/**
 	 *  Constructor for the FilePanel object
 	 */
 	public FilePanel()
 	{
+		title = "";
+		init();
+	}
+	
+	public FilePanel(String title)
+	{
+		this.title = title;
 		init();
 	}
 
 	/**
 	 *  Constructor for the FilePanel object
 	 */
-	public FilePanel(ChangeListener l)
+	public FilePanel(ChangeListener l,String title)
 	{
+		this.title = title;
 		init();
 		listeners.add(l);
 	}
@@ -103,6 +123,8 @@ public class FilePanel extends JPanel implements ActionListener
 	 */
 	private void init()
 	{
+		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		setBorder(BorderFactory.createTitledBorder(title));
 		add(label);
 		add(filename);
 		filename.addActionListener(this);
