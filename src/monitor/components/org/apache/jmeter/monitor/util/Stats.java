@@ -123,9 +123,11 @@ public class Stats
 
 	/**
 	 * Method will calculate the memory load:
-	 * free / max = load. The load value is an
+	 * used / max = load. The load value is an
 	 * integer between 1 and 100. It is the
-	 * percent memory free.
+	 * percent memory used.
+	 * Changed this to be more like other system monitors.
+	 * Peter Lin 2-11-05
 	 * @param stat
 	 * @return memory load
 	 */	
@@ -134,7 +136,8 @@ public class Stats
 		if (stat != null){
 			double total = (double)stat.getJvm().getMemory().getTotal();
 			double free = (double)stat.getJvm().getMemory().getFree();
-			load = (free/total);
+			double used = total - free;
+			load = (used/total);
 		}
 		return (int)(load * 100);
 	}
