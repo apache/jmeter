@@ -18,6 +18,7 @@
 	<li><a HREF="running.html">Running the test script</a></li>
 	<li><a href="saving.html">Saving test script elements</a></li>
 	<li><a href="rmi.html">Running JMeter over RMI</a></li>
+        <li><a href="proxy_server.html">Recording browser activity with JMeter</a></li>
 
 </UL>
 
