@@ -153,11 +153,11 @@ public class BeanShellServer implements Runnable {
 			log.error("Problem starting BeanShell server ",e);
 		}
 	}
-	public static class BeanShellServerTest extends TestCase
+	public static class Test extends TestCase
 	{
 		//private static Logger log = LoggingManager.getLoggerForClass();
 
-		public BeanShellServerTest()
+		public Test()
 		{
 			super();
 		}
