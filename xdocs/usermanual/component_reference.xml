@@ -592,7 +592,7 @@ what results any given interaction will give</note>
 <description>
 <p>The Recording Controller is a place holder indicating where the proxy server should
 record samples to.  During test run, it has no effect, similar to the Simple Controller.  But during
-recording using the <complink name="HTTP Proxy Server"/>, all recorded samples will
+recording using the <complink name="HTTP Proxy Server"/>, all recorded samples will by default
 be saved under the Recording Controller.</p>
 
 </description>
@@ -927,7 +927,8 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Port" required="Yes">The port that the Proxy Server listens to.  8080 is the default, but you can change it
-if that port is already in use on your machine.</property>
+        <!--TODO: there's some undocumented flags here -->
+        <property name="Target Controller" required="Yes">The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.</property>
         <property name="Patterns to Include" required="No">Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
         those that meet the requirements of the Include/Exclude fields are <i>recorded</i>.  If both Include and Exclude are
         left empty, then everything is recorded (which can result in dozens of samples recorded for each page, as images, stylesheets,
@@ -964,12 +965,14 @@ appropriate server and port, where the server is the machine JMeter is running o
 the port # is from the Proxy Control Panel shown above.</note>
 
 <b>Where Do Samples Get Recorded?</b>
-<p>JMeter places the recorded samples in a Recording Controller found under a Thread Group (so be sure to add a ThreadGroup and then a Recording Controller before you start recording).  Also, if you have a HTTP Request Defaults element, then the recorded samples will have empty fields for
-the default values you specified.  Additionally, you can specify user-defined values that will replaced in your samples as they are recorded.  See <a href="best-practices.html#proxy_server">Best Practices with the Proxy Server</a> for more info.</p>
+<p>JMeter places the recorded samples in the Target Controller you choose. If you choose the default option "Use Recording Controller", they will be stored in a Recording Controller found under a Thread Group (so be sure to add a ThreadGroup and then a Recording Controller before you start recording).  Also, if you have an HTTP Request Defaults element directly within the controller where samples are being stored, then the recorded samples will have empty fields for the default values you specified.  Additionally, you can specify user-defined values that will replaced in your samples as they are recorded.  See <a href="best-practices.html#proxy_server">Best Practices with the Proxy Server</a> for more info.</p>
 
 <p>When you are done recording your test samples, stop the proxy server (hit the &quot;stop&quot; button).  Remember to reset
 your browser's proxy settings.  Now, you may want to sort and re-order the test script, add timers, listeners, a
 cookie manager, etc.</p>
+
+<b>How can I record the server's responses too?</b>
+<p>The HTTP Proxy Server actually performs a sampling to obtain the server's response, and will notify any listeners directly inside the controller where the samples are being stored. So you just need to place a View Results Tree listener there to get the responses recorded.</p>
 
 </component>
 
