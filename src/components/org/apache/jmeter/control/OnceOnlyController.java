@@ -105,6 +105,10 @@ public class OnceOnlyController
                     "six",
                     "seven" };
             int counter = 15;
+            controller.setRunningVersion(true);
+            sub_1.setRunningVersion(true);
+            sub_2.setRunningVersion(true);
+            sub_3.setRunningVersion(true);
             controller.initialize();
             for (int i = 0; i < 4; i++)
             {
@@ -167,6 +171,10 @@ public class OnceOnlyController
                     "four",
                     "seven" };
             int counter = 11;
+            controller.setRunningVersion(true);
+            sub_1.setRunningVersion(true);
+            sub_2.setRunningVersion(true);
+            sub_3.setRunningVersion(true);
             controller.initialize();
             for (int i = 0; i < 4; i++)
             {
