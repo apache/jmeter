@@ -402,13 +402,14 @@ be able to run it.  However, you can use it as a reference in constructing your 
 <component index="13.4.2" name="HTTP Cookie Manager" screenshot="../images/screenshots/http-config/http-cookie-manager.gif">
 
 <description><p>The Cookie Manager element has two functions:<br/>
-First, it stores and sends cookies just like a web browser. If you
-have an HTTP Request and the response contains a cookie, the Cookie Manager automatically stores that cookie and will use
-if, for all future request that particular request.  Each JMeter thread has its own "cookie storage area".  So, if you
-are testing a web site that uses a cookie for storing session information, each JMeter thread will have its own session.</p>
+First, it stores and sends cookies just like a web browser. If you have an HTTP Request and
+the response contains a cookie, the Cookie Manager automatically stores that cookie and will
+use it for all future requests to that particular web site.  Each JMeter thread has its own
+"cookie storage area".  So, if you are testing a web site that uses a cookie for storing
+session information, each JMeter thread will have its own session.</p>
 
-<p>Second, you can manually add a cookie to the Cookie Manager.  However, if you do this, the cookie will be
-shared by all JMeter threads.</p>
+<p>Second, you can manually add a cookie to the Cookie Manager.  However, if you do this,
+the cookie will be shared by all JMeter threads.</p>
 </description>
 <properties>
 	<property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
@@ -429,8 +430,9 @@ cookie table entries.</property>
 with your normal browser (such as Internet Explorer).  JMeter will create test sample objects and store them
 directly into your test plan as you go (so you can view samples interactively while you make them).</p>
 
-<p>To use the proxy server, <i>add</i> the HTTP Proxy Server element to the workbench.  It will
-appear under the Configuration Element menu list (Add->Config Elements->HTTP Proxy Server).</p>
+<p>To use the proxy server, <i>add</i> the HTTP Proxy Server element to the workbench.
+Select the WorkBench element in the tree, and right-click on this element to get the
+Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
 </description>
 
 <properties>
