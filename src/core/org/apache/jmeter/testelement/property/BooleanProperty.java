@@ -38,7 +38,7 @@ public class BooleanProperty extends AbstractProperty
      */
     public String getStringValue()
     {
-        return Boolean.toString(value);
+        return value ? "true" : "false";
     }
 
     /**
