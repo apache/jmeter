@@ -7,17 +7,20 @@
 package org.apache.jmeter.services;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Random;
 import java.io.Reader;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.gui.JMeterFileFilter;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -108,20 +111,46 @@ public class FileServer
         throw new IOException("File never reserved");
     }
     
+    public synchronized void write(String filename,String value) throws IOException
+    {
+        Object[] file = (Object[])files.get(filename);
+        if(file != null)
+        {
+            if(file[1] == null)
+            {
+                file[1] = new BufferedWriter(new FileWriter((File)file[0]));                
+            }
+            else if(!(file[1] instanceof Writer))
+            {
+                throw new IOException("File " + filename + " already in use");
+            }
+            BufferedWriter writer = (BufferedWriter)file[1];
+            writer.write(value);
+        }
+    }
+    
     public void closeFiles() throws IOException
     {
         Iterator iter = files.keySet().iterator();
         while(iter.hasNext())
         {
-            String name = (String)iter.next();
-            Object[] file = (Object[])files.get(name);
-            if(file[1] != null)
-            {
-                ((Reader)file[1]).close();
-                file[1] = null;
-            }
+            closeFile((String)iter.next());
         }  
         files.clear();
+    }
+
+    /**
+     * @param name
+     * @throws IOException
+     */
+    public synchronized void closeFile(String name) throws IOException
+    {
+        Object[] file = (Object[])files.get(name);
+        if(file[1] != null)
+        {
+            ((Reader)file[1]).close();
+            file[1] = null;
+        }
     }
     
     protected boolean filesOpen()
