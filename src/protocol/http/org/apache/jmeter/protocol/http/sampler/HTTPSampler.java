@@ -709,7 +709,7 @@ public class HTTPSampler extends AbstractSampler
                 headerBuf.append(": ");
                 headerBuf.append(conn.getHeaderField(i));
                 headerBuf.append("\n");
-            }
+            }            
         }
         headerBuf.append("\n");
         return headerBuf.toString().getBytes("8859_1");
