@@ -102,7 +102,7 @@ public class SizeAssertion
             return setResultForNull(result);
         }
         // is the Sample the correct size?
-        resultData = getResultBody(response.getResponseData());
+        resultData = response.getResponseData();
         long resultSize = resultData.length;
         if ((!(compareSize(resultSize)) && (getAllowedSize() > 0)))
         {
@@ -181,39 +181,6 @@ public class SizeAssertion
         {
             setProperty(new LongProperty(SIZE_KEY, size));
         }
-    }
-
-    /**
-     * Return the body of the http return.
-     */
-    public byte[] getResultBody(byte[] resultData)
-    {
-        for (int i = 0; i < (resultData.length - 1); i++)
-        {
-            if (resultData[i] == '\n' && resultData[i + 1] == '\n')
-            {
-                return getByteArraySlice(
-                    resultData,
-                    (i + 3),
-                    resultData.length);
-            }
-        }
-        return resultData;
-    }
-
-    /**
-     * Return a slice of a byte array
-     */
-    private byte[] getByteArraySlice(byte[] array, int begin, int end)
-    {
-        byte[] slice = new byte[(end - begin + 1)];
-        int count = 0;
-        for (int i = begin; i < end; i++)
-        {
-            slice[count] = array[i];
-            count++;
-        }
-        return slice;
     }
 
     /**
