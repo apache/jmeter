@@ -137,7 +137,8 @@ public class JMeterTest extends JMeterTestCase
 				continue;
 			}
 			TestSuite ts = new TestSuite(item.getClass().getName());
-			ts.addTest(new JMeterTest("runGUIComponents",item));
+			ts.addTest(new JMeterTest("GUIComponents1",item));
+			ts.addTest(new JMeterTest("GUIComponents2",item));
 			ts.addTest(new JMeterTest("runGUITitle",item));
 			suite.addTest(ts);
 		}
@@ -155,7 +156,8 @@ public class JMeterTest extends JMeterTestCase
 	            JMeterGUIComponent item = new TestBeanGUI(iter.next().getClass());
 				//JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
 	            TestSuite ts = new TestSuite(item.getClass().getName());
-	            ts.addTest(new JMeterTest("runGUIComponents",item));
+				ts.addTest(new JMeterTest("GUIComponents1",item));
+				ts.addTest(new JMeterTest("GUIComponents2",item));
 	            suite.addTest(ts);
 	        }
 		return suite;
@@ -183,57 +185,69 @@ public class JMeterTest extends JMeterTestCase
 	/*
 	 * Test GUI elements - run the test
 	 */
-    public void runGUIComponents() throws Exception
+    public void GUIComponents1() throws Exception
     {
     	String name = guiItem.getClass().getName();
-    	
-    	//TODO these assertions could be separate tests
-    	
+
         assertEquals(
             "Name should be same as static label for " + name,
             guiItem.getStaticLabel(),
             guiItem.getName());
-        TestElement el = guiItem.createTestElement();
-        assertNotNull(
-		name+".createTestElement should be non-null ", el);
-        assertEquals(
-            "GUI-CLASS: Failed on " + name,
-            name,
-            el.getPropertyAsString(TestElement.GUI_CLASS));
-        assertEquals(
-            "NAME: Failed on " + name,
-            guiItem.getName(),
-            el.getPropertyAsString(TestElement.NAME));
-        assertEquals(
-            "TEST-CLASS: Failed on " + name,
-            el.getClass().getName(),
-            el.getPropertyAsString(TestElement.TEST_CLASS));
-        TestElement el2 = guiItem.createTestElement();
-        el.setProperty(TestElement.NAME, "hey, new name!:");
-        el.setProperty("NOT", "Shouldn't be here");
-        if (!(guiItem instanceof UnsharedComponent))
-        {
-            assertEquals(
-                "GUI-CLASS: Failed on " + name,
-                "",
-                el2.getPropertyAsString("NOT"));
-        }
-        log.debug("Saving element: " + el.getClass());
-        el =
-            SaveService.createTestElement(
-                SaveService.getConfigForTestElement(null, el));
-        log.debug("Successfully saved");
-        guiItem.configure(el);
-        assertEquals(
-            "CONFIGURE-TEST: Failed on " + name,
-            el.getPropertyAsString(TestElement.NAME),
-            guiItem.getName());
-        guiItem.modifyTestElement(el2);
-        assertEquals(
-            "Modify Test: Failed on " + name,
-            "hey, new name!:",
-            el2.getPropertyAsString(TestElement.NAME));
     }
+
+
+	/*
+	 * Test GUI elements - run the test
+	 */
+	public void GUIComponents2() throws Exception
+	{
+		String name = guiItem.getClass().getName();
+    	
+		//TODO these assertions should be separate tests
+    	
+		TestElement el = guiItem.createTestElement();
+		assertNotNull(
+		name+".createTestElement should be non-null ", el);
+		assertEquals(
+			"GUI-CLASS: Failed on " + name,
+			name,
+			el.getPropertyAsString(TestElement.GUI_CLASS));
+
+		assertEquals(
+			"NAME: Failed on " + name,
+			guiItem.getName(),
+			el.getPropertyAsString(TestElement.NAME));
+		assertEquals(
+			"TEST-CLASS: Failed on " + name,
+			el.getClass().getName(),
+			el.getPropertyAsString(TestElement.TEST_CLASS));
+		TestElement el2 = guiItem.createTestElement();
+		el.setProperty(TestElement.NAME, "hey, new name!:");
+		el.setProperty("NOT", "Shouldn't be here");
+		if (!(guiItem instanceof UnsharedComponent))
+		{
+			assertEquals(
+				"GUI-CLASS: Failed on " + name,
+				"",
+				el2.getPropertyAsString("NOT"));
+		}
+		log.debug("Saving element: " + el.getClass());
+		el =
+			SaveService.createTestElement(
+				SaveService.getConfigForTestElement(null, el));
+		log.debug("Successfully saved");
+		guiItem.configure(el);
+		assertEquals(
+			"CONFIGURE-TEST: Failed on " + name,
+			el.getPropertyAsString(TestElement.NAME),
+			guiItem.getName());
+		guiItem.modifyTestElement(el2);
+		assertEquals(
+			"Modify Test: Failed on " + name,
+			"hey, new name!:",
+			el2.getPropertyAsString(TestElement.NAME));
+	}
+
 
     /*
      * Test serializable elements - create the suite of tests
