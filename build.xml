@@ -51,6 +51,9 @@
   <!-- Are we running under Gump? -->
   <property name="gump.run" value="false"/>
   
+  <!-- The version of this file -->
+  <property name="version.build" value="$revision$"/>
+  
   <!-- Renamed targets -->
   <target name="all-docs">
     <echo message="Target has been renamed to docs-all"/>
