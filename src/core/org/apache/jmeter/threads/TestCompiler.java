@@ -38,15 +38,22 @@ import org.apache.log.Logger;
 public class TestCompiler implements HashTreeTraverser, SampleListener
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
+    
+    //TODO - should these variables be made private?
     LinkedList stack = new LinkedList();
     Map samplerConfigMap = new HashMap();
-    Set objectsWithFunctions = new HashSet();
+    //Set objectsWithFunctions = new HashSet();
     HashTree testTree;
-    SampleResult previousResult;
-    Sampler currentSampler;
-    JMeterVariables threadVars;
+    SampleResult previousResult;//TODO is this needed?
+    Sampler currentSampler;//TODO is this needed?
+    JMeterVariables threadVars;//TODO is this needed?
+    
+    /*
+     * This set keeps track of which ObjectPairs have been seen
+     * Its purpose is not entirely clear (please document if you know!)
+     * but it is needed,..
+     */
     private static Set pairing = new HashSet();
-    //TODO: should pairing be static?
 
     List loopIterListeners = new ArrayList();
 
@@ -55,7 +62,11 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         threadVars = vars;
         this.testTree = testTree;
     }
-
+    
+    /**
+     * Clears the pairing Set
+     * Called by StandardJmeterEngine at the start of a test run.
+     */
     public static synchronized void initialize()
     {
         pairing.clear();
@@ -227,7 +238,6 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
     }
 
     /**
-     * @author    $Author$
      * @version   $Revision$
      */
     public static class Test extends junit.framework.TestCase
@@ -273,10 +283,6 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         }
     }
 
-    /**
-     * @author    $Author$
-     * @version   $Revision$
-     */
     private class ObjectPair
     {
         TestElement child, parent;
