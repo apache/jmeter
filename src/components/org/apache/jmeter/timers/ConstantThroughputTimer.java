@@ -54,10 +54,12 @@
  */
 package org.apache.jmeter.timers;
 
-import java.io.Serializable;
-
-import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * This class implements a constant throughput timer. A Constant Throughtput
@@ -69,17 +71,22 @@ import org.apache.jmeter.util.JMeterUtils;
  * @version $Id$
  */
 public class ConstantThroughputTimer
-        extends AbstractTestElement
-        implements Timer, Serializable
+        extends TestBean
+        implements Timer, TestListener
 {
-    public final static String THROUGHPUT= "ConstantThroughputTimer.throughput";
-    
+	protected static final Logger log = LoggingManager.getLoggerForClass();
+
     /**
      * Target time for the start of the next request. The delay provided by
      * the timer will be calculated so that the next request happens at this
      * time.
      */
     private long targetTime= 0;
+
+	/**
+	 * Desired throughput, in samples per minute.
+	 */
+	private double throughput;
 
     /**
      * Constructor for a non-configured ConstantThroughputTimer.
@@ -93,39 +100,9 @@ public class ConstantThroughputTimer
      *
      * @param throughput Desired sampling rate, in samples per minute.
      */
-    public void setThroughput(String throughput)
+    public void setThroughput(double throughput)
     {
-        setProperty(THROUGHPUT,throughput);
-    }
-
-    /**
-     * Not implemented.
-     */
-    public void setRange(double range)
-    {
-    }
-
-    /**
-     * Not implemented.
-     */
-    public double getRange()
-    {
-        return (double)0;
-    }
-
-    /**
-     * Not implemented.
-     */
-    public void setDelay(String delay)
-    {
-    }
-
-    /**
-     * Not implemented.
-     */
-    public String getDelay()
-    {
-        return "";
+    	this.throughput= throughput;
     }
 
     /**
@@ -133,16 +110,11 @@ public class ConstantThroughputTimer
      *
      * @return the rate at which samples should occur, in samples per minute.
      */
-    public long getThroughput()
+    public double getThroughput()
     {
-        return  getPropertyAsLong(THROUGHPUT);
+    	return throughput;
     }
     
-    public String getThroughputString()
-    {
-        return getPropertyAsString(THROUGHPUT);
-    }
-
     /**
      * Retrieve the delay to use during test execution.
      * 
@@ -150,9 +122,11 @@ public class ConstantThroughputTimer
      */
     public synchronized long delay()
     {
+    	prepare();
+
         long currentTime = System.currentTimeMillis();
         long currentTarget = targetTime == 0 ? currentTime : targetTime;
-        targetTime = currentTarget + 60000 / getThroughput();
+        targetTime = currentTarget + (long)( 60000.0 / getThroughput() );
         if (currentTime > currentTarget)
         {
             // We're behind schedule -- try to catch up:
@@ -172,17 +146,41 @@ public class ConstantThroughputTimer
     }
 
     /**
-     * Creates a copy of this ConstantThroughputTimer, ready to start
-     * calculating delays for new samples. This is in assumption that cloning
-     * always happens just before a test starts running.
-     *
-     * @return a fresh copy of this ConstantThroughputTimer
+     * Get the timer ready to compute delays for a new test.
+     * 
+     * @see org.apache.jmeter.testelement.TestListener#testStarted()
      */
-    public Object clone()
+    public void testStarted()
     {
-        ConstantThroughputTimer result =
-            (ConstantThroughputTimer) super.clone();
-        result.targetTime = 0;
-        return result;
+    	log.debug("Test started - reset throughput calculation.");
+    	targetTime= 0;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestListener#testEnded()
+     */
+    public void testEnded()
+    {
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
+     */
+    public void testStarted(String host)
+    {
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
+     */
+    public void testEnded(String host)
+    {
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+     */
+    public void testIterationStart(LoopIterationEvent event)
+    {
     }
 }
