@@ -1,6 +1,5 @@
-velocity.log
+*.log
 build
-jmeter.log
 dist
 docs
 site
