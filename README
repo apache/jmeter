@@ -1,14 +1,14 @@
 
                          A P A C H E   J M E T E R
                          
-                                Version 1.1
+                                Version 1.5Beta
 
 
   What is it?
   -----------
 
   Apache JMeter is a 100% pure Java application designed to test
-  and measure the performance of URL retrieval and it may be used
+  and measure performance.  It may be used
   as a highly portable server benchmark as well as multiclient
   load generator.
 
@@ -24,6 +24,8 @@
   The following requirements exist for installing Apache JMeter:
 
    o  Java Interpreter:
+   ***Currently in this Beta release a 1.2 runtime is required, 
+	this requirement will be eliminated in the final release.***
 
       A fully compliant Java 1.1 Runtime Environment is required for 
       Apache JMeter to execute. Since Apache JMeter uses _only_ standard
@@ -39,12 +41,18 @@
       works only with Swing placed under the packages "javax.swing.*" while
       other placing are not supported because considered non-standard.
       
+   o  SAX 1.0 Compliant Parser [OPTIONAL]:
+      
+      A Java SAX 1.0 Parser is required to restore HTTPSamples  You can save 
+      samples without the parser but you will not be able to restore them.  
+      you can specify the parser class in the xml.parser property in 
+      jmeter.properties
+
    o  Java Compiler [OPTIONAL]:
 
       A Java compiler is not needed since the distribution includes a 
       precompiled java binary archive. Note that a compiler is required
       if you plan to build plugin classes for Apache JMeter.
-
 
   Installation Instructions and Documentation
   -------------------------------------------
@@ -65,3 +73,4 @@
 
                                            The Java Apache Project
                                            http://java.apache.org/
+
