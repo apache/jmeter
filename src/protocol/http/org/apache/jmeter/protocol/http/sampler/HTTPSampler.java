@@ -377,10 +377,6 @@ public class HTTPSampler extends AbstractSampler
 	 ***************************************/
 	public HTTPSampler() {
 		setArguments(new Arguments());
-
-		// Make followRedirects be true by default, to stay compatible
-		// with the old behaviour:
-		setFollowRedirects(true);
 	}
 	
 	public HTTPSampler(URL u)
