@@ -734,7 +734,7 @@ public class HTTPSampler extends AbstractSampler
             res.setRequestHeaders(hdrs);
         }
         setConnectionAuthorization(conn, u, getAuthManager());
-        if (getMethod().equals(HTTPSampler.POST))
+        if (method.equals(HTTPSampler.POST))
         {
             setPostHeaders(conn);
         }
@@ -1067,7 +1067,7 @@ public class HTTPSampler extends AbstractSampler
                 throw new BindException();
             }
             // Nice, we've got a connection. Finish sending the request:
-            if (getMethod().equals(HTTPSampler.POST))
+            if (method.equals(HTTPSampler.POST))
             {
                 sendPostData(conn);
             }
