@@ -36,7 +36,6 @@ import org.apache.log.Logger;
  * A list of open files is also maintained for each thread, together with
  * the current line number.
  * 
- * @author sebb AT apache DOT org
  * @version $Revision$ $Date$
  */
 public class FileWrapper

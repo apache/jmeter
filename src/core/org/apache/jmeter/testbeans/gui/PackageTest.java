@@ -44,8 +44,6 @@ import junit.framework.TestSuite;
  *   except for beans whose name contains "Experimental" or "Alpha".
  * TODO: - Check property files don't have duplicate keys (is this important)
  * 
- * @author Sebastian Bazley &lt; sebb AT apache DOT org &gt;
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision$ updated on $Date$
  */
 public class PackageTest extends JMeterTestCase

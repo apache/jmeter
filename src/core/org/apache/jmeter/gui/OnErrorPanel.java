@@ -29,7 +29,6 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * 
- * @author sebb AT apache DOT org
  * @version $Revision$ $Date$
  */
 public class OnErrorPanel extends JPanel 

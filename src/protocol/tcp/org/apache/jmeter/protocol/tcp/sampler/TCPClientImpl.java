@@ -37,7 +37,6 @@ import org.apache.log.Logger;
 
 /**
  *
- * @author sebb AT apache DOT org
  * @version $Revision$ $Date$  
  *
  */

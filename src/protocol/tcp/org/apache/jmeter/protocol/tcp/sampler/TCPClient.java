@@ -28,7 +28,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * @author sebb AT apache DOT org
  * @version $Revision$ $Date$
  */
 public interface TCPClient

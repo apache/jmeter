@@ -33,7 +33,6 @@ import org.apache.log.Logger;
 /**
  * A sampler which understands BeanShell
  *
- * @author sebb AT apache DOT org
  * @version    $Revision$ Updated on: $Date$
  */
 public class BeanShellAssertion extends AbstractTestElement

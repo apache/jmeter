@@ -26,7 +26,6 @@ import java.net.URL;
  * URL methods equals() and hashCode()
  * URL is a final class, so cannot be extended ...
  * 
- * @author sebb AT apache DOT org
  * @version $Revision$ $Date$
  */
 public class URLString

@@ -31,7 +31,6 @@ import org.apache.log.Logger;
 /**
  * ResultAction - take action based on the status of the last Result
  *  
- * @author sebb AT apache DOT org
  * @version $Revision$ Last updated: $Date$
  */
 public class ResultAction

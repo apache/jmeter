@@ -33,7 +33,6 @@ import org.apache.log.Logger;
  * beanshell.server.port (see JMeter.java)
  * beanshell.server.file (optional, startup file)
  * 
- * @author sebb AT apache DOT org
  * @version $Revision$ Last updated: $Date$
  */
 public class BeanShellServer implements Runnable {
