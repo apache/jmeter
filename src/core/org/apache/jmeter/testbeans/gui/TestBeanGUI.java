@@ -174,6 +174,12 @@ public class TestBeanGUI
         PropertyEditorManager.setEditorSearchPath((String[])paths.toArray(new String[0]));
     }
 
+    // Dummy for JUnit test
+    public TestBeanGUI()
+    {
+    	log.warn("Only for use in testing");
+    }
+    
     public TestBeanGUI(Class testBeanClass)
     {
         super();
