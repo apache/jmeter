@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <author email="bburns@apache.org">Brendan Burns, et al.</author>
+    <title>JMeter Wish and ToDo List</title>
+  </properties>
+<body>
+<section name="ToDo List">
+<p>
+List of those things yet to do, wishes, dreams, etc.. (in no particular
+order)
+</p>
+<ul>
+  <li><strong>Greater Sampling Logic Control</strong>: Some sort of dynamic "scripting" for
+  JMeter allowing for samples to run based on the response from earlier samples.</li>
+  <li><strong>Better documentation</strong>: since JMeter evolved faster than its docs, its
+    documenation on how to use its features is underdeveloped. Better documents with example of
+    usage and common problems should be written.</li>
+  <li><STRONG>New modules:</STRONG> New SamplerControllers, TestSamples, and Samplers for testing different types of applications.  HTTP is currently all the JMeter
+	supports.  Some possibilities include:
+	<UL><li>FTP(currently being developed)</li>
+        <li>JDBC(currently being developed)</li>
+	<li>RMI</li>
+	<li>SMTP</li>
+	<li>JINI</li>
+	<li>Corba</li>
+	<li>HTTP-multiPart</li>
+	<li>Local Java Object</li>
+	</UL></li>
+  <li><STRONG>Improving visualizers:</STRONG>  Currently, the visualizers only make use of the timing data - but much more than that is and can be supplied
+	to them.  In the
+        short term, it would be nice to add a visualizer that displayed the full text
+        response from each sample, thus allowing the user to verify that things are
+        working correctly (ie - that the web server is returning correct results, and
+        that JMeter is functioning as expected).</li>
+  <li><strong>Adding reporters:</strong> Reporters would offer report generation based
+        on data collected by JMeter.  For those looking for more information than
+        simply time per sample and average time, a reporter should be available.
+        Examples could include statistical reports, accuracy reports (eg what exactly
+        did the web page return - this could be used for QA testing).</li>
+  <li><strong>Improve Properties file structure:</strong> The properties file is taking
+        on more and more all the time, and it should probably be rethought and
+        restructured.  Currently, the TestSamples an HTTPSamplerController "knows" is
+        hardcoded into the SamplerController, making it difficult for someone to
+        plug in a new TestSample to JMeter.</li>
+  <li><strong>Re-structure JMeter code</strong> so that any kind of test sample (http, jdbc,
+  ftp, etc) can be tested simultaneously.  Make new modules easier to write by making
+  clearer abstractions.  Abstract thread logic out from JMeter so that users can
+  choose how and in what order their entries are sampled.</li>
+
+  <li><strong>Make JMeter distributed</strong> Enable JMeter to take on a distributed,
+  but centrally controlled architecture, thus allowing JMeter to stress very large
+  sites and networks.</li>
+  <li><strong>Dynamic control while JMeter runs</strong> Enable users to change
+  options while JMeter runs - ie change number of threads running, start and stop
+  thread groups individually, add test samples on the fly, etc.</li>
+</ul>
+</section>
+</body>
+</document>

@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <author email="bburns@apache.org">Brendan Burns, et al.</author>
+    <title>History of Changes</title>
+  </properties>
+<body>
+<section name="History of Changes">
+<p>
+<b>Changes are chronologically ordered from top (most recent) to bottom
+(least recent)</b> 
+</p>
+<p>
+<b>Apache JMeter 1.5.1</b>
+</p>
+<p>
+<b>Contributors</b> - If I missed any, please let me know (<a href="mail:mstover1@rochester.rr.com">
+Michael Stover</a>):
+<ul>
+  <li>Brendan Burns</li>
+  <li>Michael Stover</li>
+  <li>Jeff Pajor</li>
+  <li>Tom Wiedenhoeft</li>
+  <li>Matthew Daniel</li>
+  <li>Steve Gentle</li>
+  <li>Tom Schneider</li>
+</ul>
+<b>Changes:</b>
+<h3>Version 1.5.1</h3>
+<ul>
+<li>Fixed bug that caused cookies not to be read if header name case not as expected.</li>
+<li>Clone entries before sending to sampler - prevents relocations from messing up information across threads</li>
+<li>Minor bug fix to convenience dialog for adding paramters to test sample.  Bug prevented entries in dialog from appearing in test sample.</li>
+<li>Added xerces.jar to distribution</li>
+<li>Added junit.jar to distribution and created a few tests.</li>
+<li>Started work on new framework.  New files in cvs, but do not effect program yet.</li>
+<li>Fixed bug that prevent HTTPJMeterThread from delaying according to chosen timer.</li>
+</ul>
+</p>
+<p>
+<h3>Version 1.5</h3>
+<ul>
+  <li>Abstracted out the concept of the Sampler, SamplerController, and TestSample.
+  A Sampler represents code that understands a protocol (such as HTTP, or FTP, RMI,
+  SMTP, etc..).  It is the code that actually makes the connection to whatever is
+  being tested.
+  A SamplerController represents code that understands how to organize and run a group
+  of test samples.  It is what binds together a Sampler and it's test samples and runs them.
+  A TestSample represents code that understands how to gather information from the
+  user about a particular test.  For a website, it would represent a URL and any
+  information to be sent with the URL.</li>
+  <li>The UI has been updated to make entering test samples more convenient.</li>
+  <li>Thread groups have been added, allowing a user to setup multiple test to run
+  concurrently, and to allow sharing of test samples between those tests.</li>
+  <li>It is now possible to save and load test samples.</li>
+  <li>....and many more minor changes/improvements...</li>
+</ul>
+</p>
+<p>
+<b>Apache JMeter 1.4.1-dev</b>
+(<a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>)
+
+<ul>
+  <li>Cleaned up URLSampler code after tons of patches for better readability. (SM)</li>
+  <li>Made JMeter send a special &quot;user-agent&quot; identifier. (SM)</li>
+  <li>Fixed problems with redirection not sending cookies and authentication info and removed
+    a warning with jikes compilation. Thanks to <a href="mailto:wtanaka@yahoo.com">Wesley
+    Tanaka</a> for the patches (SM)</li>
+  <li>Fixed a bug in the URLSampler that caused to skip one URL when testing lists of URLs and
+    a problem with Cookie handling. Thanks to <a
+    href="mailto:gjohnson@investlearning.com">Graham Johnson</a> for the patches (SM)</li>
+  <li>Fixed a problem with POST actions. Thanks to <a href="mailto:sschaub@bju.edu">Stephen
+    Schaub</a> for the patch (SM)</li>
+</ul>
+</p>
+<p>
+<b>Apache JMeter 1.4</b> - Jul 11 1999
+(<a href="mailto:cimjpno@be.ibm.com">Jean-Pierre Norguet</a>, <a
+href="mailto:stefano@apache.org">Stefano Mazzocchi</a>)
+
+<ul>
+  <li>Fixed a problem with POST actions. Thanks to <a href="mailto:bburns@labs.gte.com">Brendan
+    Burns</a> for the patch (SM)</li>
+  <li>Added close button to the About box for those window managers who don't provide it.
+    Thanks to Jan-Henrik Haukeland for pointing it out. (SM)</li>
+  <li>Added the simple Spline sample visualizer (JPN)</li>
+</ul>
+</p>
+
+<p><b>Apache JMeter 1.3</b> - Apr 16 1999 
+(<a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>, <a
+href="mailto:luta.raphael@networks.vivendi.net">Raphaël Luta</a>)
+
+<ul>
+  <li>Run the Garbage Collector and run finalization before starting to sampling to ensure
+    same state every time (SM)</li>
+  <li>Fixed some NullPointerExceptions here and there (SM)</li>
+  <li>Added HTTP authentication capabilities (RL)</li>
+  <li>Added windowed sample visualizer (SM)</li>
+  <li>Fixed stupid bug for command line arguments. Thanks to <a
+    href="mailto:jbracer@infoneers.com">Jorge Bracer</a> for pointing this out (SM)</li>
+</ul>
+</p>
+
+<p><b>Apache JMeter 1.2</b> - Mar 17 1999
+(<a href="mailto:sdowd@arcmail.com">Sean Dowd</a>, <a href="mailto:stefano@apache.org">Stefano
+Mazzocchi</a>)
+
+<ul>
+  <li>Integrated cookie capabilities with JMeter (SM)</li>
+  <li>Added the Cookie manager and Netscape file parser (SD)</li>
+  <li>Fixed compilation error for JDK 1.1 (SD)</li>
+</ul>
+</p>
+
+<p>
+<b>Apache JMeter 1.1</b> - Feb 24 1999
+(<a href="mailto:sdowd@arcmail.com">Sean Dowd</a>, <a href="mailto:stefano@apache.org">Stefano
+Mazzocchi</a>)
+
+<ul>
+  <li>Created the opportunity to create URL aliasing from the properties file as well as the
+    ability to associate aliases to URL sequences instead of single URLs (SM) Thanks to <a
+    href="mailto:chatfield@evergreen.com">Simon Chatfield</a> for the very nice suggestions
+    and code examples.</li>
+  <li>Removed the TextVisualizer and replaced it with the much more useful FileVisualizer (SM)</li>
+  <li>Added the known bug list (SM)</li>
+  <li>Removed the Java Apache logo (SM)</li>
+  <li>Fixed a couple of typos (SM)</li>
+  <li>Added UNIX makefile (SD)</li>
+</ul>
+</p>
+<p>
+<b>Apache JMeter 1.0.1</b> - Jan 25 1999
+(<a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>)
+
+<ul>
+  <li>Removed pending issues doc issues (SM)</li>
+  <li>Fixed the unix script (SM)</li>
+  <li>Added the possibility of running the JAR directly using &quot;java -jar
+    ApacheJMeter.jar&quot; with Java 2 (SM)</li>
+  <li>Some small updates: fixed Swing location after Java 2(tm) release, license update and
+    small cleanups (SM)</li>
+</ul>
+</p>
+<p>
+<b>Apache JMeter 1.0</b> - Dec 15 1998
+(<a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>)
+<ul>
+  <li>Initial version. (SM)</li>
+</ul>
+</p>
+</section>
+</body>
+</document>

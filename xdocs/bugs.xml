@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <author email="bburns@apache.org">Brendan Burns, et al.</author>
+    <title>Known Bugs</title>
+  </properties>
+<body>
+<section name="Known Bugs">
+<ul>
+  <li>The scrolling bar of the graphical plot visualizer has fixed size.</li>
+  <li>Thread overload may false results due to garbage collection interference.</li>
+  <li>Code design in not as good as it should be, as usual ;-).</li>
+</ul>
+</section>
+</body>
+</document>
