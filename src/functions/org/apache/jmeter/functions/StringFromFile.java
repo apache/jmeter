@@ -33,7 +33,6 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.log.Logger;
 
 /**
@@ -125,7 +124,7 @@ public class StringFromFile extends AbstractFunction implements Serializable
     }
 
     private int myStart = 0;
-    private int myCurrent = -1;
+    private int myCurrent = 0;
 	private int myEnd = 0;
 	
     private void openFile()
@@ -133,64 +132,33 @@ public class StringFromFile extends AbstractFunction implements Serializable
 		String tn = Thread.currentThread().getName();
         fileName = ((CompoundVariable) values[0]).execute();
 
-        String start = "";
 		if (values.length >= PARAM_START)
 		{
-			start = ((CompoundVariable) values[PARAM_START-1]).execute();
-			try
-			{
-				myStart = Integer.valueOf(start).intValue();
-			}
-			catch (NumberFormatException e)
-			{
-				myStart=1;// so "" will give 1
-			}
+			String tmp = ((CompoundVariable) values[PARAM_START-1]).execute();
+			myStart = Integer.valueOf(tmp).intValue();
 			// Have we use myCurrent yet?
-			if (myCurrent == -1) myCurrent=myStart;
+			if (myCurrent == 0) myCurrent=myStart;
 		}
 
 		if (values.length >= PARAM_END)
 		{
 			String tmp = ((CompoundVariable) values[PARAM_END-1]).execute();
-			try
-			{
-				myEnd = Integer.valueOf(tmp).intValue();
-			}
-			catch (NumberFormatException e)
-			{
-				myEnd=0;
-			}
-			
+			myEnd = Integer.valueOf(tmp).intValue();
 		}
 
 		if (values.length >= PARAM_START)
 		{
-			log.info(tn+" Start = "+myStart+" Current = "+myCurrent+" End = "+myEnd);//$NON-NLS-1$
+			log.info("Start ="+myStart+" Current = "+myCurrent+" End ="+myEnd);//$NON-NLS-1$
 			if (values.length >= PARAM_END){
 				if (myCurrent > myEnd){
-					log.info(tn+" No more files to process, "+myCurrent+" > "+myEnd);//$NON-NLS-1$
+					log.info("No more files to process, "+myCurrent+" > "+myEnd);//$NON-NLS-1$
 					myBread=null;
 					return;
 				}
 			}
-			/*
-			 * DecimalFormat adds the number to the end of the format if there are
-			 * no formatting characters, so we need a way to prevent this from messing
-			 * up the file name.
-			 * 
-			 */
-			if (start.length()>0) // Only try to format if there is a number
-			{
-				log.info("Using format "+fileName);
-				try {
-					DecimalFormat myFormatter = new DecimalFormat(fileName);
-					fileName = myFormatter.format(myCurrent);
-				}
-				catch (NumberFormatException e)
-				{
-					log.warn("Bad file name format ",e);
-				}
-			}
+			log.info("Using format "+fileName);
+			DecimalFormat myFormatter = new DecimalFormat(fileName);
+			fileName = myFormatter.format(myCurrent);
 			myCurrent++;// for next time
         }
 
@@ -243,32 +211,26 @@ public class StringFromFile extends AbstractFunction implements Serializable
                 String line = myBread.readLine();
                 if (line == null && reopenFile)
                 { // EOF, re-open file
-    				String tn = Thread.currentThread().getName();
-                    log.info(tn+" Reached EOF on " + fileName);//$NON-NLS-1$
+                    log.info("Reached EOF on " + fileName);//$NON-NLS-1$
                     closeFile();
                     openFile();
                     if (myBread != null) {
 						line = myBread.readLine();
                     } else {
                     	line = ERR_IND;
-                    	if (values.length >= PARAM_END){// Are we processing a file sequence?
-                    		log.info(tn + " Detected end of sequence.");
-               				throw new JMeterStopThreadException("End of sequence");
-                    	}
                     }
                 }
                 myValue = line;
             }
-            catch (IOException e)
+            catch (Exception e)
             {
 				String tn = Thread.currentThread().getName();
                 log.error(tn + " error reading file " + e.toString());//$NON-NLS-1$
             }
         } else { // File was not opened successfully
         	if (values.length >= PARAM_END){// Are we processing a file sequence?
-				String tn = Thread.currentThread().getName();
-        		log.info(tn + " Detected end of sequence.");
-   				throw new JMeterStopThreadException("End of sequence");
+        		log.info("Detected end of sequence.");
+        		throw new RuntimeException("Stop Thread");//TODO there has to be a better way...
         	}
         }
 
@@ -277,8 +239,7 @@ public class StringFromFile extends AbstractFunction implements Serializable
         }
         
         if (log.isDebugEnabled()){
-			String tn = Thread.currentThread().getName();
-            log.debug(tn + " name:" //$NON-NLS-1$ 
+            log.debug(this +"::StringFromFile.execute() name:" //$NON-NLS-1$ 
                  + myName + " value:" + myValue);//$NON-NLS-1$
         }
         

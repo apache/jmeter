@@ -20,9 +20,12 @@ package org.apache.jmeter.visualizers.gui;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
@@ -30,15 +33,20 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
+import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.SavePropertyDialog;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.reporters.AbstractListenerElement;
 import org.apache.jmeter.reporters.ResultCollector;
+import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
 import org.apache.jmeter.visualizers.Visualizer;
+import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -110,8 +118,10 @@ public abstract class AbstractVisualizer
     
     /** A checkbox choosing whether or not only errors should be logged. */
     private JCheckBox errorLogging;
+    private JButton saveConfigButton;
+    SampleSaveConfiguration saveConfig;
     
-    protected ResultCollector collector;
+    protected ResultCollector collector = new ResultCollector();
 
     public AbstractVisualizer()
     {
@@ -119,11 +129,25 @@ public abstract class AbstractVisualizer
         
         errorLogging =
             new JCheckBox(JMeterUtils.getResString("log_errors_only"));
+        saveConfigButton = new JButton(JMeterUtils.getResString("config_save_settings"));
+        saveConfigButton.addActionListener(new ActionListener()
+              {
+           		public void actionPerformed(ActionEvent e)
+           		{
+           		   SavePropertyDialog d = new SavePropertyDialog(GuiPackage.getInstance().getMainFrame(),
+           		         JMeterUtils.getResString("Sample Result Save Configuration"),
+           		         true,collector.getSaveConfig());
+           		   d.pack();
+           		   ComponentUtil.centerComponentInComponent(GuiPackage.getInstance().getMainFrame(),d);
+           		   d.setVisible(true);           		   
+           		}
+              });
 
         filePanel = new FilePanel(
                 JMeterUtils.getResString("file_visualizer_output_file"),".jtl");
         filePanel.addChangeListener(this);
         filePanel.add(errorLogging);
+        filePanel.add(saveConfigButton);
                 
     }
 
@@ -283,6 +307,11 @@ public abstract class AbstractVisualizer
         setFile(el.getPropertyAsString(ResultCollector.FILENAME));
         ResultCollector rc = (ResultCollector) el;
         errorLogging.setSelected(rc.isErrorLogging());
+        if(collector == null)
+        {
+           collector = new ResultCollector();
+        }
+        collector.setSaveConfig((SampleSaveConfiguration)rc.getSaveConfig().clone());
     }
 
     /**

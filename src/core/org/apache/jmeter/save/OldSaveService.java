@@ -40,6 +40,7 @@ import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -692,7 +693,7 @@ public final class OldSaveService implements SaveServiceConstants
      * @param sample the test result to be converted
      * @return       the separated value representation of the result
      */
-    public static String resultToDelimitedString(SampleResult sample)
+    public static String resultToDelimitedString(SampleResult sample,SampleSaveConfiguration saveConfig)
     {
         return resultToDelimitedString(sample, defaultDelimiter);
     }

@@ -402,7 +402,7 @@ public class CookieManager
             }
             else if (key.equalsIgnoreCase("path"))
             {
-                newCookie.setPath(nvp.substring(index + 1));
+                newCookie.setPath(nvp.substring(index + 1).trim());
             }
             else if (key.equalsIgnoreCase("secure"))
             {

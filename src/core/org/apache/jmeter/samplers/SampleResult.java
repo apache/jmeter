@@ -63,7 +63,20 @@ public class SampleResult implements Serializable
 	private static final byte [] EMPTY_BA = new byte [0];
 	private static final SampleResult [] EMPTY_SR = new SampleResult[0];
 	private static final AssertionResult [] EMPTY_AR = new AssertionResult[0];
+	private SampleSaveConfiguration saveConfig;
 
+   /**
+    * @param propertiesToSave The propertiesToSave to set.
+    */
+   public void setSaveConfig(SampleSaveConfiguration propertiesToSave)
+   {
+      this.saveConfig = propertiesToSave;
+   }
+   
+   public SampleSaveConfiguration getSaveConfig()
+   {
+      return saveConfig;
+   }
     private byte[] responseData;
     private String responseCode;
     private String label;
@@ -205,7 +218,6 @@ public class SampleResult implements Serializable
      * 
      * Must not be used in conjunction with sampleStart()/End()
      * 
-     * @deprecated use sampleStart() and sampleEnd() instead
      * @param elapsed time in milliseconds
      */
     public void setTime(long elapsed){
@@ -299,6 +311,7 @@ public class SampleResult implements Serializable
 
     public void addSubResult(SampleResult subResult)
     {
+       subResult.setThreadName(getThreadName());
         if (subResults == null)
         {
             subResults = new ArrayList();
@@ -716,5 +729,19 @@ public class SampleResult implements Serializable
    public void latencyEnd()
    {
       latency = System.currentTimeMillis() - startTime - idleTime;
+   }
+   /**
+    * @param latency The latency to set.
+    */
+   public void setLatency(long latency)
+   {
+      this.latency = latency;
+   }
+   /**
+    * @param timeStamp The timeStamp to set.
+    */
+   public void setTimeStamp(long timeStamp)
+   {
+      this.timeStamp = timeStamp;
    }
 }

@@ -22,6 +22,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -43,7 +45,7 @@ import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.save.OldSaveService;
+import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.testelement.TestElement;
@@ -467,9 +469,10 @@ public class JMeterTest extends JMeterTestCase
 				el2.getPropertyAsString("NOT"));
 		}
 		log.debug("Saving element: " + el.getClass());
+		StringWriter writer = new StringWriter();
+		SaveService.saveElement(el, writer);
 		el =
-			OldSaveService.createTestElement(
-				OldSaveService.getConfigForTestElement(null, el));
+			SaveService.loadElement(new StringReader(writer.toString()));
 		log.debug("Successfully saved");
 		guiItem.configure(el);
 		assertEquals(
