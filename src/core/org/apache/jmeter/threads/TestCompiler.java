@@ -274,7 +274,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
     {
         if(maybeController instanceof Controller)
             {
-            log.info("adding controller: " + maybeController + " to sampler config");
+            log.debug("adding controller: " + maybeController + " to sampler config");
                controllers.add(maybeController);
             }
     }
