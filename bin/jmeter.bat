@@ -1,22 +1,33 @@
-@echo on
-set PROP=jmeter.properties
-set LOG4JCONFIG=log4j.configuration=log4j.conf
-set HOST=
-set PORT=
-IF "%1" == "-f" set PROP=%2
-IF "%1" == "-h" set HOST=-Dhttp.proxyHost=%2 -Dhttps.proxyHost=%2
-IF "%1" == "-p" set PORT=-Dhttp.proxyPort=%2 -Dhttps.proxyPort=%2
-IF "%3" == "-f" set PROP=%4
-IF "%3" == "-h" set HOST=-Dhttp.proxyHost=%4 -Dhttps.proxyHost=%4
-IF "%3" == "-p" set PORT=-Dhttp.proxyPort=%4 -Dhttps.proxyPort=%4
-IF "%5" == "-f" set PROP=%6
-IF "%5" == "-h" set HOST=-Dhttp.proxyHost=%6 -Dhttps.proxyHost=%6
-IF "%5" == "-p" set PORT=-Dhttp.proxyPort=%6 -Dhttps.proxyPort=%6
+@echo off
+if not "%OS%"=="Windows_NT" goto win9xStart
+:winNTStart
+@setlocal
 
-set LOCALCLASSPATH=%CLASSPATH%
+rem Need to check if we are using the 4NT shell...
+if "%eval[2+2]" == "4" goto setup4NT
 
-for %%i in ("..\lib\*.jar") do CALL ..\lcp.bat %%i
-for %%i in ("..\ext\*.jar") do CALL ..\lcp.bat %%i
+rem On NT/2K grab all arguments at once
+set JMETER_CMD_LINE_ARGS=%*
+goto doneStart
 
+:setup4NT
+set JMETER_CMD_LINE_ARGS=%$
+goto doneStart
 
-java -cp ApacheJMeter.jar -D%LOG4JCONFIG% %HOST% %PORT% org.apache.jmeter.NewDriver %PROP%
+:win9xStart
+rem Slurp the command line arguments.  This loop allows for an unlimited number of 
+rem agruments (up to the command line limit, anyway).
+
+set JMETER_CMD_LINE_ARGS=
+
+:setupArgs
+if %1a==a goto doneStart
+set JMETER_CMD_LINE_ARGS=%JMETER_CMD_LINE_ARGS% %1
+shift
+goto setupArgs
+
+:doneStart
+rem This label provides a place for the argument list loop to break out 
+rem and for NT handling to skip to.
+
+java -Xincgc -jar ApacheJMeter.jar %JMETER_CMD_LINE_ARGS%
