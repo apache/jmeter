@@ -268,7 +268,7 @@ public class JMeter implements JMeterPlugin
             }
             else if (parser.getArgumentById(SERVER_OPT) != null)
             {
-                startServer();
+                startServer(JMeterUtils.getPropDefault("server_port",0));
                 startBSH();
             }
             else if (parser.getArgumentById(NONGUI_OPT) == null)
@@ -438,9 +438,14 @@ public class JMeter implements JMeterPlugin
 
     public void startServer()
     {
+    	startServer(0);
+    }
+
+    public void startServer(int port)
+    {
         try
         {
-            new RemoteJMeterEngineImpl();
+            new RemoteJMeterEngineImpl(port);
             while (true)
             {
                 Thread.sleep(Long.MAX_VALUE);
