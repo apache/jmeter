@@ -100,6 +100,10 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener
      */
     public void modifyTestElement(TestElement el)
     {
+       if (authTable.isEditing())
+       {
+          authTable.getCellEditor().stopCellEditing();
+       }
         el.clear();
         el.addTestElement((TestElement) tableModel.manager.clone());
         configureTestElement(el);

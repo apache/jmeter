@@ -98,6 +98,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel
 
     public TestElement createTestElement()
     {
+       stopTableEditing();
         Iterator modelData = tableModel.iterator();
         Arguments args = new Arguments();
         while (modelData.hasNext())
