@@ -65,6 +65,11 @@ Figure 10.1. Thread Group with Default Values</figure>
 and password for your webserver. Important note: the monitor only works with
 Tomcat5 build 5.0.19 and newer. For instructions on how to setup Tomcat, please
 refer to tomcat 5 documentation.</p>
+<ol>
+<li> leave the base URL blank</li>
+<li> enter the username</li>
+<li> enter the password</li>
+</ol>
 </section>
 
 <section name="11.3 Adding HTTP Request" anchor="adding_request">
@@ -115,7 +120,25 @@ the last sample the monitor received. The second tab is "Performance", which sho
 historical view of the server's performance. 
 </p>
 
+<figure image="monitor_health.png"/>
+<p>A quick note about how health is calculated. Typically, a server will crash if
+it runs out of memory, or reached the maximum number of threads. In the case of
+Tomcat 5, once the threads are maxed out, requests are placed in a queue until a
+thread is available. The relative importance of threads vary between containers, so
+the current implementation uses 50/50 to be conservative. A container that is more
+efficient with thread management might not see any performance degradation, but
+the used memory definitely will show an impact.</p>
 <figure image="monitor_screencap.png"/>
+<p>The performance graph shows for different lines. The free memory line shows how
+much free memory is left in the current allocated block. Tomcat 5 returns the maximum
+memory, but it is not graphed. In a well tuned environment, the server should never
+reach the maximum memory.</p>
+<p>Note the graph has captions on both sides of the graph. On the left is percent and
+the right is dead/healthy. If the memory line spikes up and down rapidly, it could
+indicate memory thrashing. In those situations, it is a good idea to profile the
+application with Borland OptimizeIt or JProbe. What you want to see is a regular
+pattern for load, memory and threads. Any irratic behavior usually indicates poor
+performance or a bug of some sort.</p>
 
 </section>
 
