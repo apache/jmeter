@@ -59,8 +59,9 @@ public class SoapSampler extends HTTPSampler
             "" + getXmlData().length());
         // if the user provides a different content type, we use it
         // added 1-15-04 peter lin
-        if (getHeaderManager().getPropertyAsString(
-        	HTTPSampler.CONTENT_TYPE).length() > 0){
+        if (getHeaderManager() != null &&
+        getHeaderManager().getPropertyAsString(
+        HTTPSampler.CONTENT_TYPE).length() > 0){
         		// headerManager was set, so let's set the connection
         		// to use it.
         		connection.setRequestProperty("Content-type",
