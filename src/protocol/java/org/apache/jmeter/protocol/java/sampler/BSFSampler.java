@@ -41,13 +41,14 @@ public class BSFSampler extends AbstractSampler
 	public static final String LANGUAGE   = "BSFSampler.language"; //$NON-NLS-1$
 	public static final String PARAMETERS = "BSFSampler.parameters"; //$NON-NLS-1$
 
-	//private transient BSFManager mgr;
+	private transient BSFManager mgr;
 	private BSFEngine bsfEngine;
 	
 	public BSFSampler()
 	{
 		try {
 			// register beanshell with the BSF framework
+			mgr = new BSFManager();
 			BSFManager.registerScriptingEngine("beanshell",
 			 "bsh.util.BeanShellBSFEngine", new String [] { "bsh"} );
 		} catch (NoClassDefFoundError e){
