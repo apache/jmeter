@@ -1029,6 +1029,9 @@ the performance history of each machine for the last hour.</p>
 
 <component index="15.4.1" name="HTTP Authorization Manager" screenshot="http-config/http-auth-manager.gif">
 
+<note>If there is more than one Authorization Manager in the scope of a Sampler,
+there is currently no way to sepcify which one is to be used.</note>
+
 <description>
 <p>The Authorization Manager lets you specify one or more user logins for web pages that are
 restricted using Basic HTTP Authentication.  You see this type of authentication when you use
@@ -1087,6 +1090,9 @@ be able to run it.  However, you can use it as a reference in constructing your 
 </component>
 
 <component index="15.4.2" name="HTTP Cookie Manager" screenshot="http-config/http-cookie-manager.gif">
+
+<note>If there is more than one Cookie Manager in the scope of a Sampler,
+there is currently no way to sepcify which one is to be used.</note>
 
 <description><p>The Cookie Manager element has two functions:<br></br>
 First, it stores and sends cookies just like a web browser. If you have an HTTP Request and
@@ -1259,6 +1265,8 @@ resource requires query string parameters, add them below in the
 
 
 <component index="15.4.9" name="HTTP Header Manager" screenshot="http-config/http-header-manager.gif">
+<note>If there is more than one Header Manager in the scope of a Sampler,
+there is currently no way to sepcify which one is to be used.</note>
 <description><p>The Header Manager lets you add or override HTTP request headers.</p>
 </description>
 
