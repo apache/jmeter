@@ -301,6 +301,7 @@ public abstract class HTMLParser
     public static class HTMLParserTest extends TestCase
     {
 		private static final String TESTFILE1= "testfiles/HTMLParserTestCase.html";
+        private static final String TESTFILE2= "testfiles/HTMLParserTestCaseWithBaseHRef.html";
 		private static final String URL1 = "http://myhost/mydir/myfile.html";
 		private static final String[] EXPECTED_RESULT1 = new String[] {
 			"http://myhost/mydir/images/image-a.gif",
@@ -355,6 +356,9 @@ public abstract class HTMLParser
 			filetest(p,TESTFILE1,URL1,EXPECTED_RESULT1,null);// See if reusable
 			filetest(p,TESTFILE1,URL1,EXPECTED_RESULT1A,new Vector());
 			filetest(p,TESTFILE1,URL1,EXPECTED_RESULT1A,new Vector());
+            // Test for BASE HREF support:
+            filetest(p,TESTFILE2,URL1,EXPECTED_RESULT1,null);
+            filetest(p,TESTFILE2,URL1,EXPECTED_RESULT1A,new Vector());
         }
 
 		private static void filetest(HTMLParser p,String file, String url, String[] expected_result,
