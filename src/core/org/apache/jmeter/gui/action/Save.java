@@ -54,15 +54,23 @@
  */
 package org.apache.jmeter.gui.action;
 import java.awt.event.ActionEvent;
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
-import org.apache.jmeter.gui.*;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Set;
+
+import javax.swing.JFileChooser;
+
+import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.util.FileDialoger;
-import org.apache.jmeter.save.*;
-import org.apache.jmeter.util.*;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.save.SaveService;
+import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.ListedHashTree;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -74,6 +82,8 @@ import org.apache.jmeter.save.SaveService;
 
 public class Save implements Command
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.gui");
 	private final static String SAVE_ALL = "save_all";
 	private final static String SAVE = "save";
 
@@ -137,7 +147,7 @@ public class Save implements Command
 		}
 		catch(Throwable ex)
 		{
-			ex.printStackTrace();
+			log.error("",ex);
 		}
 		finally
 		{
@@ -203,7 +213,7 @@ public class Save implements Command
 			}
 			catch(Exception ex)
 			{
-				ex.printStackTrace();
+				log.error("",ex);
 			}
 		}
 	}

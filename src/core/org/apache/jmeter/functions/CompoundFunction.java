@@ -11,9 +11,10 @@ import junit.framework.TestCase;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testelement.PerThreadClonable;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.ClassFinder;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 import org.apache.oro.text.perl.Perl5Util;
 import org.apache.oro.text.regex.PatternCompiler;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -26,7 +27,8 @@ import org.apache.oro.text.regex.Perl5Compiler;
  */
 public class CompoundFunction implements Function
 {
-	
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.elements");
 	private JMeterVariables threadVars;
 	
 	static Map functions = new HashMap();
@@ -54,7 +56,7 @@ public class CompoundFunction implements Function
 		}
 		catch(Exception err)
 		{
-			err.printStackTrace();
+			log.error("",err);
 		}
 	}
 	
@@ -161,7 +163,7 @@ public class CompoundFunction implements Function
 							func.setParameters(extractParams(function));
 							compiledComponents.addLast(func);
 						} catch(Exception e) {
-							e.printStackTrace();
+							log.error("",e);
 							throw new InvalidVariableException();
 						} 
 					}

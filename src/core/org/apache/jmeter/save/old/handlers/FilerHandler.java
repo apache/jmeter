@@ -27,39 +27,6 @@ public class FilerHandler extends TagHandler
 
 	public void save(Saveable saveObject, Writer out) throws java.io.IOException
 	{
- 		/* protect ourselves from bad input.
-		if ((saveObject == null) || (out == null))
-		{
-			// error!
-		}
-		else
-		{
-	 		Filer save = (Filer)saveObject;
-
-			// validate filename
-			String filename = save.getFile();
-			if (filename == null)
-			{
-				System.err.println("Error. Missing filename in File Reporter.");
-				filename = "";
-			}
-
-			out.write("<Filer type=\"");
-			out.write(JMeterHandler.convertToXML(save.getClass().getName()));
-			out.write("\" name=\"");
-			out.write(JMeterHandler.convertToXML(save.getName()));
-			out.write("\" verbose=\"");
-			out.write(""+save.getVerbose());
-			out.write("\" append=\"");
-			out.write(""+save.getAppend());
-			out.write("\" autoFlush=\"");
-			out.write("" + save.getAutoFlush());
-			out.write("\" viewSubmitData=\"");
-			out.write("" + save.getViewSubmitData());
-			out.write("\" file=\"");
-			out.write(JMeterHandler.convertToXML(filename));
-			out.write("\"/>");
-		}*/
 	}
 
 	public void setAtts(Attributes atts) throws java.lang.Exception

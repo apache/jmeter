@@ -1,8 +1,11 @@
 package org.apache.jmeter.samplers;
 
-import org.apache.jmeter.testelement.TestListener;
-import org.apache.jmeter.testelement.AbstractTestElement;
 import java.io.Serializable;
+
+import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.TestListener;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /**
  * <p>Title: </p>
@@ -16,7 +19,8 @@ import java.io.Serializable;
 public class RemoteTestListenerWrapper extends AbstractTestElement implements
 		TestListener,Serializable
 {
-
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.elements");
 	RemoteSampleListener listener;
 
 	public RemoteTestListenerWrapper()
@@ -35,7 +39,7 @@ public class RemoteTestListenerWrapper extends AbstractTestElement implements
 		}
 		catch (Exception ex)
 		{
-			ex.printStackTrace();
+			log.error("",ex);
 		}
 
 	}
@@ -47,7 +51,7 @@ public class RemoteTestListenerWrapper extends AbstractTestElement implements
 		}
 		catch (Exception ex)
 		{
-			ex.printStackTrace();
+			log.error("",ex);
 		}
 	}
 	public void testStarted(String host)
@@ -58,7 +62,7 @@ public class RemoteTestListenerWrapper extends AbstractTestElement implements
 		}
 		catch (Exception ex)
 		{
-			ex.printStackTrace();
+			log.error("",ex);
 		}
 	}
 	public void testEnded(String host)
@@ -69,7 +73,7 @@ public class RemoteTestListenerWrapper extends AbstractTestElement implements
 		}
 		catch (Exception ex)
 		{
-			ex.printStackTrace();
+			log.error("",ex);
 		}
 	}
 }

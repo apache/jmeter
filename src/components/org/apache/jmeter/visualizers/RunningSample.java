@@ -125,7 +125,6 @@ public class RunningSample {
         double samplesPerSecond = (double)((double)howLongRunning * threadNames.size()) / (double)getAverage();
         double factor = (double)((double)1000 / (double)howLongRunning);
         samplesPerSecond = samplesPerSecond * factor;
-//        System.out.println("Running for " + howLongRunning + " seconds - " + samplesPerSecond + " samples per second.");
         String perString = "/sec";
         if (samplesPerSecond < 1.0) {
             samplesPerSecond *= 60;

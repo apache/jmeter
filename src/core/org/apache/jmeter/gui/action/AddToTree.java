@@ -66,6 +66,8 @@ import javax.swing.tree.TreePath;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /**
  *  !ToDo (Class description)
@@ -76,6 +78,8 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
  */
 public class AddToTree implements Command
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.gui");
 	private Map allJMeterComponentCommands;
 
 	public AddToTree()
@@ -113,7 +117,7 @@ public class AddToTree implements Command
 		}
 		catch(Exception err)
 		{
-			err.printStackTrace();
+			log.error("",err);
 		}
 	}
 

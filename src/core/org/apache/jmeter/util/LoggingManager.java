@@ -18,6 +18,19 @@ public class LoggingManager
 	private static PatternFormatter format = new PatternFormatter("%{time:MM/dd/yyyy h:mm:ss a} %{priority} - %{category}: %{message}\n");
 	private static WriterTarget target;
 	
+	public static final String JMETER = "jmeter";
+	public static final String ENGINE = "jmeter.engine";
+	public static final String ELEMENTS = "jmeter.elements";
+	public static final String GUI = "jmeter.gui";
+	public static final String UTIL = "jmeter.util";
+	public static final String CLASSFINDER = "jmeter.util.classfinder";
+	public static final String TEST = "jmeter.test";
+	public static final String HTTP = "jmeter.protocol.http";
+	public static final String JDBC = "jmeter.protocol.jdbc";
+	public static final String FTP = "jmeter.protocol.ftp";
+	public static final String JAVA = "jmeter.protocol.java";
+	
+	
 	LoggingManager()
 	{
 	}

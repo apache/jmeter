@@ -80,6 +80,8 @@ import org.apache.jmeter.save.old.xml.XmlHandler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.ListedHashTree;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
@@ -92,6 +94,8 @@ import org.xml.sax.XMLReader;
  ***************************************/
 public class Load implements Command
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.gui");
 	private static Set commands = new HashSet();
 
 	static
@@ -150,8 +154,8 @@ public class Load implements Command
 			}
 			catch(Throwable err)
 			{
-				//ex.printStackTrace();
-				err.printStackTrace();
+				//log.error("",ex);
+				log.error("",err);
 				JMeterUtils.reportErrorToUser("Couldn't load JMX file.  May have been corrupted");
 			}
 		}
@@ -187,8 +191,7 @@ public class Load implements Command
 			try {
 				gui = (JMeterGUIComponent)Class.forName((String)item.getProperty(TestElement.GUI_CLASS)).newInstance();
 			} catch(Exception e) {
-				System.out.println("Couldn't get gui for "+item);
-				e.printStackTrace();
+				log.warn("Couldn't get gui for "+item,e);
 				gui = new WorkBenchGui();
 			} 
 			gui.configure(item);

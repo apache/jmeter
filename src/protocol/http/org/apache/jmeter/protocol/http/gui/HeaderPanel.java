@@ -88,6 +88,8 @@ import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /****************************************
  * Allows the user to specify if she needs HTTP header services, and give
@@ -99,7 +101,8 @@ import org.apache.jmeter.util.JMeterUtils;
  ***************************************/
 public class HeaderPanel extends AbstractConfigGui implements ActionListener,FocusListener
 {
-
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.protocol.http");
 	InnerTableModel tableModel;
 
 	/****************************************
@@ -291,7 +294,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener,Foc
 			}
 			catch(IOException ex)
 			{
-				ex.printStackTrace();
+				log.error("",ex);
 			}
 			catch(NullPointerException err){}
 		}
@@ -307,7 +310,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener,Foc
 			}
 			catch(IOException ex)
 			{
-				ex.printStackTrace();
+				log.error("",ex);
 			}
 			catch(NullPointerException err){}
 		}

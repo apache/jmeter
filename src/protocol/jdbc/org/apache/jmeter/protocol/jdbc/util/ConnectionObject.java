@@ -54,7 +54,11 @@
  */
 
 package org.apache.jmeter.protocol.jdbc.util;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 
 /*********************************************************
@@ -68,6 +72,8 @@ import java.sql.*;
  *****************************************************************/
 public class ConnectionObject  implements Runnable
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.protocol.jdbc");
   Connection con;
   DBKey key;
   int useCount,maxUsage;
@@ -96,7 +102,7 @@ public class ConnectionObject  implements Runnable
 	 reset.start();
 	/* try{
 		reset();
-	 }catch(SQLException e){e.printStackTrace();}*/
+	 }catch(SQLException e){log.error("",e);}*/
   } // End Method
 
 /*************************************************************
@@ -220,8 +226,9 @@ Method to run in separate thread that resets the connection object
 		  reset();
 		  set=false;
 		 // Functions.javaLog("ConnectionObject: Got to here - 2");
-		}catch(SQLException e){System.out.println("ConnectionObject: e="+e.toString()+
-				  "url = "+key.getUrl());}
+		}catch(SQLException e){
+			log.error("ConnectionObject: url = "+key.getUrl(),e);
+		}			
 	 }
 	// Functions.javaLog("ConnectionObject: Got to here - 3");
 	 reset=new Thread(this);

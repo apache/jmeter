@@ -14,6 +14,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
@@ -31,7 +33,8 @@ import org.apache.oro.text.regex.Util;
  * Window>Preferences>Java>Templates.
  */
 public class RegexFunction extends AbstractFunction {
-	
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.elements");
 	public static final String ALL = "ALL";
 	public static final String RAND = "RAND";
 	public static final String KEY = "__regexFunction";	
@@ -60,7 +63,7 @@ public class RegexFunction extends AbstractFunction {
 		try {
 			templatePattern = compiler.compile("\\$(\\d+)\\$");
 		} catch(MalformedPatternException e) {
-			e.printStackTrace();
+			log.error("",e);
 		}
 	}
 	
@@ -85,7 +88,7 @@ public class RegexFunction extends AbstractFunction {
 				collectAllMatches.add(match);
 			}
 		} catch(NumberFormatException e) {
-			e.printStackTrace();
+			log.error("",e);
 		}
 		if(collectAllMatches.size() == 0)
 		{
@@ -195,7 +198,7 @@ public class RegexFunction extends AbstractFunction {
 				name = (String)tk.next();
 			}
 		} catch(MalformedPatternException e) {
-				e.printStackTrace();
+				log.error("",e);
 				throw new InvalidVariableException("Bad regex pattern");
 		}
 		catch(Exception e)
@@ -247,7 +250,7 @@ public class RegexFunction extends AbstractFunction {
 			Pattern pattern = compiler.compile("^\\$\\d+\\$");
 			return new Perl5Matcher().contains(rawData,pattern);
 		} catch(MalformedPatternException e) {
-			e.printStackTrace();
+			log.error("",e);
 			return false;
 		}
 	}

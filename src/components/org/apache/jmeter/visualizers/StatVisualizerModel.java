@@ -185,7 +185,6 @@ public class StatVisualizerModel implements Clearable
 
 	public void clear()
 	{
-//        System.out.println("StatVisualizerModel.clear() called");
 		// clear the data structures
 		labelMap.clear();
 		this.fireDataChanged();

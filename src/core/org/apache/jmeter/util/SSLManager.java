@@ -54,17 +54,20 @@
  */
 package org.apache.jmeter.util;
 
-import java.lang.reflect.Constructor;
 import java.io.File;
 import java.io.FileInputStream;
+import java.lang.reflect.Constructor;
+import java.net.HttpURLConnection;
+import java.security.KeyStore;
 import java.security.Provider;
 import java.security.Security;
-import java.security.KeyStore;
-import java.net.HttpURLConnection;
+
 import javax.swing.JOptionPane;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.keystore.JmeterKeyStore;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /**
  * The SSLManager handles the KeyStore information for JMeter.  Basically, it
@@ -77,6 +80,8 @@ import org.apache.jmeter.util.keystore.JmeterKeyStore;
  * @version CVS $Revision$ $Date$
  */
 public abstract class SSLManager {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.util");
     /** Singleton instance of the manager */
     private static SSLManager manager;
     private static boolean isIAIKProvider = false;
@@ -126,11 +131,11 @@ public abstract class SSLManager {
             try {
                 if (fileName.endsWith(".p12") || fileName.endsWith(".P12")) {
                     this.keyStore = JmeterKeyStore.getInstance("pkcs12");
-                    System.out.println("KeyStore Type: PKCS 12");
+                    log.info("KeyStore Type: PKCS 12");
                     System.setProperty("javax.net.ssl.keyStoreType", "pkcs12");
                 } else {
                     this.keyStore = JmeterKeyStore.getInstance("JKS");
-                    System.out.println("KeyStore Type: JKS");
+                    log.info("KeyStore Type: JKS");
                 }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(),
@@ -175,8 +180,8 @@ public abstract class SSLManager {
             } catch (Exception e) {
             }
 
-        System.out.println("JmeterKeyStore Location: " + fileName);
-        System.out.println("JmeterKeyStore type: " + this.keyStore.getClass().toString());
+        log.info("JmeterKeyStore Location: " + fileName);
+        log.info("JmeterKeyStore type: " + this.keyStore.getClass().toString());
         }
 
         return this.keyStore;
@@ -195,7 +200,7 @@ public abstract class SSLManager {
                     this.trustStore = KeyStore.getInstance("IAIKKeyStore", "IAIK");
                 }  else {
                     this.trustStore = KeyStore.getInstance("JKS");
-                    System.out.println("KeyStore Type: JKS");
+                    log.info("KeyStore Type: JKS");
                 }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(),
@@ -221,8 +226,8 @@ public abstract class SSLManager {
             } catch (Exception e) {
             }
 
-            System.out.println("TrustStore Location: " + fileName);
-            System.out.println("TrustStore type: " + this.keyStore.getClass().toString());
+            log.info("TrustStore Location: " + fileName);
+            log.info("TrustStore type: " + this.keyStore.getClass().toString());
         }
 
         return this.trustStore;
@@ -253,7 +258,7 @@ public abstract class SSLManager {
                     Constructor con = clazz.getConstructor(new Class[] {Provider.class});
                     SSLManager.manager = (SSLManager) con.newInstance(new Object[] {SSLManager.sslProvider});
                 } catch (Exception e) {
-                    e.printStackTrace(System.err);
+                    log.error("",e);
                     SSLManager.isSSLSupported = false;
                     return null;
                 }
@@ -285,12 +290,12 @@ public abstract class SSLManager {
                 SSLManager.isSSLSupported = true;
             }
         } catch (Exception noSSL) {
-            noSSL.printStackTrace(System.err);
+            log.error("",noSSL);
         }
 
         try {
             if(SSLManager.sslProvider != null) {
-                System.out.println("SSL Provider is: " + SSLManager.sslProvider);
+                log.info("SSL Provider is: " + SSLManager.sslProvider);
                 Security.addProvider(SSLManager.sslProvider);
                 // register jsse provider
             }

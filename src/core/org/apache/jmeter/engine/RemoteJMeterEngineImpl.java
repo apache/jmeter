@@ -58,6 +58,8 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 
 import org.apache.jmeter.util.ListedHashTree;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 
 /************************************************************
@@ -70,6 +72,8 @@ public class RemoteJMeterEngineImpl
 		 extends java.rmi.server.UnicastRemoteObject
 		 implements RemoteJMeterEngine
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.engine");
 	JMeterEngine backingEngine;
 
 	/************************************************************
@@ -86,7 +90,7 @@ public class RemoteJMeterEngineImpl
 		}
 		catch(Exception ex)
 		{
-			ex.printStackTrace();
+			log.error("",ex);
 		}
 	}
 	
@@ -155,7 +159,7 @@ public class RemoteJMeterEngineImpl
 		}
 		catch(Exception ex)
 		{
-			ex.printStackTrace();
+			log.error("",ex);
 		}
 
 	}

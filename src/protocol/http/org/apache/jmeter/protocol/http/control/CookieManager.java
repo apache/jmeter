@@ -79,6 +79,8 @@ import java.util.Vector;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testelement.PerThreadClonable;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /**
  * This class provides an interface to the netscape cookies file to
@@ -90,6 +92,8 @@ import org.apache.jmeter.util.JMeterUtils;
 public class CookieManager extends ConfigTestElement implements
 		  Serializable,PerThreadClonable
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.protocol.http");
 
 	 public static final String COOKIES = "CookieManager.cookies";
 	  /**
@@ -232,7 +236,7 @@ public class CookieManager extends ConfigTestElement implements
 				// a Date. So, I chose 0. The Date will appear as
 				// the beginning of the Epoch (Jan 1, 1970 00:00:00 GMT)
 				time = 0;
-				System.out.println("DateFormat.ParseException: " + e.getMessage());
+				log.error("DateFormat.ParseException: ",e);
 		  }
 
 		  return time;
@@ -264,7 +268,6 @@ public class CookieManager extends ConfigTestElement implements
 	  }
 
 	  public void addCookieFromHeader(String cookieHeader, URL url) {
-		  //System.out.println("inside addCookieFromHeader: " + cookieHeader + " " + url);
 			 StringTokenizer st = new StringTokenizer(cookieHeader, ";");
 			 String nvp;
 
@@ -275,11 +278,6 @@ public class CookieManager extends ConfigTestElement implements
 			 String value = nvp.substring(index+1);
 			 String domain = url.getHost();
 			 String path = url.getFile();
-
-		  //System.out.println(name);
-		  //System.out.println(value);
-		  //System.out.println(domain);
-		  //System.out.println(path);
 
 			 Cookie newCookie = new Cookie(name, value, domain, path, false,
 							System.currentTimeMillis() + 1000 * 60 * 60 * 24);
@@ -298,8 +296,6 @@ public class CookieManager extends ConfigTestElement implements
 								  String expires = nvp.substring(index+1);
 								  Date date = dateFormat.parse(expires);
 								  newCookie.setExpires(date.getTime());
-								//System.out.println("set expires to " + date.getTime());
-								//System.out.println("current time: " + (System.currentTimeMillis());
 							} catch (ParseException pe) {}
 					 } else if (key.equalsIgnoreCase("domain")) {
 							newCookie.setDomain(nvp.substring(index+1));
@@ -318,20 +314,17 @@ public class CookieManager extends ConfigTestElement implements
 					 if (cookie.getPath().equals(newCookie.getPath()) &&
 								  cookie.getDomain().equals(newCookie.getDomain()) &&
 								  cookie.getName().equals(newCookie.getName())) {
-						  //System.out.println("remove cookie #" + i);
 							removeIndices.addElement(new Integer(i));
 					 }
 			 }
 
 			 for (Enumeration e = removeIndices.elements(); e.hasMoreElements();) {
 					 index = ((Integer) e.nextElement()).intValue();
-					 //System.out.println("remove cookie index " + index);
 					 getCookies().remove(index);
 			 }
 
 			 if (newCookie.getExpires() >= System.currentTimeMillis())
 			 {
-				//System.out.println("cookie expiration is future so add it");
 					 getCookies().add(newCookie);
 			 }
 	  }

@@ -4,9 +4,17 @@ package org.apache.jmeter.protocol.http.proxy;
 ***
 ***/
 
-import java.io.*;
-import java.util.*;
-import java.net.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 //
 // Class:     Cache
@@ -15,6 +23,8 @@ import java.net.*;
 
 public class Cache
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.protocol.http");
 	//
 	// Members variables
 	//
@@ -121,7 +131,7 @@ public class Cache
 			try
 
 			{
-				System.out.println("File Not Found:"+getFileName(rawUrl)+" "+fnf);
+				log.warn("File Not Found:"+getFileName(rawUrl),fnf);
 			}
 			catch (Exception e)
 			{}
@@ -185,7 +195,7 @@ public class Cache
 	//
 	 public synchronized void clean()
 	{
-		System.out.println("Cleaning the cache...");
+		log.info("Cleaning the cache...");
 
 		// Enumerate the hash table
 		for (Enumeration keys = htable.keys(); keys.hasMoreElements() ;)
@@ -210,7 +220,7 @@ public class Cache
 		}
 		config.setHits(0);
 		config.setMisses(0);
-		System.out.println("Cache is clean.");
+		log.info("Cache is clean.");
 	}
 
 
@@ -236,7 +246,7 @@ public class Cache
 
 			if (htable.isEmpty())
 			{
-				System.out.println("Could not make free space: Hash table empty...");
+				log.info("Could not make free space: Hash table empty...");
 				return;
 			}
 
@@ -269,7 +279,7 @@ public class Cache
 			else
 			{
 				// Another thread holds this file open for writing
-				System.out.println("File "+LRUfilename+" could not be deleted...");
+				log.info("File "+LRUfilename+" could not be deleted...");
 				return;
 			}
 		}

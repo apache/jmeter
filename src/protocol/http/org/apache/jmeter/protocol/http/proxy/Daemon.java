@@ -1,12 +1,15 @@
 package org.apache.jmeter.protocol.http.proxy;
 
-import java.io.*;
-import org.apache.jmeter.protocol.http.control.CookieManager;
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
-/************************************************************
- *  File Daemon.java
- ***********************************************************/
-import java.net.*;
+import org.apache.jmeter.protocol.http.control.CookieManager;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 //
 // Class:     Daemon
 // Abstract:  Web daemon thread. creates main socket on port 8080
@@ -21,6 +24,8 @@ import java.net.*;
  ***********************************************************/
 public class Daemon extends Thread
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.protocol.http");
 	//
 	// Member variables
 	//
@@ -54,8 +59,8 @@ public class Daemon extends Thread
 	{
 		this.daemonPort = daemonPort;
 		// Create the Cache Manager and Configuration objects
-		System.out.println("Initializing...");
-		System.out.print("Creating Config Object...");
+		log.info("Initializing...");
+		log.info("Creating Config Object...");
 		config = new Config();
 		config.setIsAppletContext(false);
 		config.setLocalHost(InetAddress.getLocalHost().getHostName());
@@ -65,10 +70,10 @@ public class Daemon extends Thread
 		config.setJmxScriptDir("proxy_script");
 		File adminDir = new File("Applet");
 		config.setAdminPath(adminDir.getAbsolutePath());
-		System.out.println("OK");
-		System.out.print("Creating Cache Manager...");
+		log.info("Proxy: OK");
+		log.info("Creating Cache Manager...");
 		cache = new Cache(config);
-		System.out.println("OK");
+		log.info("Proxy: OK");
 	}
 
 	//
@@ -97,17 +102,17 @@ public class Daemon extends Thread
 				}
 				catch(NumberFormatException e)
 				{
-					System.out.println("Error: Invalid daemon port");
+					log.error("Invalid daemon port",e);
 					return;
 				}
 				if(daemonPort > maxDaemonPort)
 				{
-					System.out.println("Error: Invalid daemon port");
+					log.error("Invalid daemon port");
 					return;
 				}
 				break;
 			default:
-				System.out.println("Usage: Proxy [daemon port]");
+				log.info("Usage: Proxy [daemon port]");
 				return;
 		}
 		Daemon demon = new Daemon();
@@ -117,7 +122,7 @@ public class Daemon extends Thread
 		}
 		catch(UnknownHostException e)
 		{
-			System.out.println("Unknown host");
+			log.fatalError("Unknown host",e);
 			System.exit(-1);
 		}
 		demon.start();
@@ -132,10 +137,10 @@ public class Daemon extends Thread
 		running = true;
 		try
 		{
-			System.out.print("Creating Daemon Socket...");
+			log.info("Creating Daemon Socket...");
 			MainSocket = new ServerSocket(daemonPort);
-			System.out.println(" port " + daemonPort + " OK");
-			System.out.println("Proxy up and running!");
+			log.info(" port " + daemonPort + " OK");
+			log.info("Proxy up and running!");
 			while(running)
 			{
 				// Listen on main socket
@@ -144,11 +149,11 @@ public class Daemon extends Thread
 				Proxy thd = new Proxy(ClientSocket, cache, config,target,cookieManager);
 				thd.start();
 			}
-			System.out.println("Proxy Server stopped");
+			log.info("Proxy Server stopped");
 		}
 		catch(Exception e)
 		{
-			System.out.println("Proxy Server stopped");
+			log.warn("Proxy Server stopped",e);
 		}
 		finally
 		{

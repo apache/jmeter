@@ -460,7 +460,7 @@ public class HtmlParser implements Serializable
 		}
 		catch(Exception ex)
 		{
-			System.out.println("Some bad HTML " + printNode(tempNode));
+			log.warn("Some bad HTML " + printNode(tempNode),ex);
 		}
 		NodeList childNodes = tempNode.getChildNodes();
 		for(int x = 0; x < childNodes.getLength(); x++)

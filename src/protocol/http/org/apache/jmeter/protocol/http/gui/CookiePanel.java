@@ -77,15 +77,17 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellEditor;
+
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.PowerTableModel;
-import org.apache.jmeter.gui.util.TextAreaTableCellEditor;
 import org.apache.jmeter.gui.util.VerticalLayout;
 import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /****************************************
  * Allows the user to specify if she needs cookie services, and give parameters
@@ -97,6 +99,8 @@ import org.apache.jmeter.util.JMeterUtils;
  ***************************************/
 public class CookiePanel extends AbstractConfigGui implements ActionListener
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.protocol.http");
 	private final static int columnCount = 6;
 	private final static String[] columnNames = {
 		 JMeterUtils.getResString("name"),
@@ -238,7 +242,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
 			}
 			catch(IOException ex)
 			{
-				ex.printStackTrace();
+				log.error("",ex);
 			}
 			catch(NullPointerException err){}
 		}
@@ -254,7 +258,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
 			}
 			catch(IOException ex)
 			{
-				ex.printStackTrace();
+				log.error("",ex);
 			}
 			catch(NullPointerException err){}
 		}

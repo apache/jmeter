@@ -54,8 +54,16 @@
  */
 
 package org.apache.jmeter.protocol.jdbc.util;
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Hashtable;
+import java.util.Iterator;
+
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /*****************************************************************
  This class manages a pool of Connection objects (ConnectionObject).  This
@@ -69,6 +77,8 @@ import java.util.*;
  *****************************************************************/
 public class DBConnectionManager
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.protocol.jdbc");
   int absoluteMaxConnections=100;
   long accessInterval=1800000;
   Hashtable connections;
@@ -161,7 +171,7 @@ Constructor.
 		  maxConnections=absoluteMaxConnections;
 		  key.setMaxConnections(maxConnections);
 		}
-	 }catch(Exception e){e.printStackTrace();
+	 }catch(Exception e){log.error("",e);
 		maxConnections=1;}
 	 connectionArray=new ConnectionObject[maxConnections];
 	 int count=-1;
@@ -220,7 +230,7 @@ Constructor.
 	 }
 	 else
 	 {
-		System.out.println("DBConnectionManager: Lost a connection connection='"+c+"'\r\n");
+		log.warn("DBConnectionManager: Lost a connection connection='"+c);
 		c=null;
 	 }
   } // End Method
@@ -263,7 +273,7 @@ Registers a driver for a database.
   {
 	 try{
 		DriverManager.registerDriver((Driver)Class.forName(driver).newInstance());
-	 }catch(Exception e){e.printStackTrace(); return false;}
+	 }catch(Exception e){log.error("",e); return false;}
 	 return true;
   }
 
@@ -279,7 +289,7 @@ Registers a driver for a database.
 	 {
 		DatabaseMetaData dmd=connection[counter].getCon().getMetaData();
 		int cons=dmd.getMaxConnections();
-	 }catch(SQLException e){connected=false;e.printStackTrace();}
+	 }catch(SQLException e){connected=false;log.error("",e);}
 
 	 return connected;
   }  //end of method      */

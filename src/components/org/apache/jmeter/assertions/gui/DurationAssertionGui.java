@@ -60,10 +60,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.JOptionPane;
-import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -73,6 +71,8 @@ import org.apache.jmeter.assertions.DurationAssertion;
 import org.apache.jmeter.gui.util.VerticalLayout;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 
 /****************************************
@@ -86,6 +86,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class DurationAssertionGui extends AbstractAssertionGui implements FocusListener
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.elements");
 
 	private JTextField duration;
 
@@ -194,7 +196,7 @@ public class DurationAssertionGui extends AbstractAssertionGui implements FocusL
 				isInvalid = true;
 			}
 			if (isInvalid) {
-				System.out.println("DurationAssertionGui: Not a valid number!");
+				log.warn("DurationAssertionGui: Not a valid number!");
 				JOptionPane.showMessageDialog(null, JMeterUtils.getResString("duration_assertion_input_error"), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
