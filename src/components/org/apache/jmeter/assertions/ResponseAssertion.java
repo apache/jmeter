@@ -420,7 +420,7 @@ protected AssertionResult setResultForNull(AssertionResult result)
             synchronized (Test.this)
             {
                threadsRunning--;
-               Test.this.notify();
+               Test.this.notifyAll();
             }
          }
       }
