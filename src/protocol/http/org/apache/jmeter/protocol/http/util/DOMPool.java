@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -36,7 +35,7 @@ import org.w3c.dom.Document;
  * <p>
  * Created on:  Jun 17, 2003<br>
  * 
- * @version $Revision$
+ * @author Peter Lin
  */
 public final class DOMPool
 {

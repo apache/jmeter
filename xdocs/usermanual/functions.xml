@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <!--
-   $Header$
    Copyright 2001-2004 The Apache Software Foundation
  
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<document prev="component_reference.html" next="glossary.html" date="$Date$">
+<document prev="component_reference.html" next="glossary.html" date="2004/06/12">
 
 <properties>
   <title>User's Manual: Introduction</title>
@@ -105,7 +104,7 @@ replacement string") parsed by this function</li>
 </p></description>
 
 <properties>
-        <property name="First arguement" required="Yes">The first argument is the regular expression
+        <property name="First argument" required="Yes">The first argument is the regular expression
         to be applied to the response data.  It will grab all matches.  Any parts of this expression
         that you wish to use in your template string, be sure to surround in parentheses.  Example:
         &amp;lt;a href="(.*)"&amp;gt;.  This will grab the value of the link and store it as the first group (there is
@@ -217,17 +216,23 @@ A reference name - refName - for reusing the value created by this function. Sto
 <p/>
 Examples:<br/>
  pin#.dat -> pin1.dat, ... pin9.dat, pin10.dat, ... pin9999.dat<br/>
- pin000.dat -> pin001.dat ... pin099.dat ... pin999.dat ... pin9999.dat
+ pin000.dat -> pin001.dat ... pin099.dat ... pin999.dat ... pin9999.dat<br/>
+ pin'.'dat# -> pin.dat1, ... pin.dat9 ... pin.dat999<br/>
+ N.B: pin.dat# -> pin1.0dat, ... pin9.0dat ... pin999.0dat<br/>
 </code><p/>
 	If more digits are required than there are formatting characters, the number will be
-	expanded as necessary. To prevent a formatting character from being interpreted,
-	enclose it in single quotes. See the documentation for DecimalFormat for full details.
-	<br></br>
+	expanded as necessary.<br/>
+	To prevent a formatting character from being interpreted,
+	enclose it in single quotes. Note that the decimal point is a formatting character,
+	and must be enclosed in single quotes (though it works as expected for #. and 000.)
+	N.B. the decimal point varies between locales, but in the UK and US, at least, it is
+	the same character as is used to separate parts of file names.<br/>
+	See the documentation for DecimalFormat for full details.<br/>
 	If the path name does not contain any special formatting characters,
 	it will be unaffected by the current sequence number. 
 	In this case, specifying only a start sequence number will have no effect,
 	but specifying a start and end sequence number will result in the file
-	being used at mose end-start+1 times.
+	being used at most end-start+1 times.
 	
 	</p>
 </component>
@@ -375,9 +380,12 @@ the second would return 1 and the last would return www.dummy.org
 
 <properties>
         <property name="String to be logged" required="Yes">A string</property>
-        <property name="Log Level" required="No">DEBUG, INFO (default), WARN or ERROR</property>
+        <property name="Log Level" required="No">OUT, ERR, DEBUG, INFO (default), WARN or ERROR</property>
         <property name="Throwable text" required="No">If non-empty, creates a Throwable to pass to the logger</property>
 </properties>
+<p>The OUT and ERR log level names are used to direct the output to System.out and System.err respectively.
+	In this case, the output is always printed - it does not depend on the current log setting.
+</p>
 </component>
 
 <component index="16.5.12" name="__logn">
@@ -389,9 +397,12 @@ the second would return 1 and the last would return www.dummy.org
 
 <properties>
         <property name="String to be logged" required="Yes">A string</property>
-        <property name="Log Level" required="No">DEBUG, INFO (default), WARN or ERROR</property>
+        <property name="Log Level" required="No">OUT, ERR, DEBUG, INFO (default), WARN or ERROR</property>
         <property name="Throwable text" required="No">If non-empty, creates a Throwable to pass to the logger</property>
 </properties>
+<p>The OUT and ERR log level names are used to direct the output to System.out and System.err respectively.
+	In this case, the output is always printed - it does not depend on the current log setting.
+</p>
 </component>
 
 <component index="16.5.13" name="__BeanShell">

@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -43,7 +42,6 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @version   $Revision$ on $Date$
  */
 public abstract class AbstractTestElement implements TestElement, Serializable
 {
@@ -457,7 +455,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable
 	public void setThreadName(String inthreadName) {
 		if (threadName != null)
 		{
-			if (inthreadName != threadName)
+			if (!threadName.equals(inthreadName))
 			throw new RuntimeException("Attempting to reset the thread name");
 		}
 		this.threadName = inthreadName;

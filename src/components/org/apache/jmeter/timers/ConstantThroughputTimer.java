@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2002-2004 The Apache Software Foundation.
  *
@@ -31,7 +30,6 @@ import org.apache.log.Logger;
  * Timer paces the samplers under it's influence so that the total number of
  * samples per unit of time approaches a given constant as much as possible.
  *
- * @version $Id$
  */
 public class ConstantThroughputTimer
         extends AbstractTestElement
@@ -117,7 +115,7 @@ public class ConstantThroughputTimer
      * 
      * @see org.apache.jmeter.testelement.TestListener#testStarted()
      */
-    public void testStarted()
+    public synchronized void testStarted()//synch to protect targetTime
     {
     	log.debug("Test started - reset throughput calculation.");
     	targetTime= 0;

@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -38,7 +37,6 @@ import org.apache.log.Logger;
  * 
  * This is mainly intended for validation tests
  * 
- * @version $Revision$ Last updated: $Date$
  */
 public class ResultSaver
     extends AbstractTestElement
@@ -100,11 +98,8 @@ public class ResultSaver
 		SampleResult s = e.getResult();
 		saveSample(s);
 		SampleResult []sr = s.getSubResults();
-		if (sr != null){
-			for (int i = 0; i < sr.length; i++){
-				saveSample(sr[i]);
-			}
-
+		for (int i = 0; i < sr.length; i++){
+			saveSample(sr[i]);
 		}
     }
 
@@ -121,11 +116,16 @@ public class ResultSaver
 		try {
 			pw = new FileOutputStream(out);
 			pw.write(s.getResponseData());
-			pw.close();
 		} catch (FileNotFoundException e1) {
 			log.error("Error creating sample file for "+s.getSampleLabel(),e1);
 		} catch (IOException e1) {
 			log.error("Error saving sample "+s.getSampleLabel(),e1);
+		}
+		finally
+		{
+			try {
+				if (pw != null) pw.close();
+			} catch (IOException e) {}
 		}
 	}
 	/**
