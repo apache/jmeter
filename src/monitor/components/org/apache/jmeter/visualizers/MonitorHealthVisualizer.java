@@ -154,6 +154,7 @@ public class MonitorHealthVisualizer extends AbstractVisualizer
 		VerticalPanel titlePanel = new VerticalPanel();
 		titlePanel.add(createTitleLabel());
 		titlePanel.add(getNamePanel());
+		titlePanel.add(super.getFilePanel());
 		return titlePanel;
 	}
 
