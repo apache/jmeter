@@ -102,8 +102,8 @@ public interface TestElement extends Cloneable
      * Adds a property to the TestElement.  The property will be marked as
      * temporary if this test element is a running version.
      * @param property
-     */
-    public void addProperty(JMeterProperty property);
+     
+    protected void addProperty(JMeterProperty property);*/
     
     /**
      * Sets and overwrites a property in the TestElement.  This call will be 

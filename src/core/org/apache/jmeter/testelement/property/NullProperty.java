@@ -7,6 +7,7 @@ import org.apache.jmeter.testelement.TestElement;
  */
 public class NullProperty extends AbstractProperty
 {
+    JMeterProperty tempValue;
     
     public NullProperty(String name)
     {
@@ -23,6 +24,10 @@ public class NullProperty extends AbstractProperty
      */
     public String getStringValue()
     {
+        if(tempValue != null)
+        {
+            return tempValue.getStringValue();
+        }        
         return "";
     }
     
@@ -59,7 +64,7 @@ public class NullProperty extends AbstractProperty
      */
     public void mergeIn(JMeterProperty prop)
     {
-        throw new UnsupportedOperationException();
+        tempValue = prop;
     }
 
     /**
@@ -108,6 +113,15 @@ public class NullProperty extends AbstractProperty
     public long getLongValue()
     {
         return 0;
+    }
+
+    /**
+     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+     */
+    public void recoverRunningVersion(TestElement owner)
+    {
+        super.recoverRunningVersion(owner);
+        tempValue = null;
     }
 
 }
