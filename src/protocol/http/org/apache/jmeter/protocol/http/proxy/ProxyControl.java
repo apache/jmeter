@@ -365,13 +365,11 @@ public class ProxyControl extends ConfigTestElement implements Serializable
 	private void removeValuesFromSampler(
 		HTTPSampler sampler,
 		TestElement urlConfig) {
-		if(urlConfig != null && urlConfig.getProperty(HTTPSampler.DOMAIN) != null &&
-				!urlConfig.getProperty(HTTPSampler.DOMAIN).equals(""))
+		if(urlConfig != null && sampler.getDomain().equals(urlConfig.getProperty(HTTPSampler.DOMAIN)))
 		{
 			sampler.setDomain("");
 		}
-		if(urlConfig != null && urlConfig.getProperty(HTTPSampler.PATH) != null &&
-				!urlConfig.getProperty(HTTPSampler.PATH).equals("/"))
+		if(urlConfig != null && sampler.getPath().equals(urlConfig.getProperty(HTTPSampler.PATH)))
 		{
 			sampler.setPath("");
 		}
