@@ -210,8 +210,11 @@ public class PostWriter
         writeln(out, "Content-Type: " + mimetype);
         out.write(CRLF);
 
-        byte[] buf = new byte[1024 * 100];
-        //100k
+        byte[] buf = new byte[1024];
+	        //1k - the previous 100k made no sense (there's tons of buffers
+	        // elsewhere in the chain) and it caused OOM when many concurrent 
+	        // uploads were being done. Could be fixed by increasing the evacuation
+	        // ratio in bin/jmeter[.bat], but this is better.
         int read;
         while ((read = in.read(buf)) > 0)
         {
