@@ -79,6 +79,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 /****************************************
@@ -558,7 +559,7 @@ public class HTTPSampler extends AbstractSampler
 	 */
 	public void parseArguments(String queryString)
 	{
-		String[] args = JMeterUtils.split(queryString, "&");
+		String[] args = JOrphanUtils.split(queryString, "&");
 		for (int i = 0; i < args.length; i++)
 		{
 			// need to handle four cases:   string contains name=value

@@ -174,7 +174,7 @@ public abstract class SSLManager {
                     this.keyStore.load(null, password);
                 }
             } catch (Exception e) {
-	      throw new RuntimeException("Can't load KeyStore", e);
+	      throw new RuntimeException("Can't load KeyStore: "+e.toString());
             }
 
         log.info("JmeterKeyStore Location: " + fileName);
@@ -217,7 +217,7 @@ public abstract class SSLManager {
                     this.trustStore.load(null, null);
                 }
             } catch (Exception e) {
-	      throw new RuntimeException("Can't load TrustStore", e);
+	      throw new RuntimeException("Can't load TrustStore: "+e.toString());
             }
 
             log.info("TrustStore Location: " + fileName);

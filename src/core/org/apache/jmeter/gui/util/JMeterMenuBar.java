@@ -72,6 +72,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.apache.jorphan.util.JOrphanUtils;
+
 /****************************************
  * Title: Apache JMeter Description: Copyright: Copyright (c) 2000 Company:
  * Apache Foundation
@@ -118,7 +120,7 @@ public class JMeterMenuBar extends JMenuBar
 		remote_engine_start = new LinkedList();
 		remote_engine_stop = new LinkedList();
 		remoteHosts =
-			JMeterUtils.split(JMeterUtils.getPropDefault("remote_hosts", ""), ",");
+			JOrphanUtils.split(JMeterUtils.getPropDefault("remote_hosts", ""), ",");
 		if (remoteHosts.length == 1 && remoteHosts[0].equals(""))
 		{
 			remoteHosts = new String[0];

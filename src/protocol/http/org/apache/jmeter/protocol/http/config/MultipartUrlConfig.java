@@ -60,6 +60,7 @@ import java.io.Serializable;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Title:        JMeter
@@ -163,7 +164,7 @@ public class MultipartUrlConfig implements Serializable
 	 */
 	public void parseArguments(String queryString)
 	{
-		String[] parts = JMeterUtils.split(queryString,"--"+getBoundary());
+		String[] parts = JOrphanUtils.split(queryString,"--"+getBoundary());
 		for (int i = 0; i < parts.length; i++)
 		{
 			if(parts[i].indexOf("filename=") > -1)

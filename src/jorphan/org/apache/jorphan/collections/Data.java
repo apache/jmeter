@@ -62,6 +62,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.jorphan.util.JOrphanUtils;
 
 /****************************************************************
  Use this class to store database-like data.  This class uses rows
@@ -517,11 +518,11 @@ Returns the row number where a certain value is.
 	  *****************************************************************/
   public void setData(String[] contents, String delimiter)
   {
-		setHeaders(contents[0].split(delimiter));
+		setHeaders(JOrphanUtils.split(contents[0], delimiter));
 		int x=1;
 		while(x<contents.length)
 		{
-			setLine(contents[x++].split(delimiter));
+			setLine(JOrphanUtils.split(contents[x++], delimiter));
 		}
 	 } //end of Method
 
