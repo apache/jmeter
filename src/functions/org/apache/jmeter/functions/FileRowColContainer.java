@@ -161,11 +161,31 @@ public class FileRowColContainer
     private static ArrayList splitLine(String theLine,String delim)
     {
         ArrayList result = new ArrayList();
-        StringTokenizer tokener = new StringTokenizer(theLine,delim);
+        StringTokenizer tokener = new StringTokenizer(theLine,delim,true);
+        /* the beginning of the line is a "delimiter" so that 
+           ,a,b,c returns "" "a" "b" "c" */
+        boolean lastWasDelim = true;
         while(tokener.hasMoreTokens())
         {
             String token = tokener.nextToken();
-            result.add(token);
+            if(token.equals(delim))
+            {
+              if(lastWasDelim)
+              {
+                // two delimiters in a row; add an empty String
+                result.add("");
+              }
+              lastWasDelim = true;
+            }
+            else
+            {
+              lastWasDelim = false;
+              result.add(token);
+            }
+        }
+        if (lastWasDelim) // Catch the trailing delimiter
+        {
+        	result.add("");
         }
         return result;
     }
@@ -245,6 +265,34 @@ public class FileRowColContainer
 			assertEquals(1,myRow);
 			assertEquals("b2",f.getColumn(myRow,1));
 			assertEquals("c2",f.getColumn(myRow,2));
+		}
+
+		public void testEmptyCols() throws Exception
+		{
+			FileRowColContainer f = new FileRowColContainer("testfiles/testempty.csv");
+			assertNotNull(f);
+			assertEquals("Expected 4 lines",4,f.fileData.size());
+
+			int myRow=f.nextRow();
+			assertEquals(0,myRow);
+			assertEquals("",f.getColumn(myRow,0));
+			assertEquals("d1",f.getColumn(myRow,3));
+
+			myRow=f.nextRow();
+			assertEquals(1,myRow);
+			assertEquals("",f.getColumn(myRow,1));
+			assertEquals("c2",f.getColumn(myRow,2));
+
+			myRow=f.nextRow();
+			assertEquals(2,myRow);
+			assertEquals("b3",f.getColumn(myRow,1));
+			assertEquals("",f.getColumn(myRow,2));
+
+			myRow=f.nextRow();
+			assertEquals(3,myRow);
+			assertEquals("b4",f.getColumn(myRow,1));
+			assertEquals("c4",f.getColumn(myRow,2));
+			assertEquals("",f.getColumn(myRow,3));
 		}
     }
     /**
