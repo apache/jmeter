@@ -62,8 +62,10 @@ import java.util.Locale;
 
 /**
  * @author Oliver Rossmueller <oliver@oross.net>
+ * @version $Revision$
  */
-public class LocaleChangeEvent extends EventObject {
+public class LocaleChangeEvent extends EventObject
+{
 
     private Locale locale;
     

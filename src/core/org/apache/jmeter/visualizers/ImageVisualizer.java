@@ -52,8 +52,12 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.visualizers;
+package org.apache.jmeter.visualizers;
 
-public interface ImageVisualizer {
-	public java.awt.Image getImage();
+/**
+ * @version $Revision$
+ */
+public interface ImageVisualizer
+{
+    public java.awt.Image getImage();
 }

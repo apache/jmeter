@@ -1,8 +1,5 @@
 /*
  * Created on Jun 13, 2003
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
  */
 package org.apache.jmeter.util;
 
@@ -14,9 +11,7 @@ import org.apache.log.Logger;
 
 /**
  * @author ano ano
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * @version $Revision$
  */
 public class NameUpdater
 {
@@ -27,7 +22,12 @@ public class NameUpdater
         nameMap = new Properties();
         try
         {
-            nameMap.load(new FileInputStream(JMeterUtils.getJMeterHome() + JMeterUtils.getPropDefault("upgrade_properties","/bin/upgrade.properties")));
+            nameMap.load(
+                new FileInputStream(
+                    JMeterUtils.getJMeterHome()
+                        + JMeterUtils.getPropDefault(
+                            "upgrade_properties",
+                            "/bin/upgrade.properties")));
         }
         catch (Exception e)
         {
@@ -43,6 +43,4 @@ public class NameUpdater
         }
         return guiName;
     }
-    
-
 }
