@@ -28,6 +28,7 @@ public class TestPlan extends AbstractTestElement implements Serializable
         "TestPlan.user_defined_variables";
     public final static String SERIALIZE_THREADGROUPS =
         "TestPlan.serialize_threadgroups";
+    public final static String COMMENTS = "TestPlan.comments";
 
     private List threadGroups = new LinkedList();
     private List configs = new LinkedList();
@@ -44,14 +45,16 @@ public class TestPlan extends AbstractTestElement implements Serializable
 
     public TestPlan()
     {
-        this("Test Plan");
-        setFunctionalMode(false);
-        setSerialized(false);
+//        this("Test Plan");
+//        setFunctionalMode(false);
+//        setSerialized(false);
     }
 
     public TestPlan(String name)
     {
         setName(name);
+//		setFunctionalMode(false);
+//		setSerialized(false);
         setProperty(new CollectionProperty(THREAD_GROUPS, threadGroups));
     }
 
