@@ -10,8 +10,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.apache.jmeter.config.gui.AbstractModifierGui;
 import org.apache.jmeter.gui.util.HorizontalPanel;
+import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.protocol.http.modifier.ParamMask;
 import org.apache.jmeter.protocol.http.modifier.ParamModifier;
 import org.apache.jmeter.testelement.TestElement;
@@ -25,7 +25,7 @@ import org.apache.jmeter.util.JMeterUtils;
  *@created   Jan 18, 2002
  *@version   $Revision$
  ***************************************/
-public class ParamModifierGui extends AbstractModifierGui implements FocusListener
+public class ParamModifierGui extends AbstractPreProcessorGui implements FocusListener
 {
 
     private final String NAME = "name";

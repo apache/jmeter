@@ -1,8 +1,10 @@
 package org.apache.jmeter.testelement.property;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testelement.TestElement;
 
 public class CollectionProperty extends MultiProperty
@@ -20,6 +22,7 @@ public class CollectionProperty extends MultiProperty
     public CollectionProperty()
     {
         super();
+        value = new ArrayList();
     }
 
     public boolean equals(Object o)
@@ -166,10 +169,7 @@ public class CollectionProperty extends MultiProperty
      */
     public void addProperty(JMeterProperty prop)
     {
-        if (value.size() == 0 || value.iterator().next().getClass().equals(prop.getClass()))
-        {
-            value.add(prop);
-        }
+        value.add(prop);
     }
 
     public void addItem(Object item)
@@ -205,6 +205,23 @@ public class CollectionProperty extends MultiProperty
             savedValue = null;
         }
         recoverRunningVersionOfSubElements(owner);
+    }
+    
+    public static class Test extends JMeterTestCase
+    {
+        public Test(String name)
+        {
+            super(name);
+        }
+        
+        public void testAddingProperties() throws Exception
+        {
+            CollectionProperty coll = new CollectionProperty();
+            coll.addItem("joe");
+            coll.addProperty(new FunctionProperty());
+            assertEquals("joe",coll.get(0).getName());
+            assertEquals("org.apache.jmeter.testelement.property.FunctionProperty",coll.get(1).getClass().getName());
+        }
     }
 
 }

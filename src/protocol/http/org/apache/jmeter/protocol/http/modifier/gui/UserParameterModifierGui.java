@@ -63,7 +63,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.apache.jmeter.config.gui.AbstractModifierGui;
+import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.protocol.http.modifier.UserParameterModifier;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -76,7 +76,7 @@ import org.apache.jmeter.util.JMeterUtils;
  *@created    $Date$
  *@version    1.0
  ***********************************************************/
-public class UserParameterModifierGui extends AbstractModifierGui {
+public class UserParameterModifierGui extends AbstractPreProcessorGui {
 	//-------------------------------------------
 	// Constants and Data Members
 	//-------------------------------------------
