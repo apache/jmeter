@@ -561,9 +561,11 @@ public class SaveService implements SaveServiceConstants
 
         SampleResult[] subResults = result.getSubResults();
 
-        for (int i = 0; i < subResults.length; i++)
-        {
-            config.addChild(getConfiguration(subResults[i], funcTest));
+        if (subResults != null) {
+            for (int i = 0; i < subResults.length; i++)
+            {
+                config.addChild(getConfiguration(subResults[i], funcTest));
+            }
         }
 
         AssertionResult[] assResults = result.getAssertionResults();
@@ -571,9 +573,11 @@ public class SaveService implements SaveServiceConstants
         if (funcTest)
         {
             config.addChild(getConfigForTestElement(null, result.getSamplerData()));
-            for (int i = 0; i < assResults.length; i++)
-            {
-                config.addChild(getConfiguration(assResults[i]));
+            if (assResults != null) {
+                for (int i = 0; i < assResults.length; i++)
+                {
+                    config.addChild(getConfiguration(assResults[i]));
+                }
             }
             config.addChild(getConfiguration(result.getResponseData()));
         }
@@ -584,12 +588,15 @@ public class SaveService implements SaveServiceConstants
             if (assertionsResultsToSave == SAVE_ALL_ASSERTIONS)
             {
                 config.addChild(getConfigForTestElement(null, result.getSamplerData()));
-                for (int i = 0; i < assResults.length; i++)
-                {
-                    config.addChild(getConfiguration(assResults[i]));
+                if (assResults != null) {
+                    for (int i = 0; i < assResults.length; i++)
+                    {
+                        config.addChild(getConfiguration(assResults[i]));
+                    }
                 }
             }
             else if ((assertionsResultsToSave == SAVE_FIRST_ASSERTION)
+                    && assResults != null
                     && assResults.length > 0)
             {
                 config.addChild(getConfiguration(assResults[0]));

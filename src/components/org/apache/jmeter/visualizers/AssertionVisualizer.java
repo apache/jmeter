@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -116,7 +116,10 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
      ***************************************/
     public void add(SampleResult sample)
     {
-        textArea.append(sample.getSamplerData().toString());
+        if(null != sample.getSamplerData())
+            textArea.append(sample.getSamplerData().toString());
+        else
+            textArea.append(sample.getSampleLabel());
         textArea.append(getAssertionResult(sample));
         textArea.append("\n");
     }
@@ -134,15 +137,10 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
         if (res != null)
         {
             StringBuffer display = new StringBuffer();
-            List assertionResults = Arrays.asList(res.getAssertionResults());
-
-            if (assertionResults != null)
-            {
-                Iterator iter = assertionResults.iterator();
-
-                while (iter.hasNext())
-                {
-                    AssertionResult item = (AssertionResult) iter.next();
+            AssertionResult assertionResults[] = res.getAssertionResults();
+            if (assertionResults != null) {
+                for (int i = 0; i < assertionResults.length; i++) {
+                    AssertionResult item = assertionResults[i];
 
                     if (item.isFailure() || item.isError())
                     {

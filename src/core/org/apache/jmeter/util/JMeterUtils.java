@@ -86,6 +86,7 @@ import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Perl5Compiler;
+import org.apache.oro.text.regex.Perl5Matcher;
 import org.xml.sax.XMLReader;
 /**
  *  This class contains the static utility methods used by JMeter.
@@ -122,9 +123,25 @@ public class JMeterUtils implements UnitTestManager
 	private static Collection localeChangeListeners = new HashSet();
 	private static Locale locale;
 	private static ResourceBundle resources;
+    
+    private static ThreadLocal localMatcher = new ThreadLocal()
+        {
+            protected Object initialValue()
+            {
+                return new Perl5Matcher();
+            }
+        };
    
    //Provide Random numbers to whomever wants one
    private static Random rand = new Random();
+   
+   /**
+    * Gets Perl5Matcher for this thread.
+    */
+   public static Perl5Matcher getMatcher()
+   {
+       return (Perl5Matcher)localMatcher.get();
+   }
 
 	/**
 	 *  This method is used by the init method to load the property file that may

@@ -2,7 +2,7 @@
  *  ====================================================================
  *  The Apache Software License, Version 1.1
  *
- *  Copyright (c) 2001 The Apache Software Foundation.  All rights
+ *  Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  *  reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -77,11 +77,22 @@ import org.apache.log.Logger;
  */
 public class SampleResult implements Serializable
 {
-	//public final static String URL = "sampler.url";
-
-	public final static String TAG_NAME = "sampleResult";
+    /**
+     * Data type value indicating that the response data is text.
+     *
+     * @see #getDataType
+     * @see #setDataType(java.lang.String)
+     */
 	public final static String TEXT = "text";
+
+    /**
+     * Data type value indicating that the response data is binary.
+     *
+     * @see #getDataType
+     * @see #setDataType(java.lang.String)
+     */
 	public final static String BINARY = "bin";
+
 	private byte[] responseData;
 	private String responseCode;
 	private String label;
@@ -89,65 +100,30 @@ public class SampleResult implements Serializable
 	private String threadName;
 	private String responseMessage;
 	private long timeStamp = 0;
-	private List assertionResults = new ArrayList();
-	private List subResults = new ArrayList();
+	private List assertionResults;
+	private List subResults;
 	private String dataType;
 	private boolean success;
-	private boolean mark = false;
-	private Set files = new HashSet();
+	private Set files;
     private String dataEncoding;
-	
+    private long time;
 
-	Map map;
-	long time;
-	/**
-	 *  Description of the Field
-	 */
-	private final static String SAMPLE_LABEL = "displayName";
-	private final static String SAMPLER_CONFIG = "samplerConfig";
-	private final static String DATA_TYPE = "dataType";
-	private final static String RESPONSE_CODE = "responseCode";
-	private final static String RESPONSE_MESSAGE = "responseMessage";
-	private final static String THREAD_NAME = "threadName";
-	private final static String TIME_STAMP = "timeStamp";
-	/**
-	 *  Description of the Field
-	 */
-	private final static String ASSERTION_RESULTS = "assertionResults";
-	/**
-	 *  Description of the Field
-	 */
-	private final static String RESPONSE_DATA = "responseData";
-	/**
-	 *  Description of the Field
-	 */
-	private final static String SUCCESS = "success";
-
-	/**
-	 *  Description of the Field
-	 */
 	private final static String TOTAL_TIME = "totalTime";
 
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
 
 
-	/**
-	 *  !ToDo (Constructor description)
-	 */
-	public SampleResult()
-	{
-		map = new HashMap();
-		time = 0;
-	}
-	
 	public void setMarked(String filename)
 	{
+        if (files == null) {
+            files = new HashSet();
+        }
 		files.add(filename);
 	}
 	
 	public boolean isMarked(String filename)
 	{
-		return files.contains(filename);
+        return files != null && files.contains(filename);
 	}	
 	
 	public String getResponseCode()
@@ -202,29 +178,48 @@ public class SampleResult implements Serializable
 
 	public void addAssertionResult(AssertionResult assertResult)
 	{
+        if (assertionResults == null) {
+            assertionResults = new ArrayList();
+        }
 		assertionResults.add(assertResult);
 	}
 
+    /**
+     * Gets the assertion results associated with this sample.
+     *
+     * @return an array containing the assertion results for this sample.
+     *         Returns null if there are no assertion results.
+     */
 	public AssertionResult[] getAssertionResults()
 	{
+        if (assertionResults == null) {
+            return null;
+        }
 		return (AssertionResult[])assertionResults.toArray(new AssertionResult[0]);
 	}
 
 	public void addSubResult(SampleResult subResult)
 	{
+        if (subResults == null) {
+            subResults = new ArrayList();
+        }
 		subResults.add(subResult);
 	}
 
+    /**
+     * Gets the subresults associated with this sample.
+     *
+     * @return an array containing the subresults for this sample. Returns
+     *         null if there are no subresults.
+     */
 	public SampleResult[] getSubResults()
 	{
+        if (subResults == null) {
+            return null;
+        }
 		return (SampleResult[])subResults.toArray(new SampleResult[0]);
 	}
 
-	/**
-	 *  Description of the Method
-	 *
-	 *@param  info  Description of the Parameter
-	 */
 	public void configure(Configuration info)
 	{
 		setTime(info.getAttributeAsLong(TOTAL_TIME,0L));
@@ -248,9 +243,6 @@ public class SampleResult implements Serializable
 	public void setResponseData(byte[] response)
 	{
 		responseData = response;
-		/*DefaultConfiguration responseChild = new DefaultConfiguration(RESPONSE_DATA, "");
-		responseChild.setValue(getHexString(response));
-		addChild(responseChild);*/
 	}
 
 	
@@ -264,14 +256,6 @@ public class SampleResult implements Serializable
 	public byte[] getResponseData()
 	{
 		return responseData;
-		/*Configuration responseChild = getChild(RESPONSE_DATA);
-		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		String res = responseChild.getValue("");
-		for (int i = 0; i < res.length(); i+=2)
-		{
-			bytes.write(Integer.parseInt(res.substring(i,i+2),16));
-		}
-		return bytes.toByteArray();*/
 	}
 
 	public void setSamplerData(TestElement s)
@@ -294,11 +278,6 @@ public class SampleResult implements Serializable
 		return time;
 	}
 
-	/**
-	 *  !ToDoo (Method description)
-	 *
-	 *@return    !ToDo (Return description)
-	 */
 	public boolean isSuccessful()
 	{
 		return success;
