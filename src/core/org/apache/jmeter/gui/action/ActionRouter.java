@@ -191,6 +191,27 @@ public class ActionRouter implements ActionListener
 	}
 	
 	/**
+	 * Allows an ActionListener to be removed from receiving 
+	 * notifications of a command being executed prior to the actual 
+	 * execution of the command.
+	 * 
+	 * @param action	The Class of the command for which the listener will
+	 * notifications for. Class must extend org.apache.jmeter.gui.action.Command
+	 * @param listener	The ActionListener to receive the notifications
+	 */	
+	public void removePreActionListener(Class action, ActionListener listener) 
+	{
+		if ( action != null ) {
+			HashSet set = (HashSet)preActionListeners.get(action.getName());
+			if ( set != null ) 
+			{
+				set.remove(listener);
+				preActionListeners.put(action.getName(), set);
+			}
+		}
+	}
+	
+	/**
 	 * Allows an ActionListener to receive notification of a command
 	 * being executed after the command has executed.
 	 * 
@@ -208,6 +229,26 @@ public class ActionRouter implements ActionListener
 			}
 			set.add(listener);
 			postActionListeners.put(action.getName(), set);
+		}
+	}
+	
+	/**
+	 * Allows an ActionListener to be removed from receiving 
+	 * notifications of a command being executed after the command has executed.
+	 * 
+	 * @param action	The Class of the command for which the listener will
+	 * notifications for. Class must extend org.apache.jmeter.gui.action.Command
+	 * @param listener
+	 */
+	public void removePostActionListener(Class action, ActionListener listener) 
+	{
+		if ( action != null ) {
+			HashSet set = (HashSet)postActionListeners.get(action.getName());
+			if ( set != null ) 
+			{
+				set.remove(listener);
+				postActionListeners.put(action.getName(), set);
+			}
 		}
 	}
 	
