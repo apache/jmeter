@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<document>
+
+<properties>
+  <title>User's Manual: Getting Started</title>
+</properties>
+
+<body>
+
+<section name="2. Getting Started">
+</section>
+
+<section name="2.1 Requirements"></section>
+
+<section name="2.1.1 Java Versions">
+<p>JMeter runs in JDK1.2 and higher. However, there is a rather <a href="">nasty bug in JDK 1.3</a> that may affect your testing.</p>
+</section>
+
+<section name="2.1.5 JDBC Driver (for testing databases)">
+<p>If you intend to perform database testing, you will need a JDBC driver.</p>
+</section>
+
+<section name="2.1.6 SAX XML Parser">
+</section>
+
+<section name="2.2 Installation">
+</section>
+
+<section name="2.2.1 Downloading the Latest Release">
+<p>We recommend that most users run the latest stable release instead of a nightly build.</p>
+</section>
+
+<section name="2.2.2 Downloading Nightly Builds">
+<p>If you do not mind working with beta-quality software, then you can download and run the <a href="">latest nightly build</a>.  </p>
+</section>
+
+<section name="2.2.3 UNIX Instructions">
+<p></p>
+</section>
+
+<section name="2.2.4 MS-Windows Instructions">
+</section>
+
+</body>
+</document>
+
