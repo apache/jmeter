@@ -74,8 +74,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
             JMeterUtils.getResString("value"),
             JMeterUtils.getResString("domain"),
             JMeterUtils.getResString("path"),
-            JMeterUtils.getResString("secure"),
-            JMeterUtils.getResString("expiration"),
+            JMeterUtils.getResString("secure"),//removed expiration because it's just an annoyance for static cookies
             };
 
     private static final Class[] columnClasses =
@@ -85,7 +84,6 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
             String.class,
             String.class,
             Boolean.class,
-            Long.class,
             };
 
     private JButton addButton;
@@ -252,8 +250,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
                 cookie.getValue(),
                 cookie.getDomain(),
                 cookie.getPath(),
-                JOrphanUtils.valueOf(cookie.getSecure()),
-                new Long(cookie.getExpires())});
+                JOrphanUtils.valueOf(cookie.getSecure())});
     }
 
     /**
@@ -290,7 +287,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
                 (String) rowData[2],
                 (String) rowData[3],
                 ((Boolean) rowData[4]).booleanValue(),
-                ((Long) rowData[5]).longValue());
+                Long.MAX_VALUE);
         return cookie;
     }
 

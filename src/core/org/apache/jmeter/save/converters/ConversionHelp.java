@@ -25,6 +25,10 @@ public class ConversionHelp
 
    public static String encode(String p)
    {
+      if(p == null)
+      {
+         return "";
+      }
       try
       {
          String p1 = JOrphanUtils.encode(p,CHAR_SET);
@@ -39,6 +43,10 @@ public class ConversionHelp
    
    public static String decode(String p)
    {
+      if(p == null)
+      {
+         return null;
+      }
       try
       {
          return JOrphanUtils.decode(p,CHAR_SET);
@@ -48,5 +56,13 @@ public class ConversionHelp
          log.warn("System doesn't support " + CHAR_SET,e);
          return p;
       }
+   }
+   
+   public static String cdata(byte[] chars,String encoding) throws UnsupportedEncodingException
+   {
+      StringBuffer buf = new StringBuffer("<![CDATA[");
+      buf.append(new String(chars,encoding));
+      buf.append("]]>");
+      return buf.toString();
    }
 }
