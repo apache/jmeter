@@ -80,7 +80,7 @@ public class FileReporter extends JPanel
         {
             try
             {
-                line.trim();
+                line = line.trim();
                 if (line.startsWith("#") || line.length() == 0)
                 {
                     continue;
