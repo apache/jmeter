@@ -55,6 +55,8 @@
 package org.apache.jmeter.control;
 import java.io.Serializable;
 
+import junit.framework.*;
+
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.PerSampleClonable;
@@ -77,7 +79,7 @@ public class InterleaveControl extends GenericController implements Serializable
 	public static final int NEW_STYLE = 1;
 	private boolean interleave;
 	private boolean doNotIncrement = false;
-	private Controller start = null;
+	private Controller searchStart = null;
 
 	/****************************************
 	 * Constructor for the InterleaveControl object
@@ -101,6 +103,12 @@ public class InterleaveControl extends GenericController implements Serializable
 
 	public boolean hasNext()
 	{
+		if(interleave)
+		{
+			interleave = false;
+			return false;
+		}
+		
 		boolean retVal;
 		Object controller = getCurrentController();
 		if(controller == null)
@@ -109,24 +117,19 @@ public class InterleaveControl extends GenericController implements Serializable
 		}
 		else if(controller instanceof Controller)
 		{
-			if (start != null )
-			{ 	
-				if (((Controller)controller).equals(start))
-				{
-					return false;
-				} 
-			} else 
+			if (searchStart != null && ((Controller)controller).equals(searchStart))
 			{
-				start = (Controller)controller;
+				retVal = false;	
 			}
-			
-			if(((Controller)controller).hasNext())
+			else if(((Controller)controller).hasNext())
 			{
 				retVal = true;
 			}
 			else
 			{
 				currentHasNextIsFalse();
+				if (searchStart == null )
+					searchStart = (Controller)controller;
 				retVal = hasNext();
 			}
 		}
@@ -134,28 +137,24 @@ public class InterleaveControl extends GenericController implements Serializable
 		{
 			retVal = true;
 		}
-
-		if(controller == null)
-		{
-			reInitialize();
-		}
-		if(interleave)
-		{
-			interleave = false;
-			return false;
-		}
+		searchStart = null;
 		return retVal;
 	}
 	
 	protected boolean hasNextAtEnd()
 	{
-		resetCurrent();
-		return hasNext();
+		if (subControllersAndSamplers.size() == 0)
+			return false;
+		else 
+		{
+			resetCurrent();
+			return hasNext();
+		}
 	}
 	
 	protected void removeCurrentController()
 	{
-		setInterleave(NEW_STYLE);
+//		setInterleave(NEW_STYLE);
 		super.removeCurrentController();
 	}
 
