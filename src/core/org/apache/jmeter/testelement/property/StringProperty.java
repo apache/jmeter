@@ -26,7 +26,7 @@ import org.apache.jmeter.testelement.TestElement;
 public class StringProperty extends AbstractProperty
 {
     String value;
-    String savedValue;
+    transient String savedValue;
 
     public StringProperty(String name, String value)
     {

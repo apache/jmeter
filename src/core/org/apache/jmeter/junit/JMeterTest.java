@@ -43,7 +43,7 @@ import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.save.SaveService;
+import org.apache.jmeter.save.OldSaveService;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.testelement.TestElement;
@@ -54,7 +54,6 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
-
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
@@ -469,8 +468,8 @@ public class JMeterTest extends JMeterTestCase
 		}
 		log.debug("Saving element: " + el.getClass());
 		el =
-			SaveService.createTestElement(
-				SaveService.getConfigForTestElement(null, el));
+			OldSaveService.createTestElement(
+				OldSaveService.getConfigForTestElement(null, el));
 		log.debug("Successfully saved");
 		guiItem.configure(el);
 		assertEquals(

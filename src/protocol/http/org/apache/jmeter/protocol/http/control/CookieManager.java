@@ -69,7 +69,7 @@ public class CookieManager
     // SimpleDateFormat isn't thread-safe
     // TestElements are cloned for each thread, so
     // we use an instance variable.
-    private SimpleDateFormat dateFormat =
+    private transient SimpleDateFormat dateFormat =
         new SimpleDateFormat("EEEE, dd-MMM-yy HH:mm:ss zzz");
 
     public CookieManager()

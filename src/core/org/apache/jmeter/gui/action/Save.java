@@ -19,8 +19,8 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.FileWriter;
+import java.io.Writer;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -135,11 +135,11 @@ public class Save implements Command
         catch (Exception err)
         {
         }
-        OutputStream writer = null;
+        Writer writer = null;
         try
         {
-            writer = new FileOutputStream(updateFile);
-            SaveService.saveSubTree(subTree, writer);
+            writer = new FileWriter(updateFile);
+            SaveService.saveTree(subTree,writer);
         }
         catch (Throwable ex)
         {
@@ -208,7 +208,7 @@ public class Save implements Command
         }
     }
 
-    private void closeWriter(OutputStream writer)
+    private void closeWriter(Writer writer)
     {
         if (writer != null)
         {
