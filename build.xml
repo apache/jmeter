@@ -218,6 +218,9 @@
     <available classname="bsh.Interpreter" property="beanshell.present">
       <classpath refid="classpath"/>
     </available>
+    <available classname="org.apache.bsf.BSFManager" property="bsf.present">
+      <classpath refid="classpath"/>
+    </available>
   </target>
   
   <!--
@@ -239,8 +242,12 @@
     <echo message="Classes for BeanShell support not found in classpath"/>
   </target>
 
+  <target name="bsf-message" depends="check-libs" unless="bsf.present">
+    <echo message="Classes for BSF support not found in classpath"/>
+  </target>
+
   <target name="report-missing-libs" 
-      depends="ssl-message,iaik-message,mail-message,beanshell-message"
+      depends="ssl-message,iaik-message,mail-message,beanshell-message,bsf-message"
   />
 
   <!--
@@ -358,7 +365,8 @@
     <mkdir dir="${build.java}"/>
     <javac srcdir="${src.java}" destdir="${build.java}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
-      <exclude name="org/apache/jmeter/protocol/java/**/BSH*.java" unless="beanshell.present"/>
+      <exclude name="org/apache/jmeter/protocol/java/**/BeanShell*.java" unless="beanshell.present"/>
+      <exclude name="org/apache/jmeter/protocol/java/**/BSF*.java" unless="bsf.present"/>
       <classpath>
         <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
