@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -36,6 +37,7 @@ import org.apache.jmeter.reporters.AbstractListenerElement;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.visualizers.Printable;
 import org.apache.jmeter.visualizers.Visualizer;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -98,7 +100,7 @@ import org.apache.log.Logger;
  */
 public abstract class AbstractVisualizer
     extends AbstractJMeterGuiComponent
-    implements Visualizer, ChangeListener, UnsharedComponent
+    implements Visualizer, ChangeListener, UnsharedComponent, Printable
 {
     /** Logging. */
     protected static transient Logger log =LoggingManager.getLoggerForClass();
@@ -339,4 +341,13 @@ public abstract class AbstractVisualizer
     {
         this.collector = collector;
     }
+
+	/**
+	 * Subclasses need to over this method, if they wish to
+	 * return something other than the Visualizer itself.
+	 * @return
+	 */    
+	public JComponent getPrintableComponent(){
+		return this;
+	}
 }
