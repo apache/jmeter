@@ -81,8 +81,8 @@ public class LdapExtTestSamplerGui extends AbstractSamplerGui {
         this.configureTestElement(sampler);
     }
 
-    public String getStaticLabel() {
-        return JMeterUtils.getResString("Ldapext_testing_title");
+    public String getLabelResource() {
+        return "ldapext_testing_title";
     }
     
     private void init() {
