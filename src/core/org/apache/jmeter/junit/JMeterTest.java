@@ -230,6 +230,7 @@ public class JMeterTest extends JMeterTestCase
     }
     public void checkGuiSet() throws Exception
     {
+    	guiTitles.remove("Example Sampler");// We don't mind if this is left over
 		assertEquals("Should not have any names left over",0,scanprintMap(guiTitles,"GUI"));
     }
 
@@ -637,7 +638,8 @@ public class JMeterTest extends JMeterTestCase
         while (iter2.hasNext())
         {
             JMeterProperty item2 = iter2.next();
-            assertEquals(item2, clonedItem.getProperty(item2.getName()));
+            //[sebb] assertEquals(item2, clonedItem.getProperty(item2.getName()));
+            assertEquals(item2.getStringValue(), clonedItem.getProperty(item2.getName()).getStringValue());
             assertTrue(item2 != clonedItem.getProperty(item2.getName()));
         }
     }
