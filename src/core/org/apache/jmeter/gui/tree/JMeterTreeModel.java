@@ -79,8 +79,7 @@ import org.apache.jmeter.util.ListedHashTree;
 
 public class JMeterTreeModel extends DefaultTreeModel
 {
-	private static ResourceBundle rb = ResourceBundle.getBundle("org.apache.jmeter.resources.messages");
-
+	
 	/****************************************
 	 * !ToDo (Constructor description)
 	 ***************************************/

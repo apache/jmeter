@@ -88,16 +88,16 @@ public class GraphAccumVisualizer extends AbstractVisualizer
 	/****************************************
 	 * !ToDo (Field description)
 	 ***************************************/
-	protected GraphAccumModel model;
+	protected transient GraphAccumModel model;
 	/****************************************
 	 * !ToDo (Field description)
 	 ***************************************/
-	protected GraphAccum graph;
+	protected transient GraphAccum graph;
 
 	/****************************************
 	 * !ToDo (Field description)
 	 ***************************************/
-	protected JPanel legendPanel;
+	transient protected JPanel legendPanel;
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
 

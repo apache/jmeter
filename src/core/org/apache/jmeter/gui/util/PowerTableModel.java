@@ -21,6 +21,10 @@ public class PowerTableModel extends DefaultTableModel {
 		model.setHeaders(headers);
 		columnClasses = cc;
 	}
+	
+	public PowerTableModel()
+	{
+	}
 
 	public void setRowValues(int row, Object[] values) {
 		model.setCurrentPos(row);

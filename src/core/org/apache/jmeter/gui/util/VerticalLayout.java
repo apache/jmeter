@@ -53,8 +53,13 @@
  * <http://www.apache.org/>.
  */
  package org.apache.jmeter.gui.util;
-import java.awt.*;
-import java.util.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.LayoutManager;
+import java.io.Serializable;
+import java.util.Hashtable;
 /****************************************
  * A vertical layout manager similar to java.awt.FlowLayout. Like FlowLayout
  * components do not expand to fill available space except when the horizontal
@@ -71,7 +76,7 @@ import java.util.*;
  *@version   $Revision$
  ***************************************/
 
-public class VerticalLayout implements LayoutManager
+public class VerticalLayout implements LayoutManager, Serializable
 {
 
 	/****************************************

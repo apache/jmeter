@@ -85,6 +85,9 @@ public class ListDialog extends JPanel implements ActionListener, KeyListener
 
 	Vector listData;
 
+	public ListDialog()
+	{
+	}
 
 	/*************************
 	 *  Constructor takes a label for instructions to the user, and a list of items

@@ -53,6 +53,7 @@
  */
 package org.apache.jmeter.visualizers;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -70,7 +71,7 @@ import org.apache.log.Logger;
  *@version    1.0
  */
 
-public class GraphAccumModel implements Clearable
+public class GraphAccumModel implements Clearable,Serializable
 {
 	/**
 	 *  Description of the Field

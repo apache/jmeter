@@ -1,12 +1,24 @@
 package org.apache.jmeter.junit;
-import java.util.*;
-import junit.framework.TestCase;
-import org.apache.jmeter.gui.JMeterGUIComponent;
-import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.ClassFinder;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import junit.framework.TestCase;
+
+import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.save.SaveService;
+import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.ClassFinder;
+import org.apache.jmeter.util.LoggingManager;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -18,6 +30,7 @@ import org.apache.jmeter.save.SaveService;
 
 public class JMeterTest extends TestCase
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(LoggingManager.TEST);
 
 	/****************************************
 	 * !ToDo (Constructor description)
@@ -65,6 +78,38 @@ public class JMeterTest extends TestCase
 					el.getProperty(TestElement.NAME), item.getName());
 		}
 	}
+	
+	public void testSerializableElements() throws Exception
+	{
+		Iterator iter = getObjects(Serializable.class).iterator();
+		while(iter.hasNext())
+		{
+			Serializable serObj = (Serializable)iter.next();
+			if(serObj.getClass().getName().endsWith("_Stub"))
+			{
+				continue;
+			}
+			try
+			{
+				log.debug("serializing class: "+serObj.getClass().getName());
+				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+				ObjectOutputStream out = new ObjectOutputStream(bytes);
+				out.writeObject(serObj);
+				out.close();
+				ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bytes.toByteArray()));
+				Object readObject = in.readObject();
+				in.close();
+				assertEquals("deserializing class: "+serObj.getClass().getName(),
+						serObj.getClass(),readObject.getClass());
+			}
+			catch (Exception e)
+			{
+				log.error("Trying to serialize object: "+serObj.getClass().getName(),
+						e);
+				throw e;
+			}
+		}
+	}
 
 	/****************************************
 	 * !ToDo
@@ -97,7 +142,14 @@ public class JMeterTest extends TestCase
 		List objects = new LinkedList();
 		while(classes.hasNext())
 		{
-			objects.add(Class.forName((String)classes.next()).newInstance());
+			String className = (String)classes.next();
+			try
+			{
+				objects.add(Class.forName(className).newInstance());
+			}
+			catch (IllegalAccessException e)
+			{
+			}
 		}
 		return objects;
 	}

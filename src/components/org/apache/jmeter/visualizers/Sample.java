@@ -54,6 +54,8 @@
  */
  package org.apache.jmeter.visualizers;
 
+import java.io.Serializable;
+
 /**
  * Title:        Apache JMeter
  * Description:
@@ -63,7 +65,7 @@
  * @version 1.0
  */
 
-	public class Sample
+	public class Sample implements Serializable
 	{
 
 		/**
@@ -97,5 +99,9 @@
 			this.deviation = deviation;
 			this.throughput = throughput;
 			this.error = error;
+		}
+		
+		public Sample()
+		{
 		}
 	}

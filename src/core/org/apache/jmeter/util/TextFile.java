@@ -30,6 +30,11 @@ public class TextFile extends File
 	public TextFile(File filename)
 	{
 		super(filename.toString());
+	}	
+	
+	public TextFile()
+	{
+		super("");
 	}
 
 	/************************************************************
