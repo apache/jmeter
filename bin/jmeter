@@ -11,5 +11,5 @@ while getopts h:p:f: x; do
 	?) echo $USAGE; exit -1;;
 	 esac;
 done
-
+echo `dirname $0`
 java -classpath $CLASSPATH:`dirname $0`/../lib/xerces.jar:`dirname $0`/../lib/util.jar:`dirname $0`/ApacheJMeter.jar org.apache.jmeter.NewDriver $JAVA_PROPS $PROPERTIES
