@@ -50,8 +50,7 @@ public class IterationCounter extends AbstractFunction implements Serializable
         JMeterVariables vars = getVariables();
 
         boolean perThread =
-            new Boolean(((CompoundVariable) variables[0]).execute())
-                .booleanValue();
+            Boolean.valueOf(((CompoundVariable) variables[0]).execute()).booleanValue();
 
         String varName =
             ((CompoundVariable) variables[variables.length - 1]).execute();
