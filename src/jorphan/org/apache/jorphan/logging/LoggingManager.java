@@ -142,6 +142,7 @@ public class LoggingManager
 	{
 		return Hierarchy.getDefaultHierarchy().getLoggerFor(category);
 	}
+    
 	public void setPriority(Priority p, String category)
 	{
 		Hierarchy.getDefaultHierarchy().getLoggerFor(category).setPriority(p);
