@@ -36,7 +36,7 @@ public class UnknownFunction implements Function {
 	public String execute(SampleResult previousResult, Sampler currentSampler)
 		throws InvalidVariableException {
 		String ret = getVariables().get(name);
-		if(ret == null)
+		if(ret == null  || ret.length() == 0)
 		{
 			return "${"+name+"}";
 		}

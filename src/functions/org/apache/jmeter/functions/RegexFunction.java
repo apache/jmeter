@@ -74,6 +74,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	 */
 	public String execute(SampleResult previousResult,Sampler currentSampler) 
 	{
+		getVariables().put(name,defaultValue);
 		if(previousResult == null || previousResult.getResponseData() == null)
 		{
 			return defaultValue;
@@ -90,6 +91,11 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 			}
 		} catch(NumberFormatException e) {
 			log.error("",e);
+			return defaultValue;
+		}
+		catch(Exception e)
+		{
+			return defaultValue;
 		}
 		if(collectAllMatches.size() == 0)
 		{
@@ -167,6 +173,8 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 				result.append(match.group(((Integer)template[a]).intValue()));
 			}
 		}
+		JMeterVariables vars = getVariables();
+		vars.put(name,result.toString());
 		return result.toString();
 	}
 	
