@@ -54,30 +54,29 @@
  */
 package org.apache.jmeter.protocol.java.config.gui;
 
-import java.awt.Font;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
+import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.protocol.java.config.JavaConfig;
 import org.apache.jmeter.protocol.java.sampler.JavaSampler;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerClient;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
@@ -117,54 +116,29 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
 
 	protected void init()
 	{
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-
-		JPanel classnameRequestPanel = new JPanel();
-		classnameRequestPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-		classnameRequestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("protocol_java_border")));
+        setLayout(new BorderLayout(0, 5));
+        
+        if (displayName) {
+            setBorder(makeBorder());
+            
+            add(makeTitlePanel(), BorderLayout.NORTH);
+        }
+        
+		Box classnameRequestPanel = Box.createVerticalBox();
 		classnameRequestPanel.add(getClassnamePanel());
+        classnameRequestPanel.add(Box.createVerticalStrut(5));
 		classnameRequestPanel.add(getParameterPanel());
+        classnameRequestPanel.add(Box.createVerticalGlue());
 
-		if (displayName)
-		{
-			// MAIN PANEL
-			JPanel mainPanel = new JPanel();
-			Border margin = new EmptyBorder(10, 10, 5, 10);
-			mainPanel.setBorder(margin);
-			mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-			// TITLE
-			JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("protocol_java_config_tile"));
-			Font curFont = panelTitleLabel.getFont();
-			int curFontSize = curFont.getSize();
-			curFontSize += 4;
-			panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-			mainPanel.add(panelTitleLabel);
-
-			// NAME
-			mainPanel.add(getNamePanel());
-			
-			mainPanel.add(classnameRequestPanel);
-
-			this.add(mainPanel);
-		}
-		else
-		{
-			this.add(classnameRequestPanel);
-		}
+        add(classnameRequestPanel, BorderLayout.CENTER);			
 	}
 
 
 	protected JPanel getClassnamePanel()
 	{
-		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 10));
-		panel.add(new JLabel(JMeterUtils.getResString("protocol_java_classname")));
-		
 		List possibleClasses = null;
-		
+
 		try {
-			
 			// Find all the classes which implement the JavaSamplerClient interface
 		
 			possibleClasses = ClassFinder.findClassesThatExtend(
@@ -174,19 +148,23 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
 			// Remove the JavaConfig class from the list since it only implements the interface for
 			// error conditions.
 			
-			possibleClasses.remove("org.apache.jmeter.protocol.java.sampler.JavaSampler$ErrorSamplerClient");
-		
+			possibleClasses.remove("org.apache.jmeter.protocol.java.sampler.JavaSampler$ErrorSamplerClient");		
 		} catch (Exception e) {
 			log.debug("Exception getting interfaces.",e);
 		}
+
+        JLabel label = new JLabel(JMeterUtils.getResString("protocol_java_classname"));
 		
 		classnameCombo = new JComboBox(possibleClasses.toArray());
         classnameCombo.addActionListener(this);
 		classnameCombo.setName(CLASSNAMECOMBO);
 		classnameCombo.setEditable(false);
+        label.setLabelFor(classnameCombo);
+        
+        HorizontalPanel panel = new HorizontalPanel();
+        panel.add(label);
 		panel.add(classnameCombo);
 		
-
 		return panel;
 	}
 
@@ -276,4 +254,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
         ((JavaConfig)config).setClassname(classnameCombo.getSelectedItem().toString());
     }		
 
+    public Dimension getPreferredSize() {
+        return getMinimumSize();
+    }
 }

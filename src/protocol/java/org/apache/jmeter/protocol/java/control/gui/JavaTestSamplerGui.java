@@ -54,9 +54,7 @@
  */
 package org.apache.jmeter.protocol.java.control.gui;
 
-import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
+import java.awt.BorderLayout;
 
 import org.apache.jmeter.protocol.java.config.JavaConfig;
 import org.apache.jmeter.protocol.java.config.gui.JavaConfigGui;
@@ -64,7 +62,6 @@ import org.apache.jmeter.protocol.java.sampler.JavaSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 
 /**
@@ -114,23 +111,14 @@ public class JavaTestSamplerGui extends AbstractSamplerGui {
 	}
 
 	private void init() {
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-		
-		// NAME
-		mainPanel.add(makeTitlePanel());
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
+        
+		add(makeTitlePanel(), BorderLayout.NORTH);
 
 		javaPanel = new JavaConfigGui(false);
 		
-		mainPanel.add(javaPanel);
-
-		this.add(mainPanel);
+		add(javaPanel, BorderLayout.CENTER);
 	}
 	
 	public TestElement createTestElement()
