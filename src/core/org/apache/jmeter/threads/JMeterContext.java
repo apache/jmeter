@@ -18,12 +18,14 @@ public class JMeterContext {
 	SampleResult previousResult;
 	Sampler currentSampler;
     Sampler previousSampler;
+    boolean samplingStarted;
     private int threadNum;
 	
 	JMeterContext() {
 		variables = null;
 		previousResult = null;
 		currentSampler = null;
+        samplingStarted = false;
 	}
 	
 	
@@ -89,6 +91,22 @@ public class JMeterContext {
     public void setThreadNum(int threadNum)
     {
         this.threadNum = threadNum;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isSamplingStarted()
+    {
+        return samplingStarted;
+    }
+
+    /**
+     * @param b
+     */
+    public void setSamplingStarted(boolean b)
+    {
+        samplingStarted = b;
     }
 
 }

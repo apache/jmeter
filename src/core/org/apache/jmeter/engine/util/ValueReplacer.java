@@ -135,7 +135,10 @@ public class ValueReplacer
             JMeterVariables vars = new JMeterVariables();
             vars.put("server", "jakarta.apache.org");
             JMeterContextService.getContext().setVariables(vars);
+            JMeterContextService.getContext().setSamplingStarted(true);
         }
+        
+        
 
         public void testReverseReplacement() throws Exception
         {
@@ -165,5 +168,13 @@ public class ValueReplacer
             element.setRunningVersion(true);
             assertEquals("jakarta.apache.org", element.getPropertyAsString("domain"));
         }
+        /* (non-Javadoc)
+         * @see junit.framework.TestCase#tearDown()
+         */
+        protected void tearDown() throws Exception
+        {
+            JMeterContextService.getContext().setSamplingStarted(false);
+        }
+
     }
 }

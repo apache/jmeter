@@ -156,7 +156,9 @@ public class JMeterThread implements Runnable, java.io.Serializable
                         threadContext.setCurrentSampler(sam);
                         SamplePackage pack = compiler.configureSampler(sam);
                         delay(pack.getTimers());
+                        threadContext.setSamplingStarted(true);                        
                         SampleResult result = pack.getSampler().sample(null);
+                        threadContext.setSamplingStarted(false);
                         result.setThreadName(threadName);
                         result.setTimeStamp(System.currentTimeMillis());
                         threadContext.setPreviousResult(result);

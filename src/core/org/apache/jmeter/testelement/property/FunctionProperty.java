@@ -59,7 +59,7 @@ public class FunctionProperty extends AbstractProperty
      */
     public String getStringValue()
     {
-        if (!isRunningVersion())
+        if (!isRunningVersion() || !JMeterContextService.getContext().isSamplingStarted())
         {
             log.debug("Not running version, return raw function string");
             return function.getRawParameters();
