@@ -30,6 +30,10 @@
        			<exclude name="**/Makefile"/>
        			<exclude name="**/Changelog*"/>
        			<exclude name="**/*.orig"/>
+                <exclude name="**/New*.java"/>
+                <exclude name="**/Sampler/**"/>
+                <exclude name="**/config/**"/>
+                <exclude name="**/ThreadGroup.java"/>
 		</javac>
 	</target>
 
@@ -96,7 +100,7 @@
 	- Deletes old build files.
 	-->
 	<target name="clean">
-		<delete file="ApacheJMeter.jar"/>
-		<deltree dir="${classes.dest.dir}"/>
+		<delete file="bin/ApacheJMeter.jar"/>
+		<delete dir="${classes.dest.dir}"/>
 	</target>
 </project>
