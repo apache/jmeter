@@ -81,7 +81,7 @@ resource requires query string parameters, add them below in the
 	multipart form specifications.
 	<p>
 	Additionally, you can specify whether each paramter should be URL encoded.  If you are not sure what this
-	means, it is probably best to select it.  If your values contain characters such as &amp;amp; or spaces, or 
+	means, it is probably best to select it.  If your values contain characters such as &amp;amp; or spaces, or
 	question marks, then encoding is usually required.</p></property>
 	<property name="Filename" required="No">Name of the file to send.  If left blank, JMeter
 	does not send a file, if filled in, JMeter automatically sends the request as
@@ -181,7 +181,7 @@ POST content.</p>
 	<property name="Name" required="No">Descriptive name for this sampler
 	 that is shown in the tree.</property>
 	<property name="URL" required="Yes">The URL to direct the SOAP request to.</property>
-	<property name="Soap/XML-RPC Data" required="No">The Soap XML message, or XML-RPC 
+	<property name="Soap/XML-RPC Data" required="No">The Soap XML message, or XML-RPC
 	instructions.</property>
 	</properties>
 
@@ -375,7 +375,7 @@ be saved under the Recording Controller.</p>
 
 <section name="13.3 Listeners" anchor="listeners">
 <component index="13.3.1" name="Mailer Visualizer" screenshot="../images/screenshots/mailer_vis.png">
-<description><p>The mailer visualizer can be set up to send email if a test run receives too many 
+<description><p>The mailer visualizer can be set up to send email if a test run receives too many
 failed responses from the server.</p></description>
 
 <properties>
@@ -409,7 +409,7 @@ current standard deviation (red), and the current throughput rate (green) are di
 includes any delays you added to your test and JMeter's own internal processing time.  The advantage
 of doing the calculation like this is that this number represents something
 real - your server in fact handled that many requests per minute, and you can increase the number of threads
-and/or decrease the delays to discover your server's maximum throughput.  Whereas if you made calculations 
+and/or decrease the delays to discover your server's maximum throughput.  Whereas if you made calculations
 that factored out delays and JMeter's processing, it would be unclear what you could conclude from that
 number.</p></description>
 </component>
@@ -444,8 +444,8 @@ idealized throughput calculation.</description>
 </component>
 
 <component index="13.3.7" name="View Results in Table" screenshot="../images/screenshots/table_results.gif">
-<description>This visualizer creates a row for every sample result.  Each sample result's URL, 
-time in milliseconds, success/failure is displayed.  Like the <complink name="View Results Tree"/>, 
+<description>This visualizer creates a row for every sample result.  Each sample result's URL,
+time in milliseconds, success/failure is displayed.  Like the <complink name="View Results Tree"/>,
 this visualizer uses a lot of memory.</description>
 </component>
 
@@ -678,11 +678,11 @@ instead. (see figures 9 and 10).</p>
 <component index="13.4.10" name="User Parameters" screenshot="../images/screenshots/user_params.png">
 <description><p>Allows the user to specify values for User Variables specific to individual threads.</p>
 <p>User Variables can also be specified in the Test Plan but not specific to individual threads. This panel allows
-you to specify a series of values for any User Variable. For each thread, the variable will be assigned one of the values from the series 
+you to specify a series of values for any User Variable. For each thread, the variable will be assigned one of the values from the series
 in sequence. If there are more threads than values, the values get re-used. For example, this can be used to assign a distinct
 user id to be used by each thread. User variables can be referenced in any field of any jMeter Component.</p>
 
-<p>The variable is specified by clicking the Add Variable button in the bottom of the panel and filling in the Variable name in the 'Name:' column. 
+<p>The variable is specified by clicking the Add Variable button in the bottom of the panel and filling in the Variable name in the 'Name:' column.
 To add a new value to the series, click the 'Add User' button and fill in the desired value in the newly added column.</p>
 
 <p>Values can be accessed in any test component in the same thread group, using the <a href="functions.html">function syntax</a>: ${variable}.</p>
@@ -704,7 +704,7 @@ with the start, continuing on like that until the test is ended.  </p></descript
 	<property name="Reference Name" required="Yes">This controls how you refer to this value in other elements.  Syntax is
 	as in <a href="functions.html">user-defined values</a>: <code>$(reference_name}</code>.</property>
 	<property name="Track Counter Independently for each User" required="No">In other words, is this a global counter, or does each user get their
-	own counter?  If unchecked, the counter is global (ie, user #1 will get value "1", and user #2 will get value "2" on 
+	own counter?  If unchecked, the counter is global (ie, user #1 will get value "1", and user #2 will get value "2" on
 	the first iteration).  If checked, each user has an independent counter.</property>
 </properties>
 </component>
@@ -752,7 +752,7 @@ user) is marked as a failed response.</p></description>
 <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
 	<property name="Duration in Milliseconds" required="Yes">The maximum number of milliseconds
 	each response is allowed before being marked as failed.</property>
-	
+
 </properties>
 </component>
 
@@ -874,16 +874,16 @@ your dynamic test sample.</note>
 it is easier to use than the HTML Link Parser, and more efficient.  For web applications that
 use URL Re-writing to store session ids instead of cookies, this element can be attached at the
 ThreadGroup level, much like the <complink name="HTTP Cookie Manager"/>.  Simply give it the name
-of the session id parameter, and it will find it on the page and add the argument to every 
+of the session id parameter, and it will find it on the page and add the argument to every
 request of that ThreadGroup.</p>
-<p>Alternatively, this modifier can be attached to select requests and it will modify only them.  
-Clever users will even determine that this modifier can be used to grab values that elude the 
+<p>Alternatively, this modifier can be attached to select requests and it will modify only them.
+Clever users will even determine that this modifier can be used to grab values that elude the
 <complink name="HTML Link Parser"/>.</p>
 </description>
 
 <properties>
 	<property name="Name" required="No">Descriptive name given to this element in the test tree.</property>
-	<property name="Session Argument Name" required="Yes">The name of the parameter to grab from 
+	<property name="Session Argument Name" required="Yes">The name of the parameter to grab from
 	previous response.  This modifier will find the parameter anywhere it exists on the page, and
 	grab the value assigned to it, whether it's in an HREF or a form.</property>
 	<property name="Path Extension" required="No">Some web apps rewrite URLs by appending
@@ -899,7 +899,7 @@ Request that it modifies, it will replace any parameter with the same name or ad
 parameter to the requests list of arguments.</p>
 <note>The value of the argument in your HTTP Request must be a '*' in order for the HTML Parameter Mask
 Modifier to replace it.</note>
-<p>As an example, the username for a login script could be modified to send a series of values 
+<p>As an example, the username for a login script could be modified to send a series of values
 such as:<br/>
 user_1<br/>
 user_2<br/>
@@ -912,7 +912,7 @@ user_4, etc.</p></description>
 	modify or add to the HTTP Request.</property>
 	<property name="ID Prefix" required="No">A string value to prefix to every generated value.</property>
 	<property name="Lower Bound" required="Yes">A number value to start the counter at.</property>
-	<property name="Upper Bound" required="Yes">A number value to end the counter, at which point it restarts 
+	<property name="Upper Bound" required="Yes">A number value to end the counter, at which point it restarts
 	with the Lower Bound value.</property>
 	<property name="Increment" required="Yes">Value to increment the counter by each time through.</property>
 	<property name="ID Suffix" required="No">A string value to add as suffix to every generated vaue.</property>
@@ -923,8 +923,8 @@ user_4, etc.</p></description>
 <description><p>The User Parameter Modifier uses an XML file get values for HTTP arguments.  Any
 HTTP Request that this modifier modifies will be checked for the existence of the specified
 arguments.  If found, the values for those arguments will be replaced by the values found in the
-xml file.  The XML file can have multiple sets of the same values.  This modifier will iterate 
-through these values in a round-robin style, thus each request will get a different set of values 
+xml file.  The XML file can have multiple sets of the same values.  This modifier will iterate
+through these values in a round-robin style, thus each request will get a different set of values
 until the last set of values is reached, at which point it will begin again at the first set.</p>
 <note>If the number of value sets is equal to the number of threads in your test, then it will work
 out that each thread will get the same set of values each time, which will be a different set from
@@ -1002,13 +1002,21 @@ any other thread</note>
 specific functions.</p>
 
 <component index="13.9.1" name="__regexFunction">
-<description><p>The Regex Function is used to parse the previous response using any regular 
+<description><p>The Regex Function is used to parse the previous response using any regular
 expression (provided by user).  The function returns the template string with variable values filled
 in.</p>
 <p>The __regexFunction stores values for future use.  In the sixth parameter, you can specify
 a reference name.  After this function executes, the same values can be retrieved at later times
-using the syntax for user-defined values.  For instance, ${refName_g1} would refer to the first
-group parsed by this function.  ${refName_g0} always refers to the entire match.</p></description>
+using the syntax for user-defined values.  For instance, if you enter "refName" as the sixth
+parameter you will be able to use:
+<ul>
+<li>${refName} to refer to the computed result of the second parameter ("Template for the
+replacement string") parsed by this function</li>
+<li>${refName_g0} to refer to the entire match  parsed by this function.</li>
+<li>${refName_g1} to refer to the first group parsed by this function.</li>
+<li>${refName_g#} to refer to the n<sup>th</sup> group parsed by this function.</li>
+</ul>
+</p></description>
 
 <properties>
 	<property name="First arguement" required="Yes">The first argument is the regular expression
@@ -1023,7 +1031,7 @@ group parsed by this function.  ${refName_g0} always refers to the entire match.
 	$[group_number]$.  Ie: $1$, or $2$.  Your template can be any string.</property>
 	<property name="Third argument" required="Yes">The third argument tells JMeter which match
 	to use.  Your regular expression might find numerous matches.  You have four choices:
-		<ul><li>An integer - Tells JMeter to use that match.  '1' for the first found match, '2' for the 
+		<ul><li>An integer - Tells JMeter to use that match.  '1' for the first found match, '2' for the
 		second, and so on</li>
 		<li>RAND - Tells JMeter to choose a match at random.</li>
 		<li>ALL - Tells JMeter to use all matches, and create a template string for each one and then
@@ -1034,8 +1042,9 @@ group parsed by this function.  ${refName_g0} always refers to the entire match.
 	<property name="Fourth argument" required="No">If 'ALL' was selected for the above argument
 	value, then this argument will be inserted between each appended copy of the template value.</property>
 	<property name="Fifth argument" required="No">Default value returned if no match is found</property>
-	<property name="Sixth argument" required="No">A reference name for reusing the values parsed by this function.<br/>
-		Stored values are of the form ${refName_g#} where "#" is the group number from the regular expression.</property>
+    <property name="Sixth argument" required="No">A reference name for reusing the values parsed by this function.<br/>
+        Stored values are ${refName} (the replacement template string) and ${refName_g#} where "#" is the
+        group number from the regular expression ("0" can be used to refer to the entire match).</property>
 </properties>
 </component>
 
@@ -1047,7 +1056,7 @@ that is like counting the number of iterations through the test plan.  A global 
 counting how many times that request was run.</p></description>
 
 <properties>
-	<property name="First argument" required="Yes">TRUE if you wish each simulated user's counter 
+	<property name="First argument" required="Yes">TRUE if you wish each simulated user's counter
 	to be kept independent and separate from the other users.  FALSE for a global counter.</property>
 
 <property name="Second argument" required="No">A reference name for reusing the value created by this function.<br/>
@@ -1057,7 +1066,7 @@ counting how many times that request was run.</p></description>
 </component>
 
 <component index="13.9.3" name="__threadNum">
-<description><p>The thread number function simply returns the number of the thread currently 
+<description><p>The thread number function simply returns the number of the thread currently
 being executed.  These numbers are independent of ThreadGroup, meaning thread #1 in one threadgroup
 is indistinguishable from thread #1 in another threadgroup, from the point of view of this function.</p>
 
