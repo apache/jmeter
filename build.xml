@@ -846,6 +846,17 @@ some of its classes - at present JMeter can only run from jar files.
       <arg value="./jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>
+   <!-- TEMP test again non-headless-->
+   <echo>Test non-headless</echo>
+   <java classname="org.apache.jorphan.test.AllTests" fork="yes" dir="${basedir}/bin">
+      <classpath>
+	<path refid="classpath"/>
+	<fileset dir="${dest.jar}" includes="*.jar"/>
+      </classpath>
+      <arg value="../lib/ext"/>
+      <arg value="./jmetertest.properties"/>
+      <arg value="org.apache.jmeter.util.JMeterUtils"/>
+    </java>
   </target>
   
   <!-- Run the HTML Parser unit tests -->
