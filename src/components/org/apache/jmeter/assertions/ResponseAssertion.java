@@ -57,7 +57,6 @@ package org.apache.jmeter.assertions;
 import java.util.*;
 import java.io.Serializable;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.testelement.AbstractTestElement;
 
 import org.apache.oro.text.PatternCacheLRU;
@@ -92,15 +91,15 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 	public final static int CONTAINS = 1 << 1;
 	public final static int NOT = 1 << 2;
 
-	private transient static ThreadLocal matcher =
+	private static ThreadLocal matcher =
 	    new ThreadLocal()
 	    {
-		protected Object initialValue()
-		{
-		    return new Perl5Matcher();
-		}
+			protected Object initialValue()
+			{
+			    return new Perl5Matcher();
+			}
 	    };
-	private transient PatternCacheLRU patternCache =
+	private static PatternCacheLRU patternCache =
 		new PatternCacheLRU(1000, new Perl5Compiler());
 
 	/************************************************************
@@ -314,7 +313,7 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 	    while (iter.hasNext())
 	    {
 		String stringPattern= (String) iter.next();
-		Pattern pattern = patternCache.getPattern(stringPattern);
+		Pattern pattern = patternCache.getPattern(stringPattern, Perl5Compiler.READ_ONLY_MASK);
 		boolean found;
 		if ((CONTAINS & getTestType()) > 0)
 		{
