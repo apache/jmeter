@@ -59,8 +59,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Set;
 
 import javax.swing.JFileChooser;
@@ -68,14 +66,11 @@ import javax.swing.tree.TreePath;
 
 import junit.framework.TestCase;
 
-import org.apache.jmeter.control.gui.WorkBenchGui;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.SaveService;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -190,38 +185,6 @@ public class Load implements Command
         return isTestPlan;
     }
 
-    private void convertTree(HashTree tree) throws Exception
-    {
-        Iterator iter = new LinkedList(tree.list()).iterator();
-        while (iter.hasNext())
-        {
-            TestElement item = (TestElement) iter.next();
-            convertTree(tree.getTree(item));
-            JMeterGUIComponent comp = generateGUIComponent(item);
-            tree.replace(item, comp);
-        }
-    }
-
-    private JMeterGUIComponent generateGUIComponent(TestElement item)
-        throws Exception
-    {
-        JMeterGUIComponent gui = null;
-        try
-        {
-            gui =
-                (JMeterGUIComponent) Class
-                    .forName(item.getPropertyAsString(TestElement.GUI_CLASS))
-                    .newInstance();
-        }
-        catch (Exception e)
-        {
-            log.warn("Couldn't get gui for " + item, e);
-            gui = new WorkBenchGui();
-        }
-        gui.configure(item);
-        return gui;
-    }
-
     /**
      * 
      * @version    $Revision$  Last updated: $Date$
@@ -306,63 +269,59 @@ public class Load implements Command
 
         public void testFile3() throws Exception
         {
-            loadAndAssertTree(getTree(testFile3));
+            assertTree(getTree(testFile3));
         }
 
-        private void loadAndAssertTree(HashTree tree) throws Exception
+        private void assertTree(HashTree tree) throws Exception
         {
             assertTrue(
                 tree.getArray()[0]
                     instanceof org.apache.jmeter.testelement.TestPlan);
-            loader.convertTree(tree);
-            assertTrue(
-                tree.getArray()[0]
-                    instanceof org.apache.jmeter.control.gui.TestPlanGui);
         }
 
         public void testFile4() throws Exception
         {
-            loadAndAssertTree(getTree(testFile4));
+            assertTree(getTree(testFile4));
         }
 
         public void testFile5() throws Exception
         {
-            loadAndAssertTree(getTree(testFile5));
+            assertTree(getTree(testFile5));
         }
 
         public void testFile6() throws Exception
         {
-            loadAndAssertTree(getTree(testFile6));
+            assertTree(getTree(testFile6));
         }
 
         public void testFile7() throws Exception
         {
-            loadAndAssertTree(getTree(testFile7));
+            assertTree(getTree(testFile7));
         }
 
         public void testFile8() throws Exception
         {
-            loadAndAssertTree(getTree(testFile8));
+            assertTree(getTree(testFile8));
         }
 
         public void testFile9() throws Exception
         {
-            loadAndAssertTree(getTree(testFile9));
+            assertTree(getTree(testFile9));
         }
 
         public void testFile10() throws Exception
         {
-            loadAndAssertTree(getTree(testFile10));
+            assertTree(getTree(testFile10));
         }
 
         public void testFile11() throws Exception
         {
-            loadAndAssertTree(getTree(testFile11));
+            assertTree(getTree(testFile11));
         }
 
         public void testFile12() throws Exception
         {
-            loadAndAssertTree(getTree(testFile12));
+            assertTree(getTree(testFile12));
         }
 
         private HashTree getTree(File f) throws Exception
