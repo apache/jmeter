@@ -169,8 +169,8 @@ public class JavaTest
     private void setupValues(JavaSamplerContext context)
     {
 
-        sleepTime = context.getLongParameter(MASK_NAME, DEFAULT_SLEEP_TIME);
-        sleepMask = context.getLongParameter(SLEEP_NAME, DEFAULT_SLEEP_MASK);
+        sleepTime = context.getLongParameter(SLEEP_NAME, DEFAULT_SLEEP_TIME);
+        sleepMask = context.getLongParameter(MASK_NAME, DEFAULT_SLEEP_MASK);
 
         responseMessage =
             context.getParameter(
@@ -296,16 +296,22 @@ public class JavaTest
 		// Record sample start time.
 		results.sampleStart();
 		
-		long start = System.currentTimeMillis();
-
-		// Generate a random offset value using the current time.
-        long sleep = getSleepTime() + (start % getSleepMask());
-
+		long sleep = sleepTime;
+		if (sleepTime > 0 && sleepMask > 0)
+		{ /// Only do the calculation if it is needed
+		    long start = System.currentTimeMillis();
+		    // Generate a random-ish offset value using the current time.
+            sleep = sleepTime + (start % sleepMask);
+		}
+		
         try
         {
             // Execute the sample.  In this case sleep for the
-            // specified time.
-            Thread.sleep(sleep);
+            // specified time, if any
+        	if (sleep > 0)
+        	{
+        		Thread.sleep(sleep);
+        	}
             results.setSuccessful(success);
         }
         catch (InterruptedException e)
@@ -385,7 +391,7 @@ public class JavaTest
      * @return the base number of milliseconds to sleep during
      *          each sample.
      */
-    private long getSleepTime()
+    private long xgetSleepTime()
     {
         return sleepTime;
     }
@@ -396,7 +402,7 @@ public class JavaTest
      * @return a mask to be applied to the current time in order
      *          to add a random component to the sleep time.
      */
-    private long getSleepMask()
+    private long xgetSleepMask()
     {
         return sleepMask;
     }
