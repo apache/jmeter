@@ -1009,6 +1009,25 @@ the performance history of each machine for the last hour.</p>
 </description>
 </component>
 
+<component index="15.3.11" name="Distribution Graph" screenshot="distribution_graph.png">
+<description>
+<p>The distribution graph will display a bar for every unique response time. Since the
+granularity of System.currentTimeMillis() is 10 milliseconds, the 90% threshold should be
+within the width of the graph. The graph will draw two threshold lines: 50% and 90%.
+What this means is 50% of the response times finished between 0 and the line. The same
+is true of 90% line. Several tests with Tomcat were performed using 30 threads for 600K
+requests. The graph was able to display the distribution without any problems and both
+the 50% and 90% line were within the width of the graph. A performant application will
+generally produce results that clump together. A poorly written application that has
+memory leaks may result in wild fluctuations. In those situations, the threshold lines
+may be beyond the width of the graph. The recommended solution to this specific problem
+is fix the webapp so it performs well. If your test plan produces distribution graphs
+with no apparent clumping or pattern, it may indicate a memory leak. The only way to
+know for sure is to use a profiling tool.</p>
+</description>
+</component>
+
+
 </section>
 
 <section name="15.4 Configuration Elements" anchor="config_elements">
