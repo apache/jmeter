@@ -166,6 +166,7 @@ public class ResultCollector
         throws SAXException, IOException, ConfigurationException
     {
         //inLoading = true;
+    	boolean parsedOK = false;
         if (new File(getFilename()).exists())
         {
             clearVisualizer();
@@ -174,23 +175,33 @@ public class ResultCollector
             {
                 Configuration savedSamples = getConfiguration(getFilename());
                 readSamples(savedSamples);
+                parsedOK = true;
             }
             catch(SAXException e)
             {
+            	log.warn("Error parsing XML results "+e);
+				log.info("Assuming CSV format instead");
                 dataReader = new BufferedReader(new FileReader(getFilename()));
                 String line;
                 while((line = dataReader.readLine()) != null)
                 {
-                    sendToVisualizer(OldSaveService.makeResultFromDelimitedString(line));
+                	sendToVisualizer(OldSaveService.makeResultFromDelimitedString(line));
                 }
+                parsedOK = true;
             }
             catch (Exception e)
             {
-                log.error("", e);
+                log.error("Error parsing results file "+getFilename(), e);
             }
             finally
 			{
             	if (dataReader != null) dataReader.close();
+            	if (!parsedOK)
+            	{
+                    SampleResult sr=new SampleResult();
+                    sr.setSampleLabel("Error loading results file - see log file");
+                    sendToVisualizer(sr);            		
+            	}
             }
         }
         //inLoading = false;
