@@ -105,16 +105,6 @@ public class JDBCSampler extends AbstractSampler
     {
     }
 
-    public void addCustomTestElement(TestElement element)
-    {
-        if (element instanceof SqlConfig
-                || element instanceof PoolConfig
-                || element instanceof DbConfig)
-        {
-            this.mergeIn(element);
-        }
-    }
-
     public void testStarted(String host)
     {
     }
