@@ -67,7 +67,7 @@ import org.apache.log.Logger;
 
 /**
  * @author     $Author$
- * @version    $Revision$
+ * @version    $Revision$ Updated on: $Date$
  */
 public class ClientJMeterEngine implements JMeterEngine,Runnable
 {
@@ -107,9 +107,9 @@ public class ClientJMeterEngine implements JMeterEngine,Runnable
 
     public void runTest()
     {
-        log.warn("about to run remote test");
+        log.info("about to run remote test");
         new Thread(this).start();
-        log.warn("done initiating run command");
+        log.info("done initiating run command");
     }
 
     public void stopTest()
@@ -141,7 +141,7 @@ public class ClientJMeterEngine implements JMeterEngine,Runnable
      */
     public void run()
     {
-        log.warn("running clientengine run method");
+        log.info("running clientengine run method");
         testListeners = new SearchByClass(TestListener.class);
         getTestTree().traverse(testListeners);
         sampleListeners = new ConvertListeners();
@@ -149,11 +149,11 @@ public class ClientJMeterEngine implements JMeterEngine,Runnable
         try
         {
             remote.setHost(host);
-            log.warn("sent host info");
+            log.info("sent host ="+host);
             remote.configure(test);
-            log.warn("sent test");
+            log.info("sent test");
             remote.runTest();
-            log.warn("sent run command");
+            log.info("sent run command");
         }
         catch(Exception ex)
         {
