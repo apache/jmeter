@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,19 +54,18 @@
  */
 package org.apache.jmeter.threads;
 
-/****************************************
- * ThreadGroup used for reflection purposes. ThreadGroup has a <code>LoopController</code>
- * which loops as many times as specified on the ThreadGroup gui. During
- * reflection, we don't need the <code>LoopController</code> 'cos we need to run
- * the Sampler e.g. <code>JNDISampler</code> only once. Thus we create this
- * <code>ReflectionThreadGroup</code> which has a <code>nextEntry()</code> which
- * doesn't make use of the <code>LoopController</code>
+/**
+ * ThreadGroup used for reflection purposes. {@link ThreadGroup} has a
+ * {@link LoopController} which loops as many times as specified on the
+ * ThreadGroup gui. During reflection, we don't need the
+ * <code>LoopController</code> because we need to run the Sampler (for example,
+ * <code>JNDISampler</code>) only once. Thus we create this
+ * <code>ReflectionThreadGroup</code> which has a {@link #nextEntry()}
+ * which doesn't make use of the <code>LoopController</code>.
  *
- *@author    Khor Soon Hin
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
+ * @author    Khor Soon Hin
+ * @version   $Revision$
+ */
 public class ReflectionThreadGroup extends ThreadGroup
 {
 

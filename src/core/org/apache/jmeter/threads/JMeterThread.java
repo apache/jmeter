@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -76,17 +76,18 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.SearchByClass;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-/****************************************
+
+/**
  * The JMeter interface to the sampling process, allowing JMeter to see the
  * timing, add listeners for sampling events and to stop the sampling process.
  *
- *@author    $Author$
- *@created   $Date$
- *@version   $Revision$
- ***************************************/
+ * @author    $Author$
+ * @version   $Revision$
+ */
 public class JMeterThread implements Runnable, java.io.Serializable
 {
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
     static Map samplers = new HashMap();
     int initialDelay = 0;
     Controller controller;
@@ -105,19 +106,22 @@ public class JMeterThread implements Runnable, java.io.Serializable
     private boolean scheduler = false;
     //based on this scheduler is enabled or disabled
 
-    /****************************************
-     * !ToDo (Constructor description)
-     ***************************************/
     public JMeterThread()
-    {}
-    public JMeterThread(HashTree test, JMeterThreadMonitor monitor, ListenerNotifier note)
+    {
+    }
+
+    public JMeterThread(
+        HashTree test,
+        JMeterThreadMonitor monitor,
+        ListenerNotifier note)
     {
         this.monitor = monitor;
         threadVars = new JMeterVariables();
         testTree = test;
         compiler = new TestCompiler(testTree, threadVars);
         controller = (Controller) testTree.getArray()[0];
-        SearchByClass threadListenerSearcher = new SearchByClass(TestListener.class);
+        SearchByClass threadListenerSearcher =
+            new SearchByClass(TestListener.class);
         test.traverse(threadListenerSearcher);
         testListeners = threadListenerSearcher.getSearchResults();
         notifier = note;
@@ -129,20 +133,21 @@ public class JMeterThread implements Runnable, java.io.Serializable
     }
 
 
-    /*************************************
-     * Checks whether the JMeterThread is Scheduled
-     * @Author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
-     *************************************/
-    public boolean isScheduled() {
+    /**
+     * Checks whether the JMeterThread is Scheduled.
+     * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+     */
+    public boolean isScheduled()
+    {
         return this.scheduler;
     }
 
-    /*************************************
-     *Enable the scheduler for this JMeterThread
-     *groups from the JMeterThreads.
-     * @Author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
-     *************************************/
-    public void setScheduled(boolean sche) {
+    /**
+     * Enable the scheduler for this JMeterThread.
+     * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+     */
+    public void setScheduled(boolean sche)
+    {
         this.scheduler = sche;
     }
 
@@ -151,7 +156,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
      * Set the StartTime for this Thread.
      *
      * @param StartTime the StartTime value.
-     * @Author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+     * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
     public void setStartTime(long stime)
     {
@@ -162,7 +167,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
      * Get the start time value.
      *
      * @return the start time value.
-     * @Author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+     * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
     public long getStartTime()
     {
@@ -173,17 +178,18 @@ public class JMeterThread implements Runnable, java.io.Serializable
      * Set the EndTime for this Thread.
      *
      * @param EndTime the EndTime value.
-     * @Author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+     * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
     public void setEndTime(long etime)
     {
         endTime = etime;
     }
+    
     /**
      * Get the end time value.
      *
      * @return the end time  value.
-     * @Author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+     * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
     public long getEndTime()
     {
@@ -194,11 +200,13 @@ public class JMeterThread implements Runnable, java.io.Serializable
     /**
      * Check the scheduled time is completed.
      *
-     * @Author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+     * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
-    public void  stopScheduler() {
+    public void stopScheduler()
+    {
         long delay = System.currentTimeMillis() - endTime;
-        if ((delay >= 0 )) {
+        if ((delay >= 0))
+        {
             running = false;
         }
     }
@@ -206,28 +214,33 @@ public class JMeterThread implements Runnable, java.io.Serializable
     /**
      * Start the scheduler with the specified time
      *
-     * @Author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+     * aAuthor T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
-    public void  startScheduler() {
-        long delay =(startTime - System.currentTimeMillis());
-        if(delay > 0) {
-            try {
+    public void startScheduler()
+    {
+        long delay = (startTime - System.currentTimeMillis());
+        if (delay > 0)
+        {
+            try
+            {
                 running = true;
                 Thread.sleep(delay);
-            }catch(Exception e){}
-        }else  {
+            }
+            catch (Exception e)
+            {
+            }
+        }
+        else
+        {
             running = false;
         }
-
     }
 
     public void setThreadName(String threadName)
     {
         this.threadName = threadName;
     }
-    /****************************************
-     * !ToDo (Method description)
-     ***************************************/
+
     public void run()
     {
         try
@@ -241,7 +254,8 @@ public class JMeterThread implements Runnable, java.io.Serializable
             Sampler entry = null;
             rampUpDelay();
             
-            if (scheduler) {
+            if (scheduler)
+            {
                 //set the scheduler to start
                 startScheduler();
             }
@@ -252,7 +266,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
             threadContext.setSamplingStarted(true);
             while (running)
             {
-            	Sampler sam;
+                Sampler sam;
                 while (running && (sam=controller.next())!=null)
                 {
                     try
@@ -268,7 +282,8 @@ public class JMeterThread implements Runnable, java.io.Serializable
                         checkAssertions(pack.getAssertions(), result);
                         notifyListeners(pack.getSampleListeners(), result);
                         compiler.done(pack);
-                        if (scheduler) {
+                        if (scheduler)
+                        {
                             //checks the scheduler to stop the iteration
                             stopScheduler();
                         }
@@ -298,9 +313,6 @@ public class JMeterThread implements Runnable, java.io.Serializable
         return threadName;
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     ***************************************/
     public void stop()
     {
         running = false;
@@ -311,8 +323,11 @@ public class JMeterThread implements Runnable, java.io.Serializable
         Iterator iter = assertions.iterator();
         while (iter.hasNext())
         {
-            AssertionResult assertion = ((Assertion) iter.next()).getResult(result);
-            result.setSuccessful(result.isSuccessful() && !(assertion.isError() || assertion.isFailure()));
+            AssertionResult assertion =
+                ((Assertion) iter.next()).getResult(result);
+            result.setSuccessful(
+                result.isSuccessful()
+                    && !(assertion.isError() || assertion.isFailure()));
             result.addAssertionResult(assertion);
         }
     }
@@ -357,19 +372,28 @@ public class JMeterThread implements Runnable, java.io.Serializable
             TestListener listener = (TestListener)iter.next();
             if(listener instanceof TestElement)
             {
-                listener.testIterationStart(new LoopIterationEvent(controller,threadVars.getIteration()));
+                listener.testIterationStart(
+                    new LoopIterationEvent(
+                        controller,
+                        threadVars.getIteration()));
                 ((TestElement)listener).recoverRunningVersion();
             }
             else
             {
-                listener.testIterationStart(new LoopIterationEvent(controller,threadVars.getIteration()));
+                listener.testIterationStart(
+                    new LoopIterationEvent(
+                        controller,
+                        threadVars.getIteration()));
             }
         }
     }
 
     private void notifyListeners(List listeners, SampleResult result)
     {
-        SampleEvent event = new SampleEvent(result,controller.getPropertyAsString(TestElement.NAME));
+        SampleEvent event =
+            new SampleEvent(
+                result,
+                controller.getPropertyAsString(TestElement.NAME));
         compiler.sampleOccurred(event);
         notifier.notifyListeners(event, listeners);
 
@@ -378,9 +402,10 @@ public class JMeterThread implements Runnable, java.io.Serializable
     {
         initialDelay = delay;
     }
-    /****************************************
-     * Initial delay if ramp-up period is active for this group
-     ***************************************/
+
+    /**
+     * Initial delay if ramp-up period is active for this group.
+     */
     private void rampUpDelay()
     {
         if (initialDelay > 0)
@@ -393,9 +418,9 @@ public class JMeterThread implements Runnable, java.io.Serializable
             {}
         }
     }
+    
     /**
      * Returns the threadNum.
-     * @return int
      */
     public int getThreadNum()
     {
@@ -404,7 +429,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
 
     /**
      * Sets the threadNum.
-     * @param threadNum The threadNum to set
+     * @param threadNum the threadNum to set
      */
     public void setThreadNum(int threadNum)
     {
@@ -414,11 +439,11 @@ public class JMeterThread implements Runnable, java.io.Serializable
     private class IterationListener implements LoopIterationListener
     {
         /* (non-Javadoc)
-         * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+         * @see LoopIterationListener#iterationStart(LoopIterationEvent)
          */
         public void iterationStart(LoopIterationEvent iterEvent)
         {
             notifyTestListeners();
         }
-	}
+    }
 }

@@ -16,75 +16,77 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * Title:        JMeter
- * Description:
- * Copyright:    Copyright (c) 2000
- * Company:      Apache
  * @author Michael Stover
- * @version 1.0
+ * @version $Revision$
  */
-
 public class SamplePackage
 {
     private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.ENGINE);
-	List sampleListeners = new LinkedList();
-	List timers = new LinkedList();
-	List assertions = new LinkedList();
+    List sampleListeners = new LinkedList();
+    List timers = new LinkedList();
+    List assertions = new LinkedList();
     List postProcessors = new LinkedList();
     List preProcessors = new LinkedList();
     List responseModifiers;
     List configs;
     List modifiers;
-	Sampler sampler;
+    Sampler sampler;
 
-	public SamplePackage()
-	{
-	}
+    public SamplePackage()
+    {
+    }
     
-    public SamplePackage(List configs, List modifiers, List responseModifiers, List listeners, List timers, List assertions, 
-                    List extractors,List pres)
-            {
-                log.debug("configs is null: " + (configs == null));
-                this.configs = configs;
-                this.modifiers = modifiers;
-                this.responseModifiers = responseModifiers;
-                this.sampleListeners = listeners;
-                this.timers = timers;
-                this.assertions = assertions;
-                this.postProcessors = extractors;
-                this.preProcessors = pres;
-            }
+    public SamplePackage(
+        List configs,
+        List modifiers,
+        List responseModifiers,
+        List listeners,
+        List timers,
+        List assertions,
+        List extractors,
+        List pres)
+    {
+        log.debug("configs is null: " + (configs == null));
+        this.configs = configs;
+        this.modifiers = modifiers;
+        this.responseModifiers = responseModifiers;
+        this.sampleListeners = listeners;
+        this.timers = timers;
+        this.assertions = assertions;
+        this.postProcessors = extractors;
+        this.preProcessors = pres;
+    }
     
     public void setRunningVersion(boolean running)
-            {
-                setRunningVersion(configs,running);
-                setRunningVersion(modifiers,running);
-                setRunningVersion(sampleListeners,running);
-                setRunningVersion(assertions,running);
-                setRunningVersion(timers,running);
-                setRunningVersion(responseModifiers,running);
-                setRunningVersion(postProcessors,running);
-                setRunningVersion(preProcessors,running);
-                sampler.setRunningVersion(running);
-            }
+    {
+        setRunningVersion(configs, running);
+        setRunningVersion(modifiers, running);
+        setRunningVersion(sampleListeners, running);
+        setRunningVersion(assertions, running);
+        setRunningVersion(timers, running);
+        setRunningVersion(responseModifiers, running);
+        setRunningVersion(postProcessors, running);
+        setRunningVersion(preProcessors, running);
+        sampler.setRunningVersion(running);
+    }
         
     private void setRunningVersion(List list,boolean running)
     {
         Iterator iter = list.iterator();
         while (iter.hasNext())
         {
-            ((TestElement) iter.next()).setRunningVersion(running);                
+            ((TestElement) iter.next()).setRunningVersion(running);
         }
     }
     
     private void recoverRunningVersion(List list)
+    {
+        Iterator iter = list.iterator();
+        while (iter.hasNext())
         {
-            Iterator iter = list.iterator();
-            while (iter.hasNext())
-            {
-                ((TestElement) iter.next()).recoverRunningVersion();                
-            }
+            ((TestElement) iter.next()).recoverRunningVersion();
         }
+    }
     
     public void recoverRunningVersion()
     {
@@ -99,20 +101,20 @@ public class SamplePackage
         sampler.recoverRunningVersion();
     }
 
-	public List getSampleListeners()
-	{
-		return sampleListeners;
-	}
+    public List getSampleListeners()
+    {
+        return sampleListeners;
+    }
 
-	public void addSampleListener(SampleListener listener)
-	{
-		sampleListeners.add(listener);
-	}
+    public void addSampleListener(SampleListener listener)
+    {
+        sampleListeners.add(listener);
+    }
 
-	public List getTimers()
-	{
-		return timers;
-	}
+    public List getTimers()
+    {
+        return timers;
+    }
     
     public void addPostProcessor(PostProcessor ex)
     {
@@ -124,38 +126,38 @@ public class SamplePackage
         preProcessors.add(pre);
     }
 
-	public void addTimer(Timer timer)
-	{
-		timers.add(timer);
-	}
+    public void addTimer(Timer timer)
+    {
+        timers.add(timer);
+    }
 
-	public void addAssertion(Assertion asser)
-	{
-		assertions.add(asser);
-	}
+    public void addAssertion(Assertion asser)
+    {
+        assertions.add(asser);
+    }
 
-	public List getAssertions()
-	{
-		return assertions;
-	}
+    public List getAssertions()
+    {
+        return assertions;
+    }
     
     public List getPostProcessors()
     {
         return postProcessors;
     }
 
-	public Sampler getSampler()
-	{
-		return sampler;
-	}
+    public Sampler getSampler()
+    {
+        return sampler;
+    }
 
-	public void setSampler(Sampler s)
-	{
-		sampler = s;
-	}
+    public void setSampler(Sampler s)
+    {
+        sampler = s;
+    }
+
     /**
      * Returns the preProcessors.
-     * @return List
      */
     public List getPreProcessors()
     {
@@ -164,7 +166,7 @@ public class SamplePackage
 
     /**
      * Sets the preProcessors.
-     * @param preProcessors The preProcessors to set
+     * @param preProcessors the preProcessors to set
      */
     public void setPreProcessors(List preProcessors)
     {
@@ -182,7 +184,6 @@ public class SamplePackage
 
     /**
      * Returns the modifiers.
-     * @return List
      */
     public List getModifiers()
     {
@@ -191,7 +192,6 @@ public class SamplePackage
 
     /**
      * Returns the responseModifiers.
-     * @return List
      */
     public List getResponseModifiers()
     {
@@ -200,7 +200,7 @@ public class SamplePackage
 
     /**
      * Sets the assertions.
-     * @param assertions The assertions to set
+     * @param assertions the assertions to set
      */
     public void setAssertions(List assertions)
     {
@@ -209,7 +209,7 @@ public class SamplePackage
 
     /**
      * Sets the configs.
-     * @param configs The configs to set
+     * @param configs the configs to set
      */
     public void setConfigs(List configs)
     {
@@ -218,7 +218,7 @@ public class SamplePackage
 
     /**
      * Sets the modifiers.
-     * @param modifiers The modifiers to set
+     * @param modifiers the modifiers to set
      */
     public void setModifiers(List modifiers)
     {
@@ -227,7 +227,7 @@ public class SamplePackage
 
     /**
      * Sets the postProcessors.
-     * @param postProcessors The postProcessors to set
+     * @param postProcessors the postProcessors to set
      */
     public void setPostProcessors(List postProcessors)
     {
@@ -236,7 +236,7 @@ public class SamplePackage
 
     /**
      * Sets the responseModifiers.
-     * @param responseModifiers The responseModifiers to set
+     * @param responseModifiers the responseModifiers to set
      */
     public void setResponseModifiers(List responseModifiers)
     {
@@ -245,7 +245,7 @@ public class SamplePackage
 
     /**
      * Sets the sampleListeners.
-     * @param sampleListeners The sampleListeners to set
+     * @param sampleListeners the sampleListeners to set
      */
     public void setSampleListeners(List sampleListeners)
     {
@@ -254,11 +254,10 @@ public class SamplePackage
 
     /**
      * Sets the timers.
-     * @param timers The timers to set
+     * @param timers the timers to set
      */
     public void setTimers(List timers)
     {
         this.timers = timers;
     }
-
 }

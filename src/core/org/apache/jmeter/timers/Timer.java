@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,7 +52,6 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-
 package org.apache.jmeter.timers;
 
 import java.io.Serializable;
@@ -75,11 +74,11 @@ public interface Timer extends Serializable
      */
     public long delay();
 
-	/**
-	 * Set the range value.
-	 * 
-	 * @param range
-	 */
+    /**
+     * Set the range value.
+     * 
+     * @param range
+     */
     public void setRange(double range);
 
     /**
@@ -89,12 +88,12 @@ public interface Timer extends Serializable
      */
     public double getRange();
 
-	/**
-	 * Set the delay value.
-	 * 
-	 * @param delay the delay value (this is a String as it can be set using a
-	 * variable).
-	 */
+    /**
+     * Set the delay value.
+     * 
+     * @param delay the delay value (this is a String as it can be set using a
+     * variable).
+     */
     public void setDelay(String delay);
 
     /**
@@ -103,5 +102,4 @@ public interface Timer extends Serializable
      * @return String
      */
     public String getDelay();
-
 }
