@@ -23,7 +23,7 @@ public class Help implements Command
     public final static String HELP = "help";
     private static Set commands = new HashSet();
 
-    private static String helpPage =
+    public static final String HELP_PAGE =
         "file:///"
             + JMeterUtils.getJMeterHome()
             + "/printable_docs/usermanual/component_reference.html";
@@ -41,8 +41,8 @@ public class Help implements Command
         helpDoc.setEditable(false);
         try
         {
-            helpDoc.setPage(helpPage);
-            currentPage = helpPage;
+            helpDoc.setPage(HELP_PAGE);
+            currentPage = HELP_PAGE;
         }
         catch (IOException err)
         {
@@ -79,7 +79,7 @@ public class Help implements Command
         }
         else
         {
-            resetPage(helpPage);
+            resetPage(HELP_PAGE);
             helpDoc.scrollToReference(
                 GuiPackage
                     .getInstance()
@@ -94,6 +94,13 @@ public class Help implements Command
     {
         if (!currentPage.equals(source))
         {
+        	if (currentPage.length()==0){
+        		helpDoc = new HtmlPane();// setText seems to mangle the old one
+        		scroller.setViewportView(helpDoc);
+				helpDoc.setEditable(false);
+				//TODO: still does not recover completely, but is usable
+				// and unlikely to be needed now that HELP_PAGE is shared string
+        	}
             try
             {
                 helpDoc.setPage(source);
