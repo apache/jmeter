@@ -182,4 +182,10 @@ public interface JMeterGUIComponent
      * @param node the tree node corresponding to this component
      */
     void setNode(JMeterTreeNode node);
+    
+    /**
+     * Clear the gui and return it to initial default values.
+     * TODO: implement this in all gui classes.
+     */
+    public void clear();
 }
