@@ -194,7 +194,7 @@ public class UrlConfigGui extends JPanel
             port.setText(portString);
         }
         protocol.setText(el.getPropertyAsString(HTTPSampler.PROTOCOL));
-        if ("POST".equals(el.getProperty(HTTPSampler.METHOD)))
+        if ("POST".equals(el.getPropertyAsString(HTTPSampler.METHOD)))
         {
             post.setSelected(true);
             get.setSelected(false);
