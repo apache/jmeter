@@ -15,9 +15,8 @@ import javax.swing.filechooser.FileFilter;
  * This FileFilter allows for a list of file extensions
  * to be set that it will filter on. This design was taken
  * from the ExampleFileFilter used in
- * <a
- href="http://java.sun.com/docs/books/tutorial/uiswing/components/filechooser.html">How to Use File Choosers</a>,
- * a section in <em>The Java Tutorial</em>.
+ * <a href="http://java.sun.com/docs/books/tutorial/uiswing/components/filechooser.html">How
+ * to Use File Choosers</a>, a section in <em>The Java Tutorial</em>.
  *
  * Here is an example of how to use the file filter for JMX files,
  * that have the .jmx extension.
@@ -71,7 +70,8 @@ public class ExtensionsFileFilter extends FileFilter
     /**
      * Set the description of the extensions being filtered on.
      *
-     * @param pDescription The detailed description of the extensions being filtered on.
+     * @param pDescription the detailed description of the extensions being
+     *                     filtered on.
      */
     public void setDescription(String pDescription)
     {
@@ -79,7 +79,8 @@ public class ExtensionsFileFilter extends FileFilter
     }
 
     /**
-     * Returns a descriptive string detailing the file extensions being filtered.
+     * Returns a descriptive string detailing the file extensions being
+     * filtered.
      *
      * @return The description of the extensions being filtered.
      * @see javax.swing.filechooser.FileFilter#getDescription()

@@ -274,12 +274,12 @@ public class ArgumentsPanel
         }
     }
 
-    /**************************************
-     * clear all row from the table.
+    /**
+     * Clear all rows from the table.
      * T.Elanjchezhiyan(chezhiyan@siptech.co.in)
-     **************************************/
-    
-    public void clear() {
+     */
+    public void clear()
+    {
         tableModel.clearData();
     }
 
