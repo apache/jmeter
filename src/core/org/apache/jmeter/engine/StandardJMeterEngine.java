@@ -63,9 +63,66 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
    private String host = null;
    private transient ListenerNotifier notifier;
 
+    // Allow engine and threads to be stopped from outside a thread
+    // e.g. from beanshell server
+    // Assumes that there is only one instance of the engine
+    // at any one time so it is not guaranteed to work ...
+    private static transient Map allThreadNames;
+    private static StandardJMeterEngine engine;
+	private static Map allThreadsSave;
+    public static void stopEngineNow()
+    {
+    	  engine.stopTest();
+    }
+    public static void stopEngine()
+    {
+    	  engine.askThreadsToStop();
+    }
+    public static boolean stopThread(String threadName)
+    {
+    	return stopThread(threadName,false);
+    }
+    public static boolean stopThreadNow(String threadName)
+    {
+    	return stopThread(threadName,true);
+    }
+    private static boolean stopThread(String threadName, boolean now)
+    {
+    	if (allThreadNames == null) return false;// e.g. not yet started
+    	JMeterThread thrd;
+		try {
+    	    thrd = (JMeterThread)allThreadNames.get(threadName);
+    	} catch (Exception e) {
+    		log.warn("stopThread: "+e);
+    		return false;
+    	}
+    	if (thrd!= null)
+    	{
+    		thrd.stop();
+    		if (now)
+    		{
+    		    Thread t = (Thread) allThreadsSave.get(thrd);
+    		    if (t != null)
+    		    {
+    		        t.interrupt();
+    		    }
+    			
+    		}
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+    // End of code to allow engine to be controlled remotely
+    
    public StandardJMeterEngine()
    {
       allThreads = new HashMap();
+        engine=this;
+        allThreadNames = new HashMap();
+        allThreadsSave = allThreads;
    }
 
    public StandardJMeterEngine(String host)
