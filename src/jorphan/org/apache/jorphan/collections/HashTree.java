@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
@@ -718,7 +719,7 @@ public class HashTree implements Serializable, Map
         }
         else
         {
-            return null;
+            return new LinkedList();
         }
     }
     
@@ -769,7 +770,7 @@ public class HashTree implements Serializable, Map
        HashTree tree = getTreePath(treePath);
        if(tree != null)
         return tree.list();
-       return null;
+       return new LinkedList();
     }
     
     /**
