@@ -373,6 +373,7 @@ public class JMeterTreeListener
             || (MouseEvent.BUTTON3_MASK == e.getModifiers());
     }
 
+/* NOTUSED
     private void updateMainMenu(JPopupMenu menu)
     {
         try
@@ -386,6 +387,7 @@ public class JMeterTreeListener
             log.error("", e);
         }
     }
+*/
 
     private void displayPopUp(MouseEvent e)
     {

@@ -163,7 +163,6 @@ public class StatVisualizerModel implements Clearable
     public void addNewSample(SampleResult res)
     {
         String aLabel = res.getSampleLabel();
-        String responseCode = res.getResponseCode();
         RunningSample s;
 
         synchronized (labelMap)

@@ -106,7 +106,6 @@ public class LagDetector extends Thread
     public void run()
     {
         running = true;
-        long totalTime = 0;
         long time;
         totalLag = 0;
         count = 0;

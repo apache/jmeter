@@ -453,8 +453,7 @@ class graphPanel extends JPanel
                 Y1 = height - Y1 - base;
                 Y2 = height - Y2 - base;
                 g.drawLine(start, Y1, start + increment, Y2);
-                Integer value = (Integer) v.elementAt(i);
-
+                
                 start += increment;
             }
         }

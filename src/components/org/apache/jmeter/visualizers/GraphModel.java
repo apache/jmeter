@@ -278,13 +278,13 @@ public class GraphModel implements Clearable, Serializable
      */
     protected Sample addNewSample(long sample, long timeStamp, boolean success)
     {
-        int counter = 0;
+        //NOTUSED int counter = 0;
         float average;
         long deviation, median;
         synchronized (statCalc)
         {
             statCalc.addValue(sample);
-            counter = statCalc.getCount();
+            //NOTUSED counter = statCalc.getCount();
             average = (float) statCalc.getMean();
             deviation = (long) statCalc.getStandardDeviation();
             median = statCalc.getMedian().longValue();

@@ -74,8 +74,6 @@ import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  *
@@ -84,7 +82,6 @@ import org.apache.log.Logger;
  */
 public class JMeterTreeModel extends DefaultTreeModel
 {
-    private static Logger log = LoggingManager.getLoggerForClass();
 
     public JMeterTreeModel()
     {

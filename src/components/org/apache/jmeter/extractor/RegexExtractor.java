@@ -168,7 +168,6 @@ public class RegexExtractor
         log.debug("template = " + rawTemplate);
         Util.split(pieces, matcher, templatePattern, rawTemplate);
         PatternMatcherInput input = new PatternMatcherInput(rawTemplate);
-        int count = 0;
         Iterator iter = pieces.iterator();
         boolean startsWith = isFirstElementGroup(rawTemplate);
         log.debug(

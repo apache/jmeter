@@ -101,7 +101,6 @@ public class ThreadGroup
     private final int DEFAULT_NUM_THREADS = 1;
     private final int DEFAULT_RAMP_UP = 0;
     private SampleQueue queue = null;
-    private int threadsStarted = 0;
     private LinkedList listeners = new LinkedList();
     private LinkedList remoteListeners = new LinkedList();
 

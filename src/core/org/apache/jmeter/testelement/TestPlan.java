@@ -2,7 +2,6 @@ package org.apache.jmeter.testelement;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +33,7 @@ public class TestPlan extends AbstractTestElement implements Serializable
     private List configs = new LinkedList();
     private static List itemsCanAdd = new LinkedList();
     private static TestPlan plan;
-    private Map userDefinedVariables = new HashMap();
-
+    
     static {
         // WARNING! This String value must be identical to the String value
         // returned in org.apache.jmeter.threads.ThreadGroup.getClassLabel()

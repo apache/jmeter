@@ -885,6 +885,9 @@ public final class SaveService implements SaveServiceConstants
         return config;
     }
 
+    /*
+     * 
+     *   NOTUSED
     private static Configuration createConfigForCollection(
         String propertyName,
         Collection list)
@@ -920,7 +923,11 @@ public final class SaveService implements SaveServiceConstants
         }
         return config;
     }
+    */
 
+	/*
+	 * NOTUSED
+	 *
     private static Configuration createConfigForString(String value)
     {
         DefaultConfiguration config =
@@ -930,6 +937,8 @@ public final class SaveService implements SaveServiceConstants
         config.setAttribute(XML_SPACE, PRESERVE);
         return config;
     }
+    */
+
 
     private static Configuration createConfigForString(
         String name,

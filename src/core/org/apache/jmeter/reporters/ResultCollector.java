@@ -107,7 +107,6 @@ public class ResultCollector
         NoThreadClone
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
-    private final static String COLLECTED = "collected";
     public final static String FILENAME = "filename";
     private static boolean functionalMode = false;
     public static final String ERROR_LOGGING = "ResultCollector.error_logging";

@@ -134,7 +134,7 @@ public class RemoteJMeterEngineImpl
     {
         try
         {
-            RemoteJMeterEngine engine = new RemoteJMeterEngineImpl();
+            new RemoteJMeterEngineImpl();
             while (true)
             {
                 Thread.sleep(Long.MAX_VALUE);

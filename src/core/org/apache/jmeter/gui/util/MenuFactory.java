@@ -110,15 +110,15 @@ public final class MenuFactory
         postProcessors,
         preProcessors;
 
-    private static JMenu timerMenu;
-    private static JMenu controllerMenu;
-    private static JMenu generativeControllerMenu;
-    private static JMenu listenerMenu;
-    private static JMenu assertionMenu;
-    private static JMenu configMenu;
-    private static JMenu insertControllerMenu;
-    private static JMenu postProcessorMenu;
-    private static JMenu preProcessorMenu;
+    //private static JMenu timerMenu;
+    //private static JMenu controllerMenu;
+    //private static JMenu generativeControllerMenu;
+    //private static JMenu listenerMenu;
+    //private static JMenu assertionMenu;
+    //private static JMenu configMenu;
+    //private static JMenu insertControllerMenu;
+    //private static JMenu postProcessorMenu;
+    //private static JMenu preProcessorMenu;
 
     static {
         try

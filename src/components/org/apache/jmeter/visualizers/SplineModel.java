@@ -237,7 +237,7 @@ public class SplineModel implements Clearable
         if ((n % (numberOfNodes * refreshPeriod)) == 0)
         {
             float[] floatNode = new float[numberOfNodes];
-            long[] longSample = getSamples();
+            //NOTUSED: long[] longSample = getSamples();
             // load each node
             int loadFactor = n / numberOfNodes;
 
