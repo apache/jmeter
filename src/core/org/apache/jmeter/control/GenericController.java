@@ -84,7 +84,7 @@ public class GenericController extends AbstractTestElement implements Controller
 	/****************************************
 	 * !ToDo (Field description)
 	 ***************************************/
-	protected int current;
+	protected int current = 0;
 	/****************************************
 	 * !ToDo (Field description)
 	 ***************************************/
@@ -93,6 +93,7 @@ public class GenericController extends AbstractTestElement implements Controller
 	private boolean returnedNull = false;
 	private boolean done = false, timeForNext = false;
 	private List assertions = new LinkedList();
+    private boolean first = true;
 
 	/****************************************
 	 * !ToDo (Constructor description)
@@ -104,11 +105,12 @@ public class GenericController extends AbstractTestElement implements Controller
 	
 	public boolean isNextFirst()
 	{
-		if(current == 0)
-		{
-			return true;
-		}
-		return false;
+		if(first)
+        {
+            first = false;
+            return true;
+        }
+        return false;
 	}
 
 	/****************************************
@@ -128,11 +130,13 @@ public class GenericController extends AbstractTestElement implements Controller
 
 	public void initialize()
 	{
+        first = true;
 		resetCurrent();
 	}
 
 	public void reInitialize()
 	{
+        first = true;
 		resetCurrent();
 	}
 

@@ -87,7 +87,7 @@ public class MapProperty extends AbstractProperty
     {
         MapProperty prop = (MapProperty) super.clone();
         prop.value = cloneMap();
-        return value;
+        return prop;
     }
 
     private Map cloneMap()

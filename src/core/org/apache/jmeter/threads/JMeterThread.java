@@ -98,6 +98,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
     JMeterVariables threadVars;
     Collection threadListeners;
     ListenerNotifier notifier;
+    int threadNum = 0;
 
     /****************************************
      * !ToDo (Constructor description)
@@ -135,6 +136,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
         {
             threadContext = JMeterContextService.getContext();
             threadContext.setVariables(threadVars);
+            threadContext.setThreadNum(getThreadNum());
             initializeThreadListeners();
             testTree.traverse(compiler);
             running = true;
@@ -252,7 +254,19 @@ public class JMeterThread implements Runnable, java.io.Serializable
         Iterator iter = threadListeners.iterator();
         while (iter.hasNext())
         {
-            ((ThreadListener) iter.next()).iterationStarted(threadVars.getIteration());
+            ThreadListener listener = (ThreadListener)iter.next();
+            if(listener instanceof TestElement)
+            {
+                ((TestElement)listener).setRunningVersion(true);
+                listener.iterationStarted(threadVars.getIteration());
+                ((TestElement)listener).recoverRunningVersion();
+                ((TestElement)listener).setRunningVersion(false);
+            }
+            else
+            {
+                listener.iterationStarted(threadVars.getIteration());
+            }
+            
         }
     }
 
@@ -282,4 +296,22 @@ public class JMeterThread implements Runnable, java.io.Serializable
             {}
         }
     }
+    /**
+     * Returns the threadNum.
+     * @return int
+     */
+    public int getThreadNum()
+    {
+        return threadNum;
+    }
+
+    /**
+     * Sets the threadNum.
+     * @param threadNum The threadNum to set
+     */
+    public void setThreadNum(int threadNum)
+    {
+        this.threadNum = threadNum;
+    }
+
 }

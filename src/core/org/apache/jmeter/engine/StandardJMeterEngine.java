@@ -173,6 +173,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor,
 					ListedHashTree threadGroupTree = (ListedHashTree)searcher.getSubTree(group);
 					threadGroupTree.add(group,testLevelElements);
 					threads[i] = new JMeterThread(cloneTree(threadGroupTree),this,notifier);
+                    threads[i].setThreadNum(i);
                     threads[i].setInitialContext(JMeterContextService.getContext());
 					threads[i].setInitialDelay((int)(((float)(group.getRampUp() * 1000) /
 							(float)group.getNumThreads()) * (float)i));
