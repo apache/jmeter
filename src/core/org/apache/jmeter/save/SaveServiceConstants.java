@@ -74,11 +74,6 @@ public interface SaveServiceConstants
     // PROPERTY FILE CONSTANTS
     // ---------------------------------------------------------------------
 
-    /** The file containing the properties governing the information to
-     be saved.  **/
-    public static final String PROPS_FILE =
-            "jmeter.properties";
-
     /** Indicates that the results file should be in XML format.  **/
     public static final String XML = "xml";
 
