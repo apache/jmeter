@@ -1,7 +1,10 @@
 package org.apache.jmeter.reporters;
 
+
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.visualizers.Visualizer;
+
+
 /**
  * Title:        JMeter
  * Description:
@@ -13,26 +16,26 @@ import org.apache.jmeter.visualizers.Visualizer;
 
 public abstract class AbstractListenerElement extends AbstractTestElement
 {
-	private Visualizer listener;
+    private Visualizer listener;
 
-	public AbstractListenerElement()
-	{
-	}
+    public AbstractListenerElement()
+    {}
 
-	protected Visualizer getVisualizer()
-	{
-		return listener;
-	}
+    protected Visualizer getVisualizer()
+    {
+        return listener;
+    }
 
-	public void setListener(Visualizer vis)
-	{
-		listener = vis;
-	}
-	
-	public Object clone()
-	{
-		AbstractListenerElement clone = (AbstractListenerElement)super.clone();
-		clone.setListener(getVisualizer());
-		return clone;
-	}
+    public void setListener(Visualizer vis)
+    {
+        listener = vis;
+    }
+
+    public Object clone()
+    {
+        AbstractListenerElement clone = (AbstractListenerElement) super.clone();
+
+        clone.setListener(getVisualizer());
+        return clone;
+    }
 }

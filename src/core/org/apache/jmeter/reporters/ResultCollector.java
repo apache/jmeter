@@ -54,6 +54,7 @@
  */
 package org.apache.jmeter.reporters;
 
+
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -86,24 +87,24 @@ import org.apache.log.Logger;
 import org.apache.jorphan.io.TextFile;
 import org.xml.sax.SAXException;
 
+
 /**
  * Title: Description: Copyright: Copyright (c) 2001 Company:
  *
  * @author Michael Stover
  * @version $Id$
  */
-public class ResultCollector
-    extends AbstractListenerElement
-    implements SampleListener, Clearable, Serializable, TestListener, Remoteable
+public class ResultCollector extends AbstractListenerElement
+        implements SampleListener, Clearable, Serializable, TestListener, Remoteable
 {
     transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+            Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
     private final static String COLLECTED = "collected";
     public final static String FILENAME = "filename";
     private static boolean functionalMode = false;
     public static final String ERROR_LOGGING = "ResultCollector.error_logging";
 
-    //protected List results = Collections.synchronizedList(new ArrayList());
+    // protected List results = Collections.synchronizedList(new ArrayList());
     private int current;
     transient private DefaultConfigurationSerializer serializer;
     private boolean inLoading = false;
@@ -212,6 +213,7 @@ public class ResultCollector
             try
             {
                 Configuration savedSamples = getConfiguration(getFilename());
+
                 readSamples(savedSamples);
             }
             catch (Exception e)
@@ -241,14 +243,15 @@ public class ResultCollector
         }
         PrintWriter writer = (PrintWriter) files.get(filename);
         boolean trimmed = true;
+
         if (writer == null)
         {
             trimmed = trimLastLine(filename);
             writer =
-                new PrintWriter(
+                    new PrintWriter(
                     new OutputStreamWriter(
-                        new BufferedOutputStream(new FileOutputStream(filename, trimmed)),
-                        "UTF-8"));
+                    new BufferedOutputStream(new FileOutputStream(filename, trimmed)),
+                    "UTF-8"));
             files.put(filename, writer);
         }
         if (!trimmed)
@@ -263,11 +266,13 @@ public class ResultCollector
         try
         {
             TextFile text = new TextFile(filename);
+
             if (!text.exists())
             {
                 return false;
             }
             String xml = text.getText();
+
             xml = xml.substring(0, xml.indexOf("</testResults>"));
             text.setText(xml);
         }
@@ -295,11 +300,13 @@ public class ResultCollector
      * @return The serializedSampleResult value
      */
     private String getSerializedSampleResult(SampleResult result)
-        throws SAXException, IOException, ConfigurationException
+            throws SAXException, IOException, ConfigurationException
     {
         ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
+
         serializer.serialize(tempOut, SaveService.getConfiguration(result, getFunctionalMode()));
         String serVer = tempOut.toString();
+
         return serVer.substring(serVer.indexOf(System.getProperty("line.separator")));
     }
 
@@ -309,12 +316,14 @@ public class ResultCollector
      * @param testResults Description of the Parameter
      */
     private void readSamples(Configuration testResults)
-        throws IOException, SAXException, ConfigurationException
+            throws IOException, SAXException, ConfigurationException
     {
         Configuration[] samples = testResults.getChildren();
+
         for (int i = 0; i < samples.length; i++)
         {
             SampleResult result = SaveService.getSampleResult(samples[i]);
+
             sendToVisualizer(result);
             recordResult(result);
         }
@@ -327,9 +336,10 @@ public class ResultCollector
      * @return The configuration value
      */
     private Configuration getConfiguration(String filename)
-        throws SAXException, IOException, ConfigurationException
+            throws SAXException, IOException, ConfigurationException
     {
         DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
+
         return builder.buildFromFile(filename);
     }
 
@@ -344,16 +354,13 @@ public class ResultCollector
     }
 
     public void setListener(Object l)
-    {
-    }
+    {}
 
     public void sampleStarted(SampleEvent e)
-    {
-    }
+    {}
 
     public void sampleStopped(SampleEvent e)
-    {
-    }
+    {}
 
     public void sampleOccurred(SampleEvent e)
     {
@@ -366,7 +373,7 @@ public class ResultCollector
             }
             catch (Exception err)
             {
-                log.error("", err); //should throw exception back to caller
+                log.error("", err); // should throw exception back to caller
             }
         }
     }
@@ -385,7 +392,7 @@ public class ResultCollector
      * @param result Description of the Parameter
      */
     private void recordResult(SampleResult result)
-        throws SAXException, IOException, ConfigurationException
+            throws SAXException, IOException, ConfigurationException
     {
         if (out != null)
         {
@@ -399,6 +406,7 @@ public class ResultCollector
     private synchronized boolean isResultMarked(SampleResult res)
     {
         boolean marked = res.isMarked(getFilename());
+
         if (!marked)
         {
             res.setMarked(getFilename());
@@ -438,5 +446,5 @@ public class ResultCollector
             out = null;
         }
     }
-    
+
 }
