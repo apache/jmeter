@@ -230,7 +230,6 @@ public class CollectionProperty extends AbstractProperty
             }
             else
             {
-                log.debug("recovering property with hashcode: " + prop.hashCode());
                 prop.recoverRunningVersion(owner);
             }
         }
