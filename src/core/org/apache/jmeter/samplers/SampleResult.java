@@ -98,10 +98,10 @@ public class SampleResult implements Serializable
     private String label;
     private String samplerData;
     private String threadName;
-    private String responseMessage;
-    private String responseHeaders;
+    private String responseMessage="";
+    private String responseHeaders=""; // Never return null
     private String contentType;
-    private String requestHeaders;
+    private String requestHeaders="";
     private long timeStamp = 0;
     private List assertionResults;
     private List subResults;
