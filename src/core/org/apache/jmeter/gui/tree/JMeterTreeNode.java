@@ -49,7 +49,8 @@ public class JMeterTreeNode
     private JMeterTreeModel treeModel;
     //boolean enabled = true;
 
-    public JMeterTreeNode(){// Allow guiTest and serializable test to work
+    public JMeterTreeNode(){// Allow serializable test to work
+    		// TODO: is the serializable test necessary now that JMeterTreeNode is no longer a GUI component?
     	this(null,null);
     }
     
