@@ -112,8 +112,8 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         currentSampler = sampler;
         SamplePackage pack = (SamplePackage) samplerConfigMap.get(sampler);
         pack.setSampler(sampler);
-        runPreProcessors(pack.getPreProcessors());
         configureWithConfigElements(sampler, pack.getConfigs());
+        runPreProcessors(pack.getPreProcessors());
         //replaceStatics(ret);
         return pack;
     }
