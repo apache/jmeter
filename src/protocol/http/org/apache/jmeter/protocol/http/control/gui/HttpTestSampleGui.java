@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 
 import junit.framework.TestCase;
 
-import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.protocol.http.config.gui.MultipartUrlConfigGui;
 import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
@@ -113,7 +113,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
     private JPanel createOptionalTasksPanel()
     {
         // OPTIONAL TASKS
-        VerticalPanel optionalTasksPanel = new VerticalPanel();
+        HorizontalPanel optionalTasksPanel = new HorizontalPanel();
         optionalTasksPanel.setBorder(
             BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(),
