@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -60,15 +60,20 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.testelement.AbstractTestElement;
 
-import org.apache.oro.text.regex.*;
+import org.apache.oro.text.PatternCacheLRU;
+import org.apache.oro.text.MalformedCachePatternException;
+import org.apache.oro.text.regex.Perl5Compiler;
+import org.apache.oro.text.regex.Perl5Matcher;
+import org.apache.oro.text.regex.Pattern;
 
 /************************************************************
  *  Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:
  *  Apache
  *
- *@author     Michael Stover
- *@created    $Date$
- *@version    1.0
+ * @author     Michael Stover
+ * @author     <a href="mailto:jacarlco@katun.com">Jonathan Carlson</a>
+ * @created    $Date$
+ * @version    $Revision$
  ***********************************************************/
 
 public class ResponseAssertion extends AbstractTestElement implements Serializable, Assertion
@@ -86,8 +91,17 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 	public final static int MATCH = 1 << 0;
 	public final static int CONTAINS = 1 << 1;
 	public final static int NOT = 1 << 2;
-	private transient static Perl5Compiler compiler = new Perl5Compiler();
-	private transient static Perl5Matcher matcher = new Perl5Matcher();
+
+	private transient static ThreadLocal matcher =
+	    new ThreadLocal()
+	    {
+		protected Object initialValue()
+		{
+		    return new Perl5Matcher();
+		}
+	    };
+	private transient PatternCacheLRU patternCache =
+		new PatternCacheLRU(1000, new Perl5Compiler());
 
 	/************************************************************
 	 *  !ToDo (Constructor description)
@@ -278,50 +292,115 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 		setTestType(getTestType() & (NOT ^ (CONTAINS | MATCH | NOT)));
 	}
 
-	private AssertionResult evaluateResponse(SampleResult response)
+    /**
+     * Make sure the response satisfies the specified assertion requirements.
+     * 
+     * @param response an instance of SampleResult
+     * @return an instance of AssertionResult
+     */
+    private AssertionResult evaluateResponse(SampleResult response)
+    {
+	boolean pass = true;
+	boolean not = (NOT & getTestType()) > 0;
+	AssertionResult result = new AssertionResult();
+	String responseString = new String(response.getResponseData());
+
+	try
 	{
-		boolean pass = true;
-		boolean not = (NOT & getTestType()) > 0;
-		AssertionResult result = new AssertionResult();
-		try
+	    // Get the Matcher for this thread
+	    Perl5Matcher localMatcher = (Perl5Matcher)matcher.get();
+
+	    Iterator iter = getTestStrings().iterator();
+	    while (iter.hasNext())
+	    {
+		String stringPattern= (String) iter.next();
+		Pattern pattern = patternCache.getPattern(stringPattern);
+		boolean found;
+		if ((CONTAINS & getTestType()) > 0)
 		{
-			Iterator iter = getTestStrings().iterator();
-			while (iter.hasNext())
-			{
-				String pattern = (String)iter.next();
-				if ((CONTAINS & getTestType()) > 0)
-				{
-					pass = pass && (not ? !matcher.contains(new String(response.getResponseData()),
-							compiler.compile(pattern)) :
-							matcher.contains(new String(response.getResponseData()),
-							compiler.compile(pattern)));
-				}
-				else
-				{
-					pass = pass && (not ? !matcher.matches(new String(response.getResponseData()),
-							compiler.compile(pattern)) :
-							matcher.matches(new String(response.getResponseData()),
-							compiler.compile(pattern)));
-				}
-				if (!pass)
-				{
-					result.setFailure(true);
-					result.setFailureMessage("Test Failed, expected " + notMessage + failMessage + pattern);
-					break;
-				}
-			}
-			if(pass)
-			{
-				result.setFailure(false);
-			}
-			result.setError(false);
+		    found = localMatcher.contains(responseString, pattern);
 		}
-		catch(MalformedPatternException e)
+		else
 		{
-			result.setError(true);
-			result.setFailure(false);
-			result.setFailureMessage("Bad test configuration"+e);
+		    found = localMatcher.matches(responseString, pattern);
 		}
-		return result;
+		pass = not ? !found : found;
+
+		if (!pass)
+		{
+		    result.setFailure(true);
+		    result.setFailureMessage("Test Failed, expected " +
+			    notMessage + failMessage + stringPattern);
+		    break;
+		}
+	    }
+	    if(pass)
+	    {
+		result.setFailure(false);
+	    }
+	    result.setError(false);
 	}
+	catch (MalformedCachePatternException e)
+	{
+	    result.setError(true);
+	    result.setFailure(false);
+	    result.setFailureMessage("Bad test configuration"+e);
+	}
+
+	return result;
+    }
+
+    public static class Test extends junit.framework.TestCase
+    {
+	int threadsRunning;
+	int failed;
+
+	public Test(String name)
+	{
+	    super(name);
+	}
+
+	public void testThreadSafety() throws Exception
+	{
+	    Thread[] threads= new Thread[100];
+	    for (int i= 0; i < threads.length; i++) {
+		threads[i]= new TestThread();
+	    }
+	    failed= 0;
+	    for (int i= 0; i < threads.length; i++) {
+		threads[i].start();
+		threadsRunning++;
+	    }
+	    synchronized (this)
+	    {
+		while (threadsRunning>0) wait();
+	    }
+	    assertEquals(failed, 0);
+	}
+
+	class TestThread extends Thread
+	{
+	    static final String TEST_STRING= "Dábale arroz a la zorra el abad.";
+	    static final String TEST_PATTERN= ".*á.*\\.";
+	    public void run()
+	    {
+		ResponseAssertion assertion= new ResponseAssertion(
+			RESPONSE_DATA, CONTAINS, TEST_PATTERN);
+		SampleResult response= new SampleResult();
+		response.setResponseData(TEST_STRING.getBytes());
+		for (int i= 0; i< 100; i++) {
+		    AssertionResult result;
+		    result= assertion.evaluateResponse(response);
+		    if (result.isFailure() || result.isError()) {
+			failed++;
+		    }
+		}
+		synchronized(Test.this) {
+		  threadsRunning--;
+		  Test.this.notify();
+		}
+	    }
+	}
+    }
+
 }
