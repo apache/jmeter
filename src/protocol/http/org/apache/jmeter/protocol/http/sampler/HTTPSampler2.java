@@ -181,7 +181,7 @@ public class HTTPSampler2 extends HTTPSamplerBase
 	            + encode(filename)
 	            + "\"");
             // Specify content type and encoding
-            post.setRequestHeader("Content-type", sampler.getMimetype());
+            post.setRequestHeader("Content-Type", sampler.getMimetype());
             post.setRequestBody(new FileInputStream(input));
         }
     }
@@ -527,7 +527,7 @@ public class HTTPSampler2 extends HTTPSamplerBase
 
             res.setResponseMessage(httpMethod.getStatusText());
 
-            String ct= httpMethod.getResponseHeader("Content-type").getValue();
+            String ct= httpMethod.getResponseHeader("Content-Type").getValue();
             res.setContentType(ct);// e.g. text/html; charset=ISO-8859-1
             if (ct != null)
             {
