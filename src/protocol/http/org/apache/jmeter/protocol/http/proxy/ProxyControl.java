@@ -81,6 +81,9 @@ import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.RecordingController;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.samplers.SampleEvent;
+import org.apache.jmeter.samplers.SampleListener;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -275,11 +278,12 @@ public class ProxyControl extends ConfigTestElement implements Serializable
     public void deliverSampler(
         HTTPSampler sampler,
         TestElement[] subConfigs,
-        byte[] serverResponse)
+        SampleResult result)
     {
         if (filterUrl(sampler))
         {
             placeConfigElement(sampler, subConfigs);
+            notifyListeners(new SampleEvent(result,sampler.getName()));
         }
     }
 
@@ -600,6 +604,48 @@ public class ProxyControl extends ConfigTestElement implements Serializable
                 "Invalid variables included for replacement into recorded "
                     + "sample",
                 e);
+        }
+    }
+    
+    /**
+     * This will notify sample listeners of the sampling that just occured
+     * -- so that we have a means to record the server's responses as we go.
+     * <p>
+     * Only listeners which are directly within the RecordingControllers or
+     * ThreadGroups where recording is happening will be notified.
+     * 
+     * @param event sampling event to be delivered
+     */
+    private void notifyListeners(SampleEvent event) {
+        JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
+        List nodes = treeModel.getNodesOfType(RecordingController.class);
+        if (nodes.size() == 0)
+        {
+            nodes = treeModel.getNodesOfType(ThreadGroup.class);
+        }
+        Iterator iter = nodes.iterator();
+        while (iter.hasNext())
+        {
+            JMeterTreeNode node = (JMeterTreeNode) iter.next();
+
+            if (!node.isEnabled())
+            {
+                continue;
+            }
+            else
+            {
+                Enumeration enum = node.children();
+                while (enum.hasMoreElements())
+                {
+                    JMeterTreeNode subNode =
+                        (JMeterTreeNode) enum.nextElement();
+                    TestElement testElement =
+                        (TestElement) subNode.createTestElement();
+                    if (testElement instanceof SampleListener) {
+                        ((SampleListener)testElement).sampleOccurred(event);
+                    }
+                }
+            }
         }
     }
 
