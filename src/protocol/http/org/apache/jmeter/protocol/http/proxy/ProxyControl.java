@@ -245,12 +245,17 @@ public class ProxyControl extends ConfigTestElement implements Serializable
 	{
 		getIncludePatterns().clear();
 	}
-	/************************************************************
-	 *  !ToDo (Method description)
-	 *
-	 *@param  config  !ToDo (Parameter description)
-	 ***********************************************************/
-	public void deliverSampler(HTTPSampler sampler, TestElement[] subConfigs)
+	
+	/**
+	 * Receives the recorded sampler from the proxy server for placing in the
+	 * test tree
+	 * @param sampler
+	 * @param subConfigs
+	 * @param serverResponse Added to allow saving of the server's response while
+	 * recording.  A future consideration.
+	 */
+	public void deliverSampler(HTTPSampler sampler, TestElement[] subConfigs,
+			byte[] serverResponse)
 	{
 		if (filterUrl(sampler))
 		{
@@ -267,7 +272,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
 			server.stopServer();
 		}
 	}
-	private boolean filterUrl(HTTPSampler sampler)
+	protected boolean filterUrl(HTTPSampler sampler)
 	{
 		boolean ok = false;
 		if (sampler.getDomain() == null || sampler.getDomain().equals(""))

@@ -108,21 +108,34 @@ public class Proxy extends Thread {
 	// UrlConfig object for saving test cases
 	ProxyControl target;
 	CookieManager cookieManager;
-	//
-	// Public member methods
-	//
-	//
-	// Constructor
-	//
-	Proxy(
+	
+	
+	/**
+	 * Constructor.  Configures Proxy at same time.
+	 * @param clientSocket
+	 * @param CacheManager
+	 * @param configObject
+	 * @param target
+	 * @param cookieManager
+	 */
+	Proxy(Socket clientSocket,Cache CacheManager,Config configObject,
+		ProxyControl target,CookieManager cookieManager) 
+	{
+		configure(clientSocket,CacheManager,configObject,target,cookieManager);
+	}
+	
+	public Proxy()
+	{
+		
+	}
+	
+	public void configure(
 		Socket clientSocket,
 		Cache CacheManager,
 		Config configObject,
 		ProxyControl target,
-		CookieManager cookieManager) {
-		//
-		// Initialize member variables
-		//
+		CookieManager cookieManager)
+	{
 		this.cookieManager = cookieManager;
 		this.target = target;
 		config = configObject;
@@ -158,7 +171,7 @@ public class Proxy extends Thread {
 			writeToClient(serverResponse,
 				new BufferedOutputStream(ClientSocket.getOutputStream()));
 			headers.removeHeaderNamed("cookie");
-			target.deliverSampler(sampler,new TestElement[]{headers});
+			target.deliverSampler(sampler,new TestElement[]{headers},serverResponse);
 		} catch (UnknownHostException uhe) {
 			log.warn("Server Not Found.",uhe);
 			try {
