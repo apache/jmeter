@@ -813,6 +813,8 @@ specifying the name of the parameter, a value prefix and suffix, and counter par
 modifier will generate values of the form "<code>name=prefixcountersuffix</code>".  Any HTTP
 Request that it modifies, it will replace any parameter with the same name or add the appropriate
 parameter to the requests list of arguments.</p>
+<note>The value of the argument in your HTTP Request must be a '*' in order for the HTML Parameter Mask
+Modifier to replace it.</note>
 <p>As an example, the username for a login script could be modified to send a series of values 
 such as:<br/>
 user_1<br/>
