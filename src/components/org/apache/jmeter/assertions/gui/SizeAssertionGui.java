@@ -236,6 +236,7 @@ public class SizeAssertionGui
             createComparatorButton("<=", SizeAssertion.LESSTHANEQUAL, group);
 
         equalButton.setSelected(true);
+        execState = Integer.parseInt(equalButton.getActionCommand());
 
         //Put the check boxes in a column in a panel
         Box checkPanel = Box.createVerticalBox();
