@@ -216,7 +216,7 @@ I said above is true (so I won't need to reinstate this code).
 	 */
 	private final void shouldNeverHappen(Exception e) throws Error
 	{
-		throw new Error(e); // Programming error: bail out.
+		throw new Error(e.toString()); // Programming error: bail out.
 	}
 
 	/**
