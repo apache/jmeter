@@ -621,9 +621,15 @@ public final class GuiPackage implements LocaleChangeListener
         // EditCommand action -- we can't just trigger the action because that
         // would populate the current node with the contents of the new GUI --
         // which is empty.]
-        getMainFrame().setMainPanel(
-            (javax.swing.JComponent) getCurrentGui());
-        getMainFrame().setEditMenu(getTreeListener().getCurrentNode()
-                .createPopupMenu());
+        MainFrame mf = getMainFrame(); // Fetch once
+        if (mf == null) //Probably caused by unit testing on headless system
+        {
+        	log.warn("Mainframe is null");
+        }
+        else
+        {
+        	mf.setMainPanel((javax.swing.JComponent) getCurrentGui());
+        	mf.setEditMenu(getTreeListener().getCurrentNode().createPopupMenu());
+        }
     }
 }
