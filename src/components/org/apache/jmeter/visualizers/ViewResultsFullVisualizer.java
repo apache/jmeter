@@ -163,7 +163,7 @@ public class ViewResultsFullVisualizer
        }
 
        private void addSubResults(DefaultMutableTreeNode currNode,
-	   			  SampleResult res) {
+                                  SampleResult res) {
                 SampleResult[] subResults = res.getSubResults();
                 if (subResults != null)
                 {
@@ -175,7 +175,7 @@ public class ViewResultsFullVisualizer
                                         log.debug("updateGui1 : child sample result - " + child);
                                 DefaultMutableTreeNode leafNode = new DefaultMutableTreeNode(child);
                                 treeModel.insertNodeInto(leafNode, currNode, leafIndex++);
-				addSubResults(leafNode, child);
+                                addSubResults(leafNode, child);
                         }
                 }
         }
@@ -410,17 +410,32 @@ public class ViewResultsFullVisualizer
 
         protected void showRenderedResponse(String response)
         {
-                resultPanel.remove(textArea);
+                int htmlIndex = response.indexOf("<HTML>");
 
-                int htmlIndex = response.indexOf("<html>");
-                String html = response.substring(htmlIndex, response.length());
-                htmlEditPane.setText(html);
+                // Look for a case variation
+                if (htmlIndex < 0)
+                {
+                        htmlIndex = response.indexOf("<html>");
+                }
+
+                // If there is text, render it
+                if (htmlIndex > -1)
+                {
+                        resultPanel.remove(textArea);
+                        String html = response.substring(htmlIndex, response.length());
+                        htmlEditPane.setText(html);
+                }
+                // No HTML tag, so try to render what's there
+                else
+                {
+                        htmlEditPane.setText(response);
+                }
                 htmlEditPane.setCaretPosition(0);
-
                 gbc.gridx = 0;
                 gbc.gridy++;
                 gridBag.setConstraints(htmlEditPane, gbc);
                 resultPanel.add(htmlEditPane);
+
         }
 
         protected void initHtmlOrTextButton()
