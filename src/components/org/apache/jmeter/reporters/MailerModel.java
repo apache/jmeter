@@ -314,7 +314,28 @@ public class MailerModel extends AbstractTestElement implements Serializable
         msg.setText(attText);
         Transport.send(msg);
     }
+    public synchronized void sendTestMail()
+            throws UnknownHostException, AddressException, MessagingException
+        {
+    		String to = getToAddress();
+            String from = getFromAddress();
+	        String subject = "Testing mail-addresses";
+	        String smtpHost = getSmtpHost();
+	        String attText = "JMeter-Testmail" + "\n" 
+			+ "To:  " + to + "\n"
+			+ "From: " + from + "\n"
+            + "Via:  " + smtpHost + "\n"
+			+ "Fail Subject:  " + getFailureSubject() + "\n"
+            + "Success Subject:  " + getSuccessSubject();
 
+	        log.info(attText);
+
+	        Vector destination= new Vector();
+            destination.add(to);
+
+    		sendMail(from, destination, subject, attText, smtpHost);
+            log.info("Test mail sent successfully!!");
+        }
     // ////////////////////////////////////////////////////////////
     //
     // setter/getter - JavaDoc-Comments not needed...
