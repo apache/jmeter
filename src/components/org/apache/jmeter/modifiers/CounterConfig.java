@@ -31,9 +31,6 @@ public class CounterConfig
 	
 	private boolean perUser = false;
 	private int globalCounter = -1;
-	private int increment = 1;
-	private int start = 0;
-	private int end = Integer.MAX_VALUE;
 	private int currentIterationCount = -1;
 	/**
 	 * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationStart(LoopIterationEvent)
@@ -41,16 +38,15 @@ public class CounterConfig
 	public synchronized void iterationStart(LoopIterationEvent event)
 	{
 		JMeterVariables variables = JMeterContextService.getContext().getVariables();
+		int start=getStart(),end=getEnd(),increment=getIncrement();
 		if(!isPerUser())
 		{
-			globalCounter++;
-			int value = start + (increment * globalCounter);
-			if(value > end)
+			if (globalCounter==-1 || globalCounter>end)
 			{
-				globalCounter = 0;
-				value = start;
+				globalCounter=start;
 			}
-			variables.put(getVarName(),Integer.toString(value));
+			variables.put(getVarName(),Integer.toString(globalCounter));
+			globalCounter+=increment;
 		}
 		else
 		{		
