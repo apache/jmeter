@@ -55,7 +55,7 @@
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Id$
  */
-package org.apache.jmeter.testbeans.gui;
+package org.apache.jmeter.testbeans;
 
 import java.awt.Image;
 import java.beans.BeanDescriptor;
@@ -68,6 +68,7 @@ import java.beans.PropertyDescriptor;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.apache.jmeter.testbeans.gui.GenericTestBeanCustomizer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
