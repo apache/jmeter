@@ -66,6 +66,7 @@ To enable Email support, add Sun's JavaMail packages to JMeter's <a href="#class
 implementation of SSL be provided (such as Sun's <a href="http://java.sun.com/products/jsse/index.html">Java Secure Sockets Extension -- JSSE</a>).
 Include the necessary encryption packages in JMeter's <a href="#classpath">classpath</a>.  Also, update <a href="#configuring_jmeter">jmeter.properties</a>
 by registering the SSL Provider.</p>
+<p>There is also the <complink name="SSL Manager"/>, for greater control of certs.</p>
 <p>Note: if you are running JDK1.4, then you do not have to download JSSE because Sun integrated it into JDK1.4 as a standard library.</p>
 </subsection>
 
