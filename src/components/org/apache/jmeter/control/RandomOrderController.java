@@ -135,8 +135,6 @@ public class RandomOrderController
         public void testRandomOrderNoElements()
         {
             RandomOrderController roc = new RandomOrderController();
-            TestElement sampler = null;
-            List usedSamplers = new ArrayList();
             roc.initialize();
             assertTrue(roc.next() == null);
         }
