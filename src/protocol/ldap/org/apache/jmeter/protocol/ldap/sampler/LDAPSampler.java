@@ -106,7 +106,7 @@ public class LDAPSampler extends AbstractSampler
     
     //For In build test case using this counter 
     //create the new entry in the server
-    public static int counter=0;
+    private static int counter=0;
 
 	private boolean searchFoundEntries;//TODO turn into parameter?
 
@@ -294,7 +294,7 @@ public class LDAPSampler extends AbstractSampler
      * 
      * @return    the BasicAttributes
      */
-    public BasicAttributes getUserAttributes()
+    private BasicAttributes getUserAttributes()
     {
         BasicAttribute basicattribute = new BasicAttribute("objectclass");
         basicattribute.add("top");
@@ -323,7 +323,7 @@ public class LDAPSampler extends AbstractSampler
      * 
      * @return   the BasicAttributes
      */
-    public ModificationItem[] getUserModAttributes()
+    private ModificationItem[] getUserModAttributes()
     {
         ModificationItem[] mods =
             new ModificationItem[getArguments().getArguments().size()];
@@ -348,7 +348,7 @@ public class LDAPSampler extends AbstractSampler
      * 
      * @return    the BasicAttributes
      */
-    public ModificationItem[] getModificationItem()
+    private ModificationItem[] getModificationItem()
     {
         ModificationItem[] mods = new ModificationItem[2];
         // replace (update)  attribute
@@ -370,7 +370,7 @@ public class LDAPSampler extends AbstractSampler
      * 
      * @return    the BasicAttributes
      */
-    public BasicAttributes getBasicAttributes()
+    private BasicAttributes getBasicAttributes()
     {
         BasicAttributes basicattributes = new BasicAttributes();
         BasicAttribute basicattribute = new BasicAttribute("objectclass");
@@ -398,7 +398,7 @@ public class LDAPSampler extends AbstractSampler
      * 
      * @return    the BasicAttribute
      */
-    public BasicAttribute getBasicAttribute(String name, String value)
+    private BasicAttribute getBasicAttribute(String name, String value)
     {
         BasicAttribute attr = new BasicAttribute(name,value);
         return attr;
@@ -427,27 +427,24 @@ public class LDAPSampler extends AbstractSampler
      * 
      * @return    executed time for the give test case
      */
-    public long addTest(LdapClient ldap)
+    private void addTest(LdapClient ldap, SampleResult res)
         throws NamingException
     {
-        long start = 0L;
-        long end = 0L;
         if (getPropertyAsBoolean(USER_DEFINED))
         {
-            start = System.currentTimeMillis();
+        	res.sampleStart();
             ldap.createTest(
                 getUserAttributes(),
                 getPropertyAsString(BASE_ENTRY_DN));
-            end = System.currentTimeMillis();
+            res.sampleEnd();
         }
         else
         {
-            start = System.currentTimeMillis();
+			res.sampleStart();
             ldap.createTest(getBasicAttributes(), getPropertyAsString(ADD));
-            end = System.currentTimeMillis();
+            res.sampleEnd();
             ldap.deleteTest(getPropertyAsString(ADD));
         }
-        return (end - start);
     }
          
 
@@ -457,20 +454,17 @@ public class LDAPSampler extends AbstractSampler
      * 
      * @return    executed time for the give test case
      */
-    public long deleteTest(LdapClient ldap)
+    private void deleteTest(LdapClient ldap, SampleResult res)
         throws NamingException
     {
-        long start = 0L;
-        long end = 0L;
         if (!getPropertyAsBoolean(USER_DEFINED))
         {
             ldap.createTest(getBasicAttributes(), getPropertyAsString(ADD));
             setProperty(new StringProperty(DELETE, getPropertyAsString(ADD)));
         }
-        start = System.currentTimeMillis();
+        res.sampleStart();
         ldap.deleteTest(getPropertyAsString(DELETE));
-        end = System.currentTimeMillis();
-        return (end - start);
+        res.sampleEnd();
     }
 
     /**
@@ -479,12 +473,9 @@ public class LDAPSampler extends AbstractSampler
      * 
      * @return    executed time for the give test case
      */
-    public long searchTest(LdapClient ldap)
+    private void searchTest(LdapClient ldap, SampleResult res)
         throws NamingException
     {
-        long start = 0L;
-        long end = 0L;
-
         if (!getPropertyAsBoolean(USER_DEFINED))
         {
             ldap.createTest(getBasicAttributes(), getPropertyAsString(ADD));
@@ -493,16 +484,15 @@ public class LDAPSampler extends AbstractSampler
             setProperty(
                 new StringProperty(SEARCHFILTER, getPropertyAsString(ADD)));
         }
-        start = System.currentTimeMillis();
+        res.sampleStart();
         searchFoundEntries = ldap.searchTest(
             getPropertyAsString(SEARCHBASE),
             getPropertyAsString(SEARCHFILTER));
-        end = System.currentTimeMillis();
+        res.sampleEnd();
         if (!getPropertyAsBoolean(USER_DEFINED))
         {
             ldap.deleteTest(getPropertyAsString(ADD));
         }
-        return (end - start);
     }
 
     /**
@@ -511,29 +501,26 @@ public class LDAPSampler extends AbstractSampler
      * 
      * @return    executed time for the give test case
      */
-    public long modifyTest(LdapClient ldap)
+    private void modifyTest(LdapClient ldap, SampleResult res)
         throws NamingException
     {
-        long start = 0L;
-        long end = 0L;
         if (getPropertyAsBoolean(USER_DEFINED))
         {
-            start = System.currentTimeMillis();
+            res.sampleStart();
             ldap.modifyTest(
                 getUserModAttributes(),
                 getPropertyAsString(BASE_ENTRY_DN));
-            end = System.currentTimeMillis();
+            res.sampleEnd();
         }
         else
         {
             ldap.createTest(getBasicAttributes(), getPropertyAsString(ADD));
             setProperty(new StringProperty(MODIFY, getPropertyAsString(ADD)));
-            start = System.currentTimeMillis();
+            res.sampleStart();
             ldap.modifyTest(getModificationItem(), getPropertyAsString(MODIFY));
-            end = System.currentTimeMillis();
+            res.sampleEnd();
             ldap.deleteTest(getPropertyAsString(ADD));
         }
-        return (end - start);
     }
          
     public SampleResult sample(Entry e)
@@ -542,7 +529,6 @@ public class LDAPSampler extends AbstractSampler
         boolean isSuccessful = false;
         res.setSampleLabel(getLabel());
 		res.setSamplerData(getPropertyAsString(TEST));//TODO improve this
-        long time=0L;
         LdapClient ldap = new LdapClient();
 
         try
@@ -556,19 +542,19 @@ public class LDAPSampler extends AbstractSampler
 
             if (getPropertyAsString(TEST).equals("add"))
             {
-                time = addTest(ldap);
+                addTest(ldap,res);
             }
             else if (getPropertyAsString(TEST).equals("delete"))
             {
-                time = deleteTest(ldap);
+                deleteTest(ldap,res);
             }
             else if (getPropertyAsString(TEST).equals("modify"))
             {
-                time = modifyTest(ldap);
+                modifyTest(ldap,res);
             }
             else if (getPropertyAsString(TEST).equals("search"))
             {
-                time = searchTest(ldap);
+                searchTest(ldap,res);
             }
 
             //TODO - needs more work ...
@@ -590,15 +576,15 @@ public class LDAPSampler extends AbstractSampler
         catch (Exception ex)
         {
 			log.error("Ldap client - ",ex);
+			// Could time this
+			// res.sampleEnd();
+			// if sampleEnd() is not called, elapsed time will remain zero
 			res.setResponseCode("500");//TODO distinguish errors better
             res.setResponseMessage(ex.toString());
             ldap.disconnect();
             isSuccessful = false;
-            time = 0L;
         }
 
-        // Calculate response time
-        res.setTime(time);
         // Set if we were successful or not
         res.setSuccessful(isSuccessful);
         return res;
