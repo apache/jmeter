@@ -113,7 +113,7 @@ public class ConstantThroughputTimer
      * 
      * @see org.apache.jmeter.testelement.TestListener#testStarted()
      */
-    public void testStarted()
+    public synchronized void testStarted()//synch to protect targetTime
     {
     	log.debug("Test started - reset throughput calculation.");
     	targetTime= 0;
