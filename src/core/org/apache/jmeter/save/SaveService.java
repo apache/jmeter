@@ -178,19 +178,19 @@ public class SaveService
       saver.toXML(wrapper, writer);
    }
    
-   public static void saveElement(TestElement el,Writer writer) throws Exception
+   public static void saveElement(Object el,Writer writer) throws Exception
    {
        saver.toXML(el,writer);
    }
    
-   public static TestElement loadElement(InputStream in) throws Exception
+   public static Object loadElement(InputStream in) throws Exception
    {
-       return (TestElement) saver.fromXML(new InputStreamReader(in));
+       return saver.fromXML(new InputStreamReader(in));
    }
    
-   public static TestElement loadElement(Reader in) throws Exception
+   public static Object loadElement(Reader in) throws Exception
    {
-       return (TestElement)saver.fromXML(in);
+       return saver.fromXML(in);
    }
 
    public synchronized static void saveSampleResult(SampleResult res,
@@ -256,7 +256,7 @@ public class SaveService
       checkVersion(IntegerPropertyConverter.class, "1.3");
       checkVersion(LongPropertyConverter.class, "1.3");
       checkVersion(MultiPropertyConverter.class, "1.3");
-      checkVersion(SampleResultConverter.class, "1.4");
+      checkVersion(SampleResultConverter.class, "1.5");
       checkVersion(StringPropertyConverter.class, "1.6");
       checkVersion(TestElementConverter.class, "1.2");
       checkVersion(TestElementPropertyConverter.class, "1.3");
