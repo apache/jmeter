@@ -432,7 +432,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable
 		return threadContext;
 	}
 	/**
-	 * @param threadContext The threadContext to set.
+	 * @param inthreadContext The threadContext to set.
 	 */
 	public void setThreadContext(JMeterContext inthreadContext) {
 		if (threadContext != null)
@@ -449,7 +449,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable
 		return threadName;
 	}
 	/**
-	 * @param threadName The threadName to set.
+	 * @param inthreadName The threadName to set.
 	 */
 	public void setThreadName(String inthreadName) {
 		if (threadName != null)
