@@ -276,7 +276,6 @@
     <property name="assuming.libs.present" value="true"/>
 
     <property name="jsse.present" value="assume"/>
-    <property name="isasilk.present" value="assume"/>
     <property name="javamail.present" value="assume"/>
     <property name="javamail.complete" value="assume"/>
   </target>
