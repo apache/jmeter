@@ -119,10 +119,10 @@ public class ProxyControlGui
 
    /**
     * Used to indicate that HTTP request headers should be captured.
-    * The default is to <b>not</b> capture the HTTP request headers,
+    * The default is to capture the HTTP request headers,
     * which are specific to particular browser settings.
     */
-   private JCheckBox httpHeaders;
+    private JCheckBox httpHeaders;
 
     private ProxyControl model;
 
