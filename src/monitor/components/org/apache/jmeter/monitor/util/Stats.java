@@ -90,14 +90,14 @@ public class Stats
 	 * <li> none of the above is dead
 	 * </ol>
 	 * @param stat
-	 * @return
+	 * @return integer representing the status
 	 */
 	public static int calculateStatus(Status stat){
 		if (stat != null){
 			Connector cntr = (Connector)stat.getConnector().get(0);
 			int max = cntr.getThreadInfo().getMaxThreads();
 			int current = cntr.getThreadInfo().getCurrentThreadsBusy();
-			int spare = cntr.getThreadInfo().getMaxSpareThreads();
+			//int spare = cntr.getThreadInfo().getMaxSpareThreads();
 			double per = (double)current/(double)max;
 			if (per > WARNING_PER){
 				return WARNING;
