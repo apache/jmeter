@@ -52,6 +52,7 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 import org.jdom.Document;
@@ -112,6 +113,9 @@ public class JMeterTest extends JMeterTestCase
     
 	// Constructor for Function tests
 	private Function funcItem;
+
+	private static boolean classPathShown=false;// Only show classpath once
+	
 	public JMeterTest(String testName, Function fi)
 	{
 		super(testName);// Save the method name
@@ -657,8 +661,16 @@ public class JMeterTest extends JMeterTestCase
 		    for (int i=0;i<ss.length;i++){
 			    System.out.println(ss[i]);
 			}
-	        System.out.println("Class path is:");
-		    System.out.println(System.getProperty("java.class.path"));
+		    if (!classPathShown=false){// Only dump it once
+		        System.out.println("Class path is:");
+		        String cp=System.getProperty("java.class.path");
+				String cpe[]= JOrphanUtils.split(cp,java.io.File.pathSeparator);
+				for (int i=0;i<cpe.length;i++)
+				{
+			        System.out.println(cpe[i]);
+				}
+		    	classPathShown=true;
+		    }
 		}
         return objects;
     }
