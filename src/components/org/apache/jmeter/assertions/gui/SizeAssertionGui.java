@@ -113,35 +113,35 @@ public class SizeAssertionGui
      */
     public void setState(int state)
     {
-        if (state == 1)
+        if (state == SizeAssertion.EQUAL)
         {
             equalButton.setSelected(true);
-            execState = 1;
+            execState = state;
         }
-        else if (state == 2)
+        else if (state == SizeAssertion.NOTEQUAL)
         {
             notequalButton.setSelected(true);
-            execState = 2;
+            execState = state;
         }
-        else if (state == 3)
+        else if (state == SizeAssertion.GREATERTHAN)
         {
             greaterthanButton.setSelected(true);
-            execState = 3;
+            execState = state;
         }
-        else if (state == 4)
+        else if (state == SizeAssertion.LESSTHAN)
         {
             lessthanButton.setSelected(true);
-            execState = 4;
+            execState = state;
         }
-        else if (state == 5)
+        else if (state == SizeAssertion.GREATERTHANEQUAL)
         {
             greaterthanequalButton.setSelected(true);
-            execState = 5;
+            execState = state;
         }
-        else if (state == 6)
+        else if (state == SizeAssertion.LESSTHANEQUAL)
         {
             lessthanequalButton.setSelected(true);
-            execState = 6;
+            execState = state;
         }
     }
 
