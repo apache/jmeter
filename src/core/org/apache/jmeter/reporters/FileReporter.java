@@ -123,7 +123,7 @@ public class FileReporter extends JPanel
         }
         finally
         {
-			reader.close();
+			if (reader != null) reader.close();
         }
         showPanel();
     }
