@@ -46,7 +46,10 @@ public class Help implements Command
         }
         catch (IOException err)
         {
-            log.error("Couldn't load " + helpPage, err);
+        	String msg = "Couldn't load help file " + err.toString();
+            log.error(msg);
+            helpDoc.setText(msg);
+            currentPage="";// Avoid NPE in resetPage()
         }
     }
     
@@ -60,7 +63,7 @@ public class Help implements Command
             helpWindow =
                 new JDialog(
 			        new Frame(),// independent frame to allow it to be overlaid by the main frame
-                    JMeterUtils.getResString("help"),
+                    JMeterUtils.getResString("help"),//$NON-NLS-1$
                     false);
             helpWindow.getContentPane().setLayout(new GridLayout(1, 1));
             ComponentUtil.centerComponentInWindow(helpWindow, 60);
@@ -98,7 +101,10 @@ public class Help implements Command
             }
             catch (IOException err)
             {
-                log.error("Couldn't load page: " + source, err);
+				String msg = "Couldn't load page " + source + " " + err.toString();
+                log.error(msg);
+                helpDoc.setText(msg);
+                currentPage="";
             }
         }
     }
