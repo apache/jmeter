@@ -259,7 +259,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean
     */
    public String getPortString()
    {
-      return super.getPropertyAsString(HTTPSampler.PORT);
+      return super.getPropertyAsString(HTTPSamplerBase.PORT);
    }
 
    /**
@@ -268,7 +268,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean
     */
    public void setPortString(String port)
    {
-      super.setProperty(HTTPSampler.PORT, port);
+      super.setProperty(HTTPSamplerBase.PORT, port);
    }
 
    /**

@@ -27,7 +27,7 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
@@ -72,26 +72,26 @@ public class HttpDefaultsGui extends AbstractConfigGui
     public void modifyTestElement(TestElement config)
     {
         super.configureTestElement(config);
-        config.setProperty(HTTPSampler.PROTOCOL, protocol.getText());
-        config.setProperty(HTTPSampler.DOMAIN, domain.getText());
-        config.setProperty(HTTPSampler.PATH, path.getText());
+        config.setProperty(HTTPSamplerBase.PROTOCOL, protocol.getText());
+        config.setProperty(HTTPSamplerBase.DOMAIN, domain.getText());
+        config.setProperty(HTTPSamplerBase.PATH, path.getText());
         config.setProperty(
             new TestElementProperty(
-                HTTPSampler.ARGUMENTS,
+                HTTPSamplerBase.ARGUMENTS,
                 argPanel.createTestElement()));
-        config.setProperty(HTTPSampler.PORT, port.getText());
+        config.setProperty(HTTPSamplerBase.PORT, port.getText());
     }
 
     public void configure(TestElement el)
     {
         super.configure(el);
-        protocol.setText(el.getPropertyAsString(HTTPSampler.PROTOCOL));
-        domain.setText(el.getPropertyAsString(HTTPSampler.DOMAIN));
-        path.setText(el.getPropertyAsString(HTTPSampler.PATH));
-        port.setText(el.getPropertyAsString(HTTPSampler.PORT));
+        protocol.setText(el.getPropertyAsString(HTTPSamplerBase.PROTOCOL));
+        domain.setText(el.getPropertyAsString(HTTPSamplerBase.DOMAIN));
+        path.setText(el.getPropertyAsString(HTTPSamplerBase.PATH));
+        port.setText(el.getPropertyAsString(HTTPSamplerBase.PORT));
         argPanel.configure(
             (TestElement) el
-                .getProperty(HTTPSampler.ARGUMENTS)
+                .getProperty(HTTPSamplerBase.ARGUMENTS)
                 .getObjectValue());
     }
 
