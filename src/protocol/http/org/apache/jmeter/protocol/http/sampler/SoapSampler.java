@@ -66,7 +66,6 @@ public class SoapSampler extends HTTPSampler
      *
      * @param connection      <code>URLConnection</code> of where POST data
      *                        should be sent
-     * @param url             contains the query string for POST
      * @exception IOException if an I/O exception occurs
      */
     public void sendPostData(URLConnection connection) throws IOException

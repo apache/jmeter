@@ -592,7 +592,7 @@ public class HTTPSampler extends AbstractSampler
     /**
      * Set request headers in preparation to opening a connection.
      *
-     * @param connection       <code>URLConnection</code> to set headers on
+     * @param conn       <code>URLConnection</code> to set headers on
      * @exception IOException  if an I/O exception occurs
      */
     public void setPostHeaders(URLConnection conn) throws IOException
@@ -617,7 +617,8 @@ public class HTTPSampler extends AbstractSampler
      * POST), headers, cookies, authorization properly set for the URL request.
      *
      * @param u                <code>URL</code> of the URL request
-     * @param url              <code>UrlConfig</code> of the URL request
+     * @param method            http/https
+     * @param res               the sample result
      * @return                 <code>HttpURLConnection</code> of the URL request
      * @exception IOException  if an I/O Exception occurs
      */

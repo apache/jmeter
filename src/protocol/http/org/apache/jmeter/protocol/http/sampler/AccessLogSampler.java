@@ -145,7 +145,7 @@ public class AccessLogSampler extends HTTPSampler
     /**
      * it's kinda obvious, but we state it anyways.  Set the xml file with a
      * string path.
-     * @param String filename
+     * @param classname - parser class name
      */
     public void setParserClassName(String classname)
     {
@@ -256,7 +256,8 @@ public class AccessLogSampler extends HTTPSampler
 
 	/**
 	 * sample(Entry e) simply calls sample().
-	 * @param Entry e
+	 * @param e - ignored
+	 * @return the new sample
 	 */
 	public SampleResult sample(Entry e)
 	{

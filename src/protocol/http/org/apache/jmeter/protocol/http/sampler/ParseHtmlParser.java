@@ -92,9 +92,10 @@ public class ParseHtmlParser
 	 * This method is called by HTTPSampler to get the images
 	 * from the HTML and retrieve it from the server. It is
 	 * the entry point for parsing the HTML.
-	 * @param res
-	 * @param sampler
-	 * @return
+	 * 
+     * @param res - the current sample result
+     * @param sampler - the HTTP sampler
+     * @return the sample result, with possible additional sub results
 	 */
 	protected static SampleResult parseForImages(SampleResult res,HTTPSampler sampler)
 	{

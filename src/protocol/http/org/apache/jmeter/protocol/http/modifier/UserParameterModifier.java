@@ -143,8 +143,6 @@ public class UserParameterModifier
      * Modifies an entry object to replace the value of any url parameter that
      * matches a parameter name in the XML file.
      *
-     * @param entry Entry object containing information about the current test
-     * @return <code>True</code> if modified, else <code>false</code>
      */
     public void process()
     {
