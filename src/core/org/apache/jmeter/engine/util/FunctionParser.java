@@ -49,7 +49,7 @@ class FunctionParser
                         {
                             break;
                         }
-                        if(current[0] != '$' && current[0] != ',')
+                        if(current[0] != '$' && current[0] != ',' && current[0] != '\\')
                         {
                             buffer.append(previous);
                         }
