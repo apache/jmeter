@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -27,7 +26,6 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
@@ -39,7 +37,6 @@ import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
- * @version $Revision$ on $Date$
  */
 public class RegexExtractorGui extends AbstractPostProcessorGui
 {
@@ -49,7 +46,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
     private JLabeledTextField matchNumberField;
     private JLabeledTextField refNameField;
     
-    private JCheckBox scanHeader;
+    //NOTUSED private JCheckBox scanHeader;
 	private JRadioButton useBody;
 	private JRadioButton useHeaders;
     
@@ -141,7 +138,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
         panel.add(useBody);
         panel.add(useHeaders);
 		
-        //useBody.setSelected(true);
+        useBody.setSelected(true);
         return panel;
     }
 
