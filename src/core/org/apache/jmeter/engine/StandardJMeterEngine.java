@@ -412,7 +412,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
             threads[i].setThreadNum(i);
             threads[i].setInitialContext(JMeterContextService.getContext());
             threads[i].setInitialDelay((int) (perThreadDelay * (float) i));
-            threads[i].setThreadName(groupName + (groupCount) + "-" + (i + 1));
+            threads[i].setThreadName(groupName + " " + (groupCount) + "-" + (i + 1));
 
             scheduleThread(threads[i], group);
 
