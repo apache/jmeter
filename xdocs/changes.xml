@@ -44,7 +44,8 @@
 <li>Catch Runtime Exceptions so an error in one Listener does not affect others</li>
 <li>Bug 33467 - __threadNum() extracted number wrongly </li>
 <li>Bug 29186,33299 - fix CLI parsing of "-" in second argument</li>
-<li>Fix CLI parse bug: -D arg1=arg2</li>
+<li>Fix CLI parse bug: -D arg1=arg2. Log more startup parameters.</li>
+<li>Fix JTidy and HTMLParser parsers to handle form src= and link rel=stylesheet</li>
 </ul>
 <h4>Other changes:</h4>
 <ul>
