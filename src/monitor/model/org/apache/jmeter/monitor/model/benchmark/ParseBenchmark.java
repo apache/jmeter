@@ -66,8 +66,7 @@ public class ParseBenchmark
 			}
 			long start = 0;
 			long end = 0;
-			String contents = new String(buf.toString());
-			contents.trim();
+			String contents = buf.toString().trim();
 			System.out.println("start test: " + loops + " iterations");
 			System.out.println("content:");
 			System.out.println(contents);
