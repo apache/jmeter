@@ -20,6 +20,7 @@
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 
 /**
@@ -76,8 +77,9 @@ public class FunctionProperty extends AbstractProperty
     {
         log.debug("Calling getStringValue from FunctionProperty");
         log.debug("boogedy boogedy");
+        JMeterContext ctx = JMeterContextService.getContext();//Expensive, so do once
         if (!isRunningVersion()
-            || !JMeterContextService.getContext().isSamplingStarted())
+            || !ctx.isSamplingStarted())
         {
             log.debug("Not running version, return raw function string");
             return function.getRawParameters();
@@ -86,7 +88,7 @@ public class FunctionProperty extends AbstractProperty
         {
             log.debug("Running version, executing function");
             int iter =
-                JMeterContextService.getContext().getVariables().getIteration();
+                ctx.getVariables().getIteration();
             if (iter < testIteration)
             {
                 testIteration = -1;
