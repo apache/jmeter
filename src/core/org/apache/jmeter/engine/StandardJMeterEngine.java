@@ -57,6 +57,7 @@ package org.apache.jmeter.engine;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -378,8 +379,12 @@ public class StandardJMeterEngine
             //set the starttime for the Thread
             thread.setStartTime(group.getStartTime());
             
-            //set the endtime for the Thread
-            thread.setEndTime(group.getEndTime());
+			//set the endtime for the Thread
+            if (group.getDuration() > 0){// Duration is  in seconds
+				thread.setEndTime(group.getDuration()*1000+(new Date().getTime()));
+            } else {
+				thread.setEndTime(group.getEndTime());
+            }
 
             //Enables the scheduler
             thread.setScheduled(true);
