@@ -84,7 +84,6 @@ public class HTTPSampler2 extends HTTPSamplerBase
 	 */
 	public HTTPSampler2()
 	{
-		setArguments(new Arguments());
 	}
 
     /**

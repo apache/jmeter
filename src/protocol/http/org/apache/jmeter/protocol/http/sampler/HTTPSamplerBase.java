@@ -118,6 +118,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     
 	public HTTPSamplerBase()
 	{
+		setArguments(new Arguments());
 	}
 
     public void setFileField(String value)
