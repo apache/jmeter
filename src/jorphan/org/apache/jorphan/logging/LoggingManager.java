@@ -24,7 +24,6 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.Properties;
 
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.ClassContext;
 import org.apache.log.Hierarchy;
 import org.apache.log.LogTarget;
@@ -35,8 +34,7 @@ import org.apache.log.output.NullOutputLogTarget;
 import org.apache.log.output.io.WriterTarget;
 
 /**
- * @author Michael Stover (mstover1 at apache.org)
- * @version $Revision$
+ * @version $Revision$ on $Date$
  */
 public final class LoggingManager
 {
@@ -58,39 +56,8 @@ public final class LoggingManager
 		"%{time:yyyy/MM/dd HH:mm:ss} %5.5{priority} "
         + "%{category}[%{thread}]: %{message} %{throwable}";
 
-	private static PatternFormatter getFormat()
-	{
-		if (savedFormat == null)
-		{
-			String pattern = DEFAULT_PATTERN;
-			String type = JMeterUtils.getPropDefault("log_format_type","");
-			if (type.length()==0)
-			{
-				pattern=JMeterUtils.getPropDefault("log_format",DEFAULT_PATTERN);
-			}
-			else
-			{
-				if (type.equalsIgnoreCase("thread_suffix"))
-				{
-					pattern=PATTERN_THREAD_SUFFIX;
-				}
-				else 
-				if (type.equalsIgnoreCase("thread_prefix"))
-				{
-					pattern=PATTERN_THREAD_PREFIX;
-				}
-				else
-				{
-					pattern=DEFAULT_PATTERN;
-				}
-			}
-			savedFormat = new PatternFormatter(pattern+"\n");
-		}
-		return savedFormat;
-	}
 
-
-	private static PatternFormatter savedFormat = null;
+	private static PatternFormatter format = null;
 	
     /** Used to hold the default logging target. */
     private static LogTarget target;
@@ -130,6 +97,8 @@ public final class LoggingManager
             logManager = new LoggingManager();
         }
 
+        setFormat(properties);
+        
         // Set the top-level defaults
         setTarget(
             makeWriter(
@@ -140,6 +109,48 @@ public final class LoggingManager
         setLoggingLevels(properties);
         // now set the individual categories (if any)
     }
+
+	private static void setFormat(Properties properties)
+	{
+			String pattern = DEFAULT_PATTERN;
+			String type = properties.getProperty("log_format_type","");
+			if (type.length()==0)
+			{
+				pattern=properties.getProperty("log_format",DEFAULT_PATTERN);
+			}
+			else
+			{
+				if (type.equalsIgnoreCase("thread_suffix"))
+				{
+					pattern=PATTERN_THREAD_SUFFIX;
+				}
+				else 
+				if (type.equalsIgnoreCase("thread_prefix"))
+				{
+					pattern=PATTERN_THREAD_PREFIX;
+				}
+				else
+				{
+					pattern=DEFAULT_PATTERN;
+				}
+			}
+			format = new PatternFormatter(pattern+"\n");
+	}
+
+
+	/*
+	 * Helper method to ensure that format is initialised if initializeLogging()
+	 * has not yet been called.
+	*/
+	private static PatternFormatter getFormat()
+	{
+    	if (format == null)
+    	{
+            format = new PatternFormatter(DEFAULT_PATTERN+"\n");    		
+    	}
+    	return format;
+    }
+    
 
     /*
      * Helper method to handle log target creation.
@@ -259,7 +270,7 @@ public final class LoggingManager
     {
         if (target == null)
         {
-            target = new WriterTarget(targetFile, getFormat());
+            target = getTarget(targetFile, getFormat());
             isTargetSystemOut=isWriterSystemOut;
         }
         else
@@ -268,9 +279,14 @@ public final class LoggingManager
             {
                 ((WriterTarget) target).close();
             }
-            target = new WriterTarget(targetFile, getFormat());
+            target = getTarget(targetFile, getFormat());
 			isTargetSystemOut=isWriterSystemOut;
         }
         Hierarchy.getDefaultHierarchy().setDefaultLogTarget(target);
+    }
+    
+    private static LogTarget getTarget(Writer targetFile, PatternFormatter fmt)
+	{
+    	return new WriterTarget(targetFile, fmt);
     }
 }
