@@ -35,6 +35,9 @@ import junit.framework.TestSuite;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.log.Logger;
@@ -83,6 +86,19 @@ public class PackageTest extends JMeterTestCase
 		return sff;
 	}
 
+	// Create the StringFromFile function and set its parameters.
+	private static SplitFunction SplitParams(String p1, String p2, String p3)
+	throws Exception
+	{
+		SplitFunction split = new SplitFunction();
+		Collection parms = new LinkedList();
+		parms.add(new CompoundVariable(p1));
+		if (p2 != null) parms.add(new CompoundVariable(p2));
+		if (p3 != null) parms.add(new CompoundVariable(p3));
+		split.setParameters(parms);
+		return split;
+	}
+
 	public static Test suite() throws Exception
 	{
 		   TestSuite allsuites = new TestSuite();
@@ -112,7 +128,70 @@ public class PackageTest extends JMeterTestCase
 		   sff.addTest(new PackageTest("SFFTest5"));
 		   allsuites.addTest(sff);
 		   
+		   TestSuite split = new TestSuite("SplitFunction");
+		   split.addTest(new PackageTest("SplitTest1"));
+		   allsuites.addTest(split);
+		   
 		   return allsuites;
+    }
+    
+    private JMeterContext jmctx = null;
+	private JMeterVariables vars = null;
+    public void setUp()
+    {
+    	jmctx = JMeterContextService.getContext();
+        jmctx.setVariables(new JMeterVariables());
+    	vars = jmctx.getVariables();
+    }
+
+    public void SplitTest1() throws Exception
+    {
+    	SplitFunction split=null;
+    	try
+		{
+		    split = SplitParams("a,b,c",null,null);
+		    fail("Expected InvalidVariableException (wrong number of parameters)");
+		}
+    	catch (InvalidVariableException e)
+		{
+    		//OK
+		}
+	    split = SplitParams("a,b,c","VAR1",null);
+    	split.execute();
+    	assertEquals("a,b,c",vars.get("VAR1"));
+    	assertEquals("3",vars.get("VAR1_n"));
+    	assertEquals("a",vars.get("VAR1_1"));
+    	assertEquals("b",vars.get("VAR1_2"));
+    	assertEquals("c",vars.get("VAR1_3"));
+    	assertNull(vars.get("VAR1_4"));
+
+    	split = SplitParams("a,b,c","VAR2",",");
+    	split.execute();
+    	assertEquals("a,b,c",vars.get("VAR2"));
+    	assertEquals("3",vars.get("VAR2_n"));
+    	assertEquals("a",vars.get("VAR2_1"));
+    	assertEquals("b",vars.get("VAR2_2"));
+    	assertEquals("c",vars.get("VAR2_3"));
+    	assertNull(vars.get("VAR2_4"));
+
+    	split = SplitParams("a|b|c","VAR3","|");
+    	split.execute();
+    	assertEquals("a|b|c",vars.get("VAR3"));
+    	assertEquals("3",vars.get("VAR3_n"));
+    	assertEquals("a",vars.get("VAR3_1"));
+    	assertEquals("b",vars.get("VAR3_2"));
+    	assertEquals("c",vars.get("VAR3_3"));
+    	assertNull(vars.get("VAR3_4"));
+
+    	split = SplitParams("a|b||","VAR4","|");
+    	split.execute();
+    	assertEquals("a|b||",vars.get("VAR4"));
+    	assertEquals("3",vars.get("VAR4_n"));
+    	assertEquals("a",vars.get("VAR4_1"));
+    	assertEquals("b",vars.get("VAR4_2"));
+    	assertEquals("?",vars.get("VAR4_3"));
+    	assertNull(vars.get("VAR4_5"));
+
     }
     
     public void SFFTest1() throws Exception

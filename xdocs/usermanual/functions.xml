@@ -101,8 +101,10 @@ replacement string") parsed by this function</li>
 <li>${refName_g0} to refer to the entire match  parsed by this function.</li>
 <li>${refName_g1} to refer to the first group parsed by this function.</li>
 <li>${refName_g#} to refer to the n<sup>th</sup> group parsed by this function.</li>
+<li>${refName_matchNr} to refer to the number of groups found by this function.</li>
 </ul>
-</p></description>
+</p>
+</description>
 
 <properties>
         <property name="First argument" required="Yes">The first argument is the regular expression
@@ -423,6 +425,27 @@ the second would return 1 and the last would return www.dummy.org
         <property name="BeanShell script" required="Yes">A beanshell script (not a file name)</property>
         <property name="Name of variable" required="No">A reference name for reusing the value
                computed by this function.</property>
+        
+</properties>
+</component>
+
+<component index="16.5.14" name="__split">
+<description>
+	<p>
+	The split function splits the string passed to it according to the delimiter,
+    and returns the original string. If any delimiters are adjacent, "?" is returned as the value.
+    The split strings are returned in the variables ${VAR_1}, ${VAR_2} etc. 
+    The count of variables is returned in ${VAR_n}. 
+	</p>
+</description>
+
+<properties>
+        <property name="String to split" required="Yes">A delimited string, e.g. "a|b|c"</property>
+        <property name="Name of variable" required="Yes">A reference name for reusing the value
+               computed by this function.</property>
+        <property name="Delimiter" required="No">The delimiter character, e.g. "|". 
+If omitted, "," is used. Note that "," would need to be specified as "\,".
+</property>
         
 </properties>
 </component>
