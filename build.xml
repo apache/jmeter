@@ -99,15 +99,16 @@
    HomePage: http://www.cs.umd.edu/~pugh/java/bugs/
    
    To use the findbugs target, download and install the findbugs binary distribution
-   Set the value of findbugs.home according to where you installed findbugs, for example:
-   ant findbugs -Dfindbugs.home=/etc/findbugs -Dfindbugs.level=medium
-  [The defaults are /findbugs and high]
+   Set the value of findbugs.homedir according to where you installed findbugs, for example:
+   ant findbugs -Dfindbugs.homedir=/etc/findbugs -Dfindbugs.level=medium
+  [The defaults are /findbugs and medium]
    -->
    <property name="findbugs.homedir" value="/findbugs" />
    <property name="findbugs.level" value="medium" />
    <property name="findbugs.outName" value="reports/jmeter-fb" />
-   <target name="findbugs">
-   	<mkdir dir="reports"/>
+   <target name="findbugs" description="Run the stand-alone Findbugs detector">
+    <echoproperties prefix="findbugs"/>
+    <mkdir dir="reports"/>
     <taskdef name="findbugs" 
         classpath="${findbugs.homedir}/lib/findbugs-ant.jar" 
         classname="edu.umd.cs.findbugs.anttask.FindBugsTask"/>
@@ -130,45 +131,25 @@
       <class location="${lib.dir}/jorphan.jar" />
       <sourcePath path="${src.jorphan}" />
       <sourcePath path="${src.tcp}" />
-      <!--
+
+	<!--
+      Uncomment the following 2 lines to include htmlparser in the analysis
       <class location="${lib.dir}/htmlparser.jar" />
       <sourcePath path="${src.htmlparser}" />
       -->
-      <!--
-      Uncomment the previous lines and comment the following line
-      to do a source analysis of htmlparser
-      -->
-      <auxClasspath path="${lib.dir}/htmlparser.jar" />
-      <auxClasspath path="${jakarta-oro.jar}" />
-      <auxClasspath path="${junit.jar}" />
-      <auxClasspath path="${soap.jar}" />
-      <auxClasspath path="${jdom.jar}" />
-      <auxClasspath path="${tidy.jar}" />
-      <auxClasspath path="${logkit.jar}" />
-      <auxClasspath path="${excalibur-logger.jar}" />
-      <auxClasspath path="${excalibur-compatibility.jar}" />
-      <auxClasspath path="${excalibur-datasource.jar}" />
-      <auxClasspath path="${excalibur-pool.jar}" />
-      <auxClasspath path="${excalibur-instrument.jar}" />
-      <auxClasspath path="${excalibur-i18n.jar}" />
-      <auxClasspath path="${avalon-excalibur.jar}" />
-      <auxClasspath path="${avalon-framework.jar}" />
-      <auxClasspath path="${commons-collections.jar}" />
-      <auxClasspath path="${commons-logging.jar}" />
-      <auxClasspath path="${commons-httpclient.jar}" />
-      <auxClasspath path="${batik-awt-util.jar}" />
-      <auxClasspath path="${xstream.jar}" />
-      <auxClasspath path="${xpp3.jar}" />
-      <auxClasspath path="${lib.dir}/${bsf.jar}" />
-      <auxClasspath path="${lib.dir}/${bsh.jar}" />
-      <auxClasspath path="${lib.opt}/${bsf.jar}" />
-      <auxClasspath path="${lib.opt}/${bsh.jar}" />
-      <auxClasspath path="${lib.dir}/activation.jar" />
-      <auxClasspath path="${lib.dir}/mail.jar" />
-      <auxClasspath path="${lib.opt}/activation.jar" />
-      <auxClasspath path="${lib.opt}/mail.jar" />
-      <auxClasspath path="${js.jar}" />
-      
+
+      <auxClasspath>
+       	<fileset dir="${lib.dir}">
+       		<include name="*.jar"/>
+       	</fileset>
+      </auxClasspath>
+
+      <auxClasspath>
+       	<fileset dir="${lib.opt}">
+       		<include name="*.jar"/>
+       	</fileset>
+      </auxClasspath>
+
     </findbugs>
     <antcall target="findbugs-style"/>
   </target>
@@ -372,8 +353,6 @@
   not be included in the runtime classpath. This is intended
   for testing JMeter without the optional Jar file(s).
   -->
-  <property name="bsf.jar" value="bsf.jar"/>
-  <property name="bsh.jar" value="bsh-1.3.0.jar"/>
   
   <!-- Build classpath (includes the optional jar directory) -->
   <path id="classpath">
