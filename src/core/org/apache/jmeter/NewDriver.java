@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -65,107 +65,124 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-
-
-
-
-/************************************************************
- *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author     Michael Stover
- *@created    March 13, 2001
- *@version    1.0
- ***********************************************************/
-
-public class NewDriver
+/**
+ * @author     Michael Stover
+ * @version    $Revision$
+ */
+public final class NewDriver
 {
-	private static URLClassLoader loader;	
-	private static String jmDir;
-	
+    /** The class loader to use for loading JMeter classes. */
+    private static URLClassLoader loader;
+    
+    /** The directory JMeter is installed in. */
+    private static String jmDir;
 
-	
-	static {
-		List jars = new LinkedList();
-		String cp = System.getProperty("java.class.path");
-		
-		//Find JMeter home dir
-		StringTokenizer tok = new StringTokenizer(cp, File.pathSeparator);
-		if (tok.countTokens() == 1) {
-			File jar = new File(tok.nextToken());
-			try {
-				jmDir = jar.getCanonicalFile().getParentFile().getParent();
-			} catch (IOException e) {
- 			}
- 		}
- 		else
- 		{
- 			File userDir = new File(System.getProperty("user.dir"));
-			jmDir = userDir.getAbsoluteFile().getParent();
- 		}
- 		
-		StringBuffer classpath = new StringBuffer();
-		File[] libDirs = new File[]{new File(jmDir+File.separator+"lib"),
-				new File(jmDir+File.separator+"lib"+File.separator+"ext")};
-		for(int a = 0;a < libDirs.length;a++)
-		{
-			File[] libJars = libDirs[a].listFiles(new FilenameFilter() {
-			public boolean accept(File dir,String name) {
-				if(name.endsWith(".jar"))
-					return true;
-				return false;
-			}});
-			for(int i = 0;i < libJars.length;i++)
-			{
-				try
-				{
-					jars.add(new URL("file","",libJars[i].getPath()));
-					classpath.append(System.getProperty("path.separator"));
-					classpath.append(libJars[i].getPath());
-				}
-				catch(MalformedURLException e)
-				{
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		System.setProperty("java.class.path",System.getProperty("java.class.path")+classpath.toString());
-		loader = new URLClassLoader((URL[])jars.toArray(new URL[0]));
-		
-	}
-	
-	public static String getJMeterDir()
-	{
-		return jmDir;
-	}
-	
-	private NewDriver(String[] args)
-	{
-		
-	}
+    static {
+        List jars = new LinkedList();
+        String cp = System.getProperty("java.class.path");
 
-	/************************************************************
-	 *  The main program for the NewDriver class
-	 *
-	 *@param  args  The command line arguments
-	 ***********************************************************/
-	public static void main(String[] args)
-	{	
-		Thread.currentThread().setContextClassLoader(loader);
-		if (System.getProperty("log4j.configuration") == null)
-		{
-			File conf = new File(jmDir, "bin" + File.separator + "log4j.conf");
-			System.setProperty("log4j.configuration", "file:" + conf);
-		}
-		
-			try {
-				Class JMeter = loader.loadClass("org.apache.jmeter.JMeter");
-				Object instance = JMeter.newInstance();
-				Method startup = JMeter.getMethod("start",new Class[]{(new String[0]).getClass()});
-				startup.invoke(instance,new Object[]{args});
-				
-			} catch(Exception e) {
-				e.printStackTrace();
-			} 		
-	}
+        //Find JMeter home dir
+        StringTokenizer tok = new StringTokenizer(cp, File.pathSeparator);
+        if (tok.countTokens() == 1)
+        {
+            File jar = new File(tok.nextToken());
+            try
+            {
+                jmDir = jar.getCanonicalFile().getParentFile().getParent();
+            }
+            catch (IOException e)
+            {
+            }
+        }
+        else
+        {
+            File userDir = new File(System.getProperty("user.dir"));
+            jmDir = userDir.getAbsoluteFile().getParent();
+        }
+
+        StringBuffer classpath = new StringBuffer();
+        File[] libDirs =
+            new File[] {
+                new File(jmDir + File.separator + "lib"),
+                new File(
+                    jmDir + File.separator + "lib" + File.separator + "ext")};
+        for (int a = 0; a < libDirs.length; a++)
+        {
+            File[] libJars = libDirs[a].listFiles(new FilenameFilter()
+            {
+                public boolean accept(File dir, String name)
+                {
+                    return name.endsWith(".jar");
+                }
+            });
+            for (int i = 0; i < libJars.length; i++)
+            {
+                try
+                {
+                    jars.add(new URL("file", "", libJars[i].getPath()));
+                    classpath.append(System.getProperty("path.separator"));
+                    classpath.append(libJars[i].getPath());
+                }
+                catch (MalformedURLException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        System.setProperty(
+            "java.class.path",
+            System.getProperty("java.class.path") + classpath.toString());
+        loader = new URLClassLoader((URL[]) jars.toArray(new URL[0]));
+
+    }
+
+    /**
+     * Prevent instantiation.
+     */
+    private NewDriver()
+    {
+    }
+
+    /**
+     * Get the directory where JMeter is installed.  This is the absolute path
+     * name.
+     * 
+     * @return the directory where JMeter is installed.
+     */
+    public static String getJMeterDir()
+    {
+        return jmDir;
+    }
+
+    /**
+     * The main program which actually runs JMeter.
+     *
+     * @param  args  the command line arguments
+     */
+    public static void main(String[] args)
+    {
+        Thread.currentThread().setContextClassLoader(loader);
+        if (System.getProperty("log4j.configuration") == null)
+        {
+            File conf = new File(jmDir, "bin" + File.separator + "log4j.conf");
+            System.setProperty("log4j.configuration", "file:" + conf);
+        }
+
+        try
+        {
+            Class JMeter = loader.loadClass("org.apache.jmeter.JMeter");
+            Object instance = JMeter.newInstance();
+            Method startup =
+                JMeter.getMethod(
+                    "start",
+                    new Class[] {(new String[0]).getClass()});
+            startup.invoke(instance, new Object[] { args });
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 }

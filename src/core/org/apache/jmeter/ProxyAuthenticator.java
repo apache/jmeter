@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,26 +52,47 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter;
+package org.apache.jmeter;
 
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 
 /**
+ * Provides JMeter the ability to use proxy servers that require username and
+ * password.
+ * 
  * @author Dion MCMURTRIE
- *
- * Provides JMeter the ability to use proxy servers that require username and password
+ * @version $Revision$
  */
-public class ProxyAuthenticator extends Authenticator {
+public class ProxyAuthenticator extends Authenticator
+{
+    /** The username to authenticate with. */
+    private String userName;
+    
+    /** The password to authenticate with. */
+    private char password[];
 
-    private String userName, password;
-
-    protected PasswordAuthentication getPasswordAuthentication() {
-        return new PasswordAuthentication(userName, password.toCharArray());
+    /**
+     * Create a ProxyAuthenticator with the specified username and password.
+     *
+     * @param userName the username to authenticate with
+     * @param password the password to authenticate with
+     */
+    public ProxyAuthenticator(String userName, String password)
+    {
+        this.userName = userName;
+        this.password = password.toCharArray();
     }
 
-    public ProxyAuthenticator(String userName, String password) {
-        this.userName = userName;
-        this.password = password;
+    /**
+     * Return a PasswordAuthentication instance using the userName and password
+     * specified in the constructor.
+     * 
+     * @return a PasswordAuthentication instance to use for authenticating with
+     * the proxy
+     */
+    protected PasswordAuthentication getPasswordAuthentication()
+    {
+        return new PasswordAuthentication(userName, password);
     }
 }
