@@ -325,6 +325,7 @@ public class SaveService
 				}
 				catch (Exception ex)
 				{
+					log.error("Problem loading property",ex);
 					element.setProperty(children[i].getAttribute("name"),"");
 				}
 			}
