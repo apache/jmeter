@@ -42,7 +42,6 @@ import org.apache.log.Logger;
 /**
  * A sampler which understands Tcp requests.
  *
- * @author sebb AT apache DOT org
  * @version    $Revision$ $Date$
  */
 public class TCPSampler extends AbstractSampler implements TestListener

@@ -42,7 +42,6 @@ import org.apache.jmeter.util.JMeterUtils;
  *  - the default value, but if not define
  *  - the property name itself
  * 
- * @author sebb AT apache DOT org
  * @version $Revision$ Updated: $Date$
  */
 public class Property extends AbstractFunction implements Serializable

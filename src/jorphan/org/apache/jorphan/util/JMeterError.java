@@ -21,7 +21,6 @@ package org.apache.jorphan.util;
 /**
  * The rationale for this class is to support chained Errors in JDK 1.3
  * 
- * @author sebb AT apache DOT org
  * @version $Revision$ $Date$
  */
 public class JMeterError extends Error

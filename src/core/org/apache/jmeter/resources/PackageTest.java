@@ -53,7 +53,6 @@ import junit.framework.TestSuite;
  */
 
 /**
- * @author sebb AT apache DOT org
  * @version $Revision$ $Date$
  */
 public class PackageTest extends TestCase

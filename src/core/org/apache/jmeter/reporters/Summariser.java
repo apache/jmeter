@@ -44,7 +44,6 @@ import org.apache.log.Logger;
  * 
  * This is mainly intended for batch (non-GUI) runs
  * 
- * @author sebb AT apache DOT org
  * @version $Revision$ Last updated: $Date$
  */
 public class Summariser
@@ -129,7 +128,6 @@ public class Summariser
 	/**
 	 * Contains the items needed to collect stats for a summariser
 	 * 
-	 * @author sebb AT apache DOT org
 	 * @version $revision$ Last updated: $date$
 	 */
 	private static class Totals{

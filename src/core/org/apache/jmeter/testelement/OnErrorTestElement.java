@@ -25,7 +25,6 @@ package org.apache.jmeter.testelement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 
 /**
- * @author sebb at apache dot org
  * @version $Revision$ $Date$
  */
 public abstract class OnErrorTestElement extends AbstractTestElement

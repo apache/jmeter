@@ -39,7 +39,6 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author sebb AT apache DOT org
  * @version $Revision$ $Date$
  */
 public class PackageTest extends JMeterTestCase
