@@ -766,7 +766,10 @@ public class HashTree implements Serializable, Map
      */
     public Collection list(Collection treePath)
     {
-        return getTreePath(treePath).list();
+       HashTree tree = getTreePath(treePath);
+       if(tree != null)
+        return tree.list();
+       return null;
     }
     
     /**

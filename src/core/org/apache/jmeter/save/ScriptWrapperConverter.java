@@ -32,14 +32,14 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
-class ScriptWrapperConverter implements Converter
+public class ScriptWrapperConverter implements Converter
 {
     /** Returns the converter version; used to check for possible incompatibilities */
 	public static String getVersion(){	return "$Revision$";}
 	
    ClassMapper classMapper;
    
-   ScriptWrapperConverter(ClassMapper classMapper)
+   public ScriptWrapperConverter(ClassMapper classMapper)
    {
       this.classMapper = classMapper;
    }

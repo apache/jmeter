@@ -93,7 +93,7 @@ public class MailerVisualizer extends AbstractVisualizer
     public MailerVisualizer()
     {
         super();
-
+        setModel(new MailerResultCollector());
         // initialize GUI.
         initGui();
     }
