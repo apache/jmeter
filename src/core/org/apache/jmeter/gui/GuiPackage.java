@@ -194,17 +194,29 @@ public final class GuiPackage implements LocaleChangeListener
      */
     public JMeterGUIComponent getGui(TestElement node)
     {
+        String testClassName= node.getPropertyAsString(TestElement.TEST_CLASS);
+        String guiClassName= node.getPropertyAsString(TestElement.GUI_CLASS);
         try
         {
-            return getGui(
-                node, 
-                Class.forName(node.getPropertyAsString(TestElement.GUI_CLASS)),
-                Class.forName(node.getPropertyAsString(TestElement.TEST_CLASS)));
+            Class testClass;
+            if (testClassName.equals(""))
+            {
+                testClass= node.getClass();
+            }
+            else
+            {
+                testClass= Class.forName(testClassName);
+            }
+            Class guiClass= null;
+            if (! guiClassName.equals(""))
+            {
+                guiClass= Class.forName(guiClassName);
+            }
+            return getGui(node, guiClass, testClass);
         }
         catch (ClassNotFoundException e)
         {
-            log.error("Could not get GUI for "
-                +node.getPropertyAsString(TestElement.GUI_CLASS), e);
+            log.error("Could not get GUI for " + node, e);
             return null;
         }
     }
@@ -231,12 +243,12 @@ public final class GuiPackage implements LocaleChangeListener
         try
         {
             JMeterGUIComponent comp = (JMeterGUIComponent) nodesToGui.get(node);
-            log.debug("Gui retrieved = " + comp);
             if (comp == null)
             {
                 comp = getGuiFromCache(guiClass, testClass);
                 nodesToGui.put(node, comp);
             }
+            log.debug("Gui retrieved = " + comp);
             return comp;
         }
         catch (Exception e)
