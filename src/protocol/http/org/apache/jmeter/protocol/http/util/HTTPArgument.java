@@ -54,14 +54,13 @@
  */
  package org.apache.jmeter.protocol.http.util;
 
-import junit.framework.TestCase;
-import java.net.URLEncoder;
-import java.net.URLDecoder;
-
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Iterator;
 import java.io.Serializable;
+import java.net.URLDecoder;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import junit.framework.TestCase;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
@@ -74,9 +73,9 @@ import org.apache.jmeter.config.Arguments;
  */
 public class HTTPArgument extends Argument  implements Serializable {
 	
-	private static final String ENCODED_NAME = "HTTPArgument.encoded_name";
-	private static final String ENCODED_VALUE = "HTTPArgument.encoded_value";
 	private static final String ALWAYS_ENCODE = "HTTPArgument.always_encode";
+    
+    private static EncoderCache cache = new EncoderCache(1000);
 	
 	
 	/****************************************
@@ -92,15 +91,6 @@ public class HTTPArgument extends Argument  implements Serializable {
 		this.setMetaData(metadata);
 	}
 	
-	private void encodeName(String name)
-	{
-		if(getAlwaysEncode())
-		{
-			name = URLEncoder.encode(name);
-		}
-		setProperty(ENCODED_NAME,name);
-	}
-	
 	public void setAlwaysEncode(boolean ae)
 	{
 		setProperty(ALWAYS_ENCODE,new Boolean(ae));
@@ -110,18 +100,7 @@ public class HTTPArgument extends Argument  implements Serializable {
 	{
 		return getPropertyAsBoolean(ALWAYS_ENCODE);
 	}
-	
-	private void encodeValue(Object value)
-	{
-		if(value != null)
-		{
-			if(getAlwaysEncode())
-			{
-				value = URLEncoder.encode(value.toString());
-			}
-			setProperty(ENCODED_VALUE,value.toString());
-		}
-	}
+    
 	/****************************************
 	 * Constructor for the Argument object
 	 *
@@ -136,55 +115,13 @@ public class HTTPArgument extends Argument  implements Serializable {
 	public HTTPArgument(String name, Object value, boolean alreadyEncoded)
 	{
 		setAlwaysEncode(true);
-		if(alreadyEncoded)
-		{
-			try
-			{
-				setName(URLDecoder.decode(name));
-			}
-			catch(IllegalArgumentException e)
-			{
-				setName(name);
-			}
-			try
-			{
-				setValue(URLDecoder.decode(value.toString()));
-			}
-			catch(IllegalArgumentException e)
-			{
-				setValue(value.toString());
-			}
-			setProperty(ENCODED_NAME,name);
-			setProperty(ENCODED_VALUE,value.toString());
-		}
-		else
-		{
-			setName(name);
-			setValue(value);
-		}
-	}
-	
-	public void setProperty(String key,Object value)
-	{
-		if(value == null || !value.equals(getProperty(key)))
-		{
-			if(Argument.NAME.equals(key))
-			{
-				if(value == null)
-				{
-					encodeName("");
-				}
-				else
-				{
-					encodeName(value.toString());
-				}
-			}
-			else if(Argument.VALUE.equals(key))
-			{
-				encodeValue(value);
-			}
-			super.setProperty(key,value);
-		}
+        if(alreadyEncoded)
+        {
+            name = URLDecoder.decode(name);
+            value = URLDecoder.decode(value.toString());
+        }
+		setName(name);
+		setValue(value);
 	}
 	
 	public HTTPArgument(String name,Object value,Object metaData,boolean alreadyEncoded)
@@ -218,25 +155,12 @@ public class HTTPArgument extends Argument  implements Serializable {
 	
 	public String getEncodedValue()
 	{
-		return getPropertyAsString(ENCODED_VALUE);
+		return cache.getEncoded(getValue().toString());
 	}
 	
 	public String getEncodedName()
 	{
-		return getPropertyAsString(ENCODED_NAME);
-	}
-
-	/****************************************
-	 * Sets the Value attribute of the Argument object
-	 *
-	 *@param newValue  The new Value value
-	 ***************************************/
-	public void setValue(Object newValue)
-	{
-		if(newValue == null || !newValue.equals(getValue()))
-		{
-			super.setValue(newValue);
-		}
+		return cache.getEncoded(getName());
 	}
 	
 	public static void convertArgumentsToHTTP(Arguments args)

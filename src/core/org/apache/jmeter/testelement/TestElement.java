@@ -75,4 +75,10 @@ public interface TestElement extends Cloneable
 	 *@return   !ToDo (Return description)
 	 ***************************************/
 	public Object clone();
+    
+    /**
+     * Convenient way to traverse a test element
+     * @param traverser
+     */
+    public void traverse(TestElementTraverser traverser);
 }
