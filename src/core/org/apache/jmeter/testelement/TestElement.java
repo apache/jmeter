@@ -20,6 +20,7 @@ package org.apache.jmeter.testelement;
 
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.threads.JMeterContext;
 
 /**
  * @author    Michael Stover
@@ -119,4 +120,25 @@ public interface TestElement extends Cloneable
      * Convenient way to traverse a test element.
      */
     public void traverse(TestElementTraverser traverser);
+    
+	/**
+	 * @return Returns the threadContext.
+	 */
+	public JMeterContext getThreadContext();
+	
+	/**
+	 * @param threadContext The threadContext to set.
+	 */
+	public void setThreadContext(JMeterContext threadContext);
+
+	/**
+	 * @return Returns the threadName.
+	 */
+	public String getThreadName();
+	
+	/**
+	 * @param threadName The threadName to set.
+	 */
+	public void setThreadName(String threadName);
+
 }
