@@ -100,7 +100,7 @@ public class Load implements Command
 
 	static
 	{
-		commands.add(JMeterUtils.getResString("open"));
+		commands.add("open");
 	}
 
 	/****************************************
