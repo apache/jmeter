@@ -33,12 +33,11 @@ import org.apache.log.Logger;
 /**
  * A sampler which understands BeanShell
  *
- * @author sebb AT apache DOT org
  * @version    $Revision$ Updated on: $Date$
  */
 public class BeanShellSampler extends AbstractSampler 
 {
-	protected static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static final String FILENAME   = "BeanShellSampler.filename"; //$NON-NLS-1$
 	public static final String SCRIPT     = "BeanShellSampler.query"; //$NON-NLS-1$
