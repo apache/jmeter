@@ -84,8 +84,8 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -408,7 +408,7 @@ public class HTTPSampler extends AbstractSampler
      * !ToDo (Field description)
      ***************************************/
     protected final static String NON_HTTP_RESPONSE_MESSAGE = "Non HTTP response message";
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     /****************************************
      * Holds a list of URLs sampled - so we're not flooding stdout with debug
      * information
@@ -457,10 +457,8 @@ public class HTTPSampler extends AbstractSampler
     public URL getUrl() throws MalformedURLException
     {
         String pathAndQuery = null;
-        log.debug("#4, encoded path = " + getEncodedPath());
         if (this.getMethod().equals(HTTPSampler.GET) && getQueryString().length() > 0)
         {
-            log.debug("Path = " + getPath() + "Encoded path = " + getEncodedPath());
             if (this.getEncodedPath().indexOf("?") > -1)
             {
                 pathAndQuery = this.getEncodedPath() + "&" + getQueryString();
@@ -472,7 +470,6 @@ public class HTTPSampler extends AbstractSampler
         }
         else
         {
-            log.debug("Path = " + getPath() + "Encoded path = " + getEncodedPath());
             pathAndQuery = this.getEncodedPath();
         }
         if (!pathAndQuery.startsWith("/"))
@@ -517,19 +514,15 @@ public class HTTPSampler extends AbstractSampler
             {
                 first = false;
             }
-            log.debug("Making query: appending name = '" + item.getEncodedName() + "'");
             buf.append(item.getEncodedName());
             if (item.getMetaData() == null)
             {
-                log.debug("Making query: appending metadata(which was null) = '" + item.getMetaData() + "'");
                 buf.append("=");
             }
             else
             {
-                log.debug("Making query: appending metadata = '" + item.getMetaData() + "'");
                 buf.append(item.getMetaData());
             }
-            log.debug("Making query: appending value = '" + item.getEncodedValue() + "'");
             buf.append(item.getEncodedValue());
         }
         return buf.toString();
