@@ -63,59 +63,117 @@ import javax.swing.JComponent;
 
 
 /**
+ * Provides a way to register and retrieve GUI classes and icons.
+ * 
  * @author Oliver Rossmueller
+ * @version $Revision$
  */
-public class GUIFactory {
+public class GUIFactory
+{
+    /** A Map from String to JComponent of registered GUI classes. */
+    private static final Map GUI_MAP = new HashMap();
+    
+    /** A Map from String to ImageIcon of registered icons. */
+    private static final Map ICON_MAP = new HashMap();
 
-    private static final Map guiMap = new HashMap();
-    private static final Map iconMap = new HashMap();
-
-
+    /**
+     * Prevent instantiation since this is a static utility class.
+     */
+    private GUIFactory ()
+    {
+    }
+    
+    /**
+     * Get an icon which has previously been registered for this class object.
+     * 
+     * @param elementClass the class object which we want to get an icon for
+     * 
+     * @return the associated icon, or null if this class or its superclass
+     *         has not been registered
+     */
     public static ImageIcon getIcon(Class elementClass)
     {
         String key = elementClass.getName();
-        ImageIcon icon = (ImageIcon)iconMap.get(key);
+        ImageIcon icon = (ImageIcon) ICON_MAP.get(key);
 
         if (icon != null)
-	{
+        {
             return icon;
         }
+        
         if (elementClass.getSuperclass() != null)
-	{
+        {
             return getIcon(elementClass.getSuperclass());
         }
+        
         return null;
     }
 
 
+    /**
+     * Get a component instance which has previously been registered for this
+     * class object.
+     * 
+     * @param elementClass the class object which we want to get an instance of
+     * 
+     * @return an instance of the class, or null if this class or its superclass
+     *         has not been registered
+     */
     public static JComponent getGUI(Class elementClass)
     {
+        // TODO: This method doesn't appear to be used.
         String key = elementClass.getName();
-        JComponent gui = (JComponent)guiMap.get(key);
+        JComponent gui = (JComponent) GUI_MAP.get(key);
 
         if (gui != null)
-	{
+        {
             return gui;
         }
+
         if (elementClass.getSuperclass() != null)
-	{
+        {
             return getGUI(elementClass.getSuperclass());
         }
+
         return null;
     }
 
 
+    /**
+     * Register an icon so that it can later be retrieved via
+     * {@link #getIcon(Class)}.  The key should match the fully-qualified
+     * class name for the class used as the parameter when retrieving the
+     * icon.
+     * 
+     * @param key   the name which can be used to retrieve this icon later
+     * @param icon  the icon to store
+     */
     public static void registerIcon(String key, ImageIcon icon)
     {
-        iconMap.put(key, icon);
+        ICON_MAP.put(key, icon);
     }
 
 
+    /**
+     * Register a GUI class so that it can later be retrieved via
+     * {@link #getGUI(Class)}.  The key should match the fully-qualified
+     * class name for the class used as the parameter when retrieving the
+     * GUI.
+     * 
+     * @param key       the name which can be used to retrieve this GUI later
+     * @param guiClass  the class object for the GUI component
+     * 
+     * @throws InstantiationException if an instance of the GUI class can not
+     *    be instantiated
+     * @throws IllegalAccessException if access rights do not permit an instance
+     *    of the GUI class to be created
+     */
     public static void registerGUI(String key, Class guiClass)
             throws InstantiationException, IllegalAccessException
     {
-        JMeterGUIComponent gui = (JMeterGUIComponent)guiClass.newInstance();
-        JComponent component = (JComponent)gui;
-        guiMap.put(key, gui);
+        // TODO: This method doesn't appear to be used.
+        JMeterGUIComponent gui = (JMeterGUIComponent) guiClass.newInstance();
+        JComponent component = (JComponent) gui;
+        GUI_MAP.put(key, gui);
     }
 }

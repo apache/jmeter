@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,48 +58,82 @@ package org.apache.jmeter.gui;
 import java.io.File;
 import java.util.Arrays;
 
-public class JMeterFileFilter extends javax.swing.filechooser.FileFilter 
-		implements java.io.FileFilter {
-	String[] exts;
-	
-	public JMeterFileFilter(String[] extensions)
-	{
-		exts = extensions;
-	}
+/**
+ * A file filter which allows files to be filtered based on a list of allowed
+ * extensions.
+ *
+ * @author  unknown
+ * @version $Revision$
+ */
+public class JMeterFileFilter
+    extends javax.swing.filechooser.FileFilter
+    implements java.io.FileFilter
+{
+    /** The list of extensions allowed by this filter. */
+    private String[] exts;
 
-	public boolean accept(File f) {
-		boolean isAccepted = false;
+    /**
+     * Create a new JMeter file filter which allows the specified extensions.
+     * If the array of extensions contains no elements, any file will be
+     * allowed.
+     * 
+     * @param extensions non-null array of allowed file extensions
+     */
+    public JMeterFileFilter(String[] extensions)
+    {
+        exts = extensions;
+    }
 
-		if (f.isDirectory()) {
-			isAccepted = true;
-		} else {
-			if (accept(f.getName().toLowerCase())) {
-				isAccepted = true;
-			} else {
-				isAccepted = false;
-			}
-		}
+    /**
+     * Determine if the specified file is allowed by this filter.  The file
+     * will be allowed if it is a directory, or if the end of the filename
+     * matches one of the extensions allowed by this filter.  The filename is
+     * converted to lower-case before making the comparison.
+     * 
+     * @param f the File being tested
+     * 
+     * @return true if the file should be allowed, false otherwise
+     */
+    public boolean accept(File f)
+    {
+        return f.isDirectory() || accept(f.getName().toLowerCase());
+    }
 
-		return isAccepted;
-	}
-	
-	public boolean accept(String filename)
-	{
-		for(int i = 0;i < exts.length;i++)
-		{
-			if(filename.endsWith(exts[i]))
-			{
-				return true;
-			}
-		}
-		if(exts.length == 0)
-		{
-			return true;
-		}
-		return false;
-	}
+    /**
+     * Determine if the specified filename is allowed by this filter.  The file
+     * will be allowed if the end of the filename matches one of the extensions
+     * allowed by this filter.  The comparison is case-sensitive.  If no
+     * extensions were provided for this filter, the file will always be
+     * allowed.
+     *   
+     * @param filename the filename to test
+     * @return         true if the file should be allowed, false otherwise
+     */
+    public boolean accept(String filename)
+    {
+        if (exts.length == 0)
+        {
+            return true;
+        }
+        
+        for (int i = 0; i < exts.length; i++)
+        {
+            if (filename.endsWith(exts[i]))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 
-	public String getDescription() {
-		return "JMeter "+Arrays.asList(exts).toString();
-	}
+    /**
+     * Get a description for this filter.
+     * 
+     * @return a description for this filter
+     */
+    public String getDescription()
+    {
+        return "JMeter " + Arrays.asList(exts).toString();
+    }
 }
