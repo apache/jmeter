@@ -7,9 +7,13 @@
 package org.apache.jmeter.save;
 
 import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
 
 import org.apache.jmeter.save.converters.BooleanPropertyConverter;
 import org.apache.jmeter.save.converters.HashTreeConverter;
@@ -26,6 +30,7 @@ import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.testelement.property.MapProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
@@ -44,8 +49,42 @@ public class SaveService
    private static XStream saver = new XStream();
    private static Logger log = LoggingManager.getLoggerForClass();
    
+   // Helper method to simplify alias creation from properties
+   private static void makeAlias(String alias,String clazz)
+   {
+   	try {
+		saver.alias(alias,Class.forName(clazz));
+	} catch (ClassNotFoundException e) {
+		log.warn("Could not set up alias "+alias+" "+e.toString());
+	}
+   }
+   
    static
    {
+   	
+      // Load the alias properties
+	  Properties nameMap = new Properties();
+	  try
+	  {
+	     nameMap.load(
+	         new FileInputStream(
+	             JMeterUtils.getJMeterHome()
+	                 + JMeterUtils.getPropDefault(
+	                     "saveservice_properties",
+	                     "/bin/saveservice.properties")));
+	     // now create the aliases
+		 Iterator it = nameMap.entrySet().iterator();
+		 while (it.hasNext())
+		 {
+		 	Map.Entry me = (Map.Entry) it.next();
+		  	makeAlias((String)me.getKey(),(String)me.getValue());
+		 }
+	  }
+	  catch (Exception e)
+	  {
+	     log.error("Bad saveservice properties file",e);
+	  }
+	
       saver.alias("stringProp",StringProperty.class);
       saver.alias("intProp",IntegerProperty.class);
       saver.alias("longProp",LongProperty.class);
