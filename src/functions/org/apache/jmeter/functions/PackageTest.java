@@ -55,6 +55,7 @@ public class PackageTest extends JMeterTestCase
 	public static Test suite() throws Exception
 	{
 		   TestSuite suite = new TestSuite("SingleThreaded");
+		   suite.addTest(new PackageTest("CSVNoFile"));
 		   suite.addTest(new PackageTest("CSV2Setup"));
 		   suite.addTest(new PackageTest("CSV2Run"));
 
@@ -208,9 +209,18 @@ public class PackageTest extends JMeterTestCase
 		{
 		}
 		*/
-    	cr1=setParams("test.csv","1");
-		cr2=setParams("test.csv","2");
-		cr3=setParams("test.csv","3");
-		cr4=setParams("test.csv","next");
+    	cr1=setParams("testfiles/test.csv","1");
+		cr2=setParams("testfiles/test.csv","2");
+		cr3=setParams("testfiles/test.csv","3");
+		cr4=setParams("testfiles/test.csv","next");
+    }
+    public void CSVNoFile() throws Exception
+    {
+    	//TODO - fix file not found error handling in CSVRead ...
+    	CSVRead c1,c2;
+		c1 = setParams("xtestfiles/test.csv","1");
+		c1.execute(null,null);
+		c2 = setParams("xtestfiles/test.csv","next");
+		c2.execute(null,null);
     }
 }
