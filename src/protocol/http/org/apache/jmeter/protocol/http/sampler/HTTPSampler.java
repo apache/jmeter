@@ -59,17 +59,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
+
 import java.net.BindException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-//import java.util.ArrayList;
+
 import java.util.Iterator;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
+
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.Header;
@@ -77,9 +79,11 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.parser.HTMLParser;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
+
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -88,12 +92,17 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+
 import org.apache.jmeter.threads.JMeterContextService;
+
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
+
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
+
 import org.apache.log.Logger;
+
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
@@ -106,10 +115,15 @@ import org.apache.oro.text.regex.Util;
  * HTTP requests, including cookies and authentication.
  *
  * @author    Michael Stover
- * @version   $Revision$
+ * @version   $Revision$ Last updated $Date$
  */
 public class HTTPSampler extends AbstractSampler
 {
+	transient private static Logger log= LoggingManager.getLoggerForClass();
+
+    private static final int DEFAULT_HTTPS_PORT = 443;
+    private static final int DEFAULT_HTTP_PORT = 80;
+
     public final static String HEADERS= "headers";
     public final static String HEADER= "header";
     public final static String ARGUMENTS= "HTTPsampler.Arguments";
@@ -142,10 +156,17 @@ public class HTTPSampler extends AbstractSampler
     public static final int UNSPECIFIED_PORT= 0;
     private static final int MAX_REDIRECTS= 5; // As recommended by RFC 2068
     private static final int MAX_FRAME_DEPTH= 5;
+    private static final int MAX_CONN_RETRIES = 10; // Maximum connection retries
+    
     protected static String encoding= "iso-8859-1";
     private static final PostWriter postWriter= new PostWriter();
 
-    static {
+	protected final static String NON_HTTP_RESPONSE_CODE=
+		"Non HTTP response code";
+	protected final static String NON_HTTP_RESPONSE_MESSAGE=
+		"Non HTTP response message";
+
+    static {// TODO - document what this is doing and why
         System.setProperty(
             "java.protocol.handler.pkgs",
             JMeterUtils.getPropDefault(
@@ -167,8 +188,8 @@ public class HTTPSampler extends AbstractSampler
 
     private static Substitution spaceSub= new StringSubstitution("%20");
 
-    /* Delegate redirects to the URLConnection implementation - this can be useful
-     * with alternate URLConnection implementations.
+    /* Should we delegate redirects to the URLConnection implementation?
+     * This can be useful with alternate URLConnection implementations.
      * 
      * Defaults to false, to maintain backward compatibility. 
      */
@@ -177,6 +198,29 @@ public class HTTPSampler extends AbstractSampler
             .getJMeterProperties()
             .getProperty("HTTPSampler.delegateRedirects", "false")
             .equalsIgnoreCase("true");
+
+
+	/**
+	 * Constructor for the HTTPSampler object.
+	 */
+	public HTTPSampler()
+	{
+		setArguments(new Arguments());
+	}
+
+	public HTTPSampler(URL u)
+	{
+		setMethod(GET);
+		setDomain(u.getHost());
+		setPath(u.getPath());
+		setPort(u.getPort());
+		setProtocol(u.getProtocol());
+		parseArguments(u.getQuery());
+		setFollowRedirects(true);
+		setUseKeepAlive(true);
+		setArguments(new Arguments());
+	}
+
 
     public void setFileField(String value)
     {
@@ -213,7 +257,9 @@ public class HTTPSampler extends AbstractSampler
 
     /**
      *  Sets the Path attribute of the UrlConfig object
-     *
+     * Also calls parseArguments to extract and store any
+     * query arguments
+     *  
      *@param  path  The new Path value
      */
     public void setPath(String path)
@@ -245,6 +291,8 @@ public class HTTPSampler extends AbstractSampler
 
     private String encodePath(String path)
     {
+    	// TODO JDK1.4 
+    	// this seems to be equivalent to path.replaceAll(" ","%20");
         path=
             Util.substitute(
                 (Perl5Matcher)localMatcher.get(),
@@ -328,7 +376,7 @@ public class HTTPSampler extends AbstractSampler
                 + value
                 + " metaData: "
                 + metaData);
-        Arguments args= getArguments();
+
         HTTPArgument arg= new HTTPArgument(name, value, metaData, true);
 
         if (arg.getName().equals(arg.getEncodedName())
@@ -336,14 +384,18 @@ public class HTTPSampler extends AbstractSampler
         {
             arg.setAlwaysEncoded(false);
         }
-        args.addArgument(arg);
+		this.getArguments().addArgument(arg);
     }
 
     public void addArgument(String name, String value)
     {
-        Arguments args= this.getArguments();
-        args.addArgument(new HTTPArgument(name, value));
+        this.getArguments().addArgument(new HTTPArgument(name, value));
     }
+
+	public void addArgument(String name, String value, String metadata)
+	{
+		this.getArguments().addArgument(new HTTPArgument(name, value, metadata));
+	}
 
     public void addTestElement(TestElement el)
     {
@@ -365,12 +417,6 @@ public class HTTPSampler extends AbstractSampler
         }
     }
 
-    public void addArgument(String name, String value, String metadata)
-    {
-        Arguments args= this.getArguments();
-        args.addArgument(new HTTPArgument(name, value, metadata));
-    }
-
     public void setPort(int value)
     {
         setProperty(new IntegerProperty(PORT, value));
@@ -383,9 +429,9 @@ public class HTTPSampler extends AbstractSampler
         {
             if ("https".equalsIgnoreCase(getProtocol()))
             {
-                return 443;
+                return DEFAULT_HTTPS_PORT;
             }
-            return 80;
+            return DEFAULT_HTTP_PORT;
         }
         return port;
     }
@@ -460,33 +506,6 @@ public class HTTPSampler extends AbstractSampler
         setProperty(new BooleanProperty(IMAGE_PARSER, parseImages));
     }
 
-    protected final static String NON_HTTP_RESPONSE_CODE=
-        "Non HTTP response code";
-    protected final static String NON_HTTP_RESPONSE_MESSAGE=
-        "Non HTTP response message";
-    transient private static Logger log= LoggingManager.getLoggerForClass();
-
-    /**
-     * Constructor for the HTTPSampler object.
-     */
-    public HTTPSampler()
-    {
-        setArguments(new Arguments());
-    }
-
-    public HTTPSampler(URL u)
-    {
-        setMethod(GET);
-        setDomain(u.getHost());
-        setPath(u.getPath());
-        setPort(u.getPort());
-        setProtocol(u.getProtocol());
-        parseArguments(u.getQuery());
-        setFollowRedirects(true);
-        setUseKeepAlive(true);
-        setArguments(new Arguments());
-    }
-
     /**
      * Do a sampling and return its results.
      *
@@ -498,6 +517,11 @@ public class HTTPSampler extends AbstractSampler
         return sample();
     }
 
+    /**
+     * Perform a sample, and return the results
+     * 
+     * @return results of the sampling
+     */
     public SampleResult sample()
     {
         try
@@ -523,7 +547,7 @@ public class HTTPSampler extends AbstractSampler
      */
     private HTTPSampleResult errorResult(Throwable e, String data, long time)
     {
-        HTTPSampleResult res= new HTTPSampleResult();
+        HTTPSampleResult res= new HTTPSampleResult(time);
         res.setSampleLabel("Error");
         res.setSamplerData(data);
         res.setDataType(HTTPSampleResult.TEXT);
@@ -532,7 +556,6 @@ public class HTTPSampler extends AbstractSampler
         res.setResponseData(text.toByteArray());
         res.setResponseCode(NON_HTTP_RESPONSE_CODE);
         res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
-        res.setTime(time);
         res.setSuccessful(false);
         return res;
     }
@@ -566,7 +589,7 @@ public class HTTPSampler extends AbstractSampler
         {
             pathAndQuery= "/" + pathAndQuery;
         }
-        if (getPort() == UNSPECIFIED_PORT || getPort() == 80)
+        if (getPort() == UNSPECIFIED_PORT || getPort() == DEFAULT_HTTP_PORT)
         {
             return new URL(getProtocol(), getDomain(), pathAndQuery);
         }
@@ -684,7 +707,7 @@ public class HTTPSampler extends AbstractSampler
         conn= (HttpURLConnection)u.openConnection();
         // Delegate SSL specific stuff to SSLManager so that compilation still
         // works otherwise.
-        if ("https".equals(u.getProtocol()))
+        if ("https".equalsIgnoreCase(u.getProtocol()))
         {
             try
             {
@@ -720,8 +743,10 @@ public class HTTPSampler extends AbstractSampler
             StringBuffer sb= new StringBuffer();
             if (method.equals(HTTPSampler.POST))
             {
+            	String q = this.getQueryString();
+				res.setQueryString(q);
                 sb.append("Query data:\n");
-                sb.append(this.getQueryString());
+                sb.append(q);
                 sb.append('\n');
             }
             if (cookies != null)
@@ -732,6 +757,9 @@ public class HTTPSampler extends AbstractSampler
                 sb.append('\n');
             }
             res.setSamplerData(sb.toString());
+            //TODO rather than stuff all the information in here,
+            //pick it up from the individual fields later 
+            
             res.setURL(u);
             res.setHTTPMethod(method);
             res.setRequestHeaders(hdrs);
@@ -750,6 +778,11 @@ public class HTTPSampler extends AbstractSampler
      * This method allows a proxy server to send over the raw text from a
      * browser's output stream to be parsed and stored correctly into the
      * UrlConfig object.
+     *
+     * For each name found, addEncodedArgument() is called 
+     *
+     * @param queryString - the query string
+     * 
      */
     public void parseArguments(String queryString)
     {
@@ -796,26 +829,7 @@ public class HTTPSampler extends AbstractSampler
             }
             if (name.length() > 0)
             {
-                // In JDK 1.2, the decode() method has a throws clause:
-                // "throws Exception". In JDK 1.3, the method does not have
-                // a throws clause. So, in order to be JDK 1.2 compliant,
-                // we need to add a try/catch around the method call.
-                try
-                {
                     addEncodedArgument(name, value, metaData);
-                }
-                catch (Exception e)
-                {
-                    log.error(
-                        "UrlConfig:parseArguments(): Unable to parse argument=["
-                            + value
-                            + "]");
-                    log.error(
-                        "UrlConfig:parseArguments(): queryString=["
-                            + queryString
-                            + "]",
-                        e);
-                }
             }
         }
     }
@@ -853,13 +867,13 @@ public class HTTPSampler extends AbstractSampler
             }
             else
             {
-                log.error("Getting error message from server", e);
+                log.error("Getting error message from server: "+e.toString());
             }
             in= new BufferedInputStream(conn.getErrorStream());
         }
         catch (Exception e)
         {
-            log.warn("Getting error message from server", e);
+            log.error("Getting error message from server: "+e.toString());
             in= new BufferedInputStream(conn.getErrorStream());
         }
         java.io.ByteArrayOutputStream w= new ByteArrayOutputStream();
@@ -943,6 +957,7 @@ public class HTTPSampler extends AbstractSampler
      *@param u              <code>URL</code> of the URL request
      *@param headerManager  the <code>HeaderManager</code> containing all the
      *                      cookies for this <code>UrlConfig</code>
+     * @return the headers as a string
      */
     private String setConnectionHeaders(
         HttpURLConnection conn,
@@ -1019,36 +1034,32 @@ public class HTTPSampler extends AbstractSampler
         int frameDepth)
     {
         HttpURLConnection conn= null;
-        long t0= System.currentTimeMillis(); // connection start time
+
+		String urlStr = url.toString();
+		log.debug("Start : sample" + urlStr);
+
         HTTPSampleResult res= new HTTPSampleResult();
 
-        log.debug("Start : sample");
+		res.setSampleLabel(urlStr);
+		res.sampleStart(); // Count the retries as well in the time
 
         try
         {
-            res.setSampleLabel(url.toString());
-            if (log.isDebugEnabled())
-            {
-                log.debug("sample2 : sampling url - " + url);
-            }
-
             // Sampling proper - establish the connection and read the response:
             // Repeatedly try to connect:
             int retry;
-            for (retry= 1; retry <= 10; retry++)
+            for (retry= 1; retry <= MAX_CONN_RETRIES; retry++)
             {
                 try
                 {
                     conn= setupConnection(url, method, res);
-                    // Ready to attempt connect - [re]start the chrono:
-                    t0= System.currentTimeMillis();
                     // Attempt the connection:
                     conn.connect();
                     break;
                 }
                 catch (BindException e)
                 {
-                    if (retry == 10)
+                    if (retry >= MAX_CONN_RETRIES)
                     {
                         log.error("Can't connect", e);
                         throw e;
@@ -1064,7 +1075,7 @@ public class HTTPSampler extends AbstractSampler
                     throw e;
                 }
             }
-            if (retry > 10)
+            if (retry > MAX_CONN_RETRIES)
             {
                 // This should never happen, but...
                 throw new BindException();
@@ -1076,8 +1087,8 @@ public class HTTPSampler extends AbstractSampler
             }
             // Request sent. Now get the response:
             byte[] responseData= readResponse(conn);
-            // Done - stop the chrono:
-            long t1= System.currentTimeMillis();
+
+             res.sampleEnd();
             // Done with the sampling proper.
 
             // Now collect the results into the HTTPSampleResult:
@@ -1107,8 +1118,6 @@ public class HTTPSampler extends AbstractSampler
                 res.setRedirectLocation(conn.getHeaderField("Location"));
             }
 
-            res.setTime(t1 - t0);
-
             // Store any cookies received in the cookie manager:
             saveConnectionCookies(conn, url, getCookieManager());
 
@@ -1118,11 +1127,8 @@ public class HTTPSampler extends AbstractSampler
                 boolean didFollowRedirects= false;
                 if (res.isRedirect())
                 {
-                    if (log.isDebugEnabled())
-                    {
-                        log.debug(
-                            "Location set to - " + res.getRedirectLocation());
-                    }
+                    log.debug("Location set to - " + res.getRedirectLocation());
+                    
                     if (getFollowRedirects())
                     {
                         res= followRedirects(res, frameDepth);
@@ -1161,7 +1167,8 @@ public class HTTPSampler extends AbstractSampler
         }
         catch (IOException e)
         {
-            return errorResult(e, url.toString(), System.currentTimeMillis() - t0);
+        	res.sampleEnd();
+            return errorResult(e, url.toString(), res.getTime());
         }
         finally
         {
@@ -1190,6 +1197,7 @@ public class HTTPSampler extends AbstractSampler
         int frameDepth)
     {
         HTTPSampleResult totalRes= new HTTPSampleResult(res);
+        totalRes.sampleStart();
         HTTPSampleResult lastRes= res;
 
         int redirect;
@@ -1210,18 +1218,17 @@ public class HTTPSampler extends AbstractSampler
                 lastRes= errorResult(e, location, 0);
             }
             totalRes.addSubResult(lastRes);
-            totalRes.setTime(totalRes.getTime() + lastRes.getTime());
 
             if (!lastRes.isRedirect())
             {
                 break;
             }
         }
-        if (redirect == MAX_REDIRECTS)
+        if (redirect >= MAX_REDIRECTS)
         {
             lastRes=
                 errorResult(
-                    new IOException("Maximum number of redirects exceeded."),
+                    new IOException("Exceeeded maximum number of redirects: "+MAX_REDIRECTS),
                     null,
                     0);
             totalRes.addSubResult(lastRes);
@@ -1229,6 +1236,7 @@ public class HTTPSampler extends AbstractSampler
 
         // Now populate the any totalRes fields that need to
         // come from lastRes:
+		totalRes.sampleEnd();
 
         totalRes.setSampleLabel(
             totalRes.getSampleLabel() + "->" + lastRes.getSampleLabel());
@@ -1308,7 +1316,7 @@ public class HTTPSampler extends AbstractSampler
                             false,
                             frameDepth + 1);
                     res.addSubResult(binRes);
-                    res.setTime(res.getTime() + binRes.getTime());
+                    res.sampleEnd();
                     res.setSuccessful(
                         res.isSuccessful() && binRes.isSuccessful());
                 }
