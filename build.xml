@@ -13,7 +13,7 @@
   </description>
 
   <!-- JMeter version -->
-  <property name="version" value="1.8+"/>
+  <property name="version" value="1.8.1"/>
 
   <!-- Where the Sources live -->
   <property name="src.dir" value="src"/>
@@ -320,6 +320,12 @@
     <include name="${lib.dir}/"/>
     <include name="${jar.dest}/"/> <!-- redundant but future-proof -->
     <include name="${docs.dest}/"/> <exclude name="${docs.api.dest}/"/>
+    <exclude name="**/mail.jar"/>
+    <exclude name="**/activation.jar"/>
+    <exclude name="**/mailapi.jar"/>
+    <exclude name="**/pop3.jar"/>
+    <exclude name="**/smtp.jar"/>
+    <exclude name="**/imap.jar"/>
     <include name="README"/>
     <include name="LICENSE"/>
   </patternset>

@@ -26,7 +26,7 @@ will find it and add it to each request.  If the request already has a value, it
 <p>Download <a href="../demos/URLRewritingExample.jmx">this example</a>. In Figure 1 is shown a 
 test plan using URL rewriting.  Note that the URL Re-writing modifier is attached to the ThreadGroup,
 thus assuring that it will affect every request in that ThreadGroup.</p>
-<figure image="../images/screenshots/url_rewrite_example_a.gif">Figure 1 - Test Tree</figure>
+<figure image="../images/screenshots/url_rewrite_example_a.png">Figure 1 - Test Tree</figure>
 <p>In Figure 2, we see the URL Re-writing modifier GUI, which just has a field for the user to specify
 the name of the session ID parameter.  There is also a checkbox for indicating that the session ID should
 be part of the path (separated by a ";"), rather than a request parameter</p>

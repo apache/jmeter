@@ -91,7 +91,7 @@ import org.xml.sax.XMLReader;
  */
 public class JMeterUtils implements UnitTestManager
 {
-        private static final String VERSION="1.8+";
+        private static final String VERSION="1.8.1";
 
 	transient private static Logger log =
 		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.util");
@@ -935,3 +935,4 @@ public class JMeterUtils implements UnitTestManager
 		return VERSION;
 	}
 }
+
