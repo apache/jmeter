@@ -73,7 +73,6 @@ package org.htmlparser.scanners;
 //////////////////
 import java.util.Hashtable;
 
-import org.apache.jorphan.util.JOrphanUtils;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
@@ -120,34 +119,35 @@ public class ImageScanner extends TagScanner
         {
             table = tag.getAttributes();
             relativeLink = (String) table.get("SRC");
+
             if (relativeLink != null)
             {
                 relativeLink = ParserUtils.removeChars(relativeLink, '\n');
                 relativeLink = ParserUtils.removeChars(relativeLink, '\r');
             }
-			if (relativeLink==null || relativeLink.length()==0) {
-				// try fix
-				String tagText = tag.getText();
-				int indexSrc = tagText.indexOf("src");
-				if (indexSrc != -1) {
-					// There is a bug with AttributeParser when the
-					// alt tag value is zero length. To get around
-					// the bug, I strip out alt="" and then append
-					// it at the end. When the alt attribute has a
-					// value, the bug does not appear.
-					//JDK1.4: String newtext = tagText.replaceAll("alt=\"\" ","");
-					String newtext = JOrphanUtils.replaceFirst(tagText,"alt=\"\" ","");
-					tag.setText(newtext + " alt=\"\"");
-					table = tag.redoParseAttributes();
-					relativeLink = (String)table.get("SRC");
-				} 
-			}
-			if (relativeLink == null){
-				return ""; 
-			}else{
-				tag.setAttributes(table);
-				return relativeLink;
-			}
+            if (relativeLink == null || relativeLink.length() == 0)
+            {
+                // try fix
+                String tagText = tag.getText().toUpperCase();
+                int indexSrc = tagText.indexOf("SRC");
+                if (indexSrc != -1)
+                {
+                    // There is a missing equals.
+                    tag.setText(
+                        tag.getText().substring(0, indexSrc + 3)
+                            + "="
+                            + tag.getText().substring(
+                                indexSrc + 3,
+                                tag.getText().length()));
+                    table = tag.redoParseAttributes();
+                    relativeLink = (String) table.get("SRC");
+
+                }
+            }
+            if (relativeLink == null)
+                return "";
+            else
+                return processor.extract(relativeLink, url);
         }
         catch (Exception e)
         {
