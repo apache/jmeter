@@ -34,7 +34,7 @@ rem See the unix startup file for the rationale of the following parameters,
 rem including some tuning recommendations
 set HEAP=-Xms256m -Xmx256m
 set NEW=-XX:NewSize=128m -XX:MaxNewSize=128m
-set SURVIVOR=-XX:SurvivorRatio=8 -XX:TargetSurvivorRatio=80%
+set SURVIVOR=-XX:SurvivorRatio=8 -XX:TargetSurvivorRatio=50%
 set TENURING=-XX:MaxTenuringThreshold=2
 set EVACUATION=-XX:MaxLiveObjectEvacuationRatio=20%
 set RMIGC=-Dsun.rmi.dgc.client.gcInterval=600000 -Dsun.rmi.dgc.server.gcInterval=600000
