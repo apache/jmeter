@@ -171,7 +171,7 @@ public class InterleaveControl extends GenericController implements Serializable
         resetCurrent();
         if (getStyle() == USE_SUB_CONTROLLERS)
         {
-            setFirst(true);
+            setFirst(true);            
         }
         return next();
     }
@@ -185,7 +185,7 @@ public class InterleaveControl extends GenericController implements Serializable
         {
             searchStart = currentElement;
         }
-        else if (searchStart == currentElement && !currentReturnedAtLeastOne) // we've gone through the whole list and are now back at the start point of our search.
+        else if (searchStart == currentElement && (!currentReturnedAtLeastOne && getStyle() == USE_SUB_CONTROLLERS)) // we've gone through the whole list and are now back at the start point of our search.
         {
             throw new NextIsNullException();
         }
@@ -200,7 +200,7 @@ public class InterleaveControl extends GenericController implements Serializable
         {
             removeCurrentElement();
         }
-        else
+        else if(getStyle() == USE_SUB_CONTROLLERS)
         {
             incrementCurrent();
         }
