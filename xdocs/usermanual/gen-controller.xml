@@ -139,9 +139,14 @@ and send HTTP/HTTPS requests for all images and Java applets referenced in the f
 </section>
 
 <section name="4.2.1.3 JDBC Request">
-<p>This controller lets you send an JDBC Request to a database.  JMeter... 
-Query (no updates, only send query).</p>
-
+<p>This controller lets you send an JDBC Request (an SQL query) to a database.</p>
+<p>If you are going to send multiple requests to the same database, consider
+using one or more of the Defaults Configuration Elements: 
+<a href="">Login</a>, 
+<a href="">Connection Pool</a>, 
+<a href="">SQL Query</a>. 
+This way, you do not have to enter the same information for each JDBC Request 
+controller.</p>
 <p><img src="../images/screenshots/gen-controller/jdbc-request.gif" width="466" height="454"></img></p>
 
 <p><b>Property Descriptions:</b>
@@ -149,11 +154,12 @@ Query (no updates, only send query).</p>
   <li><b>Name</b> - Descriptive name for this controller that is shown in the tree. </li>
   <li><i>Database URL and JDBC Driver</i></li>
   <ul>
-     <li><b>JDBC URL</b> - URL to the database (for example, ...). Refer to the JDBC documentation for
-your database.</li>
-     <li><b>Driver Class</b> - The Java class for your database driver (for example, ...). 
-Refer to the JDBC documentation for
-your database.</li>
+     <li><b>JDBC URL</b> - URL of the database (for example, 
+"jdbc:weblogic:oracle"). Refer to your database's JDBC documentation for the 
+URL you should use.</li>
+     <li><b>Driver Class</b> - The database driver Java class (for example, 
+"weblogic.jdbc.oci.Driver"). Refer to your database's JDBC documentation for 
+the name of the JDBC driver class you should use.</li>
   </ul>
   <li><i>Login Configuration</i></li>
   <ul>
@@ -162,9 +168,12 @@ your database.</li>
   </ul>
   <li><i>Database Connection Pool</i></li>
   <ul>
-    <li><b>Number of Connections in Pool</b> - ... The maximum value depends on your database. 
+    <li><b>Number of Connections in Pool</b> - Number of database connection 
+instances to create and keep active. The maximum value depends on your database. 
 Also, JMeter imposes a maximum of 100 connections.</li>
-    <li><b>Max Usage For Each Connection</b> - </li>
+    <li><b>Max Usage For Each Connection</b> - Maximum number of times JMeter 
+uses a database connection instance before recycling it (destroying and creating
+a new instance).</li>
   </ul>
   <li><b>SQL Query String</b> - SQL query (for example, "select * from t_customers").</li>
 </ul>
