@@ -86,13 +86,15 @@ public class RunningSample {
     private long errorCount;
     private long firstTime;
     private long lastTime;
-    private Set threadNames;
     private String label;
+    private int index;
 
     /**
      * use this constructor.
      */
-    public RunningSample() {
+    public RunningSample(String label, int index) {
+        this.label= label;
+	this.index = index;
         counter = 0L;
         runningSum = 0L;
         max = Long.MIN_VALUE;
@@ -100,7 +102,6 @@ public class RunningSample {
         errorCount = 0L;
         firstTime = 0L;
         lastTime = 0L;
-        threadNames = new HashSet();
     }
 
     /**
@@ -123,20 +124,18 @@ public class RunningSample {
         long howLongRunning = lastTime - firstTime;
 
         if (howLongRunning == 0) return ("N/A");
-        double samplesPerSecond = (double)((double)howLongRunning * threadNames.size()) / (double)getAverage();
-        double factor = (double)((double)1000 / (double)howLongRunning);
-        samplesPerSecond = samplesPerSecond * factor;
-        String perString = "/sec";
-        if (samplesPerSecond < 1.0) {
-            samplesPerSecond *= 60;
-            perString = "/min";
+	double rate= (double)howLongRunning / counter / 1000.0;
+	String unit="sec";
+        if (rate < 1.0) {
+            rate *= 60.0;
+            unit = "min";
         }
-        if (samplesPerSecond < 1.0) {
-            samplesPerSecond *= 60;
-            perString = "/hour";
+        if (rate < 1.0) {
+            rate *= 60.0;
+            unit = "hour";
         }
         
-        String rval = rateFormatter.format(samplesPerSecond) + perString;
+        String rval = rateFormatter.format(rate) + "/" + unit;
         return (rval);
     }
     
@@ -145,6 +144,10 @@ public class RunningSample {
     	return label;
     }
 
+    public int getIndex()
+    {
+        return index;
+    }
 
     /**
      * Records a sample.
@@ -152,11 +155,9 @@ public class RunningSample {
      * @arg aSuccessFlag Flag for if this sample was successful or not
      */
     public synchronized void addSample(SampleResult res) {
-    	threadNames.add(res.getThreadName());
 		long aTimeInMillis = res.getTime();
 		boolean aSuccessFlag = res.isSuccessful();
 		lastTime = res.getTimeStamp();
-		label = res.getSampleLabel();
         counter++;
         if (firstTime == 0L) {
             // this is our first sample, set the start time to current timestamp
@@ -174,7 +175,7 @@ public class RunningSample {
      */
     public long getMin() {
         long rval = 0;
-        if (min != Long.MIN_VALUE) rval = min;
+        if (min != Long.MAX_VALUE) rval = min;
         return (rval);
     }
 
@@ -184,7 +185,7 @@ public class RunningSample {
      */
     public long getMax() {
         long rval = 0;
-        if (max != Long.MAX_VALUE) rval = max;
+        if (max != Long.MIN_VALUE) rval = max;
         return (rval);
     }
 
