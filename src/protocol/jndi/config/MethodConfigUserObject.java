@@ -117,7 +117,7 @@ public class MethodConfigUserObject
       }
       else if(type.getName().equals(BOOLEAN))
       {
-        object = new Boolean(value);
+        object = Boolean.valueOf(value);
       }
       else if(type.getName().equals(CHAR))
       {
