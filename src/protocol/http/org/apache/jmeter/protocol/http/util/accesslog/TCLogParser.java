@@ -234,14 +234,7 @@ public class TCLogParser implements LogParser
         {
             // read one line at a time using
             // BufferedReader
-            line = breader.readLine();
-            if (line == null && COUNT >= this.PARSECOUNT)
-            {
-                this.READER.close();
-                this.READER = null;
-                //this.READER = new BufferedReader(new FileReader(this.SOURCE));
-                //parse(this.READER,el);
-            }
+            line = breader.readLine();            
             while (line != null)
             {
 				if (line.length() > 0)
@@ -259,6 +252,14 @@ public class TCLogParser implements LogParser
                 }
                 line = breader.readLine();
             }
+            if (line == null)
+            {
+               breader.close();
+               breader = null;
+               this.READER = null;
+               //this.READER = new BufferedReader(new FileReader(this.SOURCE));
+               //parse(this.READER,el);
+           }
         }
         catch (IOException ioe)
         {
@@ -438,8 +439,8 @@ public class TCLogParser implements LogParser
         {
             StringTokenizer tokens = this.tokenize(url, "?");
             this.URL_PATH = tokens.nextToken();
-            el.setProperty(HTTPSamplerBase.PATH,URL_PATH);
-            return tokens.nextToken();
+			el.setProperty(HTTPSamplerBase.PATH,URL_PATH);
+            return tokens.hasMoreTokens() ? tokens.nextToken() : null;
         }
         else
         {
