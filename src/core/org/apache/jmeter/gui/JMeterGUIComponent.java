@@ -39,8 +39,7 @@ import org.apache.jmeter.testelement.TestElement;
  * @see org.apache.jmeter.visualizers.gui.AbstractVisualizer
  * @see org.apache.jmeter.samplers.gui.AbstractSamplerGui
  *
- * @author    Michael Stover
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  * 
  */
 
@@ -70,10 +69,21 @@ public interface JMeterGUIComponent
      * component in a list of many.  It should therefore be a descriptive
      * name for the end user to see.  It must be unique to the class.
      *
+     * It is also used by Help to find the appropriate location in the documentation
+     *  
      * @return   GUI label for the component.
      */
     String getStaticLabel();
 
+    /**
+     * Get the component's resource name, which getStaticLabel uses
+     * to derive the component's label in the local language.
+     * The resource name is fixed, and does not vary with the selected language.
+     *  
+     * @return the resource name
+     */
+    String getLabelResource();
+    
     /**
      * JMeter test components are separated into a model and a GUI
      * representation.  The model holds the data and the GUI displays it.  The
