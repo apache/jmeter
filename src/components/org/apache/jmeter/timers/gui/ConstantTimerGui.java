@@ -100,11 +100,7 @@ public class ConstantTimerGui extends AbstractTimerGui
      */
     public static void error(Exception e, JComponent thrower)
     {
-        JOptionPane.showMessageDialog(
-            thrower,
-            e,
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(thrower, e, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -155,22 +151,27 @@ public class ConstantTimerGui extends AbstractTimerGui
      */
     private void init()
     {
-        setLayout(
-            new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
 
         setBorder(makeBorder());
         add(makeTitlePanel());
 
         Box delayPanel = Box.createHorizontalBox();
-        JLabel delayLabel =
-            new JLabel(JMeterUtils.getResString("constant_timer_delay"));
+        JLabel delayLabel = new JLabel(JMeterUtils.getResString("constant_timer_delay"));
         delayPanel.add(delayLabel);
 
         delayField = new JTextField(6);
         delayField.setText(DEFAULT_DELAY);
         delayField.setName(DELAY_FIELD);
         delayPanel.add(delayField);
-
         add(delayPanel);
+    }
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+     */
+    public void clear()
+    {
+        delayField.setText(DEFAULT_DELAY);
+        super.clear();
     }
 }

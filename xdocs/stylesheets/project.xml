@@ -18,7 +18,7 @@
 	 <menu name="download">
 	 	<item name="Download Releases"               	href="http://jakarta.apache.org/builds/jakarta-jmeter/release"/>
 		<item name="Download Nightly Tarball"  			href="http://cvs.apache.org/builds/jakarta-jmeter/nightly"/>
-	 	<item name="Download Latest Stable Release" 	href="http://jakarta.apache.org/builds/jakarta-jmeter/release/v1.9/jakarta-jmeter-1.9.zip"/>
+	 	<item name="Download Latest Stable Release" 	href="http://jakarta.apache.org/builds/jakarta-jmeter/release/v1.9/jakarta-jmeter-1.9.1.zip"/>
 	 	<!-- <item name="Download Latest Release Candidate" 	href="http://jakarta.apache.org/builds/jakarta-jmeter/unstable/v1.9/jakarta-jmeter-1.9.RC3.zip"/> -->
 	 </menu>
 	 <menu name="Documentation">
