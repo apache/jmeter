@@ -290,11 +290,21 @@ public class StandardJMeterEngine
         // and the listeners, and the timer
         JMeterThread[] threads;
         Iterator iter = searcher.getSearchResults().iterator();
+
+        /*
+         * Here's where the test really starts. Run a Full GC now: it's no
+         * harm at all (just delays test start by a tiny amount) and
+         * hitting one too early in the test can impair results for short
+         * tests.
+         */
+        System.gc();
+        
         if (iter.hasNext())
         {
             notifyTestListenersOfStart();
         }
         notifier = new ListenerNotifier();
+        
         schcdule_run = true;
         JMeterContextService.getContext().setSamplingStarted(true);
         int groupCount = 0;
