@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +60,7 @@ public class ValueReplacer
     public void replaceValues(TestElement el) throws InvalidVariableException
     {
         PropertyIterator iter = el.propertyIterator();
+        List newProps = new LinkedList();
         while (iter.hasNext())
         {
             JMeterProperty prop = iter.next();
@@ -77,8 +79,13 @@ public class ValueReplacer
             else if (prop instanceof StringProperty)
             {
                 JMeterProperty newValue = getNewValue((StringProperty) prop);
-                el.setProperty(newValue);
+                newProps.add(newValue);
             }
+        }
+        Iterator props = newProps.iterator();
+        while (props.hasNext())
+        {
+            el.setProperty((JMeterProperty) props.next());
         }
     }
 
@@ -257,43 +264,43 @@ public class ValueReplacer
         }
         prop.setMap(newMap);
     }
-    
+
     private void undoReverseReplace(MapProperty prop)
+    {
+        Map newMap = null;
+        try
         {
-            Map newMap = null;
-            try
-            {
-                newMap = (Map) prop.getObjectValue().getClass().newInstance();
-            }
-            catch (Exception e)
-            {
-                log.error("", e);
-                return;
-            }
-            PropertyIterator iter = prop.valueIterator();
-            while (iter.hasNext())
-            {
-                JMeterProperty val = iter.next();
-                if (val instanceof TestElementProperty)
-                {
-                    undoReverseReplace((TestElement) val.getObjectValue());
-                }
-                else if (val instanceof StringProperty)
-                {
-                    val = substituteReferences((StringProperty) val);
-                }
-                else if (val instanceof CollectionProperty)
-                {
-                    undoReverseReplace((CollectionProperty) val);
-                }
-                else if (val instanceof MapProperty)
-                {
-                    undoReverseReplace((MapProperty) val);
-                }
-                newMap.put(val.getName(), val);
-            }
-            prop.setMap(newMap);
+            newMap = (Map) prop.getObjectValue().getClass().newInstance();
         }
+        catch (Exception e)
+        {
+            log.error("", e);
+            return;
+        }
+        PropertyIterator iter = prop.valueIterator();
+        while (iter.hasNext())
+        {
+            JMeterProperty val = iter.next();
+            if (val instanceof TestElementProperty)
+            {
+                undoReverseReplace((TestElement) val.getObjectValue());
+            }
+            else if (val instanceof StringProperty)
+            {
+                val = substituteReferences((StringProperty) val);
+            }
+            else if (val instanceof CollectionProperty)
+            {
+                undoReverseReplace((CollectionProperty) val);
+            }
+            else if (val instanceof MapProperty)
+            {
+                undoReverseReplace((MapProperty) val);
+            }
+            newMap.put(val.getName(), val);
+        }
+        prop.setMap(newMap);
+    }
 
     /**
          * Remove variables references and replace with the raw string values.
@@ -342,12 +349,13 @@ public class ValueReplacer
     public void undoReverseReplace(TestElement el)
     {
         PropertyIterator iter = el.propertyIterator();
+        List newProps = new LinkedList();
         while (iter.hasNext())
         {
             JMeterProperty prop = iter.next();
             if (prop instanceof StringProperty)
             {
-                el.setProperty(substituteReferences((StringProperty) prop));
+                newProps.add(substituteReferences((StringProperty) prop));
             }
             else if (prop instanceof TestElementProperty)
             {
@@ -362,6 +370,11 @@ public class ValueReplacer
                 undoReverseReplace((MapProperty) prop);
             }
         }
+        Iterator props = newProps.iterator();
+        while (props.hasNext())
+        {
+            el.setProperty((JMeterProperty) props.next());
+        }
     }
 
     /**
@@ -370,12 +383,13 @@ public class ValueReplacer
     public void reverseReplace(TestElement el)
     {
         PropertyIterator iter = el.propertyIterator();
+        List newProps = new LinkedList();
         while (iter.hasNext())
         {
             JMeterProperty prop = iter.next();
             if (prop instanceof StringProperty)
             {
-                el.setProperty(substituteValues((StringProperty) prop));
+                newProps.add(substituteValues((StringProperty) prop));
             }
             else if (prop instanceof TestElementProperty)
             {
@@ -389,6 +403,12 @@ public class ValueReplacer
             {
                 reverseReplace((MapProperty) prop);
             }
+        }
+        Iterator props = newProps.iterator();
+        while (props.hasNext())
+        {
+            el.setProperty((JMeterProperty) props.next());
+
         }
     }
 
@@ -415,7 +435,7 @@ public class ValueReplacer
             String value = (String) variables.get(key);
             input = StringUtilities.substitute(input, "${" + key + "}", value);
         }
-        return new StringProperty(prop.getName(),input);
+        return new StringProperty(prop.getName(), input);
     }
 
     public static class Test extends TestCase
@@ -453,7 +473,7 @@ public class ValueReplacer
             replacer.reverseReplace(element);
             assertEquals("${server}", element.getPropertyAsString("domain"));
             args = (List) element.getProperty("args").getObjectValue();
-            assertEquals("${password}", ((JMeterProperty)args.get(1)).getStringValue());
+            assertEquals("${password}", ((JMeterProperty) args.get(1)).getStringValue());
         }
 
         public void testReplace() throws Exception
