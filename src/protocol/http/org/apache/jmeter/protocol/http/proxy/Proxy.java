@@ -75,8 +75,8 @@ import org.apache.log.Logger;
  * JMeter test plan.
  *
  * @author     mike
- * @version    $Revision$
- * @created    June 8, 2001
+ * @version    $Revision$ Last updated: $Date$
+ * Created      June 8, 2001
  */
 public class Proxy extends Thread
 {
