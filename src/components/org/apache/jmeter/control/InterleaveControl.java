@@ -81,6 +81,7 @@ public class InterleaveControl extends GenericController implements Serializable
 	 ***************************************/
 	public InterleaveControl()
 	{
+		
 	}
 
 	public void initialize()
