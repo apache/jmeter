@@ -82,6 +82,10 @@ public final class LoggingManager
 
     /** Used to hold the default logging target. */
     private static LogTarget target;
+    
+    // Hack to detect when System.out has been set as the target, to avoid closing it
+    private static boolean isTargetSystemOut = false;// Is the target System.out?
+	private static boolean isWriterSystemOut = false;// Is the Writer System.out?
 
     public final static String LOG_FILE = "log_file";
     public final static String LOG_PRIORITY = "log_level";
@@ -132,6 +136,7 @@ public final class LoggingManager
     private static Writer makeWriter(String logFile, String propName)
     {
         Writer wt;
+        isWriterSystemOut=false;
         try
         {
             wt = new FileWriter(logFile);
@@ -140,6 +145,7 @@ public final class LoggingManager
         {
             System.out.println(propName + "=" + logFile + " " + e.toString());
             System.out.println("[" + propName + "-> System.out]");
+			isWriterSystemOut=true;
             wt = new PrintWriter(System.out);
         }
         return wt;
@@ -254,14 +260,16 @@ public final class LoggingManager
         if (target == null)
         {
             target = new WriterTarget(targetFile, format);
+            isTargetSystemOut=isWriterSystemOut;
         }
         else
         {
-            if (target instanceof WriterTarget)
+            if (!isTargetSystemOut && target instanceof WriterTarget)
             {
                 ((WriterTarget) target).close();
             }
             target = new WriterTarget(targetFile, format);
+			isTargetSystemOut=isWriterSystemOut;
         }
         Hierarchy.getDefaultHierarchy().setDefaultLogTarget(target);
     }
