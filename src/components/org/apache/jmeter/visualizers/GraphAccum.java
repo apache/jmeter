@@ -44,36 +44,35 @@ import org.apache.log.Logger;
 /**
  * Draws the graph.
  *
- * @author     Khor Soon Hin
  * Created      2001/08/11
  * @version    $Revision$ Last updated: $Date$
  */
 public class GraphAccum extends JComponent implements Scrollable,
         GraphAccumListener
 {
-    protected GraphAccumModel model;
-    protected GraphAccumVisualizer visualizer;
+    private GraphAccumModel model;
+    private GraphAccumVisualizer visualizer;
 
     /** Ensure that the legends are only drawn once. */
-    protected boolean noLegendYet = true;
+    private boolean noLegendYet = true;
 
     /**
      * Keep track of previous point.  Needed to draw a line joining the
      * previous point with the current one.
      */
-    protected Point[] previousPts;
+    private Point[] previousPts;
 
     /**
      * Ensure that previousPts is allocated once only.  It'll be reused at each
      * drawSample.  It can't be allocated outside drawSample 'cos the sample
      * is only passed in here.
      */
-    protected boolean previousPtsAlloc = false;
+    private boolean previousPtsAlloc = false;
 
-    protected static int width = 2000;
+    private static final int width = 2000;
 
-    protected final static int PLOT_X_WIDTH = 10;
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+    private final static int PLOT_X_WIDTH = 10;
+    transient private static final Logger log = LoggingManager.getLoggerForClass();
 
 
     /**
