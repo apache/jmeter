@@ -108,6 +108,12 @@ public class ArgumentsPanel
     /** A button for removing arguments from the table. */
     private JButton delete;
 
+    /**
+     * Boolean indicating whether this component is a standalong component or
+     * it is intended to be used as a subpanel for another component.
+     */
+    private boolean standalone = true;
+
     /** Command for adding a row to the table. */ 
     private static final String ADD = "add";
     
@@ -122,41 +128,51 @@ public class ArgumentsPanel
         };
 
     /**
-     * Create a new ArgumentsPanel, using the default title. 
+     * Create a new ArgumentsPanel as a standalone component. 
      */
     public ArgumentsPanel()
     {
-        this(JMeterUtils.getResString("paramtable"));
+        tableLabel= new JLabel(JMeterUtils.getResString("user_defined_variables"));
+        standalone = true;
+        init();
     }
 
     /**
-     * Create a new ArgumentsPanel, using the specified title.
-     * 
-     * @param label the title of the component
+     * Create a new ArgumentsPanel as an embedded component, using the specified
+     * title.
+     *
+     * @param label        the title for the component.
      */
     public ArgumentsPanel(String label)
     {
         tableLabel = new JLabel(label);
+        standalone = false;
         init();
     }
 
     /**
      * This is the list of menu categories this gui component will be available
-     * under. The ArgumentsPanel is not intended to be used as a standalone
-     * component, so this inplementation returns null.
+     * under.
      *
      * @return   a Collection of Strings, where each element is one of the
      *           constants defined in MenuFactory
      */
     public Collection getMenuCategories()
     {
-        return null;
-    }
-
+        if (standalone)
+        {
+            return super.getMenuCategories();
+        }
+        else
+        {
+            return null;
+        } 
+    }    
+    
     /* Implements JMeterGUIComponent.getStaticLabel() */
     public String getStaticLabel()
     {
-        return "Argument List";
+        return JMeterUtils.getResString("user_defined_variables");
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
@@ -164,9 +180,7 @@ public class ArgumentsPanel
     {
         Arguments args = new Arguments();
         modifyTestElement(args);
-        // TODO: Why do we clone the return value? This is the only reference
-        // to it (right?) so we shouldn't need a separate copy.
-        return (TestElement) args.clone();
+        return args;
     }
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
@@ -419,14 +433,6 @@ public class ArgumentsPanel
     {
         initializeTableModel();
         table = new JTable(tableModel);
-        //table.addFocusListener(this);
-        // use default editor/renderer to fix bug #16058
-        //    TextAreaTableCellEditor editor = new TextAreaTableCellEditor();
-        //    table.setDefaultEditor(String.class, editor);
-        //    editor.addCellEditorListener(this);
-        //    TextAreaCellRenderer renderer = new TextAreaCellRenderer();
-        //    table.setRowHeight(renderer.getPreferredHeight());
-        //    table.setDefaultRenderer(String.class,renderer);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         return makeScrollPane(table);
     }
@@ -473,13 +479,28 @@ public class ArgumentsPanel
      */
     private void init()
     {
-        setLayout(new BorderLayout());
+        JPanel p= this;
+        
+        if (standalone)
+        {
+            setLayout(new BorderLayout(0,5));
+            setBorder(makeBorder());
+            add(makeTitlePanel(), BorderLayout.NORTH);
+            p= new JPanel();
+        }
 
-        add(makeLabelPanel(), BorderLayout.NORTH);
-        add(makeMainPanel(), BorderLayout.CENTER);
+        p.setLayout(new BorderLayout());
+
+        p.add(makeLabelPanel(), BorderLayout.NORTH);
+        p.add(makeMainPanel(), BorderLayout.CENTER);
         // Force a minimum table height of 70 pixels
-        add(Box.createVerticalStrut(70), BorderLayout.WEST);
-        add(makeButtonPanel(), BorderLayout.SOUTH);
+        p.add(Box.createVerticalStrut(70), BorderLayout.WEST);
+        p.add(makeButtonPanel(), BorderLayout.SOUTH);
+
+        if (standalone)
+        {
+            add(p, BorderLayout.CENTER);
+        }
 
         table.revalidate();
         sizeColumns(table);
