@@ -473,6 +473,35 @@ StandardGenerator and TCLogParser.
 	}
 </pre>
 </component>
+
+
+<component name="BSF Sampler (ALPHA CODE)" index="14.1.10" screenshot="">
+<center><h2>(ALPHA Code)</h2></center>
+	<description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
+		
+		<br></br>
+		Please note that the BSF jar file is not included with JMeter; it needs to be separately downloaded.
+		For full details, please see the BSF web-site at http://bsf.jakarta.apache.org/.
+		
+		</p>
+	</description>
+<properties>
+	<property name="Name" required="no">Descriptive name for this controller that is shown in the tree.</property>
+	<property name="Parameters" required="no">List of parameters to be passed to the script file or the script.</property>
+	<property name="Script File" required="no">Name of a file to be used as a BeanShell script</property>
+	<property name="Script" required="no">Script to be passed to BeanShell</property>
+</properties>
+TBC
+</component>
+
+<component name="TCP Sampler (ALPHA CODE)" index="14.1.11" screenshot="">
+<description>TBA
+</description>
+<properties>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+</properties>
+</component>
+
 </section>
 
 <section name="14.2 Logic Controllers" anchor="logic_controllers">
@@ -1207,6 +1236,14 @@ The variables in User Defined Variables components will take precedence over tho
 </properties>
 </component>
 
+<component index="14.4.15" name="TCP Sampler Config (ALPHA CODE)" screenshot="">
+<description>TBA
+</description>
+<properties>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+</properties>
+</component>
+
 </section>
 
 <section name="14.5 Assertions" anchor="assertions">
@@ -1270,6 +1307,15 @@ the size be equal to, greater than, less than, or not equal to a given number of
 <component index="14.5.4" name="XML Assertion" screenshot="xml_assertion.png">
 <description><p>The XML Assertion tests that the response data consists of a formally correct XML document.  It does not
 validate the XML based on a DTD or schema or do any further validation.</p></description>
+
+<properties>
+<property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+
+</properties>
+</component>
+
+<component index="14.5.5" name="BeanShell Assertion" screenshot="bsh_assertion.png">
+<description><p>The BeanShell Assertion allows the user to perform assertion checking using a BeanShell script.</p></description>
 
 <properties>
 <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -1524,6 +1570,43 @@ generate the template string, and store the result into the given variable name.
         <property name="Default Value" required="No">If no matches are found, the default value is stored in the variable.</property>
 </properties>
 </component>
+
+<component index="14.8.2" name="Result Status Action Handler" screenshot="resultstatusactionhandler.png">
+   <description>This test element allows the user to stop the thread or the whole test if the relevant sampler failed.
+   </description>
+   <properties>
+   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+   </properties>
+</component>
+
+<component index="14.8.3" name="Save Responses to a file" screenshot="savetofile.png">
+	<description>This test element can be placed anywhere in the test plan.
+		For each sample in its scope, it will create a file of the response Data.
+		The primary use for this is in creating functional tests.
+		The file name is created from the specified prefix, plus a number.
+		The file extension is created from the document type, if know.
+	</description>
+ <properties>
+ <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+ <property name="Filename Prefix" required="">Prefix for the generate file name</property>
+ </properties>
+</component>
+
+<component index="14.8.4" name="Generate Summary Results" screenshot="summary.png">
+	<description>This test element can be placed anywhere in the test plan.
+Generates a summary of the test run so far to the log file and/or 
+standard output. Both running and differential totals are shown.
+Output is generated every n seconds (default 3 minutes) on the appropriate
+time boundary, so that multiple test runs on the same time will be
+ synchronised.
+
+This is mainly intended for batch (non-GUI) runs.
+	</description>
+ <properties>
+ <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+ </properties>
+</component>
+
 </section>
 
 <section name="14.9 Miscellaneous Features" anchor="Miscellaneous_Features">
