@@ -14,7 +14,7 @@ import org.apache.jmeter.config.Modifier;
 import org.apache.jmeter.config.ResponseBasedModifier;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.GenericController;
-import org.apache.jmeter.engine.event.IterationListener;
+import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -324,9 +324,9 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
             {
                 parent.addTestElement(child);
             }
-            if(parent instanceof Controller && child instanceof IterationListener)
+            if(parent instanceof Controller && child instanceof LoopIterationListener)
             {
-                ((Controller)parent).addIterationListener((IterationListener)child);
+                ((Controller)parent).addIterationListener((LoopIterationListener)child);
             }
         }
 

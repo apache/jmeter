@@ -74,61 +74,61 @@ import org.apache.jmeter.util.JMeterUtils;
 public class ExitCommand implements Command
 {
 
-	private static Set commands = new HashSet();
+    private static Set commands = new HashSet();
 
-	/**
-	 *  Constructor for the ExitCommand object
-	 */
-	public ExitCommand()
-	{
-	}
+    /**
+     *  Constructor for the ExitCommand object
+     */
+    public ExitCommand()
+    {}
 
-	/**
-	 *  Gets the ActionNames attribute of the ExitCommand object
-	 *
-	 *@return    The ActionNames value
-	 */
-	public Set getActionNames()
-	{
-		return commands;
-	}
-	
-	
+    /**
+     *  Gets the ActionNames attribute of the ExitCommand object
+     *
+     *@return    The ActionNames value
+     */
+    public Set getActionNames()
+    {
+        return commands;
+    }
 
-	/**
-	 *  Description of the Method
-	 *
-	 *@param  e  Description of Parameter
-	 */
-	public void doAction(ActionEvent e)
-	{
-		ActionRouter.getInstance().actionPerformed(new ActionEvent(
-				e.getSource(),e.getID(),CheckDirty.CHECK_DIRTY));
-		if(GuiPackage.getInstance().isDirty())
-		{
-            int chosenOption = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
-            JMeterUtils.getResString("cancel_exit_to_save"),
-            JMeterUtils.getResString("Save?"),
-            JOptionPane.YES_NO_CANCEL_OPTION,
-            JOptionPane.QUESTION_MESSAGE);
-			if(chosenOption == JOptionPane.NO_OPTION)
-			{
-				System.exit(0);
-			}
-            else if(chosenOption == JOptionPane.YES_OPTION)
+    /**
+     *  Description of the Method
+     *
+     *@param  e  Description of Parameter
+     */
+    public void doAction(ActionEvent e)
+    {
+        ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), CheckDirty.CHECK_DIRTY));
+        if (GuiPackage.getInstance().isDirty())
+        {
+            int chosenOption =
+                JOptionPane.showConfirmDialog(
+                    GuiPackage.getInstance().getMainFrame(),
+                    JMeterUtils.getResString("cancel_exit_to_save"),
+                    JMeterUtils.getResString("Save?"),
+                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            if (chosenOption == JOptionPane.NO_OPTION)
             {
-                ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(),e.getID(),Save.SAVE_ALL));
                 System.exit(0);
             }
-		}
-		else
-		{
-				System.exit(0);
-		}
-	}
+            else if (chosenOption == JOptionPane.YES_OPTION)
+            {
+                ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), Save.SAVE_ALL));
+                if (!GuiPackage.getInstance().isDirty())
+                {
+                    System.exit(0);
+                }
+            }
+        }
+        else
+        {
+            System.exit(0);
+        }
+    }
 
-	static
-	{
-		commands.add("exit");
-	}
+    static {
+        commands.add("exit");
+    }
 }

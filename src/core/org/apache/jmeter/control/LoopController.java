@@ -52,12 +52,16 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+
 package org.apache.jmeter.control;
+
 import java.io.Serializable;
 
-import org.apache.jmeter.samplers.AbstractSampler;
-//import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testelement.PerSampleClonable;
+import junit.framework.TestSuite;
+
+import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.junit.stubs.TestSampler;
+import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
@@ -66,9 +70,11 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 /****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
+ * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: 
+Apache
  *
  *@author    Michael Stover
+ *@author    Thad Smith
  *@created   $Date$
  *@version   1.0
  ***************************************/
@@ -76,196 +82,100 @@ import org.apache.log.Logger;
 public class LoopController extends GenericController implements Serializable
 {
     private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.ELEMENTS);
-	private final static String LOOPS = "LoopController.loops";
-	private final static String CONTINUE_FOREVER = "LoopController.continue_forever";
-	private int loopCount = 0;
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public LoopController()
-	{
-		setContinueForever(true);
-	}
+    private final static String LOOPS = "LoopController.loops";
+    private final static String CONTINUE_FOREVER = "LoopController.continue_forever";
+    private int loopCount = 0;
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param loops  !ToDo (Parameter description)
-	 ***************************************/
-	public void setLoops(int loops)
-	{
-		setProperty(new IntegerProperty(LOOPS,loops));
-	}
-    
-    public void setLoops(String loopValue)
+    public LoopController()
     {
-        setProperty(new StringProperty(LOOPS,loopValue));
+        setContinueForever(true);
     }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public int getLoops()
-	{
-		return getPropertyAsInt(LOOPS);
-	}
-    
+    public void setLoops(int loops)
+    {
+        setProperty(new IntegerProperty(LOOPS, loops));
+    }
+
+    public void setLoops(String loopValue)
+    {
+        setProperty(new StringProperty(LOOPS, loopValue));
+    }
+
+    public int getLoops()
+    {
+        return getPropertyAsInt(LOOPS);
+    }
+
     public String getLoopString()
     {
         return getPropertyAsString(LOOPS);
     }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param forever  !ToDo (Parameter description)
-	 ***************************************/
-	public void setContinueForever(boolean forever)
-	{
-		setProperty(new BooleanProperty(CONTINUE_FOREVER,forever));
-	}
+    public void setContinueForever(boolean forever)
+    {
+        setProperty(new BooleanProperty(CONTINUE_FOREVER, forever));
+    }
 
+    public boolean getContinueForever()
+    {
+        return getPropertyAsBoolean(CONTINUE_FOREVER);
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public boolean getContinueForever()
-	{
-		return getPropertyAsBoolean(CONTINUE_FOREVER);
-	}
+    /**
+     * @see org.apache.jmeter.control.Controller#isDone()
+     */
+    public boolean isDone()
+    {
+        if (getLoops() != 0)
+        {
+            return super.isDone();
+        }
+        else
+        {
+            return true;
+        }
+    }
 
-	public void initialize()
-	{
-		super.initialize();
-		resetLoopCount();
-	}
+    private boolean endOfLoop()
+    {
+        return (getLoops() > -1) && loopCount >= getLoops();
+    }
 
-	public void reInitialize()
-	{
-		super.reInitialize();
-		resetLoopCount();
-	}
+    /**
+     * @see org.apache.jmeter.control.GenericController#nextIfCurrentNull()
+     */
+    protected Sampler nextIsNull() throws NextIsNullException
+    {
+        reInitialize();
+        if (endOfLoop())
+        {
+            if (!getContinueForever())
+            {
+                setDone(true);
+            }
+            else
+            {
+                resetLoopCount();
+            }
+            return null;
+        }
+        else
+        {
+            return next();
+        }
+    }
 
-	protected void incrementLoopCount()
-	{
-		loopCount++;
-	}
+    protected void incrementLoopCount()
+    {
+        loopCount++;
+    }
 
-	protected void resetLoopCount()
-	{
-		if(!getContinueForever() && getLoops() > -1)
-		{
-			this.setShortCircuit(true);
-		}
-		else
-		{
-			loopCount = 0;
-		}
-	}
-	
-	public boolean hasNext() 
-	{
-		if (getLoops()!=0 && !endOfLoop()) 
-		{
-			return super.hasNext();
-		} 
-		else 
-		{
-			return false;
-		}
-	}
+    protected void resetLoopCount()
+    {
+        loopCount = 0;
+    }
 
-	protected boolean hasNextAtEnd()
-	{
-		incrementLoopCount();
-		if(endOfLoop())
-		{
-			return false;
-		}
-		else
-		{
-			resetCurrent();
-			return hasNext();
-		}
-	}
-	
-	public boolean isDone() {
-		if (getLoops()!=0) 
-		{
-			return super.isDone();
-		} 
-		else 
-		{
-			return true;
-		}
-	}
-
-	protected void nextAtEnd()
-	{
-		resetCurrent();
-		incrementLoopCount();
-	}
-
-	private boolean endOfLoop()
-	{
-		return (!getContinueForever() || getLoops() > -1) && loopCount >= getLoops();
-	}
-
-	public static class Test extends junit.framework.TestCase
-	{
-		public Test(String name)
-		{
-			super(name);
-		}
-
-		public void testProcessing() throws Exception
-		{
-			GenericController controller = new GenericController();
-			GenericController sub_1 = new GenericController();
-			sub_1.addTestElement(makeSampler("one"));
-			sub_1.addTestElement(makeSampler("two"));
-			controller.addTestElement(sub_1);
-			controller.addTestElement(makeSampler("three"));
-			LoopController sub_2 = new LoopController();
-			sub_2.setLoops(3);
-			GenericController sub_3 = new GenericController();
-			sub_2.addTestElement(makeSampler("four"));
-			sub_3.addTestElement(makeSampler("five"));
-			sub_3.addTestElement(makeSampler("six"));
-			sub_2.addTestElement(sub_3);
-			sub_2.addTestElement(makeSampler("seven"));
-			controller.addTestElement(sub_2);
-			String[] order = new String[]{"one","two","three","four","five","six","seven",
-						"four","five","six","seven","four","five","six","seven"};
-			int counter = 15;
-			for (int i = 0; i < 2; i++)
-			{
-				assertEquals(15,counter);
-				counter = 0;
-				while(controller.hasNext())
-				{
-					TestElement sampler = controller.next();
-					assertEquals(order[counter++],sampler.getPropertyAsString(TestElement.NAME));
-				}
-			}
-		}
-
-		private TestElement makeSampler(String name)
-		{
-		  	TestSampler s= new TestSampler();
-			s.setName(name);
-			return s;
-		}
-		class TestSampler extends AbstractSampler implements PerSampleClonable {
-		  public void addCustomTestElement(TestElement t) { }
-		  public org.apache.jmeter.samplers.SampleResult sample(org.apache.jmeter.samplers.Entry e) { return null; }
-		}
-	}
     /**
      * @see org.apache.jmeter.control.GenericController#getIterCount()
      */
@@ -274,4 +184,66 @@ public class LoopController extends GenericController implements Serializable
         return loopCount + 1;
     }
 
-}
+    public static class Test extends junit.framework.TestCase
+    {
+        public Test(String name)
+        {
+            super(name);
+        }
+
+        public void testProcessing() throws Exception
+        {
+            GenericController controller = new GenericController();
+            GenericController sub_1 = new GenericController();
+            sub_1.addTestElement(new TestSampler("one"));
+            sub_1.addTestElement(new TestSampler("two"));
+            controller.addTestElement(sub_1);
+            controller.addTestElement(new TestSampler("three"));
+            LoopController sub_2 = new LoopController();
+            sub_2.setLoops(3);
+            GenericController sub_3 = new GenericController();
+            sub_2.addTestElement(new TestSampler("four"));
+            sub_3.addTestElement(new TestSampler("five"));
+            sub_3.addTestElement(new TestSampler("six"));
+            sub_2.addTestElement(sub_3);
+            sub_2.addTestElement(new TestSampler("seven"));
+            controller.addTestElement(sub_2);
+            String[] order =
+                new String[] { "one", "two", "three", "four", "five", "six", "seven", "four", "five", "six", "seven", "four", "five", "six", "seven" };
+            int counter = 15;
+            controller.initialize();
+            for (int i = 0; i < 2; i++)
+            {
+                assertEquals(15, counter);
+                counter = 0;
+                TestElement sampler = null;
+                while ((sampler = controller.next()) != null)
+                {
+                    assertEquals(order[counter++], sampler.getPropertyAsString(TestElement.NAME));
+                }
+            }
+        }
+    }
+
+    public static void main(String args[])
+    {
+        junit.textui.TestRunner.run(suite());
+    }
+
+    public static TestSuite suite()
+    {
+        TestSuite suite = new TestSuite();
+        suite.addTest(new Test("testProcessing"));
+        return suite;
+    }
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.control.GenericController#reInitialize()
+     */
+    protected void reInitialize()
+    {
+        setFirst(true);
+        resetCurrent();
+        incrementLoopCount();
+    }
+
+};

@@ -3,6 +3,7 @@ package org.apache.jmeter.samplers;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 
+import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
@@ -17,7 +18,7 @@ import org.apache.log.Logger;
  */
 
 public class RemoteSampleListenerWrapper extends AbstractTestElement implements
-		SampleListener,Serializable
+		SampleListener,Serializable,NoThreadClone
 {
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.elements");

@@ -73,7 +73,7 @@ import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
-import org.apache.jmeter.engine.event.IterationEvent;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.Remoteable;
@@ -473,7 +473,7 @@ public class ResultCollector extends AbstractListenerElement
     /**
      * @see org.apache.jmeter.testelement.TestListener#iterationStart(org.apache.jmeter.engine.event.IterationEvent)
      */
-    public void testIterationStart(IterationEvent event)
+    public void testIterationStart(LoopIterationEvent event)
     {}
 
 }

@@ -94,8 +94,7 @@ public class SSLManagerCommand implements Command {
         HashSet commands = new HashSet();
         commands.add("sslManager");
         SSLManagerCommand.commandSet = Collections.unmodifiableSet(commands);
-        System.setProperty("java.protocol.handler.pkgs", "com.sun.net.ssl.internal.www.protocol");
-        System.setProperty("javax.net.ssl.debug", "all");
+        
     }
 
     /**

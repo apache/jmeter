@@ -55,7 +55,7 @@
 
 import java.rmi.RemoteException;
 
-import org.apache.jmeter.engine.event.IterationEvent;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testelement.TestListener;
 
 /************************************************************
@@ -174,7 +174,7 @@ public class RemoteSampleListenerImpl
     /**
      * @see org.apache.jmeter.testelement.TestListener#iterationStart(org.apache.jmeter.engine.event.IterationEvent)
      */
-    public void testIterationStart(IterationEvent event)
+    public void testIterationStart(LoopIterationEvent event)
     {}
 
 }

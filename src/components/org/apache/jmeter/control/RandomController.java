@@ -52,33 +52,26 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- 
- package org.apache.jmeter.control;
+
+package org.apache.jmeter.control;
 
 import java.io.Serializable;
 import java.util.Random;
 
-import org.apache.jmeter.engine.event.IterationEvent;
-import org.apache.jmeter.engine.event.IterationListener;
-import org.apache.jmeter.threads.JMeterVariables;
-
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ *@author Michael Stover
  */
 public class RandomController
 	extends InterleaveControl
-	implements Serializable,IterationListener
+	implements Serializable
 {
 	static Random rand = new Random();
 	
-	public RandomController()
-	{
-		
-	}
+	public RandomController() {}
 	
+	/**
+	 * @see org.apache.jmeter.control.GenericController#resetCurrent()
+	 */
 	protected void resetCurrent()
 	{
 		if(getSubControllers().size() > 0)
@@ -91,33 +84,12 @@ public class RandomController
 		}
 	}
 	
+	/**
+	 * @see org.apache.jmeter.control.GenericController#incrementCurrent()
+	 */
 	protected void incrementCurrent()
 	{
-		setInterleave(NEW_STYLE);
 		current = rand.nextInt(this.getSubControllers().size());
 	}
-
-
-	/**
-	 * @see org.apache.jmeter.engine.event.IterationListener#iterationStarted(org.apache.jmeter.engine.event.IterationEvent)
-	 */
-	public void iterationStart(IterationEvent event)
-	{
-		if(event.getIteration() == 1)
-		{
-			resetCurrent();
-		}
-	}
-	
-	/**
-	 * @see org.apache.jmeter.engine.event.IterationListener#iteration(org.apache.jmeter.engine.event.IterationEvent)
-	 */
-	public void iteration(IterationEvent event) {}
-
-	/**
-	 * @see org.apache.jmeter.testelement.ThreadListener#setJMeterVariables(org.apache.jmeter.threads.JMeterVariables)
-	 */
-	public void setJMeterVariables(JMeterVariables jmVars)
-	{}
 
 }
