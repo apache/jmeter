@@ -28,12 +28,12 @@ import org.apache.jmeter.monitor.model.Status;
  * XML output and JAXB was used to generate classes.
  * <p>
  * The equations are:<p>
- * memory weight = (int)(33 * (used/max))<br>
- * thread weight = (int)(67 * (current/max))<p>
+ * memory weight = (int)(50 * (free/max))<br>
+ * thread weight = (int)(50 * (current/max))<p>
  * The load factors are stored in the properties
  * files. Simply change the values in the properties
  * to change how load is calculated. The defaults
- * values are memory (33) and threads (67). The sum
+ * values are memory (50) and threads (50). The sum
  * of the factors must equal 100.
  */
 public class Stats
@@ -54,8 +54,7 @@ public class Stats
 	 * The method is responsible for taking a status
 	 * object and calculating an int value from 1 to
 	 * 100. We use a combination of free memory and
-	 * free threads. Since memory is a bigger risk,
-	 * it counts for 2/3.<p>
+	 * free threads. The current factor is 50/50.<p>
 	 * @param stat
 	 * @return calculated load value
 	 */
@@ -64,8 +63,8 @@ public class Stats
 			// equation for calculating the weight
 			// w = (int)(33 * (used/max))
 			long totMem = stat.getJvm().getMemory().getTotal();
-			long usedMem = stat.getJvm().getMemory().getFree();
-			double memdiv = (double)usedMem/(double)totMem;
+			long freeMem = stat.getJvm().getMemory().getFree();
+			double memdiv = (double)freeMem/(double)totMem;
 			double memWeight = DEFAULT_MEMORY_FACTOR * memdiv;
 
 			Connector cntr = (Connector)stat.getConnector().get(0);
@@ -115,9 +114,9 @@ public class Stats
 
 	/**
 	 * Method will calculate the memory load:
-	 * used / max = load. The load value is an
+	 * free / max = load. The load value is an
 	 * integer between 1 and 100. It is the
-	 * percent memory used.
+	 * percent memory free.
 	 * @param stat
 	 * @return memory load
 	 */	
@@ -125,8 +124,8 @@ public class Stats
 		double load = 0;
 		if (stat != null){
 			double total = (double)stat.getJvm().getMemory().getTotal();
-			double used = (double)stat.getJvm().getMemory().getFree();
-			load = (used/total);
+			double free = (double)stat.getJvm().getMemory().getFree();
+			load = (free/total);
 		}
 		return (int)(load * 100);
 	}
