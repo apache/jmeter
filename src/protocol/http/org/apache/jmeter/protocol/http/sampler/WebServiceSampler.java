@@ -26,21 +26,23 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Random;
-import org.xml.sax.*;
+
+import javax.xml.parsers.DocumentBuilder;
+
+import org.xml.sax.InputSource;
 
 import org.apache.jorphan.io.TextFile;
 
-import org.apache.soap.util.xml.*;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.protocol.http.util.DOMPool;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.soap.*;
-import org.apache.soap.messaging.*;
-import org.apache.soap.transport.*;
+import org.apache.soap.Envelope;
+import org.apache.soap.messaging.Message;
+import org.apache.soap.transport.SOAPTransport;
 import org.apache.soap.transport.http.SOAPHTTPConnection;
-import javax.xml.parsers.*;
+import org.apache.soap.util.xml.XMLParserUtils;
 import org.w3c.dom.Document;
 
 /**
@@ -50,7 +52,6 @@ import org.w3c.dom.Document;
  * <p>
  * Created on:  Jun 26, 2003
  * 
- * @author Peter Lin
  * @version $Revision$
  */
 public class WebServiceSampler extends HTTPSampler
