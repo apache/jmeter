@@ -62,6 +62,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;
+
+import javax.swing.JOptionPane;
+
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -122,37 +126,6 @@ class WrapperEditor extends PropertyEditorSupport
      */
     private String lastValidValue= null;
 
-/*
-I formerly used this method to obtain a type against which I could
-validate property values, e.g. in isValidProperty. Later I found that
-simple propertyEditors can do this in a simpler way -- they throw
-InvalidValueException if the value is not of the appropriate type.
-
-TODO: remove this code once I'm reasonably convinced that what
-I said above is true (so I won't need to reinstate this code).
-
-    private static Class objectType(Class type)
-    {
-        // Sorry for this -- I have not found a better way:
-        if (! type.isPrimitive()) return type;
-        else if (type == boolean.class) return Boolean.class;
-        else if (type == char.class) return Character.class;
-        else if (type == byte.class) return Byte.class;
-        else if (type == short.class) return Short.class;
-        else if (type == int.class) return Integer.class;
-        else if (type == long.class) return Long.class;
-        else if (type == float.class) return Float.class;
-        else if (type == double.class) return Double.class;
-        else if (type == void.class) return Void.class;
-        else
-        {
-            log.error("Class "+type+" is an unknown primitive type.");
-            throw new Error("Class "+type+" is an unknown primitive type");
-                // programming error: bail out.
-        }
-    }
-*/
-
     /**
      * Constructor for use when a PropertyEditor is delegating to us.
      */
@@ -201,6 +174,7 @@ I said above is true (so I won't need to reinstate this code).
         this.acceptsOther= acceptsOther;
 
         setValue(defaultValue);
+        lastValidValue= getAsText();
 
         if (guiEditor instanceof ComboStringEditor)
         {
@@ -496,13 +470,14 @@ I said above is true (so I won't need to reinstate this code).
         }
         else
         {
-            if (log.isDebugEnabled())
-            {
-                log.debug("Invalid value. Reverting to last valid value.");
-            }
-            // TODO: warn the user. Maybe with a pop-up? A bell?
-    
-            // Revert to the previously unselected (presumed valid!) value:
+            // TODO: how to bring the editor back in view & focus?
+            JOptionPane.showMessageDialog(
+                guiEditor.getCustomEditor().getParent(),
+                JMeterUtils.getResString("property_editor.value_is_invalid_message"),
+                JMeterUtils.getResString("property_editor.value_is_invalid_title"),
+                JOptionPane.WARNING_MESSAGE);
+
+            // Revert to the previous value:
             guiEditor.setAsText(lastValidValue);
         }
     }
