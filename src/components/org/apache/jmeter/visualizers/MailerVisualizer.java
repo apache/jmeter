@@ -75,12 +75,12 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
@@ -184,14 +184,13 @@ public class MailerVisualizer extends AbstractVisualizer
      */
     private void initGui()
     {
-        this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        this.setLayout(new BorderLayout());
 
         // MAIN PANEL
-        JPanel mainPanel = new JPanel();
+        JPanel mainPanel = new VerticalPanel();
         Border margin = new EmptyBorder(10, 10, 5, 10);
 
-        mainPanel.setBorder(margin);
-        mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+        this.setBorder(margin);
 
         // NAME
         mainPanel.add(makeTitlePanel());
@@ -302,9 +301,9 @@ public class MailerVisualizer extends AbstractVisualizer
         g.setConstraints(failureField, c);
         mailerPanel.add(failureField);
 
-        mainPanel.add(mailerPanel, BorderLayout.CENTER);
+        mainPanel.add(mailerPanel);
 
-        this.add(mainPanel);
+        this.add(mainPanel,BorderLayout.WEST);
     }
 
     /**
@@ -484,6 +483,8 @@ public class MailerVisualizer extends AbstractVisualizer
         model.storeModel(element);
         return element;
     }
+    
+
 
     // ////////////////////////////////////////////////////////////
     //
@@ -525,5 +526,14 @@ public class MailerVisualizer extends AbstractVisualizer
         }
         JOptionPane.showMessageDialog(null, message, "Error", type);
     }
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
+     */
+    public void modifyTestElement(TestElement c)
+    {
+        super.modifyTestElement(c);
+        model.storeModel(c);
+    }
+
 }
 
