@@ -97,12 +97,10 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /****************************************
- * Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:
- * Apache
+ * Title: Jakarta-JMeter
  *
  *@author    Michael Stover
- *@created   $Date$
- *@version $Revision$
+ *@version $Revision$ Last updated: $Date$
  ***************************************/
 
 public class ProxyControlGui

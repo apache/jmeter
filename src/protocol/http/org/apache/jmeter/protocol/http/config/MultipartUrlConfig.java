@@ -68,7 +68,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 public class MultipartUrlConfig implements Serializable
 {
 
-    public static String MULTIPART_FORM = "multipart/form-data";
+    public static final String MULTIPART_FORM = "multipart/form-data";
     private String boundary, filename, fileField, mimetype;
     private Arguments args;
 

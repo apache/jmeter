@@ -287,7 +287,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
                 cookie.getValue(),
                 cookie.getDomain(),
                 cookie.getPath(),
-                new Boolean(cookie.getSecure()),
+                Boolean.valueOf(cookie.getSecure()),
                 new Long(cookie.getExpires())});
     }
 

@@ -123,7 +123,7 @@ public class Cookie extends AbstractTestElement implements Serializable
     /**
      * get the value for this object.
      */
-    public String getValue()
+    public String getValue() //TODO should this be synchronized - the set() method is
     {
         return getPropertyAsString(VALUE);
     }
@@ -139,7 +139,7 @@ public class Cookie extends AbstractTestElement implements Serializable
     /**
      * get the domain for this object.
      */
-    public String getDomain()
+    public String getDomain() //TODO should this be synchronized - the set() method is
     {
         return getPropertyAsString(DOMAIN);
     }
@@ -155,7 +155,7 @@ public class Cookie extends AbstractTestElement implements Serializable
     /**
      * get the expires for this object.
      */
-    public long getExpires()
+    public long getExpires() //TODO should this be synchronized - the set() method is
     {
         return getPropertyAsLong(EXPIRES);
     }
@@ -171,7 +171,7 @@ public class Cookie extends AbstractTestElement implements Serializable
     /**
      * get the secure for this object.
      */
-    public boolean getSecure()
+    public boolean getSecure() //TODO should this be synchronized - the set() method is
     {
         return getPropertyAsBoolean(SECURE);
     }
@@ -187,7 +187,7 @@ public class Cookie extends AbstractTestElement implements Serializable
     /**
      * get the path for this object.
      */
-    public String getPath()
+    public String getPath() //TODO should this be synchronized - the set() method is
     {
         return getPropertyAsString(PATH);
     }
@@ -209,7 +209,7 @@ public class Cookie extends AbstractTestElement implements Serializable
             + "\tTRUE\t"
             + getPath()
             + "\t"
-            + new Boolean(getSecure()).toString().toUpperCase()
+            + Boolean.valueOf(getSecure()).toString().toUpperCase()
             + "\t"
             + getExpires()
             + "\t"

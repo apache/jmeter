@@ -98,14 +98,14 @@ public class ProxyControl extends ConfigTestElement implements Serializable
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
     Daemon server;
-    private final int DEFAULT_PORT = 8080;
+    private static final int DEFAULT_PORT = 8080;
     private static PatternCacheLRU patternCache =
         new PatternCacheLRU(1000, new Perl5Compiler());
     transient Perl5Matcher matcher;
-    public final static String PORT = "ProxyControlGui.port";
-    public final static String EXCLUDE_LIST = "ProxyControlGui.exclude_list";
-    public final static String INCLUDE_LIST = "ProxyControlGui.include_list";
-    public final static String CAPTURE_HTTP_HEADERS = "ProxyControlGui.capture_http_headers";
+    public static final String PORT = "ProxyControlGui.port";
+    public static final String EXCLUDE_LIST = "ProxyControlGui.exclude_list";
+    public static final String INCLUDE_LIST = "ProxyControlGui.include_list";
+    public static final String CAPTURE_HTTP_HEADERS = "ProxyControlGui.capture_http_headers";
 
     public ProxyControl()
     {
