@@ -136,8 +136,8 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
                 TestPlan.FUNCTIONAL_MODE));
         
         serializedMode.setSelected(
-        	((AbstractTestElement) el).getPropertyAsBoolean(
-        		TestPlan.SERIALIZE_THREADGROUPS));
+            ((AbstractTestElement) el).getPropertyAsBoolean(
+                TestPlan.SERIALIZE_THREADGROUPS));
 
         if (el.getProperty(TestPlan.USER_DEFINED_VARIABLES) != null)
         {
@@ -174,10 +174,10 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
 
         add(createVariablePanel(), BorderLayout.CENTER);
 
-		VerticalPanel southPanel = new VerticalPanel();
-        serializedMode = 
-        	new JCheckBox(JMeterUtils.getResString("testplan.serialized"));
-		southPanel.add(serializedMode);
+        VerticalPanel southPanel = new VerticalPanel();
+        serializedMode =
+            new JCheckBox(JMeterUtils.getResString("testplan.serialized"));
+        southPanel.add(serializedMode);
         functionalMode =
             new JCheckBox(JMeterUtils.getResString("functional_mode"));
         southPanel.add(functionalMode);
