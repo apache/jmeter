@@ -108,10 +108,8 @@ public final class DBConnectionManager
      * @param username  username to use to connect to database.
      * @param password  password to use to connect to database.
      * @param driver    driver to use for the database.
-     * @param maxUsage  sets the maxUsage parameter for connections to this
-     *                  database.
-     * @param maxConnections tells the DBConnectionManager how many connections
-     *                  to keep active.
+     * @param properties configuration properties to be used by the connection
+     *                  pool.
      * @return          DBKey object. Returns null if connection fails.
      */
     public DBKey getKey(
@@ -119,8 +117,7 @@ public final class DBConnectionManager
         String username,
         String password,
         String driver,
-        int maxUsage,
-        int maxConnections)
+        Map properties)
     {
         DBKey key =
             new DBKey(
@@ -137,7 +134,7 @@ public final class DBConnectionManager
                 {
                     poolMap.put(
                         key,
-                        createConnectionPool(key, maxUsage, maxConnections));
+                        createConnectionPool(key, properties));
                 }
                 else
                 {
@@ -150,11 +147,9 @@ public final class DBConnectionManager
     }
 
     private ConnectionPool createConnectionPool(
-        DBKey key,
-        int maxUsage,
-        int maxConnections)
+        DBKey key, Map properties)
     {
-        return new JMeter19ConnectionPool(key, maxUsage, maxConnections);
+        return new JMeter19ConnectionPool(key, properties);
     }
 
     public void shutdown()

@@ -59,6 +59,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -68,6 +70,8 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jorphan.collections.Data;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -85,10 +89,10 @@ public class JDBCSampler extends AbstractSampler implements TestListener
     
     public static final String URL = "JDBCSampler.url";
     public static final String DRIVER = "JDBCSampler.driver";
-    public static final String CONNECTIONS = "JDBCSampler.connections";
-    public static final String MAXUSE = "JDBCSampler.maxuse";
     public static final String QUERY = "JDBCSampler.query";
 
+    public static final String JDBCSAMPLER_PROPERTY_PREFIX = "JDBCSampler.";
+    
     /** Database connection pool manager. */
     private transient DBConnectionManager manager =
         DBConnectionManager.getManager();
@@ -103,6 +107,7 @@ public class JDBCSampler extends AbstractSampler implements TestListener
 
     public SampleResult sample(Entry e)
     {
+        // FIXME: Should only call getKey once per test
         DBKey key = getKey();
         SampleResult res = new SampleResult();
 
@@ -192,10 +197,25 @@ public class JDBCSampler extends AbstractSampler implements TestListener
                     getUsername(),
                     getPassword(),
                     getDriver(),
-                    getMaxUse(),
-                    getNumConnections());
+                    getJDBCProperties());
     }
 
+    private Map getJDBCProperties()
+    {
+        Map props = new HashMap();
+        
+        PropertyIterator iter = propertyIterator();
+        while (iter.hasNext())
+        {
+            JMeterProperty prop = iter.next();
+            if (prop.getName().startsWith(JDBCSAMPLER_PROPERTY_PREFIX))
+            {
+                props.put(prop.getName(), prop);
+            }
+        }
+        return props;
+    }
+    
     /**
      * Gets a Data object from a ResultSet.
      *
@@ -256,16 +276,6 @@ public class JDBCSampler extends AbstractSampler implements TestListener
     public String getQuery()
     {
         return this.getPropertyAsString(QUERY);
-    }
-
-    public int getMaxUse()
-    {
-        return getPropertyAsInt(MAXUSE);
-    }
-
-    public int getNumConnections()
-    {
-        return getPropertyAsInt(CONNECTIONS);
     }
 
 

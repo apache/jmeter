@@ -67,7 +67,7 @@ import javax.swing.JTextField;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.VerticalPanel;
-import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
+import org.apache.jmeter.protocol.jdbc.util.JMeter19ConnectionPool;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -101,8 +101,9 @@ public class PoolConfigGui extends AbstractConfigGui implements FocusListener
     {
         super.configure(element);
         connField.setText(
-            element.getProperty(JDBCSampler.CONNECTIONS).toString());
-        maxUseField.setText(element.getProperty(JDBCSampler.MAXUSE).toString());
+            element.getProperty(JMeter19ConnectionPool.CONNECTIONS).toString());
+        maxUseField.setText(
+            element.getProperty(JMeter19ConnectionPool.MAXUSE).toString());
     }
 
     public TestElement createTestElement()
@@ -119,8 +120,12 @@ public class PoolConfigGui extends AbstractConfigGui implements FocusListener
     public void modifyTestElement(TestElement element)
     {
         configureTestElement(element);
-        element.setProperty(JDBCSampler.CONNECTIONS, connField.getText());
-        element.setProperty(JDBCSampler.MAXUSE, maxUseField.getText());
+        element.setProperty(
+            JMeter19ConnectionPool.CONNECTIONS,
+            connField.getText());
+        element.setProperty(
+            JMeter19ConnectionPool.MAXUSE,
+            maxUseField.getText());
     }
 
     public String getStaticLabel()
