@@ -18,17 +18,15 @@
 
 package org.apache.jmeter.protocol.java.sampler;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
-//import bsh.EvalError;
-import bsh.Interpreter;
-   
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
@@ -46,27 +44,22 @@ public class BeanShellSampler extends AbstractSampler
 	public static final String PARAMETERS = "BeanShellSampler.parameters"; //$NON-NLS-1$
 	public static final String INIT_FILE = "beanshell.sampler.init"; //$NON-NLS-1$
 
-    private Interpreter bshInterpreter;
+    transient private BeanShellInterpreter bshInterpreter;
 	
 	public BeanShellSampler()
 	{
-		String init="";
-		try{
-			bshInterpreter = new Interpreter();
-			init = JMeterUtils.getPropDefault(INIT_FILE,null);
-			if (init != null)
-			{
-				try
-				{
-					 bshInterpreter.source(init);
-				} catch (IOException e){
-					log.warn("Error processing init file "+init+" "+e);
-				} catch (Exception e){
-					log.warn("Error processing init file "+init+" "+e);
-				}
+		try {
+			bshInterpreter = new BeanShellInterpreter();
+			String init = JMeterUtils.getProperty(INIT_FILE);
+			try {
+				bshInterpreter.init(init,log);
+			} catch (IOException e) {
+				log.warn("Could not initialise interpreter",e);
+			} catch (JMeterException e) {
+				log.warn("Could not initialise interpreter",e);
 			}
-		} catch (NoClassDefFoundError e){
-			bshInterpreter=null;
+		} catch (ClassNotFoundException e) {
+			log.error("Could not establish BeanShellInterpreter: "+e);
 		}
 	}
 
@@ -103,6 +96,13 @@ public class BeanShellSampler extends AbstractSampler
         boolean isSuccessful = false;
         res.setSampleLabel(getLabel());
         res.sampleStart();
+		if (bshInterpreter == null){
+			res.sampleEnd();
+			res.setResponseCode("503");//$NON-NLS-1$
+			res.setResponseMessage("BeanShell Interpreter not found");
+			res.setSuccessful(false);
+			return res;
+		}
         try
         {
         	String request=getScript();
@@ -112,8 +112,6 @@ public class BeanShellSampler extends AbstractSampler
         	} else {
 				res.setSamplerData(fileName);
         	}
-        	// Has to be done after construction, otherwise fails serialisation check
-        	bshInterpreter.set("log",log);  //$NON-NLS-1$
 
 			bshInterpreter.set("Label",getLabel());  //$NON-NLS-1$
 			bshInterpreter.set("FileName",getFilename()); //$NON-NLS-1$
@@ -164,12 +162,6 @@ public class BeanShellSampler extends AbstractSampler
 			res.setResponseMessage(ex.toString());
 			res.setStopThread(true); // No point continuing
         }
-		catch (IOException ex)
-		{
-			log.warn(ex.toString());
-			res.setResponseCode("500");//$NON-NLS-1$
-			res.setResponseMessage(ex.toString());
-		}
 		catch (Exception ex) // Mainly for bsh.EvalError
 		{
 			log.warn(ex.toString());

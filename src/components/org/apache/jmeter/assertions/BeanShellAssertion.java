@@ -21,13 +21,12 @@ package org.apache.jmeter.assertions;
 import java.io.IOException;
 import java.io.Serializable;
 
-//import bsh.EvalError;
-import bsh.Interpreter;
-   
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
@@ -48,27 +47,22 @@ public class BeanShellAssertion extends AbstractTestElement
 	// can be specified in jmeter.properties
 	public static final String INIT_FILE = "beanshell.assertion.init"; //$NON-NLS-1$
 
-    private Interpreter bshInterpreter;
+    transient private BeanShellInterpreter bshInterpreter = null;
 	
 	public BeanShellAssertion()
 	{
-		String init="";
-		try{
-			bshInterpreter = new Interpreter();
-			init = JMeterUtils.getPropDefault(INIT_FILE,null);
-			if (init != null)
-			{
-				try
-				{
-					 bshInterpreter.source(null);
-				} catch (IOException e){
-					log.warn("Error processing init file "+init+" "+e);
-				} catch (Exception e){
-					log.warn("Error processing init file "+init+" "+e);
-				}
+		try {
+			bshInterpreter = new BeanShellInterpreter();
+			String init = JMeterUtils.getProperty(INIT_FILE);
+			try {
+				bshInterpreter.init(init,log);
+			} catch (IOException e) {
+				log.warn("Could not initialise interpreter",e);
+			} catch (JMeterException e) {
+				log.warn("Could not initialise interpreter",e);
 			}
-		} catch (NoClassDefFoundError e){
-			bshInterpreter=null;
+		} catch (ClassNotFoundException e) {
+			log.error("Could not establish BeanShellInterpreter: "+e);
 		}
 	}
 
@@ -94,14 +88,17 @@ public class BeanShellAssertion extends AbstractTestElement
 	{
 		AssertionResult result = new AssertionResult();
 		
+		if (bshInterpreter == null){
+			result.setFailure(true);
+			result.setError(true);
+			result.setFailureMessage("BeanShell Interpreter not found");
+			return result;
+		}
 		try
         {
         	String request=getScript();
         	String fileName=getFilename();
         	
-        	// Has to be done after construction, otherwise fails serialisation check
-        	bshInterpreter.set("log",log);  //$NON-NLS-1$
-			
         	bshInterpreter.set("FileName",getFilename());//$NON-NLS-1$
 			bshInterpreter.set("Parameters",getParameters());// as a single line $NON-NLS-1$
 			bshInterpreter.set("bsh.args",//$NON-NLS-1$
@@ -155,12 +152,6 @@ public class BeanShellAssertion extends AbstractTestElement
 			result.setFailureMessage("BeanShell Jar missing? "+ex.toString());
 			response.setStopThread(true); // No point continuing
         }
-		catch (IOException ex)
-		{
-			result.setError(true);
-			result.setFailureMessage(ex.toString());
-			log.warn(ex.toString());
-		}
 		catch (Exception ex) // Mainly for bsh.EvalError
 		{
 			result.setError(true);
