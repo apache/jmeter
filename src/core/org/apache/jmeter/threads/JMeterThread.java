@@ -91,7 +91,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
     static Map samplers = new HashMap();
     int initialDelay = 0;
     Controller controller;
-    private boolean running;//TODO should this be volatile?
+    private boolean running;
     HashTree testTree;
     TestCompiler compiler;
     JMeterThreadMonitor monitor;
@@ -105,7 +105,12 @@ public class JMeterThread implements Runnable, java.io.Serializable
     long endTime = 0;
     private boolean scheduler = false;
     //based on this scheduler is enabled or disabled
-    private StandardJMeterEngine engine = null;
+    
+    
+    private StandardJMeterEngine engine = null; // For access to stop methods.
+	private boolean onErrorStopTest;
+	private boolean onErrorStopThread;
+    
 
     public JMeterThread()
     {
@@ -282,12 +287,12 @@ public class JMeterThread implements Runnable, java.io.Serializable
                         checkAssertions(pack.getAssertions(), result);
                         notifyListeners(pack.getSampleListeners(), result);
                         compiler.done(pack);
-                        if (result.isStopThread()){
+                        if (result.isStopThread() || (!result.isSuccessful() && onErrorStopThread)){
                         	stopThread();
                         }
-						if (result.isStopTest()){
-							stopTest();
-						}
+                        if (result.isStopTest() || (!result.isSuccessful() && onErrorStopTest)){
+                        	stopTest();
+                        }
                         if (scheduler)
                         {
                             //checks the scheduler to stop the iteration
@@ -467,11 +472,33 @@ public class JMeterThread implements Runnable, java.io.Serializable
         }
     }
     /**
+     * Save the engine instance for access to the stop methods
+     * 
      * @param engine
      */
     public void setEngine(StandardJMeterEngine engine)
     {
         this.engine = engine;
+    }
+
+    /**
+     * Should Test stop on sampler error?
+     * 
+     * @param boolean
+     */
+    public void setOnErrorStopTest(boolean b)
+    {
+        onErrorStopTest = b;
+    }
+
+    /**
+     * Should Thread stop on Sampler error?
+     * 
+     * @param boolean
+     */
+    public void setOnErrorStopThread(boolean b)
+    {
+        onErrorStopThread = b;
     }
 
 }
