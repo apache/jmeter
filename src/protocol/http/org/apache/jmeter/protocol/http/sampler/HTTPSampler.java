@@ -707,7 +707,7 @@ public class HTTPSampler extends AbstractSampler
         }
 
         conn.setRequestMethod(method);
-        setConnectionHeaders(conn, u, getHeaderManager());
+        String hdrs=setConnectionHeaders(conn, u, getHeaderManager());
         String cookies= setConnectionCookie(conn, u, getCookieManager());
         if (res != null)
         {
@@ -727,7 +727,7 @@ public class HTTPSampler extends AbstractSampler
             res.setSamplerData(sb.toString());
             res.setURL(u);
             res.setHTTPMethod(method);
-            res.setRequestHeaders("TODO"); //TODO
+            res.setRequestHeaders(hdrs);
         }
         setConnectionAuthorization(conn, u, getAuthManager());
         if (getMethod().equals(HTTPSampler.POST))
@@ -937,11 +937,12 @@ public class HTTPSampler extends AbstractSampler
      *@param headerManager  the <code>HeaderManager</code> containing all the
      *                      cookies for this <code>UrlConfig</code>
      */
-    private void setConnectionHeaders(
+    private String setConnectionHeaders(
         HttpURLConnection conn,
         URL u,
         HeaderManager headerManager)
     {
+    	StringBuffer hdrs = new StringBuffer(100);
         if (headerManager != null)
         {
             CollectionProperty headers= headerManager.getHeaders();
@@ -951,12 +952,17 @@ public class HTTPSampler extends AbstractSampler
                 while (i.hasNext())
                 {
                     Header header= (Header)i.next().getObjectValue();
-                    conn.setRequestProperty(
-                        header.getName(),
-                        header.getValue());
+                    String n=header.getName();
+                    String v=header.getValue();
+                    conn.setRequestProperty(n,v);
+                    hdrs.append(n);  
+					hdrs.append(": ");  
+					hdrs.append(v);  
+					hdrs.append("\n");  
                 }
             }
         }
+        return hdrs.toString();
     }
 
     /**
