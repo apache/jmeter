@@ -268,6 +268,15 @@ public class ArgumentsPanel
         }
     }
 
+    /**************************************
+     * clear all row from the table.
+     * T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+     **************************************/
+    
+    public void clear() {
+        tableModel.clearData();
+    }
+
     /**
      * Invoked when an action occurs.  This implementation supports the add
      * and delete buttons.

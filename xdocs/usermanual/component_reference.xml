@@ -187,6 +187,58 @@ POST content.</p>
 
 </component>
 
+<component name="LDAP Request" index="13.1.6" screenshot="../images/screenshots/ldap_request.png">
+	<description>For testing LDAP servers</description>
+	<p>There are two ways to create test cases for testing a LDAP Server.</p>
+       <ol><li>Inbuilt Test cases.</li>
+       <li>User defined Test cases.</li></ol>
+
+<p>There are four test scenarios of testing LDAP. The tests are given below:</p>
+	<ol>
+        <li>Add Test</li>
+		<ol><li>Inbuilt test :
+		     <p>This will add a pre-defined entry in the LDAP Server and calculate
+	the execution time. After execution of the test, the created entry will be
+ 	deleted from the LDAP
+	Server.</p></li>
+		<li>User defined test :
+		     <p>This will add the entry in the LDAP Server. User has to enter all the
+	attributes in the table.The entries are collected from the table to add. The
+	execution time is calculated. The created entry will not be deleted after the
+ 	test.</p></li></ol>
+
+	<li>Modify Test</li>
+		<ol><li>Inbuilt test :
+		     <p>This will create a pre-defined entry first, then will modify the
+ 	created	entry in the LDAP Server.And calculate the execution time. After
+ execution
+	of the test, the created entry will be deleted from the LDAP Server.</p></li>
+		<li>User defined test
+		     <p>This will modify the entry in the LDAP Server. User has to enter all the
+	attributes in the table. The entries are collected from the table to modify.
+ 	The execution time is calculated. The entry will not be deleted from the LDAP
+ 	Server.</p></li></ol>
+
+	<li>Search Test</li>
+		<ol><li>Inbuilt test :
+		       <p>This will create the entry first, then will search if the attributes
+ 	are available. It calculates the execution time of the search query. At the
+	end of  the execution,created entry will be deleted from the LDAP Server.</p></li>
+		<li>User defined test
+		      <p>This will search the user defined entry(Search filter) in the Search
+ 	base (again, defined by the user). The entries should be available in the LDAP
+	Server. The execution time is  calculated.</p></li></ol>
+
+        <li>Delete Test</li>
+		<ol><li>Inbuilt test :
+		       <p>This will create a pre-defined entry first, then it will be deleted
+ 	from the LDAP Server. The execution time is calculated.</p></li>
+
+		<li>User defined test
+		     <p>This will delete the user-defined entry in the LDAP Server. The entries
+ 	should be available in the LDAP Server. The execution time is calculated.</p></li></ol></ol>
+</component>
+
 </section>
 
 <section name="13.2 Logic Controllers" anchor="logic_controllers">

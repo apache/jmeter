@@ -12,8 +12,7 @@
       ./build.sh -Ddeprecation=on clean compile
   </description>
 
-  <!-- JMeter version -->
-  <property name="version" value="1.9-RC1"/>
+  
 
   <!-- Where the Sources live -->
   <property name="src.dir" value="src"/>
@@ -25,6 +24,7 @@
   <property name="src.components" value="src/components"/>
   <property name="src.functions" value="src/functions"/>
   <property name="src.jorphan" value="src/jorphan"/>
+  <property name="src.ldap" value="src/protocol/ldap"/>
 
   <path id="srcpaths">
     <pathelement location="${src.core}"/>
@@ -35,6 +35,7 @@
     <pathelement location="${src.jdbc}"/>
     <pathelement location="${src.java}"/>
     <pathelement location="${src.jorphan}"/>
+    <pathelement location="${src.ldap}"/>
   </path>
 
   <!-- Temporary build directories: where the .class live -->
@@ -47,6 +48,7 @@
   <property name="build.components" value="build/components"/>
   <property name="build.functions" value="build/functions"/>
   <property name="build.jorphan" value="build/jorphan"/>
+  <property name="build.ldap" location="build/protocol/ldap"/>
 
   <!-- Where the build result .jars will be placed -->
   <property name="jar.dest" value="lib/ext"/>
@@ -101,7 +103,12 @@
     <fileset dir="${lib.dir}" includes="*.jar"/>
   </path>
 
-  <target name="init" depends="check-libs,report-missing-libs"/>
+  <target name="init" depends="check-libs,report-missing-libs">
+  	<tstamp/>
+  	<!-- JMeter version -->
+  <property name="version" value="1.9.RC${DSTAMP}"/>
+  </target>
+  
   <target name="init-docs" depends="check-anakia,report-anakia-missing"/>
 
   <!--
@@ -232,6 +239,19 @@
       </classpath>
     </javac>
   </target>
+  
+    <target name="compile-ldap" depends="compile-jorphan,compile-core" 
+    description="Compile components specific to LDAP sampling.">
+    <mkdir dir="${build.ldap}"/>
+    <javac srcdir="${src.ldap}" destdir="${build.ldap}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+      <include name="**/*.java"/>
+      <classpath>
+        <path refid="classpath"/>
+        <pathelement location="${build.jorphan}"/>
+        <pathelement location="${build.core}"/>
+      </classpath>
+    </javac>
+  </target>
 
   <target name="compile-java" depends="compile-jorphan,compile-core" description="Compile components specific to Java sampling.">
     <mkdir dir="${build.java}"/>
@@ -245,7 +265,7 @@
     </javac>
   </target>
 
-  <target name="compile-protocols" depends="compile-http,compile-ftp,compile-jdbc,compile-java" description="Compile all protocol-specific components."/>
+  <target name="compile-protocols" depends="compile-http,compile-ftp,compile-jdbc,compile-java,compile-ldap" description="Compile all protocol-specific components."/>
 
   <target name="compile-jorphan" depends="init" description="Compile JOrphan utility classes.">
     <mkdir dir="${build.jorphan}"/>
@@ -300,6 +320,7 @@
     <jar jarfile="${jar.dest}/ApacheJMeter_ftp.jar" basedir="${build.ftp}"/>
     <jar jarfile="${jar.dest}/ApacheJMeter_jdbc.jar" basedir="${build.jdbc}"/>
     <jar jarfile="${jar.dest}/ApacheJMeter_java.jar" basedir="${build.java}"/>
+    <jar jarfile="${jar.dest}/ApacheJMeter_ldap.jar" basedir="${build.ldap}"/>
     <jar jarfile="${jorphan.jar.dest}/jorphan.jar" basedir="${build.jorphan}"/>
   </target>
 
