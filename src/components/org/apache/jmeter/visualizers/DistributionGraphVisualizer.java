@@ -42,7 +42,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
-//import org.apache.jmeter.save.SaveGraphicsService;
+import org.apache.jmeter.save.SaveGraphicsService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
@@ -61,16 +61,12 @@ public class DistributionGraphVisualizer extends AbstractVisualizer
 {
     SamplingStatCalculator model;
     private JPanel graphPanel = null;
-    //NOTREAD private JTextField noSamplesField = null;
-    //NOTREAD String minute = JMeterUtils.getResString("minute");
 
     private DistributionGraph graph;
     private JTextField noteField;
     private JButton saveButton;
     private int delay = 10;
     private int counter = 0;
-    //NOTREAD private int cwidth = 0;
-    //NOTREAD private int cheight = 0;
     
     /**
      * Constructor for the GraphVisualizer object.
@@ -293,12 +289,9 @@ public class DistributionGraphVisualizer extends AbstractVisualizer
     	if (src == saveButton){
     		// this is temporary until I get familiar with the
     		// action stuff in JMeter.
-    		/**
     		SaveGraphicsService service = new SaveGraphicsService();
 			service.saveJComponent("distributionGraph",
 				SaveGraphicsService.PNG,this.graphPanel);
-			service.saveUsingJPEGEncoder("graph",this.graphPanel);
-			**/
     	}
     }
 }
