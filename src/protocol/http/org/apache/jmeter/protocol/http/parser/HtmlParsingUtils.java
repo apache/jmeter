@@ -86,7 +86,7 @@ import org.xml.sax.SAXException;
  * Created   June 14, 2001
  * @version   $Revision$ Last updated: $Date$
  */
-public final class HtmlParser implements Serializable
+public final class HtmlParsingUtils implements Serializable
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
@@ -112,7 +112,7 @@ public final class HtmlParser implements Serializable
     /**
      * Private constructor to prevent instantiation.
      */
-    private HtmlParser()
+    private HtmlParsingUtils()
     {
     }
 
@@ -590,12 +590,12 @@ public final class HtmlParser implements Serializable
             String javaVersion = System.getProperty("java.version");
             utfEncodingName = null;
             System.setProperty("java.version", "1.1");
-            assertEquals("UTF8", HtmlParser.getUTFEncodingName());
+            assertEquals("UTF8", HtmlParsingUtils.getUTFEncodingName());
             // need to clear utfEncodingName variable first 'cos
             // getUTFEncodingName checks to see if it's null
             utfEncodingName = null;
             System.setProperty("java.version", "1.2");
-            assertEquals("UTF-8", HtmlParser.getUTFEncodingName());
+            assertEquals("UTF-8", HtmlParsingUtils.getUTFEncodingName());
             System.setProperty("java.version", javaVersion);
             log.debug("End : testGetUTFEncodingName1");
         }

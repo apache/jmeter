@@ -51,16 +51,22 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
+ * 
+ * @author TBA
+ * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
+ * @version $Id$
  */
-package org.apache.jmeter.protocol.http.sampler;
+package org.apache.jmeter.protocol.http.parser;
 
 import java.io.ByteArrayInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.apache.jmeter.samplers.SampleResult;
+import junit.framework.TestCase;
+
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.w3c.dom.Document;
@@ -71,12 +77,9 @@ import org.w3c.tidy.Tidy;
 import org.xml.sax.SAXException;
 
 /**
- * Parser class using JTidy to scan HTML documents fof images etc
- * 
- * @author TBA
- * @version $revision$ Last updated: $date$
+ * HtmlParser implementation using JTidy.
  */
-public class ParseJTidy
+class JTidyHTMLParser extends HTMLParser
 {
     /** Used to store the Logger (used for debug and error messages). */
     transient private static Logger log = LoggingManager.getLoggerForClass();
@@ -84,78 +87,53 @@ public class ParseJTidy
     /**
      * This is a singleton class
      */
-    private ParseJTidy()
+    private JTidyHTMLParser()
     {
         super();
     }
 
-	protected static SampleResult parseForImages(SampleResult res,HTTPSampler sampler)
-	{
-		String displayName = res.getSampleLabel();
-		Document html = null;
-		URL baseUrl = null;
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.protocol.http.parser.HTMLParser#getEmbeddedResourceURLs(byte[], java.net.URL)
+     */
+    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl)
+        throws HTMLParseException
+    {
+        LinkedHashSet uniqueURLs= new LinkedHashSet();
+		Document dom = null;
 		try
 		{
-			baseUrl = sampler.getUrl();
-			if(log.isDebugEnabled())
-			{
-				log.debug("baseUrl - " + baseUrl.toString());
-			}
-			html = (Document)getDOM(res.getResponseData());
+			dom = (Document)getDOM(html);
 		}
 		catch(SAXException se)
 		{
-			log.error("Error parsing document - " + se);
-			res.setResponseData(se.toString().getBytes());
-			res.setResponseCode(HTTPSampler.NON_HTTP_RESPONSE_CODE);
-			res.setResponseMessage(HTTPSampler.NON_HTTP_RESPONSE_MESSAGE);
-			res.setSuccessful(false);
-			return res;
-		}
-		catch(MalformedURLException mfue)
-		{
-			log.error("Error creating URL '" + displayName + "'");
-			log.error("MalformedURLException - " + mfue);
-			res.setResponseData(mfue.toString().getBytes());
-			res.setResponseCode(HTTPSampler.NON_HTTP_RESPONSE_CODE);
-			res.setResponseMessage(HTTPSampler.NON_HTTP_RESPONSE_MESSAGE);
-			res.setSuccessful(false);
-			return res;
+            throw new HTMLParseException(se);
 		}
         
 		// Now parse the DOM tree
 		
 		// TODO - check for <base> tag ??
         
-		// This is used to ignore duplicated binary files.
-		Set uniqueURLs = new HashSet();
-        
 		// look for images
-		parseNodes(html, "img", false, "src", uniqueURLs, res,sampler,baseUrl);
+		parseNodes(dom, "img", false, "src", uniqueURLs, baseUrl);
 		// look for applets
         
 		// This will only work with an Applet .class file.
 		// Ideally, this should be upgraded to work with Objects (IE)
 		// and archives (.jar and .zip) files as well.
         
-		parseNodes(html, "applet", false, "code", uniqueURLs, res,sampler,baseUrl);
+		parseNodes(dom, "applet", false, "code", uniqueURLs, baseUrl);
 		// look for input tags with image types
-		parseNodes(html, "input", true, "src", uniqueURLs, res,sampler,baseUrl);
+		parseNodes(dom, "input", true, "src", uniqueURLs, baseUrl);
 		// look for background images
-		parseNodes(html, "body", false, "background", uniqueURLs, res,sampler,baseUrl);
+		parseNodes(dom, "body", false, "background", uniqueURLs, baseUrl);
         
 		// look for table background images
-		parseNodes(html, "table", false, "background", uniqueURLs, res,sampler,baseUrl);
+		parseNodes(dom, "table", false, "background", uniqueURLs, baseUrl);
 
 		//TODO look for TD, TR etc images
 
-		// Okay, we're all done now
-		if(log.isDebugEnabled())
-		{
-			log.debug("Total time - " + res.getTime());
-		}
-		log.debug("End   : HTTPSamplerFull sample");
-		return res;
+		return uniqueURLs.iterator();
 	}
 
 
@@ -174,16 +152,12 @@ public class ParseJTidy
      * @param res       <code>SampleResult</code> to store sampling results
      */
     private static void parseNodes(Document html, String htmlTag, boolean type,
-            String srcTag, Set uniques, SampleResult res,HTTPSampler sampler,
-            URL baseUrl)
+            String srcTag, Set uniques, URL baseUrl)
     {
         log.debug("Start : HTTPSamplerFull parseNodes");
         NodeList nodeList = html.getElementsByTagName(htmlTag);
-        boolean uniqueBinary;
-        SampleResult binRes = null;
         for(int i = 0; i < nodeList.getLength(); i++)
         {
-            uniqueBinary = true;
             Node tempNode = nodeList.item(i);
             if(log.isDebugEnabled())
             {
@@ -219,70 +193,21 @@ public class ParseJTidy
                 }
             }
 
-            binRes = new SampleResult();
             namedItem = nnm.getNamedItem(srcTag);
             if(namedItem == null)
             {
                 continue;
             }
             String binUrlStr = namedItem.getNodeValue();
-            // set the baseUrl and binUrl so that if error occurs
-            // due to MalformedException then at least the values will be
-            // visible to the user to aid correction
-            binRes.setSampleLabel(baseUrl + "," + binUrlStr);
-            // download the binary
-            URL binUrl = null;
             try
             {
-                binUrl = new URL(baseUrl, binUrlStr);
+                uniques.add(new URL(baseUrl, binUrlStr));
             }
             catch(MalformedURLException mfue)
             {
-                log.error("Error creating URL '" + baseUrl +
-                          " , " + binUrlStr + "'");
-                log.error("MalformedURLException - " + mfue);
-                binRes.setResponseData(mfue.toString().getBytes());
-                binRes.setResponseCode(HTTPSampler.NON_HTTP_RESPONSE_CODE);
-                binRes.setResponseMessage(
-                    HTTPSampler.NON_HTTP_RESPONSE_MESSAGE);
-                binRes.setSuccessful(false);
-                res.addSubResult(binRes);
-                break;
-            }
-            if(log.isDebugEnabled())
-            {
-                log.debug("Binary url - " + binUrlStr);
-                log.debug("Full Binary url - " + binUrl);
-            }
-            binRes.setSampleLabel(binUrl.toString());
-            uniqueBinary = uniques.add(binUrl.toString());
-            if (uniqueBinary)
-            {
-                // a browser should be smart enough to *not* download
-                //   a binary file that it already has in its cache.
-                try
-                {
-                    HTTPSamplerFull.loadBinary(binUrl, binRes,sampler);
-                }
-                catch(Exception ioe)
-                {
-                    log.error("Error reading from URL - " + ioe);
-                    binRes.setResponseData(ioe.toString().getBytes());
-                    binRes.setResponseCode(HTTPSampler.NON_HTTP_RESPONSE_CODE);
-                    binRes.setResponseMessage(
-                        HTTPSampler.NON_HTTP_RESPONSE_MESSAGE);
-                    binRes.setSuccessful(false);
-                }
-                log.debug("Adding result");
-                res.addSubResult(binRes);
-                res.setTime(res.getTime() + binRes.getTime());
-            }
-            else
-            {
-                if(log.isDebugEnabled())
-                {
-                    log.debug("Skipping duplicate - " + binUrl);
-                }
+                // Can't build the URL. May be a site error: return
+                // the string.
+                uniques.add(binUrlStr);
             }
         }
         log.debug("End   : HTTPSamplerFull parseNodes");
@@ -294,7 +219,7 @@ public class ParseJTidy
      *
      * @return  a <code>tidy</code> HTML parser
      */
-    private static Tidy getParser()
+    private static Tidy getTidyParser()
     {
         log.debug("Start : getParser");
         Tidy tidy = new Tidy();
@@ -320,7 +245,7 @@ public class ParseJTidy
     private static Node getDOM(byte [] text) throws SAXException
     {
         log.debug("Start : getDOM");
-        Node node = getParser().parseDOM(new
+        Node node = getTidyParser().parseDOM(new
           ByteArrayInputStream(text), null);
         if(log.isDebugEnabled())
         {
@@ -329,5 +254,14 @@ public class ParseJTidy
         log.debug("End   : getDOM");
         return node;
     }
-
+    
+    public static class Test extends TestCase
+    {
+        public Test() {
+            super();
+        }
+        public void testParser() throws Exception {
+            HTMLParserTest.testParser(new JTidyHTMLParser());
+        }
+    }
 }

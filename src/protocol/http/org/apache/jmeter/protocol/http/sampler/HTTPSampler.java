@@ -1150,7 +1150,7 @@ public class HTTPSampler extends AbstractSampler
                 {
                     imageSampler = new HTTPSamplerFull();
                 }
-                res = imageSampler.parseForImages(res, this);
+                res = imageSampler.downloadEmbeddedResources(res, this);
             }
             return res;
         }

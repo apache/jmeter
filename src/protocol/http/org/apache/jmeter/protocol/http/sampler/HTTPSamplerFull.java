@@ -57,13 +57,15 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
 
 import junit.framework.TestCase;
 
+import org.apache.jmeter.protocol.http.parser.*;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -109,23 +111,19 @@ import org.apache.log.Logger;
  *
  * @author  Khor Soon Hin
  * @author  <a href="mailto:mramshaw@alumni.concordia.ca">Martin Ramshaw</a>
+ * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Id$
  */
 public class HTTPSamplerFull
 {
     /** Used to store the Logger (used for debug and error messages). */
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+    transient private static Logger log= LoggingManager.getLoggerForClass();
 
     /**
      * Used to store the UTF encoding name (which is version dependent).
      * @see #getUTFEncodingName
      */
     protected static String utfEncodingName;
-
-    private static boolean parseJTidy =
-            JMeterUtils.getPropDefault("parser.jtidy",false);
-    private static boolean parseRegexp =
-            JMeterUtils.getPropDefault("parser.regexp",false);
 
     /**
      * This is the only Constructor.
@@ -152,14 +150,14 @@ public class HTTPSamplerFull
     {
         // Sample the container page.
         log.debug("Start : HTTPSamplerFull sample");
-        SampleResult res = sampler.sample(new Entry());
-        if(log.isDebugEnabled())
+        SampleResult res= sampler.sample(new Entry());
+        if (log.isDebugEnabled())
         {
             log.debug("Main page loading time - " + res.getTime());
         }
 
         // Now parse the HTML page
-        return parseForImages(res,sampler);
+        return downloadEmbeddedResources(res, sampler);
     }
 
     /**
@@ -167,20 +165,74 @@ public class HTTPSamplerFull
      * @param sampler - the HTTP sampler
      * @return the sample result, with possible additional sub results
      */
-    protected SampleResult parseForImages(SampleResult res, HTTPSampler sampler)
+    protected SampleResult downloadEmbeddedResources(
+        SampleResult res,
+        HTTPSampler sampler)
     {
-    	if (parseJTidy){
-            log.info("Using JTidy");
-            return ParseJTidy.parseForImages(res,sampler); 
+        Iterator urls;
+        try
+        {
+            urls=
+                HTMLParser.getParser().getEmbeddedResourceURLs(
+                    res.getResponseData(),
+                    sampler.getUrl());
         }
-        else if (parseRegexp) {
-            log.info("Using Regexp-based HTML parsing");
-            return ParseRegexp.parseForImages(res, sampler);
+        catch (MalformedURLException e)
+        {
+            // If we're downloading the resources dragged in by the HTML
+            // page, I can't see how the URL could be malformed!
+            log.error("Program error: can't get sampler URL", e);
+            throw new Error(e);
         }
-        else {
-            log.info("Using HtmlParser");
-            return ParseHtmlParser.parseForImages(res,sampler);
+        catch (HTMLParseException e)
+        {
+            res.setResponseData(e.toString().getBytes());
+            res.setResponseCode(HTTPSampler.NON_HTTP_RESPONSE_CODE);
+            res.setResponseMessage(HTTPSampler.NON_HTTP_RESPONSE_MESSAGE);
+            res.setSuccessful(false);
+            return res;
         }
+
+        // Iterate through the URLs and download each image:
+        while (urls.hasNext())
+        {
+            SampleResult binRes= new SampleResult();
+            Object url= urls.next();
+            binRes.setSampleLabel(url.toString());
+            try
+            {
+                HTTPSamplerFull.loadBinary((URL)url, binRes, sampler);
+            }
+            catch (ClassCastException e)
+            {
+                binRes.setResponseData(e.toString().getBytes());
+                binRes.setResponseCode(HTTPSampler.NON_HTTP_RESPONSE_CODE);
+                binRes.setResponseMessage(
+                    HTTPSampler.NON_HTTP_RESPONSE_MESSAGE);
+                binRes.setSuccessful(false);
+                continue;
+            }
+            catch (Exception ioe)
+            {
+                log.error("Error reading from URL - " + ioe);
+                binRes.setResponseData(ioe.toString().getBytes());
+                binRes.setResponseCode(HTTPSampler.NON_HTTP_RESPONSE_CODE);
+                binRes.setResponseMessage(
+                    HTTPSampler.NON_HTTP_RESPONSE_MESSAGE);
+                binRes.setSuccessful(false);
+            }
+
+            log.debug("Adding result");
+            res.addSubResult(binRes);
+            res.setTime(res.getTime() + binRes.getTime());
+        }
+
+        // Okay, we're all done now
+        if (log.isDebugEnabled())
+        {
+            log.debug("Total time - " + res.getTime());
+        }
+        return res;
     }
 
     /**
@@ -192,23 +244,26 @@ public class HTTPSamplerFull
      *
      * @throws IOException indicates a problem reading from the URL
      */
-    protected static byte[] loadBinary(URL url, SampleResult res, HTTPSampler sampler)
+    protected static byte[] loadBinary(
+        URL url,
+        SampleResult res,
+        HTTPSampler sampler)
         throws Exception
     {
         log.debug("Start : loadBinary");
-        byte[] ret = new byte[0];
+        byte[] ret= new byte[0];
         res.setSamplerData(new HTTPSampler(url).toString());
         HttpURLConnection conn;
         try
         {
-            conn = sampler.setupConnection(url, HTTPSampler.GET,res);
+            conn= sampler.setupConnection(url, HTTPSampler.GET, res);
             sampler.connect();
         }
-        catch(Exception ioe)
+        catch (Exception ioe)
         {
             // don't do anything 'cos presumably the connection will return the
             // correct http response codes
-            if(log.isDebugEnabled())
+            if (log.isDebugEnabled())
             {
                 log.debug("loadBinary : error in setupConnection " + ioe);
             }
@@ -217,19 +272,19 @@ public class HTTPSamplerFull
 
         try
         {
-            long time = System.currentTimeMillis();
-            if(log.isDebugEnabled())
+            long time= System.currentTimeMillis();
+            if (log.isDebugEnabled())
             {
                 log.debug("loadBinary : start time - " + time);
             }
-            int errorLevel = getErrorLevel(conn, res);
+            int errorLevel= getErrorLevel(conn, res);
             if (errorLevel == 2)
             {
-                ret = sampler.readResponse(conn);
-				res.setContentType(conn.getHeaderField("Content-type"));
+                ret= sampler.readResponse(conn);
+                res.setContentType(conn.getHeaderField("Content-type"));
                 res.setSuccessful(true);
-                long endTime = System.currentTimeMillis();
-                if(log.isDebugEnabled())
+                long endTime= System.currentTimeMillis();
+                if (log.isDebugEnabled())
                 {
                     log.debug("loadBinary : end   time - " + endTime);
                 }
@@ -238,16 +293,15 @@ public class HTTPSamplerFull
             else
             {
                 res.setSuccessful(false);
-                int responseCode =
-                        ((HttpURLConnection)conn).getResponseCode();
-                String responseMsg =
-                        ((HttpURLConnection)conn).getResponseMessage();
+                int responseCode= ((HttpURLConnection)conn).getResponseCode();
+                String responseMsg=
+                    ((HttpURLConnection)conn).getResponseMessage();
                 log.error("loadBinary : failed code - " + responseCode);
                 log.error("loadBinary : failed message - " + responseMsg);
             }
-            if(log.isDebugEnabled())
+            if (log.isDebugEnabled())
             {
-                log.debug("loadBinary : binary - " + ret[0]+ret[1]);
+                log.debug("loadBinary : binary - " + ret[0] + ret[1]);
                 log.debug("loadBinary : loadTime - " + res.getTime());
             }
             log.debug("End   : loadBinary");
@@ -266,7 +320,7 @@ public class HTTPSamplerFull
                 // when its timeout period is reached.
                 sampler.disconnect(conn);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
             }
         }
@@ -280,33 +334,35 @@ public class HTTPSamplerFull
      * @param res           where all results of sampling will be stored
      * @return              HTTP response code divided by 100
      */
-    protected static int getErrorLevel(HttpURLConnection conn, SampleResult res)
+    protected static int getErrorLevel(
+        HttpURLConnection conn,
+        SampleResult res)
     {
         log.debug("Start : getErrorLevel");
-        int errorLevel = 2;
+        int errorLevel= 2;
         try
         {
-            int responseCode =
-                    ((HttpURLConnection) conn).getResponseCode();
-            String responseMessage =
-                    ((HttpURLConnection) conn).getResponseMessage();
-            errorLevel = responseCode/100;
+            int responseCode= ((HttpURLConnection)conn).getResponseCode();
+            String responseMessage=
+                ((HttpURLConnection)conn).getResponseMessage();
+            errorLevel= responseCode / 100;
             res.setResponseCode(String.valueOf(responseCode));
             res.setResponseMessage(responseMessage);
-            if(log.isDebugEnabled())
+            if (log.isDebugEnabled())
             {
-                log.debug("getErrorLevel : responseCode - " +
-                        responseCode);
-                log.debug("getErrorLevel : responseMessage - " +
-                        responseMessage);
+                log.debug("getErrorLevel : responseCode - " + responseCode);
+                log.debug(
+                    "getErrorLevel : responseMessage - " + responseMessage);
             }
         }
         catch (Exception e2)
         {
             log.error("getErrorLevel : " + conn.getHeaderField(0));
             log.error("getErrorLevel : " + conn.getHeaderFieldKey(0));
-            log.error("getErrorLevel : " +
-                    "Error getting response code for HttpUrlConnection - ",e2);
+            log.error(
+                "getErrorLevel : "
+                    + "Error getting response code for HttpUrlConnection - ",
+                e2);
             res.setResponseData(e2.toString().getBytes());
             res.setResponseCode(HTTPSampler.NON_HTTP_RESPONSE_CODE);
             res.setResponseMessage(HTTPSampler.NON_HTTP_RESPONSE_MESSAGE);
@@ -328,21 +384,21 @@ public class HTTPSamplerFull
         log.debug("Start : getUTFEncodingName");
         if (utfEncodingName == null)
         {
-            String versionNum = System.getProperty( "java.version" );
-            if(log.isDebugEnabled())
+            String versionNum= System.getProperty("java.version");
+            if (log.isDebugEnabled())
             {
                 log.debug("getUTFEncodingName : version = " + versionNum);
             }
-            if (versionNum.startsWith( "1.1" ))
+            if (versionNum.startsWith("1.1"))
             {
-                utfEncodingName = "UTF8";
+                utfEncodingName= "UTF8";
             }
             else
             {
-                utfEncodingName = "UTF-8";
+                utfEncodingName= "UTF-8";
             }
         }
-        if(log.isDebugEnabled())
+        if (log.isDebugEnabled())
         {
             log.debug("getUTFEncodingName : Encoding = " + utfEncodingName);
         }
@@ -354,7 +410,7 @@ public class HTTPSamplerFull
     {
         private HTTPSampler hsf;
 
-        transient private static Logger log = LoggingManager.getLoggerForClass();
+        transient private static Logger log= LoggingManager.getLoggerForClass();
 
         public Test(String name)
         {
@@ -364,7 +420,7 @@ public class HTTPSamplerFull
         protected void setUp()
         {
             log.debug("Start : setUp1");
-            hsf = new HTTPSampler();
+            hsf= new HTTPSampler();
             hsf.setMethod(HTTPSampler.GET);
             hsf.setProtocol("file");
             hsf.setPath("HTTPSamplerFullTestFile.txt");
@@ -375,12 +431,12 @@ public class HTTPSamplerFull
         public void testGetUTFEncodingName()
         {
             log.debug("Start : testGetUTFEncodingName");
-            String javaVersion = System.getProperty("java.version");
+            String javaVersion= System.getProperty("java.version");
             System.setProperty("java.version", "1.1");
             assertEquals("UTF8", HTTPSamplerFull.getUTFEncodingName());
             // need to clear utfEncodingName variable first 'cos
             // getUTFEncodingName checks to see if it's null
-            utfEncodingName = null;
+            utfEncodingName= null;
             System.setProperty("java.version", "1.2");
             assertEquals("UTF-8", HTTPSamplerFull.getUTFEncodingName());
             System.setProperty("java.version", javaVersion);
@@ -404,50 +460,53 @@ public class HTTPSamplerFull
             log.debug("Start : testSampleMain");
             // !ToDo : Have to wait till the day SampleResult is extended to
             // store results of all downloaded stuff e.g. images, applets etc
-            String fileInput = "<html>\n\n" +
-                    "<title>\n" +
-                    "  A simple applet\n" +
-                    "</title>\n" +
-                    "<body background=\"back.jpg\" vlink=\"#dd0000\" "+
-                            "link=\"#0000ff\">\n" +
-                    "<center>\n" +
-                    "<h2>   A simple applet\n" +
-                    "</h2>\n" +
-                    "<br>\n" +
-                    "<br>\n" +
-                    "<table>\n" +
-                    "<td width = 20>\n" +
-                    "<td width = 500 align = left>\n" +
-                    "<img src=\"/tomcat.gif\">\n" +
-                    "<img src=\"/tomcat.gif\">\n" +
-                    "<a href=\"NervousText.java\"> Read my code <a>\n" +
-                    "<p><applet code=NervousText.class width=400 " +
-                    "height=200>\n" +
-                    "</applet>\n" +
-                    "<p><applet code=NervousText.class width=400 " +
-                    "height=200>\n" +
-                    "</applet>\n" +
-                    "</table>\n" +
-                    "<form>\n" +
-                    "  <input type=\"image\" src=\"/tomcat-power.gif\">\n" +
-                    "</form>\n" +
-                    "<form>\n" +
-                    "  <input type=\"image\" src=\"/tomcat-power.gif\">\n" +
-                    "</form>\n" +
-                    "</body>\n" +
-                    "</html>\n";
-            byte[] bytes = fileInput.getBytes();
+            String fileInput=
+                "<html>\n\n"
+                    + "<title>\n"
+                    + "  A simple applet\n"
+                    + "</title>\n"
+                    + "<body background=\"back.jpg\" vlink=\"#dd0000\" "
+                    + "link=\"#0000ff\">\n"
+                    + "<center>\n"
+                    + "<h2>   A simple applet\n"
+                    + "</h2>\n"
+                    + "<br>\n"
+                    + "<br>\n"
+                    + "<table>\n"
+                    + "<td width = 20>\n"
+                    + "<td width = 500 align = left>\n"
+                    + "<img src=\"/tomcat.gif\">\n"
+                    + "<img src=\"/tomcat.gif\">\n"
+                    + "<a href=\"NervousText.java\"> Read my code <a>\n"
+                    + "<p><applet code=NervousText.class width=400 "
+                    + "height=200>\n"
+                    + "</applet>\n"
+                    + "<p><applet code=NervousText.class width=400 "
+                    + "height=200>\n"
+                    + "</applet>\n"
+                    + "</table>\n"
+                    + "<form>\n"
+                    + "  <input type=\"image\" src=\"/tomcat-power.gif\">\n"
+                    + "</form>\n"
+                    + "<form>\n"
+                    + "  <input type=\"image\" src=\"/tomcat-power.gif\">\n"
+                    + "</form>\n"
+                    + "</body>\n"
+                    + "</html>\n";
+            byte[] bytes= fileInput.getBytes();
             try
             {
-                FileOutputStream fos =
-                        new FileOutputStream("HTTPSamplerFullTestFile.txt");
+                FileOutputStream fos=
+                    new FileOutputStream("HTTPSamplerFullTestFile.txt");
                 fos.write(bytes);
                 fos.close();
             }
-            catch(IOException ioe)
+            catch (IOException ioe)
             {
-                fail("Cannot create HTTPSamplerFullTestFile.txt in current " +
-                    "directory for testing - " + ioe);
+                fail(
+                    "Cannot create HTTPSamplerFullTestFile.txt in current "
+                        + "directory for testing - "
+                        + ioe);
             }
             // !ToDo
             // hsf.sample(entry);
@@ -458,7 +517,7 @@ public class HTTPSamplerFull
         protected void tearDown()
         {
             log.debug("Start : tearDown");
-            hsf = null;
+            hsf= null;
             log.debug("End   : tearDown");
         }
     }
