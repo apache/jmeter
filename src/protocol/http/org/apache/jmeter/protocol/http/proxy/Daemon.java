@@ -14,7 +14,8 @@ import org.apache.log.Logger;
  * request.
  *
  * @author     default
- * @created    June 29, 2001
+ * Created    June 29, 2001
+ * @version $Revision$ Last updated: $Date$
  */
 public class Daemon extends Thread
 {

@@ -83,8 +83,8 @@ import org.xml.sax.SAXException;
 
 /**
  * @author    Michael Stover
- * @created   June 14, 2001
- * @version   $Revision$
+ * Created   June 14, 2001
+ * @version   $Revision$ Last updated: $Date$
  */
 public final class HtmlParser implements Serializable
 {

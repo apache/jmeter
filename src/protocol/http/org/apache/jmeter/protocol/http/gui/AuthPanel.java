@@ -91,8 +91,8 @@ import org.apache.log.Logger;
  * Sampler. It also understands how to get AuthManagers for the files that the
  * user selects.
  *
- * @author    $Author$
- * @version   $Revision$
+ * @author    
+ * @version   $Revision$  Last updated: $Date$
  */
 public class AuthPanel extends AbstractConfigGui implements ActionListener
 {

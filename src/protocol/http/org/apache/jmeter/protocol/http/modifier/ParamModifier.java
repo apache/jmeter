@@ -30,9 +30,9 @@ import org.apache.jmeter.threads.JMeterContextService;
  * changing one or two method implementations there.
  *
  * @author     David La France
- * @created    Jan 18, 2002
+ * Created    Jan 18, 2002
  * @see        ParamMask
- * @version    $Revision$
+ * @version    $Revision$ Last updated: $Date$
  */
 public class ParamModifier
     extends AbstractTestElement

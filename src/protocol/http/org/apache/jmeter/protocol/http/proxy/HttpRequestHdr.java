@@ -34,18 +34,18 @@ public class HttpRequestHdr
     /**
      * Http Request method. Such as get or post.
      */
-    public String method = new String();
+    public String method = "";
 
     /**
      * The requested url. The universal resource locator that hopefully uniquely
      * describes the object or service the client is requesting.
      */
-    public String url = new String();
+    public String url = "";
 
     /**
      * Version of http being used. Such as HTTP/1.0.
      */
-    public String version = new String();
+    public String version = "";
 
     public String postData = "";
     static String CR = "\r\n";
