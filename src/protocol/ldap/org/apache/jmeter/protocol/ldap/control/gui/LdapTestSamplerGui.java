@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.ldap.control.gui;
+
 import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
@@ -65,22 +66,19 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    T.Elanjchezhiyan(chezhiyan@siptech.co.in)
- *@created   Apr 29 2003 11:52 AM
- *@company   Sip Technologies and Exports Ltd.
- *@version   1.0
- ***************************************/
-public class LdapTestSamplerGui extends AbstractSamplerGui {
+/**
+ * @author    T.Elanjchezhiyan(chezhiyan@siptech.co.in) - Sip Technologies and
+ *            Exports Ltd. 
+ * @created   Apr 29 2003 11:52 AM
+ * @version   $Revision$
+ */
+public class LdapTestSamplerGui extends AbstractSamplerGui
+{
     private LoginConfigGui loginPanel;
     private LdapConfigGui ldapDefaultPanel;
 
-    /****************************************
-     * !ToDo (Constructor description)
-     ***************************************/
-    public LdapTestSamplerGui() {
+    public LdapTestSamplerGui()
+    {
         init();
     }
 
@@ -92,13 +90,15 @@ public class LdapTestSamplerGui extends AbstractSamplerGui {
      *
      * @param element the TestElement to configure 
      */
-    public void configure(TestElement element) {
+    public void configure(TestElement element)
+    {
         super.configure(element);
         loginPanel.configure(element);
         ldapDefaultPanel.configure(element);
     }
 
-    public TestElement createTestElement() {
+    public TestElement createTestElement()
+    {
         LDAPSampler sampler = new LDAPSampler();
         modifyTestElement(sampler);
         return sampler;
@@ -108,25 +108,31 @@ public class LdapTestSamplerGui extends AbstractSamplerGui {
      * Modifies a given TestElement to mirror the data in the gui components.
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
-    public void modifyTestElement(TestElement sampler) {
+    public void modifyTestElement(TestElement sampler)
+    {
         sampler.clear();
-        ((LDAPSampler)sampler).addTestElement(ldapDefaultPanel.createTestElement());
+        ((LDAPSampler) sampler).addTestElement(
+            ldapDefaultPanel.createTestElement());
         ((LDAPSampler)sampler).addTestElement(loginPanel.createTestElement());
         this.configureTestElement(sampler);
     }
 
-    public String getStaticLabel() {
+    public String getStaticLabel()
+    {
         return JMeterUtils.getResString("ldap_testing_title");
     }
     
-    private void init() {
+    private void init()
+    {
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
         // MAIN PANEL
         VerticalPanel mainPanel = new VerticalPanel();
         loginPanel = new LoginConfigGui(false);
         ldapDefaultPanel = new LdapConfigGui(false);
-        loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config")));
+        loginPanel.setBorder(
+            BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("login_config")));
         add(makeTitlePanel(),BorderLayout.NORTH);
         mainPanel.add(loginPanel);
         mainPanel.add(ldapDefaultPanel);
