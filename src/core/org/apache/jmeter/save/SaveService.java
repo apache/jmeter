@@ -348,7 +348,7 @@ public class SaveService
 		{
 			if(items[i].getName().equals("property"))
 			{
-				coll.add(items[i].getValue());
+				coll.add(items[i].getValue(""));
 			}
 			else if(items[i].getName().equals("testelement"))
 			{
@@ -360,7 +360,7 @@ public class SaveService
 			}
 			else if(items[i].getName().equals("string"))
 			{
-				coll.add(items[i].getValue());
+				coll.add(items[i].getValue(""));
 			}
 		}
 		return coll;
