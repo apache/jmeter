@@ -118,7 +118,7 @@ public class ViewResultsFullVisualizer
         protected String response;
 
         /** The pane where the rendered HTML response is displayed.  **/
-        protected JEditorPane htmlEditPane;
+        transient protected JEditorPane htmlEditPane;
 
         protected JPanel resultPanel;
         protected JScrollPane treePane;
