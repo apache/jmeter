@@ -349,7 +349,7 @@ public class ViewResultsFullVisualizer
                         String response = null;
                         try
                         {
-                            response = new String(responseBytes, "utf-8");
+                            response = new String(responseBytes, "UTF-8");
                         }
                         catch (UnsupportedEncodingException err)
                         {
@@ -438,7 +438,7 @@ public class ViewResultsFullVisualizer
             {
                 try
                 {
-                    response = new String(responseBytes, "utf-8");
+                    response = new String(responseBytes, "UTF-8");
                 }
                 catch (UnsupportedEncodingException err)
                 {
