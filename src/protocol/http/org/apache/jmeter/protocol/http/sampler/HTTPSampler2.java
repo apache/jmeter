@@ -1041,22 +1041,29 @@ public class HTTPSampler2 extends AbstractSampler
     {
         if (authManager != null)
         {
-            Authorization authHeader= authManager.getAuthForURL(u);
+        	// Old method
+            String authHeader= authManager.getAuthHeaderForURL(u);
             if (authHeader != null)
             {
-            	//authHeader.get
-                httpState.setCredentials(
-                	"realm",
-					authHeader.getURL(),
-                	new NTCredentials(// Includes other types of Credentials
-                			authHeader.getUser(),
-							authHeader.getPass(),
-                			"thishost",
-							"targetdomain"
-							)
-					);
-
+                method.setRequestHeader("Authorization", authHeader);
             }
+
+            //TODO: replace with something like this:
+//            Authorization auth= authManager.getAuthForURL(u);
+//            if (auth != null)
+//            {
+//            	// TODO - set up realm, thishost and domain
+//            	httpState.setCredentials(
+//                	null,         // "realm"
+//					auth.getURL(),
+//                	new NTCredentials(// Includes other types of Credentials
+//                			auth.getUser(),
+//							auth.getPass(),
+//                			null, // "thishost",
+//							null  // "targetdomain"
+//							)
+//					);
+//            }
         }
     }
 
