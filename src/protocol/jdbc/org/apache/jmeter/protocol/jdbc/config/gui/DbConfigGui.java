@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,20 +53,20 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.jdbc.config.gui;
+import java.awt.BorderLayout;
+
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.config.gui.LoginConfigGui;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Title: Description: Copyright: Copyright (c) 2001 Company:
@@ -142,82 +142,56 @@ public class DbConfigGui extends AbstractConfigGui
 
 	private void init()
 	{
-		if(displayName)
-		{
-			this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setLayout(new BorderLayout(0, 5));
+        
+		if(displayName) {
+            setBorder(makeBorder());
 
-			// MAIN PANEL
-			JPanel mainPanel = new JPanel();
-			Border margin = new EmptyBorder(10, 10, 5, 10);
-			mainPanel.setBorder(margin);
-			mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+			add(makeTitlePanel(), BorderLayout.NORTH);
+        }
 
-			// NAME
-			mainPanel.add(makeTitlePanel());
+        VerticalPanel mainPanel = new VerticalPanel();
+                
+		// URL and JDBC PROPS
+		VerticalPanel urlJDBCPanel = new VerticalPanel();
+		urlJDBCPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("database_url_jdbc_props")));
 
-			// URL and JDBC PROPS
-			JPanel urlJDBCPanel = new JPanel();
-			urlJDBCPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-			urlJDBCPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("database_url_jdbc_props")));
+		urlJDBCPanel.add(getUrlPanel());
+		urlJDBCPanel.add(getDriverPanel());
 
-			// URL
-			urlJDBCPanel.add(getUrlPanel());
+		mainPanel.add(urlJDBCPanel);
 
-			// DRIVER
-			urlJDBCPanel.add(getDriverPanel());
+		// LOGIN
+		JPanel loginPanel = new JPanel(new BorderLayout());
+		loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config")));
 
-			mainPanel.add(urlJDBCPanel);
+        loginGui = new LoginConfigGui(false);
+		loginPanel.add(loginGui, BorderLayout.NORTH);
 
-			// LOGIN
-			loginGui = new LoginConfigGui(false);
-			JPanel loginPanel = new JPanel();
-			loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config")));
-			loginPanel.add(loginGui);
-			mainPanel.add(loginPanel);
+		mainPanel.add(loginPanel);
 
-			this.add(mainPanel);
-		}
-		else
-		{
-			this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-			// URL and JDBC PROPS
-			JPanel urlJDBCPanel = new JPanel();
-			urlJDBCPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-			urlJDBCPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("database_url_jdbc_props")));
-
-			// URL
-			urlJDBCPanel.add(getUrlPanel());
-
-			// DRIVER
-			urlJDBCPanel.add(getDriverPanel());
-
-			this.add(urlJDBCPanel);
-
-			// LOGIN
-			loginGui = new LoginConfigGui(false);
-			JPanel loginPanel = new JPanel();
-			loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config")));
-			loginPanel.add(loginGui);
-			this.add(loginPanel);
-		}
+		add(mainPanel, BorderLayout.CENTER);
 	}
 
 	private JPanel getDriverPanel()
 	{
-		JPanel panel = new JPanel();
-		panel.add(new JLabel(JMeterUtils.getResString("database_driver_class")));
-		driverField.setName(DRIVER);
-		panel.add(driverField);
-		return panel;
+        JPanel panel = new JPanel(new BorderLayout(5, 0));
+        JLabel label = new JLabel(JMeterUtils.getResString("database_driver_class"));
+        label.setLabelFor(driverField);
+        driverField.setName(DRIVER);
+        panel.add(label, BorderLayout.WEST);
+        panel.add(driverField, BorderLayout.CENTER);
+        return panel;
 	}
 
 	private JPanel getUrlPanel()
 	{
-		JPanel panel = new JPanel();
-		panel.add(new JLabel(JMeterUtils.getResString("database_url")));
+		JPanel panel = new JPanel(new BorderLayout(5, 0));
+		JLabel label = new JLabel(JMeterUtils.getResString("database_url"));
+        label.setLabelFor(urlField);
 		urlField.setName(URL);
-		panel.add(urlField);
+        panel.add(label, BorderLayout.WEST);
+		panel.add(urlField, BorderLayout.CENTER);
 		return panel;
 	}
 }

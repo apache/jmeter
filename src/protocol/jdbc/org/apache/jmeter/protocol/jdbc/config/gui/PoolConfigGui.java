@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.jdbc.config.gui;
+import java.awt.BorderLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
@@ -61,15 +62,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -85,8 +84,8 @@ public class PoolConfigGui extends AbstractConfigGui implements FocusListener
 	private static String MAXUSE = "maxuse";
 	private static String DEFAULT_MAX_USE = "50";
 	private static String DEFAULT_NUM_CONNECTIONS = "1";
-	private JTextField connField = new JTextField(5);
-	private JTextField maxUseField = new JTextField(5);
+	private JTextField connField;
+	private JTextField maxUseField;
 
 	private boolean displayName;
 
@@ -191,72 +190,56 @@ public class PoolConfigGui extends AbstractConfigGui implements FocusListener
 
 	private void init()
 	{
-		if(displayName)
-		{
-			this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setLayout(new BorderLayout(0, 5));
+        
+		if (displayName) {
+            setBorder(makeBorder());            
+            add(makeTitlePanel(), BorderLayout.NORTH);
+        }
 
-			// MAIN PANEL
-			JPanel mainPanel = new JPanel();
-			Border margin = new EmptyBorder(10, 10, 5, 10);
-			mainPanel.setBorder(margin);
-			mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+		VerticalPanel poolPanel = new VerticalPanel();
+		poolPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("database_conn_pool_props")));
 
-			// NAME
-			mainPanel.add(makeTitlePanel());
+		poolPanel.add(createConnPanel());
+		poolPanel.add(createMaxUsePanel());
 
-			// CONNECTION POOL
-			JPanel connPoolPanel = new JPanel();
-			connPoolPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-			connPoolPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("database_conn_pool_props")));
-
-			// NUMBER OF CONNECTIONS
-			connPoolPanel.add(createConnPanel());
-
-			// MAX USAGE
-			connPoolPanel.add(createMaxUsePanel());
-
-			mainPanel.add(connPoolPanel);
-
-			this.add(mainPanel);
-		}
-		else
-		{
-			this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-			// CONNECTION POOL
-			JPanel connPoolPanel = new JPanel();
-			connPoolPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-			connPoolPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("database_conn_pool_props")));
-
-			// NUMBER OF CONNECTIONS
-			connPoolPanel.add(createConnPanel());
-
-			// MAX USAGE
-			connPoolPanel.add(createMaxUsePanel());
-
-			this.add(connPoolPanel);
-		}
+        // The Center component will fill all available space.  Since poolPanel
+        // has a titled border, this means that the border would extend to the
+        // bottom of the frame, which is ugly.  So put the poolPanel in a
+        // second panel to fix this.
+        VerticalPanel mainPanel = new VerticalPanel();
+        mainPanel.add(poolPanel);
+                
+		add(mainPanel, BorderLayout.CENTER);
 	}
 
 	private JPanel createConnPanel()
 	{
-		JPanel panel = new JPanel();
-		panel.add(new JLabel(JMeterUtils.getResString("database_conn_pool_size")));
-		connField.setText(DEFAULT_NUM_CONNECTIONS);
+        connField = new JTextField(DEFAULT_NUM_CONNECTIONS, 5);
 		connField.setName(CONNECTIONS);
 		connField.addFocusListener(this);
-		panel.add(connField);
+
+        JLabel label = new JLabel(JMeterUtils.getResString("database_conn_pool_size"));
+        label.setLabelFor(connField);
+
+        JPanel panel = new JPanel(new BorderLayout(5, 0));
+        panel.add(label, BorderLayout.WEST);
+        panel.add(connField, BorderLayout.CENTER);
 		return panel;
 	}
 
 	private JPanel createMaxUsePanel()
 	{
-		JPanel panel = new JPanel();
-		panel.add(new JLabel(JMeterUtils.getResString("database_conn_pool_max_usage")));
-		maxUseField.setText(DEFAULT_MAX_USE);
+		maxUseField = new JTextField(DEFAULT_MAX_USE, 5);
 		maxUseField.setName(MAXUSE);
 		maxUseField.addFocusListener(this);
-		panel.add(maxUseField);
-		return panel;
+
+        JLabel label = new JLabel(JMeterUtils.getResString("database_conn_pool_max_usage"));
+        label.setLabelFor(maxUseField);
+
+        JPanel panel = new JPanel(new BorderLayout(5, 0));
+        panel.add(label, BorderLayout.WEST);
+        panel.add(maxUseField, BorderLayout.CENTER);
+        return panel;
 	}
 }
