@@ -60,7 +60,8 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.java.sampler.JavaSampler;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerClient;
-import org.apache.log4j.Category;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 
 /**
@@ -77,7 +78,7 @@ public class JavaConfig extends ConfigTestElement implements Serializable
 {
 
 	/** Logging  */
-	private static Category cat = Category.getInstance(JavaConfig.class);
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
 	
 	private transient JavaSamplerClient javaClient = null;
 

@@ -78,7 +78,8 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
-import org.apache.log4j.Category;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /****************************************
  * Allows the tester to view the textual response from sampling an Entry. This
@@ -107,8 +108,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 	protected JTree jTree;
 	protected int childIndex;
 
-	private static Category catClass =
-			Category.getInstance(ViewResultsFullVisualizer.class.getName());
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
 	/****************************************
 	 * !ToDo (Constructor description)
@@ -117,8 +117,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 	{
 		super();
 		init();
-		catClass.debug("Start : ViewResultsFullVisualizer1");
-		catClass.debug("End : ViewResultsFullVisualizer1");
+		log.debug("Start : ViewResultsFullVisualizer1");
+		log.debug("End : ViewResultsFullVisualizer1");
 	}
 
 	public void add(SampleResult res)
@@ -136,10 +136,10 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 	 ***************************************/
 	public void updateGui(SampleResult res)
 	{
-		catClass.debug("Start : updateGui1");
+		log.debug("Start : updateGui1");
 
-		if(catClass.isDebugEnabled())
-			catClass.debug("updateGui1 : sample result - " + res);
+		if(log.isDebugEnabled())
+			log.debug("updateGui1 : sample result - " + res);
 
 		DefaultMutableTreeNode currNode = new DefaultMutableTreeNode(res);
 		treeModel.insertNodeInto(currNode, root, root.getChildCount());
@@ -150,15 +150,15 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 			for(int i = 0;i < subResults.length;i++)
 			{
 				SampleResult child = subResults[i];
-				if(catClass.isDebugEnabled())
-					catClass.debug("updateGui1 : child sample result - " + child);
+				if(log.isDebugEnabled())
+					log.debug("updateGui1 : child sample result - " + child);
 
 				DefaultMutableTreeNode leafNode =
 						new DefaultMutableTreeNode(child);
 				treeModel.insertNodeInto(leafNode, currNode, leafIndex++);
 			}
 		}
-		catClass.debug("End : updateGui1");
+		log.debug("End : updateGui1");
 	}
 
 	/****************************************
@@ -166,10 +166,10 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 	 ***************************************/
 	public void clear()
 	{
-		catClass.debug("Start : clear1");
+		log.debug("Start : clear1");
 		int totalChild = root.getChildCount();
-		if(catClass.isDebugEnabled())
-			catClass.debug("clear1 : total child - " + totalChild);
+		if(log.isDebugEnabled())
+			log.debug("clear1 : total child - " + totalChild);
 
 		for(int i = 0; i < totalChild; i++)
 			// the child to be removed will always be 0 'cos as the nodes are removed
@@ -181,7 +181,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 		resultPanel.revalidate();
 		// reset the child index
 		childIndex = 0;
-		catClass.debug("End : clear1");
+		log.debug("End : clear1");
 	}
 
 	/****************************************
@@ -192,8 +192,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 	public String toString()
 	{
 		String desc = "Shows the text results of sampling in tree form";
-		if(catClass.isDebugEnabled())
-			catClass.debug("toString1 : Returning description - " + desc);
+		if(log.isDebugEnabled())
+			log.debug("toString1 : Returning description - " + desc);
 
 		return desc;
 	}
@@ -205,23 +205,23 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 	 ***************************************/
 	public void valueChanged(TreeSelectionEvent e)
 	{
-		catClass.debug("Start : valueChanged1");
+		log.debug("Start : valueChanged1");
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)jTree.getLastSelectedPathComponent();
-		if(catClass.isDebugEnabled())
-			catClass.debug("valueChanged : selected node - " + node);
+		if(log.isDebugEnabled())
+			log.debug("valueChanged : selected node - " + node);
 
 		if(node != null)
 		{
 			SampleResult res = (SampleResult)node.getUserObject();
-			if(catClass.isDebugEnabled())
-				catClass.debug("valueChanged1 : sample result - " + res);
+			if(log.isDebugEnabled())
+				log.debug("valueChanged1 : sample result - " + res);
 
 			if(res != null)
 			{
 				resultPanel.removeAll();
 				// load time label
 				JLabel loadTime = new JLabel();
-				catClass.debug("valueChanged1 : load time - " + res.getTime());
+				log.debug("valueChanged1 : load time - " + res.getTime());
 				loadTime.setText("Load time : " + res.getTime());
 				gbc.gridx = 0;
 				gbc.gridy = 0;
@@ -242,7 +242,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 				// response code label
 				JLabel httpResponseCode = new JLabel();
 				String responseCode = res.getResponseCode();
-				catClass.debug("valueChanged1 : response code - " + responseCode);
+				log.debug("valueChanged1 : response code - " + responseCode);
 				int responseLevel = 0;
 				if(responseCode != null)
 					try
@@ -272,7 +272,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 				// response message label
 				JLabel httpResponseMsg = new JLabel();
 										  String responseMsgStr = res.getResponseMessage();
-										  catClass.debug("valueChanged1 : response message - " + responseMsgStr);
+										  log.debug("valueChanged1 : response message - " + responseMsgStr);
 				httpResponseMsg.setText("HTTP response message : " +
 						responseMsgStr);
 				gbc.gridx = 0;
@@ -318,7 +318,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 				resultPanel.revalidate();
 			}
 		}
-		catClass.debug("End : valueChanged1");
+		log.debug("End : valueChanged1");
 	}
 
 	/****************************************
@@ -327,7 +327,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 	protected void init()
 	{
 		this.setLayout(new BorderLayout());
-		catClass.debug("Start : init1");
+		log.debug("Start : init1");
 		SampleResult rootSampleResult = new SampleResult();
 		rootSampleResult.setSampleLabel("Root");
 		root = new DefaultMutableTreeNode(rootSampleResult);
@@ -345,7 +345,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 				treePane, resultPane);
 		add(getFilePanel(),BorderLayout.NORTH);
 		add(treeSplitPane,BorderLayout.CENTER);
-		catClass.debug("End : init1");
+		log.debug("End : init1");
 	}
 }
 

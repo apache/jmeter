@@ -54,23 +54,27 @@
  */
  package org.apache.jmeter.visualizers;
 
-import java.io.*;
-import java.util.*;
-import java.net.*;
+import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Properties;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
-import javax.mail.*;
-import javax.mail.internet.*;
-import javax.swing.JOptionPane;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
-import org.apache.log4j.Category;
-
-import org.apache.jmeter.util.*;
-import org.apache.jmeter.gui.util.*;
-import org.apache.jmeter.samplers.*;
-import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 
 /**
@@ -104,7 +108,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 	private static final String FAILURE_LIMIT_KEY = "MailerModel.failureLimit";
 	private static final String SUCCESS_LIMIT_KEY = "MailerModel.successLimit";
 
-	private static Category logger = Category.getInstance("org.apache.jmeter.visualizers.MailerModel");
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
 	/** The listener for changes. */
 	ModelListener changeListener;
@@ -212,7 +216,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 						sample.getSampleLabel(), smtpHost);
 				}
 				catch (Exception e) {
-					log(e.toString());
+					log.error("Problem sending mail",e);
 				}
 				siteDown = true;
 				failureMsgSent = true;
@@ -231,7 +235,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 							sample.getSampleLabel(), smtpHost);
 				}
 				catch (Exception e) {
-					log(e.toString());
+					log.error("Problem sending mail",e);
 				}
 				siteDown = false;
 				successMsgSent = true;
@@ -324,15 +328,6 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 	public String getAttributesTitle()
 	{
 		return JMeterUtils.getResString("mailer_attributes_panel");
-	}
-
-	/**
-	* Method used to log a String.
-	*
-	* @param str String to be logged.
-	*/
-	private static void log(String str) {
-		logger.info(str);
 	}
 
 	//////////////////////////////////////////////////////////////
@@ -452,7 +447,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 			setSuccessLimit(Long.parseLong((String)element.getProperty(SUCCESS_LIMIT_KEY)));
 		}
 		catch (Exception e) {
-			log("Couldn't load MailerVisualizer...");
+			log.error("Couldn't load MailerVisualizer...");
 		}
 	}
 
