@@ -407,13 +407,17 @@ public final class HtmlParsingUtils implements Serializable
                 {
                     inForm = false;
                 }
-                try
+                // I can't see the point for this code being here. Looks like
+                // a really obscure performance optimization feature :-)
+                // Seriously: I'll comment it out... I just don't dare to
+                // remove it completely, in case there *is* a reason.
+                /*try
                 {
                     Thread.sleep(5000);
                 }
                 catch (Exception e)
                 {
-                }
+                }*/
             }
         }
         catch (Exception ex)
