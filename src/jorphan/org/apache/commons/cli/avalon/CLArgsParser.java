@@ -52,8 +52,8 @@ public final class CLArgsParser
     private static final int TOKEN_SEPARATOR = 0;
     private static final int TOKEN_STRING = 1;
 
-    private static final char[] ARG2_SEPARATORS =
-            new char[]{(char)0, '=', '-'};
+    private static final char[] ARG2_SEPARATORS = // Used to find the end of the second argument
+            new char[]{(char)0 };
 
     private static final char[] ARG_SEPARATORS =
             new char[]{(char)0, '='};
