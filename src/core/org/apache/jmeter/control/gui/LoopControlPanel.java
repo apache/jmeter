@@ -1,4 +1,5 @@
 package org.apache.jmeter.control.gui;
+
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,37 +15,63 @@ import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
+/**
+ * The user interface for a controller which specifies that its subcomponents
+ * should be executed some number of times in a loop.  This component can be
+ * used standalone or embedded into some other component.
+ * Copyright: 2000
  *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 
-public class LoopControlPanel extends AbstractControllerGui implements ActionListener
+public class LoopControlPanel
+    extends AbstractControllerGui
+    implements ActionListener
 {
+    /**
+     * A checkbox allowing the user to specify whether or not the controller
+     * should loop forever.
+     */
+    private JCheckBox infinite;
+    
+    /**
+     * A field allowing the user to specify the number of times the controller
+     * should loop. 
+     */
+    private JTextField loops;
 
-    JCheckBox infinite;
-    JTextField loops;
-
+   
+    /**
+     * Boolean indicating whether or not this component should display its
+     * name. If true, this is a standalone component. If false, this component
+     * is intended to be used as a subpanel for another component.
+     */
     private boolean displayName = true;
-    private static String INFINITE = "Infinite Field";
-    private static String LOOPS = "Loops Field";
+    
+    /** The name of the infinite checkbox component. */
+    private static final String INFINITE = "Infinite Field";
+    
+    /** The name of the loops field component. */
+    private static final String LOOPS = "Loops Field";
 
-    /****************************************
-     * !ToDo (Constructor description)
-     ***************************************/
+    /**
+     * Create a new LoopControlPanel as a standalone component.
+     */
     public LoopControlPanel()
     {
         this(true);
     }
 
-    /****************************************
-     * !ToDo (Constructor description)
+    /**
+     * Create a new LoopControlPanel as either a standalone or an embedded
+     * component.
      *
-     *@param displayName  !ToDo (Parameter description)
-     ***************************************/
+     * @param displayName  indicates whether or not this component should
+     *                     display its name.  If true, this is a standalone
+     *                     component.  If false, this component is intended
+     *                     to be used as a subpanel for another component.
+     */
     public LoopControlPanel(boolean displayName)
     {
         this.displayName = displayName;
@@ -52,11 +79,14 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
         setState(1);
     }
 
-    /****************************************
-     * !ToDo (Method description)
+    /**
+     * A newly created component can be initialized with the contents of
+     * a Test Element object by calling this method.  The component is
+     * responsible for querying the Test Element object for the
+     * relevant information to display in its GUI.
      *
-     *@param element  !ToDo (Parameter description)
-     ***************************************/
+     * @param element the TestElement to configure 
+     */
     public void configure(TestElement element)
     {
         super.configure(element);
@@ -70,11 +100,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
         }
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
+    /* Implements JMeterGUIComponent.createTestElement() */
     public TestElement createTestElement()
     {
         LoopController lc = new LoopController();
@@ -82,10 +108,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
         return lc;
     }
 
-    /**
-         * Modifies a given TestElement to mirror the data in the gui components.
-         * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-         */
+    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
     public void modifyTestElement(TestElement lc)
     {
         configureTestElement(lc);
@@ -102,11 +125,12 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
         }
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param event  !ToDo (Parameter description)
-     ***************************************/
+    /**
+     * Invoked when an action occurs.  This implementation assumes that the
+     * target component is the infinite loops checkbox.
+     * 
+     * @param event the event that has occurred
+     */
     public void actionPerformed(ActionEvent event)
     {
         if (infinite.isSelected())
@@ -121,16 +145,15 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
         }
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
+    /* Implements JMeterGUIComponent.getStaticLabel() */
     public String getStaticLabel()
     {
         return JMeterUtils.getResString("loop_controller_title");
     }
 
+    /**
+     * Initialize the GUI components and layout for this component.
+     */
     private void init()
     {
         // The Loop Controller panel can be displayed standalone or inside
@@ -150,21 +173,27 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
             mainPanel.add(createLoopCountPanel(), BorderLayout.NORTH);
             add(mainPanel, BorderLayout.CENTER);
         }
-
-        // Embedded
         else
         {
+            // Embedded
             setLayout(new BorderLayout());
             add(createLoopCountPanel(), BorderLayout.NORTH);
         }
     }
 
+    /**
+     * Create a GUI panel containing the components related to the number of
+     * loops which should be executed.
+     *  
+     * @return a GUI panel containing the loop count components
+     */
     private JPanel createLoopCountPanel()
     {
         JPanel loopPanel = new JPanel(new BorderLayout(5, 0));
 
         // LOOP LABEL
-        JLabel loopsLabel = new JLabel(JMeterUtils.getResString("iterator_num"));
+        JLabel loopsLabel =
+            new JLabel(JMeterUtils.getResString("iterator_num"));
         loopPanel.add(loopsLabel, BorderLayout.WEST);
 
         // TEXT FIELD
@@ -179,22 +208,46 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
         infinite.addActionListener(this);
         loopPanel.add(infinite, BorderLayout.EAST);
 
-        loopPanel.add(Box.createHorizontalStrut(loopsLabel.getPreferredSize().width + loops.getPreferredSize().width + infinite.getPreferredSize().width), BorderLayout.NORTH);
+        loopPanel.add(
+            Box.createHorizontalStrut(
+                loopsLabel.getPreferredSize().width
+                    + loops.getPreferredSize().width
+                    + infinite.getPreferredSize().width),
+            BorderLayout.NORTH);
 
         return loopPanel;
     }
     
+    /**
+     * Set the number of loops which should be reflected in the GUI.  The
+     * loopCount parameter should contain the String representation of an
+     * integer.  This integer will be treated as the number of loops.  If this
+     * integer is less than 0, the number of loops will be assumed to be
+     * infinity.
+     * 
+     * @param loopCount the String representation of the number of loops
+     */
     private void setState(String loopCount)
     {
-        if (loopCount.startsWith("-")) {
+        if (loopCount.startsWith("-"))
+        {
             setState(-1);
-        } else {
+        }
+        else
+        {
             loops.setText(loopCount);
             infinite.setSelected(false);
             loops.setEnabled(true);
         }
     }
 
+    /**
+     * Set the number of loops which should be reflected in the GUI.  If the
+     * loopCount is less than 0, the number of loops will be assumed to be
+     * infinity.
+     * 
+     * @param loopCount the number of loops
+     */
     private void setState(int loopCount)
     {
         if (loopCount <= -1)

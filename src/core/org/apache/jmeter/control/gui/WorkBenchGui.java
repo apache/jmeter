@@ -60,115 +60,112 @@ import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
-import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
+/**
+ * JMeter GUI component representing a work bench where users can make
+ * preparations for the test plan.
  *
- *@author    Kevin Hammond
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
+ * @author    Kevin Hammond
+ * @version   $Revision$
+ */
 public class WorkBenchGui extends AbstractJMeterGuiComponent
 {
-    private JMeterTreeNode node;
-
-
-        /****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public WorkBenchGui()
-	{
-		super();
-		init();
-	}
-
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public Collection getMenuCategories()
-	{
-		return null;
-	}
-
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public TestElement createTestElement()
-	{
-		WorkBench wb = new WorkBench();
-		modifyTestElement(wb);
-		return wb;
-	}
+    /**
+     * Create a new WorkbenchGui.
+     */
+    public WorkBenchGui()
+    {
+        super();
+        init();
+    }
 
     /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     * This is the list of menu categories this gui component will be available
+     * under. This implementation returns null, since the WorkBench appears at
+     * the top level of the tree and cannot be added elsewhere.
+     *
+     * @return   a Collection of Strings, where each element is one of the
+     *           constants defined in MenuFactory
      */
+    public Collection getMenuCategories()
+    {
+        return null;
+    }
+
+    /* Implements JMeterGUIComponent.createTestElement() */
+    public TestElement createTestElement()
+    {
+        WorkBench wb = new WorkBench();
+        modifyTestElement(wb);
+        return wb;
+    }
+
+    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
     public void modifyTestElement(TestElement wb)
     {
         super.configureTestElement(wb);
     }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param element  !ToDo (Parameter description)
-	 ***************************************/
-	public void configure(TestElement element)
-	{
-		getNamePanel().configure(element);
-	}
-
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public JPopupMenu createPopupMenu()
-	{
-		JPopupMenu menu = new JPopupMenu();
-		JMenu addMenu = MenuFactory.makeMenus(new String[]{MenuFactory.CONTROLLERS,
-				MenuFactory.SAMPLERS, MenuFactory.CONFIG_ELEMENTS,
-				MenuFactory.NON_TEST_ELEMENTS}, JMeterUtils.getResString("Add"),
-				"Add");
-		menu.add(addMenu);
-		MenuFactory.addEditMenu(menu, false);
-		MenuFactory.addFileMenu(menu);
-		return menu;
-	}
-
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("workbench_title");
-	}
-
-	private void init()
-	{
-		setLayout(new BorderLayout());
-        setBorder(makeBorder());
-        
-        add(makeTitlePanel(), BorderLayout.NORTH);
-	}
-
-
-    public void setNode(JMeterTreeNode node)
+    /**
+     * A newly created component can be initialized with the contents of
+     * a Test Element object by calling this method.  The component is
+     * responsible for querying the Test Element object for the
+     * relevant information to display in its GUI.
+     *
+     * @param element the TestElement to configure 
+     */
+    public void configure(TestElement element)
     {
-        this.node = node;
-        getNamePanel().setNode(node);
+        getNamePanel().configure(element);
+    }
+
+    /**
+     * When a user right-clicks on the component in the test tree, or
+     * selects the edit menu when the component is selected, the 
+     * component will be asked to return a JPopupMenu that provides
+     * all the options available to the user from this component.
+     * <p>
+     * The WorkBench will return a popup menu allowing you to add Controllers,
+     * Samplers, Configuration Elements, and Non-test Elements.
+     * 
+     * @return   a JPopupMenu appropriate for the component.
+     */
+    public JPopupMenu createPopupMenu()
+    {
+        JPopupMenu menu = new JPopupMenu();
+        JMenu addMenu =
+            MenuFactory.makeMenus(
+                new String[] {
+                    MenuFactory.CONTROLLERS,
+                    MenuFactory.SAMPLERS,
+                    MenuFactory.CONFIG_ELEMENTS,
+                    MenuFactory.NON_TEST_ELEMENTS },
+                JMeterUtils.getResString("Add"),
+                "Add");
+        menu.add(addMenu);
+        MenuFactory.addEditMenu(menu, false);
+        MenuFactory.addFileMenu(menu);
+        return menu;
+    }
+
+    /* Implements JMeterGUIComponent.getStaticLabel() */
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("workbench_title");
+    }
+
+    /**
+     * Initialize the components and layout of this component.
+     */
+    private void init()
+    {
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
+
+        add(makeTitlePanel(), BorderLayout.NORTH);
     }
 }
