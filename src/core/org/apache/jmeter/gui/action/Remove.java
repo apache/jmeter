@@ -105,9 +105,7 @@ public class Remove implements Command
             removeNode(nodes[i]);
         }
 		guiPackage.getTreeListener().getJTree().setSelectionPath(newTreePath);
-
-        //guiPackage.getTreeListener().getJTree().setSelectionRow(1);
-
+		guiPackage.updateCurrentGui();
     }
 
     public static void removeNode(JMeterTreeNode node)

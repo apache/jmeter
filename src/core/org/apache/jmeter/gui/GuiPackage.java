@@ -419,14 +419,10 @@ public final class GuiPackage implements LocaleChangeListener
      */
     public void updateCurrentGui()
     {
-        // TODO: Would it be possible to get the current node from the
-        // treeListener instead of keeping it as a separate variable?
-        if (currentNode != null)
-        {
-            TestElement element = currentNode.createTestElement();
-            JMeterGUIComponent comp = getGui(element);
-            comp.configure(element);
-        }
+        currentNode= treeListener.getCurrentNode();
+		TestElement element = currentNode.createTestElement();
+		JMeterGUIComponent comp = getGui(element);
+		comp.configure(element);
     }
 
     /**
