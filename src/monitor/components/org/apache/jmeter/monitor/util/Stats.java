@@ -16,8 +16,8 @@
  */
 package org.apache.jmeter.monitor.util;
 
-import javax.xml.bind.*;
-import org.apache.jorphan.tomcat.manager.*;
+import org.apache.jmeter.monitor.model.Connector;
+import org.apache.jmeter.monitor.model.Status;
 
 /**
  * 
@@ -90,7 +90,7 @@ public class Stats
 	 * <li> none of the above is dead
 	 * </ol>
 	 * @param stat
-	 * @return status
+	 * @return
 	 */
 	public static int calculateStatus(Status stat){
 		if (stat != null){
@@ -151,27 +151,4 @@ public class Stats
 		return load;
 	}
 	
-	/**
-	 * Simple unit test to make sure it works correctly.
-	 * Will write a JUnit test later for this.
-	 * @param args
-	 */
-    public static void main(String[] args)
-    {
-    	try {
-			JAXBContext jxbc = new ObjectFactory();
-				// ObjectFactory.newInstance("org.apache.jorphan.tomcat.manager");
-			Unmarshaller mar = jxbc.createUnmarshaller();
-			Object ld = mar.unmarshal(new java.io.File("status3.xml"));
-			System.out.println("successfully unmarshalled sample status");
-			if (ld instanceof Status){
-				System.out.println("status is " + calculateStatus((Status)ld));
-				System.out.println("load is " + calculateLoad((Status)ld));
-				System.out.println("mem load is " + calculateMemoryLoad((Status)ld));
-				System.out.println("th load is " + calculateThreadLoad((Status)ld));
-			}
-    	} catch (JAXBException e){
-    		e.printStackTrace();
-    	}
-    }
 }
