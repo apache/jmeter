@@ -144,7 +144,7 @@ public class FileServer
      * @param basedir
      * @return
      */
-    public File getRandomFile(String basedir){
+    public File getRandomFile(String basedir, String[] extensions){
     	File input = null;
 		if (basedir != null)
 		{
@@ -153,7 +153,7 @@ public class FileServer
 			{
 				File[] files =
 					src.listFiles(
-						new JMeterFileFilter(new String[] { ".txt",".obj" }));
+						new JMeterFileFilter(extensions));
 				int count = files.length;
 				input = files[random.nextInt(count)];
 			}
