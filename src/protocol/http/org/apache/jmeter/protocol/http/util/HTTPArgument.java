@@ -55,6 +55,7 @@
 package org.apache.jmeter.protocol.http.util;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.LinkedList;
 import java.util.List;
@@ -132,8 +133,17 @@ public class HTTPArgument extends Argument implements Serializable
         setAlwaysEncoded(true);
         if (alreadyEncoded)
         {
-            name = URLDecoder.decode(name);
-            value = URLDecoder.decode(value.toString());
+            try
+            {
+                name = URLDecoder.decode(name, "UTF-8");
+                value = URLDecoder.decode(value.toString(), "UTF-8");
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                // UTF-8 unsupported? You must be joking!
+                log.error("UTF-8 encoding not supported!");
+                throw new Error(e);
+            }
         }
         setName(name);
         setValue(value);
