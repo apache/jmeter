@@ -64,7 +64,7 @@ import junit.framework.TestCase;
 
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.control.gui.RecordController;
+import org.apache.jmeter.protocol.http.control.gui.RecordController;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.functions.ValueReplacer;
 import org.apache.jmeter.gui.GuiPackage;
