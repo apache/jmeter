@@ -7,10 +7,7 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
 public class DisabledComponentRemover implements HashTreeTraverser
 {
@@ -22,17 +19,11 @@ public class DisabledComponentRemover implements HashTreeTraverser
         this.tree = tree;
     }
 
-    /**
-     * @see org.apache.jorphan.collections.HashTreeTraverser#addNode(java.lang.Object, org.apache.jorphan.collections.HashTree)
-     */
     public void addNode(Object node, HashTree subTree)
     {
         stack.addLast(node);
     }
 
-    /**
-     * @see org.apache.jorphan.collections.HashTreeTraverser#subtractNode()
-     */
     public void subtractNode()
     {
         TestElement lastNode = (TestElement)stack.removeLast();
@@ -42,10 +33,7 @@ public class DisabledComponentRemover implements HashTreeTraverser
         }
     }
 
-    /**
-     * @see org.apache.jorphan.collections.HashTreeTraverser#processPath()
-     */
     public void processPath()
-    {}
-
+    {
+    }
 }

@@ -1,8 +1,5 @@
 /*
  * Created on May 4, 2003
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
  */
 package org.apache.jmeter.engine.util;
 
@@ -15,13 +12,13 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 /**
  * @author ano ano
  *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * @version $Revision$
  */
 public class ReplaceStringWithFunctions extends AbstractTransformer
 {
-    
-    public ReplaceStringWithFunctions(CompoundVariable masterFunction,Map variables)
+    public ReplaceStringWithFunctions(
+        CompoundVariable masterFunction,
+        Map variables)
         {
             super();
             setMasterFunction(masterFunction);
@@ -29,16 +26,20 @@ public class ReplaceStringWithFunctions extends AbstractTransformer
         }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.engine.util.ValueTransformer#transformValue(org.apache.jmeter.testelement.property.JMeterProperty)
+     * @see ValueTransformer#transformValue(JMeterProperty)
      */
-    public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException
+    public JMeterProperty transformValue(JMeterProperty prop)
+        throws InvalidVariableException
     {
         JMeterProperty newValue = prop;
         getMasterFunction().clear();
         getMasterFunction().setParameters(prop.getStringValue());
         if (getMasterFunction().hasFunction())
         {
-            newValue = new FunctionProperty(prop.getName(), getMasterFunction().getFunction());
+            newValue =
+                new FunctionProperty(
+                    prop.getName(),
+                    getMasterFunction().getFunction());
         }
         return newValue;
     }

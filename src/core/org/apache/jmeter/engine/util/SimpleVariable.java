@@ -8,55 +8,55 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
-public class SimpleVariable {
+public class SimpleVariable
+{
 
-	private static final String KEY = "__unknownFunction";
-	private Map varMap = new HashMap();
-	private String name;
-	
-	public SimpleVariable(String name)
-	{
-		this.name = name;
-	}
-	
-	public SimpleVariable()
-	{
-		this.name = "";
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
+    private static final String KEY = "__unknownFunction";
+    private Map varMap = new HashMap();
+    private String name;
 
-	/**
-	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-	 */
-	public String toString()
-	{
-		String ret = null;
-		JMeterVariables vars = getVariables();
-		
-		if ( vars != null )
-			ret = vars.get(name);
-		if( ret == null)
-			return "${"+name+"}";
+    public SimpleVariable(String name)
+    {
+        this.name = name;
+    }
 
-		return ret;
-	}
-	
-	private JMeterVariables getVariables()
-	{
-		JMeterContext context = JMeterContextService.getContext();
-		return context.getVariables();
-	}
+    public SimpleVariable()
+    {
+        this.name = "";
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    /**
+     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
+     */
+    public String toString()
+    {
+        String ret = null;
+        JMeterVariables vars = getVariables();
+
+        if (vars != null)
+            ret = vars.get(name);
+        if (ret == null)
+            return "${" + name + "}";
+
+        return ret;
+    }
+
+    private JMeterVariables getVariables()
+    {
+        JMeterContext context = JMeterContextService.getContext();
+        return context.getVariables();
+    }
 
 }

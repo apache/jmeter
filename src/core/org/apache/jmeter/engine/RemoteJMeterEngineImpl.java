@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.engine;
+
 import java.net.InetAddress;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -62,108 +63,88 @@ import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
 
-/************************************************************
- *  Description of the Class
- *
- *@author     default
- *@created    March 13, 2001
- ***********************************************************/
+/**
+ * @version $Revision$
+ */
 public class RemoteJMeterEngineImpl
-		 extends java.rmi.server.UnicastRemoteObject
-		 implements RemoteJMeterEngine
+    extends java.rmi.server.UnicastRemoteObject
+    implements RemoteJMeterEngine
 {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter.engine");
-	JMeterEngine backingEngine;
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
+    JMeterEngine backingEngine;
 
-	/************************************************************
-	 *  !ToDo (Constructor description)
-	 *
-	 *@exception  RemoteException  Description of Exception
-	 ***********************************************************/
-	public RemoteJMeterEngineImpl() throws RemoteException
-	{
-		try
-		{
-			backingEngine = new StandardJMeterEngine(InetAddress.getLocalHost().getHostName());
-			Naming.rebind("JMeterEngine", this);
-		}
-		catch(Exception ex)
-		{
-			log.error("rmiregistry needs to be running to start JMeter in server mode",ex);
-		}
-	}
-	
-	public void setHost(String host)
-	{
+    public RemoteJMeterEngineImpl() throws RemoteException
+    {
+        try
+        {
+            backingEngine =
+                new StandardJMeterEngine(
+                    InetAddress.getLocalHost().getHostName());
+            Naming.rebind("JMeterEngine", this);
+        }
+        catch (Exception ex)
+        {
+            log.error(
+                "rmiregistry needs to be running to start JMeter in server " +
+                "mode",
+                ex);
+        }
+    }
+
+    public void setHost(String host)
+    {
         log.warn("received host");
-		backingEngine.setHost(host);
-	}
+        backingEngine.setHost(host);
+    }
 
-	/************************************************************
-	 *  Adds a feature to the ThreadGroup attribute of the RemoteJMeterEngineImpl
-	 *  object
-	 *
-	 *@param  tGroup               The feature to be added to the ThreadGroup
-	 *      attribute
-	 *@exception  RemoteException  Description of Exception
-	 ***********************************************************/
-	public void configure(HashTree testTree) throws RemoteException
-	{
+    /**
+     * Adds a feature to the ThreadGroup attribute of the RemoteJMeterEngineImpl
+     * object.
+     *
+     * @param  tGroup the feature to be added to the ThreadGroup attribute
+     */
+    public void configure(HashTree testTree) throws RemoteException
+    {
         log.warn("received test tree");
-		backingEngine.configure(testTree);
-	}
+        backingEngine.configure(testTree);
+    }
 
-	/************************************************************
-	 *  Description of the Method
-	 *
-	 *@exception  RemoteException  Description of Exception
-	 ***********************************************************/
-	public void runTest() throws RemoteException,JMeterEngineException
-	{
+    public void runTest() throws RemoteException, JMeterEngineException
+    {
         log.warn("running test");
-		backingEngine.runTest();
-	}
+        backingEngine.runTest();
+    }
 
-	/************************************************************
-	 *  Description of the Method
-	 *
-	 *@exception  RemoteException  Description of Exception
-	 ***********************************************************/
-	public void reset() throws RemoteException
-	{
-		backingEngine.reset();
-	}
+    public void reset() throws RemoteException
+    {
+        backingEngine.reset();
+    }
 
-	/************************************************************
-	 *  Description of the Method
-	 *
-	 *@exception  RemoteException  Description of Exception
-	 ***********************************************************/
-	public void stopTest() throws RemoteException
-	{
-		backingEngine.stopTest();
-	}
+    public void stopTest() throws RemoteException
+    {
+        backingEngine.stopTest();
+    }
 
-	/************************************************************
-	 *  The main program for the RemoteJMeterEngineImpl class
-	 *
-	 *@param  args  The command line arguments
-	 ***********************************************************/
-	public static void main(String[] args)
-	{
-		try
-		{
-			RemoteJMeterEngine engine = new RemoteJMeterEngineImpl();
-			while(true)
-			{
-				Thread.sleep(Long.MAX_VALUE);
-			}
-		}
-		catch(Exception ex)
-		{
-			log.error("",ex);
-		}
+    /**
+     * The main program for the RemoteJMeterEngineImpl class.
+     *
+     * @param  args  the command line arguments
+     */
+    public static void main(String[] args)
+    {
+        try
+        {
+            RemoteJMeterEngine engine = new RemoteJMeterEngineImpl();
+            while (true)
+            {
+                Thread.sleep(Long.MAX_VALUE);
+            }
+        }
+        catch (Exception ex)
+        {
+            log.error("", ex);
+        }
 
-	}
+    }
 }
