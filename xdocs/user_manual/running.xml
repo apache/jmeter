@@ -6,8 +6,6 @@
   </properties>
 <body>
 <section name="Running a TestPlan">
-
-<h2>Running a TestPlan</h2>:
 <p>Once you have a TestPlan configured the way you want it, running it is as simple
 as selecting Run->Start from JMeter's menu.  To stop, choose Run->Stop from the menu.
 </p>

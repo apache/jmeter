@@ -5,32 +5,9 @@
 	 <title>Using JMeter</title>
   </properties>
 <body>
-<section name="Using JMeter">
+<section name="Overview">
 
-<h2>Using JMeter effectively consists of the following activities</h2>:
-<UL>
-	<li><a href="#overview">Overview</a></li>
-	<li><a HREF="threadgroups.html">Creating ThreadGroups</a></li>
-	<li><a HREF="test_samples.html">Creating Test Samples</a></li>
-	<li><a HREF="logical_controllers.html">Creating Flow Logic Controls</a></li>
-	<li><a HREF="visualizers.html">Using Visualizers</a></li>
-	<li><a HREF="timers.html">Using Timers</a></li>
-	<li><a HREF="running.html">Running the test script</a></li>
-	<li><a href="saving.html">Saving test script elements</a></li>
-	<li><a href="rmi.html">Running JMeter over RMI</a></li>
-        <li><a href="proxy_server.html">Recording browser activity with JMeter</a></li>
-
-</UL>
-
-<p>
-<i>
-Throughout this documentation, examples will most often be given in terms of testing
-web applications, although JMeter is capable of testing most any type of server-client
-application.
-</i>
-</p>
-<a NAME="overview"></a>
-<H2>Overview</H2>
+<img src="/images/screenshots/base_ui.gif" width="594" height="402"/>
 <p>
 JMeter 1.6 has a new UI layout.  The window is divided into two sections.  On the left is
 a tree which represents a test configuration.  The tree represents both
@@ -43,6 +20,7 @@ the main display allowing you to enter your test data.
 When a visualizer is selected the main display will contain the
 visualizer's view of the current test.</p>
 
+<img src="/images/screenshots/adding_threadgroup.gif" width="273" height="189" align="right"/>
 <table border="5"><tr><td><b>Most functions in the UI are available from popup menus
 that appear when you right-click on an element in the test tree.</b></td></tr></table>
 <p>
@@ -92,15 +70,6 @@ data in the hierarchical tree).  All elements in the tree are added up - meaning
 parent objects until a single TestPlan object is created.  A JMeterEngine is then created, and the TestPlan sends
 all of its ThreadGroups to the engine.  The engine creates threads, and each thread
 iterates through the test cases.
-</p>
-<p>
-When a test is run, every element in the tree receives every element that
-is above it in the test configuration.  That is a Timer inserted into the
-test configuration tree at the highest level will apply to every element
-that lies below it.  This is why it makes sense to add a URL Config Element to the
-ThreadGroup in addition to a Web Test Controller with multiple test samples.  If the
-top level config element has only a host name, the host name will be applied to all
-URL test samples that are used within the ThreadGroup.
 </p>
 
 </section>

@@ -5,9 +5,7 @@
 	 <title>Saving Test Elements</title>
   </properties>
 <body>
-<section name="Saving">
-
-<h2>Saving Test Elements</h2>:
+<section name="Saving Test Elements">
 <p>Most test elements can be saved to file in XML format.  To so, right-click on the
 element you wish to save, and select "save".  Choose a file, and you're done.  The
 element you selected, plus all it's child elements will be saved.

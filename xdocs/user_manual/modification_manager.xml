@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+	 <author email="mstover1@apache.org">Michael Stover, et al.</author>
+	 <title>Modification Manager</title>
+  </properties>
+<body>
+<section name="Modification Manager">
+<p>
+The Modification Manager can be used to introduce dynamic data into a test script.  As test samples pass through the
+Modification Manager, it has the opportunity to modify them.  The Modification Manager holds Modifier elements which it
+ uses to control how it modifies test samples.  If no Modifier elements are added, the Modification Manager has no effect.
+</p>
+<p>
+There are two types of Modifiers.  Regular Modifiers (currently there aren't any implemented Modifiers), and response
+based Modifiers (there is one HTML response based Modifier).
+</p>
+</section>
+<section name="Response Based Modifier: HTML Link/Form Modifier">
+<p>
+This modifier parses HTML response from the server and extracts
+links and forms.  A URL test sample that passes through this modifier will be examined to
+see if it &quot;matches&quot; any of the links or forms extracted
+from the immediately previous response.  It would then replace the values in the URL
+test sample with appropriate values from the matching link or form.  Perl-type regular
+expressions are used to find matches.
+</p>
+<p>
+Consider a simple example: let's say you wanted JMeter to &quot;spider&quot; through your site,
+hitting link after link parsed from the HTML returned from your server (this is not
+actually the most useful thing to do, but it serves as a good example).  You would create
+a Modification Manager, and add the &quot;HTML Link Parser&quot; to it.  Then, create a
+Web Test controller, and set the domain to &quot;.*&quot;, and the path likewise. This will
+cause your test sample to match with any link found on the returned pages.  If you wanted to
+restrict the spidering to a particular domain, then change the domain value
+to the one you want.  Then, only links to that domain will be followed.
+</p>
+<p>
+A more useful example: given a web polling application, you might have a page with
+several poll options as radio buttons for the user to select.  Let's say the values
+of the poll options are very dynamic - maybe user generated.  If you wanted JMeter to
+test the poll, you could either create test samples with hardcoded values chosen, or you
+could let the HTML Link Parser parse the form, and insert a random poll option into
+your URL test sample.  To do this, follow the above example, except, when configuring
+your Web Test controller's URL options, be sure to choose &quot;POST&quot; as the
+method.  Put in hard-coded values for the domain, path, and any additional form parameters.
+Then, for the actual radio button parameter, put in the name (let's say it's called &quot;poll_choice&quot;),
+and then &quot;.*&quot; for the value of that parameter.  When the modifier examines
+this URL test sample, it will find that it &quot;matches&quot; the poll form (and
+it shouldn't match any other form, given that you've specified all the other aspects of
+the URL test sample), and it will replace your form parameters with the matching
+parameters from the form.  Since the regular expression &quot;.*&quot; will match with
+anything, the modifier will probably have a list of radio buttons to choose from.  It
+will choose at random, and replace the value in your URL test sample.  Each time through
+the test, a new random value will be chosen.</p>
+<p>
+One important thing to remember is that you must create a test sample immediately
+prior that will return an HTML page with the links and forms that are relevant to
+your dynamic test sample.
+</p>
+</section>
+<section name="Example test tree">
+<img src="/images/screenshots/modification.gif" width="808" height="626"/>
+</section>
+</body>
+</document>
