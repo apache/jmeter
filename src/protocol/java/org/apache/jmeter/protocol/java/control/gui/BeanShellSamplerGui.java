@@ -60,8 +60,6 @@
 package org.apache.jmeter.protocol.java.control.gui;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.JLabel;
@@ -79,8 +77,14 @@ import org.apache.jmeter.util.JMeterUtils;
  * @author sebb AT apache DOT org
  * @version   $Revision$ $Date$
  */
-public class BeanShellSamplerGui extends AbstractSamplerGui implements ActionListener
+public class BeanShellSamplerGui extends AbstractSamplerGui
 {
+	
+	private JTextField filename;// script file name (if present)
+	private JTextField parameters;// parameters to pass to script file (or script)
+	private JTextArea scriptField;// script area
+
+
 	public BeanShellSamplerGui()
     {
         init();
@@ -90,6 +94,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui implements ActionLis
     {
     	scriptField.setText(element.getProperty(BeanShellSampler.SCRIPT).toString());
 		filename.setText(element.getProperty(BeanShellSampler.FILENAME).toString());
+		parameters.setText(element.getProperty(BeanShellSampler.PARAMETERS).toString());
         super.configure(element);
     }
 
@@ -110,13 +115,14 @@ public class BeanShellSamplerGui extends AbstractSamplerGui implements ActionLis
         this.configureTestElement(te);
 		te.setProperty(BeanShellSampler.SCRIPT, scriptField.getText());
 		te.setProperty(BeanShellSampler.FILENAME, filename.getText());
+		te.setProperty(BeanShellSampler.PARAMETERS, parameters.getText());
     }
 
     public String getStaticLabel()
     {
         return JMeterUtils.getResString("bsh_sampler_title") + " (BETA CODE)";
     }
-    private JTextField filename;
+
     
 
 	private JPanel createFilenamePanel()//TODO ought to be a FileChooser ...
@@ -133,6 +139,19 @@ public class BeanShellSamplerGui extends AbstractSamplerGui implements ActionLis
 		return filenamePanel;
 	}
 
+    private JPanel createParameterPanel()
+    {
+    	JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_parameters"));
+
+		parameters = new JTextField(10);
+		parameters.setName(BeanShellSampler.PARAMETERS);
+		label.setLabelFor(parameters);
+
+    	JPanel parameterPanel = new JPanel(new BorderLayout(5,0));
+    	parameterPanel.add(label,BorderLayout.WEST);
+		parameterPanel.add(parameters, BorderLayout.CENTER);
+    	return parameterPanel;
+    }
 
     private void init()
     {
@@ -141,10 +160,11 @@ public class BeanShellSamplerGui extends AbstractSamplerGui implements ActionLis
 
 		Box box = Box.createVerticalBox();
 		box.add(makeTitlePanel());
+		box.add(createParameterPanel());
 		box.add(createFilenamePanel());
 		add(box,BorderLayout.NORTH);
 
-		JPanel panel = createSqlPanel();
+		JPanel panel = createScriptPanel();
 		add(panel, BorderLayout.CENTER);
 		// Don't let the input field shrink too much
 		add(
@@ -152,9 +172,8 @@ public class BeanShellSamplerGui extends AbstractSamplerGui implements ActionLis
 			BorderLayout.WEST);
     }
 
-	private JTextArea scriptField;
 
-	private JPanel createSqlPanel()
+	private JPanel createScriptPanel()
 	{
 		scriptField = new JTextArea();
 		scriptField.setRows(4);
@@ -169,13 +188,4 @@ public class BeanShellSamplerGui extends AbstractSamplerGui implements ActionLis
 		panel.add(new JScrollPane(scriptField), BorderLayout.CENTER);
 		return panel;
 	}
-
-    /* (non-Javadoc)
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-     */
-    public void actionPerformed(ActionEvent e)
-    {
-        // TODO Auto-generated method stub
-        
-    }
 }
