@@ -74,7 +74,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.jorphan.collections.Data;
+import org.apache.jorphan.collections.Data;
 /************************************************************
  *  A sampler which understands JDBC database requests
  *

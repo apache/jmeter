@@ -81,7 +81,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.jorphan.gui.JLabeledTextArea;
+import org.apache.jorphan.gui.JLabeledTextArea;
 /****************************************
  * Allows the tester to view the textual response from sampling an Entry. This
  * also allows to "single step through" the sampling process via a nice

@@ -71,7 +71,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.jorphan.gui.layout.VerticalLayout;
+import org.apache.jorphan.gui.layout.VerticalLayout;
 /****************************************
  * This class implements a statistical analyser that plots the accumulated time
  * taken to load each set of pages. The number of plots is equivalent to the

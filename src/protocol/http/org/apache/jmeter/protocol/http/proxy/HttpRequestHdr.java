@@ -21,7 +21,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Logger;
-import org.jorphan.logging.LoggingManager;
+import org.apache.jorphan.logging.LoggingManager;
 //
 // Class:     HttpRequestHdr
 // Abstract:  The headers of the client HTTP request.

@@ -87,7 +87,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.jorphan.gui.layout.VerticalLayout;
+import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Allows the user to specify if she needs cookie services, and give parameters

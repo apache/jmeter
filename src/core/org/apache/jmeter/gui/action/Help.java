@@ -13,8 +13,8 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.swing.HtmlPane;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Logger;
-import org.jorphan.gui.ComponentUtil;
-import org.jorphan.logging.LoggingManager;
+import org.apache.jorphan.gui.ComponentUtil;
+import org.apache.jorphan.logging.LoggingManager;
 /**
  * @author Administrator
  *

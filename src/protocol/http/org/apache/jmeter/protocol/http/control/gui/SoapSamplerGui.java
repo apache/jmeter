@@ -13,9 +13,9 @@ import org.apache.jmeter.protocol.http.sampler.SoapSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.jorphan.gui.JLabeledTextArea;
-import org.jorphan.gui.JLabeledTextField;
-import org.jorphan.gui.layout.VerticalLayout;
+import org.apache.jorphan.gui.JLabeledTextArea;
+import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
  * @author mstover

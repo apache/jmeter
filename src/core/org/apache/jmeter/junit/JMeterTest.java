@@ -17,8 +17,8 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Logger;
-import org.jorphan.logging.LoggingManager;
-import org.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.reflect.ClassFinder;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache

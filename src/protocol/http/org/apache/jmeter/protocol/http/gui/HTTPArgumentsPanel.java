@@ -8,7 +8,7 @@ import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.jorphan.collections.Data;
+import org.apache.jorphan.collections.Data;
 
 /**
  * @author Administrator

@@ -57,7 +57,7 @@ package org.apache.jmeter.engine;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import org.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.HashTree;
 
 /************************************************************
  *  Description of the Interface

@@ -14,8 +14,8 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.jorphan.collections.HashTree;
-import org.jorphan.collections.HashTreeTraverser;
+import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.HashTreeTraverser;
 
 /**
  * @author mstover

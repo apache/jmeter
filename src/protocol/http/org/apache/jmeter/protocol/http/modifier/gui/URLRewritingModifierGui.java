@@ -12,8 +12,8 @@ import org.apache.jmeter.config.gui.AbstractResponseBasedModifierGui;
 import org.apache.jmeter.protocol.http.modifier.URLRewritingModifier;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.jorphan.gui.JLabeledTextField;
-import org.jorphan.gui.layout.VerticalLayout;
+import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
  * @author mstover

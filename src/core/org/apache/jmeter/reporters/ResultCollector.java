@@ -82,7 +82,7 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.jorphan.io.TextFile;
+import org.apache.jorphan.io.TextFile;
 import org.xml.sax.SAXException;
 
 /**

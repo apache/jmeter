@@ -5,9 +5,9 @@ import java.util.LinkedList;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.testelement.PerThreadClonable;
-import org.jorphan.collections.HashTree;
-import org.jorphan.collections.HashTreeTraverser;
-import org.jorphan.collections.ListedHashTree;
+import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.HashTreeTraverser;
+import org.apache.jorphan.collections.ListedHashTree;
 
 /**
  * <p>Title: </p>

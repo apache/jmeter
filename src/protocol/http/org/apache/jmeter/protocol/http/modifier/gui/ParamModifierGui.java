@@ -20,7 +20,7 @@ import org.apache.jmeter.protocol.http.modifier.ParamMask;
 import org.apache.jmeter.protocol.http.modifier.ParamModifier;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.jorphan.gui.layout.VerticalLayout;
+import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * A swing panel to allow UI with the ParamModifier class.
