@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,18 +53,20 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.jdbc.config.gui;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+
+import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -76,7 +78,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class SqlConfigGui extends AbstractConfigGui
 {
-	private JTextField sqlField = new JTextField(30);
+    private JTextArea sqlField;
 	private boolean displayName;
 
 	/****************************************
@@ -123,43 +125,44 @@ public class SqlConfigGui extends AbstractConfigGui
     public void modifyTestElement(TestElement element)
     {
         configureTestElement(element);
-        element.setProperty(JDBCSampler.QUERY,sqlField.getText());
+        
+        String text = sqlField.getText();
+        // Remove any line feeds from the text
+        text = text.replace('\n', ' ');
+        element.setProperty(JDBCSampler.QUERY, text);
     }
 
 	private void init()
 	{
-		if(displayName)
-		{
-			this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setLayout(new BorderLayout(0, 5));
 
-			// MAIN PANEL
-			JPanel mainPanel = new JPanel();
-			Border margin = new EmptyBorder(10, 10, 5, 10);
-			mainPanel.setBorder(margin);
-			mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+		if(displayName) {
+            setBorder(makeBorder());
+            add(makeTitlePanel(), BorderLayout.NORTH);
+        }
 
-
-			// NAME
-			mainPanel.add(makeTitlePanel());
-
-			// SQL
-			mainPanel.add(createSqlPanel());
-
-			this.add(mainPanel);
-		}
-		else
-		{
-			this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-			this.add(createSqlPanel());
-		}
+        JPanel panel = createSqlPanel();
+		add(panel, BorderLayout.CENTER);
+        // Don't let the SQL field shrink too much
+        add(Box.createVerticalStrut(panel.getPreferredSize().height), BorderLayout.WEST);
 	}
 
-	private JPanel createSqlPanel()
-	{
-		JPanel panel = new JPanel();
-		panel.add(new JLabel(JMeterUtils.getResString("database_sql_query_string")));
-		panel.add(sqlField);
+	private JPanel createSqlPanel() {
+        sqlField = new JTextArea();
+        sqlField.setRows(4);
+        sqlField.setLineWrap(true);
+        sqlField.setWrapStyleWord(true);
+        
+        JLabel label = new JLabel(JMeterUtils.getResString("database_sql_query_string"));
+        label.setLabelFor(sqlField);
+        
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(label, BorderLayout.NORTH);
+		panel.add(new JScrollPane(sqlField), BorderLayout.CENTER);
 		return panel;
 	}
 
+    public Dimension getPreferredSize() {
+        return getMinimumSize();
+    }
 }
