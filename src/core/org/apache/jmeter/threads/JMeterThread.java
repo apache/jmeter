@@ -212,6 +212,7 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 	private void notifyListeners(List listeners, SampleResult result) {
 		SampleEvent event =
 			new SampleEvent(result, (String) controller.getProperty(TestElement.NAME));
+		compiler.sampleOccurred(event);
 		notifier.addLast(event,listeners);
 	}
 	public void setInitialDelay(int delay) {

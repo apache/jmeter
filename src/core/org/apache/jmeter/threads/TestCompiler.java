@@ -124,7 +124,6 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 			replaceValues(clonedSampler);
 		}
 		ret.setSampler(clonedSampler);
-		ret.addSampleListener(this);
 		configureWithConfigElements(clonedSampler,configs.getConfigs());
 		configureWithResponseModifiers(clonedSampler,configs.getResponseModifiers());
 		configureWithModifiers(clonedSampler,configs.getModifiers());
