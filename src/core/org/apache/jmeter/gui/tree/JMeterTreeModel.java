@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.gui.tree;
+
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -75,33 +76,26 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
 
+/**
+ *
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 public class JMeterTreeModel extends DefaultTreeModel
 {
     private static Logger log = LoggingManager.getLoggerForClass();
 
-    /****************************************
-     * !ToDo (Constructor description)
-     ***************************************/
     public JMeterTreeModel()
     {
         super(new JMeterTreeNode(new WorkBenchGui().createTestElement(), null));
         initTree();
     }
 
-    /****************************************
-     * Returns a list of tree nodes that
-     * hold objects of the given class
-     * type.  If none are found, an empty
-     * list is returned 
-	*************************************/
+    /**
+     * Returns a list of tree nodes that hold objects of the given class type.
+     * If none are found, an empty list is returned. 
+     */
     public List getNodesOfType(Class type)
     {
         List nodeList = new LinkedList();
@@ -111,24 +105,22 @@ public class JMeterTreeModel extends DefaultTreeModel
 
     /**
      * Get the node for a given TestElement object.
-     * @param userObject
-     * @return JMeterTreeNode
      */
     public JMeterTreeNode getNodeOf(TestElement userObject)
     {
         List nodeList = new LinkedList();
-        return traverseAndFind(userObject, (JMeterTreeNode) this.getRoot(), nodeList);
+        return traverseAndFind(
+            userObject,
+            (JMeterTreeNode) this.getRoot(),
+            nodeList);
     }
 
-    /****************************************
+    /**
      * Adds the sub tree at the given node.  Returns a boolean indicating
      * whether the added sub tree was a full test plan.
-     *
-     *@param subTree                         !ToDo
-     *@param current                         !ToDo
-     *@exception IllegalUserActionException  !ToDo (Exception description)
-     ***************************************/
-    public HashTree addSubTree(HashTree subTree, JMeterTreeNode current) throws IllegalUserActionException
+     */
+    public HashTree addSubTree(HashTree subTree, JMeterTreeNode current)
+        throws IllegalUserActionException
     {
         Iterator iter = subTree.list().iterator();
         while (iter.hasNext())
@@ -136,18 +128,24 @@ public class JMeterTreeModel extends DefaultTreeModel
             TestElement item = (TestElement) iter.next();
             if (item instanceof TestPlan)
             {
-                current = (JMeterTreeNode) ((JMeterTreeNode) getRoot()).getChildAt(0);
+                current =
+                    (JMeterTreeNode) ((JMeterTreeNode) getRoot()).getChildAt(0);
                 ((TestElement) current.getUserObject()).addTestElement(item);
-                ((TestPlan)current.getUserObject()).setName(item.getPropertyAsString(TestElement.NAME));
-                ((TestPlan)current.getUserObject()).setFunctionalMode(item.getPropertyAsBoolean(TestPlan.FUNCTIONAL_MODE));
-                ((TestPlan)current.getUserObject()).setSerialized(item.getPropertyAsBoolean(TestPlan.SERIALIZE_THREADGROUPS));
+                ((TestPlan) current.getUserObject()).setName(
+                    item.getPropertyAsString(TestElement.NAME));
+                ((TestPlan) current.getUserObject()).setFunctionalMode(
+                    item.getPropertyAsBoolean(TestPlan.FUNCTIONAL_MODE));
+                ((TestPlan) current.getUserObject()).setSerialized(
+                    item.getPropertyAsBoolean(TestPlan.SERIALIZE_THREADGROUPS));
                 addSubTree(subTree.getTree(item), current);
             }
-            else if(item instanceof WorkBench)
+            else if (item instanceof WorkBench)
             {
-                current = (JMeterTreeNode) ((JMeterTreeNode) getRoot()).getChildAt(1);
+                current =
+                    (JMeterTreeNode) ((JMeterTreeNode) getRoot()).getChildAt(1);
                 ((TestElement) current.getUserObject()).addTestElement(item);
-                ((WorkBench)current.getUserObject()).setName(item.getPropertyAsString(TestElement.NAME));
+                ((WorkBench) current.getUserObject()).setName(
+                    item.getPropertyAsString(TestElement.NAME));
                 addSubTree(subTree.getTree(item), current);
             }
             else
@@ -158,38 +156,43 @@ public class JMeterTreeModel extends DefaultTreeModel
         return getCurrentSubTree(current);
     }
 
-    /****************************************
-     * !ToDo
-     *
-     *@param component                       !ToDo
-     *@param node                            !ToDo
-     *@return                                !ToDo (Return description)
-     *@exception IllegalUserActionException  !ToDo (Exception description)
-     ***************************************/
-    public JMeterTreeNode addComponent(TestElement component, JMeterTreeNode node) throws IllegalUserActionException
+    public JMeterTreeNode addComponent(
+        TestElement component,
+        JMeterTreeNode node)
+        throws IllegalUserActionException
     {
         if (node.getUserObject() instanceof AbstractConfigGui)
         {
-            throw new IllegalUserActionException("This node cannot hold sub-elements");
+            throw new IllegalUserActionException(
+                    "This node cannot hold sub-elements");
         }
-        component.setProperty(TestElement.GUI_CLASS,NameUpdater.getCurrentName(component.getPropertyAsString(TestElement.GUI_CLASS)));
+        component.setProperty(
+            TestElement.GUI_CLASS,
+            NameUpdater.getCurrentName(
+                component.getPropertyAsString(TestElement.GUI_CLASS)));
         JMeterGUIComponent guicomp = GuiPackage.getInstance().getGui(component);
         guicomp.configure(component);
         guicomp.modifyTestElement(component);
-        JMeterTreeNode newNode = new JMeterTreeNode((TestElement) component, this);
-        
-        //This check the state of the TestElement and if returns false it disable the loaded node
-        try{
-            if(component.getProperty(TestElement.ENABLED) instanceof NullProperty || 
-                    component.getPropertyAsBoolean(TestElement.ENABLED))
+        JMeterTreeNode newNode =
+            new JMeterTreeNode((TestElement) component, this);
+
+        // This check the state of the TestElement and if returns false it
+        // disable the loaded node
+        try
+        {
+            if (component.getProperty(TestElement.ENABLED)
+                instanceof NullProperty
+                || component.getPropertyAsBoolean(TestElement.ENABLED))
             {
-                newNode.setEnabled(true);           
+                newNode.setEnabled(true);
             }
             else
             {
                 newNode.setEnabled(false);
             }
-        }catch(Exception e){
+        }
+        catch (Exception e)
+        {
             newNode.setEnabled(true);
         }
 
@@ -197,20 +200,19 @@ public class JMeterTreeModel extends DefaultTreeModel
         return newNode;
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param node  !ToDo (Parameter description)
-     ***************************************/
     public void removeNodeFromParent(JMeterTreeNode node)
     {
-        if (!(node.getUserObject() instanceof TestPlan) && !(node.getUserObject() instanceof WorkBench))
+        if (!(node.getUserObject() instanceof TestPlan)
+            && !(node.getUserObject() instanceof WorkBench))
         {
             super.removeNodeFromParent(node);
         }
     }
 
-    private void traverseAndFind(Class type, JMeterTreeNode node, List nodeList)
+    private void traverseAndFind(
+        Class type,
+        JMeterTreeNode node,
+        List nodeList)
     {
         if (type.isInstance(node.getUserObject()))
         {
@@ -224,7 +226,10 @@ public class JMeterTreeModel extends DefaultTreeModel
         }
     }
 
-    private JMeterTreeNode traverseAndFind(TestElement userObject, JMeterTreeNode node, List nodeList)
+    private JMeterTreeNode traverseAndFind(
+        TestElement userObject,
+        JMeterTreeNode node,
+        List nodeList)
     {
         if (userObject == node.getUserObject())
         {
@@ -253,7 +258,8 @@ public class JMeterTreeModel extends DefaultTreeModel
 
     public HashTree getTestPlan()
     {
-        return getCurrentSubTree((JMeterTreeNode) ((JMeterTreeNode) this.getRoot()).getChildAt(0));
+        return getCurrentSubTree(
+            (JMeterTreeNode) ((JMeterTreeNode) this.getRoot()).getChildAt(0));
     }
 
     public void clearTestPlan()
@@ -266,13 +272,20 @@ public class JMeterTreeModel extends DefaultTreeModel
     {
         TestElement tp = new TestPlanGui().createTestElement();
         TestElement wb = new WorkBenchGui().createTestElement();
-        this.insertNodeInto(new JMeterTreeNode(tp, this), (JMeterTreeNode) getRoot(), 0);
+        this.insertNodeInto(
+            new JMeterTreeNode(tp, this),
+            (JMeterTreeNode) getRoot(),
+            0);
         try
         {
             super.removeNodeFromParent((JMeterTreeNode) getChild(getRoot(), 1));
         }
         catch (RuntimeException e)
-        {}
-        this.insertNodeInto(new JMeterTreeNode(wb, this), (JMeterTreeNode) getRoot(), 1);
+        {
+        }
+        this.insertNodeInto(
+            new JMeterTreeNode(wb, this),
+            (JMeterTreeNode) getRoot(),
+            1);
     }
 }

@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,7 +54,6 @@
  */
 package org.apache.jmeter.gui.tree;
 
-
 import java.awt.Component;
 
 import javax.swing.ImageIcon;
@@ -62,21 +61,14 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 /**
- * Title:        JMeter
- * Description:
- * Copyright:    Copyright (c) 2000
- * Company:      Apache
  * @author Michael Stover
- * @version 1.0
+ * @version $Revision$
  */
-
 public class JMeterCellRenderer extends DefaultTreeCellRenderer
 {
-
     public JMeterCellRenderer()
     {
     }
-
 
     public Component getTreeCellRendererComponent(JTree tree,
                                                   Object value,
@@ -86,13 +78,20 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer
                                                   int row,
                                                   boolean hasFocus)
     {
-        super.getTreeCellRendererComponent(tree, ((JMeterTreeNode)value).getName(), sel, expanded, leaf, row, hasFocus);
+        super.getTreeCellRendererComponent(
+            tree,
+            ((JMeterTreeNode) value).getName(),
+            sel,
+            expanded,
+            leaf,
+            row,
+            hasFocus);
         this.setEnabled(((JMeterTreeNode)value).isEnabled());
         ImageIcon ic = ((JMeterTreeNode)value).getIcon();
-        if (ic != null) {
+        if (ic != null)
+        {
             setIcon(ic);
         }
         return this;
     }
 }
-
