@@ -18,6 +18,7 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
@@ -73,38 +74,42 @@ public class RegexExtractor
             new PatternMatcherInput(
                 new String(context.getPreviousResult().getResponseData()));
         log.debug("Regex = " + getRegex());
-        Pattern pattern =
-            patternCache.getPattern(getRegex(), Perl5Compiler.READ_ONLY_MASK);
-        List matches = new ArrayList();
-        int x = 0;
-        boolean done = false;
-        do
-        {
-            if (matcher.contains(input, pattern))
-            {
-                log.debug("RegexExtractor: Match found!");
-                matches.add(matcher.getMatch());
-            }
-            else
-            {
-                done = true;
-            }
-            x++;
-        }
-        while (x != getMatchNumber() && !done);
-        try
-        {
-            MatchResult match = getCorrectMatch(matches);
-            if (match != null)
-            {
-                context.getVariables().put(getRefName(), generateResult(match));
-                saveGroups(context.getVariables(), getRefName(), match);
-            }
-        }
-        catch (RuntimeException e)
-        {
-            log.warn("Error while generating result");
-        }
+		try {
+			Pattern pattern =
+			    patternCache.getPattern(getRegex(), Perl5Compiler.READ_ONLY_MASK);
+			List matches = new ArrayList();
+			int x = 0;
+			boolean done = false;
+			do
+			{
+			    if (matcher.contains(input, pattern))
+			    {
+			        log.debug("RegexExtractor: Match found!");
+			        matches.add(matcher.getMatch());
+			    }
+			    else
+			    {
+			        done = true;
+			    }
+			    x++;
+			}
+			while (x != getMatchNumber() && !done);
+			try
+			{
+			    MatchResult match = getCorrectMatch(matches);
+			    if (match != null)
+			    {
+			        context.getVariables().put(getRefName(), generateResult(match));
+			        saveGroups(context.getVariables(), getRefName(), match);
+			    }
+			}
+			catch (RuntimeException e)
+			{
+			    log.warn("Error while generating result");
+			}
+		} catch (MalformedCachePatternException e) {
+			log.warn("Error in pattern: "+ getRegex());
+		}
     }
 
     private void saveGroups(
