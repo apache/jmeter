@@ -53,8 +53,6 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control.gui;
-import javax.swing.BorderFactory;
-
 import org.apache.jmeter.control.OnceOnlyController;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -112,8 +110,7 @@ public class OnceOnlyControllerGui extends AbstractControllerGui
 	private void init()
 	{
 		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
-		add(createTitleLabel());
-		add(getNamePanel());
+        setBorder(makeBorder());
+		add(makeTitlePanel());
 	}
 }
