@@ -26,6 +26,50 @@
 (least recent)</b></p>  
 
 <b>Changes: for more info, contact <a href="mailto:mstover1@apache.org">Michael Stover</a></b>
+
+<h3>Version 2.0.3</h3>
+<h4>New functionality:</h4>
+<ul>
+<li>XPath Assertion and XPath Function</li>
+<li>Switch Controller</li>
+<li>ForEach Controller can now loop through sets of groups</li>
+<li>Allow CSVRead delimiter to be changed (see jmeter.properties)</li>
+<li>Bug 33920 - allow additional property files</li>
+<li>Bug 33845 - allow direct override of Home dir</li>
+</ul>
+<h4>Bug fixes:</h4>
+<ul>
+<li>Regex Extractor nested constant not put in correct place (32395)</li>
+<li>Start time reset to now if necessary so that delay works OK.</li>
+<li>Missing start/end times in scheduler are assumed to be now, not 1970</li>
+<li>Bug 28661 - 304 responses not appearing in listeners</li>
+<li>DOS scripts now handle different disks better</li>
+<li>Bug 32345 - HTTP Rewriter does not work with HTTP Request default</li>
+<li>Catch Runtime Exceptions so an error in one Listener does not affect others</li>
+<li>Bug 33467 - __threadNum() extracted number wrongly </li>
+<li>Bug 29186,33299 - fix CLI parsing of "-" in second argument</li>
+<li>Fix CLI parse bug: -D arg1=arg2. Log more startup parameters.</li>
+<li>Fix JTidy and HTMLParser parsers to handle form src= and link rel=stylesheet</li>
+<li>JMeterThread now logs Errors to jmeter.log which were appearing on console</li>
+<li>Ensure WhileController condition is dynamically checked</li>
+<li>Bug 32790 ensure If Controller condition is re-evaluated each time</li>
+<li>Bug 30266 - document how to display proxy recording responses</li>
+<li>Bug 33921 - merge should not change file name</li>
+<li>Close file now gives chance to save changes</li>
+<li>Bug 33559 - fixes to Runtime Controller</li>
+</ul>
+<h4>Other changes:</h4>
+<ul>
+<li>To help with variable evaluation, JMeterThread sets "sampling started" a bit earlier (see jmeter.properties)</li>
+<li>Bug 33796 - delete cookies with null/empty values</li>
+<li>Better checking of parameter count in JavaScript function</li>
+<li>Thread Group now defaults to 1 loop instead of forever</li>
+<li>All Beanshell access is now via a single class; only need BSH jar at run-time</li>
+<li>Bug 32464 - document Direct Draw settings in jmeter.bat</li>
+<li>Bug 33919 - increase Counter field sizes</li>
+<li>Bug 32252 - ForEach was not initialising counters</li>
+</ul>
+
 <h3>Version 2.0.2</h3>
 <h4>New functionality:</h4>
 <ul>

@@ -15,6 +15,8 @@ rem   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 rem   See the License for the specific language governing permissions and
 rem   limitations under the License.
 
+if .%JM_LAUNCH% == . set JM_LAUNCH=java.exe
+
 if not "%OS%"=="Windows_NT" goto win9xStart
 :winNTStart
 @setlocal
@@ -22,6 +24,11 @@ if not "%OS%"=="Windows_NT" goto win9xStart
 rem Need to check if we are using the 4NT shell...
 if "%eval[2+2]" == "4" goto setup4NT
 
+if exist jmeter.bat goto winNT1
+echo Changing to JMeter home directory
+cd /D %~dp0
+
+:winNT1
 rem On NT/2K grab all arguments at once
 set JMETER_CMD_LINE_ARGS=%*
 goto doneStart
@@ -56,6 +63,21 @@ set EVACUATION=-XX:MaxLiveObjectEvacuationRatio=20%
 set RMIGC=-Dsun.rmi.dgc.client.gcInterval=600000 -Dsun.rmi.dgc.server.gcInterval=600000
 set PERM=-XX:PermSize=64m -XX:MaxPermSize=64m
 set DEBUG=-verbose:gc -XX:+PrintTenuringDistribution
-set ARGS=%HEAP% %NEW% %SURVIVOR% %TENURING% %EVACUATION% %RMIGC% %PERM% %DEBUG%
 
-java %JVM_ARGS% %ARGS% -jar ApacheJMeter.jar %JMETER_CMD_LINE_ARGS%
+rem Additional settings that might help improve GUI performance on some platforms
+rem See: http://java.sun.com/products/java-media/2D/perf_graphics.html
+
+set DDRAW=
+rem  Setting this flag to true turns off DirectDraw usage, which sometimes helps to get rid of a lot of rendering problems on Win32.
+rem set DDRAW=%DDRAW% -Dsun.java2d.noddraw=true
+
+rem  Setting this flag to false turns off DirectDraw offscreen surfaces acceleration by forcing all createVolatileImage calls to become createImage calls, and disables hidden acceleration performed on surfaces created with createImage .
+rem set DDRAW=%DDRAW% -Dsun.java2d.ddoffscreen=false
+
+rem Setting this flag to true enables hardware-accelerated scaling.
+rem set DDRAW=%DDRAW% -Dsun.java2d.ddscale=true
+
+rem Collect the settings defined above
+set ARGS=%HEAP% %NEW% %SURVIVOR% %TENURING% %EVACUATION% %RMIGC% %PERM% %DEBUG% %DDRAW%
+
+%JM_START% %JM_LAUNCH% %JVM_ARGS% %ARGS% -jar ApacheJMeter.jar %JMETER_CMD_LINE_ARGS%

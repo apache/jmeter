@@ -18,6 +18,14 @@ rem   limitations under the License.
 REM Protect environment against changes if possible:
 if "%OS%"=="Windows_NT" setlocal
 
+rem Need to check if we are using the 4NT shell...
+rem [Does that support the ~ constructs?]
+if "%eval[2+2]" == "4" goto winNT1
+if exist jmeter-server.bat goto winNT1
+echo Changing to JMeter home directory
+cd /D %~dp0
+:winNT1
+
 if exist %JMETER_HOME%\lib\ext\ApacheJMeter_core.jar goto setCP
 echo Could not find ApacheJmeter_core.jar ...
 REM Try to work out JMETER_HOME

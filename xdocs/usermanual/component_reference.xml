@@ -534,7 +534,6 @@ StandardGenerator and TCLogParser.
 </component>
 
 <component name="BeanShell Sampler" index="16.1.9" screenshot="">
-<center><h2>(Beta Code)</h2></center>
 	<description><p>This sampler allows you to write a sampler using the BeanShell scripting language.		
 </p><p>
 		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
@@ -592,7 +591,7 @@ If a script file is supplied, that will be used, otherwise the script will be us
 <pre>
 if (bsh.args[0].equalsIgnoreCase("StopThread")) {
     log.info("Stop Thread detected!");
-    SampleResult.StopThread(bsh.args[1]);
+    SampleResult.setStopThread(true);
 }
 return "Data from sample with Label "+Label;
 </pre>
@@ -600,7 +599,7 @@ return "Data from sample with Label "+Label;
 
 
 <component name="BSF Sampler" index="16.1.10" screenshot="">
-<center><h2>(ALPHA Code)</h2></center>
+<note>This is Alpha code</note>
 	<description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
 		
 		<br></br>
@@ -899,12 +898,16 @@ So for example when the input variable has the name inputVar, the following vari
 		<li>inputVar_3 = peter</li>
 		<li>inputVar_4 = john</li>
 		</ul>
+		<p>Note: the "_" separator is now optional.</p>
 When the return variable is given as "returnVar", the collection of samplers and controllers under the ForEach controller will be executed 4 consecutive times,
 with the return variable having the respective above values, which can then be used in the samplers.
 </p>
 <p>
 It is especially suited for running with the regular expression post-processor. 
 This can "create" the necessary input variables out of the result data of a previous request.
+By omitting the "_" separator, the ForEach Controller can be used to loop through the groups by using
+the input variable refName_g, and can also loop through all the groups in all the matches
+by using an input variable of the form refName_${C}_g, where C is a counter variable.
 </p>
 <note>The ForEach Controller does not run any samples if inputVar_1 is null.
 This would be the case if the Regular Expression returned no matches.</note>
@@ -915,6 +918,7 @@ This would be the case if the Regular Expression returned no matches.</note>
         <property name="Input variable prefix" required="Yes">Prefix for the variable names to be used as input.</property>
         <property name="Output variable" required="Yes">
                 The name of the variable which can be used in the loop for replacement in the samplers</property>
+		<property required="Yes" name="Use Separator">If not checked, the "_" separator is omitted.</property>
 </properties>
 
 <example title="ForEach Example" anchor="foreach_example">
@@ -989,10 +993,39 @@ The While Controller runs its children until the condition is "false".
 If the last sample just before the loop failed, don't enter loop.</li>
 <li>Otherwise - exit (or don't enter) the loop when the condition is "false"</li>
 </ul>
+<p>Note: unlike the IfController, the condition is not evaluated as a JavaScript expression. 
+The condition can be any variable or function that eventually evaluates to "false". 
+This allows one to use JavaScript, BeanShell, properties or variables as needed.
+<br></br>
+For example:
+<ul>
+	<li>${VAR} - where VAR is set to false by some other test element</li>
+	<li>${__javaScript(${C}==10,dummy)}</li>
+	<li>${_P(property)}</li>
+	<li>etc</li>
+</ul>
+</p>
 	</description>
 <properties>
 	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
-	<property name="Condition" required="No">blank, LAST, or variable/function</property>
+	<property name="Condition" required="Yes">blank, LAST, or variable/function</property>
+</properties>
+</component>
+
+<component name="Switch Controller" index="16.2.14" screenshot="">
+	<description>
+<note>ALPHA CODE</note>
+<p>
+The Switch Controller acts like the <complink name="Interleave Controller"/> 
+in that it runs one of the subordinate elements on each iteration, but rather than
+run them in sequence, the controller runs the element number defined by the switch value.
+</p>
+<p>If the switch value is out of range, it will run the zeroth element, 
+which therefore acts as the default.</p>
+</description>
+<properties>
+	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+	<property name="Switch Value" required="Yes">The number of the subordinate element to be invoked. Elements are numbered from 0.</property>
 </properties>
 </component>
 
@@ -1011,6 +1044,8 @@ listeners generally have a panel whereby one can specify the file to
 which the results will be written (or read).  By default,
 the results are stored as CSV
 files, typically with a ".jtl" extension.  Storing as CSV is the most efficient option, but is less detailed than XML (the other available option).</p>
+<note>To read existing results and display them, use the file panel Browse button to open the file.
+</note>
 <p>To change the format, in jmeter.properties, find the following line:</p>
 <p>jmeter.save.saveservice.output_format=csv</p>
 <p>Change "csv" to "xml" for greater detail.</p>
@@ -1415,9 +1450,9 @@ your browser's proxy settings.  Now, you may want to sort and re-order the test 
 cookie manager, etc.</p>
 
 <b>How can I record the server's responses too?</b>
-<p>The HTTP Proxy Server actually performs a sampling to obtain the server's response, and will notify any
-listeners directly inside the controller where the samples are being stored. So you just need to place a 
-<complink name="View Results Tree"/> listener there to get the responses recorded.</p>
+<p>Just place a <complink name="View Results Tree"/> listener as a child of the Proxy Server and the responses will be displayed. 
+You can also add a <complink name="Save Responses to a file"/> Post-Processor which will save the responses to files.
+</p>
 
 </component>
 
@@ -1679,7 +1714,27 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 </component>
 
 <component index="16.5.5" name="BeanShell Assertion" screenshot="bsh_assertion.png">
-<description><p>The BeanShell Assertion allows the user to perform assertion checking using a BeanShell script.</p></description>
+<description><p>The BeanShell Assertion allows the user to perform assertion checking using a BeanShell script.
+</p>
+<p>
+<b>Please note that the BeanShell jar file is not included with JMeter;
+it needs to be downloaded separately and placed in the lib directory.
+<br/>
+For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+</p><p>
+Note that a different Interpreter is used for each independent occurence of the assertion
+in each thread in a test script, but the same Interpreter is used for subsequent invocations.
+This means that variables persist across calls to the assertion.
+</p>
+<p>
+All Assertions are called from a single thread - the one that controls the thread Group.
+</p>
+<p>
+If the property "beanshell.assertion.init" is defined, it is passed to the Interpreter
+as the name of a sourced file. This can be used to define common methods and variables.
+There is a sample init file in the bin directory: BeanShellAssertion.bshrc
+</p>
+</description>
 
 <properties>
 <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -1697,6 +1752,7 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 These are strings unless otherwise noted:
 <ul>
 <li>log - the Logger Object. (e.g.) log.warn("Message"[,Throwable])</li>
+	<li>SampleResult - the SampleResult Object; read-write</li>
 	<li>Response - the response Object; read-write</li>
 	<li>Failure - boolean; read-write; used to set the Assertion status</li>
 	<li>FailureMessage - String; read-write; used to set the Assertion message</li>
@@ -1709,6 +1765,13 @@ These are strings unless otherwise noted:
 	<li>SamplerData - data that was sent to the server</li>
 </ul>
 </p>
+<p>The following methods of the Response object may be useful:
+<ul>
+	<li>setStopThread(boolean)</li>
+	<li>setStopTest(boolean)</li>
+	<li>String getSampleLabel()</li>
+	<li>setSampleLabel(String)</li>
+</ul></p>
 </component>
 
 <component index="16.5.6" name="MD5Hex Assertion">
@@ -1733,6 +1796,25 @@ These are strings unless otherwise noted:
 <property name="Warning threshold" required="Yes">Number of warnings allowed before classing the response as failed</property>
 <property name="Filename" required="No">Name of file to which report is written</property>
 
+</properties>
+</component>
+<component index="16.5.8" name="XPath Assertion" screenshot="xpath_assertion.png">
+<description><p>The XPath Assertion tests a document for well formedness, has the option
+of validating against a DTD, or putting the document through JTidy and testing for an
+XPath.  If that XPath exists, the Assertion is true.  Using "/" will match any well-formed
+document, and is the default XPath Expression.
+See <a href="http://www.w3.org/TR/xpath">http://www.w3.org/TR/xpath</a> for more information
+on XPath.
+</p></description>
+
+<properties>
+<property name="Name"		required="No">Descriptive name for this element that is shown in the tree.</property>
+<property name="Tolerant Parser"	required="No">Be tolerant of XML/HTML errors</property>
+<property name="Use Namespaces"	required="No">Should namespaces be honoured?</property>
+<property name="Validate XML"	required="No">Check the document against its schema.</property>
+<property name="XPath Assertion"		required="Yes">XPath to match in the document.</property>
+<property name="Ignore Whitespace"	required="No">Ignore Element Whitespace.</property>
+<property name="True if nothing matches"	required="No">True if a XPath expression is not matched</property>
 </properties>
 </component>
 

@@ -170,9 +170,14 @@ class HtmlParserHTMLParser extends HTMLParser
 				} else if (node instanceof ScriptTag){
 					ScriptTag script = (ScriptTag)node;
 					binUrlStr = script.getAttribute("src");
+				} else if (node instanceof FrameTag){
+					FrameTag tag = (FrameTag)node;
+					binUrlStr = tag.getAttribute("src");
 				} else if (node instanceof LinkTagTag){
 					LinkTagTag script = (LinkTagTag)node;
-					binUrlStr = script.getAttribute("href");
+					if (script.getAttribute("rel").equalsIgnoreCase("stylesheet")){
+						binUrlStr = script.getAttribute("href");
+					}
 				} else if (node instanceof FrameTag){
 					FrameTag script = (FrameTag)node;
 					binUrlStr = script.getAttribute("src");

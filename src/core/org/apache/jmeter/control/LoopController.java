@@ -163,6 +163,7 @@ public class LoopController extends GenericController implements Serializable
 		setFirst(true);
 		resetCurrent();
 		incrementLoopCount();
+        recoverRunningVersion();
 	}
 
 ///////////////////////// Start of Test code ///////////////////////////////

@@ -114,7 +114,7 @@ public class PackageTest extends JMeterTestCase
 		// Check that all necessary keys are there:
 
 		// displayName is always mandatory:
-		String dn= defaultBundle.getString("displayName").toLowerCase();
+		String dn= defaultBundle.getString("displayName").toUpperCase(Locale.ENGLISH);
 
 		// Skip the rest of this test for alpha/experimental beans:
 		if (dn.indexOf("(ALPHA") != -1

@@ -20,16 +20,18 @@ package org.apache.jmeter;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.Authenticator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.avalon.excalibur.cli.CLArgsParser;
-import org.apache.avalon.excalibur.cli.CLOption;
-import org.apache.avalon.excalibur.cli.CLOptionDescriptor;
-import org.apache.avalon.excalibur.cli.CLUtil;
+import org.apache.commons.cli.avalon.CLArgsParser;
+import org.apache.commons.cli.avalon.CLOption;
+import org.apache.commons.cli.avalon.CLOptionDescriptor;
+import org.apache.commons.cli.avalon.CLUtil;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.control.gui.AbstractControllerGui;
 import org.apache.jmeter.control.gui.TestPlanGui;
@@ -76,6 +78,7 @@ public class JMeter implements JMeterPlugin
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
     private static final int PROPFILE_OPT = 'p';
+    private static final int PROPFILE2_OPT = 'q'; // Bug 33920 - additional prop files
     private static final int TESTFILE_OPT = 't';
     private static final int LOGFILE_OPT = 'l';
     private static final int NONGUI_OPT = 'n';
@@ -90,6 +93,7 @@ public class JMeter implements JMeterPlugin
     private static final int SYSTEM_PROPERTY = 'D';
     private static final int LOGLEVEL = 'L';
     private static final int REMOTE_OPT = 'r';
+	private static final int JMETER_HOME_OPT = 'd';
 
     /**
      * Define the understood options. Each CLOptionDescriptor contains:
@@ -119,6 +123,12 @@ public class JMeter implements JMeterPlugin
                 CLOptionDescriptor.ARGUMENT_REQUIRED,
                 PROPFILE_OPT,
                 "the jmeter property file to use"),
+            new CLOptionDescriptor(
+	                "addprop",
+	                CLOptionDescriptor.ARGUMENT_REQUIRED 
+	                | CLOptionDescriptor.DUPLICATES_ALLOWED, // Bug 33920 - allow multiple props
+	                PROPFILE2_OPT,
+	                "additional property file(s)"),
             new CLOptionDescriptor(
                 "testfile",
                 CLOptionDescriptor.ARGUMENT_REQUIRED,
@@ -182,7 +192,13 @@ public class JMeter implements JMeterPlugin
                 "runremote",
                 CLOptionDescriptor.ARGUMENT_DISALLOWED,
                 REMOTE_OPT,
-                "Start remote servers from non-gui mode")};
+                "Start remote servers from non-gui mode"),
+			new CLOptionDescriptor(
+		         "homedir",
+		          CLOptionDescriptor.ARGUMENT_REQUIRED,
+		          JMETER_HOME_OPT,
+		          "the jmeter home directory to use"),
+                };
 
     public JMeter()
     {
@@ -323,34 +339,40 @@ public class JMeter implements JMeterPlugin
         {
             if (parser.getArgumentById(PROXY_PASSWORD) != null)
             {
+				String u,p;
                 Authenticator.setDefault(
                     new ProxyAuthenticator(
-                        parser.getArgumentById(PROXY_USERNAME).getArgument(),
-                        parser.getArgumentById(PROXY_PASSWORD).getArgument()));
+                        u=parser.getArgumentById(PROXY_USERNAME).getArgument(),
+                        p=parser.getArgumentById(PROXY_PASSWORD).getArgument()));
+				log.info("Set Proxy login: "+u+"/"+p);
             }
             else
             {
+				String u;
                 Authenticator.setDefault(
                     new ProxyAuthenticator(
-                        parser.getArgumentById(PROXY_USERNAME).getArgument(),
+                        u=parser.getArgumentById(PROXY_USERNAME).getArgument(),
                         ""));
+				log.info("Set Proxy login: "+u);
             }
         }
         if (parser.getArgumentById(PROXY_HOST) != null
             && parser.getArgumentById(PROXY_PORT) != null)
         {
+			String h,p;
             System.setProperty(
                 "http.proxyHost",
-                parser.getArgumentById(PROXY_HOST).getArgument());
+                h=parser.getArgumentById(PROXY_HOST).getArgument());
             System.setProperty(
                 "https.proxyHost",
                 parser.getArgumentById(PROXY_HOST).getArgument());
             System.setProperty(
                 "http.proxyPort",
-                parser.getArgumentById(PROXY_PORT).getArgument());
+                p=parser.getArgumentById(PROXY_PORT).getArgument());
             System.setProperty(
                 "https.proxyPort",
                 parser.getArgumentById(PROXY_PORT).getArgument());
+			log.info("Set http[s].proxyHost: "+h+" Port: "+p);
         }
         else if (
             parser.getArgumentById(PROXY_HOST) != null
@@ -377,7 +399,13 @@ public class JMeter implements JMeterPlugin
                     + File.separator
                     + "jmeter.properties");
         }
-        JMeterUtils.setJMeterHome(NewDriver.getJMeterDir());
+
+		// Bug 33845 - allow direct override of Home dir
+		if (parser.getArgumentById(JMETER_HOME_OPT) == null) {
+    		JMeterUtils.setJMeterHome(NewDriver.getJMeterDir());
+		} else {
+    		JMeterUtils.setJMeterHome(parser.getArgumentById(JMETER_HOME_OPT).getArgument());
+        }
 
         // Process command line property definitions (can occur multiple times)
 
@@ -391,8 +419,18 @@ public class JMeter implements JMeterPlugin
             String name = option.getArgument(0);
             String value = option.getArgument(1);
 
-            switch (option.getId())
+            switch (option.getDescriptor().getId())
             {
+			    case PROPFILE2_OPT : // Bug 33920 - allow multiple props
+					File f = new File(name);
+				    try {
+						jmeterProps.load(new FileInputStream(f));
+					} catch (FileNotFoundException e) {
+						log.warn("Can't find additional property file: "+name,e);
+					} catch (IOException e) {
+						log.warn("Error loading additional property file: "+name,e);
+					}
+					break;
                 case SYSTEM_PROPERTY :
                     if (value.length() > 0)
                     { // Set it

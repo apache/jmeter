@@ -58,6 +58,7 @@ public class InterleaveControl extends GenericController implements Serializable
         stillSame = true;
         skipNext = false;
         incrementIterCount();
+        recoverRunningVersion();
     }
 
     public void setStyle(int style)

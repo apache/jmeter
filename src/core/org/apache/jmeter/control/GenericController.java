@@ -79,6 +79,7 @@ public class GenericController
         resetCurrent();
         incrementIterCount();
         setFirst(true);
+        recoverRunningVersion();
     }
 
     /**

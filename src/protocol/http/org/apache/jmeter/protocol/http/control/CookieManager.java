@@ -74,6 +74,10 @@ public class CookieManager
     private SimpleDateFormat dateFormat =
         new SimpleDateFormat("EEEE, dd-MMM-yy HH:mm:ss zzz",Locale.US);
 
+	// See bug 33796
+	private static final boolean DELETE_NULL_COOKIES =
+		JMeterUtils.getPropDefault("CookieManager.delete_null_cookies",true);// $NON-NLS-1$
+	
     public CookieManager()
     {
 		// The cookie specification requires that the timezone be GMT.
@@ -212,21 +216,27 @@ public class CookieManager
      */
     public void add(Cookie c)
     {
-    	JMeterContext context = getThreadContext();
-        getCookies().addItem(c);
-        if(context.isSamplingStarted())
-        {
-            context.getVariables().put(c.getName(),c.getValue());
-        }
+		String cv = c.getValue();
+		if (DELETE_NULL_COOKIES && (null == cv || "".equals(cv))){
+			removeCookieNamed(c.getName());
+		} else {
+	    	JMeterContext context = getThreadContext();
+	        getCookies().addItem(c);
+	        if(context.isSamplingStarted())
+	        {
+	            context.getVariables().put(c.getName(),c.getValue());
+	        }
+		}
     }
 
-    /**
-     * Add an empty cookie.
-     */
-    public void add()
-    {
-        getCookies().addItem(new Cookie());
-    }
+//NOT USED - did it make sense to create an empty cookie, anyway?
+//    /**
+//     * Add an empty cookie.
+//     */
+//    public void add()
+//    {
+//        getCookies().addItem(new Cookie());
+//    }
     
     /**
      * Remove all the cookies.

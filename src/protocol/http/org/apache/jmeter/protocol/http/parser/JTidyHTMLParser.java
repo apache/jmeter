@@ -136,12 +136,18 @@ class JTidyHTMLParser extends HTMLParser
 				}
 			  break;
 			}
-			if (name.equalsIgnoreCase("link"))
+			if (name.equalsIgnoreCase("link") 
+					&& getValue(attrs,"rel").equalsIgnoreCase("stylesheet"))
 			{
 				urls.addURL(getValue(attrs,"href"),baseUrl);
 			  break;
 			}
 			if (name.equalsIgnoreCase("script"))
+			{
+				urls.addURL(getValue(attrs,"src"),baseUrl);
+			  break;
+			}
+			if (name.equalsIgnoreCase("frame"))
 			{
 				urls.addURL(getValue(attrs,"src"),baseUrl);
 			  break;

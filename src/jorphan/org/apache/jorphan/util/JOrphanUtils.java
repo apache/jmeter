@@ -43,9 +43,11 @@ public final class JOrphanUtils
     }
     
     /**
-     * This is equivalent to the String.split method in JDK 1.4. It is
+     * This is _almost_ equivalent to the String.split method in JDK 1.4. It is
      * here to enable us to support earlier JDKs.
      *
+     * Note that unlike JDK1.4 spilt(), it ignores leading split Characters.
+     * 
      * <P>This piece of code used to be part of JMeterUtils, but was moved
      * here because some JOrphan classes use it too.
      *
@@ -287,6 +289,24 @@ public final class JOrphanUtils
 		public void testReplace8()
 		{
 			assertEquals("img src=xyz ",replaceFirst("img src=xyz alt=\"\" ","alt=\"\" ",""));
+		}
+		public void testSplit1()
+		{
+			String in="a,bc,,"; // Test ignore trailing split characters
+			String out[]=split(in,",");
+			assertEquals(2,out.length);
+			assertEquals("a",out[0]);
+			assertEquals("bc",out[1]);
+		}
+		public void testSplit2()
+		{
+			String in=",,a,bc"; // Test leading split characters
+			String out[]=split(in,",");
+			assertEquals("Should detect the leading split chars; ",2,out.length-2);
+			assertEquals("",out[0]);
+			assertEquals("",out[1]);
+			assertEquals("a",out[2]);
+			assertEquals("bc",out[3]);
 		}
     }
 }

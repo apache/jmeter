@@ -7,7 +7,8 @@ avalon-framework-4.1.4
 - Configuration (ResultCollector, SaveService, SampleResult, TestElementSaver)
 
 commons-collections
-- ListenerNotifier ONLY
+- ListenerNotifier
+- Anakia
 
 commons-httpclient-2.0
 - httpclient
@@ -31,6 +32,8 @@ jakarta-oro
 
 jdom-b9
 - XMLAssertion, JMeterTest ONLY
+jdom-b9
+- Anakia
 
 (jorphan)
 
@@ -42,6 +45,7 @@ junit
 
 logkit-1.2
 - logging
+- Anakia
 
 soap
 - WebServiceSampler ONLY
@@ -49,6 +53,7 @@ soap
 Tidy
 - http: various modules for parsing html
 - org.xml.sax - various
+- XPathUtil (XPath assertion)
 
 velocity-1.4
 - Anakia (create documentation) Not used by JMeter runtime
