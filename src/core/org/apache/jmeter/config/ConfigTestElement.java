@@ -29,7 +29,7 @@ import org.apache.jmeter.testelement.TestElement;
  */
 public class ConfigTestElement
     extends AbstractTestElement
-    implements Serializable
+    implements Serializable,ConfigElement
 {
     public final static String USERNAME = "ConfigTestElement.username";
     public final static String PASSWORD = "ConfigTestElement.password";
@@ -44,5 +44,19 @@ public class ConfigTestElement
         {
             mergeIn(parm1);
         }
+    }
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.config.ConfigElement#addConfigElement(org.apache.jmeter.config.ConfigElement)
+     */
+    public void addConfigElement(ConfigElement config)
+    {
+        mergeIn((TestElement)config);
+    }
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.config.ConfigElement#expectsModification()
+     */
+    public boolean expectsModification()
+    {
+        return false;
     }
 }

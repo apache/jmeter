@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.testelement;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -26,6 +27,8 @@ import java.util.Map;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigElement;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -38,8 +41,9 @@ import org.apache.jmeter.util.JMeterUtils;
  * Created   March 13, 2001
  * @version   $Revision$ Last updated: $Date$
  */
-public class TestPlan extends AbstractTestElement implements Serializable
+public class TestPlan extends AbstractTestElement implements Serializable,TestListener
 {
+
     public final static String THREAD_GROUPS = "TestPlan.thread_groups";
     public final static String FUNCTIONAL_MODE = "TestPlan.functional_mode";
     public final static String USER_DEFINED_VARIABLES =
@@ -47,6 +51,8 @@ public class TestPlan extends AbstractTestElement implements Serializable
     public final static String SERIALIZE_THREADGROUPS =
         "TestPlan.serialize_threadgroups";
     public final static String COMMENTS = "TestPlan.comments";
+    
+    public final static String BASEDIR = "basedir";
 
     private transient List threadGroups = new LinkedList();
     private transient List configs = new LinkedList();
@@ -84,6 +90,16 @@ public class TestPlan extends AbstractTestElement implements Serializable
     public void setUserDefinedVariables(Arguments vars)
     {
         setProperty(new TestElementProperty(USER_DEFINED_VARIABLES, vars));
+    }
+    
+    public String getBasedir()
+    {
+        return getPropertyAsString(BASEDIR);
+    }
+    
+    public void setBasedir(String b)
+    {
+        setProperty(BASEDIR,b);
     }
 
     public Map getUserDefinedVariables()
@@ -189,5 +205,58 @@ public class TestPlan extends AbstractTestElement implements Serializable
     public void addThreadGroup(ThreadGroup group)
     {
         threadGroups.add(group);
+    }
+    
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestListener#testEnded()
+     */
+    public void testEnded()
+    {
+        try
+        {
+            FileServer.getFileServer().closeFiles();
+        }
+        catch(IOException e)
+        {
+            log.error("Problem closing files at end of test",e);
+        }
+    }
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
+     */
+    public void testEnded(String host)
+    {
+        testEnded();
+
+    }
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+     */
+    public void testIterationStart(LoopIterationEvent event)
+    {}
+    
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestListener#testStarted()
+     */
+    public void testStarted()
+    {
+        if(getBasedir() != null && getBasedir().length() > 0)
+        {
+            try
+            {
+                FileServer.getFileServer().setBasedir(FileServer.getFileServer().getBaseDir() + getBasedir());
+            }
+            catch(IOException e)
+            {
+                log.error("Failed to set file server base dir with " + getBasedir(),e);
+            }
+        }
+    }
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
+     */
+    public void testStarted(String host)
+    {
+        testStarted();
     }
 }

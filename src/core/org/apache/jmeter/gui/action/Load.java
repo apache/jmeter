@@ -33,6 +33,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.SaveService;
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -93,6 +94,7 @@ public class Load implements Command
 					log.info("Merging file: " + f);
             	} else {
 					log.info("Loading file: " + f);
+					FileServer.getFileServer().setBasedir(f.getAbsolutePath());
             	}
                 reader = new FileInputStream(f);
                 HashTree tree = (HashTree)SaveService.loadTree(reader);
@@ -116,8 +118,7 @@ public class Load implements Command
         }
         if (isTestPlan && f != null)
         {
-            (
-                (Save) ActionRouter.getInstance().getAction(
+            ((Save) ActionRouter.getInstance().getAction(
                     "save",
                     "org.apache.jmeter.gui.action.Save")).setTestPlanFile(
                 f.getAbsolutePath());

@@ -187,6 +187,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
                 {
                     if (item instanceof Controller)
                     {
+                        TestBeanHelper.prepare(child);
                         ((Controller) item).addIterationListener(
                             (LoopIterationListener) child);
                         break;
