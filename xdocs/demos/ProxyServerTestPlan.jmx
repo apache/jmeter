@@ -1,33 +1,20 @@
-<?xml version="1.0"?>
-
-<TestPlan>
-<threadgroups>
-<ThreadGroup name="Thread Group" numThreads="1" rampUp="0">
-<controllers>
-<LoopController type="org.apache.jmeter.control.LoopController" name="Loop Controller" iterations="1">
-<configElements>
-<ProxyControl type="org.apache.jmeter.protocol.http.proxy.ProxyControl">
-<property name="port">8080</property>
-<property name="name">HTTP Proxy Server</property>
-<property name="includes"><Arguments>
-</Arguments>
-</property>
-<property name="excludes"><Arguments>
-</Arguments>
-</property>
-</ProxyControl>
-</configElements>
-<controllers>
-</controllers>
-</LoopController>
-</controllers>
-<timers>
-</timers>
-<listeners>
-</listeners>
-</ThreadGroup>
-
-</threadgroups>
-<configElements>
-</configElements>
-</TestPlan>
+<?xml version="1.0" encoding="UTF-8"?>
+<node>
+<testelement class="org.apache.jmeter.testelement.WorkBench">
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.gui_class">org.apache.jmeter.control.gui.WorkBenchGui</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.test_class">org.apache.jmeter.testelement.WorkBench</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">WorkBench</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
+</testelement>
+<node>
+<testelement class="org.apache.jmeter.protocol.http.proxy.ProxyControl">
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.gui_class">org.apache.jmeter.protocol.http.proxy.gui.ProxyControlGui</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.test_class">org.apache.jmeter.protocol.http.proxy.ProxyControl</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">HTTP Proxy Server</property>
+<collection class="java.util.HashSet" propType="org.apache.jmeter.testelement.property.CollectionProperty" name="ProxyControlGui.include_list"/>
+<collection class="java.util.HashSet" propType="org.apache.jmeter.testelement.property.CollectionProperty" name="ProxyControlGui.exclude_list"/>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ProxyControlGui.port">8080</property>
+</testelement>
+</node>
+</node>

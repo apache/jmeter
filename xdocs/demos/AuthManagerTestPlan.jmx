@@ -1,90 +1,146 @@
-<?xml version="1.0"?>
-
-<TestPlan>
-<threadgroups>
-<ThreadGroup name="Thread Group" numThreads="1" rampUp="0">
-<controllers>
-<LoopController type="org.apache.jmeter.control.LoopController" name="Loop Controller" iterations="1">
-<configElements>
-<AuthManager name="HTTP Authorization Manager">
-<ConfigElement type="org.apache.jmeter.protocol.http.control.Authorization">
-<property name="password">spot</property>
-<property name="url">http://localhost/secret</property>
-<property name="username">kevin</property>
-</ConfigElement>
-</AuthManager>
-
-<ConfigElement type="org.apache.jmeter.protocol.http.config.UrlConfig">
-<property name="name">HTTP Request Defaults</property>
-<property name="PROTOCOL">http</property>
-<property name="domain">localhost</property>
-<property name="arguments"><Arguments>
-</Arguments>
-</property>
-<property name="path">/</property>
-<property name="method">GET</property>
-</ConfigElement>
-</configElements>
-<controllers>
-<HttpTestSample type="org.apache.jmeter.protocol.http.control.HttpTestSample" name="SecretPage1" getImages="false">
-<defaultUrl>
-<ConfigElement type="org.apache.jmeter.protocol.http.config.MultipartUrlConfig">
-<property name="PROTOCOL">http</property>
-<property name="arguments"><Arguments>
-</Arguments>
-</property>
-<property name="path">/secret/index.html</property>
-<property name="method">GET</property>
-</ConfigElement></defaultUrl>
-<configElements>
-</configElements>
-<controllers>
-</controllers>
-</HttpTestSample>
-
-<HttpTestSample type="org.apache.jmeter.protocol.http.control.HttpTestSample" name="SecretPage2" getImages="false">
-<defaultUrl>
-<ConfigElement type="org.apache.jmeter.protocol.http.config.MultipartUrlConfig">
-<property name="PROTOCOL">http</property>
-<property name="arguments"><Arguments>
-</Arguments>
-</property>
-<property name="path">/secret/index2.html</property>
-<property name="method">GET</property>
-</ConfigElement></defaultUrl>
-<configElements>
-</configElements>
-<controllers>
-</controllers>
-</HttpTestSample>
-
-<HttpTestSample type="org.apache.jmeter.protocol.http.control.HttpTestSample" name="NoSecretPage" getImages="false">
-<defaultUrl>
-<ConfigElement type="org.apache.jmeter.protocol.http.config.MultipartUrlConfig">
-<property name="PROTOCOL">http</property>
-<property name="arguments"><Arguments>
-</Arguments>
-</property>
-<property name="path">/index.html</property>
-<property name="method">GET</property>
-</ConfigElement></defaultUrl>
-<configElements>
-</configElements>
-<controllers>
-</controllers>
-</HttpTestSample>
-
-</controllers>
-</LoopController>
-</controllers>
-<timers>
-</timers>
-<listeners>
-<Filer type="org.apache.jmeter.reporters.Filer" name="File Reporter" verbose="true" append="false" autoFlush="false" viewSubmitData="true" file="auth-manager.dat"/>
-</listeners>
-</ThreadGroup>
-
-</threadgroups>
-<configElements>
-</configElements>
-</TestPlan>
+<?xml version="1.0" encoding="UTF-8"?>
+<node>
+<testelement class="org.apache.jmeter.testelement.TestPlan">
+<property name="TestElement.test_class">org.apache.jmeter.testelement.TestPlan</property>
+<property name="TestElement.name">Test Plan</property>
+<property name="TestPlan.functional_mode">false</property>
+<collection name="TestPlan.thread_groups" class="java.util.LinkedList"/>
+<testelement name="TestPlan.user_defined_variables" class="org.apache.jmeter.config.Arguments">
+<property name="TestElement.name">Argument List</property>
+<property name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
+<collection name="Arguments.arguments" class="java.util.ArrayList"/>
+<property name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
+</testelement>
+<property name="TestElement.gui_class">org.apache.jmeter.control.gui.TestPlanGui</property>
+</testelement>
+<node>
+<testelement class="org.apache.jmeter.threads.ThreadGroup">
+<property name="TestElement.name">Thread Group</property>
+<property name="TestElement.test_class">org.apache.jmeter.threads.ThreadGroup</property>
+<testelement name="ThreadGroup.main_controller" class="org.apache.jmeter.control.LoopController">
+<property name="TestElement.test_class">org.apache.jmeter.control.LoopController</property>
+<property name="TestElement.name">Loop Controller</property>
+<property name="LoopController.continue_forever">false</property>
+<property name="LoopController.loops">1</property>
+<property name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</property>
+</testelement>
+<property name="ThreadGroup.num_threads">1</property>
+<property name="ThreadGroup.ramp_time">0</property>
+<property name="TestElement.gui_class">org.apache.jmeter.threads.gui.ThreadGroupGui</property>
+</testelement>
+<node>
+<testelement class="org.apache.jmeter.protocol.http.control.AuthManager">
+<property name="TestElement.name">HTTP Authorization Manager</property>
+<property name="TestElement.test_class">org.apache.jmeter.protocol.http.control.AuthManager</property>
+<collection name="AuthManager.auth_list" class="java.util.ArrayList">
+<testelement class="org.apache.jmeter.protocol.http.control.Authorization">
+<property name="Authorization.username">kevin</property>
+<property name="Authorization.url">http://localhost/secret</property>
+<property name="Authorization.password">spot</property>
+</testelement>
+</collection>
+<property name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.AuthPanel</property>
+</testelement>
+</node>
+<node>
+<testelement class="org.apache.jmeter.config.ConfigTestElement">
+<property name="HTTPSampler.method">GET</property>
+<property name="HTTPSampler.port"> </property>
+<property name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</property>
+<property name="TestElement.name">HTTP Request Defaults</property>
+<testelement name="HTTPsampler.Arguments" class="org.apache.jmeter.config.Arguments">
+<property name="TestElement.name"> </property>
+<property name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
+<collection name="Arguments.arguments" class="java.util.LinkedList"/>
+<property name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
+</testelement>
+<property name="HTTPSampler.follow_redirects">false</property>
+<property name="HTTPSampler.protocol">http</property>
+<property name="HTTPSampler.path">/</property>
+<property name="HTTPSampler.use_keepalive">false</property>
+<property name="HTTPSampler.domain">localhost</property>
+<property name="TestElement.gui_class">org.apache.jmeter.protocol.http.config.gui.UrlConfigGui</property>
+</testelement>
+</node>
+<node>
+<testelement class="org.apache.jmeter.protocol.http.sampler.HTTPSampler">
+<property name="TestElement.name">SecretPage1</property>
+<property name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
+<property name="HTTPSampler.port"> </property>
+<property name="HTTPSampler.method">GET</property>
+<property name="HTTPSampler.mimetype"> </property>
+<collection name="AbstractSampler.assertions" class="java.util.ArrayList"/>
+<testelement name="HTTPsampler.Arguments" class="org.apache.jmeter.config.Arguments">
+<property name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
+<property name="TestElement.name"> </property>
+<collection name="Arguments.arguments" class="java.util.ArrayList"/>
+<property name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
+</testelement>
+<property name="HTTPSampler.follow_redirects">true</property>
+<property name="HTTPSampler.protocol">http</property>
+<property name="HTTPSampler.FILE_FIELD"> </property>
+<property name="HTTPSampler.path">/secret/index.html</property>
+<property name="HTTPSampler.domain"> </property>
+<property name="HTTPSampler.use_keepalive">false</property>
+<property name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
+<property name="HTTPSampler.FILE_NAME"> </property>
+</testelement>
+</node>
+<node>
+<testelement class="org.apache.jmeter.protocol.http.sampler.HTTPSampler">
+<property name="TestElement.name">SecretPage2</property>
+<property name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
+<property name="HTTPSampler.port"> </property>
+<property name="HTTPSampler.method">GET</property>
+<property name="HTTPSampler.mimetype"> </property>
+<collection name="AbstractSampler.assertions" class="java.util.ArrayList"/>
+<testelement name="HTTPsampler.Arguments" class="org.apache.jmeter.config.Arguments">
+<property name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
+<property name="TestElement.name"> </property>
+<collection name="Arguments.arguments" class="java.util.ArrayList"/>
+<property name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
+</testelement>
+<property name="HTTPSampler.follow_redirects">true</property>
+<property name="HTTPSampler.protocol">http</property>
+<property name="HTTPSampler.FILE_FIELD"> </property>
+<property name="HTTPSampler.path">/secret/index2.html</property>
+<property name="HTTPSampler.domain"> </property>
+<property name="HTTPSampler.use_keepalive">false</property>
+<property name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
+<property name="HTTPSampler.FILE_NAME"> </property>
+</testelement>
+</node>
+<node>
+<testelement class="org.apache.jmeter.protocol.http.sampler.HTTPSampler">
+<property name="TestElement.name">NoSecretPage</property>
+<property name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
+<property name="HTTPSampler.port"> </property>
+<property name="HTTPSampler.method">GET</property>
+<property name="HTTPSampler.mimetype"> </property>
+<collection name="AbstractSampler.assertions" class="java.util.ArrayList"/>
+<testelement name="HTTPsampler.Arguments" class="org.apache.jmeter.config.Arguments">
+<property name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
+<property name="TestElement.name"> </property>
+<collection name="Arguments.arguments" class="java.util.ArrayList"/>
+<property name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
+</testelement>
+<property name="HTTPSampler.follow_redirects">true</property>
+<property name="HTTPSampler.protocol">http</property>
+<property name="HTTPSampler.FILE_FIELD"> </property>
+<property name="HTTPSampler.path">/index.html</property>
+<property name="HTTPSampler.domain"> </property>
+<property name="HTTPSampler.use_keepalive">false</property>
+<property name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
+<property name="HTTPSampler.FILE_NAME"> </property>
+</testelement>
+</node>
+<node>
+<testelement class="org.apache.jmeter.reporters.ResultCollector">
+<property name="TestElement.name">File Reporter</property>
+<property name="TestElement.test_class">org.apache.jmeter.reporters.ResultCollector</property>
+<property name="filename">auth-manager.dat</property>
+<property name="TestElement.gui_class">org.apache.jmeter.visualizers.GraphVisualizer</property>
+</testelement>
+</node>
+</node>
+</node>
