@@ -174,12 +174,12 @@ public class HTTPSamplerFull
             return ParseJTidy.parseForImages(res,sampler); 
         }
         else if (parseRegexp) {
-            log.info("Using HtmlParser");
-            return ParseHtmlParser.parseForImages(res,sampler);
-        }
-        else {
             log.info("Using Regexp-based HTML parsing");
             return ParseRegexp.parseForImages(res, sampler);
+        }
+        else {
+            log.info("Using HtmlParser");
+            return ParseHtmlParser.parseForImages(res,sampler);
         }
     }
 
