@@ -104,6 +104,9 @@ public class RegexFunction extends AbstractFunction {
 				if(!first)
 				{
 					value.append(between);
+				}
+				else
+				{
 					first = false;
 				}
 				value.append(generateResult((MatchResult)it.next()));
@@ -295,6 +298,14 @@ public class RegexFunction extends AbstractFunction {
 			variable.setJMeterVariables(new JMeterVariables());
 			String match = variable.execute(result,null);
 			assertEquals("pinposition3",match);			
+		}
+		
+		public void testVariableExtraction5() throws Exception
+		{
+			variable.setParameters(URLEncoder.encode("<value field=\"(pinposition\\d+)\">(\\d+)</value>")+",$1$,ALL,_");
+			variable.setJMeterVariables(new JMeterVariables());
+			String match = variable.execute(result,null);
+			assertEquals("pinposition1_pinposition2_pinposition3",match);			
 		}
 		
 		public void testComma() throws Exception
