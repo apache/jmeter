@@ -88,6 +88,7 @@ public class SampleResult implements Serializable
     private long time = 0;
     private boolean stopThread = false; //Should thread terminate?
 	private boolean stopTest = false;   //Should test terminate?
+	private boolean isMonitor = false;
 	//TODO do contentType and/or dataEncoding belong in HTTPSampleResult instead?
 
     private final static String TOTAL_TIME = "totalTime";
@@ -614,6 +615,23 @@ public class SampleResult implements Serializable
 		}
 		idleTime += System.currentTimeMillis() - pauseTime;
 		pauseTime=0;
+	}
+	
+	/**
+	 * When a Sampler is working as a monitor
+	 * @param monitor
+	 */
+	public void setMonitor(boolean monitor){
+		isMonitor = monitor;
+	}
+
+	/**
+	 * If the sampler is a monitor, method will
+	 * return true.
+	 * @return
+	 */
+	public boolean isMonitor(){
+		return isMonitor;
 	}
 	
 ////////////////////////////// Start of Test Code ///////////////////////////
