@@ -112,6 +112,8 @@
 				destdir="${docs.api.dest.dir}"
 				private="yes" author="yes" version="yes"
 				doctitle="Apache JMeter APIs Specification"
+				windowtitle="Apache JMeter API Specification"
+				header="&lt;b&gt;Apache JMeter&lt;/b&gt;&lt;br&gt;&lt;font size='-1'&gt;1.7&lt;/font&gt;"
 				bottom="Copyright &#169; 1998-2001 Apache Software Foundation. All Rights Reserved."
 				packagenames="org.apache.jmeter.*,
 				org.apache.jmeter.timers.*,
