@@ -764,12 +764,16 @@ So for example when the input variable has the name inputVar, the following vari
 		<li>inputVar_3 = peter</li>
 		<li>inputVar_4 = john</li>
 		</ul>
+		<p>Note: the "_" separator is now optional.</p>
 When the return variable is given as "returnVar", the collection of samplers and controllers under the ForEach controller will be executed 4 consecutive times,
 with the return variable having the respective above values, which can then be used in the samplers.
 </p>
 <p>
 It is especially suited for running with the regular expression post-processor. 
 This can "create" the necessary input variables out of the result data of a previous request.
+By omitting the "_" separator, the ForEach Controller can be used to loop through the groups by using
+the input variable refName_g, and can also loop through all the groups in all the matches
+by using an input variable of the form refName_${C}_g, where C is a counter variable.
 </p>
 <note>The ForEach Controller does not run any samples if inputVar_1 is null.
 This would be the case if the Regular Expression returned no matches.</note>
@@ -780,6 +784,7 @@ This would be the case if the Regular Expression returned no matches.</note>
         <property name="Input variable prefix" required="Yes">Prefix for the variable names to be used as input.</property>
         <property name="Output variable" required="Yes">
                 The name of the variable which can be used in the loop for replacement in the samplers</property>
+		<property required="Yes" name="Use Separator">If not checked, the "_" separator is omitted.</property>
 </properties>
 
 <example title="ForEach Example" anchor="foreach_example">

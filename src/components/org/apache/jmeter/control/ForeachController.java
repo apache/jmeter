@@ -22,6 +22,7 @@ import java.io.Serializable;
 
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -38,8 +39,11 @@ public class ForeachController extends GenericController implements Serializable
 
     private final static String INPUTVAL = "ForeachController.inputVal";
     private final static String RETURNVAL ="ForeachController.returnVal";
+    private final static String USE_SEPARATOR ="ForeachController.useSeparator";
     private int loopCount = 0;
 
+    private static final String DEFAULT_SEPARATOR = "_";
+	
     public ForeachController()
     {
     }
@@ -55,6 +59,11 @@ public class ForeachController extends GenericController implements Serializable
         setProperty(new StringProperty(INPUTVAL, inputValue));
     }
 
+	private String getInputVal()
+	{
+		getProperty(INPUTVAL).recoverRunningVersion(null);
+		return getInputValString();
+	}
     public String getInputValString()
     {
         return getPropertyAsString(INPUTVAL);
@@ -65,9 +74,29 @@ public class ForeachController extends GenericController implements Serializable
         setProperty(new StringProperty(RETURNVAL, inputValue));
     }
 
+	private String getReturnVal()
+	{
+		getProperty(RETURNVAL).recoverRunningVersion(null);
+		return getReturnValString();
+	}
     public String getReturnValString()
     {
         return getPropertyAsString(RETURNVAL);
+    }
+
+	private String getSeparator()
+	{
+		return getUseSeparator() ? DEFAULT_SEPARATOR : "";
+	}
+	
+	public void setUseSeparator(boolean b)
+    {
+        setProperty(new BooleanProperty(USE_SEPARATOR, b));
+    }
+
+    public boolean getUseSeparator()
+    {
+        return getPropertyAsBoolean(USE_SEPARATOR,true);
     }
 
    /* (non-Javadoc)
@@ -76,11 +105,11 @@ public class ForeachController extends GenericController implements Serializable
     public boolean isDone()
     {
         JMeterContext context = getThreadContext();
-    	String inputVariable=getInputValString()+"_"+(loopCount+1);
+    	String inputVariable=getInputVal()+getSeparator()+(loopCount+1);
     	if (context.getVariables().get(inputVariable) != null) 
     	{
-    	   context.getVariables().put(getReturnValString(), context.getVariables().get(inputVariable));
-                   log.debug("ForEach resultstring isDone="+context.getVariables().get(getReturnValString()));
+    	   context.getVariables().put(getReturnVal(), context.getVariables().get(inputVariable));
+                   log.debug("ForEach resultstring isDone="+context.getVariables().get(getReturnVal()));
     	   return false;
     	} 
         return super.isDone();
@@ -89,7 +118,7 @@ public class ForeachController extends GenericController implements Serializable
     private boolean endOfArguments()
     {
         JMeterContext context = getThreadContext();
-    	String inputVariable=getInputValString()+"_"+(loopCount+1);
+    	String inputVariable=getInputVal()+getSeparator()+(loopCount+1);
     	if (context.getVariables().get(inputVariable) != null) 
     	{
            log.debug("ForEach resultstring eofArgs= false");
@@ -118,7 +147,7 @@ public class ForeachController extends GenericController implements Serializable
 	 */
 	private boolean emptyList() {
         JMeterContext context = getThreadContext();
-    	String inputVariable=getInputValString()+"_1";
+    	String inputVariable=getInputVal()+getSeparator()+"1";
     	if (context.getVariables().get(inputVariable) != null) 
     	{
     	   return false;
