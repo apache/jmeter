@@ -313,4 +313,9 @@ public class JDBCSampler extends AbstractSampler implements TestListener
         }
         return data;
     }
+
+    public String toString()
+    {
+        return getUrl()+", user: "+getUsername()+"\n"+getQuery();
+    }
 }
