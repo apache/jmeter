@@ -369,6 +369,7 @@ public class JMeterUtils implements UnitTestManager
                     text.append(lineEnd);
                 }
             }
+            fileReader.close();
             return text.toString();
         }
 		catch (NullPointerException e) // Cannot find file
@@ -676,12 +677,12 @@ public class JMeterUtils implements UnitTestManager
     {
         if (className != null)
         {
-            className.trim();//TODO does nothing - presumably should be s=className.trim()
+            className=className.trim();
         }
 
         if (impls != null)
-        {   // FIXME: Shouldn't this be impls.trim()?
-            className.trim();//TODO does nothing!!
+        {   
+            impls=impls.trim();
         }
 
         try
