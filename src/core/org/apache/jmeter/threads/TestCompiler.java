@@ -47,7 +47,7 @@ import org.apache.jmeter.util.ListedHashTreeVisitor;
 public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 {
 	LinkedList stack = new LinkedList();
-	Map samplerConfigs = new HashMap();
+	Map samplerConfigMap = new HashMap();
 	Set objectsWithFunctions = new HashSet();
 	ListedHashTree testTree;
 	SampleResult previousResult;
@@ -110,9 +110,10 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 		currentSampler = sampler;
 		SamplePackage ret = new SamplePackage();
 		Sampler clonedSampler = sampler;
+		SamplerConfigs configs = (SamplerConfigs)samplerConfigMap.get(sampler);
 		if(sampler instanceof PerSampleClonable)
 		{
-			clonedSampler = (Sampler)((PerSampleClonable)sampler).clone();
+			clonedSampler = (Sampler)sampler.clone();
 		}
 		if(objectsWithFunctions.contains(sampler))
 		{
@@ -120,12 +121,11 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 		}
 		ret.setSampler(clonedSampler);
 		ret.addSampleListener(this);
-		Iterator iter = ((List)samplerConfigs.get(sampler)).iterator();
-		while(iter.hasNext())
-		{
-			TestElement config = (TestElement)iter.next();
-			layerElement(ret,config, clonedSampler);
-		}
+		configureWithConfigElements(clonedSampler,configs.getConfigs());
+		configureWithResponseModifiers(clonedSampler,configs.getResponseModifiers());
+		configureWithModifiers(clonedSampler,configs.getModifiers());
+		configureSamplerPackage(ret,configs);
+		//replaceStatics(ret);
 		return ret;
 	}
 
@@ -170,6 +170,11 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 	private void saveSamplerConfigs(Sampler sam)
 	{
 		List configs = new LinkedList();
+		List modifiers = new LinkedList();
+		List responseModifiers = new LinkedList();
+		List listeners = new LinkedList();
+		List timers = new LinkedList();
+		List assertions = new LinkedList();
 		for(int i = stack.size(); i > 0; i--)
 		{
 			Iterator iter = testTree.list(stack.subList(0, i)).iterator();
@@ -183,10 +188,30 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 						objectsWithFunctions.add(item);
 					}
 				}
-				if(!(item instanceof Sampler))
+				if((item instanceof ConfigTestElement))
 				{
 					configs.add(item);
 				}
+				if(item instanceof Modifier)
+				{
+					modifiers.add(item);
+				}
+				if(item instanceof ResponseBasedModifier)
+				{
+					responseModifiers.add(item);
+				}
+				if(item instanceof SampleListener)
+				{
+					listeners.add(item);
+				}
+				if(item instanceof Timer)
+				{
+					timers.add(item);
+				}
+				if(item instanceof Assertion)
+				{
+					assertions.add(item);
+				}			
 			}
 		}
 		synchronized(sam)
@@ -196,7 +221,60 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 				objectsWithFunctions.add(sam);
 			}
 		}
-		samplerConfigs.put(sam, configs);
+		SamplerConfigs samplerConfigs = new SamplerConfigs(configs,modifiers,responseModifiers,
+				listeners,timers,assertions);
+		samplerConfigMap.put(sam, samplerConfigs);
+	}
+	
+	private class SamplerConfigs
+	{
+		List configs;
+		List modifiers;
+		List listeners;
+		List assertions;
+		List timers;
+		List responseModifiers;
+		
+		public SamplerConfigs(List configs,List modifiers,List responseModifiers,
+				List listeners,List timers,List assertions)
+		{
+			this.configs = configs;
+			this.modifiers = modifiers;
+			this.responseModifiers = responseModifiers;
+			this.listeners = listeners;
+			this.timers = timers;
+			this.assertions = assertions;
+		}
+		
+		public List getConfigs()
+		{
+			return configs;
+		}
+		
+		public List getModifiers()
+		{
+			return modifiers;
+		}
+		
+		public List getResponseModifiers()
+		{
+			return responseModifiers;
+		}
+		
+		public List getListeners()
+		{
+			return listeners;
+		}
+		
+		public List getAssertions()
+		{
+			return assertions;
+		}
+		
+		public List getTimers()
+		{
+			return timers;
+		}
 	}
 
 	/****************************************
@@ -302,44 +380,103 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 			return false;
 		}
 	}
-
-	private void layerElement(SamplePackage ret,TestElement config, Sampler clonedSampler)
+	
+	private void configureWithConfigElements(Sampler sam,List configs)
 	{
-		boolean replace = objectsWithFunctions.contains(config);
-		if(config instanceof PerSampleClonable)
+		Iterator iter = configs.iterator();
+		while(iter.hasNext())
 		{
-			config = (TestElement)((PerSampleClonable)config).clone();
+			ConfigTestElement config = (ConfigTestElement)iter.next();
+			config = (ConfigTestElement)cloneIfNecessary(config);
+			if(objectsWithFunctions.contains(config))
+			{
+				replaceValues(config);
+			}
+			sam.addTestElement(config);
 		}
-		if(config instanceof Modifier)
+	}
+	
+	private void configureWithModifiers(Sampler sam,List modifiers)
+	{
+		Iterator iter = modifiers.iterator();
+		while(iter.hasNext())
 		{
-			((Modifier)config).modifyEntry(clonedSampler);
+			Modifier mod = (Modifier)iter.next();
+			mod = (Modifier)cloneIfNecessary(mod);
+			if(objectsWithFunctions.contains(mod))
+			{
+				replaceValues((TestElement)mod);
+			}
+			mod.modifyEntry(sam);
 		}
-		if(config instanceof ResponseBasedModifier && previousResult != null)
+	}
+	
+	private void configureWithResponseModifiers(Sampler sam,List responseModifiers)
+	{
+		Iterator iter = responseModifiers.iterator();
+		while(iter.hasNext())
 		{
-			((ResponseBasedModifier)config).modifyEntry(clonedSampler, previousResult);
+			ResponseBasedModifier mod = (ResponseBasedModifier)iter.next();
+			mod = (ResponseBasedModifier)cloneIfNecessary(mod);
+			if(objectsWithFunctions.contains(mod))
+			{
+				replaceValues((TestElement)mod);
+			}
+			if(previousResult != null)
+			{
+				mod.modifyEntry(sam,previousResult);
+			}
 		}
-		if(config instanceof SampleListener)
+	}
+	
+	private Object cloneIfNecessary(Object el)
+	{
+		if(el instanceof PerSampleClonable || objectsWithFunctions.contains(el))
 		{
-			ret.addSampleListener((SampleListener)config);
+			return ((TestElement)el).clone();
 		}
-		if(config instanceof Assertion)
+		else
 		{
-			ret.addAssertion((Assertion)config);
+			return el;
 		}
-		if(config instanceof Timer)
+	}
+
+	private void configureSamplerPackage(SamplePackage ret,SamplerConfigs configs)
+	{
+		Iterator iter = configs.getAssertions().iterator();
+		while(iter.hasNext())
 		{
-			ret.addTimer((Timer)config);
+			Assertion assertion = (Assertion)iter.next();
+			assertion = (Assertion)cloneIfNecessary(assertion);
+			if(objectsWithFunctions.contains(assertion))
+			{
+				replaceValues((TestElement)assertion);
+			}
+			ret.addAssertion(assertion);
 		}
-		if(replace && config instanceof PerSampleClonable)
+		iter = configs.getTimers().iterator();
+		while(iter.hasNext())
 		{
-			replaceValues(config);
+			Timer timer = (Timer)iter.next();
+			timer = (Timer)cloneIfNecessary(timer);
+			if(objectsWithFunctions.contains(timer))
+			{
+				replaceValues((TestElement)timer);
+			}
+			ret.addTimer(timer);
 		}
-		else if(replace)
+		
+		iter = configs.getListeners().iterator();
+		while(iter.hasNext())
 		{
-			config = (TestElement)config.clone();
-			replaceValues(config);
+			SampleListener lis = (SampleListener)iter.next();
+			lis = (SampleListener)cloneIfNecessary(lis);
+			if(objectsWithFunctions.contains(lis))
+			{
+				replaceValues((TestElement)lis);
+			}
+			ret.addSampleListener(lis);
 		}
-		clonedSampler.addTestElement(config);
 	}
 	
 	private boolean hasFunctions(TestElement el)

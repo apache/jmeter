@@ -1,32 +1,51 @@
 package org.apache.jmeter.functions;
 
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 
 /**
- * @author default
+ * @author Administrator
  *
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
  */
-public class ThreadNumber implements Function {
+public class UnknownFunction implements Function {
 	
-	private JMeterVariables vars;
-	private static final String KEY = "__threadNum";
+	private static final String KEY = "__unknownFunction";
+	private Map varMap = new HashMap();
+	private String name;
+	
+	public UnknownFunction(String name)
+	{
+		this.name = name;
+	}
+	
+	public UnknownFunction()
+	{
+		this.name = "";
+	}
 
 	/**
 	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
 	 */
 	public String execute(SampleResult previousResult, Sampler currentSampler)
 		throws InvalidVariableException {
-		return Thread.currentThread().getName().substring(
-				Thread.currentThread().getName().indexOf("-")+1);
+		String ret = getVariables().get(name);
+		if(ret == null)
+		{
+			return "${"+name+"}";
+		}
+		return ret;
+	}
+	
+	private JMeterVariables getVariables()
+	{
+		return (JMeterVariables)varMap.get(Thread.currentThread().getName());
 	}
 
 	/**
@@ -34,6 +53,7 @@ public class ThreadNumber implements Function {
 	 */
 	public void setParameters(String parameters)
 		throws InvalidVariableException {
+			
 	}
 
 	/**
@@ -47,14 +67,14 @@ public class ThreadNumber implements Function {
 	 * @see org.apache.jmeter.functions.Function#getArgumentDesc()
 	 */
 	public List getArgumentDesc() {
-		return new LinkedList();
+		return null;
 	}
 
 	/**
 	 * @see org.apache.jmeter.functions.Function#setJMeterVariables(JMeterVariables)
 	 */
 	public void setJMeterVariables(JMeterVariables jmv) {
-		vars = jmv;
+		varMap.put(Thread.currentThread().getName(),jmv);
 	}
 
 }

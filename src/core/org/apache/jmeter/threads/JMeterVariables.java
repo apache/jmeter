@@ -12,7 +12,12 @@ import java.util.Map;
  * Window>Preferences>Java>Code Generation.
  */
 public class JMeterVariables {
-	private static Map iterationData = new HashMap();
+	private Map variables = new HashMap();
+	private int iteration = 0;	
+	
+	public JMeterVariables()
+	{
+	}
 	
 	public String getThreadName()
 	{
@@ -21,25 +26,27 @@ public class JMeterVariables {
 	
 	public int getIteration()
 	{
-		int[] a = (int[])iterationData.get(getThreadName());
-		return a[0];
+		return iteration;
 	}
 	
 	public void incIteration()
 	{
-		int[] a = (int[])iterationData.get(getThreadName());
-		if(a == null)
-		{
-			a = new int[1];
-			a[0] = 0;
-			iterationData.put(getThreadName(),a);
-		}
-		a[0]++;
+		iteration++;
 	}
 	
-	public static void initialize()
+	public void initialize()
 	{
-		iterationData.clear();
+		variables.clear();
+	}
+	
+	public void put(String key,String value)
+	{
+		variables.put(key,value);
+	}
+	
+	public String get(String key)
+	{
+		return (String)variables.get(key);
 	}
 
 }

@@ -2,13 +2,15 @@ package org.apache.jmeter.functions;
 
 import java.net.URLDecoder;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.apache.jmeter.functions.*;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.threads.JMeterVariables;
 
 /**
  * @author mstover
@@ -17,6 +19,7 @@ import org.apache.jmeter.samplers.Sampler;
  * Window>Preferences>Java>Templates.
  */
 public abstract class AbstractFunction implements Function {
+	private Map threadVariables = new HashMap();
 
 	/**
 	 * @see Function#execute(SampleResult, Sampler)
@@ -58,6 +61,18 @@ public abstract class AbstractFunction implements Function {
 			previous = arg;
 		}
 		return arguments;
+	}
+	
+	protected JMeterVariables getVariables()
+	{
+		return (JMeterVariables)threadVariables.get(Thread.currentThread().getName());
+	}
+	
+	/**
+	 * @see org.apache.jmeter.functions.Function#setJMeterVariables(JMeterVariables)
+	 */
+	public void setJMeterVariables(JMeterVariables jmv) {
+		threadVariables.put(jmv.getThreadName(),jmv);
 	}
 
 }

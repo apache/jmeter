@@ -65,7 +65,6 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.JMeterThreadMonitor;
-import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.threads.TestCompiler;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.ListedHashTree;
@@ -146,7 +145,6 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 			{
 				notifyTestListenersOfStart();
 			}
-			JMeterVariables.initialize();
 			while(iter.hasNext())
 			{
 				ThreadGroup group = (ThreadGroup)iter.next();
