@@ -158,12 +158,12 @@ public class ProxyControlGui extends JPanel implements JMeterGUIComponent, Actio
 		return element;
 	}
 
-	private void setIncludeListInProxyControl(ProxyControl element) {
+	protected void setIncludeListInProxyControl(ProxyControl element) {
 		List includeList = getDataList(includeModel,INCLUDE_COL);
 		element.setIncludeList(includeList);
 	}
 
-	private void setExcludeListInProxyControl(ProxyControl element)
+	protected void setExcludeListInProxyControl(ProxyControl element)
 	{
 		List excludeList = getDataList(excludeModel,EXCLUDE_COL);
 		element.setExcludeList(excludeList);
@@ -509,4 +509,14 @@ public class ProxyControlGui extends JPanel implements JMeterGUIComponent, Actio
     {
         namePanel.setNode(node);
     }
+
+	/**
+	 * Returns the portField.
+	 * @return JTextField
+	 */
+	protected JTextField getPortField()
+	{
+		return portField;
+	}
+
 }
