@@ -75,15 +75,13 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
-public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListener
+/**
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
+public class MultipartUrlConfigGui
+    extends UrlConfigGui
+    implements ActionListener
 {
 
     private JTextField filenameField;
@@ -95,19 +93,11 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
     private static String PARAMNAME = "paramname";
     private static String MIMETYPE = "mimetype";
 
-    /****************************************
-     * !ToDo (Constructor description)
-     ***************************************/
     public MultipartUrlConfigGui()
     {
         super();
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public TestElement createTestElement()
     {
         TestElement ce = super.createTestElement();
@@ -127,11 +117,6 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
         super.configureSampler(sampler);
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param el  !ToDo (Parameter description)
-     ***************************************/
     public void configure(TestElement el)
     {
         super.configure(el);
@@ -140,27 +125,14 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
         paramNameField.setText(el.getPropertyAsString(HTTPSampler.FILE_FIELD));
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public String getStaticLabel()
     {
         return JMeterUtils.getResString("url_multipart_config_title");
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     ***************************************/
     public void updateGui()
     {}
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param e  !ToDo (Parameter description)
-     ***************************************/
     public void actionPerformed(ActionEvent e)
     {
         String name = e.getActionCommand();
@@ -182,24 +154,26 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
         }
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     ***************************************/
     protected void init()
     {
         this.setLayout(new BorderLayout());
 
         // WEB SERVER PANEL
         VerticalPanel webServerPanel = new VerticalPanel();
-        webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        webServerPanel.setBorder(
+            BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("web_server")));
         webServerPanel.add(getDomainPanel());
         webServerPanel.add(getPortPanel());
 
         // WEB REQUEST PANEL
         JPanel webRequestPanel = new JPanel();
-        webRequestPanel.setLayout(new BoxLayout(webRequestPanel, BoxLayout.Y_AXIS));
-        webRequestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        webRequestPanel.setLayout(
+            new BoxLayout(webRequestPanel, BoxLayout.Y_AXIS));
+        webRequestPanel.setBorder(
+            BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("web_request")));
         
         webRequestPanel.add(getProtocolAndMethodPanel());
@@ -211,11 +185,6 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
         this.add(webRequestPanel, BorderLayout.CENTER);
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     protected JPanel getFilePanel()
     {
         JPanel filePanel = new VerticalPanel();
@@ -231,26 +200,28 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
         return filePanel;
     }
 
-    private JPanel createFileMimeTypePanel() {
+    private JPanel createFileMimeTypePanel()
+    {
         mimetypeField = new JTextField(15);
         mimetypeField.setName(MIMETYPE);
-        
-        JLabel mimetypeLabel = new JLabel(JMeterUtils.getResString("send_file_mime_label"));
+
+        JLabel mimetypeLabel =
+            new JLabel(JMeterUtils.getResString("send_file_mime_label"));
         mimetypeLabel.setLabelFor(mimetypeField);
-        
         JPanel mimePanel = new JPanel(new BorderLayout(5, 0));
         mimePanel.add(mimetypeLabel, BorderLayout.WEST);
         mimePanel.add(mimetypeField, BorderLayout.CENTER);
         return mimePanel;
     }
 
-    private JPanel createFileParamNamePanel() {
+    private JPanel createFileParamNamePanel()
+    {
         paramNameField = new JTextField(15);
         paramNameField.setName(PARAMNAME);
 
-        JLabel paramNameLabel = new JLabel(JMeterUtils.getResString("send_file_param_name_label"));
+        JLabel paramNameLabel =
+            new JLabel(JMeterUtils.getResString("send_file_param_name_label"));
         paramNameLabel.setLabelFor(paramNameField);
-        
 
         JPanel paramNamePanel = new JPanel(new BorderLayout(5, 0));        
         paramNamePanel.add(paramNameLabel, BorderLayout.WEST);
@@ -258,14 +229,17 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
         return paramNamePanel;
     }
 
-    private JPanel createFilenamePanel() {
+    private JPanel createFilenamePanel()
+    {
         filenameField = new JTextField(15);
         filenameField.setName(FILENAME);
 
-        JLabel filenameLabel = new JLabel(JMeterUtils.getResString("send_file_filename_label"));
-        filenameLabel.setLabelFor(filenameField);        
-        
-        JButton browseFileButton = new JButton(JMeterUtils.getResString("send_file_browse"));
+        JLabel filenameLabel =
+            new JLabel(JMeterUtils.getResString("send_file_filename_label"));
+        filenameLabel.setLabelFor(filenameField);
+
+        JButton browseFileButton =
+            new JButton(JMeterUtils.getResString("send_file_browse"));
         browseFileButton.setActionCommand(BROWSE);
         browseFileButton.addActionListener(this);
         
@@ -276,6 +250,7 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
         filenamePanel.add(browseFileButton, BorderLayout.EAST);
         return filenamePanel;
     }
+    
     /* (non-Javadoc)
      * @see org.apache.jmeter.protocol.http.config.gui.UrlConfigGui#clear()
      */
@@ -287,5 +262,4 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
         mimetypeField.setText("");
         paramNameField.setText("");
     }
-
 }

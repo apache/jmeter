@@ -52,24 +52,19 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.junit.protocol.http.config;
+package org.apache.jmeter.junit.protocol.http.config;
 
 import junit.framework.TestSuite;
-/**
- * Title:        Apache JMeter
- * Description:
- * Copyright:    Copyright (c) 2000
- * Company:      Apache Foundation
- * @author Michael Stover
- * @version 1.0
- */
 
+/**
+ * @author Michael Stover
+ * @version $Revision$
+ */
 public class HttpConfigSuite
 {
-
-	public static TestSuite suite()
-	{
-		TestSuite test = new TestSuite(UrlConfigTest.class);
-		return test;
-	}
+    public static TestSuite suite()
+    {
+       TestSuite test = new TestSuite(UrlConfigTest.class);
+       return test;
+    }
 }

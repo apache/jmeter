@@ -52,72 +52,81 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.protocol.http.control;
+package org.apache.jmeter.protocol.http.control;
 
 import java.io.Serializable;
 
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.testelement.AbstractTestElement;
+
 /**
  * This class is an Authorization encapsulator.
  *
- * @author  <a href="mailto:luta.raphael@networks.vivendi.net">Raphael Luta</a>
+ * @author <a href="mailto:luta.raphael@networks.vivendi.net">Raphael Luta</a>
+ * @version $Revision$
  */
 public class Authorization extends AbstractTestElement implements Serializable
 {
-	 private static String URL = "Authorization.url";
-	 private static String USERNAME = "Authorization.username";
-	 private static String PASSWORD = "Authorization.password";
-	 /**
-	  * create the authorization
-	  */
-	 Authorization(String url, String user, String pass) {
-		  setURL(url);
-		  setUser(user);
-		  setPass(pass);
-	 }
+    private static String URL = "Authorization.url";
+    private static String USERNAME = "Authorization.username";
+    private static String PASSWORD = "Authorization.password";
+    /**
+     * create the authorization
+     */
+    Authorization(String url, String user, String pass)
+    {
+        setURL(url);
+        setUser(user);
+        setPass(pass);
+    }
 
-	 public boolean expectsModification()
-	{
-		return false;
-	}
+    public boolean expectsModification()
+    {
+        return false;
+    }
 
-	 public Authorization()
-	 {
-		  setURL("");
-		  setUser("");
-		  setPass("");
-	 }
+    public Authorization()
+    {
+        setURL("");
+        setUser("");
+        setPass("");
+    }
 
-	 public String getClassLabel()
-	 {
-		return "Authorization";
-	 }
+    public String getClassLabel()
+    {
+        return "Authorization";
+    }
 
-	 public void addConfigElement(ConfigElement config)
-	 {
-	 }
+    public void addConfigElement(ConfigElement config)
+    {
+    }
 
-	 public String getURL() {
-		  return getPropertyAsString(URL);
-	 }
-	 public synchronized void setURL(String url) {
-		  setProperty(URL,url);
-	 }
-	 public String getUser() {
-		  return getPropertyAsString(USERNAME);
-	 }
-	 public synchronized void setUser(String user) {
-		  setProperty(USERNAME,user);
-	 }
-	 public String getPass() {
-		  return getPropertyAsString(PASSWORD);
-	 }
-	 public synchronized void setPass(String pass) {
-		  setProperty(PASSWORD,pass);
-	 }
-	 public String toString() {
-		  return getURL() + "\t" + getUser() + "\t" + getPass();
-	 }
+    public String getURL()
+    {
+        return getPropertyAsString(URL);
+    }
+    public synchronized void setURL(String url)
+    {
+        setProperty(URL, url);
+    }
+    public String getUser()
+    {
+        return getPropertyAsString(USERNAME);
+    }
+    public synchronized void setUser(String user)
+    {
+        setProperty(USERNAME, user);
+    }
+    public String getPass()
+    {
+        return getPropertyAsString(PASSWORD);
+    }
+    public synchronized void setPass(String pass)
+    {
+        setProperty(PASSWORD, pass);
+    }
+    public String toString()
+    {
+        return getURL() + "\t" + getUser() + "\t" + getPass();
+    }
 }
-

@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.sampler;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -95,14 +96,14 @@ import org.apache.oro.text.regex.Perl5Matcher;
 import org.apache.oro.text.regex.StringSubstitution;
 import org.apache.oro.text.regex.Substitution;
 import org.apache.oro.text.regex.Util;
-/****************************************
+
+/**
  * A sampler which understands all the parts necessary to read statistics about
  * HTTP requests, including cookies and authentication.
  *
- *@author    Michael Stover
- *@created   $Date$
- *@version   $Revision$
- ***************************************/
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 public class HTTPSampler extends AbstractSampler
 {
     public final static String HEADERS = "headers";
@@ -116,7 +117,8 @@ public class HTTPSampler extends AbstractSampler
     public final static String PORT = "HTTPSampler.port";
     public final static String METHOD = "HTTPSampler.method";
     public final static String PATH = "HTTPSampler.path";
-    public final static String FOLLOW_REDIRECTS = "HTTPSampler.follow_redirects";
+    public final static String FOLLOW_REDIRECTS =
+        "HTTPSampler.follow_redirects";
     public final static String PROTOCOL = "HTTPSampler.protocol";
     public final static String DEFAULT_PROTOCOL = "http";
     public final static String URL = "HTTPSampler.URL";
@@ -142,11 +144,16 @@ public class HTTPSampler extends AbstractSampler
     private HTTPSamplerFull imageSampler;
 
     static {
-        System.setProperty("java.protocol.handler.pkgs", JMeterUtils.getPropDefault("ssl.pkgs", "com.sun.net.ssl.internal.www.protocol"));
+        System.setProperty(
+            "java.protocol.handler.pkgs",
+            JMeterUtils.getPropDefault(
+                "ssl.pkgs",
+                "com.sun.net.ssl.internal.www.protocol"));
         System.setProperty("javax.net.ssl.debug", "all");
     }
 
-    private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
+    private static PatternCacheLRU patternCache =
+        new PatternCacheLRU(1000, new Perl5Compiler());
 
     private static ThreadLocal localMatcher = new ThreadLocal()
     {
@@ -189,6 +196,7 @@ public class HTTPSampler extends AbstractSampler
         else
             return protocol;
     }
+
     /**
      *  Sets the Path attribute of the UrlConfig object
      *
@@ -220,12 +228,16 @@ public class HTTPSampler extends AbstractSampler
         path = encodePath(path);
         setProperty(ENCODED_PATH, path);
     }
+
     private String encodePath(String path)
     {
         path =
             Util.substitute(
                 (Perl5Matcher) localMatcher.get(),
-                patternCache.getPattern(" ", Perl5Compiler.READ_ONLY_MASK & Perl5Compiler.SINGLELINE_MASK),
+                patternCache.getPattern(
+                    " ",
+                    Perl5Compiler.READ_ONLY_MASK
+                        & Perl5Compiler.SINGLELINE_MASK),
                 spaceSub,
                 path,
                 Util.SUBSTITUTE_ALL);
@@ -251,7 +263,10 @@ public class HTTPSampler extends AbstractSampler
         super.addProperty(prop);
         if (PATH.equals(prop.getName()))
         {
-            super.addProperty(new StringProperty(ENCODED_PATH, encodePath(prop.getStringValue())));
+            super.addProperty(
+                new StringProperty(
+                    ENCODED_PATH,
+                    encodePath(prop.getStringValue())));
         }
     }
 
@@ -259,41 +274,57 @@ public class HTTPSampler extends AbstractSampler
     {
         return getPropertyAsString(PATH);
     }
+
     public void setFollowRedirects(boolean value)
     {
         setProperty(new BooleanProperty(FOLLOW_REDIRECTS, value));
     }
+
     public boolean getFollowRedirects()
     {
         return getPropertyAsBoolean(FOLLOW_REDIRECTS);
     }
+
     public void setMethod(String value)
     {
         setProperty(METHOD, value);
     }
+
     public String getMethod()
     {
         return getPropertyAsString(METHOD);
     }
+
     public void setUseKeepAlive(boolean value)
     {
         setProperty(new BooleanProperty(USE_KEEPALIVE, value));
     }
+
     public boolean getUseKeepAlive()
     {
         return getPropertyAsBoolean(USE_KEEPALIVE);
     }
+
     public void addEncodedArgument(String name, String value, String metaData)
     {
-        log.debug("adding argument: name: " + name + " value: " + value + " metaData: " + metaData);
+        log.debug(
+            "adding argument: name: "
+                + name
+                + " value: "
+                + value
+                + " metaData: "
+                + metaData);
         Arguments args = getArguments();
         HTTPArgument arg = new HTTPArgument(name, value, metaData, true);
-        if (arg.getName().equals(arg.getEncodedName()) && arg.getValue().equals(arg.getEncodedValue()))
+
+        if (arg.getName().equals(arg.getEncodedName())
+            && arg.getValue().equals(arg.getEncodedValue()))
         {
             arg.setAlwaysEncoded(false);
         }
         args.addArgument(arg);
     }
+
     public void addArgument(String name, String value)
     {
         Arguments args = this.getArguments();
@@ -325,10 +356,12 @@ public class HTTPSampler extends AbstractSampler
         Arguments args = this.getArguments();
         args.addArgument(new HTTPArgument(name, value, metadata));
     }
+
     public void setPort(int value)
     {
         setProperty(new IntegerProperty(PORT, value));
     }
+
     public int getPort()
     {
         int port = getPropertyAsInt(PORT);
@@ -342,50 +375,62 @@ public class HTTPSampler extends AbstractSampler
         }
         return port;
     }
+
     public void setDomain(String value)
     {
         setProperty(DOMAIN, value);
     }
+
     public String getDomain()
     {
         return getPropertyAsString(DOMAIN);
     }
+
     public void setArguments(Arguments value)
     {
         setProperty(new TestElementProperty(ARGUMENTS, value));
     }
+
     public Arguments getArguments()
     {
         return (Arguments) getProperty(ARGUMENTS).getObjectValue();
     }
+
     public void setAuthManager(AuthManager value)
     {
         setProperty(new TestElementProperty(AUTH_MANAGER, value));
     }
+
     public AuthManager getAuthManager()
     {
         return (AuthManager) getProperty(AUTH_MANAGER).getObjectValue();
     }
+
     public void setHeaderManager(HeaderManager value)
     {
         setProperty(new TestElementProperty(HEADER_MANAGER, value));
     }
+
     public HeaderManager getHeaderManager()
     {
         return (HeaderManager) getProperty(HEADER_MANAGER).getObjectValue();
     }
+
     public void setCookieManager(CookieManager value)
     {
         setProperty(new TestElementProperty(COOKIE_MANAGER, value));
     }
+
     public CookieManager getCookieManager()
     {
         return (CookieManager) getProperty(COOKIE_MANAGER).getObjectValue();
     }
+
     public void setMimetype(String value)
     {
         setProperty(MIMETYPE, value);
     }
+
     public String getMimetype()
     {
         return getPropertyAsString(MIMETYPE);
@@ -401,27 +446,26 @@ public class HTTPSampler extends AbstractSampler
         setProperty(new BooleanProperty(IMAGE_PARSER, parseImages));
     }
 
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
-    protected final static String NON_HTTP_RESPONSE_CODE = "Non HTTP response code";
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
-    protected final static String NON_HTTP_RESPONSE_MESSAGE = "Non HTTP response message";
+    protected final static String NON_HTTP_RESPONSE_CODE =
+        "Non HTTP response code";
+    protected final static String NON_HTTP_RESPONSE_MESSAGE =
+        "Non HTTP response message";
     transient private static Logger log = LoggingManager.getLoggerForClass();
-    /****************************************
+
+    /**
      * Holds a list of URLs sampled - so we're not flooding stdout with debug
      * information
-     ***************************************/
+     */
     private ArrayList m_sampledURLs = new ArrayList();
-    /****************************************
-     * Constructor for the HTTPSampler object
-     ***************************************/
+    
+    /**
+     * Constructor for the HTTPSampler object.
+     */
     public HTTPSampler()
     {
         setArguments(new Arguments());
     }
+    
     public HTTPSampler(URL u)
     {
         setMethod(GET);
@@ -434,31 +478,28 @@ public class HTTPSampler extends AbstractSampler
         setUseKeepAlive(true);
         setArguments(new Arguments());
     }
-    /****************************************
+    
+    /**
      * Do a sampling and return its results.
      *
-     *@param e  <code>Entry</code> to be sampled
-     *@return   results of the sampling
-     ***************************************/
+     * @param e  <code>Entry</code> to be sampled
+     * @return   results of the sampling
+     */
     public SampleResult sample(Entry e)
     {
         return sample(0);
     }
+    
     public SampleResult sample()
     {
         return sample(0);
     }
 
-    /**
-     *  !ToDoo (Method description)
-     *
-     *@return                            !ToDo (Return description)
-     *@exception  MalformedURLException  !ToDo (Exception description)
-     */
     public URL getUrl() throws MalformedURLException
     {
         String pathAndQuery = null;
-        if (this.getMethod().equals(HTTPSampler.GET) && getQueryString().length() > 0)
+        if (this.getMethod().equals(HTTPSampler.GET)
+            && getQueryString().length() > 0)
         {
             if (this.getEncodedPath().indexOf("?") > -1)
             {
@@ -483,13 +524,18 @@ public class HTTPSampler extends AbstractSampler
         }
         else
         {
-            return new URL(getProtocol(), getPropertyAsString(HTTPSampler.DOMAIN), getPort(), pathAndQuery);
+            return new URL(
+                getProtocol(),
+                getPropertyAsString(HTTPSampler.DOMAIN),
+                getPort(),
+                pathAndQuery);
         }
     }
+
     /**
-     *  Gets the QueryString attribute of the UrlConfig object
+     * Gets the QueryString attribute of the UrlConfig object.
      *
-     *@return    The QueryString value
+     * @return    the QueryString value
      */
     public String getQueryString()
     {
@@ -505,7 +551,8 @@ public class HTTPSampler extends AbstractSampler
             }
             catch (ClassCastException e)
             {
-                item = new HTTPArgument((Argument) iter.next().getObjectValue());
+                item =
+                    new HTTPArgument((Argument) iter.next().getObjectValue());
             }
             if (!first)
             {
@@ -529,40 +576,43 @@ public class HTTPSampler extends AbstractSampler
         return buf.toString();
     }
 
-    /****************************************
-     * Set request headers in preparation to opening a connection
+    /**
+     * Set request headers in preparation to opening a connection.
      *
-     *@param connection       <code>URLConnection</code> to set headers on
-     *@exception IOException  if an I/O exception occurs
-     ***************************************/
+     * @param connection       <code>URLConnection</code> to set headers on
+     * @exception IOException  if an I/O exception occurs
+     */
     public void setPostHeaders(URLConnection conn) throws IOException
     {
         postWriter.setHeaders(conn, this);
     }
 
-    /****************************************
+    /**
      * Send POST data from <code>Entry</code> to the open connection.
      *
-     *@param connection       <code>URLConnection</code> of where POST data should
-     *      be sent
-     *@param url              contains the query string for POST
-     *@exception IOException  if an I/O exception occurs
-     ***************************************/
+     * @param connection <code>URLConnection</code> of where POST data should
+     *                   be sent
+     * @exception IOException  if an I/O exception occurs
+     */
     public void sendPostData(URLConnection connection) throws IOException
     {
         postWriter.sendPostData(connection, this);
     }
 
-    /****************************************
-     * Returns a <code>HttpURLConnection</code> with request method(GET or POST),
-     * headers, cookies, authorization properly set for the URL request
+    /**
+     * Returns a <code>HttpURLConnection</code> with request method(GET or
+     * POST), headers, cookies, authorization properly set for the URL request.
      *
-     *@param u                <code>URL</code> of the URL request
-     *@param url              <code>UrlConfig</code> of the URL request
-     *@return                 <code>HttpURLConnection</code> of the URL request
-     *@exception IOException  if an I/O Exception occurs
-     ***************************************/
-    protected HttpURLConnection setupConnection(URL u, String method, SampleResult res) throws IOException
+     * @param u                <code>URL</code> of the URL request
+     * @param url              <code>UrlConfig</code> of the URL request
+     * @return                 <code>HttpURLConnection</code> of the URL request
+     * @exception IOException  if an I/O Exception occurs
+     */
+    protected HttpURLConnection setupConnection(
+        URL u,
+        String method,
+        SampleResult res)
+        throws IOException
     {
         HttpURLConnection conn;
         // [Jordi <jsalvata@atg.com>]
@@ -570,13 +620,15 @@ public class HTTPSampler extends AbstractSampler
         // feature of HttpURLConnections and we're doing redirection
         // by hand instead. Everything would be so much simpler...
         // [/Jordi]
-        // Mike: answer - it didn't work.  Maybe in JDK1.4 it works, but honestly,
-        // it doesn't seem like they're working on this.
+        // Mike: answer - it didn't work.  Maybe in JDK1.4 it works, but
+        // honestly, it doesn't seem like they're working on this.
         // My longer term plan is to use Apache's home grown HTTP Client, or
-        // maybe even HTTPUnit's classes.  I'm sure both would be better than Sun's
+        // maybe even HTTPUnit's classes.  I'm sure both would be better than
+        // Sun's.
         HttpURLConnection.setFollowRedirects(false);
         conn = (HttpURLConnection) u.openConnection();
-        // delegate SSL specific stuff to SSLManager so that compilation still works otherwise.
+        // Delegate SSL specific stuff to SSLManager so that compilation still
+        // works otherwise.
         if ("https".equals(u.getProtocol()))
         {
             try
@@ -585,9 +637,13 @@ public class HTTPSampler extends AbstractSampler
             }
             catch (Exception e)
             {
-                log.warn("You may have forgotten to set the ssl.provider property in jmeter.properties", e);
+                log.warn(
+                    "You may have forgotten to set the ssl.provider property "
+                        + "in jmeter.properties",
+                    e);
             }
         }
+
         // a well-bahaved browser is supposed to send 'Connection: close'
         // with the last request to an HTTP server. Instead, most browsers
         // leave it to the server to close the connection after their
@@ -600,6 +656,7 @@ public class HTTPSampler extends AbstractSampler
         {
             conn.setRequestProperty("Connection", "close");
         }
+
         conn.setRequestMethod(method);
         setConnectionHeaders(conn, u, getHeaderManager());
         String cookies = setConnectionCookie(conn, u, getCookieManager());
@@ -614,11 +671,13 @@ public class HTTPSampler extends AbstractSampler
         setConnectionAuthorization(conn, u, getAuthManager());
         return conn;
     }
+
     //Mark Walsh 2002-08-03, modified to also parse a parameter name value
     //string, where string contains only the parameter name and no equal sign.
     /**
-     * This method allows a proxy server to send over the raw text from a browser's
-     * output stream to be parsed and stored correctly into the UrlConfig object.
+     * This method allows a proxy server to send over the raw text from a
+     * browser's output stream to be parsed and stored correctly into the
+     * UrlConfig object.
      */
     public void parseArguments(String queryString)
     {
@@ -634,7 +693,8 @@ public class HTTPSampler extends AbstractSampler
             String metaData = ""; // records the existance of an equal sign
             if (args[i].indexOf("=") != -1)
             {
-                endOfNameIndex = args[i].indexOf("="); // case of name=value, name=
+                // case of name=value, name=
+                endOfNameIndex = args[i].indexOf("=");
                 metaData = "=";
             }
             else
@@ -653,7 +713,8 @@ public class HTTPSampler extends AbstractSampler
             String name = ""; // for empty string
             if (args[i].length() > 0)
             {
-                name = args[i].substring(0, endOfNameIndex); //for non empty string
+                //for non empty string
+                name = args[i].substring(0, endOfNameIndex);
             }
             // parse value
             String value = "";
@@ -673,28 +734,39 @@ public class HTTPSampler extends AbstractSampler
                 }
                 catch (Exception e)
                 {
-                    log.error("UrlConfig:parseArguments(): Unable to parse argument=[" + value + "]");
-                    log.error("UrlConfig:parseArguments(): queryString=[" + queryString + "]", e);
+                    log.error(
+                        "UrlConfig:parseArguments(): Unable to parse argument=["
+                            + value
+                            + "]");
+                    log.error(
+                        "UrlConfig:parseArguments(): queryString=["
+                            + queryString
+                            + "]",
+                        e);
                 }
             }
         }
     }
-    /****************************************
-     * Reads the response from the URL connection
+
+    /**
+     * Reads the response from the URL connection.
      *
-     *@param conn             URL from which to read response
-     *@return                 response in <code>String</code>
-     *@exception IOException  if an I/O exception occurs
-     ***************************************/
+     * @param conn             URL from which to read response
+     * @return                 response in <code>String</code>
+     * @exception IOException  if an I/O exception occurs
+     */
     protected byte[] readResponse(HttpURLConnection conn) throws IOException
     {
         byte[] readBuffer = JMeterContextService.getContext().getReadBuffer();
         BufferedInputStream in;
         try
         {
-            if (conn.getContentEncoding() != null && conn.getContentEncoding().equals("gzip"))
+            if (conn.getContentEncoding() != null
+                && conn.getContentEncoding().equals("gzip"))
             {
-                in = new BufferedInputStream(new GZIPInputStream(conn.getInputStream()));
+                in =
+                    new BufferedInputStream(
+                        new GZIPInputStream(conn.getInputStream()));
             }
             else
             {
@@ -717,14 +789,18 @@ public class HTTPSampler extends AbstractSampler
         w.close();
         return w.toByteArray();
     }
-    /****************************************
+
+    /**
      * Gets the ResponseHeaders from the URLConnection, save them to the
      * SampleResults object.
      *
-     *@param conn  connection from which the headers are read
-     *@param res   where the headers read are stored
-     ***************************************/
-    protected byte[] getResponseHeaders(HttpURLConnection conn, SampleResult res) throws IOException
+     * @param conn  connection from which the headers are read
+     * @param res   where the headers read are stored
+     */
+    protected byte[] getResponseHeaders(
+        HttpURLConnection conn,
+        SampleResult res)
+        throws IOException
     {
         StringBuffer headerBuf = new StringBuffer();
         headerBuf.append(conn.getHeaderField(0).substring(0, 8));
@@ -733,9 +809,12 @@ public class HTTPSampler extends AbstractSampler
         headerBuf.append(" ");
         headerBuf.append(conn.getResponseMessage());
         headerBuf.append("\n");
+
         for (int i = 1; conn.getHeaderFieldKey(i) != null; i++)
         {
-            if (!conn.getHeaderFieldKey(i).equalsIgnoreCase("transfer-encoding"))
+            if (!conn
+                .getHeaderFieldKey(i)
+                .equalsIgnoreCase("transfer-encoding"))
             {
                 headerBuf.append(conn.getHeaderFieldKey(i));
                 headerBuf.append(": ");
@@ -746,17 +825,21 @@ public class HTTPSampler extends AbstractSampler
         headerBuf.append("\n");
         return headerBuf.toString().getBytes("8859_1");
     }
-    /****************************************
+
+    /**
      * Extracts all the required cookies for that particular URL request and set
-     * them in the <code>HttpURLConnection</code> passed in
+     * them in the <code>HttpURLConnection</code> passed in.
      *
-     *@param conn           <code>HttpUrlConnection</code> which represents the URL
-     *      request
-     *@param u              <code>URL</code> of the URL request
-     *@param cookieManager  the <code>CookieManager</code> containing all the
-     *      cookies for this <code>UrlConfig</code>
-     ***************************************/
-    private String setConnectionCookie(HttpURLConnection conn, URL u, CookieManager cookieManager)
+     * @param conn          <code>HttpUrlConnection</code> which represents the
+     *                      URL request
+     * @param u             <code>URL</code> of the URL request
+     * @param cookieManager the <code>CookieManager</code> containing all the
+     *                      cookies for this <code>UrlConfig</code>
+     */
+    private String setConnectionCookie(
+        HttpURLConnection conn,
+        URL u,
+        CookieManager cookieManager)
     {
         String cookieHeader = null;
         if (cookieManager != null)
@@ -769,17 +852,21 @@ public class HTTPSampler extends AbstractSampler
         }
         return cookieHeader;
     }
-    /****************************************
+
+    /**
      * Extracts all the required headers for that particular URL request and set
      * them in the <code>HttpURLConnection</code> passed in
      *
-     *@param conn           <code>HttpUrlConnection</code> which represents the URL
-     *      request
+     *@param conn           <code>HttpUrlConnection</code> which represents the
+     *                      URL request
      *@param u              <code>URL</code> of the URL request
      *@param headerManager  the <code>HeaderManager</code> containing all the
-     *      cookies for this <code>UrlConfig</code>
-     ***************************************/
-    private void setConnectionHeaders(HttpURLConnection conn, URL u, HeaderManager headerManager)
+     *                      cookies for this <code>UrlConfig</code>
+     */
+    private void setConnectionHeaders(
+        HttpURLConnection conn,
+        URL u,
+        HeaderManager headerManager)
     {
         if (headerManager != null)
         {
@@ -790,22 +877,28 @@ public class HTTPSampler extends AbstractSampler
                 while (i.hasNext())
                 {
                     Header header = (Header) i.next().getObjectValue();
-                    conn.setRequestProperty(header.getName(), header.getValue());
+                    conn.setRequestProperty(
+                        header.getName(),
+                        header.getValue());
                 }
             }
         }
     }
-    /****************************************
-     * Extracts all the required authorization for that particular URL request and
-     * set them in the <code>HttpURLConnection</code> passed in
+
+    /**
+     * Extracts all the required authorization for that particular URL request
+     * and set them in the <code>HttpURLConnection</code> passed in.
      *
-     *@param conn         <code>HttpUrlConnection</code> which represents the URL
-     *      request
-     *@param u            <code>URL</code> of the URL request
-     *@param authManager  the <code>AuthManager</code> containing all the cookies
-     *      for this <code>UrlConfig</code>
-     ***************************************/
-    private void setConnectionAuthorization(HttpURLConnection conn, URL u, AuthManager authManager)
+     * @param conn        <code>HttpUrlConnection</code> which represents the
+     *                    URL request
+     * @param u           <code>URL</code> of the URL request
+     * @param authManager the <code>AuthManager</code> containing all the
+     *                    cookies for this <code>UrlConfig</code>
+     */
+    private void setConnectionAuthorization(
+        HttpURLConnection conn,
+        URL u,
+        AuthManager authManager)
     {
         if (authManager != null)
         {
@@ -816,16 +909,21 @@ public class HTTPSampler extends AbstractSampler
             }
         }
     }
-    /****************************************
+
+    /**
      * Get the response code of the URL connection and divide it by 100 thus
      * returning 2(for 2xx response codes), 3(for 3xx reponse codes), etc
      *
-     *@param conn  <code>HttpURLConnection</code> of URL request
-     *@param res   where all results of sampling will be stored
-     *@param time  time when the URL request was first started
-     *@return      HTTP response code divided by 100
-     ***************************************/
-    private int getErrorLevel(HttpURLConnection conn, SampleResult res, long time) throws IOException
+     * @param conn  <code>HttpURLConnection</code> of URL request
+     * @param res   where all results of sampling will be stored
+     * @param time  time when the URL request was first started
+     * @return      HTTP response code divided by 100
+     */
+    private int getErrorLevel(
+        HttpURLConnection conn,
+        SampleResult res,
+        long time)
+        throws IOException
     {
         int errorLevel = 200;
         String message = null;
@@ -835,24 +933,27 @@ public class HTTPSampler extends AbstractSampler
         res.setResponseMessage(message);
         return errorLevel;
     }
+    
     public void removeArguments()
     {
-        setProperty(new TestElementProperty(HTTPSampler.ARGUMENTS, new Arguments()));
+        setProperty(
+            new TestElementProperty(HTTPSampler.ARGUMENTS, new Arguments()));
     }
-    /****************************************
-     * Follow redirection manually. Normally if the web server does a redirection
-     * the intermediate page is not returned. Only the resultant page and the
-     * response code for the page will be returned. With redirection turned off,
-     * the response code of 3xx will be returned together with a "Location"
-     * header-value pair to indicate that the "Location" value needs to be followed
-     * to get the resultant page.
+    
+    /**
+     * Follow redirection manually. Normally if the web server does a
+     * redirection the intermediate page is not returned. Only the resultant
+     * page and the response code for the page will be returned. With
+     * redirection turned off, the response code of 3xx will be returned
+     * together with a "Location" header-value pair to indicate that the
+     * "Location" value needs to be followed to get the resultant page.
      *
-     *@param conn                       connection
-     *@param u
-     *@param urlConfig                  !ToDo (Parameter description)
-     *@exception MalformedURLException  if URL is not understood
-     ***************************************/
-    private void redirectUrl(HttpURLConnection conn, URL u) throws MalformedURLException
+     * @param conn                       connection
+     * @param u
+     * @exception MalformedURLException  if URL is not understood
+     */
+    private void redirectUrl(HttpURLConnection conn, URL u)
+        throws MalformedURLException
     {
         String loc = conn.getHeaderField("Location");
         if (loc != null)
@@ -863,14 +964,21 @@ public class HTTPSampler extends AbstractSampler
                 if (loc.startsWith("/"))
                 {
                     int ind = tempURL.indexOf("//") + 2;
-                    loc = tempURL.substring(0, tempURL.indexOf("/", ind) + 1) + loc.substring(1);
+                    loc =
+                        tempURL.substring(0, tempURL.indexOf("/", ind) + 1)
+                            + loc.substring(1);
                 }
                 else
                 {
-                    loc = u.toString().substring(0, u.toString().lastIndexOf('/') + 1) + loc;
+                    loc =
+                        u.toString().substring(
+                            0,
+                            u.toString().lastIndexOf('/') + 1)
+                            + loc;
                 }
             }
         }
+
         URL newUrl = new URL(loc);
         setMethod(GET);
         setProtocol(newUrl.getProtocol());
@@ -921,15 +1029,16 @@ public class HTTPSampler extends AbstractSampler
         return time;
     }
 
-    /****************************************
-     * Samples <code>Entry</code> passed in and stores the result in <code>SampleResult</code>
+    /**
+     * Samples <code>Entry</code> passed in and stores the result in
+     * <code>SampleResult</code>.
      *
-     *@param e           <code>Entry</code> to be sampled
-     *@param redirects   the level of redirection we're processing (0 means
-     *                  original request) -- just used to prevent
-     *                  an infinite loop.
-     *@return            results of the sampling
-     ***************************************/
+     * @param e           <code>Entry</code> to be sampled
+     * @param redirects   the level of redirection we're processing (0 means
+     *                    original request) -- just used to prevent
+     *                    an infinite loop.
+     * @return            results of the sampling
+     */
     private SampleResult sample(int redirects)
     {
         log.debug("Start : sample2");
@@ -980,7 +1089,8 @@ public class HTTPSampler extends AbstractSampler
             {
                 if (redirects >= MAX_REDIRECTS)
                 {
-                    throw new IOException("Maximum number of redirects exceeded");
+                    throw new IOException(
+                        "Maximum number of redirects exceeded");
                 }
 
                 if (!getFollowRedirects())
@@ -989,7 +1099,8 @@ public class HTTPSampler extends AbstractSampler
                 }
                 else
                 {
-                    time = bundleResponseInResult(time, res, conn); //System.currentTimeMillis() - time;
+                    time = bundleResponseInResult(time, res, conn);
+                    //System.currentTimeMillis() - time;
                     redirectUrl(conn, u);
                     SampleResult redirectResult = sample(redirects + 1);
                     res.addSubResult(redirectResult);
@@ -1030,9 +1141,9 @@ public class HTTPSampler extends AbstractSampler
         {
             try
             {
-                // calling disconnect doesn't close the connection immediately, but
-                // indicates we're through with it.  The JVM should close it when
-                // necessary.
+                // calling disconnect doesn't close the connection immediately,
+                // but indicates we're through with it.  The JVM should close
+                // it when necessary.
                 disconnect(conn);
             }
             catch (Exception e)
@@ -1046,12 +1157,18 @@ public class HTTPSampler extends AbstractSampler
     {
         String connection = conn.getHeaderField("Connection");
         boolean http11 = conn.getHeaderField(0).startsWith("HTTP/1.1");
-        if ((connection == null && !http11) || (connection != null && connection.equalsIgnoreCase("close")))
+        if ((connection == null && !http11)
+            || (connection != null && connection.equalsIgnoreCase("close")))
         {
             conn.disconnect();
         }
     }
-    private long bundleResponseInResult(long time, SampleResult res, HttpURLConnection conn) throws IOException, FileNotFoundException
+
+    private long bundleResponseInResult(
+        long time,
+        SampleResult res,
+        HttpURLConnection conn)
+        throws IOException, FileNotFoundException
     {
         res.setDataType(SampleResult.TEXT);
         byte[] ret = readResponse(conn);
@@ -1064,17 +1181,21 @@ public class HTTPSampler extends AbstractSampler
         res.setSuccessful(true);
         return time;
     }
-    /****************************************
-     * From the <code>HttpURLConnection</code>, store all the "set-cookie" key-pair
-     * values in the cookieManager of the <code>UrlConfig</code>
+
+    /**
+     * From the <code>HttpURLConnection</code>, store all the "set-cookie"
+     * key-pair values in the cookieManager of the <code>UrlConfig</code>.
      *
-     *@param conn           <code>HttpUrlConnection</code> which represents the URL
-     *      request
-     *@param u              <code>URL</code> of the URL request
-     *@param cookieManager  the <code>CookieManager</code> containing all the
-     *      cookies for this <code>UrlConfig</code>
-     ***************************************/
-    private void saveConnectionCookies(HttpURLConnection conn, URL u, CookieManager cookieManager)
+     * @param conn          <code>HttpUrlConnection</code> which represents the
+     *                      URL request
+     * @param u             <code>URL</code> of the URL request
+     * @param cookieManager the <code>CookieManager</code> containing all the
+     *                      cookies for this <code>UrlConfig</code>
+     */
+    private void saveConnectionCookies(
+        HttpURLConnection conn,
+        URL u,
+        CookieManager cookieManager)
     {
         if (cookieManager != null)
         {
@@ -1082,16 +1203,22 @@ public class HTTPSampler extends AbstractSampler
             {
                 if (conn.getHeaderFieldKey(i).equalsIgnoreCase("set-cookie"))
                 {
-                    cookieManager.addCookieFromHeader(conn.getHeaderField(i), u);
+                    cookieManager.addCookieFromHeader(
+                        conn.getHeaderField(i),
+                        u);
                 }
             }
         }
     }
+
     public String toString()
     {
         try
         {
-            return this.getUrl().toString() + ((POST.equals(getMethod())) ? "\nQuery Data: " + getQueryString() : "");
+            return this.getUrl().toString()
+                + ((POST.equals(getMethod()))
+                    ? "\nQuery Data: " + getQueryString()
+                    : "");
         }
         catch (MalformedURLException e)
         {
@@ -1113,7 +1240,9 @@ public class HTTPSampler extends AbstractSampler
             sampler.setMethod(HTTPSampler.GET);
             sampler.setPath("/index.html?pear");
             sampler.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?pear", sampler.getUrl().toString());
+            assertEquals(
+                "http://www.apache.org/index.html?pear",
+                sampler.getUrl().toString());
         }
 
         public void testMakingUrl() throws Exception
@@ -1124,7 +1253,9 @@ public class HTTPSampler extends AbstractSampler
             config.addArgument("param1", "value1");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?param1=value1", config.getUrl().toString());
+            assertEquals(
+                "http://www.apache.org/index.html?param1=value1",
+                config.getUrl().toString());
         }
         public void testMakingUrl2() throws Exception
         {
@@ -1134,7 +1265,9 @@ public class HTTPSampler extends AbstractSampler
             config.addArgument("param1", "value1");
             config.setPath("/index.html?p1=p2");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?param1=value1&p1=p2", config.getUrl().toString());
+            assertEquals(
+                "http://www.apache.org/index.html?param1=value1&p1=p2",
+                config.getUrl().toString());
         }
         public void testMakingUrl3() throws Exception
         {
@@ -1144,9 +1277,14 @@ public class HTTPSampler extends AbstractSampler
             config.addArgument("param1", "value1");
             config.setPath("/index.html?p1=p2");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?p1=p2", config.getUrl().toString());
+            assertEquals(
+                "http://www.apache.org/index.html?p1=p2",
+                config.getUrl().toString());
         }
-        // test cases for making Url, and exercise method addArgument(String name,String value,String metadata)
+        
+        // test cases for making Url, and exercise method
+        // addArgument(String name,String value,String metadata)
+
         public void testMakingUrl4() throws Exception
         {
             HTTPSampler config = new HTTPSampler();
@@ -1155,7 +1293,9 @@ public class HTTPSampler extends AbstractSampler
             config.addArgument("param1", "value1", "=");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?param1=value1", config.getUrl().toString());
+            assertEquals(
+                "http://www.apache.org/index.html?param1=value1",
+                config.getUrl().toString());
         }
         public void testMakingUrl5() throws Exception
         {
@@ -1165,7 +1305,9 @@ public class HTTPSampler extends AbstractSampler
             config.addArgument("param1", "", "=");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?param1=", config.getUrl().toString());
+            assertEquals(
+                "http://www.apache.org/index.html?param1=",
+                config.getUrl().toString());
         }
         public void testMakingUrl6() throws Exception
         {
@@ -1175,9 +1317,14 @@ public class HTTPSampler extends AbstractSampler
             config.addArgument("param1", "", "");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?param1", config.getUrl().toString());
+            assertEquals(
+                "http://www.apache.org/index.html?param1",
+                config.getUrl().toString());
         }
-        // test cases for making Url, and exercise method parseArguments(String queryString)
+
+        // test cases for making Url, and exercise method
+        // parseArguments(String queryString)
+        
         public void testMakingUrl7() throws Exception
         {
             HTTPSampler config = new HTTPSampler();
@@ -1186,8 +1333,11 @@ public class HTTPSampler extends AbstractSampler
             config.parseArguments("param1=value1");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?param1=value1", config.getUrl().toString());
+            assertEquals(
+                "http://www.apache.org/index.html?param1=value1",
+                config.getUrl().toString());
         }
+
         public void testMakingUrl8() throws Exception
         {
             HTTPSampler config = new HTTPSampler();
@@ -1196,8 +1346,11 @@ public class HTTPSampler extends AbstractSampler
             config.parseArguments("param1=");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?param1=", config.getUrl().toString());
+            assertEquals(
+                "http://www.apache.org/index.html?param1=",
+                config.getUrl().toString());
         }
+
         public void testMakingUrl9() throws Exception
         {
             HTTPSampler config = new HTTPSampler();
@@ -1206,8 +1359,11 @@ public class HTTPSampler extends AbstractSampler
             config.parseArguments("param1");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html?param1", config.getUrl().toString());
+            assertEquals(
+                "http://www.apache.org/index.html?param1",
+                config.getUrl().toString());
         }
+
         public void testMakingUrl10() throws Exception
         {
             HTTPSampler config = new HTTPSampler();
@@ -1216,7 +1372,9 @@ public class HTTPSampler extends AbstractSampler
             config.parseArguments("");
             config.setPath("/index.html");
             config.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org/index.html", config.getUrl().toString());
+            assertEquals(
+                "http://www.apache.org/index.html",
+                config.getUrl().toString());
         }
     }
 }

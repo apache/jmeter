@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.parser;
+
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -80,499 +81,516 @@ import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
 import org.xml.sax.SAXException;
 
-/****************************************
- * Title: Description: Copyright: Copyright (c) 2001 Company:
- *
- *@author    Michael Stover
- *@created   June 14, 2001
- *@version   1.0
- ***************************************/
-
+/**
+ * @author    Michael Stover
+ * @created   June 14, 2001
+ * @version   $Revision$
+ */
 public class HtmlParser implements Serializable
 {
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
 
-	/****************************************
-	 * !ToDo (Field description)
-	 ***************************************/
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter.protocol.http");
+    protected static String utfEncodingName;
+    private int compilerOptions =
+        Perl5Compiler.CASE_INSENSITIVE_MASK
+            | Perl5Compiler.MULTILINE_MASK
+            | Perl5Compiler.READ_ONLY_MASK;
 
-	/****************************************
-	 * !ToDo (Field description)
-	 ***************************************/
-	protected static String utfEncodingName;
-	private int compilerOptions = Perl5Compiler.CASE_INSENSITIVE_MASK |
-			Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK;
+    private static PatternCacheLRU patternCache =
+        new PatternCacheLRU(1000, new Perl5Compiler());
 
-	private static PatternCacheLRU patternCache =
-		new PatternCacheLRU(1000, new Perl5Compiler());
-	
-	private static ThreadLocal localMatcher =
-			 new ThreadLocal()
-			 {
-				protected Object initialValue()
-				{
-					 return new Perl5Matcher();
-				}
-			 };
+    private static ThreadLocal localMatcher = new ThreadLocal()
+    {
+        protected Object initialValue()
+        {
+            return new Perl5Matcher();
+        }
+    };
 
+    /**
+     * Constructor for the HtmlParser object.
+     */
+    public HtmlParser()
+    {
+    }
 
-	/****************************************
-	 * Constructor for the HtmlParser object
-	 ***************************************/
+    public static synchronized boolean isAnchorMatched(
+        HTTPSampler newLink,
+        HTTPSampler config)
+        throws MalformedPatternException
+    {
+        boolean ok = true;
+        Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
+        PropertyIterator iter = config.getArguments().iterator();
 
-	public HtmlParser()
-	{
-	}
+        // In JDK1.2, URLDecoder.decode has Exception in its throws clause.
+        // However, it was removed in JDK1.3. Since JMeter is
+        // JDK1.2-compatible, we need to catch Exception.
+        String query = null;
+        try
+        {
+            query = URLDecoder.decode(newLink.getQueryString());
+        }
+        catch (Exception e)
+        {
+            // do nothing. query will remain null.
+        }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@param newLink                        !ToDo (Parameter description)
-	 *@param config                         !ToDo (Parameter description)
-	 *@return                               !ToDo (Return description)
-	 *@exception MalformedPatternException  !ToDo (Exception description)
-	 ***************************************/
-	public static synchronized boolean isAnchorMatched(HTTPSampler newLink, 
-			HTTPSampler config) throws MalformedPatternException
-	{
-		boolean ok = true;
-		Perl5Matcher matcher = (Perl5Matcher)localMatcher.get();
-		PropertyIterator iter = config.getArguments().iterator();
+        if (query == null && config.getArguments().getArgumentCount() > 0)
+        {
+            return false;
+        }
+        
+        while (iter.hasNext())
+        {
+            Argument item = (Argument) iter.next().getObjectValue();
+            if (query.indexOf(item.getName() + "=") == -1)
+            {
+                if (!(ok =
+                    ok
+                        && matcher.contains(
+                            query,
+                            patternCache.getPattern(
+                                item.getName(),
+                                Perl5Compiler.READ_ONLY_MASK))))
+                {
+                    return false;
+                }
+            }
+        }
 
-		// In JDK1.2, URLDecoder.decode has Exception in its throws clause. However, it
-		// was removed in JDK1.3. Since JMeter is JDK1.2-compatible, we need to catch
-		// Exception.
-		String query = null;
-		try
-		{
-			query = URLDecoder.decode(newLink.getQueryString());
-		}
-		catch (Exception e)
-		{
-			// do nothing. query will remain null.
-		}
+        if (config.getDomain() != null
+            && config.getDomain().length() > 0
+            && !newLink.getDomain().equals(config.getDomain()))
+        {
+            if (!(ok =
+                ok
+                    && matcher.matches(
+                        newLink.getDomain(),
+                        patternCache.getPattern(
+                            config.getDomain(),
+                            Perl5Compiler.READ_ONLY_MASK))))
+                return false;
+        }
 
-		if(query == null && config.getArguments().getArgumentCount() > 0)
-			return false;
+        if (!newLink.getPath().equals(config.getPath())
+            && !matcher.matches(
+                newLink.getPath(),
+                patternCache.getPattern(
+                    "[/]*" + config.getPath(),
+                    Perl5Compiler.READ_ONLY_MASK)))
+            return false;
 
-		while(iter.hasNext())
-		{
-			Argument item = (Argument)iter.next().getObjectValue();
-			if(query.indexOf(item.getName()+"=") == -1)
-			{
-				if(!(ok = ok && matcher.contains(query, 
-						patternCache.getPattern(item.getName(), Perl5Compiler.READ_ONLY_MASK))))
-				{
-					return false;
-				}
-			}
-		}
+        if (!(ok =
+            ok
+                && matcher.matches(
+                    newLink.getProtocol(),
+                    patternCache.getPattern(
+                        config.getProtocol(),
+                        Perl5Compiler.READ_ONLY_MASK))))
+            return false;
 
-		if(config.getDomain() != null && config.getDomain().length() > 0 &&
-				!newLink.getDomain().equals(config.getDomain()))
-		{
-			if(!(ok = ok && matcher.matches(newLink.getDomain(),
-					patternCache.getPattern(config.getDomain(), Perl5Compiler.READ_ONLY_MASK))))
-				return false;
-		}
+        return ok;
+    }
 
-		if(!newLink.getPath().equals(config.getPath()) && !matcher.matches(newLink.getPath(), 
-				patternCache.getPattern("[/]*" + config.getPath(), Perl5Compiler.READ_ONLY_MASK)))
-			return false;
+    public static synchronized boolean isArgumentMatched(
+        Argument arg,
+        Argument patternArg)
+        throws MalformedPatternException
+    {
+        Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
+        return (
+            arg.getName().equals(patternArg.getName())
+                || matcher.matches(
+                    arg.getName(),
+                    patternCache.getPattern(
+                        patternArg.getName(),
+                        Perl5Compiler.READ_ONLY_MASK)))
+            && (arg.getValue().equals(patternArg.getValue())
+                || matcher.matches(
+                    (String) arg.getValue(),
+                    patternCache.getPattern(
+                        (String) patternArg.getValue(),
+                        Perl5Compiler.READ_ONLY_MASK)));
+    }
 
-		if(!(ok = ok && matcher.matches(newLink.getProtocol(), 
-				patternCache.getPattern(config.getProtocol(), Perl5Compiler.READ_ONLY_MASK))))
-			return false;
+    /**
+     * Returns <code>tidy</code> as HTML parser.
+     *
+     * @return   a <code>tidy</code> HTML parser
+     */
+    public static Tidy getParser()
+    {
+        log.debug("Start : getParser1");
+        Tidy tidy = new Tidy();
+        tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
+        tidy.setQuiet(true);
+        tidy.setShowWarnings(false);
 
-		return ok;
-	}
+        if (log.isDebugEnabled())
+            log.debug("getParser1 : tidy parser created - " + tidy);
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@param arg                            !ToDo (Parameter description)
-	 *@param patternArg                     !ToDo (Parameter description)
-	 *@return                               !ToDo (Return description)
-	 *@exception MalformedPatternException  !ToDo (Exception description)
-	 ***************************************/
-	public static synchronized boolean isArgumentMatched(Argument arg, Argument patternArg) throws MalformedPatternException
-	{
-		Perl5Matcher matcher = (Perl5Matcher)localMatcher.get();
-		return (arg.getName().equals(patternArg.getName()) || 
-				matcher.matches(arg.getName(), patternCache.getPattern(patternArg.getName(), 
-						Perl5Compiler.READ_ONLY_MASK))) &&
-				(arg.getValue().equals(patternArg.getValue()) || 
-				matcher.matches((String)arg.getValue(), patternCache.getPattern((String)patternArg.getValue(), 
-						Perl5Compiler.READ_ONLY_MASK)));
-	}
+        log.debug("End : getParser1");
 
-	/****************************************
-	 * Returns <code>tidy</code> as HTML parser
-	 *
-	 *@return   a <code>tidy</code> HTML parser
-	 ***************************************/
-	public static Tidy getParser()
-	{
-		log.debug("Start : getParser1");
-		Tidy tidy = new Tidy();
-		tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
-		tidy.setQuiet(true);
-		tidy.setShowWarnings(false);
+        return tidy;
+    }
 
-		if(log.isDebugEnabled())
-			log.debug("getParser1 : tidy parser created - " + tidy);
+    /**
+     * Returns a node representing a whole xml given an xml document.
+     *
+     * @param text              an xml document
+     * @return                  a node representing a whole xml
+     */
+    public static Node getDOM(String text) throws SAXException
+    {
+        log.debug("Start : getDOM1");
 
-		log.debug("End : getParser1");
+        try
+        {
+            Node node =
+                getParser().parseDOM(
+                    new ByteArrayInputStream(
+                        text.getBytes(getUTFEncodingName())),
+                    null);
 
-		return tidy;
-	}
+            if (log.isDebugEnabled())
+                log.debug("node : " + node);
 
-	/****************************************
-	 * Returns a node representing a whole xml given an xml document
-	 *
-	 *@param text              an xml document
-	 *@return                  a node representing a whole xml
-	 *@exception SAXException  !ToDo (Exception description)
-	 ***************************************/
-	public static Node getDOM(String text) throws SAXException
-	{
-		log.debug("Start : getDOM1");
+            log.debug("End : getDOM1");
 
-		try
-		{
-			Node node = getParser().parseDOM(new
-					ByteArrayInputStream(text.getBytes(getUTFEncodingName())), null);
+            return node;
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            log.error("getDOM1 : Unsupported encoding exception - " + e);
+            log.debug("End : getDOM1");
+            throw new RuntimeException("UTF-8 encoding failed");
+        }
+    }
 
-			if(log.isDebugEnabled())
-				log.debug("node : " + node);
+    /**
+     * Returns the encoding type which is different for different jdks even
+     * though they mean the same thing i.e. UTF8 or UTF-8.
+     *
+     * @return   either UTF8 or UTF-8 depending on the jdk version
+     */
+    public static String getUTFEncodingName()
+    {
+        log.debug("Start : getUTFEncodingName1");
 
-			log.debug("End : getDOM1");
+        if (utfEncodingName == null)
+        {
+            String versionNum = System.getProperty("java.version");
 
-			return node;
-		}
-		catch(UnsupportedEncodingException e)
-		{
-			log.error("getDOM1 : Unsupported encoding exception - " + e);
-			log.debug("End : getDOM1");
-			throw new RuntimeException("UTF-8 encoding failed");
-		}
-	}
+            if (log.isDebugEnabled())
+            {
+                log.debug("getUTFEncodingName1 : versionNum - " + versionNum);
+            }
 
-	/****************************************
-	 * Returns the encoding type which is different for different jdks even though
-	 * the mean the same thing i.e. UTF8 or UTF-8
-	 *
-	 *@return   either UTF8 or UTF-8 depending on the jdk version
-	 ***************************************/
-	public static String getUTFEncodingName()
-	{
-		log.debug("Start : getUTFEncodingName1");
+            if (versionNum.startsWith("1.1"))
+            {
+                utfEncodingName = "UTF8";
+            }
+            else
+            {
+                utfEncodingName = "UTF-8";
+            }
+        }
 
-		if(utfEncodingName == null)
-		{
-			String versionNum = System.getProperty("java.version");
+        if (log.isDebugEnabled())
+        {
+            log.debug(
+                "getUTFEncodingName1 : Returning utfEncodingName - "
+                    + utfEncodingName);
+        }
 
-			if(log.isDebugEnabled())
-				log.debug("getUTFEncodingName1 : versionNum - " + versionNum);
+        log.debug("End : getUTFEncodingName1");
 
-			if(versionNum.startsWith("1.1"))
-				utfEncodingName = "UTF8";
+        return utfEncodingName;
+    }
 
-			else
-				utfEncodingName = "UTF-8";
+    public static Document createEmptyDoc()
+    {
+        return Tidy.createEmptyDocument();
+    }
 
-		}
+    /**
+     * Create a new URL based on an HREF string plus a contextual URL object.
+     * Given that an HREF string might be of three possible forms, some
+     * processing is required.
+     */
+    public static HTTPSampler createUrlFromAnchor(
+        String parsedUrlString,
+        HTTPSampler context)
+        throws MalformedURLException
+    {
+        HTTPSampler url = new HTTPSampler();
+        url.setDomain(context.getDomain());
+        url.setProtocol(context.getProtocol());
+        url.setPort(context.getPort());
 
-		if(log.isDebugEnabled())
-			log.debug("getUTFEncodingName1 : Returning utfEncodingName - " +
-					utfEncodingName);
+        // In JDK1.3, we can get the path using getPath(). However, in JDK1.2,
+        // we have to parse the file to obtain the path. In the source for
+        // JDK1.3.1, they determine the path to be from the start of the file
+        // up to the LAST question mark (if any).
+        String contextPath = null;
+        String contextFile = context.getPath();
+        int indexContextQuery = contextFile.lastIndexOf('?');
+        if (indexContextQuery != -1)
+            contextPath = contextFile.substring(0, indexContextQuery);
 
-		log.debug("End : getUTFEncodingName1");
+        else
+            contextPath = contextFile;
 
-		return utfEncodingName;
-	}
+        int queryStarts = parsedUrlString.indexOf("?");
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public static Document createEmptyDoc()
-	{
-		return Tidy.createEmptyDocument();
-	}
+        if (queryStarts == -1)
+            queryStarts = parsedUrlString.length();
 
-	/****************************************
-	 * Create a new URL based on an HREF string plus a contextual URL object. Given
-	 * that an HREF string might be of three possible forms, some processing is
-	 * required.
-	 *
-	 *@param parsedUrlString            !ToDo (Parameter description)
-	 *@param context                    !ToDo (Parameter description)
-	 *@return                           !ToDo (Return description)
-	 *@exception MalformedURLException  !ToDo (Exception description)
-	 ***************************************/
-	public static HTTPSampler createUrlFromAnchor(String parsedUrlString, HTTPSampler context) throws MalformedURLException
-	{
-		HTTPSampler url = new HTTPSampler();
-		url.setDomain(context.getDomain());
-		url.setProtocol(context.getProtocol());
-		url.setPort(context.getPort());
+        if (parsedUrlString.startsWith("/"))
+            url.setPath(parsedUrlString.substring(0, queryStarts));
 
-		// In JDK1.3, we can get the path using getPath(). However, in JDK1.2, we have to parse
-		// the file to obtain the path. In the source for JDK1.3.1, they determine the path to
-		// be from the start of the file up to the LAST question mark (if any).
-		String contextPath = null;
-		String contextFile = context.getPath();
-		int indexContextQuery = contextFile.lastIndexOf('?');
-		if(indexContextQuery != -1)
-			contextPath = contextFile.substring(0, indexContextQuery);
+        else if (parsedUrlString.startsWith(".."))
+            url.setPath(
+                contextPath.substring(
+                    0,
+                    contextPath.substring(
+                        0,
+                        contextPath.lastIndexOf("/")).lastIndexOf(
+                        "/"))
+                    + parsedUrlString.substring(2, queryStarts));
 
-		else
-			contextPath = contextFile;
+        else if (!parsedUrlString.toLowerCase().startsWith("http"))
+            url.setPath(
+                contextPath.substring(0, contextPath.lastIndexOf("/"))
+                    + "/"
+                    + parsedUrlString.substring(0, queryStarts));
 
-		int queryStarts = parsedUrlString.indexOf("?");
+        else
+        {
+            URL u = new URL(parsedUrlString);
 
-		if(queryStarts == -1)
-			queryStarts = parsedUrlString.length();
+            // Determine the path. (See JDK1.2/1.3 comment above.)
+            String uPath = null;
+            String uFile = u.getFile();
+            int indexUQuery = uFile.lastIndexOf('?');
+            if (indexUQuery != -1)
+                uPath = uFile.substring(0, indexUQuery);
 
-		if(parsedUrlString.startsWith("/"))
-			url.setPath(parsedUrlString.substring(0, queryStarts));
+            else
+                uPath = uFile;
 
-		else if(parsedUrlString.startsWith(".."))
-			url.setPath(contextPath.substring(0, contextPath.substring(0,
-					contextPath.lastIndexOf("/")).lastIndexOf("/")) +
-					parsedUrlString.substring(2, queryStarts));
+            url.setPath(uPath);
+            url.setDomain(u.getHost());
+            url.setProtocol(u.getProtocol());
+            url.setPort(u.getPort());
+        }
 
-		else if(!parsedUrlString.toLowerCase().startsWith("http"))
-			url.setPath(contextPath.substring(0, contextPath.lastIndexOf("/")) +
-					"/" + parsedUrlString.substring(0, queryStarts));
+        if (queryStarts < parsedUrlString.length())
+            url.parseArguments(parsedUrlString.substring(queryStarts + 1));
 
-		else
-		{
-			URL u = new URL(parsedUrlString);
+        return url;
+    }
 
-			// Determine the path. (See JDK1.2/1.3 comment above.)
-			String uPath = null;
-			String uFile = u.getFile();
-			int indexUQuery = uFile.lastIndexOf('?');
-			if(indexUQuery != -1)
-				uPath = uFile.substring(0, indexUQuery);
+    public static List createURLFromForm(Node doc, HTTPSampler context)
+    {
+        String selectName = null;
+        LinkedList urlConfigs = new LinkedList();
+        recurseForm(doc, urlConfigs, context, selectName, false);
+        /*
+         * NamedNodeMap atts = formNode.getAttributes();
+         * if(atts.getNamedItem("action") == null)
+         * {
+         * throw new MalformedURLException();
+         * }
+         * String action = atts.getNamedItem("action").getNodeValue();
+         * UrlConfig url = createUrlFromAnchor(action, context);
+         * recurseForm(doc, url, selectName,true,formStart);
+         */
+        return urlConfigs;
+    }
 
-			else
-				uPath = uFile;
+    private static boolean recurseForm(
+        Node tempNode,
+        LinkedList urlConfigs,
+        HTTPSampler context,
+        String selectName,
+        boolean inForm)
+    {
+        NamedNodeMap nodeAtts = tempNode.getAttributes();
+        String tag = tempNode.getNodeName();
+        try
+        {
+            if (inForm)
+            {
+                HTTPSampler url = (HTTPSampler) urlConfigs.getLast();
+                if (tag.equalsIgnoreCase("form"))
+                {
+                    try
+                    {
+                        urlConfigs.add(createFormUrlConfig(tempNode, context));
+                    }
+                    catch (MalformedURLException e)
+                    {
+                        inForm = false;
+                    }
+                }
+                else if (tag.equalsIgnoreCase("input"))
+                {
+                    url.addArgument(
+                        getAttributeValue(nodeAtts, "name"),
+                        getAttributeValue(nodeAtts, "value"));
+                }
 
-			url.setPath(uPath);
-			url.setDomain(u.getHost());
-			url.setProtocol(u.getProtocol());
-			url.setPort(u.getPort());
-		}
+                else if (tag.equalsIgnoreCase("textarea"))
+                    try
+                    {
+                        url.addArgument(
+                            getAttributeValue(nodeAtts, "name"),
+                            tempNode.getFirstChild().getNodeValue());
+                    }
+                    catch (NullPointerException e)
+                    {
+                        url.addArgument(
+                            getAttributeValue(nodeAtts, "name"),
+                            "");
+                    }
 
-		if(queryStarts < parsedUrlString.length())
-			url.parseArguments(parsedUrlString.substring(queryStarts + 1));
+                else if (tag.equalsIgnoreCase("select"))
+                    selectName = getAttributeValue(nodeAtts, "name");
 
-		return url;
-	}
+                else if (tag.equalsIgnoreCase("option"))
+                {
+                    String value = getAttributeValue(nodeAtts, "value");
+                    if (value == null)
+                    {
+                        try
+                        {
+                            value = tempNode.getFirstChild().getNodeValue();
+                        }
+                        catch (NullPointerException e)
+                        {
+                            value = "";
+                        }
+                    }
+                    url.addArgument(selectName, value);
+                }
+            }
+            else if (tag.equalsIgnoreCase("form"))
+            {
+                try
+                {
+                    urlConfigs.add(createFormUrlConfig(tempNode, context));
+                    inForm = true;
+                }
+                catch (MalformedURLException e)
+                {
+                    inForm = false;
+                }
+                try
+                {
+                    Thread.sleep(5000);
+                }
+                catch (Exception e)
+                {
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            log.warn("Some bad HTML " + printNode(tempNode), ex);
+        }
+        NodeList childNodes = tempNode.getChildNodes();
+        for (int x = 0; x < childNodes.getLength(); x++)
+        {
+            inForm =
+                recurseForm(
+                    childNodes.item(x),
+                    urlConfigs,
+                    context,
+                    selectName,
+                    inForm);
+        }
+        return inForm;
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param context                    !ToDo (Parameter description)
-	 *@param doc                        !ToDo (Parameter description)
-	 *@return                           !ToDo (Return description)
-	 ***************************************/
+    private static String getAttributeValue(NamedNodeMap att, String attName)
+    {
+        try
+        {
+            return att.getNamedItem(attName).getNodeValue();
+        }
+        catch (Exception ex)
+        {
+            return "";
+        }
+    }
 
-	public static List createURLFromForm(Node doc, HTTPSampler context)
-	{
-		String selectName = null;
-		LinkedList urlConfigs = new LinkedList();
-		recurseForm(doc, urlConfigs, context, selectName, false);
-		/*
-		 * NamedNodeMap atts = formNode.getAttributes();
-		 * if(atts.getNamedItem("action") == null)
-		 * {
-		 * throw new MalformedURLException();
-		 * }
-		 * String action = atts.getNamedItem("action").getNodeValue();
-		 * UrlConfig url = createUrlFromAnchor(action, context);
-		 * recurseForm(doc, url, selectName,true,formStart);
-		 */
-		return urlConfigs;
-	}
+    private static String printNode(Node node)
+    {
+        StringBuffer buf = new StringBuffer();
+        buf.append("<");
+        buf.append(node.getNodeName());
+        NamedNodeMap atts = node.getAttributes();
+        for (int x = 0; x < atts.getLength(); x++)
+        {
+            buf.append(" ");
+            buf.append(atts.item(x).getNodeName());
+            buf.append("=\"");
+            buf.append(atts.item(x).getNodeValue());
+            buf.append("\"");
+        }
 
-	private static boolean recurseForm(Node tempNode, LinkedList urlConfigs, HTTPSampler context,
-			String selectName, boolean inForm)
-	{
-		NamedNodeMap nodeAtts = tempNode.getAttributes();
-		String tag = tempNode.getNodeName();
-		try
-		{
-			if(inForm)
-			{
-				HTTPSampler url = (HTTPSampler)urlConfigs.getLast();
-				if(tag.equalsIgnoreCase("form"))
-				{
-					try
-					{
-						urlConfigs.add(createFormUrlConfig(tempNode, context));
-					}
-					catch(MalformedURLException e)
-					{
-						inForm = false;
-					}
-				}
-				else if(tag.equalsIgnoreCase("input"))
-				{
-					url.addArgument(getAttributeValue(nodeAtts, "name"),
-							getAttributeValue(nodeAtts, "value"));
-				}
+        buf.append(">");
 
-				else if(tag.equalsIgnoreCase("textarea"))
-					try
-					{
-						url.addArgument(getAttributeValue(nodeAtts, "name"),
-								tempNode.getFirstChild().getNodeValue());
-					}
-					catch(NullPointerException e)
-					{
-						url.addArgument(getAttributeValue(nodeAtts, "name"), "");
-					}
+        return buf.toString();
+    }
 
-				else if(tag.equalsIgnoreCase("select"))
-					selectName = getAttributeValue(nodeAtts, "name");
+    /**
+     * @version   $Revision$
+     */
+    public static class Test extends TestCase
+    {
+        transient private static Logger log =
+            Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.test");
 
-				else if(tag.equalsIgnoreCase("option"))
-				{
-					String value = getAttributeValue(nodeAtts, "value");
-					if(value == null)
-					{
-						try
-						{
-							value = tempNode.getFirstChild().getNodeValue();
-						}
-						catch(NullPointerException e)
-						{
-							value = "";
-						}
-					}
-					url.addArgument(selectName, value);
-				}
-			}
-			else if(tag.equalsIgnoreCase("form"))
-			{
-				try
-				{
-					urlConfigs.add(createFormUrlConfig(tempNode, context));
-					inForm = true;
-				}
-				catch(MalformedURLException e)
-				{
-					inForm = false;
-				}
-				try{Thread.sleep(5000);}catch(Exception e){}
-			}
-		}
-		catch(Exception ex)
-		{
-			log.warn("Some bad HTML " + printNode(tempNode),ex);
-		}
-		NodeList childNodes = tempNode.getChildNodes();
-		for(int x = 0; x < childNodes.getLength(); x++)
-		{
-			inForm = recurseForm(childNodes.item(x), urlConfigs, context, selectName, inForm);
-		}
-		return inForm;
-	}
+        public Test(String name)
+        {
+            super(name);
+        }
 
-	private static String getAttributeValue(NamedNodeMap att, String attName)
-	{
-		try
-		{
-			return att.getNamedItem(attName).getNodeValue();
-		}
-		catch(Exception ex)
-		{
-			return "";
-		}
-	}
+        public void testGetUTFEncodingName()
+        {
+            log.debug("Start : testGetUTFEncodingName1");
+            String javaVersion = System.getProperty("java.version");
+            utfEncodingName = null;
+            System.setProperty("java.version", "1.1");
+            assertEquals("UTF8", HtmlParser.getUTFEncodingName());
+            // need to clear utfEncodingName variable first 'cos
+            // getUTFEncodingName checks to see if it's null
+            utfEncodingName = null;
+            System.setProperty("java.version", "1.2");
+            assertEquals("UTF-8", HtmlParser.getUTFEncodingName());
+            System.setProperty("java.version", javaVersion);
+            log.debug("End : testGetUTFEncodingName1");
+        }
 
-	private static String printNode(Node node)
-	{
-		StringBuffer buf = new StringBuffer();
-		buf.append("<");
-		buf.append(node.getNodeName());
-		NamedNodeMap atts = node.getAttributes();
-		for(int x = 0; x < atts.getLength(); x++)
-		{
-			buf.append(" ");
-			buf.append(atts.item(x).getNodeName());
-			buf.append("=\"");
-			buf.append(atts.item(x).getNodeValue());
-			buf.append("\"");
-		}
+        protected void setUp()
+        {
+        }
+    }
 
-		buf.append(">");
-
-		return buf.toString();
-	}
-
-	/****************************************
-	 * !ToDo (Class description)
-	 *
-	 *@author    $Author$
-	 *@created   $Date$
-	 *@version   $Revision$
-	 ***************************************/
-	public static class Test extends TestCase
-	{
-		transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.test");
-
-		/****************************************
-		 * !ToDo (Constructor description)
-		 *
-		 *@param name  !ToDo (Parameter description)
-		 ***************************************/
-		public Test(String name)
-		{
-			super(name);
-		}
-
-		/****************************************
-		 * !ToDo
-		 ***************************************/
-		public void testGetUTFEncodingName()
-		{
-			log.debug("Start : testGetUTFEncodingName1");
-			String javaVersion = System.getProperty("java.version");
-			utfEncodingName = null;
-			System.setProperty("java.version", "1.1");
-			assertEquals("UTF8", HtmlParser.getUTFEncodingName());
-			// need to clear utfEncodingName variable first 'cos
-			// getUTFEncodingName checks to see if it's null
-			utfEncodingName = null;
-			System.setProperty("java.version", "1.2");
-			assertEquals("UTF-8", HtmlParser.getUTFEncodingName());
-			System.setProperty("java.version", javaVersion);
-			log.debug("End : testGetUTFEncodingName1");
-		}
-
-		/****************************************
-		 * !ToDo
-		 ***************************************/
-		protected void setUp()
-		{
-		}
-	}
-
-	private static HTTPSampler createFormUrlConfig(Node tempNode, HTTPSampler context) throws
-			MalformedURLException
-	{
-		NamedNodeMap atts = tempNode.getAttributes();
-		if(atts.getNamedItem("action") == null)
-			throw new MalformedURLException();
-		String action = atts.getNamedItem("action").getNodeValue();
-		HTTPSampler url = createUrlFromAnchor(action, context);
-		return url;
-	}
+    private static HTTPSampler createFormUrlConfig(
+        Node tempNode,
+        HTTPSampler context)
+        throws MalformedURLException
+    {
+        NamedNodeMap atts = tempNode.getAttributes();
+        if (atts.getNamedItem("action") == null)
+            throw new MalformedURLException();
+        String action = atts.getNamedItem("action").getNodeValue();
+        HTTPSampler url = createUrlFromAnchor(action, context);
+        return url;
+    }
 }

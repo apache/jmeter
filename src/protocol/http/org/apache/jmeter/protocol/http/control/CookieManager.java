@@ -52,7 +52,6 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-
 package org.apache.jmeter.protocol.http.control;
 
 import java.io.BufferedReader;
@@ -68,8 +67,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.Vector;
@@ -95,20 +92,19 @@ import org.apache.log.Logger;
  * @author  <a href="mailto:sdowd@arcmail.com">Sean Dowd</a>
  * @version $Revision$ $Date$
  */
-public class CookieManager extends ConfigTestElement 
-	implements TestListener, Serializable
+public class CookieManager
+    extends ConfigTestElement
+    implements TestListener, Serializable
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String CLEAR = "CookieManager.clearEachIteration";
+    public static final String CLEAR = "CookieManager.clearEachIteration";
     public static final String COOKIES = "CookieManager.cookies";
-    /**
-    	* A vector of Cookies managed by this class.
-    	* @associates <{org.apache.jmeter.controllers.Cookie}>
-    	*/
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd-MMM-yy HH:mm:ss zzz");
 
-    private static List addableList = new LinkedList();
+    // FIXME: SimpleDateFormat isn't thread-safe, so we need to synchronize
+    // access to it.
+    private static SimpleDateFormat dateFormat =
+        new SimpleDateFormat("EEEE, dd-MMM-yy HH:mm:ss zzz");
 
     static {
         // The cookie specification requires that the timezone be GMT.
@@ -120,7 +116,7 @@ public class CookieManager extends ConfigTestElement
     public CookieManager()
     {
         setProperty(new CollectionProperty(COOKIES, new ArrayList()));
-		setProperty(new BooleanProperty(CLEAR, false));
+        setProperty(new BooleanProperty(CLEAR, false));
     }
 
     public CollectionProperty getCookies()
@@ -132,22 +128,22 @@ public class CookieManager extends ConfigTestElement
     {
         return getCookies().size();
     }
-    
+
     public boolean getClearEachIteration()
     {
-    	return getPropertyAsBoolean(CLEAR);
-    }
-    
-    public void setClearEachIteration(boolean clear)
-    {
-    	setProperty(new BooleanProperty(CLEAR, clear));
+        return getPropertyAsBoolean(CLEAR);
     }
 
-    // Incorrect method. Always returns String. I changed CookiePanel code to perform
-    // this lookup.
+    public void setClearEachIteration(boolean clear)
+    {
+        setProperty(new BooleanProperty(CLEAR, clear));
+    }
+
+    // Incorrect method. Always returns String. I changed CookiePanel code to
+    // perform this lookup.
     //public Class getColumnClass(int column)
     //{
-    //	return columnNames[column].getClass();
+    //  return columnNames[column].getClass();
     //}
 
     public Cookie getCookie(int row)
@@ -155,12 +151,16 @@ public class CookieManager extends ConfigTestElement
         return (Cookie) getCookies().get(row);
     }
 
-    /** save the cookie data to a file */
+    /**
+     * Save the cookie data to a file.
+     */
     public void save(String authFile) throws IOException
     {
         File file = new File(authFile);
         if (!file.isAbsolute())
-            file = new File(System.getProperty("user.dir") + File.separator + authFile);
+            file =
+                new File(
+                    System.getProperty("user.dir") + File.separator + authFile);
         PrintWriter writer = new PrintWriter(new FileWriter(file));
         writer.println("# JMeter generated Cookie file");
         PropertyIterator cookies = getCookies().iterator();
@@ -173,12 +173,18 @@ public class CookieManager extends ConfigTestElement
         writer.close();
     }
 
-    /** add cookie data from a file */
+    /**
+     * Add cookie data from a file.
+     */
     public void addFile(String cookieFile) throws IOException
     {
         File file = new File(cookieFile);
         if (!file.isAbsolute())
-            file = new File(System.getProperty("user.dir") + File.separator + cookieFile);
+            file =
+                new File(
+                    System.getProperty("user.dir")
+                        + File.separator
+                        + cookieFile);
         BufferedReader reader = null;
         if (file.canRead())
         {
@@ -206,12 +212,20 @@ public class CookieManager extends ConfigTestElement
                 long expires = new Long(st[4]).longValue();
                 int name = 5;
                 int value = 6;
-                Cookie cookie = new Cookie(st[name], st[value], st[domain], st[path], secure, expires);
+                Cookie cookie =
+                    new Cookie(
+                        st[name],
+                        st[value],
+                        st[domain],
+                        st[path],
+                        secure,
+                        expires);
                 getCookies().addItem(cookie);
             }
             catch (Exception e)
             {
-                throw new IOException("Error parsing cookie line\n\t'" + line + "'\n\t" + e);
+                throw new IOException(
+                    "Error parsing cookie line\n\t'" + line + "'\n\t" + e);
             }
         }
         reader.close();
@@ -227,40 +241,55 @@ public class CookieManager extends ConfigTestElement
         //do nothing, the cookie manager has to accept changes.
     }
 
-    /** add a cookie */
+    /**
+     * Add a cookie.
+     */
     public void add(Cookie c)
     {
         getCookies().addItem(c);
-        JMeterContextService.getContext().getVariables().put(c.getName(),c.getValue());
+        JMeterContextService.getContext().getVariables().put(
+            c.getName(),
+            c.getValue());
     }
 
-    /** add an empty cookie */
+    /**
+     * Add an empty cookie.
+     */
     public void add()
     {
         getCookies().addItem(new Cookie());
     }
-    /***Remove all the cookie*/
+    
+    /**
+     * Remove all the cookies.
+     */
     public void clear()
     {
-/*    	boolean clear = getClearEachIteration();
-        super.clear();
-        setClearEachIteration(clear);*/
+        /*      boolean clear = getClearEachIteration();
+                super.clear();
+                setClearEachIteration(clear);*/
         setProperty(new CollectionProperty(COOKIES, new ArrayList()));
     }
 
-    /** remove a cookie */
+    /**
+     * Remove a cookie.
+     */
     public void remove(int index)
     {
         getCookies().remove(index);
     }
 
-    /** return the number cookies */
+    /**
+     * Return the number of cookies.
+     */
     public int size()
     {
         return getCookies().size();
     }
 
-    /** return the cookie at index i */
+    /**
+     * Return the cookie at index i.
+     */
     public Cookie get(int i)
     {
         return (Cookie) getCookies().get(i);
@@ -296,7 +325,8 @@ public class CookieManager extends ConfigTestElement
 
     public String getCookieHeaderForURL(URL url)
     {
-        if (!url.getProtocol().toUpperCase().trim().equals("HTTP") && !url.getProtocol().toUpperCase().trim().equals("HTTPS"))
+        if (!url.getProtocol().toUpperCase().trim().equals("HTTP")
+            && !url.getProtocol().toUpperCase().trim().equals("HTTPS"))
             return null;
 
         StringBuffer header = new StringBuffer();
@@ -311,7 +341,8 @@ public class CookieManager extends ConfigTestElement
                 {
                     header.append("; ");
                 }
-                header.append(cookie.getName()).append("=").append(cookie.getValue());
+                header.append(cookie.getName()).append("=").append(
+                    cookie.getValue());
             }
         }
 
@@ -338,7 +369,14 @@ public class CookieManager extends ConfigTestElement
         String domain = url.getHost();
         String path = "/";
 
-        Cookie newCookie = new Cookie(name, value, domain, path, false, System.currentTimeMillis() + 1000 * 60 * 60 * 24);
+        Cookie newCookie =
+            new Cookie(
+                name,
+                value,
+                domain,
+                path,
+                false,
+                System.currentTimeMillis() + 1000 * 60 * 60 * 24);
         // check the rest of the headers
         while (st.hasMoreTokens())
         {
@@ -356,13 +394,14 @@ public class CookieManager extends ConfigTestElement
                 {
                     String expires = nvp.substring(index + 1);
                     Date date = dateFormat.parse(expires);
-                    if(date.getTime() > System.currentTimeMillis())
+                    if (date.getTime() > System.currentTimeMillis())
                     {
                         newCookie.setExpires(date.getTime());
                     }
                 }
                 catch (ParseException pe)
-                {}
+                {
+                }
             }
             else if (key.equalsIgnoreCase("domain"))
             {
@@ -417,16 +456,16 @@ public class CookieManager extends ConfigTestElement
         }
     }
 
-    /******************************************************
-    	* Takes a String and a tokenizer character, and returns
-    	a new array of strings of the string split by the tokenizer
-    	character.
-    	@param splittee String to be split
-    	@param splitChar Character to split the string on
-    	@param def Default value to place between two split chars that have
-    	nothing between them
-    	@return Array of all the tokens.
-    ******************************************************/
+    /**
+     * Takes a String and a tokenizer character, and returns a new array of
+     * strings of the string split by the tokenizer character.
+     * 
+     * @param splittee  string to be split
+     * @param splitChar character to split the string on
+     * @param def       default value to place between two split chars that have
+     *                  nothing between them
+     * @return array of all the tokens.
+     */
     public String[] split(String splittee, String splitChar, String def)
     {
         if (splittee == null || splitChar == null)
@@ -435,7 +474,12 @@ public class CookieManager extends ConfigTestElement
         String temp;
         int spot;
         while ((spot = splittee.indexOf(splitChar + splitChar)) != -1)
-            splittee = splittee.substring(0, spot + splitChar.length()) + def + splittee.substring(spot + 1 * splitChar.length(), splittee.length());
+            splittee =
+                splittee.substring(0, spot + splitChar.length())
+                    + def
+                    + splittee.substring(
+                        spot + 1 * splitChar.length(),
+                        splittee.length());
         Vector returns = new Vector();
         tokens = new StringTokenizer(splittee, splitChar);
         while (tokens.hasMoreTokens())
@@ -453,19 +497,27 @@ public class CookieManager extends ConfigTestElement
         return JMeterUtils.getResString("cookie_manager_title");
     }
 
-	public void testStarted() {}
+    public void testStarted()
+    {
+    }
 
-	public void testEnded() {}
-	
-	public void testStarted(String host) {}
-	
-	public void testEnded(String host) {}
-    
-	public void testIterationStart(LoopIterationEvent event) 
-	{
-		if (getClearEachIteration())
-			clear();
-	}
+    public void testEnded()
+    {
+    }
+
+    public void testStarted(String host)
+    {
+    }
+
+    public void testEnded(String host)
+    {
+    }
+
+    public void testIterationStart(LoopIterationEvent event)
+    {
+        if (getClearEachIteration())
+            clear();
+    }
 
     public static class Test extends TestCase
     {
@@ -481,28 +533,41 @@ public class CookieManager extends ConfigTestElement
             man.removeCookieNamed("id");
             assertEquals(0, man.getCookieCount());
         }
-        
+
         public void testSendCookie() throws Exception
         {
             CookieManager man = new CookieManager();
-            man.add(new Cookie("id","value","jakarta.apache.org","/",false,9999999999L));
+            man.add(
+                new Cookie(
+                    "id",
+                    "value",
+                    "jakarta.apache.org",
+                    "/",
+                    false,
+                    9999999999L));
             HTTPSampler sampler = new HTTPSampler();
             sampler.setDomain("jakarta.apache.org");
             sampler.setPath("/index.html");
             sampler.setMethod(HTTPSampler.GET);
             assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
         }
-        
-        public void testSendCookie2() throws Exception
-                {
-                    CookieManager man = new CookieManager();
-                    man.add(new Cookie("id","value",".apache.org","/",false,9999999999L));
-                    HTTPSampler sampler = new HTTPSampler();
-                    sampler.setDomain("jakarta.apache.org");
-                    sampler.setPath("/index.html");
-                    sampler.setMethod(HTTPSampler.GET);
-                    assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
-                }
-    }
 
+        public void testSendCookie2() throws Exception
+        {
+            CookieManager man = new CookieManager();
+            man.add(
+                new Cookie(
+                    "id",
+                    "value",
+                    ".apache.org",
+                    "/",
+                    false,
+                    9999999999L));
+            HTTPSampler sampler = new HTTPSampler();
+            sampler.setDomain("jakarta.apache.org");
+            sampler.setPath("/index.html");
+            sampler.setMethod(HTTPSampler.GET);
+            assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
+        }
+    }
 }
