@@ -359,6 +359,10 @@ XML.</p>
  left blank. If a sampler has values in the proxy host and port text field, it
  will use the ones provided by the user. This behavior may not be what users
  expect.</p>
+ <p>By default, the webservice sampler set SOAPHTTPConnection.setMaintainSession
+ (true). If you need to maintain the session, add a blank Header Manager. The
+ sampler uses the Header Manager to store the SOAPHTTPConnection object, since
+ there apache soap does provide a easy way to get and set the cookies.</p>
 </description>
 
 <properties>
