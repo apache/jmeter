@@ -845,33 +845,52 @@ some of its classes - at present JMeter can only run from jar files.
   </target>
   
   <!--
-  Additional gump targets. The intention is to move towards separate build, test
-  and documentation projects for the jmeter module.
+  Gump targets.
+  There are separate build, test and documentation projects for the jmeter module.
   -->
-  <target name="gump-build" depends="assume-libs-present,clean,install,docs-printable" 
-          description="Build JMeter">
+  <!-- Used by project jakarta-jmeter-cvs -->
+  <target name="gump-build" 
+      depends="_gump_properties,assume-libs-present,clean,install,docs-printable" 
+      description="Build JMeter">
     <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
     <antcall target="_pack-binaries"/>
     <antcall target="_pack-libraries"/>
     <antcall target="_pack-source"/>
   </target>
   
-  <target name="gump-compile" depends="assume-libs-present,clean,compile" 
-          description="Compile JMeter only">
+  <!-- Used by project jakarta-jmeter -->
+  <target name="gump-compile" 
+      depends="_gump_properties,assume-libs-present,clean,compile" 
+      description="Compile JMeter only">
   </target>
 
-  <target name="gump-test" depends="_test" description="Test JMeter">
+  <!-- Used by project jakarta-jmeter-test -->
+  <target name="gump-test" 
+      depends="_gump_properties,_test"
+      description="Test JMeter">
     <!-- Show the log file -->
     <concat>
       <filelist dir="bin" files="jmeter-test.log" />
     </concat>
   </target>
   
-  <target name="gump-javadoc" depends="docs-api" description="Create JMeter javadocs">
+  <!-- Used by project jakarta-jmeter-javadoc -->
+  <target name="gump-javadoc"
+      depends="_gump_properties,docs-api"
+      description="Create JMeter javadocs">
     <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
     <antcall target="_pack-javadoc"/>
   </target>
   
+  <target name="_gump_properties">
+  <echo>
+  Gump properties for this run
+  jmeter.version      = ${jmeter.version}
+  gump.run            = ${gump.run}
+  date.projectfile    = ${date.projectfile}
+  version.projectfile = ${version.projectfile}
+  </echo>
+  </target>
   <target name="dist-src" depends="init-version" description="Create the source distribution packages.">
     <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
     <antcall target="_pack-source"/>
