@@ -327,6 +327,9 @@ public class SamplingStatCalculator implements Serializable
     public String getErrorPercentageString()
     {
         double myErrorPercentage = this.getErrorPercentage();
+        if (myErrorPercentage < 0){
+        	myErrorPercentage = 0.0;
+        }
 
         return (errorFormatter.format(myErrorPercentage));
     }
@@ -409,7 +412,11 @@ public class SamplingStatCalculator implements Serializable
     */
    public Number getMin()
    {
-      return calculator.getMin();
+      if (calculator.getMin().longValue() < 0){
+      	return new Long(0);
+      } else {
+		return calculator.getMin();
+      }
    }
    /**
     * @param percent
