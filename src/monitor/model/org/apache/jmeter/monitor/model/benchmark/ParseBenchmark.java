@@ -16,13 +16,6 @@
  */
 package org.apache.jmeter.monitor.model.benchmark;
 
-import java.io.*;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
-import javax.xml.transform.stream.StreamSource;
 
 public class ParseBenchmark
 {
@@ -77,6 +70,7 @@ public class ParseBenchmark
 			System.out.println(contents);
 			
 			if (parser == 0){
+				/**
 				try {
 					JAXBContext jxbc = 
 						new org.apache.jorphan.tomcat.manager.ObjectFactory();
@@ -92,6 +86,7 @@ public class ParseBenchmark
 					System.out.println("elapsed Time: " + (end - start));
 				} catch (JAXBException e){
 				}
+				**/
 			} else {
 				org.apache.jmeter.monitor.model.ObjectFactory of = 
 					org.apache.jmeter.monitor.model.ObjectFactory.getInstance();
