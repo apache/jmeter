@@ -102,7 +102,8 @@ import org.apache.jorphan.util.JOrphanUtils;
 
 import org.apache.log.Logger;
 
-import org.apache.oro.text.PatternCacheLRU;
+import org.apache.oro.text.regex.MalformedPatternException;
+import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 import org.apache.oro.text.regex.StringSubstitution;
@@ -174,9 +175,8 @@ public class HTTPSampler extends AbstractSampler
         System.setProperty("javax.net.ssl.debug", "all");
     }
 
-    private static PatternCacheLRU patternCache=
-        new PatternCacheLRU(1000, new Perl5Compiler());
-
+    private static Pattern pattern; // initialized by the constructor
+    
     private static ThreadLocal localMatcher= new ThreadLocal()
     {
         protected synchronized Object initialValue()
@@ -204,6 +204,19 @@ public class HTTPSampler extends AbstractSampler
 	 */
 	public HTTPSampler()
 	{
+        try
+        {
+            pattern= new Perl5Compiler().compile(
+                    " ",
+                    Perl5Compiler.READ_ONLY_MASK
+                        & Perl5Compiler.SINGLELINE_MASK);
+        }
+        catch (MalformedPatternException e)
+        {
+            log.error("Cant compile pattern.", e);
+            throw new Error(e.toString()); // programming error -- bail out
+        }
+
 		setArguments(new Arguments());
 	}
 
@@ -284,21 +297,18 @@ public class HTTPSampler extends AbstractSampler
 
     public void setEncodedPath(String path)
     {
-        path= encodePath(path);
+        path= encodeSpaces(path);
         setProperty(ENCODED_PATH, path);
     }
 
-    private String encodePath(String path)
+    private String encodeSpaces(String path)
     {
     	// TODO JDK1.4 
     	// this seems to be equivalent to path.replaceAll(" ","%20");
         path=
             Util.substitute(
                 (Perl5Matcher)localMatcher.get(),
-                patternCache.getPattern(
-                    " ",
-                    Perl5Compiler.READ_ONLY_MASK
-                        & Perl5Compiler.SINGLELINE_MASK),
+                pattern,
                 spaceSub,
                 path,
                 Util.SUBSTITUTE_ALL);
@@ -327,7 +337,7 @@ public class HTTPSampler extends AbstractSampler
             super.addProperty(
                 new StringProperty(
                     ENCODED_PATH,
-                    encodePath(prop.getStringValue())));
+                    encodeSpaces(prop.getStringValue())));
         }
     }
 
@@ -1225,7 +1235,10 @@ public class HTTPSampler extends AbstractSampler
         int redirect;
         for (redirect= 0; redirect < MAX_REDIRECTS; redirect++)
         {
-            String location= lastRes.getRedirectLocation();
+            String location= encodeSpaces(lastRes.getRedirectLocation());
+                // Browsers seem to tolerate Location headers with spaces,
+                // replacing them automatically with %20. We want to emulate
+                // this behaviour.
             try
             {
                 lastRes=
