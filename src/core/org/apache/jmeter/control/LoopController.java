@@ -56,6 +56,7 @@ package org.apache.jmeter.control;
 import java.io.Serializable;
 
 import org.apache.jmeter.samplers.AbstractSampler;
+//import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.PerSampleClonable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
@@ -161,6 +162,18 @@ public class LoopController extends GenericController implements Serializable
 			loopCount = 0;
 		}
 	}
+	
+	public boolean hasNext() 
+	{
+		if (getLoops()!=0) 
+		{
+			return super.hasNext();
+		} 
+		else 
+		{
+			return false;
+		}
+	}
 
 	protected boolean hasNextAtEnd()
 	{
@@ -173,6 +186,28 @@ public class LoopController extends GenericController implements Serializable
 		else
 		{
 			return hasNext();
+		}
+	}
+	
+/*	public Sampler next() {
+		if ((!getContinueForever() && getLoops()>0) || getContinueForever()) 
+		{
+			return super.next();
+		}
+		else 
+		{
+			return null;
+		}
+	}*/
+	
+	public boolean isDone() {
+		if (getLoops()!=0) 
+		{
+			return super.isDone();
+		} 
+		else 
+		{
+			return true;
 		}
 	}
 
