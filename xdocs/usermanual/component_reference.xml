@@ -1484,7 +1484,15 @@ A reference name - refName - for reusing the value created by this function. Sto
 	</description>
 
 <properties>
-        <property name="Expression" required="Yes">The JavaScript expression to be executed.</property>
+        <property name="Expression" required="Yes">The JavaScript expression to be executed. For example:
+        	<ul>
+        		<li>new Date() - return the current date and time</li>
+        		<li>Math.floor(Math.random()*(${maxRandom}+1))
+        			- a random number between 0 and the variable maxRandom</li>
+        		<li>${minRandom}+Math.floor(Math.random()*(${maxRandom}-${minRandom}+1))
+        			- a random number between the variables minRandom and maxRandom</li>
+        	</ul>
+        	</property>
         <property name="Name of function" required="Yes">A reference name for reusing the value
                 computed by this function.</property>
 </properties>
@@ -1512,6 +1520,18 @@ A reference name - refName - for reusing the value created by this function. Sto
         	0 = first column, 1 = second etc.
         	"next" - go to next line of file.
         	</property>
+</properties>
+</component>
+
+<component index="13.10.9" name="__property">
+<description><p>The property function returns the value of a JMeter property. 
+	If the property value cannot be found, it returns the property name.</p>
+	</description>
+
+<properties>
+        <property name="Property Name" required="Yes">The property name to be retrieved.</property>
+        <property name="Name of function" required="No">A reference name for reusing the value
+                computed by this function.</property>
 </properties>
 </component>
 
