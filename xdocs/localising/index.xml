@@ -80,7 +80,7 @@ provinces. The process of producing and maintaining the later is called "transla
 be specific to this software, but this is not mandatory: the process should mostly work also if you prefer to use
 another tool, such as or <b>vi</b> or <b>Emacs</b>.
 
-<p>This document describes 7 processes:</p>
+<p>This document describes 6 processes:</p>
 <ol>
 <li>Obtaining the current texts [translators].</li>
 <li>Providing the current texts to translators [developers].</li>
@@ -171,16 +171,17 @@ tgz, or alike and send them to jmeter-dev@apache.org or, even better, post them 
 
 <section name="Merging in new translations" anchor="submitting">
 
-<p>If you're a committer receiving translation files from a translator, follow this steps to merge them into
+<p>If you're a committer receiving text files from a translator, follow this steps to merge them into
 the project:
 <ol>
 <li>Unpack the files submitted by the translator in a separate directory.</li>
 <li>Start i18nEdit as described in <a href="#i18nEdit">Downloading and running i18nEdit</a> above.</li>
+<li>If the translator worked in a new language, make sure it is listed in the Additional locales field in the Project Settings.</li>
 <li>Open the "Team" menu and select "Merge changes as integrator".</li>
 <li>Enter the path to the src directory in the files submitted by the translator.</li>
 <li>Select the translator's target language.</li>
 <li>Press "Perform merge".</li>
-<li>Close i18nEdit and commit to CVS as usual.</li>
+<li>Close i18nEdit and commit to CVS as usual (remember to Refresh your project if you're using Eclipse).</li>
 </ol>
 </p>
 
