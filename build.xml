@@ -456,7 +456,7 @@
 
   <target name="printable-docs" depends="init-docs" if="AnakiaTask.present" description="Generate printable HTML documentation.">
     <taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask"/>
-    <anakia basedir="${docs.src}" destdir="${printable_docs.dest}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site_printable.vsl" projectFile="./stylesheets/project.xml" excludes="**/stylesheets/**" includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${docs.src}/velocity.properties"/>
+    <anakia basedir="${docs.src}" destdir="${printable_docs.dest}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site_printable.vsl" projectFile="./stylesheets/printable_project.xml" excludes="**/stylesheets/**" includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${docs.src}/velocity.properties"/>
   </target>
 
   <target name="all-docs" depends="docs,printable-docs,api-docs" description="Generate documentation."/>
