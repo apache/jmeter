@@ -357,6 +357,20 @@ what results any given interaction will give</note>
 </properties>
 
 </component>
+
+<component index="13.2.7" name="Recording Controller" screenshot="../images/screenshots/logic-controller/recording-controller.gif">
+<description>
+<p>The Recording Controller is a place holder indicating where the proxy server should
+record samples to.  During test run, it has no effect, similar to the Simple Controller.  But during
+recording using the <complink name="HTTP Proxy Server"/>, all recorded samples will
+be saved under the Recording Controller.</p>
+
+</description>
+<properties>
+	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+</properties>
+
+</component>
 </section>
 
 <section name="13.3 Listeners" anchor="listeners">
@@ -417,7 +431,7 @@ are part of the test plan.</p></description>
 </links>
 </component>
 
-<component index="13.3.6" name="View Result Tree" screenshot="../images/screenshots/view_results_tree.png">
+<component index="13.3.6" name="View Results Tree" screenshot="../images/screenshots/view_results_tree.png">
 <description>The View Results Tree shows a tree of all sample responses, allowing you to view the
 response for any sample.  In addition to showing the response, you can see the time it took to get
 this response, and some response codes.</description>
@@ -427,6 +441,12 @@ this response, and some response codes.</description>
 <description>The aggregate report creates a table row for each differently named request in your test.  For each
 request, it totals the response information and provides request count, min, max, average, error rate, and an
 idealized throughput calculation.</description>
+</component>
+
+<component index="13.3.7" name="View Results in Table" screenshot="../images/screenshots/table_results.gif">
+<description>This visualizer creates a row for every sample result.  Each sample result's URL, 
+time in milliseconds, success/failure is displayed.  Like the <complink name="View Results Tree"/>, 
+this visualizer uses a lot of memory.</description>
 </component>
 
 </section>
@@ -655,6 +675,15 @@ instead. (see figures 9 and 10).</p>
 
 </component>
 
+<component index="13.4.10" name="User Parameters">
+<description><p>Allows the user to specify values specific to individual threads.</p></description>
+</component>
+
+<component index="13.4.11" name="Counter">
+<description><p>Allows the user to create a counter that can be referenced anywhere
+in the Thread Group.</p></description>
+</component>
+
 </section>
 
 <section name="13.5 Assertions" anchor="assertions">
@@ -852,7 +881,7 @@ user_4, etc.</p></description>
 </properties>
 </component>
 
-<component index="13.7.4" name="HTML User Parameter Modifier" screenshot="../images/screenshots/user_param_modifier.gif">
+<component index="13.7.4" name="HTTP User Parameter Modifier" screenshot="../images/screenshots/user_param_modifier.gif">
 <description><p>The User Parameter Modifier uses an XML file get values for HTTP arguments.  Any
 HTTP Request that this modifier modifies will be checked for the existence of the specified
 arguments.  If found, the values for those arguments will be replaced by the values found in the
