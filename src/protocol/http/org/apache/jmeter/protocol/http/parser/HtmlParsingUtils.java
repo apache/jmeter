@@ -28,6 +28,7 @@ import java.util.List;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -79,8 +80,8 @@ public final class HtmlParsingUtils
     }
 
     public static synchronized boolean isAnchorMatched(
-        HTTPSampler newLink,
-        HTTPSampler config)
+        HTTPSamplerBase newLink,
+        HTTPSamplerBase config)
         throws MalformedPatternException
     {
         boolean ok = true;
