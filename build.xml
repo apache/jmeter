@@ -880,6 +880,7 @@ some of its classes - at present JMeter can only run from jar files.
     <include name="${dest.jar.jmeter}/ApacheJMeter.jar"/>
     <include name="${dest.jar.jmeter}/jmeter*"/>
     <include name="${dest.jar.jmeter}/upgrade.properties"/>
+    <include name="${dest.jar.jmeter}/saveservice.properties"/>
     <include name="${dest.jar.jmeter}/users.*"/>
     <include name="${dest.jar.jmeter}/testfiles/**"/>
     <include name="${dest.jar}/"/>
