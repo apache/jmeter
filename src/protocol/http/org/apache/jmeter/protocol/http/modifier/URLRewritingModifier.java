@@ -94,10 +94,10 @@ public class URLRewritingModifier
 				compiler.compile(
 					"[Nn][Aa][Mm][Ee]=\""
 						+ argName
-						+ "\"[^>]+[vV][Aa][Ll][Uu][Ee]=\"(.*)\"");
+						+ "\"[^>]+[vV][Aa][Ll][Uu][Ee]=\"([^\"]*)\"");
 			case3 =
 				compiler.compile(
-					"[vV][Aa][Ll][Uu][Ee]=\"(.*)\"[^>]+[Nn][Aa][Mm][Ee]=\""
+					"[vV][Aa][Ll][Uu][Ee]=\"([^\"]*)\"[^>]+[Nn][Aa][Mm][Ee]=\""
 						+ argName
 						+ "\"");
 		}
