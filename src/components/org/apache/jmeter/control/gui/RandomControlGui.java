@@ -55,12 +55,14 @@
 package org.apache.jmeter.control.gui;
 import java.awt.Font;
 
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+
+import org.apache.jmeter.control.InterleaveControl;
 import org.apache.jmeter.control.RandomController;
-import org.apache.jmeter.gui.NamePanel;
 import org.apache.jmeter.gui.util.VerticalLayout;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -76,6 +78,7 @@ import org.apache.jmeter.util.JMeterUtils;
 public class RandomControlGui extends AbstractControllerGui
 {
 
+	JCheckBox style;
 	/****************************************
 	 * !ToDo (Constructor description)
 	 ***************************************/
@@ -93,7 +96,28 @@ public class RandomControlGui extends AbstractControllerGui
 	{
 		RandomController ic = new RandomController();
 		configureTestElement(ic);
+		if(style.isSelected())
+		{
+			ic.setStyle(ic.DEFAULT_STYLE);
+		}
+		else
+		{
+			ic.setStyle(ic.NEW_STYLE);
+		}
 		return ic;
+	}
+	
+	public void configure(TestElement el)
+	{
+		super.configure(el);
+		if(((RandomController)el).getStyle() == InterleaveControl.DEFAULT_STYLE)
+		{
+			style.setSelected(true);
+		}
+		else
+		{
+			style.setSelected(false);
+		}
 	}
 
 	/****************************************
@@ -128,5 +152,7 @@ public class RandomControlGui extends AbstractControllerGui
 		mainPanel.add(getNamePanel());
 
 		this.add(mainPanel);
+		style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers"));
+		this.add(style);
 	}
 }
