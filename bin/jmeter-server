@@ -1,7 +1,7 @@
 #!/bin/sh
 USAGE=$0" [-h remote-host] [-p policy-file] [-f property-file]"
 
-PROPERTIES=jmeter.properties
+PROPERTIES=`dirname $0`/jmeter.properties
 POLICY=`pwd`/default-policy
 
 while getopts h:f:p: x; do 
