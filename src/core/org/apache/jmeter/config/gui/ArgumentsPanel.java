@@ -54,6 +54,7 @@
  */
 package org.apache.jmeter.config.gui;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -134,6 +135,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 	{
 		return table;
 	}
+    
+    protected JLabel getTableLabel()
+    {
+        return tableLabel;
+    }
 	
 	protected JButton getDeleteButton()
 	{
@@ -387,13 +393,19 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 	{
 		this.setLayout(new BorderLayout(0,0));
 		this.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-		JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		labelPanel.add(tableLabel);
+		Component labelPanel = makeLabelPanel();
 		this.add(labelPanel,BorderLayout.NORTH);
 		this.addInnerPanel();
         table.revalidate();
         sizeColumns(table);
 	}
+
+    protected Component makeLabelPanel()
+    {
+        JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        labelPanel.add(tableLabel);
+        return labelPanel;
+    }
     
     protected void sizeColumns(JTable table)
     {
