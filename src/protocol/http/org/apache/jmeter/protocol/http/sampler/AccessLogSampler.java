@@ -146,6 +146,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean
             }
             log.info("parser returned 0 paths");
             filter.reset();
+            count = 0;
             return null;
          }
          count = thisCount;
