@@ -756,6 +756,16 @@ setting is reset when a parent Loop Controller restarts.
 	<property name="Condition" required="yes">Javascript code that returns "true" or "false"</property>
 </properties>
 </component>
+
+<component name="Random Order Controller" index="14.2.10" screenshot="">
+	<description>
+		<p>The Random Order Controller is much like a Simple Controller in that it will execute each child
+		 element at most once, but the order of execution of the nodes will be random.</p>
+	</description>
+<properties>
+	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+</properties>
+</component>
 </section>
 
 <section name="14.3 Listeners" anchor="listeners">
