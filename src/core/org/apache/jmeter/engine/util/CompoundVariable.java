@@ -99,11 +99,12 @@ public class CompoundVariable implements Function
 	private Map varMap = new HashMap();
 
     static Map functions = new HashMap();
-    private boolean hasFunction, hasStatics, hasUnknowns;
+    private boolean hasFunction, isDynamic;
     private String staticSubstitution;
     private Perl5Util util = new Perl5Util();
     private Perl5Compiler compiler = new Perl5Compiler();
     private static final String unescapePattern = "[\\\\]([${}\\,])";
+    private String permanentResults = "";
     
     LinkedList compiledComponents = new LinkedList();
 
@@ -133,9 +134,8 @@ public class CompoundVariable implements Function
     public CompoundVariable()
     {
     	super();
+        isDynamic = true;
         hasFunction = false;
-        hasStatics = false;
-        hasUnknowns = false;
         staticSubstitution = "";
     }
     
@@ -149,10 +149,17 @@ public class CompoundVariable implements Function
 
 	public String execute() 
 	{
-		JMeterContext context = JMeterContextService.getContext();
-		SampleResult previousResult = context.getPreviousResult();
-		Sampler currentSampler = context.getCurrentSampler();
-		return execute( previousResult, currentSampler );
+        if(isDynamic)
+        {
+    		JMeterContext context = JMeterContextService.getContext();
+    		SampleResult previousResult = context.getPreviousResult();
+    		Sampler currentSampler = context.getCurrentSampler();
+    		return execute( previousResult, currentSampler );
+        }
+        else
+        {
+            return permanentResults;
+        }
 	}
     
     /**
@@ -173,6 +180,7 @@ public class CompoundVariable implements Function
         {
             return "";
         }
+        boolean testDynamic = false;
         StringBuffer results = new StringBuffer();
         Iterator iter = compiledComponents.iterator();
         while (iter.hasNext())
@@ -181,6 +189,7 @@ public class CompoundVariable implements Function
             log.debug("executing object: " + item);
             if (item instanceof Function)
             {
+                testDynamic = true;
                 try
                 {
                     results.append(
@@ -194,12 +203,18 @@ public class CompoundVariable implements Function
             }
             else if (item instanceof SimpleVariable)
             {
+                testDynamic = true;
            		results.append( ((SimpleVariable) item).toString() );	
             }
             else
             {
                 results.append(item);
             }
+        }
+        if(!testDynamic)
+        {
+            isDynamic = false;
+            permanentResults = results.toString();
         }
         return results.toString();
     }
@@ -220,7 +235,6 @@ public class CompoundVariable implements Function
     public void clear()
     {
         hasFunction = false;
-        hasStatics = false;
         compiledComponents.clear();
         staticSubstitution = "";
     }
@@ -481,17 +495,6 @@ public class CompoundVariable implements Function
     public boolean hasFunction()
     {
         return hasFunction;
-    }
-
-	public boolean hasStatics()
-    {
-        return hasStatics;
-    }
-
-
-    public String getStaticSubstitution()
-    {
-        return staticSubstitution;
     }
 
     /**
