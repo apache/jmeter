@@ -70,9 +70,8 @@ import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.apache.log.Logger;
-
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 /************************************************************
  *  This class finds classes that implement one or more specified interfaces.
  *  
@@ -81,8 +80,7 @@ import org.apache.jorphan.logging.LoggingManager;
  ******************************************/
 public class ClassFinder
 {
-	transient private static Logger log =
-		LoggingManager.getLoggerFor("jorphan.reflect");
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 	private ClassFinder()
 	{
 	}

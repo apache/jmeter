@@ -8,7 +8,6 @@ import java.util.Set;
 import org.apache.jmeter.control.ReplaceableController;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -20,7 +19,7 @@ import org.apache.log.Logger;
  * Window>Preferences>Java>Templates.
  */
 public abstract class AbstractAction implements Command {
-    protected static Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
+    protected static Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * @see Command#doAction(ActionEvent)

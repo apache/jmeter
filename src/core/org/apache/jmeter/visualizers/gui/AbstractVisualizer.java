@@ -19,7 +19,7 @@ import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Visualizer;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -35,8 +35,7 @@ public abstract class AbstractVisualizer
     implements Visualizer, ChangeListener, UnsharedComponent
 {
     /** Logging. */
-    protected static transient Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    protected static transient Logger log =LoggingManager.getLoggerForClass();
 
     /** A panel allowing results to be saved. */
     private FilePanel filePanel;
