@@ -25,6 +25,8 @@
 
     To diagnose usage of deprecated APIs:
       ant -Ddeprecation=on clean compile
+      
+    Version: $Revision$ Last Updated: $Date$
   </description>
   
   <!-- Renamed targets -->
@@ -437,6 +439,11 @@
     description="Default: build from source and install. Does not create docs."
   />
 
+  <!--
+  N.B. This target is used by the "dist" target, which is set up as the Gump target. 
+  Any libraries in this list need also to be set up in the Gump file:
+    projects/jakarta-jmeter.xml
+  -->
   <target name="assume-libs-present">
     <property name="assuming.libs.present" value="true"/>
     <property name="jsse.present" value="assume"/>
