@@ -76,7 +76,6 @@ import org.apache.jmeter.engine.JMeterEngine;
 import org.apache.jmeter.engine.RemoteJMeterEngineImpl;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.engine.util.DisabledComponentRemover;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -93,7 +92,9 @@ import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.save.SaveService;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.threads.gui.ThreadGroupGui;
 import org.apache.jmeter.timers.gui.AbstractTimerGui;
 import org.apache.jmeter.util.BeanShellServer;
@@ -112,17 +113,17 @@ public class JMeter implements JMeterPlugin
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    private final static int PROPFILE_OPT = 'p';
-    private final static int TESTFILE_OPT = 't';
-    private final static int LOGFILE_OPT = 'l';
-    private final static int NONGUI_OPT = 'n';
-    protected static final int HELP_OPT = 'h';
-    protected static final int VERSION_OPT = 'v';
-    protected static final int SERVER_OPT = 's';
-    protected static final int PROXY_HOST = 'H';
-    protected static final int PROXY_PORT = 'P';
-    protected static final int PROXY_USERNAME = 'u';
-    protected static final int PROXY_PASSWORD = 'a';
+    private static final int PROPFILE_OPT = 'p';
+    private static final int TESTFILE_OPT = 't';
+    private static final int LOGFILE_OPT = 'l';
+    private static final int NONGUI_OPT = 'n';
+    private static final int HELP_OPT = 'h';
+    private static final int VERSION_OPT = 'v';
+    private static final int SERVER_OPT = 's';
+    private static final int PROXY_HOST = 'H';
+    private static final int PROXY_PORT = 'P';
+    private static final int PROXY_USERNAME = 'u';
+    private static final int PROXY_PASSWORD = 'a';
     private static final int JMETER_PROPERTY = 'J';
     private static final int SYSTEM_PROPERTY = 'D';
     private static final int LOGLEVEL = 'L';
@@ -537,9 +538,7 @@ public class JMeter implements JMeterPlugin
 
             // Remove the disabled items
             // For GUI runs this is done in Start.java
-			DisabledComponentRemover remover =
-				new DisabledComponentRemover(tree);
-			tree.traverse(remover);
+			convertSubTree(tree);
 
             if (logFile != null)
             {
@@ -590,12 +589,60 @@ public class JMeter implements JMeterPlugin
         }
         catch (Exception e)
         {
-            System.out.println("Error in NonGUIDriver" + e.getMessage());
+            System.out.println("Error in NonGUIDriver " + e.toString());
             log.error("", e);
         }
     }
 
-    private JMeterEngine doRemoteInit(String hostName, HashTree testTree)
+    private boolean isEnabled(TestElement te){//TODO - belongs in TestElement ...
+    	return 
+    	te.getProperty(TestElement.ENABLED) instanceof NullProperty
+    	||
+    	te.getPropertyAsBoolean(TestElement.ENABLED);
+    }
+    
+    /**
+     * Code copied from AbstractAction.java and modified to suit TestElements
+	 * @param tree
+	 */
+	private void convertSubTree(HashTree tree) {//TODO check build dependencies
+			Iterator iter = new LinkedList(tree.list()).iterator();
+			while (iter.hasNext())
+			{
+				TestElement item = (TestElement) iter.next();
+				if (isEnabled(item))
+				{//TODO handle ReplaceableControllers
+//					if (item instanceof ReplaceableController)
+//					{
+//						System.out.println("Replaceable "+item.getClass().getName());
+//						HashTree subTree = tree.getTree(item);
+//
+//						if (subTree != null)
+//						{
+//							ReplaceableController rc =
+//								(ReplaceableController) item;//.createTestElement();
+//							rc.replace(subTree);
+//							convertSubTree(subTree);
+//							tree.replace(item, rc.getReplacement());
+//						}
+//					}
+//					else
+					{
+						//System.out.println("NonReplaceable "+item.getClass().getName());
+						convertSubTree(tree.getTree(item));
+//						TestElement testElement = item.createTestElement();
+//						tree.replace(item, testElement);
+					}
+				}
+				else
+				{
+					//System.out.println("Disabled "+item.getClass().getName());
+					tree.remove(item);
+				}
+			}
+	}
+
+	private JMeterEngine doRemoteInit(String hostName, HashTree testTree)
     {
         JMeterEngine engine = null;
         try
