@@ -19,6 +19,7 @@
 package org.apache.jmeter.samplers;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  * Allows notification on events occuring during the sampling process.
@@ -37,6 +38,14 @@ public interface RemoteSampleListener extends java.rmi.Remote
     public void testEnded() throws RemoteException;
 
     public void testEnded(String host) throws RemoteException;
+
+    /**
+     * This method is called remotely and fires a list of samples events recieved locally.
+     * The function is to reduce network load when using remote testing.
+     * @param samples the list of sample events to be fired locally.
+     * @throws RemoteException
+     */
+    public void processBatch(List samples) throws RemoteException;
 
     /**
      * A sample has started and stopped.
