@@ -2,6 +2,9 @@ package org.apache.jmeter.testelement.property;
 
 import org.apache.jmeter.testelement.TestElement;
 
+/**
+ * @version $Revision$
+ */
 public class TestElementProperty extends MultiProperty
 {
     TestElement value;
@@ -31,7 +34,7 @@ public class TestElementProperty extends MultiProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getStringValue()
+     * #getStringValue()
      */
     public String getStringValue()
     {
@@ -51,7 +54,7 @@ public class TestElementProperty extends MultiProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getObjectValue()
+     * #getObjectValue()
      */
     public Object getObjectValue()
     {
@@ -79,7 +82,7 @@ public class TestElementProperty extends MultiProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#mergeIn(JMeterProperty)
+     * #mergeIn(JMeterProperty)
      */
     public void mergeIn(JMeterProperty prop)
     {
@@ -90,7 +93,7 @@ public class TestElementProperty extends MultiProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(TestElement)
+     * #recoverRunningVersion(TestElement)
      */
     public void recoverRunningVersion(TestElement owner)
     {
@@ -104,7 +107,7 @@ public class TestElementProperty extends MultiProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
+     * #setRunningVersion(boolean)
      */
     public void setRunningVersion(boolean runningVersion)
     {
@@ -113,7 +116,7 @@ public class TestElementProperty extends MultiProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.MultiProperty#addProperty(org.apache.jmeter.testelement.property.JMeterProperty)
+     * @see MultiProperty#addProperty(JMeterProperty)
      */
     public void addProperty(JMeterProperty prop)
     {
@@ -121,7 +124,7 @@ public class TestElementProperty extends MultiProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.MultiProperty#clear()
+     * @see MultiProperty#clear()
      */
     public void clear()
     {
@@ -130,11 +133,10 @@ public class TestElementProperty extends MultiProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.MultiProperty#iterator()
+     * @see MultiProperty#iterator()
      */
     public PropertyIterator iterator()
     {
         return value.propertyIterator();
     }
-
 }

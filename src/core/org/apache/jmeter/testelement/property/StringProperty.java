@@ -3,10 +3,7 @@ package org.apache.jmeter.testelement.property;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
 public class StringProperty extends AbstractProperty
 {
@@ -25,7 +22,7 @@ public class StringProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
+     * @see JMeterProperty#setRunningVersion(boolean)
      */
     public void setRunningVersion(boolean runningVersion)
     {
@@ -42,7 +39,7 @@ public class StringProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getStringValue()
+     * @see JMeterProperty#getStringValue()
      */
     public String getStringValue()
     {
@@ -50,7 +47,7 @@ public class StringProperty extends AbstractProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getObjectValue()
+     * @see JMeterProperty#getObjectValue()
      */
     public Object getObjectValue()
     {
@@ -58,7 +55,7 @@ public class StringProperty extends AbstractProperty
     }
 
     /**
-     * @see java.lang.Object#clone()
+     * @see Object#clone()
      */
     public Object clone()
     {
@@ -77,7 +74,7 @@ public class StringProperty extends AbstractProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+     * @see JMeterProperty#recoverRunningVersion(TestElement)
      */
     public void recoverRunningVersion(TestElement owner)
     {
@@ -88,5 +85,4 @@ public class StringProperty extends AbstractProperty
         }
         super.recoverRunningVersion(owner);
     }
-
 }

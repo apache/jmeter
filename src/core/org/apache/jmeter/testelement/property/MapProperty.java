@@ -5,10 +5,7 @@ import java.util.Map;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
 public class MapProperty extends MultiProperty
 {
@@ -57,10 +54,10 @@ public class MapProperty extends MultiProperty
     }
 
     /**
-         * Figures out what kind of properties this collection is holding and
-         * returns the class type.
-         * @see org.apache.jmeter.testelement.property.AbstractProperty#getPropertyType()
-         */
+     * Figures out what kind of properties this collection is holding and
+     * returns the class type.
+     * @see AbstractProperty#getPropertyType()
+     */
     protected Class getPropertyType()
     {
         if (value.size() > 0)
@@ -74,7 +71,7 @@ public class MapProperty extends MultiProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getStringValue()
+     * @see JMeterProperty#getStringValue()
      */
     public String getStringValue()
     {
@@ -82,7 +79,7 @@ public class MapProperty extends MultiProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#getObjectValue()
+     * @see JMeterProperty#getObjectValue()
      */
     public Object getObjectValue()
     {
@@ -142,7 +139,7 @@ public class MapProperty extends MultiProperty
     }
 
     /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+     * @see JMeterProperty#recoverRunningVersion(TestElement)
      */
     public void recoverRunningVersion(TestElement owner)
     {
@@ -160,7 +157,7 @@ public class MapProperty extends MultiProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.MultiProperty#iterator()
+     * @see MultiProperty#iterator()
      */
     public PropertyIterator iterator()
     {
