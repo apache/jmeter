@@ -19,7 +19,6 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import org.apache.jmeter.protocol.http.util.accesslog.Filter;
-import org.apache.jmeter.protocol.http.util.accesslog.LogFilter;
 import org.apache.jmeter.protocol.http.util.accesslog.LogParser;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
