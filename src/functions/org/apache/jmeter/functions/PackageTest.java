@@ -38,6 +38,7 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.log.Logger;
@@ -167,6 +168,7 @@ public class PackageTest extends JMeterTestCase
 
     public void BSH1() throws Exception
 	{
+		String fn = "testfiles/BeanShellTest.bsh";
     	BeanShell bsh;
     	try
 		{
@@ -190,6 +192,16 @@ public class PackageTest extends JMeterTestCase
 		assertEquals("2",bsh.execute());
 		assertEquals("2",vars.get("VAR"));
 
+		// Check some initial variables
+		bsh = BSHFParams("return threadName",null,null);
+		assertEquals(Thread.currentThread().getName(),bsh.execute());
+		bsh = BSHFParams("return log.getClass().getName()",null,null);
+		assertEquals(log.getClass().getName(),bsh.execute());
+
+		// Check source works
+		bsh = BSHFParams("source (\"testfiles/BeanShellTest.bsh\")",null,null);
+		assertEquals("9876",bsh.execute());
+
 		// Check persistence
 		bsh = BSHFParams("${SCR1}",null,null);
 
@@ -202,10 +214,29 @@ public class PackageTest extends JMeterTestCase
 		vars.put("SCR1","x=var1");
 		assertEquals("11",bsh.execute());
 
-		vars.put("SCR1","x");
-		assertEquals("11",bsh.execute());
+		vars.put("SCR1","++x");
+		assertEquals("12",bsh.execute());
 
+		vars.put("VAR1","test");
+		vars.put("SCR1","vars.get(\"VAR1\")");
+		assertEquals("test",bsh.execute());
+
+
+		// Check init file functioning
+		JMeterUtils.getJMeterProperties()
+		    .setProperty(BeanShell.INIT_FILE,fn);
+		bsh = BSHFParams("${SCR2}",null,null);
+		vars.put("SCR2","getprop(\""+BeanShell.INIT_FILE+"\")");
+		assertEquals(fn,bsh.execute());// Check that bsh has read the file
+		vars.put("SCR2","getprop(\"avavaav\",\"default\")");
+		assertEquals("default",bsh.execute());
+		vars.put("SCR2","++i");
+		assertEquals("1",bsh.execute());
+		vars.put("SCR2","++i");
+		assertEquals("2",bsh.execute());
+		
 	}
+    
     public void SplitTest1() throws Exception
     {
     	SplitFunction split=null;

@@ -34,7 +34,24 @@ element in a test tree.  A function looks like this:</p>
 Parentheses surround the parameters sent to the function.  The actual parameters vary from function 
 to function.  Functions that require no parameters can leave off the parentheses.  The function itself
 is wrapped in ${}.</p>
-
+<p>List of functions:</p>
+<ul>
+        <li><a href="#__regexFunction">regexFunction - regular expression evaluator</a></li>
+        <li><a href="#__counter">counter</a></li>
+        <li><a href="#__threadNum">threadNum - get thread number</a></li>
+        <li><a href="#__intSum">intSum - add variables</a></li>
+        <li><a href="#__StringFromFile">StringFromFile - read a line from a file</a></li>
+        <li><a href="#__machineName">machineName - get the local machine name</a></li>
+        <li><a href="#__javaScript">JavaScript (Apache Rhino)</a></li>
+        <li><a href="#__Random">random number</a></li>
+        <li><a href="#__CSVRead">CSVRead -read from CSV delimited file</a></li>
+        <li><a href="#__property">read a property</a></li>
+        <li><a href="#__P">P -read a property</a></li>
+        <li><a href="#__log">log - log a message</a></li>
+        <li><a href="#__logn">log - log a message</a></li>
+        <li><a href="#__BeanShell">BeanShell - run BeanShell</a></li>
+        <li><a href="#__split">split - Split a string into variables</a></li>
+</ul>
 
 <subsection name="16.1 What can functions do" anchor="what_can_do">
 <p>There are two kinds of functions: user-defined static values, and built-in functions.<br/>
@@ -175,7 +192,10 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 </properties>
 </component>
 
+<!-- Alternate spelling -->
+<a name="__StringFromFile"/>
 <component index="16.5.5" name="_StringFromFile">
+
 <description>
 	<p>
 	The StringFromFile function can be used to read strings from a text file. 
@@ -418,7 +438,34 @@ the second would return 1 and the last would return www.dummy.org
 <description>
 	<p>
 	The BeanShell function evaluates the script passed to it, and returns the result.
-	</p>
+</p>
+<p>
+Note that a different Interpreter is used for each independent occurence of the function
+in a test script, but the same Interpreter is used for subsequent invocations.
+This means that variables persist across calls to the function.
+</p>
+<p>
+A single instance of a function may be called from multiple threads.
+However the function execute() method is synchronised.
+</p>
+<p>
+If the property "beanshell.function.init" is defined, it is passed to the Interpreter
+as the name of a sourced file. This can be used to define common methods and variables. There is a
+sample init file in the bin directory: BeanShellFunction.bshrc.
+</p>
+<p>
+The following variables are set before the script is executed:
+<ul>
+<li>log - the logger for the BeanShell function (*)</li>
+<li>ctx - the current JMeter context variable</li>
+<li>vars - the current JMeter variables</li>
+<li>threadName - the threadName</li>
+<li>Sampler the current Sampler, if any</li>
+<li>SampleResult - the current SampleResult, if any</li>
+</ul>
+(*) means that this is set before the init file, if any, is processed. 
+Other variables vary from invocation to invocation.
+</p>
 </description>
 
 <properties>
@@ -427,6 +474,13 @@ the second would return 1 and the last would return www.dummy.org
                computed by this function.</property>
         
 </properties>
+<p>
+Example:
+<pre>
+${__BeanShell(123*456)} - returns 56088
+${__BeanShell(source("function.bsh"))} - processes the script in function.bsh
+</pre>
+</p>
 </component>
 
 <component index="16.5.14" name="__split">

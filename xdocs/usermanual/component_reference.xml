@@ -403,28 +403,37 @@ StandardGenerator and TCLogParser.
 
 <component name="BeanShell Sampler" index="15.1.9" screenshot="">
 <center><h2>(Beta Code)</h2></center>
-	<description><p>This sampler allows you to write a sampler using the BeanShell scripting language.<br></br>
-		
-		<br></br>
-		Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
-		For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.
-		
-		</p>
+	<description><p>This sampler allows you to write a sampler using the BeanShell scripting language.		
+</p><p>
+		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
+		<br/>
+        For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+</p>
 	</description>
 <properties>
 	<property name="Name" required="no">Descriptive name for this controller that is shown in the tree.</property>
 	<property name="Parameters" required="no">List of parameters to be passed to the script file or the script.</property>
-	<property name="Script File" required="no">Name of a file to be used as a BeanShell script</property>
-	<property name="Script" required="no">Script to be passed to BeanShell</property>
+	<property name="Script File" required="(yes)">Name of a file to be used as a BeanShell script</property>
+	<property name="Script" required="(yes)">Script to be passed to BeanShell</property>
 </properties>
-<p>If a script file is supplied, that will be used, otherwise the script will be used.</p>
-		<p>Before invoking the script, some variable are set up in the BeanShell interpreter:
+<p>
+N.B. Each Sampler instance has its own BeanShell interpeter,
+and Samplers are only called from a single thread
+</p><p>
+If the property "beanshell.sampler.init" is defined, it is passed to the Interpreter
+as the name of a sourced file.
+This can be used to define common methods and variables. 
+There is a sample init file in the bin directory: BeanShellFunction.bshrc.
+</p><p>
+If a script file is supplied, that will be used, otherwise the script will be used.</p>
+		<p>Before invoking the script, some variables are set up in the BeanShell interpreter:
 			</p>
 				<p>The contents of the Parameters field is put into the variable "Parameters".
 			The string is also split into separate tokens using a single space as the separator, and the resulting list
 			is stored in the String array bsh.args.</p>
 			<p>The full list of variables that is set up is as follows:</p>
 		<ul>
+		<li>log - the Logger</li>
 		<li>Label - the Sampler label</li>
 		<li>FileName - the file name, if any</li>
 		<li>Parameters - text from the Parameters field</li>
@@ -446,12 +455,14 @@ StandardGenerator and TCLogParser.
 				methods in the SampleResult. For example, the script has access to the methods
 				setStopThread(boolean) and setStopTest(boolean).
 				
-				Here is a simple example script:</p>
+				Here is a simple (not very useful!) example script:</p>
 				
 <pre>
-	if (bsh.args[0].equalsIgnoreCase("StopThread")) {
-	    SampleResult.StopThread(bsh.args[1]);
-	}
+if (bsh.args[0].equalsIgnoreCase("StopThread")) {
+    log.info("Stop Thread detected!");
+    SampleResult.StopThread(bsh.args[1]);
+}
+return "Data from sample with Label "+Label;
 </pre>
 </component>
 
