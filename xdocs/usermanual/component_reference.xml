@@ -166,6 +166,23 @@ provided.</p></description>
 
 </component>
 
+<component name="SOAP/XML-RPC Request" index="13.1.5" screenshot="../images/screenshots/soap_sampler.png">
+
+<description><p>This sampler lets you send a SOAP request to a webservice.  It can also be
+used to send XML-RPC over HTTP.  It creates an HTTP POST request, with the specified XML as the
+POST content.</p>
+</description>
+
+<properties>
+	<property name="Name" required="No">Descriptive name for this sampler
+	 that is shown in the tree.</property>
+	<property name="URL" required="Yes">The URL to direct the SOAP request to.</property>
+	<property name="Soap/XML-RPC Data" required="No">The Soap XML message, or XML-RPC 
+	instructions.</property>
+	</properties>
+
+</component>
+
 </section>
 
 <section name="13.2 Logic Controllers" anchor="logic_controllers">
@@ -368,7 +385,7 @@ are part of the test plan.</p></description>
 </links>
 </component>
 
-<component index="13.3.8" name="View Result Tree" screenshot="../images/screenshots/view_result_tree.gif">
+<component index="13.3.8" name="View Result Tree" screenshot="../images/screenshots/view_results_tree.png">
 <description>The View Results Tree shows a tree of all sample responses, allowing you to view the
 response for any sample.  In addition to showing the response, you can see the time it took to get
 this response, and some response codes.</description>
@@ -462,7 +479,7 @@ cookie table entries.</property>
 
 </component>
 
-<component index="13.4.3" name="HTTP Proxy Server" screenshot="../images/screenshots/http-config/http-proxy-server.gif">
+<component index="13.4.3" name="HTTP Proxy Server" screenshot="../images/screenshots/proxy_control.png">
 
 <description><p>The Proxy Server allows JMeter to watch and record your actions while you browse your web application
 with your normal browser (such as Internet Explorer).  JMeter will create test sample objects and store them
@@ -488,6 +505,8 @@ if that port is already in use on your machine.</property>
   <property name="Start Button" required="N/A">Start the proxy server.  JMeter writes the following message to the console once the proxy server
 has started up and is ready to take requests: "Proxy up and running!".</property>
   <property name="Stop Button" required="N/A">Stop the proxy server.</property>
+  <property name="Restart Button" required="N/A">Stops and restarts the proxy server.  This is
+  useful when you change/add/delete an include/exclude filter expression.</property>
 </properties>
 
 <p>To add an entry to the Include or Exclude field, type the entry into the text field, and hit &quot;Enter&quot; when done.
@@ -696,8 +715,8 @@ expressions are used to find matches.</p>
 <p>Consider a simple example: let's say you wanted JMeter to &quot;spider&quot; through your site,
 hitting link after link parsed from the HTML returned from your server (this is not
 actually the most useful thing to do, but it serves as a good example).  You would create
-a <complink anchor="modification_manager" name="Modification Manager"/>, and add the &quot;HTML Link Parser&quot; to it.  Then, create a
-Web Test controller, and set the domain to &quot;.*&quot;, and the path likewise. This will
+a <complink name="Simple Controller"/>, and add the &quot;HTML Link Parser&quot; to it.  Then, create a
+HTTP Request, and set the domain to &quot;.*&quot;, and the path likewise. This will
 cause your test sample to match with any link found on the returned pages.  If you wanted to
 restrict the spidering to a particular domain, then change the domain value
 to the one you want.  Then, only links to that domain will be followed.
@@ -723,7 +742,7 @@ anything, the modifier will probably have a list of radio buttons to choose from
 will choose at random, and replace the value in your URL test sample.  Each time through
 the test, a new random value will be chosen.</p>
 
-<figure image="../images/screenshots/modification.gif">Figure 8 - Online Poll Example</figure>
+<figure image="../images/screenshots/modification.png">Figure 8 - Online Poll Example</figure>
 
 <note>One important thing to remember is that you must create a test sample immediately
 prior that will return an HTML page with the links and forms that are relevant to
@@ -731,18 +750,78 @@ your dynamic test sample.</note>
 </example>
 
 </component>
+
+<component index="13.7.2" name="HTTP URL Re-writing Modifier" screenshot="../images/screenshots/url_rewriter.gif">
+<description><p>This modifier works similarly to the HTML Link Parser, except it has a specific purpose for which
+it is easier to use than the HTML Link Parser, and more efficient.  For web applications that
+use URL Re-writing to store session ids instead of cookies, this element can be attached at the
+ThreadGroup level, much like the <complink name="HTTP Cookie Manager"/>.  Simply give it the name
+of the session id parameter, and it will find it on the page and add the argument to every 
+request of that ThreadGroup.</p>
+<p>Alternatively, this modifier can be attached to select requests and it will modify only them.  
+Clever users will even determine that this modifier can be used to grab values that elude the 
+<complink name="HTML Link Parser"/>.</p>
+</description>
+
+<properties>
+	<property name="Name" required="No">Descriptive name given to this element in the test tree.</property>
+	<property name="Session Argument Name" required="Yes">The name of the parameter to grab from 
+	previous response.  This modifier will find the parameter anywhere it exists on the page, and
+	grab the value assigned to it, whether it's in an HREF or a form.</property>
+	<property name="Path Extension" required="No">Some web apps rewrite URLs by appending
+	a semi-colon plus the session id parameter.  Check this box if that is so.</property>
+</properties>
+</component>
+
+<component index="13.7.3" name="HTML Parameter Mask" screenshot="../images/screenshots/parameter_mask.png">
+<description><p>The HTML Parameter Mask is used to generate unique values for HTML arguments.  By
+specifying the name of the parameter, a value prefix and suffix, and counter parameters, this
+modifier will generate values of the form "<code>name=prefixcountersuffix</code>".  Any HTTP
+Request that it modifies, it will replace any parameter with the same name or add the appropriate
+parameter to the requests list of arguments.</p>
+<p>As an example, the username for a login script could be modified to send a series of values 
+such as:<br/>
+user_1<br/>
+user_2<br/>
+user_3<br/>
+user_4, etc.</p></description>
+
+<properties>
+	<property name="Name" required="No">Descriptive name given to this element in the test tree.</property>
+	<property name="Name (second appearing)" required="Yes">The name of the parameter to
+	modify or add to the HTTP Request.</property>
+	<property name="ID Prefix" required="No">A string value to prefix to every generated value.</property>
+	<property name="Lower Bound" required="Yes">A number value to start the counter at.</property>
+	<property name="Upper Bound" required="Yes">A number value to end the counter, at which point it restarts 
+	with the Lower Bound value.</property>
+	<property name="Increment" required="Yes">Value to increment the counter by each time through.</property>
+	<property name="ID Suffix" required="No">A string value to add as suffix to every generated vaue.</property>
+</properties>
+</component>
+
+<component index="13.7.4" name="HTML User Parameter Modifier" screenshot="../images/screenshots/user_param_modifier.gif">
+<description><p>The User Parameter Modifier uses an XML file get values for HTTP arguments.  Any
+HTTP Request that this modifier modifies will be checked for the existence of the specified
+arguments.  If found, the values for those arguments will be replaced by the values found in the
+xml file.  The XML file can have multiple sets of the same values.  This modifier will iterate 
+through these values in a round-robin style, thus each request will get a different set of values 
+until the last set of values is reached, at which point it will begin again at the first set.</p>
+<note>If the number of value sets is equal to the number of threads in your test, then it will work
+out that each thread will get the same set of values each time, which will be a different set from
+any other thread</note></description>
+
+<properties>
+	<property name="Name" required="No">Descriptive name given to this element in the test tree.</property>
+	<property name="File Name" required="Yes">Name of the XML file in JMeter's /bin directory
+	that holds the value sets.</property>
+</properties>
+</component>
+
 </section>
 
 <section name="13.8 Miscellaneous Features" anchor="Miscellaneous_Features">
-<component index="13.8.1" name="Data Analyzer" screenshot="../images/screenshots/data_analyzer.gif">
-<description><p>The Data Analyzer presents a graphical view of data stored using the <complink name="File Reporter"/>.</p>
-<p>To use the Data Analyzer, goto the Report --&gt; Analyze Data File main menu option.  Then,
-when prompted, select the file where the data is stored.  JMeter will present the data
-as a graph with multiple lines.  Each line represents a different HTTP Request from your test and
-its response times.</p></description>
-</component>
 
-<component index="13.8.2" name="SSL Manager" screenshot="">
+<component index="13.8.1" name="SSL Manager" screenshot="">
 <p>
   The SSL Manager is a way to select a client certificate so that you can test
   applications that use Public Key Infrastructure (PKI).  In order to use it,
