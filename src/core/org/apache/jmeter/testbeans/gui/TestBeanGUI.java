@@ -45,16 +45,9 @@ import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.DoubleProperty;
-import org.apache.jmeter.testelement.property.FloatProperty;
-import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.property.AbstractProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.LongProperty;
-import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
-import org.apache.jmeter.testelement.property.StringProperty;
-import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Visualizer;
@@ -145,7 +138,7 @@ public class TestBeanGUI
     public TestBeanGUI(Class testBeanClass)
     {
         super();
-        
+        log.warn("testing class: " + testBeanClass.getName());
         // A quick verification, just in case:
         if (! TestBean.class.isAssignableFrom(testBeanClass))
         {
@@ -248,69 +241,11 @@ public class TestBeanGUI
             }
             else
             {
-                JMeterProperty jprop= wrapInProperty(propertyMap.get(name));
+                JMeterProperty jprop= AbstractProperty.createProperty(propertyMap.get(name));
                 jprop.setName(name);
                 element.setProperty(jprop);
             }
         }
-    }
-
-    /**
-     * Utility method to wrap an object in a property of an appropriate type.
-     * <p>
-     * I plan to get rid of this sooner than later, so please don't use it much.
-     * 
-     * @param value Object to be wrapped.
-     * @return an unnamed property holding the provided value.
-     * @deprecated
-     */
-    private static JMeterProperty wrapInProperty(Object value)
-    {
-        // TODO: Awful, again...
-        
-        if (value instanceof JMeterProperty)
-        {
-            return (JMeterProperty)value;
-        }
-        
-        JMeterProperty property;
-        if (value == null)
-        {
-            property= new NullProperty();
-        }
-        else if (value instanceof Boolean)
-        {
-            property= new BooleanProperty();
-        }
-        else if (value instanceof Double)
-        {
-            property= new DoubleProperty();
-        }
-        else if (value instanceof Float)
-        {
-            property= new FloatProperty();
-        }
-        else if (value instanceof Integer)
-        {
-            property= new IntegerProperty();
-        }
-        else if (value instanceof Long)
-        {
-            property= new LongProperty();
-        }
-        else if (value instanceof String)
-        {
-            property= new StringProperty();
-        }
-        else if (value instanceof TestElement)
-        {
-            property= new TestElementProperty();
-        }
-        else throw new Error("Ouch!");
-
-        property.setObjectValue(value);
-
-        return property;
     }
 
     /* (non-Javadoc)

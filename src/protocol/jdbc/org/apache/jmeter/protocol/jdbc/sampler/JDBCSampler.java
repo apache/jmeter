@@ -29,6 +29,7 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jorphan.collections.Data;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -40,7 +41,7 @@ import org.apache.log.Logger;
  * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
  * @version $Revision$
  */
-public class JDBCSampler extends TestBean implements Sampler
+public class JDBCSampler extends AbstractTestElement implements Sampler,TestBean
 {
     private static Logger log = LoggingManager.getLoggerForClass();
     public static final String QUERY = "query";
