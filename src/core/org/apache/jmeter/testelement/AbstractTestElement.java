@@ -37,6 +37,8 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.PropertyIteratorImpl;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -53,6 +55,10 @@ public abstract class AbstractTestElement implements TestElement, Serializable
 
     private boolean runningVersion = false;
 
+    // Thread-specific variables saved here to save recalculation
+    private transient JMeterContext threadContext = null;
+    private transient String threadName = null;
+    
     public Object clone()
     {
         TestElement clonedElement = null;
@@ -413,4 +419,44 @@ public abstract class AbstractTestElement implements TestElement, Serializable
         }
     }
 
+	/**
+	 * @return Returns the threadContext.
+	 */
+	public JMeterContext getThreadContext() {
+		if (threadContext == null)
+		{
+			log.warn("ThreadContext was not set up - should only happen in JUnit testing..."
+					,new Throwable("Debug"));
+			threadContext = JMeterContextService.getContext();
+		}
+		return threadContext;
+	}
+	/**
+	 * @param threadContext The threadContext to set.
+	 */
+	public void setThreadContext(JMeterContext inthreadContext) {
+		if (threadContext != null)
+		{
+			if (inthreadContext != threadContext)
+			throw new RuntimeException("Attempting to reset the thread context");
+		}
+		this.threadContext = inthreadContext;
+	}
+	/**
+	 * @return Returns the threadName.
+	 */
+	public String getThreadName() {
+		return threadName;
+	}
+	/**
+	 * @param threadName The threadName to set.
+	 */
+	public void setThreadName(String inthreadName) {
+		if (threadName != null)
+		{
+			if (inthreadName != threadName)
+			throw new RuntimeException("Attempting to reset the thread name");
+		}
+		this.threadName = inthreadName;
+	}
 }
