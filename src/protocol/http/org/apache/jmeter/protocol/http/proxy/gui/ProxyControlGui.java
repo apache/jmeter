@@ -55,7 +55,6 @@
 package org.apache.jmeter.protocol.http.proxy.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -68,7 +67,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -85,6 +84,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.protocol.http.proxy.ProxyControl;
@@ -372,93 +372,99 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
 
     private void init()
     {
-        setBorder (BorderFactory.createEmptyBorder(10, 10, 5, 10));
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
         
-        add(makeTitlePanel());
-        add(createPortPanel());
-        add(createIncludePanel());
-        add(createExcludePanel());
-        add(createControls());        
+        add(makeTitlePanel(), BorderLayout.NORTH);
+
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(createPortPanel(), BorderLayout.NORTH);
+        
+        Box includeExcludePanel = Box.createVerticalBox();
+        includeExcludePanel.add(createIncludePanel());
+        includeExcludePanel.add(createExcludePanel());
+        mainPanel.add(includeExcludePanel, BorderLayout.CENTER);
+        
+        mainPanel.add(createControls(), BorderLayout.SOUTH);
+        
+        add(mainPanel, BorderLayout.CENTER);        
     }
     
     private JPanel createControls()
     {
-        JPanel panel = new JPanel();
-
         start = new JButton(JMeterUtils.getResString("start"));
         start.addActionListener(this);
         start.setActionCommand(START);
+        start.setEnabled(true);
 
         stop = new JButton(JMeterUtils.getResString("stop"));
         stop.addActionListener(this);
         stop.setActionCommand(STOP);
+        stop.setEnabled(false);
 
         restart = new JButton(JMeterUtils.getResString("restart"));
         restart.addActionListener(this);
         restart.setActionCommand(RESTART);
+        restart.setEnabled(false);
 
+        JPanel panel = new JPanel();
         panel.add(start);
         panel.add(stop);
         panel.add(restart);
-        start.setEnabled(true);
-        stop.setEnabled(false);
-        restart.setEnabled(false);
-
         return panel;
     }
 
     private JPanel createPortPanel()
     {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        panel.add(new JLabel(JMeterUtils.getResString("port")));
-
-        portField = new JTextField(8);
+        portField = new JTextField("8080", 8);
         portField.setName(ProxyControl.PORT);
         portField.addKeyListener(this);
-        portField.setText("8080");
+
+        JLabel label = new JLabel(JMeterUtils.getResString("port"));
+        label.setLabelFor(portField);
+        
+        HorizontalPanel panel = new HorizontalPanel();
+        panel.add(label);
         panel.add(portField);
-        return panel;
+        return panel;        
     }
 
-    private JPanel createIncludePanel()
-    {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("patterns_to_include")));
-
-        includeModel = new PowerTableModel(new String[] { INCLUDE_COL }, new Class[] { String.class });
+    private JPanel createIncludePanel() {
+        includeModel = new PowerTableModel(
+                new String[] { INCLUDE_COL },
+                new Class[] { String.class });
         includeTable = new JTable(includeModel);
-        includeTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
-        
-        JScrollPane scroller = new JScrollPane(includeTable);
-        scroller.setBackground(panel.getBackground());
-        panel.add(scroller, BorderLayout.CENTER);
-        
-        JPanel buttonPanel = createTableButtonPanel(ADD_INCLUDE, DELETE_INCLUDE);
-        panel.add(buttonPanel, BorderLayout.SOUTH);
-        
+        includeTable.setPreferredScrollableViewportSize(new Dimension(100, 50));
         includeTable.addFocusListener(this);
+
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("patterns_to_include")));
+
+        panel.add(new JScrollPane(includeTable), BorderLayout.CENTER);
+        panel.add(createTableButtonPanel(ADD_INCLUDE, DELETE_INCLUDE),
+            BorderLayout.SOUTH);
+
         return panel;
     }
     
     private JPanel createExcludePanel()
     {
+        excludeModel = new PowerTableModel(
+            new String[] { EXCLUDE_COL },
+            new Class[] { String.class });
+        excludeTable = new JTable(excludeModel);
+        excludeTable.setPreferredScrollableViewportSize(new Dimension(100, 50));
+        excludeTable.addFocusListener(this);
+        
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("patterns_to_exclude")));
 
-        excludeModel = new PowerTableModel(new String[] { EXCLUDE_COL }, new Class[] { String.class });
-        excludeTable = new JTable(excludeModel);
-        excludeTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
-
-        JScrollPane scroller = new JScrollPane(excludeTable);
-        scroller.setBackground(panel.getBackground());
-        panel.add(scroller, BorderLayout.CENTER);
+        panel.add(new JScrollPane(excludeTable), BorderLayout.CENTER);
+        panel.add(createTableButtonPanel(ADD_EXCLUDE, DELETE_EXCLUDE),
+            BorderLayout.SOUTH);
         
-        JPanel buttonPanel = createTableButtonPanel(ADD_EXCLUDE, DELETE_EXCLUDE);
-        panel.add(buttonPanel, BorderLayout.SOUTH);
-        
-        excludeTable.addFocusListener(this);
         return panel;
     }
 
