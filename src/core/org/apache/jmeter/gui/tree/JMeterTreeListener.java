@@ -359,6 +359,7 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 				}
 				if(getCurrentNode() instanceof JMeterGUIComponent)
 				{
+                    log.debug("About to display pop-up");
 					displayPopUp(e);
 				}
 			}
@@ -450,11 +451,12 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 	private void displayPopUp(MouseEvent e)
 	{
 		JPopupMenu pop = ((JMeterGUIComponent)getCurrentNode()).createPopupMenu();
-		displayPopUp(e,pop);
+		GuiPackage.getInstance().displayPopUp(e,pop);
 	}
 	
 	private void displayPopUp(MouseEvent e,JPopupMenu popup)
 	{
+        log.warn("Shouldn't be here");
 		if(popup != null)
 		{
 			popup.pack();

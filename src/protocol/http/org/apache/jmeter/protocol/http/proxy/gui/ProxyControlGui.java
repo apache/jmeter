@@ -152,9 +152,7 @@ public class ProxyControlGui extends JPanel implements JMeterGUIComponent, Actio
     {
         if (model == null)
         {
-            model = new ProxyControl();
-            model.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
-            model.setProperty(TestElement.TEST_CLASS, model.getClass().getName());
+            model = makeProxyControl();
         }
         log.debug("creating/configuring model = " + model);
         model.setProperty(TestElement.NAME, getName());
@@ -162,6 +160,14 @@ public class ProxyControlGui extends JPanel implements JMeterGUIComponent, Actio
         setIncludeListInProxyControl(model);
         setExcludeListInProxyControl(model);
         return model;
+    }
+
+    protected ProxyControl makeProxyControl()
+    {
+        ProxyControl local = new ProxyControl();
+        local.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
+        local.setProperty(TestElement.TEST_CLASS, local.getClass().getName());
+        return local;
     }
 
     protected void setIncludeListInProxyControl(ProxyControl element)
