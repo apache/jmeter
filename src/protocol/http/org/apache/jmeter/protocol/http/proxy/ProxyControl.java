@@ -112,13 +112,15 @@ public class ProxyControl extends ConfigTestElement implements Serializable
     public static final String CAPTURE_HTTP_HEADERS = "ProxyControlGui.capture_http_headers";
 	public static final String ADD_ASSERTIONS = "ProxyControlGui.add_assertion";
 	public static final String ADD_SEPARATORS = "ProxyControlGui.add_separator";
+	public static final String USE_KEEPALIVE  = "ProxyControlGui.use_keepalive";
 
 
 	private long lastTime = 0;//When was the last sample seen?
 	private static final long sampleGap = 
-	JMeterUtils.getPropDefault("proxy.pause",1000);//Detect if user has pressed a new link
+	    JMeterUtils.getPropDefault("proxy.pause",1000);//Detect if user has pressed a new link
 	private boolean addAssertions;
 	private boolean addSeparators;
+	private boolean useKeepAlive;
 
     public ProxyControl()
     {
@@ -154,6 +156,15 @@ public class ProxyControl extends ConfigTestElement implements Serializable
 	{
 		addAssertions=b;
 		setProperty(new BooleanProperty(ADD_ASSERTIONS,b));
+	}
+
+	/**
+	 * @param b
+	 */
+	public void setUseKeepAlive(boolean b)
+	{
+		useKeepAlive=b;
+		setProperty(new BooleanProperty(USE_KEEPALIVE,b));
 	}
 
     public void setIncludeList(Collection list)
@@ -369,6 +380,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
                 {
                     removeValuesFromSampler(sampler, urlConfig);
                     replaceValues(sampler,subConfigs);
+                    sampler.setUseKeepAlive(useKeepAlive);
                     sampler.setProperty(
                         TestElement.GUI_CLASS,
                         "org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui");
