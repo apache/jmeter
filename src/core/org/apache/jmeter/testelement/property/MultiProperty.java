@@ -135,17 +135,13 @@ public abstract class MultiProperty extends AbstractProperty
         {
             return;
         }
-
+        log.debug("merging in " + prop.getClass());
         if (prop instanceof MultiProperty)
         {
             PropertyIterator iter = ((MultiProperty) prop).iterator();
             while (iter.hasNext())
             {
                 JMeterProperty item = iter.next();
-                if(isRunningVersion())
-                {
-                    item.setTemporary(true,null);
-                }
                 addProperty(item);
             }
         }

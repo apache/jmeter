@@ -175,4 +175,9 @@ public class Argument extends AbstractTestElement implements Serializable
     {
         return getPropertyAsString(METADATA);
     }
+    
+    public String toString()
+    {
+        return getName()+getMetaData()+getValue();
+    }
 }
