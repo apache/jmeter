@@ -126,6 +126,7 @@ public class TableDataModel extends GraphModel implements TableModel
 		Sample s = addNewSample(e.getTime(),e.getTimeStamp(),e.isSuccessful(),
 				(String)e.getSampleLabel());
 		fireDataChanged();
+		
 		return s;
 	}
 
