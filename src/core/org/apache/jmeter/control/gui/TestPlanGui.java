@@ -1,9 +1,11 @@
 package org.apache.jmeter.control.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.util.Collection;
 
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -25,10 +27,11 @@ import org.apache.jmeter.util.JMeterUtils;
  * the test is run.
  *
  * @author    Michael Stover
- * @version   $Revision$
+ * @version   $Revision$ Last Updated: $date$
  */
 public class TestPlanGui extends AbstractJMeterGuiComponent
 {
+
     /**
      * A checkbox allowing the user to specify whether or not JMeter should
      * do functional testing.
@@ -39,6 +42,9 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
     
     /** A panel allowing the user to define variables. */
     private ArgumentsPanel argsPanel;
+
+    /** A panel to contain comments on the test plan. */
+	private JTextArea commentPanel;
 
     /**
      * Create a new TestPlanGui.
@@ -98,6 +104,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
             tp.setSerialized(serializedMode.isSelected());
             tp.setUserDefinedVariables(
                 (Arguments) argsPanel.createTestElement());
+			tp.setProperty(TestPlan.COMMENTS,commentPanel.getText());
         }
     }
 
@@ -146,6 +153,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
                     .getProperty(TestPlan.USER_DEFINED_VARIABLES)
                     .getObjectValue());
         }
+        commentPanel.setText(el.getPropertyAsString(TestPlan.COMMENTS));
     }
 
     /**
@@ -162,6 +170,15 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
         return argsPanel;
     }
 
+    private Container createCommentPanel(){
+		Container panel = makeTitlePanel();
+		commentPanel = new JTextArea();
+		JLabel label = new JLabel(JMeterUtils.getResString("testplan_comments"));
+		label.setLabelFor(commentPanel);
+		panel.add(label);
+		panel.add(commentPanel);
+    	return panel;
+    }
     /**
      * Initialize the components and layout of this component.
      */
@@ -170,7 +187,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
         setLayout(new BorderLayout(10, 10));
         setBorder(makeBorder());
         
-        add(makeTitlePanel(), BorderLayout.NORTH);
+        add(createCommentPanel(), BorderLayout.NORTH);
 
         add(createVariablePanel(), BorderLayout.CENTER);
 
