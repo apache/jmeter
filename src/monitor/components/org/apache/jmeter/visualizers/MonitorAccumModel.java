@@ -36,7 +36,11 @@ public class MonitorAccumModel implements Clearable, Serializable
 {
 
 	private HashMap MAP;
-	//private MonitorModel CURRENT;
+	/**
+	 * we use this to set the current monitorModel so that
+	 * we can save the stats to the resultcolllector.
+	 */
+	private MonitorModel CURRENT;
 	private List listeners;
 	/**
 	 * By default, we set the default to 800
@@ -61,13 +65,22 @@ public class MonitorAccumModel implements Clearable, Serializable
     }
     
     /**
+     * Added this method we that we can save the calculated
+     * stats.
+     * @return
+     */
+    public MonitorModel getLastSample(){
+    	return this.CURRENT;
+    }
+    
+    /**
      * Method will look up the server in the map. The
      * MonitorModel will be added to an existing list,
      * or a new one will be created.
      * @param model
      */
     public void addSample(MonitorModel model){
-		//this.CURRENT = model;
+		this.CURRENT = model;
     	if (MAP.containsKey(model.getURL())){
     		List newlist = updateArray(model,(List)MAP.get(model.getURL()));
     		MAP.put(model.getURL(),newlist);
