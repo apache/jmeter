@@ -15,6 +15,7 @@ import java.util.Set;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.apache.jmeter.functions.AbstractFunction;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
@@ -44,7 +45,7 @@ public class JMeterTest extends JMeterTestCase
 {
     private static Logger log = LoggingManager.getLoggerForClass();
     
-    private static Set guiTitles;
+    private static Set guiTitles,funcTitles;
 
     public JMeterTest(String name)
     {
@@ -87,6 +88,14 @@ public class JMeterTest extends JMeterTestCase
 		guiItem=gc;
 	}
     
+	// Constructor for Function tests
+	private AbstractFunction funcItem;
+	public JMeterTest(String testName, AbstractFunction fi)
+	{
+		super(testName);// Save the method name
+		funcItem=fi;
+	}
+    
 	/*
 	 * Use a suite to allow the tests to be generated at run-time
 	 */
@@ -102,6 +111,8 @@ public class JMeterTest extends JMeterTestCase
 		suite.addTest(suiteSerializableElements());
 		suite.addTest(suiteTestElements());
 		suite.addTest(suiteBeanComponents());
+		suite.addTest(new JMeterTest("createFunctionSet"));
+		suite.addTest(suiteFunctions());
         return suite;
     }
     
@@ -130,6 +141,31 @@ public class JMeterTest extends JMeterTestCase
 		guiTitles.add("Root");
 		guiTitles.add("Example Sampler");
     }
+
+	/*
+	 * Extract titles from functions.xml
+	 */
+	public void createFunctionSet() throws Exception
+	{
+		funcTitles = new HashSet(20);
+		
+		String compref = "../xdocs/usermanual/functions.xml";
+		SAXBuilder bldr = new SAXBuilder();
+		Document doc;
+		doc = bldr.build(compref);
+		Element root = doc.getRootElement();
+		Element body = root.getChild("body");
+		Element section = body.getChild("section");
+		List sections = section.getChildren("subsection");
+		for (int i = 0; i< sections.size();i++){
+			List components = ((Element) sections.get(i)).getChildren("component");
+			for (int j = 0; j <components.size();j++){
+				Element comp = (Element) components.get(j);
+				funcTitles.add(comp.getAttributeValue("name"));
+			}
+		}
+	}
+
 	/*
 	 * Test GUI elements - create the suite of tests
 	 */
@@ -152,6 +188,25 @@ public class JMeterTest extends JMeterTestCase
 		}
 		return suite;
 	}
+
+	/*
+	 * Test Functions - create the suite of tests
+	 */
+	private static Test suiteFunctions() throws Exception
+	{
+		TestSuite suite = new TestSuite("Functions");
+		Iterator iter = getObjects(AbstractFunction.class).iterator();
+		while (iter.hasNext())
+		{
+			Object item = iter.next();
+			TestSuite ts = new TestSuite(item.getClass().getName());
+			ts.addTest(new JMeterTest("runFunction",(AbstractFunction) item));
+			suite.addTest(ts);
+		}
+		return suite;
+	}
+
+
 		/*
 		 * Test GUI elements - create the suite of tests
 		 */
@@ -193,6 +248,25 @@ public class JMeterTest extends JMeterTestCase
 			)
 			{// No, not a work in progress ...
 				assertTrue("component_reference.xml needs '"+title+"' anchor for "+guiItem.getClass().getName(),ct);
+			}
+		}
+	}
+	
+	/*
+	 * run the function test
+	 */
+	public void runFunction() throws Exception
+	{
+		if (funcTitles.size() > 0) {
+			String title = funcItem.getReferenceKey();
+			boolean ct =funcTitles.contains(title); 
+			if (// Is this a work in progress ?
+				(title.indexOf("(ALPHA") == -1)
+				&&
+				(title.indexOf("(BETA")  == -1)
+			)
+			{// No, not a work in progress ...
+				assertTrue("function.xml needs '"+title+"' entry for "+funcItem.getClass().getName(),ct);
 			}
 		}
 	}
