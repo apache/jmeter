@@ -153,7 +153,7 @@ public class FileServer
 			{
 				File[] files =
 					src.listFiles(
-						new JMeterFileFilter(new String[] { ".txt,.obj" }));
+						new JMeterFileFilter(new String[] { ".txt",".obj" }));
 				int count = files.length;
 				input = files[random.nextInt(count)];
 			}
