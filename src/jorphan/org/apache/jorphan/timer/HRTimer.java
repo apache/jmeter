@@ -68,95 +68,8 @@ package org.apache.jorphan.timer;
  * @author Originally published in <a href="http://www.javaworld.com/javaworld/javaqa/2003-01/01-qa-0110-timing.html">JavaWorld</a>
  * @version $Revision$
  */
-final class HRTimer implements ITimer, ITimerConstants 
+final class HRTimer extends AbstractTimer 
 {
-    public void start ()
-    {
-        if (DO_STATE_CHECKS)
-        {
-            if (m_state != STATE_READY)
-            {
-                throw new IllegalStateException(
-                    this
-                        + ": start() must be called from READY state, "
-                        + "current state is "
-                        + STATE_NAMES[m_state]);
-            }
-        }
-        
-        if (DO_STATE_CHECKS)
-        {
-            m_state = STATE_STARTED;
-        } 
-        m_data = getTime ();
-    }
-    
-    public void stop ()
-    {
-        // Latch stop time in a local var before doing anything else.
-        final double data = getTime ();
-        
-        if (DO_STATE_CHECKS)
-        {
-            if (m_state != STATE_STARTED)
-            {
-                throw new IllegalStateException(
-                    this
-                        + ": stop() must be called from STARTED state, "
-                        + "current state is "
-                        + STATE_NAMES[m_state]);
-            }
-        }
-        
-        m_data = data - m_data;
-        if (DO_STATE_CHECKS)
-        {
-            m_state = STATE_STOPPED;
-        } 
-    }
-    
-    public double getDuration ()
-    {
-        if (DO_STATE_CHECKS)
-        {
-            if (m_state != STATE_STOPPED)
-            {
-                throw new IllegalStateException(
-                    this
-                        + ": getDuration() must be called from STOPPED state, "
-                        + "current state is "
-                        + STATE_NAMES[m_state]);
-            }
-        }
-        
-        return m_data;
-    }
-    
-    public void reset ()
-    {
-        if (DO_STATE_CHECKS)
-        {
-            m_state = STATE_READY;
-        } 
-    }
-
-
-    /*
-     * This is supposed to return a fractional count of milliseconds elapsed
-     * since some indeterminate moment in the past. The exact starting point
-     * is not relevant because this timer class reports time differences only.
-     * 
-     * JNI code in HRTIMER_LIB library is supposed to implement this.
-     */
-    private static native double getTime ();
-    
-
-    /** Used to keep track of timer state. */
-    private int m_state;
-    
-    /** Timing data. */
-    private double m_data;
-        
     private static final String HRTIMER_LIB = "hrtlib";
     
     static
@@ -174,4 +87,18 @@ final class HRTimer implements ITimer, ITimerConstants
             throw e; // re-throw
         }
     }
+
+    /*
+     * This is supposed to return a fractional count of milliseconds elapsed
+     * since some indeterminate moment in the past. The exact starting point
+     * is not relevant because this timer class reports time differences only.
+     * 
+     * JNI code in HRTIMER_LIB library is supposed to implement this.
+     */
+    private static native double getTime ();
+
+    protected double getCurrentTime()
+    {
+        return getTime();
+    }    
 }
