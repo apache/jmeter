@@ -175,7 +175,21 @@ public class HTTPSampler extends AbstractSampler
         System.setProperty("javax.net.ssl.debug", "all");
     }
 
-    private static Pattern pattern; // initialized by the constructor
+    private static Pattern pattern;
+    static {
+        try
+        {
+            pattern= new Perl5Compiler().compile(
+                    " ",
+                    Perl5Compiler.READ_ONLY_MASK
+                        & Perl5Compiler.SINGLELINE_MASK);
+        }
+        catch (MalformedPatternException e)
+        {
+            log.error("Cant compile pattern.", e);
+            throw new Error(e.toString()); // programming error -- bail out
+        }
+    }
     
     private static ThreadLocal localMatcher= new ThreadLocal()
     {
@@ -198,41 +212,13 @@ public class HTTPSampler extends AbstractSampler
             .getProperty("HTTPSampler.delegateRedirects", "false")
             .equalsIgnoreCase("true");
 
-
 	/**
 	 * Constructor for the HTTPSampler object.
 	 */
 	public HTTPSampler()
 	{
-        try
-        {
-            pattern= new Perl5Compiler().compile(
-                    " ",
-                    Perl5Compiler.READ_ONLY_MASK
-                        & Perl5Compiler.SINGLELINE_MASK);
-        }
-        catch (MalformedPatternException e)
-        {
-            log.error("Cant compile pattern.", e);
-            throw new Error(e.toString()); // programming error -- bail out
-        }
-
 		setArguments(new Arguments());
 	}
-
-	public HTTPSampler(URL u)
-	{
-		setMethod(GET);
-		setDomain(u.getHost());
-		setPath(u.getPath());
-		setPort(u.getPort());
-		setProtocol(u.getProtocol());
-		parseArguments(u.getQuery());
-		setFollowRedirects(true);
-		setUseKeepAlive(true);
-		setArguments(new Arguments());
-	}
-
 
     public void setFileField(String value)
     {
@@ -305,6 +291,9 @@ public class HTTPSampler extends AbstractSampler
     {
     	// TODO JDK1.4 
     	// this seems to be equivalent to path.replaceAll(" ","%20");
+        // TODO move to JMeterUtils or jorphan.
+        // unless we move to JDK1.4. (including the
+        // 'pattern' initialization code earlier on)
         path=
             Util.substitute(
                 (Perl5Matcher)localMatcher.get(),
