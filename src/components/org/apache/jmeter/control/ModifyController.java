@@ -53,15 +53,15 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control;
-import java.io.*;
-import java.util.*;
-import org.apache.jmeter.config.ConfigElement;
+import java.io.Serializable;
+import java.util.Iterator;
+
 import org.apache.jmeter.config.Modifier;
 import org.apache.jmeter.config.ResponseBasedModifier;
-import org.apache.jmeter.gui.JMeterComponentModel;
-import org.apache.jmeter.gui.util.MenuFactory;
-import org.apache.jmeter.samplers.*;
-import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.samplers.SampleEvent;
+import org.apache.jmeter.samplers.SampleListener;
+import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 
 /****************************************

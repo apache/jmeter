@@ -1,8 +1,8 @@
 package org.apache.jmeter.testelement;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 

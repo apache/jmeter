@@ -98,11 +98,11 @@ public class RandomControlGui extends AbstractControllerGui
 		configureTestElement(ic);
 		if(style.isSelected())
 		{
-			ic.setStyle(ic.DEFAULT_STYLE);
+			ic.setStyle(InterleaveControl.DEFAULT_STYLE);
 		}
 		else
 		{
-			ic.setStyle(ic.NEW_STYLE);
+			ic.setStyle(InterleaveControl.NEW_STYLE);
 		}
 		return ic;
 	}

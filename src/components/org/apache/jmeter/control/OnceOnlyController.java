@@ -54,12 +54,9 @@
  */
 package org.apache.jmeter.control;
 
-import java.util.*;
-import java.io.*;
+import java.io.Serializable;
 
-import org.apache.jmeter.config.ConfigElement;
-import org.apache.jmeter.samplers.*;
-import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.testelement.TestElement;
 
 /************************************************************

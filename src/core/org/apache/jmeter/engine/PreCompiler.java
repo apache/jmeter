@@ -6,10 +6,10 @@ import org.apache.jmeter.functions.ValueReplacer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Hierarchy;
-import org.apache.log.Logger;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 /**
  * @author mstover
  *

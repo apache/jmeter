@@ -60,27 +60,30 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Properties;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import java.util.HashSet;
-import java.util.Collection;
-import java.util.Iterator;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.SAXParserFactory;
+
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.log.Hierarchy;
-import org.apache.log.Logger;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.test.UnitTestManager;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 import org.xml.sax.XMLReader;
 /**
  *  This class contains the static utility methods used by JMeter.
@@ -116,6 +119,9 @@ public class JMeterUtils implements UnitTestManager
 	private static Collection localeChangeListeners = new HashSet();
 	private static Locale locale;
 	private static ResourceBundle resources;
+   
+   //Provide Random numbers to whomever wants one
+   private static Random rand = new Random();
 
 	/**
 	 *  This method is used by the init method to load the property file that may
@@ -167,6 +173,15 @@ public class JMeterUtils implements UnitTestManager
 	{
 		return new String[] { getJMeterHome() + "/lib/ext" };
 	}
+   
+   /**
+    * Provide random numbers
+    * @param loc
+    */
+   public static int getRandomInt(int r)
+   {
+      return rand.nextInt(r);
+   }
 
 	/**
 	 * Changes the current locale: re-reads resource strings and notifies

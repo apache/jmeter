@@ -55,13 +55,12 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
-import java.util.*;
-import javax.swing.*;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.apache.jmeter.gui.tree.*;
-import org.apache.jmeter.gui.*;
-import org.apache.jmeter.testelement.WorkBench;
-import org.apache.jmeter.testelement.TestPlan;
+import javax.swing.JOptionPane;
+
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**

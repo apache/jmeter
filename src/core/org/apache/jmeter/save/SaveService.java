@@ -54,8 +54,14 @@
  */
 package org.apache.jmeter.save;
 
-
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -75,10 +81,10 @@ import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Hierarchy;
-import org.apache.log.Logger;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 import org.xml.sax.SAXException;
 
 
@@ -334,7 +340,6 @@ public class SaveService implements SaveServiceConstants
     public static AssertionResult getAssertionResult(Configuration config)
     {
         AssertionResult result = new AssertionResult();
-
         result.setError(config.getAttributeAsBoolean(ERROR, false));
         result.setFailure(config.getAttributeAsBoolean(FAILURE, false));
         result.setFailureMessage(config.getAttribute(FAILURE_MESSAGE, ""));

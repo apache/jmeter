@@ -70,9 +70,9 @@ import javax.swing.border.EmptyBorder;
 import org.apache.jmeter.assertions.DurationAssertion;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 
 /****************************************

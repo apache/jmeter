@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Collection;
 
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jorphan.collections.HashTree;
 
 
 /**

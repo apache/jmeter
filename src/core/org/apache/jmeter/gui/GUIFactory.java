@@ -55,9 +55,11 @@
 
 package org.apache.jmeter.gui;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 
 
 /**

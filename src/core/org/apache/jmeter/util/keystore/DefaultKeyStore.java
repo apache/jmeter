@@ -54,15 +54,11 @@
  */
 package org.apache.jmeter.util.keystore;
 
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
-import java.security.cert.CertificateException;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.io.InputStream;
-import java.io.IOException;
 import java.util.Enumeration;
 
 /**

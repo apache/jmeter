@@ -57,9 +57,9 @@ import java.net.InetAddress;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 
+import org.apache.jorphan.collections.HashTree;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.apache.jorphan.collections.HashTree;
 
 
 /************************************************************

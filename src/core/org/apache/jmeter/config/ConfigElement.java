@@ -54,7 +54,6 @@
  */
 package org.apache.jmeter.config;
 
-import java.util.*;
 
 /************************************************************
  *  Title: Apache JMeter Description: Copyright: Copyright (c) 2000 Company:

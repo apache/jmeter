@@ -431,7 +431,7 @@ public class HTTPSampler extends AbstractSampler
 		{
 			return new URL(
 				getProtocol(),
-				(String) getProperty(HTTPSampler.DOMAIN),
+				getPropertyAsString(HTTPSampler.DOMAIN),
 				getPort(),
 				pathAndQuery);
 		}

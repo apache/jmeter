@@ -53,17 +53,17 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control;
-import java.io.*;
-import java.util.*;
-import org.apache.jmeter.assertions.Assertion;
-import org.apache.jmeter.config.ConfigElement;
-import org.apache.jmeter.gui.*;
-import org.apache.jmeter.gui.util.MenuFactory;
-import org.apache.jmeter.samplers.*;
-import org.apache.jmeter.samplers.SampleResult;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.jmeter.samplers.AbstractSampler;
+import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.PerThreadClonable;
+import org.apache.jmeter.testelement.TestElement;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache

@@ -1,10 +1,12 @@
 package org.apache.jmeter.samplers;
-import java.util.*;
-import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestElement;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.PerSampleClonable;
+import org.apache.jmeter.testelement.TestElement;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache

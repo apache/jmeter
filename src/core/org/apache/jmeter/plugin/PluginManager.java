@@ -58,7 +58,7 @@ package org.apache.jmeter.plugin;
 
 import java.net.URL;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
 
 import org.apache.jmeter.gui.GUIFactory;
 

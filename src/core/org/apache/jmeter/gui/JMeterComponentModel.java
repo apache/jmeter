@@ -54,7 +54,7 @@
  */
  package org.apache.jmeter.gui;
 
-import java.util.*;
+import java.util.Collection;
 
 /**
  * This class is obsolete.

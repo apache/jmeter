@@ -79,8 +79,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.TableCellRenderer;
-import org.apache.jmeter.assertions.Assertion;
+
 import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.gui.util.TextAreaCellRenderer;
@@ -207,8 +206,8 @@ public class AssertionGui extends AbstractAssertionGui implements FocusListener
 	{
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.anchor = gbc.WEST;
-		gbc.fill = gbc.BOTH;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridheight = 1;
 		gbc.gridwidth = 1;
 		gbc.gridx = 0;

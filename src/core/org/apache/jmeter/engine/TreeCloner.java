@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.testelement.PerThreadClonable;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.collections.ListedHashTree;
@@ -22,16 +23,23 @@ public class TreeCloner implements HashTreeTraverser
 {
 	ListedHashTree newTree;
 	LinkedList objects = new LinkedList();
+    boolean forThread = true;
+    
+    public TreeCloner()
+    {
+        this(true);
+    }
 
-	public TreeCloner()
+	public TreeCloner(boolean forThread)
 	{
 		newTree = new ListedHashTree();
+        this.forThread = forThread;
 	}
 	public void addNode(Object node,HashTree subTree)
 	{
-		if(node instanceof PerThreadClonable)
+		if(node instanceof PerThreadClonable || (!forThread && node instanceof TestElement))
 		{
-			node = ((PerThreadClonable)node).clone();
+			node = ((TestElement)node).clone();
 			newTree.add(objects,node);
 		}
 		else
@@ -72,7 +80,7 @@ public class TreeCloner implements HashTreeTraverser
 			TreeCloner cloner = new TreeCloner();
 			original.traverse(cloner);
 			ListedHashTree newTree = cloner.getClonedTree();
-			this.assertTrue(original != newTree);
+			assertTrue(original != newTree);
 			assertEquals(original.size(),newTree.size());
 			assertEquals(original.getTree(original.getArray()[0]).size(),
 					newTree.getTree(newTree.getArray()[0]).size());

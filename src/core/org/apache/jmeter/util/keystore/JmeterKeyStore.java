@@ -54,11 +54,10 @@
  */
 package org.apache.jmeter.util.keystore;
 
-import java.lang.reflect.Constructor;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
-import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Use this Keystore for JMeter specific KeyStores.
