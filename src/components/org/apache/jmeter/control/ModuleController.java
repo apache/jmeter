@@ -224,16 +224,43 @@ public class ModuleController extends GenericController implements ReplaceableCo
 	 */
 	public void replace( HashTree tree ) 
 	{
+		if (!selectedNode.isEnabled())
+		{
+			selectedNode = cloneTreeNode(selectedNode);
+			selectedNode.setEnabled(true);
+		}
 		createSubTree( tree, selectedNode );
 	}
 
 	private void createSubTree( HashTree tree, JMeterTreeNode node ) 
 	{
 		Enumeration e = node.children();
-		while ( e.hasMoreElements() ) {
+		while ( e.hasMoreElements() ) 
+		{
 			JMeterTreeNode subNode = (JMeterTreeNode)e.nextElement();
 			tree.add(subNode);
 			createSubTree( tree.getTree(subNode), subNode );
+		}
+	}
+	
+	private static JMeterTreeNode cloneTreeNode(JMeterTreeNode node)
+	{
+		JMeterTreeNode treeNode = (JMeterTreeNode)node.clone();
+		treeNode.setUserObject(((TestElement)node.getUserObject()).clone());
+		cloneChildren(treeNode,node);
+		return treeNode;
+	}
+
+	private static void cloneChildren(JMeterTreeNode to, JMeterTreeNode from) 
+	{
+		Enumeration enum = from.children();
+		while (enum.hasMoreElements()) 
+		{
+			JMeterTreeNode child = (JMeterTreeNode)enum.nextElement();
+			JMeterTreeNode childClone = (JMeterTreeNode)child.clone();
+			childClone.setUserObject(((TestElement)child.getUserObject()).clone());
+			to.add(childClone);	
+			cloneChildren((JMeterTreeNode)to.getLastChild(),child);
 		}
 	}
 
