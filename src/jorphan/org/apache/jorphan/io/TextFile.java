@@ -172,8 +172,12 @@ public class TextFile extends File
         {
             log.error("", ioe);
         }
-        if (reader != null)
-			try {reader.close();} catch (IOException e) {}
+        finally
+		{
+	        if (reader != null)
+				try {reader.close();} catch (IOException e) {}
+		}
+
         return sb.toString();
     }
 
