@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -61,7 +61,6 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.control.GenericController;
-import org.apache.jmeter.gui.NamePanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
@@ -71,7 +70,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *
  *@author    Kevin Hammond
  *@created   $Date$
- *@version   1.0
+ *@version   $Revision$
  ***************************************/
 
 public class LogicControllerGui extends AbstractControllerGui
@@ -83,27 +82,6 @@ public class LogicControllerGui extends AbstractControllerGui
 	public LogicControllerGui()
 	{
 		init();
-		setName(getStaticLabel());
-	}
-
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param name  !ToDo (Parameter description)
-	 ***************************************/
-	public void setName(String name)
-	{
-		namePanel.setName(name);
-	}
-
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getName()
-	{
-		return namePanel.getName();
 	}
 
 	/****************************************
@@ -119,27 +97,19 @@ public class LogicControllerGui extends AbstractControllerGui
 	}
     
     /**
-         * Modifies a given TestElement to mirror the data in the gui components.
-         * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-         */
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
     public void modifyTestElement(TestElement el)
     {
         configureTestElement(el);
     }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
 	public String getStaticLabel()
 	{
 		return JMeterUtils.getResString("logic_controller_title");
 	}
 
-	/****************************************
-	 * !ToDo (Method description)
-	 ***************************************/
 	public void updateGui() { }
 
 	private void init()
@@ -161,8 +131,7 @@ public class LogicControllerGui extends AbstractControllerGui
 		mainPanel.add(panelTitleLabel);
 
 		// NAME
-		namePanel = new NamePanel();
-		mainPanel.add(namePanel);
+		mainPanel.add(getNamePanel());
 
 		this.add(mainPanel);
 	}
