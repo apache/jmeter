@@ -176,6 +176,12 @@ public class SampleResult implements Serializable
     {
         return timeStamp;
     }
+    
+    /**
+     * @deprecated use sampleStart/sampleEnd instead
+     * 
+     * @param timeStamp
+     */
 
     public void setTimeStamp(long timeStamp)
     {
