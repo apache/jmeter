@@ -126,10 +126,10 @@ public class ProxyControlGui
     private JCheckBox httpHeaders;
 
     /**
-     * Add separators between page requests - if there is a large enough time
-     * difference between samples, assume that a new link has been clicked
+     * Whether to group requests together based on inactivity separation
+     * periods -- and how to handle such grouping afterwards.
      */
-	private JCheckBox addSeparators;
+	private JComboBox groupingMode;
 
 	/**
 	 * Add an Assertion to the first sample of each set
@@ -207,7 +207,7 @@ public class ProxyControlGui
             setIncludeListInProxyControl(model);
             setExcludeListInProxyControl(model);
             model.setCaptureHttpHeaders(httpHeaders.isSelected());
-			model.setSeparators(addSeparators.isSelected());
+			model.setGroupingMode(groupingMode.getSelectedIndex());
 			model.setAssertions(addAssertions.isSelected());
 			model.setUseKeepAlive(useKeepAlive.isSelected());
             TreeNodeWrapper nw= (TreeNodeWrapper)targetNodes.getSelectedItem();
@@ -262,7 +262,7 @@ public class ProxyControlGui
         model = (ProxyControl)element;
         portField.setText(model.getPropertyAsString(ProxyControl.PORT));
 		httpHeaders.setSelected(model.getPropertyAsBoolean(ProxyControl.CAPTURE_HTTP_HEADERS));
-		addSeparators.setSelected(model.getPropertyAsBoolean(ProxyControl.ADD_SEPARATORS));
+		groupingMode.setSelectedIndex(model.getPropertyAsInt(ProxyControl.GROUPING_MODE));
 		addAssertions.setSelected(model.getPropertyAsBoolean(ProxyControl.ADD_ASSERTIONS));
 		useKeepAlive.setSelected(model.getPropertyAsBoolean(ProxyControl.USE_KEEPALIVE,true));
         
@@ -325,7 +325,7 @@ public class ProxyControlGui
         }
         else if ( command.equals(ProxyControl.CAPTURE_HTTP_HEADERS)
 		        || command.equals(ProxyControl.ADD_ASSERTIONS)
-                || command.equals(ProxyControl.ADD_SEPARATORS)
+                || command.equals(ProxyControl.GROUPING_MODE)
                 || command.equals(ProxyControl.USE_KEEPALIVE)
                  )
         {
@@ -513,12 +513,6 @@ public class ProxyControlGui
         httpHeaders.addActionListener(this);
         httpHeaders.setActionCommand(ProxyControl.CAPTURE_HTTP_HEADERS);
 
-		addSeparators = new JCheckBox(JMeterUtils.getResString("proxy_separators"));
-		addSeparators.setName(ProxyControl.ADD_SEPARATORS);
-		addSeparators.setSelected(false);
-		addSeparators.addActionListener(this);
-		addSeparators.setActionCommand(ProxyControl.ADD_SEPARATORS);
-
 		addAssertions = new JCheckBox(JMeterUtils.getResString("proxy_assertions"));
 		addAssertions.setName(ProxyControl.ADD_ASSERTIONS);
 		addAssertions.setSelected(false);
@@ -539,7 +533,6 @@ public class ProxyControlGui
         panel.add(httpHeaders);
 
 		panel.add(useKeepAlive);
-		panel.add(addSeparators);
 		panel.add(addAssertions);
 
         return panel;
@@ -581,6 +574,24 @@ public class ProxyControlGui
             throw new Error(e);
         }
 
+        DefaultComboBoxModel m= new DefaultComboBoxModel();
+        m.addElement(JMeterUtils.getResString("grouping_no_groups"));
+        m.addElement(JMeterUtils.getResString("grouping_add_separators"));
+        // TODO: enable when implemented:
+        //m.addElement(JMeterUtils.getResString("grouping_in_controllers"));
+        //m.addElement(JMeterUtils.getResString("grouping_store_first_only"));
+        groupingMode = new JComboBox(m);
+        groupingMode.setName(ProxyControl.GROUPING_MODE);
+        groupingMode.setSelectedIndex(0);
+        groupingMode.addActionListener(this);
+        groupingMode.setActionCommand(ProxyControl.GROUPING_MODE);
+
+        JLabel label2 = new JLabel(JMeterUtils.getResString("grouping_mode"));
+        label2.setLabelFor(groupingMode);
+        
+        panel.add(label2);
+        panel.add(groupingMode);
+        
         return panel;        
     }
 
