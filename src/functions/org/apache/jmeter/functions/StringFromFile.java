@@ -27,9 +27,11 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -58,7 +60,9 @@ import org.apache.log.Logger;
  * 
  * @version $Revision$ Updated on: $Date$
  */
-public class StringFromFile extends AbstractFunction implements Serializable
+public class StringFromFile 
+    extends AbstractFunction 
+	implements Serializable, TestListener
 {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
@@ -80,13 +84,13 @@ public class StringFromFile extends AbstractFunction implements Serializable
 	private static final int PARAM_END = 4;
 	private static final int MAX_PARAM_COUNT = 4;
 
-    private String myValue = ERR_IND;
-    private String myName = "StringFromFile_";//$NON-NLS-1$ - Name to store the value in
-    private Object[] values;
-	transient private BufferedReader myBread; // Buffered reader
+    transient private String myValue = ERR_IND;
+    transient private String myName = "StringFromFile_";//$NON-NLS-1$ - Name to store the value in
+    transient private Object[] values;
+	transient private BufferedReader myBread = null; // Buffered reader
 	transient private FileReader fis; // keep this round to close it
-    private boolean firstTime = false; // should we try to open the file?
-    private String fileName; // needed for error messages
+    transient private boolean firstTime = false; // should we try to open the file?
+    transient private String fileName; // needed for error messages
 
     public StringFromFile()
     {
@@ -107,12 +111,8 @@ public class StringFromFile extends AbstractFunction implements Serializable
         return newReader;
     }
     
-/*
- * Warning: the file will generally be left open at the end of a test run.
- * This is because functions don't (yet) have any way to find out when a test has
- * ended ... 
- */
     private void closeFile(){
+    	if (myBread == null) return;
     	String tn = Thread.currentThread().getName();
     	log.info(tn + " closing file " + fileName);//$NON-NLS-1$
     	try {
@@ -291,6 +291,8 @@ public class StringFromFile extends AbstractFunction implements Serializable
      * Parameters:
      * - file name
      * - variable name (optional)
+     * - start index (optional)
+     * - end index or count (optional)
      * 
      * @see org.apache.jmeter.functions.Function#setParameters(Collection)
      */
@@ -339,4 +341,28 @@ public class StringFromFile extends AbstractFunction implements Serializable
         return desc;
     }
 
+	public void testStarted() 
+	{
+		//
+	}
+
+	public void testStarted(String host) 
+	{
+		//
+	}
+
+	public void testEnded() 
+	{
+		this.testEnded("");
+	}
+
+	public void testEnded(String host) 
+	{
+		closeFile();
+	}
+
+	public void testIterationStart(LoopIterationEvent event) 
+	{
+		//
+	}
 }
