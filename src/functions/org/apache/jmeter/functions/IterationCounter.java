@@ -24,17 +24,18 @@ public class IterationCounter extends AbstractFunction implements Serializable
 	}
 	
 	private Object[] variables;
-	private static int counter;
+	private IntegerWrapper counter;
 
 
 	public IterationCounter()
 	{
-		counter = 0;
+		counter = new IntegerWrapper(new Integer(0));
 	}
 	
 	public Object clone()
 	{
 		IterationCounter newCounter = new IterationCounter();
+		newCounter.counter = counter;
 		return newCounter;
 	}
 
@@ -44,7 +45,7 @@ public class IterationCounter extends AbstractFunction implements Serializable
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 		throws InvalidVariableException 
 	{
-		counter++;
+		counter.setInteger((new Integer(counter.getInteger().intValue()+1)));
 
 		JMeterVariables vars = getVariables();
 		
@@ -59,7 +60,7 @@ public class IterationCounter extends AbstractFunction implements Serializable
 		}
 		else
 		{
-			counterString = Integer.toString(counter);
+			counterString = String.valueOf(counter.getInteger());
 		}
 		
 		vars.put( varName, counterString );
@@ -93,6 +94,28 @@ public class IterationCounter extends AbstractFunction implements Serializable
 	public List getArgumentDesc() {
 		return desc;
 	}
+	
+	protected class IntegerWrapper
+		implements Serializable
+	{
+		Integer i;
 
+		public IntegerWrapper() {}
+	
+		public IntegerWrapper(Integer i)
+		{
+			this.i = i;
+		}
+	
+		public void setInteger(Integer i)
+		{
+			this.i = i;
+		}
+	
+		public Integer getInteger()
+		{
+			return i;
+		}
+	}
 
 }
