@@ -210,6 +210,10 @@ public class LoopController extends GenericController implements Serializable
                     "six",
                     "seven" };
             int counter = 15;
+            controller.setRunningVersion(true);
+            sub_1.setRunningVersion(true);
+            sub_2.setRunningVersion(true);
+            sub_3.setRunningVersion(true);
             controller.initialize();
             for (int i = 0; i < 2; i++)
             {
@@ -239,6 +243,7 @@ public class LoopController extends GenericController implements Serializable
             LoopController loop = new LoopController();
             loop.setLoops(-1);
             loop.addTestElement(new TestSampler("never run"));
+            loop.setRunningVersion(true);
             loop.initialize();
             for (int i=0; i<42; i++)
             {

@@ -246,6 +246,10 @@ public class InterleaveControl extends GenericController implements Serializable
                     "six",
                     "seven" };
             int counter = 14;
+            controller.setRunningVersion(true);
+            sub_1.setRunningVersion(true);
+            sub_2.setRunningVersion(true);
+            sub_3.setRunningVersion(true);
             controller.initialize();
             for (int i = 0; i < 4; i++)
             {
@@ -283,6 +287,9 @@ public class InterleaveControl extends GenericController implements Serializable
             sub_1.addTestElement(sub_2);
             sub_2.setLoops(3);
             int counter = 1;
+            controller.setRunningVersion(true);
+            sub_1.setRunningVersion(true);
+            sub_2.setRunningVersion(true);
             controller.initialize();
             for (int i = 0; i < 4; i++)
             {
@@ -341,6 +348,10 @@ public class InterleaveControl extends GenericController implements Serializable
                     "one",
                     "three" };
             int counter = 0;
+            controller.setRunningVersion(true);
+            sub_1.setRunningVersion(true);
+            sub_2.setRunningVersion(true);
+            sub_3.setRunningVersion(true);
             controller.initialize();
             while (counter < order.length)
             {
@@ -399,6 +410,10 @@ public class InterleaveControl extends GenericController implements Serializable
                     "two",
                     "three" };
             int counter = 0;
+            controller.setRunningVersion(true);
+            sub_1.setRunningVersion(true);
+            sub_2.setRunningVersion(true);
+            sub_3.setRunningVersion(true);
             controller.initialize();
             while (counter < order.length)
             {
@@ -431,6 +446,10 @@ public class InterleaveControl extends GenericController implements Serializable
             sub_1.addTestElement(sub_3);
             String[] order = new String[] { "one", "three", "two", "four" };
             int counter = 0;
+            controller.setRunningVersion(true);
+            sub_1.setRunningVersion(true);
+            sub_2.setRunningVersion(true);
+            sub_3.setRunningVersion(true);
             controller.initialize();
             while (counter < order.length)
             {
@@ -463,6 +482,10 @@ public class InterleaveControl extends GenericController implements Serializable
             sub_1.addTestElement(sub_3);
             String[] order = new String[] { "one", "two", "three", "four" };
             int counter = 0;
+            controller.setRunningVersion(true);
+            sub_1.setRunningVersion(true);
+            sub_2.setRunningVersion(true);
+            sub_3.setRunningVersion(true);
             controller.initialize();
             while (counter < order.length)
             {

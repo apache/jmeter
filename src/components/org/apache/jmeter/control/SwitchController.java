@@ -264,6 +264,10 @@ public class SwitchController extends InterleaveControl implements Serializable
 			controller.addTestElement(new TestSampler("before"));
             controller.addTestElement(switch_cont);			
             controller.addTestElement(new TestSampler("after"));
+            controller.setRunningVersion(true);
+            sub_1.setRunningVersion(true);
+            sub_2.setRunningVersion(true);
+            switch_cont.setRunningVersion(true);
             controller.initialize();
 			for (int i=1;i<=3;i++){
 				assertEquals("Loop:"+i,"before",nextName(controller));
