@@ -139,11 +139,7 @@ public class Save implements Command
 		{
 			subTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
 		}
-		try
-		{
-			convertSubTree(subTree);
-		}catch(Exception err)
-		{}
+		
 		if(!SAVE_TO_PREVIOUS.equals(e.getActionCommand()) || testPlanFile == null)
 		{
 			JFileChooser chooser = FileDialoger.promptToSaveFile(
@@ -166,7 +162,13 @@ public class Save implements Command
 		{
 			chosenFile = testPlanFile;
 		}
-		
+
+        ActionRouter.getInstance().actionPerformed(new ActionEvent(subTree,e.getID(),CheckDirty.SUB_TREE_SAVED));
+        try
+                {
+                    convertSubTree(subTree);
+                }catch(Exception err)
+                {}
 		OutputStream writer = null;
 		try
 		{

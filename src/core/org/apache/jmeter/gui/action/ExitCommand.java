@@ -74,6 +74,7 @@ import org.apache.jmeter.util.JMeterUtils;
 public class ExitCommand implements Command
 {
 
+    public static final String EXIT = "exit";
     private static Set commands = new HashSet();
 
     /**
@@ -129,6 +130,6 @@ public class ExitCommand implements Command
     }
 
     static {
-        commands.add("exit");
+        commands.add(EXIT);
     }
 }
