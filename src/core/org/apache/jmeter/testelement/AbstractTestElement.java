@@ -474,4 +474,9 @@ public abstract class AbstractTestElement implements TestElement, Serializable
 	 */
 	public void threadStarted() {
 	}
+	
+	// Default implementation
+	public boolean canRemove(){
+		return true;
+	}
 }
