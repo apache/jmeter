@@ -95,7 +95,7 @@ public class DBKey implements Serializable
         this.password = password;
     }
     // Dummy constructor to allow JMeter test suite to work
-    DBKey(){
+    public DBKey(){
     	this("","","","");
     }
 
