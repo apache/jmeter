@@ -141,4 +141,15 @@ public interface TestElement extends Cloneable
 	 */
 	public void setThreadName(String threadName);
 
+	/**
+	 * Called at the start of each thread.
+	 * TODO - should it hava a parameter?
+	 */
+	public void threadStarted();
+
+	/**
+	 * Called at the end of each thread.
+	 * TODO - should it hava a parameter?
+	 */
+	public void threadFinished();
 }
