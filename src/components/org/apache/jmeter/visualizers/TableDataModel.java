@@ -64,6 +64,7 @@ import javax.swing.table.TableModel;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 
@@ -228,7 +229,7 @@ public class TableDataModel extends GraphModel implements TableModel
         {
             if ((rowIndex >= 0) && (rowIndex < urlList.size()))
             {
-                return Boolean.valueOf(
+                return JOrphanUtils.valueOf(
                     !((Sample) getSamples().get(rowIndex)).error);
             }
         }

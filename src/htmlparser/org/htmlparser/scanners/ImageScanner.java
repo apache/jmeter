@@ -73,6 +73,7 @@ package org.htmlparser.scanners;
 //////////////////
 import java.util.Hashtable;
 
+import org.apache.jorphan.util.JOrphanUtils;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
@@ -134,7 +135,8 @@ public class ImageScanner extends TagScanner
 					// the bug, I strip out alt="" and then append
 					// it at the end. When the alt attribute has a
 					// value, the bug does not appear.
-					String newtext = tagText.replaceAll("alt=\"\" ","");
+					//JDK1.4: String newtext = tagText.replaceAll("alt=\"\" ","");
+					String newtext = JOrphanUtils.replaceFirst(tagText,"alt=\"\" ","");
 					tag.setText(newtext + " alt=\"\"");
 					table = tag.redoParseAttributes();
 					relativeLink = (String)table.get("SRC");

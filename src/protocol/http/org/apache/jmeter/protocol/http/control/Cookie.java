@@ -60,6 +60,7 @@ import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * This class is a Cookie encapsulator.
@@ -209,7 +210,7 @@ public class Cookie extends AbstractTestElement implements Serializable
             + "\tTRUE\t"
             + getPath()
             + "\t"
-            + Boolean.valueOf(getSecure()).toString().toUpperCase()
+            + JOrphanUtils.booleanToSTRING(getSecure())
             + "\t"
             + getExpires()
             + "\t"
