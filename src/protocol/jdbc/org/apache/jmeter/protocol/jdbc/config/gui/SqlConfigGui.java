@@ -60,7 +60,7 @@ public class SqlConfigGui extends AbstractConfigGui
 
     public void configure(TestElement element)
     {
-        sqlField.setText(element.getProperty(JDBCSampler.QUERY).toString());
+        sqlField.setText(element.getPropertyAsString(JDBCSampler.QUERY));
         super.configure(element);
     }
 

@@ -66,9 +66,9 @@ public class PoolConfigGui extends AbstractConfigGui implements FocusListener
     {
         super.configure(element);
         connField.setText(
-            element.getProperty(JMeter19ConnectionPool.CONNECTIONS).toString());
+            element.getPropertyAsString(JMeter19ConnectionPool.CONNECTIONS));
         maxUseField.setText(
-            element.getProperty(JMeter19ConnectionPool.MAXUSE).toString());
+            element.getPropertyAsString(JMeter19ConnectionPool.MAXUSE));
     }
 
     public TestElement createTestElement()

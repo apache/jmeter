@@ -51,9 +51,9 @@ public class BeanShellSamplerGui extends AbstractSamplerGui
 
     public void configure(TestElement element)
     {
-    	scriptField.setText(element.getProperty(BeanShellSampler.SCRIPT).toString());
-		filename.setText(element.getProperty(BeanShellSampler.FILENAME).toString());
-		parameters.setText(element.getProperty(BeanShellSampler.PARAMETERS).toString());
+    	scriptField.setText(element.getPropertyAsString(BeanShellSampler.SCRIPT));
+		filename.setText(element.getPropertyAsString(BeanShellSampler.FILENAME));
+		parameters.setText(element.getPropertyAsString(BeanShellSampler.PARAMETERS));
         super.configure(element);
     }
 
