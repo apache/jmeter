@@ -60,8 +60,8 @@ import java.util.Map;
 
 import javax.swing.JPopupMenu;
 
+import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
-import org.apache.jmeter.functions.ValueReplacer;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;

@@ -60,6 +60,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -115,11 +116,11 @@ public class IntSum extends AbstractFunction implements Serializable
 		JMeterVariables vars = getVariables();
 		
 		int sum = 0;
-		String varName = ((CompoundFunction)values[values.length - 1]).execute();
+		String varName = ((CompoundVariable)values[values.length - 1]).execute();
 
 		for (int i = 0; i < values.length - 1; i++)
 		{
-			sum += Integer.parseInt(((CompoundFunction)values[i]).execute());
+			sum += Integer.parseInt(((CompoundVariable)values[i]).execute());
 		}
 
 		String totalString = Integer.toString(sum);
@@ -134,11 +135,10 @@ public class IntSum extends AbstractFunction implements Serializable
 	 * 
 	 * @see Function#setParameters(String)
 	 */
-	public void setParameters(String parameters)
+	public void setParameters(Collection parameters)
 			throws InvalidVariableException
 	{
-		Collection params = this.parseArguments2(parameters);
-		values = params.toArray();
+		values = parameters.toArray();
 		
 		if ( values.length < 3 ) {
 			throw new InvalidVariableException();

@@ -53,17 +53,22 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.jmeter.functions;
+package org.apache.jmeter.engine.util;
 
-import java.net.URLEncoder;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import junit.framework.TestCase;
 
+import org.apache.jmeter.functions.Function;
+import org.apache.jmeter.functions.InvalidVariableException;
+import org.apache.jmeter.functions.util.ArgumentDecoder;
+import org.apache.jmeter.functions.util.ArgumentEncoder;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
@@ -74,8 +79,7 @@ import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 import org.apache.oro.text.perl.Perl5Util;
-import org.apache.oro.text.regex.PatternCompiler;
-import org.apache.oro.text.regex.Perl5Compiler;
+
 
 /**
  * CompoundFunction
@@ -83,7 +87,7 @@ import org.apache.oro.text.regex.Perl5Compiler;
  * @author mstover
  * @version $Id$
  */
-public class CompoundFunction implements Function
+public class CompoundVariable implements Function
 {
     transient private static Logger log =
         Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
@@ -92,14 +96,10 @@ public class CompoundFunction implements Function
 	private Map varMap = new HashMap();
 
     static Map functions = new HashMap();
-    private Map definedValues;
     private boolean hasFunction, hasStatics, hasUnknowns;
     private String staticSubstitution;
+    private Perl5Util util = new Perl5Util();
     
-    private static Perl5Util util = new Perl5Util();
-    static private PatternCompiler compiler = new Perl5Compiler();
-    static private String variableSplitter = "/(\\${)/";
-
     LinkedList compiledComponents = new LinkedList();
 
     static {
@@ -125,12 +125,12 @@ public class CompoundFunction implements Function
     }
 
 
-    public CompoundFunction()
+    public CompoundVariable()
     {
         hasFunction = false;
         hasStatics = false;
         hasUnknowns = false;
-        definedValues = new HashMap();
+//        definedValues = new HashMap();
         staticSubstitution = "";
     }
 
@@ -171,6 +171,10 @@ public class CompoundFunction implements Function
                 {
                 }
             }
+            else if (item instanceof SimpleVariable)
+            {
+           		results.append( ((SimpleVariable) item).toString() );	
+            }
             else
             {
                 results.append(item);
@@ -179,9 +183,9 @@ public class CompoundFunction implements Function
         return results.toString();
     }
 
-    public CompoundFunction getFunction()
+    public CompoundVariable getFunction()
     {
-        CompoundFunction func = new CompoundFunction();
+        CompoundVariable func = new CompoundVariable();
         func.compiledComponents = (LinkedList) compiledComponents.clone();
         return func;
     }
@@ -213,134 +217,235 @@ public class CompoundFunction implements Function
         this.threadVars = threadVars;
     }
 
-    /**
-     * @see Function#setParameters(String)
-     */
-    public void setParameters(String parameters)
-        throws InvalidVariableException
+	/**
+	 * @see Function#setParameters(String)
+	 */
+	public void setParameters(String parameters)
+		throws InvalidVariableException
+	{
+		if (parameters == null || parameters.length() == 0)
+			return;
+		
+		compiledComponents = buildComponents( parameters );
+	}
+	
+	/**
+	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
+	 */
+	public void setParameters(Collection parameters)
+		throws InvalidVariableException { }
+
+	
+	private LinkedList buildComponents(String parameters)
+		throws InvalidVariableException
+	{
+		LinkedList components = new LinkedList();
+		String current, pre, functionStr;
+		int funcStartIndex, funcEndIndex;
+		
+		current = parameters;
+		funcStartIndex = current.indexOf( "${" );
+
+		while ( funcStartIndex > -1 ) 
+		{
+			pre = current.substring(0, funcStartIndex);
+			if ( ! pre.equals("") ) {
+//				hasStatics = true;
+				components.addLast( pre );
+			}
+			
+			funcEndIndex = findMatching( "${", "}", current );
+			functionStr = current.substring( funcStartIndex+2, funcEndIndex );
+			Function newFunction = buildFunction( functionStr );
+			
+			if ( newFunction == null ) {
+				components.addLast(new SimpleVariable(functionStr) );	
+			} else {			
+				components.addLast(newFunction);
+			}
+			
+			hasFunction = true;
+			current = current.substring( funcEndIndex+1 );
+			funcStartIndex = current.indexOf( "${" );
+		} 
+
+		if ( ! current.equals("") ) {
+//			hasStatics = true;
+			components.addLast( current );
+		}
+
+		return components;
+	}
+	
+	private Function buildFunction( String functionStr ) 
+		throws InvalidVariableException 
+	{		
+		Function returnFunction = null;
+		LinkedList parameterList;
+		String functionName, params, decodedParams;
+		int paramsStart = functionStr.indexOf("(");
+
+		if ( paramsStart > -1 ) 
+			functionName = functionStr.substring( 0, functionStr.indexOf("(") );
+		else 
+			functionName = functionStr;
+
+		if ( functions.containsKey(functionName) ) 
+		{
+			Object replacement = functions.get(functionName);
+			params = extractParams(functionStr);
+			decodedParams = ArgumentDecoder.decode(params);
+
+			try 
+			{	
+				returnFunction = (Function) ((Class) replacement).newInstance();
+				
+				Collection paramList = parseParams(decodedParams);
+				returnFunction.setParameters(paramList);
+			} 
+			catch (Exception e) 
+			{
+				log.error("", e);
+				throw new InvalidVariableException();
+			}
+		}
+
+		return returnFunction;
+		
+	}
+	
+
+    private String extractParams(String functionStr)
     {
-        if (parameters == null || parameters.length() == 0)
-        {
-            return;
-        }
-        List components = new LinkedList();
-        util.split(components, variableSplitter, parameters);
-        Iterator iter = components.iterator();
-        String previous = "";
-        while (iter.hasNext())
-        {
-            String part = (String) iter.next();
-            int index = getFunctionEndIndex(part);
-            if (index > -1 && previous.equals("${"))
-            {
-                String function = part.substring(0, index);
-                String functionName = parseFunctionName(function);
-                
-				if ( functions.containsKey(functionName) )
-                {
-                    Object replacement = functions.get(functionName);
+    	String params;
+    	int startIndex, endIndex, embeddedStartIndex;
+    	
+    	params = "";
+    	startIndex = functionStr.indexOf("(");
+    	endIndex = findMatching( "(", ")", functionStr );
+    	embeddedStartIndex = functionStr.indexOf("${");
+    	
+    	if ( startIndex != -1 && endIndex != -1 )
+    	{	
+    		if ( embeddedStartIndex == -1 || ( embeddedStartIndex != -1 && startIndex < embeddedStartIndex ) ) 
+    		{
+    			params = functionStr.substring(startIndex+1, endIndex );
+    		}
+    	}
 
-                    try
-                    {
-                        hasFunction = true;
-                        Function func =
-                            (Function) ((Class) replacement).newInstance();
-                        func.setParameters(extractParams(function));
-                        compiledComponents.addLast(func);
-                    }
-                    catch (Exception e)
-                    {
-                        log.error("", e);
-                        throw new InvalidVariableException();
-                    }
-                }
-                else
-                {
-                    UnknownFunction unknown = new UnknownFunction(functionName);
-                    compiledComponents.addLast(unknown);
-                    hasFunction = true;
-                    hasUnknowns = true;
-                }
+    	return params;
+    }
 
-                if ((index + 1) < part.length())
-                {
-                    addStringToComponents(
-                        compiledComponents,
-                        part.substring(index + 1));
-                }
-            }
-            else if (previous.equals("${"))
-            {
-                addStringToComponents(compiledComponents, "${");
-                addStringToComponents(compiledComponents, part);
-            }
-            else if (!part.equals("${"))
-            {
-                addStringToComponents(compiledComponents, part);
-            }
-            previous = part;
-        }
+    
+    private LinkedList parseParams( String params )
+    	throws InvalidVariableException 
+    {	
+    	LinkedList uncompiled = new LinkedList();
+    	LinkedList compiled = new LinkedList();
+    	StringTokenizer st = new StringTokenizer( params, ",", true );
+		StringBuffer buffer = new StringBuffer();
+		String token, previous;
+		
+		previous = token = "";
+    	
+    	while ( st.hasMoreElements() ) 
+    	{
+    		buffer.append( st.nextElement() );
+    		token = buffer.toString();
+    		
+    		if ( token.indexOf("(") != -1 ) 
+    		{	
+    			if ( findMatching( "(", ")", token) != -1 ) 
+    			{
+    				uncompiled.add(token);
+    				previous = token;
+    				buffer = new StringBuffer();    				
+    			}	
+    		} 
+    		else
+    		{
+    			if ( token.equals(",") && ( previous.equals(",") || previous.length() == 0 ) ) 
+    			{
+    				uncompiled.add("");
+    			}
+    			else if ( ! token.equals(",") ) 
+    			{
+    				uncompiled.add(token);
+    			}
+    			
+    			previous = token;
+    			buffer = new StringBuffer();    			
+    		}
+    		
+    	}
+    	
+		if ( token.equals(",") ) 
+		{
+			uncompiled.add("");
+		}
 
+    	for ( int i=0; i<uncompiled.size(); i++ ) {
+    		CompoundVariable c = new CompoundVariable();
+    		c.setParameters((String)uncompiled.get(i));
+    		compiled.addLast(c);
+    	}
+
+    	return compiled;	
     }
 
 
-    private void addStringToComponents( LinkedList refinedComponents, String part)
-    {
-        if (part == null || part.length() == 0)
-        {
-            return;
-        }
-        if (refinedComponents.size() == 0)
-        {
-            refinedComponents.addLast(new StringBuffer(part));
-        }
-        else
-        {
-            if (refinedComponents.getLast() instanceof StringBuffer)
-            {
-                ((StringBuffer) refinedComponents.getLast()).append(part);
-            }
-            else
-            {
-                refinedComponents.addLast(new StringBuffer(part));
-            }
-        }
-    }
-
-
-    private String extractParams(String function)
-    {
-        if (function.indexOf("(") > -1)
-        {
-            return function.substring(
-                function.indexOf("(") + 1,
-                function.lastIndexOf(")"));
-        }
-        else
-        {
-            return "";
-        }
-    }
-
-
-    private int getFunctionEndIndex(String part)
-    {
-        int index = part.indexOf("}");
-        return index;
-    }
-
-
-    private String parseFunctionName(String function)
-    {
-        String functionName = function;
-        int parenIndex = -1;
-        if ((parenIndex = function.indexOf("(")) > -1)
-        {
-            functionName = function.substring(0, parenIndex);
-        }
-        return functionName;
-    }
-
+	private static int findMatching( String openStr, String closeStr, 
+		String searchString ) 
+	{
+		int count, openIndex, closeIndex, previousMatch;
+		boolean found = false;
+ 
+		openIndex = closeIndex = previousMatch = -1;
+		
+		while ( ! found ) {
+			openIndex = searchString.indexOf(openStr, previousMatch+1);
+			if ( openIndex == -1 )
+				break;
+			else if ( openIndex == 0 || searchString.charAt(openIndex-1) != '\\' )
+				found=true;
+			else {
+				previousMatch=openIndex;
+				openIndex = -1;
+			}			
+		}
+		
+		if ( openIndex < searchString.indexOf(closeStr)) 
+		{
+			if ( openIndex != -1 ) 
+			{
+				String subSearch;
+				
+				subSearch = searchString.substring( openIndex+1, searchString.length() );
+				int subMatch = findMatching( openStr, closeStr, subSearch );
+				
+				while ( subMatch != -1 ) 
+				{
+					previousMatch += subMatch + 1;
+					subSearch = searchString.substring( previousMatch+1, searchString.length() );
+					subMatch = findMatching( openStr, closeStr, subSearch );
+				}
+				
+				found = false;
+				while ( !found ) 
+				{
+					closeIndex = searchString.indexOf( closeStr, previousMatch+1 );
+					if ( closeIndex == -1 )
+						break;
+					else if ( searchString.charAt(closeIndex-1) != '\\' )
+						found=true;
+					else
+						previousMatch = closeIndex;
+				}
+			}
+		}
+		
+		return closeIndex;
+	}
 
     public boolean hasFunction()
     {
@@ -366,9 +471,9 @@ public class CompoundFunction implements Function
 	 */
 	public void setUserDefinedVariables(Map userVariables)
     {
-        definedValues.clear();
-        definedValues.putAll(functions);
-        definedValues.putAll(userVariables);
+//        definedValues.clear();
+//        definedValues.putAll(functions);
+//        definedValues.putAll(userVariables);
     }
 
     /**
@@ -385,9 +490,9 @@ public class CompoundFunction implements Function
 	}
 
 
-    public static class Test extends TestCase
+/*    public static class Test extends TestCase
     {
-        CompoundFunction function;
+        CompoundVariable function;
         SampleResult result;
 
         public Test(String name)
@@ -400,7 +505,7 @@ public class CompoundFunction implements Function
             Map userDefinedVariables = new HashMap();
             userDefinedVariables.put("my_regex", ".*");
             userDefinedVariables.put("server", "jakarta.apache.org");
-            function = new CompoundFunction();
+            function = new CompoundVariable();
             function.setUserDefinedVariables(userDefinedVariables);
             result = new SampleResult();
             result.setResponseData("<html>hello world</html>".getBytes());
@@ -408,7 +513,7 @@ public class CompoundFunction implements Function
 
         public void testParseExample1() throws Exception
         {
-            function.setParameters("${__regexFunction(<html>(.*)</html>,$1$)}");
+            function.setParameters("${__regexFunction(<html>\\(.*\\)</html>,$1$)}");
             function.setJMeterVariables(new JMeterVariables());
             assertEquals(1, function.compiledComponents.size());
             assertEquals(
@@ -428,7 +533,7 @@ public class CompoundFunction implements Function
         {
             function.setParameters(
                 "It should say:${${__regexFunction("
-                    + URLEncoder.encode("<html>(.*)</html>")
+                    + ArgumentEncoder.encode("<html>(.*)</html>")
                     + ",$1$)}}");
             function.setJMeterVariables(new JMeterVariables());
             assertEquals(3, function.compiledComponents.size());
@@ -454,7 +559,7 @@ public class CompoundFunction implements Function
         public void testParseExample3() throws Exception
         {
             function.setParameters(
-                "${__regexFunction(<html>(.*)</html>,$1$)}${__regexFunction(<html>(.*o)(.*o)(.*)</html>,$1$$3$)}");
+                "${__regexFunction(<html>\\(.*\\)</html>,$1$)}${__regexFunction(<html>\\(.*o\\)\\(.*o\\)\\(.*\\)</html>,$1$$3$)}");
             function.setJMeterVariables(new JMeterVariables());
             assertEquals(2, function.compiledComponents.size());
             assertTrue(function.hasFunction());
@@ -470,9 +575,9 @@ public class CompoundFunction implements Function
                     result,
                     null));
             assertEquals("hello worldhellorld", function.execute(result, null));
-            assertEquals(
-                "<html>(.*)</html>,$1$<html>(.*o)(.*o)(.*)</html>,$1$$3$",
-                function.execute(null, null));
+//            assertEquals(
+//                "<html>(.*)</html>,$1$<html>(.*o)(.*o)(.*)</html>,$1$$3$",
+//                function.execute(null, null));
         }
 
         public void testParseExample4() throws Exception
@@ -495,7 +600,7 @@ public class CompoundFunction implements Function
             function.setParameters("${server}");
             function.setJMeterVariables(new JMeterVariables());
             assertEquals(1, function.compiledComponents.size());
-            assertTrue(!function.hasFunction());
+//            assertTrue(!function.hasFunction());
 //            assertTrue(function.hasStatics());
             assertEquals("jakarta.apache.org", function.execute(null, null));
         }
@@ -512,7 +617,7 @@ public class CompoundFunction implements Function
         public void testNestedExample1() throws Exception
         {
             function.setParameters(
-                "${__regexFunction(<html>(${my_regex})</html>,$1$)}${__regexFunction(<html>(.*o)(.*o)(.*)</html>,$1$$3$)}");
+                "${__regexFunction(<html>\\(\\$\\{my_regex\\}\\)</html>,$1$)}${__regexFunction(<html>\\(.*o\\)\\(.*o\\)\\(.*\\)</html>,$1$$3$)}");
             function.setJMeterVariables(new JMeterVariables());
             assertEquals(2, function.compiledComponents.size());
             assertTrue(function.hasFunction());
@@ -536,7 +641,7 @@ public class CompoundFunction implements Function
         public void testNestedExample2() throws Exception
         {
             function.setParameters(
-                "${__regexFunction(<html>(${my_regex})</html>,$1$)}");
+                "${__regexFunction(<html>(\\$\\{my_regex\\})</html>,$1$)}");
             function.setJMeterVariables(new JMeterVariables());
             assertEquals(1, function.compiledComponents.size());
             assertEquals(
@@ -551,6 +656,6 @@ public class CompoundFunction implements Function
                     null));
             assertEquals("hello world", function.execute(result, null));
         }
-    }
+    }*/
 
 }

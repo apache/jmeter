@@ -1,6 +1,7 @@
 package org.apache.jmeter.functions;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,6 +35,14 @@ public class ThreadNumber implements Function,Serializable {
 	 * @see org.apache.jmeter.functions.Function#setParameters(String)
 	 */
 	public void setParameters(String parameters)
+		throws InvalidVariableException {
+	}
+	
+	
+	/**
+	 * @see org.apache.jmeter.functions.Function#setParameters(String)
+	 */
+	public void setParameters(Collection parameters)
 		throws InvalidVariableException {
 	}
 

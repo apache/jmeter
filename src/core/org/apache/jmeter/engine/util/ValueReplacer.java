@@ -1,4 +1,4 @@
-package org.apache.jmeter.functions;
+package org.apache.jmeter.engine.util;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,6 +9,7 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
+import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
@@ -25,7 +26,7 @@ import org.apache.log.Logger;
 public class ValueReplacer
 {
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ELEMENTS);
-	CompoundFunction masterFunction = new CompoundFunction();
+	CompoundVariable masterFunction = new CompoundVariable();
 	Map variables = new HashMap();
     TestPlan tp;
 	

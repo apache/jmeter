@@ -1,8 +1,8 @@
 package org.apache.jmeter.engine;
 import java.util.Map;
 
+import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.functions.InvalidVariableException;
-import org.apache.jmeter.functions.ValueReplacer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
