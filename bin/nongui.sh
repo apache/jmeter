@@ -24,4 +24,4 @@ do
     CLASSPATH=${CLASSPATH}:$i
 done
 
-java -classpath $CLASSPATH:`dirname $0`/ApacheJMeter.jar $JAVA_PROPS -D$LOG4JCONFIG org.apache.jmeter.NewDriver $PROPERTIES $SRCFILE
+java -classpath $CLASSPATH:`dirname $0`/ApacheJMeter.jar $JAVA_PROPS -D$LOG4JCONFIG org.apache.jmeter.NonGuiDriver $PROPERTIES $SRCFILE
