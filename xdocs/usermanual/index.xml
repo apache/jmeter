@@ -9,6 +9,10 @@
 
 <ul>
   <li><a href="intro.html">1. Introduction</a></li>
+  <ul>
+    <li><a href="intro.html#history">1.1 History</a></li>
+    <li><a href="intro.html#future">1.2 The Future</a></li>
+  </ul>
   <li><a href="get-started.html">2. Getting Started</a></li>
   <ul>
 	 <li><a href="get-started.html#requirements">2.1 Requirements</a></li>
