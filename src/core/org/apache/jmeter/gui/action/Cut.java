@@ -23,7 +23,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 
 /**
@@ -51,13 +50,11 @@ public class Cut extends AbstractAction
      */
     public void doAction(ActionEvent e)
     {
-        Copy.setCopiedNode(
-            GuiPackage.getInstance().getTreeListener().getCurrentNode());
-        JMeterTreeListener treeListener =
-            GuiPackage.getInstance().getTreeListener();
-        JMeterTreeNode currentNode = treeListener.getCurrentNode();//NOTUSED
-        GuiPackage.getInstance().getTreeModel().removeNodeFromParent(
-            GuiPackage.getInstance().getTreeListener().getCurrentNode());
-        GuiPackage.getInstance().getMainFrame().repaint();
+        GuiPackage guiPack = GuiPackage.getInstance();
+        JMeterTreeNode currentNode = guiPack.getTreeListener().getCurrentNode();
+
+        Copy.setCopiedNode(currentNode);
+        guiPack.getTreeModel().removeNodeFromParent(currentNode);
+        guiPack.getMainFrame().repaint();
     }
 }
