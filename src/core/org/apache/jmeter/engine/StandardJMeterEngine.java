@@ -74,10 +74,12 @@ public class StandardJMeterEngine
 	private static Map allThreadsSave;
     public static void stopEngineNow()
     {
+    	if (engine != null) // May be null if called from Unit test
     	  engine.stopTest();
     }
     public static void stopEngine()
     {
+    	if (engine != null)  // May be null if called from Unit test
     	  engine.askThreadsToStop();
     }
     public static boolean stopThread(String threadName)
