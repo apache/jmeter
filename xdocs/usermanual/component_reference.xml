@@ -978,6 +978,29 @@ but not to the UI.  It is meant to provide an efficient means of
 recording data by eliminating GUI overhead.</description>
 </component>
 
+<component index="14.3.10" name="Monitor Results" screenshot="monitor_screencap.png">
+<description>
+<p>Monitor Results is a new Visualizer for displaying server
+status. It is designed for Tomcat 5, but any servlet container
+can port the status servlet and use this monitor. There are two primary
+tabs for the monitor. The first is the "Health" tab, which will show the
+status of one or more servers. The second tab labled "Performance" shows
+the performance for one server for the last 1000 samples. The equations
+used for the load calculation is included in the Visualizer.</p>
+<p>Currently, the primary limitation of the monitor is system memory. A
+quick benchmark of memory usage indicates a buffer of 1000 data points for
+100 servers would take roughly 10Mb of RAM. On a 1.4Ghz centrino
+laptop with 1Gb of ram, the monitor should be able to handle several
+hundred servers.</p>
+<p>As a general rule, monitoring production systems should take care to
+set an appropriate interval. Intervals shorter than 5 seconds are too
+aggressive and have a potential of impacting the server. With a buffer of
+1000 data points at 5 second intervals, the monitor would check the server
+status 12 times a minute or 720 times a hour. This means the buffer shows
+the performance history of each machine for the last hour.</p>
+</description>
+</component>
+
 </section>
 
 <section name="14.4 Configuration Elements" anchor="config_elements">
