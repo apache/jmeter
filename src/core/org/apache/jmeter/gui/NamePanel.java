@@ -35,7 +35,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 /**
  *
- *@author    Michael Stover
  *@version   $Revision$  Last updated: $Date$
 */
 
@@ -217,4 +216,12 @@ public class NamePanel extends JPanel implements JMeterGUIComponent
     {
         nameLabel.setText(JMeterUtils.getResString(nameLabel.getName()));
     }
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getDocAnchor()
+	 */
+	public String getDocAnchor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

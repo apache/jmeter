@@ -154,6 +154,14 @@ public class JMeterTreeNode
             .getStaticLabel();
     }
 
+    public String getDocAnchor()
+    {
+        return GuiPackage
+            .getInstance()
+            .getGui((TestElement) getUserObject())
+            .getDocAnchor();
+    }
+
     public void setName(String name)
     {
         ((TestElement) getUserObject()).setProperty(

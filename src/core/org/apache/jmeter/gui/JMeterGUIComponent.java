@@ -85,6 +85,14 @@ public interface JMeterGUIComponent
     String getLabelResource();
     
     /**
+     * Get the component's document anchor name.
+     * Used by Help to find the appropriate location in the documentation
+     *  
+     * @return   Document anchor (#ref) for the component.
+     */
+    String getDocAnchor();
+
+    /**
      * JMeter test components are separated into a model and a GUI
      * representation.  The model holds the data and the GUI displays it.  The
      * GUI class is responsible for knowing how to create and initialize with
