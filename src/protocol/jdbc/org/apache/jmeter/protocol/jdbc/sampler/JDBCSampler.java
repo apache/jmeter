@@ -18,6 +18,9 @@
 
 package org.apache.jmeter.protocol.jdbc.sampler;
 
+import java.io.IOException;
+import java.io.NotActiveException;
+import java.io.ObjectInputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -55,7 +58,7 @@ public class JDBCSampler extends AbstractTestElement implements Sampler,TestBean
     public JDBCSampler()
     {
     }
-
+    
     public SampleResult sample(Entry e)
     {
        log.debug("sampling jdbc");

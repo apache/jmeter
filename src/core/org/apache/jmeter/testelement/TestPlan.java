@@ -35,6 +35,8 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * @author    Michael Stover
@@ -43,6 +45,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class TestPlan extends AbstractTestElement implements Serializable,TestListener
 {
+   private static Logger log = LoggingManager.getLoggerForClass();
 
     public final static String THREAD_GROUPS = "TestPlan.thread_groups";
     public final static String FUNCTIONAL_MODE = "TestPlan.functional_mode";

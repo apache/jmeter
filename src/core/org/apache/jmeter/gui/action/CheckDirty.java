@@ -30,6 +30,8 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.collections.ListedHashTree;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * @author mstover
@@ -39,6 +41,8 @@ public class CheckDirty
     extends AbstractAction
     implements HashTreeTraverser, ActionListener
 {
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
     private static Map previousGuiItems;
     public static final String CHECK_DIRTY = "check_dirty";
     public static final String SUB_TREE_SAVED = "sub_tree_saved";

@@ -65,7 +65,7 @@ public class Authorization extends AbstractTestElement implements Serializable
     {
     }
 
-    public String getURL()
+    public synchronized String getURL()
     {
         return getPropertyAsString(URL);
     }
@@ -73,7 +73,7 @@ public class Authorization extends AbstractTestElement implements Serializable
     {
         setProperty(URL, url);
     }
-    public String getUser()
+    public synchronized String getUser()
     {
         return getPropertyAsString(USERNAME);
     }
@@ -81,7 +81,7 @@ public class Authorization extends AbstractTestElement implements Serializable
     {
         setProperty(USERNAME, user);
     }
-    public String getPass()
+    public synchronized String getPass()
     {
         return getPropertyAsString(PASSWORD);
     }

@@ -311,6 +311,18 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
         german.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
         german.setName("de");
         languageMenu.add(german);
+        //add French
+        JMenuItem french = new JMenuItem(JMeterUtils.getResString("fr"), 'F');
+        french.addActionListener(ActionRouter.getInstance());
+        french.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
+        french.setName("fr");
+        languageMenu.add(french);
+        //add chinese
+        JMenuItem chinese = new JMenuItem(JMeterUtils.getResString("cn"), 'C');
+        chinese.addActionListener(ActionRouter.getInstance());
+        chinese.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
+        chinese.setName("cn");
+        languageMenu.add(chinese);
         return languageMenu;
     }
 

@@ -68,7 +68,7 @@ public class Header extends AbstractTestElement implements Serializable
     /**
      * Get the value for this object.
      */
-    public String getValue()
+    public synchronized String getValue()
     {
         return getPropertyAsString(VALUE);
     }

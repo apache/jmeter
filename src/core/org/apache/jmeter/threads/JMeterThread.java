@@ -82,7 +82,6 @@ public class JMeterThread implements Runnable, java.io.Serializable
     
     public static final String PACKAGE_OBJECT = "JMeterThread.pack"; // $NON-NLS-1$
     public static final String LAST_SAMPLE_OK = "JMeterThread.last_sample_ok"; // $NON-NLS-1$
-	public static final String ALL_SAMPLES_OK = "JMeterThread.all_samples_ok"; // $NON-NLS-1$
 
     public JMeterThread()
     {
@@ -222,6 +221,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
             threadContext = JMeterContextService.getContext();
             threadContext.setVariables(threadVars);
             threadContext.setThreadNum(getThreadNum());
+            threadContext.getVariables().put(LAST_SAMPLE_OK,"true");
             threadContext.setThread(this);
             testTree.traverse(compiler);
             //listeners = controller.getListeners();
@@ -406,8 +406,6 @@ public class JMeterThread implements Runnable, java.io.Serializable
     private void checkAssertions(List assertions, SampleResult result)
     {
         Iterator iter = assertions.iterator();
-        boolean last_sample_ok=true;
-        boolean all_samples_ok=true;
         while (iter.hasNext())
         {
         	Assertion assertion= (Assertion)iter.next();
@@ -417,11 +415,9 @@ public class JMeterThread implements Runnable, java.io.Serializable
                 result.isSuccessful()
                     && !(assertionResult.isError() || assertionResult.isFailure()));
             result.addAssertionResult(assertionResult);
-            last_sample_ok = result.isSuccessful();
-            all_samples_ok &= last_sample_ok;
         }
-        threadContext.getVariables().put(LAST_SAMPLE_OK,JOrphanUtils.booleanToString(last_sample_ok));
-        threadContext.getVariables().put(ALL_SAMPLES_OK,JOrphanUtils.booleanToString(all_samples_ok));
+        threadContext.getVariables().put(LAST_SAMPLE_OK,
+        		JOrphanUtils.booleanToString(result.isSuccessful()));
     }
 
     private void runPostProcessors(List extractors)

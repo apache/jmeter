@@ -23,6 +23,8 @@ import java.io.Serializable;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * @author    Dolf Smits
@@ -32,6 +34,7 @@ import org.apache.jmeter.testelement.property.StringProperty;
  */
 public class ForeachController extends GenericController implements Serializable
 {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private final static String INPUTVAL = "ForeachController.inputVal";
     private final static String RETURNVAL ="ForeachController.returnVal";
@@ -97,7 +100,37 @@ public class ForeachController extends GenericController implements Serializable
     	}
     }
 
-    /* (non-Javadoc)
+    // Prevent entry if nothing to do
+    public Sampler next()
+    {
+        if(emptyList())
+        {
+            reInitialize();
+            return null;
+        }
+        return super.next();
+    }
+
+    /**
+     * Check if there are any matching entries
+     * 
+	 * @return whethere any entries in the list
+	 */
+	private boolean emptyList() {
+        JMeterContext context = getThreadContext();
+    	String inputVariable=getInputValString()+"_1";
+    	if (context.getVariables().get(inputVariable) != null) 
+    	{
+    	   return false;
+    	}
+    	else
+    	{
+    		log.debug("No entries found - null first entry: "+inputVariable);
+    		return true;
+    	}
+	}
+
+	/* (non-Javadoc)
      * @see org.apache.jmeter.control.GenericController#nextIsNull()
      */
     protected Sampler nextIsNull() throws NextIsNullException

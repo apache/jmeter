@@ -539,7 +539,7 @@ public class Tag extends Node
      */
     public void collectInto(NodeList collectionList, String filter)
     {
-        if (thisScanner != null && thisScanner.getFilter() == filter)
+        if (thisScanner != null && thisScanner.getFilter().equals(filter))
             collectionList.add(this);
     }
 

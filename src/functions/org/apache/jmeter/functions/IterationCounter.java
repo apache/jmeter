@@ -41,12 +41,15 @@ public class IterationCounter extends AbstractFunction implements Serializable
         desc.add(JMeterUtils.getResString("function_name_param"));
     }
 
-    private Object[] variables;
-    private int[] counter;
+    transient private Object[] variables;
+    transient private int[] counter;
+    transient private String key; // Used to keep track of counter
 
     public IterationCounter()
     {
         counter = new int[1];
+    	// TODO use better key if poss. Can't use varName - it may not be present
+        key=KEY+System.identityHashCode(this);
     }
 
     public Object clone()
@@ -97,7 +100,7 @@ public class IterationCounter extends AbstractFunction implements Serializable
             counterString = String.valueOf(counter[0]);
         }
 
-        vars.put(varName, counterString);
+        if (varName.length()>0) vars.put(varName, counterString);
         return counterString;
     }
 

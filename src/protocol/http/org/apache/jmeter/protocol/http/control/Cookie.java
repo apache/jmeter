@@ -88,7 +88,7 @@ public class Cookie extends AbstractTestElement implements Serializable
     /**
      * get the value for this object.
      */
-    public String getValue() //TODO should this be synchronized - the set() method is
+    public synchronized String getValue()
     {
         return getPropertyAsString(VALUE);
     }
@@ -104,7 +104,7 @@ public class Cookie extends AbstractTestElement implements Serializable
     /**
      * get the domain for this object.
      */
-    public String getDomain() //TODO should this be synchronized - the set() method is
+    public synchronized String getDomain()
     {
         return getPropertyAsString(DOMAIN);
     }
@@ -120,7 +120,7 @@ public class Cookie extends AbstractTestElement implements Serializable
     /**
      * get the expires for this object.
      */
-    public long getExpires() //TODO should this be synchronized - the set() method is
+    public synchronized long getExpires()
     {
         return getPropertyAsLong(EXPIRES);
     }
@@ -136,7 +136,7 @@ public class Cookie extends AbstractTestElement implements Serializable
     /**
      * get the secure for this object.
      */
-    public boolean getSecure() //TODO should this be synchronized - the set() method is
+    public synchronized boolean getSecure()
     {
         return getPropertyAsBoolean(SECURE);
     }
@@ -152,7 +152,7 @@ public class Cookie extends AbstractTestElement implements Serializable
     /**
      * get the path for this object.
      */
-    public String getPath() //TODO should this be synchronized - the set() method is
+    public synchronized String getPath()
     {
         return getPropertyAsString(PATH);
     }
