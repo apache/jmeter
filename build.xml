@@ -747,6 +747,7 @@ some of its classes - at present JMeter can only run from jar files.
 
    <target name="_pack-javadoc">
     <property name="pack.name" value="${dist.name}_api"/>
+    <mkdir dir="${dist.dir}"/>
     <tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
       <tarfileset includes="${dest.docs.api}/" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </tar>
