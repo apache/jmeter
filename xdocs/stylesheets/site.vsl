@@ -248,6 +248,9 @@
 			 <a name="$component.getAttributeValue("name").replace($space,$udsc)"><h3>$!component.getAttributeValue("index") $component.getAttributeValue("name")</h3></a>
 		  </font>
 		</td></tr>
+		#if($component.getAttribute("useinstead"))
+			<tr><td><em>* - This element is deprecated.  Use <a href="$relativePath/usermanual/component_reference.html#$component.getAttributeValue("useinstead").replace($space,$udsc)">$component.getAttributeValue("useinstead")</a> instead</td></tr>
+		#end
 		<tr><td>
 		  #foreach ( $c_items in $component.getChildren() )
 				#if ($c_items.getName().equals("description"))

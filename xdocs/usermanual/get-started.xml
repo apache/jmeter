@@ -29,7 +29,7 @@ over your Test Plans.</p>
 <p>JMeter requires your computing environment meets some minimum requirements.</p>
 
 <subsection name="2.1.1 Java Version" anchor="java_ver">
-<p>JMeter requires a fully compliant JDK1.2 (or higher) environment. Because JMeter uses only
+<p>JMeter (as of version 1.8) requires a fully compliant JDK1.4 (or higher) environment. Because JMeter uses only
 standard Java APIs (java.*), please do not file bug reports if your JRE fails to run
 JMeter because of JRE implementation issues.</p>
 <note>JDK1.4.1Beta appears to be buggy, and there are some GUI elements that won't work correctly in this JVM.</note>
