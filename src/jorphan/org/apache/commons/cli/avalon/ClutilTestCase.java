@@ -160,6 +160,40 @@ public final class ClutilTestCase
         assertEquals( option2.getArgument( 0 ), null );
     }
 
+    public void testOptionalArgLong()
+    {
+        final CLOptionDescriptor[] options = new CLOptionDescriptor[]
+        {
+            ALL, TAINT
+        };
+
+		// Check that optional args work woth long options
+        final String[] args = new String[]{"--taint", "param", "-a"};
+
+        final CLArgsParser parser = new CLArgsParser( args, options );
+
+        assertNull( parser.getErrorString(), parser.getErrorString() );
+
+        final List clOptions = parser.getArguments();
+        final int size = clOptions.size();
+
+        assertEquals( "Option count", 3, size );
+
+        final CLOption option0 = (CLOption)clOptions.get( 0 );
+        assertEquals( "Option Code: " + option0.getDescriptor().getId(), TAINT_OPT,
+                option0.getDescriptor().getId() );
+        assertEquals( "Option Arg: " + option0.getArgument( 0 ),
+                null, option0.getArgument( 0 ) );
+
+        final CLOption option1 = (CLOption)clOptions.get( 1 );
+        assertEquals( CLOption.TEXT_ARGUMENT , option1.getDescriptor().getId());
+        assertEquals( "param" , option1.getArgument( 0 ) );
+
+        final CLOption option2 = (CLOption)clOptions.get( 2 );
+        assertEquals( option2.getDescriptor().getId(), ALL_OPT );
+        assertEquals( option2.getArgument( 0 ), null );
+    }
+
     public void testShortOptArgUnenteredBeforeOtherOpt()
     {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[]
@@ -979,4 +1013,10 @@ public final class ClutilTestCase
                 "\t-n, --nulltest" + lineSeparator,
                 sb.toString() );
     }
+	/*
+	 *  TODO add tests to check for:
+	 *  - name clash
+	 *  - long option abbreviations (match shortest unique abbreviation)
+	 */
+	
 }

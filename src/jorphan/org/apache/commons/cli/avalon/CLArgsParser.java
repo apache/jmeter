@@ -449,7 +449,7 @@ public final class CLArgsParser
                 //should never get to here when stringIndex != 0
                 addOption( new CLOption( m_args[m_argIndex++] ) );
             }
-            else if( STATE_OPTIONAL_ARG == m_state && '-' == m_ch )
+            else if( STATE_OPTIONAL_ARG == m_state && m_isLong && m_ch != 0)
             {
                 m_state = STATE_NORMAL;
                 addOption( m_option );
