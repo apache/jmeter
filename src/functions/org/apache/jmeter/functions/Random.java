@@ -81,8 +81,8 @@ public class Random extends AbstractFunction implements Serializable
 
         JMeterVariables vars = getVariables();
 
-        int min = Integer.parseInt(minimum.execute());
-        int max = Integer.parseInt(maximum.execute());
+        int min = Integer.parseInt(minimum.execute().trim());
+        int max = Integer.parseInt(maximum.execute().trim());
 
         int rand = (int) Math.round(min + Math.random() * (max - min));
 

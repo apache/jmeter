@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -44,7 +43,6 @@ import org.apache.log.Logger;
 /**
  * The headers of the client HTTP request.
  *
- * @version   $Revision$
  */
 public class HttpRequestHdr
 {
@@ -229,7 +227,7 @@ public class HttpRequestHdr
         sampler.setMethod(method);
         log.debug("Proxy: method server: " + sampler.getMethod());
         sampler.setPath(serverUrl());
-        log.debug("Proxy: setting path: " + sampler.getEncodedPath());
+        log.debug("Proxy: setting path: " + sampler.getPath());
         if (numberRequests){
         	requestNumber++;
 			sampler.setName(requestNumber + " " + sampler.getPath());

@@ -248,13 +248,21 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
          serialized = true;
       }
       compileTree();
+      /** 
+       * Notification of test listeners needs to happen after function replacement, but before
+       * setting RunningVersion to true.
+       */
+      testListeners = new SearchByClass(TestListener.class);
+      getTestTree().traverse(testListeners);
+      notifyTestListenersOfStart();
+      
+      getTestTree().traverse(new TurnElementsOn());
+      
       List testLevelElements = new LinkedList(getTestTree().list(
             getTestTree().getArray()[0]));
       removeThreadGroups(testLevelElements);
       SearchByClass searcher = new SearchByClass(ThreadGroup.class);
-      testListeners = new SearchByClass(TestListener.class);
       setMode();
-      getTestTree().traverse(testListeners);
       getTestTree().traverse(searcher);
       TestCompiler.initialize();
       //for each thread group, generate threads
@@ -270,10 +278,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
        */
       System.gc();
 
-      if (iter.hasNext())
-      {
-         notifyTestListenersOfStart();
-      }
       notifier = new ListenerNotifier();
 
       schcdule_run = true;

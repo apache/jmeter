@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -45,7 +44,6 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * @author    Michael Stover
- * @version   $Revision$
  */
 public class UrlConfigGui extends JPanel
 {
@@ -110,7 +108,6 @@ public class UrlConfigGui extends JPanel
         element.setProperty(HTTPSampler.METHOD,
                 (post.isSelected() ? "POST" : "GET"));
         element.setProperty(HTTPSampler.PATH, path.getText());
-        element.setProperty(HTTPSampler.ENCODED_PATH,path.getText());
         element.setProperty(new BooleanProperty(HTTPSampler.FOLLOW_REDIRECTS,
                 followRedirects.isSelected()));
         element.setProperty(new BooleanProperty(HTTPSampler.AUTO_REDIRECTS,

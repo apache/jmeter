@@ -155,6 +155,11 @@ public class RegexFunction extends AbstractFunction implements Serializable
         {
             return defaultValue;
         }
+        finally
+		{
+            JMeterVariables vars = getVariables();
+			vars.put(name+"_matchNr", ""+collectAllMatches.size());
+        }
 
         if (collectAllMatches.size() == 0)
         {

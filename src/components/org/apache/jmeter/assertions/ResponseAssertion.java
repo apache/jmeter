@@ -250,7 +250,7 @@ public class ResponseAssertion
       // What are we testing against?
       if (ResponseAssertion.RESPONSE_DATA.equals(getTestField()))
       {
-		toCheck = new String(response.responseDataAsBA());
+		toCheck = new StringBuffer(response.getResponseHeaders()).append(new String(response.responseDataAsBA())).toString();
       }
       else if (ResponseAssertion.RESPONSE_CODE.equals(getTestField()))
       {

@@ -329,11 +329,11 @@ public class TestBeanGUI
     public void configure(TestElement element)
     {
         if (! initialized) init();
+        clear();
 
         super.configure(element);
 
         // Copy all property values into the map:
-        propertyMap.clear();
         for (PropertyIterator jprops= element.propertyIterator(); jprops.hasNext(); )
         {
             JMeterProperty jprop= jprops.next();
@@ -439,4 +439,12 @@ public class TestBeanGUI
 		// TODO Auto-generated method stub
 		return null;
 	}
+   /* (non-Javadoc)
+    * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+    */
+   public void clear()
+   {
+      super.clear();
+      propertyMap.clear();
+   }
 }
