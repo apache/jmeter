@@ -104,7 +104,7 @@ public class JMeter implements JMeterPlugin
      *   <li>A description of the option.</li>
      * </ul>
      */
-    protected static final CLOptionDescriptor[] options =
+    private static final CLOptionDescriptor[] options =
         new CLOptionDescriptor[] {
             new CLOptionDescriptor(
                 "help",
