@@ -96,7 +96,8 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 
 	private JTextField size;
 	SizeAssertion sa = new SizeAssertion();
-
+        JRadioButton equalButton,notequalButton,greaterthanButton,lessthanButton,greaterthanequalButton,lessthanequalButton;
+        private int execState; //store the operator 
 	/****************************************
 	 * !ToDo (Constructor description)
 	 ***************************************/
@@ -142,6 +143,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
         	assertionSize = Long.MAX_VALUE;
         }
         ((SizeAssertion)el).setAllowedSize(assertionSize);
+        ((SizeAssertion)el).setCompOper(getState());
     }
 
 	/****************************************
@@ -152,8 +154,41 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 		super.configure(el);
 		SizeAssertion assertion = (SizeAssertion)el;
 		size.setText(String.valueOf(assertion.getAllowedSize()));
+                setState(assertion.getCompOper());  
 	}
 
+        /***************************************
+         * setting the state of the radio Button
+         ***************************************/
+        public void setState(int state){
+            if (state ==1){
+                equalButton.setSelected(true);
+                execState=1;
+            }else if (state==2){
+                notequalButton.setSelected(true);
+                execState=2;
+            }else if(state==3){
+                greaterthanButton.setSelected(true);
+                execState=3;
+            }else if(state==4){
+                lessthanButton.setSelected(true);
+                execState=4;
+            }else if(state==5){
+                greaterthanequalButton.setSelected(true);
+                execState=5;
+            }else if(state==6){
+                lessthanequalButton.setSelected(true);
+                execState=6;
+            }
+        }
+
+        /**********************************
+         * getting the state of the radio Button
+         **********************************/
+	public int getState()
+	{
+            return execState;
+	}
 	private void init()
 	{
 		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
@@ -188,33 +223,33 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 		
 		ButtonGroup comparatorButtonGroup = new ButtonGroup();
 		
-		JRadioButton equalButton = new JRadioButton("=");
+		equalButton = new JRadioButton("=");
 		equalButton.setSelected(true);
 		equalButton.setActionCommand(new Integer(SizeAssertion.EQUAL).toString());
 		equalButton.addActionListener(this);
 		comparatorButtonGroup.add(equalButton);
 				
-		JRadioButton notequalButton = new JRadioButton("!=");
+		notequalButton = new JRadioButton("!=");
 		notequalButton.setActionCommand(new Integer(SizeAssertion.NOTEQUAL).toString());
 		notequalButton.addActionListener(this);
 		comparatorButtonGroup.add(notequalButton);
 		
-		JRadioButton greaterthanButton = new JRadioButton(">");
+		greaterthanButton = new JRadioButton(">");
 		greaterthanButton.setActionCommand(new Integer(SizeAssertion.GREATERTHAN).toString());
 		greaterthanButton.addActionListener(this);
 		comparatorButtonGroup.add(greaterthanButton);
 		
-		JRadioButton lessthanButton = new JRadioButton("<");
+		lessthanButton = new JRadioButton("<");
 		lessthanButton.setActionCommand(new Integer(SizeAssertion.LESSTHAN).toString());
 		lessthanButton.addActionListener(this);
 		comparatorButtonGroup.add(lessthanButton);
 		
-		JRadioButton greaterthanequalButton = new JRadioButton(">=");
+		greaterthanequalButton = new JRadioButton(">=");
 		greaterthanequalButton.setActionCommand(new Integer(SizeAssertion.GREATERTHANEQUAL).toString());
 		greaterthanequalButton.addActionListener(this);
 		comparatorButtonGroup.add(greaterthanequalButton);
 		
-		JRadioButton lessthanequalButton = new JRadioButton("<=");
+		lessthanequalButton = new JRadioButton("<=");
 		lessthanequalButton.setActionCommand(new Integer(SizeAssertion.LESSTHANEQUAL).toString());
 		lessthanequalButton.addActionListener(this);
 		comparatorButtonGroup.add(lessthanequalButton);
@@ -278,7 +313,8 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 	 ***************************************/
 	public void actionPerformed(ActionEvent e) {
 		int comparator = new Integer(e.getActionCommand()).intValue(); 
-    	sa.setLogicalComparator(comparator);
+             	    execState=comparator;
+            // sa.setLogicalComparator(comparator);
     }
     
 }
