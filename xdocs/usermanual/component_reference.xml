@@ -1121,15 +1121,17 @@ approximation that is helpful for initial result evaluation.</p>
 </component>
 
 <component index="16.3.7" name="Aggregate Report" screenshot="aggregate_report.png">
-<description>The aggregate report creates a table row for each differently named request in your test.  For each
-request, it totals the response information and provides request count, min, max, average, error rate, and an
-idealized throughput calculation.</description>
+<description>The aggregate report creates a table row for each differently named request in your
+test.  For each request, it totals the response information and provides request count, min, max,
+average, error rate, approximate throughput (request/second) and Kilobytes per second throughput.
+Once the test is done, the throughput is the actual through for the duration of the entire test.</description>
 </component>
 
 <component index="16.3.8" name="View Results in Table" screenshot="table_results.png">
 <description>This visualizer creates a row for every sample result.  Each sample result's URL,
 time in milliseconds, success/failure is displayed.  Like the <complink name="View Results Tree"/>,
-this visualizer uses a lot of memory.</description>
+this visualizer uses a lot of memory. The last column shows the number of bytes for the
+response from the server.</description>
 </component>
 
 <component index="16.3.9" name="Simple Data Writer" screenshot="">
