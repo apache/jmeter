@@ -22,7 +22,7 @@ Element. Each controller has its own Defaults element (see below). </p>
 <p>Remember to add a Listener to your Thread Group to view and/or store the
 results of your requests to disk.</p>
 
-<p>If your are interested in having JMeter perform basic validation on
+<p>If you are interested in having JMeter perform basic validation on
 the response of your request, add an <a href="assertion.html">Assertion</a> to
 the Request controller.  For example, in stress testing a web application, the server
 may return a successful "HTTP Response" code, but the page may have errors on it or
@@ -30,7 +30,7 @@ may be missing sections. You could add assertions to check for certain HTML tags
 common error strings, and so on. JMeter lets you create these assertions using regular
 expressions.</p>
 
-
+<p><a href="component_reference.html#gen_controllers">JMeter's built-in generative controllers</a></p>
 </section>
 
 
