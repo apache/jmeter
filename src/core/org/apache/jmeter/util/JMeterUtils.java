@@ -1078,7 +1078,9 @@ public class JMeterUtils implements UnitTestManager
 
     /**
     *  Builds the string used as the main frame title
-    *  @param the fully qualified name of the current working file
+    * 
+    *  @param fname the fully qualified name of the current working file
+    * 
     *  @return a string of the form "FileName (<full path>/FileName) - Apache JMeter".
     *  If fname is null, returns "Apache JMeter".
     */
