@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+	 <author email="bloritsch@apache.org">Berin Loritsch</author>
+	 <title>Using the SSL Manager</title>
+  </properties>
+<body>
+<section name="What is the SSL Manager">
+<p>
+  The SSL Manager is a way to select a client certificate so that you can test
+  applications that use Public Key Infrastructure (PKI).  In order to use it,
+  you must have JSSE 1.0.2 installed.  Unfortunately, there is no standard method
+  for controling who a client is--and that won't be introduced until JDK 1.4 is
+  officially available.  The SSL Manager should still work with JDK 1.4, so this
+  is the best solution we could come up with.
+</p>
+
+</section>
+<section name="Choosing a Client Certificate">
+<p>
+  You may either use a Java Key Store (JKS) format key store, or a Public Key
+  Certificate Standard #12 (PKCS12) file for your client certificates.  There
+  is a bug in the JSSE libraries that require you to have at least a six character
+  password on your key (at least for the keytool utility that comes with your
+  JDK).
+</p>
+<p>
+  To select the client certificate, choose Options-&gt;SSL Manager from the menu bar.
+  You will be presented with a file finder that looks for PKCS12 files by default.
+  Your PKCS12 file must have the extension '.p12' for SSL Manager to recognize it
+  as a PKCS12 file.  Any other file will be treated like an average JKS key store.
+  If JSSE is correctly installed, you will be prompted for the password.  The text
+  box does not hide the characters you type at this point--so make sure no one is
+  looking over your shoulder.  The current implementation assumes that the password
+  for the keystore is also the password for the private key of the client you want
+  to authenticate as.
+</p>
+<p>
+  The next time you run your test, the SSL Manager will examine your key store to
+  see if it has more than one key available to it.  If there is only one key, SSL
+  Manager will select it for you.  If there is more than one key, you will be prompted
+  to select the alias you wish to authenticate as.  If SSL Manager cannot detect
+  any keys in your keystore, it will give you a text box for the off chance you know
+  something it doesn't.  Keep in mind that for the first run, you will be prompted
+  once per thread.  Try to use only one thread for the first run to ensure everything
+  is working properly.
+</p>
+</section>
+<section name="Things to Look Out For">
+<p>
+  You must have your Certificate Authority (CA) certificate installed properly
+  if it is not signed by one of the five CA certificates that ships with your
+  JDK.  One method to install it is to import your CA certificate into a JKS
+  file, and name the JKS file "jssecacerts".  Place the file in your JRE's
+  lib/security folder.  This file will be read before the "cacerts" file in
+  the same directory.  Keep in mind that as long as the "jssecacerts" file
+  exists, the certificates installed in "cacerts" will not be used.  This may
+  cause problems for you.  If you don't mind importing your CA certificate into
+  the "cacerts" file, then you can authenticate against all of the CA certificates
+  installed.
+</p>
+</section>
+</body>
+</document>
