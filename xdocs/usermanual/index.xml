@@ -40,13 +40,12 @@
   <li><a href="#build-ldapext-test-plan">+</a>...<a href="build-ldapext-test-plan.html">9b. Building an Extended LDAP Test Plan</a></li>
   <li><a href="#build-ws-test-plan">+</a>...<a href="build-ws-test-plan.html">10. Building a Webservice Test Plan</a></li>
   <li><a href="#build-monitor-test-plan">+</a>...<a href="build-monitor-test-plan.html">11. Building a Monitor Test Plan</a></li>
-  <li><a href="#listeners">+</a>...<a href="listeners.html">12. Listeners</a></li>
-  <li><a href="#remote-test">+</a>...<a href="remote-test.html">13. Remote Testing</a></li>
-  <li><a href="#best-practices">+</a>...<a href="best-practices.html">14. Best Practices</a></li>
-  <li><a href="#boss">+</a>...<a href="boss.html">15. Help! My boss wants me to load test our web app!</a></li>
-  <li><a href="#component_reference">+</a>...<a href="component_reference.html">16. Component Reference</a></li>
-  <li><a href="#functions">+</a>...<a href="functions.html">17. Functions</a></li>
-  <li><a href="#glossary">+</a>...<a href="glossary.html">18. Glossary</a></li>
+  <li><a href="#remote-test">+</a>...<a href="remote-test.html">12. Remote Testing</a></li>
+  <li><a href="#best-practices">+</a>...<a href="best-practices.html">13. Best Practices</a></li>
+  <li><a href="#boss">+</a>...<a href="boss.html">14. Help! My boss wants me to load test our web app!</a></li>
+  <li><a href="#component_reference">+</a>...<a href="component_reference.html">15. Component Reference</a></li>
+  <li><a href="#functions">+</a>...<a href="functions.html">16. Functions</a></li>
+  <li><a href="#glossary">+</a>...<a href="glossary.html">17. Glossary</a></li>
 </ul>
 </subsection>
 <subsection name="Detailed Section List">
@@ -155,20 +154,19 @@
   </ul>
  <li><a name="build-ws-test-plan"/><a href="build-ws-test-plan.html">10. Building a Webservice Test Plan</a></li>
  <li><a name="build-monitor-test-plan"/><a href="build-monitor-test-plan.html">11. Building a Monitor Test Plan</a></li>
- <li><a name="listeners"/><a href="listeners.html">12. Listeners</a></li>
- <li><a name="remote-test"/><a href="remote-test.html">13. Remote Testing</a></li>
- <li><a name="best-practices"/><a href="best-practices.html">14. Best Practices</a></li>
+ <li><a name="remote-test"/><a href="remote-test.html">12. Remote Testing</a></li>
+ <li><a name="best-practices"/><a href="best-practices.html">13. Best Practices</a></li>
   <ul>
-	 <li><a href="best-practices.html#limit_threads">14.1 [ALL] Limit the Number of Threads</a></li>
-	 <li><a href="best-practices.html#put_cookie_manager">14.2 [HTTP] Where to Put the Cookie Manager</a></li>
-	 <li><a href="best-practices.html#put_auth_manager">14.3 [HTTP] Where to Put the Authorization Manager</a></li>
-	 <li><a href="best-practices.html#proxy_server">14.4 Using the Proxy Server to record test scripts</a></li>
+	 <li><a href="best-practices.html#limit_threads">13.1 [ALL] Limit the Number of Threads</a></li>
+	 <li><a href="best-practices.html#put_cookie_manager">13.2 [HTTP] Where to Put the Cookie Manager</a></li>
+	 <li><a href="best-practices.html#put_auth_manager">13.3 [HTTP] Where to Put the Authorization Manager</a></li>
+	 <li><a href="best-practices.html#proxy_server">13.4 Using the Proxy Server to record test scripts</a></li>
   </ul>
- <li><a name="boss"/><a href="boss.html">15. Help! My boss wants me to load test our web app!</a></li>
+ <li><a name="boss"/><a href="boss.html">14. Help! My boss wants me to load test our web app!</a></li>
 
- <li><a name="component_reference"/><a href="component_reference.html">16. Component Reference</a></li>
- <li><a name="functions"/><a href="functions.html">17. Functions</a></li>
- <li><a name="glossary"/><a href="glossary.html">18. Glossary</a></li>
+ <li><a name="component_reference"/><a href="component_reference.html">15. Component Reference</a></li>
+ <li><a name="functions"/><a href="functions.html">16. Functions</a></li>
+ <li><a name="glossary"/><a href="glossary.html">17. Glossary</a></li>
 </ul>
 </subsection>
 
