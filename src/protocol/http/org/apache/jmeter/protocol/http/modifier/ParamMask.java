@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,7 +57,7 @@
  * @version $Id$
  */
  
- package org.apache.jmeter.protocol.http.modifier;
+package org.apache.jmeter.protocol.http.modifier;
 
 import java.io.Serializable;
 
