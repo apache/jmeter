@@ -65,16 +65,21 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * GetProperty Function to get a JMeter property.
+ * Function to get a JMeter property, and optionally store it
  * 
  * Parameters:
- *      - property name
- *      - variable name (optional)
+ *  - property name
+ *  - variable name (optional)
+ *  - default value (optional)
+ *    
  * 
  * Returns:
- *      - the property value or the property name if not found
+ *  - the property value, but if not found
+ *  - the default value, but if not define
+ *  - the property name itself
  * 
- * @version $Id$
+ * @author sebb AT apache DOT org
+ * @version $Revision$ Updated: $Date$
  */
 public class Property extends AbstractFunction implements Serializable
 {
