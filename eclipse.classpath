@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry output="build/jorphan" kind="src" path="src/jorphan"/>
-	<classpathentry excluding="org/apache/jmeter/images/|org/apache/jmeter/resources/*.properties|org/apache/jmeter/util/keystore/DefaultKeyStore.java|org/apache/jmeter/util/JsseSSLManager.java|org/apache/jmeter/util/keystore/PKCS12KeyStore.java" output="build/core" kind="src" path="src/core"/>
-	<classpathentry excluding="org/apache/jmeter/reporters/MailerModel.java|org/apache/jmeter/reporters/MailerResultCollector.java|org/apache/jmeter/visualizers/MailerVisualizer.java|org/apache/jmeter/assertions/**/BeanShell*.java" output="build/components" kind="src" path="src/components"/>
+	<classpathentry output="build/test" kind="src" path="test"/>
+	<classpathentry output="build/jms" kind="src" path="src/protocol/jms"/>
+	<classpathentry output="build/protocol/mail" kind="src" path="src/protocol/mail"/>
+	<classpathentry excluding="org/apache/jmeter/images/|org/apache/jmeter/util/keystore/PKCS12KeyStore.java" output="build/core" kind="src" path="src/core"/>
+	<classpathentry output="build/components" kind="src" path="src/components"/>
 	<classpathentry output="build/functions" kind="src" path="src/functions"/>
-	<classpathentry excluding="org/apache/jmeter/protocol/http/sampler/WebServiceSampler.java|org/apache/jmeter/protocol/http/control/gui/WebServiceSamplerGui.java" output="build/protocol/http" kind="src" path="src/protocol/http"/>
+	<classpathentry output="build/protocol/http" kind="src" path="src/protocol/http"/>
 	<classpathentry output="build/protocol/ftp" kind="src" path="src/protocol/ftp"/>
 	<classpathentry output="build/protocol/jdbc" kind="src" path="src/protocol/jdbc"/>
-	<classpathentry excluding="org/apache/jmeter/protocol/java/**/BeanShell*.java|org/apache/jmeter/protocol/java/**/BSF*.java" output="build/protocol/java" kind="src" path="src/protocol/java"/>
+	<classpathentry output="build/protocol/java" kind="src" path="src/protocol/java"/>
 	<classpathentry output="build/protocol/ldap" kind="src" path="src/protocol/ldap"/>
 	<classpathentry output="build/protocol/tcp" kind="src" path="src/protocol/tcp"/>
 	<classpathentry output="build/monitor/model" kind="src" path="src/monitor/model"/>
@@ -25,7 +28,7 @@
 	<classpathentry kind="lib" path="lib/Tidy.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections.jar"/>
 	<classpathentry kind="lib" path="lib/soap.jar"/>
-	<classpathentry kind="lib" path="lib/jdom-b9.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/xalan.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
@@ -34,7 +37,8 @@
 	<classpathentry kind="lib" path="lib/excalibur-datasource-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-instrument-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-pool-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/xstream-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/xstream-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/xpp3_min-1.1.3.4.I.jar"/>
 	<classpathentry kind="lib" path="lib/batik-awt-util.jar"/>
-	<classpathentry kind="output" path="build/default"/>
+	<classpathentry kind="output" path=""/>
 </classpath>
