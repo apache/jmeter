@@ -35,7 +35,9 @@
  -->
 
 <section name="15.1 Samplers" anchor="samplers">
-
+<description>
+	<br></br>
+</description>
 <component name="FTP Request" index="15.1.1" screenshot="gen-controller/ftp-request.gif">
 <description>This controller lets you send an FTP "retrieve file" request to an FTP server.
 If you are going to send multiple requests to the same FTP server, consider
@@ -139,8 +141,7 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
 <description><p>This sampler lets you send an JDBC Request (an SQL query) to a database.</p>
 <p>If you are going to send multiple requests to the same database, consider
 using one or more of the Defaults Configuration Elements:
-<complink name="JDBC Database Login Defaults"/>,
-<complink name="JDBC Database Connection Pool Defaults"/>,
+<complink name="JDBC Connection Configuration"/>,
 <complink name="JDBC SQL Query Defaults"/>.
 This way, you do not have to enter the same information for each JDBC Request
 controller.</p></description>
@@ -167,8 +168,7 @@ a new instance).</property>
 <links>
         <link href="test_plan.html#assertions">Assertion</link>
         <link href="build-db-test-plan.html">Building a Database Test Plan</link>
-        <complink name="JDBC Database Login Defaults"/>
-        <complink name="JDBC Database Connection Pool Defaults"/>
+        <complink name="JDBC Connection Configuration"/>
         <complink name="JDBC SQL Query Defaults"/>
 </links>
 
@@ -473,7 +473,14 @@ TBC
 </component>
 
 <component name="TCP Sampler" index="15.1.11" screenshot="">
-	<center><h2>(ALPHA Code)</h2></center>
+<description>TBA
+</description>
+<properties>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+</properties>
+</component>
+
+<component name="Test Action" index="15.1.12" screenshot="test_action.png">
 <description>TBA
 </description>
 <properties>
@@ -484,6 +491,9 @@ TBC
 </section>
 
 <section name="15.2 Logic Controllers" anchor="logic_controllers">
+<description>
+	<br></br>
+</description>
 
 <component index="15.2.1" name="Interleave Controller" screenshot="logic-controller/interleave-controller.png">
 <description><p>If you add Generative or Logic Controllers to an Interleave Controller, JMeter will alternate among each of the
@@ -809,9 +819,11 @@ out of the return page and puts them in the inputVar variable</p>
 
 <section name="15.3 Listeners" anchor="listeners">
 <description>
+	<br></br>
 Most of the listeners perform several roles in addition to "listening"
 to the test results.  They frequently also provide means to view,
 save, and read saved test results.
+<p>Note that Listeners are processed at the end of the scope in which they are found.</p>
 <p>
 The saving and reading of test results is generic.  The various
 listeners generally have a panel whereby one can specify the file to
@@ -895,6 +907,7 @@ make it impossible for JMeter to interpret the value when it is read
 in later for viewing purposes.</p>
 <p>
 The internal viewing capabilities are described in the following subsections.</p>
+	<br></br>
 
 </description>
 <component index="15.3.1" name="Mailer Visualizer" screenshot="mailer_vis.png">
@@ -1009,7 +1022,7 @@ the performance history of each machine for the last hour.</p>
 </description>
 </component>
 
-<component index="15.3.11" name="Distribution Graph" screenshot="distribution_graph.png">
+<component index="15.3.11" name="Distribution Graph (alpha)" screenshot="distribution_graph.png">
 <description>
 <p>The distribution graph will display a bar for every unique response time. Since the
 granularity of System.currentTimeMillis() is 10 milliseconds, the 90% threshold should be
@@ -1031,7 +1044,13 @@ know for sure is to use a profiling tool.</p>
 </section>
 
 <section name="15.4 Configuration Elements" anchor="config_elements">
-
+<description>
+	<br></br>
+	Configuration elements can be used to set up defaults and variables for later use by samplers.
+	Note that these elements are processed at the start of the scope in which they are found, 
+	i.e. before any samplers in the same scope.
+	<br></br>
+</description>
 <component index="15.4.1" name="HTTP Authorization Manager" screenshot="http-config/http-auth-manager.gif">
 
 <description>
@@ -1246,19 +1265,23 @@ resource requires query string parameters, add them below in the
 <description></description>
 </component>
 
-<component index="15.4.6" name="JDBC Database Connection Pool Defaults"
-                screenshot="jdbc-config/jdbc-db-conn-pool.gif">
-<description></description>
+<component index="15.4.6" name="JDBC Connection Configuration"
+                screenshot="jdbc-config/jdbc-conn-config.png">
+	<description>Defines the JDBC Connection settings to be used by 
+		the <complink name="JDBC Request"/>Sampler.
+	</description>
 </component>
 
-<component index="15.4.7" name="JDBC Database Login Defaults"
-                screenshot="jdbc-config/jdbc-db-login.gif">
-<description></description>
+<component index="15.4.7" name="JDBC SQL Query Defaults"
+	screenshot="jdbc-config/jdbc-sql-query.png">
+<description>Defines a default query for the <complink name="JDBC Request"/>Sampler.
+	<br></br>
+	 Connection settings are defined by the <complink name="JDBC Connection Configuration"/>element.
+	</description>
 </component>
 
-<component index="15.4.8" name="JDBC SQL Query Defaults"
-                screenshot="jdbc-config/jdbc-sql-query.gif">
-<description></description>
+<component index="15.4.8" name="Mail Reader Sampler">
+<description>TBA</description>
 </component>
 
 
@@ -1334,7 +1357,6 @@ GUI that they can use while developing new JMeter components.</p>
 <component index="15.4.14" name="User Defined Variables" screenshot="user_defined_variables.png">
 <description><p>The User Defined Variables lets you define variables for use in other test elements, just as in the <complink name="Test Plan"/>.
 The variables in User Defined Variables components will take precedence over those defined closer to the tree root -- including those defined in the Test Plan.</p>
-<p>Note that the variable's values have to be static: you can't currently use other variables in their definition.</p>
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -1355,7 +1377,12 @@ The variables in User Defined Variables components will take precedence over tho
 </section>
 
 <section name="15.5 Assertions" anchor="assertions">
-
+<description>
+	<br></br>
+	Assertions are used to perform additional checks on samplers, and are processed after <b>each sampler</b>
+	in the same scope.
+	<br></br>
+</description>
 <component index="15.5.1" name="Response Assertion" anchor="basic_assertion" screenshot="assertion/assertion.gif">
 
 <description><p>The response assertion control panel lets you add pattern strings to be compared against various
@@ -1505,7 +1532,16 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 </section>
 
 <section name="15.6 Timers" anchor="timers">
-
+<description>
+	<br></br>
+	Note that timers are processed at the start of the scope in which they are found;
+	if there are several timers in the same scope, all the timers will be processed.
+	To apply a timer to a single sampler, add the timer as a child element to the sampler.
+	The timer will be applied before the sampler is executed.
+	To apply a timer after a sampler, either add it to the next sampler, or add it as the
+	child of a simple logic controller immediately after the sampler.
+	<br></br>
+</description>
 <component index="15.6.1" name="Constant Timer" anchor="constant" screenshot="timers/constant_timer.gif">
 <description>
 <p>If you want to have each thread pause for the same amount of time between
@@ -1565,6 +1601,11 @@ to the random delay.</property>
 </section>
 
 <section name="15.7 Pre Processors" anchor="preprocessors">
+	<description>
+	<br></br>
+		Preprocessors are used to modify the Samplers in their scope.
+	<br></br>
+	</description>
 <component index="15.7.1" name="HTML Link Parser" anchor="html_link_parser">
 <description>
 <p>This modifier parses HTML response from the server and extracts
@@ -1732,6 +1773,13 @@ with the start, continuing on like that until the test is ended.  </p></descript
 </section>
 
 <section name="15.8 Post-Processors" anchor="postprocessors">
+	<description>
+	<br></br>
+		As the name suggests, Post-Processors are applied after samplers. Note that they are
+		applied to <b>all</b> the samplers in the same scope, so to ensure that a post-processor
+		is applied only to a particular sampler, add it as a child of the sampler.
+	<br></br>
+	</description>
 <component index="15.8.1" name="Regular Expression Extractor" screenshot="regex_extractor.png">
 <description><p>Allows the user to extract values from a server response using a Perl-type regular expression.  As a post-processor,
 this element will execute after each Sample request in its <scope/>, applying the regular expression, extracting the requested values,
@@ -1806,7 +1854,9 @@ This is mainly intended for batch (non-GUI) runs.
 </section>
 
 <section name="15.9 Miscellaneous Features" anchor="Miscellaneous_Features">
-
+<description>
+		<br></br>
+</description>
 <component index="15.9.1" name="Test Plan" screenshot="testplan.png">
 <description><p>At the Test Plan level, static variables can be defined that allow users to abstract values that are repeated throughout their tests, such as server names.  Here, one can instruct JMeter to save the maximum sample information to file by selecting "functional testing".  Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.</p></description>
 </component>
