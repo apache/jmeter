@@ -166,7 +166,8 @@ public class PackageTest extends JMeterTestCase
 
         while (iter.hasNext())
         {
-            Class testBeanClass= Class.forName((String)iter.next());
+        	String className = (String)iter.next();
+            Class testBeanClass= Class.forName(className);
             JMeterUtils.setLocale(new Locale(defaultLanguage,""));
             ResourceBundle defaultBundle;
             try
@@ -185,8 +186,12 @@ public class PackageTest extends JMeterTestCase
 
 			if (defaultBundle == null)
 			{
-				throw new Error("No default bundle for class "
-						+testBeanClass.getName());
+	        	if (className.startsWith("org.apache.jmeter.examples."))
+	        	{
+	        		log.warn("No default bundle found for "+className);
+	        		continue;
+	        	}
+				throw new Error("No default bundle for class " + className);
 			}
 
 			suite.addTest(new PackageTest(testBeanClass, defaultLanguage, defaultBundle));
