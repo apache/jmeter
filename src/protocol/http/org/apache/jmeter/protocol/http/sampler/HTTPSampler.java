@@ -57,6 +57,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.BindException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -64,6 +65,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.http.control.AuthManager;
@@ -810,9 +812,9 @@ public class HTTPSampler extends AbstractSampler
 		{				
 			conn.connect();
 		}
-		catch(IOException e)
+		catch(BindException e)
 		{
-			log.debug("Connection failed, turning off keep-alive and trying again");
+			log.debug("Bind exception, try again");
 			if(connectionTries++ == 10)
 			{
 				log.error("Can't connect",e);
@@ -829,6 +831,15 @@ public class HTTPSampler extends AbstractSampler
 				postWriter.setHeaders(conn,this);
 			}
 			time = connect();
+		}
+		catch(IOException e)
+		{
+			log.debug("Connection failed, giving up");
+			conn.disconnect();
+			conn = null;
+			System.gc();
+			Runtime.getRuntime().runFinalization();
+			throw e;
 		}
 		return time;
 	}

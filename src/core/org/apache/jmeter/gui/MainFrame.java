@@ -138,7 +138,10 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 			{
 				public void run()
 				{
-					stoppingMessage.show();
+					if(stoppingMessage != null)
+					{
+						stoppingMessage.show();
+					}
 				}
 			});
 	}
@@ -274,11 +277,6 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 
 	public void testEnded()
 	{
-		if(stoppingMessage != null)
-		{
-			stoppingMessage.dispose();
-			stoppingMessage = null;
-		}
 		testEnded("local");
 		menuBar.setEnabled(false);
 	}
@@ -289,6 +287,11 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 		if(hosts.size() == 0)
 		{
 			runningIndicator.setIcon(stoppedIcon);
+			if(stoppingMessage != null)
+			{
+				stoppingMessage.dispose();
+				stoppingMessage = null;
+			}
 		}
 		menuBar.setRunning(false,host);
 	}
