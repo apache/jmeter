@@ -36,8 +36,7 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * A swing panel to allow UI with the UserParameterModifier class.
  *
- * @author     Mark Walsh
- * @version    $Revision$
+ * @version    $Revision$ on $Date$
  */
 public class UserParameterModifierGui extends AbstractPreProcessorGui
 {
@@ -77,9 +76,9 @@ public class UserParameterModifierGui extends AbstractPreProcessorGui
     {
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("http_user_parameter_modifier");
+        return "http_user_parameter_modifier";
     }
 
     public void configure(TestElement el)

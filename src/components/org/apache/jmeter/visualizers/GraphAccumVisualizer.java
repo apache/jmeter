@@ -45,7 +45,7 @@ import org.apache.log.Logger;
  * taken to load each set of pages. The number of plots is equivalent to the
  * number of times the set of pages is configured to load.
  *
- * @author    Khor Soon Hin
+ * 
  * Created     2001/08/11
  * @version   $Revision$ $Date$
  */
@@ -71,9 +71,9 @@ public class GraphAccumVisualizer extends AbstractVisualizer
         log.debug("End : GraphAccumVisualizer1");
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("graph_full_results_title");
+        return "graph_full_results_title";
     }
 
     public void add(SampleResult res)

@@ -50,7 +50,6 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * and the standard deviation of the sampling process and outputs them as
  * autoscaling plots.
  *
- * @author    <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
  * Created     February 8, 2001
  * @version   $Revision$ $Date$
  */
@@ -131,9 +130,9 @@ public class GraphVisualizer extends AbstractVisualizer
         model.addSample(res);
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("graph_results_title");
+        return "graph_results_title";
     }
 
     public void itemStateChanged(ItemEvent e)

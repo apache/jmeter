@@ -44,8 +44,7 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * GUI interface for a {@link ResponseAssertion}.
  *
- * @author    Michael Stover
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class AssertionGui extends AbstractAssertionGui
 {
@@ -103,10 +102,9 @@ public class AssertionGui extends AbstractAssertionGui
         init();
     }
 
-    /* Implements JMeterGUIComponent.getStaticLabel() */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("assertion_title");
+        return "assertion_title";
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */

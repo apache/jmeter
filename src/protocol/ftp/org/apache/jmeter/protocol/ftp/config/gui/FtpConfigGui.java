@@ -31,7 +31,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author    Michael Stover
  * @version   $Revision$ last updated $Date$
  */
 public class FtpConfigGui extends AbstractConfigGui
@@ -55,9 +54,9 @@ public class FtpConfigGui extends AbstractConfigGui
         init();
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("ftp_sample_title");
+        return "ftp_sample_title";
     }
 
     public void configure(TestElement element)

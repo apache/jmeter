@@ -36,8 +36,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
- * @author    Kevin Hammond
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class ThroughputControllerGui extends AbstractControllerGui
 {
@@ -126,9 +125,9 @@ public class ThroughputControllerGui extends AbstractControllerGui
         perthread.setSelected(((ThroughputController) el).isPerThread());
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("throughput_control_title");
+        return "throughput_control_title";
     }
 
     private void init()

@@ -20,12 +20,10 @@ package org.apache.jmeter.control.gui;
 
 import org.apache.jmeter.control.OnceOnlyController;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
- * @author    Kevin Hammond
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class OnceOnlyControllerGui extends AbstractControllerGui
 {
@@ -50,9 +48,9 @@ public class OnceOnlyControllerGui extends AbstractControllerGui
         configureTestElement(oc);
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("once_only_controller_title");
+        return "once_only_controller_title";
     }
 
     private void init()

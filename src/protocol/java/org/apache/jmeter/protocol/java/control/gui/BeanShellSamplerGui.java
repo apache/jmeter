@@ -33,7 +33,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author sebb AT apache DOT org
  * @version   $Revision$ $Date$
  */
 public class BeanShellSamplerGui extends AbstractSamplerGui
@@ -77,9 +76,9 @@ public class BeanShellSamplerGui extends AbstractSamplerGui
 		te.setProperty(BeanShellSampler.PARAMETERS, parameters.getText());
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("bsh_sampler_title");
+        return "bsh_sampler_title";
     }
 
     

@@ -23,7 +23,6 @@ import java.awt.BorderLayout;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
 
@@ -32,7 +31,6 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  *  but not to the UI.  It is meant to provide an efficient means of
  *  recording data by eliminating GUI overhead.
  *
- *@author     <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell</a>
  *@version    $Revision$ $Date$
  ***********************************************************/
 
@@ -50,16 +48,9 @@ public class SimpleDataWriter
         setName(getStaticLabel());
     }
 
-
-    /****************************************
-     * Reurns the name of this component to be used by the GUI.
-     *
-     *@return the name of this component
-     ***************************************/
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        //return "Simple Data Writer";
-        return JMeterUtils.getResString("simple_data_writer_title");
+        return "simple_data_writer_title";
     }
 
 

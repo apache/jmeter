@@ -34,8 +34,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * A GUI component allowing the user to enter a username and password for a
  * login.
  *
- * @author    Michael Stover
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class LoginConfigGui extends AbstractConfigGui
 {
@@ -75,10 +74,9 @@ public class LoginConfigGui extends AbstractConfigGui
         init();
     }
 
-    /* Implements JMeterGUIComponent.getStaticLabel() */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("login_config_element");
+        return "login_config_element";
     }
 
     /**

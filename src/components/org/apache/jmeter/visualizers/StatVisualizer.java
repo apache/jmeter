@@ -48,8 +48,7 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * borrowed code from to start me off (and much code may still exist). Thank
  * you!
  *
- * @author    James Boutcher
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class StatVisualizer extends AbstractVisualizer
         implements AccumListener, Clearable
@@ -57,9 +56,6 @@ public class StatVisualizer extends AbstractVisualizer
     protected JTable myJTable;
 
     protected JScrollPane myScrollPane;
-    private final static String VISUALIZER_NAME =
-            JMeterUtils.getResString("aggregate_report");
-    //private long sleepTill = 0;
     transient private StatVisualizerModel model;
     transient private StatTableModel myStatTableModel;
 
@@ -71,9 +67,9 @@ public class StatVisualizer extends AbstractVisualizer
         init();
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return VISUALIZER_NAME;
+        return "aggregate_report";
     }
 
     public void add(SampleResult res)

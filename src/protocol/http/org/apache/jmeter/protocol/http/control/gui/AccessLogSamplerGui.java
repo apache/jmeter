@@ -70,7 +70,6 @@ import junit.framework.TestCase;
  * <br>
  * Created on:  Jun 26, 2003
  *
- * @author Peter Lin
  * @version $Id$ 
  */
 public class AccessLogSamplerGui
@@ -78,7 +77,6 @@ public class AccessLogSamplerGui
     implements ChangeListener, UnsharedComponent
 {
 
-    private static final String label = JMeterUtils.getResString("log_sampler");
     JLabeledTextField parserClassName =
         new JLabeledTextField(JMeterUtils.getResString("log_parser"));
 	JLabeledTextField generatorClassName =
@@ -119,9 +117,9 @@ public class AccessLogSamplerGui
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
      */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return label;
+        return "log_sampler";
     }
 
     /**
@@ -196,7 +194,7 @@ public class AccessLogSamplerGui
         mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
         // TITLE
-        JLabel panelTitleLabel = new JLabel(label);
+        JLabel panelTitleLabel = new JLabel(getStaticLabel());
         Font curFont = panelTitleLabel.getFont();
         int curFontSize = curFont.getSize();
         curFontSize += 4;
@@ -320,7 +318,6 @@ public class AccessLogSamplerGui
 	/**
 	 * Added basic TestCase for AccessLogSamplerGui. It does
 	 * the same test at HttpTestSampleGui.java.
-	 * @author peter lin
 	 */
 	public static class Test extends TestCase
 	{

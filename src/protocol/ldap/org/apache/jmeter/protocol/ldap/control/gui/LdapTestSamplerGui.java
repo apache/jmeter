@@ -31,8 +31,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author    T.Elanjchezhiyan(chezhiyan@siptech.co.in) - Sip Technologies and
- *            Exports Ltd. 
  * Created     Apr 29 2003 11:52 AM
  * @version   $Revision$ Last updated: $Date$
  */
@@ -81,9 +79,9 @@ public class LdapTestSamplerGui extends AbstractSamplerGui
         this.configureTestElement(sampler);
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("ldap_testing_title");
+        return "ldap_testing_title";
     }
     
     private void init()

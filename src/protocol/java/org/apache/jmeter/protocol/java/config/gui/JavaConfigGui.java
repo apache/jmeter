@@ -48,9 +48,7 @@ import org.apache.log.Logger;
  * The <code>JavaConfigGui</code> class provides the user interface for
  * the {@link JavaConfig} object.
  * 
- * @author Brad Kiewel
- * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
- * @version $Revision$
+ * @version $Revision$ on $Date$
  */
 public class JavaConfigGui extends AbstractConfigGui implements ActionListener
 {
@@ -96,10 +94,9 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener
         init();
     }
 
-    /* Implements JMeterGUIComponent.getStaticLabel() */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("java_request_defaults");
+        return "java_request_defaults";
     }
 
     /**

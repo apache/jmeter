@@ -33,8 +33,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * JMeter GUI component representing a work bench where users can make
  * preparations for the test plan.
  *
- * @author    Kevin Hammond
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class WorkBenchGui extends AbstractJMeterGuiComponent
 {
@@ -116,10 +115,9 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent
         return menu;
     }
 
-    /* Implements JMeterGUIComponent.getStaticLabel() */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("workbench_title");
+        return "workbench_title";
     }
 
     /**

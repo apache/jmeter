@@ -42,8 +42,7 @@ import org.apache.jorphan.collections.Data;
 /**
  * Default config gui for Configuration Element.
  *
- * @author     T.Elanjchezhiyan (chezhiyan@siptech.co.in)
- * @version    $Revision$
+ * @version    $Revision$ on $Date$
  */
 public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
 {
@@ -107,10 +106,9 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
         init();
     }
 
-    /* Implements JMeterGUIComponent.getStaticLabel() */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("simple_config_element");
+        return "simple_config_element";
     }
 
     /**

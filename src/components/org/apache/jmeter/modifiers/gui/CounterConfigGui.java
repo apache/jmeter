@@ -28,7 +28,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
- * @version $Revision$
+ * @version $Revision$ on $Date$
  */
 public class CounterConfigGui extends AbstractPreProcessorGui
 {
@@ -41,12 +41,9 @@ public class CounterConfigGui extends AbstractPreProcessorGui
         init();
     }
 
-    /**
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-     */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("counter_config_title");
+        return "counter_config_title";
     }
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()

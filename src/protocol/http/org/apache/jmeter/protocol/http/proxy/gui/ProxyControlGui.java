@@ -65,9 +65,6 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author  Michael Stover
- * @author  Thad Smith (controller combo code, taken from ModuleController)
- * @author  <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision$ updated on $Date$
  */
 public class ProxyControlGui
@@ -207,9 +204,9 @@ public class ProxyControlGui
         return list;
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("proxy_title");
+        return "proxy_title";
     }
 
     public Collection getMenuCategories()

@@ -32,9 +32,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 /**
  * The GUI for ConstantTimer. 
  *
- * @author Michael Stover
- * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
- * @version $Id$
+ * @version $Revision$ on $Date$
  */
 public class ConstantTimerGui extends AbstractTimerGui
 {
@@ -66,14 +64,9 @@ public class ConstantTimerGui extends AbstractTimerGui
         JOptionPane.showMessageDialog(thrower, e, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    /**
-     * Get the title to display for this component.
-     * 
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-     */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("constant_timer_title");
+        return "constant_timer_title";
     }
 
     /**

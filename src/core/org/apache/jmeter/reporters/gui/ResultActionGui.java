@@ -27,12 +27,10 @@ import org.apache.jmeter.gui.OnErrorPanel;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.OnErrorTestElement;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Create a Result Action Test Element
  * 
- * @author sebb AT apache DOT org
  * @version $Revision$ Last updated: $Date$
  */
 public class ResultActionGui extends AbstractPostProcessorGui
@@ -49,9 +47,9 @@ public class ResultActionGui extends AbstractPostProcessorGui
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
      */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("resultaction_title");
+        return "resultaction_title";
     }
     
 	/**

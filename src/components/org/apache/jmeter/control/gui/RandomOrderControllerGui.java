@@ -18,23 +18,18 @@ package org.apache.jmeter.control.gui;
 
 import org.apache.jmeter.control.RandomOrderController;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * GUI for RandomOrderController.
  *
- * @author  Mike Verdone
  * @version $Revision$ updated on $Date$
  */
 public class RandomOrderControllerGui extends LogicControllerGui
 {
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-     */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("random_order_control_title");
+        return "random_order_control_title";
     }
 
     /* (non-Javadoc)

@@ -43,7 +43,6 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * and the standard deviation of the sampling process. The samples are displayed
  * in a JTable, and the statistics are displayed at the bottom of the table.
  *
- *@author    <a href="mailto:alf@i100.no">Alf Hogemark</a>
  * created   March 10, 2002
  *@version   $Revision$ Updated on $Date$
  */
@@ -70,9 +69,9 @@ public class TableVisualizer
         init();
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("view_results_in_table");
+        return "view_results_in_table";
     }
 
     public void updateGui()

@@ -65,8 +65,6 @@ import org.apache.log.Logger;
  * This class implements a visualizer that mails a message when an error
  * occurs.
  *
- * @author <a href="mailto:stuart@personalmd.com">Stuart Schmukler</a>
- * @author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
  * @version    $Revision$ $Date$
  */
 public class MailerVisualizer extends AbstractVisualizer
@@ -240,16 +238,9 @@ public class MailerVisualizer extends AbstractVisualizer
         this.add(mainPanel,BorderLayout.WEST);
     }
 
-    /**
-     * Returns a String for the title of the component
-     * as set up in the properties-file using the lookup-constant
-     * "mailer_visualizer_title".
-     *
-     * @return  The title of the component.
-     */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("mailer_visualizer_title");
+        return "mailer_visualizer_title";
     }
 
     /**

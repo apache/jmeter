@@ -33,7 +33,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author    sebb AT apache DOT org 
+ *  
  * @version   $Revision$ $Date$
  */
 public class BSFSamplerGui extends AbstractSamplerGui
@@ -76,9 +76,9 @@ public class BSFSamplerGui extends AbstractSamplerGui
 		te.setProperty(BSFSampler.SCRIPT, scriptField.getText());
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("bsf_sampler_title") + " (ALPHA CODE)";
+        return "bsf_sampler_title";
     }
 
     private void init()

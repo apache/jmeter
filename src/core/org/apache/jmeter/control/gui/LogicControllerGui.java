@@ -21,13 +21,11 @@ import java.awt.BorderLayout;
 
 import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * A generic controller component.
  *
- * @author    Kevin Hammond
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class LogicControllerGui extends AbstractControllerGui
 {
@@ -53,10 +51,10 @@ public class LogicControllerGui extends AbstractControllerGui
         configureTestElement(el);
     }
 
-    /* Implements JMeterGUIComponent.getStaticLabel() */
-    public String getStaticLabel()
+
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("logic_controller_title");
+        return "logic_controller_title";
     }
 
     /**
