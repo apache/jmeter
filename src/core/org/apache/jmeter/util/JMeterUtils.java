@@ -66,9 +66,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Collection;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Locale;
@@ -119,7 +117,7 @@ public class JMeterUtils implements UnitTestManager
         xmlFactory = temp;
     }
     private static Properties appProperties;
-    private static Collection localeChangeListeners = new HashSet();
+    private static Vector localeChangeListeners = new Vector();
     private static Locale locale;
     private static ResourceBundle resources;
 
@@ -287,7 +285,7 @@ public class JMeterUtils implements UnitTestManager
     {
         LocaleChangeEvent event =
             new LocaleChangeEvent(JMeterUtils.class, locale);
-        Iterator iterator = localeChangeListeners.iterator();
+        Iterator iterator = ((Vector)localeChangeListeners.clone()).iterator();
 
         while (iterator.hasNext())
         {
