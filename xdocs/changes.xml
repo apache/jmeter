@@ -67,6 +67,7 @@
 <li>All Beanshell access is now via a single class; only need BSH jar at run-time</li>
 <li>Bug 32464 - document Direct Draw settings in jmeter.bat</li>
 <li>Bug 33919 - increase Counter field sizes</li>
+<li>Bug 32252 - ForEach was not initialising counters</li>
 </ul>
 
 <h3>Version 2.0.2</h3>

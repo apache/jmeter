@@ -47,12 +47,6 @@ public class ForeachController extends GenericController implements Serializable
     public ForeachController()
     {
     }
-
-    public void initialize()
-    {
-        log.debug("Initilizing ForEach");
-    }
-    
     
     public void setInputVal(String inputValue)
     {
