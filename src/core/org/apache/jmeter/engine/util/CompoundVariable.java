@@ -65,7 +65,7 @@ import java.util.StringTokenizer;
 
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.functions.InvalidVariableException;
-import org.apache.jmeter.functions.util.ArgumentDecoder;
+//import org.apache.jmeter.functions.util.ArgumentDecoder;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
@@ -126,11 +126,20 @@ public class CompoundVariable implements Function
 
     public CompoundVariable()
     {
+    	super();
         hasFunction = false;
         hasStatics = false;
         hasUnknowns = false;
 //        definedValues = new HashMap();
         staticSubstitution = "";
+    }
+    
+    public CompoundVariable(String parameters) 
+    {
+    	this();
+    	try {
+ 		   	setParameters(parameters);
+    	} catch(InvalidVariableException e) {}
     }
 
 	public String execute() 
@@ -188,7 +197,7 @@ public class CompoundVariable implements Function
                 results.append(item);
             }
         }
-        return ArgumentDecoder.decode( results.toString() );
+        return results.toString();
     }
 
     public CompoundVariable getFunction()
