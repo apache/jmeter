@@ -1,10 +1,10 @@
 package org.apache.jmeter.modifiers;
 import java.io.Serializable;
 
-import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.engine.util.NoThreadClone;
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -19,7 +19,7 @@ import org.apache.log.Logger;
  * Window>Preferences>Java>Templates.
  */
 public class CounterConfig
-	extends ConfigTestElement
+	extends AbstractTestElement
 	implements Serializable, LoopIterationListener,NoThreadClone
 {
 	private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.ELEMENTS);

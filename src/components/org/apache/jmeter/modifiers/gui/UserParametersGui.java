@@ -19,10 +19,10 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
 
-import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.modifiers.UserParameters;
+import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -30,7 +30,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-public class UserParametersGui extends AbstractConfigGui {
+public class UserParametersGui extends AbstractPreProcessorGui {
 
     private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
 	private String THREAD_COLUMNS = JMeterUtils.getResString("user");
