@@ -113,7 +113,7 @@ public class ResultCollector
     // protected List results = Collections.synchronizedList(new ArrayList());
     private int current;
     transient private DefaultConfigurationSerializer serializer;
-    private boolean inLoading = false;
+    //private boolean inLoading = false;
     transient private PrintWriter out;
     private boolean inTest = false;
     private static Map files = new HashMap();
@@ -200,7 +200,7 @@ public class ResultCollector
     public void loadExistingFile()
         throws SAXException, IOException, ConfigurationException
     {
-        inLoading = true;
+        //inLoading = true;
         if (new File(getFilename()).exists())
         {
             clearVisualizer();
@@ -223,7 +223,7 @@ public class ResultCollector
                 log.error("", e);
             }
         }
-        inLoading = false;
+        //inLoading = false;
     }
 
     private static void writeFileStart(PrintWriter writer)
