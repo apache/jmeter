@@ -495,16 +495,11 @@ public class GenericTestBeanCustomizer extends JPanel
 		{
 			add(currentPanel, cp);
 		}
-		
+
 		// Add a 0-sized invisible component that will take all the vertical
 		// space that nobody wants:
-		GridBagConstraints cs= new GridBagConstraints(); // for strut
-		cs.gridx= 1;
-		cs.gridy= y++;
-		cs.gridwidth= 2;
-		cs.weighty= 0.0001;
-
-		add(Box.createHorizontalStrut(0), cs);
+        cp.weighty= 0.0001;
+		add(Box.createHorizontalStrut(0), cp);
     }
 
 	private JLabel createLabel(PropertyDescriptor desc)
