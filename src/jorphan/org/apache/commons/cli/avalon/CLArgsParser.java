@@ -676,6 +676,16 @@ public final class CLArgsParser
         {
             if( 0 == m_option.getArgumentCount() )
             {
+				/*
+				 * Fix bug: -D arg1=arg2 was causing parse error; however --define arg1=arg2 is OK
+				 * This seems to be because the parser skips the terminator for the long options,
+				 * but was not doing so for the short options. 
+				 */
+				if (!m_isLong){
+					if (0 == peekAtChar()){
+						getChar();
+					}
+				}
                 final Token token = nextToken( ARG_SEPARATORS );
 
                 if( TOKEN_SEPARATOR == token.getType() )
