@@ -10,7 +10,8 @@ import junit.framework.TestCase;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.VariablesCollection;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
@@ -37,8 +38,6 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
     public static final String MATCH_NUMBER = "RegexExtractor.match_number";
     public static final String DEFAULT = "RegexExtractor.default";
     public static final String TEMPLATE = "RegexExtractor.template";
-
-    private VariablesCollection vars = new VariablesCollection();
     private Object[] template = null;
 
     private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
@@ -54,12 +53,14 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
      * into variables for use later in the test.
      * @see org.apache.jmeter.config.PostProcessor#processResult(org.apache.jmeter.samplers.SampleResult)
      */
-    public void process(SampleResult result)
+    public void process()
     {
+        initTemplate();
+        JMeterContext context = JMeterContextService.getContext();
         log.debug("RegexExtractor processing result");
-        vars.getVariables().put(getRefName(), getDefaultValue());
+        context.getVariables().put(getRefName(), getDefaultValue());
         Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
-        PatternMatcherInput input = new PatternMatcherInput(new String(result.getResponseData()));
+        PatternMatcherInput input = new PatternMatcherInput(new String(context.getPreviousResult().getResponseData()));
         log.debug("Regex = " + getRegex());
         Pattern pattern = patternCache.getPattern(getRegex(), Perl5Compiler.READ_ONLY_MASK);
         List matches = new ArrayList();
@@ -84,7 +85,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
             MatchResult match = getCorrectMatch(matches);
             if(match != null)
             {
-                vars.getVariables().put(getRefName(), generateResult(match));
+                context.getVariables().put(getRefName(), generateResult(match));
             }
         }
         catch (RuntimeException e)
@@ -97,7 +98,6 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
     {
         RegexExtractor cloned = (RegexExtractor)super.clone();
         cloned.template = this.template;
-        cloned.vars = vars;
         return cloned;
     }
 
@@ -122,6 +122,10 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 
     private void initTemplate()
     {
+        if(template != null)
+        {
+            return;
+        }
         List pieces = new ArrayList();
         List combined = new LinkedList();
         String rawTemplate = getTemplate();
@@ -197,20 +201,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
             return null;
         }
     }
-
-    /**
-     * This method is ignored.
-     */
-    public void iterationStarted(int iterationCount)
-    {}
-    /**
-     * @see org.apache.jmeter.testelement.ThreadListener#setJMeterVariables(org.apache.jmeter.threads.JMeterVariables)
-     */
-    public void setJMeterVariables(JMeterVariables vars)
-    {
-        this.vars.addJMeterVariables(vars);
-        initTemplate();
-    }
+    
     public void setRegex(String regex)
     {
         setProperty(REGEX, regex);
@@ -294,6 +285,8 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
                     + " field=\"pinpositionvalue3\"></value></row></company-xmlext-query-ret>";
             result.setResponseData(data.getBytes());
             vars = new JMeterVariables();
+            JMeterContextService.getContext().setVariables(vars);
+            JMeterContextService.getContext().setPreviousResult(result);
         }
 
         public void testVariableExtraction() throws Exception
@@ -301,8 +294,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
             extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
             extractor.setTemplate("$2$");
             extractor.setMatchNumber(2);
-            extractor.setJMeterVariables(vars);
-            extractor.process(result);
+            extractor.process();
             assertEquals("5", vars.get("regVal"));
         }
 
@@ -311,8 +303,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
             extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
             extractor.setTemplate("$1$");
             extractor.setMatchNumber(3);
-            extractor.setJMeterVariables(vars);
-            extractor.process(result);
+            extractor.process();
             assertEquals("pinposition3", vars.get("regVal"));
         }
 
@@ -322,8 +313,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
             extractor.setTemplate("$2$");
             extractor.setMatchNumber(4);
             extractor.setDefaultValue("default");
-            extractor.setJMeterVariables(vars);
-            extractor.process(result);
+            extractor.process();
             assertEquals("default", vars.get("regVal"));
         }
 
@@ -332,8 +322,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
             extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
             extractor.setTemplate("_$1$");
             extractor.setMatchNumber(2);
-            extractor.setJMeterVariables(vars);
-            extractor.process(result);
+            extractor.process();
             assertEquals("_pinposition2", vars.get("regVal"));
         }
     }

@@ -38,7 +38,7 @@ public class JMeterContext {
 		return previousResult;
 	}
 	
-	void setPreviousResult( SampleResult result ) {
+	public void setPreviousResult( SampleResult result ) {
 		this.previousResult = result;
 	}
 	
@@ -47,7 +47,7 @@ public class JMeterContext {
 		return currentSampler;
 	}
 	
-	void setCurrentSampler( Sampler sampler ) {
+	public void setCurrentSampler( Sampler sampler ) {
 		this.currentSampler = sampler;
 	}
 	

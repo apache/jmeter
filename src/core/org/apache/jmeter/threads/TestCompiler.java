@@ -13,9 +13,10 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.Modifier;
 import org.apache.jmeter.config.ResponseBasedModifier;
 import org.apache.jmeter.control.GenericController;
-import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.functions.InvalidVariableException;
+import org.apache.jmeter.processor.PostProcessor;
+import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
@@ -183,6 +184,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         List timers = new LinkedList();
         List assertions = new LinkedList();
         List extractors = new LinkedList();
+        List pres = new LinkedList();
         log.debug("Full stack = " + stack);
         for (int i = stack.size(); i > 0; i--)
         {
@@ -227,6 +229,10 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
                 {
                     extractors.add(item);
                 }
+                if (item instanceof PreProcessor)
+                                {
+                                    pres.add(item);
+                                }
             }
         }
         synchronized (sam)
@@ -236,7 +242,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
                 objectsWithFunctions.add(sam);
             }
         }
-        SamplerConfigs samplerConfigs = new SamplerConfigs(configs, modifiers, responseModifiers, listeners, timers, assertions, extractors);
+        SamplerConfigs samplerConfigs = new SamplerConfigs(configs, modifiers, responseModifiers, listeners, timers, assertions, extractors,pres);
         samplerConfigMap.put(sam, samplerConfigs);
     }
 
@@ -248,9 +254,11 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         List assertions;
         List timers;
         List responseModifiers;
-        List extractors;
+        List postProcessors;
+        List preProcessors;
 
-        public SamplerConfigs(List configs, List modifiers, List responseModifiers, List listeners, List timers, List assertions, List extractors)
+        public SamplerConfigs(List configs, List modifiers, List responseModifiers, List listeners, List timers, List assertions, 
+                List extractors,List pres)
         {
             this.configs = configs;
             this.modifiers = modifiers;
@@ -258,7 +266,8 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
             this.listeners = listeners;
             this.timers = timers;
             this.assertions = assertions;
-            this.extractors = extractors;
+            this.postProcessors = extractors;
+            this.preProcessors = pres;
         }
 
         public List getConfigs()
@@ -291,10 +300,19 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
             return timers;
         }
 
-        public List getExtractors()
+        public List getPostProcessors()
         {
-            return extractors;
+            return postProcessors;
         }
+        /**
+         * Returns the preProcessors.
+         * @return List
+         */
+        public List getPreProcessors()
+        {
+            return preProcessors;
+        }
+
     }
 
     /****************************************
@@ -500,7 +518,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
             ret.addSampleListener((SampleListener) cloned);
         }
 
-        iter = configs.getExtractors().iterator();
+        iter = configs.getPostProcessors().iterator();
         while (iter.hasNext())
         {
             PostProcessor ex = (PostProcessor) iter.next();
@@ -509,8 +527,20 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
             {
                 replaceValues(cloned);
             }
-            ret.addExtractor((PostProcessor) cloned);
+            ret.addPostProcessor((PostProcessor) cloned);
         }
+        
+        iter = configs.getPreProcessors().iterator();
+                while (iter.hasNext())
+                {
+                    PreProcessor ex = (PreProcessor) iter.next();
+                    TestElement cloned = (TestElement) cloneIfNecessary(ex);
+                    if (objectsWithFunctions.contains(ex))
+                    {
+                        replaceValues(cloned);
+                    }
+                    ret.addPreProcessor((PreProcessor) cloned);
+                }
     }
 
     private boolean hasFunctions(TestElement el)

@@ -110,7 +110,9 @@ public class MenuFactory
 	 ***************************************/
 	public final static String MODIFIERS = "menu_modifiers";
     
-    public final static String POST_PROCESSORS = "menu_extractors";
+    public final static String POST_PROCESSORS = "menu_post_processors";
+    
+    public final static String PRE_PROCESSORS = "menu_pre_processors";
 	/****************************************
 	 * !ToDo (Field description)
 	 ***************************************/
@@ -132,7 +134,7 @@ public class MenuFactory
 
 	private static List timers, controllers, samplers,
 			configElements, modifiers, responseBasedModifiers,
-			assertions, listeners, nonTestElements,extractors;
+			assertions, listeners, nonTestElements,postProcessors,preProcessors;
 
 	private static JMenu timerMenu;
 	private static JMenu controllerMenu;
@@ -143,7 +145,8 @@ public class MenuFactory
 	private static JMenu assertionMenu;
 	private static JMenu configMenu;
 	private static JMenu insertControllerMenu;
-    private static JMenu extractorMenu;
+    private static JMenu postProcessorMenu;
+    private static JMenu preProcessorMenu;
 	static
 	{
 		try
@@ -263,7 +266,9 @@ public class MenuFactory
 				MenuFactory.SAMPLERS, MenuFactory.CONFIG_ELEMENTS,
 				MenuFactory.MODIFIERS,MenuFactory.RESPONSE_BASED_MODIFIERS,
 				MenuFactory.TIMERS,
-				MenuFactory.LISTENERS},
+				MenuFactory.LISTENERS,
+                MenuFactory.PRE_PROCESSORS,
+                MenuFactory.POST_PROCESSORS},
 				JMeterUtils.getResString("Add"),
 				"Add"));
 		pop.add(makeMenus(new String[]{MenuFactory.CONTROLLERS},
@@ -286,6 +291,7 @@ public class MenuFactory
 				MenuFactory.RESPONSE_BASED_MODIFIERS,
 				MenuFactory.TIMERS,
 				MenuFactory.LISTENERS,
+                MenuFactory.PRE_PROCESSORS,
                 MenuFactory.POST_PROCESSORS},
 				JMeterUtils.getResString("Add"),
 				"Add"));
@@ -449,7 +455,8 @@ public class MenuFactory
 			responseBasedModifiers = new LinkedList();
 			assertions = new LinkedList();
 			listeners = new LinkedList();
-            extractors = new LinkedList();
+            postProcessors = new LinkedList();
+            preProcessors = new LinkedList();
 			nonTestElements = new LinkedList();
 			menuMap.put(TIMERS, timers);
 			menuMap.put(ASSERTIONS, assertions);
@@ -460,7 +467,8 @@ public class MenuFactory
 			menuMap.put(NON_TEST_ELEMENTS, nonTestElements);
 			menuMap.put(RESPONSE_BASED_MODIFIERS, responseBasedModifiers);
 			menuMap.put(SAMPLERS, samplers);
-            menuMap.put(POST_PROCESSORS,extractors);
+            menuMap.put(POST_PROCESSORS,postProcessors);
+            menuMap.put(PRE_PROCESSORS,preProcessors);
 			Collections.sort(guiClasses);
 			Iterator iter = guiClasses.iterator();
 			while(iter.hasNext())
@@ -493,7 +501,12 @@ public class MenuFactory
                 
                 if(categories.contains(POST_PROCESSORS))
                 {
-                    extractors.add(new MenuInfo(item.getStaticLabel(), item.getClass().getName()));
+                    postProcessors.add(new MenuInfo(item.getStaticLabel(), item.getClass().getName()));
+                }
+                
+                if(categories.contains(PRE_PROCESSORS))
+                {
+                    preProcessors.add(new MenuInfo(item.getStaticLabel(), item.getClass().getName()));
                 }
 
 				if(categories.contains(CONTROLLERS))
