@@ -122,8 +122,7 @@ public class ProxyControl extends GenericController implements Serializable
 
     public static final int GROUPING_NO_GROUPS = 0;
     public static final int GROUPING_ADD_SEPARATORS = 1;
-    // TODO: implement thin one:
-    //public static final int GROUPING_IN_CONTROLLERS = 2;
+    public static final int GROUPING_IN_CONTROLLERS = 2;
     public static final int GROUPING_STORE_FIRST_ONLY = 3;
 
 	private long lastTime = 0;//When was the last sample seen?
@@ -365,47 +364,66 @@ public class ProxyControl extends GenericController implements Serializable
 	private void addDivider(JMeterTreeModel model,JMeterTreeNode node)
 	    throws IllegalUserActionException
 	{
-		if (groupingMode == GROUPING_ADD_SEPARATORS){
-			GenericController sc = new GenericController();
-			sc.setProperty(TestElement.GUI_CLASS,
-			    "org.apache.jmeter.control.gui.LogicControllerGui");
-			sc.setName("-------------------");
-			model.addComponent(sc,node);
-	    }
+        GenericController sc = new GenericController();
+        sc.setProperty(TestElement.GUI_CLASS,
+            "org.apache.jmeter.control.gui.LogicControllerGui");
+        sc.setName("-------------------");
+        model.addComponent(sc,node);
 	}
+    
+    /**
+     * Helper method to add a Simple Controller to contain the samplers.
+     * 
+     * @param model Test component tree model
+     * @param node  Node in the tree where we will add the Controller
+     * @param name  A name for the Controller
+     */
+    private void addSimpleController(
+            JMeterTreeModel model,
+            JMeterTreeNode node,
+            String name)
+        throws IllegalUserActionException
+    {
+        GenericController sc = new GenericController();
+        sc.setProperty(TestElement.GUI_CLASS,
+            "org.apache.jmeter.control.gui.LogicControllerGui");
+        sc.setName(name);
+        model.addComponent(sc,node);
+    }
     
     private void placeConfigElement(
         HTTPSampler sampler,
         TestElement[] subConfigs)
     {
+        JMeterTreeNode myTarget= target;
         TestElement urlConfig = null;
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
-        if (target == null)
+        if (myTarget == null)
         {
             List nodes = treeModel.getNodesOfType(RecordingController.class);
             Iterator iter= nodes.iterator();
             while (iter.hasNext()) {
                 JMeterTreeNode node= (JMeterTreeNode) iter.next();
                 if (node.isEnabled()) {
-                    target= node;
+                    myTarget= node;
                     break;
                 }
             }
         }
-        if (target == null)
+        if (myTarget == null)
         {
             List nodes = treeModel.getNodesOfType(ThreadGroup.class);
             Iterator iter = nodes.iterator();
             while (iter.hasNext()) {
                 JMeterTreeNode node= (JMeterTreeNode) iter.next();
                 if (node.isEnabled()) {
-                    target= node;
+                    myTarget= node;
                     break;
                 }
             }
         }
 
-        Enumeration enum = target.children();
+        Enumeration enum = myTarget.children();
         String guiClassName = null;
         while (enum.hasMoreElements())
         {
@@ -434,18 +452,22 @@ public class ProxyControl extends GenericController implements Serializable
             try
             {
                 boolean firstInBatch=false;
-                if (lastTime == 0){
-                    lastTime = System.currentTimeMillis();
-                    firstInBatch=true;
-                }
                 long now = System.currentTimeMillis();
                 if (now - lastTime > sampleGap){
-                    addDivider(treeModel,target);
-                    firstInBatch=true;//Remember to save the new node
+                    if (!myTarget.isLeaf() 
+                            && groupingMode == GROUPING_ADD_SEPARATORS)
+                    {
+                        addDivider(treeModel, myTarget);
+                    }
+                    if (groupingMode == GROUPING_IN_CONTROLLERS)
+                    {
+                        addSimpleController(treeModel, myTarget, sampler.getName());
+                    }
+                    firstInBatch=true;//Remember this was first in its batch
                 }
-                lastTime = System.currentTimeMillis();
+                lastTime = now;
 
-                if (groupingMode==GROUPING_STORE_FIRST_ONLY)
+                if (groupingMode == GROUPING_STORE_FIRST_ONLY)
                 {
                     if (!firstInBatch) return; // Huh! don't store this one!
                     
@@ -455,8 +477,23 @@ public class ProxyControl extends GenericController implements Serializable
                     sampler.setImageParser(true);
                 }
                 
+                if (groupingMode == GROUPING_IN_CONTROLLERS)
+                {
+                    // Find the last controller in the target to store the
+                    // sampler there:
+                    for (int i= myTarget.getChildCount()-1; i>=0; i--)
+                    {
+                        JMeterTreeNode c= (JMeterTreeNode)myTarget.getChildAt(i);
+                        if (c.createTestElement() instanceof GenericController)
+                        {
+                            myTarget= c;
+                            break;
+                        }
+                    }
+                }
+
                 JMeterTreeNode newNode =
-                    treeModel.addComponent(sampler, target);
+                    treeModel.addComponent(sampler, myTarget);
                             
                 if(firstInBatch){
                     addAssertion(treeModel,newNode);

@@ -173,6 +173,7 @@ public class ProxyControlGui
     public ProxyControlGui()
     {
         super();
+        log.debug("Creating ProxyControlGui");
         init();
     }
 
@@ -444,8 +445,8 @@ public class ProxyControlGui
                     portField.setText("");
                 }
             }
+            enableRestart();
         }
-        enableRestart();
     }
 
     private void init()
@@ -582,11 +583,11 @@ public class ProxyControlGui
     private JPanel createGroupingPanel()
     {
         DefaultComboBoxModel m= new DefaultComboBoxModel();
+        // Note: position of these elements in the menu *must* match the
+        // corresponding ProxyControl.GROUPING_* values.
         m.addElement(JMeterUtils.getResString("grouping_no_groups"));
         m.addElement(JMeterUtils.getResString("grouping_add_separators"));
-        // TODO: enable when implemented:
-        //m.addElement(JMeterUtils.getResString("grouping_in_controllers"));
-        m.addElement("[not implemented]");
+        m.addElement(JMeterUtils.getResString("grouping_in_controllers"));
         m.addElement(JMeterUtils.getResString("grouping_store_first_only"));
         groupingMode = new JComboBox(m);
         groupingMode.setName(ProxyControl.GROUPING_MODE);
@@ -692,14 +693,14 @@ public class ProxyControlGui
         for (int i = 0; i < targetNodesModel.getSize(); i++)
         {
             choice = (TreeNodeWrapper) targetNodesModel.getElementAt(i);
+            log.debug("Selecting item "+choice+" for model "+model+" in "+this);
             if (choice.getTreeNode() == model.getTarget()) // .equals caused NPE
             {
-                log.debug("Selecting item "+choice);
                 break;
             }
         }
         // Reinstate action notifications:
-        targetNodes.removeActionListener(this);
+        targetNodes.addActionListener(this);
         // Set the current value:
         targetNodesModel.setSelectedItem(choice);        
         
