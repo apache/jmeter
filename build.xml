@@ -184,8 +184,8 @@
   <target name="compile-core" depends="compile-jorphan" description="Compile JMeter core classes.">
     <mkdir dir="${build.core}"/>
     <replaceregexp file="${src.core}/org/apache/jmeter/util/JMeterUtils.java"
-    	match="VERSION=&quot;.*?&quot;"
-	replace="VERSION=&quot;${version}&quot;"/>
+    	match="VERSION = &quot;.*?&quot;"
+	replace="VERSION = &quot;${version}&quot;"/>
     <javac srcdir="${src.core}" destdir="${build.core}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <exclude name="org/apache/jmeter/util/JsseSSLManager.java" unless="jsse.present"/>
