@@ -217,17 +217,23 @@ A reference name - refName - for reusing the value created by this function. Sto
 <p/>
 Examples:<br/>
  pin#.dat -> pin1.dat, ... pin9.dat, pin10.dat, ... pin9999.dat<br/>
- pin000.dat -> pin001.dat ... pin099.dat ... pin999.dat ... pin9999.dat
+ pin000.dat -> pin001.dat ... pin099.dat ... pin999.dat ... pin9999.dat<br/>
+ pin'.'dat# -> pin.dat1, ... pin.dat9 ... pin.dat999<br/>
+ N.B: pin.dat# -> pin1.0dat, ... pin9.0dat ... pin999.0dat<br/>
 </code><p/>
 	If more digits are required than there are formatting characters, the number will be
-	expanded as necessary. To prevent a formatting character from being interpreted,
-	enclose it in single quotes. See the documentation for DecimalFormat for full details.
-	<br></br>
+	expanded as necessary.<br/>
+	To prevent a formatting character from being interpreted,
+	enclose it in single quotes. Note that the decimal point is a formatting character,
+	and must be enclosed in single quotes (though it works as expected for #. and 000.)
+	N.B. the decimal point varies between locales, but in the UK and US, at least, it is
+	the same character as is used to separate parts of file names.<br/>
+	See the documentation for DecimalFormat for full details.<br/>
 	If the path name does not contain any special formatting characters,
 	it will be unaffected by the current sequence number. 
 	In this case, specifying only a start sequence number will have no effect,
 	but specifying a start and end sequence number will result in the file
-	being used at mose end-start+1 times.
+	being used at most end-start+1 times.
 	
 	</p>
 </component>
