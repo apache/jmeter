@@ -57,9 +57,9 @@ package org.apache.jmeter.protocol.java.config;
 import java.io.Serializable;
 
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.java.sampler.JavaSampler;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerClient;
-import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.log4j.Category;
 
 
@@ -73,7 +73,7 @@ import org.apache.log4j.Category;
  *@version    $Revision$
  */
 
-public class JavaConfig extends AbstractTestElement implements Serializable
+public class JavaConfig extends ConfigTestElement implements Serializable
 {
 
 	/** Logging  */
