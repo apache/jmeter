@@ -421,6 +421,9 @@
     <available classname="org.apache.bsf.BSFManager" property="bsf.present">
       <classpath refid="classpath"/>
     </available>
+    <available classname="javax.jms.TopicConnection" property="jms.present">
+      <classpath refid="classpath"/>
+    </available>
   </target>
   
   <!--
@@ -446,8 +449,12 @@
     <echo message="Classes for BSF support not found in classpath"/>
   </target>
 
+  <target name="jms-message" depends="check-libs" unless="jms.present">
+    <echo message="Classes for JMS support not found in classpath"/>
+  </target>
+
   <target name="report-missing-libs" 
-      depends="ssl-message,iaik-message,mail-message,beanshell-message,bsf-message"
+      depends="ssl-message,iaik-message,mail-message,beanshell-message,bsf-message,jms-message"
   />
 
   <!--
@@ -629,7 +636,7 @@
     </javac>
   </target>
 
-  <target name="compile-protocols" depends="compile-http,compile-ftp,compile-jdbc,compile-java,compile-ldap,compile-mail,compile-tcp" description="Compile all protocol-specific components."/>
+  <target name="compile-protocols" depends="compile-http,compile-ftp,compile-jdbc,compile-java,compile-ldap,compile-mail,compile-tcp,compile-jms" description="Compile all protocol-specific components."/>
 
   <target name="compile-examples" depends="compile-jorphan,compile-core" description="Compile example components.">
     <mkdir dir="${build.examples}"/>
@@ -723,7 +730,7 @@
     </javac>
   </target>
 
-  <target name="compile" depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-htmlparser,compile-monitor,compile-jms"
+  <target name="compile" depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-htmlparser,compile-monitor"
   description="Compile everything."/>
 
   <target name="package" depends="compile, package-only"
