@@ -259,7 +259,7 @@ public final class HtmlParsingUtils implements Serializable
             Node node =
                 getParser().parseDOM(
                     new ByteArrayInputStream(
-                        text.getBytes(getUTFEncodingName())),
+                        text.getBytes("UTF-8")),
                     null);
 
             if (log.isDebugEnabled())
@@ -277,47 +277,6 @@ public final class HtmlParsingUtils implements Serializable
             log.debug("End : getDOM1");
             throw new RuntimeException("UTF-8 encoding failed");
         }
-    }
-
-    /**
-     * Returns the encoding type which is different for different jdks even
-     * though they mean the same thing i.e. UTF8 or UTF-8.
-     *
-     * @return   either UTF8 or UTF-8 depending on the jdk version
-     */
-    public static String getUTFEncodingName()
-    {
-        log.debug("Start : getUTFEncodingName1");
-
-        if (utfEncodingName == null)
-        {
-            String versionNum = System.getProperty("java.version");
-
-            if (log.isDebugEnabled())
-            {
-                log.debug("getUTFEncodingName1 : versionNum - " + versionNum);
-            }
-
-            if (versionNum.startsWith("1.1"))
-            {
-                utfEncodingName = "UTF8";
-            }
-            else
-            {
-                utfEncodingName = "UTF-8";
-            }
-        }
-
-        if (log.isDebugEnabled())
-        {
-            log.debug(
-                "getUTFEncodingName1 : Returning utfEncodingName - "
-                    + utfEncodingName);
-        }
-
-        log.debug("End : getUTFEncodingName1");
-
-        return utfEncodingName;
     }
 
     public static Document createEmptyDoc()
@@ -518,22 +477,6 @@ public final class HtmlParsingUtils implements Serializable
         public Test(String name)
         {
             super(name);
-        }
-
-        public void testGetUTFEncodingName()
-        {
-            log.debug("Start : testGetUTFEncodingName1");
-            String javaVersion = System.getProperty("java.version");
-            utfEncodingName = null;
-            System.setProperty("java.version", "1.1");
-            assertEquals("UTF8", HtmlParsingUtils.getUTFEncodingName());
-            // need to clear utfEncodingName variable first 'cos
-            // getUTFEncodingName checks to see if it's null
-            utfEncodingName = null;
-            System.setProperty("java.version", "1.2");
-            assertEquals("UTF-8", HtmlParsingUtils.getUTFEncodingName());
-            System.setProperty("java.version", javaVersion);
-            log.debug("End : testGetUTFEncodingName1");
         }
 
         protected void setUp()
