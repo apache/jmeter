@@ -20,14 +20,8 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * <p>Title: </p>
- * <p>Description: </p>
- * <p>Copyright: Copyright (c) 2001</p>
- * <p>Company: </p>
- * @author unascribed
- * @version 1.0
+ * @version $Revision$
  */
-
 public class TreeCloner implements HashTreeTraverser
 {
     Logger log = LoggingManager.getLoggerFor(JMeterUtils.ENGINE);
@@ -47,7 +41,8 @@ public class TreeCloner implements HashTreeTraverser
     }
     public void addNode(Object node, HashTree subTree)
     {
-        if ((!forThread || !(node instanceof NoThreadClone)) && (node instanceof TestElement))
+        if ((!forThread || !(node instanceof NoThreadClone))
+            && (node instanceof TestElement))
         {
             node = ((TestElement) node).clone();
             newTree.add(objects, node);
@@ -58,6 +53,7 @@ public class TreeCloner implements HashTreeTraverser
         }
         objects.addLast(node);
     }
+
     public void subtractNode()
     {
         objects.removeLast();
@@ -69,7 +65,8 @@ public class TreeCloner implements HashTreeTraverser
     }
 
     public void processPath()
-    {}
+    {
+    }
 
     public static class Test extends junit.framework.TestCase
     {
@@ -97,17 +94,34 @@ public class TreeCloner implements HashTreeTraverser
             ListedHashTree newTree = cloner.getClonedTree();
             assertTrue(original != newTree);
             assertEquals(original.size(), newTree.size());
-            assertEquals(original.getTree(original.getArray()[0]).size(), newTree.getTree(newTree.getArray()[0]).size());
+            assertEquals(
+                original.getTree(original.getArray()[0]).size(),
+                newTree.getTree(newTree.getArray()[0]).size());
             assertTrue(original.getArray()[0] != newTree.getArray()[0]);
-            assertEquals(((GenericController) original.getArray()[0]).getName(), ((GenericController) newTree.getArray()[0]).getName());
-            assertSame(original.getTree(original.getArray()[0]).getArray()[1], newTree.getTree(newTree.getArray()[0]).getArray()[1]);
+            assertEquals(
+                ((GenericController) original.getArray()[0]).getName(),
+                ((GenericController) newTree.getArray()[0]).getName());
+            assertSame(
+                original.getTree(original.getArray()[0]).getArray()[1],
+                newTree.getTree(newTree.getArray()[0]).getArray()[1]);
             TestPlan clonedTestPlan = (TestPlan) newTree.getArray()[1];
             clonedTestPlan.setRunningVersion(true);
             clonedTestPlan.recoverRunningVersion();
-            assertTrue(!plan.getProperty(TestPlan.USER_DEFINED_VARIABLES).isRunningVersion());
-            assertTrue(clonedTestPlan.getProperty(TestPlan.USER_DEFINED_VARIABLES).isRunningVersion());
-            Arguments vars = (Arguments) plan.getProperty(TestPlan.USER_DEFINED_VARIABLES).getObjectValue();
-            PropertyIterator iter = ((CollectionProperty)vars.getProperty(Arguments.ARGUMENTS)).iterator();
+            assertTrue(
+                !plan
+                    .getProperty(TestPlan.USER_DEFINED_VARIABLES)
+                    .isRunningVersion());
+            assertTrue(
+                clonedTestPlan
+                    .getProperty(TestPlan.USER_DEFINED_VARIABLES)
+                    .isRunningVersion());
+            Arguments vars =
+                (Arguments) plan
+                    .getProperty(TestPlan.USER_DEFINED_VARIABLES)
+                    .getObjectValue();
+            PropertyIterator iter =
+                ((CollectionProperty) vars.getProperty(Arguments.ARGUMENTS))
+                    .iterator();
             while (iter.hasNext())
             {
                 JMeterProperty argProp = iter.next();                
@@ -117,7 +131,10 @@ public class TreeCloner implements HashTreeTraverser
                 arg.setValue("yahoo");
                 assertEquals("yahoo",arg.getValue());
             }
-            vars = (Arguments) clonedTestPlan.getProperty(TestPlan.USER_DEFINED_VARIABLES).getObjectValue();
+            vars =
+                (Arguments) clonedTestPlan
+                    .getProperty(TestPlan.USER_DEFINED_VARIABLES)
+                    .getObjectValue();
             iter = vars.propertyIterator();
             while (iter.hasNext())
             {

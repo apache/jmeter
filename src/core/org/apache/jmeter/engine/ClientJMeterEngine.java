@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -65,101 +65,76 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 
-/************************************************************
- *  !ToDo (Class description)
- *
- *@author     $Author$
- *@created    $Date$
- *@version    $Revision$
- ***********************************************************/
+/**
+ * @author     $Author$
+ * @version    $Revision$
+ */
 public class ClientJMeterEngine implements JMeterEngine,Runnable
 {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
-	RemoteJMeterEngine remote;
-	HashTree test;
-	SearchByClass testListeners;
-	ConvertListeners sampleListeners;
-	private String host;
+    transient private static Logger log = LoggingManager.getLoggerForClass();
+    RemoteJMeterEngine remote;
+    HashTree test;
+    SearchByClass testListeners;
+    ConvertListeners sampleListeners;
+    private String host;
 
-	/************************************************************
-	 *  !ToDo (Constructor description)
-	 *
-	 *@param  host                       !ToDo (Parameter description)
-	 *@exception  MalformedURLException  !ToDo (Exception description)
-	 *@exception  NotBoundException      !ToDo (Exception description)
-	 *@exception  RemoteException        !ToDo (Exception description)
-	 ***********************************************************/
-	public ClientJMeterEngine(String host)
-			 throws MalformedURLException, NotBoundException, RemoteException
-	{
-		this((RemoteJMeterEngine)Naming.lookup("//" + host + "/JMeterEngine"));
-		this.host = host;
-	}
+    public ClientJMeterEngine(String host)
+        throws MalformedURLException, NotBoundException, RemoteException
+    {
+        this((RemoteJMeterEngine) Naming.lookup("//" + host + "/JMeterEngine"));
+        this.host = host;
+    }
 
-	/************************************************************
-	 *  !ToDo (Constructor description)
-	 *
-	 *@param  remote  !ToDo (Parameter description)
-	 ***********************************************************/
-	public ClientJMeterEngine(RemoteJMeterEngine remote)
-	{
-		this.remote = remote;
-	}
-	
-	protected HashTree getTestTree()
-	{
-		return test;
-	}
+    public ClientJMeterEngine(RemoteJMeterEngine remote)
+    {
+        this.remote = remote;
+    }
 
-	public void configure(HashTree testTree)
-	{
-		test = testTree;
-	}
-	
-	public void setHost(String host)
-	{
-		this.host = host;
-	}
+    protected HashTree getTestTree()
+    {
+        return test;
+    }
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 ***********************************************************/
-	public void runTest()
-	{
+    public void configure(HashTree testTree)
+    {
+        test = testTree;
+    }
+
+    public void setHost(String host)
+    {
+        this.host = host;
+    }
+
+    public void runTest()
+    {
         log.warn("about to run remote test");
-		new Thread(this).start();
+        new Thread(this).start();
         log.warn("done initiating run command");
-	}
+    }
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 ***********************************************************/
-	public void stopTest()
-	{
-		try
-		{
-			remote.stopTest();
-		}
-		catch(Exception ex)
-		{
-			log.error("",ex);
-		}
-	}
+    public void stopTest()
+    {
+        try
+        {
+            remote.stopTest();
+        }
+        catch (Exception ex)
+        {
+            log.error("", ex);
+        }
+    }
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 ***********************************************************/
-	public void reset()
-	{
-		try
-		{
-			remote.reset();
-		}
-		catch(Exception ex)
-		{
-			log.error("",ex);
-		}
-	}
+    public void reset()
+    {
+        try
+        {
+            remote.reset();
+        }
+        catch (Exception ex)
+        {
+            log.error("", ex);
+        }
+    }
 
     /* (non-Javadoc)
      * @see java.lang.Runnable#run()
@@ -184,7 +159,5 @@ public class ClientJMeterEngine implements JMeterEngine,Runnable
         {
             log.error("",ex);
         }
-
     }
-
 }
