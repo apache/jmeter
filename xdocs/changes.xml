@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <document>
   <properties>
-    <author email="bburns@apache.org">Brendan Burns, et al.</author>
+    <author email="mstover1@apache.org">Michael Stover, et al.</author>
     <title>History of Changes</title>
   </properties>
 <body>
@@ -12,6 +12,25 @@
 </p>
 
 <b>Changes:</b>
+<h3>Current in CVS</h3>
+<ul>
+<li>Better XML support for special characters (Tushar Bhatia) </li>
+<li>Non-GUI functioning  &amp; Non-GUI test plan execution  (Tushar Bhatia)</li>
+<li>Removing Swing dependence from base JMeter classes</li>
+<li>Internationalization (Takashi Okamoto)</li>
+<li>AllTests bug fix (neth6@atozasia.com)</li>
+<li>ClassFinder bug fix (neth6@atozasia.com)</li>
+<li>New Loop Controller</li>
+<li>Proxy Server records HTTP samples from browser</li>
+<li>Multipart Form support</li>
+<li>HTTP Header class for Header customization</li>
+<li>Extracting HTTP Header information from responses (Jamie Davidson)</li>
+<li>Mailer Visualizer re-added to JMeter</li>
+<li>JMeter now url encodes paramter names and values</li>
+<li>listeners no longer give exceptions if their gui's haven't been initialized</li>
+<li>HTTPS and Authorization working together</li>
+</ul>
+
 <h3>Version 1.6.1</h3>
 <ul>
 <li>Fixed saving and loading of test scripts (no more extra lines)</li>
