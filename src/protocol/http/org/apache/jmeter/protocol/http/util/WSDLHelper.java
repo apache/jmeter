@@ -96,21 +96,33 @@ public class WSDLHelper
     {
         try
         {
-            NodeList services = this.WSDLDOC.getElementsByTagName("service");
+            NodeList services =
+            	this.WSDLDOC.getElementsByTagName("service");
+            if (services.getLength() == 0){
+				services =
+					this.WSDLDOC.getElementsByTagName("wsdl:service");
+            }
             // the document should only have one service node
             // if it doesn't it may not work!
             Element node = (Element) services.item(0);
             NodeList ports = node.getElementsByTagName("port");
+            if (ports.getLength() == 0){
+            	ports = node.getElementsByTagName("wsdl:port");
+            }
             for (int idx = 0; idx < ports.getLength(); idx++)
             {
                 Element pnode = (Element) ports.item(idx);
                 String portname = pnode.getAttribute("name");
                 // got the port name. now check it against the
                 // binding name.
-                if (portname.equals(this.BINDNAME))
+                if (this.BINDNAME.indexOf(portname) > -1)
                 {
                     NodeList servlist =
                         pnode.getElementsByTagName("soap:address");
+                    if (servlist.getLength() == 0){
+						servlist =
+						pnode.getElementsByTagName("wsdlsoap:address");
+                    }
                     Element addr = (Element) servlist.item(0);
                     this.SOAPBINDING = addr.getAttribute("location");
                     return this.SOAPBINDING;
@@ -221,6 +233,10 @@ public class WSDLHelper
             // get the soap:operation
             NodeList opers =
                 ((Element) act).getElementsByTagName("soap:operation");
+            if (opers.getLength() == 0){
+            	opers =
+            		((Element) act).getElementsByTagName("wsdlsoap:operation");
+            }
             // there should only be one soap:operation node per operation
             Element op = (Element) opers.item(0);
             String value = op.getAttribute("soapAction");
@@ -259,10 +275,15 @@ public class WSDLHelper
     {
         ArrayList list = new ArrayList();
         NodeList bindings = WSDLDOC.getElementsByTagName("binding");
+        String soapBind = "soap:binding";
+        if (bindings.getLength() == 0){
+        	bindings = WSDLDOC.getElementsByTagName("wsdl:binding");
+			soapBind = "wsdlsoap:binding";
+        }
         for (int idx = 0; idx < bindings.getLength(); idx++)
         {
             Element nd = (Element) bindings.item(idx);
-            NodeList slist = nd.getElementsByTagName("soap:binding");
+            NodeList slist = nd.getElementsByTagName(soapBind);
             if (slist.getLength() > 0)
             {
                 //NOTUSED Element soapbind = (Element) slist.item(0);
@@ -305,6 +326,11 @@ public class WSDLHelper
         {
             Element one = (Element) res[idx];
             NodeList opnodes = one.getElementsByTagName("operation");
+            String soapOp = "soap:operation";
+            if (opnodes.getLength() == 0){
+            	opnodes = one.getElementsByTagName("wsdl:operation");
+            	soapOp = "wsdlsoap:operation";
+            }
             // now we iterate through the operations
             for (int idz = 0; idz < opnodes.getLength(); idz++)
             {
@@ -312,7 +338,7 @@ public class WSDLHelper
                 // we add it to the array
                 Element child = (Element) opnodes.item(idz);
                 NodeList soapnode =
-                    child.getElementsByTagName("soap:operation");
+                    child.getElementsByTagName(soapOp);
                 if (soapnode.getLength() > 0)
                 {
                     ops.add(child);
@@ -331,8 +357,9 @@ public class WSDLHelper
     {
         try
         {
-            WSDLHelper help =
-                new WSDLHelper("http://localhost/testWS/Service1.asmx?WSDL");
+			WSDLHelper help =
+			// 	new WSDLHelper("http://localhost/WSTest/WSTest.asmx?WSDL");
+				new WSDLHelper("http://localhost/AxisWSDL.xml");
             long start = System.currentTimeMillis();
             help.parse();
             String[] methods = help.getWebMethods();
