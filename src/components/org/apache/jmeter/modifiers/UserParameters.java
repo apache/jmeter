@@ -133,10 +133,12 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
         }
     }
 
-    /**
+    /* This method doesn't appear to be used anymore.
+     * jeremy_a@bigfoot.com  03 May 2003
+     * 
      * @see org.apache.jmeter.testelement.ThreadListener#setJMeterVariables(org.apache.jmeter.threads.JMeterVariables)
-     */
     public void setJMeterVariables(JMeterVariables jmVars)
     {}
+     */
 
 }

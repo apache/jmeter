@@ -16,9 +16,6 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
  * @author mstover
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
  */
 public class SoapSamplerGui extends AbstractSamplerGui
 {
@@ -31,16 +28,16 @@ public class SoapSamplerGui extends AbstractSamplerGui
         init();
     }
 
-    /**
-     * @see JMeterGUIComponent#getStaticLabel()
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
      */
     public String getStaticLabel()
     {
         return label;
     }
 
-    /**
-     * @see JMeterGUIComponent#createTestElement()
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
      */
     public TestElement createTestElement()
     {
