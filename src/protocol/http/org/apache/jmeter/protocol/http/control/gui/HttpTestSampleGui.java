@@ -89,7 +89,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
     {
         super.configure(element);
         urlConfigGui.configure(element);
-        String testClass = element.getPropertyAsString(TestElement.TEST_CLASS);
+        //NOTUSED String testClass = element.getPropertyAsString(TestElement.TEST_CLASS);
         getImages.setSelected(((HTTPSampler) element).isImageParser());
     }
 

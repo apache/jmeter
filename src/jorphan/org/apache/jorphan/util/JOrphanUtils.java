@@ -54,7 +54,6 @@
  */
 package org.apache.jorphan.util;
 
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 /**
@@ -90,8 +89,6 @@ public final class JOrphanUtils
         {
             return new String[0];
         }
-        StringTokenizer tokens;
-        String temp;
         int spot;
         while ((spot = splittee.indexOf(splitChar + splitChar)) != -1)
         {

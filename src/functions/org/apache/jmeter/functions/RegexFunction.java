@@ -267,7 +267,6 @@ public class RegexFunction extends AbstractFunction implements Serializable
         PatternMatcher matcher = new Perl5Matcher();
         Util.split(pieces, new Perl5Matcher(), templatePattern, rawTemplate);
         PatternMatcherInput input = new PatternMatcherInput(rawTemplate);
-        int count = 0;
         Iterator iter = pieces.iterator();
         boolean startsWith = isFirstElementGroup(rawTemplate);
         while (iter.hasNext())

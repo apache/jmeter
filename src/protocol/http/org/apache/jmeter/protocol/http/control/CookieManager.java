@@ -204,7 +204,6 @@ public class CookieManager
                     continue;
                 String[] st = split(line, "\t", " ");
                 int domain = 0;
-                int foo = 1;
                 int path = 2;
                 if (st[path].equals(" "))
                     st[path] = "/";

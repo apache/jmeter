@@ -66,7 +66,6 @@ import org.apache.jmeter.testelement.AbstractTestElement;
  */
 public class Header extends AbstractTestElement implements Serializable
 {
-    private static String NAME = "Header.name";
     private static String VALUE = "Header.value";
 
     /**

@@ -56,7 +56,6 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,7 +66,6 @@ import java.net.HttpURLConnection;
 import java.net.URLConnection;
 
 import org.apache.jmeter.config.Argument;
-import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 
 /**
@@ -164,6 +162,7 @@ public class PostWriter
         return new BufferedInputStream(new FileInputStream(filename));
     }
 
+	/* NOTUSED
     private String getContentLength(MultipartUrlConfig config)
     {
         long size = 0;
@@ -188,7 +187,8 @@ public class PostWriter
         size += 2 + (CRLF.length * 1);
         return Long.toString(size);
     }
-
+	*/
+	
     /**
      *  Writes out the contents of a file in correct multipart format.
      */
@@ -253,11 +253,13 @@ public class PostWriter
         return newValue.toString();
     }
 
+	/* NOTUSED
     private void write(OutputStream out, String value)
         throws UnsupportedEncodingException, IOException
     {
         out.write(value.getBytes(encoding));
     }
+    */
 
     private void writeln(OutputStream out, String value)
         throws UnsupportedEncodingException, IOException

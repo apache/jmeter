@@ -92,9 +92,6 @@ public class UrlConfigGui extends JPanel
     private static String PATH = "path";
     private static String FOLLOW_REDIRECTS = "follow_redirects";
     private static String USE_KEEPALIVE = "use_keepalive";
-    private static String POST = "post";
-    private static String GET = "get";
-    private static String SEND_PARAM = "sendparam";
 
     private JTextField domain;
     private JTextField port;

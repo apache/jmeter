@@ -15,8 +15,10 @@ import org.apache.jorphan.gui.ObjectTableModel;
 
 public class HTTPArgumentsPanel extends ArgumentsPanel
 {
+	/* NOTUSED
     private static final String ENCODED_VALUE =
         JMeterUtils.getResString("encoded_value");
+        */
     private static final String ENCODE_OR_NOT =
         JMeterUtils.getResString("encode?");
     private static final String INCLUDE_EQUALS =

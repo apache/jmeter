@@ -65,7 +65,6 @@ import junit.framework.TestCase;
 
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.gui.GuiPackage;
@@ -253,7 +252,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
         HTTPSampler sampler,
         TestElement[] subConfigs)
     {
-        ValueReplacer replacer = GuiPackage.getInstance().getReplacer();
+        //NOTUSED ValueReplacer replacer = GuiPackage.getInstance().getReplacer();
         TestElement urlConfig = null;
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
         List nodes = treeModel.getNodesOfType(RecordingController.class);
