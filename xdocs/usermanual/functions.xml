@@ -199,7 +199,7 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
         <property name="Variable Name" required="No">
 A reference name - refName - for reusing the value created by this function. Stored values are of the form ${refName}.
         </property>
-        <property name="Start sequence number" required="No">Initial Sequence number</property>
+        <property name="Start sequence number" required="No">Initial Sequence number (if omitted, the End sequence number is treated as a loop count)</property>
         <property name="End   sequence number" required="No">Final sequence number (if omitted, seqence numbers can increase without limit)</property>
 </properties>
 <p>The file name parameter is resolved when the file is opened or re-opened.</p>
@@ -230,11 +230,10 @@ Examples:<br/>
 	the same character as is used to separate parts of file names.<br/>
 	See the documentation for DecimalFormat for full details.<br/>
 	If the path name does not contain any special formatting characters,
-	it will be unaffected by the current sequence number. 
-	In this case, specifying only a start sequence number will have no effect,
-	but specifying a start and end sequence number will result in the file
-	being used at most end-start+1 times.
-	
+	the current sequence number will be appended to the name, otherwise
+	the number will be inserted aaccording to the fomatting instructions.<br/>
+	If the start sequence number is omitted, and the end sequence number is specified,
+	the sequence number is interpreted as a loop count, and the file will be used at most "end" times.
 	</p>
 </component>
 
@@ -414,7 +413,7 @@ the second would return 1 and the last would return www.dummy.org
 </description>
 
 <properties>
-        <property name="BeanShell script" required="Yes">A script</property>
+        <property name="BeanShell script" required="Yes">A beanshell script (not a file name)</property>
         <property name="Name of variable" required="No">A reference name for reusing the value
                computed by this function.</property>
         
