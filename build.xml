@@ -46,7 +46,14 @@
 			packagenames="org.apache.jmeter.*, 
 			org.apache.jmeter.timers.*,
 			org.apache.jmeter.visualizers.*,
-			org.apache.jmeter.samplers.*"/>
+			org.apache.jmeter.samplers.*,
+			org.apache.jmeter.controllers.*,
+			org.apache.jmeter.reporters.*,
+			org.apache.jmeter.samplers.ftp.*,
+			org.apache.jmeter.samplers.http.*,
+			org.apache.jmeter.samplers.jdbc.*,
+			org.apache.jmeter.threads.*,
+			org.apache.jmeter.util.*"/>
 	</target>
 
 	<!--
