@@ -84,10 +84,11 @@ import org.apache.log.Logger;
  *@created    $Date$
  *@version    $Revision$
  ***********************************************************/
-public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
+public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor,Runnable
 {
 	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.engine");
+	private static long WAIT_TO_DIE = 5 * 1000; //5 seconds
 	Map allThreads;
 	boolean running = false;
 	ListedHashTree test;
@@ -280,10 +281,10 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 	public synchronized void threadFinished(JMeterThread thread)
 	{
 		allThreads.remove(thread);
-		if(allThreads.size() == 0)
+		/*if(allThreads.size() == 0)
 		{
 			notifyTestListenersOfEnd();
-		}
+		}*/
 	}
 
 	/************************************************************
@@ -291,7 +292,51 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 	 ***********************************************************/
 	public void stopTest()
 	{
-		running = false;
+		running = false;		
+		Thread stopThread = new Thread(this);
+		stopThread.start();
+	}
+	
+	public void run()
+	{
+		tellThreadsToStop();
+		try
+		{
+			Thread.sleep(10 * allThreads.size());
+		}
+		catch (InterruptedException e)
+		{
+		}
+		verifyThreadsStopped();
+		notifyTestListenersOfEnd();	
+	}
+
+	private void verifyThreadsStopped()
+	{
+		Iterator iter = new HashSet(allThreads.keySet()).iterator();
+		while(iter.hasNext())
+		{
+			Thread t = (Thread)allThreads.get(iter.next());
+			if(t != null && t.isAlive())
+			{
+				try
+				{
+					t.join(WAIT_TO_DIE);
+				}
+				catch (InterruptedException e)
+				{
+				}
+				if(t.isAlive())
+				{
+					log.info("Thread won't die: "+t.getName());
+				}
+			}
+			log.debug("finished thread");
+		}
+	}
+
+	private void tellThreadsToStop()
+	{
 		Iterator iter = new HashSet(allThreads.keySet()).iterator();
 		while(iter.hasNext())
 		{
