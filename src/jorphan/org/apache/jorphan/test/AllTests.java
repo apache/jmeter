@@ -135,10 +135,18 @@ public final class AllTests
     {
     }
 
-    private static void logprop(String prop)
+    private static void logprop(String prop,boolean show)
     {
-    	log.info(prop+"="+System.getProperty(prop));
+    	String value = System.getProperty(prop);
+    	log.info(prop+"="+value);
+    	if (show) System.out.println(prop+"="+value);
     }
+
+	private static void logprop(String prop)
+	{
+		logprop(prop,false);
+	}
+
     /**
      * Starts a run through all unit tests found in the specified classpaths.
      * The first argument should be a list of paths to search.  The second
@@ -163,9 +171,9 @@ public final class AllTests
         initializeManager(args);
         // end : added - 11 July 2001
 
-        logprop("java.version");
+        logprop("java.version",true);
 		logprop("java.vendor");
-		logprop("java.home");
+		logprop("java.home",true);
 		logprop("user.home");
 		logprop("user.dir");
 		logprop("os.name");
@@ -192,12 +200,9 @@ public final class AllTests
 //
 //  Try to find out why this is ...
 
-        String e = "java.awt.headless";
-		String g="java.awt.graphicsenv";
 		System.out.println("+++++++++++");
-        System.out.println(e+"="+System.getProperty(e));
-        String n=System.getProperty(g);
-		System.out.println(g+"="+n);
+		logprop("java.awt.headless",true);
+		logprop("java.awt.graphicsenv",true);
 //
 //		try {//
 //			Class c = Class.forName(n);
