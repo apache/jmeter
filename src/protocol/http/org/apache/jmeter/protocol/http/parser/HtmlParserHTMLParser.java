@@ -64,8 +64,6 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
 
-import junit.framework.TestCase;
-
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -237,23 +235,6 @@ class HtmlParserHTMLParser extends HTMLParser
         parser.addScanner(new InputTagScanner());
         // add applet tag scanner
         parser.addScanner(new AppletScanner());
-    }
-
-    public static class Test extends TestCase
-    {
-        public Test()
-        {
-            super();
-        }
-        public void testParser() throws Exception
-        {   
-        	log.info("testParser");
-			HTMLParserTest.testParser(getParserInstance());
-        }
-		public void testParserClass() throws Exception {
-			log.info("testParserClass");
-			HTMLParserTest.testParser("org.apache.jmeter.protocol.http.parser.HtmlParserHTMLParser");
-		}
     }
 
     /* (non-Javadoc)
