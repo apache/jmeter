@@ -10,7 +10,7 @@
 		<property name="sources.src.dir" value="src"/>
 		<!-- Where the API documentation lives -->
 		<property name="docs.api.dest.dir" value="docs/api"/>
-		<property name="version" value="_1.5.1"/>
+		<property name="version" value="_1.6.0Beta"/>
 	</target>
 
 	<!--
@@ -33,11 +33,11 @@
 	</target>
 
 	<target name="ssl.message" depends="check.optional.libs1" unless="jsse.present">
-			  <echo message="Classes for SSL not available"/>
+			  <echo message="Classes for SSL not found in classpath"/>
 	</target>
 
 	<target name="mail.message" depends="check.optional.libs2" unless="javamail.complete">
-			  <echo message="Classes for Mail support not available"/>
+			  <echo message="Classes for Mail support not found in classpath"/>
 	</target>
 
 
