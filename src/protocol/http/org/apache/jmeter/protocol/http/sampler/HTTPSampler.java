@@ -568,7 +568,7 @@ public class HTTPSampler extends AbstractSampler
      *@return                 <code>HttpURLConnection</code> of the URL request
      *@exception IOException  if an I/O Exception occurs
      ***************************************/
-    protected HttpURLConnection setupConnection(URL u, String method) throws IOException
+    protected HttpURLConnection setupConnection(URL u, String method, SampleResult res) throws IOException
     {
         HttpURLConnection conn;
         // [Jordi <jsalvata@atg.com>]
@@ -608,7 +608,15 @@ public class HTTPSampler extends AbstractSampler
         }
         conn.setRequestMethod(method);
         setConnectionHeaders(conn, u, getHeaderManager());
-        setConnectionCookie(conn, u, getCookieManager());
+        String cookies = setConnectionCookie(conn, u, getCookieManager());
+		if (res!=null)
+		{
+			StringBuffer sb = new StringBuffer();
+			sb.append(this.toString());
+			sb.append("\nCookie Data:\n");
+			sb.append(cookies);
+			res.setSamplerData(sb.toString());
+		}
         setConnectionAuthorization(conn, u, getAuthManager());
         return conn;
     }
@@ -746,16 +754,18 @@ public class HTTPSampler extends AbstractSampler
      *@param cookieManager  the <code>CookieManager</code> containing all the
      *      cookies for this <code>UrlConfig</code>
      ***************************************/
-    private void setConnectionCookie(HttpURLConnection conn, URL u, CookieManager cookieManager)
+    private String setConnectionCookie(HttpURLConnection conn, URL u, CookieManager cookieManager)
     {
+    	String cookieHeader=null;
         if (cookieManager != null)
         {
-            String cookieHeader = cookieManager.getCookieHeaderForURL(u);
+            cookieHeader = cookieManager.getCookieHeaderForURL(u);
             if (cookieHeader != null)
             {
                 conn.setRequestProperty("Cookie", cookieHeader);
             }
         }
+        return cookieHeader;
     }
     /****************************************
      * Extracts all the required headers for that particular URL request and set
@@ -890,7 +900,7 @@ public class HTTPSampler extends AbstractSampler
             System.gc();
             Runtime.getRuntime().runFinalization();
             this.setUseKeepAlive(false);
-            conn = setupConnection(getUrl(), getMethod());
+            conn = setupConnection(getUrl(), getMethod(), null);
             if (getMethod().equals(HTTPSampler.POST))
             {
                 setPostHeaders(conn);
@@ -930,7 +940,7 @@ public class HTTPSampler extends AbstractSampler
             u = getUrl();
             res.setSampleLabel(getName());
             // specify the data to the result.
-            res.setSamplerData(this.toString());
+//            res.setSamplerData(this.toString());
             /****************************************
              * END - cached logging hack
              ***************************************/
@@ -938,7 +948,7 @@ public class HTTPSampler extends AbstractSampler
             {
                 log.debug("sample2 : sampling url - " + u);
             }
-            conn = setupConnection(u, getMethod());
+            conn = setupConnection(u, getMethod(), res);
             if (getMethod().equals(HTTPSampler.POST))
             {
                 setPostHeaders(conn);
