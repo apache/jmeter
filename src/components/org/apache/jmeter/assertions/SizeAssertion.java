@@ -1,4 +1,5 @@
-/* ====================================================================
+/*
+ * ====================================================================
  * The Apache Software License, Version 1.1
  *
  * Copyright (c) 2001 The Apache Software Foundation.  All rights
@@ -73,9 +74,19 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 public class SizeAssertion extends AbstractTestElement implements Serializable, Assertion {
 
+	int comparator = 1;
+	String comparatorErrorMessage = "ERROR!";
+	//* Static int to signify the type of logical comparitor to assert
+	public final static int EQUAL = 1;
+	public final static int NOTEQUAL = 2;
+	public final static int GREATERTHAN = 3;
+	public final static int LESSTHAN = 4;
+	public final static int GREATERTHANEQUAL = 5;
+	public final static int LESSTHANEQUAL = 6;
 	/** Key for storing assertion-informations in the jmx-file. */
-	private static final String SIZE_KEY = "SizeAssertion.size";
+	private static final String SIZE_KEY = "size_assertion_size";
 	byte[] resultData;
+	
 	/**
 	 * Returns the result of the Assertion. Here it checks wether the
 	 * Sample took to long to be considered successful. If so an AssertionResult
@@ -89,9 +100,9 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 		// is the Sample the correct size?
 		resultData = getResultBody(response.getResponseData());
 		long resultSize = resultData.length;
-		if (((resultSize != getAllowedSize()) && (getAllowedSize() > 0))) {
+		if ((!(compareSize(resultSize)) && (getAllowedSize() > 0))) {
 			result.setFailure(true);
-			Object[] arguments = { new Long(resultSize), new Long(getAllowedSize())};
+			Object[] arguments = { new Long(resultSize), new String(comparatorErrorMessage), new Long(getAllowedSize())};
 			String message = MessageFormat.format(JMeterUtils.getResString("size_assertion_failure"), arguments);
 			result.setFailureMessage(message);
 		}
@@ -157,5 +168,62 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 		}
 		return slice;
 	}	 
-
-}  
+	
+	/**
+	 * Set the type of logical comparator to assert.
+	 *
+	 * Possible values are:
+	 * equal, not equal, 
+	 * greater than, less than, 
+	 * greater than eqaul, less than equal, .
+	 * 
+	 *@param comparator is an int value indicating logical comparator type
+	 *
+	 */
+	public void setLogicalComparator(int comparator) {
+		this.comparator = comparator;
+	}
+	
+	/**
+	 * Compares the the size of a return result to the set allowed size
+	 *using a logical comparator set in setLogicalComparator().
+	 *
+	 * Possible values are:
+	 * equal, not equal, 
+	 * greater than, less than, 
+	 * greater than eqaul, less than equal, .
+	 * 
+	 */
+	
+	private boolean compareSize(long resultSize) {
+		boolean result = false;
+		switch (comparator) 
+		{
+			case EQUAL: 
+				result = (resultSize == getAllowedSize());
+				comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_equal");
+				break;
+			case NOTEQUAL: 
+				result = (resultSize != getAllowedSize());
+				comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_notequal");
+				break;
+			case GREATERTHAN: 
+				result = (resultSize > getAllowedSize());
+				comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greater");
+				break;
+			case LESSTHAN: 
+				result = (resultSize < getAllowedSize());
+				comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_less");
+				break;				
+			case GREATERTHANEQUAL: 
+				result = (resultSize >= getAllowedSize());
+				comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greaterequal");
+				break;
+			case LESSTHANEQUAL: 
+				result = (resultSize <= getAllowedSize());
+				comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_lessequal");
+				break;
+		}
+		return result;
+	}
+}
