@@ -85,6 +85,8 @@ public class FileWrapper
     private int currentRow;
     private static final int NO_LINE = -1;
     
+    private static String defaultFile = ""; // for omitted file names
+    
 	private static Map fileContainers = new HashMap(); // Map file names to containers
     
     /*
@@ -104,12 +106,34 @@ public class FileWrapper
 		}
 	};
 
+    private static String checkDefault(String file)
+    {
+		if (file.length() == 0)
+		{
+			if (fileContainers.size() == 1 && defaultFile.length() > 0)
+			{
+				log.warn("Using default: "+defaultFile);
+				file = defaultFile;
+			}
+			else
+			{
+				log.error("Cannot determine default file name");
+			}
+		}
+    	return file;
+    }
     /*
-     * called by (file,alias)
+     * called by CSVRead(file,alias)
      */
-    public static void open(String file, String alias)
+    public static synchronized void open(String file, String alias)
     {
     	log.info("Opening "+file+ " as " + alias);
+    	file = checkDefault(file);
+		if (alias.length() == 0)
+		{
+			log.error("Alias cannot be empty");
+			return;
+		} 
     	Map m = (Map) filePacks.get();
     	if (m.get(alias) == null)
     	{
@@ -138,8 +162,11 @@ public class FileWrapper
     	if ((frcc = (FileRowColContainer) fileContainers.get(alias)) == null)
     	{
     		frcc = new FileRowColContainer(file);
-			log.info("Opened "+file+" as "+alias);
     		fileContainers.put(alias,frcc);
+			log.info("Saved "+file+" as "+alias);
+			if (defaultFile.length() == 0){
+				defaultFile = file;// Save in case needed later
+			}
     	}
     	return frcc;
     }
@@ -151,6 +178,7 @@ public class FileWrapper
      */
     public static void endRow(String file)
     {
+    	file=checkDefault(file);
 		Map my = (Map) filePacks.get();
 		FileWrapper fw = (FileWrapper) (my).get(file);
 		if (fw == null)
@@ -183,6 +211,7 @@ public class FileWrapper
 			}
 			else
 			{
+				file=checkDefault(file);
 				log.info("Attaching "+file);
 				open(file,file);
 				fw = (FileWrapper) my.get(file);
@@ -217,5 +246,6 @@ public class FileWrapper
 			i.remove();
 		}
 		fileContainers.clear();
+		defaultFile = "";
 	}
 }

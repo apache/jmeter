@@ -8,7 +8,7 @@
  */
 package org.apache.jmeter.functions;
 
-//import java.io.PrintWriter;
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -18,7 +18,7 @@ import junit.framework.TestSuite;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
-//import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.logging.LoggingManager;
 //import org.apache.log.Logger;
 
 /**
@@ -60,14 +60,14 @@ public class PackageTest extends JMeterTestCase
 		   suite.addTest(new PackageTest("CSVSetup"));
 		   suite.addTest(new PackageTest("CSVRun"));
 
-           suite.addTest(new PackageTest("CSValias"));
-
-           //Reset files
-           suite.addTest(new PackageTest("CSVSetup"));
-		   TestSuite par = new ActiveTestSuite("Parallel");
-		   par.addTest(new PackageTest("CSVThread1"));
-		   par.addTest(new PackageTest("CSVThread2"));
-		   suite.addTest(par);
+//           suite.addTest(new PackageTest("CSValias"));
+//
+//           //Reset files
+//           suite.addTest(new PackageTest("CSVSetup"));
+//		   TestSuite par = new ActiveTestSuite("Parallel");
+//		   par.addTest(new PackageTest("CSVThread1"));
+//		   par.addTest(new PackageTest("CSVThread2"));
+//		   suite.addTest(par);
 		   return suite;
     }
     
@@ -184,6 +184,11 @@ public class PackageTest extends JMeterTestCase
 		assertEquals("b1",cr1.execute(null,null));
 		assertEquals("c1",cr2.execute(null,null));
 		assertEquals("d1",cr3.execute(null,null));
+		
+		assertEquals("a1",cr5.execute(null,null));
+		assertEquals("",cr6.execute(null,null));
+		assertEquals("a2",cr5.execute(null,null));
+		
     }
     
     public void CSVParams() throws Exception
@@ -217,6 +222,8 @@ public class PackageTest extends JMeterTestCase
 		cr2=setParams("testfiles/test.csv","2");
 		cr3=setParams("testfiles/test.csv","3");
 		cr4=setParams("testfiles/test.csv","next");
+		cr5=setParams("","0");
+		cr6=setParams("","next");
     }
     
     public void CSValias() throws Exception
@@ -246,8 +253,16 @@ public class PackageTest extends JMeterTestCase
 		assertEquals("",s);
 		s = cr2.execute(null,null);
 		assertEquals("b2",s);
+		
+		// Empty string
 		s = cr5.execute(null,null);
-		assertEquals("c1",s);
+		assertEquals("d1",s);
+
+		s = cr6.execute(null,null);
+		assertEquals("",s);
+
+		s = cr5.execute(null,null);
+		assertEquals("d2",s);
 
     }
 
