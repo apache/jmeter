@@ -58,7 +58,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
     JMenu editMenu;
     JMenu edit_add;
     //JMenu edit_add_submenu;
-    JMenuItem edit_remove;
+    JMenuItem edit_remove; //TODO - should this be created?
     JMenu runMenu;
     JMenuItem run_start;
     JMenu remote_start;
