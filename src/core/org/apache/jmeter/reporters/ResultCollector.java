@@ -282,9 +282,10 @@ public class ResultCollector
 
     private static boolean trimLastLine(String filename)
     {
+        // TODO: there must be more memory-efficient ways to do this!
         try
         {
-            TextFile text = new TextFile(filename);
+            TextFile text = new TextFile(filename, "UTF-8");
 
             if (!text.exists())
             {
