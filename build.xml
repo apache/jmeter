@@ -338,23 +338,23 @@
       <fileset refid="external.jars"/>
     </copy>
     <tar destfile="${dist.dir}/${dist.name}.tar" longfile="gnu">
-      <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}">
+      <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
         <patternset refid="dist.binaries"/>
       </tarfileset>
-      <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}"/>
+      <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </tar>
     <gzip zipfile="${dist.dir}/${dist.name}.tgz" src="${dist.dir}/${dist.name}.tar" />
     <zip zipfile="${dist.dir}/${dist.name}.zip">
-      <zipfileset dir="." prefix="${dist.name}">
+      <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist.binaries"/>
       </zipfileset>
     </zip>
     <tar destfile="${dist.dir}/${dist.name}-javadoc.tar" longfile="gnu">
-      <tarfileset includes="${docs.api.dest}/" dir="." prefix="${dist.name}"/>
+      <tarfileset includes="${docs.api.dest}/" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </tar>
     <gzip zipfile="${dist.dir}/${dist.name}-javadoc.tgz" src="${dist.dir}/${dist.name}-javadoc.tar" />
     <zip zipfile="${dist.dir}/${dist.name}-javadoc.zip">
-      <zipfileset includes="${docs.api.dest}/" dir="." prefix="${dist.name}"/>
+      <zipfileset includes="${docs.api.dest}/" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </zip>
   </target>
 
@@ -363,8 +363,8 @@
     <delete file="lib/jorphan.jar"/>
     <delete dir="${jar.dest}"/>
     <delete dir="${build.dir}"/>
-    <delete dir="${docs.api.dest}"/> <!-- redundant but future-proof -->
-    <delete dir="${docs.dest}"/>
+    <delete dir="${docs.api.dest}" defaultexcludes="yes"/> <!-- redundant but future-proof -->
+    <delete dir="${docs.dest}" defaultexcludes="yes"/>
     <delete dir="${dist.dir}"/>
   </target>
 
