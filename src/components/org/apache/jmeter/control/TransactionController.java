@@ -24,7 +24,6 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.threads.ListenerNotifier;
@@ -98,7 +97,7 @@ public class TransactionController
 				res.setThreadName(threadName);
         	
 				//TODO could these be done earlier (or just once?)
-				threadContext = JMeterContextService.getContext();
+				threadContext = getThreadContext();
 				threadVars = threadContext.getVariables();
 				
 				SamplePackage pack = (SamplePackage)

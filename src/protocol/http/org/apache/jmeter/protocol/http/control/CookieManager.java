@@ -44,6 +44,7 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -209,10 +210,11 @@ public class CookieManager
      */
     public void add(Cookie c)
     {
+    	JMeterContext context = getThreadContext();
         getCookies().addItem(c);
-        if(JMeterContextService.getContext().isSamplingStarted())
+        if(context.isSamplingStarted())
         {
-            JMeterContextService.getContext().getVariables().put(c.getName(),c.getValue());
+            context.getVariables().put(c.getName(),c.getValue());
         }
     }
 
@@ -511,14 +513,25 @@ public class CookieManager
 
     public static class Test extends TestCase
     {
+    	CookieManager man = null;
+    	
         public Test(String name)
         {
             super(name);
         }
+        private JMeterContext jmctx = null;
+        
+        public void setUp()
+    	{
+        	jmctx = JMeterContextService.getContext();
+            man = new CookieManager();
+            man.setThreadContext(jmctx);
+        }
+
 
         public void testRemoveCookie() throws Exception
         {
-            CookieManager man = new CookieManager();
+            man.setThreadContext(jmctx);
             man.add(new Cookie("id", "me", "127.0.0.1", "/", false, 0));
             man.removeCookieNamed("id");
             assertEquals(0, man.getCookieCount());
@@ -526,7 +539,6 @@ public class CookieManager
 
         public void testSendCookie() throws Exception
         {
-            CookieManager man = new CookieManager();
             man.add(
                 new Cookie(
                     "id",
@@ -544,7 +556,6 @@ public class CookieManager
 
         public void testSendCookie2() throws Exception
         {
-            CookieManager man = new CookieManager();
             man.add(
                 new Cookie(
                     "id",
@@ -566,7 +577,6 @@ public class CookieManager
          */
         public void testDomainHandling() throws Exception
         {
-            CookieManager man= new CookieManager();
             URL url= new URL("http://jakarta.apache.org/");
             man.addCookieFromHeader("test=1;domain=.jakarta.apache.org", url);
             assertNotNull(man.getCookieHeaderForURL(url));
@@ -578,7 +588,6 @@ public class CookieManager
          */
         public void testSimilarHostNames() throws Exception
         {
-            CookieManager man= new CookieManager();
             URL url= new URL("http://ache.org/");
             man.addCookieFromHeader("test=1", url);
             url= new URL("http://jakarta.apache.org/");
