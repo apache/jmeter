@@ -64,8 +64,6 @@ import org.apache.avalon.excalibur.cli.CLOption;
 import org.apache.avalon.excalibur.cli.CLOptionDescriptor;
 import org.apache.avalon.excalibur.cli.CLUtil;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
-import org.apache.jmeter.config.gui.AbstractModifierGui;
-import org.apache.jmeter.config.gui.AbstractResponseBasedModifierGui;
 import org.apache.jmeter.control.gui.AbstractControllerGui;
 import org.apache.jmeter.control.gui.TestPlanGui;
 import org.apache.jmeter.control.gui.WorkBenchGui;
@@ -82,6 +80,8 @@ import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
+import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
+import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.save.SaveService;
@@ -433,8 +433,8 @@ public class JMeter implements JMeterPlugin {
             { ThreadGroupGui.class.getName(), "org/apache/jmeter/images/thread.gif"},
             { AbstractVisualizer.class.getName(), "org/apache/jmeter/images/meter.png"},
             { AbstractConfigGui.class.getName(), "org/apache/jmeter/images/testtubes.png"},
-            { AbstractModifierGui.class.getName(), "org/apache/jmeter/images/testtubes.gif"},
-            { AbstractResponseBasedModifierGui.class.getName(), "org/apache/jmeter/images/testtubes.gif"},
+            { AbstractPreProcessorGui.class.getName(), "org/apache/jmeter/images/testtubes.gif"},
+            { AbstractPostProcessorGui.class.getName(), "org/apache/jmeter/images/testtubes.gif"},
             { AbstractControllerGui.class.getName(), "org/apache/jmeter/images/knob.gif"},
             { WorkBenchGui.class.getName(), "org/apache/jmeter/images/clipboard.gif"},
             { AbstractSamplerGui.class.getName(), "org/apache/jmeter/images/pipet.png"}

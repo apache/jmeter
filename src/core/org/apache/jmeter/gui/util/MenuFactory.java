@@ -107,18 +107,10 @@ public class MenuFactory
 	 * !ToDo (Field description)
 	 ***************************************/
 	public final static String CONFIG_ELEMENTS = "menu_config_element";
-	/****************************************
-	 * !ToDo (Field description)
-	 ***************************************/
-	public final static String MODIFIERS = "menu_modifiers";
     
     public final static String POST_PROCESSORS = "menu_post_processors";
     
     public final static String PRE_PROCESSORS = "menu_pre_processors";
-	/****************************************
-	 * !ToDo (Field description)
-	 ***************************************/
-	public final static String RESPONSE_BASED_MODIFIERS = "menu_response_based_modifiers";
 	/****************************************
 	 * !ToDo (Field description)
 	 ***************************************/
@@ -135,15 +127,12 @@ public class MenuFactory
 	private static Set elementsToSkip = new HashSet();
 
 	private static List timers, controllers, samplers,
-			configElements, modifiers, responseBasedModifiers,
-			assertions, listeners, nonTestElements,postProcessors,preProcessors;
+			configElements, assertions, listeners, nonTestElements,postProcessors,preProcessors;
 
 	private static JMenu timerMenu;
 	private static JMenu controllerMenu;
 	private static JMenu generativeControllerMenu;
 	private static JMenu listenerMenu;
-	private static JMenu ModifierMenu;
-	private static JMenu ResponseBasedModifierMenu;
 	private static JMenu assertionMenu;
 	private static JMenu configMenu;
 	private static JMenu insertControllerMenu;
@@ -266,7 +255,6 @@ public class MenuFactory
 		JPopupMenu pop = new JPopupMenu();
 		pop.add(MenuFactory.makeMenus(new String[]{MenuFactory.CONTROLLERS,
 				MenuFactory.SAMPLERS, MenuFactory.CONFIG_ELEMENTS,
-				MenuFactory.MODIFIERS,MenuFactory.RESPONSE_BASED_MODIFIERS,
 				MenuFactory.TIMERS,
 				MenuFactory.LISTENERS,
                 MenuFactory.PRE_PROCESSORS,
@@ -289,8 +277,7 @@ public class MenuFactory
 	{
 		JPopupMenu pop = new JPopupMenu();
 		pop.add(MenuFactory.makeMenus(new String[]{MenuFactory.CONFIG_ELEMENTS,
-				MenuFactory.ASSERTIONS,MenuFactory.MODIFIERS,
-				MenuFactory.RESPONSE_BASED_MODIFIERS,
+				MenuFactory.ASSERTIONS,
 				MenuFactory.TIMERS,
 				MenuFactory.LISTENERS,
                 MenuFactory.PRE_PROCESSORS,
@@ -460,8 +447,6 @@ public class MenuFactory
 			controllers = new LinkedList();
 			samplers = new LinkedList();
 			configElements = new LinkedList();
-			modifiers = new LinkedList();
-			responseBasedModifiers = new LinkedList();
 			assertions = new LinkedList();
 			listeners = new LinkedList();
             postProcessors = new LinkedList();
@@ -472,9 +457,7 @@ public class MenuFactory
 			menuMap.put(CONFIG_ELEMENTS, configElements);
 			menuMap.put(CONTROLLERS, controllers);
 			menuMap.put(LISTENERS, listeners);
-			menuMap.put(MODIFIERS, modifiers);
 			menuMap.put(NON_TEST_ELEMENTS, nonTestElements);
-			menuMap.put(RESPONSE_BASED_MODIFIERS, responseBasedModifiers);
 			menuMap.put(SAMPLERS, samplers);
             menuMap.put(POST_PROCESSORS,postProcessors);
             menuMap.put(PRE_PROCESSORS,preProcessors);
@@ -534,21 +517,9 @@ public class MenuFactory
 							item.getClass().getName()));
 				}
 
-				if(categories.contains(RESPONSE_BASED_MODIFIERS))
-				{
-					responseBasedModifiers.add(new MenuInfo(item.getStaticLabel(),
-							item.getClass().getName()));
-				}
-
 				if(categories.contains(NON_TEST_ELEMENTS))
 				{
 					nonTestElements.add(new MenuInfo(item.getStaticLabel(),
-							item.getClass().getName()));
-				}
-
-				if(categories.contains(MODIFIERS))
-				{
-					modifiers.add(new MenuInfo(item.getStaticLabel(),
 							item.getClass().getName()));
 				}
 

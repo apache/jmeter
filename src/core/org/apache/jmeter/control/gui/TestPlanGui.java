@@ -53,8 +53,8 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
         addMenu.add(MenuFactory.makeMenu(MenuFactory.LISTENERS, "Add"));
         addMenu.add(MenuFactory.makeMenu(MenuFactory.CONFIG_ELEMENTS, "Add"));
         addMenu.add(MenuFactory.makeMenu(MenuFactory.ASSERTIONS, "Add"));
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.MODIFIERS, "Add"));
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.RESPONSE_BASED_MODIFIERS, "Add"));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, "Add"));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.POST_PROCESSORS, "Add"));
         addMenu.add(MenuFactory.makeMenu(MenuFactory.TIMERS, "Add"));
         pop.add(addMenu);
         MenuFactory.addFileMenu(pop);

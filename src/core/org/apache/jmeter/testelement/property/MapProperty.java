@@ -126,13 +126,10 @@ public class MapProperty extends MultiProperty
 
     public void addProperty(String name, JMeterProperty prop)
     {
-        if (value.size() == 0 || value.values().iterator().next().getClass().equals(prop.getClass()))
-        {
-            if (!value.containsKey(name))
-           {
-               value.put(name, prop);
-           }
-        }
+        if (!value.containsKey(name))
+       {
+           value.put(name, prop);
+       }
     }
 
     public void setMap(Map newMap)
