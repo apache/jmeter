@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+	 <author email="mstover1@apache.org">Michael Stover, et al.</author>
+	 <title>JDBC Test</title>
+  </properties>
+<body>
+<section name="JDBC  Test Controller">
+<p>
+The JDBC  Test controller is a generative controller whose function is to create a single test case for FTP applications.
+The JDBC  Test allows you to configure an FTP sample:</p>
+<ul>
+<li><b>Username</b>: Username to use to connect to server</li>
+<li><b>Password</b>: Password to user to connect to server</li>
+<li><b>Database URL</b>: This includes the host name plus database name.  It should be in the correct format for the database being tested (usually hostname/database name)</li>
+<li><b>Sub Protocol</b>: The sub-protocol to use with your specific database (ie &quot;mysql&quot; for MySQL)</li>
+<li><b>Driver Class</b>: The full class name of your driver (ie org.gjt.mm.mysql.Driver)</li>
+<li><b>Number of Connections in Pool</b>: JMeter will use a pool of connections that you can configure.  Set here how many connections you would like the pool to maintain</li>
+<li><b>Max usage for each connection</b>: JMeter will automatically re-initialize SQL connections that have been used a certain number of times.  You can change the max usage for each connection here.</li>
+<li><b>SQL Query String</b>: Finally, the actual SQL query you want to test.</li>
+</ul>
+<p><b>Note:</b> If you were going to test multiple SQL queries, you would probably want to add a &quot;Database Login&quot; config element to the top of your test tree, and configure the username, password, database URL, sub-protocol, and Driver class in just the one place.  You can similarly add a &quot;Database Connection Pool&quot; config element.</p>
+</section>
+<section name="Example test tree">
+<img src="/images/screenshots/jdbctest.gif" width="682" height="391"/>
+</section>
+</body>
+</document>

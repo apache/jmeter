@@ -52,11 +52,13 @@ Currently, the Proxy Server does not save these settings when saved to file.</p>
 </section>
 <section name="Where do the samples get recorded to?">
 <p>
-If you went ahead and tried out the Proxy Server, you might have noticed that nothing was recorded.  In order for samples
-to be recorded, the Proxy Server needs to be able to find a Web Test Controller somewhere in the tree.  The Proxy Server
-will record the samples under any appropriate Web Test Controller it finds.  If you add a Web Test Controller, and do
-nothing more to it, all recorded samples will be recorded into it.  If you enter a domain name in the Web Test Controller,
-only those samples that have a matching domain will be recorded into it.  Same with the Path field.
+The samples will be recorded as Web Test controllers under any Simple Controller elements in your tree (note, if you have more than one
+Simple Controller, they will all have duplicate Web Test controllers created for them).  If your Simple Controller has a
+Url Sample element with domain or path settings, then your Web Test controllers will be created with blank domain and/or path settings (provided
+they match, of course).  This allows you to simply create test plans with a single top level config element to control which server name is
+being tested.<br/>
+If there are no Simple Controllers in your test plan, then the Web Test controllers will be generated directly under the ThreadGroup
+object in your tree.
 </p>
 </section>
 <section name="All Done">
@@ -65,6 +67,9 @@ When you are done recording your test samples, stop the proxy server (hit the &q
 your browser's proxy settings.  Now, you may want to sort and re-order the test script, add timers, listeners, a
 cookie manager, etc.  </p>
 
+</section>
+<section name="Example test tree">
+<img src="/images/screenshots/proxy_control.gif" width="644" height="303"/>
 </section>
 </body>
 </document>

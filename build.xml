@@ -172,7 +172,7 @@
 	 <target name="docs" depends="no.anakia" if="AnakiaTask.present">
 		  <taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask"/>
 		  <anakia basedir="${docs.src}" destdir="${docs.dest}/"
-				extension=".html" style="./xdocs/stylesheets/site.vsl"
+				extension=".html" style="./site.vsl"
 				projectFile="./stylesheets/project.xml"
 				excludes="**/stylesheets/**"
 				includes="**/*.xml"
