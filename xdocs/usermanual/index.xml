@@ -47,13 +47,13 @@
 	 <li><a href="build-test-plan.html#config_element">3.3 Configuring Tree Elements</a></li>
 	 <li><a href="build-test-plan.html#run">3.3 Running a Test Plan</a></li>
   </ul>
-  <li><a href="component_reference.html">4. Elements of a Test Plan</a></li>
+  <li><a href="test_plan.html">4. Elements of a Test Plan</a></li>
   <ul>
-	 <li><a href="thread-group.html">4.1 Thread Group</a></li>
-	 <li><a href="controller.html">4.2 Controllers</a></li>
+	 <li><a href="test_plan.html#thread_group">4.1 Thread Group</a></li>
+	 <li><a href="test_plan.html#controllers">4.2 Controllers</a></li>
 	 <ul>
-		<li><a href="gen-controller.html">4.2.1 Generative Controllers</a></li>
-		<li><a href="logic-controller.html">4.2.2 Logic Controllers</a></li>
+		<li><a href="test_plan.html#gen_controller">4.2.1 Generative Controllers</a></li>
+		<li><a href="test_plan.html#logic_controller">4.2.2 Logic Controllers</a></li>
 	 </ul>
 	 <li><a href="listener.html">4.3 Listeners</a></li>
 	 <li><a href="timer.html">4.4 Timers</a></li>
