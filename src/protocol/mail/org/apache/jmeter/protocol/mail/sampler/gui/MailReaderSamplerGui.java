@@ -72,13 +72,13 @@ public class MailReaderSamplerGui
 	private final static String DeleteLabel = JMeterUtils.getResString("mail_reader_delete");
 	private final static String FolderLabel = JMeterUtils.getResString("mail_reader_folder");
 	
-	private String type;
+	//NOTREAD private String type;
 	private boolean delete;
 	private int num_messages;
 
 	public MailReaderSamplerGui()
 	{
-		type = MailReaderSampler.TYPE_POP3;
+//		NOTREAD type = MailReaderSampler.TYPE_POP3;
 		delete = false;
 		init();
 	}
@@ -189,14 +189,14 @@ public class MailReaderSamplerGui
 				if (((String)serverTypeBox.getSelectedItem())
 					.equals(POP3Label))
 				{
-					type = MailReaderSampler.TYPE_POP3;
+					//NOTREAD type = MailReaderSampler.TYPE_POP3;
 					folderLabel.setEnabled(false);
 					folderBox.setText("INBOX");
 					folderBox.setEnabled(false);
 				}
 				else
 				{
-					type = MailReaderSampler.TYPE_IMAP;
+					//NOTREAD type = MailReaderSampler.TYPE_IMAP;
 					folderLabel.setEnabled(true);
 					folderBox.setEnabled(true);
 				}

@@ -38,7 +38,7 @@ public class MailReaderSampler
 	extends AbstractSampler 
 {
 	// Where we keep all of the mail connection information
-	private Properties props = new Properties();
+	//NOTUSED private Properties props = new Properties();
 	
 	// Static data identifiers
 	private final static String SERVER_TYPE = "host_type";
