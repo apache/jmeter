@@ -18,7 +18,7 @@
 <p>If your web application uses URL rewriting rather than cookies to save session information,
 then you'll need to do a bit of extra work to test your site.</p>
 <p>To respond correctly to URL rewriting, JMeter needs to parse the HTML
-received from the server and retrieve the unique session ID.  Use the appropriate <complink name="HTTP URL Rewriting Modifier"/>
+received from the server and retrieve the unique session ID.  Use the appropriate <complink name="HTTP URL Re-writing Modifier"/>
 to accomplish this.  Simply enter the name of your session ID parameter into the modifier, and it
 will find it and add it to each request.  If the request already has a value, it will be replaced.</p>
 
