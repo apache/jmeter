@@ -23,7 +23,7 @@ import org.apache.log.Logger;
 
 /**
  * @author sebb 'AT apache DOT org
- * @version $revision$ $date$
+ * @version $Revision$ $Date$
  */
 public class PackageTest extends JMeterTestCase
 {
