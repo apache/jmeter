@@ -71,10 +71,10 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
-import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.apache.oro.text.perl.Perl5Util;
+//import org.apache.oro.text.perl.Perl5Util;
 import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
@@ -91,17 +91,17 @@ import org.apache.oro.text.regex.Util;
 public class CompoundVariable implements Function
 {
     transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ENGINE);
+        LoggingManager.getLoggerForClass();
         
     private String rawParameters;
     
-    private JMeterVariables threadVars;
-	private Map varMap = new HashMap();
+    //private JMeterVariables threadVars;
+	//private Map varMap = new HashMap();
 
     static Map functions = new HashMap();
     private boolean hasFunction, isDynamic;
     private String staticSubstitution;
-    private Perl5Util util = new Perl5Util();
+    //private Perl5Util util = new Perl5Util();
     private Perl5Compiler compiler = new Perl5Compiler();
     private static final String unescapePattern = "[\\\\]([${}\\,])";
     private String permanentResults = "";
@@ -275,7 +275,12 @@ public class CompoundVariable implements Function
 			
 			funcEndIndex = findMatching( "${", "}", current );
 			functionStr = current.substring( funcStartIndex+2, funcEndIndex );
-			Function newFunction = buildFunction( functionStr );
+			Function newFunction = null;
+			try {
+				newFunction = buildFunction( functionStr );
+			}
+			catch (InvalidVariableException e){// Don't abandon processing if function fails
+			}
 			
 			if ( newFunction == null ) {
 				components.addLast(new SimpleVariable(functionStr) );	
@@ -299,7 +304,7 @@ public class CompoundVariable implements Function
 		throws InvalidVariableException 
 	{		
 		Function returnFunction = null;
-		LinkedList parameterList;
+		//LinkedList parameterList;
 		String functionName, params;
 		int paramsStart = functionStr.indexOf("(");
 
@@ -422,7 +427,8 @@ public class CompoundVariable implements Function
 	private static int findMatching( String openStr, String closeStr, 
 		String searchString ) 
 	{
-		int count, openIndex, closeIndex, previousMatch;
+		//int count;
+		int openIndex, closeIndex, previousMatch;
 		boolean found = false;
  
 		openIndex = closeIndex = previousMatch = -1;
@@ -505,7 +511,7 @@ public class CompoundVariable implements Function
         return "";
     }
        
-	private JMeterVariables getVariables()
+	private JMeterVariables getVariables()//TODO: not used
 	{
 		return JMeterContextService.getContext().getVariables();
 	}
