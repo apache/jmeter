@@ -411,7 +411,8 @@ public class JMeterTest extends JMeterTestCase
         {
         	String label = guiItem.getLabelResource();
             assertTrue(label.length() > 0);
-            assertFalse(JMeterUtils.getResString(label).startsWith(JMeterUtils.RES_KEY_PFX));
+            assertFalse("Label should be in resource file for "+name
+            		,JMeterUtils.getResString(label).startsWith(JMeterUtils.RES_KEY_PFX));
         }
     }
 
