@@ -263,6 +263,10 @@ public class ResultCollector
         try
         {
             TextFile text = new TextFile(filename);
+            if (!text.exists())
+            {
+                return false;
+            }
             String xml = text.getText();
             xml = xml.substring(0, xml.indexOf("</testResults>"));
             text.setText(xml);
