@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<Controller type="org.apache.jmeter.control.ModifyController" name="Modification Manager">
+<configElements>
+</configElements>
+<controllers>
+<HttpTestSample type="org.apache.jmeter.protocol.http.control.HttpTestSample" name="Web Testing">
+<defaultUrl>
+<ConfigElement type="org.apache.jmeter.protocol.http.config.UrlConfig">
+<property name="port">80</property>
+<property name="PROTOCOL">http</property>
+<property name="arguments"><Arguments>
+</Arguments>
+</property>
+<property name="domain">13.231.197.158</property>
+<property name="path"></property>
+<property name="method">GET</property>
+</ConfigElement></defaultUrl>
+<urlList>
+<ConfigElement type="org.apache.jmeter.protocol.http.config.UrlConfig">
+<property name="port">80</property>
+<property name="name">/xdx/admin/inspect_job.jsp</property>
+<property name="PROTOCOL">http</property>
+<property name="arguments"><Arguments>
+<argument name="request.job_id">.*</argument>
+<argument name="request.action1">opjobadmin.action.inspect</argument>
+</Arguments>
+</property>
+<property name="domain"></property>
+<property name="path">/xdx/admin/inspect_job.jsp</property>
+<property name="method">GET</property>
+</ConfigElement>
+</urlList>
+<configElements>
+</configElements>
+<controllers>
+</controllers>
+</HttpTestSample>
+
+</controllers>
+</Controller>
