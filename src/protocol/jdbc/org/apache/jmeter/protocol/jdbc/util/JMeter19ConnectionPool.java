@@ -59,7 +59,10 @@ import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Hashtable;
+import java.util.Map;
 
+import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -73,16 +76,25 @@ public class JMeter19ConnectionPool implements ConnectionPool
     private static Logger log = LoggingManager.getLoggerForClass();
     private static final int ABSOLUTE_MAX_CONNECTIONS = 100;
 
+    public static final String CONNECTIONS =
+        JDBCSampler.JDBCSAMPLER_PROPERTY_PREFIX + "connections";
+    public static final String MAXUSE =
+        JDBCSampler.JDBCSAMPLER_PROPERTY_PREFIX + "maxuse";
+
     private final ConnectionObject connectionArray[];
     private final Hashtable rentedConnections = new Hashtable();
 
     private final DBKey key;
     private int maxConnections;
 
-    public JMeter19ConnectionPool(DBKey key, int maxUsage, int maxConnections)
+    public JMeter19ConnectionPool(DBKey key, Map properties)
     {
         this.key = key;
-        this.maxConnections = maxConnections;
+
+        this.maxConnections =
+            ((JMeterProperty) properties.get(CONNECTIONS)).getIntValue();
+        int maxUsage =
+            ((JMeterProperty) properties.get(MAXUSE)).getIntValue();
         
         validateMaxConnections();
 
