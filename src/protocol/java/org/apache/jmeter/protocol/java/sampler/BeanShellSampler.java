@@ -64,6 +64,7 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -78,6 +79,7 @@ public class BeanShellSampler extends AbstractSampler
 
     public static final String FILENAME   = "BeanShellSampler.filename"; //$NON-NLS-1$
 	public static final String SCRIPT     = "BeanShellSampler.query"; //$NON-NLS-1$
+	public static final String PARAMETERS = "BeanShellSampler.parameters"; //$NON-NLS-1$
 
     private Interpreter bshInterpreter;
 	
@@ -89,16 +91,6 @@ public class BeanShellSampler extends AbstractSampler
 			bshInterpreter=null;
 		}
 	}
-    
-	public void setFilename(String newFilename)
-	{
-		this.setProperty(FILENAME, newFilename);
-	}
-	public String getFilename()
-	{
-		return getPropertyAsString(FILENAME);
-	}
-
 
     /**
      * Returns a formatted string label describing this sampler
@@ -114,6 +106,16 @@ public class BeanShellSampler extends AbstractSampler
 	public String getScript()
 	{
 		return this.getPropertyAsString(SCRIPT);
+	}
+    
+	public String getFilename()
+	{
+		return getPropertyAsString(FILENAME);
+	}
+
+	public String getParameters()
+	{
+		return getPropertyAsString(PARAMETERS);
 	}
 
     public SampleResult sample(Entry e)// Entry tends to be ignored ...
@@ -133,11 +135,12 @@ public class BeanShellSampler extends AbstractSampler
 				res.setSamplerData(fileName);
         	}
 			
-
-
 			//TODO - set some more variables?
 			bshInterpreter.set("Label",getLabel());
 			bshInterpreter.set("FileName",getFilename());
+			bshInterpreter.set("SampleResult",res);
+			bshInterpreter.set("Parameters",getParameters());// as a single line
+			bshInterpreter.set("bsh.args",JOrphanUtils.split(getParameters()," "));
 
             // Set default values
 			bshInterpreter.set("ResponseCode","200"); //$NON-NLS-1$
@@ -151,11 +154,14 @@ public class BeanShellSampler extends AbstractSampler
 			} else {
 				bshOut = bshInterpreter.source(fileName);
 			}
-
-
 			
-
-	        res.setResponseData(bshOut.toString().getBytes());
+			String out;
+			if (bshOut == null) {// Script did not return anything...
+				out="";
+			} else { 
+				out = bshOut.toString();
+			}
+	        res.setResponseData(out.getBytes());
 	        res.setDataType(SampleResult.TEXT);
 	        res.setResponseCode(bshInterpreter.get("ResponseCode").toString());//$NON-NLS-1$
 	        res.setResponseMessage(bshInterpreter.get("ResponseMessage").toString());//$NON-NLS-1$
