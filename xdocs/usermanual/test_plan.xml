@@ -235,7 +235,7 @@ branch.  For example, we defined two HTTP Request Defaults elements, "Web Defaul
 Since we placed "Web Defaults 1" inside a Loop Controller, only "Web Page 2" can access it.  The other HTTP
 requests will use "Web Defaults 2", since we placed it in the Thread Group (the "parent" of all other branches).</p>
 
-<figure image="../images/screenshots/http-config/http-config-example.gif">Figure 1 -
+<figure image="../images/screenshots/http-config/http-config-example.png">Figure 1 -
 	Test Plan Showing Accessability of Configuration Elements</figure>
 </subsection>
 
