@@ -10,6 +10,19 @@
 (least recent)</b></p>  
 
 <b>Changes: for more info, contact <a href="mailto:mstover1@apache.org">Michael Stover</a></b>
+
+<h3>Version 1.8.1</h3>
+<ul>
+<li>Bug Fix Release.  Many bugs were fixed.</li>
+<li>Removed redundant "Root" node from test tree.</li>
+<li>Re-introduced Icons in test tree.</li>
+<li>Some re-organization of code to improve build process.</li>
+<li>View Results Tree has added option to view results as web document (still buggy at this point).</li>
+<li>New Total line in Aggregate Listener (still buggy at this point).</li>
+<li>Improvements to ability to change JMeter's Locale settings.</li>
+<li>Improvements to SSL Manager.</li>
+</ul>
+
 <h3>Version 1.8</h3>
 <ul>
 <li>Improvement to Aggregate report's calculations.</li>
