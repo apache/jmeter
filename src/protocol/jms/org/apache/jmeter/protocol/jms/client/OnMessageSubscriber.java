@@ -34,8 +34,14 @@ import org.apache.log.Logger;
 /**
  * @author pete
  *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * OnMessageSubscriber is designed to create the connection, 
+ * session and subscriber. The sampler is responsible for
+ * implementing javax.jms.MessageListener interface and
+ * onMessage(Message msg) method.
+ * 
+ * The implementation provides a close() method to clean up
+ * the client at the end of a test. This is important to make
+ * sure there aren't any zombie threads or odd memory leaks.
  */
 public class OnMessageSubscriber {
 
@@ -52,7 +58,19 @@ public class OnMessageSubscriber {
     public OnMessageSubscriber() {
         super();
     }
-    
+
+	/**
+	 * Constructor takes the necessary JNDI related parameters to
+	 * create a connection and begin receiving messages.
+	 * @param useProps
+	 * @param jndi
+	 * @param url
+	 * @param connfactory
+	 * @param topic
+	 * @param useAuth
+	 * @param user
+	 * @param pwd
+	 */    
     public OnMessageSubscriber(boolean useProps, String jndi, String url, String connfactory,
     String topic, String useAuth, String user, String pwd){
     	Context ctx = initJNDI(useProps,jndi,url,useAuth,user,pwd);
@@ -62,7 +80,17 @@ public class OnMessageSubscriber {
 			log.error("Could not initialize JNDI Initial Context Factory");
     	}
     }
-    
+
+	/**
+	 * initialize the JNDI intial context
+	 * @param useProps
+	 * @param jndi
+	 * @param url
+	 * @param useAuth
+	 * @param user
+	 * @param pwd
+	 * @return
+	 */    
     public Context initJNDI(boolean useProps, String jndi,
       String url, String useAuth, String user, String pwd){
 		if (useProps){
@@ -77,6 +105,12 @@ public class OnMessageSubscriber {
 		}
     }
     
+    /**
+     * Initialize the connection, session and subscriber
+     * @param ctx
+     * @param connfactory
+     * @param topic
+     */
     public void initConnection(Context ctx, String connfactory, String topic){
     	try {
 			TopicConnectionFactory connfac =
@@ -91,6 +125,10 @@ public class OnMessageSubscriber {
         }
     }
 
+	/**
+	 * resume will call Connection.start() to begin receiving
+	 * inbound messages.
+	 */
 	public void resume(){
 		try {
 			this.CONN.start();
@@ -98,7 +136,10 @@ public class OnMessageSubscriber {
 			log.error("failed to start recieving");
 		}
 	}
-	
+
+	/**
+	 * close will close all the objects and set them to null.
+	 */	
 	public void close(){
 		try {
 			log.info("Subscriber closed");
@@ -116,6 +157,12 @@ public class OnMessageSubscriber {
 		}
 	}
 
+	/**
+	 * The sample uses this method to set itself as the listener.
+	 * That means the sampler need to implement MessageListener
+	 * interface.
+	 * @param listener
+	 */
 	public void setMessageListener(MessageListener listener){
 		try {
 			this.SUBSCRIBER.setMessageListener(listener);
