@@ -173,9 +173,8 @@
 	  		file="${sources.src.dir}/org/apache/jmeter/help.txt"/>	
 	  <mkdir dir="./lib/ext/"/> 
 
-	  <jar jarfile="./lib/ext/ApacheJMeter_core.jar" excludes="**/NewDriver.class,**/NonGuiDriver.class" manifest="${sources.src.dir}/MANIFEST" basedir="${classes.dest.dir}"/>
-	  <jar jarfile="ApacheJMeter.jar" includes="**/NewDriver.class,**/NonGuiDriver.class" manifest="${sources.src.dir}/MANIFEST" basedir="${classes.dest.dir}"/>	  
-	</target>
+	  <jar jarfile="./lib/ext/ApacheJMeter_core.jar" excludes="**/NewDriver*" manifest="${sources.src.dir}/MANIFEST" basedir="${classes.dest.dir}"/>
+	  <jar jarfile="ApacheJMeter.jar" includes="**/NewDriver*" manifest="${sources.src.dir}/MANIFEST" basedir="${classes.dest.dir}"/>	  	</target>
 
 	<!--
 	- Copies the jar file to bin/ and everything else needed to run JMeter
