@@ -46,7 +46,12 @@ public class JMeterVariables {
 	
 	public String get(String key)
 	{
-		return (String)variables.get(key);
+		String val = (String)variables.get(key);
+		if(val == null)
+		{
+			return "";
+		}
+		return val;
 	}
 
 }
