@@ -7,18 +7,19 @@
 
 <body>
 
-<section name="5. Building a Web Test Plan">
+<section name="5. Building a Web Test Plan" anchor="building">
 <p>In this section, you will learn how to create a basic 
-<a href="">Test Plan</a> to test a Web site.  You will create five users that 
-send requests to two pages on the Jakarta Web site. Also, you will tell the 
-users to run their tests twice. So, the total number of requests is (5 users) 
-x (2 requests) x (repeat 2 times) = 20 HTTP requests. To construct the Test 
-Plan, you will use the following elements: <a href="thread-group.html">Thread Group</a>, 
-<a href="gen-controller.html#4.2.1.2">HTTP Request</a>, 
-<a href="http-config.html#4.7.5">HTTP Request Defaults</a>, and 
-<a href="listener.html#4.3.3.2">File Reporter</a>.</p> 
+<a href="build-test-plan.html">Test Plan</a> to test a Web site.  You will 
+create five users that send requests to two pages on the Jakarta Web site. 
+Also, you will tell the users to run their tests twice. So, the total number of 
+requests is (5 users) x (2 requests) x (repeat 2 times) = 20 HTTP requests. To 
+construct the Test Plan, you will use the following elements: 
+<a href="thread-group.html">Thread Group</a>, 
+<a href="gen-controller.html#http_request">HTTP Request</a>, 
+<a href="http-config.html#request_defaults">HTTP Request Defaults</a>, and 
+<a href="listener.html#file_reporter">File Reporter</a>.</p> 
 
-<p>For a more advanced Test Plan, see Section 6, 
+<p>For a more advanced Test Plan, see  
 <a href="build-adv-web-test-plan.html">Building an Advanced Web Test Plan</a>.</p>
 </section>
 
@@ -28,19 +29,19 @@ all tree elements), Test Plan (you place all of your elements here), and
 WorkBench (a temporary place to store your elements while constructing a Test
 Plan).</p>-->
 
-<section name="5.1 Adding Users">
+<section name="5.1 Adding Users" anchor="adding_users">
 <p>The first step you want to do with every JMeter Test Plan is to add a 
 <a href="thread-group.html">Thread Group</a> element.  The Thread Group tells 
 JMeter the number of users you want to simulate, how often the users should send 
 requests, and the how many requests they should send.</p>
 
 <p>Go ahead and add the ThreadGroup element by first selecting the Test Plan, 
-and then from the Edit menu, select Add --> ThreadGroup.</p>
+and then from the Edit menu, select Add --&gt; ThreadGroup.</p>
 
 <p>
 <table border="1" cellspacing="0" cellpadding="5">
-  <tr><td><b>TIP:</b> You can also access the Edit menu by selecting an element and then
-clicking your right mouse button.</td></tr>
+  <tr><td><b>TIP:</b> You can also access the Edit menu by selecting an element 
+and then clicking your right mouse button.</td></tr>
 </table>
 </p>
 
@@ -56,8 +57,8 @@ below)</p>
 <p><img src="../images/screenshots/webtest/threadgroup.gif" width="555" height="297"></img>
 <br>Figure 5.1. Thread Group with Default Values</br></p>  
 
-<p>Start by providing a more descriptive name for our Thread Group. In 
-the name field, enter Jakarta Users.</p> 
+<p>Start by providing a more descriptive name for our Thread Group. In the name 
+field, enter Jakarta Users.</p> 
 
 <p>Next, increase the number of users (called threads) to 5.</p>  
 
@@ -92,14 +93,14 @@ leave the Control Panel (for example, when selecting another tree element).</td>
 
 </section>
 
-<section name="5.2 Adding Default HTTP Request Properties">
+<section name="5.2 Adding Default HTTP Request Properties" anchor="adding_defaults">
 <p>Now that we have defined our users, it is time define the tasks that they
 will be performing.  In this section, you will specify the default settings
 for your HTTP requests.  And then, in section 5.3, you will add HTTP Request
 elements which use some of the default settings you specified here.</p>
 
 <p>Begin by selecting the Jakarta Users element. From the Edit menu, choose 
-Add --> Config Element --> Defaults. Then, select this new
+Add --&gt; Config Element --&gt; HTTP Request Defaults. Then, select this new
 element to view its Control Panel (see Figure 5.3).</p>
 
 <p><img src="../images/screenshots/webtest/http-defaults1.gif" width="633" height="326"></img>
@@ -107,9 +108,9 @@ element to view its Control Panel (see Figure 5.3).</p>
 
 <p>
 Like most JMeter elements, the 
-<a href="http-config.html#4.7.5">HTTP Request Defaults</a> Control Panel has a 
-name field that you can modify.  In this example, leave this field with the 
-default value.</p>
+<a href="http-config.html#request_defaults">HTTP Request Defaults</a> Control 
+Panel has a name field that you can modify.  In this example, leave this field with 
+the default value.</p>
 
 <p>Skip to the next field, which is the Web Server's Server Name/IP. For the
 Test Plan that you are building, all HTTP requests will be sent to the same
@@ -132,14 +133,14 @@ HTTP Request elements use.</td></tr>
 </section>
 
 
-<section name="5.3 Adding HTTP Requests">
+<section name="5.3 Adding HTTP Requests" anchor="adding_requests">
 
 <p>In our Test Plan, we need to make two HTTP requests. The first one is for the 
 Jakarta home page (http://jakarta.apache.org/), and the second one is for the 
 Project Guidelines page (http://jakarta.apache.org/site/guidelines.html).</p>
 
 <p>Start by adding the first <a href="gen-controller.html#4.2.1.2">HTTP Request</a> 
-to the Jakarta Users element (Add --> Generative Controller --> HTTP Request). 
+to the Jakarta Users element (Add --&gt; Generative Controller --&gt; HTTP Request). 
 Then, select the HTTP Request element in the tree and edit the following properties 
 (see Figure 5.5):
 <ol>
@@ -153,8 +154,7 @@ element.</li>
 <p><img src="../images/screenshots/webtest/http-request1.gif" width="633" height="326"></img>
 <br>Figure 5.5. HTTP Request for Jakarta Home Page</br></p>  
 
-<p>Next, add the second HTTP Request and edit the following 
-properties (see 
+<p>Next, add the second HTTP Request and edit the following properties (see 
 Figure 5.56:
 <ol>
 <li>Change the Name field to "Project Guidelines".</li>
@@ -165,16 +165,15 @@ Figure 5.56:
 <p><img src="../images/screenshots/webtest/http-request2.gif" width="633" height="326"></img>
 <br>Figure 5.6. HTTP Request for Jakarta Project Guidelines Page</br></p>  
 
-
 </section>
 
-<section name="5.3 Adding a File Reporter to Store the Test Results">
+<section name="5.4 Adding a File Reporter to Store the Test Results" anchor="adding_file_reporter">
 <p>The final element you need to add to your Test Plan is a 
-<a href="listener.html#4.3.3.2">File Reporter Listener</a>. This element is 
+<a href="listener.html#file_reporter">File Reporter Listener</a>. This element is 
 responsible for storing all of the results of your HTTP requests in a file.</p>
 
-<p>Select the Jakarta Users element and add a File Reporter (Add --> Listener 
---> File Reporter).  Next, you need to specify a directory and filename of the
+<p>Select the Jakarta Users element and add a File Reporter (Add --&gt; Listener 
+--&gt; File Reporter).  Next, you need to specify a directory and filename of the
 output file.  You can either type it into the filename field, or select the
 Browse button and browse to a directory and then enter a filename.  Leave
 all of the other fields with their default values (see Figure 5.7).</p>
@@ -184,7 +183,7 @@ all of the other fields with their default values (see Figure 5.7).</p>
 
 </section>
 
-<section name="5.4 Saving the Test Plan">
+<section name="5.5 Saving the Test Plan" anchor="saving">
 <p>Although it is not required, we recommend that you save the Test Plan to a 
 file before running it.  To save the Test Plan, select the Test Plan element
 in the tree. Then, select Save As from the File menu.</p>
@@ -195,7 +194,7 @@ in the tree. Then, select Save As from the File menu.</p>
 only a portion of it.  JMeter uses the currently selected tree element
 and saves all elements located in that particular "branch" of the tree.  
 Because you want to save all of the elements, you must select the Test Plan 
-element before selecting File --> Save As.</td></tr>
+element before selecting File --&gt; Save As.</td></tr>
 </table>
 </p>
 
@@ -208,7 +207,7 @@ element and then clicking your right mouse button.</td></tr>
 
 </section>
 
-<section name="5.5 Running the Test Plan">
+<section name="5.6 Running the Test Plan" anchor="running">
 <p>Before running the Test Plan, You have to manually open the File Reporter 
 output file. Select the File Reporter tree element, and select the Open button, 
 which is located at the bottom of the Control Panel.</p>
