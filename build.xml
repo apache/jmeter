@@ -551,6 +551,8 @@
 
   <target name="compile" depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-htmlparser" description="Compile everything."/>
 
+  <target name="package" depends="compile, package-only"/>
+  
 <!--
 N.B. Eclipse (and perhaps other Java IDEs) copies all files to the build directory, unless
 told otherwise. This means that there might be copies of property and image files in the
@@ -566,7 +568,7 @@ The advantage would be that JMeter could theoretically be run from the classes, 
 needing to create jar files first. However, this would mean changing the way JMeter loads
 some of its classes - at present JMeter can only run from jar files.
 -->
-  <target name="package" depends="compile">
+  <target name="package-only" description="Package already-compiled classes (shortcut for IDE users)">
     <mkdir dir="${dest.jar}"/>
     <jar jarfile="${dest.jar}/ApacheJMeter_core.jar" excludes="**/NewDriver*" manifest="${src.core}/MANIFEST">
       <!-- Only include class files - see above -->
