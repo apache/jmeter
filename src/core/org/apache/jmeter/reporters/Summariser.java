@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -44,7 +43,6 @@ import org.apache.log.Logger;
  * 
  * This is mainly intended for batch (non-GUI) runs
  * 
- * @version $Revision$ Last updated: $Date$
  */
 public class Summariser
     extends AbstractTestElement
@@ -252,9 +250,17 @@ public class Summariser
 		sb.append(" ");
         sb.append(longToSb(tmp,s.getCount(),5));
         sb.append(" in ");
-		sb.append(longToSb(tmp,s.getElapsed()/1000,5));
+        long elapsed = s.getElapsed();
+		sb.append(doubleToSb(tmp,(double)elapsed/1000.0,5,1));
 		sb.append("s = ");
-		sb.append(doubleToSb(tmp,s.getRate(),6,1));
+		if (elapsed > 0)
+		{
+			sb.append(doubleToSb(tmp,s.getRate(),6,1));			
+		}
+		else
+		{
+			sb.append("******");// Rate is effectively infinite
+		}
 		sb.append("/s Avg: ");
 		sb.append(longToSb(tmp,(long)s.getMean(),5));
 		sb.append(" Min: ");
@@ -264,8 +270,8 @@ public class Summariser
 		sb.append(" Err: ");
 		sb.append(longToSb(tmp,s.getErrorCount(),5));
 		sb.append(" (");
-		sb.append(doubleToSb(tmp,s.getErrorPercentage(),3,1));
-		sb.append("%)");
+		sb.append(s.getErrorPercentageString());
+		sb.append(")");
         return sb.toString();
     }
 

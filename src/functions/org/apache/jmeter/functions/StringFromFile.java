@@ -261,7 +261,7 @@ public class StringFromFile extends AbstractFunction implements Serializable
      * 
      * @see org.apache.jmeter.functions.Function#setParameters(Collection)
      */
-    public void setParameters(Collection parameters)
+    public synchronized void setParameters(Collection parameters)
         throws InvalidVariableException
     {
 

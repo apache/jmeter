@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -32,7 +31,6 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 
 /**
- * @version $Revision$
  */
 
 public class PostWriter

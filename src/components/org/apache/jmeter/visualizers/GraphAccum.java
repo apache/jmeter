@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -45,7 +44,6 @@ import org.apache.log.Logger;
  * Draws the graph.
  *
  * Created      2001/08/11
- * @version    $Revision$ Last updated: $Date$
  */
 public class GraphAccum extends JComponent implements Scrollable,
         GraphAccumListener
@@ -69,7 +67,7 @@ public class GraphAccum extends JComponent implements Scrollable,
      */
     private boolean previousPtsAlloc = false;
 
-    private static final int width = 2000;
+    protected final static int width = 2000;
 
     private final static int PLOT_X_WIDTH = 10;
     transient private static final Logger log = LoggingManager.getLoggerForClass();
@@ -288,10 +286,7 @@ public class GraphAccum extends JComponent implements Scrollable,
         // Allocate previousPts only the first time
         if (!previousPtsAlloc)
         {
-            if (resultList != null)
-            {
-                resultListCount += resultList.length;
-            }
+            resultListCount += resultList.length;
             previousPts = new Point[resultListCount + 2];
         }
 

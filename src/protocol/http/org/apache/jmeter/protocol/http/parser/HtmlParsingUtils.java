@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -46,13 +45,11 @@ import org.xml.sax.SAXException;
 /**
  * @author    Michael Stover
  * Created   June 14, 2001
- * @version   $Revision$ Last updated: $Date$
  */
 public final class HtmlParsingUtils
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    //NOTUSED protected static String utfEncodingName;
     /* NOTUSED 
     private int compilerOptions =
         Perl5Compiler.CASE_INSENSITIVE_MASK

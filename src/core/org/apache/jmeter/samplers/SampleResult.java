@@ -59,8 +59,10 @@ public class SampleResult implements Serializable
      */
     public final static String BINARY = "bin";
 
-	/* empty array which can be returned instead of null */
+	/* empty arrays which can be returned instead of null */
 	private static final byte [] EMPTY_BA = new byte [0];
+	private static final SampleResult [] EMPTY_SR = new SampleResult[0];
+	private static final AssertionResult [] EMPTY_AR = new AssertionResult[0];
 
     private byte[] responseData;
     private String responseCode;
@@ -283,13 +285,13 @@ public class SampleResult implements Serializable
      * Gets the assertion results associated with this sample.
      *
      * @return an array containing the assertion results for this sample.
-     *         Returns null if there are no assertion results.
+     *         Returns empty array if there are no assertion results.
      */
     public AssertionResult[] getAssertionResults()
     {
         if (assertionResults == null)
         {
-            return null;
+            return EMPTY_AR;
         }
         return (AssertionResult[]) assertionResults.toArray(
             new AssertionResult[0]);
@@ -309,13 +311,13 @@ public class SampleResult implements Serializable
      * Gets the subresults associated with this sample.
      *
      * @return an array containing the subresults for this sample. Returns
-     *         null if there are no subresults.
+     *         an empty array if there are no subresults.
      */
     public SampleResult[] getSubResults()
     {
         if (subResults == null)
         {
-            return null;
+            return EMPTY_SR;
         }
         return (SampleResult[]) subResults.toArray(new SampleResult[0]);
     }
