@@ -77,6 +77,7 @@ import java.util.Vector;
 import junit.framework.TestCase;
 
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.PerThreadClonable;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -443,6 +444,17 @@ public class CookieManager extends ConfigTestElement implements Serializable, Pe
             man.add(new Cookie("id", "me", "127.0.0.1", "/", false, 0));
             man.removeCookieNamed("id");
             assertEquals(0, man.getCookieCount());
+        }
+        
+        public void testSendCookie() throws Exception
+        {
+            CookieManager man = new CookieManager();
+            man.add(new Cookie("id","value","jakarta.apache.org","/",false,9999999999L));
+            HTTPSampler sampler = new HTTPSampler();
+            sampler.setDomain("jakarta.apache.org");
+            sampler.setPath("/index.html");
+            sampler.setMethod(HTTPSampler.GET);
+            assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
         }
     }
 }

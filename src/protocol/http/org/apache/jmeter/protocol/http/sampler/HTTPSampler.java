@@ -806,7 +806,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable
         String message = null;
         errorLevel = ((HttpURLConnection) conn).getResponseCode();
         message = ((HttpURLConnection) conn).getResponseMessage();
-        res.setResponseCode(String.valueOf(errorLevel));
+        res.setResponseCode(Integer.toString(errorLevel));
         res.setResponseMessage(message);
         return errorLevel;
     }

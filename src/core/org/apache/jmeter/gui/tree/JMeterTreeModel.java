@@ -132,6 +132,8 @@ public class JMeterTreeModel extends DefaultTreeModel
             {
                 current = (JMeterTreeNode) ((JMeterTreeNode) getRoot()).getChildAt(0);
                 ((TestElement) current.getUserObject()).addTestElement(item);
+                ((TestPlan)current.getUserObject()).setName(item.getPropertyAsString(TestElement.NAME));
+                ((TestPlan)current.getUserObject()).setFunctionalMode(item.getPropertyAsBoolean(TestPlan.FUNCTIONAL_MODE));
                 addSubTree(subTree.getTree(item), current);
             }
             else
