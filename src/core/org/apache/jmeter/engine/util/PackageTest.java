@@ -29,6 +29,7 @@ import junit.framework.TestCase;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
@@ -46,8 +47,11 @@ public class PackageTest extends TestCase
         // TODO Auto-generated constructor stub
     }
 
+    private JMeterContext jmctx = null;
+    
     public void setUp()
     {
+    	jmctx =JMeterContextService.getContext();
         variables = new HashMap();
         variables.put("my_regex", ".*");
         variables.put("server", "jakarta.apache.org");
@@ -56,13 +60,13 @@ public class PackageTest extends TestCase
             "<html>hello world</html> costs: $3.47,$5.67".getBytes());
         transformer =
             new ReplaceStringWithFunctions(new CompoundVariable(), variables);
-        JMeterContextService.getContext().setVariables(new JMeterVariables());
-        JMeterContextService.getContext().setSamplingStarted(true);
-        JMeterContextService.getContext().setPreviousResult(result);
-        JMeterContextService.getContext().getVariables().put(
+        jmctx.setVariables(new JMeterVariables());
+        jmctx.setSamplingStarted(true);
+        jmctx.setPreviousResult(result);
+        jmctx.getVariables().put(
             "server",
             "jakarta.apache.org");
-        JMeterContextService.getContext().getVariables().put("my_regex", ".*");
+        jmctx.getVariables().put("my_regex", ".*");
     }
 
     public void testFunctionParse1() throws Exception
@@ -81,7 +85,7 @@ public class PackageTest extends TestCase
         assertTrue(Integer.parseInt(newProp.getStringValue()) > -1);
         assertEquals(
             "2",
-            JMeterContextService.getContext().getVariables().getObject("d,ay"));
+            jmctx.getVariables().getObject("d,ay"));
     }
 
     public void testParseExample1() throws Exception
