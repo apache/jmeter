@@ -367,6 +367,7 @@ public class ResultCollector extends AbstractListenerElement
     public void sampleOccurred(SampleEvent e)
     {
         SampleResult result = e.getResult();
+        result.setTimeStamp(System.currentTimeMillis());
 
         if (!isErrorLogging() || !result.isSuccessful())
         {

@@ -313,7 +313,7 @@ public class GraphModel implements Clearable, Serializable
 
         if (samples.size() == 0)
         {
-            startTime = timeStamp;
+            startTime = timeStamp - sample;
         }
 
         float throughput = 0;
