@@ -99,6 +99,15 @@ public class GenericController extends AbstractTestElement implements Controller
 	public GenericController()
 	{
 	}
+	
+	public boolean isNextFirst()
+	{
+		if(current == 0)
+		{
+			return true;
+		}
+		return false;
+	}
 
 	/****************************************
 	 * Gets the ConfigElements attribute of the GenericController object
