@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 
 import junit.framework.Test;
@@ -19,7 +20,7 @@ import junit.framework.TestSuite;
  * Test the composition of the properties files
  * - properties files exist (default, DE, NO, JA)
  * - properties files don't have duplicate keys
- * - non-default properties files have same keys as the default.
+ * - non-default properties files don't have any extra keys.
  * 
  * N.B. If there is a default resource, ResourceBundle does not detect missing resources,
  * i.e. the presence of messages.properties means that the ResourceBundle for Locale "XYZ"
@@ -40,29 +41,18 @@ import junit.framework.TestSuite;
 public class PackageTest extends TestCase
 {
 
-    private static int defaultListSize;
-
-    private static List defaultList = null;
-    
-    private int countKeys(Enumeration e, List l){
-    	int i=0;
-    	while (e.hasMoreElements()){
-    		i++;
-    		l.add(e.nextElement());
-    	}
-    	return i;
-    }
+    //private static List defaultList = null;
+    private static PropertyResourceBundle defaultPRB;
     
     // Read resource into ResourceBundle and store in List
-    private int getRAS(String res, List l) throws Exception{
+    private PropertyResourceBundle getRAS(String res) throws Exception{
     	InputStream ras = this.getClass().getResourceAsStream(res);
-    	PropertyResourceBundle prb = new PropertyResourceBundle(ras);
-    	return countKeys(prb.getKeys(),l);
+    	return new PropertyResourceBundle(ras);
     }
 
-    private int readRF(String res, List l) throws Exception
-    {//Read resource file and return # of lines; saving the keys
-		int i=0;// no of lines
+    //	Read resource file saving the keys
+    private void readRF(String res, List l) throws Exception
+    {
 		InputStream ras = this.getClass().getResourceAsStream(res);
 		BufferedReader fileReader =
 		new BufferedReader(new InputStreamReader(ras));
@@ -71,10 +61,8 @@ public class PackageTest extends TestCase
         {
            	if (s.length() > 0)  {
            		l.add(s.substring(0,s.indexOf('=')));
-          		i++;
            	}
        	} 
-		return i;
     }
     
     // Helper method to construct resource name
@@ -86,15 +74,16 @@ public class PackageTest extends TestCase
     	}
     }
 	
+	/*
+	 * perform the checks on the resources
+	 * 
+	 */
 	private void check(String resname) throws Exception
 	{
 		ArrayList alf = new ArrayList(500);// holds keys from file
-		ArrayList alr = new ArrayList(500);// holds keys from resource
 		String res = getResName(resname);
 		readRF(res,alf);
-		getRAS(res,alr);
 		Collections.sort(alf);
-		Collections.sort(alr);
 		
 		// Look for duplicate keys in the file
 		String last="";
@@ -107,31 +96,28 @@ public class PackageTest extends TestCase
 			last=curr;
 		}
 		
-		if (defaultList != null){
-			if (defaultListSize != alr.size()){
-				subTestFailures++;
-				System.out.println("\nKey counts differ: "
-				+getResName("")+"="+defaultListSize+" "+res+"="+alr.size());
-			}
-			if (!defaultList.equals(alr)){
-				subTestFailures++;
-				System.out.println("\nKeys in "
-				+res
-				+" do not match keys in "
-				+getResName("")
-				);
-				for (int i=0;i<alr.size();i++){
-					String d=(String) defaultList.get(i);
-					String a=(String) alr.get(i);
-					if (!d.equals(a)){
-						System.out.println("First difference: "+ a + "!=" + d);
-						break;
-					}
+		if (resname.length()==0) // Must be the default resource file
+		{
+			defaultPRB = getRAS(res);
+		}
+		else
+		{
+			// Check all the keys are in the default props file
+			Enumeration enum = getRAS(res).getKeys();
+			while(enum.hasMoreElements())
+			{
+				String key = null;
+				try
+				{
+				    key = (String)enum.nextElement();
+			        defaultPRB.getString(key);
+				}
+				catch (MissingResourceException e)
+				{
+					subTestFailures++;
+					System.out.println("Locale: "+resname+" has unexpected key: "+ key);
 				}
 			}
-		} else { // must be the default file
-			defaultList = alr;
-			defaultListSize = alr.size();
 		}
 
 		if (subTestFailures > 0) {
@@ -144,12 +130,10 @@ public class PackageTest extends TestCase
 	 */
 	public static Test suite(){
 		TestSuite ts=new TestSuite();
-// Disabled test altogether while we think what to do about it
-// TODO: reinstate
-/*		ts.addTest(new PackageTest("atestDefault"));
+		ts.addTest(new PackageTest("atestDefault"));
 		ts.addTest(new PackageTest("atestDE"));
 		ts.addTest(new PackageTest("atestNO"));
-		ts.addTest(new PackageTest("atestJA"));*/
+		ts.addTest(new PackageTest("atestJA"));
 		return ts;
 	}
 
