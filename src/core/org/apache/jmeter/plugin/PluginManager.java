@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,40 +55,36 @@
 
 package org.apache.jmeter.plugin;
 
-
 import java.net.URL;
 
 import javax.swing.ImageIcon;
 
 import org.apache.jmeter.gui.GUIFactory;
 
-
 /**
  * @author Oliver Rossmueller
+ * @version $Revision$
  */
 public class PluginManager
 {
-
     private static final PluginManager instance = new PluginManager();
-
 
     private PluginManager()
     {
     }
 
-	/**
-	 * Installs a plugin.
-	 * @param plugin The plugin to install.
-	 * @param useGui Indication of whether or not the gui will be used.
-	 */
+    /**
+     * Installs a plugin.
+     * @param plugin the plugin to install
+     * @param useGui indication of whether or not the gui will be used
+     */
     public static void install(JMeterPlugin plugin, boolean useGui)
     {
-    	if (useGui)
-    	{
+        if (useGui)
+        {
             instance.installPlugin(plugin);
-    	}
+        }
     }
-
 
     private void installPlugin(JMeterPlugin plugin)
     {
@@ -96,17 +92,17 @@ public class PluginManager
         ClassLoader classloader = plugin.getClass().getClassLoader();
 
         for (int i = 0; i < icons.length; i++)
-		{
+        {
             URL resource = classloader.getResource(icons[i][1].trim());
 
             if (resource == null)
-		    {
+            {
                 // todo: log or throw exception
             }
-	    	else
-	    	{
+            else
+            {
                 GUIFactory.registerIcon(icons[i][0], new ImageIcon(resource));
             }
         }
-    } 
+    }
 }
