@@ -54,6 +54,7 @@
  */
 package org.apache.jmeter.protocol.http.control.gui;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.net.MalformedURLException;
@@ -177,6 +178,12 @@ public class WebServiceSamplerGui
         new JLabel(JMeterUtils.getResString("read_response_note2"));
     JLabel readMessage3 =
         new JLabel(JMeterUtils.getResString("read_response_note3"));
+
+	/**
+	 * Text note for proxy
+	 */
+	JLabel proxyMessage = 
+		new JLabel(JMeterUtils.getResString("webservice_proxy_note"));
 
     public WebServiceSamplerGui()
     {
@@ -321,6 +328,10 @@ public class WebServiceSamplerGui
         mainPanel.add(urlField);
         mainPanel.add(soapAction);
         // OPTIONAL TASKS
+        // we create a preferred size for the soap text area
+        // the width is the same as the soap file browser
+        Dimension pref = new Dimension(400,200);
+        soapXml.setPreferredSize(pref);
         mainPanel.add(soapXml);
         mainPanel.add(soapXmlFile);
         mainPanel.add(wsdlMessage);
@@ -340,7 +351,9 @@ public class WebServiceSamplerGui
 		useProxy.addActionListener(this);
 		mainPanel.add(proxyHost);
 		mainPanel.add(proxyPort);
-
+		proxyMessage.setFont(plainText);
+		mainPanel.add(proxyMessage);
+		
         this.add(mainPanel);
     }
 
