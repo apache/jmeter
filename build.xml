@@ -10,7 +10,7 @@
 		<property name="sources.src.dir" value="src"/>
 		<!-- Where the API documentation lives -->
 		<property name="docs.api.dest.dir" value="docs/api"/>
-		<property name="version" value="_1.5beta"/>
+		<property name="version" value="_1.5b1"/>
 	</target>
 
 	<!--
