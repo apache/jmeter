@@ -1,6 +1,7 @@
-package org.apache.jmeter.control.gui;
+package org.apache.jmeter.protocol.http.control.gui;
 
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.control.gui.LogicControllerGui;
 
 /**
  * @author Administrator
