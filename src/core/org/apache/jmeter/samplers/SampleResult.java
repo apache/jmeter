@@ -120,7 +120,7 @@ public class SampleResult implements Serializable
     private boolean success;
     private Set files;
     private String dataEncoding;
-    private long time;
+    private long time = 0;
     private boolean stopThread = false; //Should thread terminate?
 	private boolean stopTest = false;   //Should test terminate?
 
@@ -248,6 +248,7 @@ public class SampleResult implements Serializable
 
     /**
      * Set the time this sample took to occur.
+     * @deprecated to be removed - use sampleStart() and sampleEnd() instead
      */
     public void setTime(long t)
     {
@@ -298,6 +299,8 @@ public class SampleResult implements Serializable
 
     /**
      * Get the time it took this sample to occur.
+     * @return elapsed time in milliseonds
+     * 
      */
     public long getTime()
     {
