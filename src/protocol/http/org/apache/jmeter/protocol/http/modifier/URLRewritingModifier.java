@@ -29,7 +29,7 @@ public class URLRewritingModifier
     implements Serializable, PreProcessor
 {
 
-    private Pattern case1, case2, case3, case4;
+    private Pattern equalsRegexp, formRegexp1, formRegexp2, noEqualsRegexp;
     //transient Perl5Compiler compiler = new Perl5Compiler();
     private final static String ARGUMENT_NAME = "argument_name";
     private final static String PATH_EXTENSION = "path_extension";
@@ -49,25 +49,39 @@ public class URLRewritingModifier
         String text = new String(responseText.getResponseData());
         Perl5Matcher matcher = JMeterUtils.getMatcher();
         String value = "";
-        if (matcher.contains(text, case1))
+        if (isPathExtension() && isPathExtensionNoEquals())
         {
-            MatchResult result = matcher.getMatch();
-            value = result.group(1);
+            if (matcher.contains(text, noEqualsRegexp))
+            {
+                MatchResult result = matcher.getMatch();
+                value = result.group(1);
+            }
         }
-        else if (matcher.contains(text, case2))
+        else if (isPathExtension()) // && ! isPathExtensionNoEquals
         {
-            MatchResult result = matcher.getMatch();
-            value = result.group(1);
+            if (matcher.contains(text, equalsRegexp))
+            {
+                MatchResult result = matcher.getMatch();
+                value = result.group(1);
+            }
         }
-        else if (matcher.contains(text, case3))
+        else // if ! isPathExtension()
         {
-            MatchResult result = matcher.getMatch();
-            value = result.group(1);
-        }
-        else if (matcher.contains(text, case4))
-        {
-            MatchResult result = matcher.getMatch();
-            value = result.group(1);
+            if (matcher.contains(text, equalsRegexp))
+            {
+                MatchResult result = matcher.getMatch();
+                value = result.group(1);
+            }
+            else if (matcher.contains(text, formRegexp1))
+            {
+                MatchResult result = matcher.getMatch();
+                value = result.group(1);
+            }
+            else if (matcher.contains(text, formRegexp2))
+            {
+                MatchResult result = matcher.getMatch();
+                value = result.group(1);
+            }
         }
 
         modify((HTTPSampler) sampler, value);
@@ -100,17 +114,17 @@ public class URLRewritingModifier
     }
     private void initRegex(String argName)
     {
-        case1 =
+        equalsRegexp =
             JMeterUtils.getPatternCache().getPattern(
                 argName + "=([^\"'>&\\s;]*)[&\\s\"'>;]?$?",
                 Perl5Compiler.MULTILINE_MASK);
-        case2 =
+        formRegexp1 =
             JMeterUtils.getPatternCache().getPattern(
                 "[Nn][Aa][Mm][Ee]=[\"']"
                     + argName
                     + "[\"'][^>]+[vV][Aa][Ll][Uu][Ee]=[\"']([^\"']*)[\"']",
                 Perl5Compiler.MULTILINE_MASK);
-        case3 =
+        formRegexp2 =
             JMeterUtils.getPatternCache().getPattern(
                 "[vV][Aa][Ll][Uu][Ee]=[\"']([^\"']*)[\"'][^>]+[Nn][Aa][Mm][Ee]=[\"']"
                     + argName
@@ -123,7 +137,7 @@ public class URLRewritingModifier
             
         // case1 could be re-written "=?([^..."  instead of creating a new
         // pattern? Maybe not: note the semicolons
-        case4 =
+        noEqualsRegexp =
             JMeterUtils.getPatternCache().getPattern(
                 argName + "([^\"'>&\\s]*)[&\\s\"'>]?$?",
                 Perl5Compiler.MULTILINE_MASK);
