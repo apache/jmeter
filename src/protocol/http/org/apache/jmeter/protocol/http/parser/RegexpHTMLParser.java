@@ -54,6 +54,7 @@ import org.apache.oro.text.regex.MalformedPatternException;
  *  <li>&lt;embed src=<b>url</b> ... &gt;
  *  <li>&lt;embed codebase=<b>url</b> ... &gt;
  *  <li>&lt;object codebase=<b>url</b> ... &gt;
+ *  <li>&lt;link rel=stylesheet href=<b>url</b>... gt;
  * </ul>
  *
  * <p>
