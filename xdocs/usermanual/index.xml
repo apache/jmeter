@@ -94,7 +94,7 @@
 		<li><a href="build-ftp-test-plan.html#saving">8.5 Saving the Test Plan</a></li>
 		<li><a href="build-ftp-test-plan.html#running">8.6 Running the Test Plan</a></li>
 	 </ul>
-  <li><a href="build-jndi-test-plan.html">9. Building a JNDI Test Plan</a></li>
+  <li><a href="build-ldap-test-plan.html">9. Building an LDAP Test Plan</a></li>
   <li><a href="remote-test.html">10. Remote Testing</a></li>
   <li><a href="best-practices.html">11. Best Practices</a></li>
   <ul>
