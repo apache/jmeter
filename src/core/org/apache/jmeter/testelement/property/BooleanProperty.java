@@ -7,7 +7,7 @@ import org.apache.jmeter.testelement.TestElement;
  */
 public class BooleanProperty extends AbstractProperty
 {
-    boolean value;
+    boolean value; //TODO: should these be private?
     boolean savedValue;
     
     public BooleanProperty(String name,boolean v)
@@ -46,7 +46,7 @@ public class BooleanProperty extends AbstractProperty
      */
     public Object getObjectValue()
     {
-        return new Boolean(value);
+        return Boolean.valueOf(value);
     }
 
     /**

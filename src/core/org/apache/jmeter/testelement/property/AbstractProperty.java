@@ -67,7 +67,7 @@ import org.apache.log.Logger;
  */
 public abstract class AbstractProperty implements JMeterProperty
 {
-    protected static Logger log = LoggingManager.getLoggerForClass();
+    protected static final Logger log = LoggingManager.getLoggerForClass();
     private String name;
     private boolean runningVersion = false;
 
@@ -250,7 +250,7 @@ public abstract class AbstractProperty implements JMeterProperty
         return Boolean.valueOf(val).booleanValue();
     }
 
-    public boolean equals(Object o)
+    public boolean equals(Object o) //TODO probably ought to provide hashCode() as well
     {
         return compareTo(o) == 0;
     }
