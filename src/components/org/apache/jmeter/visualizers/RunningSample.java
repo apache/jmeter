@@ -87,6 +87,7 @@ public class RunningSample {
     private long firstTime;
     private long lastTime;
     private Set threadNames;
+    private String label;
 
     /**
      * use this constructor.
@@ -138,6 +139,11 @@ public class RunningSample {
         String rval = rateFormatter.format(samplesPerSecond) + perString;
         return (rval);
     }
+    
+    public String getLabel()
+    {
+    	return label;
+    }
 
 
     /**
@@ -150,7 +156,7 @@ public class RunningSample {
 		long aTimeInMillis = res.getTime();
 		boolean aSuccessFlag = res.isSuccessful();
 		lastTime = res.getTimeStamp();
-
+		label = res.getSampleLabel();
         counter++;
         if (firstTime == 0L) {
             // this is our first sample, set the start time to current timestamp
