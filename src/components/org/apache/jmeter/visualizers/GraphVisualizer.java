@@ -110,8 +110,7 @@ public class GraphVisualizer extends AbstractVisualizer
     private JTextField deviationField;
     private JTextField throughputField;
     private JTextField medianField;
-    private boolean perSecond = false;
-
+    
     /**
      * Constructor for the GraphVisualizer object.
      */

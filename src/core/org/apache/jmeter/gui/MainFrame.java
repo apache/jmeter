@@ -96,8 +96,6 @@ import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * The main JMeter frame, containing the menu bar, test tree, and an area for
@@ -108,8 +106,6 @@ import org.apache.log.Logger;
  */
 public class MainFrame extends JFrame implements TestListener, Remoteable
 {
-    /** Logging. */
-    private static transient Logger log = LoggingManager.getLoggerForClass();
 
     /** The menu bar. */
     private JMeterMenuBar menuBar;

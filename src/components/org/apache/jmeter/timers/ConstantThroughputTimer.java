@@ -55,8 +55,6 @@
 package org.apache.jmeter.timers;
 
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -75,8 +73,7 @@ public class ConstantThroughputTimer
         implements Timer, Serializable
 {
     public final static String THROUGHPUT= "ConstantThroughputTimer.throughput";
-    private static List addableList= new LinkedList();
-
+    
     /**
      * Target time for the start of the next request. The delay provided by
      * the timer will be calculated so that the next request happens at this
@@ -88,7 +85,7 @@ public class ConstantThroughputTimer
      * Inverse of the configured throughput, in milliseconds. It's the interval
      * at which sampling should ideally occur to get that throughput.
      */
-    private long delay;
+    //TODO: remove? notused private long delay;
 
     /**
      * Constructor for a non-configured ConstantThroughputTimer.

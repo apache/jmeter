@@ -76,7 +76,6 @@ public class InterleaveControl extends GenericController implements Serializable
     public static final int IGNORE_SUB_CONTROLLERS = 0;
     public static final int USE_SUB_CONTROLLERS = 1;
     private boolean skipNext;
-    private boolean doNotIncrement = false;
     private TestElement searchStart = null;
     private boolean currentReturnedAtLeastOne;
     private boolean stillSame = true;
@@ -364,7 +363,6 @@ public class InterleaveControl extends GenericController implements Serializable
                     "one",
                     "three" };
             int counter = 0;
-            int loops = 1;
             controller.initialize();
             while (counter < order.length)
             {
@@ -423,7 +421,6 @@ public class InterleaveControl extends GenericController implements Serializable
                     "two",
                     "three" };
             int counter = 0;
-            int loops = 1;
             controller.initialize();
             while (counter < order.length)
             {
@@ -456,7 +453,6 @@ public class InterleaveControl extends GenericController implements Serializable
             sub_1.addTestElement(sub_3);
             String[] order = new String[] { "one", "three", "two", "four" };
             int counter = 0;
-            int loops = 1;
             controller.initialize();
             while (counter < order.length)
             {
@@ -489,7 +485,6 @@ public class InterleaveControl extends GenericController implements Serializable
             sub_1.addTestElement(sub_3);
             String[] order = new String[] { "one", "two", "three", "four" };
             int counter = 0;
-            int loops = 1;
             controller.initialize();
             while (counter < order.length)
             {

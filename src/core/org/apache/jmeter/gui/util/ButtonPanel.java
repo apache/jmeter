@@ -105,10 +105,11 @@ public class ButtonPanel extends JPanel
         }
     }
 
+/* NOTUSED
     private void initButtonMap()
     {
     }
-
+*/
     private void init()
     {
         add = new JButton(JMeterUtils.getResString("add"));

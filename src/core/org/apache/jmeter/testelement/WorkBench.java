@@ -1,7 +1,6 @@
 package org.apache.jmeter.testelement;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author    Michael Stover
@@ -10,8 +9,6 @@ import java.util.List;
  */
 public class WorkBench extends AbstractTestElement implements Serializable
 {
-    private static List itemsCanAdd = null;
-    private boolean isRootNode;
 
     /**
      * Constructor for the WorkBench object.

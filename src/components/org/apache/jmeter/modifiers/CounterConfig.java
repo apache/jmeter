@@ -27,10 +27,8 @@ public class CounterConfig
     public final static String PER_USER = "CounterConfig.per_user";
     public final static String VAR_NAME = "CounterConfig.name";
 
-    private boolean perUser = false;
     private int globalCounter = -1;
-    private int currentIterationCount = -1;
-
+    
     /**
      * @see LoopIterationListener#iterationStart(LoopIterationEvent)
      */

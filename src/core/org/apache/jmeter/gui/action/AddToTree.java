@@ -56,7 +56,6 @@
 package org.apache.jmeter.gui.action;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -82,8 +81,6 @@ public class AddToTree implements Command
     {
         allJMeterComponentCommands = new HashMap();
         allJMeterComponentCommands.put("Add", "Add");
-        List classes;
-
     }
 
     /**

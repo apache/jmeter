@@ -230,8 +230,6 @@ public class Graph
     {
         super.paintComponent(g);
 
-        Dimension d = this.getSize();
-
         synchronized (model.getSamples())
         {
             Iterator e = model.getSamples().iterator();

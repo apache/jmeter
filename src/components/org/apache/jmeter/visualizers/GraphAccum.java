@@ -281,8 +281,7 @@ public class GraphAccum extends JComponent implements Scrollable,
     {
         super.paintComponent(g);
         log.debug("Start : paintComponent1");
-        Dimension d = this.getSize();
-
+        
         synchronized (model.getList())
         {
             // For repainting set this to false because all the points needs to
