@@ -184,7 +184,7 @@ public class SamplingStatCalculator implements Serializable
 	{
 		double rate = 0;
 		if (this.getElapsed() > 0 && calculator.getTotalBytes() > 0){
-			rate = (double)calculator.getTotalBytes()/
+			rate = calculator.getTotalBytes()/
 				((double)this.getElapsed()/1000);
 		}
 		if (rate < 0){
@@ -220,15 +220,15 @@ public class SamplingStatCalculator implements Serializable
           // in case the sampler doesn't return the contents
           // we see if the bytes was set
           if (res.getResponseData() == null || res.getResponseData().length == 0){
-            byteslength = (long)res.getBytes();
+            byteslength = res.getBytes();
           } else {
-            byteslength = (long)res.getResponseData().length;
+            byteslength = res.getResponseData().length;
           }
           // if there was more than 1 loop in the sample, we
           // handle it appropriately
           if (res.getSampleCount() > 1){
           	long time = res.getTime() / res.getSampleCount();
-          	long resbytes = byteslength/(long)res.getSampleCount();
+          	long resbytes = byteslength / res.getSampleCount();
           	for (int idx=0; idx < res.getSampleCount(); idx++){
 				calculator.addValue(time);
 				calculator.addBytes(resbytes);
@@ -250,7 +250,7 @@ public class SamplingStatCalculator implements Serializable
           {
             throughput = Double.MAX_VALUE;
           }
-          throughput = (double) ((double)calculator.getCount() / (double)howLongRunning) * 1000.0;
+          throughput = ((double)calculator.getCount() / (double)howLongRunning) * 1000.0;
           if(throughput > maxThroughput)
           {
              maxThroughput = throughput;
