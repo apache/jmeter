@@ -12,6 +12,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import junit.framework.TestCase;
+
 import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
@@ -22,6 +24,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Logger;
 import org.apache.jorphan.logging.LoggingManager;
+
 //
 // Class:     HttpRequestHdr
 // Abstract:  The headers of the client HTTP request.
@@ -339,4 +342,25 @@ public class HttpRequestHdr
 		}
 		return str;
 	}
+
+        public static class Test extends TestCase
+	{
+                public Test(String name)
+		{
+			super(name);
+		}
+	
+		public void setUp() {
+		}
+
+                public void testRepeatedArguments() throws Exception {
+                    String TEST_REQ=
+                        "GET http://localhost/matrix.html?update=yes&d=1&d=2&d=&d=&d=&d=&d=&d=1&d=2&d=1&d=&d= HTTP/1.0\n\n";
+                    HttpRequestHdr req= new HttpRequestHdr();
+                    req.parse(new java.io.ByteArrayInputStream(
+                            TEST_REQ.getBytes()));
+                    HTTPSampler s= req.getSampler();
+                    assertEquals(s.getArguments().getArguments().size(), 13);
+                }
+        }
 }
