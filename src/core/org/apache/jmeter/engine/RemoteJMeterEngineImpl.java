@@ -64,7 +64,7 @@ import org.apache.log.Logger;
 
 
 /**
- * @version $Revision$
+ * @version $Revision$ Updated on: $Date$
  */
 public class RemoteJMeterEngineImpl
     extends java.rmi.server.UnicastRemoteObject
@@ -75,6 +75,8 @@ public class RemoteJMeterEngineImpl
 
     public RemoteJMeterEngineImpl() throws RemoteException
     {
+    	log.info("Starting backing engine");
+		log.debug("This = "+ this);
         try
         {
             backingEngine =
@@ -94,7 +96,7 @@ public class RemoteJMeterEngineImpl
 
     public void setHost(String host)
     {
-        log.warn("received host");
+        log.info("received host: "+host);
         backingEngine.setHost(host);
     }
 
@@ -106,24 +108,27 @@ public class RemoteJMeterEngineImpl
      */
     public void configure(HashTree testTree) throws RemoteException
     {
-        log.warn("received test tree");
+        log.info("received test tree");
         backingEngine.configure(testTree);
     }
 
     public void runTest() throws RemoteException, JMeterEngineException
     {
-        log.warn("running test");
+        log.info("running test");
+		log.debug("This = "+ this);
         backingEngine.runTest();
     }
 
     public void reset() throws RemoteException
     {
+    	log.info("Reset");
         backingEngine.reset();
     }
 
     public void stopTest() throws RemoteException
     {
-        backingEngine.stopTest();
+    	log.info("Stopping test");
+        backingEngine.stopTest();//TODO: askThreadsToStop() instead?
     }
 
     /**
@@ -133,6 +138,7 @@ public class RemoteJMeterEngineImpl
      */
     public static void main(String[] args)
     {
+    	log.info("Starting main");
         try
         {
             new RemoteJMeterEngineImpl();
