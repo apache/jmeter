@@ -97,18 +97,18 @@ Use the "-s" option with the jmeter startup script ("jmeter -s").</p>
      -J-Dsun.rmi.dgc.logLevel=verbose
      -J-Dsun.rmi.transport.logLevel=verbose
      -J-Dsun.rmi.transport.tcp.logLevel=verbose
-<p>The solution to the problem is to remove the loopbacks 127.0.0.1 and 127.0.0.2 from etc/hosts. What happens is jmeter-server can't connect to rmiregistry if 127.0.0.2 loopback is not available. Use the following settings to fix the problem.<p>
+<p>The solution to the problem is to remove the loopbacks 127.0.0.1 and 127.0.0.2 from etc/hosts. What happens is jmeter-server can't connect to rmiregistry if 127.0.0.2 loopback is not available. Use the following settings to fix the problem.</p>
 <p> Replace</p>
 <ul>
     <li> `dirname $0`/jmeter  -s "$@"</li>
 </ul>
-<p>With</p>
+<p> With</p>
 <ul>
-    <li> HOST="-Djava.rmi.server.hostname=<computer_name><computer_domain></li>
-    <li> -Djava.security.policy=`dirname $0`/<policy_file>"</li>
+    <li> HOST="-Djava.rmi.server.hostname=[computer_name][computer_domain]</li>
+    <li> -Djava.security.policy=`dirname $0`/[policy_file]"</li>
     <li> `dirname $0`/jmeter $HOST -s "$@"</li>
 </ul>
-<p>Also create a policy file and add <computer_name><computer_domain> line to /etc/hosts.</p>
+<p>Also create a policy file and add [computer_name][computer_domain] line to /etc/hosts.</p>
 </subsection>
 
 
