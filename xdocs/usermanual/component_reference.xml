@@ -1,57 +1,22 @@
 <?xml version="1.0"?>
 <!--
- * ====================================================================
- * The Apache Software License, Version 1.1
+ $Header$
+ 
+ * Copyright 2001-2004 The Apache Software Foundation.
  *
- * Copyright (c) 2003 The Apache Software Foundation.  All rights
- * reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * 1. Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in
- * the documentation and/or other materials provided with the
- * distribution.
- *
- * 3. The end-user documentation included with the redistribution,
- * if any, must include the following acknowledgment:
- * "This product includes software developed by the
- * Apache Software Foundation (http://www.apache.org/)."
- * Alternately, this acknowledgment may appear in the software itself,
- * if and wherever such third-party acknowledgments normally appear.
- *
- * 4. The names "Apache" and "Apache Software Foundation" and
- * "Apache JMeter" must not be used to endorse or promote products
- * derived from this software without prior written permission. For
- * written permission, please contact apache@apache.org.
- *
- * 5. Products derived from this software may not be called "Apache",
- * "Apache JMeter", nor may "Apache" appear in their name, without
- * prior written permission of the Apache Software Foundation.
- *
- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
- * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
- * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ * @version $Id$
  -->
 <document index="yes" index-level-2="yes" colbreak="14.5"
   prev="boss.html" next="functions.html" date="$Date$">
@@ -1276,10 +1241,22 @@ The variables in User Defined Variables components will take precedence over tho
 
 <component index="14.5.1" name="Response Assertion" anchor="basic_assertion" screenshot="assertion/assertion.gif">
 
-<description><p>The response assertion control panel let's you add strings to be tested. These strings can
-be regular expressions. You can also choose whether the strings will be expected
-to match the entire response, or if the response is only expected to contain the
-strings. You can attach multiple assertions to any controller for additionaly flexibility.</p>
+<description><p>The response assertion control panel lets you add pattern strings to be compared against various
+	fields of the response.
+	The pattern strings are Perl5-style regular expressions. You can also choose whether the strings will be expected
+to <b>match</b> the entire response, or if the response is only expected to <b>contain</b> the
+pattern. You can attach multiple assertions to any controller for additional flexibility.</p>
+<p>Note that the pattern string should not include the enclosing brackets, 
+	i.e. use <b>Price: (\d+)</b> not <b>/Price: (\d+)/</b>.
+	By default, the pattern is in multi-line mode, which means that the "." meta-character does not match newline.
+	Case is also significant. To override these settings, one can use the extended regular expression syntax.
+	For example:
+</p>
+<pre>
+	(?i) - ignore case
+	(?s) - treat target as single line, i.e. "." matches new-line
+	(?is) - both the above
+</pre>
 </description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -1293,7 +1270,9 @@ strings. You can attach multiple assertions to any controller for additionaly fl
         one Assertion with multiple patterns and setting up multiple Assertions with one
         pattern each (assuming the other options are the same).</property>
 </properties>
-
+<p>
+	The pattern is a Perl5-style regular expression, but without the enclosing brackets.
+</p>
 <example title="Assertion Examples" anchor="assertion_examples">
 <figure image="assertion/example1a.png">Figure 7 - Test Plan</figure>
 <figure image="assertion/example1b.gif">Figure 8 - Assertion Control Panel with Pattern</figure>
