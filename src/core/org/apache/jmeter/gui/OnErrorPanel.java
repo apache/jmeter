@@ -85,7 +85,7 @@ public class OnErrorPanel extends JPanel
     {
 		stopTestBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_STOPTEST);
 		stopThrdBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_STOPTHREAD);
-		//continueBox.setSelected(etc);// no need to set the remaining Radio Button
+		continueBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_CONTINUE);
     }
     
     public int getOnErrorSetting()

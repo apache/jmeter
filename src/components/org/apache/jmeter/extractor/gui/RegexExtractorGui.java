@@ -68,6 +68,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
     {
         super.configure(el);
         useHeaders.setSelected(el.getPropertyAsBoolean(RegexExtractor.USEHEADERS));
+        useBody.setSelected(!el.getPropertyAsBoolean(RegexExtractor.USEHEADERS));
         regexField.setText(el.getPropertyAsString(RegexExtractor.REGEX));
         templateField.setText(el.getPropertyAsString(RegexExtractor.TEMPLATE));
         defaultField.setText(el.getPropertyAsString(RegexExtractor.DEFAULT));
@@ -140,7 +141,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
         panel.add(useBody);
         panel.add(useHeaders);
 		
-        useBody.setSelected(true);
+        //useBody.setSelected(true);
         return panel;
     }
 
