@@ -151,6 +151,16 @@ class JTidyHTMLParser extends HTMLParser
 				urls.addURL(back,baseUrl);
 				break;
 			}
+			if (name.equalsIgnoreCase("bgsound"))
+			{
+				urls.addURL(getValue(attrs,"src"),baseUrl);
+				break;
+			}
+			if (name.equalsIgnoreCase("frame"))
+			{
+				urls.addURL(getValue(attrs,"src"),baseUrl);
+				break;
+			}
 
 		  NodeList children = node.getChildNodes();
 		  if ( children != null ) {

@@ -54,6 +54,8 @@ import org.apache.oro.text.regex.MalformedPatternException;
  *  <li>&lt;embed src=<b>url</b> ... &gt;
  *  <li>&lt;embed codebase=<b>url</b> ... &gt;
  *  <li>&lt;object codebase=<b>url</b> ... &gt;
+ *  <li>&lt;bgsound src=<b>url</b> ... &gt;
+ *  <li>&lt;frame src=<b>url</b> ... &gt;
  * </ul>
  *
  * <p>
@@ -99,7 +101,7 @@ class RegexpHTMLParser extends HTMLParser
         "<(?:"
             + "!--.*?-->"
             + "|BASE"+SEP+"HREF"+VALUE
-            + "|(?:IMG|SCRIPT|FRAME|IFRAME)"+SEP+"SRC"+VALUE
+            + "|(?:IMG|SCRIPT|FRAME|IFRAME|BGSOUND|FRAME)"+SEP+"SRC"+VALUE
             + "|APPLET"+SEP+"CODE(?:BASE)?"+VALUE
             + "|(?:EMBED|OBJECT)"+SEP+"(?:SRC|CODEBASE)"+VALUE
             + "|(?:BODY|TABLE|TR|TD)"+SEP+"BACKGROUND"+VALUE

@@ -337,6 +337,12 @@ public abstract class HTMLParser
                      "testfiles/HTMLScript.set",
                      "testfiles/HTMLScript.all"
                      ),
+            new TestData(
+                     "testfiles/HTMLParserTestCaseFrames.html",
+                     "http://localhost/",
+                     "testfiles/HTMLParserTestCaseFrames.set",
+                     "testfiles/HTMLParserTestCaseFrames.all"
+                     ),
         };
 
         public static junit.framework.Test suite(){
@@ -478,10 +484,12 @@ public abstract class HTMLParser
 			}
 			
 			while (expected.hasNext()) {
-				assertTrue(parserName+"::Expecting another result",result.hasNext());
+				Object next = expected.next();
+				assertTrue(parserName+"::Expecting another result "+next
+						,result.hasNext());
                 try
                 {
-                    assertEquals(parserName+"("+file+")",expected.next(),((URL) result.next()).toString());
+                    assertEquals(parserName+"("+file+")",next,((URL) result.next()).toString());
                 }
                 catch (ClassCastException e)
                 {
