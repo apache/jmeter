@@ -34,6 +34,9 @@
 <li>Allow CSVRead delimiter to be changed</li>
 <li>Bug 33796 - delete cookies with null/empty values</li>
 <li>All Beanshell access is now via a single class; only need BSH jar at run-time</li>
+<li>Bug 33920 - additional prop files</li>
+<li>Bug 33845 - allow direct override of Home dir</li>
+<li>Bug 33919 - increase Counter field sizes</li>
 </ul>
 <h4>Bug fixes:</h4>
 <ul>
