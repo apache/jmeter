@@ -104,9 +104,10 @@ before you deploy the monitor in your production environment.</p>
 </section>
 
 <section name="11.5 Adding a Listener to Store the Results" anchor="adding_listener">
-<p>If you want to keep a record of the server's performance, add a 
- <a href="component_reference.html#listeners">Listener</a>. This element is
-responsible for storing all of the results of your HTTP requests in a file.</p>
+<p>If you want to save the raw results from the server, add a simple data
+ <a href="component_reference.html#listeners">Listener</a>. If you want to save the
+ calculated statistics, enter a filename in the listener. If you want to save both
+ the raw data and statistics, make sure you use different filenames.</p>
 
 <p>Select the thread group element and add a <complink name="Simple Data Writer"/> listener
 (Add --&gt; Listener --&gt; Simple Data Writer).  Next, you need to specify a directory
