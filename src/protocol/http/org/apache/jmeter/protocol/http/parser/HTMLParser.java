@@ -66,7 +66,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
@@ -121,20 +120,20 @@ public abstract class HTMLParser
         	if (clazz instanceof HTMLParser){
 				pars = (HTMLParser) clazz;
         	} else {
-        		throw new Error(new ClassCastException(htmlParserClassName));
+        		throw new HTMLParseError(new ClassCastException(htmlParserClassName));
         	}
         }
         catch (InstantiationException e)
         {
-			throw new Error(e);
+			throw new HTMLParseError(e);
         }
         catch (IllegalAccessException e)
         {
-			throw new Error(e);
+			throw new HTMLParseError(e);
         }
         catch (ClassNotFoundException e)
         {
-			throw new Error(e);
+			throw new HTMLParseError(e);
         }
 		log.info("Created "+htmlParserClassName);
 		if (pars.isReusable()){
@@ -168,7 +167,10 @@ public abstract class HTMLParser
 			// them roughly in order, which should be a better model of browser
 			// behaviour.
 			// N.B. LinkedHashSet is Java 1.4
-        	return getEmbeddedResourceURLs(html, baseUrl,new LinkedHashSet());
+        	//JDK1.4:
+        	return getEmbeddedResourceURLs(html, baseUrl,new java.util.LinkedHashSet());
+        	//TODO better fix for JDK1.3:
+			//return getEmbeddedResourceURLs(html, baseUrl,new java.util.HashSet());
         }
 
 	/**
@@ -338,7 +340,7 @@ public abstract class HTMLParser
 			try{
 			    getParser("no.such.parser");
 			}
-			catch (Error e)
+			catch (HTMLParseError e)
 			{
 				if (e.getCause() instanceof ClassNotFoundException)
 				{
@@ -355,7 +357,7 @@ public abstract class HTMLParser
 			try{
                 getParser("java.lang.String");
 			}
-			catch (Error e)
+			catch (HTMLParseError e)
 			{
 				if (e.getCause() instanceof ClassCastException) return;
 				throw e;
@@ -367,7 +369,7 @@ public abstract class HTMLParser
 			{
 				getParser(TestClass.class.getName());
 			}
-			catch (Error e)
+			catch (HTMLParseError e)
 			{
 				if (e.getCause() instanceof InstantiationException) return;
 				throw e;
@@ -404,6 +406,12 @@ public abstract class HTMLParser
 			} else {
 			    result = p.getEmbeddedResourceURLs(buffer,new URL(url),c);
 			}
+			/* 
+			 * TODO:
+			 * Exact ordering is only required for some tests;
+			 * change the comparison to do a set compare where
+			 * necessary.
+			 */
 			Iterator expected= getFile(resultFile).iterator();
 			while (expected.hasNext()) {
 				assertTrue(result.hasNext());
