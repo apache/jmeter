@@ -54,11 +54,13 @@
  */
 package org.apache.jmeter.protocol.http.modifier;
 
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.List;
+
 import org.apache.jmeter.util.JMeterUtils;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
 /************************************************************
  *  Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:

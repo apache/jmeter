@@ -8,10 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import junit.framework.TestCase;
-
 import org.apache.jmeter.engine.util.CompoundVariable;
-import org.apache.jmeter.functions.util.ArgumentEncoder;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
