@@ -1,39 +1,39 @@
-<jmeterTestPlan version="2.0.20040619">
+<jmeterTestPlan version="1.0" properties="1.5">
   <hashTree>
-    <org.apache.jmeter.testelement.TestPlan>
+    <TestPlan>
       <collectionProp name="TestPlan.thread_groups"/>
       <elementProp name="TestPlan.user_defined_variables" elementType="org.apache.jmeter.config.Arguments">
         <stringProp name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</stringProp>
         <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
         <collectionProp name="Arguments.arguments"/>
-        <stringProp name="TestElement.name">User Defined Variables</stringProp>
+        <stringProp name="TestElement.name">User+Defined+Variables</stringProp>
         <boolProp name="TestElement.enabled">true</boolProp>
       </elementProp>
       <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.TestPlanGui</stringProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
       <stringProp name="TestElement.test_class">org.apache.jmeter.testelement.TestPlan</stringProp>
-      <stringProp name="TestElement.name">Test Plan</stringProp>
+      <stringProp name="TestElement.name">Test+Plan</stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
       <boolProp name="TestElement.enabled">true</boolProp>
       <stringProp name="TestPlan.comments"></stringProp>
-    </org.apache.jmeter.testelement.TestPlan>
+    </TestPlan>
     <hashTree>
-      <org.apache.jmeter.control.GenericController>
+      <GenericController>
         <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
         <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-        <stringProp name="TestElement.name">Modification Manager</stringProp>
+        <stringProp name="TestElement.name">Modification+Manager</stringProp>
         <boolProp name="TestElement.enabled">true</boolProp>
-      </org.apache.jmeter.control.GenericController>
+      </GenericController>
       <hashTree>
-        <org.apache.jmeter.control.GenericController>
+        <GenericController>
           <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
           <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Simple Controller</stringProp>
+          <stringProp name="TestElement.name">Simple+Controller</stringProp>
           <boolProp name="TestElement.enabled">true</boolProp>
-        </org.apache.jmeter.control.GenericController>
+        </GenericController>
         <hashTree>
-          <org.apache.jmeter.protocol.http.sampler.HTTPSampler>
-            <stringProp name="HTTPSampler.path">/xdx/admin/inspect_job.jsp</stringProp>
+          <HTTPSampler>
+            <stringProp name="HTTPSampler.path">%2Fxdx%2Fadmin%2Finspect_job.jsp</stringProp>
             <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</stringProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
@@ -47,7 +47,7 @@
               <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
               <collectionProp name="Arguments.arguments">
                 <elementProp name="" elementType="org.apache.jmeter.protocol.http.util.HTTPArgument">
-                  <stringProp name="Argument.metadata">=</stringProp>
+                  <stringProp name="Argument.metadata">%3D</stringProp>
                   <stringProp name="Argument.value">.*</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   <stringProp name="Argument.name">request.job_id</stringProp>
@@ -56,7 +56,7 @@
                   <stringProp name="HTTPArgument.encoded_value">.*</stringProp>
                 </elementProp>
                 <elementProp name="" elementType="org.apache.jmeter.protocol.http.util.HTTPArgument">
-                  <stringProp name="Argument.metadata">=</stringProp>
+                  <stringProp name="Argument.metadata">%3D</stringProp>
                   <stringProp name="Argument.value">opjobadmin.action.inspect</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   <stringProp name="Argument.name">request.action1</stringProp>
@@ -71,21 +71,22 @@
             <stringProp name="HTTPSampler.mimetype"></stringProp>
             <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</stringProp>
             <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
-            <stringProp name="TestElement.name">Web Testing</stringProp>
+            <stringProp name="TestElement.name">Web+Testing</stringProp>
             <stringProp name="HTTPSampler.monitor">false</stringProp>
             <stringProp name="HTTPSampler.domain"></stringProp>
             <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          </org.apache.jmeter.protocol.http.sampler.HTTPSampler>
+          </HTTPSampler>
           <hashTree/>
-          <org.apache.jmeter.config.ConfigTestElement>
-            <stringProp name="HTTPSampler.path"></stringProp>
+          <ConfigTestElement>
             <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui</stringProp>
+            <stringProp name="HTTPSampler.path"></stringProp>
             <stringProp name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</stringProp>
-            <stringProp name="TestElement.name">HTTP Request Defaults</stringProp>
+            <stringProp name="TestElement.name">HTTP+Request+Defaults</stringProp>
             <stringProp name="HTTPSampler.domain">13.231.197.158</stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <boolProp name="TestElement.enabled">true</boolProp>
+            <stringProp name="HTTPSampler.port">80</stringProp>
             <elementProp name="HTTPsampler.Arguments" elementType="org.apache.jmeter.config.Arguments">
               <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</stringProp>
               <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
@@ -93,8 +94,7 @@
               <stringProp name="TestElement.name"></stringProp>
               <boolProp name="TestElement.enabled">true</boolProp>
             </elementProp>
-            <stringProp name="HTTPSampler.port">80</stringProp>
-          </org.apache.jmeter.config.ConfigTestElement>
+          </ConfigTestElement>
           <hashTree/>
         </hashTree>
       </hashTree>
