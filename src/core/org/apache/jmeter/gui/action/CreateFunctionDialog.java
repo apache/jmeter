@@ -6,12 +6,6 @@ import java.util.Set;
 
 import org.apache.jmeter.functions.gui.FunctionHelper;
 
-/**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- */
 public class CreateFunctionDialog extends AbstractAction {
 	
 	private static Set commands;
@@ -34,9 +28,6 @@ public class CreateFunctionDialog extends AbstractAction {
         return commands;
     }
 
-	/**
-	 * @see ActionListener#actionPerformed(ActionEvent)
-	 */
 	public void doAction(ActionEvent arg0) 
 	{   
 		helper.show();

@@ -52,7 +52,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
     /**
      * Parses the response data using regular expressions and saving the results
      * into variables for use later in the test.
-     * @see org.apache.jmeter.config.PostProcessor#processResult(org.apache.jmeter.samplers.SampleResult)
+     * @see org.apache.jmeter.processor.PostProcessor#process()
      */
     public void process()
     {

@@ -312,11 +312,6 @@ public class ResultCollector extends AbstractListenerElement
         return serVer.substring(serVer.indexOf(System.getProperty("line.separator")));
     }
 
-    /**
-     * Description of the Method
-     *
-     * @param testResults Description of the Parameter
-     */
     private void readSamples(Configuration testResults)
             throws IOException, SAXException, ConfigurationException
     {
@@ -366,10 +361,9 @@ public class ResultCollector extends AbstractListenerElement
 
 
     /**
-        When a test result is received, display it and save it.
-        @param  e the sample event that was received
-    **/
-
+     * When a test result is received, display it and save it.
+     * @param  e the sample event that was received
+     */
     public void sampleOccurred(SampleEvent e)
     {
         SampleResult result = e.getResult();
@@ -409,11 +403,6 @@ public class ResultCollector extends AbstractListenerElement
         }
     }
 
-    /**
-     * Description of the Method
-     *
-     * @param result Description of the Parameter
-     */
     private void recordResult(SampleResult result)
             throws SAXException, IOException, ConfigurationException
     {
@@ -456,9 +445,6 @@ public class ResultCollector extends AbstractListenerElement
         }
     }
 
-    /**
-     * Description of the Method
-     */
     private synchronized void finalizeFileOutput()
     {
         if (out != null)
@@ -470,8 +456,8 @@ public class ResultCollector extends AbstractListenerElement
         }
     }
 
-    /**
-     * @see org.apache.jmeter.testelement.TestListener#iterationStart(org.apache.jmeter.engine.event.IterationEvent)
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(LoopIterationEvent)
      */
     public void testIterationStart(LoopIterationEvent event)
     {}

@@ -80,7 +80,7 @@ import org.apache.log.Logger;
  * 
  * @author mstover
  *
- * @see JMeterGuiComponent
+ * @see JMeterGUIComponent
  * @see org.apache.jmeter.config.gui.AbstractConfigGui
  * @see org.apache.jmeter.config.gui.AbstractModifierGui
  * @see org.apache.jmeter.config.gui.AbstractResponseBasedModifierGui
@@ -111,7 +111,7 @@ public abstract class AbstractJMeterGuiComponent
 		setName(getStaticLabel());
 	}
 	
-	/**
+    /* (non-Javadoc)
 	 * @see JMeterGUIComponent#setName(String)
 	 */
 	public void setName(String name)
@@ -119,7 +119,7 @@ public abstract class AbstractJMeterGuiComponent
 		namePanel.setName(name);
 	}
 	
-	/**
+    /* (non-Javadoc)
 	 * @see java.awt.Component#isEnabled()
 	 */
 	public boolean isEnabled()
@@ -127,7 +127,7 @@ public abstract class AbstractJMeterGuiComponent
 		return enabled;
 	}
 	
-	/**
+    /* (non-Javadoc)
 	 * @see java.awt.Component#setEnabled(boolean)
 	 */
 	public void setEnabled(boolean e)
@@ -136,7 +136,7 @@ public abstract class AbstractJMeterGuiComponent
 		enabled = e;
 	}
 	
-	/**
+    /* (non-Javadoc)
 	 * @see JMeterGUIComponent#getName()
 	 */
 	public String getName()
@@ -161,7 +161,7 @@ public abstract class AbstractJMeterGuiComponent
      * Provides a label containing the title for the component.  Subclasses
      * typically place this label at the top of their GUI.  The title is set
      * to the name returned from the component's
-     * {@link JMeterGuiComponent#getStaticLabel() getStaticLabel()} method.
+     * {@link JMeterGUIComponent#getStaticLabel() getStaticLabel()} method.
      * 
      * @return a JLabel which subclasses can add to their GUI
      */
@@ -177,7 +177,7 @@ public abstract class AbstractJMeterGuiComponent
 	 * it does the work necessary to configure the name of the component from the
 	 * given Test Element.  Otherwise, the component can do this itself.
 	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(org.apache.jmeter.testelement.TestElement)
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
 	 */
 	public void configure(TestElement element)
 	{
@@ -209,8 +209,8 @@ public abstract class AbstractJMeterGuiComponent
                 mc.setProperty(new BooleanProperty(TestElement.ENABLED,enabled));
 	}
 	
-	/**
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#setNode(org.apache.jmeter.gui.tree.JMeterTreeNode)
+    /* (non-Javadoc)
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#setNode(JMeterTreeNode)
 	 */
 	public void setNode(JMeterTreeNode node)
 	{
@@ -251,31 +251,38 @@ public abstract class AbstractJMeterGuiComponent
         return BorderFactory.createEmptyBorder(10, 10, 5, 10);
     }
 
-/**
- * Create a scroll panel that sets it's preferred size to it's minimum size.  Explicitly for scroll panes that live inside other
- * scroll panes, or within containers that stretch components to fill the area they exist in.
- * @param comp
- * @return
- */
+    /**
+     * Create a scroll panel that sets it's preferred size to it's minimum
+     * size.  Explicitly for scroll panes that live inside other scroll panes,
+     * or within containers that stretch components to fill the area they exist
+     * in.
+     * @param comp
+     * @return a JScrollPane containing the specified component
+     */
     protected JScrollPane makeScrollPane(Component comp)
     {
         JScrollPane pane =  new JScrollPane(comp);
         pane.setPreferredSize(pane.getMinimumSize());
         return pane;
     }
-    
+
     /**
-     *  Create a scroll panel that sets it's preferred size to it's minimum size.  Explicitly for scroll panes that live inside other
- * scroll panes, or within containers that stretch components to fill the area they exist in.
+     * Create a scroll panel that sets it's preferred size to it's minimum
+     * size.  Explicitly for scroll panes that live inside other scroll panes,
+     * or within containers that stretch components to fill the area they exist
+     * in.
      * @param comp
      * @param verticalPolicy
      * @param horizontalPolicy
-     * @return
+     * @return a JScrollPane containing the specified component
      */
-    protected JScrollPane makeScrollPane(Component comp,int verticalPolicy,int horizontalPolicy)
-        {
-            JScrollPane pane =  new JScrollPane(comp,verticalPolicy,horizontalPolicy);
-            pane.setPreferredSize(pane.getMinimumSize());
-            return pane;
-        }
+    protected JScrollPane makeScrollPane(
+        Component comp,
+        int verticalPolicy,
+        int horizontalPolicy)
+    {
+        JScrollPane pane =  new JScrollPane(comp,verticalPolicy,horizontalPolicy);
+        pane.setPreferredSize(pane.getMinimumSize());
+        return pane;
+    }
 }

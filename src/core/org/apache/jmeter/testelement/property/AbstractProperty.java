@@ -10,12 +10,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- */
 public abstract class AbstractProperty implements JMeterProperty
 {
     protected static Logger log = LoggingManager.getLoggerFor(JMeterUtils.PROPERTIES);
@@ -45,7 +39,7 @@ public abstract class AbstractProperty implements JMeterProperty
         }
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.jmeter.testelement.property.JMeterProperty#isRunningVersion()
      */
     public boolean isRunningVersion()
@@ -53,7 +47,7 @@ public abstract class AbstractProperty implements JMeterProperty
         return runningVersion;
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.jmeter.testelement.property.JMeterProperty#getName()
      */
     public String getName()
@@ -66,7 +60,7 @@ public abstract class AbstractProperty implements JMeterProperty
         this.name = name;
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
      */
     public void setRunningVersion(boolean runningVersion)
@@ -74,8 +68,8 @@ public abstract class AbstractProperty implements JMeterProperty
         this.runningVersion = runningVersion;
     }
 
-    /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#isTemporary()
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.property.JMeterProperty#isTemporary(TestElement)
      */
     public boolean isTemporary(TestElement owner)
     {
@@ -94,14 +88,14 @@ public abstract class AbstractProperty implements JMeterProperty
         }
     }
 
-    /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#merge(org.apache.jmeter.testelement.property.JMeterProperty)
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.property.JMeterProperty#mergeIn(JMeterProperty)
      */
     public void mergeIn(JMeterProperty prop)
     {}
 
-    /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#setTemporary(boolean)
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.property.JMeterProperty#setTemporary(boolean, TestElement)
      */
     public void setTemporary(boolean temporary, TestElement owner)
     {
@@ -130,7 +124,7 @@ public abstract class AbstractProperty implements JMeterProperty
         ownerMap.remove(owner);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see java.lang.Object#clone()
      */
     public Object clone()
@@ -154,9 +148,9 @@ public abstract class AbstractProperty implements JMeterProperty
     }
 
     /**
-         * returns 0 if string is invalid or null.
-         * @see org.apache.jmeter.testelement.property.JMeterProperty#getIntValue()
-         */
+     * returns 0 if string is invalid or null.
+     * @see org.apache.jmeter.testelement.property.JMeterProperty#getIntValue()
+     */
     public int getIntValue()
     {
         String val = getStringValue();
@@ -218,8 +212,8 @@ public abstract class AbstractProperty implements JMeterProperty
     }
 
     /**
-         * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion()
-         */
+     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(TestElement)
+     */
     public void recoverRunningVersion(TestElement owner)
     {}
 
@@ -265,9 +259,9 @@ public abstract class AbstractProperty implements JMeterProperty
         return compareTo(o) == 0;
     }
 
-    /**
-         * @see java.lang.Comparable#compareTo(java.lang.Object)
-         */
+    /* (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(Object)
+     */
     public int compareTo(Object arg0)
     {
         if (arg0 instanceof JMeterProperty)
