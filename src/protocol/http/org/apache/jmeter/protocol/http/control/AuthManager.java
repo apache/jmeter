@@ -302,6 +302,7 @@ public class AuthManager
             }
             catch (Exception e)
             {
+				reader.close();
                 throw new IOException(
                     "Error parsing auth line\n\t'" + line + "'\n\t" + e);
             }
