@@ -295,7 +295,6 @@ public class LDAPSampler extends AbstractSampler
      */
     public BasicAttributes getUserAttributes()
     {
-        boolean add =true;
         BasicAttribute basicattribute = new BasicAttribute("objectclass");
         basicattribute.add("top");
         basicattribute.add("person");
@@ -327,8 +326,6 @@ public class LDAPSampler extends AbstractSampler
     {
         ModificationItem[] mods =
             new ModificationItem[getArguments().getArguments().size()];
-        boolean add = true;
-        BasicAttributes attrs = new BasicAttributes(true);
         BasicAttribute attr;
         PropertyIterator iter = getArguments().iterator();
         int count =0;

@@ -54,10 +54,6 @@
  */
 package org.apache.jmeter.protocol.ftp.sampler;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
@@ -119,9 +115,6 @@ public class FTPSampler extends AbstractSampler
     public SampleResult sample(Entry e)
     {
         SampleResult res = new SampleResult();
-        Connection con = null;
-        ResultSet rs = null;
-        Statement stmt = null;
         boolean isSuccessful = false;
         //FtpConfig ftpConfig = (FtpConfig)e.getConfigElement(FtpConfig.class);
         res.setSampleLabel(getLabel());

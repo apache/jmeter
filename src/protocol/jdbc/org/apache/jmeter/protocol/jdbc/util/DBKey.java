@@ -190,7 +190,6 @@ public class DBKey implements Serializable
     {
         // Implementation based on Joshua Bloch's _Effective Java_
         // http://developer.java.sun.com/developer/Books/effectivejava/Chapter3.pdf
-        int c;
         int result = 17;
         
         result = 37 * result + driver.hashCode();

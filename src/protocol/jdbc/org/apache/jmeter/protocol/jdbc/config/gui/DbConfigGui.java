@@ -74,8 +74,6 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class DbConfigGui extends AbstractConfigGui
 {
-    private final static String LOGIN_ELEMENT = "DbConfigGui.login_element";
-    private static String PROTOCOL = "protocol";
     private static String URL = "url";
     private static String DRIVER = "driver";
     private JTextField urlField = new JTextField(20);
