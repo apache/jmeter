@@ -42,7 +42,8 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * collectors rather the same information. Instead,
  * I would rather have the visualizer be the
  * container for the data and simply pass the data
- * to child JComponents.
+ * to child JComponents. In the future, we may want
+ * to add email alerts as a third tab.
  */
 public class MonitorHealthVisualizer extends AbstractVisualizer
 	implements ImageVisualizer, ItemListener, GraphListener, Clearable
