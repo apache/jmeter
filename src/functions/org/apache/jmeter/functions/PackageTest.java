@@ -1,0 +1,216 @@
+/*
+ * Package to test functions
+ * 
+ * Functions are created and parameters set up in one thread.
+ * 
+ * They are then tested in another thread, or two threads running in parallel
+ * 
+ */
+package org.apache.jmeter.functions;
+
+import java.io.PrintWriter;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import junit.extensions.ActiveTestSuite;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
+import org.apache.jmeter.engine.util.CompoundVariable;
+import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
+
+/**
+ * @author sebb 'AT apache DOT org
+ * @version $revision$ $date$
+ */
+public class PackageTest extends JMeterTestCase
+{
+
+//	transient private static final Logger log = LoggingManager.getLoggerForClass();
+//
+//    static{
+//	    LoggingManager.setPriority("DEBUG","jmeter");
+//	    LoggingManager.setTarget(new PrintWriter(System.out));
+//    }
+//
+    public PackageTest(String arg0)
+    {
+        super(arg0);
+    }
+
+
+    // Create the CSVRead function and set its parameters.
+	private static CSVRead setParams(String p1, String p2) throws Exception
+	{
+		CSVRead cr = new CSVRead();
+		Collection parms = new LinkedList();
+		if (p1 != null) parms.add(new CompoundVariable(p1));
+		if (p2 != null) parms.add(new CompoundVariable(p2));
+		cr.setParameters(parms);
+		return cr;
+	}
+
+	public static Test suite() throws Exception
+	{
+		   TestSuite suite = new TestSuite("SingleThreaded");
+		   suite.addTest(new PackageTest("CSV2Setup"));
+		   suite.addTest(new PackageTest("CSV2Run"));
+
+
+           //Reset files
+           suite.addTest(new PackageTest("CSV2Setup"));
+		   TestSuite par = new ActiveTestSuite("Parallel");
+		   par.addTest(new PackageTest("Thread1"));
+		   par.addTest(new PackageTest("Thread2"));
+		   suite.addTest(par);
+		   return suite;
+    }
+    
+    
+    // Function objects to be tested
+    private static CSVRead cr1, cr2, cr3, cr4;
+    
+    // Helper class used to implement co-routine between two threads
+    private static class Baton{
+    	void pass(){
+    		done();
+    		try
+            {
+				//System.out.println(">wait:"+Thread.currentThread().getName());
+                wait(1000);
+            }
+            catch (InterruptedException e)
+            {
+            	System.out.println(e);
+            }
+			//System.out.println("<wait:"+Thread.currentThread().getName());
+
+    	}
+    	
+    	void done(){
+			//System.out.println(">done:"+Thread.currentThread().getName());
+    		notifyAll();
+    	}
+
+    }
+    
+    private static Baton baton = new Baton();
+
+	public void Thread1() throws Exception
+	{
+		Thread.currentThread().setName("One");
+		synchronized(baton){
+			
+			assertEquals("b1",cr1.execute(null,null));
+
+			assertEquals("",cr4.execute(null,null));
+	
+			assertEquals("b2",cr1.execute(null,null));
+           
+			baton.pass();
+
+			assertEquals("",cr4.execute(null,null));
+	
+			assertEquals("b4",cr1.execute(null,null));
+
+			assertEquals("",cr4.execute(null,null));
+
+			baton.pass();
+
+			assertEquals("b3",cr1.execute(null,null));
+
+			assertEquals("",cr4.execute(null,null));
+
+			baton.done();
+		}
+	}
+
+	public void Thread2() throws Exception
+	{
+		Thread.currentThread().setName("Two");
+		Thread.sleep(500);// Allow other thread to start
+		synchronized(baton){
+
+			assertEquals("b3",cr1.execute(null,null));
+			
+            assertEquals("",cr4.execute(null,null));
+			
+			baton.pass();
+			
+			assertEquals("b1",cr1.execute(null,null));
+
+			assertEquals("",cr4.execute(null,null));
+
+			assertEquals("b2",cr1.execute(null,null));
+			
+			baton.pass();
+
+			assertEquals("",cr4.execute(null,null));
+
+			assertEquals("b4",cr1.execute(null,null));
+
+			baton.done();
+		}
+	}
+
+    
+    public void CSV2Run() throws Exception
+    {
+    	assertEquals("b1",cr1.execute(null,null));
+		assertEquals("c1",cr2.execute(null,null));
+		assertEquals("d1",cr3.execute(null,null));
+
+		assertEquals("",cr4.execute(null,null));
+		assertEquals("b2",cr1.execute(null,null));
+		assertEquals("c2",cr2.execute(null,null));
+		assertEquals("d2",cr3.execute(null,null));
+
+		assertEquals("",cr4.execute(null,null));
+		assertEquals("b3",cr1.execute(null,null));
+		assertEquals("c3",cr2.execute(null,null));
+		assertEquals("d3",cr3.execute(null,null));
+
+		assertEquals("",cr4.execute(null,null));
+		assertEquals("b4",cr1.execute(null,null));
+		assertEquals("c4",cr2.execute(null,null));
+		assertEquals("d4",cr3.execute(null,null));
+
+		assertEquals("",cr4.execute(null,null));
+		assertEquals("b1",cr1.execute(null,null));
+		assertEquals("c1",cr2.execute(null,null));
+		assertEquals("d1",cr3.execute(null,null));
+    }
+
+    public void CSV2Setup() throws Exception
+    {
+    	/*
+    	try {
+			setParams(null,null);
+			fail("Should have failed");
+    	}
+    	catch (InvalidVariableException e)
+    	{
+    	}
+		try {
+			setParams(null,"");
+			fail("Should have failed");
+		}
+		catch (InvalidVariableException e)
+		{
+		}
+		try {
+			setParams("",null);
+			fail("Should have failed");
+		}
+		catch (InvalidVariableException e)
+		{
+		}
+		*/
+    	cr1=setParams("test.csv","1");
+		cr2=setParams("test.csv","2");
+		cr3=setParams("test.csv","3");
+		cr4=setParams("test.csv","next");
+    }
+}
