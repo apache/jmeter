@@ -392,9 +392,8 @@ is complete, but some features have not been enabled. There is a filter for the 
 log parser, but I haven't figured out how to link to the pre-processor. Once I do, changes
 to the sampler will be made to enable that functionality.</p>
 <p>Tomcat uses the common format for access logs. This means any webserver that uses the
-common log format can use the AccessLogSampler. Server that don't use common log format
-include IIS, Netscape and SunOne. I'm sure there are other servers that don't use the
-common format, but we don't bother listing all of them here. Common log format looks
+common log format can use the AccessLogSampler. Server that use common log format include:
+Tomcat, Resin, Weblogic, and SunOne. Common log format looks
 like this:</p>
 <p>127.0.0.1 - - [21/Oct/2003:05:37:21 -0500] "GET /index.jsp?%2Findex.jsp= HTTP/1.1" 200 8343</p>
 <p>The current implemenation of the parser only looks at the text within the quotes.
