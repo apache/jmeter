@@ -2,8 +2,6 @@ package org.apache.jmeter.control.gui;
 import java.awt.BorderLayout;
 import java.util.Collection;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -139,11 +137,11 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
     private void init()
     {
         this.setLayout(new BorderLayout(10, 10));
-        this.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 5));
+        this.setBorder(makeBorder());
         
-        Box northPanel = Box.createVerticalBox();
-        northPanel.add(makeTitlePanel());
-        add(northPanel, BorderLayout.NORTH);
+        add(makeTitlePanel(), BorderLayout.NORTH);
+
+        add(getVariablePanel(), BorderLayout.CENTER);
 
         JPanel southPanel = new JPanel(new BorderLayout());
         functionalMode = new JCheckBox(JMeterUtils.getResString("functional_mode"));
@@ -153,7 +151,6 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
         explain.setBackground(this.getBackground());
         southPanel.add(explain, BorderLayout.CENTER);
 
-        add(getVariablePanel(), BorderLayout.CENTER);
         add(southPanel, BorderLayout.SOUTH);
     }
 }

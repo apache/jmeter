@@ -53,13 +53,11 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control.gui;
+import java.awt.BorderLayout;
 import java.util.Collection;
 
 import javax.swing.JMenu;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -67,7 +65,6 @@ import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -162,16 +159,10 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent
 
 	private void init()
 	{
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-		mainPanel.add(makeTitlePanel());
-
-		this.add(mainPanel);
+		setLayout(new BorderLayout());
+        setBorder(makeBorder());
+        
+        add(makeTitlePanel(), BorderLayout.NORTH);
 	}
 
 

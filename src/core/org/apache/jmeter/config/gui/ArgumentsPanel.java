@@ -55,7 +55,6 @@
 package org.apache.jmeter.config.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -65,6 +64,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -330,7 +330,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, 
     /****************************************
      * !ToDo
      ***************************************/
-    public void addInnerPanel()
+    private Component makeMainPanel()
     {
         initializeTableModel();
         table = new JTable(tableModel);
@@ -349,30 +349,26 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, 
         table.setColumnSelectionAllowed(false);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        JScrollPane scroller = new JScrollPane(table);
-        Dimension tableDim = scroller.getPreferredSize();
-        tableDim.height = 70;
-        scroller.setPreferredSize(tableDim);
-        scroller.setColumnHeaderView(table.getTableHeader());
+        return new JScrollPane(table);
+    }
 
+    private JPanel makeButtonPanel() {
         add = new JButton(JMeterUtils.getResString("add"));
         add.setActionCommand(ADD);
         add.setEnabled(true);
-
+        
         delete = new JButton(JMeterUtils.getResString("delete"));
         delete.setActionCommand(DELETE);
-
+        
         checkDeleteStatus();
-
+        
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         add.addActionListener(this);
         delete.addActionListener(this);
         buttonPanel.add(add);
         buttonPanel.add(delete);
-
-        this.add(scroller, BorderLayout.CENTER);
-        this.add(buttonPanel, BorderLayout.SOUTH);
+        return buttonPanel;
     }
 
     protected void initializeTableModel()
@@ -412,11 +408,15 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, 
 
     private void init()
     {
-        this.setLayout(new BorderLayout(0, 0));
-        this.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-        Component labelPanel = makeLabelPanel();
-        this.add(labelPanel, BorderLayout.NORTH);
-        this.addInnerPanel();
+        this.setLayout(new BorderLayout());
+//        this.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+
+        this.add(makeLabelPanel(), BorderLayout.NORTH);
+        this.add(makeMainPanel(), BorderLayout.CENTER);
+        // Force a minimum table height of 70 pixels
+        this.add(Box.createVerticalStrut(70), BorderLayout.WEST);
+        this.add(makeButtonPanel(), BorderLayout.SOUTH);
+
         table.revalidate();
         sizeColumns(table);
     }

@@ -10,6 +10,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 
 import javax.swing.Box;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 /**
@@ -20,12 +21,18 @@ import javax.swing.JPanel;
  */
 public class VerticalPanel extends JPanel
 {
-    Box subPanel = Box.createVerticalBox();
+    private Box subPanel = Box.createVerticalBox();
+    private float horizontalAlign;
     
     public VerticalPanel()
     {
+        this(LEFT_ALIGNMENT);
+    }
+    
+    public VerticalPanel(float horizontalAlign) {
         super(new BorderLayout());
         add(subPanel,BorderLayout.NORTH);
+        this.horizontalAlign = horizontalAlign;
     }
     
     
@@ -33,9 +40,12 @@ public class VerticalPanel extends JPanel
     /* (non-Javadoc)
      * @see java.awt.Container#add(java.awt.Component)
      */
-    public Component add(Component arg0)
+    public Component add(Component c)
     {
-        return subPanel.add(arg0);
+        if (c instanceof JComponent) {
+            ((JComponent)c).setAlignmentX(horizontalAlign);
+        }
+        return subPanel.add(c);
     }
 
 }
