@@ -18,7 +18,7 @@
 	 <li><a href="get-started.html#requirements">2.1 Requirements</a></li>
 	 <ul>
 		<li><a href="get-started.html#java_versions">2.1.1 Java Version</a></li>
-		<li><a href="get-started.html#os">2.1.2 Operating Systems<!--: any (has been tested on Windows 98, ...)--></a></li>
+		<li><a href="get-started.html#os">2.1.2 Operating Systems</a></li>
 	 </ul>
 	 <li><a href="get-started.html#optional">2.2 Optional</a></li>
 	 <ul>
@@ -69,6 +69,11 @@
 		<li><a href="build-web-test-plan.html#running">5.6 Running the Test Plan</a></li>
 	 </ul>
   <li><a href="build-adv-web-test-plan.html">6. Building an Advanced Web Test Plan</a></li>
+	 <ul>
+		<li><a href="build-adv-web-test-plan.html#multi_user_logins">6.1 Creating Multiple User Logins</a></li>
+		<li><a href="build-adv-web-test-plan.html#session_cookies">6.2 Handling User Sessions With Cookies</a></li>
+		<li><a href="build-adv-web-test-plan.html#session_url_rewriting">6.3 Handling User Sessions With URL Rewriting</a></li>
+	 </ul>
   <li><a href="build-db-test-plan.html">7. Building a Database Test Plan</a></li>
   <li><a href="build-ftp-test-plan.html">8. Building a FTP Test Plan</a></li>
   <li><a href="remote-test.html">9. Remote Testing</a></li>

@@ -7,7 +7,26 @@
 
 <body>
 
-<section name="6. Building an Advanced Web Test Plan">
+<section name="6. Building an Advanced Web Test Plan" anchor="building">
+<p>In this section, you will learn how to create advanced 
+<a href="build-test-plan.html">Test Plans</a> to test a Web site.</p> 
+<p>
+<ul>
+<li><a href="#multi_user_logins">6.1 Creating Multiple User Logins</a></li>
+<li><a href="#session_cookies">6.2 Handling User Sessions With Cookies</a></li>
+<li><a href="#session_url_rewriting">6.3 Handling User Sessions With URL Rewriting</a></li>
+</ul>
+</p>
+<p>For an example of a basic Test Plan, see  
+<a href="build-web-test-plan.html">Building a Web Test Plan</a>.</p></section>
+
+<section name="6.1 Creating Multiple User Logins" anchor="multi_user_logins">
+</section>
+
+<section name="6.2 Handling User Sessions With Cookies" anchor="session_cookies">
+</section>
+
+<section name="6.3 Handling User Sessions With URL Rewriting" anchor="session_url_rewriting">
 </section>
 
 </body>
