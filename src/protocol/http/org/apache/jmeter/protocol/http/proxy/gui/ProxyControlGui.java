@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.proxy.gui;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -103,9 +104,16 @@ import org.apache.log.Logger;
  *@version $Revision$
  ***************************************/
 
-public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMeterGUIComponent, ActionListener, KeyListener, FocusListener, UnsharedComponent
+public class ProxyControlGui
+    extends AbstractJMeterGuiComponent
+    implements
+        JMeterGUIComponent,
+        ActionListener,
+        KeyListener,
+        FocusListener,
+        UnsharedComponent
 {
-    transient private static Logger log =
+    private static transient Logger log =
             Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
     private JTextField portField;
 
@@ -117,20 +125,19 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
     private PowerTableModel includeModel;
 
     private JButton stop, start, restart;
-    private final static String STOP = "stop";
-    private final static String START = "start";
-    private final static String RESTART = "restart";
-    private final static String ADD_INCLUDE = "add_include";
-    private final static String ADD_EXCLUDE = "add_exclude";
-    private final static String DELETE_INCLUDE = "delete_include";
-    private final static String DELETE_EXCLUDE = "delete_exclude";
+    private static final String STOP = "stop";
+    private static final String START = "start";
+    private static final String RESTART = "restart";
+    private static final String ADD_INCLUDE = "add_include";
+    private static final String ADD_EXCLUDE = "add_exclude";
+    private static final String DELETE_INCLUDE = "delete_include";
+    private static final String DELETE_EXCLUDE = "delete_exclude";
 
-    private final static String INCLUDE_COL = JMeterUtils.getResString("patterns_to_include");
-    private final static String EXCLUDE_COL = JMeterUtils.getResString("patterns_to_exclude");
+    private static final String INCLUDE_COL =
+        JMeterUtils.getResString("patterns_to_include");
+    private static final String EXCLUDE_COL =
+        JMeterUtils.getResString("patterns_to_exclude");
 
-    /****************************************
-     * !ToDo (Constructor description)
-     ***************************************/
     public ProxyControlGui()
     {
         super();
@@ -152,7 +159,7 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
         modifyTestElement(model);
         return model;
     }
-    
+
     protected ProxyControl makeProxyControl()
         {
             ProxyControl local = new ProxyControl();
@@ -164,10 +171,10 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement el)
-    {        
+    {
         configureTestElement(el);
         if(el instanceof ProxyControl)
-        {            
+        {
             ((ProxyControl)el).setPort(portField.getText());
             setIncludeListInProxyControl((ProxyControl)el);
             setExcludeListInProxyControl((ProxyControl)el);
@@ -272,8 +279,7 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
         {
             excludeModel.addNewRow();
             excludeModel.fireTableDataChanged();
-            if (stop.isEnabled())
-                enableRestart();
+            enableRestart();
         }
         else if (command.equals(ADD_INCLUDE))
         {
@@ -308,7 +314,11 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
         }
         catch (InvalidVariableException e)
         {
-            JOptionPane.showMessageDialog(this, JMeterUtils.getResString("invalid_variables"), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                this,
+                JMeterUtils.getResString("invalid_variables"),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -355,7 +365,11 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
             {
                 if (portField.getText().length() > 0)
                 {
-                    JOptionPane.showMessageDialog(this, "You must enter a valid number", "Invalid data", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(
+                        this,
+                        "You must enter a valid number",
+                        "Invalid data",
+                        JOptionPane.WARNING_MESSAGE);
 
                     // Right now, the cleanest thing to do is simply clear the
                     // entire text field. We do not want to set the text to
@@ -374,22 +388,22 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
     {
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
-        
+
         add(makeTitlePanel(), BorderLayout.NORTH);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(createPortPanel(), BorderLayout.NORTH);
-        
+
         Box includeExcludePanel = Box.createVerticalBox();
         includeExcludePanel.add(createIncludePanel());
         includeExcludePanel.add(createExcludePanel());
         mainPanel.add(includeExcludePanel, BorderLayout.CENTER);
-        
+
         mainPanel.add(createControls(), BorderLayout.SOUTH);
-        
-        add(mainPanel, BorderLayout.CENTER);        
+
+        add(mainPanel, BorderLayout.CENTER);
     }
-    
+
     private JPanel createControls()
     {
         start = new JButton(JMeterUtils.getResString("start"));
@@ -422,14 +436,15 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
 
         JLabel label = new JLabel(JMeterUtils.getResString("port"));
         label.setLabelFor(portField);
-        
+
         HorizontalPanel panel = new HorizontalPanel();
         panel.add(label);
         panel.add(portField);
-        return panel;        
+        return panel;
     }
 
-    private JPanel createIncludePanel() {
+    private JPanel createIncludePanel()
+    {
         includeModel = new PowerTableModel(
                 new String[] { INCLUDE_COL },
                 new Class[] { String.class });
@@ -448,7 +463,7 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
 
         return panel;
     }
-    
+
     private JPanel createExcludePanel()
     {
         excludeModel = new PowerTableModel(
@@ -457,18 +472,24 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
         excludeTable = new JTable(excludeModel);
         excludeTable.setPreferredScrollableViewportSize(new Dimension(100, 50));
         excludeTable.addFocusListener(this);
-        
+
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("patterns_to_exclude")));
+        panel.setBorder(
+            BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("patterns_to_exclude")));
 
         panel.add(new JScrollPane(excludeTable), BorderLayout.CENTER);
         panel.add(createTableButtonPanel(ADD_EXCLUDE, DELETE_EXCLUDE),
             BorderLayout.SOUTH);
-        
+
         return panel;
     }
 
-    private JPanel createTableButtonPanel(String addCommand, String deleteCommand) {
+    private JPanel createTableButtonPanel(
+        String addCommand,
+        String deleteCommand)
+    {
         JPanel buttonPanel = new JPanel();
 
         JButton addButton = new JButton(JMeterUtils.getResString("add"));
@@ -480,8 +501,8 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
         deleteButton.setActionCommand(deleteCommand);
         deleteButton.addActionListener(this);
         buttonPanel.add(deleteButton);
-        
-        return buttonPanel;        
+
+        return buttonPanel;
     }
 
     public void setNode(JMeterTreeNode node)
@@ -497,5 +518,4 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
     {
         return portField;
     }
-
 }
