@@ -438,8 +438,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable
      *
      *@param e  <code>Entry</code> to be sampled
      *@return   results of the sampling
-     *@see      org.apache.jmeter.protocol.http.sampler.HTTPSampler.sample(org.apache.jmeter.samplers.Entry,
-     *      int)
+     *@see      #sample(Entry, int)
      ***************************************/
     public SampleResult sample(Entry e)
     {

@@ -311,7 +311,7 @@ public class JavaSampler extends AbstractSampler
     }
 
     /**
-     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.IterationEvent)
+     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(LoopIterationEvent)
      */
     public void testIterationStart(LoopIterationEvent event)
     {}

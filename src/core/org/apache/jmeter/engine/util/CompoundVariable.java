@@ -159,7 +159,7 @@ public class CompoundVariable implements Function
         return rawParameters;
     }
  
-     /**
+    /* (non-Javadoc)
      * @see Function#execute(SampleResult, Sampler)
      */
     public String execute(SampleResult previousResult, Sampler currentSampler)
@@ -234,9 +234,6 @@ public class CompoundVariable implements Function
         this.threadVars = threadVars;
     }
 
-	/**
-	 * @see Function#setParameters(String)
-	 */
 	public void setParameters(String parameters)
 		throws InvalidVariableException
 	{
@@ -247,7 +244,7 @@ public class CompoundVariable implements Function
 		compiledComponents = buildComponents( parameters );
 	}
 	
-	/**
+    /* (non-Javadoc)
 	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
 	 */
 	public void setParameters(Collection parameters)

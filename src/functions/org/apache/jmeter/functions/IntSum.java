@@ -133,7 +133,7 @@ public class IntSum extends AbstractFunction implements Serializable
 	/**
 	 * Set the parameters for the function.
 	 * 
-	 * @see Function#setParameters(String)
+	 * @see Function#setParameters(Collection)
 	 */
 	public void setParameters(Collection parameters)
 			throws InvalidVariableException

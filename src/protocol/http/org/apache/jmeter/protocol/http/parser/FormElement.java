@@ -3,7 +3,6 @@ package org.apache.jmeter.protocol.http.parser;
 /************************************************************
  *  Title: Description: Copyright: Copyright (c) 2001 Company:
  *
- *@author
  *@created    June 16, 2001
  *@version    1.0
  ***********************************************************/

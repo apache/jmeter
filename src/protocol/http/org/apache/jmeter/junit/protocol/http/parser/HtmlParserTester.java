@@ -13,7 +13,6 @@ import org.apache.jmeter.threads.JMeterContextService;
 /************************************************************
  *  Title: Description: Copyright: Copyright (c) 2001 Company:
  *
- *@author
  *@created    June 14, 2001
  *@version    1.0
  ***********************************************************/

@@ -16,14 +16,6 @@ import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
 
-/**
- * @author default
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
- */
 /*
  * It appears that JMeter instantiates a new copy of each function for every reference in a Sampler
  * or elsewhere.
@@ -68,7 +60,7 @@ public class StringFromFile extends AbstractFunction implements Serializable
 	    }
 	}
 
-	/**
+    /* (non-Javadoc)
 	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
 	 */
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
@@ -104,8 +96,8 @@ public class StringFromFile extends AbstractFunction implements Serializable
 
 	}
 
-	/**
-	 * @see org.apache.jmeter.functions.Function#setParameters(String)
+    /* (non-Javadoc)
+	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
 	 */
 	public void setParameters(Collection parameters)
 		throws InvalidVariableException {
@@ -117,14 +109,14 @@ public class StringFromFile extends AbstractFunction implements Serializable
 			
 	}
 
-	/**
+    /* (non-Javadoc)
 	 * @see org.apache.jmeter.functions.Function#getReferenceKey()
 	 */
 	public String getReferenceKey() {
 		return KEY;
 	}
 
-	/**
+    /* (non-Javadoc)
 	 * @see org.apache.jmeter.functions.Function#getArgumentDesc()
 	 */
 	public List getArgumentDesc() {
