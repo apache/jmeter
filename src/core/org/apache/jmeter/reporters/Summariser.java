@@ -252,9 +252,17 @@ public class Summariser
 		sb.append(" ");
         sb.append(longToSb(tmp,s.getNumSamples(),5));
         sb.append(" in ");
-		sb.append(doubleToSb(tmp,(double)s.getElapsed()/1000.0,5,1));
+        long elapsed = s.getElapsed();
+		sb.append(doubleToSb(tmp,(double)elapsed/1000.0,5,1));
 		sb.append("s = ");
-		sb.append(doubleToSb(tmp,s.getRate(),6,1));
+		if (elapsed > 0)
+		{
+			sb.append(doubleToSb(tmp,s.getRate(),6,1));			
+		}
+		else
+		{
+			sb.append("******");// Rate is effectively infinite
+		}
 		sb.append("/s Avg: ");
 		sb.append(longToSb(tmp,s.getAverage(),5));
 		sb.append(" Min: ");
