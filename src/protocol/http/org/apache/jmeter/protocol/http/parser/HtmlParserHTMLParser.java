@@ -164,7 +164,13 @@ class HtmlParserHTMLParser extends HTMLParser
                         // then we need to download the binary
                         binUrlStr= input.getAttribute("src");
                     }
-                }
+				} else if (node instanceof LinkTag){
+					LinkTag link = (LinkTag)node;
+					if (link.getChild(0) instanceof ImageTag){
+						ImageTag img = (ImageTag)link.getChild(0);
+						binUrlStr = img.getImageURL();
+					}
+				}
 
                 if (binUrlStr == null)
                 {
