@@ -402,8 +402,7 @@ public class ViewResultsFullVisualizer
             )
         {
 
-            // Switch to the other mode
-            textMode = !textMode;
+            textMode = command.equals(TEXT_COMMAND);
 
             DefaultMutableTreeNode node =
                 (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
