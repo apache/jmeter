@@ -110,6 +110,28 @@ public interface SaveServiceConstants
     public static final String ASSERTION_RESULTS_PROP
             = "jmeter.save.saveservice.assertion_results";
 
+    /** The name of the property indicating which delimiter should be
+        used when saving in a delimited values format.  **/
+    public static final String DEFAULT_DELIMITER_PROP
+            = "jmeter.save.saveservice.default_delimiter";
+
+    /** The name of the property indicating which format should be
+        used when saving the results, e.g., xml or csv.  **/
+    public static final String OUTPUT_FORMAT_PROP
+            = "jmeter.save.saveservice.output_format";
+
+    /** The name of the property indicating whether field names should be
+        printed to a delimited file.  **/
+    public static final String PRINT_FIELD_NAMES_PROP
+            = "jmeter.save.saveservice.print_field_names";
+
+    /** Indicates that results should be saved as XML.  **/
+    public static final int SAVE_AS_XML = 0;
+
+    /** Indicates that results should be saved as comma-separated-values.  **/
+    public static final int SAVE_AS_CSV = SAVE_AS_XML + 1;
+
+
     /** The name of the property indicating whether the data type
      should be saved.  **/
     public static final String SAVE_DATA_TYPE_PROP
@@ -156,7 +178,7 @@ public interface SaveServiceConstants
             = "jmeter.save.saveservice.timestamp_format";
 
     // ---------------------------------------------------------------------
-    // XML RESULT FILE CONSTANTS
+    // XML RESULT FILE CONSTANTS AND FIELD NAME CONSTANTS
     // ---------------------------------------------------------------------
 
     public final static String PRESERVE = "preserve";
