@@ -96,7 +96,7 @@ public abstract class TestBean extends AbstractTestElement
     /**
      * Property name to property descriptor method map.
      */
-    private Map descriptors;
+    private transient Map descriptors;
 
     /**
      * Parameter-less constructor.
