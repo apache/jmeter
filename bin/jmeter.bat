@@ -22,6 +22,11 @@ if not "%OS%"=="Windows_NT" goto win9xStart
 rem Need to check if we are using the 4NT shell...
 if "%eval[2+2]" == "4" goto setup4NT
 
+if exist jmeter.bat goto winNT1
+echo Changing to JMeter home directory
+cd /D %~dp0
+
+:winNT1
 rem On NT/2K grab all arguments at once
 set JMETER_CMD_LINE_ARGS=%*
 goto doneStart
