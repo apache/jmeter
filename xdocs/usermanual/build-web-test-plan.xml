@@ -159,7 +159,7 @@ element.</li>
 Figure 5.5. HTTP Request for Jakarta Home Page</figure>
 
 <p>Next, add the second HTTP Request and edit the following properties (see
-Figure 5.56:
+Figure 5.6:
 <ol>
 <li>Change the Name field to "Project Guidelines".</li>
 <li>Set the Path field to "/site/guidelines.html".</li>
@@ -182,8 +182,8 @@ a visual model of the data.</p>
 output file.  You can either type it into the filename field, or select the
 Browse button and browse to a directory and then enter a filename.</p>
 
-<figure image="../images/screenshots/webtest/file-reporter.gif">
-Figure 5.7. File Reporter Listener</figure>
+<figure image="../images/screenshots/graph_results.gif">
+Figure 5.7. Graph Results Listener</figure>
 
 </section>
 
@@ -204,28 +204,20 @@ element and then clicking your right mouse button.</note>
 </section>
 
 <section name="5.7 Running the Test Plan" anchor="running">
-<p>Before running the Test Plan, You have to manually open the File Reporter
-output file. Select the File Reporter tree element, and select the Open button,
-which is located at the bottom of the Control Panel.</p>
 
 <p>From the Run menu, select Run.</p>
 
-<note>The current version of JMeter does not let you know
-when it has finished running your Test Plan.  You have to determine this
-by viewing the console output or the File Reporter output file.</note>
+<note>JMeter lights up a green square in the upper-right-hand corner to indicate if a test is
+currently running.  The square is turned gray when all tests stop.  Even after you select "stop",
+the green light will stay on until all test threads have exited.</note>
 
 <p>Once JMeter has finished running your Test Plan, select Stop from the
 Run menu.</p>
-<p>Next, you need to close the File Reporter output file.  Select
-the File Reporter tree element, and select the Close button on the
-Control Panel.</p>
-<p>To view the results, open the File Reporter output file in a text
-editor (see Figure 5.8). The format is [URL][space][Response time in milliseconds].</p>
-<p>Alternatively, you can use the <complink name="Data Analyzer"/> for a graphical
-view of the data.</p>
+<p>If you selected a file to save the results to in your listener, then you will have a file that can be
+opened in any visualizer.  Each visualizer will display the results in it's own fashion.</p>
 
-<figure image="../images/screenshots/webtest/file-reporter-results.gif">
-Figure 5.8. Test Plan Results</figure>
+<note>It is possible to have the same file open in more than one visualizer.  This is not a problem.  JMeter
+will ensure during the test run that no sample is recorded to the same file more than once.</note> 
 
 </section>
 

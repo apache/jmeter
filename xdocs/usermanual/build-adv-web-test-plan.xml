@@ -10,11 +10,7 @@
 <section name="6. Building an Advanced Web Test Plan" anchor="building">
 <p>In this section, you will learn how to create advanced
 <a href="build-test-plan.html">Test Plans</a> to test a Web site.</p>
-<p>
-<ul>
-<li><a href="#session_url_rewriting">6.1 Handling User Sessions With URL Rewriting</a></li>
-</ul>
-</p>
+
 <p>For an example of a basic Test Plan, see
 <a href="build-web-test-plan.html">Building a Web Test Plan</a>.</p></section>
 
@@ -22,24 +18,18 @@
 <p>If your web application uses URL rewriting rather than cookies to save session information,
 then you'll need to do a bit of extra work to test your site.</p>
 <p>To respond correctly to URL rewriting, JMeter needs to parse the HTML
-received from the server and retrieve the unique session ID.  To do this, put
-all your requests inside a <complink name="Modification Manager"/>, with an <complink
-name="HTML Link Parser"/> attached.  Then, include the session ID as an additional parameter
-with each <complink name="HTTP Request"/>, with ".*" as the value.</p>
+received from the server and retrieve the unique session ID.  Use the appropriate <complink name="URL Rewriting Modifier"/>
+to accomplish this.  Simply enter the name of your session ID parameter into the modifier, and it
+will find it and add it to each request.  If the request already has a value, it will be replaced.</p>
 
 <example title="URL Rewriting Example">
-<p>Download <a href="../demos/URLRewritingExample.jmx">this example</a>. In Figure 1 is shown a test plan using URL rewriting.  Note that all HTTP Requests are
-contained within the <complink name="Modification Manager"/>. The <complink name="Modification Manager"/>
-also has an <complink name="HTML Link Parser"/> attached to it.</p>
-<note>It would be possible to use other <a href="component_reference.html#logic_controllers">Logic
-Controllers</a> within the
-<complink name="Modification Manager"/> without affecting the Modification Manager.</note>
+<p>Download <a href="../demos/URLRewritingExample.jmx">this example</a>. In Figure 1 is shown a 
+test plan using URL rewriting.  Note that the URL Re-writing modifier is attached to the ThreadGroup,
+thus assuring that it will affect every request in that ThreadGroup.</p>
 <figure image="../images/screenshots/url_rewrite_example_a.gif">Figure 1 - Test Tree</figure>
-<p>In Figure 2, we see the "Send Parameters with Request" section of one of the
-<complink name="HTTP Request"/> objects.  It shows, in addition to the login
-information, the SESSION_ID parameter, with a value of ".*", which is a regular expression
-that will match any string.  Your application will have its own unique name for
-this parameter, which you will have to put in place of "SESSION_ID".</p>
+<p>In Figure 2, we see the URL Re-writing modifier GUI, which just has a field for the user to specify
+the name of the session ID parameter.  There is also a checkbox for indicating that the session ID should
+be part of the path (separated by a ";"), rather than a request parameter</p>
 <figure image="../images/screenshots/url_rewrite_example_b.gif">Figure 2 - Request parameters</figure>
 </example>
 </section>

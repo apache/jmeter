@@ -9,6 +9,15 @@
 
 <section name="4.0 Elements of a Test Plan">
 
+<p>The Test Plan object has a new checkbox to select called "Functional Testing".  If selected, it
+will cause JMeter to record the data returned from the server for each sample.  If you have 
+selected a file in your test listeners, this data will be written to file.  This can be useful if
+you are doing a small run to ensure that JMeter is configured correctly, and that your server
+is returning the expected results.  The consequence is that the file will grow huge quickly, and
+JMeter's performance will suffer.  This option should be off if you are doing stress-testing (it
+is off by default).  </p>
+<p>If you are not recording the data to file, this option makes no difference.</p>
+
 <subsection name="4.1 ThreadGroup" anchor="thread_group">
 <p>Thread group elements are the beginning points of any test plan.  All elements
 of a test plan must be under a thread group.  As the name implies, the thread group
@@ -36,7 +45,7 @@ is set at one, then JMeter will execute the test only once before stopping.</p>
 
 <subsection name="4.2 Controllers" anchor="controllers">
 
-<p> JMeter has two types of Controllers: Generative and Logical.</p>
+<p> JMeter has two types of Controllers: Samplers and Logical Controllers.</p>
 
 <p>Samplers tell JMeter to send requests to a server. For
 example, add an HTTP Request Sampler if you want JMeter
