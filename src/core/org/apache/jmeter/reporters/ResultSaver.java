@@ -121,11 +121,16 @@ public class ResultSaver
 		try {
 			pw = new FileOutputStream(out);
 			pw.write(s.getResponseData());
-			pw.close();
 		} catch (FileNotFoundException e1) {
 			log.error("Error creating sample file for "+s.getSampleLabel(),e1);
 		} catch (IOException e1) {
 			log.error("Error saving sample "+s.getSampleLabel(),e1);
+		}
+		finally
+		{
+			try {
+				if (pw != null) pw.close();
+			} catch (IOException e) {}
 		}
 	}
 	/**
