@@ -9,5 +9,4 @@ package org.apache.jmeter.engine.event;
 public interface LoopIterationListener
 {
     public void iterationStart(LoopIterationEvent iterEvent);
-    public void iteration(IterationDeliverEvent iterEvent);
 }

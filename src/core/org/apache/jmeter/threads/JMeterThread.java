@@ -63,7 +63,6 @@ import java.util.Map;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.control.Controller;
-import org.apache.jmeter.engine.event.IterationDeliverEvent;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.processor.PostProcessor;
@@ -305,16 +304,6 @@ public class JMeterThread implements Runnable, java.io.Serializable
     
     private class IterationListener implements LoopIterationListener
     {
-        
-            /* (non-Javadoc)
-         * @see org.apache.jmeter.engine.event.LoopIterationListener#iteration(org.apache.jmeter.engine.event.IterationDeliverEvent)
-         */
-        public void iteration(IterationDeliverEvent iterEvent)
-        {
-            // TODO Auto-generated method stub
-
-        }
-
         /* (non-Javadoc)
          * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
          */
@@ -322,7 +311,5 @@ public class JMeterThread implements Runnable, java.io.Serializable
         {
             notifyTestListeners();
         }
-
-}
-
+	}
 }

@@ -63,7 +63,6 @@ import java.util.List;
 
 import junit.framework.TestSuite;
 
-import org.apache.jmeter.engine.event.IterationDeliverEvent;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -302,10 +301,6 @@ public class GenericController extends AbstractTestElement implements Controller
             fireIterationStart();
             first = false;
         }
-        if (current instanceof GenericController && ((GenericController) current).isFirst())
-        {
-            fireIteration(current);
-        }
     }
 
     protected void fireIterationStart()
@@ -316,17 +311,6 @@ public class GenericController extends AbstractTestElement implements Controller
         {
             LoopIterationListener item = (LoopIterationListener) iter.next();
             item.iterationStart(event);
-        }
-    }
-
-    protected void fireIteration(TestElement current)
-    {
-        Iterator iter = iterationListeners.iterator();
-        IterationDeliverEvent event = new IterationDeliverEvent(this, current);
-        while (iter.hasNext())
-        {
-            LoopIterationListener item = (LoopIterationListener) iter.next();
-            item.iteration(event);
         }
     }
 

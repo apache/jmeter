@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.jmeter.control.NextIsNullException;
+import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MapProperty;
@@ -320,4 +322,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable
             }
         }
     }
+
+	protected Sampler nextIsNull() throws NextIsNullException {
+		return null;
+	}
 }

@@ -59,7 +59,6 @@ import java.io.Serializable;
 
 import junit.framework.TestSuite;
 
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
