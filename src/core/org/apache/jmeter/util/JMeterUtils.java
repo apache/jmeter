@@ -51,10 +51,6 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- * 
- * @author  Michael Stover
- * @author	<a href="mailto:klancast@swbell.net">Keith Lancaster</a>
- * @version $Id$
  */
 package org.apache.jmeter.util;
 
@@ -95,6 +91,10 @@ import org.xml.sax.XMLReader;
 
 /**
  * This class contains the static utility methods used by JMeter.
+ * 
+ * @author  Michael Stover
+ * @author  <a href="mailto:klancast@swbell.net">Keith Lancaster</a>
+ * @version $Revision$ updated on $Date$
  */
 public class JMeterUtils implements UnitTestManager
 {

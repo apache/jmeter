@@ -51,13 +51,8 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
- * @author     David La France
- * @see        ParamMask
- * @version    $Id$
  */
- 
- package org.apache.jmeter.protocol.http.modifier;
+package org.apache.jmeter.protocol.http.modifier;
 
 import java.io.Serializable;
 
@@ -87,6 +82,10 @@ import org.apache.jmeter.threads.JMeterContextService;
  * The {@link ParamMask} object contains most of the logic for stepping through
  * this loop. You can make large modifications to this modifier's behaviour by
  * changing one or two method implementations there.
+ *
+ * @author     David La France
+ * @see        ParamMask
+ * @version    $Revision$ updated on $Date$
  */
 public class ParamModifier
     extends AbstractTestElement

@@ -51,9 +51,6 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Id$
  */
 package org.apache.jmeter.protocol.http.sampler;
 
@@ -63,6 +60,9 @@ import org.apache.jmeter.samplers.SampleResult;
 
 /**
  * This is a specialisation of the SampleResult class for the HTTP protocol.
+ * 
+ * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
+ * @version $Revision$ updated on $Date$
  */
 public class HTTPSampleResult extends SampleResult
 {

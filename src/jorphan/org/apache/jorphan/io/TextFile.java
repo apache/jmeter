@@ -51,11 +51,6 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- * 
- * @author Giles Cope (gilescope at users.sourceforge.net)
- * @author Michael Stover (mstover1 at apache.org)
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Id$
  */
 package org.apache.jorphan.io;
 
@@ -79,6 +74,11 @@ import org.apache.log.Logger;
  * <p>
  * Note this is just as memory-inefficient as handling a text file can be. Use
  * with restraint.
+ * 
+ * @author Giles Cope (gilescope at users.sourceforge.net)
+ * @author Michael Stover (mstover1 at apache.org)
+ * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
+ * @version $Revision$ updated on $Date$
  */
 public class TextFile extends File
 {

@@ -51,9 +51,6 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Id$
  */
 package org.apache.jmeter.protocol.http.parser;
 
@@ -81,6 +78,9 @@ import org.apache.log.Logger;
 
 /**
  * HtmlParsers can parse HTML content to obtain URLs.
+ * 
+ * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
+ * @version $Revision$ updated on $Date$
  */
 public abstract class HTMLParser
 {

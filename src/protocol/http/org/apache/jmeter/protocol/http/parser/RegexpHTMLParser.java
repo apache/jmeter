@@ -51,9 +51,6 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Id$
  */
 package org.apache.jmeter.protocol.http.parser;
 
@@ -107,8 +104,8 @@ import org.apache.oro.text.regex.MalformedPatternException;
  *  <li>&lt; ... codebase=<b>url</b> ... &gt;
  * </ul>
  * 
- * <p>
- * This HtmlParser implementation 
+ * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
+ * @version $Revision$ updated on $Date$
  */
 class RegexpHTMLParser extends HTMLParser
 {

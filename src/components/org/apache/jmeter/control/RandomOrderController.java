@@ -12,9 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * @author  Mike Verdone
- * @version $Id$
  */
 package org.apache.jmeter.control;
 
@@ -31,6 +28,9 @@ import org.apache.jmeter.testelement.TestElement;
 
 /**
  * A controller that runs its children each at most once, but in a random order.
+ *
+ * @author  Mike Verdone
+ * @version $Revision$ updated on $Date$
  */
 public class RandomOrderController
     extends GenericController
