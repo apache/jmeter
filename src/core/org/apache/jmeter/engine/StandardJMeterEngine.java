@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -468,11 +467,14 @@ public class StandardJMeterEngine
         //if true the Scheduler is enabled
         if (group.getScheduler())
         {
-			//set the starttime for the Thread
+        	long now = System.currentTimeMillis();
+			//set the start time for the Thread
         	if (group.getDelay() > 0 ){// Duration is  in seconds
-				thread.setStartTime(group.getDelay()*1000+(new Date().getTime()));
+				thread.setStartTime(group.getDelay()*1000+now);
         	} else {
-				thread.setStartTime(group.getStartTime());
+        		long start = group.getStartTime();
+        		if (start < now) start = now; // Force a sensible start time
+				thread.setStartTime(start);
         	}
             
 			//set the endtime for the Thread
