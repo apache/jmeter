@@ -99,6 +99,9 @@ public class SampleResult implements Serializable
     private String samplerData;
     private String threadName;
     private String responseMessage;
+    private String responseHeaders;
+    private String contentType;
+    private String requestHeaders;
     private long timeStamp = 0;
     private List assertionResults;
     private List subResults;
@@ -378,6 +381,54 @@ public class SampleResult implements Serializable
     public void setStopThread(boolean b)
     {
         stopThread = b;
+    }
+
+    /**
+     * @return
+     */
+    public String getRequestHeaders()
+    {
+        return requestHeaders;
+    }
+
+    /**
+     * @return
+     */
+    public String getResponseHeaders()
+    {
+        return responseHeaders;
+    }
+
+    /**
+     * @param string
+     */
+    public void setRequestHeaders(String string)
+    {
+        requestHeaders = string;
+    }
+
+    /**
+     * @param string
+     */
+    public void setResponseHeaders(String string)
+    {
+        responseHeaders = string;
+    }
+
+    /**
+     * @return
+     */
+    public String getContentType()
+    {
+        return contentType;
+    }
+
+    /**
+     * @param string
+     */
+    public void setContentType(String string)
+    {
+        contentType = string;
     }
 
 }
