@@ -345,7 +345,7 @@ XML.</p>
 
 </component>
 
-<component name="Tomcat Access Log Sampler" index="15.1.8" screenshot="">
+<component name="Access Log Sampler" index="15.1.8" screenshot="">
 <center><h2>(Alpha Code)</h2></center>
 <description><p>AccessLogSampler was designed to read access logs and generate http requests.
 For those not familiar with the access log, it is the log the webserver maintains of every
