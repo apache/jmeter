@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,7 +55,11 @@
 package org.apache.jmeter.protocol.java.config.gui;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
@@ -64,6 +68,7 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
@@ -72,10 +77,10 @@ import org.apache.jmeter.protocol.java.sampler.JavaSampler;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerClient;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Hierarchy;
-import org.apache.log.Logger;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.jorphan.reflect.ClassFinder;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 
 /**
@@ -85,9 +90,9 @@ import org.apache.jorphan.reflect.ClassFinder;
  * @version $Revision$
  */
 
-public class JavaConfigGui extends AbstractConfigGui
-{
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
+public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
 	private static String CLASSNAMECOMBO = "classnamecombo";
 
 	private JComboBox classnameCombo;
@@ -169,13 +174,14 @@ public class JavaConfigGui extends AbstractConfigGui
 			// Remove the JavaConfig class from the list since it only implements the interface for
 			// error conditions.
 			
-			possibleClasses.remove("org.apache.jmeter.protocol.java.sampler.JavaSampler");
+			possibleClasses.remove("org.apache.jmeter.protocol.java.sampler.JavaSampler$ErrorSamplerClient");
 		
 		} catch (Exception e) {
 			log.debug("Exception getting interfaces.",e);
 		}
 		
 		classnameCombo = new JComboBox(possibleClasses.toArray());
+        classnameCombo.addActionListener(this);
 		classnameCombo.setName(CLASSNAMECOMBO);
 		classnameCombo.setEditable(false);
 		panel.add(classnameCombo);
@@ -183,6 +189,51 @@ public class JavaConfigGui extends AbstractConfigGui
 
 		return panel;
 	}
+
+    public void actionPerformed(ActionEvent evt) {
+        if (evt.getSource() == classnameCombo) {
+            String className = (String)classnameCombo.getSelectedItem();
+            try {
+                JavaSamplerClient client = (JavaSamplerClient)Class.forName(
+                            className.trim(),
+                            true,
+                            Thread.currentThread().getContextClassLoader()
+                        ).newInstance();
+
+                Arguments currArgs = new Arguments();
+                argsPanel.modifyTestElement(currArgs);
+                Map currArgsMap = currArgs.getArgumentsAsMap();
+
+                Arguments newArgs = new Arguments();
+                Arguments testParams = client.getDefaultParameters();
+                if (testParams != null) {
+                    Iterator i = testParams.getArguments().iterator();
+                    while (i.hasNext()) {
+                        Argument arg = (Argument)i.next();
+                        String name = arg.getName();
+                        Object value = arg.getValue();
+
+                        // If a user has set parameters in one test, and then
+                        // selects a different test which supports the same
+                        // parameters, those parameters should have the same
+                        // values that they did in the original test.
+                        if (currArgsMap.containsKey(name)) {
+                            Object newVal = currArgsMap.get(name);
+                            if (newVal != null &&
+                                    newVal.toString().length() > 0) {
+                                value = newVal;
+                            }
+                        }
+                        newArgs.addArgument(name, value);
+                    }
+                }
+
+                argsPanel.configure(newArgs);
+            } catch (Exception e) {
+                log.error("Error getting argument list for " + className, e);
+            }
+        }
+    }
 
 	protected JPanel getParameterPanel()
 	{

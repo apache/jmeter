@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,123 +56,192 @@
 package org.apache.jmeter.protocol.java.test;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map.Entry;
 
-import org.apache.jmeter.protocol.java.sampler.JavaSamplerClient;
+import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient;
+import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.log.Hierarchy;
-import org.apache.log.Logger;
 
 /**
  * The <code>SleepTest</code> class is a simple example class for a
  * JMeter Java protocol client.  The class implements the
  * <code>JavaSamplerClient</code> interface.
+ * <p>
+ * During each sample, this client will sleep for some amount of
+ * time.  The amount of time to sleep is determined from the
+ * two parameters SleepTime and SleepMask using the formula:
+ * <pre>
+ *     totalSleepTime = SleepTime + (System.currentTimeMillis() % SleepMask)
+ * </pre>
+ * Thus, the SleepMask provides a way to add a random component
+ * to the sleep time.
  */
+public class SleepTest extends AbstractJavaSamplerClient
+        implements Serializable {
+    /**
+     * The default value of the SleepTime parameter, in milliseconds.
+     */
+    public static final long DEFAULT_SLEEP_TIME = 1000;
 
-public class SleepTest implements JavaSamplerClient,Serializable {
-	/** Define category for logging  */
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
-	/** */
-	private long sleepTime = 1000;
-	/** */
-	private long sleepMask = 0x3ff;
-	/**
-	 * Default constructor for <code>SleepTest</code>.
-	 *
-	 * {@link org.apache.jmeter.protocol.java.config.JavaConfig JavaConfig}
-	 * uses the default constructor to instantiate an instance of
-	 * the client class.
-	 */
+    /**
+     * The default value of the SleepMask parameter.
+     */
+    public static final long DEFAULT_SLEEP_MASK = 0x3ff;
+
+    /**
+     * The base number of milliseconds to sleep during each sample.
+     */
+    private long sleepTime;
+
+    /**
+     * A mask to be applied to the current time in order to add a
+     * random component to the sleep time.
+     */
+    private long sleepMask;
+
+    /**
+     * Default constructor for <code>SleepTest</code>.
+     *
+     * The Java Sampler uses the default constructor to instantiate
+     * an instance of the client class.
+     */
 	public SleepTest() {
-		log.debug(whoAmI() + "\tConstruct");
+        getLogger().debug(whoAmI() + "\tConstruct");
 	}
 
-	/**
-	 * @see JavaSamplerClient#setupTest()
-	 *
-	 * setupTest() provides a way to do any initialization that may be required.
-	 */
-	public void setupTest(HashMap arguments) {
-		log.debug(whoAmI() + "\tsetupTest()");
-		Iterator argsIt = arguments.entrySet().iterator();
-		while (argsIt.hasNext()) {
-			Entry entry = (Entry)argsIt.next();
-			log.debug(entry.getKey().toString() + "=" + entry.getValue().toString());
-		}
+    /**
+     * Do any initialization required by this client.  In this case,
+     * initialization consists of getting the values of the SleepTime
+     * and SleepMask parameters.  It is generally recommended to do
+     * any initialization such as getting parameter values in the
+     * setupTest method rather than the runTest method in order to
+     * add as little overhead as possible to the test.
+     * 
+     * @param context  the context to run with. This provides access
+     *                  to initialization parameters.
+     */
+    public void setupTest(JavaSamplerContext context) {
+        getLogger().debug(whoAmI() + "\tsetupTest()");
+        listParameters(context);
 
-		if (arguments.containsKey("SleepTime")) {
-			setSleepTime(arguments.get("SleepTime"));
-		}
+        sleepTime = context.getLongParameter("SleepTime", 1000);
+        sleepMask = context.getLongParameter("SleepMask", 0x3ff);
+    }
 
-		if (arguments.containsKey("SleepMask")) {
-			setSleepMask(arguments.get("SleepMask"));
-		}
-	}
-
-	/**
-	 * @see JavaSamplerClient#teardownTest()
-	 *
-	 * teardownTest() provides a way to do any clean-up that may be required.
-	 */
-	public void teardownTest(HashMap arguments) {
-		log.debug(whoAmI() + "\tteardownTest()");
-		Iterator argsIt = arguments.entrySet().iterator();
-		while (argsIt.hasNext()) {
-			Entry entry = (Entry)argsIt.next();
-			log.debug(entry.getKey().toString() + "=" + entry.getValue().toString());
-		}
-	}
-
-	/**
-	 * @see JavaSamplerClient#runTest()
-	 *
-	 * runTest() is called for each sample.  The method returns a
-	 * <code>SampleResult</code> object.  The method must calculate
-	 * how long the sample took to execute.
-	 */
-	public SampleResult runTest(HashMap arguments) {
-
+    /**
+     * Perform a single sample.  In this case, this method will
+     * simply sleep for some amount of time.
+     * <p>
+     * This method returns a <code>SampleResult</code> object.
+     * <code>SampleResult</code> has many fields which can be
+     * used.  At a minimum, the test should use
+     * <code>SampleResult.setTime</code> to set the time that
+     * the test required to execute.  It is also a good idea to
+     * set the sampleLabel and the successful flag.
+     * 
+     * @see org.apache.jmeter.samplers.SampleResult.setTime(long)
+     * @see org.apache.jmeter.samplers.SampleResult.setSuccessful(boolean)
+     * @see org.apache.jmeter.samplers.SampleResult.setSampleLabel(java.lang.String)
+     * 
+     * @param context  the context to run with. This provides access
+     *                 to initialization parameters.
+     * 
+     * @return         a SampleResult giving the results of this
+     *                 sample.
+     */
+    public SampleResult runTest(JavaSamplerContext context) {
 		SampleResult results = new SampleResult();
+		
 		try {
-			//
-			// Generate a random value using the current time.
-			//
-			long ct = System.currentTimeMillis();
-			ct %= getSleepMask();
-			//
 			// Record sample start time.
-			//
 			long start = System.currentTimeMillis();
-			//
+
+			// Generate a random value using the current time.
+            long ct = start % getSleepMask();
+			
 			// Execute the sample.  In this case sleep for the
 			// specified time.
-			//
 			Thread.sleep(getSleepTime() + ct);
-			//
+
 			// Record end time and populate the results.
-			//
 			long end = System.currentTimeMillis();
+
 			results.setTime(end - start);
 			results.setSuccessful(true);
-			results.setSampleLabel("Sleep Test: time = "+getSleepTime() + ct);
+			results.setSampleLabel("Sleep Test: time = " +
+                            (getSleepTime() + ct));
 		} catch (Exception e) {
+            getLogger().error("SleepTest: error during sample", e);
+            results.setSuccessful(false);
 		}
 
-		if (log.isDebugEnabled()) {
-			log.debug(whoAmI() + "\trunTest()" + "\tTime:\t" + results.getTime());
-			Iterator argsIt = arguments.entrySet().iterator();
-			while (argsIt.hasNext()) {
-				Entry entry = (Entry)argsIt.next();
-				log.debug(entry.getKey().toString() + "=" + entry.getValue().toString());
-			}
-		}
+        if (getLogger().isDebugEnabled()) {
+            getLogger().debug(whoAmI() + "\trunTest()" + "\tTime:\t" + results.getTime());
+            listParameters(context);
+        }
 
 		return results;
-
 	}
 
+	/**
+	 * Do any clean-up required by this test.  In this case no
+	 * clean-up is necessary, but some messages are logged for
+	 * debugging purposes.
+	 * 
+	 * @param context  the context to run with. This provides access
+	 *                  to initialization parameters.
+	 */
+	public void teardownTest(JavaSamplerContext context) {
+		getLogger().debug(whoAmI() + "\tteardownTest()");
+		listParameters(context);
+	}
+
+    /**
+     * Provide a list of parameters which this test supports.  Any
+     * parameter names and associated values returned by this method
+     * will appear in the GUI by default so the user doesn't have
+     * to remember the exact names.  The user can add other parameters
+     * which are not listed here.  If this method returns null then
+     * no parameters will be listed.  If the value for some parameter
+     * is null then that parameter will be listed in the GUI with
+     * an empty value.
+     * 
+     * @return  a specification of the parameters used by this
+     *           test which should be listed in the GUI, or null
+     *           if no parameters should be listed.
+     */
+    public Arguments getDefaultParameters() {
+        Arguments params = new Arguments();
+        params.addArgument("SleepTime", String.valueOf(DEFAULT_SLEEP_TIME));
+        params.addArgument("SleepMask", "0x" +
+                        (Long.toHexString(DEFAULT_SLEEP_MASK)).toUpperCase());
+        return params;
+    }
+
+    /**
+     * Dump a list of the parameters in this context to the debug
+     * log.
+     *
+     * @param context  the context which contains the initialization
+     *                  parameters.
+     */
+    private void listParameters(JavaSamplerContext context) {
+        if (getLogger().isDebugEnabled()) {
+            Iterator argsIt = context.getParameterNamesIterator();
+            while (argsIt.hasNext()) {
+                String name = (String)argsIt.next();
+                getLogger().debug(name + "=" + context.getParameter(name));
+            }
+        }
+    }
+	
+    /**
+     * Generate a String identifier of this test for debugging
+     * purposes.
+     * 
+     * @return  a String identifier for this test instance
+     */
 	private String whoAmI() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(Thread.currentThread().toString());
@@ -181,22 +250,23 @@ public class SleepTest implements JavaSamplerClient,Serializable {
 		return sb.toString();
 	}
 
-	private long getSleepTime() {return sleepTime;}
-	private long getSleepMask() {return sleepMask;}
-	private void setSleepTime(Object arg) {
-		try {
-			sleepTime = Long.parseLong((String)arg);
-		} catch (Exception e) {
-			log.debug("Exception getting sleepTime:\t",e);
-			sleepTime = 1000l;
-		}
-	}
-	private void setSleepMask(Object arg) {
-		try {
-			sleepMask = Long.parseLong((String)arg);
-		} catch (Exception e) {
-			log.debug("Exception getting sleepMask:\t",e);
-			sleepMask = 0x3ff;
-		}
-	}
+    /**
+     * Get the value of the sleepTime field.
+     * 
+     * @return the base number of milliseconds to sleep during
+     *          each sample.
+     */
+    private long getSleepTime() {
+        return sleepTime;
+    }
+
+    /**
+     * Get the value of the sleepMask field.
+     * 
+     * @return a mask to be applied to the current time in order
+     *          to add a random component to the sleep time.
+     */
+    private long getSleepMask() {
+        return sleepMask;
+    }
 }

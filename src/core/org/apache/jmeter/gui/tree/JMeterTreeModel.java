@@ -90,11 +90,11 @@ public class JMeterTreeModel extends DefaultTreeModel
     }
 
     /****************************************
-     * !ToDoo (Method description)
-     *
-     *@param type  !ToDo (Parameter description)
-     *@return      !ToDo (Return description)
-     ***************************************/
+     * Returns a list of tree nodes that
+     * hold objects of the given class
+     * type.  If none are found, an empty
+     * list is returned 
+	*************************************/
     public List getNodesOfType(Class type)
     {
         List nodeList = new LinkedList();

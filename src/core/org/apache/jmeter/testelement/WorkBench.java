@@ -10,7 +10,7 @@ import java.util.List;
  *@version   1.0
  ***************************************/
 
-public class WorkBench extends TestPlan implements Serializable
+public class WorkBench extends AbstractTestElement implements Serializable
 {
 	private static List itemsCanAdd = null;
 	private boolean isRootNode;
