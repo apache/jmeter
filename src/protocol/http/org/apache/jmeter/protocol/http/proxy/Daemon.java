@@ -218,7 +218,7 @@ public class Daemon extends Thread
         {
             try
             {
-                mainSocket.close();
+                if (mainSocket != null) mainSocket.close();
             }
             catch (Exception exc)
             {
