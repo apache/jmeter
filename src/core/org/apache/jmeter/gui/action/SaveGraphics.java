@@ -134,6 +134,10 @@ public class SaveGraphics implements Command {
 			save = new SaveGraphics();
 		}
 
+		public void testSomething()
+		{
+			//TODO write some tests
+		}
 	}
 
 }
