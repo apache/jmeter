@@ -1108,7 +1108,7 @@ public class HashTree implements Serializable, Map
                 Arrays.asList(new String[] { "1", "2", "3", "4" });
             HashTree tree = new HashTree();
             log.debug("treePath = " + treePath);
-            tree.add(treePath, new String("value"));
+            tree.add(treePath, "value");
             log.debug("Now treePath = " + treePath);
             log.debug(tree.toString());
             assertEquals(1, tree.list(treePath).size());

@@ -78,7 +78,7 @@ public class Data implements Serializable
 {
     private static Logger log = LoggingManager.getLoggerForClass();
     Map data;
-    Map iterators = new HashMap();
+    //Map iterators = new HashMap();
     // Hashtable dataLine;
     ArrayList header;
     // saves current position in data Vector
