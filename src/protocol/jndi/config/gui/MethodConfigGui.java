@@ -86,7 +86,7 @@ import org.apache.jmeter.gui.util.VerticalLayout;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 /**
  * Provides the gui interface to configure remote method execution
@@ -99,8 +99,7 @@ public class MethodConfigGui
 	extends JPanel
 	implements ModelSupported, ActionListener, TreeSelectionListener
 {
-	transient private static Logger log =
-		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.jndi");
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 	protected static final String REFLECT = "MethodConfigGui.reflect";
 	protected static final String INVOKE = "MethodConfigGui.invoke";
 	protected static final String STRING_CLASS = "java.lang.String";

@@ -92,7 +92,7 @@ import org.apache.jmeter.protocol.http.proxy.ProxyControl;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /****************************************
@@ -113,8 +113,7 @@ public class ProxyControlGui
         FocusListener,
         UnsharedComponent
 {
-    private static transient Logger log =
-            Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    private static transient Logger log = LoggingManager.getLoggerForClass();
     private JTextField portField;
 
     private ProxyControl model;

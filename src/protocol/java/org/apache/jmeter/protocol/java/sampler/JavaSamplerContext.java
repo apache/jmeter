@@ -58,7 +58,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.jmeter.config.Arguments;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -86,8 +86,7 @@ public class JavaSamplerContext
      */
 
     /** Logging */
-    private static transient Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
+    private static transient Logger log = LoggingManager.getLoggerForClass();
 
     /**
      * Map containing the initialization parameters for the

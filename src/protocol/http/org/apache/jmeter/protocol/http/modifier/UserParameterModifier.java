@@ -68,7 +68,7 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -85,8 +85,7 @@ public class UserParameterModifier
     extends ConfigTestElement
     implements PreProcessor, Serializable, TestListener
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     private static final String XMLURI = "UserParameterModifier.xmluri";
 
     private UserSequence allAvailableUsers;

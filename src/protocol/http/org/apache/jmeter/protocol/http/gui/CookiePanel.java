@@ -79,7 +79,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -90,8 +90,7 @@ import org.apache.log.Logger;
  */
 public class CookiePanel extends AbstractConfigGui implements ActionListener
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     private static final String ADD_COMMAND = "Add";
     private static final String DELETE_COMMAND = "Delete";

@@ -55,7 +55,7 @@
 
 package org.apache.jmeter.protocol.http.modifier;
 
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
@@ -69,8 +69,7 @@ import org.xml.sax.SAXParseException;
  */
 public class UserParameterXMLErrorHandler implements ErrorHandler
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     public void warning(SAXParseException exception) throws SAXException
     {

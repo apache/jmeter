@@ -68,7 +68,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -99,8 +99,7 @@ import org.apache.log.Logger;
  */
 public class CSVRead extends AbstractFunction implements Serializable
 {
-    transient protected static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.CSVRead");
+    transient protected static Logger log = LoggingManager.getLoggerForClass();
 
     private static final String KEY = "__CSVRead"; // Function name (only 1 _)
 

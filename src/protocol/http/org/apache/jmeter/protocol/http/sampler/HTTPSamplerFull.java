@@ -68,7 +68,7 @@ import junit.framework.TestCase;
 
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -124,8 +124,7 @@ import org.xml.sax.SAXException;
 public class HTTPSamplerFull
 {
     /** Used to store the Logger (used for debug and error messages). */
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     /**
      * Used to store the UTF encoding name (which is version dependent).
@@ -585,8 +584,7 @@ public class HTTPSamplerFull
     {
         private HTTPSampler hsf;
 
-        transient private static Logger log =
-                Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.test");
+        transient private static Logger log = LoggingManager.getLoggerForClass();
 
         public Test(String name)
         {
