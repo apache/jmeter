@@ -57,6 +57,7 @@ package org.apache.jorphan.test;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -188,7 +189,10 @@ public final class AllTests
 		System.out.println("------------");
 // don't call isHeadless() here, as it has a side effect.
 //--
+        System.out.println("Creating test suite");
         TestSuite suite = suite(args[0]);
+		System.out.println("Starting test run");
+		
         // Jeremy Arnold: This method used to attempt to write results to
         // a file, but it had a bug and instead just wrote to System.out.
         // Since nobody has complained about this behavior, I'm changing
@@ -230,7 +234,7 @@ public final class AllTests
             try
             {
                 System.out.println(
-                    "setting up logging props using file: " + args[1]);
+                    "Setting up logging props using file: " + args[1]);
                 props.load(new FileInputStream(args[1]));
                 LoggingManager.initializeLogging(props);
             }
@@ -255,8 +259,12 @@ public final class AllTests
         {
             try
             {
+				System.out.println(
+                    "Using initializeProperties() from " + args[2]);
                 UnitTestManager um =
                     (UnitTestManager) Class.forName(args[2]).newInstance();
+				System.out.println(
+					"Setting up initial properties using: " + args[1]);
                 um.initializeProperties(args[1]);
             }
             catch (Exception e)
@@ -289,10 +297,52 @@ public final class AllTests
                 String name = (String) classes.next();
                 try
                 {
-                    suite.addTest(new TestSuite(Class.forName(name)));
+                	/*
+                	 * TestSuite only finds testXXX() methods, and does not look for
+                	 * suite() methods.
+                	 * 
+                	 * If no testXXX methods were found, JUnit currently adds a dummy test
+                	 * which prints out a warning - so the test count will always be >= 1
+                	 * 
+                	 * So we check to see if there is a single test case called "warning"
+                	 * If so, we look for the method makeSuite() and invoke that to get
+                	 * the suite.
+                	 * 
+                	 * We don't look for the standard suite() method in case that clashes
+                	 * with an existing use of the suite() method. This may be changed in
+                	 * future.
+                	 */
+
+                	Class clazz = Class.forName(name);
+                	TestSuite ts = new TestSuite(clazz);
+
+                	if (// Perhaps no tests were found?
+                	    (ts.testCount() == 1) 
+                	  &&  
+                	    (ts.testAt(0).toString().startsWith("warning"))
+                	   )
+                	{
+						Method m;
+                        try
+                        {
+                            m = clazz.getMethod("makeSuite", new Class[0]);
+							TestSuite t = (TestSuite) m.invoke(clazz,null);
+							suite.addTest(t);
+                        }
+                        catch (Exception e)
+                        {// Add the original suite on failure, so we generate a warning
+                        	//System.out.println("Error on makeSuite"+e);
+							suite.addTest(ts);
+                        }
+                	}
+                	else
+                	{
+						suite.addTest(ts);
+                	}
                 }
                 catch (Exception ex)
                 {
+                	System.out.println("Error adding test for class "+name+" "+ex.toString());
                     log.error("error adding test :" + ex);
                 }
             }
