@@ -22,8 +22,8 @@ import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Logger;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /****************************************
  * The headers of the client HTTP request.

@@ -55,7 +55,10 @@
 
 package org.apache.jmeter.protocol.jdbc.util;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 public class DBKey implements Serializable{
 

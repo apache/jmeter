@@ -54,14 +54,16 @@
  */
 package org.apache.jmeter.protocol.ldap.sampler;
 
-import javax.naming.NoPermissionException;
 import javax.naming.NamingException;
-import javax.naming.directory.DirContext;
-import javax.naming.directory.BasicAttributes;
-import javax.naming.directory.BasicAttribute;
-import javax.naming.directory.ModificationItem;
+import javax.naming.NoPermissionException;
 import javax.naming.directory.Attribute;
+import javax.naming.directory.BasicAttribute;
+import javax.naming.directory.BasicAttributes;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.ModificationItem;
 
+import org.apache.jmeter.config.Argument;
+import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.LoginConfig;
 import org.apache.jmeter.protocol.ldap.config.LdapConfig;
@@ -69,13 +71,10 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
-import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.config.Argument;
-
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 

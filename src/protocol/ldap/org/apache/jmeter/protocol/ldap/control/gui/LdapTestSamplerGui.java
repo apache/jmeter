@@ -53,15 +53,12 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.ldap.control.gui;
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 
-import org.apache.jmeter.gui.util.VerticalPanel;
+import javax.swing.BorderFactory;
+
 import org.apache.jmeter.config.gui.LoginConfigGui;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.ldap.config.gui.LdapConfigGui;
 import org.apache.jmeter.protocol.ldap.sampler.LDAPSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;

@@ -63,9 +63,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.log.Logger;
-
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**********************************************************************
  * SortedHashTree is a different implementation of the {@link HashTree} collection class. 

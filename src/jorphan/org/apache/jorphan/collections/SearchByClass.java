@@ -55,7 +55,11 @@
  
 
 package org.apache.jorphan.collections;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 /**
  * Useful for finding all nodes in the tree that represent objects of a particular
  * type.  For instance, if your tree contains all strings, and a few StringBuffer objects, 

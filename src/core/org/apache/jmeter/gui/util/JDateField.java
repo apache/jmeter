@@ -55,18 +55,17 @@
 
 package org.apache.jmeter.gui.util;
 
-import javax.swing.JTextField;
-import java.util.Date;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Date;
-import java.awt.event.KeyAdapter;
-import java.awt.event.FocusListener;
 import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import javax.swing.JTextField;
 /****************************************
 * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
 *

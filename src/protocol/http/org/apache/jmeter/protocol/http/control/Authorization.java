@@ -54,9 +54,9 @@
  */
  package org.apache.jmeter.protocol.http.control;
 
-import org.apache.jmeter.config.*;
-import java.io.*;
+import java.io.Serializable;
 
+import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.testelement.AbstractTestElement;
 /**
  * This class is an Authorization encapsulator.
