@@ -37,7 +37,7 @@ public class Cut extends AbstractAction
             GuiPackage.getInstance().getTreeListener().getDraggedNode());
         JMeterTreeListener treeListener =
             GuiPackage.getInstance().getTreeListener();
-        JMeterTreeNode currentNode = treeListener.getCurrentNode();
+        JMeterTreeNode currentNode = treeListener.getCurrentNode();//NOTUSED
         GuiPackage.getInstance().getTreeModel().removeNodeFromParent(
             GuiPackage.getInstance().getTreeListener().getDraggedNode());
         GuiPackage.getInstance().getMainFrame().repaint();

@@ -97,7 +97,7 @@ public class ThroughputController
     private transient Object iterationLock;
 
     private int numExecutions = 0, iteration = -1;
-    private boolean returnTrue, cloned = false;
+    private boolean returnTrue;
 
     public ThroughputController()
     {

@@ -67,7 +67,6 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  */
 public class InterleaveControlGui extends AbstractControllerGui
 {
-    //private InterleaveControl model;
     private JCheckBox style;
 
     public InterleaveControlGui()
