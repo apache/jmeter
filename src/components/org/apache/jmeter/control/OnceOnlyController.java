@@ -52,43 +52,55 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+
 package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
-import org.apache.jmeter.samplers.AbstractSampler;
-import org.apache.jmeter.testelement.PerSampleClonable;
+import junit.framework.TestSuite;
+
+import org.apache.jmeter.engine.event.IterationDeliverEvent;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.engine.event.LoopIterationListener;
+import org.apache.jmeter.junit.stubs.TestSampler;
+import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 
 /************************************************************
- *  Title: Apache JMeter Description: Copyright: Copyright (c) 2000 Company:
- *  Apache Foundation
+ *  Title: Apache JMeter Description: 
+ * Copyright: Copyright (c) 2000 
+ * Company: Apache Foundation
  *
  *@author     Michael Stover
  *@created    March 13, 2001
  *@version    1.0
  ***********************************************************/
 
-public class OnceOnlyController extends GenericController implements Serializable
+public class OnceOnlyController 
+	extends GenericController 
+	implements Serializable,LoopIterationListener
 {
 
 	/************************************************************
 	 *  Constructor for the OnceOnlyController object
 	 ***********************************************************/
-	public OnceOnlyController()
-	{
-	}
+	public OnceOnlyController() {}
 
-	public void reInitialize()
-	{
-		//don't do anything
-	}
-
-	protected boolean hasNextAtEnd()
-	{
-		this.setShortCircuit(true);
-		return false;
-	}
+	/**
+	 * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+	 */
+    public void iterationStart(LoopIterationEvent event)
+    {
+        if (event.getIteration() == 1)
+        {
+            reInitialize();
+        }
+    }
+    
+    protected Sampler nextIsNull() throws NextIsNullException
+        {
+            return null;
+        }
 
 	public static class Test extends junit.framework.TestCase
 	{
@@ -101,23 +113,24 @@ public class OnceOnlyController extends GenericController implements Serializabl
 		{
 			GenericController controller = new GenericController();
 			GenericController sub_1 = new OnceOnlyController();
-			sub_1.addTestElement(makeSampler("one"));
-			sub_1.addTestElement(makeSampler("two"));
+			sub_1.addTestElement(new TestSampler("one"));
+			sub_1.addTestElement(new TestSampler("two"));
 			controller.addTestElement(sub_1);
-			controller.addTestElement(makeSampler("three"));
+			controller.addTestElement(new TestSampler("three"));
 			LoopController sub_2 = new LoopController();
 			sub_2.setLoops(3);
 			GenericController sub_3 = new GenericController();
-			sub_2.addTestElement(makeSampler("four"));
-			sub_3.addTestElement(makeSampler("five"));
-			sub_3.addTestElement(makeSampler("six"));
+			sub_2.addTestElement(new TestSampler("four"));
+			sub_3.addTestElement(new TestSampler("five"));
+			sub_3.addTestElement(new TestSampler("six"));
 			sub_2.addTestElement(sub_3);
-			sub_2.addTestElement(makeSampler("seven"));
+			sub_2.addTestElement(new TestSampler("seven"));
 			controller.addTestElement(sub_2);
 			String[] interleaveOrder = new String[]{"one","two"};
 			String[] order = new String[]{"","","three","four","five","six","seven",
 						"four","five","six","seven","four","five","six","seven"};
 			int counter = 15;
+            controller.initialize();
 			for (int i = 0; i < 4; i++)
 			{
 				assertEquals(15,counter);
@@ -126,9 +139,9 @@ public class OnceOnlyController extends GenericController implements Serializabl
 				{
 					counter = 2;
 				}
-				while(controller.hasNext())
+                TestElement sampler = null;
+				while((sampler = controller.next()) != null)
 				{
-					TestElement sampler = controller.next();
 					if(i == 0 && counter < 2)
 					{
 						assertEquals(interleaveOrder[counter],sampler.getPropertyAsString(TestElement.NAME));
@@ -141,17 +154,74 @@ public class OnceOnlyController extends GenericController implements Serializabl
 				}
 			}
 		}
-
-		private TestElement makeSampler(String name)
-		{
-		  	TestSampler s= new TestSampler();
-			s.setName(name);
-			return s;
-		}
-		public class TestSampler extends AbstractSampler
-						implements PerSampleClonable {
-		  public void addCustomTestElement(TestElement t) { }
-		  public org.apache.jmeter.samplers.SampleResult sample(org.apache.jmeter.samplers.Entry e) { return null; }
-		}
+        
+        public void testProcessing2() throws Exception
+                {
+                    GenericController controller = new GenericController();
+                    GenericController sub_1 = new OnceOnlyController();
+                    sub_1.addTestElement(new TestSampler("one"));
+                    sub_1.addTestElement(new TestSampler("two"));
+                    controller.addTestElement(sub_1);
+                    controller.addTestElement(new TestSampler("three"));
+                    LoopController sub_2 = new LoopController();
+                    sub_2.setLoops(3);
+                    OnceOnlyController sub_3 = new OnceOnlyController();
+                    sub_2.addTestElement(new TestSampler("four"));
+                    sub_3.addTestElement(new TestSampler("five"));
+                    sub_3.addTestElement(new TestSampler("six"));
+                    sub_2.addTestElement(sub_3);
+                    sub_2.addIterationListener(sub_3);
+                    sub_2.addTestElement(new TestSampler("seven"));
+                    controller.addTestElement(sub_2);
+                    String[] interleaveOrder = new String[]{"one","two"};
+                    String[] order = new String[]{"","","three","four","five","six","seven",
+                                "four","seven","four","seven"};
+                    int counter = 11;
+                    controller.initialize();
+                    for (int i = 0; i < 4; i++)
+                    {
+                        assertEquals(11,counter);
+                        counter = 0;
+                        if(i > 0)
+                        {
+                            counter = 2;
+                        }
+                        TestElement sampler = null;
+                        while((sampler = controller.next()) != null)
+                        {
+                            if(i == 0 && counter < 2)
+                            {
+                                assertEquals(interleaveOrder[counter],sampler.getPropertyAsString(TestElement.NAME));
+                            }
+                            else
+                            {
+                                assertEquals(order[counter],sampler.getPropertyAsString(TestElement.NAME));
+                            }
+                            counter++;
+                        }
+                    }
+                }
 	}
+	
+	public static void main(String args[]) { 
+		junit.textui.TestRunner.run(suite());
+	}
+	
+	public static TestSuite suite()
+	{
+		TestSuite suite = new TestSuite();
+		suite.addTest(new Test("testProcessing"));
+        suite.addTest(new Test("testProcessing2"));
+		return suite;
+	}
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.engine.event.LoopIterationListener#iteration(org.apache.jmeter.engine.event.IterationDeliverEvent)
+     */
+    public void iteration(IterationDeliverEvent iterEvent)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
 }
+

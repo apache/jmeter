@@ -63,7 +63,7 @@ import java.util.List;
 
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.LoopController;
-import org.apache.jmeter.engine.event.IterationListener;
+import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.samplers.RemoteSampleListener;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
@@ -122,19 +122,9 @@ public class ThreadGroup
         return getSamplerController().isDone();
     }
 
-    public boolean hasNext()
-    {
-        return getSamplerController().hasNext();
-    }
-
     public Sampler next()
     {
         return getSamplerController().next();
-    }
-    
-    public int samplersReturned()
-    {
-    	return getSamplerController().samplersReturned();
     }
 
     /**
@@ -145,11 +135,6 @@ public class ThreadGroup
     public void setRampUp(int rampUp)
     {
         setProperty(new IntegerProperty(RAMP_TIME,rampUp));
-    }
-
-    public boolean isNextFirst()
-    {
-        return getSamplerController().isNextFirst();
     }
 
     /**
@@ -363,9 +348,17 @@ public class ThreadGroup
     /**
      * @see org.apache.jmeter.control.Controller#addIterationListener(org.apache.jmeter.engine.event.IterationListener)
      */
-    public void addIterationListener(IterationListener lis)
+    public void addIterationListener(LoopIterationListener lis)
     {
         getSamplerController().addIterationListener(lis);
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.control.Controller#initialize()
+     */
+    public void initialize()
+    {
+        getSamplerController().initialize();
     }
 
 }

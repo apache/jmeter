@@ -84,7 +84,7 @@ public class InterleaveControlGui extends AbstractControllerGui
 	public void configure(TestElement el)
 	{
 		super.configure(el);
-		if(((InterleaveControl)el).getStyle() == InterleaveControl.DEFAULT_STYLE)
+		if(((InterleaveControl)el).getStyle() == InterleaveControl.IGNORE_SUB_CONTROLLERS)
 		{
 			style.setSelected(true);
 		}
@@ -115,11 +115,11 @@ public class InterleaveControlGui extends AbstractControllerGui
         configureTestElement(ic);
         if(style.isSelected())
         {
-        	((InterleaveControl)ic).setStyle(InterleaveControl.DEFAULT_STYLE);
+        	((InterleaveControl)ic).setStyle(InterleaveControl.IGNORE_SUB_CONTROLLERS);
         }
         else
         {
-        	((InterleaveControl)ic).setStyle(InterleaveControl.NEW_STYLE);
+        	((InterleaveControl)ic).setStyle(InterleaveControl.USE_SUB_CONTROLLERS);
         }
     }
 

@@ -60,7 +60,7 @@ import java.util.Map;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.engine.event.IterationEvent;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.samplers.Sampler;
@@ -195,7 +195,7 @@ public class UserParameterModifier
     /**
      * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.IterationEvent)
      */
-    public void testIterationStart(IterationEvent event)
+    public void testIterationStart(LoopIterationEvent event)
     {}
 
 }

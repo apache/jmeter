@@ -3,7 +3,7 @@ package org.apache.jmeter.protocol.http.modifier;
 import java.io.Serializable;
 
 import org.apache.jmeter.config.Argument;
-import org.apache.jmeter.engine.event.IterationEvent;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.samplers.Sampler;
@@ -154,7 +154,7 @@ public class ParamModifier extends AbstractTestElement implements TestListener,P
     /**
      * @see org.apache.jmeter.testelement.TestListener#iterationStart(org.apache.jmeter.engine.event.IterationEvent)
      */
-    public void testIterationStart(IterationEvent event)
+    public void testIterationStart(LoopIterationEvent event)
     {}
 
 }

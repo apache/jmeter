@@ -2,8 +2,9 @@ package org.apache.jmeter.modifiers;
 import java.io.Serializable;
 
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.engine.event.IterationEvent;
-import org.apache.jmeter.engine.event.IterationListener;
+import org.apache.jmeter.engine.event.IterationDeliverEvent;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
@@ -20,7 +21,7 @@ import org.apache.log.Logger;
  */
 public class CounterConfig
 	extends ConfigTestElement
-	implements Serializable, IterationListener,NoThreadClone
+	implements Serializable, LoopIterationListener,NoThreadClone
 {
 	private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.ELEMENTS);
 	private final static String START = "CounterConfig.start";
@@ -38,7 +39,7 @@ public class CounterConfig
 	/**
 	 * @see org.apache.jmeter.engine.event.IterationListener#iterationStarted(org.apache.jmeter.engine.event.IterationEvent)
 	 */
-	public synchronized void iterationStart(IterationEvent event)
+	public synchronized void iterationStart(LoopIterationEvent event)
 	{
 		JMeterVariables variables = JMeterContextService.getContext().getVariables();
 		if(!isPerUser())
@@ -83,7 +84,7 @@ public class CounterConfig
 	/**
 	 * @see org.apache.jmeter.engine.event.IterationListener#iteration(org.apache.jmeter.engine.event.IterationEvent)
 	 */
-	public void iteration(IterationEvent event) {}
+	public void iteration(IterationDeliverEvent event) {}
 	
 	public void setStart(int start)
 	{

@@ -6,8 +6,8 @@ package org.apache.jmeter.engine.event;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public interface IterationListener
+public interface LoopIterationListener
 {
-    public void iterationStart(IterationEvent iterEvent);
-    public void iteration(IterationEvent iterEvent);
+    public void iterationStart(LoopIterationEvent iterEvent);
+    public void iteration(IterationDeliverEvent iterEvent);
 }

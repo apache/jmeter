@@ -52,390 +52,348 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+
 package org.apache.jmeter.control;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.jmeter.engine.event.IterationEvent;
-import org.apache.jmeter.engine.event.IterationListener;
-import org.apache.jmeter.samplers.AbstractSampler;
+import junit.framework.TestSuite;
+
+import org.apache.jmeter.engine.event.IterationDeliverEvent;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.engine.event.LoopIterationListener;
+import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.PerSampleClonable;
-import org.apache.jmeter.testelement.PerThreadClonable;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
+ * Title: JMeter 
+ * Description: Copyright: Copyright (c) 2000 
+ * Company: Apache
  *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
+ *@author	Michael Stover
+ *@author	Thad Smith
+ *@created	$Date$
+ *@version	1.0
  ***************************************/
 
-public class GenericController extends AbstractTestElement implements Controller,
-		Serializable,PerThreadClonable,IterationListener
+public class GenericController extends AbstractTestElement implements Controller, Serializable
 {
+    protected static Logger log = LoggingManager.getLoggerFor(JMeterUtils.ELEMENTS);
     protected List iterationListeners = new LinkedList();
-	/****************************************
-	 * !ToDo (Field description)
-	 ***************************************/
-	protected List subControllersAndSamplers = new ArrayList();
-	/****************************************
-	 * !ToDo (Field description)
-	 ***************************************/
-	protected int current = 0;
-	/****************************************
-	 * !ToDo (Field description)
-	 ***************************************/
-	protected Iterator controlIt;
-	private List configs = new LinkedList();
-	private boolean returnedNull = false;
-	private boolean done = false, timeForNext = false;
-	private List assertions = new LinkedList();
-    private boolean first = true;
-    private int samplersReturned = 0;
+    protected List subControllersAndSamplers = new ArrayList();
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public GenericController()
-	{
-		
-	}
-    
-    public void addIterationListener(IterationListener lis)
+    protected int current;
+    private int iterCount;
+    private boolean done, first;
+
+    /**
+     * Creates a Generic Controller
+     */
+    public GenericController()
+    {
+        initialize();
+    }
+
+    public void initialize()
+    {
+        resetCurrent();
+        resetIterCount();
+        done = false;
+        first = true;
+        TestElement elem;
+        for (int i = 0; i < subControllersAndSamplers.size(); i++)
+        {
+            elem = (TestElement) subControllersAndSamplers.get(i);
+            if (elem instanceof Controller)
+            {
+                ((Controller) elem).initialize();
+            }
+        }
+    }
+
+    protected void reInitialize()
+    {
+        resetCurrent();
+        incrementIterCount();
+        setFirst(true);
+    }
+
+    /**
+     * @see org.apache.jmeter.control.Controller#next()
+     */
+    public Sampler next()
+    {
+        log.debug("Calling next on: " + this.getClass().getName());
+        Sampler returnValue = null;
+        TestElement currentElement = null;
+        try
+        {
+            currentElement = getCurrentElement();
+            log.debug("next element = " + currentElement);
+            setCurrentElement(currentElement);
+            if (currentElement == null)
+            {
+                //incrementCurrent();  
+                returnValue = nextIsNull();
+            }
+            else
+            {
+                fireIterEvents(currentElement);
+                if (currentElement instanceof Sampler)
+                {
+                    returnValue = nextIsASampler((Sampler) currentElement);
+                }
+                else
+                {
+                    returnValue = nextIsAController((Controller) currentElement);
+                }
+            }
+        }
+        catch (NextIsNullException e)
+        {
+            returnValue = null;
+        }
+        return returnValue;
+    }
+
+    /**
+     * @see org.apache.jmeter.control.Controller#isDone()
+     */
+    public boolean isDone()
+    {
+        return done;
+    }
+
+    protected void setDone(boolean done)
+    {
+        this.done = done;
+    }
+
+    protected boolean isFirst()
+    {
+        return first;
+    }
+
+    public void setFirst(boolean b)
+    {
+        first = b;
+    }
+
+    protected Sampler nextIsAController(Controller controller) throws NextIsNullException
+    {
+        Sampler returnValue;
+        Sampler sampler = controller.next();
+        if (sampler == null)
+        {
+            currentReturnedNull(controller);
+            returnValue = next();
+        }
+        else
+        {
+            returnValue = sampler;
+        }
+        return returnValue;
+    }
+
+    protected Sampler nextIsASampler(Sampler element) throws NextIsNullException
+    {
+        incrementCurrent();
+        return element;
+    }
+
+    protected Sampler nextIsNull() throws NextIsNullException
+    {
+        reInitialize();
+        return null;
+    }
+
+    protected void currentReturnedNull(Controller c)
+    {
+        if (c.isDone())
+        {
+            removeCurrentElement();
+        }
+        else
+        {
+            incrementCurrent();
+        }
+    }
+
+    /**
+     * Gets the SubControllers attribute of the 
+     * GenericController object
+     *
+     *	@return	The SubControllers value
+     */
+    protected List getSubControllers()
+    {
+        return subControllersAndSamplers;
+    }
+
+    private void addElement(TestElement child)
+    {
+        subControllersAndSamplers.add(child);
+    }
+
+    protected void setCurrentElement(TestElement currentElement) throws NextIsNullException
+    {}
+
+    protected TestElement getCurrentElement()
+    {
+        if (current < subControllersAndSamplers.size())
+        {
+            return (TestElement) subControllersAndSamplers.get(current);
+        }
+        else
+        {
+            if (subControllersAndSamplers.size() == 0)
+            {
+                setDone(true);
+            }
+            return null;
+        }
+    }
+
+    protected void removeCurrentElement()
+    {
+        subControllersAndSamplers.remove(current);
+    }
+
+    protected void incrementCurrent()
+    {
+        current++;
+    }
+
+    protected void resetCurrent()
+    {
+        current = 0;
+    }
+
+    /**
+     * @see org.apache.jmeter.testelement.TestElement#addTestElement(org.apache.jmeter.testelement.TestElement)
+     */
+    public void addTestElement(TestElement child)
+    {
+        if (child instanceof Controller || child instanceof Sampler)
+        {
+            addElement(child);
+        }
+    }
+
+    public void addIterationListener(LoopIterationListener lis)
     {
         iterationListeners.add(lis);
     }
-	
-	public boolean isNextFirst()
-	{
-		return first;
-	}
-
-	/****************************************
-	 * Gets the ConfigElements attribute of the GenericController object
-	 *
-	 *@return   The ConfigElements value
-	 ***************************************/
-	protected List getConfigElements()
-	{
-		return configs;
-	}
-
-	private void addConfigElement(TestElement el)
-	{
-		configs.add(el);
-	}
-
-	public void initialize()
-	{
-        first = true;
-		resetCurrent();
-	}
-
-	public void reInitialize()
-	{
-		resetCurrent();
-	}
-
-	protected void removeCurrentController()
-	{
-		subControllersAndSamplers.remove(current);
-	}
-
-	protected void resetCurrent()
-	{
-        first = true;
-		current = 0;
-	}
-
-	protected void incrementCurrent()
-	{
-		current++;
-	}
-
-	/**
-	 * Answers the question: when the end of subcontrollers and samplers is reached,
-	 * how does this Controller answert the question: hasNext()?  For most controllers,
-	 * the answer is to return false.  For some, it depends.  The LoopController, for
-	 * instance will repeat the list of subcontrollers a given number of times
-	 * before signalling false to 'hasNext()'.
-	 */
-	protected boolean hasNextAtEnd()
-	{
-		return false;
-	}
-
-	protected void nextAtEnd()
-	{
-		resetCurrent();
-	}
-
-	public boolean hasNext()
-	{
-		boolean retVal;
-		Object controller = getCurrentController();
-		if(controller == null)
-		{
-			retVal = hasNextAtEnd();
-			resetCurrent();
-		}
-		else if(controller instanceof Controller)
-		{
-			if(((Controller)controller).hasNext())
-			{
-				retVal = true;
-			}
-			else
-			{
-				currentHasNextIsFalse();
-				retVal = hasNext();
-			}
-		}
-		else
-		{
-			retVal = true;
-		}
-
-		return retVal;
-	}
-
-	protected void currentHasNextIsFalse()
-	{
-		if(((Controller)getCurrentController()).isDone())
-		{
-			removeCurrentController();
-		}
-		else
-		{
-			incrementCurrent();
-		}
-	}
-
-	protected boolean shortCircuitIsDone()
-	{
-		return done;
-	}
-
-	protected void setShortCircuit(boolean done)
-	{
-		this.done = done;
-	}
-
-	public boolean isDone()
-	{
-		if(shortCircuitIsDone())
-		{
-			return true;
-		}
-		boolean isdone = true;
-		Iterator iter = subControllersAndSamplers.iterator();
-		while (iter.hasNext())
-		{
-			Object item = iter.next();
-			if(item instanceof Sampler)
-			{
-				return false;
-			}
-			else
-			{
-				isdone = isdone && ((Controller)item).isDone();
-			}
-		}
-		setShortCircuit(isdone);
-		return isdone;
-	}
-
-	protected TestElement getCurrentController()
-	{
-		if(current < subControllersAndSamplers.size())
-		{
-			return (TestElement)subControllersAndSamplers.get(current);
-		}
-		else return null;
-	}
-
-	/****************************************
-	 * Gets the SubControllers attribute of the GenericController object
-	 *
-	 *@return   The SubControllers value
-	 ***************************************/
-	protected List getSubControllers()
-	{
-		return subControllersAndSamplers;
-	}
-	
-	/**
-	 * @see org.apache.jmeter.control.Controller#samplersReturned()
-	 */
-	public int samplersReturned()
-	{
-		return samplersReturned;
-	}
-	
-	protected void resetSamplersReturned()
-	{
-		samplersReturned = 0;
-	}
-
-
-	/****************************************
-	 * !ToDo
-	 *
-	 *@param child  !ToDo
-	 ***************************************/
-	public void addTestElement(TestElement child)
-	{
-		if(child instanceof Controller || child instanceof Sampler)
-		{
-			addController(child);
-		}
-	}
-
-	private void addController(TestElement child)
-	{
-		subControllersAndSamplers.add(child);
-	}
-
-	/****************************************
-	 * Retrieves the next Entry to be sampled.
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public Sampler next()
-	{    
-		TestElement controller = getCurrentController();
-		fireIterEvents(controller);
-		if(controller == null)
-		{
-			nextAtEnd();
-			if (subControllersAndSamplers.size()>0)
-				return next();
-			else
-				return null;
-		}
-		if(controller instanceof Sampler)
-		{
-			incrementCurrent();
-			samplersReturned++;
-			return (Sampler)controller;
-		}
-		else
-		{
-			Controller c = (Controller)controller;
-			if(c.hasNext())
-			{
-				Sampler s = c.next();
-				return s;
-			}
-			else if(c.isDone())
-			{
-				removeCurrentController();
-				return next();
-			}
-			else
-			{
-				incrementCurrent();
-				return next();
-			}
-		}
-	}
 
     protected void fireIterEvents(TestElement current)
     {
-        if(isNextFirst())
+        if (isFirst())
         {
-            fireIterationStart(current);
+            fireIterationStart();
             first = false;
         }
-        if (current instanceof GenericController && ((GenericController)current).isNextFirst()) 
-        { 
-	        fireIteration(current);
+        if (current instanceof GenericController && ((GenericController) current).isFirst())
+        {
+            fireIteration(current);
         }
     }
-    
-    protected int getIterCount()
-    {
-        return 1;
-    }
-    
-    protected void fireIterationStart(TestElement current)
+
+    protected void fireIterationStart()
     {
         Iterator iter = iterationListeners.iterator();
+        LoopIterationEvent event = new LoopIterationEvent(this, getIterCount());
         while (iter.hasNext())
         {
-            IterationListener item = (IterationListener)iter.next();
-            item.iterationStart(new IterationEvent(this,current,getIterCount()));            
+            LoopIterationListener item = (LoopIterationListener) iter.next();
+            item.iterationStart(event);
         }
     }
-    
-    protected void fireIteration(TestElement current) {
-    	Iterator iter = iterationListeners.iterator();
-    	while (iter.hasNext())
-    	{
-    		IterationListener item = (IterationListener)iter.next();
-    		item.iteration(new IterationEvent(this,current,getIterCount()));
-    	}
-    }
-    
-    public void iterationStart(IterationEvent event)
+
+    protected void fireIteration(TestElement current)
     {
-    	resetSamplersReturned();
+        Iterator iter = iterationListeners.iterator();
+        IterationDeliverEvent event = new IterationDeliverEvent(this, current);
+        while (iter.hasNext())
+        {
+            LoopIterationListener item = (LoopIterationListener) iter.next();
+            item.iteration(event);
+        }
     }
-    
-    public void iteration(IterationEvent event) {}
 
-	public static class Test extends junit.framework.TestCase
-	{
-		public Test(String name)
-		{
-			super(name);
-		}
+    protected int getIterCount()
+    {
+        return iterCount;
+    }
 
-		public void testProcessing() throws Exception
-		{
-			GenericController controller = new GenericController();
-			GenericController sub_1 = new GenericController();
-			sub_1.addTestElement(makeSampler("one"));
-			sub_1.addTestElement(makeSampler("two"));
-			controller.addTestElement(sub_1);
-			controller.addTestElement(makeSampler("three"));
-			GenericController sub_2 = new GenericController();
-			GenericController sub_3 = new GenericController();
-			sub_2.addTestElement(makeSampler("four"));
-			sub_3.addTestElement(makeSampler("five"));
-			sub_3.addTestElement(makeSampler("six"));
-			sub_2.addTestElement(sub_3);
-			sub_2.addTestElement(makeSampler("seven"));
-			controller.addTestElement(sub_2);
-			String[] order = new String[]{"one","two","three","four","five","six","seven"};
-			int counter = 7;
-			for (int i = 0; i < 2; i++)
-			{
-				assertEquals(7,counter);
-				counter = 0;
-				while(controller.hasNext())
-				{
-					TestElement sampler = controller.next();
-					assertEquals(order[counter++],sampler.getPropertyAsString(TestElement.NAME));
-				}
-			}
-		}
+    protected void incrementIterCount()
+    {
+        iterCount++;
+    }
 
-		private TestElement makeSampler(String name)
-		{
-			TestSampler s = new TestSampler();
-			s.setName(name);
-			return s;
-		}
-		class TestSampler extends AbstractSampler implements PerSampleClonable {
-		  public void addCustomTestElement(TestElement t) { }
-		  public org.apache.jmeter.samplers.SampleResult sample(org.apache.jmeter.samplers.Entry e) { return null; }
-		}
-	}
+    protected void resetIterCount()
+    {
+        iterCount = 0;
+    }
+
+    public static class Test extends JMeterTestCase
+    {
+        public Test(String name)
+        {
+            super(name);
+        }
+
+        public void testProcessing() throws Exception
+        {
+            testLog.debug("Testing Generic Controller");
+            GenericController controller = new GenericController();
+            GenericController sub_1 = new GenericController();
+            sub_1.addTestElement(new TestSampler("one"));
+            sub_1.addTestElement(new TestSampler("two"));
+            controller.addTestElement(sub_1);
+            controller.addTestElement(new TestSampler("three"));
+            GenericController sub_2 = new GenericController();
+            GenericController sub_3 = new GenericController();
+            sub_2.addTestElement(new TestSampler("four"));
+            sub_3.addTestElement(new TestSampler("five"));
+            sub_3.addTestElement(new TestSampler("six"));
+            sub_2.addTestElement(sub_3);
+            sub_2.addTestElement(new TestSampler("seven"));
+            controller.addTestElement(sub_2);
+            String[] order = new String[] { "one", "two", "three", "four", "five", "six", "seven" };
+            int counter = 7;
+            controller.initialize();
+            for (int i = 0; i < 2; i++)
+            {
+                assertEquals(7, counter);
+                counter = 0;
+                TestElement sampler = null;
+                while ((sampler = controller.next()) != null)
+                {
+                    assertEquals(order[counter++], sampler.getPropertyAsString(TestElement.NAME));
+                }
+            }
+        }
+    }
+
+    public static void main(String args[])
+    {
+        junit.textui.TestRunner.run(suite());
+    }
+
+    public static TestSuite suite()
+    {
+        TestSuite suite = new TestSuite();
+        suite.addTest(new Test("testProcessing"));
+        return suite;
+    }
 }

@@ -2,7 +2,8 @@ package org.apache.jmeter.samplers;
 
 import java.io.Serializable;
 
-import org.apache.jmeter.engine.event.IterationEvent;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.log.Hierarchy;
@@ -18,7 +19,7 @@ import org.apache.log.Logger;
  */
 
 public class RemoteTestListenerWrapper extends AbstractTestElement implements
-		TestListener,Serializable
+		TestListener,Serializable,NoThreadClone
 {
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.elements");
@@ -80,7 +81,7 @@ public class RemoteTestListenerWrapper extends AbstractTestElement implements
     /**
      * @see org.apache.jmeter.testelement.TestListener#iterationStart(org.apache.jmeter.engine.event.IterationEvent)
      */
-    public void testIterationStart(IterationEvent event)
+    public void testIterationStart(LoopIterationEvent event)
     {}
 
 }

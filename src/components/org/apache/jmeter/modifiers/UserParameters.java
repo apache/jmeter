@@ -5,8 +5,9 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.engine.event.IterationEvent;
-import org.apache.jmeter.engine.event.IterationListener;
+import org.apache.jmeter.engine.event.IterationDeliverEvent;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -20,7 +21,7 @@ import org.apache.jmeter.threads.JMeterVariables;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class UserParameters extends ConfigTestElement implements Serializable, PreProcessor,IterationListener
+public class UserParameters extends ConfigTestElement implements Serializable, PreProcessor,LoopIterationListener
 {
 
     public static final String NAMES = "UserParameters.names";
@@ -125,7 +126,7 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
     /**
      * @see org.apache.jmeter.engine.event.IterationListener#iterationStarted(org.apache.jmeter.engine.event.IterationEvent)
      */
-    public void iterationStart(IterationEvent event)
+    public void iterationStart(LoopIterationEvent event)
     {
         if(isPerIteration())
         {
@@ -136,7 +137,7 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
 	/**
 	 * @see org.apache.jmeter.engine.event.IterationListener#iteration(org.apache.jmeter.engine.event.IterationEvent)
 	 */
-	public void iteration(IterationEvent event) {}
+	public void iteration(IterationDeliverEvent event) {}
 
     /**
      * @see org.apache.jmeter.testelement.ThreadListener#setJMeterVariables(org.apache.jmeter.threads.JMeterVariables)
