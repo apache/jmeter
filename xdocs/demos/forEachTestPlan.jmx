@@ -80,7 +80,7 @@
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="RegexExtractor.default">fout</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.gui_class">org.apache.jmeter.extractor.gui.RegexExtractorGui</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.test_class">org.apache.jmeter.extractor.RegexExtractor</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="RegexExtractor.regex">&lt;a href="([^"])"</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="RegexExtractor.regex">&lt;a href="([^"]+)"</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">Regular Expression Extractor</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="RegexExtractor.template">$1$</property>
