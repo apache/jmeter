@@ -182,6 +182,16 @@ public abstract class HTMLParser
 			}
         	
 			return getEmbeddedResourceURLs(html, baseUrl,col);
+            
+            // An additional note on using HashSets to store URLs: I just
+            // discovered that obtaining the hashCode of a java.net.URL implies
+            // a domain-name resolution process. This means significant delays
+            // can occur, even more so if the domain name is not resolvable.
+            // Whether this can be a problem in practical situations I can't tell, but
+            // thought I'd keep a note just in case...
+            // BTW, note that using a Vector and removing duplicates via scan
+            // would not help, since URL.equals requires name resolution too.
+            // TODO: maybe change the API to return URL Strings instead of java.net.URLs?
         }
         
         // See whether we can use LinkedHashSet or not:
@@ -294,13 +304,13 @@ public abstract class HTMLParser
         private static final TestData[] TESTS = new TestData[]{
         	new TestData(
         	             "testfiles/HTMLParserTestCase.html",
-			             "http://myhost/mydir/myfile.html",
+			             "http://localhost/mydir/myfile.html",
 			             "testfiles/HTMLParserTestCase.set",
 			              "testfiles/HTMLParserTestCase.all"
         	             ),
 			new TestData(
 			             "testfiles/HTMLParserTestCaseWithBaseHRef.html",
-						 "http://myhost/mydir/myfile.html",
+						 "http://localhost/mydir/myfile.html",
 						 "testfiles/HTMLParserTestCase.set",
 						  "testfiles/HTMLParserTestCase.all"
 						 ),
@@ -318,7 +328,7 @@ public abstract class HTMLParser
 						 ),
             new TestData(
                          "testfiles/HTMLParserTestCaseWithComments.html",
-                         "http://myhost/mydir/myfile.html",
+                         "http://localhost/mydir/myfile.html",
                          "testfiles/HTMLParserTestCase.set",
                          "testfiles/HTMLParserTestCase.all"
                          ),
