@@ -58,8 +58,6 @@ import org.jdom.*;
 import org.jdom.input.SAXBuilder;
 
 /**
- * @author    Michael Stover
- * @author    sebb at apache dot org (refactor into suites)
  * @version   $Revision$ Last update $Date$
  */
 public class JMeterTest extends JMeterTestCase
@@ -570,9 +568,10 @@ public class JMeterTest extends JMeterTestCase
         	{
         		continue; // Don't try to instantiate remote server
         	}
-            Class c = Class.forName(n);
+            Class c = null;
             try
             {
+            	c = Class.forName(n);
                 try
                 {
                     // Try with a parameter-less constructor first
