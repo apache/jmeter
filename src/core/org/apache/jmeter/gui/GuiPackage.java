@@ -68,6 +68,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
+import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -240,6 +241,10 @@ public class GuiPackage
             TestElement currentNode =
                 treeListener.getCurrentNode().createTestElement();
             JMeterGUIComponent comp = getGui(currentNode);
+            if(!(comp instanceof AbstractVisualizer))  // a hack that needs to be fixed for 2.0
+            {
+                comp.clear();
+            }
             comp.configure(currentNode);
             return comp;
         }

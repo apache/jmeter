@@ -116,8 +116,7 @@ public class ConstantThroughputTimerGui extends AbstractTimerGui
     public void modifyTestElement(TestElement timer)
     {
         this.configureTestElement(timer);
-        ((ConstantThroughputTimer) timer).setThroughput(
-            throughputField.getText());
+        ((ConstantThroughputTimer) timer).setThroughput(throughputField.getText());
     }
 
     /**
@@ -137,8 +136,7 @@ public class ConstantThroughputTimerGui extends AbstractTimerGui
      */
     private void init()
     {
-        setLayout(
-            new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
 
         setBorder(makeBorder());
         setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
@@ -146,10 +144,7 @@ public class ConstantThroughputTimerGui extends AbstractTimerGui
         add(makeTitlePanel());
 
         Box throughputPanel = Box.createHorizontalBox();
-        throughputPanel.add(
-            new JLabel(
-                JMeterUtils.getResString(
-                    "constant_throughput_timer_throughput")));
+        throughputPanel.add(new JLabel(JMeterUtils.getResString("constant_throughput_timer_throughput")));
 
         throughputField = new JTextField(6);
         throughputField.setText(DEFAULT_THROUGHPUT);
@@ -157,5 +152,13 @@ public class ConstantThroughputTimerGui extends AbstractTimerGui
         throughputPanel.add(throughputField);
 
         add(throughputPanel);
+    }
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+     */
+    public void clear()
+    {
+        throughputField.setText(DEFAULT_THROUGHPUT);
+        super.clear();
     }
 }

@@ -27,12 +27,7 @@ public class ObjectTableModel extends DefaultTableModel
     private transient ArrayList setMethods = new ArrayList();
     private transient ArrayList getMethods = new ArrayList();
 
-    public ObjectTableModel(
-        String[] headers,
-        String[] propertyNames,
-        Class[] propertyClasses,
-        Class[] renderClasses,
-        Object sampleObject)
+    public ObjectTableModel(String[] headers, String[] propertyNames, Class[] propertyClasses, Class[] renderClasses, Object sampleObject)
     {
         this.headers.addAll(Arrays.asList(headers));
         this.classes.addAll(Arrays.asList(renderClasses));
@@ -60,10 +55,7 @@ public class ObjectTableModel extends DefaultTableModel
                             "is" + propertyNames[i],
                             emptyClasses));
                 }
-                setMethods.add(
-                    objectClass.getMethod(
-                        "set" + propertyNames[i],
-                        new Class[] { propertyClasses[i] }));
+                setMethods.add(objectClass.getMethod("set" + propertyNames[i], new Class[] { propertyClasses[i] }));
             }
             catch (NoSuchMethodException e)
             {
@@ -71,23 +63,23 @@ public class ObjectTableModel extends DefaultTableModel
             }
         }
     }
-    
+
     public Iterator iterator()
     {
         return objects.iterator();
     }
-    
+
     public void clearData()
     {
         int size = getRowCount();
         objects.clear();
-        super.fireTableRowsDeleted(0,size);
+        super.fireTableRowsDeleted(0, size);
     }
-    
+
     public void addRow(Object value)
     {
         objects.add(value);
-        super.fireTableRowsInserted(objects.size()-1,objects.size());
+        super.fireTableRowsInserted(objects.size() - 1, objects.size());
     }
 
     /**
@@ -111,7 +103,7 @@ public class ObjectTableModel extends DefaultTableModel
      */
     public int getRowCount()
     {
-        if(objects == null)
+        if (objects == null)
         {
             return 0;
         }
@@ -131,11 +123,11 @@ public class ObjectTableModel extends DefaultTableModel
         }
         catch (IllegalAccessException e)
         {
-            log.error("Illegal method access",e);
+            log.error("Illegal method access", e);
         }
         catch (InvocationTargetException e)
         {
-            log.error("incorrect method access",e);
+            log.error("incorrect method access", e);
         }
         return null;
     }
@@ -153,12 +145,12 @@ public class ObjectTableModel extends DefaultTableModel
      */
     public void moveRow(int start, int end, int to)
     {
-        List subList = objects.subList(start,end);
-        for(int x = end-1;x >= start;x--)
+        List subList = objects.subList(start, end);
+        for (int x = end - 1; x >= start; x--)
         {
             objects.remove(x);
         }
-        objects.addAll(to,subList);
+        objects.addAll(to, subList);
         super.fireTableChanged(new TableModelEvent(this));
     }
 
@@ -168,7 +160,7 @@ public class ObjectTableModel extends DefaultTableModel
     public void removeRow(int row)
     {
         objects.remove(row);
-        super.fireTableRowsDeleted(row,row);
+        super.fireTableRowsDeleted(row, row);
     }
 
     /**
@@ -176,21 +168,27 @@ public class ObjectTableModel extends DefaultTableModel
      */
     public void setValueAt(Object cellValue, int row, int col)
     {
-        Object value = objects.get(row);
-        Method setMethod = (Method)setMethods.get(col);
-        try
+        if (row < objects.size())
         {
-            setMethod.invoke(value,new Object[]{cellValue});
+            Object value = objects.get(row);
+            if (col < setMethods.size())
+            {
+                Method setMethod = (Method) setMethods.get(col);
+                try
+                {
+                    setMethod.invoke(value, new Object[] { cellValue });
+                }
+                catch (IllegalAccessException e)
+                {
+                    log.error("Illegal method access", e);
+                }
+                catch (InvocationTargetException e)
+                {
+                    log.error("incorrect method access", e);
+                }
+                super.fireTableDataChanged();
+            }
         }
-        catch (IllegalAccessException e)
-        {
-            log.error("Illegal method access",e);
-        }
-        catch (InvocationTargetException e)
-        {
-            log.error("incorrect method access",e);
-        }
-        super.fireTableDataChanged();
     }
 
     /**
@@ -198,7 +196,7 @@ public class ObjectTableModel extends DefaultTableModel
      */
     public Class getColumnClass(int arg0)
     {
-        return (Class)classes.get(arg0);
+        return (Class) classes.get(arg0);
     }
 
 }

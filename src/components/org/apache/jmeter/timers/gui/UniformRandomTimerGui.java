@@ -105,11 +105,7 @@ public class UniformRandomTimerGui extends AbstractTimerGui
      */
     public static void error(Exception e, JComponent thrower)
     {
-        JOptionPane.showMessageDialog(
-            thrower,
-            e,
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(thrower, e, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -169,16 +165,12 @@ public class UniformRandomTimerGui extends AbstractTimerGui
 
         // THREAD DELAY PROPERTIES
         JPanel threadDelayPropsPanel = new JPanel();
-        threadDelayPropsPanel.setLayout(
-            new VerticalLayout(5, VerticalLayout.LEFT));
-        threadDelayPropsPanel.setBorder(
-            BorderFactory.createTitledBorder(
-                JMeterUtils.getResString("thread_delay_properties")));
+        threadDelayPropsPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+        threadDelayPropsPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("thread_delay_properties")));
 
         // DELAY DEVIATION
         Box delayDevPanel = Box.createHorizontalBox();
-        delayDevPanel.add(
-            new JLabel(JMeterUtils.getResString("uniform_timer_range")));
+        delayDevPanel.add(new JLabel(JMeterUtils.getResString("uniform_timer_range")));
         delayDevPanel.add(Box.createHorizontalStrut(5));
 
         rangeField = new JTextField(6);
@@ -190,8 +182,7 @@ public class UniformRandomTimerGui extends AbstractTimerGui
 
         // AVG DELAY
         Box avgDelayPanel = Box.createHorizontalBox();
-        avgDelayPanel.add(
-            new JLabel(JMeterUtils.getResString("uniform_timer_delay")));
+        avgDelayPanel.add(new JLabel(JMeterUtils.getResString("uniform_timer_delay")));
         avgDelayPanel.add(Box.createHorizontalStrut(5));
 
         delayField = new JTextField(6);
@@ -207,4 +198,13 @@ public class UniformRandomTimerGui extends AbstractTimerGui
         new FocusRequester(rangeField);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+     */
+    public void clear()
+    {
+        rangeField.setText(DEFAULT_RANGE);
+        delayField.setText(DEFAULT_DELAY);
+        super.clear();
+    }
 }
