@@ -2,12 +2,85 @@
 <document>
 
 <properties>
-  <title>User's Manual: Logic Controllers</title>
+  <title>User's Manual: Thread Group</title>
 </properties>
 
 <body>
 
-<section name="4.2.2 Logic Controllers" anchor="logic_controller">
+<section name="4.0 Elements of a Test Plan">
+
+<subsection name="4.1 ThreadGroup" anchor="thread_group">
+<p>Thread group elements are the beginning points of any test plan.  All elements
+of a test plan must be under a thread group.  As the name implies, the thread group
+element controls the number of threads JMeter will use to execute your test.  The
+controls for a thread group allow you to:
+<ul><li>Set the number of threads</li>
+<li>Set the ramp-up period</li>
+<li>Set the number of times to execute the test</li>
+</ul></p>
+
+<p>Each thread will execute the test plan in its entirety and completely independent
+of other test threads.  Multiple threads are used to simulate concurrent connections
+to your server application.</p>
+
+<p>The ramp-up period tells JMeter how long to take to "ramp-up" to the full number of
+threads chosen.  If 10 threads are used, and the ramp-up period is 100 seconds, then
+JMeter will take 100 seconds to get all 10 threads up and running.  Each thread will
+start 10 (100/10) seconds after the previous thread was begun.  If there are 30 threads
+and a ramp-up period of 120 seconds, then each successive thread will be delayed by 4 seconds.</p>
+
+<p>By default, a thread group is configured to loop indefinitely through its elements.
+Alternatively, you can set the number of times the thread group will loop before ending.  If the number
+is set at one, then JMeter will execute the test only once before stopping.</p>
+</subsection>
+
+<subsection name="4.2 Controllers" anchor="controllers">
+
+<p> JMeter has two types of Controllers: Generative and Logical.</p>
+
+<p>Generative Controllers tell JMeter to send requests to a server. For
+example, add an HTTP Request Generative Controller if you want JMeter
+to send an HTTP request.  You can also customize a request by adding one
+or more Configuration Elements to a Generative Controller.  For more
+information, see
+<a href="#gen_controller">Generative Controllers</a>.</p>
+
+<p>Logical Controllers let you customize the logic that JMeter uses to
+decide when to send requests.  For example, you can add an Interleave
+Logic Controller to alternate between two HTTP Request Generative
+Controllers.  Also, one particular Logic Controller, the Modification
+Manager, lets you modify the results of a request.  For more information,
+see <a href="#logic_controller">Logical Controllers</a>.</p>
+
+</subsection>
+
+<subsection name="4.2.1 Generative Controllers" anchor="gen_controller">
+
+<p>Generative Controllers tell JMeter to send requests to a server. JMeter
+currently has three such controllers: FTP Request, HTTP Request, and JDBC
+request.  Each controller has several properties you can set.  You can further
+customize a controller by adding one or more Configuration Elements to it.
+Also, note that JMeter sends requests in the order that you add them to the tree.</p>
+
+<p>If you are going to send multiple requests of the same type (for example,
+HTTP Request) to the same server, consider using a Defaults Configuration
+Element. Each controller has its own Defaults element (see below). </p>
+
+<p>Remember to add a Listener to your Thread Group to view and/or store the
+results of your requests to disk.</p>
+
+<p>If you are interested in having JMeter perform basic validation on
+the response of your request, add an <a href="assertion.html">Assertion</a> to
+the Request controller.  For example, in stress testing a web application, the server
+may return a successful "HTTP Response" code, but the page may have errors on it or
+may be missing sections. You could add assertions to check for certain HTML tags,
+common error strings, and so on. JMeter lets you create these assertions using regular
+expressions.</p>
+
+<p><a href="component_reference.html#gen_controllers">JMeter's built-in generative controllers</a></p>
+</subsection>
+
+<subsection name="4.2.2 Logic Controllers" anchor="logic_controller">
 <p>Logic Controllers let you customize the logic that JMeter uses to
 decide when to send requests.  Logic Controllers may have as child elements any
 of the following: Generative Controllers (requests), Configuration Elements, and other Logic
@@ -88,9 +161,9 @@ will share the same cookies.</p>
 
 <p>Logic Controllers can be combined to achieve various results.  See the list of <a href="component_reference.html#logic_controllers">built-in
 Logic Controllers</a>.</p>
+</subsection>
+
 </section>
-
-
 
 </body>
 </document>
