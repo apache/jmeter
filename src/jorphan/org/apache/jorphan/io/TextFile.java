@@ -107,9 +107,9 @@ public class TextFile extends File
      */
     public void setText(String body)
     {
+        Writer writer = null;
         try
         {
-            Writer writer;
             if (encoding == null)
             {
                 writer = new FileWriter(this);
@@ -126,6 +126,11 @@ public class TextFile extends File
         }
         catch (IOException ioe)
         {
+        	try {
+				if (writer != null) {
+					writer.close();
+				}
+				} catch (IOException e) {}
             log.error("", ioe);
         }
     }
@@ -139,9 +144,9 @@ public class TextFile extends File
     {
         String lineEnd = System.getProperty("line.separator");
         StringBuffer sb = new StringBuffer();
+        Reader reader = null;
         try
         {
-            Reader reader;
             if (encoding == null)
             {
                 reader= new FileReader(this);
@@ -167,6 +172,8 @@ public class TextFile extends File
         {
             log.error("", ioe);
         }
+        if (reader != null)
+			try {reader.close();} catch (IOException e) {}
         return sb.toString();
     }
 
