@@ -622,13 +622,15 @@ public class ProxyControl extends GenericController implements Serializable
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
         Enumeration enum = myNode.children();
         while (enum.hasMoreElements())
-        {
+        { 
             JMeterTreeNode subNode =
                 (JMeterTreeNode) enum.nextElement();
-            TestElement testElement =
-                (TestElement) subNode.createTestElement();
-            if (testElement instanceof SampleListener) {
-                ((SampleListener)testElement).sampleOccurred(event);
+            if (subNode.isEnabled()) {
+                TestElement testElement =
+                    (TestElement) subNode.createTestElement();
+                if (testElement instanceof SampleListener) {
+                    ((SampleListener)testElement).sampleOccurred(event);
+                }
             }
         }
     }
@@ -646,10 +648,12 @@ public class ProxyControl extends GenericController implements Serializable
         {
             JMeterTreeNode subNode =
                 (JMeterTreeNode) enum.nextElement();
-            TestElement testElement =
-                (TestElement) subNode.createTestElement();
-            if (testElement instanceof TestListener) {
-                ((TestListener)testElement).testStarted();
+            if (subNode.isEnabled()) {
+                TestElement testElement =
+                    (TestElement) subNode.createTestElement();
+                if (testElement instanceof TestListener) {
+                    ((TestListener)testElement).testStarted();
+                }
             }
         }
     }
@@ -667,10 +671,12 @@ public class ProxyControl extends GenericController implements Serializable
         {
             JMeterTreeNode subNode =
                 (JMeterTreeNode) enum.nextElement();
-            TestElement testElement =
-                (TestElement) subNode.createTestElement();
-            if (testElement instanceof TestListener) {
-                ((TestListener)testElement).testEnded();
+            if (subNode.isEnabled()) {
+                TestElement testElement =
+                    (TestElement) subNode.createTestElement();
+                if (testElement instanceof TestListener) {
+                    ((TestListener)testElement).testEnded();
+                }
             }
         }
     }
