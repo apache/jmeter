@@ -634,7 +634,15 @@ public class HTTPSampler extends AbstractSampler
 	protected byte[] readResponse(HttpURLConnection conn) throws IOException
 	{
 		byte[] buffer = new byte[4096];
-		BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
+		BufferedInputStream in;
+		try
+		{
+			in = new BufferedInputStream(conn.getInputStream());
+		}
+		catch(Exception e)
+		{
+			in = new BufferedInputStream(conn.getErrorStream());
+		}
 		java.io.ByteArrayOutputStream w = new ByteArrayOutputStream();
 		int x = 0;
 		while((x = in.read(buffer)) > -1)
@@ -922,8 +930,13 @@ public class HTTPSampler extends AbstractSampler
 		}
 		catch(IOException ex)
 		{
-			//ex.printStackTrace();
-			res.setResponseData(ex.toString().getBytes());
+			ex.printStackTrace();
+			res.setDataType(res.TEXT);
+			try {
+				res.setResponseData(readResponse(conn));
+			} catch (IOException e) {
+				res.setResponseData(ex.toString().getBytes());
+			}
 			res.setResponseCode(NON_HTTP_RESPONSE_CODE);
 			res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
 			res.setTime(System.currentTimeMillis() - time);
