@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -64,7 +63,6 @@ import org.apache.log.Logger;
  * "Continue" button.
  *
  * Created     2001/07/25
- * @version   $Revision$ $Date$
  */
 public class ViewResultsFullVisualizer
     extends AbstractVisualizer
@@ -138,24 +136,21 @@ public class ViewResultsFullVisualizer
     {
         SampleResult[] subResults = res.getSubResults();
 
-        if (subResults != null)
+        int leafIndex = 0;
+
+        for (int i = 0; i < subResults.length; i++)
         {
-            int leafIndex = 0;
+            SampleResult child = subResults[i];
 
-            for (int i = 0; i < subResults.length; i++)
+            if (log.isDebugEnabled())
             {
-                SampleResult child = subResults[i];
-
-                if (log.isDebugEnabled())
-                {
-                    log.debug("updateGui1 : child sample result - " + child);
-                }
-                DefaultMutableTreeNode leafNode =
-                    new DefaultMutableTreeNode(child);
-
-                treeModel.insertNodeInto(leafNode, currNode, leafIndex++);
-                addSubResults(leafNode, child);
+                log.debug("updateGui1 : child sample result - " + child);
             }
+            DefaultMutableTreeNode leafNode =
+                new DefaultMutableTreeNode(child);
+
+            treeModel.insertNodeInto(leafNode, currNode, leafIndex++);
+            addSubResults(leafNode, child);
         }
     }
 

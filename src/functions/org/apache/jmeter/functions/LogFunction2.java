@@ -28,7 +28,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-import org.apache.log.Priority;
 
 /**
  * Function to log a message
@@ -90,11 +89,8 @@ public class LogFunction2 extends AbstractFunction implements Serializable
 		if (values.length > 2){ // Throwable wanted
 			t = new Throwable(((CompoundVariable) values[2]).execute());
 		}
-		
-		// N.B. if the string is not recognised, DEBUG is assumed
-        Priority p = Priority.getPriorityForName(priorityString);
 
-        log.log(p,stringToLog,t);
+		LogFunction.logDetails(log,stringToLog,priorityString,t);
         
         return "";
 

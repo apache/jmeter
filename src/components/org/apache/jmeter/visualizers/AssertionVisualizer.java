@@ -84,17 +84,14 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
         {
             StringBuffer display = new StringBuffer();
             AssertionResult assertionResults[] = res.getAssertionResults();
-            if (assertionResults != null)
+            for (int i = 0; i < assertionResults.length; i++)
             {
-                for (int i = 0; i < assertionResults.length; i++)
-                {
-                    AssertionResult item = assertionResults[i];
+                AssertionResult item = assertionResults[i];
 
-                    if (item.isFailure() || item.isError())
-                    {
-                        display.append("\n\t\t");
-                        display.append(item.getFailureMessage());
-                    }
+                if (item.isFailure() || item.isError())
+                {
+                    display.append("\n\t\t");
+                    display.append(item.getFailureMessage());
                 }
             }
             return display.toString();

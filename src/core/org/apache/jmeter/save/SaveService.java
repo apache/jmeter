@@ -36,8 +36,8 @@ import com.thoughtworks.xstream.XStream;
 /**
  * @author mstover
  *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * @author     Mike Stover
+ * @author     <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell</a>
  */
 public class SaveService
 {

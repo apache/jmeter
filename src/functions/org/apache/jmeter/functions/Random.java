@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -34,7 +33,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * a min (first argument) and a max (seceond argument).
  *
  * @author <a href="mailto:sjkwadzo@praize.com">Jonathan Kwadzo</a>
- * @version $Id$
  */
 public class Random extends AbstractFunction implements Serializable
 {
@@ -98,7 +96,7 @@ public class Random extends AbstractFunction implements Serializable
      *
      * @see Function#setParameters(Collection)
      */
-    public void setParameters(Collection parameters)
+    public synchronized void setParameters(Collection parameters)
         throws InvalidVariableException
     {
         Object[] values = parameters.toArray();

@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -29,7 +28,6 @@ import org.apache.jmeter.samplers.SampleResult;
  * the stats out with whatever methods you prefer.
  *
  * @author James Boutcher
- * @version $Revision$
  */
 public class RunningSample
 {
@@ -38,11 +36,11 @@ public class RunningSample
     private static DecimalFormat errorFormatter = new DecimalFormat("#0.00%");
 
     private long counter;
-    private long runningSum;
-    private long max, min;
-    private long errorCount;
-    private long firstTime;
-    private long lastTime;
+    private volatile long runningSum;
+    private volatile long max, min;
+    private volatile long errorCount;
+    private volatile long firstTime;
+    private volatile long lastTime;
     private String label;
     private int index;
 

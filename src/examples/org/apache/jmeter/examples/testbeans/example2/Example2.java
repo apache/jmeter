@@ -6,9 +6,9 @@
  */
 package org.apache.jmeter.examples.testbeans.example2;
 
+import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 
 /**
@@ -16,7 +16,7 @@ import org.apache.jmeter.testbeans.TestBean;
  * usage of the TestBean features to podential TestBean developers. Note that only the class's
  * introspector view matters: the methods do nothing -- nothing useful, in any case.
  */
-public class Example2 extends TestBean implements Sampler {
+public class Example2 extends AbstractSampler implements TestBean {
 	public SampleResult sample(Entry e) {
 		return new SampleResult();
 	}

@@ -98,7 +98,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		"Non HTTP response code";
 	protected final static String NON_HTTP_RESPONSE_MESSAGE=
 		"Non HTTP response message";
-
+	
+	private static Pattern pattern;
+	
     static {
         try
         {
@@ -593,8 +595,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     }
 
 	protected abstract HTTPSampleResult sample(URL u, String s, boolean b, int i);
-
-	private static final Pattern pattern;
+	
 	private static ThreadLocal localMatcher = new ThreadLocal()
 	    {
 	        protected synchronized Object initialValue()
