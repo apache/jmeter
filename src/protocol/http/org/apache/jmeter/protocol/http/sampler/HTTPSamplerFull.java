@@ -341,6 +341,9 @@ public class HTTPSamplerFull extends HTTPSampler
 					binRes.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
 					binRes.setSuccessful(false);
 				}
+                                log.debug("Adding result");
+                                res.addSubResult(binRes);
+                                res.setTime(res.getTime() + binRes.getTime());
 			}
 			else
 			{
@@ -348,12 +351,7 @@ public class HTTPSamplerFull extends HTTPSampler
 				  {
 				 	 log.debug("Skipping duplicate - " + binUrl);
 				  }
-				  break;
 			}
-			log.debug("Adding result");
-			// Note that this only happens for unique binaries
-			res.addSubResult(binRes);
-			res.setTime(res.getTime() + binRes.getTime());
 		}
 		log.debug("End   : HTTPSamplerFull parseNodes");
 	}
