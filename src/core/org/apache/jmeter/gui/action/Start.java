@@ -74,8 +74,8 @@ import org.apache.log.Logger;
 
 /**
  * @author    Michael Stover
- * @created   March 1, 2001
- * @version   $Revision$
+ * Created     March 1, 2001
+ * @version   $Revision$ Last updated: $Date$
  */
 public class Start extends AbstractAction
 {

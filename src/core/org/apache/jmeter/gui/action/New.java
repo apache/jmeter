@@ -68,8 +68,8 @@ import org.apache.jmeter.util.JMeterUtils;
  * test plan.
  *
  * @author     <a href="mramshaw@alumni.concordia.ca">Martin Ramshaw</a>
- * @created    June 6, 2002
- * @version    $Revision$
+ * Created      June 6, 2002
+ * @version    $Revision$ Last updated: $Date$
  */
 public class New implements Command
 {

@@ -70,11 +70,10 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 /****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
+ * Title: JMeter
  *
  *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
+ *@version   $Revision$  Last updated: $Date$
  ***************************************/
 
 public class NamePanel extends JPanel implements JMeterGUIComponent

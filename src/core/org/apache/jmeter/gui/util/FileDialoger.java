@@ -72,8 +72,8 @@ public final class FileDialoger
     /**
      * The last directory visited by the user while choosing Files.
      */
-    public static String lastJFCDirectory = null;
-    public static JFileChooser jfc = new JFileChooser();
+    public static String lastJFCDirectory = null;//TODO: make private?
+    public static JFileChooser jfc = new JFileChooser();//TODO: make private?
 
     /**
      * Prevent instantiation of utility class.

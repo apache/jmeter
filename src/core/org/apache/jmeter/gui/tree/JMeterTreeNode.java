@@ -79,8 +79,8 @@ public class JMeterTreeNode
     implements JMeterGUIComponent
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
-    JMeterTreeModel treeModel;
-    boolean enabled = true;
+    private JMeterTreeModel treeModel;
+    //boolean enabled = true;
 
     public JMeterTreeNode(TestElement userObj, JMeterTreeModel treeModel)
     {
