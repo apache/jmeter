@@ -90,6 +90,7 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer
 	{
 		super.getTreeCellRendererComponent(tree,((JMeterGUIComponent)value).getName(),
 				sel,expanded,leaf,row,hasFocus);
+		this.setEnabled(((JMeterGUIComponent)value).isEnabled());
 		ImageIcon ic = ((JMeterTreeNode)value).getIcon();
 		if (ic!=null)
 			 setIcon(ic);
