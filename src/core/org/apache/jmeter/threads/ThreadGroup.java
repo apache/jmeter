@@ -440,7 +440,8 @@ public class ThreadGroup
      */
     public boolean getOnErrorStopThread()
     {
-        return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR) == ON_SAMPLE_ERROR_STOPTHREAD;
+        return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR)
+            .equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTHREAD);
     }
 
     /**
@@ -450,7 +451,8 @@ public class ThreadGroup
      */
     public boolean getOnErrorStopTest()
     {
-		return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR) == ON_SAMPLE_ERROR_STOPTEST;
+        return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR)
+		    .equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST);
     }
 
 }
