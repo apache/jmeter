@@ -386,18 +386,19 @@ public class JMeterTest extends JMeterTestCase
                     catch (NoSuchMethodException f)
                     {
                         // no luck. Ignore this class
-						System.out.println(exName+": could not construct "+n+" "+f);
+						System.out.println(exName+": NoSuchMethodException  "+n);
                     }
                 }
             }
             catch (NoClassDefFoundError e)
             {
 				// no luck. Ignore this class
-				System.out.println(exName+": could not construct "+n+" "+e);
+				System.out.println(exName+": NoClassDefFoundError "+n);
             }
             catch (IllegalAccessException e)
             {
 				caught=e;
+				System.out.println(exName+": IllegalAccessException "+n);
                 // We won't test restricted-access classes.
             }
 			//JDK1.4: catch (java.awt.HeadlessException e)
