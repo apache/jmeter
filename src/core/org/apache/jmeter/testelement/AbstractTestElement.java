@@ -27,7 +27,7 @@ import org.apache.log.Logger;
 
 public abstract class AbstractTestElement implements TestElement, Serializable
 {
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+    protected static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
 
     private Map propMap = Collections.synchronizedMap(new HashMap());
 
