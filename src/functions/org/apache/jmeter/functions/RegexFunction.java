@@ -69,12 +69,15 @@ public class RegexFunction extends AbstractFunction implements Serializable
         }
     };
 
+    // Number of parameters expected - used to reject invalid calls
+    private static final int MIN_PARAMETER_COUNT = 2;
+    private static final int MAX_PARAMETER_COUNT = 6;
     static {
-        desc.add(JMeterUtils.getResString("regexfunc_param_1"));
-        desc.add(JMeterUtils.getResString("regexfunc_param_2"));
-        desc.add(JMeterUtils.getResString("regexfunc_param_3"));
-        desc.add(JMeterUtils.getResString("regexfunc_param_4"));
-        desc.add(JMeterUtils.getResString("regexfunc_param_5"));
+        desc.add(JMeterUtils.getResString("regexfunc_param_1"));// regex
+        desc.add(JMeterUtils.getResString("regexfunc_param_2"));// template
+        desc.add(JMeterUtils.getResString("regexfunc_param_3"));// which match
+        desc.add(JMeterUtils.getResString("regexfunc_param_4"));// between text
+        desc.add(JMeterUtils.getResString("regexfunc_param_5"));// default text
         desc.add(JMeterUtils.getResString("function_name_param"));
     }
 
@@ -262,10 +265,18 @@ public class RegexFunction extends AbstractFunction implements Serializable
         throws InvalidVariableException
     {
         values = parameters.toArray();
-        if (values.length < 2)
-        {
-            throw new InvalidVariableException();
-        }
+
+        if ((values.length < MIN_PARAMETER_COUNT)
+                || (values.length > MAX_PARAMETER_COUNT))
+            {
+                throw new InvalidVariableException(
+                    "Parameter Count " //$NON-NLS-1$
+                	+ values.length 
+					+ " not between " //$NON-NLS-1$
+                    + MIN_PARAMETER_COUNT
+                    + " & " //$NON-NLS-1$
+                    + MAX_PARAMETER_COUNT);
+            }
     }
 
     private Object[] generateTemplate(String rawTemplate)
