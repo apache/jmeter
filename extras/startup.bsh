@@ -1,0 +1,41 @@
+//
+// Sample BeanShell Server Startup file
+//
+// Use as follows:
+// -Jbeanshell.server.port=nnnn
+// -Jbeanshell.server.file=../extras/startup.bsh
+//
+// Defines various utility routines for properties and logging
+//
+//
+
+print("Startup script running");
+
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+
+getprop(p){// get a JMeter property
+return JMeterUtils.getPropDefault(p,"");
+}
+
+setprop(p,v){// set a JMeter property
+JMeterUtils.getJMeterProperties().setProperty(p, v);
+}
+
+printprop(p){// print a JMeter property
+print(p + " = " + getprop(p));
+}
+
+loglevel(String priority, String category){
+LoggingManager.setPriority(priority, category);
+}
+
+logdebug(String category){
+loglevel("DEBUG",category);
+}
+
+loginfo(String category){
+loglevel("INFO",category);
+}
+
+print("Startup script completed");
