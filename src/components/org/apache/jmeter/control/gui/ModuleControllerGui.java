@@ -94,9 +94,8 @@ public class ModuleControllerGui
     private JComboBox nodes;
     private DefaultComboBoxModel nodesModel;
 
-    public static String STATIC_LABEL =
-        JMeterUtils.getResString("module_controller_title");
-    public static String CONTROLLER = "Module To Run";
+    public static final String CONTROLLER = "Module To Run";
+    //TODO should be a resource, and probably ought to be resolved at run-time (to allow language change)
 
     /**
      * Initializes the gui panel for the ModuleController instance.
@@ -111,7 +110,7 @@ public class ModuleControllerGui
      */
     public String getStaticLabel()
     {
-        return STATIC_LABEL;
+        return JMeterUtils.getResString("module_controller_title");
     }
 
     /* (non-Javadoc)
