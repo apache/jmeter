@@ -57,9 +57,9 @@ import org.apache.jmeter.samplers.SampleResult;
  *<p>
  * Note: this class was derived from {@link SleepTest}.
  * 
- * @author ANO
  * @version $Version: 1.3 $ $Date$
  */
+
 public class JavaTest
     extends AbstractJavaSamplerClient
     implements Serializable
@@ -385,25 +385,4 @@ public class JavaTest
         return sb.toString();
     }
 
-    /**
-     * Get the value of the sleepTime field.
-     * 
-     * @return the base number of milliseconds to sleep during
-     *          each sample.
-     */
-    private long xgetSleepTime()
-    {
-        return sleepTime;
-    }
-
-    /**
-     * Get the value of the sleepMask field.
-     * 
-     * @return a mask to be applied to the current time in order
-     *          to add a random component to the sleep time.
-     */
-    private long xgetSleepMask()
-    {
-        return sleepMask;
-    }
 }
