@@ -17,20 +17,12 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 
 /**
  * @author ano ano
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
  */
 public class PackageTest extends TestCase
 {
-
-    /**
-     * @param arg0
-     */
     public PackageTest(String arg0)
     {
         super(arg0);
-        // TODO Auto-generated constructor stub
     }
     
     public void testRecovery() throws Exception
@@ -43,7 +35,9 @@ public class PackageTest extends TestCase
         loginConfig.setPassword("pass1");
         assertEquals(new NullProperty(),config.getProperty("login"));
         config.addProperty(new TestElementProperty("login",loginConfig));
-        assertEquals(loginConfig.toString(),config.getPropertyAsString("login"));
+        assertEquals(
+            loginConfig.toString(),
+            config.getPropertyAsString("login"));
         config.recoverRunningVersion();
         assertEquals(new NullProperty(),config.getProperty("login"));
     }

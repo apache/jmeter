@@ -278,11 +278,10 @@ public class CollectionProperty extends MultiProperty
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
+     * @see JMeterProperty#setRunningVersion(boolean)
      */
     public void setRunningVersion(boolean running)
     {
-        // TODO Auto-generated method stub
         super.setRunningVersion(running);
         if(running)
         {
@@ -293,5 +292,4 @@ public class CollectionProperty extends MultiProperty
             savedValue = null;
         }
     }
-
 }

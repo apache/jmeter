@@ -311,7 +311,8 @@ public class StandardJMeterEngine
                     (int) (((float) (group.getRampUp() * 1000)
                         / (float) group.getNumThreads())
                         * (float) i));
-                threads[i].setThreadName(group.getName() + (groupCount++) + "-" + (i + 1));
+                threads[i].setThreadName(
+                    group.getName() + (groupCount++) + "-" + (i + 1));
 
                 scheduleThread(threads[i], group);
 

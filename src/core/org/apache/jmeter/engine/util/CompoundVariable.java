@@ -248,7 +248,8 @@ public class CompoundVariable implements Function
             return;
 
         compiledComponents = functionParser.compileString(parameters);
-        if(compiledComponents.size() > 1 || !(compiledComponents.get(0) instanceof String))
+        if (compiledComponents.size() > 1
+            || !(compiledComponents.get(0) instanceof String))
         {
             hasFunction = true;
         }
@@ -262,13 +263,15 @@ public class CompoundVariable implements Function
     {
     }
     
-    static Object getNamedFunction(String functionName) throws InvalidVariableException
+    static Object getNamedFunction(String functionName)
+        throws InvalidVariableException
     {
         if(functions.containsKey(functionName))
         {
             try
             {
-                return (Function) ((Class) functions.get(functionName)).newInstance();
+                return (Function) ((Class) functions.get(functionName))
+                    .newInstance();
             }
             catch (Exception e)
             {
