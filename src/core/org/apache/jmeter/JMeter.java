@@ -27,10 +27,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.avalon.excalibur.cli.CLArgsParser;
-import org.apache.avalon.excalibur.cli.CLOption;
-import org.apache.avalon.excalibur.cli.CLOptionDescriptor;
-import org.apache.avalon.excalibur.cli.CLUtil;
+import org.apache.commons.cli.avalon.CLArgsParser;
+import org.apache.commons.cli.avalon.CLOption;
+import org.apache.commons.cli.avalon.CLOptionDescriptor;
+import org.apache.commons.cli.avalon.CLUtil;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.control.gui.AbstractControllerGui;
 import org.apache.jmeter.control.gui.TestPlanGui;
