@@ -429,9 +429,14 @@ public final class GuiPackage implements LocaleChangeListener
         }
     }
     
+    public JMeterTreeNode getCurrentNode()
+    {
+		return treeListener.getCurrentNode();
+    }
+    
     public TestElement getCurrentElement()
     {
-        return treeListener.getCurrentNode().getTestElement();
+        return getCurrentNode().getTestElement();
     }
 
     /**

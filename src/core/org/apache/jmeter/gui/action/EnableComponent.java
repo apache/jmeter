@@ -51,12 +51,12 @@ public class EnableComponent implements Command
         if (e.getActionCommand().equals(ENABLE))
         {
             log.debug("enabling current gui object");
-            GuiPackage.getInstance().getCurrentGui().setEnabled(true);
+            GuiPackage.getInstance().getCurrentNode().setEnabled(true);
         }
         else if (e.getActionCommand().equals(DISABLE))
         {
             log.debug("disabling current gui object");
-            GuiPackage.getInstance().getCurrentGui().setEnabled(false);
+            GuiPackage.getInstance().getCurrentNode().setEnabled(false);
         }
     }
 
