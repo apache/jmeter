@@ -112,8 +112,6 @@ public class BeanShellSampler extends AbstractSampler
         	} else {
 				res.setSamplerData(fileName);
         	}
-        	// Has to be done after construction, otherwise fails serialisation check
-        	bshInterpreter.set("log",log);  //$NON-NLS-1$
 
 			bshInterpreter.set("Label",getLabel());  //$NON-NLS-1$
 			bshInterpreter.set("FileName",getFilename()); //$NON-NLS-1$
