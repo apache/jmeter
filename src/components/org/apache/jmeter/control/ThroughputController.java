@@ -88,19 +88,20 @@ public class ThroughputController
 	private IntegerWrapper globalIteration;
 	private transient Object numExecutionsLock;
 	private transient Object iterationLock;
-	private int numExecutions, iteration, i=0;
 	
-	public ThroughputController() 
-	{
-		super();
+	private int numExecutions, iteration;
+	private boolean initialized;
+
+	public ThroughputController() {
+		globalNumExecutions = new IntegerWrapper();
+		globalIteration = new IntegerWrapper();
 		numExecutionsLock = new Object();
 		iterationLock = new Object();
-		globalNumExecutions = new IntegerWrapper(new Integer(0));
-		globalIteration = new IntegerWrapper(new Integer(0));
 		setStyle(BYNUMBER);
 		setPerThread(true);
-		setMaxThroughput(0);
+		setMaxThroughput(1);
 		setPercentThroughput(100);
+		initialized = true;
 	}
 	
 	public void initialize() {
@@ -124,7 +125,7 @@ public class ThroughputController
 		setProperty(new BooleanProperty(PERTHREAD,perThread));
 	}
 	
-	public boolean getPerThread()
+	public boolean isPerThread()
 	{
 		return getPropertyAsBoolean(PERTHREAD);
 	}
@@ -151,25 +152,19 @@ public class ThroughputController
 	
 	protected void setExecutions(int executions)
 	{
-		if (getPerThread()) 
+		if (!isPerThread()) 
 		{
-			synchronized (numExecutionsLock)
-			{
-				globalNumExecutions.setInteger(new Integer(executions));
-			}
+			globalNumExecutions.setInteger(new Integer(executions));
 		}
 		this.numExecutions = executions;
 	}
 	
 	protected int getExecutions()
 	{
-		if (getPerThread())
+		if (!isPerThread())
 		{
 			int retValue;
-			synchronized (numExecutionsLock)
-			{
-				retValue = globalNumExecutions.getInteger().intValue();
-			}
+			retValue = globalNumExecutions.getInteger().intValue();
 			return retValue;
 		}
 		return numExecutions;
@@ -178,39 +173,50 @@ public class ThroughputController
 	
 	private void increaseExecutions() 
 	{
-//		if ( subControllersAndSamplers.size()>0 && current == subControllersAndSamplers.size() )
-		setExecutions(getExecutions()+1);  
+		if (!isPerThread())
+		{
+			synchronized (numExecutionsLock)
+			{
+				setExecutions(getExecutions()+1);
+			}
+		}  
+		else
+		{
+			setExecutions(getExecutions()+1);
+		}
 	}
 	
 	protected void setIteration(int iteration)
 	{
-		if (getPerThread())
+		if (!isPerThread())
 		{
-			synchronized (iterationLock)
-			{
-				globalIteration.setInteger(new Integer(iteration));
-			}
+			globalIteration.setInteger(new Integer(iteration));
 		}
 		this.iteration = iteration;
 	}
 	
 	protected int getIteration()
 	{
-		if (getPerThread())
+		if (!isPerThread())
 		{
-			int retValue;
-			synchronized (iterationLock)
-			{
-				retValue = globalIteration.getInteger().intValue();
-			}
-			return retValue;
+			return globalIteration.getInteger().intValue();
 		}
 		return iteration;
 	}
 	
 	private void increaseIteration() 
 	{
-		setIteration(getIteration()+1);  
+		if (!isPerThread()) 
+		{
+			synchronized (iterationLock)
+			{
+				setIteration(getIteration()+1);
+			}
+		}
+		else 
+		{
+			setIteration(getIteration()+1);
+		}  
 	}
 
 	
@@ -228,33 +234,44 @@ public class ThroughputController
 			}
 			else 
 			{
-				if ( getStyle() == BYNUMBER ) 
-				{
-					if ( getExecutions() < getMaxThroughput() )
-						retVal = super.next();
-				} 
-				else 
-				{
-					if ( getCurrentPercentThroughput() <= getPercentThroughput() )
-						retVal = super.next();
-				}
+				if ( canExecute() ) 
+					retVal = super.next();
 			}
-		}
-
-		if (retVal==null)
-		{
-			//increaseIteration();
-			reInitialize();
 		}
 		return retVal;
 	}
 	
-	public float getCurrentPercentThroughput() 
-	{
-		if (getIteration()==0)
-			return 0;
+	public boolean canExecute() {
+		
+		int executions, iterations;
+		
+		if (!isPerThread())
+		{
+			synchronized(numExecutionsLock)
+			{
+				executions = getExecutions();
+			}
+			synchronized(iterationLock)
+			{
+				iterations = getIteration();
+			}
+		}
+		else
+		{
+			executions = getExecutions();
+			iterations = getIteration();
+		}
+		
+		if ( getStyle() == BYNUMBER ) 
+			return executions < getMaxThroughput(); 
 		else 
-			return ((float)getExecutions()/(float)getIteration())*100;
+		{
+			if (iteration==0 && getPercentThroughput()>0)
+				return true;
+			else if ( (executions/iteration)*100 <= getPercentThroughput() )
+				return true;
+		}
+		return false;		
 	}
 
 	/**
@@ -272,14 +289,15 @@ public class ThroughputController
 	
 	public Object clone() 
 	{
-		Object o = super.clone();
-		((ThroughputController)o).numExecutions = numExecutions;
-		((ThroughputController)o).iteration = iteration;	
-		((ThroughputController)o).globalNumExecutions = globalNumExecutions;
-		((ThroughputController)o).globalIteration = globalIteration;
-		((ThroughputController)o).numExecutionsLock = numExecutionsLock;
-		((ThroughputController)o).iterationLock = iterationLock;
-		return o;
+		ThroughputController clone = (ThroughputController) super.clone();
+		clone.numExecutions = numExecutions;
+		clone.iteration = iteration;	
+		clone.globalNumExecutions = globalNumExecutions;
+		clone.globalIteration = globalIteration;
+		clone.numExecutionsLock = numExecutionsLock;
+		clone.iterationLock = iterationLock;
+		clone.initialized = initialized;
+		return clone;
 	}
 	
 	private void readObject(java.io.ObjectInputStream in)
@@ -297,29 +315,31 @@ public class ThroughputController
     public void iterationStart(LoopIterationEvent iterEvent)
     {
         increaseIteration();
+        reInitialize();
     }
+    
+	protected class IntegerWrapper
+		implements Serializable
+	{
+		Integer i;
+
+		public IntegerWrapper() {}
+	
+		public IntegerWrapper(Integer i)
+		{
+			this.i = i;
+		}
+	
+		public void setInteger(Integer i)
+		{
+			this.i = i;
+		}
+	
+		public Integer getInteger()
+		{
+			return i;
+		}
+	}
 
 }
 
-class IntegerWrapper
-	implements Serializable
-{
-	Integer i;
-
-	public IntegerWrapper(){}
-	
-	public IntegerWrapper(Integer i)
-	{
-		this.i = i;
-	}
-	
-	public void setInteger(Integer i)
-	{
-		this.i = i;
-	}
-	
-	public Integer getInteger()
-	{
-		return i;
-	}
-}
