@@ -109,7 +109,7 @@ public class PostWriter
 
 			writeln(out,"--" + BOUNDARY+"--");
 			out.flush();
-			//out.close();
+			out.close();
 		}
 
 		// No filename specified, so send the post using normal syntax
