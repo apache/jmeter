@@ -64,6 +64,7 @@ public class ConstantThroughputTimer
      */
     public void setThroughput(double throughput)
     {
+       log.info("setting throughput to: " + throughput);
     	this.throughput= throughput;
     }
 
@@ -74,6 +75,7 @@ public class ConstantThroughputTimer
      */
     public double getThroughput()
     {
+       log.info("Getting throughput, which is: " + throughput);
     	return throughput;
     }
     
@@ -84,6 +86,7 @@ public class ConstantThroughputTimer
      */
     public synchronized long delay()
     {
+       log.info("in Delay, using throughput, which is " + getThroughput());
         long currentTime = System.currentTimeMillis();
         long currentTarget = targetTime == 0 ? currentTime : targetTime;
         targetTime = currentTarget + (long)( 60000.0 / getThroughput() );

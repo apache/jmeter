@@ -334,7 +334,7 @@ public class GenericTestBeanCustomizer extends JPanel
                 + ( value == null ? "NULL" : value.getClass().getName() )
                 + ":" + value
                 +" for property "+descriptors[i].getName());
-			throw e;
+			//throw e;
 		}
 	}
 
