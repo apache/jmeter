@@ -8,39 +8,45 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 
-
 /**
- * @author Thad Smith
- *
  * Places a copied JMeterTreeNode under the selected node.
+ *
+ * @author Thad Smith
+ * @version $Revision$
  */
-public class Paste extends AbstractAction {
+public class Paste extends AbstractAction
+{
 
-	public final static String PASTE = "Paste";	
-	private static Set commands = new HashSet();
-	static {
-		commands.add(PASTE);
-	}
-	
-	/**
-	 * @see Command#getActionNames()
-	 */
-	public Set getActionNames() {
-		return commands;
-	}
-	
-	/**
-	 * @see Command#doAction(ActionEvent)
-	 */
-	public void doAction(ActionEvent e) {
-		JMeterTreeNode draggedNode = Copy.getCopiedNode();
-		if ( draggedNode != null ) {
-			JMeterTreeListener treeListener = GuiPackage.getInstance().getTreeListener();
-			JMeterTreeNode currentNode = treeListener.getCurrentNode();
-			GuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNode,
-				currentNode,currentNode.getChildCount());
-		}
-		GuiPackage.getInstance().getMainFrame().repaint();
-	}
+    public final static String PASTE = "Paste";
+    private static Set commands = new HashSet();
+    static {
+        commands.add(PASTE);
+    }
 
+    /**
+     * @see Command#getActionNames()
+     */
+    public Set getActionNames()
+    {
+        return commands;
+    }
+
+    /**
+     * @see Command#doAction(ActionEvent)
+     */
+    public void doAction(ActionEvent e)
+    {
+        JMeterTreeNode draggedNode = Copy.getCopiedNode();
+        if (draggedNode != null)
+        {
+            JMeterTreeListener treeListener =
+                GuiPackage.getInstance().getTreeListener();
+            JMeterTreeNode currentNode = treeListener.getCurrentNode();
+            GuiPackage.getInstance().getTreeModel().insertNodeInto(
+                draggedNode,
+                currentNode,
+                currentNode.getChildCount());
+        }
+        GuiPackage.getInstance().getMainFrame().repaint();
+    }
 }

@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -65,74 +65,61 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
+/**
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 public class AddParent implements Command
 {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
-	private static Set commands = new HashSet();
-	static
-	{
-		commands.add("Add Parent");
-	}
+    transient private static Logger log = LoggingManager.getLoggerForClass();
+    private static Set commands = new HashSet();
+    static
+    {
+        commands.add("Add Parent");
+    }
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public AddParent() { }
+    public AddParent()
+    {
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void doAction(ActionEvent e)
-	{
-		String name = ((Component)e.getSource()).getName();
-		try
-		{
-			TestElement controller = (TestElement)GuiPackage.getInstance().createTestElement(name);
-			addParentToTree(controller);
-		}
-		catch(Exception err)
-		{
-			log.error("",err);
-		}
+    public void doAction(ActionEvent e)
+    {
+        String name = ((Component) e.getSource()).getName();
+        try
+        {
+            TestElement controller =
+                (TestElement) GuiPackage.getInstance().createTestElement(name);
+            addParentToTree(controller);
+        }
+        catch (Exception err)
+        {
+            log.error("", err);
+        }
 
-	}
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public Set getActionNames()
-	{
-		return commands;
-	}
+    public Set getActionNames()
+    {
+        return commands;
+    }
 
-	/****************************************
-	 * !ToDo
-	 *
-	 *@param newParent  !ToDo
-	 ***************************************/
-	protected void addParentToTree(TestElement newParent)
-	{
-		GuiPackage guiPackage = GuiPackage.getInstance();
-		JMeterTreeNode newNode = new JMeterTreeNode(newParent, guiPackage.getTreeModel());
-		JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
-		JMeterTreeNode parentNode = (JMeterTreeNode)currentNode.getParent();
-		int index = parentNode.getIndex(currentNode);
-		guiPackage.getTreeModel().removeNodeFromParent(currentNode);
-		guiPackage.getTreeModel().insertNodeInto(newNode,
-				(JMeterTreeNode)parentNode, index);
-		guiPackage.getTreeModel().insertNodeInto(currentNode, newNode,
-				newNode.getChildCount());
-	}
+    protected void addParentToTree(TestElement newParent)
+    {
+        GuiPackage guiPackage = GuiPackage.getInstance();
+        JMeterTreeNode newNode =
+            new JMeterTreeNode(newParent, guiPackage.getTreeModel());
+        JMeterTreeNode currentNode =
+            guiPackage.getTreeListener().getCurrentNode();
+        JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
+        int index = parentNode.getIndex(currentNode);
+        guiPackage.getTreeModel().removeNodeFromParent(currentNode);
+        guiPackage.getTreeModel().insertNodeInto(
+            newNode,
+            (JMeterTreeNode) parentNode,
+            index);
+        guiPackage.getTreeModel().insertNodeInto(
+            currentNode,
+            newNode,
+            newNode.getChildCount());
+    }
 }

@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -63,61 +63,52 @@ import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.reporters.FileReporter;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
+/**
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 public class Analyze implements Command
 {
-	private static Set commands = new HashSet();
+    private static Set commands = new HashSet();
 
+    static
+    {
+        commands.add("Analyze File");
+    }
 
-	static
-	{
-		commands.add("Analyze File");
-	}
+    public Analyze()
+    {
+    }
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public Analyze() { }
+    public Set getActionNames()
+    {
+        return commands;
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public Set getActionNames()
-	{
-		return commands;
-	}
-
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void doAction(ActionEvent e)
-	{
-		FileReporter analyzer = new FileReporter();
-		try
-		{
-			File f = FileDialoger.promptToOpenFile(new String[]{".jtl"}).getSelectedFile();
-			if(f != null)
-			{
-				try
-				{
-					analyzer.init(f.getPath());
-				}
-				catch(IOException err)
-				{
-					JMeterUtils.reportErrorToUser("The file you selected could not be analyzed");
-				}
-			}
-		}
-		catch(NullPointerException err){}
-	}
+    public void doAction(ActionEvent e)
+    {
+        FileReporter analyzer = new FileReporter();
+        try
+        {
+            File f =
+                FileDialoger
+                    .promptToOpenFile(new String[] { ".jtl" })
+                    .getSelectedFile();
+            if (f != null)
+            {
+                try
+                {
+                    analyzer.init(f.getPath());
+                }
+                catch (IOException err)
+                {
+                    JMeterUtils.reportErrorToUser(
+                        "The file you selected could not be analyzed");
+                }
+            }
+        }
+        catch (NullPointerException err)
+        {
+        }
+    }
 }

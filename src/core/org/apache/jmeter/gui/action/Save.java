@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.gui.action;
+
 import java.awt.event.ActionEvent;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -74,177 +75,182 @@ import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Michael Stover
- *@created   February 13, 2001
- *@version   1.0
- ***************************************/
-
+/**
+ * @author    Michael Stover
+ * @created   February 13, 2001
+ * @version   $Revision$
+ */
 public class Save implements Command
 {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter.gui");
-	public final static String SAVE_ALL = "save_all";
-	public final static String SAVE = "save_as";
-	public final static String SAVE_TO_PREVIOUS = "save";
-	private String chosenFile;
-	private String testPlanFile;
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    public final static String SAVE_ALL = "save_all";
+    public final static String SAVE = "save_as";
+    public final static String SAVE_TO_PREVIOUS = "save";
+    private String chosenFile;
+    private String testPlanFile;
 
-	private static Set commands = new HashSet();
-	static
-	{
-		commands.add(SAVE);
-		commands.add(SAVE_ALL);
-		commands.add(SAVE_TO_PREVIOUS);
-	}
+    private static Set commands = new HashSet();
+    static {
+        commands.add(SAVE);
+        commands.add(SAVE_ALL);
+        commands.add(SAVE_TO_PREVIOUS);
+    }
 
+    /**
+     * Constructor for the Save object.
+     */
+    public Save()
+    {
+    }
 
-	/****************************************
-	 * Constructor for the Save object
-	 ***************************************/
-	public Save() { }
+    /**
+     * Gets the ActionNames attribute of the Save object.
+     *
+     * @return   the ActionNames value
+     */
+    public Set getActionNames()
+    {
+        return commands;
+    }
 
+    public void setTestPlanFile(String f)
+    {
+        testPlanFile = f;
+    }
 
-	/****************************************
-	 * Gets the ActionNames attribute of the Save object
-	 *
-	 *@return   The ActionNames value
-	 ***************************************/
-	public Set getActionNames()
-	{
-		return commands;
-	}
-	
-	public void setTestPlanFile(String f)
-	{
-		testPlanFile = f;
-	}
+    public void doAction(ActionEvent e)
+    {
+        HashTree subTree = null;
+        if (e.getActionCommand().equals(SAVE))
+        {
+            subTree = GuiPackage.getInstance().getCurrentSubTree();
+        }
+        else if (
+            e.getActionCommand().equals(SAVE_ALL)
+                || e.getActionCommand().equals(SAVE_TO_PREVIOUS))
+        {
+            subTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
+        }
 
+        if (!SAVE_TO_PREVIOUS.equals(e.getActionCommand())
+            || testPlanFile == null)
+        {
+            JFileChooser chooser =
+                FileDialoger.promptToSaveFile(
+                    GuiPackage
+                        .getInstance()
+                        .getTreeListener()
+                        .getCurrentNode()
+                        .getName()
+                        + ".jmx");
+            if (chooser == null)
+            {
+                return;
+            }
+            if (e.getActionCommand().equals(SAVE_ALL)
+                || e.getActionCommand().equals(SAVE_TO_PREVIOUS))
+            {
+                testPlanFile = chooser.getSelectedFile().getAbsolutePath();
+                chosenFile = testPlanFile;
+            }
+            else
+            {
+                chosenFile = chooser.getSelectedFile().getAbsolutePath();
+            }
+        }
+        else
+        {
+            chosenFile = testPlanFile;
+        }
 
-	/****************************************
-	 * Description of the Method
-	 *
-	 *@param e  Description of Parameter
-	 ***************************************/
-	public void doAction(ActionEvent e)
-	{
-		HashTree subTree = null;
-		if(e.getActionCommand().equals(SAVE))
-		{
-			subTree = GuiPackage.getInstance().getCurrentSubTree();
-		}
-		else if(e.getActionCommand().equals(SAVE_ALL) || e.getActionCommand().equals(SAVE_TO_PREVIOUS))
-		{
-			subTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
-		}
-		
-		if(!SAVE_TO_PREVIOUS.equals(e.getActionCommand()) || testPlanFile == null)
-		{
-			JFileChooser chooser = FileDialoger.promptToSaveFile(
-					GuiPackage.getInstance().getTreeListener().getCurrentNode().getName() + ".jmx");
-			if(chooser == null)
-			{
-				return;
-			}
-			if(e.getActionCommand().equals(SAVE_ALL) || e.getActionCommand().equals(SAVE_TO_PREVIOUS))
-			{
-				testPlanFile = chooser.getSelectedFile().getAbsolutePath();
-				chosenFile = testPlanFile;
-			}
-			else
-			{
-				chosenFile = chooser.getSelectedFile().getAbsolutePath();
-			}
-		}
-		else
-		{
-			chosenFile = testPlanFile;
-		}
-
-        ActionRouter.getInstance().doActionNow(new ActionEvent(subTree,e.getID(),CheckDirty.SUB_TREE_SAVED));
+        ActionRouter.getInstance().doActionNow(
+            new ActionEvent(subTree, e.getID(), CheckDirty.SUB_TREE_SAVED));
         try
-                {
-                    convertSubTree(subTree);
-                }catch(Exception err)
-                {}
-		OutputStream writer = null;
-		try
-		{
-			writer = new FileOutputStream(chosenFile);
-			SaveService.saveSubTree(subTree,writer);
-		}
-		catch(Throwable ex)
-		{
-			log.error("",ex);
-		}
-		finally
-		{
-			closeWriter(writer);
-			GuiPackage.getInstance().getMainFrame().repaint();
-		}
-	}
+        {
+            convertSubTree(subTree);
+        }
+        catch (Exception err)
+        {
+        }
+        OutputStream writer = null;
+        try
+        {
+            writer = new FileOutputStream(chosenFile);
+            SaveService.saveSubTree(subTree, writer);
+        }
+        catch (Throwable ex)
+        {
+            log.error("", ex);
+        }
+        finally
+        {
+            closeWriter(writer);
+            GuiPackage.getInstance().getMainFrame().repaint();
+        }
+    }
 
-	private void convertSubTree(HashTree tree)
-	{
-		Iterator iter = new LinkedList(tree.list()).iterator();
-		while (iter.hasNext())
-		{
-			JMeterTreeNode item = (JMeterTreeNode)iter.next();
-			convertSubTree(tree.getTree(item));
-			TestElement testElement = item.createTestElement();
-			tree.replace(item,testElement);
-		}
-	}
+    private void convertSubTree(HashTree tree)
+    {
+        Iterator iter = new LinkedList(tree.list()).iterator();
+        while (iter.hasNext())
+        {
+            JMeterTreeNode item = (JMeterTreeNode) iter.next();
+            convertSubTree(tree.getTree(item));
+            TestElement testElement = item.createTestElement();
+            tree.replace(item, testElement);
+        }
+    }
 
-	public static class Test extends junit.framework.TestCase
-	{
-		Save save;
-		public Test(String name)
-		{
-			super(name);
-		}
+    public static class Test extends junit.framework.TestCase
+    {
+        Save save;
+        public Test(String name)
+        {
+            super(name);
+        }
 
-		public void setUp()
-		{
-			save = new Save();
-		}
+        public void setUp()
+        {
+            save = new Save();
+        }
 
-		public void testTreeConversion() throws Exception
-		{
-			HashTree tree = new ListedHashTree();
-			JMeterTreeNode root = new JMeterTreeNode(new Arguments(),null);
-			tree.add(root,root);
-			tree.getTree(root).add(root,root);
-			save.convertSubTree(tree);
-			assertEquals(tree.getArray()[0].getClass().getName(),root.createTestElement().getClass().getName());
-			tree = tree.getTree(tree.getArray()[0]);
-			assertEquals(tree.getArray()[0].getClass().getName(),
-					root.createTestElement().getClass().getName());
-			assertEquals(tree.getTree(tree.getArray()[0]).getArray()[0].getClass().getName(),
-					root.createTestElement().getClass().getName());
-		}
-	}
+        public void testTreeConversion() throws Exception
+        {
+            HashTree tree = new ListedHashTree();
+            JMeterTreeNode root = new JMeterTreeNode(new Arguments(), null);
+            tree.add(root, root);
+            tree.getTree(root).add(root, root);
+            save.convertSubTree(tree);
+            assertEquals(
+                tree.getArray()[0].getClass().getName(),
+                root.createTestElement().getClass().getName());
+            tree = tree.getTree(tree.getArray()[0]);
+            assertEquals(
+                tree.getArray()[0].getClass().getName(),
+                root.createTestElement().getClass().getName());
+            assertEquals(
+                tree
+                    .getTree(tree.getArray()[0])
+                    .getArray()[0]
+                    .getClass()
+                    .getName(),
+                root.createTestElement().getClass().getName());
+        }
+    }
 
-
-	/****************************************
-	 * Description of the Method
-	 *
-	 *@param writer  Description of Parameter
-	 ***************************************/
-	private void closeWriter(OutputStream writer)
-	{
-		if(writer != null)
-		{
-			try
-			{
-				writer.close();
-			}
-			catch(Exception ex)
-			{
-				log.error("",ex);
-			}
-		}
-	}
+    private void closeWriter(OutputStream writer)
+    {
+        if (writer != null)
+        {
+            try
+            {
+                writer.close();
+            }
+            catch (Exception ex)
+            {
+                log.error("", ex);
+            }
+        }
+    }
 }

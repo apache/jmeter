@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -64,18 +64,18 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author     Brendan Burns
- *@created    October 5, 2001
- *@version    1.0
+ * @author     Brendan Burns
+ * @created    October 5, 2001
+ * @version    $Revision$
  */
-
 public class ExitCommand implements Command
 {
 
     public static final String EXIT = "exit";
     private static Set commands = new HashSet();
+    static {
+        commands.add(EXIT);
+    }
 
     /**
      *  Constructor for the ExitCommand object
@@ -100,7 +100,8 @@ public class ExitCommand implements Command
      */
     public void doAction(ActionEvent e)
     {
-        ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), CheckDirty.CHECK_DIRTY));
+        ActionRouter.getInstance().actionPerformed(
+            new ActionEvent(e.getSource(), e.getID(), CheckDirty.CHECK_DIRTY));
         if (GuiPackage.getInstance().isDirty())
         {
             int chosenOption =
@@ -116,7 +117,8 @@ public class ExitCommand implements Command
             }
             else if (chosenOption == JOptionPane.YES_OPTION)
             {
-                ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), Save.SAVE_ALL));
+                ActionRouter.getInstance().doActionNow(
+                    new ActionEvent(e.getSource(), e.getID(), Save.SAVE_ALL));
                 if (!GuiPackage.getInstance().isDirty())
                 {
                     System.exit(0);
@@ -127,9 +129,5 @@ public class ExitCommand implements Command
         {
             System.exit(0);
         }
-    }
-
-    static {
-        commands.add(EXIT);
     }
 }

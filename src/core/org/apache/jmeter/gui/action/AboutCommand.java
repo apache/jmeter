@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -84,12 +84,13 @@ import org.apache.jmeter.util.JMeterUtils;
  * @author <a href="bloritsch@apache.org">Berin Loritsch</a>
  * @version CVS $Revision$ $Date$
  */
-
-public class AboutCommand implements Command {
+public class AboutCommand implements Command
+{
     private static Set commandSet;
     private static JDialog about;
 
-    static {
+    static
+    {
         HashSet commands = new HashSet();
         commands.add("about");
         AboutCommand.commandSet = Collections.unmodifiableSet(commands);
@@ -100,8 +101,10 @@ public class AboutCommand implements Command {
      * dialog box.  The Dialog Box is NOT modal, because those should be avoided
      * if at all possible.
      */
-    public void doAction(ActionEvent e) {
-        if (e.getActionCommand().equals("about")) {
+    public void doAction(ActionEvent e)
+    {
+        if (e.getActionCommand().equals("about"))
+        {
             this.about();
         }
     }
@@ -109,7 +112,8 @@ public class AboutCommand implements Command {
     /**
      * Provide the list of Action names that are available in this command.
      */
-    public Set getActionNames() {
+    public Set getActionNames()
+    {
         return AboutCommand.commandSet;
     }
 
@@ -118,20 +122,30 @@ public class AboutCommand implements Command {
      * the product image and the copyright notice.  The dialog box is centered
      * over the MainFrame.
      */
-    void about() {
+    void about()
+    {
         JFrame mainFrame = GuiPackage.getInstance().getMainFrame();
-        if (about == null) {
+        if (about == null)
+        {
             about = new JDialog(mainFrame, "About Apache JMeter...", false);
-            about.addMouseListener(new MouseAdapter() {
-                public void mouseClicked(MouseEvent e) {
+            about.addMouseListener(new MouseAdapter()
+            {
+                public void mouseClicked(MouseEvent e)
+                {
                     about.setVisible(false);
                 }
             });
 
             JLabel jmeter = new JLabel(JMeterUtils.getImage("jmeter.jpg"));
-            JLabel copyright = new JLabel("Copyright (c) 1998-2002 The Apache Software Foundation", JLabel.CENTER);
+            JLabel copyright =
+                new JLabel(
+                    "Copyright (c) 1998-2003 The Apache Software Foundation",
+                    JLabel.CENTER);
             JLabel rights = new JLabel("All Rights Reserved.", JLabel.CENTER);
-            JLabel version = new JLabel("Apache JMeter Version " + JMeterUtils.getJMeterVersion(), JLabel.CENTER);
+            JLabel version =
+                new JLabel(
+                    "Apache JMeter Version " + JMeterUtils.getJMeterVersion(),
+                    JLabel.CENTER);
             JPanel infos = new JPanel();
             infos.setOpaque(false);
             infos.setLayout(new GridLayout(0, 1));
@@ -153,7 +167,9 @@ public class AboutCommand implements Command {
         Point p = mainFrame.getLocationOnScreen();
         Dimension d1 = mainFrame.getSize();
         Dimension d2 = about.getSize();
-        about.setLocation(p.x + (d1.width - d2.width) / 2, p.y + (d1.height - d2.height) / 2);
+        about.setLocation(
+            p.x + (d1.width - d2.width) / 2,
+            p.y + (d1.height - d2.height) / 2);
         about.pack();
         about.setVisible(true);
     }

@@ -14,61 +14,57 @@ import org.apache.log.Logger;
 
 /**
  * @author mstover
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
-public abstract class AbstractAction implements Command {
+public abstract class AbstractAction implements Command
+{
     protected static Logger log = LoggingManager.getLoggerForClass();
 
-	/**
-	 * @see Command#doAction(ActionEvent)
-	 */
-	public void doAction(ActionEvent e) {
-	}
+    /**
+     * @see Command#doAction(ActionEvent)
+     */
+    public void doAction(ActionEvent e)
+    {
+    }
 
-	/**
-	 * @see Command#getActionNames()
-	 */
-	abstract public Set getActionNames();
+    /**
+     * @see Command#getActionNames()
+     */
+    abstract public Set getActionNames();
 
-	protected void convertSubTree(HashTree tree)
-	{
-		Iterator iter = new LinkedList(tree.list()).iterator();
-		while (iter.hasNext())
-		{
-			JMeterTreeNode item = (JMeterTreeNode)iter.next();
-			if(item.isEnabled())
-			{
-				if ( item.getUserObject() instanceof ReplaceableController )
-				{
-					ReplaceableController rc = (ReplaceableController)item.createTestElement();
-					HashTree subTree = tree.getTree(item);
+    protected void convertSubTree(HashTree tree)
+    {
+        Iterator iter = new LinkedList(tree.list()).iterator();
+        while (iter.hasNext())
+        {
+            JMeterTreeNode item = (JMeterTreeNode) iter.next();
+            if (item.isEnabled())
+            {
+                if (item.getUserObject() instanceof ReplaceableController)
+                {
+                    ReplaceableController rc =
+                        (ReplaceableController) item.createTestElement();
+                    HashTree subTree = tree.getTree(item);
 
-					if ( subTree != null )
-					{
-						rc.replace(subTree);
-						convertSubTree(subTree);
-						tree.replace(item,rc.getReplacement());
-					}
-				}
-				else
-				{
-					convertSubTree(tree.getTree(item));
-					TestElement testElement = item.createTestElement();
-					tree.replace(item,testElement);
-				}
-			}
-			else
-			{
-				tree.remove(item);
-			}
+                    if (subTree != null)
+                    {
+                        rc.replace(subTree);
+                        convertSubTree(subTree);
+                        tree.replace(item, rc.getReplacement());
+                    }
+                }
+                else
+                {
+                    convertSubTree(tree.getTree(item));
+                    TestElement testElement = item.createTestElement();
+                    tree.replace(item, testElement);
+                }
+            }
+            else
+            {
+                tree.remove(item);
+            }
 
-		}
-	}
-
-
-
-
-
+        }
+    }
 }

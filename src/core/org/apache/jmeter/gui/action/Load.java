@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.gui.action;
+
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
@@ -81,238 +82,281 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
+/**
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 public class Load implements Command
 {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
-	private static Set commands = new HashSet();
+    transient private static Logger log = LoggingManager.getLoggerForClass();
+ 
+    private static Set commands = new HashSet();
+    static {
+        commands.add("open");
+    }
 
-	static
-	{
-		commands.add("open");
-	}
+    public Load()
+    {
+    }
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public Load() { }
+    public Set getActionNames()
+    {
+        return commands;
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public Set getActionNames()
-	{
-		return commands;
-	}
-
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void doAction(ActionEvent e)
-	{
-		JFileChooser chooser = FileDialoger.promptToOpenFile(new String[]{".jmx"});
-		if(chooser == null)
-		{
-			return;
-		}
-		boolean isTestPlan = false;
-		InputStream reader = null;
-		File f = null;
-		try
-		{
-			f = chooser.getSelectedFile();
-			if(f != null)
-			{
-				log.info("Loading file: "+f);
-				reader = new FileInputStream(f);
-				HashTree tree = SaveService.loadSubTree(reader);
-				isTestPlan = insertLoadedTree(e.getID(), tree);
-			}
-		}
-		catch(Exception ex)
-		{
-			String msg = ex.getMessage(); 
-			if (msg  == null) {
-				msg="Unexpected error - see log for details";
-				log.warn("Unexpected error",ex);
-			}
-			JMeterUtils.reportErrorToUser(msg);
-		}
-		finally
-		{
+    public void doAction(ActionEvent e)
+    {
+        JFileChooser chooser =
+            FileDialoger.promptToOpenFile(new String[] { ".jmx" });
+        if (chooser == null)
+        {
+            return;
+        }
+        boolean isTestPlan = false;
+        InputStream reader = null;
+        File f = null;
+        try
+        {
+            f = chooser.getSelectedFile();
+            if (f != null)
+            {
+                log.info("Loading file: " + f);
+                reader = new FileInputStream(f);
+                HashTree tree = SaveService.loadSubTree(reader);
+                isTestPlan = insertLoadedTree(e.getID(), tree);
+            }
+        }
+        catch (Exception ex)
+        {
+            String msg = ex.getMessage();
+            if (msg == null)
+            {
+                msg = "Unexpected error - see log for details";
+                log.warn("Unexpected error", ex);
+            }
+            JMeterUtils.reportErrorToUser(msg);
+        }
+        finally
+        {
             GuiPackage.getInstance().updateCurrentGui();
-			GuiPackage.getInstance().getMainFrame().repaint();
-		}
-		if(isTestPlan && f != null)
-		{
-			((Save)ActionRouter.getInstance().getAction("save",
-					"org.apache.jmeter.gui.action.Save")).setTestPlanFile(f.getAbsolutePath());
-		}
-	}
+            GuiPackage.getInstance().getMainFrame().repaint();
+        }
+        if (isTestPlan && f != null)
+        {
+            (
+                (Save) ActionRouter.getInstance().getAction(
+                    "save",
+                    "org.apache.jmeter.gui.action.Save")).setTestPlanFile(
+                f.getAbsolutePath());
+        }
+    }
 
-	/**
-	 * Returns a boolean indicating whether the loaded tree was a full test plan
-	 * */
-	public boolean insertLoadedTree(int id, HashTree tree) throws Exception, IllegalUserActionException {
-		//convertTree(tree);
-		if (tree == null){
-			throw new Exception("Error in TestPlan - see log file");
-		}
+    /**
+     * Returns a boolean indicating whether the loaded tree was a full test plan
+     */
+    public boolean insertLoadedTree(int id, HashTree tree)
+        throws Exception, IllegalUserActionException
+    {
+        //convertTree(tree);
+        if (tree == null)
+        {
+            throw new Exception("Error in TestPlan - see log file");
+        }
         boolean isTestPlan = tree.getArray()[0] instanceof TestPlan;
-		HashTree newTree = GuiPackage.getInstance().addSubTree(tree);
+        HashTree newTree = GuiPackage.getInstance().addSubTree(tree);
         GuiPackage.getInstance().updateCurrentGui();
         GuiPackage.getInstance().getMainFrame().getTree().setSelectionPath(
-        new TreePath(((JMeterTreeNode)newTree.getArray()[0]).getPath()));
-		tree = GuiPackage.getInstance().getCurrentSubTree();				
-		ActionRouter.getInstance().actionPerformed(new ActionEvent(
-			tree.get(tree.getArray()[tree.size()-1]),id,CheckDirty.SUB_TREE_LOADED));
-        
-		return isTestPlan;
-	}
+            new TreePath(((JMeterTreeNode) newTree.getArray()[0]).getPath()));
+        tree = GuiPackage.getInstance().getCurrentSubTree();
+        ActionRouter.getInstance().actionPerformed(
+            new ActionEvent(
+                tree.get(tree.getArray()[tree.size() - 1]),
+                id,
+                CheckDirty.SUB_TREE_LOADED));
 
-	private void convertTree(HashTree tree) throws Exception
-	{
-		Iterator iter = new LinkedList(tree.list()).iterator();
-		while (iter.hasNext())
-		{
-			TestElement item = (TestElement)iter.next();
-			convertTree(tree.getTree(item));
-			JMeterGUIComponent comp = generateGUIComponent(item);
-			tree.replace(item,comp);
-		}
-	}
+        return isTestPlan;
+    }
 
-	private JMeterGUIComponent generateGUIComponent(TestElement item) throws Exception
-	{
-			JMeterGUIComponent gui = null;
-			try {
-				gui = (JMeterGUIComponent)Class.forName(item.getPropertyAsString(TestElement.GUI_CLASS)).newInstance();
-			} catch(Exception e) {
-				log.warn("Couldn't get gui for "+item,e);
-				gui = new WorkBenchGui();
-			} 
-			gui.configure(item);
-			return gui;
-	}
-	
-	
-	/************************************************************
-	 *  !ToDo (Class description)
-	 *
-	 *@author     $Author$
-	 *@created    $Date$
-	 *@version    $Revision$
-	 ***********************************************************/
-	public static class Test extends TestCase {
-		File testFile1, testFile2, testFile3,testFile4,testFile5,testFile6,testFile7,
-				testFile8,testFile9,testFile10,testFile11,testFile12,testFile13;
-		static Load loader = new Load();
+    private void convertTree(HashTree tree) throws Exception
+    {
+        Iterator iter = new LinkedList(tree.list()).iterator();
+        while (iter.hasNext())
+        {
+            TestElement item = (TestElement) iter.next();
+            convertTree(tree.getTree(item));
+            JMeterGUIComponent comp = generateGUIComponent(item);
+            tree.replace(item, comp);
+        }
+    }
 
-		public Test(String name) {
-			super(name);
-		}
+    private JMeterGUIComponent generateGUIComponent(TestElement item)
+        throws Exception
+    {
+        JMeterGUIComponent gui = null;
+        try
+        {
+            gui =
+                (JMeterGUIComponent) Class
+                    .forName(item.getPropertyAsString(TestElement.GUI_CLASS))
+                    .newInstance();
+        }
+        catch (Exception e)
+        {
+            log.warn("Couldn't get gui for " + item, e);
+            gui = new WorkBenchGui();
+        }
+        gui.configure(item);
+        return gui;
+    }
 
-		/************************************************************
-		 *  !ToDo
-		 ***********************************************************/
-		public void setUp() {
-			testFile1 =
-				new File(System.getProperty("user.dir") + "/testfiles", "Test Plan.jmx");
-			testFile2 =
-				new File(
-					System.getProperty("user.dir") + "/testfiles",
-					"Modification Manager.jmx");
-			testFile3 =
-				new File(System.getProperty("user.dir") + "/testfiles", "proxy.jmx");
-			testFile4 =
-				new File(System.getProperty("user.dir") + "/testfiles", "AssertionTestPlan.jmx");
-			testFile5 =
-				new File(System.getProperty("user.dir") + "/testfiles", "AuthManagerTestPlan.jmx");
-			testFile6 =
-				new File(System.getProperty("user.dir") + "/testfiles", "HeaderManagerTestPlan.jmx");
-			testFile7 =
-				new File(System.getProperty("user.dir") + "/testfiles", "InterleaveTestPlan.jmx");
-			testFile8 =
-				new File(System.getProperty("user.dir") + "/testfiles", "InterleaveTestPlan2.jmx");
-			testFile9 =
-				new File(System.getProperty("user.dir") + "/testfiles", "LoopTestPlan.jmx");
-			testFile10 =
-				new File(System.getProperty("user.dir") + "/testfiles", "OnceOnlyTestPlan.jmx");
-			testFile11 =
-				new File(System.getProperty("user.dir") + "/testfiles", "ProxyServerTestPlan.jmx");
-			testFile12 =
-				new File(System.getProperty("user.dir") + "/testfiles", "SimpleTestPlan.jmx");
-			testFile13 =
-				new File(System.getProperty("user.dir") + "/testfiles", "URLRewritingExample.jmx");
-		}
+    /**
+     * @author     $Author$
+     * @version    $Revision$
+     */
+    public static class Test extends TestCase
+    {
+        File testFile1,
+            testFile2,
+            testFile3,
+            testFile4,
+            testFile5,
+            testFile6,
+            testFile7,
+            testFile8,
+            testFile9,
+            testFile10,
+            testFile11,
+            testFile12,
+            testFile13;
+        static Load loader = new Load();
 
-		/************************************************************
-		 *  !ToDo
-		 *
-		 *@exception  Exception  !ToDo (Exception description)
-		 ***********************************************************/
+        public Test(String name)
+        {
+            super(name);
+        }
 
-		public void testFile3() throws Exception {
-			loadAndAssertTree(getTree(testFile3));
-		}
+        public void setUp()
+        {
+            testFile1 =
+                new File(
+                    System.getProperty("user.dir") + "/testfiles",
+                    "Test Plan.jmx");
+            testFile2 =
+                new File(
+                    System.getProperty("user.dir") + "/testfiles",
+                    "Modification Manager.jmx");
+            testFile3 =
+                new File(
+                    System.getProperty("user.dir") + "/testfiles",
+                    "proxy.jmx");
+            testFile4 =
+                new File(
+                    System.getProperty("user.dir") + "/testfiles",
+                    "AssertionTestPlan.jmx");
+            testFile5 =
+                new File(
+                    System.getProperty("user.dir") + "/testfiles",
+                    "AuthManagerTestPlan.jmx");
+            testFile6 =
+                new File(
+                    System.getProperty("user.dir") + "/testfiles",
+                    "HeaderManagerTestPlan.jmx");
+            testFile7 =
+                new File(
+                    System.getProperty("user.dir") + "/testfiles",
+                    "InterleaveTestPlan.jmx");
+            testFile8 =
+                new File(
+                    System.getProperty("user.dir") + "/testfiles",
+                    "InterleaveTestPlan2.jmx");
+            testFile9 =
+                new File(
+                    System.getProperty("user.dir") + "/testfiles",
+                    "LoopTestPlan.jmx");
+            testFile10 =
+                new File(
+                    System.getProperty("user.dir") + "/testfiles",
+                    "OnceOnlyTestPlan.jmx");
+            testFile11 =
+                new File(
+                    System.getProperty("user.dir") + "/testfiles",
+                    "ProxyServerTestPlan.jmx");
+            testFile12 =
+                new File(
+                    System.getProperty("user.dir") + "/testfiles",
+                    "SimpleTestPlan.jmx");
+            testFile13 =
+                new File(
+                    System.getProperty("user.dir") + "/testfiles",
+                    "URLRewritingExample.jmx");
+        }
+
+        public void testFile3() throws Exception
+        {
+            loadAndAssertTree(getTree(testFile3));
+        }
 
         private void loadAndAssertTree(HashTree tree) throws Exception
         {
-            assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.testelement.TestPlan);
+            assertTrue(
+                tree.getArray()[0]
+                    instanceof org.apache.jmeter.testelement.TestPlan);
             loader.convertTree(tree);
-            assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.control.gui.TestPlanGui);
+            assertTrue(
+                tree.getArray()[0]
+                    instanceof org.apache.jmeter.control.gui.TestPlanGui);
         }
-		
-		public void testFile4() throws Exception {
-            loadAndAssertTree(getTree(testFile4));
-		}
-		
-		public void testFile5() throws Exception {
-            loadAndAssertTree(getTree(testFile5));
-		}
-		
-		public void testFile6() throws Exception {
-            loadAndAssertTree(getTree(testFile6));
-		}
-		
-		public void testFile7() throws Exception {
-            loadAndAssertTree(getTree(testFile7));
-		}
-		
-		public void testFile8() throws Exception {
-            loadAndAssertTree(getTree(testFile8));
-		}
-		
-		public void testFile9() throws Exception {
-            loadAndAssertTree(getTree(testFile9));
-		}
-		
-		public void testFile10() throws Exception {
-            loadAndAssertTree(getTree(testFile10));
-		}
-		
-		public void testFile11() throws Exception {
-            loadAndAssertTree(getTree(testFile11));
-		}
-		
-		public void testFile12() throws Exception {
-            loadAndAssertTree(getTree(testFile12));
-		}
 
-		private HashTree getTree(File f) throws Exception {
-				FileInputStream reader = new FileInputStream(f);
-				HashTree tree = SaveService.loadSubTree(reader);
-				return tree;
-		}
-	}
+        public void testFile4() throws Exception
+        {
+            loadAndAssertTree(getTree(testFile4));
+        }
+
+        public void testFile5() throws Exception
+        {
+            loadAndAssertTree(getTree(testFile5));
+        }
+
+        public void testFile6() throws Exception
+        {
+            loadAndAssertTree(getTree(testFile6));
+        }
+
+        public void testFile7() throws Exception
+        {
+            loadAndAssertTree(getTree(testFile7));
+        }
+
+        public void testFile8() throws Exception
+        {
+            loadAndAssertTree(getTree(testFile8));
+        }
+
+        public void testFile9() throws Exception
+        {
+            loadAndAssertTree(getTree(testFile9));
+        }
+
+        public void testFile10() throws Exception
+        {
+            loadAndAssertTree(getTree(testFile10));
+        }
+
+        public void testFile11() throws Exception
+        {
+            loadAndAssertTree(getTree(testFile11));
+        }
+
+        public void testFile12() throws Exception
+        {
+            loadAndAssertTree(getTree(testFile12));
+        }
+
+        private HashTree getTree(File f) throws Exception
+        {
+            FileInputStream reader = new FileInputStream(f);
+            HashTree tree = SaveService.loadSubTree(reader);
+            return tree;
+        }
+    }
 }
