@@ -244,7 +244,7 @@ public class ResultCollector
                 new PrintWriter(
                     new OutputStreamWriter(
                         new BufferedOutputStream(
-                            new FileOutputStream(ofile, trimmed)),
+                            new FileOutputStream(filename, trimmed)),
                         "UTF-8"),
                     true);
             files.put(filename, writer);
