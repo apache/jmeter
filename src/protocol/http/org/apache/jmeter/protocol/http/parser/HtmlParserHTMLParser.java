@@ -51,10 +51,6 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
- * @author TBA
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Id$
  */
 package org.apache.jmeter.protocol.http.parser;
 
@@ -73,6 +69,10 @@ import org.htmlparser.tags.*;
 
 /**
  * HtmlParser implementation using SourceForge's HtmlParser.
+ *
+ * @author TBA
+ * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
+ * @version $Revision$ updated on $Date$
  */
 class HtmlParserHTMLParser extends HTMLParser
 {

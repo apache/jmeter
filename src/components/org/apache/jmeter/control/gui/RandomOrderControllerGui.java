@@ -12,9 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * @author  Mike Verdone
- * @version $Id$
  */
 package org.apache.jmeter.control.gui;
 
@@ -24,6 +21,9 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * GUI for RandomOrderController.
+ *
+ * @author  Mike Verdone
+ * @version $Revision$ updated on $Date$
  */
 public class RandomOrderControllerGui extends LogicControllerGui
 {
