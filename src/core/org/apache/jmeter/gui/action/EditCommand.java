@@ -33,6 +33,8 @@ public class EditCommand implements Command
                 .getTreeListener()
                 .getCurrentNode())
                 .createPopupMenu());
+        // TODO: I believe the following code (to the end of the method) is obsolete,
+        // since NamePanel no longer seems to be the GUI for any component:
         if (!(guiPackage.getCurrentGui() instanceof NamePanel))
         {
             guiPackage.getMainFrame().setFileLoadEnabled(true);

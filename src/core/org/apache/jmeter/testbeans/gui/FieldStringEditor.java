@@ -89,12 +89,10 @@ class FieldStringEditor extends PropertyEditorSupport
 	private JTextField textField;
 
     /**
-     * True iif we're currently processing an event triggered by the user
-     * selecting or entering a new value. Used to prevent touching at
-     * GUI states outside of the event handling method -- otherwise it's
-     * a mess.
+     * Value on which we started the editing. Used to avoid firing
+     * PropertyChanged events when there's not been such change.
      */
-    private boolean processingItemEvent= false;
+    private String initialValue= "";
 
     protected FieldStringEditor()
     {
@@ -112,6 +110,7 @@ class FieldStringEditor extends PropertyEditorSupport
 	
 	public void setAsText(String value)
 	{
+        initialValue= value;
 		textField.setText(value);
 	}
 	
@@ -134,14 +133,27 @@ class FieldStringEditor extends PropertyEditorSupport
 		return textField;
     }
 
+    /* (non-Javadoc)
+     * Avoid needlessly firing PropertyChanged events.
+     */
+    public void firePropertyChange()
+    {
+        String newValue= getAsText();
+
+        if (initialValue.equals(newValue)) return;
+        initialValue= newValue;
+
+        super.firePropertyChange();
+    }
+
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e)
-	{
-		firePropertyChange();
-	}
-
+    {
+        firePropertyChange();
+    }
+    
 	/* (non-Javadoc)
 	 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
 	 */
