@@ -99,6 +99,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
     JMenuItem remote_start_all;
     Collection remote_engine_start;
     JMenuItem run_stop;
+	private JMenuItem run_shut; // all the others could be private too?
     JMenu remote_stop;
     JMenuItem remote_stop_all;
     Collection remote_engine_stop;
@@ -338,6 +339,15 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
         return languageMenu;
     }
 
+	/*
+	 * Strings used to set up and process actions in this menu
+	 * The strings need to agree with the those in the Action routines
+	*/
+	public static final String ACTION_SHUTDOWN = "shutdown";
+	public static final String ACTION_STOP = "stop";
+	public static final String ACTION_START = "start";
+
+
     private void makeRunMenu()
     {
         // RUN MENU
@@ -347,13 +357,21 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
         run_start.setAccelerator(
             KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_MASK));
         run_start.addActionListener(ActionRouter.getInstance());
-        run_start.setActionCommand("start");
+        run_start.setActionCommand(ACTION_START);
         run_stop = new JMenuItem(JMeterUtils.getResString("stop"), 'T');
         run_stop.setAccelerator(
             KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, KeyEvent.CTRL_MASK));
         run_stop.setEnabled(false);
         run_stop.addActionListener(ActionRouter.getInstance());
-        run_stop.setActionCommand("stop");
+        run_stop.setActionCommand(ACTION_STOP);
+
+		run_shut = new JMenuItem(JMeterUtils.getResString("shutdown"), 'Y');
+		run_shut.setAccelerator(
+			KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, KeyEvent.CTRL_MASK));
+		run_shut.setEnabled(false);
+		run_shut.addActionListener(ActionRouter.getInstance());
+		run_shut.setActionCommand(ACTION_SHUTDOWN);
+
         run_clear = new JMenuItem(JMeterUtils.getResString("clear"), 'C');
         run_clear.addActionListener(ActionRouter.getInstance());
         run_clear.setActionCommand(org.apache.jmeter.gui.action.Clear.CLEAR);
@@ -378,6 +396,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
         remote_start_all.setActionCommand("remote_start_all");
         runMenu.add(remote_start_all);
         runMenu.add(run_stop);
+		runMenu.add(run_shut);
         if (remote_stop != null)
         {
             runMenu.add(remote_stop);
@@ -473,6 +492,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
     {
         run_start.setEnabled(!enable);
         run_stop.setEnabled(enable);
+		run_shut.setEnabled(enable);
     }
 
     private void getRemoteItems()
