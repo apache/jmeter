@@ -284,7 +284,6 @@
   <property name="encoding" value="UTF-8"/>
 
   <!-- 3rd party libraries to be included in the binary distribution -->
-  <property name="avalon-excalibur.jar" value="${lib.dir}/avalon-excalibur-4.1.jar"/>
   <property name="avalon-framework.jar" value="${lib.dir}/avalon-framework-4.1.4.jar"/>
   <property name="jakarta-oro.jar" value="${lib.dir}/jakarta-oro-2.0.8.jar"/>
   <property name="commons-collections.jar" value="${lib.dir}/commons-collections.jar"/>
@@ -299,8 +298,8 @@
   <property name="excalibur-datasource.jar" value="${lib.dir}/excalibur-datasource-1.1.1.jar"/>
   <property name="excalibur-pool.jar" value="${lib.dir}/excalibur-pool-1.2.jar"/>
   <property name="excalibur-instrument.jar" value="${lib.dir}/excalibur-instrument-1.0.jar"/>
-  <property name="xstream.jar" value="${lib.dir}/xstream-1.0.1.jar"/>
-  <property name="xpp3.jar" value="${lib.dir}/xpp3-1.1.3.4.D.jar"/>
+  <property name="xstream.jar" value="${lib.dir}/xstream-1.1.jar"/>
+  <property name="xpp3.jar" value="${lib.dir}/xpp3_min-1.1.3.4.I.jar"/>
 	  
   <!-- The following 3 jars are probably optional for JDK1.4 -->
   <property name="xalan.jar" value="${lib.dir}/xalan.jar"/>
@@ -319,7 +318,6 @@
     <include name="INSTALL"/>
     <include name="${lib.dir}/*.html"/>
     <include name="${lib.dir}/LICENSE*.*"/>
-    <include name="${avalon-excalibur.jar}"/>
     <include name="${avalon-framework.jar}"/>
     <include name="${jakarta-oro.jar}"/>
     <include name="${commons-collections.jar}"/>
