@@ -86,6 +86,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MapProperty;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.NameUpdater;
@@ -997,12 +998,9 @@ public final class SaveService implements SaveServiceConstants
     {
         TestElement element = null;
 
-        element =
-            (TestElement) Class
-                .forName(
-                    NameUpdater.getCurrentName(
-                        (String) config.getAttribute("class")))
-                .newInstance();
+		String testClass= (String) config.getAttribute("class");
+        element = (TestElement) Class.forName(
+        	NameUpdater.getCurrentName(testClass)).newInstance();
         Configuration[] children = config.getChildren();
 
         for (int i = 0; i < children.length; i++)
@@ -1011,7 +1009,7 @@ public final class SaveService implements SaveServiceConstants
             {
                 try
                 {
-                    element.setProperty(createProperty(children[i]));
+                    element.setProperty(createProperty(children[i], testClass));
                 }
                 catch (Exception ex)
                 {
@@ -1031,20 +1029,21 @@ public final class SaveService implements SaveServiceConstants
                 element.setProperty(
                     new CollectionProperty(
                         children[i].getAttribute("name",""),
-                        createCollection(children[i])));
+                        createCollection(children[i], testClass)));
             }
             else if (children[i].getName().equals("map"))
             {
                 element.setProperty(
                     new MapProperty(
                         children[i].getAttribute("name",""),
-                        createMap(children[i])));
+                        createMap(children[i], testClass)));
             }
         }
         return element;
     }
 
-    private static Collection createCollection(Configuration config)
+    private static Collection createCollection(
+    		Configuration config, String testClass)
         throws
             ConfigurationException,
             ClassNotFoundException,
@@ -1061,7 +1060,7 @@ public final class SaveService implements SaveServiceConstants
         {
             if (items[i].getName().equals("property"))
             {
-                coll.add(createProperty(items[i]));
+                coll.add(createProperty(items[i], testClass));
             }
             else if (items[i].getName().equals("testelement"))
             {
@@ -1075,24 +1074,24 @@ public final class SaveService implements SaveServiceConstants
                 coll.add(
                     new CollectionProperty(
                         items[i].getAttribute("name", ""),
-                        createCollection(items[i])));
+                        createCollection(items[i], testClass)));
             }
             else if (items[i].getName().equals("string"))
             {
-                coll.add(createProperty(items[i]));
+                coll.add(createProperty(items[i], testClass));
             }
             else if (items[i].getName().equals("map"))
             {
                 coll.add(
                     new MapProperty(
                         items[i].getAttribute("name", ""),
-                        createMap(items[i])));
+                        createMap(items[i], testClass)));
             }
         }
         return coll;
     }
 
-    private static JMeterProperty createProperty(Configuration config)
+    private static JMeterProperty createProperty(Configuration config, String testClass)
         throws
             ConfigurationException,
             IllegalAccessException,
@@ -1100,17 +1099,29 @@ public final class SaveService implements SaveServiceConstants
             InstantiationException
     {
         String value = config.getValue("");
-        JMeterProperty prop = (JMeterProperty) Class.forName(
-                config.getAttribute(
-                    "propType",
-                    "org.apache.jmeter.testelement.property.StringProperty"))
-                .newInstance();
-        prop.setName(config.getAttribute("name", value));
+        String name= config.getAttribute("name", value);
+		String type= config.getAttribute("propType", StringProperty.class.getName());
+		
+		// Do upgrade translation:
+		name= NameUpdater.getCurrentName(name, testClass);
+		if (TestElement.GUI_CLASS.equals(name) || TestElement.TEST_CLASS.equals(name))
+		{
+			value= NameUpdater.getCurrentName(value);
+		}
+		else
+		{
+			value= NameUpdater.getCurrentName(value, name, testClass);
+		}
+		
+        // Create the property:
+        JMeterProperty prop = (JMeterProperty) Class.forName(type).newInstance();
+        prop.setName(name);
         prop.setObjectValue(value);
+
         return prop;
     }
 
-    private static Map createMap(Configuration config)
+    private static Map createMap(Configuration config, String testClass)
         throws
             ConfigurationException,
             ClassNotFoundException,
@@ -1127,7 +1138,7 @@ public final class SaveService implements SaveServiceConstants
         {
             if (items[i].getName().equals("property"))
             {
-                JMeterProperty prop = createProperty(items[i]);
+                JMeterProperty prop = createProperty(items[i], testClass);
                 map.put(prop.getName(), prop);
             }
             else if (items[i].getName().equals("testelement"))
@@ -1144,7 +1155,7 @@ public final class SaveService implements SaveServiceConstants
                     items[i].getAttribute("name"),
                     new CollectionProperty(
                         items[i].getAttribute("name", ""),
-                        createCollection(items[i])));
+                        createCollection(items[i], testClass)));
             }
             else if (items[i].getName().equals("map"))
             {
@@ -1152,7 +1163,7 @@ public final class SaveService implements SaveServiceConstants
                     items[i].getAttribute("name", ""),
                     new MapProperty(
                         items[i].getAttribute("name", ""),
-                        createMap(items[i])));
+                        createMap(items[i], testClass)));
             }
         }
         return map;
