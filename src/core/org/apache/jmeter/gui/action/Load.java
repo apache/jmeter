@@ -21,6 +21,7 @@ package org.apache.jmeter.gui.action;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
@@ -59,6 +60,7 @@ public class Load implements Command
 
     public Load()
     {
+		super();
     }
 
     public Set getActionNames()
@@ -97,7 +99,7 @@ public class Load implements Command
 					FileServer.getFileServer().setBasedir(f.getAbsolutePath());
             	}
                 reader = new FileInputStream(f);
-                HashTree tree = (HashTree)SaveService.loadTree(reader);
+                HashTree tree = SaveService.loadTree(reader);
                 isTestPlan = insertLoadedTree(e.getID(), tree);
             }
         }
@@ -113,6 +115,11 @@ public class Load implements Command
         }
         finally
         {
+			try {
+				reader.close();
+			} catch (IOException e1) {
+				// ignored
+			}
             GuiPackage.getInstance().updateCurrentGui();
             GuiPackage.getInstance().getMainFrame().repaint();
         }
