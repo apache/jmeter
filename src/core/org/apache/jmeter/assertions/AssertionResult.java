@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,51 +58,90 @@ package org.apache.jmeter.assertions;
 import java.io.Serializable;
 
 /**
- * Title:        Jakarta-JMeter
- * Description:
- * Copyright:    Copyright (c) 2001
- * Company:      Apache
  * @author Michael Stover
- * @version 1.0
+ * @version $Revision$
  */
+public class AssertionResult implements Serializable
+{
+    /** True if the assertion failed. */
+    private boolean failure;
+    
+    /** True if there was an error checking the assertion. */
+    private boolean error;
+    
+    /** A message describing the failure. */
+    private String failureMessage;
 
-public class AssertionResult implements Serializable {
+    /**
+     * Create a new Assertion Result.  The result will indicate no failure or
+     * error.
+     */
+    public AssertionResult()
+    {
+    }
 
-	private boolean failure;
-	private boolean error;
-	private String failureMessage;
+    /**
+     * Check if the assertion failed.  If it failed, the failure message may
+     * give more details about the failure.
+     * 
+     * @return true if the assertion failed, false if the sample met the
+     *         assertion criteria
+     */
+    public boolean isFailure()
+    {
+        return failure;
+    }
 
-	public AssertionResult()
-	{
-	}
+    /**
+     * Check if an error occurred while checking the assertion.  If an error
+     * occurred, the failure message may give more details about the error.
+     * 
+     * @return true if an error occurred while checking the assertion, false
+     *         otherwise.
+     */
+    public boolean isError()
+    {
+        return error;
+    }
 
-	public boolean isFailure()
-	{
-		return failure;
-	}
+    /**
+     * Get the message associated with any failure or error.  This method may
+     * return null if no message was set.
+     * 
+     * @return a failure or error message, or null if no message has been set
+     */
+    public String getFailureMessage()
+    {
+        return failureMessage;
+    }
 
-	public boolean isError()
-	{
-		return error;
-	}
+    /**
+     * Set the flag indicating whether or not an error occurred.
+     * 
+     * @param e true if an error occurred, false otherwise
+     */
+    public void setError(boolean e)
+    {
+        error = e;
+    }
 
-	public String getFailureMessage()
-	{
-		return failureMessage;
-	}
+    /**
+     * Set the flag indicating whether or not a failure occurred.
+     * 
+     * @param f true if a failure occurred, false otherwise
+     */
+    public void setFailure(boolean f)
+    {
+        failure = f;
+    }
 
-	public void setError(boolean e)
-	{
-		error = e;
-	}
-
-	public void setFailure(boolean f)
-	{
-		failure = f;
-	}
-
-	public void setFailureMessage(String message)
-	{
-		failureMessage = message;
-	}
+    /**
+     * Set the failure message giving more details about a failure or error.
+     * 
+     * @param message the message to set
+     */
+    public void setFailureMessage(String message)
+    {
+        failureMessage = message;
+    }
 }

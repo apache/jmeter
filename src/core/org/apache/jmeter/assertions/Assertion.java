@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,26 +58,24 @@ import org.apache.jmeter.samplers.SampleResult;
 
 
 /**
- * <p>An Assertion checks a SampleResult wether it fulfills the necessary
- * conditions to be called a successful Sample. The resulting
- * success-status can be obtained from a corresponding AssertionResult.</p>
-	 *
- * <p>E.g.: If A web-response doesn't contain a needed expression it would be
- * considered a failure.</p>
-	 *
- * @version $Revision$, $Date$
+ * An Assertion checks a SampleResult to determine whether or not it is
+ * successful.  The resulting success status can be obtained from a
+ * corresponding Assertion Result.  For example, if a web response doesn't
+ * contain an expected expression, it would be considered a failure.
+ * 
+ * @version $Revision$
  */
 public interface Assertion
-	{
-
-	/************************************************************
-	 *  Returns the AssertionResult-object encapsulating information
-	 *  about the success or failure of the assertion.
-	 *
-	 *@param  response The SampleResult containing informations about the Sample (duration, success...).
-	 *
-	 *@return The AssertionResult containing the information about success or failure.
-	 ***********************************************************/
-	public AssertionResult getResult(SampleResult response);
-
+{
+    /**
+     * Returns the AssertionResult object encapsulating information about the
+     * success or failure of the assertion.
+     * 
+     * @param response the SampleResult containing information about the
+     *                 Sample (duration, success, etc)
+     *
+     * @return the AssertionResult containing the information about whether the
+     *         assertion passed or failed.
+     */
+    AssertionResult getResult(SampleResult response);
 }
