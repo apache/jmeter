@@ -349,7 +349,7 @@ public class ThreadGroup
         public synchronized void sampleOccurred(SampleEvent e)
         {
             occurredQ.add(e);
-            this.notify();
+            this.notifyAll();
         }
 
         /**
