@@ -23,6 +23,8 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class BooleanPropertyConverter implements Converter
 {
 
+	public static String getVersion(){	return "$Revision$";}
+	
    /* (non-Javadoc)
     * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
     */
