@@ -1,4 +1,5 @@
 package org.apache.jmeter.extractor;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,15 +26,16 @@ import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 import org.apache.oro.text.regex.Util;
+
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
-public class RegexExtractor extends AbstractTestElement implements PostProcessor, Serializable
+public class RegexExtractor
+    extends AbstractTestElement
+    implements PostProcessor, Serializable
 {
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ELEMENTS);
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ELEMENTS);
     public static final String REGEX = "RegexExtractor.regex";
     public static final String REFNAME = "RegexExtractor.refname";
     public static final String MATCH_NUMBER = "RegexExtractor.match_number";
@@ -41,7 +43,8 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
     public static final String TEMPLATE = "RegexExtractor.template";
     private Object[] template = null;
 
-    private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
+    private static PatternCacheLRU patternCache =
+        new PatternCacheLRU(1000, new Perl5Compiler());
     private static ThreadLocal localMatcher = new ThreadLocal()
     {
         protected Object initialValue()
@@ -49,6 +52,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
             return new Perl5Matcher();
         }
     };
+
     /**
      * Parses the response data using regular expressions and saving the results
      * into variables for use later in the test.
@@ -58,16 +62,20 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
     {
         initTemplate();
         JMeterContext context = JMeterContextService.getContext();
-        if(context.getPreviousResult() == null || context.getPreviousResult().getResponseData() == null)
+        if (context.getPreviousResult() == null
+            || context.getPreviousResult().getResponseData() == null)
         {
             return;
         }
         log.debug("RegexExtractor processing result");
         context.getVariables().put(getRefName(), getDefaultValue());
         Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
-        PatternMatcherInput input = new PatternMatcherInput(new String(context.getPreviousResult().getResponseData()));
+        PatternMatcherInput input =
+            new PatternMatcherInput(
+                new String(context.getPreviousResult().getResponseData()));
         log.debug("Regex = " + getRegex());
-        Pattern pattern = patternCache.getPattern(getRegex(), Perl5Compiler.READ_ONLY_MASK);
+        Pattern pattern =
+            patternCache.getPattern(getRegex(), Perl5Compiler.READ_ONLY_MASK);
         List matches = new ArrayList();
         int x = 0;
         boolean done = false;
@@ -84,14 +92,14 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
             }
             x++;
         }
-        while (x != getMatchNumber() && !done);        
+        while (x != getMatchNumber() && !done);
         try
         {
             MatchResult match = getCorrectMatch(matches);
-            if(match != null)
+            if (match != null)
             {
                 context.getVariables().put(getRefName(), generateResult(match));
-                saveGroups(context.getVariables(),getRefName(),match);
+                saveGroups(context.getVariables(), getRefName(), match);
             }
         }
         catch (RuntimeException e)
@@ -99,23 +107,26 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
             log.warn("Error while generating result");
         }
     }
-    
-    private void saveGroups(JMeterVariables vars,String basename,MatchResult match)
+
+    private void saveGroups(
+        JMeterVariables vars,
+        String basename,
+        MatchResult match)
     {
         StringBuffer buf = new StringBuffer();
-        for(int x = 0;x < match.groups();x++)
+        for (int x = 0; x < match.groups(); x++)
         {
             buf.append(basename);
             buf.append("_g");
             buf.append(x);
-            vars.put(buf.toString(),match.group(x));
+            vars.put(buf.toString(), match.group(x));
             buf.setLength(0);
         }
     }
-    
+
     public Object clone()
     {
-        RegexExtractor cloned = (RegexExtractor)super.clone();
+        RegexExtractor cloned = (RegexExtractor) super.clone();
         cloned.template = this.template;
         return cloned;
     }
@@ -125,7 +136,8 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
         StringBuffer result = new StringBuffer();
         for (int a = 0; a < template.length; a++)
         {
-            log.debug("RegexExtractor: Template piece #" + a + " = " + template[a]);
+            log.debug(
+                "RegexExtractor: Template piece #" + a + " = " + template[a]);
             if (template[a] instanceof String)
             {
                 result.append(template[a]);
@@ -141,7 +153,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 
     private void initTemplate()
     {
-        if(template != null)
+        if (template != null)
         {
             return;
         }
@@ -149,7 +161,10 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
         List combined = new LinkedList();
         String rawTemplate = getTemplate();
         PatternMatcher matcher = (Perl5Matcher) localMatcher.get();
-        Pattern templatePattern = patternCache.getPattern("\\$(\\d+)\\$", Perl5Compiler.READ_ONLY_MASK & Perl5Compiler.SINGLELINE_MASK);
+        Pattern templatePattern =
+            patternCache.getPattern(
+                "\\$(\\d+)\\$",
+                Perl5Compiler.READ_ONLY_MASK & Perl5Compiler.SINGLELINE_MASK);
         log.debug("Pattern = " + templatePattern);
         log.debug("template = " + rawTemplate);
         Util.split(pieces, matcher, templatePattern, rawTemplate);
@@ -157,7 +172,11 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
         int count = 0;
         Iterator iter = pieces.iterator();
         boolean startsWith = isFirstElementGroup(rawTemplate);
-        log.debug("template split into " + pieces.size() + " pieces, starts with = " + startsWith);
+        log.debug(
+            "template split into "
+                + pieces.size()
+                + " pieces, starts with = "
+                + startsWith);
         while (iter.hasNext())
         {
             boolean matchExists = matcher.contains(input, templatePattern);
@@ -190,8 +209,14 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
     {
         try
         {
-            Pattern pattern = patternCache.getPattern("^\\$\\d+\\$", Perl5Compiler.READ_ONLY_MASK & Perl5Compiler.SINGLELINE_MASK);
-            return ((Perl5Matcher) localMatcher.get()).contains(rawData, pattern);
+            Pattern pattern =
+                patternCache.getPattern(
+                    "^\\$\\d+\\$",
+                    Perl5Compiler.READ_ONLY_MASK
+                        & Perl5Compiler.SINGLELINE_MASK);
+            return ((Perl5Matcher) localMatcher.get()).contains(
+                rawData,
+                pattern);
         }
         catch (RuntimeException e)
         {
@@ -213,14 +238,15 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
         }
         else if (getMatchNumber() == 0 && matches.size() > 0)
         {
-            return (MatchResult) matches.get(JMeterUtils.getRandomInt(matches.size()));
+            return (MatchResult) matches.get(
+                JMeterUtils.getRandomInt(matches.size()));
         }
         else
         {
             return null;
         }
     }
-    
+
     public void setRegex(String regex)
     {
         setProperty(REGEX, regex);
@@ -244,7 +270,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
      */
     public void setMatchNumber(int matchNumber)
     {
-        setProperty(new IntegerProperty(MATCH_NUMBER,matchNumber));
+        setProperty(new IntegerProperty(MATCH_NUMBER, matchNumber));
     }
 
     public int getMatchNumber()
@@ -293,15 +319,21 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
             extractor.setRefName("regVal");
             result = new SampleResult();
             String data =
-                "<company-xmlext-query-ret><row><value field=\"RetCode\">LIS_OK</value><value"
-                    + " field=\"RetCodeExtension\"></value><value field=\"alias\"></value><value"
-                    + " field=\"positioncount\"></value><value field=\"invalidpincount\">0</value><value"
-                    + " field=\"pinposition1\">1</value><value"
-                    + " field=\"pinpositionvalue1\"></value><value"
-                    + " field=\"pinposition2\">5</value><value"
-                    + " field=\"pinpositionvalue2\"></value><value"
-                    + " field=\"pinposition3\">6</value><value"
-                    + " field=\"pinpositionvalue3\"></value></row></company-xmlext-query-ret>";
+                "<company-xmlext-query-ret>" +
+                  "<row>" +
+                    "<value field=\"RetCode\">LIS_OK</value>" +
+                    "<value field=\"RetCodeExtension\"></value>" +
+                    "<value field=\"alias\"></value>" +
+                    "<value field=\"positioncount\"></value>" +
+                    "<value field=\"invalidpincount\">0</value>" +
+                    "<value field=\"pinposition1\">1</value>" +
+                    "<value field=\"pinpositionvalue1\"></value>" +
+                    "<value field=\"pinposition2\">5</value>" +
+                    "<value field=\"pinpositionvalue2\"></value>" +
+                    "<value field=\"pinposition3\">6</value>" +
+                    "<value field=\"pinpositionvalue3\"></value>" +
+                  "</row>" +
+                "</company-xmlext-query-ret>";
             result.setResponseData(data.getBytes());
             vars = new JMeterVariables();
             JMeterContextService.getContext().setVariables(vars);
@@ -310,7 +342,8 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 
         public void testVariableExtraction() throws Exception
         {
-            extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
+            extractor.setRegex(
+                "<value field=\"(pinposition\\d+)\">(\\d+)</value>");
             extractor.setTemplate("$2$");
             extractor.setMatchNumber(2);
             extractor.process();
@@ -319,7 +352,8 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 
         public void testVariableExtraction2() throws Exception
         {
-            extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
+            extractor.setRegex(
+                "<value field=\"(pinposition\\d+)\">(\\d+)</value>");
             extractor.setTemplate("$1$");
             extractor.setMatchNumber(3);
             extractor.process();
@@ -328,7 +362,8 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 
         public void testVariableExtraction6() throws Exception
         {
-            extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
+            extractor.setRegex(
+                "<value field=\"(pinposition\\d+)\">(\\d+)</value>");
             extractor.setTemplate("$2$");
             extractor.setMatchNumber(4);
             extractor.setDefaultValue("default");
@@ -338,7 +373,8 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 
         public void testVariableExtraction3() throws Exception
         {
-            extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
+            extractor.setRegex(
+                "<value field=\"(pinposition\\d+)\">(\\d+)</value>");
             extractor.setTemplate("_$1$");
             extractor.setMatchNumber(2);
             extractor.process();

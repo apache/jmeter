@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control.gui;
+
 import javax.swing.JCheckBox;
 
 import org.apache.jmeter.control.InterleaveControl;
@@ -61,86 +62,78 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Kevin Hammond
- *@created   $Date$
- *@version   $Revision$
- ***************************************/
-
+/**
+ * @author    Kevin Hammond
+ * @version   $Revision$
+ */
 public class RandomControlGui extends AbstractControllerGui
 {
+    private JCheckBox style;
 
-	private JCheckBox style;
-    
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public RandomControlGui()
-	{
-		init();
-	}
+    public RandomControlGui()
+    {
+        init();
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public TestElement createTestElement()
-	{
-		RandomController ic = new RandomController();
-		modifyTestElement(ic);
-		return ic;
-	}
+    public TestElement createTestElement()
+    {
+        RandomController ic = new RandomController();
+        modifyTestElement(ic);
+        return ic;
+    }
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement ic)
     {
         configureTestElement(ic);
-        if(style.isSelected())
+        if (style.isSelected())
         {
-        	((RandomController)ic).setStyle(InterleaveControl.IGNORE_SUB_CONTROLLERS);
+            ((RandomController) ic).setStyle(
+                InterleaveControl.IGNORE_SUB_CONTROLLERS);
         }
         else
         {
-        	((RandomController)ic).setStyle(InterleaveControl.USE_SUB_CONTROLLERS);
+            ((RandomController) ic).setStyle(
+                InterleaveControl.USE_SUB_CONTROLLERS);
         }
     }
-	
-	public void configure(TestElement el)
-	{
-		super.configure(el);
-		if(((RandomController)el).getStyle() == InterleaveControl.IGNORE_SUB_CONTROLLERS)
-		{
-			style.setSelected(true);
-		}
-		else
-		{
-			style.setSelected(false);
-		}
-	}
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("random_control_title");
-	}
+    public void configure(TestElement el)
+    {
+        super.configure(el);
+        if (((RandomController) el).getStyle()
+            == InterleaveControl.IGNORE_SUB_CONTROLLERS)
+        {
+            style.setSelected(true);
+        }
+        else
+        {
+            style.setSelected(false);
+        }
+    }
 
-	private void init()
-	{
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+    /****************************************
+     * !ToDoo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("random_control_title");
+    }
+
+    private void init()
+    {
+        setLayout(
+            new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
         setBorder(makeBorder());
-		add(makeTitlePanel());
+        add(makeTitlePanel());
 
-		style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers"));
-		add(style);
-	}
+        style =
+            new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers"));
+        add(style);
+    }
 }
