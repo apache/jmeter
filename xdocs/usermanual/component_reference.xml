@@ -929,6 +929,8 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
         <property name="Port" required="Yes">The port that the Proxy Server listens to.  8080 is the default, but you can change it
         <!--TODO: there's some undocumented flags here -->
         <property name="Target Controller" required="Yes">The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.</property>
+        <property name="Grouping" required="Yes">Whether to group samplers for requests received without significant time separation.</property>
+        <!-- TODO: describe all available gruping modes -->
         <property name="Patterns to Include" required="No">Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
         those that meet the requirements of the Include/Exclude fields are <i>recorded</i>.  If both Include and Exclude are
         left empty, then everything is recorded (which can result in dozens of samples recorded for each page, as images, stylesheets,
