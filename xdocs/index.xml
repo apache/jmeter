@@ -51,6 +51,7 @@ behavior under heavy concurrent load.
 <li><a href="usermanual/index.html">Using JMeter</a></li>
 <li><a href="extending/index.html">Extending JMeter (Developer Manual)</a></li>
 <li><a href="api/index.html">Javadoc API documentation</a></li>
+<li><a href="localising/index.html">JMeter Localisation (Translator's Guide)</a></li>
 </ul>
 </section>
 </body>

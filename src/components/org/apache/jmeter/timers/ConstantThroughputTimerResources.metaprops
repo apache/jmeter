@@ -1,0 +1,14 @@
+#I18NEdit properties organization file, not to be edited!
+delay.displayName..text.changed=20040119225204
+delay.displayName..text.comment=Using "before each affected sampler" to convey the idea that Timers behave like config elements, not scripting commands.
+delay.displayName..text.md5=Zil062YXnKsduKhRrIh0GQ\=\=
+displayName..text.changed=20040119225204
+displayName..text.md5=YJ5oV1iLDGUTwXkSxWF0qg\=\=
+displayName.ja.text.changed=20040119225204
+displayName.ja.text.md5=EG1qYDhrRI+A1AF1jCA/VA\=\=
+throughput.displayName..text.changed=20040119225204
+throughput.displayName..text.md5=ePhDrHfVsZx9TErS1hnPoA\=\=
+throughput.displayName.ja.text.changed=20040119225204
+throughput.displayName.ja.text.md5=NARSS297IA25vjD2I26lJA\=\=
+throughput.shortDescription..text.changed=20040119225204
+throughput.shortDescription..text.md5=uzDLUF/NYtHhFybpfNemdA\=\=
