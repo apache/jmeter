@@ -83,14 +83,14 @@ import org.apache.jmeter.samplers.SampleResult;
  * with them will be shown in the GUI.  Users can add other
  * parameters as well.
  * <p>
- * While it may be necessary to make changes to the JavaSamplerClient
- * interface from time to time (therefore requiring changes to any
- * implementations of this interface), we intend to make this abstract
- * class provide reasonable implementations of any new methods so that
- * subclasses do not necessarily need to be updated for new versions.
- * Therefore, when creating a new JavaSamplerClient implementation,
- * developers are encouraged to subclass this abstract class rather
- * than implementing the JavaSamplerClient interface directly.
+ * When possible, Java tests should extend {@link AbstractJavaSamplerClient
+ * AbstractJavaSamplerClient} rather than implementing JavaSamplerClient
+ * directly.  This should protect your tests from future changes to the
+ * interface.  While it may be necessary to make changes to the
+ * JavaSamplerClient interface from time to time (therefore requiring changes
+ * to any implementations of this interface), we intend to make this abstract
+ * class provide reasonable default implementations of any new methods so that
+ * subclasses do not necessarily need to be updated for new versions. 
  * Implementing JavaSamplerClient directly will continue to be
  * supported for cases where extending this class is not possible
  * (for example, when the client class is already a subclass of some
@@ -113,7 +113,7 @@ public interface JavaSamplerClient {
      * as possible to the test.
      * 
      * @param context  the context to run with. This provides access
-     *                  to initialization parameters.
+     *                 to initialization parameters.
      */
     public void setupTest(JavaSamplerContext context);
 
@@ -126,9 +126,9 @@ public interface JavaSamplerClient {
      * the test required to execute.  It is also a good idea to
      * set the sampleLabel and the successful flag.
      * 
-     * @see org.apache.jmeter.samplers.SampleResult.setTime(long)
-     * @see org.apache.jmeter.samplers.SampleResult.setSuccessful(boolean)
-     * @see org.apache.jmeter.samplers.SampleResult.setSampleLabel(java.lang.String)
+     * @see org.apache.jmeter.samplers.SampleResult#setTime(long)
+     * @see org.apache.jmeter.samplers.SampleResult#setSuccessful(boolean)
+     * @see org.apache.jmeter.samplers.SampleResult#setSampleLabel(java.lang.String)
      * 
      * @param context  the context to run with. This provides access
      *                 to initialization parameters.
@@ -142,7 +142,7 @@ public interface JavaSamplerClient {
      * Do any clean-up required by this test at the end of a test run.
      * 
      * @param context  the context to run with. This provides access
-     *                  to initialization parameters.
+     *                 to initialization parameters.
      */
     public void teardownTest(JavaSamplerContext context);
 

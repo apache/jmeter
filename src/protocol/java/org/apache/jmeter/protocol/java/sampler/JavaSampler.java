@@ -192,7 +192,6 @@ public class JavaSampler extends AbstractSampler
      * The <code>sample()</code> method retrieves the reference to the
      * Java client and calls its <code>runTest()</code> method.
      *
-     * @see Sampler#sample(org.apache.jmeter.samplers.Entry)
      * @see JavaSamplerClient#runTest(JavaSamplerContext)
      * 
      * @return test SampleResult
@@ -311,6 +310,12 @@ public class JavaSampler extends AbstractSampler
         testEnded();
     }
 
+    /**
+     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.IterationEvent)
+     */
+    public void testIterationStart(IterationEvent event)
+    {}
+
     class ErrorSamplerClient extends AbstractJavaSamplerClient {
         /**
          * Return SampleResult with data on error.
@@ -328,10 +333,4 @@ public class JavaSampler extends AbstractSampler
             return results;
         }
     }
-    /**
-     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.IterationEvent)
-     */
-    public void testIterationStart(IterationEvent event)
-    {}
-
 }
