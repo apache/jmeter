@@ -29,9 +29,13 @@ public class FunctionProperty extends AbstractProperty
     
     public void setObjectValue(Object v)
         {
-            if(v instanceof CompoundVariable)
+            if(v instanceof CompoundVariable && !isRunningVersion())
             {
                 function = (CompoundVariable)v;
+            }
+            else
+            {
+                cacheValue = v.toString();
             }
         }
 
