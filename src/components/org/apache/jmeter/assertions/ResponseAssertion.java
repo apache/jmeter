@@ -87,11 +87,15 @@ public class ResponseAssertion
    public final static String TEST_STRINGS = "Asserion.test_strings";
    public final static String SAMPLE_LABEL = "Assertion.sample_label";
    public final static String RESPONSE_DATA = "Assertion.response_data";
-   private String notMessage = "";
-   private String failMessage = "to contain: ";
+
+   /* 
+    * Mask values for TestType
+    * TODO: remove either MATCH or CONTAINS - they are mutually exckusive 
+    */
    public final static int MATCH = 1 << 0;
    public final static int CONTAINS = 1 << 1;
    public final static int NOT = 1 << 2;
+
    private static ThreadLocal matcher = new ThreadLocal()
    {
       protected Object initialValue()
@@ -146,23 +150,8 @@ public class ResponseAssertion
    public void setTestType(int testType)
    {
       setProperty(new IntegerProperty(TEST_TYPE, testType));
-      if ((testType & NOT) > 0)
-      {
-         notMessage = "not ";
-      }
-      else
-      {
-         notMessage = "";
-      }
-      if ((testType & CONTAINS) > 0)
-      {
-         failMessage = "to contain: ";
-      }
-      else
-      {
-         failMessage = "to match: ";
-      }
    }
+
    /************************************************************
     *  !ToDo (Method description)
     *
@@ -201,7 +190,10 @@ public class ResponseAssertion
       {
          result = new AssertionResult();
          result.setError(true);
-         result.setFailureMessage(response.responseDatatoString());
+         byte [] ba = response.getResponseData();
+         result.setFailureMessage(
+         	ba == null ? "Unknown Error (responseData is empty)" : new String(ba)
+             );
          return result;
       }
       result = evaluateResponse(response);
@@ -257,14 +249,12 @@ public class ResponseAssertion
    public void setToContainsType()
    {
       setTestType(
-         (getTestType() | CONTAINS) & (MATCH ^ (CONTAINS | MATCH | NOT)));
-      failMessage = "to contain: ";
+         (getTestType() | CONTAINS) & (~ MATCH));
    }
    public void setToMatchType()
    {
       setTestType(
-         (getTestType() | MATCH) & (CONTAINS ^ (CONTAINS | MATCH | NOT)));
-      failMessage = "to match: ";
+         (getTestType() | MATCH) & (~ CONTAINS));
    }
    public void setToNotType()
    {
@@ -272,7 +262,7 @@ public class ResponseAssertion
    }
    public void unsetNotType()
    {
-      setTestType(getTestType() & (NOT ^ (CONTAINS | MATCH | NOT)));
+      setTestType(getTestType() &  ~ NOT);
    }
    /**
     * Make sure the response satisfies the specified assertion requirements.
@@ -285,11 +275,21 @@ public class ResponseAssertion
       boolean pass = true;
       boolean not = (NOT & getTestType()) > 0;
       AssertionResult result = new AssertionResult();
-      if(response.getResponseData() == null)
+      String toCheck; // The string to check (Url or data)
+      
+      if (ResponseAssertion.RESPONSE_DATA.equals(getTestField()))
+      { // We're testing the response data
+		toCheck = new String(response.responseDataAsBA());
+      } else { // we're testing the URL
+      	toCheck=response.getSamplerData();
+      	if (toCheck == null) toCheck = "";
+      }
+      
+      if(toCheck.length()==0)
       {
           return setResultForNull(result);
       }
-      String responseString = new String(response.getResponseData());
+
       try
       {
          // Get the Matcher for this thread
@@ -305,21 +305,17 @@ public class ResponseAssertion
             boolean found;
             if ((CONTAINS & getTestType()) > 0)
             {
-               found = localMatcher.contains(responseString, pattern);
+               found = localMatcher.contains(toCheck, pattern);
             }
             else
             {
-               found = localMatcher.matches(responseString, pattern);
+               found = localMatcher.matches(toCheck, pattern);
             }
             pass = not ? !found : found;
             if (!pass)
             {
                result.setFailure(true);
-               result.setFailureMessage(
-                  "Test Failed, expected "
-                     + notMessage
-                     + failMessage
-                     + stringPattern);
+               result.setFailureMessage(getFailText(stringPattern));
                break;
             }
          }
@@ -337,11 +333,40 @@ public class ResponseAssertion
       }
       return result;
    }
+   
+/**
+ * Generate the failure reason from the TestType
+ *
+ * @param stringPattern
+ * @return the message for the assertion report
+ * TODO strings ought to be made resources
+ */
+private String getFailText(String stringPattern) {
+	String text;
+	switch(getTestType()){
+		case CONTAINS:
+			text = "Test failed, expected to contain ";
+			break;
+		case NOT | CONTAINS:
+			text = "Test failed, expected not to contain ";
+			break;
+		case MATCH:
+			text = "Test failed, expected to match ";
+			break;
+		case NOT | MATCH:
+			text = "Test failed, expected not to match ";
+			break;
+		default:// should never happen...
+		text = "Test failed, expected something using ";
+	}
+
+	return text + "/" + stringPattern + "/";
+}
 protected AssertionResult setResultForNull(AssertionResult result)
 {
     result.setError(false);
       result.setFailure(true);
-      result.setFailureMessage("Response was null");
+      result.setFailureMessage("Response (or URL) was null");
       return result;
 }
    public static class Test extends junit.framework.TestCase
