@@ -742,7 +742,7 @@ public class HTTPSampler2 extends AbstractSampler
     }
 
     /**
-     * Returns an <code>HttpURLConnection</code> fully ready to attempt 
+     * Returns an <code>HttpConnection</code> fully ready to attempt 
      * connection. This means it sets the request method (GET or
      * POST), headers, cookies, and authorization for the URL request.
      * <p>
@@ -751,7 +751,7 @@ public class HTTPSampler2 extends AbstractSampler
      * @param u                <code>URL</code> of the URL request
      * @param method            http/https
      * @param res               sample result to save request infos to 
-     * @return                 <code>HttpURLConnection</code> ready for .connect
+     * @return                 <code>HttpConnection</code> ready for .connect
      * @exception IOException  if an I/O Exception occurs
      */
     private HttpConnection setupConnection(
@@ -811,11 +811,9 @@ public class HTTPSampler2 extends AbstractSampler
         }
         
         // Allow HttpClient to handle the redirects:
-        httpMethod.setFollowRedirects(delegateRedirects && res.isRedirect());
+        httpMethod.setFollowRedirects(delegateRedirects && getFollowRedirects());
         
-        //HttpURLConnection conn=null;
-
-        // a well-bahaved browser is supposed to send 'Connection: close'
+        // a well-behaved browser is supposed to send 'Connection: close'
         // with the last request to an HTTP server. Instead, most browsers
         // leave it to the server to close the connection after their
         // timeout period. Leave it to the JMeter user to decide.
@@ -931,20 +929,20 @@ public class HTTPSampler2 extends AbstractSampler
 
 
     /**
-     * Gets the ResponseHeaders from the URLConnection
+     * Gets the ResponseHeaders
      *
-     * @param conn  connection from which the headers are read
+     * @param method  connection from which the headers are read
      * @return string containing the headers, one per line
      */
-    protected String getResponseHeaders(HttpMethod conn)
+    protected String getResponseHeaders(HttpMethod method)
         throws IOException
     {
         StringBuffer headerBuf= new StringBuffer();
-        Header rh[]=conn.getResponseHeaders();
-		headerBuf.append(rh[0].toString());//Leave header as is 
+        Header rh[]=method.getResponseHeaders();
+		headerBuf.append(method.getStatusLine());//header[0] is not the status line... 
         headerBuf.append("\n");
 
-        for (int i= 1; i < rh.length; i++)
+        for (int i= 0; i < rh.length; i++)
         {
         	String key = rh[i].getName();
             if (!key.equalsIgnoreCase("transfer-encoding"))//TODO - why is this not saved?
@@ -960,16 +958,15 @@ public class HTTPSampler2 extends AbstractSampler
 
     /**
      * Extracts all the required cookies for that particular URL request and
-     * sets them in the <code>HttpURLConnection</code> passed in.
+     * sets them in the <code>HttpMethod</code> passed in.
      *
-     * @param conn          <code>HttpUrlConnection</code> which represents the
-     *                      URL request
-     * @param u             <code>URL</code> of the URL request
+     * @param method  <code>HttpMethod</code> which represents the request
+     * @param u             <code>URL</code> of the request
      * @param cookieManager the <code>CookieManager</code> containing all the
      *                      cookies for this <code>UrlConfig</code>
      */
     private String setConnectionCookie(
-        HttpMethod conn,
+        HttpMethod method,
         URL u,
         CookieManager cookieManager)
     {
@@ -979,7 +976,7 @@ public class HTTPSampler2 extends AbstractSampler
             cookieHeader= cookieManager.getCookieHeaderForURL(u);
             if (cookieHeader != null)
             {
-                conn.setRequestHeader("Cookie", cookieHeader);
+                method.setRequestHeader("Cookie", cookieHeader);
             }
         }
         return cookieHeader;
@@ -987,17 +984,16 @@ public class HTTPSampler2 extends AbstractSampler
 
     /**
      * Extracts all the required headers for that particular URL request and
-     * sets them in the <code>HttpURLConnection</code> passed in
+     * sets them in the <code>HttpMethod</code> passed in
      *
-     *@param conn           <code>HttpUrlConnection</code> which represents the
-     *                      URL request
+     *@param method           <code>HttpMethod</code> which represents the request
      *@param u              <code>URL</code> of the URL request
      *@param headerManager  the <code>HeaderManager</code> containing all the
      *                      cookies for this <code>UrlConfig</code>
      * @return the headers as a string
      */
     private String setConnectionHeaders(
-        HttpMethod conn,
+        HttpMethod method,
         URL u,
         HeaderManager headerManager)
     {
@@ -1013,7 +1009,7 @@ public class HTTPSampler2 extends AbstractSampler
                     Header header= (Header)i.next().getObjectValue();
                     String n=header.getName();
                     String v=header.getValue();
-                    conn.setRequestHeader(n,v);
+                    method.setRequestHeader(n,v);
                     hdrs.append(n);  
 					hdrs.append(": ");  
 					hdrs.append(v);  
@@ -1026,10 +1022,9 @@ public class HTTPSampler2 extends AbstractSampler
 
     /**
      * Extracts all the required authorization for that particular URL request
-     * and sets it in the <code>HttpURLConnection</code> passed in.
+     * and sets it in the <code>HttpMethod</code> passed in.
      *
-     * @param conn        <code>HttpUrlConnection</code> which represents the
-     *                    URL request
+     * @param method    <code>HttpMethod</code> which represents the request
      * @param u           <code>URL</code> of the URL request
      * @param authManager the <code>AuthManager</code> containing all the
      *                    cookies for this <code>UrlConfig</code>
@@ -1097,7 +1092,7 @@ public class HTTPSampler2 extends AbstractSampler
 		httpMethod=null;
 		
         HTTPSampleResult res= new HTTPSampleResult();
-		res.setSampleLabel(urlStr); //was anyway reset as below
+		res.setSampleLabel(urlStr);
 
 		res.sampleStart(); // Count the retries as well in the time
 
@@ -1125,6 +1120,7 @@ public class HTTPSampler2 extends AbstractSampler
 
             // Now collect the results into the HTTPSampleResult:
 
+            res.setSampleLabel(httpMethod.getPath());// Pick up Actual path (after redirects)
             res.setResponseData(responseData);
 
             int errorLevel= httpMethod.getStatusCode();
@@ -1378,26 +1374,11 @@ public class HTTPSampler2 extends AbstractSampler
         return res;
     }
 
-//    protected void disconnect(HttpURLConnection conn)
-//    {
-//        if (conn != null)
-//        {
-//            String connection= conn.getHeaderField("Connection");
-//            String protocol= conn.getHeaderField(0);
-//            if ((connection == null && (protocol == null || !protocol.startsWith("HTTP/1.1")))
-//                || (connection != null && connection.equalsIgnoreCase("close")))
-//            {
-//                conn.disconnect();
-//            }
-//        }
-//    }
-//
     /**
-     * From the <code>HttpURLConnection</code>, store all the "set-cookie"
+     * From the <code>HttpState</code>, store all the "set-cookie"
      * key-pair values in the cookieManager of the <code>UrlConfig</code>.
      *
-     * @param conn          <code>HttpUrlConnection</code> which represents the
-     *                      URL request
+     * @param state        <code>HttpState</code> which represents the request
      * @param u             <code>URL</code> of the URL request
      * @param cookieManager the <code>CookieManager</code> containing all the
      *                      cookies for this <code>UrlConfig</code>
