@@ -82,7 +82,7 @@ value to 0, then JMeter will immediately start all of your users.</p>
 
 <p>Finally, clear the checkbox labeled "Forever", and enter a value of 2 in
 the Loop Count field.  This property tells JMeter how many times to repeat your
-test. If you enter a loop count value of 0, then JMeter will run your test only
+test. If you enter a loop count value of 1, then JMeter will run your test only
 once. To have JMeter repeatedly run your Test Plan, select the Forever
 checkbox.</p>
 
