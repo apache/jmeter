@@ -185,6 +185,10 @@
 	</table></p>
 #end
 
+#macro (scope)
+	<a href="build-test-plan.html#scoping_rules">scope</a>
+#end
+
 #macro (unknown $u_node)
 	#if($u_node.getName() == "note")
 		#note($u_node)
@@ -206,6 +210,8 @@
 		#component($u_node)
 	#elseif ($u_node.getName().equals("subsection"))
 		 #subsection ($u_node)
+	#elseif ($u_node.getName().equals("scope"))
+		 #scope ()
 	#else
 		#outputTag($u_node)
 		#runloop($u_node)

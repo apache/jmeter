@@ -62,7 +62,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.log.Logger;
 
 /****************************************************************
  Use this class to store database-like data.  This class uses rows
@@ -73,6 +75,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  ******************************************************************/
 public class Data implements Serializable
 {
+   private static Logger log = LoggingManager.getLoggerForClass();
   Map data;
   Map iterators = new HashMap();
  // Hashtable dataLine;
@@ -147,12 +150,14 @@ Adds the rows of the given Data object to this Data object.
   {
 	 List tempList;
 	 Iterator it = data.keySet().iterator();
+     log.debug("removing row, size = " + size);
 	 if(currentPos>-1 && currentPos<size)
 	 {
+         log.debug("got to here");
 		while(it.hasNext())
 		{
 		  tempList = (List)data.get(it.next());
-		  tempList.remove(currentPos);
+          tempList.remove(currentPos);
 		}
 		if(currentPos > 0)
 		{
@@ -164,9 +169,11 @@ Adds the rows of the given Data object to this Data object.
   
   public void removeRow(int index)
   {
+      log.debug("Removing row: " + index);
   	if(index < size)
   	{
   		setCurrentPos(index);
+        log.debug("Setting currentpos to " + index);
   		removeRow();
   	}
   }
@@ -536,12 +543,15 @@ Returns the row number where a certain value is.
 
   }*/
   
+  /**
+   * Sets the data for every row in the column
+   */
   public void setColumnData(String colName,Object value)
   {
   	List list = this.getColumnAsObjectArray(colName);
-  	for(int x = 0;x < list.size();x++)
+  	while(list.size() < size())
   	{
-  		list.set(x,value);
+  		list.add(value);
   	}
   }
   
