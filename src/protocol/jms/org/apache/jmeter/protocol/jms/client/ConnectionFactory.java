@@ -96,7 +96,7 @@ public class ConnectionFactory implements TestListener {
 					factory = (TopicConnectionFactory)objfac;
 				}
 			} catch (NamingException e){
-				log.error(e.getCause().toString());
+				log.error(e.getRootCause().toString());//JDK1.4 getCause()
 			}
 		}
 		return factory;
