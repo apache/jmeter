@@ -11,8 +11,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContextService;
 
 /**
- * @created    June 14, 2001
- * @version    $Revision$
+ * Created    June 14, 2001
+ * @version    $Revision$ Last updated: $Date$
  */
 public class HtmlParserTester extends TestCase
 {
