@@ -1,5 +1,15 @@
 #!/bin/sh
-case $# in
-    0) java -classpath $CLASSPATH:`dirname $0`/ApacheJMeter.jar org.apache.jmeter.Driver jmeter.properties;;
-    1) java -classpath $CLASSPATH:`dirname $0`/ApacheJMeter.jar org.apache.jmeter.Driver $1;;
-esac
+USAGE=$0" [-h proxyHost] [-p proxyPort] [-f property-file]"
+
+PROPERTIES=jmeter.properties
+
+while getopts h:p:f: x; do 
+    case $x in
+	h) JAVA_PROPS=$JAVAPROPS" -Dhttp.proxyHost="$OPTARG;;
+	p) JAVA_PROPS=$JAVAPROPS" -Dhttp.proxyPort="$OPTARG;;
+	f) PROPERTIES=$OPTARG;;
+	?) echo $USAGE; exit -1;;
+    esac;
+done
+
+java -classpath $CLASSPATH:`dirname $0`/ApacheJMeter.jar org.apache.jmeter.Driver $JAVA_PROPS $PROPERTIES
