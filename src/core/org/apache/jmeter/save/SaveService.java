@@ -63,7 +63,7 @@ public class SaveService
    // Version information for test plan header
    static String version="1.0";
    static String propertiesVersion="";//read from properties file
-   private static final String PROPVERSION="$Revision$";
+   private static final String PROPVERSION="1.3";
    
    // Helper method to simplify alias creation from properties
    private static void makeAlias(String alias,String clazz)
@@ -103,6 +103,7 @@ public class SaveService
 		 		//process special keys
 		 		if (key.equalsIgnoreCase("_version"))
 		 		{
+		 			val=extractVersion(val);
 		 			log.info("Using SaveService properties file "+val);
 		 			propertiesVersion=val;
 		 		}
@@ -149,13 +150,30 @@ public class SaveService
    
    static boolean versionsOK = true;
    
+   // Extract version digits from String of the form #Revision: n.mm #
+   // (where # is actually $ above)
+   private static final String REVPFX = "$Revision: ";
+   private static final String REVSFX = " $";
+   private static String extractVersion(String rev)
+   {
+   	  if (rev.length() > REVPFX.length() + REVSFX.length())
+   	  {
+   	      return rev.substring(REVPFX.length(),rev.length()-REVSFX.length());
+   	  }
+   	  else
+   	  {
+   	     return rev;
+   	  }
+   }
 	private static void checkVersion(Class clazz, String expected) {
 	
 		String actual="*NONE*";
 		try {
 			actual=(String)clazz.getMethod("getVersion",null).invoke(null,null);
-			actual = actual.substring("$Revision: ".length(),actual.length()-2);
-		} catch (Exception e) {
+			actual = extractVersion(actual);
+		} catch (Exception e) 
+		{
+			//Not needed
 		}
 		if (0!=actual.compareTo(expected))
 		{
@@ -223,7 +241,7 @@ public class SaveService
    		initProps();
    		checkVersions();
    		assertTrue("Unexpected version found",versionsOK);
-   		assertEquals(PROPVERSION,propertiesVersion);
+   		assertEquals("Property Version mismatch",PROPVERSION,propertiesVersion);
    	}
    }
 }
