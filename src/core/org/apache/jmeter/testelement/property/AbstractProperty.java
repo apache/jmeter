@@ -433,7 +433,7 @@ public abstract class AbstractProperty implements JMeterProperty
      */
     public String toString()
     {
-        return getStringValue();
+        return name + "=" + getStringValue();
     }
 
     /* (non-Javadoc)
