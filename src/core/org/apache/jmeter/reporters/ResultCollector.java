@@ -105,7 +105,6 @@ public class ResultCollector extends AbstractListenerElement
     public final static String FILENAME = "filename";
     private static boolean functionalMode = false;
     public static final String ERROR_LOGGING = "ResultCollector.error_logging";
-
     // protected List results = Collections.synchronizedList(new ArrayList());
     private int current;
     transient private DefaultConfigurationSerializer serializer;
@@ -249,11 +248,10 @@ public class ResultCollector extends AbstractListenerElement
         if (writer == null)
         {
             trimmed = trimLastLine(filename);
-            writer =
-                    new PrintWriter(
-                    new OutputStreamWriter(
-                    new BufferedOutputStream(new FileOutputStream(filename, trimmed)),
-                    "UTF-8"));
+            writer = new PrintWriter(
+            			new OutputStreamWriter(
+							new BufferedOutputStream(new FileOutputStream(filename, trimmed)),
+						"UTF-8"), true);
             files.put(filename, writer);
         }
         if (!trimmed)
