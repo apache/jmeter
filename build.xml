@@ -231,7 +231,7 @@
 				 projectFile="./stylesheets/project.xml"
 				 excludes="**/stylesheets/**"
 				 includes="**/*.xml"
-				 lastModifiedCheck="false"
+				 lastModifiedCheck="true"
 				 velocityPropertiesFile="${docs.src}/velocity.properties"/>
 		<copy todir="${docs.dest}">
 			<fileset dir="${docs.src}">
@@ -248,7 +248,7 @@
 				 projectFile="./stylesheets/project.xml"
 				 excludes="**/stylesheets/**"
 				 includes="**/*.xml"
-				 lastModifiedCheck="false"
+				 lastModifiedCheck="true"
 				 velocityPropertiesFile="${docs.src}/velocity.properties"/>
 
 	</target>
