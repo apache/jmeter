@@ -100,7 +100,7 @@ public class ExitCommand implements Command
      */
     public void doAction(ActionEvent e)
     {
-        ActionRouter.getInstance().actionPerformed(
+        ActionRouter.getInstance().doActionNow(
             new ActionEvent(e.getSource(), e.getID(), CheckDirty.CHECK_DIRTY));
         if (GuiPackage.getInstance().isDirty())
         {
