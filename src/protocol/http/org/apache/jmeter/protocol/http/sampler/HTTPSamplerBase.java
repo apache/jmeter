@@ -594,7 +594,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
 	protected abstract HTTPSampleResult sample(URL u, String s, boolean b, int i);
 
-	protected static Pattern pattern;
+	private static final Pattern pattern;
 	private static ThreadLocal localMatcher = new ThreadLocal()
 	    {
 	        protected synchronized Object initialValue()

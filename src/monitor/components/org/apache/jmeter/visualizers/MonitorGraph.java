@@ -35,20 +35,20 @@ public class MonitorGraph
     extends JComponent
     implements MouseListener, MonitorGuiListener, Clearable
 {
-	protected static int width = 500;
-	protected MonitorAccumModel MODEL;
-	protected MonitorModel CURRENT;
+	//NOTUSED protected static int width = 500;
+	private MonitorAccumModel MODEL;
+	private MonitorModel CURRENT;
 	
-	protected boolean CPU = false;
-	protected boolean HEALTH = true;
-	protected boolean LOAD = true;
-	protected boolean MEM = true;
-	protected boolean THREAD = true;
-	protected boolean YGRID = true;
-	protected boolean XGRID = true;
+	private boolean CPU = false;
+	private boolean HEALTH = true;
+	private boolean LOAD = true;
+	private boolean MEM = true;
+	private boolean THREAD = true;
+	private boolean YGRID = true;
+	private boolean XGRID = true;
 
-	protected int COUNT = 0;
-	protected int GRAPHMAX = 0;
+	private int COUNT = 0;
+	private int GRAPHMAX = 0;
 
     /**
      * 

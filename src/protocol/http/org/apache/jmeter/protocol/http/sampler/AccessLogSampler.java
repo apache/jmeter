@@ -71,7 +71,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean
 
    /** private members used by class * */
    transient private LogParser PARSER = null;
-   private Class PARSERCLASS = null;
+   //NOTUSED private Class PARSERCLASS = null;
    private String logFile, parserClassName, filterClassName;
    private Filter filter;
    private int count = 0;
