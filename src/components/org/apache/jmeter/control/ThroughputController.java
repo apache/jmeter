@@ -426,6 +426,9 @@ public class ThroughputController
                     "three",
                 };
             sub_1.testStarted();
+            test.setRunningVersion(true);
+            sub_1.setRunningVersion(true);
+            loop.setRunningVersion(true);
             test.initialize();
             for (int counter= 0; counter < order.length; counter++)
             {
@@ -471,6 +474,8 @@ public class ThroughputController
                     "three",
                 };
             int counter= 0;
+            controller.setRunningVersion(true);
+            sub_1.setRunningVersion(true);
             sub_1.testStarted();
             controller.initialize();
             for (int i=0; i<3; i++)
@@ -527,6 +532,8 @@ public class ThroughputController
                     // etc...
                 };
             int counter= 0;
+            controller.setRunningVersion(true);
+            sub_1.setRunningVersion(true);
             sub_1.testStarted();
             controller.initialize();
             for (int i=0; i<3; i++)
@@ -567,6 +574,8 @@ public class ThroughputController
                     "three",
                 };
             int counter= 0;
+            controller.setRunningVersion(true);
+            sub_1.setRunningVersion(true);
             sub_1.testStarted();
             controller.initialize();
             for (int i=0; i<3; i++)
@@ -609,6 +618,8 @@ public class ThroughputController
                     "three",
                 };
             int counter= 0;
+            controller.setRunningVersion(true);
+            sub_1.setRunningVersion(true);
             sub_1.testStarted();
             controller.initialize();
             for (int i=0; i<3; i++)

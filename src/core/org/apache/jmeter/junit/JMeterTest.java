@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JComponent;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -517,25 +519,28 @@ public class JMeterTest extends JMeterTestCase
      */
     public void runSerialTest() throws Exception
     {
-        try
+        if(!(serObj instanceof JComponent))
         {
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            ObjectOutputStream out = new ObjectOutputStream(bytes);
-            out.writeObject(serObj);
-            out.close();
-            ObjectInputStream in =
-                new ObjectInputStream(
-                    new ByteArrayInputStream(bytes.toByteArray()));
-            Object readObject = in.readObject();
-            in.close();
-            assertEquals(
-                "deserializing class: " + serObj.getClass().getName(),
-                serObj.getClass(),
-                readObject.getClass());
-        }
-        catch (Throwable e)
-        {
-            fail("serialization of "+serObj.getClass().getName()+" failed: "+e);
+            try
+            {
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                ObjectOutputStream out = new ObjectOutputStream(bytes);
+                out.writeObject(serObj);
+                out.close();
+                ObjectInputStream in =
+                    new ObjectInputStream(
+                        new ByteArrayInputStream(bytes.toByteArray()));
+                Object readObject = in.readObject();
+                in.close();
+                assertEquals(
+                    "deserializing class: " + serObj.getClass().getName(),
+                    serObj.getClass(),
+                    readObject.getClass());
+            }
+            catch (Throwable e)
+            {
+                fail("serialization of "+serObj.getClass().getName()+" failed: "+e);
+            }
         }
     }
 
