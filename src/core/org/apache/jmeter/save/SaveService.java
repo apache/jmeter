@@ -106,7 +106,9 @@ import org.xml.sax.SAXException;
  */
 public final class SaveService implements SaveServiceConstants
 {
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+    transient private static final Logger log = LoggingManager.getLoggerForClass();
+
+//TODO: make most/all of these fields private?
 
     protected static final int SAVE_NO_ASSERTIONS = 0;
     protected static final int SAVE_FIRST_ASSERTION = SAVE_NO_ASSERTIONS + 1;
@@ -378,7 +380,7 @@ public final class SaveService implements SaveServiceConstants
            if (saveSuccessful)
            {
                text = splitter.nextToken();
-               result.setSuccessful(new Boolean(text).booleanValue());
+               result.setSuccessful(Boolean.valueOf(text).booleanValue());
            }
         
            if (saveAssertionResultsFailureMessage)
@@ -659,7 +661,7 @@ public final class SaveService implements SaveServiceConstants
         {
             config.setAttribute(
                 SUCCESSFUL,
-                new Boolean(result.isSuccessful()).toString());
+                Boolean.valueOf(result.isSuccessful()).toString());
         }
 
         SampleResult[] subResults = result.getSubResults();
