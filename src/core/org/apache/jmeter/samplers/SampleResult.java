@@ -129,7 +129,7 @@ public class SampleResult implements Serializable
 
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    private final boolean startTimeStamp = 
+    private static final boolean startTimeStamp = 
         JMeterUtils.getPropDefault("sampleresult.timestamp.start",false);
 
     public SampleResult()
@@ -138,30 +138,86 @@ public class SampleResult implements Serializable
     }
     
     /**
-     * Allow users to create a sample with a specific elapsed time
-     * for cloning and test purposes, but don't allow the time to be
-     * changed later
+     * Create a sample with a specific elapsed time
+     * but don't allow the times to be changed later
+     * 
+     * (only used by HTTPSampleResult)
      * 
      * @param elapsed time
+     * @param atend create the sample finishing now, else starting now
      */
-	public SampleResult(long elapsed)
+	protected SampleResult(long elapsed, boolean atend)
 	{
-		time = elapsed;
+		long now = System.currentTimeMillis();
+		if (atend){
+			setTimes(now - elapsed, now);
+		} else {
+			setTimes(now, now + elapsed);
+		}
 	}
     
+	/**
+	 * Create a sample with specific start and end times
+	 * for test purposes, but don't allow the times to be changed later
+	 * 
+	 * (used by StatVisualizerModel.Test)
+	 * 
+	 * @param start start time
+	 * @param end end time 
+	 */
+	public static SampleResult createTestSample(long start, long end)
+	{
+		SampleResult res = new SampleResult();
+		res.setStartTime(start);
+		res.setEndTime(end);
+		return res;
+	}
+
+	/**
+	 * Create a sample with a specific elapsed time
+	 * for test purposes, but don't allow the times to be changed later
+	 * 
+	 * @param elapsed - desired elapsed time
+	 */
+	public static SampleResult createTestSample(long elapsed)
+	{
+		long now = System.currentTimeMillis();
+		return createTestSample(now,now+elapsed);
+	}
+
     /**
      * Allow users to create a sample with specific timestamp and elapsed times
-     * for cloning and test purposes, but don't allow the times to be
-     * changed later
+     * for cloning purposes, but don't allow the times to be changed later
      * 
-     * @param stamp
+     * Currently used by SaveService only
+     * 
+     * @param stamp - this may be a start time or an end time
      * @param elapsed
      */
 	public SampleResult(long stamp, long elapsed)
 	{
-		timeStamp = stamp;
-		time = elapsed;
+		// Maintain the timestamp relationships
+		if (startTimeStamp) {
+			setTimes(stamp, stamp + elapsed);
+		} else {
+			setTimes(stamp - elapsed, stamp);
+		}
 	}
+
+    /**
+     * Method to set the elapsed time for a sample.
+     * Retained for backward compatibility with 3rd party add-ons
+     * It is assumed that the method is called at the end of a sample
+     * 
+     * Must not be used in conjunction with sampleStart()/End()
+     * 
+     * @deprecated use sampleStart() and sampleEnd() instead
+     * @param elapsed time in milliseconds
+     */
+    public void setTime(long elapsed){
+		long now = System.currentTimeMillis();
+    	setTimes(now,elapsed);
+    }
 
     public void setMarked(String filename)
     {
@@ -482,6 +538,42 @@ public class SampleResult implements Serializable
 		return startTime;
 	}
 
+    /*
+     * Helper methods
+     * N.B. setStartTime must be called before setEndTime
+     * 
+     * setStartTime is used by HTTPSampleResult to clone
+     * the parent sampler and allow the original start time to be kept
+     */
+    protected final void setStartTime(long start)
+    {
+		startTime = start;
+		if (startTimeStamp){
+			timeStamp = startTime;
+		}
+    }
+
+	private void setEndTime(long end)
+	{
+		endTime = end;
+		if (!startTimeStamp){
+			timeStamp = endTime;
+		}
+		if (startTime == 0){
+			log.error("setEndTime must be called after setStartTime"
+			         , new Throwable("Invalid call sequence"));
+			//TODO should this throw an error?
+		} else {
+			time = endTime - startTime - idleTime;
+		}
+	}
+	
+	private void setTimes(long start, long end)
+	{
+		setStartTime(start);
+		setEndTime(end);
+	}
+
     /**
      * Record the start time of a sample
      *
@@ -489,12 +581,10 @@ public class SampleResult implements Serializable
     public void sampleStart()
     {
     	if (startTime == 0){
-			startTime = System.currentTimeMillis();
-			if (startTimeStamp){
-				timeStamp = startTime;
-			}
+			setStartTime(System.currentTimeMillis());
     	} else {
-			log.error("sampleStart called twice", new Throwable("Invalid call sequence"));
+			log.error("sampleStart called twice"
+			         , new Throwable("Invalid call sequence"));
     	}
     }
     
@@ -505,14 +595,10 @@ public class SampleResult implements Serializable
     public void sampleEnd()
     {
     	if (endTime == 0){
-			endTime = System.currentTimeMillis();
-			time = endTime - startTime - idleTime;
-			if (!startTimeStamp){
-				timeStamp = endTime;
-			}
-
+			setEndTime(System.currentTimeMillis());
     	} else {
-    		log.error("sampleEnd called twice", new Throwable("Invalid call sequence"));
+    		log.error("sampleEnd called twice"
+    		         , new Throwable("Invalid call sequence"));
     	}
     }
 
@@ -558,6 +644,7 @@ public class SampleResult implements Serializable
     		res.sampleStart();
     		Thread.sleep(100);
 			res.sampleEnd();
+			assertTrue(res.getTime() >= 100);
     	}
 
 		public void testPause() throws Exception
@@ -574,8 +661,8 @@ public class SampleResult implements Serializable
 			res.sampleResume();
 			Thread.sleep(100);
 			res.sampleEnd();
-			assertTrue(res.time  >= 200);
-			assertFalse(res.time >= 250); // we hope!
+			assertTrue(res.getTime()  >= 200);
+			assertFalse(res.getTime() >= 290); // we hope!
 		}
 
 		private static Formatter fmt=new RawFormatter();
