@@ -24,6 +24,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.Converter;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 import com.thoughtworks.xstream.alias.ClassMapper;
@@ -207,7 +208,8 @@ public class SampleResultConverter extends AbstractCollectionConverter
       if (save.saveTimestamp())
             writer.addAttribute("ts", Long.toString(res.getTimeStamp()));
       if (save.saveSuccess())
-            writer.addAttribute("s", Boolean.toString(res.isSuccessful()));
+            writer.addAttribute("s", //JDK1.4 Boolean.toString(res.isSuccessful()));
+            		JOrphanUtils.booleanToString(res.isSuccessful()));
       if (save.saveLabel())
             writer.addAttribute("lb", ConversionHelp.encode(res
                   .getSampleLabel()));
