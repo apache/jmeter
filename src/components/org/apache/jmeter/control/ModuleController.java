@@ -218,10 +218,10 @@ public class ModuleController
 
     private static void cloneChildren(JMeterTreeNode to, JMeterTreeNode from)
     {
-        Enumeration enum = from.children();
-        while (enum.hasMoreElements())
+        Enumeration enumr = from.children();
+        while (enumr.hasMoreElements())
         {
-            JMeterTreeNode child = (JMeterTreeNode) enum.nextElement();
+            JMeterTreeNode child = (JMeterTreeNode) enumr.nextElement();
             JMeterTreeNode childClone = (JMeterTreeNode) child.clone();
             childClone.setUserObject(
                 ((TestElement) child.getUserObject()).clone());

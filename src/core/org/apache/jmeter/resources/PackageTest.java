@@ -124,13 +124,13 @@ public class PackageTest extends TestCase
 		else if (checkUnexpected)
 		{
 			// Check all the keys are in the default props file
-			Enumeration enum = getRAS(res).getKeys();
-			while(enum.hasMoreElements())
+			Enumeration enumr = getRAS(res).getKeys();
+			while(enumr.hasMoreElements())
 			{
 				String key = null;
 				try
 				{
-				    key = (String)enum.nextElement();
+				    key = (String)enumr.nextElement();
 			        defaultPRB.getString(key);
 				}
 				catch (MissingResourceException e)
