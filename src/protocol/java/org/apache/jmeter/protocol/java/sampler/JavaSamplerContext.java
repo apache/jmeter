@@ -54,13 +54,15 @@
  */
 package org.apache.jmeter.protocol.java.sampler;
 
+import java.lang.Long; // Import needed for some versions of JavaDoc to
+                       // properly handle @see tag below.
+
 import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-
 
 /**
  * JavaSamplerContext is used to provide context information to a
@@ -238,7 +240,7 @@ public class JavaSamplerContext {
 	 * @throws NumberFormatException if the parameter is not
 	 *                                specified or is not a long
 	 * 
-	 * @see java.lang.Long#decode(java.lang.String)
+	 * @see Long#decode(String)
 	 */
 	public long getLongParameter (String name) throws NumberFormatException {
 		if (params == null || !params.containsKey(name)) {
@@ -265,7 +267,7 @@ public class JavaSamplerContext {
 	 *                       default value if the parameter was
 	 *                       not specified
 	 * 
-	 * @see java.lang.Long#decode(java.lang.String)
+	 * @see Long#decode(String)
 	 */
 	public long getLongParameter (String name, long defaultValue) {
 		if (params == null || !params.containsKey(name)) {

@@ -288,20 +288,20 @@ public class JsseSSLManager extends SSLManager
             log.info("Get accepted Issuers");
             return certs;
         }
-        /**
-         * @see javax.net.ssl.X509TrustManager#checkClientTrusted(java.security.cert.X509Certificate, java.lang.String)
+        /* (non-Javadoc)
+         * @see X509TrustManager#checkClientTrusted(X509Certificate[], String)
          */
         public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException
         {}
 
-        /**
-         * @see javax.net.ssl.X509TrustManager#checkServerTrusted(java.security.cert.X509Certificate, java.lang.String)
+        /* (non-Javadoc)
+         * @see X509TrustManager#checkServerTrusted(X509Certificate[], String)
          */
         public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException
         {}
 
         /* (non-Javadoc)
-         * @see com.sun.net.ssl.X509TrustManager#isClientTrusted(java.security.cert.X509Certificate[])
+         * @see com.sun.net.ssl.X509TrustManager#isClientTrusted(X509Certificate[])
          */
         public boolean isClientTrusted(X509Certificate[] arg0)
         {
@@ -310,7 +310,7 @@ public class JsseSSLManager extends SSLManager
         }
 
         /* (non-Javadoc)
-         * @see com.sun.net.ssl.X509TrustManager#isServerTrusted(java.security.cert.X509Certificate[])
+         * @see com.sun.net.ssl.X509TrustManager#isServerTrusted(X509Certificate[])
          */
         public boolean isServerTrusted(X509Certificate[] arg0)
         {
