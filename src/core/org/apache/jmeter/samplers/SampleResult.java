@@ -55,15 +55,22 @@
 package org.apache.jmeter.samplers;
 
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import junit.framework.TestCase;
+
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.jmeter.assertions.AssertionResult;
-//import org.apache.jorphan.logging.LoggingManager;
-//import org.apache.log.Logger;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.LogTarget;
+import org.apache.log.Logger;
+import org.apache.log.format.Formatter;
+import org.apache.log.format.RawFormatter;
+import org.apache.log.output.io.WriterTarget;
 
 /**
  * This is a nice packaging for the various information returned from taking a
@@ -102,7 +109,11 @@ public class SampleResult implements Serializable
     private String responseHeaders=""; // Never return null
     private String contentType;
     private String requestHeaders="";
-    private long timeStamp = 0;
+    private long timeStamp = 0;// currently the end time stamp
+    private long startTime = 0;
+    private long endTime = 0;
+    private long idleTime = 0;// Allow for non-sample time
+    private long pauseTime = 0;// Start of pause (if any)
     private List assertionResults;
     private List subResults;
     private String dataType;
@@ -115,7 +126,7 @@ public class SampleResult implements Serializable
 
     private final static String TOTAL_TIME = "totalTime";
 
-    //transient private static Logger log = LoggingManager.getLoggerForClass();
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     public void setMarked(String filename)
     {
@@ -431,4 +442,115 @@ public class SampleResult implements Serializable
         contentType = string;
     }
 
+    /**
+     * Record the start time of a sample
+     *
+     */
+    public void sampleStart()
+    {
+    	if (startTime == 0){
+			startTime = System.currentTimeMillis();
+    	} else {
+			log.error("sampleStart called twice", new Throwable("Invalid call sequence"));
+    	}
+    }
+    
+	/**
+	 * Record the end time of a sample and calculate the elapsed time
+	 *
+	 */
+    public void sampleEnd()
+    {
+    	if (endTime == 0){
+			endTime = System.currentTimeMillis();
+			time = endTime - startTime - idleTime;
+    	} else {
+    		log.error("sampleEnd called twice", new Throwable("Invalid call sequence"));
+    	}
+    }
+
+    /**
+     * Pause a sample
+     *
+     */
+	public void samplePause()
+	{
+		if (pauseTime != 0) {
+			log.error("samplePause called twice",new Throwable("Invalid call sequence"));
+		} 
+		pauseTime = System.currentTimeMillis();
+	}
+	
+	/**
+	 * Resume a sample
+	 *
+	 */
+	public void sampleResume()
+	{
+		if (pauseTime == 0) {
+			log.error("sampleResume without samplePause",new Throwable("Invalid call sequence"));
+		}
+		idleTime += System.currentTimeMillis() - pauseTime;
+		pauseTime=0;
+	}
+	
+////////////////////////////// Start of Test Code ///////////////////////////
+
+    public static class Test extends TestCase
+    {
+    	public Test(String name)
+    	{
+    		super(name);
+    	}
+    	
+    	public void testElapsed() throws Exception
+    	{
+    		SampleResult res = new SampleResult();
+
+    		// Check sample increments OK
+    		res.sampleStart();
+    		Thread.sleep(100);
+			res.sampleEnd();
+    	}
+
+		public void testPause() throws Exception
+		{
+			SampleResult res = new SampleResult();
+			// Check sample increments OK
+			res.sampleStart();
+			Thread.sleep(100);
+			res.samplePause();
+
+			Thread.sleep(200);
+			
+			// Re-increment
+			res.sampleResume();
+			Thread.sleep(100);
+			res.sampleEnd();
+			assertTrue(res.time  >= 200);
+			assertFalse(res.time >= 210); // we hope!
+		}
+
+		private static Formatter fmt=new RawFormatter();
+        private StringWriter wr = null;
+        
+        public void divertLog()
+        {
+			wr=new StringWriter(1000);
+			LogTarget [] lt = {new WriterTarget(wr,fmt)};
+			log.setLogTargets(lt);
+        }
+        
+		public void testPause2() throws Exception
+		{
+			divertLog();
+			SampleResult res = new SampleResult();
+			res.sampleStart();
+			res.samplePause();
+			assertTrue(wr.toString().length()==0);
+			res.samplePause();
+			assertFalse(wr.toString().length()==0);
+		}
+        // TODO some more invalid sequence tests needed
+    }
 }
