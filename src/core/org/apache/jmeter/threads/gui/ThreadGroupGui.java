@@ -61,10 +61,13 @@ import java.util.Collection;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.control.LoopController;
@@ -78,6 +81,7 @@ import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -106,7 +110,12 @@ public class ThreadGroupGui
     private JDateField start;
     private JDateField end;
     private JCheckBox scheduler;
-
+    
+    // Sampler error action buttons
+	private JRadioButton continueBox;
+	private JRadioButton stopThrdBox;
+	private JRadioButton stopTestBox;
+	
     public ThreadGroupGui()
     {
         super();
@@ -150,6 +159,23 @@ public class ThreadGroupGui
                 ((Date) end.getDate()).getTime()));
         tg.setProperty(
             new BooleanProperty(ThreadGroup.SCHEDULER, scheduler.isSelected()));
+        tg.setProperty(
+            new StringProperty(
+                ThreadGroup.ON_SAMPLE_ERROR,onSampleError()));
+    }
+    
+    private void setSampleErrorBoxes(ThreadGroup te){
+ 		stopTestBox.setSelected(te.getOnErrorStopTest());
+		stopThrdBox.setSelected(te.getOnErrorStopThread());
+   		continueBox.setSelected(!te.getOnErrorStopThread() && !te.getOnErrorStopTest());
+    }
+    
+    private String onSampleError(){
+    	if (stopTestBox.isSelected()) return ThreadGroup.ON_SAMPLE_ERROR_STOPTEST;
+		if (stopThrdBox.isSelected()) return ThreadGroup.ON_SAMPLE_ERROR_STOPTHREAD;
+
+    	// Defaults to continue
+    	return ThreadGroup.ON_SAMPLE_ERROR_CONTINUE;
     }
 
     public void configure(TestElement tg)
@@ -174,6 +200,8 @@ public class ThreadGroupGui
 
         start.setDate(new Date(tg.getPropertyAsLong(ThreadGroup.START_TIME)));
         end.setDate(new Date(tg.getPropertyAsLong(ThreadGroup.END_TIME)));
+        
+        setSampleErrorBoxes((ThreadGroup) tg);
     }
 
     public void itemStateChanged(ItemEvent ie)
@@ -258,13 +286,46 @@ public class ThreadGroupGui
         return JMeterUtils.getResString("threadgroup");
     }
 
+    private JPanel createOnErrorPanel()
+    {
+        JPanel panel = new JPanel();
+        panel.setBorder(
+            BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("sampler_on_error_action")));
+
+        ButtonGroup group = new ButtonGroup();
+
+        continueBox =
+            new JRadioButton(JMeterUtils.getResString("sampler_on_error_continue"));
+        group.add(continueBox);
+        continueBox.setSelected(true);
+        panel.add(continueBox);
+
+        stopThrdBox =
+            new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_thread"));
+        group.add(stopThrdBox);
+        panel.add(stopThrdBox);
+
+        stopTestBox =
+            new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test"));
+        group.add(stopTestBox);
+        panel.add(stopTestBox);
+
+        return panel;
+    }
+
+
+
     private void init()
     {
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
-                
-        add(makeTitlePanel(), BorderLayout.NORTH);
-        
+
+        Box box = Box.createVerticalBox();
+        box.add(makeTitlePanel());
+        box.add(createOnErrorPanel());
+        add(box,BorderLayout.NORTH);
+
         //JPanel mainPanel = new JPanel(new BorderLayout());
         
         // THREAD PROPERTIES

@@ -317,7 +317,11 @@ public class StandardJMeterEngine
 
                 scheduleThread(threads[i], group);
                 
+                // Set up variables for stop handling
                 threads[i].setEngine(this);
+				threads[i].setOnErrorStopTest(group.getOnErrorStopTest());
+				threads[i].setOnErrorStopThread(group.getOnErrorStopThread());
+				
                 Thread newThread = new Thread(threads[i]);
                 newThread.setName(threads[i].getThreadName());
                 allThreads.put(threads[i], newThread);
