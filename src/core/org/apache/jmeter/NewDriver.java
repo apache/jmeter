@@ -121,6 +121,10 @@ public final class NewDriver
                     return name.endsWith(".jar");
                 }
             });
+            if (libJars == null){
+            	new Throwable("Could not access "+libDirs[a]).printStackTrace();
+            	continue;
+            }
             for (int i = 0; i < libJars.length; i++)
             {
                 try
