@@ -54,8 +54,11 @@
  */
 package org.apache.jmeter.control;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.Serializable;
 
+import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.FloatProperty;
@@ -71,7 +74,7 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
  */
 public class ThroughputController
 	extends GenericController
-	implements Serializable {
+	implements Serializable,LoopIterationListener {
 
 	public static final int BYNUMBER = 0;
 	public static final int BYPERCENT = 1;
@@ -102,7 +105,7 @@ public class ThroughputController
 	
 	public void initialize() {
 		setExecutions(0);
-		setIteration(0);
+		setIteration(-1);
 		super.initialize();
 	}
 	
@@ -240,7 +243,7 @@ public class ThroughputController
 
 		if (retVal==null)
 		{
-			increaseIteration();
+			//increaseIteration();
 			reInitialize();
 		}
 		return retVal;
@@ -287,6 +290,14 @@ public class ThroughputController
 		iterationLock = new Object();
 	}
 
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+     */
+    public void iterationStart(LoopIterationEvent iterEvent)
+    {
+        increaseIteration();
+    }
 
 }
 

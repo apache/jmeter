@@ -132,6 +132,7 @@ public class GenericController extends AbstractTestElement implements Controller
      */
     public Sampler next()
     {
+        fireIterEvents();
         log.debug("Calling next on: " + this.getClass().getName());
         Sampler returnValue = null;
         TestElement currentElement = null;
@@ -146,7 +147,6 @@ public class GenericController extends AbstractTestElement implements Controller
             }
             else
             {
-                fireIterEvents(currentElement);
                 if (currentElement instanceof Sampler)
                 {
                     returnValue = nextIsASampler((Sampler) currentElement);
@@ -294,7 +294,7 @@ public class GenericController extends AbstractTestElement implements Controller
         iterationListeners.add(lis);
     }
 
-    protected void fireIterEvents(TestElement current)
+    protected void fireIterEvents()
     {
         if (isFirst())
         {

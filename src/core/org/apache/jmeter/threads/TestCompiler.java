@@ -160,7 +160,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
     {
         log.debug("Subtracting node, stack size = " + stack.size());
         TestElement child = (TestElement) stack.getLast();
-        trackIterationListeners(child);
+        trackIterationListeners(stack);
         if (child instanceof Sampler)
         {
             log.debug("Saving configs for sampler: " + child);
@@ -178,20 +178,28 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         }
     }
 
-    private void trackIterationListeners(TestElement child)
+    private void trackIterationListeners(LinkedList stack)
     {
-        if (child instanceof Controller)
-        {
-            Iterator iter = loopIterListeners.iterator();
-            while (iter.hasNext())
-            {
-                ((Controller) child).addIterationListener((LoopIterationListener) iter.next());
-                iter.remove();
-            }
-        }
+        TestElement child = (TestElement) stack.getLast();
         if (child instanceof LoopIterationListener)
         {
-            loopIterListeners.add(child);
+            ListIterator iter = stack.listIterator(stack.size());
+            while (iter.hasPrevious())
+            {
+                TestElement item = (TestElement) iter.previous();
+                if (item == child)
+                {
+                    continue;
+                }
+                else
+                {
+                    if (item instanceof Controller)
+                    {
+                        ((Controller) item).addIterationListener((LoopIterationListener) child);
+                        break;
+                    }
+                }
+            }
         }
     }
 
