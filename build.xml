@@ -900,20 +900,48 @@ some of its classes - at present JMeter can only run from jar files.
     <delete dir="${site.dir}"/>
   </target>
 
-  <target name="docs-api" description="Generate the API documentation.">
+  <target name="docs-api" depends="init-version" description="Generate the API documentation.">
+  	<tstamp>
+  	  <!-- Used to ensure end-year is up to date -->
+      <format property="THISYEAR" pattern="yyyy"/>
+    </tstamp>
     <mkdir dir="${dest.docs.api}"/>
     <javadoc sourcepathref="srcpaths" 
     additionalparam="-breakiterator" 
     destdir="${dest.docs.api}" 
-    Protected="yes" author="yes" version="yes" 
+    protected="yes" author="yes" version="yes" 
        doctitle="Apache JMeter API Specification" 
     windowtitle="Apache JMeter API Specification" 
-    header="&lt;b&gt;Apache JMeter&lt;/b&gt;&lt;br&gt;&lt;font size='-1'&gt;${docversion}&lt;/font&gt;" bottom="Copyright &#xA9; 1998-2003 Apache Software Foundation. All Rights Reserved."
-    packagenames="org.apache.jmeter.*" excludepackagenames="org.apache.jmeter.util.keystore">
+    header="&lt;b&gt;Apache JMeter&lt;/b&gt;&lt;br&gt;&lt;font size='-1'&gt;${docversion}&lt;/font&gt;" bottom="Copyright &#xA9; 1998-${THISYEAR} Apache Software Foundation. All Rights Reserved."
+    packagenames="org.apache.jmeter.*,org.apache.jorphan.*"
+    excludepackagenames="org.apache.jmeter.util.keystore,org.apache.jorphan.timer">
       <classpath refid="classpath"/>
       <link href="http://java.sun.com/products/jdk/1.3/docs/api/"/>
     </javadoc>
   </target>
+
+<!--
+	Run Doccheck: See http://java.sun.com/j2se/javadoc/doccheck/docs/DocCheck.html
+	Download the doclet, and put the jar in lib/opt.
+	Output is in reports/ directory
+-->
+<target name="docs-check">
+    <javadoc sourcepathref="srcpaths"
+    destdir="reports" 
+    docletpath="${lib.opt}/doccheck.jar"
+    packagenames="org.apache.jmeter.*,org.apache.jorphan.*"
+    excludepackagenames="org.apache.jmeter.util.keystore,org.apache.jorphan.timer">
+      <classpath refid="classpath"/>
+      <doclet name="com.sun.tools.doclets.doccheck.DocCheck">
+      	<!-- 
+      		-execDepth: 1=org.* 2=org.apache.* 3+=org.apache.jmeter.*
+      		-evident does not seem to work
+      	 -->
+      	<param name="-execDepth" value="3"/>
+      	<param name="-evident" value="4"/>
+      </doclet>
+    </javadoc>
+</target>
 
   <target name="docs-site" depends="init-docs" if="AnakiaTask.present" description="Generate browsable HTML documentation in web-site format.">
     <taskdef name="anakia" classpathref="anakia.classpath" classname="org.apache.velocity.anakia.AnakiaTask"/>
