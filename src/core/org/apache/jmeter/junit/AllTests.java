@@ -91,6 +91,11 @@ public class AllTests
 		}
 		JMeterUtils.getProperties(args[0]);
 		JMeterUtils.setJMeterHome(new File(System.getProperty("user.dir")).getParent());
+		if (System.getProperty("log4j.configuration") == null)
+		{
+			File conf = new File(JMeterUtils.getJMeterHome(), "bin" + File.separator + "log4j.conf");
+			System.setProperty("log4j.configuration", "file:" + conf);
+		}
 		// end : added - 11 July 2001
 		try
 		{

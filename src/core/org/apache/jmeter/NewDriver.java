@@ -140,6 +140,7 @@ public class NewDriver
 			loader.loadClass("org.apache.jmeter.gui.tree.JMeterTreeListener");
 			loader.loadClass("org.apache.jmeter.gui.tree.JMeterTreeModel");
 			loader.loadClass("org.apache.jmeter.gui.util.ComponentUtil");
+			loader.loadClass("org.apache.jmeter.gui.util.MenuFactory");
 			loader.loadClass("org.apache.jmeter.util.JMeterUtils");
 			loader.loadClass("javax.xml.parsers.SAXParserFactory");
 			loader.loadClass("org.apache.xerces.jaxp.SAXParserFactoryImpl");
