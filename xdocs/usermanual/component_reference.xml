@@ -239,7 +239,10 @@ provided.</p></description>
 
 <description><p>This sampler lets you send a SOAP request to a webservice.  It can also be
 used to send XML-RPC over HTTP.  It creates an HTTP POST request, with the specified XML as the
-POST content.</p>
+POST content. To change the "Content-type", use the HeaderManager. The sampler will pick up any
+required headers from the HeaderManager. The primary difference between the soap sampler and
+webservice sampler, is the soap sampler uses raw post and does not require conformance to
+XML.</p>
 </description>
 
 <properties>
@@ -342,7 +345,12 @@ POST content.</p>
  handling, since Apache SOAP currently does not provide support for it. Both IBM
  and SUN provide WSDL drivers. There are 3 options for the post data: text area,
  external file, or directory. If you want the sampler to randomly select a message,
- use the directory. Otherwise, use the text area or a file.</p>
+ use the directory. Otherwise, use the text area or a file. The if either the
+ file or path are set, it will not use the message in the text area. If you need
+ to test a soap service that uses different encoding, use the file or path. If you
+ paste the message in to text area, it will not retain the encoding and will result
+ in errors. Save your message to a file with the proper encoding, and the sampler
+ will read it as java.io.FileInputStream.</p>
  <p>The sampler requires mail.jar and activation.jar. This is because Apache SOAP
  requires the libs. Because mail.jar and activation.jar are distributed by Sun,
  you have to download it separately.</p>
