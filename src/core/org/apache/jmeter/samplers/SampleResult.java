@@ -41,7 +41,6 @@ import org.apache.log.output.io.WriterTarget;
  * This is a nice packaging for the various information returned from taking a
  * sample of an entry.
  *
- * @author     mstover?
  * @version    $Revision$ $Date$
  */
 public class SampleResult implements Serializable
@@ -628,7 +627,7 @@ public class SampleResult implements Serializable
 	/**
 	 * If the sampler is a monitor, method will
 	 * return true.
-	 * @return
+	 * @return true if the sampler is a monitor
 	 */
 	public boolean isMonitor(){
 		return isMonitor;
