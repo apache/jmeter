@@ -63,12 +63,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import junit.framework.TestCase;
-
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.functions.InvalidVariableException;
-import org.apache.jmeter.functions.util.ArgumentDecoder;
-import org.apache.jmeter.functions.util.ArgumentEncoder;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
@@ -294,13 +290,11 @@ public class CompoundVariable implements Function
 		{
 			Object replacement = functions.get(functionName);
 			params = extractParams(functionStr);
-			decodedParams = ArgumentDecoder.decode(params);
 
 			try 
 			{	
 				returnFunction = (Function) ((Class) replacement).newInstance();
-				
-				Collection paramList = parseParams(decodedParams);
+				Collection paramList = parseParams(params);
 				returnFunction.setParameters(paramList);
 			} 
 			catch (Exception e) 
@@ -425,7 +419,11 @@ public class CompoundVariable implements Function
 				
 				while ( subMatch != -1 ) 
 				{
-					previousMatch += subMatch + 1;
+					if ( previousMatch == -1 )
+						previousMatch = openIndex + subMatch + 1;
+					else
+						previousMatch += subMatch + 1;
+
 					subSearch = searchString.substring( previousMatch+1, searchString.length() );
 					subMatch = findMatching( openStr, closeStr, subSearch );
 				}
