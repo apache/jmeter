@@ -95,6 +95,7 @@ public class SampleResult implements Serializable
 	private boolean success;
 	private boolean mark = false;
 	private Set files = new HashSet();
+    private String dataEncoding;
 	
 
 	Map map;
@@ -332,4 +333,29 @@ public class SampleResult implements Serializable
 	{
 		return getSampleLabel();
 	}
+    /**
+     * Returns the dataEncoding.
+     * @return String
+     */
+    public String getDataEncoding()
+    {
+        if(dataEncoding != null)
+        {
+            return dataEncoding;
+        }
+        else
+        {
+            return "8859-1";
+        }
+    }
+
+    /**
+     * Sets the dataEncoding.
+     * @param dataEncoding The dataEncoding to set
+     */
+    public void setDataEncoding(String dataEncoding)
+    {
+        this.dataEncoding = dataEncoding;
+    }
+
 }

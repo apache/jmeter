@@ -1,9 +1,12 @@
 package org.apache.jmeter.testelement;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log.Hierarchy;
@@ -247,6 +250,25 @@ public abstract class AbstractTestElement implements TestElement,Serializable
             return bound.toString();
         }
     }
+    
+    private Collection getCollectionValue(Object value)
+    {
+        if(value == null)
+        {
+            return new LinkedList();
+        }
+        if(value instanceof Collection)
+        {
+            return (Collection)value;
+        }
+        if(value instanceof Object[])
+        {
+            return Arrays.asList((Object[])value);
+        }
+        List newList = new LinkedList();
+        newList.add(value);
+        return newList;
+    }
 
     private int getIntValue(Object bound)
     {
@@ -315,6 +337,11 @@ public abstract class AbstractTestElement implements TestElement,Serializable
     public String getPropertyAsString(String key)
     {
         return getStringValue(getProperty(key));
+    }
+    
+    public Collection getPropertyAsCollection(String key)
+    {
+        return getCollectionValue(getProperty(key));
     }
 
     /****************************************
