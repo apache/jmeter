@@ -125,11 +125,15 @@
   </path>
   
   <!-- Anakia classpath -->
+  <!--
+  N.B. On some OSes - e.g. VMS - multiple "." are converted to other characters
+  So replace the version part with "*" to match any version.
+  -->
   <path id="anakia.classpath">
     <fileset dir="${lib.dir}" includes="velocity*.jar"/>
-    <fileset dir="." includes="${jdom.jar}"/>
-    <fileset dir="." includes="${commons-collections.jar}"/>
-    <fileset dir="." includes="${logkit.jar}"/>
+    <fileset dir="${lib.dir}" includes="jdom-*.jar"/>
+    <fileset dir="${lib.dir}" includes="commons-collections*.jar"/>
+    <fileset dir="${lib.dir}" includes="logkit-*.jar"/>
   </path>
   
 
