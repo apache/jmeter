@@ -30,11 +30,12 @@
     To build all the docs
       ant docs-all
 
-    To create tar and tgz of the web-site documentation
-      ant pack-site
+    To build all and package up the files for distribution
+      ant distribution [ -Djmeter.version=vvvv ]
+
+  	To create tar and tgz of the web-site documentation (docs and api)
+      ant site [ -Djmeter.version=vvvv ]
       
-    To package up the existing build files for distribution
-      ant pack-dist [-Dversion =vvvv]
       
     For more info:
       ant -projecthelp
@@ -653,7 +654,8 @@
   <target name="compile" depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-htmlparser,compile-monitor"
   description="Compile everything."/>
 
-  <target name="package" depends="compile, package-only"/>
+  <target name="package" depends="compile, package-only"
+     description="Compile everything and create the jars"/>
   
 <!--
 N.B. Eclipse (and perhaps other Java IDEs) copies all files to the build directory, unless
@@ -757,8 +759,7 @@ some of its classes - at present JMeter can only run from jar files.
   </target>
 
   <target name="all" depends="clean,install" 
-    description="Default: build from source and install. Does not create docs."
-  />
+    description="Default: build from source. Does not create docs."/>
 
   <target name="install-examples" depends="compile-examples" description="Build and installs the example components.">
     <jar jarfile="${dest.jar}/ApacheJMeter_examples.jar">
@@ -832,58 +833,88 @@ some of its classes - at present JMeter can only run from jar files.
     <include name="eclipse.classpath*"/>
   </patternset>
   
-  <target name="distribution" depends="assume-libs-present,clean,install,docs-all,test" 
-  		description="Build JMeter for end-user distribution">
-  	<property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
-  	<property name="pack.name" value="${dist.name}"/>
-  	<patternset id="dist_bin_files">
+  	<!-- Files to be included in full download -->
+	<patternset id="dist_bin_files">
   		<patternset refid="dist.binaries"/>
   		<patternset refid="external.jars"/>
-  		<include name="docs/**"/>
   		<include name="${dest.printable_docs}/**"/>
   		<exclude name="docs/api/**"/>
   	</patternset>
-  	<patternset id="dist_src_files">
-  		<patternset refid="external.jars"/>
+
+	<!-- Files to be included in source download -->
+	<patternset id="dist_src_files">
+  		<!--patternset refid="external.jars"/-->
   		<patternset refid="dist.sources"/>
   	</patternset>
+
+	<!-- Invoke with -Djmeter.version=m.n -->
+	<target name="site" 
+		depends="init-version,docs-site,pack-site"
+		description="Build JMeter site documentation to go with distribution"/>
+
+	<!-- Invoke with -Djmeter.version=m.n -->
+	<target name="distribution" 
+		depends="assume-libs-present,clean,install,docs-all,test,_distribution"
+		description="Build JMeter for end-user distribution (see: site)"/>
+
+	<!-- Internal target -->
+	<target name="_distribution">
+  	<property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
+  	<property name="pack.name" value="${dist.name}"/>
+	<echo>Creating JMeter distribution ${dist.name}</echo>
     <mkdir dir="${dist.dir}"/>
-    <tar destfile="${dist.dir}/${pack.name}_bin.tar" longfile="gnu">
+	
+	<!-- Runtime archives -->
+    <tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
       <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
         <patternset refid="dist_bin_files"/>
       </tarfileset>
       <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </tar>
-    <gzip zipfile="${dist.dir}/${pack.name}_bin.tgz" src="${dist.dir}/${pack.name}_bin.tar" />
-    <zip  zipfile="${dist.dir}/${pack.name}_bin.zip">
+
+	<gzip zipfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
+	<!-- no longer needed -->
+	<delete file="${dist.dir}/${pack.name}.tar"/>
+	<antcall target="_md5">
+		<param name="path" value="${dist.dir}/${dist.name}.tgz"/>
+	</antcall>
+
+		
+    <zip  zipfile="${dist.dir}/${pack.name}.zip">
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist_bin_files"/>
       </zipfileset>
     </zip>
-    
+	<antcall target="_md5">
+		<param name="path" value="${dist.dir}/${dist.name}.zip"/>
+	</antcall>
+
+	<!-- Source archives -->
     <tar destfile="${dist.dir}/${pack.name}_src.tar" longfile="gnu">
       <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
         <patternset refid="dist_src_files"/>
       </tarfileset>
       <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </tar>
-    <gzip zipfile="${dist.dir}/${pack.name}_src.tgz" src="${dist.dir}/${pack.name}_src.tar" />
-    <zip  zipfile="${dist.dir}/${pack.name}_src.zip">
+
+	<gzip zipfile="${dist.dir}/${pack.name}_src.tgz" src="${dist.dir}/${pack.name}_src.tar" />
+	<!-- no longer needed -->
+	<delete file="${dist.dir}/${pack.name}_src.tar"/>
+	<antcall target="_md5">
+		<param name="path" value="${dist.dir}/${dist.name}_src.tgz"/>
+	</antcall>
+
+	<zip  zipfile="${dist.dir}/${pack.name}_src.zip">
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist_src_files"/>
       </zipfileset>
     </zip>
-  </target>
+	<antcall target="_md5">
+		<param name="path" value="${dist.dir}/${dist.name}_src.zip"/>
+	</antcall>
 
-  <!-- N.B. this target is the one currently used by Gump -->
-  <target name="dist" depends="assume-libs-present,clean,install,docs-all,test" description="Rebuild all and create the distribution packages.">
-    <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
-    <antcall target="_pack-binaries"/>
-    <antcall target="_pack-libraries"/>
-    <antcall target="_pack-javadoc"/>
-    <antcall target="_pack-source"/>
-  </target>
-  
+</target>
+
   <!--
   Gump targets.
   There are separate build, test and documentation projects for the jmeter module.
@@ -930,13 +961,15 @@ some of its classes - at present JMeter can only run from jar files.
   date.projectfile    = ${date.projectfile}
   version.projectfile = ${version.projectfile}
   </echo>
+
   </target>
-  <target name="dist-src" depends="init-version" description="Create the source distribution packages.">
+
+  <target name="pack-src" depends="init-version">
     <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
     <antcall target="_pack-source"/>
   </target>
 
-  <target name="pack-dist" depends="init-version" description="Create the distribution packages with no rebuild.">
+  <target name="pack-dist" depends="init-version">
     <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
     <antcall target="_pack-binaries"/>
     <antcall target="_pack-libraries"/>
@@ -1008,7 +1041,7 @@ some of its classes - at present JMeter can only run from jar files.
 
 
    <!-- When creating the tars for the web-site, no version prefix directory is added -->
-   <target name="pack-site"  depends="init-version" description="Create tarballs for the web-site from existing docs.">
+   <target name="pack-site"  depends="init-version">
      <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
      <antcall target="_pack_site_api"/>
      <antcall target="_pack_site_doc"/>
@@ -1034,6 +1067,21 @@ some of its classes - at present JMeter can only run from jar files.
      <!-- no point in creating Zip version as well -->
     </target>
     
+	<!-- 
+	    Utility target to create MD5 checksums in standard format (with *filename) 
+	    Usage:
+		<antcall target="_md5">
+			<param name="path" value="${dist.dir}/${dist.name}_src.tar"/>
+		</antcall>
+
+	-->
+    <target name="_md5" unless="md5.skip">
+    	<echo message="Creating MD5 for ${path}"/>
+		<basename property="_base" file="${path}"/>
+   	    <checksum file="${path}" property="md5"/>
+   	    <echo message="${md5} *${_base}" file="${path}.md5"/>
+    </target>
+	
   <target name="clean" description="Clean up to force a build from source.">
     <delete file="${dest.jar.jmeter}/ApacheJMeter.jar"/>
     <delete quiet="true" file="${lib.dir}/jorphan.jar"/>
@@ -1116,7 +1164,8 @@ some of its classes - at present JMeter can only run from jar files.
     </copy>
   </target>
 
-  <target name="docs-all" depends="docs-site,docs-printable,docs-api" description="Generate documentation."/>
+  <target name="docs-all" depends="docs-site,docs-printable,docs-api" 
+  	description="Generate documentation. (site, printable, api)"/>
 
   <target name="test" depends="install,_test" description="Run tests"/>
   
