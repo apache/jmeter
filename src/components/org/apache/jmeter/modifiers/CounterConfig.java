@@ -51,7 +51,7 @@ public class CounterConfig
 		else
 		{		
 			String value = variables.get(getVarName());
-			if(value == null || value.equals(""))
+			if(value == null)
 			{
 				variables.put(getVarName(),Integer.toString(start));
                 value = variables.get(getVarName());
