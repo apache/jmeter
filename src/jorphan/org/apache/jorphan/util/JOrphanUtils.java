@@ -150,7 +150,7 @@ public final class JOrphanUtils
 	}
 	
 	/**
-	 * Version of Boolean.valueOf() for JDK 1.3
+	 * Version of Boolean.valueOf(boolean) for JDK 1.3
 	 * 
 	 * @param value boolean to convert
 	 * @return Boolean.TRUE or Boolean.FALSE
