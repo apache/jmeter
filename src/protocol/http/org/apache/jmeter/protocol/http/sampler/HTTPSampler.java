@@ -1007,8 +1007,9 @@ public class HTTPSampler extends AbstractSampler
         }
 
         URL newUrl= new URL(loc);
-        setMethod(GET); // According to RFC 2068, this is an error, but it's
-                        // what all browsers seem to do.
+        setMethod(GET); /* According to RFC 2068, this is an error, but it's
+        		           what all browsers seem to do.
+        		        */
         setProtocol(newUrl.getProtocol());
         setDomain(newUrl.getHost());
         setPort(newUrl.getPort());
@@ -1029,7 +1030,7 @@ public class HTTPSampler extends AbstractSampler
     protected long connect() throws IOException
     {
         // Repeatedly try to connect:
-        for (int retry= 1; retry<=10; retry++)
+        for (int retry= 1; retry <= 10; retry++)
         {
             try
             {
@@ -1067,7 +1068,6 @@ public class HTTPSampler extends AbstractSampler
      * Samples <code>Entry</code> passed in and stores the result in
      * <code>SampleResult</code>.
      *
-     * @param e           <code>Entry</code> to be sampled
      * @param redirects   the level of redirection we're processing (0 means
      *                    original request) -- just used to prevent
      *                    an infinite loop.
@@ -1092,7 +1092,9 @@ public class HTTPSampler extends AbstractSampler
 
             // Sampling proper - establish the connection and read the response:
             t0= connect();
-            if (getMethod().equals(HTTPSampler.POST)) sendPostData(conn);
+            if (getMethod().equals(HTTPSampler.POST)) {
+                sendPostData(conn);
+            }
             byte[] responseData= readResponse(conn);
             long t1= System.currentTimeMillis(); // response read finish time
             // Done with the sampling proper.
@@ -1125,29 +1127,35 @@ public class HTTPSampler extends AbstractSampler
             // Store any cookies received in the cookie manager:
             saveConnectionCookies(conn, url, getCookieManager());
 
-            // Process redirects:
-            if (getFollowRedirects() && 301 <= errorLevel && errorLevel <= 303)
+            // Process redirects OR download images:
+            if (301 <= errorLevel && errorLevel <= 303)
             {
                 if (redirects >= MAX_REDIRECTS)
                 {
                     throw new IOException("Maximum number of redirects exceeded");
                 }
 
-                redirectUrl(conn, url);
-                SampleResult redirect= res;
-                res= sample(redirects + 1);
-                res.addSubResult(redirect);
-                res.setTime(res.getTime()+redirect.getTime());
+                if (getFollowRedirects())
+                {
+                    redirectUrl(conn, url);
+                    SampleResult redirect= res;
+                    res= sample(redirects + 1);
+                    res.addSubResult(redirect);
+                    res.setTime(res.getTime() + redirect.getTime());
+                }
+            }
+            else
+            {
+                if (isImageParser())
+                {
+                    if (imageSampler == null)
+                    {
+                        imageSampler= new HTTPSamplerFull();
+                    }
+                    res= imageSampler.downloadEmbeddedResources(res, this);
+                }
             }
             log.debug("End : sample, redirects=" + redirects);
-            if (isImageParser())
-            {
-                if (imageSampler == null)
-                {
-                    imageSampler= new HTTPSamplerFull();
-                }
-                res= imageSampler.downloadEmbeddedResources(res, this);
-            }
             return res;
         }
         catch (Exception ex)
