@@ -10,22 +10,18 @@
 <b>Changes are chronologically ordered from top (most recent) to bottom
 (least recent)</b> 
 </p>
-<p>
-<b>Apache JMeter 1.5.1</b>
-</p>
-<p>
-<b>Contributors</b> - If I missed any, please let me know (<a href="mail:mstover1@rochester.rr.com">
-Michael Stover</a>):
-<ul>
-  <li>Brendan Burns</li>
-  <li>Michael Stover</li>
-  <li>Jeff Pajor</li>
-  <li>Tom Wiedenhoeft</li>
-  <li>Matthew Daniel</li>
-  <li>Steve Gentle</li>
-  <li>Tom Schneider</li>
-</ul>
+
 <b>Changes:</b>
+<h3>Version 1.6 Alpha</h3>
+<ul>
+<li>New UI</li>
+<li>Separation of GUI and Logic code</li>
+<li>New Plug-in framework for new modules</li>
+<li>Enhanced performance</li>
+<li>Layering of test logic for greater flexibility</li>
+<li>Added support for saving of test elements</li>
+<li>Added support for distributed testing using a single client</li>
+</ul>
 <h3>Version 1.5.1</h3>
 <ul>
 <li>Fixed bug that caused cookies not to be read if header name case not as expected.</li>
@@ -36,7 +32,7 @@ Michael Stover</a>):
 <li>Started work on new framework.  New files in cvs, but do not effect program yet.</li>
 <li>Fixed bug that prevent HTTPJMeterThread from delaying according to chosen timer.</li>
 </ul>
-</p>
+
 <p>
 <h3>Version 1.5</h3>
 <ul>
