@@ -108,6 +108,11 @@ public class RandomController
 			resetCurrent();
 		}
 	}
+	
+	/**
+	 * @see org.apache.jmeter.engine.event.IterationListener#iteration(org.apache.jmeter.engine.event.IterationEvent)
+	 */
+	public void iteration(IterationEvent event) {}
 
 	/**
 	 * @see org.apache.jmeter.testelement.ThreadListener#setJMeterVariables(org.apache.jmeter.threads.JMeterVariables)

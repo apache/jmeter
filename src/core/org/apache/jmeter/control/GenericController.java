@@ -297,7 +297,7 @@ public class GenericController extends AbstractTestElement implements Controller
 	 ***************************************/
 	public Sampler next()
 	{
-        fireIterEventAsNeeded();     
+        fireIterEvents();     
 		TestElement controller = getCurrentController();
 		if(controller == null)
 		{
@@ -330,13 +330,14 @@ public class GenericController extends AbstractTestElement implements Controller
 		}
 	}
 
-    protected void fireIterEventAsNeeded()
+    protected void fireIterEvents()
     {
         if(isNextFirst())
         {
             fireIterationStart();
             first = false;
-        }   
+        }  
+        fireIteration();
     }
     
     protected int getIterCount()
@@ -352,6 +353,15 @@ public class GenericController extends AbstractTestElement implements Controller
             IterationListener item = (IterationListener)iter.next();
             item.iterationStart(new IterationEvent(this,getIterCount()));            
         }
+    }
+    
+    protected void fireIteration() {
+    	Iterator iter = iterationListeners.iterator();
+    	while (iter.hasNext())
+    	{
+    		IterationListener item = (IterationListener)iter.next();
+    		item.iteration(new IterationEvent(this,getIterCount()));
+    	}
     }
 
 	public static class Test extends junit.framework.TestCase
