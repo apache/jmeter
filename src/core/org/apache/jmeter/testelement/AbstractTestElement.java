@@ -251,10 +251,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable
             || (prop instanceof StringProperty
                 && prop.getStringValue().equals("")))
         {
+            log.debug("setting property " + property);
             propMap.put(property.getName(), property);
         }
         else
         {
+            log.debug("merging in property: " + property.getClass());
             prop.mergeIn(property);
         }
     }
@@ -336,11 +338,6 @@ public abstract class AbstractTestElement implements TestElement, Serializable
      */
     public void setRunningVersion(boolean runningVersion)
     {
-        log.debug(
-            "Setting "
-                + this.getClass()
-                + " to running version: "
-                + runningVersion);
         this.runningVersion = runningVersion;
         PropertyIterator iter = propertyIterator();
         while (iter.hasNext())
