@@ -164,12 +164,7 @@ public class MonitorPerformancePanel extends JSplitPane
 		
 		JPanel legend = new JPanel();
 		legend.setLayout(new FlowLayout());
-		JLabel health = new JLabel(LEGEND_HEALTH);
-		health.setFont(plaintext);
-		health.setPreferredSize(lsize);
-		health.setIcon(LEGEND_HEALTH_ICON);
-		legend.add(health);
-		
+
 		JLabel load = new JLabel(LEGEND_LOAD);
 		load.setFont(plaintext);
 		load.setPreferredSize(lsize);
@@ -187,6 +182,13 @@ public class MonitorPerformancePanel extends JSplitPane
 		thd.setPreferredSize(lsize);
 		thd.setIcon(LEGEND_THREAD_ICON);
 		legend.add(thd);
+
+		JLabel health = new JLabel(LEGEND_HEALTH);
+		health.setFont(plaintext);
+		health.setPreferredSize(lsize);
+		health.setIcon(LEGEND_HEALTH_ICON);
+		legend.add(health);
+		
 		return legend;
 	}
 
