@@ -409,8 +409,7 @@ StandardGenerator and TCLogParser.
 </component>
 
 <component name="BeanShell Sampler" index="15.1.9" screenshot="">
-<center><h2>(Beta Code)</h2></center>
-	<description><p>This sampler allows you to write a sampler using the BeanShell scripting language.		
+<description><p>This sampler allows you to write a sampler using the BeanShell scripting language.		
 </p><p>
 		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
 		<br/>
@@ -467,7 +466,7 @@ If a script file is supplied, that will be used, otherwise the script will be us
 <pre>
 if (bsh.args[0].equalsIgnoreCase("StopThread")) {
     log.info("Stop Thread detected!");
-    SampleResult.StopThread(bsh.args[1]);
+    SampleResult.setStopThread(true);
 }
 return "Data from sample with Label "+Label;
 </pre>
@@ -475,19 +474,21 @@ return "Data from sample with Label "+Label;
 
 
 <component name="BSF Sampler" index="15.1.10" screenshot="">
+	<note>This is Alpha code</note>
 	<description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
 		
 		<br></br>
-		Please note that the BSF jar file is not included with JMeter; it needs to be separately downloaded.
+		<b>Please note that the BSF jar file is not included with JMeter; it needs to be separately downloaded.
+		<br></br>
 		For full details, please see the BSF web-site at http://bsf.jakarta.apache.org/.
-		
+		</b>
 		</p>
 	</description>
 <properties>
 	<property name="Name" required="no">Descriptive name for this controller that is shown in the tree.</property>
 	<property name="Parameters" required="no">List of parameters to be passed to the script file or the script.</property>
-	<property name="Script File" required="no">Name of a file to be used as a BeanShell script</property>
-	<property name="Script" required="no">Script to be passed to BeanShell</property>
+	<property name="Script File" required="no">Name of a file to be used as a BSF script</property>
+	<property name="Script" required="no">Script to be passed to the BSF Interpreter</property>
 </properties>
 TBC
 </component>
@@ -1498,7 +1499,27 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 </component>
 
 <component index="15.5.5" name="BeanShell Assertion" screenshot="bsh_assertion.png">
-<description><p>The BeanShell Assertion allows the user to perform assertion checking using a BeanShell script.</p></description>
+<description><p>The BeanShell Assertion allows the user to perform assertion checking using a BeanShell script.
+</p>
+<p>
+<b>Please note that the BeanShell jar file is not included with JMeter;
+it needs to be downloaded separately and placed in the lib directory.
+<br/>
+For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+</p><p>
+Note that a different Interpreter is used for each independent occurence of the assertion
+in each thread in a test script, but the same Interpreter is used for subsequent invocations.
+This means that variables persist across calls to the assertion.
+</p>
+<p>
+All Assertions are called from a single thread - the one that controls the thread Group.
+</p>
+<p>
+If the property "beanshell.assertion.init" is defined, it is passed to the Interpreter
+as the name of a sourced file. This can be used to define common methods and variables.
+There is a sample init file in the bin directory: BeanShellAssertion.bshrc
+</p>
+</description>
 
 <properties>
 <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -1516,7 +1537,8 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 These are strings unless otherwise noted:
 <ul>
 <li>log - the Logger Object. (e.g.) log.warn("Message"[,Throwable])</li>
-	<li>Response - the response Object; read-write</li>
+	<li>SampleResult - the SampleResult Object; read-write</li>
+	<li>Response - alias for SampleResult (deprecated)</li>
 	<li>Failure - boolean; read-write; used to set the Assertion status</li>
 	<li>FailureMessage - String; read-write; used to set the Assertion message</li>
 	<li>ResponseData - the response body (byte [])</li>
@@ -1528,6 +1550,13 @@ These are strings unless otherwise noted:
 	<li>SamplerData - data that was sent to the server</li>
 </ul>
 </p>
+<p>The following methods of the Response object may be useful:
+<ul>
+	<li>setStopThread(boolean)</li>
+	<li>setStopTest(boolean)</li>
+	<li>String getSampleLabel()</li>
+	<li>setSampleLabel(String)</li>
+</ul></p>
 </component>
 
 <component index="15.5.6" name="MD5Hex Assertion">
