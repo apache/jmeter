@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <author email="bburns@apache.org">Brendan Burns, et al.</author>
+    <title>Using JMeter</title>
+  </properties>
+<body>
+<section name="Using JMeter">
+
+<h2>Using JMeter effectively consists of the following activities</h2>:
+<UL>
+	<li><a HREF="#Choosing_a_SamplerController">Choosing a SamplerController</a></li>
+	<li><a HREF="#Creating_Test_Samples">Creating Test Samples</a></li>
+	<li><a HREF="#Choosing_a_delay">Choosing a delay</a></li>
+	<li><a HREF="#Managing_Thread_Groups">Managing Thread Groups</a></li>
+	<li><a HREF="#Choosing_a_Visualizer">Choosing a Visualizer</a></li>
+	<li><a HREF="#Running_the_test script">Running the test script</a></li>
+</UL>
+
+
+<p>
+<a NAME="Choosing_a_SamplerController"></a>
+<H2>Choosing A SamplerController</H2>
+JMeter has two tabs - <b>setup</b> and <b>run</b>.  
+	Within <b>setup</b>, the default SamplerController is initially displayed.  You will find a drop down 
+		select box that allows you to select any SamplerController you wish to use.  When you make this 
+		selection, the appropriate GUI will be displayed.
+</p>
+
+<p>The SamplerController determines the basic kind of sampling you will do.  Choose the &quot;Advanced HTTP tester&quot; for advanced web page sampling, and the &quot;Simple HTTP Tester&quot; for testing single web pages quickly, and choose the &quot;JDBC Base Sampler&quot; to sample your database.
+</p>
+<p>The available SamplerControllers are (Click links for more detailed information):
+<UL>
+	<li><a HREF="simplehttpcontroller.html">Simple HTTP Tester</a></li>
+	<li><a HREF="httpsamplercontroller.html">Advanced HTTP tester</a></li>
+	<li><a href="jdbcsamplercontroller.html">JDBC Base Sampler</a></li>
+</UL>
+</p>
+
+<p>
+<a NAME="Creating_Test_Samples"></a>
+<H2>Creating Test Samples</H2>
+
+A test sample represents an entry to be sampled.  It holds all the information needed about conducting a sample.  For instance,
+an <b>HTTPTestSample</b> might hold information about the <b>URL</b> to be hit, whether <b>POST</b> or <b>GET</b> is to be used, and what argument
+name-value pairs should be passed on.  The Test Sample will present a GUI for the user to enter this information.
+</p>
+<p>
+Creating test samples is dictated by the workings of the SamplerController you chose.  In general, the SamplerController
+will display a list of test samples you've created, and you will be able to create more, and there may be different kinds
+of test samples you can create.  See the link for the SamplerController you are using to find out what test samples are
+available to you and how to use them.
+</p>
+
+<a NAME="Choosing_a_delay"></a>
+<H2>Choosing a delay</H2>
+<p>
+Delay represents the number of milliseconds JMeter pauses between samples in each sampling thread.  There are a number of
+delay modules you can choose from on the <EM>setup</EM> panel, and they should be mostly self-explanatory.
+You may choose a timer for each thread group (actually, you must, or each thread group
+will use the default timer).
+
+</p>
+<p>
+<a NAME="Managing_Thread_Groups"></a>
+<H2>Managing Thread Groups</H2>
+Thread groups are managed in the <EM>run</EM> panel.
+</p>
+<p>
+By default, there is only one thread group to start.  It is called "Group 1".  You may simply use this one group, or you
+can add more groups by typing in the name of the group you wish to add above the list and hitting <code>Enter</code>.  For
+each thread group, you can choose a number of threads from 1 to 20 (this can be changed in jmeter.properties).  There is no limit on the number of thread groups you
+can have, except for the limitations of your machine, and how many threads it can handle.
+</p>
+<p>
+The thread groups you add also become available as choices within your test samples you create.  If you add a thread group (say
+"Group 2"), and then, from the <EM>setup</EM> panel, you create a new test sample, you will notice that both Group 1 and Group 2
+show up in your list of thread groups to choose from.  A particular test sample may be part of one or more thread groups.  This
+allows you to set up two parallel groups of test samples that will execute simultaneously.  The two test groups could, however, share
+a common test sample, such as a one-time login sample.
+</p>
+<p>
+Thread groups are also important to visualizers, since you may choose a different visualizer for each thread group.</p>
+<p><b>Note:</b> if you are not clear on what "threadgroup" is referring to exactly, don't worry - you aren't alone.  JMeter is no less 
+powerful a tool if you only ever use the single default threadgroup.  You may use any number of threads in your default threadgroup
+(by modifying jmeter.properties).  Each thread represents a different "user" hitting your site.  All test samples will be 
+assigned to the single default thread group automatically if you never create an additional thread group.  JMeter 1.6 will 
+hopefull deal with this issue better.
+
+</p>
+<p>
+<a NAME="Choosing_a_Visualizer"></a>
+<H2>Choosing a Visualizer</H2>
+Visualizers are managed in the <EM>run</EM> panel in the section labeled <b>Actions</b>.
+</p>
+<p>
+For each thread group, you may select a different visualizer.  Visualizers show the timing data that JMeter collects during sampling.
+As you select different thread groups, the visualizer display switches to the visualizer you selected for that thread group.  In
+this way, you can keep an eye on all your visualizers while JMeter runs.
+<ul>
+	<li><a href="visualizers.html#file">File Visualizer</a></li>
+	<li><a href="visualizers.html#graph">Graphing Visualizer</a></li>
+	<li><a href="visualizers.html#windowed">Windowed Plotting Visualizer</a></li>
+	<li><a href="visualizers.html#email">E-Mail Notification Visualizer</a></li>
+	<li><a href="visualizers.html#scrolling">Scrolling Bars Visualizer</a></li>
+	<li><a href="visualizers.html#spline">Spline Curve Visualizer</a></li>
+	<li><a href="visualizers.html#text">Text Results Visualizer</a></li>
+</ul>
+
+</p>
+<p>
+<img src="images/jmeter_running.jpg" align="right" />
+<a NAME="Running_the_test script"></a>
+<H2>Running the test script</H2>
+
+Once you have chosen your sampler controller, created all your test samples, selected a delay, added any thread groups, and
+selected your visualizers, you simply choose "start" from the "Run" menu, or hit
+<code>ctrl-s</code>.  To stop, choose "Stop" from the "Run" menu, or hit <code>ctrl-.</code>.  Switch to the <EM>run</EM> panel to watch it run.
+</p>
+</section>
+</body>
+</document>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <author email="bburns@apache.org">Brendan Burns, et al.</author>
+    <title>JDBC SamplerController</title>
+  </properties>
+<body>
+<section name="JDBCSamplerController">
+<img align="right" src="images/jdbc_controller.jpg"/>
+<p>
+JDBCSamplerController is currently the only alternative Sampler that JMeter comes with (actually, there is an FTPSamplerController,
+but JMeter is not configured to make it available in the GUI by default).
+</p>
+<p>
+The GUI for JDBCSamplerController lets you do the following:
+<dl>
+<dt><strong>Enter a username</strong></dt>
+<dd>Enter a username that JMeter should use to connect to the database.</dd>
+<dt><strong>Enter a password</strong></dt>
+<dd>Enter a password that JMeter should use to connect to the database.</dd>
+<dt><strong>Enter connect string</strong></dt>
+<dd>Enter a connect string, or "URL" for JMeter to use to connect to the database.  
+example: jdbc:mysql://domain.com:3306/databasename</dd>
+<dt><strong>Enter driver</strong></dt>
+<dd>Enter a driver class name.  example: org.mm.gjt.mysql.Driver</dd>
+<dt><strong>Enter SQL query</strong></dt>
+<dd>Enter an SQL query string - example: select * from users where username='jsmith'</dd>
+</dl>
+</p>
+<p>
+The JDBCSamplerController will submit your SQL string to the database with as many threads as you selected in the 
+thread group panel.  Currently, this is the extent of the functionality of the JDBCSamplerController.
+</p>
+</section>
+</body>
+</document>
