@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -145,11 +145,11 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 		init();
 		this.setDefaultCloseOperation(this.DO_NOTHING_ON_CLOSE);
 	}
-	
+
 	public MainFrame()
 	{
 	}
-	
+
 
 	/****************************************
 	 * !ToDo (Method description)
@@ -160,7 +160,7 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 	{
 		menuBar.setFileSaveEnabled(enabled);
 	}
-	
+
 	public void showStoppingMessage(String host)
 	{
 		stoppingMessage = new JDialog(this,
@@ -328,7 +328,7 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 		hosts.remove(host);
 		if(hosts.size() == 0)
 		{
-			runningIndicator.setIcon(stoppedIcon);			
+			runningIndicator.setIcon(stoppedIcon);
 		}
 		menuBar.setRunning(false,host);
 		if(stoppingMessage != null)
@@ -425,6 +425,8 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 	{
 		tree = new JTree(this.treeModel);
 		tree.setCellRenderer(getCellRenderer());
+		tree.setRootVisible(false);
+		tree.setShowsRootHandles(true);
 		treeListener.setJTree(tree);
 		tree.addTreeSelectionListener(treeListener);
 		tree.addMouseListener(treeListener);

@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,46 +52,68 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.jmeter.gui.tree;
 
+package org.apache.jmeter.gui;
 
-import javax.swing.tree.*;
+import java.util.*;
+
 import javax.swing.*;
 
-import java.awt.Component;
 
 /**
- * Title:        JMeter
- * Description:
- * Copyright:    Copyright (c) 2000
- * Company:      Apache
- * @author Michael Stover
- * @version 1.0
+ * @author Oliver Rossmueller
  */
+public class GUIFactory {
 
-public class JMeterCellRenderer extends DefaultTreeCellRenderer
-{
+    private static final Map guiMap = new HashMap();
+    private static final Map iconMap = new HashMap();
 
-    public JMeterCellRenderer()
+
+    public static ImageIcon getIcon(Class elementClass)
     {
+        String key = elementClass.getName();
+        ImageIcon icon = (ImageIcon)iconMap.get(key);
+
+        if (icon != null)
+	{
+            return icon;
+        }
+        if (elementClass.getSuperclass() != null)
+	{
+            return getIcon(elementClass.getSuperclass());
+        }
+        return null;
     }
 
 
-    public Component getTreeCellRendererComponent(JTree tree,
-                                                  Object value,
-                                                  boolean sel,
-                                                  boolean expanded,
-                                                  boolean leaf,
-                                                  int row,
-                                                  boolean hasFocus)
+    public static JComponent getGUI(Class elementClass)
     {
-        super.getTreeCellRendererComponent(tree, ((JMeterTreeNode)value).getName(), sel, expanded, leaf, row, hasFocus);
-        this.setEnabled(((JMeterTreeNode)value).isEnabled());
-        ImageIcon ic = ((JMeterTreeNode)value).getIcon();
-        if (ic != null) {
-            setIcon(ic);
+        String key = elementClass.getName();
+        JComponent gui = (JComponent)guiMap.get(key);
+
+        if (gui != null)
+	{
+            return gui;
         }
-        return this;
+        if (elementClass.getSuperclass() != null)
+	{
+            return getGUI(elementClass.getSuperclass());
+        }
+        return null;
+    }
+
+
+    public static void registerIcon(String key, ImageIcon icon)
+    {
+        iconMap.put(key, icon);
+    }
+
+
+    public static void registerGUI(String key, Class guiClass)
+            throws InstantiationException, IllegalAccessException
+    {
+        JMeterGUIComponent gui = (JMeterGUIComponent)guiClass.newInstance();
+        JComponent component = (JComponent)gui;
+        guiMap.put(key, gui);
     }
 }
-

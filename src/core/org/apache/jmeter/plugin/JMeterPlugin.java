@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,46 +52,15 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.jmeter.gui.tree;
 
-
-import javax.swing.tree.*;
-import javax.swing.*;
-
-import java.awt.Component;
+package org.apache.jmeter.plugin;
 
 /**
- * Title:        JMeter
- * Description:
- * Copyright:    Copyright (c) 2000
- * Company:      Apache
- * @author Michael Stover
- * @version 1.0
+ * @author Oliver Rossmueller
  */
+public interface JMeterPlugin {
 
-public class JMeterCellRenderer extends DefaultTreeCellRenderer
-{
+    public String[][] getIconMappings();
 
-    public JMeterCellRenderer()
-    {
-    }
-
-
-    public Component getTreeCellRendererComponent(JTree tree,
-                                                  Object value,
-                                                  boolean sel,
-                                                  boolean expanded,
-                                                  boolean leaf,
-                                                  int row,
-                                                  boolean hasFocus)
-    {
-        super.getTreeCellRendererComponent(tree, ((JMeterTreeNode)value).getName(), sel, expanded, leaf, row, hasFocus);
-        this.setEnabled(((JMeterTreeNode)value).isEnabled());
-        ImageIcon ic = ((JMeterTreeNode)value).getIcon();
-        if (ic != null) {
-            setIcon(ic);
-        }
-        return this;
-    }
+    public String[][] getResourceBundles();
 }
-

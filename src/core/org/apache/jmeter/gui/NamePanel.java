@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -60,9 +60,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentEvent;
+
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.LocaleChangeEvent;
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
  *
@@ -73,11 +78,12 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class NamePanel extends JPanel implements JMeterGUIComponent
 {
-	private JTextField nameField = new JTextField(30);
+    private JTextField nameField = new JTextField(30);
+    private JLabel nameLabel;
+    private JMeterTreeNode node;
 
 
-
-	/****************************************
+        /****************************************
 	 * !ToDo (Constructor description)
 	 ***************************************/
 	public NamePanel()
@@ -161,11 +167,52 @@ public class NamePanel extends JPanel implements JMeterGUIComponent
 		return nameField.getText();
 	}
 
-	private void init()
-	{
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.add(new JLabel(JMeterUtils.getResString("name")));
-		this.add(nameField);
-	}
+    private void init() {
+        this.setLayout(new FlowLayout(FlowLayout.LEFT));
+        nameLabel = new JLabel(JMeterUtils.getResString("name"));
+        nameLabel.setName("name");
 
+        this.add(nameLabel);
+        this.add(nameField);
+        nameLabel.setLabelFor(nameField);
+        nameField.setName("name");
+        nameField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                updateName(nameField.getText());
+            }
+
+
+            public void removeUpdate(DocumentEvent e) {
+                updateName(nameField.getText());
+            }
+
+
+            public void changedUpdate(DocumentEvent e) {
+                // not for text fields
+            }
+        });
+    }
+
+
+    private void updateName(String newValue) {
+        if (getNode() != null) {
+            getNode().nameChanged();
+        }
+    }
+
+
+    public void localeChanged(LocaleChangeEvent event) {
+        nameLabel.setText(JMeterUtils.getResString(nameLabel.getName()));
+    }
+
+    public void setNode(JMeterTreeNode node)
+    {
+        this.node = node;
+    }
+
+
+    protected JMeterTreeNode getNode()
+    {
+        return node;
+    }
 }
