@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.util.Date;
 import java.util.Iterator;
 
 import org.apache.commons.httpclient.ConnectMethod;
@@ -766,6 +767,7 @@ public class HTTPSampler2 extends HTTPSamplerBase
         	org.apache.commons.httpclient.Cookie [] c = state.getCookies();
             for (int i= 0; i < c.length ; i++)
             {
+            	   Date exp = c[i].getExpiryDate();// might be absent
                    cookieManager.add(
                    		new org.apache.jmeter.protocol.http.control.
 						Cookie(c[i].getName(),
@@ -773,7 +775,8 @@ public class HTTPSampler2 extends HTTPSamplerBase
 								c[i].getDomain(),
 								c[i].getPath(),
 								c[i].getSecure(),
-								c[i].getExpiryDate().getTime()
+								exp != null ? exp.getTime()
+								: System.currentTimeMillis() + 1000 * 60 * 60 * 24 //cf CookieManager
 							  )
 						);
             }
