@@ -103,15 +103,15 @@
    ant findbugs -Dfindbugs.home=/etc/findbugs -Dfindbugs.level=medium
   [The defaults are /findbugs and high]
    -->
-   <property name="findbugs.home" value="/findbugs" />
+   <property name="findbugs.homedir" value="/findbugs" />
    <property name="findbugs.level" value="medium" />
    <property name="findbugs.outName" value="reports/jmeter-fb" />
    <target name="findbugs">
    	<mkdir dir="reports"/>
     <taskdef name="findbugs" 
-        classpath="${findbugs.home}/lib/findbugs-ant.jar" 
+        classpath="${findbugs.homedir}/lib/findbugs-ant.jar" 
         classname="edu.umd.cs.findbugs.anttask.FindBugsTask"/>
-    <findbugs home="${findbugs.home}"
+    <findbugs home="${findbugs.homedir}"
               output="xml"
               reportlevel="${findbugs.level}"
               excludeFilter="fb-excludes.xml"
