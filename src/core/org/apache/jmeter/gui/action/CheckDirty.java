@@ -107,6 +107,7 @@ public class CheckDirty extends AbstractAction implements
 	 */
 	public void addNode(Object node,HashTree subTree)
 	{
+        log.debug("Node is class:" + node.getClass());
 		JMeterGUIComponent treeNode = (JMeterGUIComponent)node;
 		if(checkMode)
 		{

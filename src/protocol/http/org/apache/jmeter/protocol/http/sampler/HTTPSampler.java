@@ -968,13 +968,11 @@ public class HTTPSampler extends AbstractSampler
                 }
                 else
                 {
-                    time = System.currentTimeMillis() - time;
-
-                    HTTPSampler redirect = (HTTPSampler) this.clone();
-                    redirect.redirectUrl(conn, u);
-                    SampleResult redirectResult = redirect.sample(redirects + 1);
+                    time = bundleResponseInResult(time,res,conn);//System.currentTimeMillis() - time;
+                    redirectUrl(conn, u);
+                    SampleResult redirectResult = sample(redirects + 1);
                     res.addSubResult(redirectResult);
-                    res.setResponseData(redirectResult.getResponseData());
+                    //res.setResponseData(redirectResult.getResponseData());
                     res.setSuccessful(redirectResult.isSuccessful());
                     time += redirectResult.getTime();
                 }
