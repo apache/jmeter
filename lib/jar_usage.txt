@@ -1,33 +1,45 @@
 Which jars are used by which modules?
 Version: $Revision$ $Date$
 
-avalon-excalibur
-- CLI in JMeter.java
-
-avalon-framework
+avalon-framework-4.1.4
+- LogKit (used by HttpClient ?)
 - Configuration (ResultCollector, SaveService, SampleResult, TestElementSaver)
 
 commons-collections
 - ListenerNotifier ONLY
 
-htmlparser
+commons-httpclient-2.0
+- httpclient
+
+commons-logging
+- httpclient
+
+excalibur-compatibility
+- CLI in JMeter.java
+
+excalibur-i18n-1.1
+
+excalibur-logger-1.1
+- httpclient?
+
+(htmlparser)
 - http: parsing html
 
 jakarta-oro
 - regular expressions: various
 
-jdom
+jdom-b9
 - XMLAssertion, JMeterTest ONLY
 
 (jorphan)
 
-js
+js (Rhino)
 - javascript function
 
 junit
 - unit tests
 
-logkit
+logkit-1.2
 - logging
 
 soap
@@ -37,7 +49,7 @@ Tidy
 - http: various modules for parsing html
 - org.xml.sax - various
 
-velocity
+velocity-1.4
 - Anakia (create documentation) Not used by JMeter runtime
 
 xalan
