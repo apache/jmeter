@@ -82,6 +82,9 @@ public class RunningSample
     private String label;
     private int index;
 
+    private RunningSample(){// Don't (can't) use this...
+    }
+    
     /**
      * Use this constructor.
      */
@@ -89,6 +92,10 @@ public class RunningSample
     {
         this.label = label;
         this.index = index;
+        init();
+    }
+
+    private void init(){
         counter = 0L;
         runningSum = 0L;
         max = Long.MIN_VALUE;
@@ -98,6 +105,13 @@ public class RunningSample
         lastTime = 0L;
     }
 
+    /**
+     * Clear the counters (useful for differential stats)
+     *
+     */
+	public synchronized void clear(){
+		init();
+	}
     /**
      * Returns the throughput associated to this sampler in requests per second.
      * May be slightly skewed because it takes the timestamps of the first and
@@ -327,5 +341,12 @@ public class RunningSample
         mySB.append("Sample Rate: " + this.getRateString());
         return (mySB.toString());
     }
+
+	/**
+	 * @return errorCount
+	 */
+	public long getErrorCount() {
+		return errorCount;
+	}
 
 } // class RunningSample
