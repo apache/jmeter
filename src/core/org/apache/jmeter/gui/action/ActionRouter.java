@@ -81,7 +81,6 @@ public final class ActionRouter implements ActionListener
 {
     private Map commands = new HashMap();
     private static ActionRouter router;
-    private static AddToTree add = new AddToTree();//NOTUSED add - but keep for side effects...
     transient private static Logger log = LoggingManager.getLoggerForClass();
     private Map preActionListeners = new HashMap();
     private Map postActionListeners = new HashMap();
