@@ -77,6 +77,10 @@ by registering the SSL Provider.</p>
 <subsection name="2.2.5 JDBC Driver" anchor="opt_jdbc">
 <p>You will need to add your database vendor's JDBC driver to the <a href="#classpath">classpath</a> if you want to do JDBC testing.</p>
 </subsection>
+
+<subsection name="2.2.6 Apache SOAP" anchor="opt_soap">
+<p>Apache SOAP requires mail.jar and activation.jar. You need to download and copy these two jar files to your jmeter/lib directory. Once the files are in there, JMeter will automatically pick them up.</p>
+</subsection>
 </section>
 
 <section name="2.3 Installation" anchor="install">
