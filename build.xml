@@ -10,7 +10,7 @@
 		<property name="sources.src.dir" value="src"/>
 		<!-- Where the API documentation lives -->
 		<property name="docs.api.dest.dir" value="docs/api"/>
-		<property name="version" value="_1.5b2"/>
+		<property name="version" value="_1.5"/>
 	</target>
 
 	<!--
@@ -60,11 +60,7 @@
 	- Creates the ApacheJMeter.jar file.
 	-->
 	<target name="package" depends="compile">
-		<jar jarfile="ApacheJMeter.jar" manifest="src/MANIFEST">
-		       <fileset dir="${classes.dest.dir}"/>
-		       <fileset dir="${sources.src.dir}"
-		                includes="**/*.gif"
-				excludes="**/*.java" />
+		<jar jarfile="ApacheJMeter.jar" manifest="src/MANIFEST" basedir="${classes.dest.dir}">
 		</jar>
 	</target>
 
