@@ -91,6 +91,9 @@
   <property name="xalan.jar" value="lib/xalan.jar"/>
   <property name="xerces.jar" value="lib/xerces.jar"/>
   <property name="xml-apis.jar" value="lib/xml-apis.jar"/>
+  <property name="jdom.jar" value="lib/jdom-b8.jar"/>
+  <property name="js.jar" value="lib/js.jar"/>
+  <property name="soap.jar" value="lib/soap.jar"/>
 
   <fileset dir="." id="external.jars">
     <include name="${avalon-excalibur.jar}"/>
@@ -101,6 +104,9 @@
     <include name="${xalan.jar}"/>
     <include name="${xerces.jar}"/>
     <include name="${xml-apis.jar}"/>
+    <include name="${jdom.jar}"/>
+    <include name="${js.jar}"/>
+    <include name="${soap.jar}"/>
   </fileset>
 
   <!-- Directory where these 3rd party libraries will live -->
@@ -350,7 +356,8 @@
     <include name="bin/"/>
     <include name="${lib.dir}/"/>
     <include name="${jar.dest}/"/> <!-- redundant but future-proof -->
-    <include name="${docs.dest}/"/> <exclude name="${docs.api.dest}/"/>
+    <include name="${docs.dest}/"/>
+      <exclude name="${docs.api.dest}/"/>
     <exclude name="**/mail.jar"/>
     <exclude name="**/activation.jar"/>
     <exclude name="**/mailapi.jar"/>
@@ -362,9 +369,9 @@
   </patternset>
   
   <patternset id="dist.sources">
-  <include name="${src.dir}/"/>
-  <include name="${docs.src}/"/>
-  <include name="*"/>
+    <include name="${src.dir}/"/>
+    <include name="${docs.src}/"/>
+    <include name="*"/>
   </patternset>
 
   <target name="dist" depends="assume-libs-present,clean,install,all-docs,test" description="Create the distribution packages.">
