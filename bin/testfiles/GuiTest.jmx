@@ -754,7 +754,7 @@
 </node>
 <node>
 <testelement class="org.apache.jmeter.protocol.http.sampler.AccessLogSampler">
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.AccessLogSamplerGui</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.gui_class">org.apache.jmeter.testbeans.gui.TestBeanGUI</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.AccessLogSampler</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">Tomcat Access Log Sampler</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.domain"/>
@@ -967,38 +967,6 @@ return "This will go into the Response Data field";</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">Config</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
 </testelement>
-<node>
-<testelement class="org.apache.jmeter.config.ConfigTestElement">
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="JDBCSampler.url"/>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.gui_class">org.apache.jmeter.protocol.jdbc.config.gui.DbConfigGui</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">DB Config</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="JDBCSampler.driver"/>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ConfigTestElement.username"/>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ConfigTestElement.password"/>
-</testelement>
-</node>
-<node>
-<testelement class="org.apache.jmeter.config.ConfigTestElement">
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.gui_class">org.apache.jmeter.protocol.jdbc.config.gui.PoolConfigGui</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="JDBCSampler.connections">1</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">Pool Config</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="JDBCSampler.connPoolClass">org.apache.jmeter.protocol.jdbc.util.JMeter19ConnectionPool</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="JDBCSampler.maxuse">50</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
-</testelement>
-</node>
-<node>
-<testelement class="org.apache.jmeter.config.ConfigTestElement">
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.gui_class">org.apache.jmeter.protocol.jdbc.config.gui.SqlConfigGui</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">SQL Config</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="JDBCSampler.query"/>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
-</testelement>
-</node>
 </node>
 <node>
 <testelement class="org.apache.jmeter.control.GenericController">
