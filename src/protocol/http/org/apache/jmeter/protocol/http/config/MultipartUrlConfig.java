@@ -58,6 +58,7 @@ package org.apache.jmeter.protocol.http.config;
 import java.io.Serializable;
 
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -136,13 +137,19 @@ public class MultipartUrlConfig implements Serializable
 	public void addArgument(String name,String value)
 	{
 		Arguments args = this.getArguments();
-		args.addArgument(name,value);
+		args.addArgument(new HTTPArgument(name,value));
 	}
 
 	public void addArgument(String name,String value,String metadata)
 	{
 		Arguments args = this.getArguments();
-		args.addArgument(name,value,metadata);
+		args.addArgument(new HTTPArgument(name,value,metadata));
+	}
+	
+	public void addEncodedArgument(String name,String value)
+	{
+		Arguments args = getArguments();
+		args.addArgument(new HTTPArgument(name,value,true));
 	}
 
 		/**
@@ -173,7 +180,7 @@ public class MultipartUrlConfig implements Serializable
 				String name = parts[i].substring(index,parts[i].indexOf("\"",index));
 				index = parts[i].indexOf("\n",index)+2;
 				String value = parts[i].substring(index).trim();
-				this.addArgument(name,value);
+				this.addEncodedArgument(name,value);
 			}
 		}
 	}
