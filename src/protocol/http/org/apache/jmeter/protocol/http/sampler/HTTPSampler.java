@@ -681,9 +681,12 @@ public class HTTPSampler extends AbstractSampler
         {
             StringBuffer sb = new StringBuffer();
             sb.append(this.toString());
-            sb.append("\nCookie Data:\n");
-            sb.append(cookies);
+            if (cookies != null){ //TODO put these in requestHeaders.
+				sb.append("\nCookie Data:\n");
+				sb.append(cookies);
+            }
             res.setSamplerData(sb.toString());
+            res.setRequestHeaders("TODO");//TODO
         }
         setConnectionAuthorization(conn, u, getAuthManager());
         return conn;
@@ -814,42 +817,39 @@ public class HTTPSampler extends AbstractSampler
         w.close();
         return w.toByteArray();
     }
+	/**
+	 * Gets the ResponseHeaders from the URLConnection
+	 *
+	 * @param conn  connection from which the headers are read
+	 * 
+	 * @return string containing the headers, one per line
+	 */
+	protected String getResponseHeaders(
+		HttpURLConnection conn)
+		throws IOException
+	{
+		StringBuffer headerBuf = new StringBuffer();
+		headerBuf.append(conn.getHeaderField(0).substring(0, 8));
+		headerBuf.append(" ");
+		headerBuf.append(conn.getResponseCode());
+		headerBuf.append(" ");
+		headerBuf.append(conn.getResponseMessage());
+		headerBuf.append("\n");
 
-    /**
-     * Gets the ResponseHeaders from the URLConnection, save them to the
-     * SampleResults object.
-     *
-     * @param conn  connection from which the headers are read
-     * @param res   where the headers read are stored
-     */
-    protected byte[] getResponseHeaders(
-        HttpURLConnection conn,
-        SampleResult res)
-        throws IOException
-    {
-        StringBuffer headerBuf = new StringBuffer();
-        headerBuf.append(conn.getHeaderField(0).substring(0, 8));
-        headerBuf.append(" ");
-        headerBuf.append(conn.getResponseCode());
-        headerBuf.append(" ");
-        headerBuf.append(conn.getResponseMessage());
-        headerBuf.append("\n");
-
-        for (int i = 1; conn.getHeaderFieldKey(i) != null; i++)
-        {
-            if (!conn
-                .getHeaderFieldKey(i)
-                .equalsIgnoreCase("transfer-encoding"))
-            {
-                headerBuf.append(conn.getHeaderFieldKey(i));
-                headerBuf.append(": ");
-                headerBuf.append(conn.getHeaderField(i));
-                headerBuf.append("\n");
-            }
-        }
-        headerBuf.append("\n");
-        return headerBuf.toString().getBytes("8859_1");
-    }
+		for (int i = 1; conn.getHeaderFieldKey(i) != null; i++)
+		{
+			if (!conn //TODO - why is this not saved?
+				.getHeaderFieldKey(i)
+				.equalsIgnoreCase("transfer-encoding"))
+			{
+				headerBuf.append(conn.getHeaderFieldKey(i));
+				headerBuf.append(": ");
+				headerBuf.append(conn.getHeaderField(i));
+				headerBuf.append("\n");
+			}
+		}
+		return headerBuf.toString();
+	}
 
     /**
      * Extracts all the required cookies for that particular URL request and set
@@ -1196,20 +1196,16 @@ public class HTTPSampler extends AbstractSampler
         HttpURLConnection conn)
         throws IOException, FileNotFoundException
     {
-        res.setDataType(SampleResult.TEXT);
         byte[] ret = readResponse(conn);
-        byte[] head = getResponseHeaders(conn, res);
         time = System.currentTimeMillis() - time;
         String ct = conn.getHeaderField("Content-type");
-        res.setContentType(ct); 
+        res.setContentType(ct);
+        res.setResponseHeaders(getResponseHeaders(conn)); 
+		res.setResponseData(ret);
 		if (ct.startsWith("image/")){
 			res.setDataType(SampleResult.BINARY);
-			res.setResponseData(ret);
 		} else {
-	        byte[] complete = new byte[ret.length + head.length];
-	        System.arraycopy(head, 0, complete, 0, head.length);
-	        System.arraycopy(ret, 0, complete, head.length, ret.length);
-	        res.setResponseData(complete);
+			res.setDataType(SampleResult.TEXT);
 		}
         res.setSuccessful(true);
         return time;
