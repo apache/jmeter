@@ -53,19 +53,23 @@ public class WhileController extends GenericController implements Serializable
      * Evaluate the condition, which can be:
      * blank or LAST = was the last sampler OK?
      * otherwise, evaluate the condition
+     * @param inLoop - called by nextIsNull (within loop)
      */
-    private boolean conditionTrue()
+    private boolean conditionTrue(boolean inLoop)
     {
     	String cnd = getCondition();
     	log.debug("Condition string:"+cnd);
     	boolean res;
-    	if (cnd.length() == 0 || "LAST".equalsIgnoreCase(cnd)) {// $NON-NLS-1$
+    	// If blank, only check previous sample when in loop
+    	if ((inLoop && cnd.length() == 0) 
+    			|| "LAST".equalsIgnoreCase(cnd)) {// $NON-NLS-1$
         	JMeterVariables threadVars = 
         		JMeterContextService.getContext().getVariables();
         	// Use !false rather than true, so that null is treated as true 
        	    res = !"false".equalsIgnoreCase(threadVars.get(JMeterThread.LAST_SAMPLE_OK));// $NON-NLS-1$
     	} else {
-    		res = "true".equalsIgnoreCase(cnd);// $NON-NLS-1$
+    		// cnd may be blank if next() called us
+    		res = !"false".equalsIgnoreCase(cnd);// $NON-NLS-1$
     	}
     	log.debug("Condition value: "+res);
         return res;
@@ -77,7 +81,7 @@ public class WhileController extends GenericController implements Serializable
     protected Sampler nextIsNull() throws NextIsNullException
     {
         reInitialize();
-        if (conditionTrue())
+        if (conditionTrue(true))
         {
             return next();
         }
@@ -97,15 +101,14 @@ public class WhileController extends GenericController implements Serializable
      */
     public Sampler next()
     {
-    	// Don't enter if condition false 
-        if("false".equalsIgnoreCase(getCondition()))// $NON-NLS-1$
+        if(conditionTrue(false))// $NON-NLS-1$
         {
-            reInitialize();
-            return null;
+            return super.next(); // OK to continue
         }
         else
         {
-            return super.next();
+            reInitialize(); // Don't even start the loop
+            return null;
         }
     }
 
