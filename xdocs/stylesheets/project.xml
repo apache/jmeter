@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="Velocity"
+<project name="Apache JMeter"
 		  href="http://jakarta.apache.org/jmeter/">
 
 	 <title>JMeter</title>
@@ -16,16 +16,17 @@
 		  <item name="FAQ"			href="http://nagoya.apache.org/wiki/apachewiki.cgi?JMeterFAQ"/>
 	 </menu>
 	 <menu name="download">
-	 	<item name="Download Releases"               	href="http://jakarta.apache.org/builds/jakarta-jmeter/release"/>
+	 	<item name="Download Binary"                    href="http://jakarta.apache.org/site/binindex.cgi"/>
+        <item name="Download Source"                    href="http://jakarta.apache.org/site/sourceindex.cgi"/>
 		<item name="Download Nightly Tarball"  			href="http://cvs.apache.org/builds/jakarta-jmeter/nightly"/>
-	 	<item name="Download Latest Stable Release" 	href="http://jakarta.apache.org/builds/jakarta-jmeter/release/v1.9/jakarta-jmeter-1.9.1.zip"/>
+	 	<item name="Download Latest Stable Release"     href="http://www.apache.org/dyn/closer.cgi/jakarta/jmeter/jakarta-jmeter-current-bin.zip"/>	 	
 	 	<!-- <item name="Download Latest Release Candidate" 	href="http://jakarta.apache.org/builds/jakarta-jmeter/unstable/v1.9/jakarta-jmeter-1.9.RC3.zip"/> -->
 	 </menu>
 	 <menu name="Documentation">
 		<item name="User Manual"        href="/usermanual/index.html"/>
 		<item name="Developer Manual"       href="/extending/index.html"/>
 		<item name="JMeter Wiki"			href="http://nagoya.apache.org/wiki/apachewiki.cgi?JMeterProjectPages"/>
-		<item name="Javadocs"		href="/api"/>
+		<item name="Javadocs"		href="/api/index.html"/>
 	 </menu>
 	 <menu name="JMeter Resources">
 	 		<item name="JMeter Articles" href="http://nagoya.apache.org/wiki/apachewiki.cgi?JMeterLinks"/>
