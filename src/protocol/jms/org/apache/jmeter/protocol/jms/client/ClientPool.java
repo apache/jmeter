@@ -31,21 +31,46 @@ public class ClientPool {
 	private static ArrayList clients = new ArrayList();
 	private static HashMap client_map = new HashMap();
 	
-    /**
-     * 
-     */
+	/**
+	 * Add a ReceiveClient to the ClientPool. This is so that we can
+	 * make sure to close all clients and make sure all threads are
+	 * destroyed.
+	 * @param client
+	 */
 	public static void addClient(ReceiveSubscriber client){
 		clients.add(client);
 	}
 
+	/**
+	 * Add a OnMessageClient to the ClientPool. This is so that we can
+	 * make sure to close all clients and make sure all threads are
+	 * destroyed.
+	 * @param client
+	 */
 	public static void addClient(OnMessageSubscriber client){
 		clients.add(client);
 	}
 
+	/**
+	 * Add a Publisher to the ClientPool. This is so that we can
+	 * make sure to close all clients and make sure all threads are
+	 * destroyed.
+	 * @param client
+	 */
 	public static void addClient(Publisher client){
 		clients.add(client);	
 	}
 	
+	/**
+	 * Clear all the clients created by either Publish or
+	 * Subscribe sampler. We need to do this to make sure
+	 * all the threads creatd during the test are destroyed
+	 * and cleaned up. In some cases, the client provided
+	 * by the manufacturer of the JMS server may have bugs
+	 * and some threads may become zombie.
+	 * In those cases, it is not the responsibility of JMeter
+	 * for those bugs.
+	 */
 	public static void clearClient(){
 		Iterator itr = clients.iterator();
 		while (itr.hasNext()){

@@ -72,6 +72,16 @@ public class ReceiveSubscriber implements Runnable {
     	}
     }
     
+    /**
+     * Initialize the JNDI initial context
+     * @param useProps
+     * @param jndi
+     * @param url
+     * @param useAuth
+     * @param user
+     * @param pwd
+     * @return
+     */
     public Context initJNDI(boolean useProps, String jndi,
       String url, String useAuth, String user, String pwd){
 		if (useProps){
@@ -85,7 +95,13 @@ public class ReceiveSubscriber implements Runnable {
 			return InitialContextFactory.lookupContext(jndi,url,useAuth,user,pwd);
 		}
     }
-    
+
+	/**
+	 * Create the connection, session and topic subscriber
+	 * @param ctx
+	 * @param connfactory
+	 * @param topic
+	 */    
     public void initConnection(Context ctx, String connfactory, String topic){
     	try {
 			TopicConnectionFactory connfac =
@@ -100,10 +116,18 @@ public class ReceiveSubscriber implements Runnable {
         }
     }
 
+	/**
+	 * Set the number of iterations for each call to sample()
+	 * @param loop
+	 */
 	public void setLoop(int loop){
 		this.loop = loop;
 	}
-	
+
+	/**
+	 * Resume will call Connection.start() and begin receiving
+	 * messages from the JMS provider.
+	 */	
 	public void resume(){
 		try {
 			this.CONN.start();
@@ -111,18 +135,31 @@ public class ReceiveSubscriber implements Runnable {
 			log.error("failed to start recieving");
 		}
 	}
-	
+
+	/**
+	 * Get the message as a string
+	 * @return
+	 */	
 	public String getMessage(){
 		return this.buffer.toString();
 	}
 	
+	/**
+	 * Get the message(s) as an array of byte[]
+	 * @return
+	 */
     public byte[] getByteResult(){
     	if (this.buffer.length() > 0){
     		this.RESULT = this.buffer.toString().getBytes();
     	}
 		return this.RESULT;
     }
-    
+
+	/**
+	 * close() will stop the connection first. Then it
+	 * closes the subscriber, session and connection and
+	 * sets them to null.
+	 */    
 	public synchronized void close(){
 		try {
 			this.CONN.stop();
@@ -145,31 +182,57 @@ public class ReceiveSubscriber implements Runnable {
 		}
 	}
 
+	/**
+	 * Clear will set the buffer to zero and the result
+	 * objects to null. Clear should be called at the end
+	 * of a sample.
+	 */
 	public void clear(){
 		this.buffer.setLength(0);
 		this.RESULT = null;
 		this.OBJ_RESULT = null;
 	}
 
+	/**
+	 * Increment the count and return the new value
+	 * @param count
+	 * @return
+	 */
 	public synchronized int count(int count) {
 		counter += count;
 		return counter;
 	}
 
+	/**
+	 * Reset will reset the counter and prepare for the
+	 * next sample() call.
+	 * @return
+	 */
     public synchronized int resetCount() {
         counter = 0;
         return counter;
     }
 
+	/**
+	 * start will create a new thread and pass this class.
+	 * once the thread is created, it calls Thread.start().
+	 */
 	public void start(){
 		this.CLIENTTHREAD = new Thread(this,"Subscriber2");
 		this.CLIENTTHREAD.start();
 	}
-	
+
+	/**
+	 * run calls listen to begin listening for inboud messages
+	 * from the provider.
+	 */	
     public void run() {
     	ReceiveSubscriber.this.listen();
     }
-
+	
+	/**
+	 * Listen for inbound messages
+	 */
     protected void listen() {
         log.info("Subscriber2.listen() called");
         while (RUN) {
