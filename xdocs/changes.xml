@@ -9,7 +9,47 @@
 <p><b>Changes are chronologically ordered from top (most recent) to bottom 
 (least recent)</b></p>  
 
-<b>Changes:</b> 
+<b>Changes: for more info, contact <a href="mailto:mstover1@apache.org">Michael Stover</a></b>
+<h3>Version 1.7.3</h3>
+<ul>
+<li>New Functions that provide more ability to change requests dynamically during test runs.</li>
+<li>New language translations in Japanese and German.</li>
+<li>Removed annoying Log4J error messages.</li>
+<li>Improved support for loading JMeter 1.7 version test plan files (.jmx files).</li>
+<li>JMeter now supports proxy servers that require username/password authentication.</li>
+<li>Dialog box indicating test stopping doesn't hang JMeter on problems with stopping test.</li>
+<li>GUI can run multiple remote JMeter servers (fixes GUI bug that prevented this).</li>
+<li>Dialog box to help created function calls in GUI.</li>
+<li>New Keep-alive switch in HTTP Requests to indicate JMeter should or should not use Keep-Alive for sockets.</li>
+<li>HTTP Post requests can have GET style arguments in Path field.  Proxy records them correctly now.</li>
+<li>New User-defined test-wide static variables.</li>
+<li>View Results Tree now displays more information, including name of request (matching the name
+in the test tree) and full request and POST data.</li>
+<li>Removed obsolete View Results Visualizer (use View Results Tree instead).</li>
+<li>Performance enhancements.</li>
+<li>Memory use enhancements.</li>
+<li>Graph visualizer GUI improvements.</li>
+<li>Updates and fixes to Mailer Visualizer.</li>
+</ul>
+ 
+<h3>Version 1.7.2</h3>
+<ul>
+<li>JMeter now notifies user when test has stopped running.</li>
+<li>HTTP Proxy server records HTTP Requests with re-direct turned off.</li>
+<li>HTTP Requests can be instructed to either follow redirects or ignore them.</li>
+<li>Various GUI improvements.</li>
+<li>New Random Controller.</li>
+<li>New SOAP/XML-RPC Sampler.</li>
+</ul>
+
+<h3>Version 1.7.1</h3>
+<ul>
+<li>JMeter's architecture revamped for a more complete separation between GUI code and
+test engine code.</li>
+<li>Use of Avalon code to save test plans to XML as Configuration Objects</li>
+<li>All listeners can save data to file and load same data at later date.</li>
+</ul>
+
 <h3>Version 1.7Beta</h3> 
 <ul> 
 	<li>Better XML support for special characters (Tushar Bhatia) </li> 
