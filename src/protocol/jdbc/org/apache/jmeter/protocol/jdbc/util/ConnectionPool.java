@@ -62,7 +62,7 @@ import java.sql.Connection;
  */
 public interface ConnectionPool
 {
-    public Connection getConnection() throws NoConnectionsAvailableException;
+    public Connection getConnection() throws ConnectionPoolException;
     public void returnConnection(Connection c);
     public void close();
 }

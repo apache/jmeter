@@ -54,6 +54,7 @@
  */
 package org.apache.jmeter.protocol.jdbc.util;
 
+import java.lang.reflect.Constructor;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -62,6 +63,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -118,6 +121,7 @@ public final class DBConnectionManager
         String password,
         String driver,
         Map properties)
+        throws ConnectionPoolException
     {
         DBKey key =
             new DBKey(
@@ -146,10 +150,35 @@ public final class DBConnectionManager
         return key;
     }
 
-    private ConnectionPool createConnectionPool(
-        DBKey key, Map properties)
+    private ConnectionPool createConnectionPool(DBKey key, Map properties)
+        throws ConnectionPoolException
     {
-        return new JMeter19ConnectionPool(key, properties);
+        String className =
+            ((JMeterProperty) properties.get(JDBCSampler.CONNECTION_POOL_IMPL))
+                .getStringValue();
+
+        Class types[] = new Class[] {DBKey.class, Map.class};         
+        Object params[] = new Object[] {key, properties};
+        
+        try
+        {
+            Class poolClass = Class.forName(className);
+            Constructor constructor = poolClass.getConstructor(types);
+            return (ConnectionPool)constructor.newInstance(params);
+        }
+        catch (Exception e)
+        {
+            log.error(
+                "Error instantiating JDBC connection pool class '"
+                    + className
+                    + "'",
+                e);
+            throw new ConnectionPoolException(
+                "Error instantiating JDBC connection pool class '"
+                    + className
+                    + "': "
+                    + e);
+        }
     }
 
     public void shutdown()

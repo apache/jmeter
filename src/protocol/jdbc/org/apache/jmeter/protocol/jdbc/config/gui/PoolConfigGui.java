@@ -67,6 +67,7 @@ import javax.swing.JTextField;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
 import org.apache.jmeter.protocol.jdbc.util.JMeter19ConnectionPool;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -120,6 +121,9 @@ public class PoolConfigGui extends AbstractConfigGui implements FocusListener
     public void modifyTestElement(TestElement element)
     {
         configureTestElement(element);
+        element.setProperty(
+            JDBCSampler.CONNECTION_POOL_IMPL,
+            JMeter19ConnectionPool.class.getName());
         element.setProperty(
             JMeter19ConnectionPool.CONNECTIONS,
             connField.getText());
