@@ -19,31 +19,33 @@ package org.apache.jmeter.assertions;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+
+import junit.framework.TestCase;
+import junit.textui.TestRunner;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.XPathUtil;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.apache.xpath.XPathAPI;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import org.w3c.tidy.Tidy;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
+
+
 
 /**
- * Checks if the result is a well-formed XML content. and whether it matches an
- * XPath
+ * Checks if the result is a well-formed XML content and whether it matches an XPath 
  * 
  * author <a href="mailto:jspears@astrology.com">Justin Spears </a>
  */
@@ -51,25 +53,19 @@ public class XPathAssertion extends AbstractTestElement implements
 		Serializable, Assertion {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String DEFAULT_XPATH = "/";
 
 	private static XPathAPI xpath = null;
 
-	// one builder for all requests
-	private static DocumentBuilder builder = null;
+	private static final String XPATH_KEY		= "XPath.xpath";
+	private static final String WHITESPACE_KEY	= "XPath.whitespace";
+	private static final String VALIDATE_KEY	= "XPath.validate";
+	private static final String TOLERANT_KEY	= "XPath.tolerant";
+	private static final String NEGATE_KEY		= "XPath.negate";
+	private static final String NAMESPACE_KEY	= "XPath.namespace";
 
-	// one factory for all requests
-	private static DocumentBuilderFactory factory = null;
-
-	private static final String XPATH_KEY = "XPath.xpath";
-
-	private static final String WHITESPACE_KEY = "XPath.whitespace";
-
-	private static final String VALIDATE_KEY = "XPath.validate";
-
-	private static final String JTIDY_KEY = "XPath.jtidy";
-
-	private static final String NEGATE_KEY = "XPath.negate";
+	public static final String DEFAULT_XPATH = "/";
+	
+	
 
 	/**
 	 * Returns the result of the Assertion. Checks if the result is well-formed
@@ -83,59 +79,38 @@ public class XPathAssertion extends AbstractTestElement implements
 			return setResultForNull(result);
 		}
 		result.setFailure(false);
+		result.setFailureMessage("");
 
-		/*
-		 * create a new builder if something changes and/or the builder has not
-		 * been set
-		 */
-
-		if (log.isDebugEnabled()) {
-			log.debug(new StringBuffer("Validation is set to ").append(
-					isValidating()).toString());
-			log.debug(new StringBuffer("Whitespace is set to ").append(
-					isWhitespace()).toString());
-			log.debug(new StringBuffer("Jtidy is set to ").append(isJTidy())
-					.toString());
+		if (log.isDebugEnabled()){
+			log.debug(new StringBuffer("Validation is set to ").append(isValidating()).toString());
+			log.debug(new StringBuffer("Whitespace is set to ").append(isWhitespace()).toString());
+			log.debug(new StringBuffer("Tolerant is set to ").append(isTolerant()).toString());
 		}
+
 		Document doc = null;
 
 		try {
-			if (isJTidy()) {
-				doc = makeTidyParser().parseDOM(
-						new ByteArrayInputStream(response.getResponseData()),
-						null);
-				if (log.isDebugEnabled()) {
-					log.debug("node : " + doc);
-				}
-				doc.normalize();
-				// remove the document declaration cause I think it causes
-				// issues this is only needed for JDOM, since I am not
-				// using it... But in case we change.
-				// Node name = doc.getDoctype();
-				// doc.removeChild(name);
-
-			} else {
-				doc = parse(isValidating(), isWhitespace(), true,
-						new ByteArrayInputStream(response.getResponseData()));
-			}
-		} catch (SAXException e) {
-			log.warn("Cannot parse result content", e);
-			result.setFailure(true);
-			result.setFailureMessage(e.getMessage());
+			doc = XPathUtil.makeDocument(
+					new ByteArrayInputStream(response.getResponseData()),
+					isValidating(), isWhitespace(), isNamespace(), isTolerant());
+		}catch (SAXException e) {
+			log.debug("Caught sax exception: "+e);
+			result.setError(true);
+			result.setFailureMessage(new StringBuffer("SAXException: ").append(e.getMessage()).toString());
 			return result;
 		} catch (IOException e) {
 			log.warn("Cannot parse result content", e);
 			result.setError(true);
-			result.setFailureMessage(e.getMessage());
+			result.setFailureMessage(new StringBuffer("IOException: ").append(e.getMessage()).toString());
 			return result;
 		} catch (ParserConfigurationException e) {
 			log.warn("Cannot parse result content", e);
 			result.setError(true);
-			result.setFailureMessage(e.getMessage());
+			result.setFailureMessage(new StringBuffer("ParserConfigurationException: ").append(e.getMessage()).toString());
 			return result;
 		}
-
-		if (doc == null) {
+		
+		if ( doc == null || doc.getDocumentElement() == null){
 			result.setError(true);
 			result.setFailureMessage("Document is null, probably not parsable");
 			return result;
@@ -146,38 +121,25 @@ public class XPathAssertion extends AbstractTestElement implements
 		try {
 			nodeList = XPathAPI.selectNodeList(doc, getXPathString());
 		} catch (TransformerException e) {
-			log.warn("Cannot extract XPath", e);
 			result.setError(true);
-			result.setFailureMessage(e.getLocalizedMessage());
+			result.setFailureMessage(new StringBuffer("TransformerException: ").append(e.getMessage()).toString());
 			return result;
 		}
-
-		if (nodeList == null || nodeList.getLength() == 0) {
-			if (isNegated()) {
+			
+		if ( nodeList == null || nodeList.getLength() == 0   ) {
+				log.debug(new StringBuffer("nodeList null no match  ").append(getXPathString()).toString());
+				result.setFailure(!isNegated());
+				result.setFailureMessage("No Nodes Matched " + getXPathString());
 				return result;
-			} else {
-				result.setFailure(true);
-				result
-						.setFailureMessage("No Nodes Matched "
-								+ getXPathString());
-				return result;
-			}
 		}
-		// At this point, we have matched one or more nodes
-		if (isNegated()) {// should we have found a match?
-			result.setFailure(true);
-			result.setFailureMessage("One or more Nodes Matched "
-					+ getXPathString());
+		log.debug("nodeList length "+nodeList.getLength());
+		if (log.isDebugEnabled() &! isNegated()){
+			for (int i=0; i< nodeList.getLength(); i++)
+				log.debug(new StringBuffer("nodeList[").append(i).append("] ").append(nodeList.item(i)).toString());
 		}
-
-		if (log.isDebugEnabled()) {
-			// if (!isNegated()) {
-			for (int i = 0; i < nodeList.getLength(); i++) {
-				log.debug(new StringBuffer("nodeList[").append(i).append("] ")
-						.append(nodeList.item(i)).toString());
-			}
-			// }
-		}
+		result.setFailure(isNegated());
+		if (isNegated()) 
+			result.setFailureMessage("Specified XPath was found... Turn off negate if this is not desired");
 		return result;
 	}
 
@@ -194,28 +156,23 @@ public class XPathAssertion extends AbstractTestElement implements
 	 * @return String xpath String
 	 */
 	public String getXPathString() {
-		return getPropertyAsString(XPATH_KEY, DEFAULT_XPATH);
+		return  getPropertyAsString(XPATH_KEY, DEFAULT_XPATH);
 	}
 
 	/**
-	 * Get a Property or return the defualt string
-	 * 
-	 * @param key
-	 *            Property Key
-	 * @param defaultValue
-	 *            Default Value
+	 * Get a Property or return the default string
+	 * @param key Property Key
+	 * @param defaultValue Default Value
 	 * @return String property
 	 */
-	private String getPropertyAsString(String key, String defaultValue) {
+	private String getPropertyAsString(String key, String defaultValue){
 		String str = getPropertyAsString(key);
 		return (str == null || str.length() == 0) ? defaultValue : str;
 	}
 
 	/**
 	 * Set the XPath String this will be used as an xpath
-	 * 
-	 * @param String
-	 *            xpath
+	 * @param String xpath
 	 */
 	public void setXPathString(String xpath) {
 		setProperty(new StringProperty(XPATH_KEY, xpath));
@@ -223,40 +180,42 @@ public class XPathAssertion extends AbstractTestElement implements
 
 	/**
 	 * Set whether to ignore element whitespace
-	 * 
-	 * @param boolean
-	 *            whitespace
+	 * @param boolean whitespace
 	 */
 	public void setWhitespace(boolean whitespace) {
 		setProperty(new BooleanProperty(WHITESPACE_KEY, whitespace));
 	}
 
 	/**
-	 * Set use validation
-	 * 
-	 * @param boolean
-	 *            validate
+	 * Set use validation 
+	 * @param boolean validate
 	 */
 	public void setValidating(boolean validate) {
 		setProperty(new BooleanProperty(VALIDATE_KEY, validate));
 	}
 
 	/**
-	 * Feed Document through JTidy. In order to use xpath against XML.
-	 * 
-	 * @param jtidy
+	 * Set whether this is namespace aware 
+	 * @param boolean validate
 	 */
-	public void setJTidy(boolean jtidy) {
-		setProperty(new BooleanProperty(JTIDY_KEY, jtidy));
+	public void setNamespace(boolean namespace) {
+		setProperty(new BooleanProperty(NAMESPACE_KEY, namespace));
 	}
 
-	public void setNegated(boolean negate) {
+	/**
+	 * Set tolerant mode if required
+	 * @param tolerant true/false
+	 */
+	public void setTolerant(boolean tolerant) {
+		setProperty(new BooleanProperty(TOLERANT_KEY, tolerant));
+	}
+
+	public void setNegated(boolean negate){
 		setProperty(new BooleanProperty(NEGATE_KEY, negate));
 	}
 
 	/**
 	 * Is this whitepsace ignored.
-	 * 
 	 * @return boolean
 	 */
 	public boolean isWhitespace() {
@@ -264,94 +223,237 @@ public class XPathAssertion extends AbstractTestElement implements
 	}
 
 	/**
-	 * Is this validating
-	 * 
+	 * Is this validating 
 	 * @return boolean
 	 */
 	public boolean isValidating() {
 		return getPropertyAsBoolean(VALIDATE_KEY, false);
 	}
-
 	/**
-	 * Is this using JTidy
-	 * 
+	 * Is this namespace aware?
 	 * @return boolean
 	 */
-	public boolean isJTidy() {
-		return getPropertyAsBoolean(JTIDY_KEY, false);
+	public boolean isNamespace() {
+		return getPropertyAsBoolean( NAMESPACE_KEY, false);
 	}
 
 	/**
-	 * Negate the XPath test, that is return true if something is not found.
-	 * 
+	 * Is this using tolerant mode?
+	 * @return boolean
+	 */
+	public boolean isTolerant() {
+		return getPropertyAsBoolean(TOLERANT_KEY, false);
+	}
+
+	/**
+	 * Negate the XPath test, that is return true if something
+	 * is not found.
 	 * @return boolean negated
 	 */
 	public boolean isNegated() {
 		return getPropertyAsBoolean(NEGATE_KEY, false);
 	}
+	
+	////////////////////////////////// TEST CASES //////////////////////////////
+	
+	public static class XPathAssertionTest extends TestCase {
 
-	private Tidy makeTidyParser() {
-		log.debug("Start : getParser");
-		Tidy tidy = new Tidy();
-		tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
-		tidy.setQuiet(true);
-		tidy.setShowWarnings(false);
-		tidy.setMakeClean(true);
-		tidy.setXmlTags(true);
-		return tidy;
-	}
+        XPathAssertion assertion;
+        SampleResult result;
+        JMeterVariables vars;
+        JMeterContext jmctx;
+        public XPathAssertionTest() {super();}
+        public XPathAssertionTest(String name)
+        {
+            super(name);
+        }
+        public void setUp()  {
+    	jmctx = JMeterContextService.getContext();
+        assertion = new XPathAssertion();
+        assertion.setThreadContext(jmctx);// This would be done by the run command
+//        assertion.setRefName("regVal");
+        
+        result = new SampleResult();
+        String data =
+            "<company-xmlext-query-ret>" +
+              "<row>" +
+                "<value field=\"RetCode\">LIS_OK</value>" +
+                "<value field=\"RetCodeExtension\"></value>" +
+                "<value field=\"alias\"></value>" +
+                "<value field=\"positioncount\"></value>" +
+                "<value field=\"invalidpincount\">0</value>" +
+                "<value field=\"pinposition1\">1</value>" +
+                "<value field=\"pinpositionvalue1\"></value>" +
+                "<value field=\"pinposition2\">5</value>" +
+                "<value field=\"pinpositionvalue2\"></value>" +
+                "<value field=\"pinposition3\">6</value>" +
+                "<value field=\"pinpositionvalue3\"></value>" +
+              "</row>" +
+            "</company-xmlext-query-ret>";
+        result.setResponseData(data.getBytes());
+        vars = new JMeterVariables();
+        jmctx.setVariables(vars);
+        jmctx.setPreviousResult(result);
+        }
 
-	private static synchronized Document parse(boolean validating,
-			boolean whitespace, boolean namespace, InputStream is)
-			throws SAXException, IOException, ParserConfigurationException {
-		return makeDocumentBuilder(validating, whitespace, namespace).parse(is);
-	}
+		public void testAssertion() throws Exception {
+        	assertion.setXPathString("//row/value[@field = 'alias']");
+        	AssertionResult res =	assertion.getResult(jmctx.getPreviousResult());
+        	log.debug(" res "+res.isError());
+        	log.debug(" failure "+res.getFailureMessage());
+        	assertFalse(res.isError());
+        	assertFalse(res.isFailure());
+        }
+        public void testNegateAssertion() throws Exception {
+        	assertion.setXPathString("//row/value[@field = 'noalias']");
+        	assertion.setNegated(true);
+        	
+        	AssertionResult res =	assertion.getResult(jmctx.getPreviousResult());
+        	log.debug(" res "+res.isError());
+        	log.debug(" failure "+res.getFailureMessage());
+        	assertFalse(res.isError());
+        	assertFalse(res.isFailure());
+        }
+        public void testValidationFailure() throws Exception {
+        	assertion.setXPathString("//row/value[@field = 'alias']");
+        	assertion.setNegated(false);
+        	assertion.setValidating(true);
+        	AssertionResult res =	assertion.getResult(jmctx.getPreviousResult());
+        	log.debug(res.getFailureMessage()+" error: "+res.isError()+" failure: "+res.isFailure());
+        	assertTrue(res.isError());
+        	assertFalse(res.isFailure());
+        	
+        }
+        public void testValidationSuccess() throws Exception {
+        	 String data ="<?xml version=\"1.0\"?>"
+        	 			+"<!DOCTYPE BOOK ["
+        	 			+"<!ELEMENT p (#PCDATA)>"
+        	 			+"<!ELEMENT BOOK         (OPENER,SUBTITLE?,INTRODUCTION?,(SECTION | PART)+)>"
+        	 			+"<!ELEMENT OPENER       (TITLE_TEXT)*>"
+        	 			+"<!ELEMENT TITLE_TEXT   (#PCDATA)>"
+        	 			+"<!ELEMENT SUBTITLE     (#PCDATA)>"
+        	 			+"<!ELEMENT INTRODUCTION (HEADER, p+)+>"
+        	 			+"<!ELEMENT PART         (HEADER, CHAPTER+)>"
+        	 			+"<!ELEMENT SECTION      (HEADER, p+)>"
+        	 			+"<!ELEMENT HEADER       (#PCDATA)>"
+        	 			+"<!ELEMENT CHAPTER      (CHAPTER_NUMBER, CHAPTER_TEXT)>"
+        	 			+"<!ELEMENT CHAPTER_NUMBER (#PCDATA)>"
+        	 			+"<!ELEMENT CHAPTER_TEXT (p)+>"
+        	 			+"]>"
+        	 			+"<BOOK>"
+        	 			+"<OPENER>"
+        	 			+"<TITLE_TEXT>All About Me</TITLE_TEXT>"
+        	 			+"</OPENER>"
+        	 			+"<PART>"
+        	 			+"<HEADER>Welcome To My Book</HEADER>"
+        	 			+"<CHAPTER>"
+        	 			+"<CHAPTER_NUMBER>CHAPTER 1</CHAPTER_NUMBER>"
+        	 			+"<CHAPTER_TEXT>"
+        	 			+"<p>Glad you want to hear about me.</p>"
+        	 			+"<p>There's so much to say!</p>"
+        	 			+"<p>Where should we start?</p>"
+        	 			+"<p>How about more about me?</p>"
+        	 			+"</CHAPTER_TEXT>"
+        	 			+"</CHAPTER>"
+        	 			+"</PART>"
+        	 			+"</BOOK>";
+             
+            result.setResponseData(data.getBytes());
+            vars = new JMeterVariables();
+            jmctx.setVariables(vars);
+            jmctx.setPreviousResult(result);
+            assertion.setXPathString("/");
+            assertion.setValidating(true);
+            AssertionResult res = assertion.getResult(result);
+            assertFalse(res.isError());
+        	assertFalse(res.isFailure());
+        }
+        public void testValidationFailureWithDTD() throws Exception {
+       	 String data ="<?xml version=\"1.0\"?>"
+       	 			+"<!DOCTYPE BOOK ["
+       	 			+"<!ELEMENT p (#PCDATA)>"
+       	 			+"<!ELEMENT BOOK         (OPENER,SUBTITLE?,INTRODUCTION?,(SECTION | PART)+)>"
+       	 			+"<!ELEMENT OPENER       (TITLE_TEXT)*>"
+       	 			+"<!ELEMENT TITLE_TEXT   (#PCDATA)>"
+       	 			+"<!ELEMENT SUBTITLE     (#PCDATA)>"
+       	 			+"<!ELEMENT INTRODUCTION (HEADER, p+)+>"
+       	 			+"<!ELEMENT PART         (HEADER, CHAPTER+)>"
+       	 			+"<!ELEMENT SECTION      (HEADER, p+)>"
+       	 			+"<!ELEMENT HEADER       (#PCDATA)>"
+       	 			+"<!ELEMENT CHAPTER      (CHAPTER_NUMBER, CHAPTER_TEXT)>"
+       	 			+"<!ELEMENT CHAPTER_NUMBER (#PCDATA)>"
+       	 			+"<!ELEMENT CHAPTER_TEXT (p)+>"
+       	 			+"]>"
+       	 			+"<BOOK>"
+       	 			+"<OPENER>"
+       	 			+"<TITLE_TEXT>All About Me</TITLE_TEXT>"
+       	 			+"</OPENER>"
+       	 			+"<PART>"
+       	 			+"<HEADER>Welcome To My Book</HEADER>"
+       	 			+"<CHAPTER>"
+       	 			+"<CHAPTER_NUMBER>CHAPTER 1</CHAPTER_NUMBER>"
+       	 			+"<CHAPTER_TEXT>"
+       	 			+"<p>Glad you want to hear about me.</p>"
+       	 			+"<p>There's so much to say!</p>"
+       	 			+"<p>Where should we start?</p>"
+       	 			+"<p>How about more about me?</p>"
+       	 			+"</CHAPTER_TEXT>"
+       	 			+"</CHAPTER>"
+					+"<illegal>not defined in dtd</illegal>"
+       	 			+"</PART>"
+       	 			+"</BOOK>";
+            
+           result.setResponseData(data.getBytes());
+           vars = new JMeterVariables();
+           jmctx.setVariables(vars);
+           jmctx.setPreviousResult(result);
+           assertion.setXPathString("/");
+           assertion.setValidating(true);
+           AssertionResult res = assertion.getResult(result);
+           log.debug("failureMessage: "+res.getFailureMessage());
+           assertTrue(res.isError());
+       	   assertFalse(res.isFailure());
+       }
+        public void testTolerance() throws Exception {
+          	 String data ="<html><head><title>testtitle</title></head>"
+          	 	+"<body>"
+				+"<p><i><b>invalid tag nesting</i></b><hr>"
+				+"</body></html>";
+               
+              result.setResponseData(data.getBytes());
+              vars = new JMeterVariables();
+              jmctx.setVariables(vars);
+              jmctx.setPreviousResult(result);
+              assertion.setXPathString("/html/head/title");
+              assertion.setValidating(true);
+              assertion.setTolerant(true);
+              AssertionResult res = assertion.getResult(result);
+              log.debug("failureMessage: "+res.getFailureMessage());
+          	  assertFalse(res.isFailure());
+              assertFalse(res.isError());
+        }
 
-	private static synchronized DocumentBuilderFactory makeDocumentFactory(
-			boolean validating, boolean whitespace, boolean namespace) {
-		// (Re)create the factory only if it has changed
-		if (factory == null || factory.isValidating() != validating
-				|| factory.isIgnoringElementContentWhitespace() != whitespace
-				|| factory.isNamespaceAware() != namespace) {
-			// configure the document builder factory
-			factory = DocumentBuilderFactory.newInstance();
-			factory.setValidating(validating);
-			factory.setNamespaceAware(namespace);
-			factory.setIgnoringElementContentWhitespace(whitespace);
-			builder = null;
-		}
-		return factory;
-	}
-
-	private static synchronized DocumentBuilder makeDocumentBuilder(
-			boolean validating, boolean whitespace, boolean namespace)
-			throws ParserConfigurationException {
-		factory = makeDocumentFactory(validating, whitespace, namespace);
-
-		if (builder == null) {
-			builder = factory.newDocumentBuilder();
-			if (validating) {
-				builder.setErrorHandler(new ErrorHandler() {
-
-					public void warning(SAXParseException exception)
-							throws SAXException {
-						// TODO - should this be enabled?
-						// throw new SAXException(exception);
-					}
-
-					public void error(SAXParseException exception)
-							throws SAXException {
-						throw new SAXException(exception);
-					}
-
-					public void fatalError(SAXParseException exception)
-							throws SAXException {
-						// TODO - should this be enabled?
-						// throw new SAXException(exception);
-					}
-				});
-			}
-		}
-		return builder;
+		public void testNoTolerance() throws Exception {
+         	 String data ="<html><head><title>testtitle</title></head>"
+         	 	+"<body>"
+				+"<p><i><b>invalid tag nesting</i></b><hr>"
+				+"</body></html>";
+              
+             result.setResponseData(data.getBytes());
+             vars = new JMeterVariables();
+             jmctx.setVariables(vars);
+             jmctx.setPreviousResult(result);
+             assertion.setXPathString("/html/head/title");
+             assertion.setValidating(false);
+             assertion.setTolerant(false);
+             AssertionResult res = assertion.getResult(result);
+             log.debug("failureMessage: "+res.getFailureMessage());
+             assertTrue(res.isError());
+         	 assertFalse(res.isFailure());
+         }
+        
+        public static void main(String[] args) {
+        	TestRunner.run(XPathAssertionTest.class);
+        }
 	}
 }

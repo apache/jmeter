@@ -1565,11 +1565,12 @@ on XPath.
 
 <properties>
 <property name="Name"		required="No">Descriptive name for this element that is shown in the tree.</property>
-<property name="Tidy"		required="No">Send the returning document through JTidy.</property>
-<property name="Validation"	required="No">Check the document against its schema.</property>
-<property name="XPath"		required="Yes">XPath to match in the document.</property>
-<property name="Whitespace"	required="No">Ignore Element Whitespace.</property>
-<property name="Negation"	required="No">True if a XPath expression is not matched</property>
+<property name="Tolerant Parser"	required="No">Be tolerant of XML/HTML errors</property>
+<property name="Use Namespaces"	required="No">Should namespaces be honoured?</property>
+<property name="Validate XML"	required="No">Check the document against its schema.</property>
+<property name="XPath Assertion"		required="Yes">XPath to match in the document.</property>
+<property name="Ignore Whitespace"	required="No">Ignore Element Whitespace.</property>
+<property name="True if nothing matches"	required="No">True if a XPath expression is not matched</property>
 </properties>
 </component>
 
