@@ -126,7 +126,7 @@
   <target name="init" depends="check-libs,report-missing-libs">
   	<tstamp/>
   	<!-- JMeter version -->
-  <property name="version" value="1.9.RC3"/>
+  <property name="version" value="1.9"/>
   </target>
 
   	<!-- JMeter Javadoc version (keep in line with above) -->
