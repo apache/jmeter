@@ -23,7 +23,6 @@ import java.awt.BorderLayout;
 import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Create a summariser test element.
@@ -32,8 +31,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * This is not really a PostProcessor, but that seems to be the closest
  * of the existing types.
  * 
- * @author sebb AT apache DOT org
- * @version $Revision$ Last updated: $date$
+ * @version $Revision$ Last updated: $Date$
  */
 public class SummariserGui extends AbstractPostProcessorGui
 {
@@ -44,12 +42,9 @@ public class SummariserGui extends AbstractPostProcessorGui
         init();
     }
 
-    /**
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-     */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("summariser_title");
+        return "summariser_title";
     }
     
     public void configure(TestElement el)

@@ -44,8 +44,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * JMeter GUI component representing the test plan which will be executed when
  * the test is run.
  *
- * @author    Michael Stover
- * @version   $Revision$ Last Updated: $date$
+ * @version   $Revision$ Last Updated: $Date$
  */
 public class TestPlanGui extends AbstractJMeterGuiComponent
 {
@@ -126,10 +125,9 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
         }
     }
 
-    /* Implements JMeterGUIComponent.getStaticLabel() */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("test_plan");
+        return "test_plan";
     }
 
     /**

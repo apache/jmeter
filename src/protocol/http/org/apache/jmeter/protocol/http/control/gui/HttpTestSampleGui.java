@@ -36,8 +36,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author    Michael Stover
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class HttpTestSampleGui extends AbstractSamplerGui
 {
@@ -84,14 +83,9 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         this.configureTestElement(sampler);
     }
 
-    /**
-     * Gets the ClassLabel attribute of the HttpTestSample object.
-     *
-     * @return   the ClassLabel value
-     */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("web_testing_title");
+        return "web_testing_title";
     }
 
     private void init()

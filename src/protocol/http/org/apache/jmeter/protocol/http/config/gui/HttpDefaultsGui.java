@@ -50,9 +50,9 @@ public class HttpDefaultsGui extends AbstractConfigGui
         init();
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("url_config_title");
+        return "url_config_title";
     }
 
     /**

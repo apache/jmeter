@@ -33,7 +33,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
- * @version $Revision$
+ * @version $Revision$ on $Date$
  */
 public class RegexExtractorGui extends AbstractPostProcessorGui
 {
@@ -49,12 +49,9 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
         init();
     }
 
-    /**
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-     */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("regex_extractor_title");
+        return "regex_extractor_title";
     }
     
     public void configure(TestElement el)

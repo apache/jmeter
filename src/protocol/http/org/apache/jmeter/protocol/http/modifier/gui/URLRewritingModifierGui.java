@@ -30,7 +30,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
- * @author mstover
  * @version $Revision$ last updated $Date$
  */
 public class URLRewritingModifierGui extends AbstractPreProcessorGui
@@ -38,15 +37,10 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui
     JLabeledTextField argumentName;
     JCheckBox pathExt;
     JCheckBox pathExtNoEquals;
-    private final static String title =
-        JMeterUtils.getResString("http_url_rewriting_modifier_title");
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-     */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return title;
+        return "http_url_rewriting_modifier_title";
     }
 
     public URLRewritingModifierGui()

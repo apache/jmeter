@@ -35,8 +35,8 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
 
 /**
- * @author    Michael Stover
- * @version   $Revision$
+ * 
+ * @version   $Revision$ on $Date$
  */
 public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 {
@@ -49,9 +49,9 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
         setName(getStaticLabel());
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("assertion_visualizer_title");
+        return "assertion_visualizer_title";
     }
 
     public void add(SampleResult sample)

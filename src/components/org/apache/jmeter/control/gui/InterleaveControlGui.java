@@ -26,8 +26,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
- * @author    Kevin Hammond
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class InterleaveControlGui extends AbstractControllerGui
 {
@@ -78,9 +77,9 @@ public class InterleaveControlGui extends AbstractControllerGui
         }
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("interleave_control_title");
+        return "interleave_control_title";
     }
 
     private void init()

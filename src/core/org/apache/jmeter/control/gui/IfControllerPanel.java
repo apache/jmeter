@@ -45,7 +45,6 @@ public class IfControllerPanel extends AbstractControllerGui
 	implements ActionListener
 {
 
-	  private static final String CONDITION_TITLE = "if_controller_title";
 	  private static final String CONDITION_LABEL = "if_controller_label";
 
 	/**
@@ -137,9 +136,8 @@ public class IfControllerPanel extends AbstractControllerGui
 		new FocusRequester(theCondition);
 	}
 
-	/* Implements JMeterGUIComponent.getStaticLabel() */
-	public String getStaticLabel() {
-		return JMeterUtils.getResString(CONDITION_TITLE);
+	public String getLabelResource() {
+		return "if_controller_title";
 	}
 
 	/**

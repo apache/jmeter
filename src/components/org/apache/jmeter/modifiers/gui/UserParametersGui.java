@@ -70,12 +70,9 @@ public class UserParametersGui extends AbstractPreProcessorGui
         init();
     }
 
-    /**
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-     */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("user_parameters_title");
+        return "user_parameters_title";
     }
 
     public void configure(TestElement el)

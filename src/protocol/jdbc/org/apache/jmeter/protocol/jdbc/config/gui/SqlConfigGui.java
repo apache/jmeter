@@ -34,8 +34,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author    Michael Stover
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class SqlConfigGui extends AbstractConfigGui
 {
@@ -53,9 +52,9 @@ public class SqlConfigGui extends AbstractConfigGui
         init();
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("database_sql_query_title");
+        return "database_sql_query_title";
     }
 
     public void configure(TestElement element)

@@ -106,9 +106,9 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
         init();
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("cookie_manager_title");
+        return "cookie_manager_title";
     }
 
     public void actionPerformed(ActionEvent e)

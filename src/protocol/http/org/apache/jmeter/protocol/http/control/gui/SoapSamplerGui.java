@@ -31,13 +31,10 @@ import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
- * @author mstover
- * @version $Revision$
+ * @version $Revision$ on $Date$
  */
 public class SoapSamplerGui extends AbstractSamplerGui
 {
-    private static final String label =
-        JMeterUtils.getResString("soap_sampler_title");
     private JLabeledTextField urlField;
     private JLabeledTextArea soapXml;
 
@@ -46,12 +43,9 @@ public class SoapSamplerGui extends AbstractSamplerGui
         init();
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-     */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return label;
+        return "soap_sampler_title";
     }
 
     /* (non-Javadoc)

@@ -40,7 +40,6 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author    Michael Stover
  * @version   $Revision$ Last updated: $Date$
  */
 public class SizeAssertionGui
@@ -63,12 +62,9 @@ public class SizeAssertionGui
         init();
     }
 
-    /**
-     * Returns the label to be shown within the JTree-Component.
-     */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("size_assertion_title");
+        return "size_assertion_title";
     }
 
     public String getSizeAttributesTitle()

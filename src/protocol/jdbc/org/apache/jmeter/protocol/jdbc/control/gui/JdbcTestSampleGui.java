@@ -30,11 +30,9 @@ import org.apache.jmeter.protocol.jdbc.config.gui.SqlConfigGui;
 import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author    Michael Stover
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class JdbcTestSampleGui extends AbstractSamplerGui
 {
@@ -56,9 +54,9 @@ public class JdbcTestSampleGui extends AbstractSamplerGui
         sqlGui.configure(element);
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("database_testing_title");
+        return "database_testing_title";
     }
 
     public TestElement createTestElement()

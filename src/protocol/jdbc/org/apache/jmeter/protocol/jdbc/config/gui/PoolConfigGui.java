@@ -37,8 +37,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author    Michael Stover
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class PoolConfigGui extends AbstractConfigGui implements FocusListener
 {
@@ -96,9 +95,9 @@ public class PoolConfigGui extends AbstractConfigGui implements FocusListener
             maxUseField.getText());
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("database_conn_pool_title");
+        return "database_conn_pool_title";
     }
 
     public void focusGained(FocusEvent e)

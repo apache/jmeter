@@ -31,8 +31,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author    Michael Stover
- * @version   $Revision$ last updated $date$
+ * 
+ * @version   $Revision$ last updated $Date$
  */
 public class FtpTestSamplerGui extends AbstractSamplerGui
 {
@@ -71,9 +71,9 @@ public class FtpTestSamplerGui extends AbstractSamplerGui
         this.configureTestElement(sampler);
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("ftp_testing_title");
+        return "ftp_testing_title";
     }
 
     private void init()

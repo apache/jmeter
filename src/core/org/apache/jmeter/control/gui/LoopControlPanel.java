@@ -38,8 +38,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * should be executed some number of times in a loop.  This component can be
  * used standalone or embedded into some other component.
  *
- * @author    Michael Stover
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 
 public class LoopControlPanel
@@ -162,10 +161,9 @@ public class LoopControlPanel
         }
     }
 
-    /* Implements JMeterGUIComponent.getStaticLabel() */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("loop_controller_title");
+        return "loop_controller_title";
     }
 
     /**

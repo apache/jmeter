@@ -23,11 +23,9 @@ import java.awt.BorderLayout;
 import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.protocol.http.modifier.AnchorModifier;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author    Kevin Hammond
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class AnchorModifierGui extends AbstractPreProcessorGui
 {
@@ -36,9 +34,9 @@ public class AnchorModifierGui extends AbstractPreProcessorGui
         init();
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("anchor_modifier_title");
+        return "anchor_modifier_title";
     }
 
     public TestElement createTestElement()

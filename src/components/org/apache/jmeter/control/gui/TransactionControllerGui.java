@@ -22,13 +22,11 @@ import java.awt.BorderLayout;
 import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.control.gui.AbstractControllerGui;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * A Transaction controller component.
  *
- * @author    sebb AT apache DOT org
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class TransactionControllerGui extends AbstractControllerGui
 {
@@ -54,10 +52,9 @@ public class TransactionControllerGui extends AbstractControllerGui
         configureTestElement(el);
     }
 
-    /* Implements JMeterGUIComponent.getStaticLabel() */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("transaction_controller_title")+" (ALPHA code)";
+        return "transaction_controller_title";
     }
 
     /**

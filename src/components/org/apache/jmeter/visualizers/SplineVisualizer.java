@@ -43,8 +43,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * Spline interpolated curve. Currently, it tries to look mostly like the
  * GraphVisualizer.
  *
- * @author    <a href="mailto:norguet@bigfoot.com">Jean-Pierre Norguet</a>
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class SplineVisualizer
     extends AbstractVisualizer
@@ -87,9 +86,9 @@ public class SplineVisualizer
         model.add(res);
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("spline_visualizer_title");
+        return "spline_visualizer_title";
     }
 
     public void updateGui(Sample s)

@@ -28,9 +28,9 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class RecordController extends LogicControllerGui
 {
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("record_controller_title");
+        return "record_controller_title";
     }
 
     public TestElement createTestElement()

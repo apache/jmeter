@@ -38,8 +38,6 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * A swing panel to allow UI with the ParamModifier class.
  *
- * @author    David La France
- * @author     <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * Created   Jan 18, 2002
  * @version   $Revision$ Last updated: $Date$
  */
@@ -66,9 +64,9 @@ public class ParamModifierGui
         init();
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("html_parameter_mask");
+        return "html_parameter_mask";
     }
 
     public void configure(TestElement el)

@@ -46,8 +46,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * This class LdapConfigGui is user interface gui for getting all the
  * configuration values from the user.
  * 
- * @author    T.Elanjchezhiyan(chezhiyan@siptech.co.in) - Sip Technologies and
- *            Exports Ltd. 
  * Created     Apr 29 2003 11:45 AM
  * @version   $Revision$ Last updated: $Date$
  */
@@ -89,10 +87,9 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener
         this(true);
     }
 
-    /* Implements JMeterGUIComponent.getStaticLabel() */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return  JMeterUtils.getResString("ldap_sample_title");
+        return  "ldap_sample_title";
     }
 
     /**

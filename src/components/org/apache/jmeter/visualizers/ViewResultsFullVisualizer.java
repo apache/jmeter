@@ -53,7 +53,6 @@ import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -63,7 +62,6 @@ import org.apache.log.Logger;
  * also allows to "single step through" the sampling process via a nice
  * "Continue" button.
  *
- * @author    Khor Soon Hin
  * Created     2001/07/25
  * @version   $Revision$ $Date$
  */
@@ -111,9 +109,9 @@ public class ViewResultsFullVisualizer
         updateGui(res);
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("view_results_tree_title");
+        return "view_results_tree_title";
     }
 
     /**

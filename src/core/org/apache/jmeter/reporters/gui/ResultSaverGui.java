@@ -34,8 +34,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Create a ResultSaver test element, which saves the sample information
  * in set of files
  * 
- * @author sebb AT apache DOT org
- * @version $Revision$ Last updated: $date$
+ * @version $Revision$ Last updated: $Date$
  */
 public class ResultSaverGui extends AbstractPostProcessorGui
 {
@@ -51,9 +50,9 @@ public class ResultSaverGui extends AbstractPostProcessorGui
     /**
      * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
      */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("resultsaver_title");
+        return "resultsaver_title";
     }
     
 	/**
