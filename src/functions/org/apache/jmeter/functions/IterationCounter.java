@@ -20,9 +20,9 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class IterationCounter extends AbstractFunction implements Serializable
 {
-	private static int counter;
+	
 	private static final List desc = new LinkedList();
-	private boolean perThread = true;
+	private static final String KEY = "__counter";
 	
 	static
 	{
@@ -30,10 +30,10 @@ public class IterationCounter extends AbstractFunction implements Serializable
 		desc.add(JMeterUtils.getResString("function_name_param"));
 	}
 	
-	private static final String KEY = "__counter";
-	private String trueCount;
-	private String falseCount;
-	
+	private Object[] variables;
+	private static int counter;
+
+
 	public IterationCounter()
 	{
 		counter = 0;
@@ -49,36 +49,42 @@ public class IterationCounter extends AbstractFunction implements Serializable
 	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
 	 */
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-		throws InvalidVariableException {
+		throws InvalidVariableException 
+	{
 		counter++;
+
 		JMeterVariables vars = getVariables();
-		String falseCounterString = Integer.toString(counter);
-		String trueCounterString = Integer.toString(vars.getIteration());
-		vars.put(trueCount,trueCounterString);
-		vars.put(falseCount,falseCounterString);
 		
+		boolean perThread = new Boolean(((CompoundFunction)variables[0]).execute()).booleanValue();
+
+		String varName = ((CompoundFunction)variables[variables.length - 1]).execute();
+		String counterString = "";
+
 		if(perThread)
 		{
-			return trueCounterString;
+			counterString = Integer.toString(vars.getIteration());			
 		}
 		else
 		{
-			return falseCounterString;
+			counterString = Integer.toString(counter);
 		}
+		
+		vars.put( varName, counterString );
+		return counterString;
 	}
+
 
 	/**
 	 * @see org.apache.jmeter.functions.Function#setParameters(String)
 	 */
 	public void setParameters(String parameters)
 		throws InvalidVariableException {
-			Collection params = this.parseArguments(parameters);
-			String[] values = (String[])params.toArray(new String[0]);
-			perThread = new Boolean(values[0]).booleanValue();
-			if(values.length > 1)
-			{
-				trueCount = values[1]+"_true";
-				falseCount = values[1]+"_false";
+			
+			Collection params = this.parseArguments2(parameters);
+			variables = params.toArray();
+			
+			if ( variables.length < 2 ) {
+				throw new InvalidVariableException();
 			}
 	}
 
@@ -95,5 +101,6 @@ public class IterationCounter extends AbstractFunction implements Serializable
 	public List getArgumentDesc() {
 		return desc;
 	}
+
 
 }

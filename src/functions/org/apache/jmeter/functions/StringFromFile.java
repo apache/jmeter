@@ -1,17 +1,16 @@
 package org.apache.jmeter.functions;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.io.*;
-import java.util.*;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
@@ -33,17 +32,19 @@ public class StringFromFile extends AbstractFunction implements Serializable
 {
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.elements");
+
 	private static final List desc = new LinkedList();
+	private static final String KEY = "_StringFromFile"; // Function name (only 1 _)
+
 	static
 	{
 		desc.add(JMeterUtils.getResString("string_from_file_file_name"));
 		desc.add(JMeterUtils.getResString("function_name_param"));
 	}
 	
-	private static final String KEY = "_StringFromFile"; // Function name (only 1 _)
 	private String myValue = "<please supply a file>"; // Default value
 	private String myName  = "StringFromFile_"; // Name to store value in
-	private String fileName;
+	private Object[] values;
 	private BufferedReader myBread; // Buffered reader
 	private boolean reopenFile=true; // Set from parameter list one day ...
 	
@@ -57,12 +58,12 @@ public class StringFromFile extends AbstractFunction implements Serializable
 		return newReader;
 	}
 
-	private void openFile(){
+	private void openFile( String fileName ){
 	    try {
-		FileReader fis = new FileReader(fileName);
-		myBread = new BufferedReader(fis);
+			FileReader fis = new FileReader(fileName);
+			myBread = new BufferedReader(fis);
 	    } catch (Exception e) {
-		log.error("openFile",e);
+			log.error("openFile",e);
 	    }
 	}
 
@@ -71,23 +72,32 @@ public class StringFromFile extends AbstractFunction implements Serializable
 	 */
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 		throws InvalidVariableException {
+		
 		JMeterVariables vars = getVariables();
+
+		String fileName = ((CompoundFunction)values[0]).execute();
+		myName = ((CompoundFunction)values[1]).execute();
+
+		openFile(fileName);
+
 		myValue="**ERR**";
 		if (null != myBread) {// Did we open the file?
 		  try {
 		    String line = myBread.readLine();
 		    if (line == null && reopenFile) { // EOF, re-open file
-			myBread.close();
-			openFile();
-			line = myBread.readLine();
+				myBread.close();
+				openFile(fileName);
+				line = myBread.readLine();
 		    }
 		    myValue = line;
 		  } catch (Exception e) {
 		    log.error("Token",e);
 		  }
 		}
+		
 		vars.put(myName,myValue);
 		return myValue;
+
 	}
 
 	/**
@@ -95,14 +105,14 @@ public class StringFromFile extends AbstractFunction implements Serializable
 	 */
 	public void setParameters(String parameters)
 		throws InvalidVariableException {
-			Collection params = this.parseArguments(parameters);
-			String[] values = (String[])params.toArray(new String[0]);
-			fileName = values[0];
-			if(values.length > 1)
-			{
-				myName = values[1];
-			}
-			openFile();
+			
+		Collection params = this.parseArguments2(parameters);
+		values = params.toArray();
+		
+		if ( values.length > 2 ) {
+			throw new InvalidVariableException();
+		}
+			
 	}
 
 	/**

@@ -66,6 +66,8 @@ import junit.framework.TestCase;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.reflect.ClassFinder;
@@ -85,14 +87,16 @@ public class CompoundFunction implements Function
 {
     transient private static Logger log =
         Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+    
     private JMeterVariables threadVars;
+	private Map varMap = new HashMap();
 
     static Map functions = new HashMap();
     private Map definedValues;
     private boolean hasFunction, hasStatics, hasUnknowns;
     private String staticSubstitution;
+    
     private static Perl5Util util = new Perl5Util();
-
     static private PatternCompiler compiler = new Perl5Compiler();
     static private String variableSplitter = "/(\\${)/";
 
@@ -120,6 +124,7 @@ public class CompoundFunction implements Function
         }
     }
 
+
     public CompoundFunction()
     {
         hasFunction = false;
@@ -129,8 +134,18 @@ public class CompoundFunction implements Function
         staticSubstitution = "";
     }
 
-    /**
-     * @see Function#execute(SampleResult)
+    
+	public String execute() 
+	{
+		JMeterContext context = JMeterContextService.getContext();
+		setJMeterVariables( context.getVariables() );
+		SampleResult previousResult = context.getPreviousResult();
+		Sampler currentSampler = context.getCurrentSampler();
+		return execute( previousResult, currentSampler );
+	}
+ 
+     /**
+     * @see Function#execute(SampleResult, Sampler)
      */
     public String execute(SampleResult previousResult, Sampler currentSampler)
     {
@@ -220,31 +235,23 @@ public class CompoundFunction implements Function
             {
                 String function = part.substring(0, index);
                 String functionName = parseFunctionName(function);
-                if (definedValues.containsKey(functionName))
+                
+				if ( functions.containsKey(functionName) )
                 {
-                    Object replacement = definedValues.get(functionName);
-                    if (replacement instanceof Class)
+                    Object replacement = functions.get(functionName);
+
+                    try
                     {
-                        try
-                        {
-                            hasFunction = true;
-                            Function func =
-                                (Function) ((Class) replacement).newInstance();
-                            func.setParameters(extractParams(function));
-                            compiledComponents.addLast(func);
-                        }
-                        catch (Exception e)
-                        {
-                            log.error("", e);
-                            throw new InvalidVariableException();
-                        }
+                        hasFunction = true;
+                        Function func =
+                            (Function) ((Class) replacement).newInstance();
+                        func.setParameters(extractParams(function));
+                        compiledComponents.addLast(func);
                     }
-                    else
+                    catch (Exception e)
                     {
-                        hasStatics = true;
-                        addStringToComponents(
-                            compiledComponents,
-                            (String) replacement);
+                        log.error("", e);
+                        throw new InvalidVariableException();
                     }
                 }
                 else
@@ -254,6 +261,7 @@ public class CompoundFunction implements Function
                     hasFunction = true;
                     hasUnknowns = true;
                 }
+
                 if ((index + 1) < part.length())
                 {
                     addStringToComponents(
@@ -272,42 +280,11 @@ public class CompoundFunction implements Function
             }
             previous = part;
         }
-        if (!hasFunction)
-        {
-            staticSubstitution = compiledComponents.getLast().toString();
-            if (hasStatics())
-            {
-                compiledComponents.clear();
-                hasStatics = false;
-                setParameters(staticSubstitution);
-                hasStatics = true;
-            }
-        }
-        else if (hasStatics())
-        {
-            iter = new LinkedList(compiledComponents).iterator();
-            while (iter.hasNext())
-            {
-                Object item = iter.next();
-                if (item instanceof StringBuffer)
-                {
-                    CompoundFunction nestedFunc = new CompoundFunction();
-                    nestedFunc.setUserDefinedVariables(new HashMap());
-                    nestedFunc.setParameters(item.toString());
-                    if (nestedFunc.hasFunction())
-                    {
-                        int index = compiledComponents.indexOf(item);
-                        compiledComponents.remove(index);
-                        compiledComponents.add(index, nestedFunc);
-                    }
-                }
-            }
-        }
+
     }
 
-    private void addStringToComponents(
-        LinkedList refinedComponents,
-        String part)
+
+    private void addStringToComponents( LinkedList refinedComponents, String part)
     {
         if (part == null || part.length() == 0)
         {
@@ -330,6 +307,7 @@ public class CompoundFunction implements Function
         }
     }
 
+
     private String extractParams(String function)
     {
         if (function.indexOf("(") > -1)
@@ -344,11 +322,13 @@ public class CompoundFunction implements Function
         }
     }
 
+
     private int getFunctionEndIndex(String part)
     {
         int index = part.indexOf("}");
         return index;
     }
+
 
     private String parseFunctionName(String function)
     {
@@ -361,22 +341,30 @@ public class CompoundFunction implements Function
         return functionName;
     }
 
+
     public boolean hasFunction()
     {
         return hasFunction;
     }
 
-    public boolean hasStatics()
+	public boolean hasStatics()
     {
         return hasStatics;
     }
+
 
     public String getStaticSubstitution()
     {
         return staticSubstitution;
     }
 
-    public void setUserDefinedVariables(Map userVariables)
+
+    /**
+	 * Method setUserDefinedVariables.
+	 * @deprecated
+	 * @param userVariables
+	 */
+	public void setUserDefinedVariables(Map userVariables)
     {
         definedValues.clear();
         definedValues.putAll(functions);
@@ -390,6 +378,12 @@ public class CompoundFunction implements Function
     {
         return "";
     }
+       
+	private JMeterVariables getVariables()
+	{
+		return (JMeterVariables)varMap.get(Thread.currentThread().getName());
+	}
+
 
     public static class Test extends TestCase
     {
@@ -421,7 +415,7 @@ public class CompoundFunction implements Function
                 "org.apache.jmeter.functions.RegexFunction",
                 function.compiledComponents.getFirst().getClass().getName());
             assertTrue(function.hasFunction());
-            assertTrue(!function.hasStatics());
+//            assertTrue(!function.hasStatics());
             assertEquals(
                 "hello world",
                 ((Function) function.compiledComponents.getFirst()).execute(
@@ -442,7 +436,7 @@ public class CompoundFunction implements Function
                 "It should say:${",
                 function.compiledComponents.getFirst().toString());
             assertTrue(function.hasFunction());
-            assertTrue(!function.hasStatics());
+//            assertTrue(!function.hasStatics());
             assertEquals(
                 "hello world",
                 ((Function) function.compiledComponents.get(1)).execute(
@@ -464,7 +458,7 @@ public class CompoundFunction implements Function
             function.setJMeterVariables(new JMeterVariables());
             assertEquals(2, function.compiledComponents.size());
             assertTrue(function.hasFunction());
-            assertTrue(!function.hasStatics());
+//            assertTrue(!function.hasStatics());
             assertEquals(
                 "hello world",
                 ((Function) function.compiledComponents.get(0)).execute(
@@ -487,7 +481,7 @@ public class CompoundFunction implements Function
             function.setJMeterVariables(new JMeterVariables());
             assertEquals(1, function.compiledComponents.size());
             assertTrue(function.hasFunction());
-            assertTrue(!function.hasStatics());
+//            assertTrue(!function.hasStatics());
             assertEquals(
                 "${non-existing function}",
                 function.execute(result, null));
@@ -502,7 +496,7 @@ public class CompoundFunction implements Function
             function.setJMeterVariables(new JMeterVariables());
             assertEquals(1, function.compiledComponents.size());
             assertTrue(!function.hasFunction());
-            assertTrue(function.hasStatics());
+//            assertTrue(function.hasStatics());
             assertEquals("jakarta.apache.org", function.execute(null, null));
         }
 
@@ -512,7 +506,7 @@ public class CompoundFunction implements Function
             function.setJMeterVariables(new JMeterVariables());
             assertEquals(0, function.compiledComponents.size());
             assertTrue(!function.hasFunction());
-            assertTrue(!function.hasStatics());
+//            assertTrue(!function.hasStatics());
         }
 
         public void testNestedExample1() throws Exception
@@ -522,7 +516,7 @@ public class CompoundFunction implements Function
             function.setJMeterVariables(new JMeterVariables());
             assertEquals(2, function.compiledComponents.size());
             assertTrue(function.hasFunction());
-            assertTrue(function.hasStatics());
+//            assertTrue(function.hasStatics());
             assertEquals(
                 "hello world",
                 ((Function) function.compiledComponents.get(0)).execute(
@@ -549,7 +543,7 @@ public class CompoundFunction implements Function
                 "org.apache.jmeter.functions.RegexFunction",
                 function.compiledComponents.getFirst().getClass().getName());
             assertTrue(function.hasFunction());
-            assertTrue(function.hasStatics());
+//            assertTrue(function.hasStatics());
             assertEquals(
                 "hello world",
                 ((Function) function.compiledComponents.getFirst()).execute(

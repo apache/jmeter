@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,6 +41,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	public static final String RAND = "RAND";
 	public static final String KEY = "__regexFunction";	
 	
+	Object[] values;
 	private static Random rand = new Random();
 	private static List desc = new LinkedList();
 	Pattern searchPattern;
@@ -81,12 +83,40 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	 * @see Variable#getValue(SampleResult, Sampler)
 	 */
 	public String execute(SampleResult previousResult,Sampler currentSampler) 
-	{
+		throws InvalidVariableException {
+			
+		try
+		{
+
+			searchPattern = compiler.compile(((CompoundFunction)values[0]).execute());
+			generateTemplate(((CompoundFunction)values[1]).execute());
+
+			valueIndex = ((CompoundFunction)values[2]).execute();
+			if ( valueIndex.equals("") )
+				valueIndex = "1";
+
+			between = ((CompoundFunction)values[3]).execute();
+
+			String dv = ((CompoundFunction)values[4]).execute();
+			if ( ! dv.equals("") ) {
+				defaultValue = dv;
+			}
+			
+			name = ((CompoundFunction)values[values.length-1]).execute();
+
+		} catch(MalformedPatternException e) {
+			log.error("",e);
+			throw new InvalidVariableException("Bad regex pattern");
+		} catch(Exception e) {
+			throw new InvalidVariableException(e.getMessage());
+		}
+
 		getVariables().put(name,defaultValue);
 		if(previousResult == null || previousResult.getResponseData() == null)
 		{
 			return defaultValue;
 		}
+		
 		List collectAllMatches = new ArrayList();
 		try {
 			PatternMatcher matcher = (PatternMatcher)localMatcher.get();
@@ -105,10 +135,12 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		{
 			return defaultValue;
 		}
+		
 		if(collectAllMatches.size() == 0)
 		{
 			return defaultValue;
 		}
+		
 		if(valueIndex.equals(ALL))
 		{
 			StringBuffer value = new StringBuffer();
@@ -127,7 +159,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 				value.append(generateResult((MatchResult)it.next()));
 			}
 			return value.toString();
-		}
+		} 
 		else if(valueIndex.equals(RAND))
 		{
 			MatchResult result = (MatchResult)collectAllMatches.get(
@@ -148,7 +180,8 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 			}catch (IndexOutOfBoundsException e) {
 				 return defaultValue;
 			}
-		}			
+		}
+			
 	}
 	
 	private void saveGroups(MatchResult result)
@@ -193,40 +226,11 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		return KEY;
 	}
 	
-	public void setParameters(String params) throws InvalidVariableException
+	public void setParameters(String parameters) throws InvalidVariableException
 	{
-		try
-		{
-			Iterator tk = parseArguments(params).iterator();
-			valueIndex = "1";
-			between = "";
-			defaultValue = URLDecoder.decode(params);
-			searchPattern = compiler.compile((String)tk.next());			
-			generateTemplate((String)tk.next());
-			if(tk.hasNext())
-			{
-				valueIndex = (String)tk.next();
-			}
-			if(tk.hasNext())
-			{
-				between = (String)tk.next();
-			}
-			if(tk.hasNext())
-			{
-				defaultValue = (String)tk.next();
-			}
-			if(tk.hasNext())
-			{
-				name = (String)tk.next();
-			}
-		} catch(MalformedPatternException e) {
-				log.error("",e);
-				throw new InvalidVariableException("Bad regex pattern");
-		}
-		catch(Exception e)
-		{
-			throw new InvalidVariableException(e.getMessage());
-		}
+		Collection params = parseArguments2(parameters);
+		values = params.toArray();		
+		defaultValue = URLDecoder.decode(parameters);
 	}
 	
 	private void generateTemplate(String rawTemplate)

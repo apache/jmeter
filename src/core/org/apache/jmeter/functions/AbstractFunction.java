@@ -50,16 +50,56 @@ public abstract class AbstractFunction implements Function {
 		while(tk.hasMoreTokens())
 		{
 			String arg = tk.nextToken();
-			if(arg.equals(",") && previous.equals(","))
+			
+			if(arg.equals(",") && previous.equals(",") )
 			{
-				arguments.add("");
+				arguments.add( "" );
 			}
 			else if(!arg.equals(","))
 			{
-				arguments.add(URLDecoder.decode(arg));
+				arguments.add( URLDecoder.decode(arg) );
+			}
+			previous = arg;
+		}	
+		return arguments;
+	}
+
+	/**
+	 * Provides a convenient way to parse the given argument string into a collection of
+	 * individual arguments.  Takes care of splitting the string based on commas, generates
+	 * blank strings for values between adjacent commas, and decodes the string using URLDecoder.
+	 */
+	protected Collection parseArguments2(String params)
+	{
+		StringTokenizer tk = new StringTokenizer(params,",",true);
+		List arguments = new LinkedList();
+		String previous = "";
+		while(tk.hasMoreTokens())
+		{
+			String arg = tk.nextToken();
+			
+			if(arg.equals(",") && ( previous.equals(",") || previous.length() == 0 ))
+			{
+				arguments.add( new CompoundFunction() );
+			}
+			else if(!arg.equals(","))
+			{
+				try 
+				{
+					CompoundFunction compoundArg = new CompoundFunction();
+					compoundArg.setParameters(URLDecoder.decode(arg));
+					arguments.add( compoundArg );
+				}
+				catch ( InvalidVariableException e ) { }
 			}
 			previous = arg;
 		}
+		
+		if ( previous.equals(",") ) 
+		{
+			arguments.add(new CompoundFunction());
+		}
+		
 		return arguments;
 	}
 	
