@@ -175,7 +175,7 @@
     <javac srcdir="${src.components}" destdir="${build.components}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <exclude name="org/apache/jmeter/visualizers/MailerVisualizer.java" unless="javamail.complete"/>
-      <exclude name="org/apache/jmeter/visualizers/MailerModel.java" unless="javamail.complete"/>
+      <exclude name="org/apache/jmeter/reporters/MailerModel.java" unless="javamail.complete"/>
       <exclude name="org/apache/jmeter/reporters/MailerResultCollector.java" unless="javamail.complete"/>
       <classpath>
         <path refid="classpath"/>
