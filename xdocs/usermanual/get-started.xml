@@ -110,6 +110,10 @@ you must copy them to JMeter's "lib" directory.  If you have developed new JMete
 then you should jar them and copy the jar into JMeter's /lib/ext directory.  JMeter will
 automatically find JMeter components in any jars found here.</p>
 <p>You can also install utility Jar files in $JAVA_HOME/jre/lib/ext</p>
+<p>Note that setting the CLASSPATH environment variable will have no effect.
+This is because JMeter is started with "java -jar", 
+and the java command silently ignores the CLASSPATH variable, and the -classpath/-cp options when -jar is used. 
+[This occurs with all Java programs, not just JMeter.]</p>
 </subsection>
 
 <subsection name="2.4.2 Using a Proxy Server" anchor="proxy_server">
@@ -169,7 +173,30 @@ jmeter -LDEBUG</pre>
 	Attempts to use the -J flag to update log_level or log_file properties will have no effect.</b>
 	</p>
 </subsection>
+<subsection name="2.4.6 Logging and error messages" anchor="logging">
+	<p>If JMeter detects an error, a message will be written to the log file. 
+		The log file name is defined in the jmeter.properties file.
+		It is normally defined as <b>jmeter.log</b>, and will be found in the JMeter startup directory, i.e. bin.
+		</p>
+		<p>When running on Windows, the file may appear as just <b>jmeter</b> unless you have set Windows to show file extensions.
+		[Which you should do anyway, to make it easier to detect viruses and other nasties that pretend to be text files...]
+		</p>
+		<p>As well as recording errors, the jmeter.log file records some information about the test run. For example:</p>
+<pre>
+10/17/2003 12:19:20 PM INFO  - jmeter.JMeter: Version 1.9.20031002 
+10/17/2003 12:19:45 PM INFO  - jmeter.gui.action.Load: Loading file: c:\mytestfiles\BSH.jmx 
+10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
+10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Starting 1 threads for group BSH. Ramp up = 1. 
+10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Continue on error 
+10/17/2003 12:19:52 PM INFO  - jmeter.threads.JMeterThread: Thread BSH1-1 started 
+10/17/2003 12:19:52 PM INFO  - jmeter.threads.JMeterThread: Thread BSH1-1 is done 
+10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Test has ended 	
+</pre>
+<p>The log file can be helpful in determining the cause of an error,
+	as JMeter does not interrupt a test to display an error dialogue.</p>
+</subsection>
 </section>
+
 
 <section name="2.5 Configuring JMeter" anchor="configuring_jmeter">
 <p>If you wish to modify the properties with which JMeter runs you need to
