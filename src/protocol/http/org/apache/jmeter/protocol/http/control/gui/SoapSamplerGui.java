@@ -1,11 +1,11 @@
 package org.apache.jmeter.protocol.http.control.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.protocol.http.sampler.SoapSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
@@ -13,7 +13,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
  * @author mstover
@@ -24,8 +23,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 public class SoapSamplerGui extends AbstractSamplerGui
 {
     private static final String label = JMeterUtils.getResString("soap_sampler_title");
-    JLabeledTextField urlField = new JLabeledTextField(JMeterUtils.getResString("url"));
-    JLabeledTextArea soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title"), null);
+    private JLabeledTextField urlField;
+    private JLabeledTextArea soapXml;
 
     public SoapSamplerGui()
     {
@@ -77,22 +76,19 @@ public class SoapSamplerGui extends AbstractSamplerGui
 
     private void init()
     {
-        this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
+        
+        add(makeTitlePanel(), BorderLayout.NORTH);
 
-        // MAIN PANEL
-        JPanel mainPanel = new JPanel();
-        Border margin = new EmptyBorder(10, 10, 5, 10);
-        mainPanel.setBorder(margin);
-        mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-        // NAME
-        mainPanel.add(makeTitlePanel());
+        urlField = new JLabeledTextField(JMeterUtils.getResString("url"), 10);
+        soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title"), null);
 
-        mainPanel.add(urlField);
-
-        // OPTIONAL TASKS
-        mainPanel.add(soapXml);
-
-        this.add(mainPanel);
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(urlField, BorderLayout.NORTH);
+        mainPanel.add(soapXml, BorderLayout.CENTER);
+        
+        add(mainPanel, BorderLayout.CENTER);
     }
 
     public void configure(TestElement el)
@@ -107,5 +103,8 @@ public class SoapSamplerGui extends AbstractSamplerGui
         {}
         soapXml.setText(sampler.getXmlData());
     }
-
+    
+    public Dimension getPreferredSize() {
+        return getMinimumSize();
+    }
 }

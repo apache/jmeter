@@ -56,8 +56,7 @@ package org.apache.jmeter.protocol.http.config.gui;
 
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.Component;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -70,6 +69,7 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -247,17 +247,17 @@ public class UrlConfigGui extends JPanel
      ***************************************/
     protected JPanel getPortPanel()
     {
-        JPanel portP = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        portP.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 10));
-        portP.add(new JLabel(JMeterUtils.getResString("web_server_port")));
-
         port = new JTextField(6);
-
         port.setName(PORT);
-        portP.add(port);
 
-        return portP;
+        JLabel label = new JLabel(JMeterUtils.getResString("web_server_port"));
+        label.setLabelFor(port);
+
+        JPanel panel = new JPanel(new BorderLayout(5, 0));
+        panel.add(label, BorderLayout.WEST);
+        panel.add(port, BorderLayout.CENTER);
+
+        return panel;
     }
 
     /****************************************
@@ -267,16 +267,16 @@ public class UrlConfigGui extends JPanel
      ***************************************/
     protected JPanel getDomainPanel()
     {
-        JPanel domainP = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        domainP.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 10));
-        domainP.add(new JLabel(JMeterUtils.getResString("web_server_domain")));
-
         domain = new JTextField(20);
         domain.setName(DOMAIN);
-        domainP.add(domain);
 
-        return domainP;
+        JLabel label = new JLabel(JMeterUtils.getResString("web_server_domain"));
+        label.setLabelFor(domain);
+        
+        JPanel panel = new JPanel(new BorderLayout(5, 0));
+        panel.add(label, BorderLayout.WEST);
+        panel.add(domain, BorderLayout.CENTER);
+        return panel;
     }
 
     /****************************************
@@ -287,29 +287,30 @@ public class UrlConfigGui extends JPanel
      *@return JPanel The Panel for the path,
      * 'Follow Redirects' and 'Use KeepAlive' elements.
      ***************************************/
-    protected JPanel getPathPanel()
+    protected Component getPathPanel()
     {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        panel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 10));
-        panel.add(new JLabel(JMeterUtils.getResString("path")));
-
         path = new JTextField(15);
         path.setName(PATH);
-        panel.add(path);
+
+        JLabel label = new JLabel(JMeterUtils.getResString("path"));
+        label.setLabelFor(path);
 
         followRedirects = new JCheckBox(JMeterUtils.getResString("follow_redirects"));
         followRedirects.setName(FOLLOW_REDIRECTS);
-        // Set this by default so as to stay compliant with the old
-        // behaviour:
         followRedirects.setSelected(true);
-        panel.add(followRedirects);
 
         useKeepAlive = new JCheckBox(JMeterUtils.getResString("use_keepalive"));
         useKeepAlive.setName(USE_KEEPALIVE);
         useKeepAlive.setSelected(true);
-        panel.add(useKeepAlive);
 
+        Box panel = Box.createHorizontalBox();
+        panel.add(label);
+        panel.add(Box.createHorizontalStrut(5));
+        panel.add(path);
+        panel.add(Box.createHorizontalStrut(10));
+        panel.add(followRedirects);
+        panel.add(Box.createHorizontalStrut(5));
+        panel.add(useKeepAlive);
         return panel;
     }
 
@@ -320,29 +321,33 @@ public class UrlConfigGui extends JPanel
      ***************************************/
     protected JPanel getProtocolAndMethodPanel()
     {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        panel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 10));
-
         // PROTOCOL
-        panel.add(new JLabel(JMeterUtils.getResString("protocol")));
         protocol = new JTextField(4);
         protocol.setName(PROTOCOL);
-        panel.add(protocol);
+
+        JLabel protocolLabel = new JLabel(JMeterUtils.getResString("protocol"));
+        protocolLabel.setLabelFor(protocol);
 
         // METHOD
-        post = new JRadioButton(JMeterUtils.getResString("url_config_post"));
-        get = new JRadioButton(JMeterUtils.getResString("url_config_get"));
         ButtonGroup methodButtonGroup = new ButtonGroup();
 
-        methodButtonGroup.add(post);
+        get = new JRadioButton(JMeterUtils.getResString("url_config_get"));
         methodButtonGroup.add(get);
 
-        panel.add(Box.createRigidArea(new Dimension(5, 0)));
-        panel.add(new JLabel(JMeterUtils.getResString("method")));
-
+        post = new JRadioButton(JMeterUtils.getResString("url_config_post"));
+        methodButtonGroup.add(post);
         post.setSelected(true);
 
+        JLabel methodLabel = new JLabel(JMeterUtils.getResString("method"));
+
+
+        JPanel panel = new HorizontalPanel();
+
+        panel.add(protocolLabel);
+        panel.add(protocol);
+        panel.add(Box.createHorizontalStrut(5));
+
+        panel.add(methodLabel);
         panel.add(get);
         panel.add(post);
 
