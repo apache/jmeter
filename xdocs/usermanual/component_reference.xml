@@ -301,7 +301,7 @@ XML.</p>
   <description>This Sampler can send all 8 different LDAP request to a LDAP server. It is an extended version of the LDAP sampler,
   therefore it is harder to configure, but can be made much closer resembling a real LDAP session.
     <p>If you are going to send multiple requests to the same LDAP server, consider
-      using an <complink name="LDAP Extended Request Defaults"/>
+      using an <complink name="LDAP Extended Request Defaults (ALPHA)"/>
       Configuration Element so you do not have to enter the same information for each
       LDAP Request.</p> </description>
 
@@ -420,7 +420,7 @@ XML.</p>
        
     <links>
       <link href="build-ldapext-test-plan.html">Building a Ldap Test Plan</link>
-      <complink name="LDAP Extended Request Defaults"/>
+      <complink name="LDAP Extended Request Defaults (ALPHA)"/>
     </links>
 
 </component>
@@ -1490,7 +1490,7 @@ GUI that they can use while developing new JMeter components.</p>
 </component>
 
 <component index="16.4.12b" name="LDAP Extended Request Defaults (ALPHA)" screenshot="ldapext_defaults.png">
-<description><p>The LDAP Extended Request Defaults component lets you set default values for extended LDAP testing.  See the <complink name="LDAP Extended Request"/>.</p>
+<description><p>The LDAP Extended Request Defaults component lets you set default values for extended LDAP testing.  See the <complink name="LDAP Extended Request (ALPHA)"/>.</p>
 </description>
 
 </component>
