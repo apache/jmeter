@@ -28,10 +28,10 @@ import java.io.UnsupportedEncodingException;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-//import javax.swing.Icon;
-//import javax.swing.ImageIcon;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JEditorPane;
-//import javax.swing.JLabel;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -89,7 +89,7 @@ public class ViewResultsFullVisualizer
     private JTextPane stats;
     private JEditorPane results;
     private JScrollPane resultsScrollPane;
-    //private JLabel imageLabel;
+    private JLabel imageLabel;
     private JTextArea sampleDataField;
 
     private JRadioButton textButton;
@@ -223,8 +223,6 @@ public class ViewResultsFullVisualizer
             if (node != null)
             {
                 SampleResult res = (SampleResult) node.getUserObject();
-                // res could be null here.
-                //byte[] responseBytes = res.getResponseData();
 
                 if (log.isDebugEnabled())
                 {
@@ -306,21 +304,29 @@ public class ViewResultsFullVisualizer
 						"\nHTTP response headers:\n" + res.getResponseHeaders() + "\n",
 						null);
 
-                    String response = getResponseAsString(res);
-                    if (textMode)
+					// get the text response and image icon
+                    // to determine which is NOT null
+                    if ((SampleResult.TEXT).equals(res.getDataType())) // equals(null) is OK
                     {
-                        showTextResponse(response);
+	                    String response = getResponseAsString(res);
+	                    if (textMode)
+	                    {
+	                        showTextResponse(response);
+	                    }
+	                    else
+	                    {
+	                        showRenderedResponse(response);
+	                    }
                     }
                     else
                     {
-                        showRenderedResponse(response);
+    	                byte[] responseBytes = res.getResponseData();
+    	                if (responseBytes != null)
+    	                {
+    	                	showImage(new ImageIcon(responseBytes));	
+    	                }
                     }
                 }
-                // res is null at this point - so how did responseBytes get set up??
-//                else if (responseBytes != null)
-//                {
-//                    showImage(new ImageIcon(responseBytes));
-//                }
             }
         }
         catch (BadLocationException exc)
@@ -331,14 +337,13 @@ public class ViewResultsFullVisualizer
         log.debug("End : valueChanged1");
     }
 
-// NOTUSED    
-//    private void showImage(Icon image)
-//    {
-//        imageLabel.setIcon(image);
-//        resultsScrollPane.setViewportView(imageLabel);
-//        textButton.setEnabled(false);
-//        htmlButton.setEnabled(false);
-//    }
+    private void showImage(Icon image)
+    {
+        imageLabel.setIcon(image);
+        resultsScrollPane.setViewportView(imageLabel);
+        textButton.setEnabled(false);
+        htmlButton.setEnabled(false);
+    }
 
     protected void showTextResponse(String response)
     {
@@ -575,7 +580,7 @@ public class ViewResultsFullVisualizer
         results.setEditable(false);
 
         resultsScrollPane = makeScrollPane(results);
-        //imageLabel = new JLabel();
+        imageLabel = new JLabel();
 
         JPanel resultsPane = new JPanel(new BorderLayout());
         resultsPane.add(resultsScrollPane, BorderLayout.CENTER);
