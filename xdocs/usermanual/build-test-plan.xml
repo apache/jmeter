@@ -18,7 +18,6 @@ controllers, listeners, timers, assertions, and configuration elements.
 tree, and choosing a new element from the "add" list.  Alternatively, elements can
 be loaded from file and added by choosing the "open" option.  </p>
 
-<p>Every element will only allow you to add appropriate types of elements.</p>
 <p>To remove an element, make sure the element is selected, right-click on the element,
 and choose the "remove" option.</p>
 </subsection>
@@ -37,6 +36,8 @@ you can save test tree fragments, individual elements, or the entire test plan.<
 <p>Any element in the test tree will present controls in JMeter's right-hand frame.  These
 controls allow you to configure the behavior of that particular test element.  What can be
 configured for an element depends on what type of element it is.</p>
+
+<p>The Test Tree itself can be manipulated by dragging and dropping components around the test tree.</p>
 </subsection>
 
 <subsection name="3.4 Running a Test Plan" anchor="run">

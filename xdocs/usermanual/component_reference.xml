@@ -2,13 +2,13 @@
 <document index="yes">
 
 <properties>
-  <title>User's Manual: Generative Controllers</title>
+  <title>User's Manual: Samplers</title>
 </properties>
 
 <body>
 
 
-<section name="13.1 Generative Controllers" anchor="generative_controllers">
+<section name="13.1 Samplers" anchor="samplers">
 
 <component index="13.1.1" name="FTP Request" screenshot="../images/screenshots/gen-controller/ftp-request.gif">
 <description>This controller lets you send an FTP "retrieve file" request to an FTP server.
@@ -316,7 +316,7 @@ Bug Page, Bug Page. Note, the File Reporter is configured to store the results i
 
 <component index="13.2.5" name="Simple Controller" anchor="simple_controller" screenshot="../images/screenshots/logic-controller/simple-controller.gif">
 <description>
-<p>The Simple Logic Controller lets  you organize your Generative Controllers and other
+<p>The Simple Logic Controller lets  you organize your Samplers and other
 Logic Controllers.  Unlike other Logic Controllers, this controller provides no functionality beyond that of a
 storage device.</p>
 </description>
