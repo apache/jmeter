@@ -6,7 +6,7 @@
   <property name="sources.src.dir" value="src"/>
   <!-- Where the API documentation lives -->
   <property name="docs.api.dest.dir" value="docs/api"/>
-  <property name="version" value="_1.7Beta"/>
+  <property name="version" value="1.7Beta"/>
   <property name="docs.src" value="./xdocs"/>
   <property name="docs.dest" value="./docs"/>
   <property name="printable_docs.dest" value="./printable_docs"/>
@@ -74,6 +74,10 @@
 	 -->
 	 <target name="compile" depends="mail.message,ssl.message">
 		  <mkdir dir="${classes.dest.dir}"/>
+		  <copy tofile="${sources.src.dir}/org/apache/jmeter/util/JMeterUtils.java_temp"
+		  file="${sources.src.dir}/org/apache/jmeter/util/JMeterUtils.java" overwrite="yes"/>
+		  <replace file="${sources.src.dir}/org/apache/jmeter/util/JMeterUtils.java"
+		  token="@VERSION@" value="${version}"/>
 		  <javac srcdir="${sources.src.dir}"
 				destdir="${classes.dest.dir}"
 				optimize="${optimize}">
@@ -91,6 +95,8 @@
 				<exclude name="org/apache/jmeter/reporters/MailerResultCollector.java" unless="javamail.complete"/>
 				<classpath refid="classpath"/>
 		  </javac>
+		  <copy tofile="${sources.src.dir}/org/apache/jmeter/util/JMeterUtils.java"
+		  file="${sources.src.dir}/org/apache/jmeter/util/JMeterUtils.java_temp" overwrite="yes"/>
 	 </target>
 	 <target name="rmi" depends="compile">
 		  <rmic classpath="bin/classes" base="bin/classes" classname="org.apache.jmeter.engine.RemoteJMeterEngineImpl"/>
@@ -155,10 +161,10 @@
 	 - Creates the distribution packages
 	 -->
 	 <target name="dist" depends="install">
-		  <jar jarfile="../ApacheJMeter${version}.jar" basedir="../" includes="jakarta-jmeter/**" excludes="**/classes/**,**/xdocs/**"/>
-		  <zip zipfile="../ApacheJMeter${version}.zip" basedir="../" includes="jakarta-jmeter/**" excludes="**/classes/**,**/xdocs/**"/>
-		  <tar tarfile="../ApacheJMeter${version}.tar" basedir="../" excludes="**/classes/**,**/xdocs/**" includes="jakarta-jmeter/**" />
-		  <gzip zipfile="$../ApacheJMeter${version}.tar.gz" src="../ApacheJMeter${version}.tar" />
+		  <jar jarfile="../ApacheJMeter_${version}.jar" basedir="../" includes="jakarta-jmeter/**" excludes="**/classes/**,**/xdocs/**"/>
+		  <zip zipfile="../ApacheJMeter_${version}.zip" basedir="../" includes="jakarta-jmeter/**" excludes="**/classes/**,**/xdocs/**"/>
+		  <tar tarfile="../ApacheJMeter_${version}.tar" basedir="../" excludes="**/classes/**,**/xdocs/**" includes="jakarta-jmeter/**" />
+		  <gzip zipfile="$../ApacheJMeter_${version}.tar.gz" src="../ApacheJMeter_${version}.tar" />
 	 </target>
 
 	 <!--
