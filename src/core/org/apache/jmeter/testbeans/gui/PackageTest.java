@@ -116,7 +116,7 @@ public class PackageTest extends JMeterTestCase
 			beanInfo= Introspector.getBeanInfo(testBeanClass, TestBean.class);
 			bundle= (ResourceBundle) beanInfo
 				.getBeanDescriptor()
-				.getValue(TestBeanGUI.RESOURCE_BUNDLE);
+				.getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE);
 		}
 		catch (IntrospectionException e)
 		{
@@ -127,6 +127,11 @@ public class PackageTest extends JMeterTestCase
 		if (bundle == null) throw new Error("This can't happen!");
 	}
 	
+    public void tearDown()
+    {
+        JMeterUtils.setLocale(Locale.getDefault());
+    }
+    
 	public void runTest()
 	{
 		if (bundle == defaultBundle) checkAllNecessaryKeysPresent();
@@ -175,10 +180,11 @@ public class PackageTest extends JMeterTestCase
 			bundle.getString(name+".displayName");
 			//bundle.getString(name+".shortDescription"); NOT MANDATORY
 
-			String group= (String)descriptors[i].getValue(TestBeanGUI.GROUP);
-			if (group != null) bundle.getString(group+".displayName");
-		}
-	}
+            String group= (String)descriptors[i]
+                    .getValue(GenericTestBeanCustomizer.GROUP);
+            if (group != null) bundle.getString(group+".displayName");
+        }
+    }
 
 	public static Test suite() throws Exception
 	{
@@ -196,24 +202,24 @@ public class PackageTest extends JMeterTestCase
 					new Class[] { TestBean.class })
 				.iterator();
 
-		while (iter.hasNext())
-		{
-			Class testBeanClass= Class.forName((String)iter.next());
-			JMeterUtils.setLocale(new Locale(defaultLanguage,""));
-			ResourceBundle defaultBundle;
-			try
-			{
-				defaultBundle= (ResourceBundle)
-					Introspector.getBeanInfo(testBeanClass, TestBean.class)
-					.getBeanDescriptor()
-					.getValue(TestBeanGUI.RESOURCE_BUNDLE);
-			}
-			catch (IntrospectionException e)
-			{
-				log.error("Can't get beanInfo for "+testBeanClass.getName(),
-					e);
-				throw new Error(e.toString()); // Programming error. Don't continue.
-			}
+        while (iter.hasNext())
+        {
+            Class testBeanClass= Class.forName((String)iter.next());
+            JMeterUtils.setLocale(new Locale(defaultLanguage,""));
+            ResourceBundle defaultBundle;
+            try
+            {
+                defaultBundle= (ResourceBundle)
+                    Introspector.getBeanInfo(testBeanClass, TestBean.class)
+                    .getBeanDescriptor()
+                    .getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE);
+            }
+            catch (IntrospectionException e)
+            {
+                log.error("Can't get beanInfo for "+testBeanClass.getName(),
+                    e);
+                throw new Error(e.toString()); // Programming error. Don't continue.
+            }
 
 			if (defaultBundle == null)
 			{

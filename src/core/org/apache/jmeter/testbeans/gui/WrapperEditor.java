@@ -186,21 +186,6 @@ I said above is true (so I won't need to reinstate this code).
             acceptsOther, defaultValue);
     }
 
-    /**
-     * Constructor for backward compatibility -- will soon be removed.
-     */
-    WrapperEditor(
-            PropertyEditor typeEditor, 
-            PropertyEditor guiEditor,
-            boolean acceptsNull, 
-            boolean acceptsExpressions, 
-            boolean acceptsOther)
-    {
-        super();
-        initialize(typeEditor, guiEditor, acceptsNull, acceptsExpressions,
-            acceptsOther, null);
-    }
-    
     private void initialize(
             PropertyEditor typeEditor, 
             PropertyEditor guiEditor,
