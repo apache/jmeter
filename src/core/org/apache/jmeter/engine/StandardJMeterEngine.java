@@ -453,7 +453,7 @@ public class StandardJMeterEngine
             
 			//set the endtime for the Thread
             if (group.getDuration() > 0){// Duration is  in seconds
-				thread.setEndTime(group.getDuration()*1000+(new Date().getTime()));
+				thread.setEndTime(group.getDuration()*1000+(thread.getStartTime()));
             } else {
 				thread.setEndTime(group.getEndTime());
             }
