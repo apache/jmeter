@@ -1,11 +1,10 @@
 package org.apache.jmeter.functions;
 
-import java.util.List;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.threads.JMeterVariables;
 
 /**
  * @author mstover
@@ -58,10 +57,4 @@ public interface Function {
 	 * blank strings, one for each argument.
 	 */
 	public List getArgumentDesc();
-	
-	/**
-	 * A means of giving the function access to built-in JMeter data
-	 * such as iteration number, current thread name, etc
-	 */
-	public void setJMeterVariables(JMeterVariables jmv);
 }

@@ -20,13 +20,14 @@ import org.apache.jmeter.threads.JMeterVariables;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class UserParameters extends ConfigTestElement implements Serializable, PreProcessor,LoopIterationListener
+public class UserParameters extends ConfigTestElement implements Serializable, PreProcessor, LoopIterationListener
 {
 
     public static final String NAMES = "UserParameters.names";
     public static final String THREAD_VALUES = "UserParameters.thread_values";
     public static final String PER_ITERATION = "UserParameters.per_iteration";
     private int counter = 0;
+    transient private Object lock = new Object();
 
     public CollectionProperty getNames()
     {
@@ -78,7 +79,7 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
         setProperty(threadLists);
     }
 
-    private synchronized CollectionProperty getValues()
+    private CollectionProperty getValues()
     {
         CollectionProperty threadValues = (CollectionProperty) getProperty(THREAD_VALUES);
         if (threadValues.size() > 0)
@@ -90,20 +91,20 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
             return new CollectionProperty("noname", new LinkedList());
         }
     }
-    
+
     public boolean isPerIteration()
     {
         return getPropertyAsBoolean(PER_ITERATION);
     }
-    
+
     public void setPerIteration(boolean perIter)
     {
-        setProperty(new BooleanProperty(PER_ITERATION,perIter));
+        setProperty(new BooleanProperty(PER_ITERATION, perIter));
     }
 
     public void process()
     {
-        if(!isPerIteration())
+        if (!isPerIteration())
         {
             setValues();
         }
@@ -111,14 +112,17 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
 
     private void setValues()
     {
-        PropertyIterator namesIter = getNames().iterator();
-        PropertyIterator valueIter = getValues().iterator();
-        JMeterVariables jmvars = JMeterContextService.getContext().getVariables();
-        while (namesIter.hasNext() && valueIter.hasNext())
+        synchronized (lock)
         {
-            String name = namesIter.next().getStringValue();
-            String value = valueIter.next().getStringValue();
-            jmvars.put(name, value);
+            PropertyIterator namesIter = getNames().iterator();
+            PropertyIterator valueIter = getValues().iterator();
+            JMeterVariables jmvars = JMeterContextService.getContext().getVariables();
+            while (namesIter.hasNext() && valueIter.hasNext())
+            {
+                String name = namesIter.next().getStringValue();
+                String value = valueIter.next().getStringValue();
+                jmvars.put(name, value);
+            }
         }
     }
 
@@ -127,7 +131,7 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
      */
     public void iterationStart(LoopIterationEvent event)
     {
-        if(isPerIteration())
+        if (isPerIteration())
         {
             setValues();
         }
@@ -140,5 +144,15 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
     public void setJMeterVariables(JMeterVariables jmVars)
     {}
      */
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#clone()
+     */
+    public Object clone()
+    {
+        UserParameters up = (UserParameters) super.clone();
+        up.lock = lock;
+        return up;
+    }
 
 }

@@ -94,7 +94,7 @@ public abstract class AbstractJMeterGuiComponent
 	extends JPanel
 	implements JMeterGUIComponent
 {
-    private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
+    protected static Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
 	private boolean enabled = true;
 	private JMeterTreeNode node;
 	

@@ -144,7 +144,6 @@ public class CompoundVariable implements Function
 	public String execute() 
 	{
 		JMeterContext context = JMeterContextService.getContext();
-		setJMeterVariables( context.getVariables() );
 		SampleResult previousResult = context.getPreviousResult();
 		Sampler currentSampler = context.getCurrentSampler();
 		return execute( previousResult, currentSampler );
@@ -218,20 +217,6 @@ public class CompoundVariable implements Function
         hasStatics = false;
         compiledComponents.clear();
         staticSubstitution = "";
-    }
-
-    public void setJMeterVariables(JMeterVariables threadVars)
-    {
-        Iterator iter = compiledComponents.iterator();
-        while (iter.hasNext())
-        {
-            Object item = iter.next();
-            if (item instanceof Function)
-            {
-                ((Function) item).setJMeterVariables(threadVars);
-            }
-        }
-        this.threadVars = threadVars;
     }
 
 	public void setParameters(String parameters)
@@ -513,7 +498,7 @@ public class CompoundVariable implements Function
        
 	private JMeterVariables getVariables()
 	{
-		return (JMeterVariables)varMap.get(Thread.currentThread().getName());
+		return JMeterContextService.getContext().getVariables();
 	}
 
 

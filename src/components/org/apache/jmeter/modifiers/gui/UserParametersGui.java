@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -22,6 +21,7 @@ import javax.swing.table.TableCellEditor;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.PowerTableModel;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.modifiers.UserParameters;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -113,16 +113,18 @@ public class UserParametersGui extends AbstractConfigGui {
 
 	private void init() {
         setBorder(makeBorder());
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(makeTitlePanel());
+		setLayout(new BorderLayout());
+        JPanel vertPanel = new VerticalPanel();
+        vertPanel.add(makeTitlePanel());
 
         perIterationCheck = new JCheckBox(JMeterUtils.getResString("update_per_iter"), true);
         Box perIterationPanel = Box.createHorizontalBox();
         perIterationPanel.add(perIterationCheck);
         perIterationPanel.add(Box.createHorizontalGlue());
-        add(perIterationPanel);
-
-		add(makeParameterPanel());
+        vertPanel.add(perIterationPanel);
+        add(vertPanel,BorderLayout.NORTH);
+        
+       add(makeParameterPanel(),BorderLayout.CENTER);
 	}
     
 	private JPanel makeParameterPanel() {
