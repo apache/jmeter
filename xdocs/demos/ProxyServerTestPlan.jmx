@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<TestPlan>
+<threadgroups>
+<ThreadGroup name="Thread Group" numThreads="1" rampUp="0">
+<controllers>
+<LoopController type="org.apache.jmeter.control.LoopController" name="Loop Controller" iterations="1">
+<configElements>
+<ProxyControl type="org.apache.jmeter.protocol.http.proxy.ProxyControl">
+<property name="port">8080</property>
+<property name="name">HTTP Proxy Server</property>
+<property name="includes"><Arguments>
+</Arguments>
+</property>
+<property name="excludes"><Arguments>
+</Arguments>
+</property>
+</ProxyControl>
+</configElements>
+<controllers>
+</controllers>
+</LoopController>
+</controllers>
+<timers>
+</timers>
+<listeners>
+</listeners>
+</ThreadGroup>
+
+</threadgroups>
+<configElements>
+</configElements>
+</TestPlan>
