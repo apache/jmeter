@@ -675,8 +675,18 @@ instead. (see figures 9 and 10).</p>
 
 </component>
 
-<component index="13.4.10" name="User Parameters">
-<description><p>Allows the user to specify values specific to individual threads.</p></description>
+<component index="13.4.10" name="User Parameters" screenshot="../images/screenshots/user_params.png">
+<description><p>Allows the user to specify values for User Variables specific to individual threads.</p>
+<p>User Variables can also be specified in the Test Plan but not specific to individual threads. This panel allows
+you to specify a series of values for any User Variable. For each thread, the variable will be assigned one of the values from the series 
+in sequence. If there are more threads than values, the values get re-used. For example, this can be used to assign a distinct
+user id to be used by each thread. User variables can be referenced in any field of any jMeter Component.</p>
+
+<p>The variable is specified by clicking the Add Variable button in the bottom of the panel and filling in the Variable name in the 'Name:' column. 
+To add a new value to the series, click the 'Add User' button and fill in the desired value in the newly added column.</p>
+
+<p>Values can be accessed in any test component in the same thread group, using the <a href="functions.html">function syntax</a>: ${variable}.</p>
+</description>
 </component>
 
 <component index="13.4.11" name="Counter">
@@ -1019,3 +1029,4 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 </section>
 </body>
 </document>
+
