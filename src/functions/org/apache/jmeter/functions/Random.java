@@ -98,7 +98,7 @@ public class Random extends AbstractFunction implements Serializable
      *
      * @see Function#setParameters(Collection)
      */
-    public void setParameters(Collection parameters)
+    public synchronized void setParameters(Collection parameters)
         throws InvalidVariableException
     {
         Object[] values = parameters.toArray();
