@@ -61,9 +61,11 @@ package org.apache.jmeter.protocol.http.parser;
 import java.io.ByteArrayInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.Set;
+//import java.util.Set;
 
 import junit.framework.TestCase;
 
@@ -84,6 +86,15 @@ class JTidyHTMLParser extends HTMLParser
     /** Used to store the Logger (used for debug and error messages). */
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
+    /**
+     * This is a singleton class
+     */
+    protected JTidyHTMLParser()
+    {
+        super();
+    }
+
+
     /* (non-Javadoc)
      * @see org.apache.jmeter.protocol.http.parser.HTMLParser#getEmbeddedResourceURLs(byte[], java.net.URL)
      */
@@ -103,108 +114,137 @@ class JTidyHTMLParser extends HTMLParser
         
 		// Now parse the DOM tree
 		
-		// TODO - check for <base> tag ??
-        
-		// look for images
-		parseNodes(dom, "img", false, "src", uniqueURLs, baseUrl);
-		// look for applets
-        
-		// This will only work with an Applet .class file.
-		// Ideally, this should be upgraded to work with Objects (IE)
-		// and archives (.jar and .zip) files as well.
-        
-		parseNodes(dom, "applet", false, "code", uniqueURLs, baseUrl);
-		// look for input tags with image types
-		parseNodes(dom, "input", true, "src", uniqueURLs, baseUrl);
-		// look for background images
-		parseNodes(dom, "body", false, "background", uniqueURLs, baseUrl);
-        
-		// look for table background images
-		parseNodes(dom, "table", false, "background", uniqueURLs, baseUrl);
-
-		//TODO look for TD, TR etc images
+		scanNodes(dom,uniqueURLs, baseUrl);
 
 		return uniqueURLs.iterator();
 	}
 
+    /** 
+	 * Scan nodes recursively, looking for embedded resources
+	 * @param node - initial node
+	 * @param uniqueURLs - container for URLs
+	 * @param baseUrl - used to create absolute URLs
+	 */
+	private void scanNodes(Node node, Collection uniqueURLs, URL baseUrl)
+	{
+		if ( node == null ) {
+		  return;
+	    }
 
-    /**
-     * Parse the DOM tree looking for the specified HTML source tags,
-     * and download the appropriate binary files matching these tags.
-     *
-     * @param html      the HTML document to parse
-     * @param htmlTag   the HTML tag to parse for
-     * @param type      indicates that we require 'type=image'
-     * @param srcTag    the HTML tag that indicates the source URL
-     * @param uniques   used to ensure that binary files are only downloaded
-     *                  once
-     * @param baseUrl   base URL
-     * 
-     * @param res       <code>SampleResult</code> to store sampling results
+	    String name = node.getNodeName();
+
+	    int type = node.getNodeType();
+
+	    switch ( type ) {
+
+	    case Node.DOCUMENT_NODE:
+		  scanNodes(((Document)node).getDocumentElement(),uniqueURLs,baseUrl);
+		  break;
+
+	    case Node.ELEMENT_NODE:
+	   
+		  NamedNodeMap attrs = node.getAttributes();
+		  if (name.equalsIgnoreCase("base"))
+		  {
+		  	String tmp=getValue(attrs,"href");
+		  	if (tmp!=null) try
+            {
+                baseUrl=new URL(tmp);
+            }
+            catch (MalformedURLException e)
+            {
+            	log.warn("Invalid BASE tag "+tmp);
+            }
+		  	break;
+		  }
+		  
+		  if (name.equalsIgnoreCase("img"))
+		  {
+		  	addURL(uniqueURLs,getValue(attrs,"src"),baseUrl);
+			break;
+          }
+          
+		  if (name.equalsIgnoreCase("applet"))
+		  {
+		  	addURL(uniqueURLs,getValue(attrs,"code"),baseUrl);
+			  break;
+			}
+			if (name.equalsIgnoreCase("input"))
+			{
+				String src=getValue(attrs,"src");
+				String typ=getValue(attrs,"type");
+				if ((src!=null) &&(typ.equalsIgnoreCase("image")) ){ 
+					addURL(uniqueURLs,src,baseUrl);
+				}
+			  break;
+			}
+			if (name.equalsIgnoreCase("link"))
+			{
+				addURL(uniqueURLs,getValue(attrs,"href"),baseUrl);
+			  break;
+			}
+			String back=getValue(attrs,"background");
+			if (back != null){
+				addURL(uniqueURLs,back,baseUrl);
+				break;
+			}
+
+		  NodeList children = node.getChildNodes();
+		  if ( children != null ) {
+			 int len = children.getLength();
+			 for ( int i = 0; i < len; i++ ) {
+				scanNodes(children.item(i),uniqueURLs,baseUrl);
+			 }
+		  }
+		  break;
+
+//	   case Node.TEXT_NODE:
+//		  break;
+
+	   }
+
+	}
+
+    /*
+     * Helper method to get an attribute value, if it exists
+     * @param attrs list of attributs
+     * @param attname attribute name
+     * @return
      */
-    private static void parseNodes(Document html, String htmlTag, boolean type,
-            String srcTag, Set uniques, URL baseUrl)
+    private String getValue(NamedNodeMap attrs, String attname)
     {
-        log.debug("Start : HTTPSamplerFull parseNodes");
-        NodeList nodeList = html.getElementsByTagName(htmlTag);
-        for(int i = 0; i < nodeList.getLength(); i++)
-        {
-            Node tempNode = nodeList.item(i);
-            if(log.isDebugEnabled())
-            {
-                log.debug("'" + htmlTag + "' tag: " + tempNode);
-            }
-
-            // get the url of the Binary
-            NamedNodeMap nnm = tempNode.getAttributes();
-            Node namedItem = null;
-
-            if(type)
-            {
-                // if type is set, we need 'type=image'
-                namedItem = nnm.getNamedItem("type");
-                if(namedItem == null)
-                {
-                    log.debug("namedItem 'null' - ignoring");
-                    break;
-                }
-                String inputType = namedItem.getNodeValue();
-                if(log.isDebugEnabled())
-                {
-                    log.debug("Input type - " + inputType);
-                }
-                if(inputType != null && inputType.equalsIgnoreCase("image"))
-                {
-                    // then we need to download the binary
-                }
-                else
-                {
-                    log.debug("type != 'image' - ignoring");
-                    break;
-                }
-            }
-
-            namedItem = nnm.getNamedItem(srcTag);
-            if(namedItem == null)
-            {
-                continue;
-            }
-            String binUrlStr = namedItem.getNodeValue();
-            try
-            {
-                uniques.add(new URL(baseUrl, binUrlStr));
-            }
-            catch(MalformedURLException mfue)
-            {
-                // Can't build the URL. May be a site error: return
-                // the string.
-                uniques.add(binUrlStr);
-            }
-        }
-        log.debug("End   : HTTPSamplerFull parseNodes");
+    	String v=null;
+    	Node n = attrs.getNamedItem(attname);
+    	if (n != null) v=n.getNodeValue();
+        return v;
     }
 
-
+    /*
+     * Helper method to create and add a URL, if non-null
+     * @param uniqueURLs - set
+     * @param url - may be null
+     * @param baseUrl
+     */
+    private void addURL(Collection uniqueURLs, String url, URL baseUrl)
+    {
+    	if (url == null) return;
+    	boolean b=false;
+		try
+		{
+			b=uniqueURLs.add(new URL(baseUrl, url));
+		}
+		catch(MalformedURLException mfue)
+		{
+			// Can't build the URL. May be a site error: return
+			// the string.
+			b=uniqueURLs.add(url);
+		}
+		if (b) {
+			log.debug("Added   "+url);
+		} else { 
+			log.debug("Skipped "+url);
+		}
+    }
     /**
      * Returns <code>tidy</code> as HTML parser.
      *
@@ -251,8 +291,51 @@ class JTidyHTMLParser extends HTMLParser
         public Test() {
             super();
         }
+        
         public void testParser() throws Exception {
+        	log.info("testParser");
             HTMLParserTest.testParser(new JTidyHTMLParser());
         }
+        
+		public void testfiles() throws Exception{
+			log.info("testfiles");
+			final String[] EXPECTED_RESULT= new String[] {
+				"http://myhost/mydir/images/image-a.gif",
+				"http://myhost/mydir/images/image-b.gif",
+				"http://myhost/mydir/images/image-c.gif",
+				"http://myhost/mydir/images/image-d.gif",
+				"http://myhost/mydir/images/image-e.gif",
+				"http://myhost/mydir/images/image-f.gif",
+				"http://myhost/mydir/images/image-a2.gif",
+				"http://myhost/mydir/images/image-b2.gif",
+				"http://myhost/mydir/images/image-c2.gif",
+				"http://myhost/mydir/images/image-d2.gif",
+				"http://myhost/mydir/images/image-e2.gif",
+				"http://myhost/mydir/images/image-f2.gif",
+			};
+
+			Iterator expected= Arrays.asList(EXPECTED_RESULT).iterator();
+
+			JTidyHTMLParser p = new JTidyHTMLParser();
+			byte [] ba;
+			URL u;
+			Iterator result;
+			ba=getFile("testfiles/HTMLParserTestCase.html");
+			u= new URL("http://myhost/mydir/myfile.html");
+			result=p.getEmbeddedResourceURLs(ba,u);
+			while (expected.hasNext()) {
+				assertTrue(result.hasNext());
+				assertEquals(expected.next(), result.next().toString());
+			}
+			assertFalse(result.hasNext());
+		}
+    }
+
+    private static byte []getFile(String s) throws Exception
+    {
+		java.io.File f= new java.io.File(s);
+		byte[] buffer= new byte[(int)f.length()];
+		new java.io.FileInputStream(f).read(buffer);
+		return buffer;
     }
 }
