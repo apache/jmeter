@@ -42,10 +42,6 @@
 
   <path id="testClasspath">
 		<path refid="classpath"/>
-		<fileset dir="./lib/ext">
-	 		<include name="*.jar"/>
-			<include name="*.jar"/>
-		</fileset>
   </path>
   
   <path id="srcpaths">
@@ -439,7 +435,7 @@
 	</target>
 
 	<target name="test" depends="install">
-	  <java classname="org.jorphan.test.AllTests" fork="yes" dir="${basedir}/bin">
+	  <java classname="org.apache.jorphan.test.AllTests" fork="yes" dir="${basedir}/bin">
 		 <classpath refid="testClasspath"/>
 		 <arg value="../lib/ext"/>
 		 <arg value="./jmeter.properties"/>
