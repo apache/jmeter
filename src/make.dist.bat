@@ -1,7 +1,7 @@
 @echo off
 
 ::
-:: Win32 build script for Apache JMeter zip distribution (not tested under NT, may not work)
+:: Win32 build script for Apache JMeter distribution (not tested under NT, may not work)
 ::
 :: @author Stefano Mazzocchi <stefano@apache.org>
 :: @version $Revision$ $Date$
@@ -11,7 +11,7 @@
 if "%name%"=="" set name=Apache_JMeter
 
 :: Set package version
-if "%version%"=="" set version=1.3
+if "%version%"=="" set version=1.4
 
 :: Set temp directory name
 if "%dir%"=="" set dir="temp"
@@ -19,11 +19,8 @@ if "%dir%"=="" set dir="temp"
 :: Set local directory name
 if "%cwd%"=="" set cwd="."
 
-:: Set the zip archiver
-if "%zip%"=="" set zip=pkzip25
-
 echo.
-echo Creating %name%_%version%.zip...
+echo Creating %name%_%version%.jar...
 echo.
 
 :: creating the tree
@@ -62,16 +59,10 @@ cd ..\..
 echo  * remove unused files...
 sweep deltree /y CVS > nul
 
-:: zip it
-echo  * compressing the package (zip)
-%zip% -add -rec -dir -max -silent ..\%name%_%version%.zip *.*
+:: jar it
+echo  * compressing the package (jar)
+jar -cf ..\%name%_%version%.jar *.*
 if errorlevel 1 goto fatal
-
-:: tar.gz it
-echo  * compressing the package (tar.gz)
-tar -c . | gzip -c9 > ..\%name%_%version%.tar.gz
-if errorlevel 1 goto fatal
-goto done
 
 :fatal
 echo Some error occurred in the script. Package creation aborted.
@@ -89,4 +80,3 @@ set name=
 set version=
 set dir=
 set cwd=
-set zip=
