@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,11 +53,13 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.gui;
-import java.awt.BorderLayout;
 import java.awt.Font;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
@@ -222,10 +224,28 @@ public abstract class AbstractJMeterGuiComponent
 		return node;
 	}
     
-    protected JPanel makeTitlePanel() {
-        JPanel titlePanel = new JPanel(new BorderLayout());
-        titlePanel.add(createTitleLabel(), BorderLayout.NORTH);
-        titlePanel.add(getNamePanel(), BorderLayout.SOUTH);
+    /**
+     * Create a standard title section for JMeter components.  This includes
+     * the title for the component and the Name Panel allowing the user to
+     * change the name for the component.  This method is typically added to
+     * the top of the component at the beginning of the component's init method.
+     * 
+     * @return a Box containing the component title and name panel
+     */
+    protected Box makeTitlePanel() {
+        Box titlePanel = Box.createVerticalBox();
+        titlePanel.add(createTitleLabel());
+        titlePanel.add(getNamePanel());
         return titlePanel;
+    }
+    
+    /**
+     * Create a Border which can be added to JMeter components.  Components
+     * typically set this as their border in their init method.
+     * 
+     * @return a Border for JMeter components
+     */
+    protected Border makeBorder() {
+        return BorderFactory.createEmptyBorder(10, 10, 5, 10);
     }
 }
