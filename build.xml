@@ -49,6 +49,14 @@
   <property name="build.functions" value="build/functions"/>
   <property name="build.jorphan" value="build/jorphan"/>
   <property name="build.ldap" location="build/protocol/ldap"/>
+  
+  <!-- Path prefix to allow Anakia to find stylesheets if running under Eclipse -->
+  <!--
+  Anakia looks for stylesheets relative to the java launch directory.
+  Use the External Tools properties page to define the variable 
+  as the relative path to the directory where this build file is found.
+  -->
+  <property name="eclipse.anakia" value="."/>
 
   <!-- Where the build result .jars will be placed -->
   <property name="jar.dest" value="lib/ext"/>
@@ -427,12 +435,12 @@
 
   <target name="docs" depends="init-docs" if="AnakiaTask.present" description="Generate browsable HTML documentation.">
     <taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask"/>
-    <anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" style="./xdocs/stylesheets/site.vsl" projectFile="./stylesheets/project.xml" excludes="**/stylesheets/**" includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${docs.src}/velocity.properties"/>
+    <anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site.vsl" projectFile="./stylesheets/project.xml" excludes="**/stylesheets/**" includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${docs.src}/velocity.properties"/>
   </target>
 
   <target name="printable-docs" depends="init-docs" if="AnakiaTask.present" description="Generate printable HTML documentation.">
     <taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask"/>
-    <anakia basedir="${docs.src}" destdir="${printable_docs.dest}/" extension=".html" style="./xdocs/stylesheets/site_printable.vsl" projectFile="./stylesheets/project.xml" excludes="**/stylesheets/**" includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${docs.src}/velocity.properties"/>
+    <anakia basedir="${docs.src}" destdir="${printable_docs.dest}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site_printable.vsl" projectFile="./stylesheets/project.xml" excludes="**/stylesheets/**" includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${docs.src}/velocity.properties"/>
     <copy todir="${printable_docs.dest}">
       <fileset dir="${docs.dest}">
         <include name="images/**"/>
