@@ -151,6 +151,16 @@ public class JDateField extends JTextField
         {
             return new Date();
         }
+        catch (Exception e)
+        {
+            // DateFormat.parse has some bugs (up to JDK 1.4.2) by which it
+            // throws unchecked exceptions. E.g. see:
+            // http://developer.java.sun.com/developer/bugParade/bugs/4699765.html
+            //
+            // To avoid problems with such situations, we'll catch all
+            // exceptions here and act just as for ParseException above:
+            return new Date(); 
+        }
     }
 
 	/*

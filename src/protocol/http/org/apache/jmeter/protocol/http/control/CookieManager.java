@@ -300,29 +300,6 @@ public class CookieManager
         return dateFormat.format(new Date(dateLong));
     }
 
-    public long convertDateFormatStrToLong(String dateStr)
-    {
-        long time = 0;
-
-        try
-        {
-            Date date = dateFormat.parse(dateStr);
-            time = date.getTime();
-        }
-        catch (ParseException e)
-        {
-            // ERROR!!!
-            // Later, display error dialog?  For now, we have
-            // to specify a number that can be converted to
-            // a Date. So, I chose 0. The Date will appear as
-            // the beginning of the Epoch (Jan 1, 1970 00:00:00 GMT)
-            time = 0;
-            log.error("DateFormat.ParseException: ", e);
-        }
-
-        return time;
-    }
-
     /**
      * Find cookies applicable to the given URL and build the Cookie header from
      * them.
@@ -415,12 +392,31 @@ public class CookieManager
                     String expires = nvp.substring(index + 1);
                     Date date = dateFormat.parse(expires);
                     if (date.getTime() > System.currentTimeMillis())
+                        //TODO: why this conditional? If it's expired, it's
+                        // expired!
                     {
                         newCookie.setExpires(date.getTime());
                     }
                 }
                 catch (ParseException pe)
                 {
+                    // This means the cookie did not come in the proper format.
+                    // Log an error and don't set an expiration time:
+                    log.error("Couldn't parse Cookie expiration time.", pe);
+                }
+                catch (Exception e)
+                {
+                    // DateFormat.parse() has been known to throw various
+                    // unchecked exceptions in the past, and does still do that
+                    // occasionally at the time of this writing (1.4.2 JDKs).
+                    // E.g. see http://developer.java.sun.com/developer/bugParade/bugs/4699765.html
+                    //
+                    // As a workaround for such issues we will catch all
+                    // exceptions and react just as we did for ParseException
+                    // above:
+                    log.error(
+                        "Couln't parse Cookie expiration time: likely JDK bug.",
+                        e);
                 }
             }
             else if (key.equalsIgnoreCase("domain"))
