@@ -11,7 +11,6 @@ import java.util.Map;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.property.FunctionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.StringProperty;
 
 /**
  * @author ano ano
@@ -40,10 +39,6 @@ public class ReplaceStringWithFunctions extends AbstractTransformer
         if (getMasterFunction().hasFunction())
         {
             newValue = new FunctionProperty(prop.getName(), getMasterFunction().getFunction());
-        }
-        else if (getMasterFunction().hasStatics())
-        {
-            newValue = new StringProperty(prop.getName(), getMasterFunction().getStaticSubstitution());
         }
         return newValue;
     }
