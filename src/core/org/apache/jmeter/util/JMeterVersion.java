@@ -43,6 +43,8 @@ public class JMeterVersion
 	 */
 	static final String VERSION = "2.0.1";
 
+	static final String COPYRIGHT = "Copyright (c) 1998-2004 The Apache Software Foundation";
+	
     private JMeterVersion() // Not instantiable
     {
         super();
