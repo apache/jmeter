@@ -1,5 +1,5 @@
 /* 
- * Copyright 2002-2004 The Apache Software Foundation
+ * Copyright 2002-2005 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
  * You may obtain a copy of the License at 
@@ -15,15 +15,13 @@
  * limitations under the License.
  */
 package org.apache.commons.cli.avalon;
+//Renamed from org.apache.avalon.excalibur.cli
 
 /**
  * CLUtil offers basic utility operations for use both internal and external to package.
  *
- * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @version $Revision$ $Date$
- * @since 4.0
  * @see CLOptionDescriptor
- * @deprecated Toolkit deprecated and replaced by http://spice.sourceforge.net/cli/
  */
 public final class CLUtil
 {

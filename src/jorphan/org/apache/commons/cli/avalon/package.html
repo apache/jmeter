@@ -1,16 +1,16 @@
 <html>
     <head>
-        <title>Package Documentation for org.apache.avalon.excalibur.cli Package</title>
+        <title>Package Documentation for org.apache.commons.cli.avalon Package</title>
     </head>
     <body bgcolor="white">
         Utility code for parsing command-line options.
        <br><br>
-<p style="font-weight:bold">These classes have all been deprecated in favor of
-the <a href="http://jakarta.apache.org/commons/">Jakarta Commons</a>
-version of the CLI classes.</p>
+<p style="font-weight:bold">
+These classes were originally in the Avalon project in the package org.apache.avalon.excalibur.cli
+</p>
 
         <h3>Introduction</h3>
-        <p>The utilities in <code>org.apache.avalon.excalibur.cli</code> assist
+        <p>The utilities in <code>org.apache.commons.cli.avalon</code> assist
         you in parsing command line options during startup time. It allows you
         to associate a short option and a long option to the same command, and
         then test for it in a switch statement.</p>
@@ -19,15 +19,14 @@ version of the CLI classes.</p>
         <pre>
 import java.util.List;
 
-import org.apache.avalon.excalibur.cli.CLArgsParser;
-import org.apache.avalon.excalibur.cli.CLOption;
-import org.apache.avalon.excalibur.cli.CLOptionDescriptor;
-import org.apache.avalon.excalibur.cli.CLUtil;
+import org.apache.commons.cli.avalon.CLArgsParser;
+import org.apache.commons.cli.avalon.CLOption;
+import org.apache.commons.cli.avalon.CLOptionDescriptor;
+import org.apache.commons.cli.avalon.CLUtil;
 
 /**
 * Demonstrates the excalibur command-line parsing utility.
 *
-* @author <a href="jeff@socialchange.net.au">Jeff Turner</a>
 */
 public class CLDemo {
     // Define our short one-letter option identifiers.
@@ -157,8 +156,5 @@ public class CLDemo {
                 line "-- -b" would result in the program being passed the
                 text "-b" (ie. not as an option).
                 </p>
-
-@since 4.0
-
 </body>
 </html>

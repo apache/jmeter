@@ -1,5 +1,5 @@
 /* 
- * Copyright 2002-2004 The Apache Software Foundation
+ * Copyright 2002-2005 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
  * You may obtain a copy of the License at 
@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 package org.apache.commons.cli.avalon;
+//Renamed from org.apache.avalon.excalibur.cli
 
 import java.text.ParseException;
 import java.util.Hashtable;
@@ -31,13 +32,10 @@ import java.util.Vector;
  * Note that CLArgs uses a backing hashtable for the options index and so duplicate
  * arguments are only returned by getArguments().
  *
- * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @version $Revision$ $Date$
- * @since 4.0
  * @see ParserControl
  * @see CLOption
  * @see CLOptionDescriptor
- * @deprecated Toolkit deprecated and replaced by http://spice.sourceforge.net/cli/
  */
 public final class CLArgsParser
 {
