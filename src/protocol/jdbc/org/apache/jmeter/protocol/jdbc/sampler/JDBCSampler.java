@@ -274,6 +274,7 @@ public class JDBCSampler extends AbstractSampler implements TestListener
 
     public synchronized void testStarted()
     {
+    	log.debug("testStarted(), thread: "+Thread.currentThread().getName());
         // The first call to getKey for a given key will set up the connection
         // pool.  This can take awhile, so do it while the test is starting
         // instead of waiting for the first sample.
@@ -294,6 +295,7 @@ public class JDBCSampler extends AbstractSampler implements TestListener
 
     public synchronized void testEnded()
     {
+    	log.debug("testEndded(), thread: "+Thread.currentThread().getName());
         manager.shutdown();
         dbkey = null;
     }
