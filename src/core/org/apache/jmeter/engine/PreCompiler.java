@@ -1,4 +1,5 @@
 package org.apache.jmeter.engine;
+
 import java.util.Map;
 
 import org.apache.jmeter.engine.util.ValueReplacer;
@@ -12,22 +13,24 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+
 /**
  * @author mstover
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
 public class PreCompiler implements HashTreeTraverser
 {
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ENGINE);
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ENGINE);
     private Map userDefinedVariables;
     private boolean testValid = true;
     private ValueReplacer replacer;
+
     public PreCompiler()
     {
         replacer = new ValueReplacer();
     }
+
     /* (non-Javadoc)
      * @see HashTreeTraverser#addNode(Object, HashTree)
      */
@@ -35,7 +38,8 @@ public class PreCompiler implements HashTreeTraverser
     {
         if (node instanceof TestPlan)
         {
-            replacer.setUserDefinedVariables(((TestPlan) node).getUserDefinedVariables());
+            replacer.setUserDefinedVariables(
+                ((TestPlan) node).getUserDefinedVariables());
             JMeterVariables vars = new JMeterVariables();
             vars.putAll(((TestPlan) node).getUserDefinedVariables());
             JMeterContextService.getContext().setVariables(vars);
@@ -54,14 +58,18 @@ public class PreCompiler implements HashTreeTraverser
             }
         }
     }
+
     /* (non-Javadoc)
      * @see HashTreeTraverser#subtractNode()
      */
     public void subtractNode()
-    {}
+    {
+    }
+
     /* (non-Javadoc)
      * @see HashTreeTraverser#processPath()
      */
     public void processPath()
-    {}
+    {
+    }
 }

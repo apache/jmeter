@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,24 +56,15 @@ package org.apache.jmeter.engine;
 
 import org.apache.jorphan.collections.HashTree;
 
-/************************************************************
- *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author     Michael Stover
- *@created    $Date$
- *@version    1.0
- ***********************************************************/
-
+/**
+ * @author     Michael Stover
+ * @version    $Revision$
+ */
 public interface JMeterEngine
 {
-
-	void configure(HashTree testPlan);
-
-	void runTest() throws JMeterEngineException;
-
-	void stopTest();
-
-	void reset();
-	
-	void setHost(String host);
+    void configure(HashTree testPlan);
+    void runTest() throws JMeterEngineException;
+    void stopTest();
+    void reset();
+    void setHost(String host);
 }

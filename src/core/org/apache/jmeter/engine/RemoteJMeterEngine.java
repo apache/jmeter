@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,21 +59,14 @@ import java.rmi.RemoteException;
 
 import org.apache.jorphan.collections.HashTree;
 
-/************************************************************
- *  Description of the Interface
- *
- *@author     default
- *@created    March 13, 2001
- ***********************************************************/
+/**
+ * @version $Revision$
+ */
 public interface RemoteJMeterEngine extends Remote
 {
-	void configure(HashTree testTree) throws RemoteException;
-
-	void runTest() throws RemoteException,JMeterEngineException;
-
-	void stopTest() throws RemoteException;
-
-	void reset() throws RemoteException;
-	
-	void setHost(String host) throws RemoteException;
+    void configure(HashTree testTree) throws RemoteException;
+    void runTest() throws RemoteException,JMeterEngineException;
+    void stopTest() throws RemoteException;
+    void reset() throws RemoteException;
+    void setHost(String host) throws RemoteException;
 }

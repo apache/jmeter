@@ -26,14 +26,12 @@ import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
 public class ValueReplacer
 {
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ENGINE);
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ENGINE);
     CompoundVariable masterFunction = new CompoundVariable();
     Map variables = new HashMap();
     TestPlan tp;
@@ -56,7 +54,10 @@ public class ValueReplacer
 
     public void replaceValues(TestElement el) throws InvalidVariableException
     {
-        Collection newProps = replaceValues(el.propertyIterator(),new ReplaceStringWithFunctions(masterFunction,variables));
+        Collection newProps =
+            replaceValues(
+                el.propertyIterator(),
+                new ReplaceStringWithFunctions(masterFunction, variables));
         setProperties(el, newProps);
     }
 
@@ -71,16 +72,23 @@ public class ValueReplacer
     }
     
     public void reverseReplace(TestElement el) throws InvalidVariableException
-        {
-            Collection newProps = replaceValues(el.propertyIterator(),new ReplaceFunctionsWithStrings(masterFunction,variables));
-            setProperties(el, newProps);
-        }
+    {
+        Collection newProps =
+            replaceValues(
+                el.propertyIterator(),
+                new ReplaceFunctionsWithStrings(masterFunction, variables));
+        setProperties(el, newProps);
+    }
         
-    public void undoReverseReplace(TestElement el) throws InvalidVariableException
-            {
-                Collection newProps = replaceValues(el.propertyIterator(),new UndoVariableReplacement(masterFunction,variables));
-                setProperties(el, newProps);
-            }
+    public void undoReverseReplace(TestElement el)
+        throws InvalidVariableException
+    {
+        Collection newProps =
+            replaceValues(
+                el.propertyIterator(),
+                new UndoVariableReplacement(masterFunction, variables));
+        setProperties(el, newProps);
+    }
 
     public void addVariable(String name, String value)
     {
@@ -88,7 +96,10 @@ public class ValueReplacer
         setUserDefinedVariables(tp.getUserDefinedVariables());
     }
     
-    private Collection replaceValues(PropertyIterator iter, ValueTransformer transform) throws InvalidVariableException
+    private Collection replaceValues(
+        PropertyIterator iter,
+        ValueTransformer transform)
+        throws InvalidVariableException
     {
         List props = new LinkedList();
         while(iter.hasNext())
@@ -101,12 +112,13 @@ public class ValueReplacer
             else if (val instanceof MultiProperty)
             {
                 MultiProperty multiVal = (MultiProperty)val;
-                Collection newValues = replaceValues(multiVal.iterator(),transform); 
+                Collection newValues =
+                    replaceValues(multiVal.iterator(), transform);
                 multiVal.clear();
                 Iterator propIter = newValues.iterator();
                 while(propIter.hasNext())
                 {
-                    multiVal.addProperty((JMeterProperty)propIter.next());               
+                    multiVal.addProperty((JMeterProperty) propIter.next());
                 }
             }
             props.add(val);
@@ -143,10 +155,12 @@ public class ValueReplacer
         public void testReverseReplacement() throws Exception
         {
             ValueReplacer replacer = new ValueReplacer(variables);
-            assertTrue(variables.getUserDefinedVariables().containsKey("server"));
+            assertTrue(
+                variables.getUserDefinedVariables().containsKey("server"));
             assertTrue(replacer.variables.containsKey("server"));
             TestElement element = new TestPlan();
-            element.setProperty(new StringProperty("domain", "jakarta.apache.org"));
+            element.setProperty(
+                new StringProperty("domain", "jakarta.apache.org"));
             List args = new ArrayList();
             args.add("username is jack");
             args.add("jacks_password");
@@ -154,20 +168,26 @@ public class ValueReplacer
             replacer.reverseReplace(element);
             assertEquals("${server}", element.getPropertyAsString("domain"));
             args = (List) element.getProperty("args").getObjectValue();
-            assertEquals("${password}", ((JMeterProperty) args.get(1)).getStringValue());
+            assertEquals(
+                "${password}",
+                ((JMeterProperty) args.get(1)).getStringValue());
         }
 
         public void testReplace() throws Exception
         {
             ValueReplacer replacer = new ValueReplacer();
-            replacer.setUserDefinedVariables(variables.getUserDefinedVariables());
+            replacer.setUserDefinedVariables(
+                variables.getUserDefinedVariables());
             TestElement element = new ConfigTestElement();
             element.setProperty(new StringProperty("domain", "${server}"));
             replacer.replaceValues(element);
             log.debug("domain property = " + element.getProperty("domain"));
             element.setRunningVersion(true);
-            assertEquals("jakarta.apache.org", element.getPropertyAsString("domain"));
+            assertEquals(
+                "jakarta.apache.org",
+                element.getPropertyAsString("domain"));
         }
+
         /* (non-Javadoc)
          * @see junit.framework.TestCase#tearDown()
          */
@@ -175,6 +195,5 @@ public class ValueReplacer
         {
             JMeterContextService.getContext().setSamplingStarted(false);
         }
-
     }
 }

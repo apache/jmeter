@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -80,16 +80,15 @@ import org.apache.jorphan.collections.SearchByClass;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
-/************************************************************
- *  !ToDo (Class description)
- *
- *@author     $Author$
- *@created    $Date$
- *@version    $Revision$
- ***********************************************************/
-public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, Runnable, Serializable
+/**
+ * @author     $Author$
+ * @version    $Revision$
+ */
+public class StandardJMeterEngine
+    implements JMeterEngine, JMeterThreadMonitor, Runnable, Serializable
 {
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
     private Thread runningThread;
     private static long WAIT_TO_DIE = 5 * 1000; //5 seconds
     Map allThreads;
@@ -101,9 +100,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     String host = null;
     ListenerNotifier notifier;
 
-    /************************************************************
-     *  !ToDo (Constructor description)
-     ***********************************************************/
     public StandardJMeterEngine()
     {
         allThreads = new HashMap();
@@ -136,9 +132,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         getTestTree().traverse(compiler);
     }
 
-    /************************************************************
-     *  !ToDo (Method description)
-     ***********************************************************/
     public void runTest() throws JMeterEngineException
     {
         try
@@ -178,7 +171,8 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         SearchByClass testPlan = new SearchByClass(TestPlan.class);
         getTestTree().traverse(testPlan);
         Object[] plan = testPlan.getSearchResults().toArray();
-        ResultCollector.enableFunctionalMode(((TestPlan) plan[0]).isFunctionalMode());
+        ResultCollector.enableFunctionalMode(
+            ((TestPlan) plan[0]).isFunctionalMode());
     }
 
     protected void notifyTestListenersOfStart()
@@ -220,9 +214,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         return cloner.getClonedTree();
     }
 
-    /************************************************************
-     *  !ToDo (Method description)
-     ***********************************************************/
     public void reset()
     {
         if (running)
@@ -240,9 +231,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         }
     }
 
-    /************************************************************
-     *  !ToDo (Method description)
-     ***********************************************************/
     public synchronized void stopTest()
     {
         Thread stopThread = new Thread(new StopTest());
@@ -280,7 +268,8 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         if (((TestPlan) plan[0]).isSerialized())
             serialized = true;
         compileTree();
-        List testLevelElements = new LinkedList(getTestTree().list(getTestTree().getArray()[0]));
+        List testLevelElements =
+            new LinkedList(getTestTree().list(getTestTree().getArray()[0]));
         removeThreadGroups(testLevelElements);
         SearchByClass searcher = new SearchByClass(ThreadGroup.class);
         testListeners = new SearchByClass(TestListener.class);
@@ -307,12 +296,20 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             log.info("Starting " + threads.length + " test threads");
             for (int i = 0; running && i < threads.length; i++)
             {
-                ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
+                ListedHashTree threadGroupTree =
+                    (ListedHashTree) searcher.getSubTree(group);
                 threadGroupTree.add(group, testLevelElements);
-                threads[i] = new JMeterThread(cloneTree(threadGroupTree), this, notifier);
+                threads[i] =
+                    new JMeterThread(
+                        cloneTree(threadGroupTree),
+                        this,
+                        notifier);
                 threads[i].setThreadNum(i);
                 threads[i].setInitialContext(JMeterContextService.getContext());
-                threads[i].setInitialDelay((int) (((float) (group.getRampUp() * 1000) / (float) group.getNumThreads()) * (float) i));
+                threads[i].setInitialDelay(
+                    (int) (((float) (group.getRampUp() * 1000)
+                        / (float) group.getNumThreads())
+                        * (float) i));
                 threads[i].setThreadName(group.getName() + "-" + (i + 1));
 
                 scheduleThread(threads[i], group);
@@ -320,7 +317,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 Thread newThread = new Thread(threads[i]);
                 newThread.setName(group.getName() + "-" + (i + 1));
                 allThreads.put(threads[i], newThread);
-                if (serialized && !iter.hasNext() && i == threads.length - 1) //last thread
+                if (serialized
+                    && !iter.hasNext()
+                    && i == threads.length - 1) //last thread
                 {
                     serialized = false;
                 }
@@ -343,16 +342,24 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     }
 
     /**
-     * This will  schedule the time for the JMeterThread
+     * This will  schedule the time for the JMeterThread.
+     * 
      * @param thread
      * @param group
      */
     private void scheduleThread(JMeterThread thread, ThreadGroup group)
     {            
-        if (group.getScheduler()) { //if true the Scheduler is enabled
-            thread.setStartTime(group.getStartTime());//set the starttime for the Thread
-            thread.setEndTime(group.getEndTime()); //set the endtime for the Thread
-            thread.setScheduled(true); //Enables the scheduler
+        //if true the Scheduler is enabled
+        if (group.getScheduler())
+        {
+            //set the starttime for the Thread
+            thread.setStartTime(group.getStartTime());
+            
+            //set the endtime for the Thread
+            thread.setEndTime(group.getEndTime());
+
+            //Enables the scheduler
+            thread.setScheduled(true);
         }
     }
 

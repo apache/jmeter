@@ -1,8 +1,5 @@
 /*
  * Created on May 4, 2003
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
  */
 package org.apache.jmeter.engine.util;
 
@@ -17,13 +14,13 @@ import org.apache.jmeter.util.StringUtilities;
 /**
  * @author ano ano
  *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * @version $Revision$
  */
 public class UndoVariableReplacement extends AbstractTransformer
 {
-    
-    public UndoVariableReplacement(CompoundVariable masterFunction,Map variables)
+    public UndoVariableReplacement(
+        CompoundVariable masterFunction,
+        Map variables)
         {
             super();
             setMasterFunction(masterFunction);
@@ -31,9 +28,10 @@ public class UndoVariableReplacement extends AbstractTransformer
         }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.engine.util.ValueTransformer#transformValue(org.apache.jmeter.testelement.property.JMeterProperty)
+     * @see ValueTransformer#transformValue(JMeterProperty)
      */
-    public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException
+    public JMeterProperty transformValue(JMeterProperty prop)
+        throws InvalidVariableException
     {
         Iterator iter = getVariables().keySet().iterator();
          String input = prop.getStringValue();

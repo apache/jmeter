@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,82 +55,74 @@
 
 package org.apache.jmeter.engine;
 
-/************************************************************
- *  Description of the Class
- *
- *@author     default
- *@created    March 13, 2001
- ***********************************************************/
+/**
+ * @version $Revision$
+ */
 public class LagDetector extends Thread
 {
+    private long incr = MAX_SLEEP / DIV;
+    private long totalLag;
+    private int count;
+    private boolean running;
+    public final static long MAX_SLEEP = 500;
 
-	private long incr = MAX_SLEEP / DIV;
-	private long totalLag;
-	private int count;
-	private boolean running;
-	public final static long MAX_SLEEP = 500;
+    private final static long DIV = 3;
 
-	private final static long DIV = 3;
+    /**
+     * Constructor for the LagDetector object.
+     */
+    public LagDetector()
+    {
+    }
 
-	/************************************************************
-	 *  Constructor for the LagDetector object
-	 ***********************************************************/
-	public LagDetector()
-	{
-	}
+    /**
+     * Gets the AveLag attribute of the LagDetector object.
+     *
+     * @return    the AveLag value
+     */
+    public float getAveLag()
+    {
+        return (float) ((float) totalLag / (float) count);
+    }
 
-	/************************************************************
-	 *  Gets the AveLag attribute of the LagDetector object
-	 *
-	 *@return    The AveLag value
-	 ***********************************************************/
-	public float getAveLag()
-	{
-		return (float)((float)totalLag / (float)count);
-	}
+    /**
+     * Gets the LagRatio attribute of the LagDetector object.
+     *
+     * @return    the LagRatio value
+     */
+    public float getLagRatio()
+    {
+        return ((float) totalLag / (float) count) / incr;
+    }
 
-	/************************************************************
-	 *  Gets the LagRatio attribute of the LagDetector object
-	 *
-	 *@return    The LagRatio value
-	 ***********************************************************/
-	public float getLagRatio()
-	{
-		return ((float)totalLag / (float)count) / incr;
-	}
+    public void stopRunning()
+    {
+        running = false;
+    }
 
-	/************************************************************
-	 *  Description of the Method
-	 ***********************************************************/
-	public void stopRunning()
-	{
-		running = false;
-	}
-
-	/************************************************************
-	 *  Main processing method for the LagDetector object
-	 ***********************************************************/
-	public void run()
-	{
-		running = true;
-		long totalTime = 0;
-		long time;
-		totalLag = 0;
-		count = 0;
-		while(running)
-		{
-			time = System.currentTimeMillis();
-			try
-			{
-				Thread.sleep(incr);
-			}
-			catch(Exception e)
-			{
-			}
-			time = System.currentTimeMillis() - time;
-			totalLag += time - incr;
-			count++;
-		}
-	}
-
+    /**
+     * Main processing method for the LagDetector object.
+     */
+    public void run()
+    {
+        running = true;
+        long totalTime = 0;
+        long time;
+        totalLag = 0;
+        count = 0;
+        while (running)
+        {
+            time = System.currentTimeMillis();
+            try
+            {
+                Thread.sleep(incr);
+            }
+            catch (Exception e)
+            {
+            }
+            time = System.currentTimeMillis() - time;
+            totalLag += time - incr;
+            count++;
+        }
+    }
 }
