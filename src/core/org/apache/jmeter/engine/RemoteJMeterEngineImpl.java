@@ -90,7 +90,7 @@ public class RemoteJMeterEngineImpl
 		}
 		catch(Exception ex)
 		{
-			log.error("",ex);
+			log.error("rmiregistry needs to be running to start JMeter in server mode",ex);
 		}
 	}
 	

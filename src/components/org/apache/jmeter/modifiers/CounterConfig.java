@@ -22,7 +22,7 @@ public class CounterConfig
 	private final static String VAR_NAME = "CounterConfig.name";
 	
 	private boolean perUser = false;
-	private int globalCounter = 0;
+	private int globalCounter = -1;
 	private int increment = 1;
 	private int start = 0;
 	private int end = Integer.MAX_VALUE;

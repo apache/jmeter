@@ -117,7 +117,7 @@ public class HTTPSampler extends AbstractSampler
 	public final static String MULTIPART_FORM = "multipart_form";
 	protected static String encoding = "iso-8859-1";
 	private static final PostWriter postWriter = new PostWriter();
-	protected HttpURLConnection conn;
+	transient protected HttpURLConnection conn;
 	private int connectionTries = 0;
 	public void setFileField(String value)
 	{

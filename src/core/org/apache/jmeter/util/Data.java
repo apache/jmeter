@@ -54,6 +54,7 @@
  */
 
 package org.apache.jmeter.util;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -70,7 +71,7 @@ import java.util.Map;
 @author Michael Stover
 @version 1.0 10/14/1998
  ******************************************************************/
-public class Data
+public class Data implements Serializable
 {
   Map data;
   Map iterators = new HashMap();

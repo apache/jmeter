@@ -114,8 +114,8 @@ public class StatVisualizer
 	//    private boolean data = true;
 	//    private boolean average = true;
 	//    private boolean deviation = true;
-	private StatVisualizerModel model;
-	private StatTableModel myStatTableModel;
+	transient private StatVisualizerModel model;
+	transient private StatTableModel myStatTableModel;
 	/****************************************
 	 * Constructor for the Graph object
 	 ***************************************/
@@ -318,6 +318,10 @@ class SortFilterModel extends AbstractTableModel
 			rows[i] = new Row();
 			rows[i].index = i;
 		}
+	}
+	
+	public SortFilterModel()
+	{
 	}
 	/****************************************
 	 * !ToDo (Method description)

@@ -15,7 +15,7 @@ import org.apache.log.Logger;
  */
 public class ListenerNotifier extends LinkedList implements Runnable
 {
-	Logger log =
+	private static Logger log =
 		Hierarchy.getDefaultHierarchy().getLoggerFor(LoggingManager.ENGINE);
 	/**
 	 * @see java.lang.Runnable#run()

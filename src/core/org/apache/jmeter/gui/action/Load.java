@@ -188,6 +188,7 @@ public class Load implements Command
 	private JMeterGUIComponent generateGUIComponent(TestElement item) throws Exception
 	{
 			JMeterGUIComponent gui = null;
+			fixTestElement(item);
 			try {
 				gui = (JMeterGUIComponent)Class.forName((String)item.getProperty(TestElement.GUI_CLASS)).newInstance();
 			} catch(Exception e) {
@@ -209,6 +210,16 @@ public class Load implements Command
 				ListedHashTree tree = handler.getDataTree();
 				updateTree(tree);
 				insertLoadedTree(443,tree);
+	}
+	
+	private void fixTestElement(TestElement item)
+	{
+		if(item.getProperty(TestElement.GUI_CLASS).equals(
+				"org.apache.jmeter.protocol.http.config.gui.UrlConfigGui"))
+		{
+			item.setProperty(TestElement.GUI_CLASS,
+					"org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui");
+		}
 	}
 
 	

@@ -55,6 +55,7 @@
 package org.apache.jmeter.engine;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -84,7 +85,8 @@ import org.apache.log.Logger;
  *@created    $Date$
  *@version    $Revision$
  ***********************************************************/
-public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor,Runnable
+public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor,
+		Runnable,Serializable
 {
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.engine");

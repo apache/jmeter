@@ -70,6 +70,23 @@ public class RemoteSampleListenerImpl
 {
 	TestListener testListener;
 	SampleListener sampleListener;
+	
+	public RemoteSampleListenerImpl() throws RemoteException
+	{
+		super();
+	}
+	
+	public void setListener(Object listener)
+	{
+		if(listener instanceof TestListener)
+		{
+			testListener = (TestListener)listener;
+		}
+		if(listener instanceof SampleListener)
+		{
+			sampleListener = (SampleListener)listener;
+		}
+	}
 
 	/************************************************************
 	 *  !ToDo (Constructor description)
@@ -80,14 +97,7 @@ public class RemoteSampleListenerImpl
 	public RemoteSampleListenerImpl(Object listener) throws RemoteException
 	{
 		super();
-		if(listener instanceof TestListener)
-		{
-			testListener = (TestListener)listener;
-		}
-		if(listener instanceof SampleListener)
-		{
-			sampleListener = (SampleListener)listener;
-		}
+		setListener(listener);
 	}
 
 	public void testStarted()

@@ -63,7 +63,7 @@ import java.rmi.RemoteException;
  * and when sampling is stopped.
  */
 public interface RemoteSampleListener
-	 extends java.rmi.Remote, java.io.Serializable
+	 extends java.rmi.Remote
 {
 	
 	public void testStarted() throws RemoteException;
