@@ -11,12 +11,14 @@
   <property name="docs.dest" value="./docs"/>
   <property name="printable_docs.dest" value="./printable_docs"/>
   <property name="optimize" value="on"/>
+  <property name="tools.jar" value="${java.home}/lib/tools.jar"/>
 
   <!-- Build classpath -->
   <path id="classpath">
 	 <fileset dir="./lib">
 		<include name="**/*.jar"/>
 	 </fileset>
+     <pathelement location="${tools.jar}"/>
   </path>
 
   <path id="testClasspath">
