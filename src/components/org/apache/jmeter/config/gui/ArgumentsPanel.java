@@ -224,6 +224,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 	 *@param e  Description of Parameter
 	 ***************************************/
 	public void actionPerformed(ActionEvent e)
+	{
 		String action = e.getActionCommand();
 		if(action.equals(DELETE))
 		{
