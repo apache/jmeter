@@ -42,9 +42,6 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 import org.apache.oro.text.regex.Util;
 
-/**
- * @author mstover
- */
 public class RegexFunction extends AbstractFunction implements Serializable
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
@@ -52,16 +49,14 @@ public class RegexFunction extends AbstractFunction implements Serializable
     public static final String RAND = "RAND";
     public static final String KEY = "__regexFunction";
 
-    Object[] values;
+    private Object[] values;//Parameters are stored here
+    
     private static Random rand = new Random();
-    private static List desc = new LinkedList();
-    Pattern searchPattern;
-    Object[] template;
-    String valueIndex, defaultValue, between;
+    private static final List desc = new LinkedList();
+
     private static PatternCacheLRU patternCache =
         new PatternCacheLRU(1000, new Perl5Compiler());
-    Pattern templatePattern;
-    private String name;
+    private Pattern templatePattern;// initialised to the regex \$(\d+)\$
 
     private static ThreadLocal localMatcher = new ThreadLocal()
     {
@@ -82,18 +77,21 @@ public class RegexFunction extends AbstractFunction implements Serializable
 
     public RegexFunction()
     {
-        valueIndex = between = name = "";
         templatePattern = patternCache.getPattern("\\$(\\d+)\\$", Perl5Compiler.READ_ONLY_MASK);
     }
 
-    public String execute(SampleResult previousResult, Sampler currentSampler)
+    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
         throws InvalidVariableException
     {
+    	String valueIndex="", defaultValue="", between="";
+    	String name="";
+    	Pattern searchPattern;
+    	Object [] tmplt;
         try
         {
             searchPattern =
                 patternCache.getPattern(((CompoundVariable) values[0]).execute(), Perl5Compiler.READ_ONLY_MASK);
-            generateTemplate(((CompoundVariable) values[1]).execute());
+            tmplt = generateTemplate(((CompoundVariable) values[1]).execute());
 
             if (values.length > 2)
             {
@@ -181,7 +179,7 @@ public class RegexFunction extends AbstractFunction implements Serializable
                 {
                     first = false;
                 }
-                value.append(generateResult((MatchResult) it.next()));
+                value.append(generateResult((MatchResult) it.next(),name, tmplt));
             }
             return value.toString();
         }
@@ -190,7 +188,7 @@ public class RegexFunction extends AbstractFunction implements Serializable
             MatchResult result =
                 (MatchResult) collectAllMatches.get(
                     rand.nextInt(collectAllMatches.size()));
-            return generateResult(result);
+            return generateResult(result,name, tmplt);
         }
         else
         {
@@ -198,7 +196,7 @@ public class RegexFunction extends AbstractFunction implements Serializable
             {
                 int index = Integer.parseInt(valueIndex) - 1;
                 MatchResult result = (MatchResult) collectAllMatches.get(index);
-                return generateResult(result);
+                return generateResult(result,name, tmplt);
             }
             catch (NumberFormatException e)
             {
@@ -206,7 +204,7 @@ public class RegexFunction extends AbstractFunction implements Serializable
                 MatchResult result =
                     (MatchResult) collectAllMatches.get(
                         (int) (collectAllMatches.size() * ratio + .5) - 1);
-                return generateResult(result);
+                return generateResult(result,name, tmplt);
             }
             catch (IndexOutOfBoundsException e)
             {
@@ -216,14 +214,14 @@ public class RegexFunction extends AbstractFunction implements Serializable
 
     }
 
-    private void saveGroups(MatchResult result)
+    private void saveGroups(MatchResult result, String namep)
     {
         if (result != null)
         {
             JMeterVariables vars = getVariables();
             for (int x = 0; x < result.groups(); x++)
             {
-                vars.put(name + "_g" + x, result.group(x));
+                vars.put(namep + "_g" + x, result.group(x));
             }
         }
     }
@@ -233,9 +231,9 @@ public class RegexFunction extends AbstractFunction implements Serializable
         return desc;
     }
 
-    private String generateResult(MatchResult match)
+    private String generateResult(MatchResult match, String namep, Object[] template)
     {
-        saveGroups(match);
+        saveGroups(match, namep);
         StringBuffer result = new StringBuffer();
         for (int a = 0; a < template.length; a++)
         {
@@ -249,7 +247,7 @@ public class RegexFunction extends AbstractFunction implements Serializable
             }
         }
         JMeterVariables vars = getVariables();
-        vars.put(name, result.toString());
+        vars.put(namep, result.toString());
         return result.toString();
     }
 
@@ -266,12 +264,9 @@ public class RegexFunction extends AbstractFunction implements Serializable
         {
             throw new InvalidVariableException();
         }
-
-        //  defaultValue = URLDecoder.decode(parameters);
-        defaultValue = "";
     }
 
-    private void generateTemplate(String rawTemplate)
+    private Object[] generateTemplate(String rawTemplate)
     {
         List pieces = new ArrayList();
         List combined = new LinkedList();
@@ -304,7 +299,7 @@ public class RegexFunction extends AbstractFunction implements Serializable
         {
             combined.add(new Integer(matcher.getMatch().group(1)));
         }
-        template = combined.toArray();
+        return combined.toArray();
     }
 
     private boolean isFirstElementGroup(String rawData)
