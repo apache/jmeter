@@ -54,7 +54,6 @@
  */
 package org.apache.jmeter.visualizers;
 
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -67,7 +66,6 @@ import javax.swing.SwingUtilities;
 
 import org.apache.jmeter.gui.util.JMeterColor;
 import org.apache.jmeter.samplers.Clearable;
-
 
 /**
  *  Title: Apache JMeter Description: Implements a simple graph for displaying
@@ -85,6 +83,7 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
     private boolean average = true;
     private boolean deviation = true;
     private boolean throughput = true;
+    private boolean median = true;
 
     private GraphModel model;
     private static int width = 2000;
@@ -203,6 +202,11 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
         this.average = value;
     }
 
+    public void enableMedian(boolean value)
+    {
+        this.median = value;
+    }
+
     /**
      *  Description of the Method
      *
@@ -235,20 +239,18 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
     {
         final int xPos = model.getSampleCount();
 
-        SwingUtilities.invokeLater(
-                new Runnable()
-                {
-                    public void run()
-                    {
-                        Graphics g = getGraphics();
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
+                Graphics g = getGraphics();
 
-                        if (g != null)
-                        {
-                            drawSample(xPos, oneSample, g);
-                        }
-                    }
+                if (g != null)
+                {
+                    drawSample(xPos, oneSample, g);
                 }
-                );
+            }
+        });
     }
 
     /**
@@ -303,25 +305,30 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
 
         if (average)
         {
-            int average = (int) (oneSample.average * d.height
-                    / model.getGraphMax());
+            int average = (int) (oneSample.average * d.height / model.getGraphMax());
 
             g.setColor(Color.blue);
             g.drawLine(x % width, d.height - average, x % width, (d.height - average - 1));
         }
 
+        if (median)
+        {
+            int median = (int) (oneSample.median * d.height / model.getGraphMax());
+
+            g.setColor(JMeterColor.purple);
+            g.drawLine(x % width, d.height - median, x % width, (d.height - median - 1));
+        }
+
         if (deviation)
         {
-            int deviation = (int) (oneSample.deviation * d.height
-                    / model.getGraphMax());
+            int deviation = (int) (oneSample.deviation * d.height / model.getGraphMax());
 
             g.setColor(Color.red);
             g.drawLine(x % width, d.height - deviation, x % width, (d.height - deviation - 1));
         }
         if (throughput)
         {
-            int throughput = (int) (oneSample.throughput * d.height
-                    / model.getThroughputMax());
+            int throughput = (int) (oneSample.throughput * d.height / model.getThroughputMax());
 
             g.setColor(JMeterColor.dark_green);
             g.drawLine(x % width, d.height - throughput, x % width, (d.height - throughput - 1));
