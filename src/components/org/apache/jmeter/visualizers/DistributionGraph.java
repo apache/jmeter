@@ -61,15 +61,15 @@ public class DistributionGraph
      * the granularity for the distribution
      * graph. it can only be whole numbers.
      */
-    private int granularity = 5;
+    //NOTREAD private int granularity = 5;
     /**
      * there's an option to delay drawing
      */
-    private boolean delay = false;
+    //NOTREAD private boolean delay = false;
     /**
      * delay redraw
      */
-    private int counter = 20;
+    //NOTREAD private int counter = 20;
     private static int total = -1;
 
     /**
