@@ -59,13 +59,10 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.config.LoginConfig;
-import org.apache.jmeter.protocol.ftp.config.FtpConfig;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.PerSampleClonable;
-import org.apache.jmeter.testelement.TestElement;
 
 /************************************************************
  *  A sampler which understands FTP file requests
@@ -86,14 +83,6 @@ public class FTPSampler extends AbstractSampler implements PerSampleClonable {
 	{
 	}
 
-	public void addCustomTestElement(TestElement element)
-	{
-		if(element instanceof FtpConfig || element instanceof LoginConfig)
-		{
-			mergeIn(element);
-		}
-	}
-	
 	public String getUsername()
 	{
 		return getPropertyAsString(ConfigTestElement.USERNAME);
