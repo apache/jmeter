@@ -66,14 +66,14 @@ public class JMeterVariables
         putAll(vars.variables);
     }
 
+    /**
+     * Returns null values if variable doesn't exist.   Users of this must check for null.
+     * @param key
+     * @return
+     */
     public String get(String key)
     {
-        String val = (String) variables.get(key);
-        if (val == null)
-        {
-            return "";
-        }
-        return val;
+        return (String) variables.get(key);
     }
     
     public Object getObject(String key)
