@@ -31,6 +31,7 @@
 <ul>
 <li>Better checking of parameter count in JavaScript function</li>
 <li>XPath Assertion and XPath Function</li>
+<li>Allow CSVRead delimiter to be changed</li>
 </ul>
 <h4>Bug fixes:</h4>
 <ul>
@@ -41,6 +42,8 @@
 <li>DOS scripts now handle different disks better</li>
 <li>Bug 32345 - HTTP Rewriter does not work with HTTP Request default</li>
 <li>Catch Runtime Exceptions so an error in one Listener does not affect others</li>
+<li>Bug 33467 - __threadNum() extracted number wrongly </li>
+<li>Bug 29186,33299 - fix CLI parsing of "-" in second argument</li>
 </ul>
 <h4>Other changes:</h4>
 <ul>
