@@ -82,8 +82,8 @@ import org.apache.log.Logger;
  * The JMeter interface to the sampling process, allowing JMeter to see the
  * timing, add listeners for sampling events and to stop the sampling process.
  *
- * @author    $Author$
- * @version   $Revision$
+ * @author    
+ * @version   $Revision$ Last updated: $Date$
  */
 public class JMeterThread implements Runnable, java.io.Serializable
 {
@@ -141,7 +141,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
 
     /**
      * Checks whether the JMeterThread is Scheduled.
-     * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+     * author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
     public boolean isScheduled()
     {
@@ -150,7 +150,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
 
     /**
      * Enable the scheduler for this JMeterThread.
-     * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+     * author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
     public void setScheduled(boolean sche)
     {
@@ -162,7 +162,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
      * Set the StartTime for this Thread.
      *
      * @param StartTime the StartTime value.
-     * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+     * author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
     public void setStartTime(long stime)
     {
@@ -173,7 +173,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
      * Get the start time value.
      *
      * @return the start time value.
-     * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+     * author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
     public long getStartTime()
     {
@@ -184,7 +184,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
      * Set the EndTime for this Thread.
      *
      * @param EndTime the EndTime value.
-     * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+     * author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
     public void setEndTime(long etime)
     {
@@ -195,7 +195,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
      * Get the end time value.
      *
      * @return the end time  value.
-     * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+     * author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
     public long getEndTime()
     {
@@ -206,7 +206,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
     /**
      * Check the scheduled time is completed.
      *
-     * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+     * author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
     public void stopScheduler()
     {
@@ -220,7 +220,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
     /**
      * Start the scheduler with the specified time
      *
-     * aAuthor T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+     * Author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
     public void startScheduler()
     {
