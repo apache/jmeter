@@ -68,7 +68,7 @@ public class TCPSampler extends AbstractSampler implements TestListener
 		}
 	};
 
-	private TCPClient protocolHandler;
+	private transient TCPClient protocolHandler;
 	
 	public TCPSampler()
 	{
