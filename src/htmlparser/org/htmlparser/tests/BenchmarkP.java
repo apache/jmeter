@@ -58,7 +58,7 @@ public class BenchmarkP
 
     public static void main(String[] args)
     {
-        if (args != null & args.length > 0)
+        if (args != null && args.length > 0)
         {
             String strurl = args[0];
             boolean addLink = true;
