@@ -255,11 +255,12 @@ public class JavaSampler extends AbstractSampler implements TestListener
      * actually creating a JavaSamplerClient
      * 
      * @return reference to JavaSamplerClient
-     */
+     * NOTUSED
     private JavaSamplerClient retrieveJavaClient()
     {
         return javaClient;
     }
+    */
 
     /**
      * Generate a String identifier of this instance for debugging

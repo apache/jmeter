@@ -89,9 +89,6 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class LdapConfigGui extends AbstractConfigGui implements ItemListener
 {
-    private final static String ROOTDN = "rootdn";
-    private final static String TEST = "test";
-    private static String testValue="NNNN";
 
     private JTextField rootdn = new JTextField(20);
     private JTextField searchbase = new JTextField(20);
