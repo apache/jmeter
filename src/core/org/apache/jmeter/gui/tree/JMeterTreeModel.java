@@ -144,10 +144,6 @@ public class JMeterTreeModel extends DefaultTreeModel
 	public JMeterTreeNode addComponent(Object component, JMeterTreeNode node)
 			 throws IllegalUserActionException
 	{
-		if((node.getUserObject() instanceof TestPlanGui) && !(component instanceof ThreadGroupGui))
-		{
-			throw new IllegalUserActionException("Only ThreadGroups can be added to Test Plan nodes");
-		}
 		if(node.getUserObject() instanceof AbstractConfigGui)
 		{
 			throw new IllegalUserActionException("This node cannot hold sub-elements");
