@@ -72,8 +72,8 @@ import org.apache.jmeter.util.JMeterUtils;
  * Provides the gui to configure JNDI sampling
  *
  * @author	Khor Soon Hin
- * @created	20 Dec 2001
- * @modified	20 Dec 2001
+ * Created	20 Dec 2001
+ * @version $Revision$ Last Updated: $Date$
  */
 public class JndiTestSampleGui extends JPanel implements ModelSupported
 {

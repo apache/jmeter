@@ -84,8 +84,8 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  * @author    T.Elanjchezhiyan(chezhiyan@siptech.co.in) - Sip Technologies and
  *            Exports Ltd. 
- * @created   Apr 29 2003 11:45 AM
- * @version   $Revision$
+ * Created     Apr 29 2003 11:45 AM
+ * @version   $Revision$ Last updated: $Date$
  */
 public class LdapConfigGui extends AbstractConfigGui implements ItemListener
 {

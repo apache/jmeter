@@ -85,8 +85,8 @@ import org.apache.log.Logger;
  *
  * @author    T.Elanjchezhiyan(chezhiyan@siptech.co.in) - Sip Technologies and
  *            Exports Ltd.
- * @created   Apr 29 2003 11:00 AM
- * @version   $Revision$
+ * Created     Apr 29 2003 11:00 AM
+ * @version   $Revision$ Last updated: $Date$
  */
 public class LDAPSampler extends AbstractSampler
 {

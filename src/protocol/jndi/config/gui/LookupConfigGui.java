@@ -72,10 +72,9 @@ import org.apache.log4j.Category;
 
 /**
  * Provides the gui interface to configure JNDI lookup
- * @author	Khor Soon Hin
- * @version	1.0
- * @created	2001 Dec 18
- * @modified	2001 Dec 18
+ * @author	     Khor Soon Hin
+ * @version	$Revision$ Last updated: $Date$
+ * Created	    2001 Dec 18
  */
 public class LookupConfigGui extends JPanel implements ModelSupported,
 	KeyListener

@@ -62,9 +62,8 @@ import org.apache.log4j.Category;
  * is not compatible for the class.
  *
  * @author	Khor Soon Hin
- * @version	1.0
- * @created	2002 Jan 08
- * @modified	2002 Jan 11
+ * @version	$Revision$ Last Updated: $Date$
+ * Created	2002 Jan 08
  */
 public class MethodConfigUserObjectException extends Exception
 {

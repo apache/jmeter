@@ -65,9 +65,8 @@ import org.apache.log4j.Category;
  * created.  Failing which a MethodConfigUserObjectException will be thrown.
  *
  * @author	Khor Soon Hin
- * @version	1.0
- * @created	2001 Jan 08
- * @modified	2001 Jan 08
+ * @version $Revision$ Last Updated: $Date$
+ * Created	2001 Jan 08
  */
 public class MethodConfigUserObject 
 {
