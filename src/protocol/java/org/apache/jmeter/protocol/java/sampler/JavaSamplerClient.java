@@ -77,7 +77,7 @@ import org.apache.jmeter.samplers.SampleResult;
  * <p>
  * The JMeter JavaSampler GUI allows a list of parameters to be
  * defined for the test.  These are passed to the various test
- * methods through the JavaSamplerContext.  A list of default
+ * methods through the {@link JavaSamplerContext}.  A list of default
  * parameters can be defined through the getDefaultParameters()
  * method.  These parameters and any default values associated
  * with them will be shown in the GUI.  Users can add other
@@ -95,16 +95,16 @@ import org.apache.jmeter.samplers.SampleResult;
  * supported for cases where extending this class is not possible
  * (for example, when the client class is already a subclass of some
  * other class).
- * 
- * @see JavaSamplerContext
+ * <p>
+ * See {@link org.apache.jmeter.protocol.java.test.SleepTest} for an
+ * example of how to implement this interface.
  * 
  * @author Brad Kiewel
- * @author Jeremy Arnold
- * @version $Revision$
+ * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
+ * @version $Id$
  */
-
-public interface JavaSamplerClient {
-
+public interface JavaSamplerClient
+{
     /**
      * Do any initialization required by this client.  It is
      * generally recommended to do any initialization such as
@@ -115,7 +115,7 @@ public interface JavaSamplerClient {
      * @param context  the context to run with. This provides access
      *                 to initialization parameters.
      */
-    public void setupTest(JavaSamplerContext context);
+    void setupTest(JavaSamplerContext context);
 
     /**
      * Perform a single sample for each iteration.  This method
@@ -128,7 +128,7 @@ public interface JavaSamplerClient {
      * 
      * @see org.apache.jmeter.samplers.SampleResult#setTime(long)
      * @see org.apache.jmeter.samplers.SampleResult#setSuccessful(boolean)
-     * @see org.apache.jmeter.samplers.SampleResult#setSampleLabel(java.lang.String)
+     * @see org.apache.jmeter.samplers.SampleResult#setSampleLabel(String)
      * 
      * @param context  the context to run with. This provides access
      *                 to initialization parameters.
@@ -136,7 +136,7 @@ public interface JavaSamplerClient {
      * @return         a SampleResult giving the results of this
      *                 sample.
      */
-    public SampleResult runTest(JavaSamplerContext context);
+    SampleResult runTest(JavaSamplerContext context);
 
     /**
      * Do any clean-up required by this test at the end of a test run.
@@ -144,7 +144,7 @@ public interface JavaSamplerClient {
      * @param context  the context to run with. This provides access
      *                 to initialization parameters.
      */
-    public void teardownTest(JavaSamplerContext context);
+    void teardownTest(JavaSamplerContext context);
 
     /**
      * Provide a list of parameters which this test supports.  Any
@@ -160,5 +160,5 @@ public interface JavaSamplerClient {
      *          test which should be listed in the GUI, or null
      *          if no parameters should be listed.
      */
-    public Arguments getDefaultParameters();
+    Arguments getDefaultParameters();
 }

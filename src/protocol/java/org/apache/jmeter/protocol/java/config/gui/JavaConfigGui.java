@@ -83,8 +83,10 @@ import org.apache.log.Logger;
 /**
  * The <code>JavaConfigGui</code> class provides the user interface for
  * the {@link JavaConfig} object.
+ * 
  * @author Brad Kiewel
- * @version $Revision$
+ * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
+ * @version $Id$
  */
 public class JavaConfigGui extends AbstractConfigGui implements ActionListener
 {

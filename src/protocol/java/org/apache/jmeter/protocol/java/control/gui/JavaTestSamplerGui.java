@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -66,10 +66,11 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * The <code>JavaTestSamplerGui</code> class provides the user interface 
- * for the JavaTestSampler.
+ * for the {@link JavaSampler}.
  * 
  * @author Brad Kiewel
- * @version $Revision$
+ * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
+ * @version $Id$
  */
 public class JavaTestSamplerGui extends AbstractSamplerGui
 {

@@ -61,49 +61,52 @@ import java.util.Set;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.protocol.java.config.JavaConfig;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.PerThreadClonable;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
-
-public class JavaSampler extends AbstractSampler
-            implements PerThreadClonable, TestListener {
-
+/**
+ * A sampler for executing custom Java code in each sample.  See
+ * {@link JavaSamplerClient} and {@link AbstractJavaSamplerClient} for
+ * information on writing Java code to be executed by this sampler.
+ * 
+ * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
+ * @version $Id$
+ */
+public class JavaSampler extends AbstractSampler implements TestListener
+{
     /**
      * Property key representing the classname of the JavaSamplerClient to
      * user.
-     */			
-    public final static String CLASSNAME = "classname";
-	
-	/**
-	 * Property key representing the arguments for the JavaSamplerClient.
-	 */
-    public final static String ARGUMENTS = "arguments";
+     */
+    public static final String CLASSNAME = "classname";
+
+    /**
+     * Property key representing the arguments for the JavaSamplerClient.
+     */
+    public static final String ARGUMENTS = "arguments";
 
     /**
      * The JavaSamplerClient instance used by this sampler to actually perform
      * the sample.
      */
-    transient private JavaSamplerClient javaClient = null;
-	
+    private transient JavaSamplerClient javaClient = null;
+
     /**
      * The JavaSamplerContext instance used by this sampler to hold
      * information related to the test run, such as the parameters
      * specified for the sampler client.
      */
-    transient private JavaSamplerContext context = null;
+    private transient JavaSamplerContext context = null;
 
     /**
      * Logging
      */
-    transient private static Logger log =
+    private static transient Logger log =
         Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
 
     /**
@@ -132,7 +135,7 @@ public class JavaSampler extends AbstractSampler
      */
     public void setArguments(Arguments args)
     {
-        this.setProperty(new TestElementProperty(ARGUMENTS, args));
+        setProperty(new TestElementProperty(ARGUMENTS, args));
     }
 
     /**
@@ -146,18 +149,11 @@ public class JavaSampler extends AbstractSampler
         return (Arguments) getProperty(ARGUMENTS).getObjectValue();
     }
 
-    public void addCustomTestElement(TestElement el)
-    {
-        if (el instanceof JavaConfig)
-        {
-            mergeIn(el);
-        }
-    }
-
     /**
      * Releases Java Client.
      */
-    private void releaseJavaClient () {
+    private void releaseJavaClient ()
+    {
         if (javaClient != null)
         {
             javaClient.teardownTest(context);
@@ -173,7 +169,7 @@ public class JavaSampler extends AbstractSampler
      */
     public void setClassname(String classname)
     {
-        this.setProperty(CLASSNAME, classname);
+        setProperty(CLASSNAME, classname);
     }
 
     /**
@@ -183,7 +179,7 @@ public class JavaSampler extends AbstractSampler
      */
     public String getClassname()
     {
-        return this.getPropertyAsString(CLASSNAME);
+        return getPropertyAsString(CLASSNAME);
     }
 
     /**
@@ -194,7 +190,8 @@ public class JavaSampler extends AbstractSampler
      *
      * @see JavaSamplerClient#runTest(JavaSamplerContext)
      * 
-     * @return test SampleResult
+     * @param entry  the Entry for this sample
+     * @return       test SampleResult
      */
     public SampleResult sample(Entry entry)
     {
@@ -218,7 +215,8 @@ public class JavaSampler extends AbstractSampler
      * 
      * @return JavaSamplerClient reference.
      */
-    private JavaSamplerClient createJavaClient() {
+    private JavaSamplerClient createJavaClient()
+    {
         if (javaClient == null)
         {
             try
@@ -229,15 +227,21 @@ public class JavaSampler extends AbstractSampler
                 javaClient = (JavaSamplerClient) javaClass.newInstance();
                 context = new JavaSamplerContext(getArguments());
 
-                if (log.isDebugEnabled()) {
-                    log.debug(whoAmI() + "\tCreated:\t" + getClassname() +
-                            "@" + Integer.toHexString(javaClient.hashCode()));
+                if (log.isDebugEnabled())
+                {
+                    log.debug(
+                        whoAmI()
+                            + "\tCreated:\t"
+                            + getClassname()
+                            + "@"
+                            + Integer.toHexString(javaClient.hashCode()));
                 }
             }
             catch (Exception e)
             {
-                log.error(whoAmI() + "\tException creating: " +
-                        getClassname(), e);
+                log.error(
+                    whoAmI() + "\tException creating: " + getClassname(),
+                    e);
                 javaClient = new ErrorSamplerClient();
             }
         }
@@ -252,7 +256,8 @@ public class JavaSampler extends AbstractSampler
      * 
      * @return reference to JavaSamplerClient
      */
-    private JavaSamplerClient retrieveJavaClient() {
+    private JavaSamplerClient retrieveJavaClient()
+    {
         return javaClient;
     }
 
@@ -272,12 +277,13 @@ public class JavaSampler extends AbstractSampler
     }
 
     //  TestListener implementation
-
+    /* Implements TestListener.testStarted() */
     public void testStarted()
     {
         log.debug(whoAmI() + "\ttestStarted");
     }
 
+    /* Implements TestListener.testStarted(String) */
     public void testStarted(String host)
     {
         log.debug(whoAmI() + "\ttestStarted(" + host + ")");
@@ -305,30 +311,39 @@ public class JavaSampler extends AbstractSampler
         }
     }
 
+    /* Implements TestListener.testEnded(String) */
     public void testEnded(String host)
     {
         testEnded();
     }
 
-    /**
-     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(LoopIterationEvent)
-     */
+    /* Implements TestListener.testIterationStart(LoopIterationEvent) */
     public void testIterationStart(LoopIterationEvent event)
-    {}
+    {
+    }
 
-    class ErrorSamplerClient extends AbstractJavaSamplerClient {
+    /**
+     * A {@link JavaSamplerClient} implementation used for error handling.  If
+     * an error occurs while creating the real JavaSamplerClient object, it is
+     * replaced with an instance of this class.  Each time a sample occurs with
+     * this class, the result is marked as a failure so the user can see that
+     * the test failed.
+     */
+    class ErrorSamplerClient extends AbstractJavaSamplerClient
+    {
         /**
          * Return SampleResult with data on error.
          * @see JavaSamplerClient#runTest()
          */
-        public SampleResult runTest(JavaSamplerContext context) {
+        public SampleResult runTest(JavaSamplerContext context)
+        {
             log.debug(whoAmI() + "\trunTest");
             Thread.yield();
             SampleResult results = new SampleResult();
             results.setTime(0);
             results.setSuccessful(false);
-            results.setResponseData(new String("Class not found: " +
-                    getClassname()).getBytes());
+            results.setResponseData(
+                ("Class not found: " + getClassname()).getBytes());
             results.setSampleLabel("ERROR: " + getClassname());
             return results;
         }
