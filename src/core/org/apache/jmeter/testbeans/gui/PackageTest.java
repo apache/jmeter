@@ -119,8 +119,8 @@ public class PackageTest extends JMeterTestCase
 		String dn= defaultBundle.getString("displayName").toLowerCase();
 
 		// Skip the rest of this test for alpha/experimental beans:
-		if (dn.indexOf("alpha") != -1
-			|| dn.indexOf("experimental") != -1) return;
+		if (dn.indexOf("(ALPHA") != -1
+			|| dn.indexOf("(EXPERIMENTAL") != -1) return;
 
 		// Check for property- and group-related texts:
 		PropertyDescriptor[] descriptors= beanInfo.getPropertyDescriptors();
