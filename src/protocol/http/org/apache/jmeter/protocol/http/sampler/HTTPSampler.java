@@ -478,7 +478,7 @@ public class HTTPSampler extends AbstractSampler
         {
             pathAndQuery = "/" + pathAndQuery;
         }
-        if (getPort() == UNSPECIFIED_PORT)
+        if (getPort() == UNSPECIFIED_PORT || getPort() == 80 )
         {
             return new URL(getProtocol(), getDomain(), pathAndQuery);
         }

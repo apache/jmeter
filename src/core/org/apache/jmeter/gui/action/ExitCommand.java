@@ -116,7 +116,7 @@ public class ExitCommand implements Command
             }
             else if (chosenOption == JOptionPane.YES_OPTION)
             {
-                ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), Save.SAVE_ALL));
+                ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), Save.SAVE_ALL));
                 if (!GuiPackage.getInstance().isDirty())
                 {
                     System.exit(0);

@@ -83,8 +83,7 @@ public class ListedHashTree extends HashTree implements Serializable,Cloneable
 	public Object clone()
 	{
 		ListedHashTree newTree = new ListedHashTree();
-		newTree.data = (Map)((HashMap)data).clone();
-		newTree.order = (List)((LinkedList)order).clone();
+        cloneTree(newTree);
 		return newTree;
 	}
 

@@ -564,9 +564,18 @@ public class HashTree implements Serializable,Map
 	public Object clone()
 	{
 		HashTree newTree = new HashTree();
-		newTree.data = (Map)((HashMap)data).clone();
+        cloneTree(newTree);
 		return newTree;
 	}
+    protected void cloneTree(HashTree newTree)
+    {
+        Iterator iter = list().iterator();
+        while(iter.hasNext())
+        {
+            Object key = iter.next();
+            newTree.set(key,(HashTree)getTree(key).clone());
+        }
+    }
 	
 	/**
 	 * Creates a new tree.  This method exists to allow inheriting classes to generate the
