@@ -281,72 +281,74 @@ public final class OldSaveService implements SaveServiceConstants
         long elapsed = 0;
         StringTokenizer splitter = new StringTokenizer(delim,defaultDelimiter);
         String text = null;
-        if (printMilliseconds)
-        {
-            text = splitter.nextToken();
-            timeStamp = Long.parseLong(text);
-        }
-           else if (formatter != null)
-           {
-               text = splitter.nextToken();
-               try
-            {
-                Date stamp = formatter.parse(text);
-				timeStamp = stamp.getTime();
-            }
-            catch (ParseException e)
-            {
-                e.printStackTrace();
-            }
-           }
         
-           if (saveTime)
-           {
-               text = splitter.nextToken();
-               elapsed = Long.parseLong(text);
-           }
-        
-		   result = new SampleResult(timeStamp,elapsed);
-		   
-           if (saveLabel)
-           {
-               text = splitter.nextToken();
-               result.setSampleLabel(text);  
-           }
-           if (saveResponseCode)
-           {
-               text = splitter.nextToken();
-               result.setResponseCode(text);
-           }
-        
-           if (saveResponseMessage)
-           {
-               text = splitter.nextToken();
-               result.setResponseMessage(text);
-           }
-        
-           if (saveThreadName)
-           {
-               text = splitter.nextToken();
-               result.setThreadName(text);
-           }
-        
-           if (saveDataType)
-           {
-               text = splitter.nextToken();
-               result.setDataType(text);
-           }
-        
-           if (saveSuccessful)
-           {
-               text = splitter.nextToken();
-               result.setSuccessful(Boolean.valueOf(text).booleanValue());
-           }
-        
-           if (saveAssertionResultsFailureMessage)
-           {
-               text = splitter.nextToken();
-           }
+        try {
+				if (printMilliseconds)
+				{
+				    text = splitter.nextToken();
+				    timeStamp = Long.parseLong(text);
+				}
+			   else if (formatter != null)
+			   {
+			        text = splitter.nextToken();
+			        Date stamp = formatter.parse(text);
+					timeStamp = stamp.getTime();
+			   }
+			
+			   if (saveTime)
+			   {
+			       text = splitter.nextToken();
+			       elapsed = Long.parseLong(text);
+			   }
+			
+			   result = new SampleResult(timeStamp,elapsed);
+			   
+			   if (saveLabel)
+			   {
+			       text = splitter.nextToken();
+			       result.setSampleLabel(text);  
+			   }
+			   if (saveResponseCode)
+			   {
+			       text = splitter.nextToken();
+			       result.setResponseCode(text);
+			   }
+			
+			   if (saveResponseMessage)
+			   {
+			       text = splitter.nextToken();
+			       result.setResponseMessage(text);
+			   }
+			
+			   if (saveThreadName)
+			   {
+			       text = splitter.nextToken();
+			       result.setThreadName(text);
+			   }
+			
+			   if (saveDataType)
+			   {
+			       text = splitter.nextToken();
+			       result.setDataType(text);
+			   }
+			
+			   if (saveSuccessful)
+			   {
+			       text = splitter.nextToken();
+			       result.setSuccessful(Boolean.valueOf(text).booleanValue());
+			   }
+			
+			   if (saveAssertionResultsFailureMessage)
+			   {
+			       text = splitter.nextToken();
+			   }
+		} catch (NumberFormatException e) {
+			log.warn("Error parsing number "+e);
+			throw e;
+		} catch (ParseException e) {
+			log.warn("Error parsing line "+e);
+			throw new RuntimeException(e.toString());
+		}
         return result;
     }
 
