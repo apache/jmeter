@@ -15,6 +15,7 @@ public class CollectionProperty extends AbstractProperty
 {
 
     protected Collection value;
+    private Collection savedValue;
 
     public CollectionProperty(String name, Collection value)
     {
@@ -26,60 +27,64 @@ public class CollectionProperty extends AbstractProperty
     {
         super();
     }
-    
+
     public void remove(String prop)
     {
         PropertyIterator iter = iterator();
-        while(iter.hasNext())
+        while (iter.hasNext())
         {
-            if(iter.next().getName().equals(prop))
+            if (iter.next().getName().equals(prop))
             {
                 iter.remove();
             }
         }
     }
-    
-    public void set(int index,String prop)
+
+    public void set(int index, String prop)
     {
-        if(value instanceof List)
+        if (value instanceof List)
         {
-            ((List)value).set(index,new StringProperty(prop,prop));
+            ((List) value).set(index, new StringProperty(prop, prop));
         }
     }
-    
-    public void set(int index,JMeterProperty prop)
+
+    public void set(int index, JMeterProperty prop)
     {
-        if(value instanceof List)
+        if (value instanceof List)
         {
-            ((List)value).set(index,prop);
+            ((List) value).set(index, prop);
         }
     }
-    
+
     public JMeterProperty get(int row)
     {
-        if(value instanceof List)
+        if (value instanceof List)
         {
-            return (JMeterProperty)((List)value).get(row);
+            return (JMeterProperty) ((List) value).get(row);
         }
         else
         {
             return null;
         }
     }
-    
+
     public void remove(int index)
     {
-        if(value instanceof List)
+        if (value instanceof List)
         {
-            ((List)value).remove(index);
+            ((List) value).remove(index);
         }
     }
-    
+
     public void setObjectValue(Object v)
     {
-        if(v instanceof Collection)
+        if (v instanceof Collection)
         {
-            value = normalizeList((Collection)v);
+            if (isRunningVersion())
+            {
+                savedValue = this.value;
+            }
+            value = normalizeList((Collection) v);
         }
     }
 
@@ -118,14 +123,14 @@ public class CollectionProperty extends AbstractProperty
         prop.value = cloneCollection();
         return prop;
     }
-    
+
     private Collection cloneCollection()
     {
         try
         {
-            Collection newCol = (Collection)value.getClass().newInstance();
+            Collection newCol = (Collection) value.getClass().newInstance();
             PropertyIterator iter = iterator();
-            while(iter.hasNext())
+            while (iter.hasNext())
             {
                 newCol.add(iter.next().clone());
             }
@@ -133,22 +138,22 @@ public class CollectionProperty extends AbstractProperty
         }
         catch (Exception e)
         {
-            log.error("Couldn't clone collection",e);
+            log.error("Couldn't clone collection", e);
             return value;
         }
     }
-    
+
     public void setCollection(Collection coll)
     {
         value = coll;
     }
-    
+
     /**
      * @see org.apache.jmeter.testelement.property.JMeterProperty#mergeIn(org.apache.jmeter.testelement.property.JMeterProperty)
      */
     public void mergeIn(JMeterProperty prop)
     {
-        if(((CollectionProperty)prop).value == this.value)
+        if (((CollectionProperty) prop).value == this.value)
         {
             return;
         }
@@ -165,29 +170,29 @@ public class CollectionProperty extends AbstractProperty
             addProperty(prop);
         }
     }
-    
+
     public void clear()
     {
         value.clear();
     }
-    
+
     /**
      * Easy way to add properties to the list.
      * @param prop
      */
     public void addProperty(JMeterProperty prop)
     {
-        if(value.size() == 0 || value.iterator().next().getClass().equals(prop.getClass()))
+        if (value.size() == 0 || value.iterator().next().getClass().equals(prop.getClass()))
         {
             value.add(prop);
         }
     }
-    
+
     public void addItem(Object item)
     {
         addProperty(convertObject(item));
     }
-    
+
     /**
      * Figures out what kind of properties this collection is holding and
      * returns the class type.
@@ -195,7 +200,7 @@ public class CollectionProperty extends AbstractProperty
      */
     protected Class getPropertyType()
     {
-        if(value.size() > 0)
+        if (value.size() > 0)
         {
             return value.iterator().next().getClass();
         }
@@ -220,6 +225,11 @@ public class CollectionProperty extends AbstractProperty
      */
     public void recoverRunningVersion(TestElement owner)
     {
+        if (savedValue != null)
+        {
+            value = savedValue;
+            savedValue = null;
+        }
         PropertyIterator iter = iterator();
         while (iter.hasNext())
         {
