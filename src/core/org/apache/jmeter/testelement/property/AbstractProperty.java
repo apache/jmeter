@@ -55,6 +55,8 @@ public abstract class AbstractProperty implements JMeterProperty
 
     public AbstractProperty(String name)
     {
+        if (name == null) 
+            throw new IllegalArgumentException("Name cannot be null");
         this.name = name;
     }
 
@@ -93,6 +95,8 @@ public abstract class AbstractProperty implements JMeterProperty
 
     public void setName(String name)
     {
+        if (name == null) 
+            throw new IllegalArgumentException("Name cannot be null");
         this.name = name;
     }
 
@@ -232,12 +236,38 @@ public abstract class AbstractProperty implements JMeterProperty
         return Boolean.valueOf(val).booleanValue();
     }
 
-    public boolean equals(Object o) //TODO probably ought to provide hashCode() as well
+    /**
+     * Determines if the two objects are equal by comparing names and values
+     *
+     * @return true if names are equal and values are equal (or both null)
+     */
+    public boolean equals(Object o)
     {
-        return compareTo(o) == 0;
+    	if (!(o instanceof JMeterProperty)) return false;
+    	if (this == o) return true;
+    	JMeterProperty jpo = (JMeterProperty) o;
+    	if (!name.equals(jpo.getName())) return false; 
+    	String s1 = getStringValue(); 
+    	String s2 = jpo.getStringValue();
+		return s1 == null ? s2 == null : s1.equals(s2);
     }
+    
+	public int hashCode()
+	{
+		int result = 17;
+		result = result * 37 + name.hashCode();// name cannot be null 
+		String s = getStringValue();
+		result = result * 37 + (s == null ? 0 : s.hashCode()); 
+		return result;
+	}
 
-    /* (non-Javadoc)
+    /**
+     * Compares two JMeterProperty object values.
+     * N.B. Does not compare names
+     * 
+     * @param arg0 JMeterProperty to compare against
+     * @return 0 if equal values or both values null;
+     * -1 otherwise
      * @seeComparable#compareTo(Object)
      */
     public int compareTo(Object arg0)
@@ -249,12 +279,13 @@ public abstract class AbstractProperty implements JMeterProperty
             // any other value.  Log a warning so we can try to find the root
             // cause of the null value.
             String val = getStringValue();
+            String val2 = ((JMeterProperty)arg0).getStringValue();
             if (val == null)
             {
                 log.warn(
                     "Warning: Unexpected null value for property: " + name);
                 
-                if (((JMeterProperty)arg0).getStringValue() == null)
+                if (val2 == null)
                 {
                     // Two null values -- return equal
                     return 0;
@@ -264,9 +295,7 @@ public abstract class AbstractProperty implements JMeterProperty
                     return -1;
                 }
             }
-            
-            return getStringValue().compareTo(
-                ((JMeterProperty) arg0).getStringValue());
+            return val.compareTo(val2);
         }
         else
         {
@@ -397,6 +426,11 @@ public abstract class AbstractProperty implements JMeterProperty
         }
     }
 
+    /**
+     * Provides a string representation of the property.
+     * 
+     * @return a string consisting of the name and its value
+     */
     public String toString()
     {
         return getStringValue();
