@@ -20,12 +20,6 @@ order)
 	<li>HTTP-multiPart</li>
 	<li>Local Java Object</li>
   </ul>
-  <li><STRONG>Improving visualizers:</STRONG>  Currently, the visualizers only make use of the timing data - but much more than that is and can be supplied
-	to them.  In the
-		  short term, it would be nice to add a visualizer that displayed the full text
-		  response from each sample, thus allowing the user to verify that things are
-		  working correctly (ie - that the web server is returning correct results, and
-		  that JMeter is functioning as expected).</li>
   <li><strong>Adding reporters:</strong> Reporters would offer report generation based
 		  on data collected by JMeter.  For those looking for more information than
 		  simply time per sample and average time, a reporter should be available.
@@ -38,7 +32,10 @@ order)
   <li><strong>Drag n Drop</strong> allow users to move test elements around the tree
   easily</li>
   <li>Controllers that enable spidering and/or dynamic modification of test entries
-  based on responses from previous samples</li>
+  based on responses from previous samples (<b>Currently being developed</b>)</li>
+  <li>Assertions - allowing users to assert what the results from test samples should look like, thus allowing
+  JMeter to act as an automated functional tester (<b>Currently being developed</b>)</li>
+  <li>Proxy server to enable recording of browser activity (<b>Currently being developed</b>)</li>
 </ul>
 </section>
 </body>
