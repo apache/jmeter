@@ -1,0 +1,55 @@
+Which jars are used by which modules?
+Version: $Revision$ $Date$
+
+avalon-excalibur
+- CLI in JMeter.java
+
+avalon-framework
+- Configuration (ResultCollector, SaveService, SampleResult, TestElementSaver)
+
+commons-collections
+- ListenerNotifier ONLY
+
+htmlparser
+- http: parsing html
+
+jakarta-oro
+- regular expressions: various
+
+jdom
+- XMLAssertion, JMeterTest ONLY
+
+(jorphan)
+
+js
+- javascript function
+
+junit
+- unit tests
+
+logkit
+- logging
+
+soap
+- WebServiceSampler ONLY
+
+Tidy
+- http: various modules for parsing html
+- org.xml.sax - various
+
+velocity
+- Anakia (create documentation) Not used by JMeter runtime
+
+xalan
++org.apache.xalan|xml|xpath
+
+xercesimpl
++org.apache.html.dom|org.apache.wml|org.apache.xerces|org.apache.xml.serialize
++org.w3c.dom.html|ls
+
+xml-apis
++javax.xml
++org.w3c.dom
++org.xml.sax
+
+The x* jars are used for XML handling (not needed for JDK1.4)
