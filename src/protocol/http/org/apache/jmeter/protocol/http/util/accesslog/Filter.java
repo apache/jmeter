@@ -101,4 +101,12 @@ public interface Filter {
 	 */
 	public String filter(String text);
 	
+	/**
+	 * Tell the filter when the parsing has reached the end of the 
+	 * log file and is about to begin again.  Gives the filter a chance to 
+	 * adjust it's values, if needed.
+	 *
+	 */
+	public void reset();
+	
 }

@@ -73,10 +73,23 @@ public class StatCalculator implements Serializable
         Number val = new Double(newValue);
         addValue(val);
     }
+    
+    public void addAll(StatCalculator calc)
+    {
+       Iterator iter = values.iterator();
+       while(iter.hasNext())
+       {
+          addValue((Number)iter.next());
+       }
+    }
 
     public Number getMedian()
     {
-        return (Number) values.get((int)(values.size() * .5));
+       if(count > 0)
+       {
+          return (Number) values.get((int)(values.size() * .5));
+       }
+       return new Long(0);
     }
     
     /**
@@ -88,7 +101,11 @@ public class StatCalculator implements Serializable
      */
     public Number getPercentPoint(float percent)
     {
+       if(count > 0)
+       {
         return (Number) values.get((int)(values.size() * percent));
+       }
+       return new Long(0);
     }
     
     /**
@@ -100,7 +117,11 @@ public class StatCalculator implements Serializable
      */
     public Number getPercentPoint(double percent)
     {
-        return (Number) values.get((int)(values.size() * percent));
+       if(count > 0)
+       {
+          return (Number) values.get((int)(values.size() * percent));
+       }
+       return new Long(0);
     }
     
     /**
@@ -143,12 +164,20 @@ public class StatCalculator implements Serializable
     
     public Number getMin()
     {
-        return (Number)values.get(0);
+       if(count > 0)
+       {
+          return (Number)values.get(0);
+       }
+       return new Long(Long.MIN_VALUE);
     }
     
     public Number getMax()
     {
-        return (Number)values.get(count-1);
+        if(count > 0)
+           {
+           return (Number)values.get(count-1);
+        }
+        return new Long(Long.MAX_VALUE);
     }
     
     public int getCount()
@@ -158,7 +187,21 @@ public class StatCalculator implements Serializable
 
     public void addValue(Number val)
     {
-        int index = Collections.binarySearch(values, val);
+        addSortedValue(val);
+        count++;
+        double currentVal = val.doubleValue();
+        sum += currentVal;
+        sumOfSquares += currentVal * currentVal;
+        mean = sum / count;
+        deviation = Math.sqrt( (sumOfSquares / count) - (mean * mean) );
+    }
+    
+    /**
+    * @param val
+    */
+   private void addSortedValue(Number val)
+   {
+      int index = Collections.binarySearch(values, val);
         if (index >= 0 && index < values.size())
         {
             values.add(index, val);
@@ -171,15 +214,9 @@ public class StatCalculator implements Serializable
         {
             values.add((index * (-1)) - 1, val);
         }
-        count++;
-        double currentVal = val.doubleValue();
-        sum += currentVal;
-        sumOfSquares += currentVal * currentVal;
-        mean = sum / count;
-        deviation = Math.sqrt( (sumOfSquares / count) - (mean * mean) );
-    }
-    
-    public static class Test extends TestCase
+   }
+
+   public static class Test extends TestCase
     {
         StatCalculator calc;
         
@@ -212,4 +249,5 @@ public class StatCalculator implements Serializable
             assertEquals(15,calc.getMedian().intValue());
         }
     }
+   
 }

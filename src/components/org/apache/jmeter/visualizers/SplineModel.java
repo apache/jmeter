@@ -19,7 +19,6 @@
 package org.apache.jmeter.visualizers;
 
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.jmeter.samplers.Clearable;
@@ -42,29 +41,15 @@ public class SplineModel implements Clearable
 
     /** Current Spline curve. */
     protected Spline3 dataCurve = null;
-
-    /** Sum of the samples. */
-    protected long sum = 0;
-
-    /** Average of the samples. */
-    protected long average = 0;
-
-    /** Number of collected samples. */
-    protected long n = 0;
-
-    ArrayList samples;
+    SamplingStatCalculator samples;
 
     private GraphListener listener;
-
-    private long minimum = Integer.MAX_VALUE;
-    private long maximum = Integer.MIN_VALUE;
-    private long incoming;
 
     private String name;
 
     public SplineModel()
     {
-        samples = new ArrayList();
+        samples = new SamplingStatCalculator("Spline");
     }
 
     public void setListener(GraphListener vis)
@@ -104,46 +89,32 @@ public class SplineModel implements Clearable
 
     public long getMinimum()
     {
-        return minimum;
+        return samples.getMin().longValue();
     }
 
     public long getMaximum()
     {
-        return maximum;
+        return samples.getMax().longValue();
     }
 
     public long getAverage()
     {
-        return average;
+        return (long)samples.getMean();
     }
 
     public long getCurrent()
     {
-        return incoming;
-    }
-
-    public long[] getSamples()
-    {
-        int n = samples.size();
-        long[] longSample = new long[n];
-
-        for (int i = 0; i < n; i++)
-        {
-            longSample[i] = ((Long) samples.get(i)).longValue();
-        }
-        return longSample;
+        return samples.getCurrentSample().data;
     }
 
     public long getSample(int i)
     {
-        Long sample = (Long) this.samples.get(i);
-
-        return sample.longValue();
+        return samples.getSample(i).data;
     }
 
-    public int getNumberOfCollectedSamples()
+    public long getNumberOfCollectedSamples()
     {
-        return this.samples.size();
+        return samples.getCount();
     }
 
     public String getName()
@@ -161,13 +132,6 @@ public class SplineModel implements Clearable
         // this.graph.clear();
         samples.clear();
 
-        this.n = 0;
-        this.sum = 0;
-        this.average = 0;
-
-        minimum = Integer.MAX_VALUE;
-        maximum = Integer.MIN_VALUE;
-
         this.dataCurve = null;
 
         if (listener != null)
@@ -178,38 +142,21 @@ public class SplineModel implements Clearable
 
     public synchronized void add(SampleResult sampleResult)
     {
-        long sample = sampleResult.getTime();
-
-        this.n++;
-        this.sum += sample;
-        this.average = this.sum / this.n;
-        if (SHOW_INCOMING_SAMPLES)
-        {
-            incoming = sample;
-        }
-        if (sample > maximum)
-        {
-            maximum = sample;
-        }
-        if (sample < minimum)
-        {
-            minimum = sample;
-        }
-        samples.add(new Long(sample));
-        int n = getNumberOfCollectedSamples();
+       samples.addSample(sampleResult);
+        long n = samples.getCount();
 
         if ((n % (numberOfNodes * refreshPeriod)) == 0)
         {
             float[] floatNode = new float[numberOfNodes];
             //NOTUSED: long[] longSample = getSamples();
             // load each node
-            int loadFactor = n / numberOfNodes;
+            long loadFactor = n / numberOfNodes;
 
             for (int i = 0; i < numberOfNodes; i++)
             {
                 for (int j = 0; j < loadFactor; j++)
                 {
-                    floatNode[i] += getSample((i * loadFactor) + j);
+                    floatNode[i] += samples.getSample((int)((i * loadFactor) + j)).data;
                 }
                 floatNode[i] = floatNode[i] / loadFactor;
             }

@@ -26,6 +26,8 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -109,7 +111,6 @@ public class TCLogParser implements LogParser
     /**
      * Handles to supporting classes
      */
-    protected Generator GEN = null;
     protected Filter FILTER = null;
 
 //TODO downcase UPPER case variables
@@ -128,15 +129,6 @@ public class TCLogParser implements LogParser
     public TCLogParser(String source)
     {
         setSourceFile(source);
-    }
-
-    /**
-     * Set the Generator
-     * @param generator 
-     */
-    public void setGenerator(Generator generator)
-    {
-        this.GEN = generator;
     }
 
     /**
@@ -186,7 +178,7 @@ public class TCLogParser implements LogParser
      * parse the entire file.
      * @return boolean success/failure
      */
-    public boolean parse()
+    public boolean parse(TestElement el)
     {
         if (this.SOURCE == null)
         {
@@ -198,11 +190,11 @@ public class TCLogParser implements LogParser
             {
                 this.READER = new BufferedReader(new FileReader(this.SOURCE));
             }
-            parse(this.READER);
+            parse(this.READER,el);
         }
         catch (Exception exception)
         {
-            exception.printStackTrace();
+            log.error("Problem creating samples",exception);
         }
         return true;
     }
@@ -217,13 +209,14 @@ public class TCLogParser implements LogParser
      * @param count
      * @return lines parsed
      */
-    public int parse(int count)
+    public int parseAndConfigure(int count,TestElement el)
     {
+       COUNT = 0;
         if (count > 0)
         {
             this.PARSECOUNT = count;
         }
-        this.parse();
+        this.parse(el);
         return COUNT;
     }
 
@@ -233,7 +226,7 @@ public class TCLogParser implements LogParser
      * if a set number of lines is given.
      * @param breader
      */
-    protected void parse(BufferedReader breader)
+    protected void parse(BufferedReader breader,TestElement el)
     {
         String line = null;
         try
@@ -245,14 +238,14 @@ public class TCLogParser implements LogParser
             {
                 this.READER.close();
                 this.READER = null;
-                this.READER = new BufferedReader(new FileReader(this.SOURCE));
-                parse(this.READER);
+                //this.READER = new BufferedReader(new FileReader(this.SOURCE));
+                //parse(this.READER,el);
             }
             while (line != null)
             {
 				if (line.length() > 0)
 				{
-					this.parseLine(line);
+					this.parseLine(line,el);
 				}
                 // we check the count to see if we have exceeded
                 // the number of lines to parse. There's no way
@@ -267,7 +260,7 @@ public class TCLogParser implements LogParser
         }
         catch (IOException ioe)
         {
-            ioe.printStackTrace();
+           log.error("Error reading log file",ioe);
         }
     }
 
@@ -276,17 +269,20 @@ public class TCLogParser implements LogParser
      * to parse the given text.
      * @param line
      */
-    protected void parseLine(String line)
+    protected void parseLine(String line,TestElement el)
     {
         // we clean the line to get
         // rid of extra stuff
         String cleanedLine = this.cleanURL(line);
+        log.debug("parsing line: "  + line);
         // now we set request method
-        this.GEN.setMethod(this.RMETHOD);
+        el.setProperty(HTTPSampler.METHOD,RMETHOD);
         if (FILTER != null)
         {
+           log.debug("filter is not null");
             if (!FILTER.isFiltered(line))
             {
+               log.debug("line was not filtered");
                 // increment the current count
                 COUNT++;
                 // we filter the line first, before we try
@@ -295,33 +291,38 @@ public class TCLogParser implements LogParser
                 line = FILTER.filter(cleanedLine);
                 if (line != null)
                 {
-                    createUrl(cleanedLine);
+                    createUrl(cleanedLine,el);
                 }
+            }
+            else
+            {
+               log.debug("Line was filtered");
             }
         }
         else
         {
+           log.debug("filter was null");
             // increment the current count
             COUNT++;
             // in the case when the filter is not set, we
             // parse all the lines
-            createUrl(cleanedLine);
+            createUrl(cleanedLine,el);
         }
     }
 
     /**
     * @param line
     */
-   private void createUrl(String line)
+   private void createUrl(String line,TestElement el)
    {
       String paramString = null;
         // check the URL for "?" symbol
-        paramString = this.stripFile(line);
+        paramString = this.stripFile(line,el);
         if(paramString != null)
         {
            this.checkParamFormat(line);
            // now that we have stripped the file, we can parse the parameters
-           this.convertStringToJMRequest(paramString);
+           this.convertStringToJMRequest(paramString,el);
         }
    }
 
@@ -429,18 +430,18 @@ public class TCLogParser implements LogParser
      * @param url
      * @return String parameters
      */
-    public String stripFile(String url)
+    public String stripFile(String url,TestElement el)
     {
         if (url.indexOf("?") > -1)
         {
             StringTokenizer tokens = this.tokenize(url, "?");
             this.URL_PATH = tokens.nextToken();
-            this.GEN.setPath(URL_PATH);
+            el.setProperty(HTTPSampler.PATH,URL_PATH);
             return tokens.nextToken();
         }
         else
         {
-            this.GEN.setPath(url);
+           el.setProperty(HTTPSampler.PATH,url);
             return null;
         }
     }
@@ -485,9 +486,9 @@ public class TCLogParser implements LogParser
      * Convert a single line into XML
      * @param text
      */
-    public void convertStringToJMRequest(String text)
+    public void convertStringToJMRequest(String text,TestElement el)
     {
-        this.GEN.setParams(this.convertStringtoNVPair(text));
+        ((HTTPSampler)el).parseArguments(text);
     }
 
     /**
@@ -617,11 +618,9 @@ public class TCLogParser implements LogParser
 		
 		public void testcleanURL() throws Exception
 		{
-		   tclp.GEN = new StandardGenerator();
-		   tclp.GEN.generateRequest();
 			String res = tclp.cleanURL(URL1);
 			assertEquals("/addrbook/",res);
-			assertNull(tclp.stripFile(res));
+			assertNull(tclp.stripFile(res,new HTTPSampler()));
 		}
 		public void testcheckURL() throws Exception
 		{

@@ -18,8 +18,6 @@
 
 package org.apache.jorphan.gui;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -29,6 +27,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.reflect.Functor;
 import org.apache.log.Logger;
 
 /**
@@ -40,46 +39,18 @@ public class ObjectTableModel extends DefaultTableModel
     private transient ArrayList objects = new ArrayList();
     private transient List headers = new ArrayList();
     private transient ArrayList classes = new ArrayList();
-    private transient Class objectClass;
 
-    private transient ArrayList setMethods = new ArrayList();
-    private transient ArrayList getMethods = new ArrayList();
+    private transient ArrayList readFunctors = new ArrayList();
+    private transient ArrayList writeFunctors = new ArrayList();
 
-    public ObjectTableModel(String[] headers, String[] propertyNames, Class[] propertyClasses, Class[] renderClasses, Object sampleObject)
+    public ObjectTableModel(String[] headers, Functor[] readFunctors, Functor[] writeFunctors, 
+          Class[] editorClasses)
     {
         this.headers.addAll(Arrays.asList(headers));
-        this.classes.addAll(Arrays.asList(renderClasses));
-        objectClass = sampleObject.getClass();
-        Class[] emptyClasses = new Class[0];
-        for (int i = 0; i < propertyNames.length; i++)
-        {
-            propertyNames[i] =
-                propertyNames[i].substring(0, 1).toUpperCase()
-                    + propertyNames[i].substring(1);
-            try
-            {
-                if (!propertyClasses[i].equals(Boolean.class)
-                    && !propertyClasses[i].equals(boolean.class))
-                {
-                    getMethods.add(
-                        objectClass.getMethod(
-                            "get" + propertyNames[i],
-                            emptyClasses));
-                }
-                else
-                {
-                    getMethods.add(
-                        objectClass.getMethod(
-                            "is" + propertyNames[i],
-                            emptyClasses));
-                }
-                setMethods.add(objectClass.getMethod("set" + propertyNames[i], new Class[] { propertyClasses[i] }));
-            }
-            catch (NoSuchMethodException e)
-            {
-                log.error("Invalid Method name for class: " + objectClass, e);
-            }
-        }
+        this.classes.addAll(Arrays.asList(editorClasses));
+        this.readFunctors = new ArrayList(Arrays.asList(readFunctors));
+        this.writeFunctors = new ArrayList(Arrays.asList(writeFunctors));
+        
     }
 
     public Iterator iterator()
@@ -96,8 +67,15 @@ public class ObjectTableModel extends DefaultTableModel
 
     public void addRow(Object value)
     {
+       log.debug("Adding row value: " + value);
         objects.add(value);
         super.fireTableRowsInserted(objects.size() - 1, objects.size());
+    }
+    
+    public void insertRow(Object value,int index)
+    {
+       objects.add(index,value);
+       super.fireTableRowsInserted(index, index + 1);
     }
 
     /**
@@ -133,19 +111,12 @@ public class ObjectTableModel extends DefaultTableModel
      */
     public Object getValueAt(int row, int col)
     {
+       log.debug("Getting row value");
         Object value = objects.get(row);
-        Method getMethod = (Method) getMethods.get(col);
-        try
+        Functor getMethod = (Functor) readFunctors.get(col);
+        if(getMethod != null)
         {
-            return getMethod.invoke(value, new Object[0]);
-        }
-        catch (IllegalAccessException e)
-        {
-            log.error("Illegal method access", e);
-        }
-        catch (InvocationTargetException e)
-        {
-            log.error("incorrect method access", e);
+           return getMethod.invoke(value);
         }
         return null;
     }
@@ -189,22 +160,14 @@ public class ObjectTableModel extends DefaultTableModel
         if (row < objects.size())
         {
             Object value = objects.get(row);
-            if (col < setMethods.size())
+            if (col < writeFunctors.size())
             {
-                Method setMethod = (Method) setMethods.get(col);
-                try
+                Functor setMethod = (Functor) writeFunctors.get(col);
+                if(setMethod != null)
                 {
-                    setMethod.invoke(value, new Object[] { cellValue });
+                   setMethod.invoke(value, new Object[] { cellValue });
+                   super.fireTableDataChanged();
                 }
-                catch (IllegalAccessException e)
-                {
-                    log.error("Illegal method access", e);
-                }
-                catch (InvocationTargetException e)
-                {
-                    log.error("incorrect method access", e);
-                }
-                super.fireTableDataChanged();
             }
         }
     }

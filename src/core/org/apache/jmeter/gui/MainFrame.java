@@ -58,6 +58,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 
@@ -347,6 +348,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable
         if (hosts.size() == 0)
         {
             runningIndicator.setIcon(stoppedIcon);
+            JMeterContextService.endTest();
         }
         menuBar.setRunning(false, host);
         if (stoppingMessage != null)

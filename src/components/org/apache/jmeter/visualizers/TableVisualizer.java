@@ -30,13 +30,15 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.TableModelEvent;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.apache.jorphan.math.StatCalculator;
+import org.apache.jorphan.reflect.Functor;
 
 /**
  * This class implements a statistical analyser that calculates both the average
@@ -48,15 +50,22 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  */
 public class TableVisualizer
     extends AbstractVisualizer
-    implements GraphListener, Clearable
+    implements Clearable
 {
-    private TableDataModel model = null;
+   private final String[] COLUMNS = new String[]{
+         JMeterUtils.getResString("table_visualizer_sample_num"),
+         JMeterUtils.getResString("url"),
+         JMeterUtils.getResString("table_visualizer_sample_time"),
+         JMeterUtils.getResString("Success?")};
+    private ObjectTableModel model = null;
     private JTable table = null;
     private JTextField dataField = null;
     private JTextField averageField = null;
     private JTextField deviationField = null;
     private JTextField noSamplesField = null;
     private JScrollPane tableScrollPanel = null;
+    private StatCalculator calc = new StatCalculator();
+    private long currentData = 0;
 
     /**
      * Constructor for the TableVisualizer object.
@@ -64,8 +73,13 @@ public class TableVisualizer
     public TableVisualizer()
     {
         super();
-        model = new TableDataModel();
-        model.addGraphListener(this);
+        model = new ObjectTableModel(COLUMNS,
+              new Functor[]{new Functor("getCount"),
+              		new Functor("getLabel"),
+              		new Functor("getData"),
+              		new Functor("isSuccess")},
+              new Functor[]{null,null,null,null},
+              new Class[]{Long.class,String.class,Long.class,Boolean.class});
         init();
     }
 
@@ -74,43 +88,34 @@ public class TableVisualizer
         return "view_results_in_table";
     }
 
-    public void updateGui()
-    {
-        // Not completely sure if this is the correct way of updating the table
-        table.tableChanged(new TableModelEvent(model));
-        tableScrollPanel.revalidate();
-        tableScrollPanel.repaint();
-        updateTextFields();
-    }
-
     protected synchronized void updateTextFields()
     {
-            noSamplesField.setText(Long.toString(model.getSampleCount()));
-            dataField.setText(Long.toString(model.getCurrentData()));
-            averageField.setText(Long.toString(model.getCurrentAverage()));
-            deviationField.setText(Long.toString(model.getCurrentDeviation()));
+            noSamplesField.setText(Long.toString(calc.getCount()));
+            dataField.setText(Long.toString(currentData));
+            averageField.setText(Long.toString((long)calc.getMean()));
+            deviationField.setText(Long.toString((long)calc.getStandardDeviation()));
     }
 
     public void add(SampleResult res)
     {
-        model.addSample(res);
-    }
-
-    public void updateGui(Sample s)
-    {
-        // We have received one more sample
-        // Not completely sure if this is the correct way of updating the table
-        table.tableChanged(new TableModelEvent(model));
-        tableScrollPanel.revalidate();
-        tableScrollPanel.repaint();
-        updateTextFields();
+        synchronized(calc)
+        {
+           calc.addValue(res.getTime());
+           Sample newS = new Sample(res.getSampleLabel(),res.getTime(),0,0,0,0,0,0,res.isSuccessful(),
+                 calc.getCount(),res.getTimeStamp());
+           model.addRow(newS);
+        }
+        currentData = res.getTime();
+        updateTextFields();        
     }
 
     public synchronized void clear()
     {
         log.debug("Clear called",new Exception("Debug"));
         // this.graph.clear();
-        model.clear();
+        model.clearData();
+        currentData = 0;
+        calc.clear();
         dataField.setText("0000");
         averageField.setText("0000");
         deviationField.setText("0000");

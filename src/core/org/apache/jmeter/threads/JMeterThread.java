@@ -98,6 +98,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
         test.traverse(threadListenerSearcher);
         testListeners = threadListenerSearcher.getSearchResults();
         notifier = note;
+        running = true;
     }
 
     public void setInitialContext(JMeterContext context)
@@ -218,7 +219,6 @@ public class JMeterThread implements Runnable, java.io.Serializable
             threadContext.setThreadNum(getThreadNum());
             threadContext.setThread(this);
             testTree.traverse(compiler);
-            running = true;
             //listeners = controller.getListeners();
 
             if (scheduler)
