@@ -293,7 +293,7 @@ public class TCPSampler extends AbstractSampler implements TestListener
     	log.info(getLabel()+" "+getFilename()+" "+getUsername()+" "+getPassword());
         SampleResult res = new SampleResult();
         boolean isSuccessful = false;
-        res.setSampleLabel(getLabel());
+        res.setSampleLabel(getName());//Use the test element name for the label
         res.sampleStart();
         try
         {
