@@ -54,7 +54,12 @@
  */
 package org.apache.jorphan.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Vector;
+
+import junit.framework.TestCase;
 
 /**
  * This class contains frequently-used static utility methods.
@@ -154,4 +159,121 @@ public final class JOrphanUtils
 		in.append(SPACES.substring(0,sfx));
 		return in;
 	}
+	
+	/**
+	 * Convert a boolean to its string representation
+	 * Equivalent to Boolean.valueOf(boolean).toString()
+	 * but valid also for JDK 1.3, which does not have valueOf(boolean)
+	 * 
+	 * @param value boolean to convert
+	 * @return "true" or "false"
+	 */
+	public static String booleanToString(boolean value){
+		return value ? "true" : "false";
+	}
+
+	/**
+	 * Convert a boolean to its string representation
+	 * Equivalent to Boolean.valueOf(boolean).toString().toUpperCase()
+	 * but valid also for JDK 1.3, which does not have valueOf(boolean)
+	 * 
+	 * @param value boolean to convert
+	 * @return "TRUE" or "FALSE"
+	 */
+	public static String booleanToSTRING(boolean value){
+		return value ? "TRUE" : "FALSE";
+	}
+	
+	/**
+	 * Version of Boolean.valueOf() for JDK 1.3
+	 * 
+	 * @param value boolean to convert
+	 * @return Boolean.TRUE or Boolean.FALSE
+	 */
+	public static Boolean valueOf(boolean value)
+	{
+	    return value ? Boolean.TRUE : Boolean.FALSE;	
+	}
+	
+	/**
+	 * Version of URLEncoder().encode(string,encoding) for JDK1.3
+	 * 
+	 * @param string to be encoded
+	 * @param encoding (ignored for JDK1.3)
+	 * @return the encoded string
+	 */
+	public static String encode(String string, String encoding)
+	throws UnsupportedEncodingException
+	{
+		//TODO FIX FOR JDK1.4
+		return URLEncoder.encode(string);
+	}  
+
+	/**
+	 * Version of URLDecoder().decode(string,encoding) for JDK1.3
+	 * 
+	 * @param string to be decoded
+	 * @param encoding (ignored for JDK1.3)
+	 * @return the encoded string
+	 */
+	public static String decode(String string, String encoding)
+	throws UnsupportedEncodingException
+	{
+		//TODO FIX FOR JDK1.4
+		return URLDecoder.decode(string);
+	}  
+
+    /**
+     * Simple-minded String.replace() for JDK1.3
+     * Should probably be recoded...
+     * 
+     * @param source input string
+     * @param search string to look for (no regular expressions)
+     * @param replace string to replace the search string
+     * @return the output string
+     */
+    public static String replaceFirst(String source, String search,String replace)
+    {
+    	int start=source.indexOf(search);
+    	int len=search.length();
+    	if (start == -1) return source;
+    	if (start == 0) return replace+source.substring(len);
+    	return source.substring(0,start)+replace+source.substring(start+len);
+    }
+    
+    public static class Test extends TestCase
+    {
+    	public void testReplace1()
+    	{
+    		assertEquals("xyzdef",replaceFirst("abcdef","abc","xyz"));
+    	}
+    	public void testReplace2()
+    	{
+			assertEquals("axyzdef",replaceFirst("abcdef","bc","xyz"));
+		}
+		public void testReplace3()
+		{
+			assertEquals("abcxyz",replaceFirst("abcdef","def","xyz"));
+		}
+		public void testReplace4()
+		{
+			assertEquals("abcdef",replaceFirst("abcdef","bce","xyz"));
+		}
+		public void testReplace5()
+		{
+			assertEquals("abcdef",replaceFirst("abcdef","alt=\"\" ",""));
+		}
+		public void testReplace6()
+		{
+			assertEquals("abcdef",replaceFirst("abcdef","alt=\"\" ",""));
+		}
+		public void testReplace7()
+		{
+			assertEquals("alt=\"\"",replaceFirst("alt=\"\"","alt=\"\" ",""));
+		}
+		public void testReplace8()
+		{
+			assertEquals("img src=xyz ",replaceFirst("img src=xyz alt=\"\" ","alt=\"\" ",""));
+		}
+    }
 }
