@@ -53,7 +53,12 @@ org.apache.jmeter.engine.StandardJMeterEngine.stopEngineNow();
 stopThread(t){// Stop a JMeter thread
 System.out.println("Stop Thread "+t+" called");
 ok=org.apache.jmeter.engine.StandardJMeterEngine.stopThread(t);
-if (ok){print("Thread stopped");} else { print("Thread not found");}
+if (ok){print("Thread requested to stop");} else { print("Thread not found");}
 }
 
+stopThreadNow(t){// Stop a JMeter thread
+System.out.println("Stop Thread Now "+t+" called");
+ok=org.apache.jmeter.engine.StandardJMeterEngine.stopThreadNow(t);
+if (ok){print("Thread stopped");} else { print("Thread not found");}
+}
 print("Startup script completed");
