@@ -33,6 +33,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -51,8 +52,7 @@ import org.apache.log.Logger;
  * @see org.apache.jmeter.visualizers.gui.AbstractVisualizer
  * @see org.apache.jmeter.samplers.gui.AbstractSamplerGui
  *
- * @author mstover
- * @version $Revision$
+ * @version $Revision$ on $Date$
  */
 public abstract class AbstractJMeterGuiComponent
     extends JPanel
@@ -311,4 +311,9 @@ public abstract class AbstractJMeterGuiComponent
         pane.setPreferredSize(pane.getMinimumSize());
         return pane;
     }
+    	
+	public String getStaticLabel()
+	{
+		return JMeterUtils.getResString(getLabelResource());
+	}
 }

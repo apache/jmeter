@@ -155,8 +155,15 @@ public class NamePanel extends JPanel implements JMeterGUIComponent
     /* Implements JMeterGUIComponent.getStaticLabel() */
     public String getStaticLabel()
     {
-        return JMeterUtils.getResString("root");
+        return JMeterUtils.getResString(getLabelResource());
     }
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getLabelResource()
+	 */
+	public String getLabelResource() {
+		return "root";
+	}
 
     /* Implements JMeterGUIComponent.getMenuCategories() */
     public Collection getMenuCategories()
