@@ -12,15 +12,12 @@ import org.apache.jmeter.protocol.tcp.sampler.TCPSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * @version   $Revision$ $Date$
  */
-public class TCPSamplerGui extends AbstractSamplerGui implements ActionListener
+public class TCPSamplerGui extends AbstractSamplerGui
 {
-	private static Logger log = LoggingManager.getLoggerForClass();
 	
 	private LoginConfigGui loginPanel;
 
@@ -60,7 +57,7 @@ public class TCPSamplerGui extends AbstractSamplerGui implements ActionListener
 
     public String getStaticLabel()
     {
-        return JMeterUtils.getResString("tcp_testing_title");
+        return JMeterUtils.getResString("tcp_sample_title")+" (ALPHA CODE)";
     }
 
     private void init()
@@ -82,14 +79,5 @@ public class TCPSamplerGui extends AbstractSamplerGui implements ActionListener
 		mainPanel.add(loginPanel);
 
         add(mainPanel, BorderLayout.CENTER);
-    }
-
-    /* (non-Javadoc)
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-     */
-    public void actionPerformed(ActionEvent e)
-    {
-        // TODO Auto-generated method stub
-        
     }
 }

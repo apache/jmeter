@@ -44,7 +44,7 @@ public class TCPConfigGui extends AbstractConfigGui
     
     public String getStaticLabel()
     {
-        return JMeterUtils.getResString("tcp_sample_title");
+        return JMeterUtils.getResString("tcp_config_title")+" (ALPHA CODE)";
     }
 
     public void configure(TestElement element)
