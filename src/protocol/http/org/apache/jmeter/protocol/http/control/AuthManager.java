@@ -79,7 +79,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * format of the authorization file is: URL user pass where URL is an HTTP URL,
  * user a username to use and pass the appropriate password.
  *
- *@author    <a href="mailto:luta.raphael@networks.vivendi.com">Raphaël Luta
+ *@author    <a href="mailto:luta.raphael@networks.vivendi.com">Raphael Luta
  *      </a>
  *@created   $Date$
  *@version   0.9

@@ -61,7 +61,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 /**
  * This class is an Authorization encapsulator.
  *
- * @author  <a href="mailto:luta.raphael@networks.vivendi.net">Raphaël Luta</a>
+ * @author  <a href="mailto:luta.raphael@networks.vivendi.net">Raphael Luta</a>
  */
 public class Authorization extends AbstractTestElement implements Serializable
 {
