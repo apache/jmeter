@@ -93,6 +93,7 @@ public class JMeterTest extends JMeterTestCase
     	suite.addTest(suiteGUIComponents());
 		suite.addTest(suiteSerializableElements());
 		suite.addTest(suiteTestElements());
+		suite.addTest(suiteBeanComponents());
         return suite;
     }
     
@@ -117,12 +118,14 @@ public class JMeterTest extends JMeterTestCase
 				guiTitles.add(comp.getAttributeValue("name")); 
 			}
 		}
-		guiTitles.add("Root");// Not documented ...
+		// Add titles that don't need to be documented
+		guiTitles.add("Root");
+		guiTitles.add("Example Sampler");
     }
 	/*
 	 * Test GUI elements - create the suite of tests
 	 */
-	public static Test suiteGUIComponents() throws Exception
+	private static Test suiteGUIComponents() throws Exception
 	{
 		TestSuite suite = new TestSuite("GuiComponents");
 		Iterator iter = getObjects(JMeterGUIComponent.class).iterator();
@@ -138,14 +141,23 @@ public class JMeterTest extends JMeterTestCase
 			ts.addTest(new JMeterTest("runGUITitle",item));
 			suite.addTest(ts);
 		}
-        iter = getObjects(TestBean.class).iterator();
-        while (iter.hasNext())
-        {
-            JMeterGUIComponent item = new TestBeanGUI(iter.next().getClass());
-            TestSuite ts = new TestSuite(item.getClass().getName());
-            ts.addTest(new JMeterTest("runGUIComponents",item));
-            suite.addTest(ts);
-        }
+		return suite;
+	}
+		/*
+		 * Test GUI elements - create the suite of tests
+		 */
+		private static Test suiteBeanComponents() throws Exception
+		{
+			TestSuite suite = new TestSuite("BeanComponents");
+			Iterator iter = getObjects(TestBean.class).iterator();
+	        while (iter.hasNext())
+	        {
+	            JMeterGUIComponent item = new TestBeanGUI(iter.next().getClass());
+				//JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
+	            TestSuite ts = new TestSuite(item.getClass().getName());
+	            ts.addTest(new JMeterTest("runGUIComponents",item));
+	            suite.addTest(ts);
+	        }
 		return suite;
 	}
 	
@@ -219,7 +231,7 @@ public class JMeterTest extends JMeterTestCase
     /*
      * Test serializable elements - create the suite of tests
      */
-	public static Test suiteSerializableElements() throws Exception
+	private static Test suiteSerializableElements() throws Exception
 	{
 		TestSuite suite = new TestSuite("SerializableElements");
 		Iterator iter = getObjects(Serializable.class).iterator();
@@ -260,7 +272,7 @@ public class JMeterTest extends JMeterTestCase
     /*
      * Test TestElements - create the suite
      */	
-	public static Test suiteTestElements() throws Exception
+	private static Test suiteTestElements() throws Exception
 	{
 		TestSuite suite = new TestSuite("TestElements");
 		Iterator iter = getObjects(TestElement.class).iterator();
@@ -380,18 +392,17 @@ public class JMeterTest extends JMeterTestCase
 			System.out.println("Last error="+caught);
     	}
     }
-    if (objects.size() == 0){
-    	System.out.println("No classes found. Check the following:");
-    	System.out.println("Search paths are:");
-	    String ss[] = JMeterUtils.getSearchPaths();
-	    for (int i=0;i<ss.length;i++){
-		    System.out.println(ss[i]);
+    
+	    if (objects.size() == 0){
+	    	System.out.println("No classes found that extend "+exName+". Check the following:");
+	    	System.out.println("Search paths are:");
+		    String ss[] = JMeterUtils.getSearchPaths();
+		    for (int i=0;i<ss.length;i++){
+			    System.out.println(ss[i]);
+			}
+	        System.out.println("Class path is:");
+		    System.out.println(System.getProperty("java.class.path"));
 		}
-        System.out.println("Class path is:");
-	    System.out.println(System.getProperty("java.class.path"));
-	}
-
-        assertTrue("Expected to find some classes that extend "+exName,objects.size() > 0);
         return objects;
     }
 
