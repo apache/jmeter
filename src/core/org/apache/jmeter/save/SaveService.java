@@ -272,9 +272,9 @@ public class SaveService
 
 	private static Configuration createConfigForString(String name,String value)
 	{
-		if(value == null || value.equals(""))
+		if(value == null)
 		{
-			value = " ";
+			value = "";
 		}
 		DefaultConfiguration config = new DefaultConfiguration("property","property");
 		config.setAttribute("name",name);
