@@ -137,6 +137,7 @@
   <property name="src.jorphan" value="src/jorphan"/>
   <property name="src.ldap" value="src/protocol/ldap"/>
   <property name="src.htmlparser" value="src/htmlparser"/>
+  <property name="src.tcp" value="src/protocol/tcp"/>
 
   <!-- Where the documentation sources live -->
   <property name="src.docs" value="xdocs"/>
@@ -155,6 +156,7 @@
     <pathelement location="${src.jorphan}"/>
     <pathelement location="${src.ldap}"/>
     <pathelement location="${src.htmlparser}"/>
+    <pathelement location="${src.tcp}"/>
   </path>
 
   <!-- Temporary build directories: where the .class live -->
@@ -169,6 +171,7 @@
   <property name="build.jorphan" value="build/jorphan"/>
   <property name="build.ldap" location="build/protocol/ldap"/>
   <property name="build.htmlparser" location="build/htmlparser"/>
+  <property name="build.tcp" location="build/protocol/tcp"/>
   
   <!-- Path prefix to allow Anakia to find stylesheets if running under Eclipse -->
   <!--
@@ -468,7 +471,19 @@
     </javac>
   </target>
 
-  <target name="compile-protocols" depends="compile-http,compile-ftp,compile-jdbc,compile-java,compile-ldap" description="Compile all protocol-specific components."/>
+  <target name="compile-tcp" depends="compile-jorphan,compile-core" description="Compile components specific to Java sampling.">
+    <mkdir dir="${build.tcp}"/>
+    <javac srcdir="${src.tcp}" destdir="${build.tcp}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+      <include name="**/*.java"/>
+      <classpath>
+        <path refid="classpath"/>
+        <pathelement location="${build.jorphan}"/>
+        <pathelement location="${build.core}"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="compile-protocols" depends="compile-http,compile-ftp,compile-jdbc,compile-java,compile-ldap,compile-tcp" description="Compile all protocol-specific components."/>
 
   <target name="compile-jorphan" depends="init" description="Compile JOrphan utility classes.">
     <mkdir dir="${build.jorphan}"/>
@@ -532,6 +547,7 @@
     <jar jarfile="${dest.jar}/ApacheJMeter_jdbc.jar" basedir="${build.jdbc}"/>
     <jar jarfile="${dest.jar}/ApacheJMeter_java.jar" basedir="${build.java}"/>
     <jar jarfile="${dest.jar}/ApacheJMeter_ldap.jar" basedir="${build.ldap}"/>
+    <jar jarfile="${dest.jar}/ApacheJMeter_tcp.jar" basedir="${build.tcp}"/>
     <jar jarfile="${lib.dir}/htmlparser.jar" basedir="${build.htmlparser}"/>
     <jar jarfile="${lib.dir}/jorphan.jar" basedir="${build.jorphan}"/>
   </target>
