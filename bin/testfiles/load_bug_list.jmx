@@ -227,7 +227,7 @@
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.FILE_FIELD"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">load_bug_list</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.domain">nagoya.apache.org</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.domain">issues.apache.org</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.FILE_NAME"/>
 </testelement>
 </node>
