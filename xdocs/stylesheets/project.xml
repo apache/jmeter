@@ -10,33 +10,14 @@
 	 <menu name="About">
 		  <item name="Overview"               href="/index.html"/>
 		  <item name="Download"               href="http://jakarta.apache.org/builds/jakarta-jmeter/"/>
-		  <item name="Install"                href="/installing.html"/>
-		  <item name="Running"                href="/running.html"/>
-		  <item name="Extending"              href="/extending/index.html"/>
 		  <item name="Changes"                href="/changes.html"/>
 		  <item name="Known Bugs"             href="http://nagoya.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;email1=&amp;emailtype1=substring&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=substring&amp;emailreporter2=1&amp;bugidtype=include&amp;bug_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;product=JMeter&amp;short_desc=&amp;short_desc_type=substring&amp;long_desc=&amp;long_desc_type=substring&amp;bug_file_loc=&amp;bug_file_loc_type=substring&amp;keywords=&amp;keywords_type=anywords&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;cmdtype=doit&amp;order=Reuse+same+sort+as+last+time"/>
 		  <item name="License"                href="/license.html"/>
 		  <item name="TODO"                   href="/todo.html"/>
 	 </menu>
-	 <menu name="User Manual">
-		<item name="Table of Contents"        href="/usermanual/index.html"/>
-		<item name="Introduction"             href="/usermanual/intro.html"/>
-		<item name="Getting Started"          href="/usermanual/get-started.html"/>
-		<item name="Building a Test Plan"     href="/usermanual/build-test-plan.html"/>
-		<item name="Test Plan - Thread Group"     href="/usermanual/thread-group.html"/>
-		<item name="Test Plan - Controllers"      href="/usermanual/controller.html"/>
-		<item name="Test Plan - Listeners"        href="/usermanual/listener.html"/>
-		<item name="Test Plan - Timers"           href="/usermanual/timer.html"/>
-		<item name="Test Plan - Assertions"       href="/usermanual/assertion.html"/>
-		<item name="Test Plan - FTP Config"   href="/usermanual/ftp-config.html"/>
-		<item name="Test Plan - HTTP Config"  href="/usermanual/http-config.html"/>
-		<item name="Test Plan - JDBC Config"  href="/usermanual/jdbc-config.html"/>
-		<item name="Building a Web Test Plan"      href="/usermanual/build-web-test-plan.html"/>
-		<item name="Building an Adv. Web Test Plan" href="/usermanual/build-adv-web-test-plan.html"/>
-		<item name="Building a Database Test Plan" href="/usermanual/build-db-test-plan.html"/>
-		<item name="Building a FTP Test Plan"      href="/usermanual/build-ftp-test-plan.html"/>
-		<item name="Remote Testing"                href="/usermanual/remote-test.html"/>
-		<item name="Best Practices"                href="/usermanual/best-practices.html"/>
+	 <menu name="Documentation">
+		<item name="User Manual"        href="/usermanual/index.html"/>
+		<item name="Developer Manual"       href="/extending/index.html"/>
 	 </menu>
 	 <menu name="Community">
 		  <item name="Get Involved"           href="/site/getinvolved.html"/>

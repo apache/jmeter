@@ -156,14 +156,15 @@
 
 #macro (seeAlso $seeAlso)
 	<p><b>See Also:</b>
-	<br/>
+	<ul>
 	#foreach ($items in $seeAlso.getChildren())
 		#if($items.getName() == "link")
-			<a href="$items.getAttributeValue("href")">$xmlout.outputString($items,true)</a>,
+			<li><a href="$items.getAttributeValue("href")">$xmlout.outputString($items,true)</a></li>
 		#elseif($items.getName() == "complink")
-			#complink($items),
+			<li>#complink($items)</li>
 		#end
 	#end
+	</ul>
 	</p>
 #end
 
@@ -288,7 +289,7 @@
 #end
 
 #macro ( section $section)
-	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+	 <table border="0" cellspacing="0" cellpadding="2">
 		<tr><td bgcolor="$bannerbg">
 		  <font color="$bannerfg" face="arial,helvetica,sanserif">
 			 <a name="$!section.getAttributeValue("anchor")"><strong>$section.getAttributeValue("name")</strong></a>
@@ -360,7 +361,7 @@
 		  </head>
 
 		  <body bgcolor="$bodybg" text="$bodyfg" link="$bodylink">
-				<table border="0" width="100%" cellspacing="0">
+				<table border="0" cellspacing="0">
 					 <!-- TOP IMAGE -->
 					 <tr>
 						  #getProjectImage()
