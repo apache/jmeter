@@ -248,7 +248,7 @@ public class GenericController extends AbstractTestElement implements Controller
     protected void setCurrentElement(TestElement currentElement) throws NextIsNullException
     {}
 
-    protected TestElement getCurrentElement()
+    protected TestElement getCurrentElement() throws NextIsNullException
     {
         if (current < subControllersAndSamplers.size())
         {
@@ -259,6 +259,7 @@ public class GenericController extends AbstractTestElement implements Controller
             if (subControllersAndSamplers.size() == 0)
             {
                 setDone(true);
+                throw new NextIsNullException();
             }
             return null;
         }
