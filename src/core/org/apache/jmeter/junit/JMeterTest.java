@@ -51,6 +51,9 @@ public class JMeterTest extends TestCase
                 item.getStaticLabel(),
                 item.getName());
             TestElement el = item.createTestElement();
+            assertNotNull(
+			"createTestElement failed on " + item.getClass().getName(),
+            el);
             assertEquals(
                 "GUI-CLASS: Failed on " + item.getClass().getName(),
                 item.getClass().getName(),
