@@ -52,7 +52,7 @@ public class HtmlParserTester extends TestCase
 		result.setSamplerData(context.toString());
         JMeterContextService.getContext().setPreviousResult(result);
 		parser.process();
-		assertEquals("http://www.apache.org:80/subdir/index.html",
+		assertEquals("http://www.apache.org/subdir/index.html",
 				config.getUrl().toString());
 	}
 
@@ -71,8 +71,8 @@ public class HtmlParserTester extends TestCase
         JMeterContextService.getContext().setPreviousResult(result);
         parser.process();
 		String newUrl = config.getUrl().toString();
-		assertTrue("http://www.apache.org:80/index.html".equals(newUrl)
-				|| "http://www.apache.org:80/subdir/lowerdir/index.html".equals(newUrl));
+		assertTrue("http://www.apache.org/index.html".equals(newUrl)
+				|| "http://www.apache.org/subdir/lowerdir/index.html".equals(newUrl));
 
 	}
 
@@ -91,7 +91,7 @@ public class HtmlParserTester extends TestCase
         JMeterContextService.getContext().setPreviousResult(result);
         parser.process();
 		String newUrl = config.getUrl().toString();
-		assertEquals("http://www.apache.org:80/home/index.html?param1=value1",newUrl);
+		assertEquals("http://www.apache.org/home/index.html?param1=value1",newUrl);
 	}
 
 	public void testSimpleParse4() throws Exception
@@ -108,7 +108,7 @@ public class HtmlParserTester extends TestCase
         JMeterContextService.getContext().setPreviousResult(result);
         parser.process();
 		String newUrl = config.getUrl().toString();
-		assertEquals("http://www.apache.org:80/subdir/index.html",newUrl);
+		assertEquals("http://www.apache.org/subdir/index.html",newUrl);
 	}
 
 	public void testSimpleParse5() throws Exception
@@ -125,7 +125,7 @@ public class HtmlParserTester extends TestCase
         JMeterContextService.getContext().setPreviousResult(result);
         parser.process();
 		String newUrl = config.getUrl().toString();
-		assertEquals("http://www.apache.org:80/subdir/index.html",newUrl);
+		assertEquals("http://www.apache.org/subdir/index.html",newUrl);
 	}
 
 	public void testFailSimpleParse1() throws Exception
@@ -175,7 +175,7 @@ public class HtmlParserTester extends TestCase
         JMeterContextService.getContext().setPreviousResult(result);
         parser.process();
 		String newUrl = config.getUrl().toString();
-		assertTrue(!"http://www.apache.org:80/home/index.html?param1=value1".equals(newUrl));
+		assertTrue(!"http://www.apache.org/home/index.html?param1=value1".equals(newUrl));
 		assertEquals(config.getUrl().toString(),newUrl);
 	}
 
@@ -200,7 +200,7 @@ public class HtmlParserTester extends TestCase
         JMeterContextService.getContext().setCurrentSampler(config);
         JMeterContextService.getContext().setPreviousResult(result);
         parser.process();
-		assertEquals("http://www.apache.org:80/subdir/index.html",
+		assertEquals("http://www.apache.org/subdir/index.html",
 				config.getUrl().toString());
 		assertEquals("test=goto",config.getQueryString());
 	}
@@ -226,7 +226,7 @@ public class HtmlParserTester extends TestCase
         JMeterContextService.getContext().setCurrentSampler(config);
         JMeterContextService.getContext().setPreviousResult(result);
         parser.process();
-		assertEquals("http://www.apache.org:80/subdir/index.html",
+		assertEquals("http://www.apache.org/subdir/index.html",
 				config.getUrl().toString());
 		assertEquals("te%24st=goto",config.getQueryString());
 	}

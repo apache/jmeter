@@ -88,6 +88,7 @@ public class FilePanel extends HorizontalPanel implements ActionListener
 	JButton browse = new JButton(JMeterUtils.getResString("browse"));
 	List listeners = new LinkedList();
 	String title;
+    String filetype;
 	
 	/**
 	 *  Constructor for the FilePanel object
@@ -103,6 +104,12 @@ public class FilePanel extends HorizontalPanel implements ActionListener
 		this.title = title;
 		init();
 	}
+    
+    public FilePanel(String title, String filetype)
+    {
+        this(title);
+        this.filetype = filetype;
+    }
 
 	/**
 	 *  Constructor for the FilePanel object
@@ -175,7 +182,7 @@ public class FilePanel extends HorizontalPanel implements ActionListener
 	{
 		if(e.getActionCommand().equals("browse"))
 		{
-			JFileChooser chooser = FileDialoger.promptToOpenFile(new String[]{".jtl"});
+			JFileChooser chooser = FileDialoger.promptToOpenFile(new String[]{filetype});
 			if(chooser != null && chooser.getSelectedFile() != null)
 			{
 				filename.setText(chooser.getSelectedFile().getPath());

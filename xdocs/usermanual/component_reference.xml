@@ -239,6 +239,21 @@ POST content.</p>
  	should be available in the LDAP Server. The execution time is calculated.</p></li></ol></ol>
 </component>
 
+<component name="Webservice Request" index="13.1.7" screenshot="../images/screenshots/webservice_sampler.png">
+
+<description><p>This sampler has been tested with IIS Webservice running .NET 1.0. It hasn't been tested with SUN or IBM webservices providers, but it should work. The sampler uses Apache SOAP driver, to serialize the message and set the header with the correct SOAPAction. Right now the sampler doesn't support automatic WSDL handling, since Apache SOAP currently doesn't provide support for it. Both IBM and SUN provide WSDL drivers.</p>
+</description>
+
+<properties>
+        <property name="Name" required="No">Descriptive name for this sampler
+         that is shown in the tree.</property>
+        <property name="URL" required="Yes">The URL to direct the SOAP request to.</property>
+        <property name="SOAPAction" required="Yes">The SOAPAction defined in the webservice description or WSDL.</property>
+        <property name="Soap Data" required="Yes">The Soap XML message</property>
+        </properties>
+
+</component>
+
 </section>
 
 <section name="13.2 Logic Controllers" anchor="logic_controllers">
