@@ -22,12 +22,14 @@ import java.util.ArrayList;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Pattern;
@@ -36,8 +38,6 @@ import org.apache.oro.text.regex.Perl5Matcher;
 
 /**
  *
- * @author     Michael Stover
- * @author     <a href="mailto:jacarlco@katun.com">Jonathan Carlson</a>
  * @version    $Revision$ Last Updated: $Date$
 */
 public class ResponseAssertion
@@ -50,6 +50,7 @@ public class ResponseAssertion
    public final static String RESPONSE_DATA = "Assertion.response_data";
    public final static String RESPONSE_CODE = "Assertion.response_code";
    public final static String RESPONSE_MESSAGE = "Assertion.response_message";
+   public final static String ASSUME_SUCCESS = "Assertion.assume_success";
 
    public final static String TEST_STRINGS = "Asserion.test_strings";
 
@@ -234,6 +235,14 @@ public class ResponseAssertion
    {
       setTestType(getTestType() &  ~ NOT);
    }
+   public boolean getAssumeSuccess()
+   {
+   	return getPropertyAsBoolean(ASSUME_SUCCESS,false);
+   }
+   public void setAssumeSuccess(boolean b)
+   {
+   	  setProperty(ASSUME_SUCCESS,JOrphanUtils.booleanToString(b));
+   }
    /**
     * Make sure the response satisfies the specified assertion requirements.
     * 
@@ -247,6 +256,11 @@ public class ResponseAssertion
       AssertionResult result = new AssertionResult();
       String toCheck=""; // The string to check (Url or data)
       
+      if (getAssumeSuccess())
+      {
+      	response.setSuccessful(true);// Allow testing of failure codes
+      }
+
       // What are we testing against?
       if (ResponseAssertion.RESPONSE_DATA.equals(getTestField()))
       {

@@ -1361,8 +1361,19 @@ pattern. You can attach multiple assertions to any controller for additional fle
 </description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Response Field to Test" required="Yes">Instructs JMeter to test
-                against either the Response Text from the server, or against the URL string that was sampled.</property>
+        <property name="Response Field to Test" required="Yes">Instructs JMeter which field of the Response to test.
+                This may be the Response Text from the server, the URL string that was sampled,
+                the Response Code (e.g. 404) or the Response Message (e.g. Not Found).
+                <p>
+                The overall success of the sample is determined by combining the result of the
+                assertion with the existing Response status.
+                When the Ignore Status checkbox is selected, the Response status is forced
+                to successful before evaluating the Assertion.
+                </p>
+                HTTP Responses with statuses in the 4xx and 5xx ranges are normally
+                regarded as unsuccessful. 
+                The checkbox can be used to regard a 404 status as successful.
+                </property>
         <property name="Pattern Matching Rules" required="Yes">Indicates whether the text being tested
         must CONTAIN or MATCH the test patterns.  NOT may also be selected to indicate the text
         should NOT CONTAIN or NOT MATCH the test patterns.</property>
