@@ -83,6 +83,7 @@ import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -364,25 +365,30 @@ public class ProxyControl extends ConfigTestElement implements Serializable
     private boolean checkIncludes(HTTPSampler sampler)
     {
         boolean ok = false;
+		StringBuffer url = new StringBuffer(sampler.getDomain());
+		url.append(":");
+		url.append(sampler.getPort());
+		url.append(sampler.getPath());
+		if (sampler.getQueryString().length() > 0)
+		{
+			url.append("?");
+			url.append(sampler.getQueryString());
+		}
         PropertyIterator iter = getIncludePatterns().iterator();
         while (iter.hasNext())
         {
             String item = iter.next().getStringValue();
-            Pattern pattern =
-                patternCache.getPattern(
-                    item,
-                    Perl5Compiler.READ_ONLY_MASK
-                        & Perl5Compiler.SINGLELINE_MASK);
-            StringBuffer url = new StringBuffer(sampler.getDomain());
-            url.append(":");
-            url.append(sampler.getPort());
-            url.append(sampler.getPath());
-            if (sampler.getQueryString().length() > 0)
-            {
-                url.append("?");
-                url.append(sampler.getQueryString());
-            }
-            ok = matcher.matches(url.toString(), pattern);
+			Pattern pattern;
+			try {
+				pattern =
+				    patternCache.getPattern(
+				        item,
+				        Perl5Compiler.READ_ONLY_MASK
+				            & Perl5Compiler.SINGLELINE_MASK);
+				ok = matcher.matches(url.toString(), pattern);
+			} catch (MalformedCachePatternException e) {
+				log.warn("Skipped invalid Include pattern "+item,e);
+			}
             if (ok)
             {
                 break;
@@ -394,25 +400,30 @@ public class ProxyControl extends ConfigTestElement implements Serializable
     private boolean checkExcludes(HTTPSampler sampler)
     {
         boolean ok = true;
+		StringBuffer url = new StringBuffer(sampler.getDomain());
+		url.append(":");
+		url.append(sampler.getPort());
+		url.append(sampler.getPath());
+		if (sampler.getQueryString().length() > 0)
+		{
+			url.append("?");
+			url.append(sampler.getQueryString());
+		}
         PropertyIterator iter = getExcludePatterns().iterator();
         while (iter.hasNext())
         {
             String item = iter.next().getStringValue();
-            Pattern pattern =
+			Pattern pattern=null;
+            try {
+                pattern =
                 patternCache.getPattern(
                     item,
                     Perl5Compiler.READ_ONLY_MASK
                         & Perl5Compiler.SINGLELINE_MASK);
-            StringBuffer url = new StringBuffer(sampler.getDomain());
-            url.append(":");
-            url.append(sampler.getPort());
-            url.append(sampler.getPath());
-            if (sampler.getQueryString().length() > 0)
-            {
-                url.append("?");
-                url.append(sampler.getQueryString());
-            }
-            ok = ok && !matcher.matches(url.toString(), pattern);
+				ok = ok && !matcher.matches(url.toString(), pattern);
+			} catch (MalformedCachePatternException e){
+				log.warn("Skipped invalid Exclude pattern: "+item,e);
+			}
             if (!ok)
             {
                 return ok;
