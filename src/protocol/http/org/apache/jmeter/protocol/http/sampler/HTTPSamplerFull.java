@@ -440,11 +440,7 @@ public class HTTPSamplerFull
                 // the server should echo back our 'close' request.
                 // Otherwise, let the server disconnect the connection
                 // when its timeout period is reached.
-                String connection  = conn.getHeaderField("Connection");
-                if (connection == null || connection.equalsIgnoreCase("close"))
-                {
-                    conn.disconnect();
-                }
+                sampler.disconnect(conn);
             }
             catch(Exception e)
             {

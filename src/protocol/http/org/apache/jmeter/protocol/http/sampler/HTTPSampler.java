@@ -291,27 +291,27 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable
         Arguments args = this.getArguments();
         args.addArgument(new HTTPArgument(name, value));
     }
-    
+
     public void addTestElement(TestElement el)
     {
-        if(el instanceof CookieManager)
+        if (el instanceof CookieManager)
         {
-            setCookieManager((CookieManager)el);
+            setCookieManager((CookieManager) el);
         }
-        else if(el instanceof HeaderManager)
+        else if (el instanceof HeaderManager)
         {
-            setHeaderManager((HeaderManager)el);
+            setHeaderManager((HeaderManager) el);
         }
-        else if(el instanceof AuthManager)
+        else if (el instanceof AuthManager)
         {
-            setAuthManager((AuthManager)el);
+            setAuthManager((AuthManager) el);
         }
         else
         {
             super.addTestElement(el);
         }
     }
-    
+
     public void addArgument(String name, String value, String metadata)
     {
         Arguments args = this.getArguments();
@@ -372,7 +372,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable
     }
     public CookieManager getCookieManager()
     {
-        return (CookieManager)getProperty(COOKIE_MANAGER).getObjectValue();
+        return (CookieManager) getProperty(COOKIE_MANAGER).getObjectValue();
     }
     public void setMimetype(String value)
     {
@@ -442,7 +442,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable
     {
         return sample(0);
     }
-    
+
     /**
      *  !ToDoo (Method description)
      *
@@ -1009,9 +1009,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable
                 // calling disconnect doesn't close the connection immediately, but
                 // indicates we're through with it.  The JVM should close it when
                 // necessary.
-                String connection = conn.getHeaderField("Connection");
-                if (connection == null || connection.equalsIgnoreCase("close"))
-                    conn.disconnect();
+                disconnect(conn);
             }
             catch (Exception e)
             {}
@@ -1019,6 +1017,15 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable
         }
         log.debug("End : sample2");
         return res;
+    }
+    protected void disconnect(HttpURLConnection conn)
+    {
+        String connection = conn.getHeaderField("Connection");
+        boolean http11 = conn.getHeaderField(0).startsWith("HTTP/1.1");
+        if ((connection == null && !http11) || (connection != null && connection.equalsIgnoreCase("close")))
+        {
+            conn.disconnect();
+        }
     }
     private long bundleResponseInResult(long time, SampleResult res, HttpURLConnection conn) throws IOException, FileNotFoundException
     {
