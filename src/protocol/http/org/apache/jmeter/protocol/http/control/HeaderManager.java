@@ -85,7 +85,14 @@ public class HeaderManager extends ConfigTestElement implements Serializable
     private final static int columnCount = 2;
     private final static String[] columnNames =
         { JMeterUtils.getResString("name"), JMeterUtils.getResString("value")};
-
+    /**
+     * Apache SOAP driver does not provide an easy
+     * way to get and set the cookie or HTTP 
+     * header. Therefore it is necessary to store
+     * the SOAPHTTPConnection object and reuse it.
+     */
+	private Object SOAPHeader = null;
+	
     public HeaderManager()
     {
         setProperty(new CollectionProperty(HEADERS, new ArrayList()));
@@ -379,5 +386,26 @@ public class HeaderManager extends ConfigTestElement implements Serializable
     public String getClassLabel()
     {
         return JMeterUtils.getResString("header_manager_title");
+    }
+    
+    /**
+     * Added support for SOAP related header stuff.
+     * 1-29-04 Peter Lin
+     * @return
+     */
+    public Object getSOAPHeader(){
+    	return this.SOAPHeader;
+    }
+    
+    /**
+     * Set the SOAPHeader with the SOAPHTTPConnection
+     * object. We may or may not want to rename this
+     * to setHeaderObject(Object). Concievably, other
+     * samplers may need this kind of functionality.
+     * 1-29-04 Peter Lin
+     * @param header
+     */
+    public void setSOAPHeader(Object header){
+    	this.SOAPHeader = header;
     }
 }
