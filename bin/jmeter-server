@@ -1,6 +1,9 @@
 #!/bin/sh
-export OLDCLASSPATH=$CLASSPATH
-export CLASSPATH=`dirname $0`/../lib/ext/ApacheJMeter_core.jar:`dirname $0`/../lib/jorphan.jar:`dirname $0`/../lib/logkit-1.2.jar
+set OLDCLASSPATH=$CLASSPATH
+export OLDCLASSPATH
+set CLASSPATH=`dirname $0`/../lib/ext/ApacheJMeter_core.jar:`dirname $0`/../lib/jorphan.jar:`dirname $0`/../lib/logkit-1.2.jar
+export CLASSPATH
 rmiregistry &
-export CLASSPATH=$OLDCLASSPATH
+set CLASSPATH=$OLDCLASSPATH
+export CLASSPATH
 `dirname $0`/jmeter -s "$@"

@@ -22,6 +22,16 @@ public class JMeterContext
         currentSampler = null;
         samplingStarted = false;
     }
+    
+    public void clear()
+    {
+        variables = null;
+        previousResult = null;
+        currentSampler = null;
+        previousSampler = null;
+        samplingStarted = false;
+        threadNum = 0;
+    }
 
     public JMeterVariables getVariables()
     {

@@ -302,7 +302,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
         }
         finally
         {
-            threadContext.setSamplingStarted(false);
+            threadContext.clear();
             log.info("Thread " + threadName + " is done");
             monitor.threadFinished(this);
         }
