@@ -21,47 +21,56 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.QueueSender;
 
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
+
 /**
  * Request/reply executor with a fixed reply queue.
- * 
- * @author MBlankestijn
+ * <br>
+ * Created on:  October 28, 2004
  *
+ * @author Martijn Blankestijn
+ * @version $Id$ 
  */
-public class FixedQueueExecutor implements QueueExecutor {
-	/** Sender. */
-	private QueueSender producer;
-	/** Timeout used for waiting on message. */
-	private int timeout;
+public class FixedQueueExecutor implements QueueExecutor
+{
+    /** Sender. */
+    private QueueSender producer;
+    /** Timeout used for waiting on message. */
+    private int timeout;
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param producer the queue to send the message on
-	 * @param timeout timeout to use for the return message
-	 */
-	public FixedQueueExecutor(QueueSender producer, int timeout) {
-		this.producer = producer;
-		this.timeout = timeout;
-	}
+    static Logger log = LoggingManager.getLoggerForClass();
+    /**
+     * Constructor.
+     * 
+     * @param producer the queue to send the message on
+     * @param timeout timeout to use for the return message
+     */
+    public FixedQueueExecutor(QueueSender producer, int timeout)
+    {
+        this.producer = producer;
+        this.timeout = timeout;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.protocol.jms.sampler.QueueExecutor#sendAndReceive(javax.jms.Message)
-	 */
-	public Message sendAndReceive(Message request) throws JMSException {
-		producer.send(request);
-		MessageAdmin.getAdmin().putRequest(request.getJMSMessageID(), request);
-		try {
-			synchronized(request) {
-				request.wait(timeout);
-			}
-			
-		} catch (InterruptedException e) {
-			System.err.println("Interrupt exception caught");
-			e.printStackTrace();
-		}
-		//finally {
-		//	return MessageAdmin.getAdmin().get(request.getJMSMessageID());
-		//}
-		return MessageAdmin.getAdmin().get(request.getJMSMessageID());
-	}
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.protocol.jms.sampler.QueueExecutor#sendAndReceive(javax.jms.Message)
+     */
+    public Message sendAndReceive(Message request) throws JMSException
+    {
+        producer.send(request);
+        MessageAdmin.getAdmin().putRequest(request.getJMSMessageID(), request);
+        try
+        {
+            synchronized (request)
+            {
+                request.wait(timeout);
+            }
+
+        }
+        catch (InterruptedException e)
+        {
+            log.warn("Interrupt exception caught", e);
+        }
+        return MessageAdmin.getAdmin().get(request.getJMSMessageID());
+    }
 }

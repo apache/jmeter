@@ -27,19 +27,21 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.BooleanProperty;
-//import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
 /**
  * Sampler for JMS Communication.
- * 
- * @author MBlankestijn
+ * <br>
+ * Created on:  October 28, 2004
  *
+ * @author Martijn Blankestijn
+ * @version $Id$ 
  */
 public class JMSSampler extends AbstractSampler {
 
 	public static final String JNDI_INITIAL_CONTEXT_FACTORY = "JMSSampler.initialContextFactory";
 	public static final String JNDI_CONTEXT_PROVIDER_URL = "JMSSampler.contextProviderUrl";
+	public static final String JNDI_PROPERTIES = "JMSSampler.jndiProperties";
 
 	private static final int DEFAULT_TIMEOUT = 2000;
 	public final static String TIMEOUT = "JMSSampler.timeout";
@@ -48,19 +50,28 @@ public class JMSSampler extends AbstractSampler {
 	public static final String RECEIVE_QUEUE = "JMSSampler.ReceiveQueue";
 	public static final String XML_DATA = "HTTPSamper.xml_data";
 	public final static String SEND_QUEUE = "JMSSampler.SendQueue";
-	public final static String QUEUE_CONNECTION_FACTORY_JNDI =
-		"JMSSampler.queueconnectionfactory";
+	public final static String QUEUE_CONNECTION_FACTORY_JNDI = "JMSSampler.queueconnectionfactory";
 
 	private static final Log LOGGER = LogFactory.getLog(JMSSampler.class);
+	
+	//
+	// Member variables
+	//
+	/** Factory for the connections to the queueing system. */
 	private QueueConnectionFactory factory;
+	/** Queue for receiving messages (if applicable). */
 	private Queue receiveQueue;
+	/** The session with the queueing system. */
 	private QueueSession session;
+	/** Connection to the queueing system. */
 	private QueueConnection connection;
+	/** Queue for sending messages. */
 	private Queue sendQueue;
+	/** Is the communication oneway? */
 	private boolean oneway;
-
+	/** The executor for (pseudo) synchronous communication. */
 	private QueueExecutor executor;
-
+	/** Producer of the messages. */
 	private QueueSender producer;
 
 	/* (non-Javadoc)
@@ -74,11 +85,9 @@ public class JMSSampler extends AbstractSampler {
 		res.sampleStart();
 
 		try {
-			TextMessage msg = session.createTextMessage();
-			msg.setText(getContent());
-			addJMSProperties(msg);
+			TextMessage msg = createMessage();
 
-			if (getPropertyAsBoolean(IS_ONE_WAY)) {
+			if (isOneway()) {
 				producer.send(msg);
 				res.setSuccessful(true);
 				res.setResponseData("Oneway request has no response data".getBytes());
@@ -93,14 +102,11 @@ public class JMSSampler extends AbstractSampler {
 					LOGGER.debug("No reply message received");
 				} else {
 					if (replyMsg instanceof TextMessage) {
-						res.setResponseData(
-							((TextMessage) replyMsg).getText().getBytes());
+						res.setResponseData(((TextMessage) replyMsg).getText().getBytes());
 					} else {
 						res.setResponseData(replyMsg.toString().getBytes());
 					}
-
 					res.setSuccessful(true);
-					//LOGGER.debug("ReplyMsg CorrId=" + replyMsg.getJMSCorrelationID());
 				}
 			}
 		} catch (Exception e) {
@@ -112,8 +118,15 @@ public class JMSSampler extends AbstractSampler {
 		return res;
 	}
 
+	private TextMessage createMessage() throws JMSException {
+		TextMessage msg = session.createTextMessage();
+		msg.setText(getContent());
+		addJMSProperties(msg);
+		return msg;
+	}
+
 	private void addJMSProperties(TextMessage msg) throws JMSException {
-		Map map = getArguments().getArgumentsAsMap();
+		Map map = getArguments(JMSSampler.JMS_PROPERTIES).getArgumentsAsMap();
 		Iterator argIt = map.keySet().iterator();
 		while (argIt.hasNext()) {
 			String name = (String) argIt.next();
@@ -157,7 +170,7 @@ public class JMSSampler extends AbstractSampler {
 		setProperty(XML_DATA, content);
 	}
 
-	public boolean getIsOneway() {
+	public boolean isOneway() {
 		return getPropertyAsBoolean(IS_ONE_WAY);
 	}
 
@@ -177,18 +190,16 @@ public class JMSSampler extends AbstractSampler {
 	}
 
 	public synchronized void testStarted() {
-		LOGGER.debug(
-			"testStarted, thread: " + Thread.currentThread().getName());
+		LOGGER.debug("testStarted, thread: " + Thread.currentThread().getName());
 
 	}
 
 	public synchronized void testEnded() {
-		LOGGER.debug(
-			"testEndded(), thread: " + Thread.currentThread().getName());
+		LOGGER.debug("testEndded(), thread: " + Thread.currentThread().getName());
 	}
 
 	public void testIterationStart(LoopIterationEvent event) {
-//		LOGGER.debug("testIterationStart");
+		//		LOGGER.debug("testIterationStart");
 	}
 
 	/* (non-Javadoc)
@@ -198,13 +209,11 @@ public class JMSSampler extends AbstractSampler {
 		logThreadStart();
 		super.threadStarted();
 
-
 		Context context = null;
 		try {
 			context = getInitialContext();
 			QueueConnectionFactory factory =
-				(QueueConnectionFactory) context.lookup(
-					getQueueConnectionFactory());
+				(QueueConnectionFactory) context.lookup(getQueueConnectionFactory());
 			Queue queue = (Queue) context.lookup(getSendQueue());
 
 			sendQueue = queue;
@@ -215,8 +224,7 @@ public class JMSSampler extends AbstractSampler {
 
 			connection = factory.createQueueConnection();
 
-			session =
-				connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+			session = connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Session created");
@@ -257,16 +265,33 @@ public class JMSSampler extends AbstractSampler {
 	private Context getInitialContext() throws NamingException {
 		Hashtable table = new Hashtable();
 
-		if (getInitialContextFactory()!=null && getInitialContextFactory().trim().length()>0
-		) {
-			if (LOGGER.isDebugEnabled()) LOGGER.debug("Using InitialContext [" + getInitialContextFactory() + "]");
+		if (getInitialContextFactory() != null && getInitialContextFactory().trim().length() > 0) {
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug("Using InitialContext [" + getInitialContextFactory() + "]");
 			table.put(Context.INITIAL_CONTEXT_FACTORY, getInitialContextFactory());
 		}
-		if (LOGGER.isDebugEnabled()) LOGGER.debug("Using Provider [" + getContextProvider() + "]");
-		if (getContextProvider()!=null && getContextProvider().trim().length()>0) {
-			if (LOGGER.isDebugEnabled()) LOGGER.debug("Using Provider [" + getContextProvider() + "]");
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("Using Provider [" + getContextProvider() + "]");
+		if (getContextProvider() != null && getContextProvider().trim().length() > 0) {
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug("Using Provider [" + getContextProvider() + "]");
 			table.put(Context.PROVIDER_URL, getContextProvider());
 		}
+		Map map = getArguments(JMSSampler.JNDI_PROPERTIES).getArgumentsAsMap();
+		if (LOGGER.isDebugEnabled()) {
+			if (map.isEmpty()) {
+				LOGGER.debug("Empty JNDI properties");
+			}
+			else {
+				LOGGER.debug("Number of JNDI properties: " + map.size());
+			}
+		}
+		Iterator it = map.keySet().iterator();
+		while(it.hasNext()) {
+			String key = (String)it.next();
+			table.put(key, map.get(key));
+		}
+		
 		Context context = new InitialContext(table);
 		if (LOGGER.isDebugEnabled()) {
 			printEnvironment(context);
@@ -280,7 +305,7 @@ public class JMSSampler extends AbstractSampler {
 		Enumeration keys = env.keys();
 		while (keys.hasMoreElements()) {
 			String key = (String) keys.nextElement();
-			LOGGER.debug(key + "=" + env.get(key));				
+			LOGGER.debug(key + "=" + env.get(key));
 		}
 	}
 
@@ -294,11 +319,7 @@ public class JMSSampler extends AbstractSampler {
 					+ hashCode()
 					+ "]");
 			LOGGER.debug(
-				"QCF: ["
-					+ getQueueConnectionFactory()
-					+ "], sendQueue=["
-					+ getSendQueue()
-					+ "]");
+				"QCF: [" + getQueueConnectionFactory() + "], sendQueue=[" + getSendQueue() + "]");
 			LOGGER.debug("Timeout             = " + getTimeout() + "]");
 			LOGGER.debug("Use temporary queue =" + useTemporyQueue() + "]");
 			LOGGER.debug("Reply queue         =" + getReceiveQueue() + "]");
@@ -322,19 +343,19 @@ public class JMSSampler extends AbstractSampler {
 		LOGGER.debug("Thread ended " + new Date());
 		super.threadFinished();
 
-			if (session != null)
-				try {
-					session.close();
-				} catch (JMSException e) {
-					LOGGER.info(e);
+		if (session != null)
+			try {
+				session.close();
+			} catch (JMSException e) {
+				LOGGER.info(e);
 
-				}
-			if (connection != null)
-				try {
-					connection.close();
-				} catch (JMSException e) {
-					LOGGER.info(e);
-				}
+			}
+		if (connection != null)
+			try {
+				connection.close();
+			} catch (JMSException e) {
+				LOGGER.info(e);
+			}
 	}
 
 	private boolean useTemporyQueue() {
@@ -346,8 +367,8 @@ public class JMSSampler extends AbstractSampler {
 		setProperty(new TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
 	}
 
-	public Arguments getArguments() {
-		return (Arguments) getProperty(JMSSampler.JMS_PROPERTIES).getObjectValue();
+	public Arguments getArguments(String name) {
+		return (Arguments) getProperty(name).getObjectValue();
 	}
 
 	/**
@@ -363,7 +384,7 @@ public class JMSSampler extends AbstractSampler {
 	 */
 	public void setInitialContextFactory(String string) {
 		setProperty(JNDI_INITIAL_CONTEXT_FACTORY, string);
-		
+
 	}
 
 	/**
@@ -371,7 +392,7 @@ public class JMSSampler extends AbstractSampler {
 	 */
 	public void setContextProvider(String string) {
 		setProperty(JNDI_CONTEXT_PROVIDER_URL, string);
-		
+
 	}
 
 }

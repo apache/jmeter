@@ -31,94 +31,97 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
- * @author MBlankestijn
+ * Default JNDI screen.
+ * <br>
+ * Created on:  October 28, 2004
  *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * @author Martijn Blankestijn
+ * @version $Id$ 
  */
 public class JndiDefaultsGui extends AbstractConfigGui
- {
-	 JLabeledTextField providerUrl;
-	 JLabeledTextField initialContextFactory;
+{
+    private JLabeledTextField providerUrl;
+	private JLabeledTextField initialContextFactory;
 
-	 public JndiDefaultsGui()
-	 {
-		 super();
-		 init();
-	 }
+    public JndiDefaultsGui()
+    {
+        super();
+        init();
+    }
 
-	 public String getLabelResource()
-	 {
-		 return "jms_jndi_defaults_title";
-	 }
+    public String getLabelResource()
+    {
+        return "jms_jndi_defaults_title";
+    }
 
-	 /**
-	  * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-	  */
-	 public TestElement createTestElement()
-	 {
-		 ConfigTestElement config = new ConfigTestElement();
-		 modifyTestElement(config);
-		 return config;
-	 }
+    /**
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+     */
+    public TestElement createTestElement()
+    {
+        ConfigTestElement config = new ConfigTestElement();
+        modifyTestElement(config);
+        return config;
+    }
 
-	 /**
-	  * Modifies a given TestElement to mirror the data in the gui components.
-	  * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-	  */
-	 public void modifyTestElement(TestElement config)
-	 {
-		 super.configureTestElement(config);
-		 config.setProperty(JMSSampler.JNDI_CONTEXT_PROVIDER_URL, providerUrl.getText());
-		 config.setProperty(JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY, initialContextFactory.getText());
-//		 config.setProperty(
-//			 new TestElementProperty(
-//				 HTTPSampler.ARGUMENTS,
-//				 argPanel.createTestElement()));
-	 }
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement config)
+    {
+        super.configureTestElement(config);
+        config.setProperty(
+            JMSSampler.JNDI_CONTEXT_PROVIDER_URL,
+            providerUrl.getText());
+        config.setProperty(
+            JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY,
+            initialContextFactory.getText());
+        //		 config.setProperty(
+        //			 new TestElementProperty(
+        //				 HTTPSampler.ARGUMENTS,
+        //				 argPanel.createTestElement()));
+    }
 
-	 public void configure(TestElement el)
-	 {
-		 super.configure(el);
-		 providerUrl.setText(el.getPropertyAsString(JMSSampler.JNDI_CONTEXT_PROVIDER_URL));
-		 initialContextFactory.setText(el.getPropertyAsString(JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY));
-//		 argPanel.configure(
-//			 (TestElement) el
-//				 .getProperty(HTTPSampler.ARGUMENTS)
-//				 .getObjectValue());
-	 }
+    public void configure(TestElement el)
+    {
+        super.configure(el);
+        providerUrl.setText(
+            el.getPropertyAsString(JMSSampler.JNDI_CONTEXT_PROVIDER_URL));
+        initialContextFactory.setText(
+            el.getPropertyAsString(JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY));
+        //		 argPanel.configure(
+        //			 (TestElement) el
+        //				 .getProperty(HTTPSampler.ARGUMENTS)
+        //				 .getObjectValue());
+    }
 
-	 private void init()
-	 {
-		 setLayout(new BorderLayout(0, 5));
-		 setBorder(makeBorder());
+    private void init()
+    {
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
 
-		 add(makeTitlePanel(), BorderLayout.NORTH);
+        add(makeTitlePanel(), BorderLayout.NORTH);
 
-		 Box mainPanel = Box.createVerticalBox();
+        Box mainPanel = Box.createVerticalBox();
 
-		 VerticalPanel urlPanel = new VerticalPanel();
-		 providerUrl =
-			 new JLabeledTextField(
-				 JMeterUtils.getResString("initial_context_factory"));
-		 urlPanel.add(providerUrl);
+        VerticalPanel urlPanel = new VerticalPanel();
+        providerUrl =
+            new JLabeledTextField(
+                JMeterUtils.getResString("initial_context_factory"));
+        urlPanel.add(providerUrl);
 
-		 initialContextFactory =
-			 new JLabeledTextField(
-				 JMeterUtils.getResString("provider_url"));
-		 urlPanel.add(initialContextFactory);
+        initialContextFactory =
+            new JLabeledTextField(JMeterUtils.getResString("provider_url"));
+        urlPanel.add(initialContextFactory);
 
-		 mainPanel.add(urlPanel);
+        mainPanel.add(urlPanel);
 
-//		 argPanel = new HTTPArgumentsPanel();
-//		 mainPanel.add(argPanel);
+        add(mainPanel, BorderLayout.CENTER);
+    }
 
-		 add(mainPanel, BorderLayout.CENTER);
-	 }
-
-	 public Dimension getPreferredSize()
-	 {
-		 return getMinimumSize();
-	 }
- }
-
+    public Dimension getPreferredSize()
+    {
+        return getMinimumSize();
+    }
+}
