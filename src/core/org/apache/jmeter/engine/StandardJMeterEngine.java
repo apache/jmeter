@@ -297,7 +297,16 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 		{
 			JMeterThread item = (JMeterThread)iter.next();
 			item.stop();
-			((Thread)allThreads.get(item)).interrupt();
+			Thread t = (Thread)allThreads.get(item);
+			if(t != null)
+			{
+				t.interrupt();
+			}
+			else
+			{
+				log.warn("Lost thread: "+item.getThreadName());
+				allThreads.remove(item);
+			}
 		}
 	}
 

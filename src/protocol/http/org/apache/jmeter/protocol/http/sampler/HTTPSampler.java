@@ -115,6 +115,8 @@ public class HTTPSampler extends AbstractSampler
 	public final static String MULTIPART_FORM = "multipart_form";
 	protected static String encoding = "iso-8859-1";
 	private static final PostWriter postWriter = new PostWriter();
+	protected HttpURLConnection conn;
+	private int connectionTries = 0;
 	public void setFileField(String value)
 	{
 		setProperty(FILE_FIELD, value);
@@ -618,7 +620,7 @@ public class HTTPSampler extends AbstractSampler
 		{
 			w.write(buffer, 0, x);
 		}
-		in.close();
+		//in.close();
 		w.flush();
 		w.close();
 		return w.toByteArray();
@@ -634,8 +636,6 @@ public class HTTPSampler extends AbstractSampler
 		throws IOException
 	{
 		StringBuffer headerBuf = new StringBuffer();
-		//PrintWriter headerBytes = new PrintWriter(output);
-		// either 'HTTP/1.0' or 'HTTP/1.1'
 		headerBuf.append(conn.getHeaderField(0).substring(0, 8));
 		headerBuf.append(" ");
 		headerBuf.append(conn.getResponseCode());
@@ -655,14 +655,6 @@ public class HTTPSampler extends AbstractSampler
 		headerBuf.append("\n");
 		return headerBuf.toString().getBytes("8859_1");
 	}
-	/*
-	 * Uploading a file - put in separate sampler
-	 * else if (contentType.equals(MULTIPART_FORM))
-	 * {
-	 *
-	 * }
-	 * }
-	 */
 	/****************************************
 	 * Extracts all the required cookies for that particular URL request and set
 	 * them in the <code>HttpURLConnection</code> passed in
@@ -810,6 +802,37 @@ public class HTTPSampler extends AbstractSampler
 		removeArguments();
 		parseArguments(newUrl.getQuery());
 	}
+	
+	protected long connect() throws IOException
+	{
+		long time = System.currentTimeMillis();
+		try
+		{				
+			conn.connect();
+		}
+		catch(IOException e)
+		{
+			log.debug("Connection failed, turning off keep-alive and trying again");
+			if(connectionTries++ == 10)
+			{
+				log.error("Can't connect",e);
+				throw e;
+			}
+			conn.disconnect();
+			conn = null;
+			System.gc();
+			Runtime.getRuntime().runFinalization();
+			this.setUseKeepAlive(false);
+			conn = setupConnection(getUrl(),getMethod());
+			if(getMethod().equals(HTTPSampler.POST))
+			{
+				postWriter.setHeaders(conn,this);
+			}
+			time = connect();
+		}
+		return time;
+	}
+	
 	/****************************************
 	 * Samples <code>Entry</code> passed in and stores the result in <code>SampleResult</code>
 	 *
@@ -820,7 +843,7 @@ public class HTTPSampler extends AbstractSampler
 	private SampleResult sample(boolean redirected)
 	{
 		log.debug("Start : sample2");
-		long time = 0L;
+		long time = System.currentTimeMillis();
 		SampleResult res = new SampleResult();
 		if (redirected)
 		{
@@ -833,7 +856,6 @@ public class HTTPSampler extends AbstractSampler
 			// behaves.  That's not to say it's perfect as is...
 		}
 		URL u = null;
-		HttpURLConnection conn = null;
 		try
 		{
 			u = getUrl();
@@ -854,13 +876,17 @@ public class HTTPSampler extends AbstractSampler
 			// data in the count... should we? - mike: good point, I changed it
 			// TO-DO: Is there something I'm missing here?
 			// [/Jordi]			
-			time = System.currentTimeMillis();
+			if (!redirected
+				&& getProperty(HTTPSampler.METHOD).equals(HTTPSampler.POST))
+			{
+				postWriter.setHeaders(conn,this);
+			}
+			time = connect();
 			if (!redirected
 				&& getProperty(HTTPSampler.METHOD).equals(HTTPSampler.POST))
 			{
 				sendPostData(conn);
 			}
-			conn.connect();
 			saveConnectionCookies(conn, u, getCookieManager());
 			int errorLevel = 0;
 			try
@@ -869,8 +895,9 @@ public class HTTPSampler extends AbstractSampler
 			}
 			catch (IOException e)
 			{
-				res.setSuccessful(false);
 				time = bundleResponseInResult(time, res, conn);
+				res.setSuccessful(false);
+				res.setTime(time);
 				return res;
 			}
 			if (errorLevel / 100 == 2 || errorLevel == 304)
@@ -925,12 +952,14 @@ public class HTTPSampler extends AbstractSampler
 				// calling disconnect doesn't close the connection immediately, but
 				// indicates we're through with it.  The JVM should close it when
 				// necessary.
-				if (conn != null)
+				String connection  = conn.getHeaderField("Connection");
+				if (connection == null || connection.equalsIgnoreCase("close"))
 					conn.disconnect();
 			}
 			catch (Exception e)
 			{
 			}
+			
 		}
 		log.debug("End : sample2");
 		return res;
@@ -941,15 +970,15 @@ public class HTTPSampler extends AbstractSampler
 		HttpURLConnection conn)
 		throws IOException, FileNotFoundException
 	{
+		res.setDataType(res.TEXT);
 		byte[] ret = readResponse(conn);
 		byte[] head = getResponseHeaders(conn, res);
 		time = System.currentTimeMillis() - time;
 		byte[] complete = new byte[ret.length + head.length];
 		System.arraycopy(head, 0, complete, 0, head.length);
 		System.arraycopy(ret, 0, complete, head.length, ret.length);
-		res.setResponseData(complete);
-		res.setSuccessful(true);
-		res.setDataType(res.TEXT);
+		res.setResponseData(complete);	
+		res.setSuccessful(true);	
 		return time;
 	}
 	/****************************************
