@@ -43,6 +43,7 @@
 </testelement>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">Components</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.LongProperty" name="ThreadGroup.end_time">0</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.delay"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.duration"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.on_sample_error">continue</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
@@ -74,6 +75,7 @@
 </collection>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="Assertion.test_field">Assertion.response_data</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="Assertion.assume_success">false</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.IntegerProperty" name="Assertion.test_type">2</property>
 </testelement>
 </node>
@@ -88,7 +90,7 @@
 </node>
 <node>
 <testelement class="org.apache.jmeter.assertions.SizeAssertion">
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.IntegerProperty" name="SizeAssertion.operator">0</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.IntegerProperty" name="SizeAssertion.operator">1</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.gui_class">org.apache.jmeter.assertions.gui.SizeAssertionGui</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.test_class">org.apache.jmeter.assertions.SizeAssertion</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">Size Assertion</property>
@@ -191,6 +193,7 @@
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">Regular Expression Extractor</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="RegexExtractor.template"/>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="RegexExtractor.useHeaders">false</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="RegexExtractor.match_number"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="RegexExtractor.refname"/>
 </testelement>
@@ -261,10 +264,10 @@
 </testelement>
 <node>
 <testelement class="org.apache.jmeter.timers.ConstantThroughputTimer">
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.gui_class">org.apache.jmeter.timers.gui.ConstantThroughputTimerGui</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.gui_class">org.apache.jmeter.testbeans.gui.TestBeanGUI</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.test_class">org.apache.jmeter.timers.ConstantThroughputTimer</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">Constant Throughput Timer</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ConstantThroughputTimer.throughput">60</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="throughput">60</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
 </testelement>
 </node>
@@ -402,6 +405,7 @@
 </testelement>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">Core</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.LongProperty" name="ThreadGroup.end_time">0</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.delay"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.duration"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.on_sample_error">continue</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
@@ -477,6 +481,7 @@
 </testelement>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">Protocol: FTP</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.LongProperty" name="ThreadGroup.end_time">0</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.delay"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.duration"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.on_sample_error">continue</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
@@ -538,6 +543,7 @@
 </testelement>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">Protocol: HTTP</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.LongProperty" name="ThreadGroup.end_time">0</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.delay"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.duration"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.on_sample_error">continue</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
@@ -661,6 +667,7 @@
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="path_extension">false</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.test_class">org.apache.jmeter.protocol.http.modifier.URLRewritingModifier</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">URL Rewriting Modifier</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="path_extension_no_questionmark">false</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="path_extension_no_equals">false</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="argument_name"/>
@@ -687,7 +694,6 @@
 <testelement class="org.apache.jmeter.protocol.http.sampler.HTTPSampler">
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.path"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.encoded_path"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.method">POST</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="HTTPSampler.use_keepalive">true</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.protocol"/>
@@ -706,14 +712,15 @@
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.FILE_FIELD"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">HTTP Test Sampler</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.monitor">false</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.domain"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.FILE_NAME"/>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="HTTPSampler.auto_redirects">false</property>
 </testelement>
 </node>
 <node>
 <testelement class="org.apache.jmeter.protocol.http.sampler.SoapSampler">
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.path">/</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.encoded_path">/</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.SoapSampler</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.method">POST</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.protocol">http</property>
@@ -732,15 +739,17 @@
 <node>
 <testelement class="org.apache.jmeter.protocol.http.sampler.WebServiceSampler">
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.path">/</property>
-<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.encoded_path">/</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.WebServiceSampler</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.method">POST</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="WebServiceSampler.proxy_host"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="HTTPSampler.protocol">http</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="WebServiceSampler.proxy_port"/>
 <testelement class="org.apache.jmeter.config.Arguments" name="HTTPsampler.Arguments">
 <collection class="java.util.ArrayList" propType="org.apache.jmeter.testelement.property.CollectionProperty" name="Arguments.arguments"/>
 </testelement>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.IntegerProperty" name="HTTPSampler.port">80</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="WebServiceSampler.use_proxy">false</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="Soap.Action"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.WebServiceSamplerGui</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="WebServiceSampler.xml_data_file"/>
@@ -786,6 +795,7 @@
 </testelement>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">Protocol: Java</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.LongProperty" name="ThreadGroup.end_time">0</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.delay"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.duration"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.on_sample_error">continue</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
@@ -953,6 +963,7 @@ return "This will go into the Response Data field";</property>
 </testelement>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">Protocol: JDBC</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.LongProperty" name="ThreadGroup.end_time">0</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.delay"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.duration"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.on_sample_error">continue</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
@@ -1040,6 +1051,7 @@ return "This will go into the Response Data field";</property>
 </testelement>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="TestElement.name">LDAP</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.LongProperty" name="ThreadGroup.end_time">0</property>
+<property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.delay"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.duration"/>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.StringProperty" name="ThreadGroup.on_sample_error">continue</property>
 <property xml:space="preserve" propType="org.apache.jmeter.testelement.property.BooleanProperty" name="TestElement.enabled">true</property>
