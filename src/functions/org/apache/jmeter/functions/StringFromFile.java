@@ -70,152 +70,165 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-
-
 /**
- * StringFromFile (Function)
- * 
- * @author default
- *
- * @version $Id$
- * 
- * Function to read a String from a text file
+ * StringFromFile Function to read a String from a text file.
  * 
  * Parameters:
- * 		- file name
- * 		- variable name (optional - defaults to StringFromFile_)
+ *      - file name
+ *      - variable name (optional - defaults to StringFromFile_)
  * 
  * Returns:
- * 		- the next line from the file - or **ERR** if an error occurs
- *		- value is also saved in the variable for later re-use.
+ *      - the next line from the file - or **ERR** if an error occurs
+ *      - value is also saved in the variable for later re-use.
  * 
  * Ensure that different variable names are used for each call to the function
  * 
  * 
  * Notes:
- * - JMeter instantiates a copy of each function for every reference in a Sampler
- *   or elsewhere; each instance will open its own copy of the the file
+ * - JMeter instantiates a copy of each function for every reference in a
+ *   Sampler or elsewhere; each instance will open its own copy of the the file
  * - the file name is resolved at file (re-)open time
  * - the output variable name is resolved every time the function is invoked
  * 
+ * @author default
+ *
+ * @version $Id$
  */
 public class StringFromFile extends AbstractFunction implements Serializable
 {
-	private static Logger log = LoggingManager.getLoggerForClass();
+    private static Logger log = LoggingManager.getLoggerForClass();
 
-	private static final List desc = new LinkedList();
-	private static final String KEY = "_StringFromFile"; // Function name (only 1 _)
+    private static final List desc = new LinkedList();
+    private static final String KEY = "_StringFromFile";
+    // Function name (only 1 _)
 
-	static
-	{
-		desc.add(JMeterUtils.getResString("string_from_file_file_name"));
-		desc.add(JMeterUtils.getResString("function_name_param"));
-	}
-	
-	private String myValue = "<please supply a file>"; // Default value
-	private String myName  = "StringFromFile_"; // Name to store value in
-	private Object[] values;
-	private BufferedReader myBread; // Buffered reader
-	private boolean reopenFile=true; // Set from parameter list one day ...
-	private String fileName; // needed for error messages
-	
-	public StringFromFile()
-	{
-	}
-	
-	public Object clone()
-	{
-		StringFromFile newReader = new StringFromFile();
-		if (log.isDebugEnabled()){ // Skip expensive paramter creation ..
-			log.debug(this+"::StringFromFile.clone()",new Throwable("debug"));
-		}
-			
-		return newReader;
-	}
+    static {
+        desc.add(JMeterUtils.getResString("string_from_file_file_name"));
+        desc.add(JMeterUtils.getResString("function_name_param"));
+    }
 
-	private void openFile(){
-		fileName = ((CompoundVariable)values[0]).execute();
-	    try {
-			FileReader fis = new FileReader(fileName);
-			myBread = new BufferedReader(fis);
-			log.info("Opened "+fileName);
-	    } catch (Exception e) {
-			log.error("Error in openFile "+fileName,e);
-	    }
-	}
+    private String myValue = "<please supply a file>"; // Default value
+    private String myName = "StringFromFile_"; // Name to store value in
+    private Object[] values;
+    private BufferedReader myBread; // Buffered reader
+    private boolean reopenFile = true; // Set from parameter list one day ...
+    private String fileName; // needed for error messages
+
+    public StringFromFile()
+    {
+    }
+
+    public Object clone()
+    {
+        StringFromFile newReader = new StringFromFile();
+        if (log.isDebugEnabled())
+        { // Skip expensive paramter creation ..
+            log.debug(this +"::StringFromFile.clone()", new Throwable("debug"));
+        }
+
+        return newReader;
+    }
+
+    private void openFile()
+    {
+        fileName = ((CompoundVariable) values[0]).execute();
+        try
+        {
+            FileReader fis = new FileReader(fileName);
+            myBread = new BufferedReader(fis);
+            log.info("Opened " + fileName);
+        }
+        catch (Exception e)
+        {
+            log.error("Error in openFile " + fileName, e);
+        }
+    }
 
     /* (non-Javadoc)
-	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-	 */
-	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-		throws InvalidVariableException {
-		
-		JMeterVariables vars = getVariables();
+     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
+     */
+    public synchronized String execute(
+        SampleResult previousResult,
+        Sampler currentSampler)
+        throws InvalidVariableException
+    {
 
-		if (values.length >= 2) {
-			myName = ((CompoundVariable)values[1]).execute();
-		}
-		
-		myValue="**ERR**";
-		if (null != myBread) {// Did we open the file?
-		  try {
-		    String line = myBread.readLine();
-		    if (line == null && reopenFile) { // EOF, re-open file
-		    	log.info("Reached EOF on "+fileName);
-				myBread.close();
-				openFile();
-				line = myBread.readLine();
-		    }
-		    myValue = line;
-		  } catch (Exception e) {
-		    log.error("Error reading file "+fileName,e);
-		  }
-		}
-		
-		vars.put(myName,myValue);
+        JMeterVariables vars = getVariables();
 
-		log.debug(this+"::StringFromFile.execute() value " + myValue);
+        if (values.length >= 2)
+        {
+            myName = ((CompoundVariable) values[1]).execute();
+        }
 
-		return myValue;
+        myValue = "**ERR**";
+        if (null != myBread)
+        { // Did we open the file?
+            try
+            {
+                String line = myBread.readLine();
+                if (line == null && reopenFile)
+                { // EOF, re-open file
+                    log.info("Reached EOF on " + fileName);
+                    myBread.close();
+                    openFile();
+                    line = myBread.readLine();
+                }
+                myValue = line;
+            }
+            catch (Exception e)
+            {
+                log.error("Error reading file " + fileName, e);
+            }
+        }
 
-	}
+        vars.put(myName, myValue);
+
+        log.debug(this +"::StringFromFile.execute() value " + myValue);
+
+        return myValue;
+
+    }
 
     /* (non-Javadoc)
      * Parameters:
      * - file name
      * - variable name (optional)
      * 
-	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-	 */
-	public void setParameters(Collection parameters)
-		throws InvalidVariableException {
-			
-		log.debug(this+"::StringFromFile.setParameters()");
+     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
+     */
+    public void setParameters(Collection parameters)
+        throws InvalidVariableException
+    {
 
-		values = parameters.toArray();
-		
-		if (( values.length > 2 ) || (values.length < 1)) {
-			throw new InvalidVariableException("Wrong number of parameters");
-		}
-		
-		openFile();
-		
-		log.info("Variable name: "+ myName);
-			
-	}
+        log.debug(this +"::StringFromFile.setParameters()");
 
-    /* (non-Javadoc)
-	 * @see org.apache.jmeter.functions.Function#getReferenceKey()
-	 */
-	public String getReferenceKey() {
-		return KEY;
-	}
+        values = parameters.toArray();
+
+        if ((values.length > 2) || (values.length < 1))
+        {
+            throw new InvalidVariableException("Wrong number of parameters");
+        }
+
+        openFile();
+
+        log.info("Variable name: " + myName);
+
+    }
 
     /* (non-Javadoc)
-	 * @see org.apache.jmeter.functions.Function#getArgumentDesc()
-	 */
-	public List getArgumentDesc() {
-		return desc;
-	}
+     * @see org.apache.jmeter.functions.Function#getReferenceKey()
+     */
+    public String getReferenceKey()
+    {
+        return KEY;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.functions.Function#getArgumentDesc()
+     */
+    public List getArgumentDesc()
+    {
+        return desc;
+    }
 
 }

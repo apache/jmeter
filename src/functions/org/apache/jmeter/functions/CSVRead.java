@@ -56,6 +56,7 @@ package org.apache.jmeter.functions;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -71,13 +72,11 @@ import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
 /**
- * @author Cyrus M.
- * Syntax is similar to StringFromFile function.
  * The function represented by this class allows data to be read from CSV
-files.
- * The function allows the test to line-thru the data in the CSV file - one
-line per each test.
+ * files.  Syntax is similar to StringFromFile function.  The function allows
+ * the test to line-thru the data in the CSV file - one line per each test.
  * E.g. inserting the following in the test scripts :
+ * 
  *   ${_CSVRead(c:/BOF/abcd.csv,0)}       // read (first) line of
 'c:/BOF/abcd.csv' , return the 1st column ( represented by the '0'),
  *   ${_CSVRead(c:/BOF/abcd.csv,1)}       // read (first) line of
@@ -86,22 +85,22 @@ line per each test.
 'c:/BOF/abcd.csv'
  *
  * NOTE: A single instance of file is opened and used for all threads.
- * For example, if thread-1 reads the first line and then issues a 'next()'
-, then thread-2 will be starting from line-1.
+ * For example, if thread-1 reads the first line and then issues a 'next()',
+ * then thread-2 will be starting from line-1.
  *
- * Use CSVRead to isolate the file usage between different threads .
+ * Use CSVRead to isolate the file usage between different threads.
  *
+ * @author Cyrus M.
  */
 
 /*
  * It appears that JMeter instantiates a new copy of each function for
-every reference in a Sampler
- * or elsewhere.
+ * every reference in a Sampler or elsewhere.
  */
-
 public class CSVRead extends AbstractFunction implements Serializable
 {
-    transient protected static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.CSVRead");
+    transient protected static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.CSVRead");
 
     private static final String KEY = "__CSVRead"; // Function name (only 1 _)
 
@@ -126,15 +125,20 @@ public class CSVRead extends AbstractFunction implements Serializable
     {
         myName = "ThreadStringFromFile_";
     }
+
     public Object clone()
     {
         CSVRead newReader = new CSVRead();
         return newReader;
     }
+
     /**
      * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
      */
-    public synchronized String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException
+    public synchronized String execute(
+        SampleResult previousResult,
+        Sampler currentSampler)
+        throws InvalidVariableException
     {
         try
         {
@@ -143,8 +147,12 @@ public class CSVRead extends AbstractFunction implements Serializable
             ArrayList processedLines = null;
             String fileName = null;
 
-            fileName = ((org.apache.jmeter.engine.util.CompoundVariable) values[0]).execute();
-            myName = ((org.apache.jmeter.engine.util.CompoundVariable) values[1]).execute();
+            fileName =
+                ((org.apache.jmeter.engine.util.CompoundVariable) values[0])
+                    .execute();
+            myName =
+                ((org.apache.jmeter.engine.util.CompoundVariable) values[1])
+                    .execute();
 
             // instantiates the fileDataContainer if one not already present.
             FileDataContainer fileData = getFileData(fileName);
@@ -159,7 +167,8 @@ public class CSVRead extends AbstractFunction implements Serializable
             // see if we already have read a line for this thread ...
             processedLines = reloadCurrentLine();
 
-            // if no lines associated with this thread - then read, process and store ...
+            // if no lines associated with this thread - then read, process and
+            // store...
             if (fileData != null && processedLines == null)
             {
                 processedLines = (ArrayList) fileData.getNextLine();
@@ -178,8 +187,14 @@ public class CSVRead extends AbstractFunction implements Serializable
                 myValue = "";
             }
 
-            log.debug(Thread.currentThread().getName() + ">>>> execute (" + fileName + " , " + myName + ")   " + this.hashCode());
-
+            log.debug(
+                Thread.currentThread().getName()
+                    + ">>>> execute ("
+                    + fileName
+                    + " , "
+                    + myName
+                    + ")   "
+                    + this.hashCode());
         }
         catch (Exception e)
         {
@@ -188,6 +203,7 @@ public class CSVRead extends AbstractFunction implements Serializable
         return myValue;
 
     }
+
     /**
      * @see org.apache.jmeter.functions.Function#getArgumentDesc()
      */
@@ -195,10 +211,12 @@ public class CSVRead extends AbstractFunction implements Serializable
     {
         return desc;
     }
+
     /**
      * get the FileDataContainer
      */
-    protected synchronized FileDataContainer getFileData(String fileName) throws java.io.IOException
+    protected synchronized FileDataContainer getFileData(String fileName)
+        throws IOException
     {
         if (fileData == null)
         {
@@ -207,9 +225,6 @@ public class CSVRead extends AbstractFunction implements Serializable
 
         return fileData;
     }
-    /**
-     * reset - resets the file - so the file is read in the next iteration
-     */
 
     protected String getId()
     {
@@ -223,12 +238,12 @@ public class CSVRead extends AbstractFunction implements Serializable
     {
         return KEY;
     }
+    
     /**
-     * Insert the method's description here.
      * Creation date: (24/03/2003 17:11:30)
      * @return java.util.Hashtable
      */
-    protected static synchronized java.util.Hashtable getThreadData()
+    protected static synchronized Hashtable getThreadData()
     {
         if (threadData == null)
         {
@@ -237,11 +252,12 @@ public class CSVRead extends AbstractFunction implements Serializable
 
         return threadData;
     }
+    
     /**
-     * @see org.apache.jmeter.functions.Function#execute(SampleResult,
-    Sampler)
+     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
      */
-    private synchronized FileDataContainer load(String fileName) throws java.io.IOException
+    private synchronized FileDataContainer load(String fileName)
+        throws IOException
     {
         FileDataContainer fileData = new FileDataContainer();
         openFile(fileName);
@@ -269,6 +285,7 @@ public class CSVRead extends AbstractFunction implements Serializable
         }
         return fileData;
     }
+    
     private void openFile(String fileName)
     {
         try
@@ -281,11 +298,11 @@ public class CSVRead extends AbstractFunction implements Serializable
             log.error("openFile", e);
         }
     }
+    
     /**
      * this is for version 1.8.1 only -
      * @deprecated
      */
-
     protected ArrayList reloadCurrentLine() throws InvalidVariableException
     {
         log.debug(getId() + "reloaded " + getThreadData().get(getId()));
@@ -296,7 +313,6 @@ public class CSVRead extends AbstractFunction implements Serializable
     /**
      * reset - resets the file - so the file is read in the next iteration
      */
-
     protected synchronized void reset()
     {
         log.debug(getId() + "reseting .... ");
@@ -311,10 +327,12 @@ public class CSVRead extends AbstractFunction implements Serializable
     {
         fileData = newValue;
     }
+    
     /**
      * @see org.apache.jmeter.functions.Function#setParameters(Collection)
      */
-    public void setParameters(Collection parameters) throws InvalidVariableException
+    public void setParameters(Collection parameters)
+        throws InvalidVariableException
     {
         log.debug(getId() + "setParameter - Collection" + parameters);
 
@@ -325,12 +343,13 @@ public class CSVRead extends AbstractFunction implements Serializable
             throw new InvalidVariableException();
 
     }
+
     /**
      * this is for version 1.8.1 only -
      * @deprecated
      */
-
-    public void storeCurrentLine(ArrayList currentLine) throws InvalidVariableException
+    public void storeCurrentLine(ArrayList currentLine)
+        throws InvalidVariableException
     {
         String id = getId();
         log.debug(id + "storing " + currentLine);
@@ -344,5 +363,4 @@ public class CSVRead extends AbstractFunction implements Serializable
             getThreadData().put(id, currentLine);
         }
     }
-
 }
