@@ -32,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.WebServiceSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
@@ -182,7 +183,7 @@ public class WebServiceSamplerGui
                 sampler.setPort(80);
             }
             sampler.setProtocol(url.getProtocol());
-            sampler.setMethod(WebServiceSampler.POST);
+            sampler.setMethod(HTTPSamplerBase.POST);
             sampler.setPath(url.getPath());
             sampler.setSoapAction(soapAction.getText());
             sampler.setXmlData(soapXml.getText());
@@ -221,7 +222,7 @@ public class WebServiceSamplerGui
                 sampler.setPort(80);
             }
             sampler.setProtocol(url.getProtocol());
-            sampler.setMethod(WebServiceSampler.POST);
+            sampler.setMethod(HTTPSamplerBase.POST);
             sampler.setPath(url.getPath());
             sampler.setSoapAction(soapAction.getText());
             sampler.setXmlData(soapXml.getText());
