@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,16 +56,14 @@ package org.apache.jmeter.assertions.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
@@ -76,8 +74,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.gui.util.PowerTableModel;
@@ -93,7 +89,7 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  *@author    Michael Stover
  *@created   $Date$
- *@version   1.0
+ *@version   $Revision$
  ***************************************/
 
 public class AssertionGui extends AbstractAssertionGui implements FocusListener
@@ -224,51 +220,14 @@ public class AssertionGui extends AbstractAssertionGui implements FocusListener
 
     private void init()
     {
-        this.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.gridheight = 1;
-        gbc.gridwidth = 1;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 
-        // MAIN PANEL
-        JPanel mainPanel = new JPanel();
-        add(mainPanel, gbc.clone());
-        //gbc.fill = gbc.NONE;
-        gbc.weighty = 0;
-        mainPanel.setLayout(new GridBagLayout());
-        Border margin = new EmptyBorder(10, 10, 5, 10);
-        mainPanel.setBorder(margin);
-
-        // TITLE
-        JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("assertion_title"));
-        Font curFont = panelTitleLabel.getFont();
-        int curFontSize = curFont.getSize();
-        curFontSize += 4;
-        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-        mainPanel.add(panelTitleLabel, gbc.clone());
-        gbc.gridy++;
-
-        // NAME
-        mainPanel.add(getNamePanel(), gbc.clone());
-        gbc.gridx++;
-        //gbc.fill = gbc.HORIZONTAL;
-        mainPanel.add(Box.createHorizontalGlue(), gbc.clone());
-        gbc.gridx--;
-        //gbc.fill = gbc.NONE;
-        gbc.gridy++;
-        mainPanel.add(createFieldPanel(), gbc.clone());
-        gbc.gridy++;
-        mainPanel.add(createTypePanel(), gbc.clone());
-        gbc.gridy++;
-        //gbc.fill = gbc.BOTH;
-        gbc.weighty = 1;
-        gbc.gridwidth = 2;
-        mainPanel.add(createStringPanel(), gbc.clone());
+        add(createTitleLabel());
+        add(getNamePanel());
+        add(createFieldPanel());
+        add(createTypePanel());
+        add(createStringPanel());
     }
 
     private JPanel createFieldPanel()
@@ -328,29 +287,39 @@ public class AssertionGui extends AbstractAssertionGui implements FocusListener
 
     private JPanel createStringPanel()
     {
-        JPanel panel = new JPanel();
-        stringTable = new JTable(0, 1);
-        stringTable.addFocusListener(this);
         tableModel = new PowerTableModel(new String[] { COL_NAME }, new Class[] { String.class });
-        stringTable.setModel(tableModel);
+        stringTable = new JTable(tableModel);
+
+        stringTable.addFocusListener(this);
         TextAreaCellRenderer renderer = new TextAreaCellRenderer();
-        stringTable.setDefaultEditor(String.class, new TextAreaTableCellEditor());
         stringTable.setRowHeight(renderer.getPreferredHeight());
         stringTable.setDefaultRenderer(String.class, renderer);
+        stringTable.setDefaultEditor(String.class, new TextAreaTableCellEditor());
+        stringTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
+        
+        JPanel panel = new JPanel();
+
         panel.setLayout(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("assertion_patterns_to_test")));
+
         panel.add(new JScrollPane(stringTable), BorderLayout.CENTER);
+        panel.add(createButtonPanel(), BorderLayout.SOUTH);
+
+        return panel;
+    }
+
+    private JPanel createButtonPanel() {
         addPattern = new JButton(JMeterUtils.getResString("add"));
-        deletePattern = new JButton(JMeterUtils.getResString("delete"));
         addPattern.addActionListener(new AddPatternListener());
+        
+        deletePattern = new JButton(JMeterUtils.getResString("delete"));
         deletePattern.addActionListener(new ClearPatternsListener());
+        deletePattern.setEnabled(false);
+        
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(addPattern);
         buttonPanel.add(deletePattern);
-        panel.add(buttonPanel, BorderLayout.SOUTH);
-        deletePattern.setEnabled(false);
-
-        return panel;
+        return buttonPanel;
     }
 
     /****************************************

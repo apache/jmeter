@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,8 +54,6 @@
  */
 package org.apache.jmeter.assertions.gui;
 
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
@@ -64,8 +62,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.assertions.DurationAssertion;
 import org.apache.jmeter.testelement.TestElement;
@@ -81,7 +77,7 @@ import org.apache.log.Logger;
  *
  *@author    Michael Stover
  *@created   $Date$
- *@version   1.0
+ *@version   $Revision$
  ***************************************/
 
 public class DurationAssertionGui extends AbstractAssertionGui implements FocusListener
@@ -114,7 +110,6 @@ public class DurationAssertionGui extends AbstractAssertionGui implements FocusL
 
 	public TestElement createTestElement()
 	{
-		//ResponseAssertion el = new ResponseAssertion();
 		DurationAssertion el = new DurationAssertion();
 		modifyTestElement(el);
 		return el;
@@ -150,39 +145,23 @@ public class DurationAssertionGui extends AbstractAssertionGui implements FocusL
 
 	private void init()
 	{
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(getStaticLabel());
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
-
-		// NAME
-		mainPanel.add(getNamePanel());
+        add(createTitleLabel());
+		add(getNamePanel());
 
 		// USER_INPUT
 		JPanel durationPanel = new JPanel();
 		durationPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), getDurationAttributesTitle()));
-		FlowLayout layout = new FlowLayout();
-		durationPanel.setLayout(layout);
 
 		durationPanel.add(new JLabel(JMeterUtils.getResString("duration_assertion_label")));
+
 		duration = new JTextField(5);
 		duration.addFocusListener(this);
 		durationPanel.add(duration);
 
-		mainPanel.add(durationPanel);
-		this.add(mainPanel);
-
+		add(durationPanel);
 	}
 
 	/****************************************

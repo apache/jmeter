@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,23 +54,19 @@
  */
 package org.apache.jmeter.assertions.gui;
 
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.assertions.SizeAssertion;
 import org.apache.jmeter.testelement.TestElement;
@@ -86,7 +82,7 @@ import org.apache.log.Logger;
  *
  *@author    Michael Stover
  *@created   $Date$
- *@version   1.0
+ *@version   $Revsion: $
  ***************************************/
 
 public class SizeAssertionGui extends AbstractAssertionGui implements FocusListener, ActionListener
@@ -95,9 +91,10 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 			"jmeter.elements");
 
 	private JTextField size;
-	SizeAssertion sa = new SizeAssertion();
-        JRadioButton equalButton,notequalButton,greaterthanButton,lessthanButton,greaterthanequalButton,lessthanequalButton;
-        private int execState; //store the operator 
+    private JRadioButton equalButton, notequalButton, greaterthanButton, 
+            lessthanButton, greaterthanequalButton, lessthanequalButton;
+    private int execState; //store the operator 
+
 	/****************************************
 	 * !ToDo (Constructor description)
 	 ***************************************/
@@ -121,7 +118,6 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 
 	public TestElement createTestElement()
 	{
-		//ResponseAssertion el = new ResponseAssertion();
 		SizeAssertion el = new SizeAssertion();
 		modifyTestElement(el);
 		return el;
@@ -191,72 +187,40 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 	}
 	private void init()
 	{
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setLayout (new VerticalLayout (5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setBorder (BorderFactory.createEmptyBorder(10, 10, 5, 10));
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(getStaticLabel());
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
-
-		// NAME
-		mainPanel.add(getNamePanel());
+        add (createTitleLabel());        
+		add(getNamePanel());
 
 		// USER_INPUT
 		JPanel sizePanel = new JPanel();
 		sizePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), getSizeAttributesTitle()));
-		FlowLayout layout = new FlowLayout();
-		sizePanel.setLayout(layout);
 
 		sizePanel.add(new JLabel(JMeterUtils.getResString("size_assertion_label")));
 		size = new JTextField(5);
 		size.addFocusListener(this);
 		sizePanel.add(size);
 		
-		ButtonGroup comparatorButtonGroup = new ButtonGroup();
+        sizePanel.add(createComparatorButtonPanel());
 		
-		equalButton = new JRadioButton("=");
-		equalButton.setSelected(true);
-		equalButton.setActionCommand(new Integer(SizeAssertion.EQUAL).toString());
-		equalButton.addActionListener(this);
-		comparatorButtonGroup.add(equalButton);
-				
-		notequalButton = new JRadioButton("!=");
-		notequalButton.setActionCommand(new Integer(SizeAssertion.NOTEQUAL).toString());
-		notequalButton.addActionListener(this);
-		comparatorButtonGroup.add(notequalButton);
-		
-		greaterthanButton = new JRadioButton(">");
-		greaterthanButton.setActionCommand(new Integer(SizeAssertion.GREATERTHAN).toString());
-		greaterthanButton.addActionListener(this);
-		comparatorButtonGroup.add(greaterthanButton);
-		
-		lessthanButton = new JRadioButton("<");
-		lessthanButton.setActionCommand(new Integer(SizeAssertion.LESSTHAN).toString());
-		lessthanButton.addActionListener(this);
-		comparatorButtonGroup.add(lessthanButton);
-		
-		greaterthanequalButton = new JRadioButton(">=");
-		greaterthanequalButton.setActionCommand(new Integer(SizeAssertion.GREATERTHANEQUAL).toString());
-		greaterthanequalButton.addActionListener(this);
-		comparatorButtonGroup.add(greaterthanequalButton);
-		
-		lessthanequalButton = new JRadioButton("<=");
-		lessthanequalButton.setActionCommand(new Integer(SizeAssertion.LESSTHANEQUAL).toString());
-		lessthanequalButton.addActionListener(this);
-		comparatorButtonGroup.add(lessthanequalButton);
-		
-		//Put the check boxes in a column in a panel
-        JPanel checkPanel = new JPanel();
-        checkPanel.setLayout(new GridLayout(0, 1));
+		add(sizePanel);
+	}
+
+    private Box createComparatorButtonPanel() {
+        ButtonGroup group = new ButtonGroup();
+        
+        equalButton = createComparatorButton("=", SizeAssertion.EQUAL, group);
+        notequalButton = createComparatorButton("!=", SizeAssertion.NOTEQUAL, group);
+        greaterthanButton = createComparatorButton(">", SizeAssertion.GREATERTHAN, group);
+        lessthanButton = createComparatorButton("<", SizeAssertion.LESSTHAN, group);
+        greaterthanequalButton = createComparatorButton(">=", SizeAssertion.GREATERTHANEQUAL, group);
+        lessthanequalButton = createComparatorButton("<=", SizeAssertion.LESSTHANEQUAL, group);
+        
+        equalButton.setSelected(true);
+                
+        //Put the check boxes in a column in a panel
+        Box checkPanel = Box.createVerticalBox();
         JLabel compareLabel = new JLabel(JMeterUtils.getResString("size_assertion_comparator_label"));
         checkPanel.add(compareLabel);
         checkPanel.add(equalButton);
@@ -265,12 +229,16 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
         checkPanel.add(lessthanButton);
         checkPanel.add(greaterthanequalButton);
         checkPanel.add(lessthanequalButton);
-        sizePanel.add(checkPanel);
-		
-		mainPanel.add(sizePanel);
-		this.add(mainPanel);
+        return checkPanel;
+    }
 
-	}
+    private JRadioButton createComparatorButton(String name, int value, ButtonGroup group) {
+        JRadioButton button = new JRadioButton(name);
+        button.setActionCommand(String.valueOf(value));
+        button.addActionListener(this);
+        group.add(button);
+        return button;
+    }
 
 	/****************************************
 	 * Description of the Method
@@ -312,9 +280,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 	 *@param e ActionEvent
 	 ***************************************/
 	public void actionPerformed(ActionEvent e) {
-		int comparator = new Integer(e.getActionCommand()).intValue(); 
+		int comparator = Integer.parseInt(e.getActionCommand()); 
              	    execState=comparator;
-            // sa.setLogicalComparator(comparator);
-    }
-    
+    }    
 }
