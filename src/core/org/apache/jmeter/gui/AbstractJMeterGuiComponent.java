@@ -333,6 +333,7 @@ public abstract class AbstractJMeterGuiComponent
 	 */
 	public String getLabelResource()
 	{
-		throw new UnsupportedOperationException("Needs to be implemented by each class");
+		throw new UnsupportedOperationException("Needs to be implemented by the class: "
+				+this.getClass().getName());
 	}
 }
