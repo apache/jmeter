@@ -1,7 +1,7 @@
 @echo off
 
 ::
-:: Win32 build script for Apache JMeter zip distribution
+:: Win32 build script for Apache JMeter zip distribution (not tested under NT, may not work)
 ::
 :: @author Stefano Mazzocchi <stefano@apache.org>
 :: @version $Revision$ $Date$
@@ -11,10 +11,13 @@
 if "%name%"=="" set name=Apache_JMeter
 
 :: Set package version
-if "%version%"=="" set version=1.0.1
+if "%version%"=="" set version=1.0.2
 
-:: Set directory name
+:: Set temp directory name
 if "%dir%"=="" set dir="temp"
+
+:: Set local directory name
+if "%cwd%"=="" set cwd="."
 
 :: Set the zip archiver
 if "%zip%"=="" set zip=pkzip25
@@ -27,13 +30,14 @@ echo.
 echo  * creating the tree
 cd ..
 md %dir%
-copy .\README .\%dir%\readme.txt > nul
-copy .\LICENSE .\%dir%\license.txt > nul
-xcopy32 /S .\bin\ .\%dir%\bin\ > nul
-xcopy32 /S .\docs\ .\%dir%\docs\ > nul
-xcopy32 /S .\src\ .\%dir%\src\ > nul
-del .\%dir%\bin\jmeter > nul
-del .\%dir%\src\Makefile > nul
+copy .\%cwd%\README .\%dir%\readme.txt > nul
+copy .\%cwd%\LICENSE .\%dir%\license.txt > nul
+copy .\%cwd%\index.html .\%dir%\index.html > nul
+xcopy32 /S .\%cwd%\bin\ .\%dir%\bin\ > nul
+xcopy32 /S .\%cwd%\docs\ .\%dir%\docs\ > nul
+xcopy32 /S .\%cwd%\src\ .\%dir%\src\ > nul
+rem del .\%dir%\bin\jmeter > nul
+rem del .\%dir%\src\Makefile > nul
 del .\%dir%\src\make.dist.bat > nul
 cd %dir%
 
@@ -59,8 +63,13 @@ echo  * remove unused files...
 sweep deltree /y CVS > nul
 
 :: zip it
-echo  * compressing the package
+echo  * compressing the package (zip)
 %zip% -add -rec -dir -max -silent ..\%name%_%version%.zip *.*
+if errorlevel 1 goto fatal
+
+:: tar.gz it
+echo  * compressing the package (tar.gz)
+tar -c . | gzip -c9 > ..\%name%_%version%.tar.gz
 if errorlevel 1 goto fatal
 goto done
 
@@ -79,4 +88,5 @@ deltree /y %dir% > nul
 set name=
 set version=
 set dir=
+set cwd=
 set zip=
