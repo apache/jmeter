@@ -99,7 +99,7 @@ import org.apache.log.Logger;
  * "Continue" button.
  *
  * @author    Khor Soon Hin
- * @created   2001/07/25
+ * Created     2001/07/25
  * @version   $Revision$ $Date$
  */
 public class ViewResultsFullVisualizer
@@ -339,16 +339,13 @@ public class ViewResultsFullVisualizer
                             response = new String(responseBytes);
                         }
 
-                        if (response != null)
+                        if (textMode)
                         {
-                            if (textMode)
-                            {
-                                showTextResponse(response);
-                            }
-                            else
-                            {
-                                showRenderedResponse(response);
-                            }
+                            showTextResponse(response);
+                        }
+                        else
+                        {
+                            showRenderedResponse(response);
                         }
                     }
                     else if (responseBytes != null)
@@ -396,8 +393,12 @@ public class ViewResultsFullVisualizer
         String command = e.getActionCommand();
 
         if (command != null
-            && command.equals(TEXT_COMMAND)
-            || command.equals(HTML_COMMAND))
+            && (
+                command.equals(TEXT_COMMAND)
+                ||
+                command.equals(HTML_COMMAND)
+               )
+            )
         {
 
             // Switch to the other mode
