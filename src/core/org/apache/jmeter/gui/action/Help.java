@@ -1,4 +1,5 @@
 package org.apache.jmeter.gui.action;
+import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
@@ -59,7 +60,7 @@ public class Help implements Command
         {
             helpWindow =
                 new JDialog(
-                    GuiPackage.getInstance().getMainFrame(),
+			        new Frame(),// independent frame to allow it to be overlaid by the main frame
                     JMeterUtils.getResString("help"),
                     false);
             helpWindow.getContentPane().setLayout(new GridLayout(1, 1));
