@@ -26,7 +26,6 @@ import org.apache.jmeter.protocol.ldap.config.gui.LdapExtConfigGui;
 import org.apache.jmeter.protocol.ldap.sampler.LDAPExtSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 
 /****************************************
  *
