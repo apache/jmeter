@@ -27,8 +27,6 @@ import java.net.URLConnection;
 
 import java.util.zip.GZIPInputStream;
 
-import org.apache.jmeter.config.Arguments;
-
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.Header;
