@@ -507,7 +507,7 @@ public class HTTPSampler extends AbstractSampler
         }
         catch (MalformedURLException e)
         {
-            return errorResult(e, 0);
+            return errorResult(e, getName(), 0);
         }
     }
 
@@ -516,12 +516,15 @@ public class HTTPSampler extends AbstractSampler
      * during sampling, and how long it took to detect the error.
      * 
      * @param e Exception representing the error.
+     * @param data a piece of data associated to the error (e.g. URL)
      * @param time time spent detecting the error (0 for client-only issues)
      * @return a sampling result useful to inform the user about the exception.
      */
-    private HTTPSampleResult errorResult(Throwable e, long time)
+    private HTTPSampleResult errorResult(Throwable e, String data, long time)
     {
         HTTPSampleResult res= new HTTPSampleResult();
+        res.setSampleLabel("Error");
+        res.setSamplerData(data);
         res.setDataType(HTTPSampleResult.TEXT);
         res.setResponseData(e.toString().getBytes());
         res.setResponseCode(NON_HTTP_RESPONSE_CODE);
@@ -1054,7 +1057,6 @@ public class HTTPSampler extends AbstractSampler
                 catch (IOException e)
                 {
                     log.debug("Connection failed, giving up");
-                    conn.disconnect();
                     throw e;
                 }
             }
@@ -1133,6 +1135,7 @@ public class HTTPSampler extends AbstractSampler
                         res.addSubResult(
                             errorResult(
                                 new Exception("Maximum frame/iframe nesting depth exceeded."),
+                                null,
                                 0));
                     }
                     else
@@ -1152,13 +1155,9 @@ public class HTTPSampler extends AbstractSampler
             log.debug("End : sample");
             return res;
         }
-        catch (MalformedURLException e)
-        {
-            return errorResult(e, System.currentTimeMillis() - t0);
-        }
         catch (IOException e)
         {
-            return errorResult(e, System.currentTimeMillis() - t0);
+            return errorResult(e, url.toString(), System.currentTimeMillis() - t0);
         }
         finally
         {
@@ -1204,7 +1203,7 @@ public class HTTPSampler extends AbstractSampler
             }
             catch (MalformedURLException e)
             {
-                lastRes= errorResult(e, 0);
+                lastRes= errorResult(e, location, 0);
             }
             totalRes.addSubResult(lastRes);
             totalRes.setTime(totalRes.getTime() + lastRes.getTime());
@@ -1219,6 +1218,7 @@ public class HTTPSampler extends AbstractSampler
             lastRes=
                 errorResult(
                     new IOException("Maximum number of redirects exceeded."),
+                    null,
                     0);
             totalRes.addSubResult(lastRes);
         }
@@ -1280,7 +1280,7 @@ public class HTTPSampler extends AbstractSampler
         catch (HTMLParseException e)
         {
             // Don't break the world just because this failed:
-            res.addSubResult(errorResult(e, 0));
+            res.addSubResult(errorResult(e, null, 0));
             res.setSuccessful(false);
         }
 
@@ -1313,6 +1313,7 @@ public class HTTPSampler extends AbstractSampler
                     res.addSubResult(
                         errorResult(
                             new Exception(binURL + " is not a correct URI"),
+                            null,
                             0));
                     res.setSuccessful(false);
                     continue;
@@ -1325,8 +1326,8 @@ public class HTTPSampler extends AbstractSampler
     protected void disconnect(HttpURLConnection conn)
     {
         String connection= conn.getHeaderField("Connection");
-        boolean http11= conn.getHeaderField(0).startsWith("HTTP/1.1");
-        if ((connection == null && !http11)
+        String protocol= conn.getHeaderField(0);
+        if ((connection == null && (protocol == null || !protocol.startsWith("HTTP/1.1")))
             || (connection != null && connection.equalsIgnoreCase("close")))
         {
             conn.disconnect();
