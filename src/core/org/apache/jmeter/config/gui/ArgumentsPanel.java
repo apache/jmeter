@@ -80,6 +80,7 @@ import junit.framework.TestCase;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.log.Hierarchy;
@@ -211,10 +212,10 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, 
         if (el instanceof Arguments)
         {
             tableModel.clearData();
-            Iterator iter = ((Arguments) el).getArguments().iterator();
+            PropertyIterator iter = ((Arguments) el).iterator();
             while (iter.hasNext())
             {
-                Argument arg = (Argument) iter.next();
+                Argument arg = (Argument) iter.next().getObjectValue();
                 tableModel.addRow(arg);
             }
         }
@@ -377,7 +378,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, 
     protected void initializeTableModel()
     {
         tableModel = new ObjectTableModel(new String[] { Arguments.COLUMN_NAMES[0], Arguments.COLUMN_NAMES[1] }, 
-                new String[]{"name","value"},new Class[]{String.class,Object.class},new Class[] { String.class, String.class },
+                new String[]{"name","value"},new Class[]{String.class,String.class},new Class[] { String.class, String.class },
                 new Argument());
     }
 
@@ -443,8 +444,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, 
             ArgumentsPanel gui = new ArgumentsPanel();
             gui.tableModel.addRow(new Argument());
             gui.tableModel.setValueAt("howdy", 0, 0);
+            gui.tableModel.addRow(new Argument());
             gui.tableModel.setValueAt("doody", 0, 1);
-            assertEquals("=", ((Argument) ((Arguments) gui.createTestElement()).getArguments().get(0)).getMetaData());
+            assertEquals("=", ((Argument) ((Arguments) gui.createTestElement()).getArguments().get(0).getObjectValue()).getMetaData());
         }
     }
 }

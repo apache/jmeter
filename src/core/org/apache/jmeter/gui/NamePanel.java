@@ -66,6 +66,7 @@ import javax.swing.event.DocumentListener;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.WorkBench;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 /****************************************
@@ -110,7 +111,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent
 	 ***************************************/
 	public void configure(TestElement testElement)
 	{
-		setName((String)testElement.getProperty(TestElement.NAME));
+		setName(testElement.getPropertyAsString(TestElement.NAME));
 	}
 
 	/****************************************
@@ -161,9 +162,9 @@ public class NamePanel extends JPanel implements JMeterGUIComponent
          */
     public void modifyTestElement(TestElement wb)
     {
-        wb.setProperty(TestElement.NAME, getName());
-        wb.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
-        wb.setProperty(TestElement.TEST_CLASS, WorkBench.class.getName());
+        wb.setProperty(new StringProperty(TestElement.NAME, getName()));
+        wb.setProperty(new StringProperty(TestElement.GUI_CLASS, this.getClass().getName()));
+        wb.setProperty(new StringProperty(TestElement.TEST_CLASS, WorkBench.class.getName()));
     }
     
     

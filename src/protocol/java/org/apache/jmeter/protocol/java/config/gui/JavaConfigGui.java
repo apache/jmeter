@@ -57,7 +57,6 @@ package org.apache.jmeter.protocol.java.config.gui;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -76,6 +75,7 @@ import org.apache.jmeter.protocol.java.config.JavaConfig;
 import org.apache.jmeter.protocol.java.sampler.JavaSampler;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerClient;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.jorphan.reflect.ClassFinder;
@@ -207,18 +207,18 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
                 Arguments newArgs = new Arguments();
                 Arguments testParams = client.getDefaultParameters();
                 if (testParams != null) {
-                    Iterator i = testParams.getArguments().iterator();
+                    PropertyIterator i = testParams.getArguments().iterator();
                     while (i.hasNext()) {
-                        Argument arg = (Argument)i.next();
+                        Argument arg = (Argument)i.next().getObjectValue();
                         String name = arg.getName();
-                        Object value = arg.getValue();
+                        String value = arg.getValue();
 
                         // If a user has set parameters in one test, and then
                         // selects a different test which supports the same
                         // parameters, those parameters should have the same
                         // values that they did in the original test.
                         if (currArgsMap.containsKey(name)) {
-                            Object newVal = currArgsMap.get(name);
+                            String newVal = (String)currArgsMap.get(name);
                             if (newVal != null &&
                                     newVal.toString().length() > 0) {
                                 value = newVal;
@@ -244,7 +244,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
 	public void configure(TestElement config)
 	{
 		super.configure(config);
-		argsPanel.configure((Arguments)config.getProperty(JavaSampler.ARGUMENTS));
+		argsPanel.configure((Arguments)config.getProperty(JavaSampler.ARGUMENTS).getObjectValue());
 		classnameCombo.setSelectedItem(config.getPropertyAsString(JavaSampler.CLASSNAME));
 	}
 	

@@ -55,11 +55,15 @@
 package org.apache.jmeter.assertions;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.NullProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Pattern;
@@ -102,7 +106,7 @@ public class ResponseAssertion
     ***********************************************************/
    public ResponseAssertion()
    {
-      setProperty(TEST_STRINGS, new ArrayList());
+      setProperty(new CollectionProperty(TEST_STRINGS, new ArrayList()));
    }
    /************************************************************
     *  !ToDo (Constructor description)
@@ -116,13 +120,13 @@ public class ResponseAssertion
       this();
       setTestField(field);
       setTestType(type);
-      getTestStrings().add(string);
+      getTestStrings().addProperty(new StringProperty(string,string));
    }
    
    public void clear()
    {
        super.clear();
-       setProperty(TEST_STRINGS, new ArrayList());
+       setProperty(new CollectionProperty(TEST_STRINGS, new ArrayList()));
    }
    
    /************************************************************
@@ -141,7 +145,7 @@ public class ResponseAssertion
     ***********************************************************/
    public void setTestType(int testType)
    {
-      setProperty(TEST_TYPE, new Integer(testType));
+      setProperty(new IntegerProperty(TEST_TYPE, testType));
       if ((testType & NOT) > 0)
       {
          notMessage = "not ";
@@ -166,7 +170,7 @@ public class ResponseAssertion
     ***********************************************************/
    public void addTestString(String testString)
    {
-      getTestStrings().add(testString);
+      getTestStrings().addProperty(new StringProperty(testString,testString));
    }
    public void setTestString(String testString, int index)
    {
@@ -211,7 +215,7 @@ public class ResponseAssertion
     ***********************************************************/
    public String getTestField()
    {
-      return (String) getProperty(TEST_FIELD);
+      return getPropertyAsString(TEST_FIELD);
    }
    /************************************************************
     *  !ToDoo (Method description)
@@ -220,18 +224,14 @@ public class ResponseAssertion
     ***********************************************************/
    public int getTestType()
    {
-      Object type = getProperty(TEST_TYPE);
-      if (type == null)
+      JMeterProperty type = getProperty(TEST_TYPE);
+      if (type instanceof NullProperty)
       {
          return CONTAINS;
       }
-      else if (type instanceof Integer)
-      {
-         return ((Integer) type).intValue();
-      }
       else
       {
-         return Integer.parseInt((String) type);
+         return type.getIntValue();
       }
    }
    /************************************************************
@@ -239,9 +239,9 @@ public class ResponseAssertion
     *
     *@return    !ToDo (Return description)
     ***********************************************************/
-   public List getTestStrings()
+   public CollectionProperty getTestStrings()
    {
-      return (List) getProperty(TEST_STRINGS);
+      return (CollectionProperty) getProperty(TEST_STRINGS);
    }
    public boolean isContainsType()
    {
@@ -291,10 +291,10 @@ public class ResponseAssertion
       {
          // Get the Matcher for this thread
          Perl5Matcher localMatcher = (Perl5Matcher) matcher.get();
-         Iterator iter = getTestStrings().iterator();
+         PropertyIterator iter = getTestStrings().iterator();
          while (iter.hasNext())
          {
-            String stringPattern = (String) iter.next();
+            String stringPattern = iter.next().getStringValue();
             Pattern pattern =
                patternCache.getPattern(
                   stringPattern,

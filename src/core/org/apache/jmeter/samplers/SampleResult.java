@@ -96,7 +96,7 @@ public class SampleResult implements Serializable
 	private byte[] responseData;
 	private String responseCode;
 	private String label;
-	private TestElement samplerData;
+	private String samplerData;
 	private String threadName;
 	private String responseMessage;
 	private long timeStamp = 0;
@@ -258,12 +258,12 @@ public class SampleResult implements Serializable
 		return responseData;
 	}
 
-	public void setSamplerData(TestElement s)
+	public void setSamplerData(String s)
 	{
 		samplerData = s;
 	}
 
-	public TestElement getSamplerData()
+	public String getSamplerData()
 	{
 		return samplerData;
 	}

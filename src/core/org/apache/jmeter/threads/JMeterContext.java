@@ -17,6 +17,7 @@ public class JMeterContext {
 	JMeterVariables variables;
 	SampleResult previousResult;
 	Sampler currentSampler;
+    Sampler previousSampler;
 	
 	JMeterContext() {
 		variables = null;
@@ -48,8 +49,27 @@ public class JMeterContext {
 	}
 	
 	public void setCurrentSampler( Sampler sampler ) {
+        setPreviousSampler(currentSampler);
 		this.currentSampler = sampler;
 	}
 	
+
+    /**
+     * Returns the previousSampler.
+     * @return Sampler
+     */
+    public Sampler getPreviousSampler()
+    {
+        return previousSampler;
+    }
+
+    /**
+     * Sets the previousSampler.
+     * @param previousSampler The previousSampler to set
+     */
+    public void setPreviousSampler(Sampler previousSampler)
+    {
+        this.previousSampler = previousSampler;
+    }
 
 }

@@ -9,6 +9,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 
@@ -29,7 +30,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 		tableModel = new ObjectTableModel(new String[]{Arguments.COLUMN_NAMES[0],Arguments.COLUMN_NAMES[1],
 				ENCODE_OR_NOT,INCLUDE_EQUALS},
 				new String[]{"name","value","alwaysEncoded","useEquals"},
-                new Class[]{String.class,Object.class,boolean.class,boolean.class},
+                new Class[]{String.class,String.class,boolean.class,boolean.class},
                 new Class[]{String.class,String.class,Boolean.class,Boolean.class},
                 new HTTPArgument());
 	}
@@ -95,10 +96,10 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 		{
 			tableModel.clearData();
 			HTTPArgument.convertArgumentsToHTTP((Arguments)el);
-			Iterator iter = ((Arguments)el).getArguments().iterator();
+			PropertyIterator iter = ((Arguments)el).getArguments().iterator();
 			while(iter.hasNext())
 			{
-				HTTPArgument arg = (HTTPArgument)iter.next();
+				HTTPArgument arg = (HTTPArgument)iter.next().getObjectValue();
 				tableModel.addRow(arg);
 			}
 		}

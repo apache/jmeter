@@ -59,7 +59,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -67,6 +66,7 @@ import junit.framework.TestCase;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 import org.apache.oro.text.PatternCacheLRU;
@@ -138,7 +138,7 @@ public class HtmlParser implements Serializable
 	{
 		boolean ok = true;
 		Perl5Matcher matcher = (Perl5Matcher)localMatcher.get();
-		Iterator iter = config.getArguments().iterator();
+		PropertyIterator iter = config.getArguments().iterator();
 
 		// In JDK1.2, URLDecoder.decode has Exception in its throws clause. However, it
 		// was removed in JDK1.3. Since JMeter is JDK1.2-compatible, we need to catch
@@ -158,7 +158,7 @@ public class HtmlParser implements Serializable
 
 		while(iter.hasNext())
 		{
-			Argument item = (Argument)iter.next();
+			Argument item = (Argument)iter.next().getObjectValue();
 			if(query.indexOf(item.getName()+"=") == -1)
 			{
 				if(!(ok = ok && matcher.contains(query, 

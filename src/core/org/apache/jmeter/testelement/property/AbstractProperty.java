@@ -1,6 +1,8 @@
 package org.apache.jmeter.testelement.property;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.jmeter.testelement.TestElement;
@@ -30,10 +32,10 @@ public abstract class AbstractProperty implements JMeterProperty
     {
         this("");
     }
-    
+
     protected boolean isEqualType(JMeterProperty prop)
     {
-        if(this.getClass().equals(prop.getClass()))
+        if (this.getClass().equals(prop.getClass()))
         {
             return true;
         }
@@ -59,7 +61,7 @@ public abstract class AbstractProperty implements JMeterProperty
         return name;
     }
 
-    protected void setName(String name)
+    public void setName(String name)
     {
         this.name = name;
     }
@@ -77,13 +79,18 @@ public abstract class AbstractProperty implements JMeterProperty
      */
     public boolean isTemporary(TestElement owner)
     {
-        if(ownerMap == null)
+        if (ownerMap == null)
         {
             return false;
         }
         else
         {
-            return ((boolean[])ownerMap.get(owner))[0];
+            boolean[] temp = (boolean[]) ownerMap.get(owner);
+            if (temp == null)
+            {
+                return false;
+            }
+            return temp[0];
         }
     }
 
@@ -98,20 +105,29 @@ public abstract class AbstractProperty implements JMeterProperty
      */
     public void setTemporary(boolean temporary, TestElement owner)
     {
-        if(ownerMap == null)
+        if (ownerMap == null)
         {
             ownerMap = new HashMap();
         }
-        boolean[] temp = (boolean[])ownerMap.get(owner);
-        if(temp != null)
+        boolean[] temp = (boolean[]) ownerMap.get(owner);
+        if (temp != null)
         {
             temp[0] = temporary;
         }
         else
         {
-            temp = new boolean[]{temporary};
-            ownerMap.put(owner,temp);
+            temp = new boolean[] { temporary };
+            ownerMap.put(owner, temp);
         }
+    }
+
+    public void clearTemporary(TestElement owner)
+    {
+        if (ownerMap == null)
+        {
+            return;
+        }
+        ownerMap.remove(owner);
     }
 
     /**
@@ -154,7 +170,6 @@ public abstract class AbstractProperty implements JMeterProperty
         }
         catch (NumberFormatException e)
         {
-            log.error("Tried to parse a non-number string to an integer", e);
             return 0;
         }
     }
@@ -176,7 +191,6 @@ public abstract class AbstractProperty implements JMeterProperty
         }
         catch (NumberFormatException e)
         {
-            log.error("Tried to parse a non-number string to an integer", e);
             return 0;
         }
     }
@@ -244,20 +258,151 @@ public abstract class AbstractProperty implements JMeterProperty
         }
         return Boolean.valueOf(val).booleanValue();
     }
-    
+
+    public boolean equals(Object o)
+    {
+        return compareTo(o) == 0;
+    }
+
     /**
          * @see java.lang.Comparable#compareTo(java.lang.Object)
          */
-        public int compareTo(Object arg0)
+    public int compareTo(Object arg0)
+    {
+        if (arg0 instanceof JMeterProperty)
         {
-            if(arg0 instanceof JMeterProperty)
-            {
-                return getStringValue().compareTo(((JMeterProperty)arg0).getStringValue());
-            }
-            else
-            {
-                return -1;
-            }
+            return getStringValue().compareTo(((JMeterProperty) arg0).getStringValue());
         }
+        else
+        {
+            return -1;
+        }
+    }
+
+    /**
+     * Get the property type for this property.  Used to convert raw values into
+     * JMeterProperties.
+     * @return Class
+     */
+    protected Class getPropertyType()
+    {
+        return getClass();
+    }
+
+    protected JMeterProperty getBlankProperty()
+    {
+        try
+        {
+            JMeterProperty prop = (JMeterProperty) getPropertyType().newInstance();
+            if (prop instanceof NullProperty)
+            {
+                return new StringProperty();
+            }
+            return prop;
+        }
+        catch (Exception e)
+        {
+            return new StringProperty();
+        }
+    }
+
+    protected Collection normalizeList(Collection coll)
+    {
+        Iterator iter = coll.iterator();
+        Collection newColl = null;
+        while (iter.hasNext())
+        {
+            Object item = iter.next();
+            if (newColl == null)
+            {
+                try
+                {
+                    newColl = (Collection) coll.getClass().newInstance();
+                }
+                catch (Exception e)
+                {
+                    log.error("Bad collection", e);
+                }
+            }
+            newColl.add(convertObject(item));
+        }
+        if (newColl != null)
+        {
+            return newColl;
+        }
+        else
+        {
+            return coll;
+        }
+    }
+
+    /**
+     * Given a Map, it converts the Map into a collection of JMeterProperty
+     * objects, appropriate for a MapProperty object.
+     * @param coll
+     * @return Map
+     */
+    protected Map normalizeMap(Map coll)
+    {
+        Iterator iter = coll.keySet().iterator();
+        Map newColl = null;
+        while (iter.hasNext())
+        {
+            Object item = iter.next();
+            Object prop = coll.get(item);
+            if (newColl == null)
+            {
+                try
+                {
+                    newColl = (Map) coll.getClass().newInstance();
+                }
+                catch (Exception e)
+                {
+                    log.error("Bad collection", e);
+                }
+            }
+            newColl.put(item, convertObject(item));
+        }
+        if (newColl != null)
+        {
+            return newColl;
+        }
+        else
+        {
+            return coll;
+        }
+    }
+
+    protected JMeterProperty convertObject(Object item)
+    {
+        if (item instanceof JMeterProperty)
+        {
+            return (JMeterProperty) item;
+        }
+        else if (item instanceof TestElement)
+        {
+            return new TestElementProperty(((TestElement) item).getPropertyAsString(TestElement.NAME), (TestElement) item);
+        }
+        else if (item instanceof Collection)
+        {
+            return new CollectionProperty("" + item.hashCode(), normalizeList((Collection) item));
+        }
+        else if (item instanceof Map)
+        {
+            return new MapProperty("" + item.hashCode(), normalizeMap((Map) item));
+        }
+        else
+        {
+            JMeterProperty prop = getBlankProperty();
+            prop.setName(item.toString());
+            prop.setObjectValue(item);
+            return prop;
+        }
+    }
+
+    public String toString()
+    {
+        return getStringValue();
+    }
 
 }

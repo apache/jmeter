@@ -4,8 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -21,6 +20,8 @@ import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.modifiers.UserParameters;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -59,13 +60,13 @@ public class UserParametersGui extends AbstractConfigGui {
         initTableModel();
         paramTable.setModel(tableModel);
 		UserParameters params = (UserParameters)el;
-		List names = params.getNames();
-		List threadValues = params.getThreadLists();
-		tableModel.setColumnData(0,names);
-		Iterator iter = threadValues.iterator();
+		CollectionProperty names = params.getNames();
+        CollectionProperty threadValues = params.getThreadLists();
+		tableModel.setColumnData(0,(List)names.getObjectValue());
+		PropertyIterator iter = threadValues.iterator();
 		if(iter.hasNext())
 		{
-			tableModel.setColumnData(1,(List)iter.next());
+			tableModel.setColumnData(1,(List)iter.next().getObjectValue());
 		}
 		int count = 2;
 		while(iter.hasNext())
@@ -93,10 +94,11 @@ public class UserParametersGui extends AbstractConfigGui {
      */
     public void modifyTestElement(TestElement params)
     {
-        ((UserParameters)params).setNames(tableModel.getColumnData(JMeterUtils.getResString("name")));
-        List threadLists = new LinkedList();
+        ((UserParameters)params).setNames(new CollectionProperty(UserParameters.NAMES,
+                tableModel.getColumnData(JMeterUtils.getResString("name"))));
+        CollectionProperty threadLists = new CollectionProperty(UserParameters.THREAD_VALUES,new ArrayList());
         for (int x = 1; x < tableModel.getColumnCount(); x++) {
-        	threadLists.add(tableModel.getColumnData(THREAD_COLUMNS + "_" + x));
+        	threadLists.addItem(tableModel.getColumnData(THREAD_COLUMNS + "_" + x));
         }
         ((UserParameters)params).setThreadLists(threadLists);
         super.configureTestElement(params);

@@ -73,6 +73,7 @@ import javax.mail.internet.MimeMessage;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
@@ -460,8 +461,8 @@ public class MailerModel extends AbstractTestElement implements Serializable
         element.setProperty(HOST_KEY, getSmtpHost());
         element.setProperty(SUCCESS_KEY, getSuccessSubject());
         element.setProperty(FAILURE_KEY, getFailureSubject());
-        element.setProperty(FAILURE_LIMIT_KEY, new Long(getFailureLimit()));
-        element.setProperty(SUCCESS_LIMIT_KEY, new Long(getSuccessLimit()));
+        element.setProperty(new LongProperty(FAILURE_LIMIT_KEY,getFailureLimit()));
+        element.setProperty(new LongProperty(SUCCESS_LIMIT_KEY,getSuccessLimit()));
     }
 
     /**
@@ -479,8 +480,8 @@ public class MailerModel extends AbstractTestElement implements Serializable
             setSmtpHost(element.getPropertyAsString(HOST_KEY));
             setSuccessSubject(element.getPropertyAsString(SUCCESS_KEY));
             setFailureSubject(element.getPropertyAsString(FAILURE_KEY));
-            setFailureLimit(Long.parseLong((String) element.getProperty(FAILURE_LIMIT_KEY)));
-            setSuccessLimit(Long.parseLong((String) element.getProperty(SUCCESS_LIMIT_KEY)));
+            setFailureLimit(element.getPropertyAsLong(FAILURE_LIMIT_KEY));
+            setSuccessLimit(element.getPropertyAsLong(SUCCESS_LIMIT_KEY));
         }
         catch (Exception e)
         {

@@ -13,6 +13,13 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
+import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.FunctionProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.MapProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
@@ -46,48 +53,50 @@ public class ValueReplacer
 
     public void setUserDefinedVariables(Map variables)
     {
-        masterFunction.setUserDefinedVariables(variables);
         this.variables = variables;
     }
 
     public void replaceValues(TestElement el) throws InvalidVariableException
     {
-        Iterator iter = el.getPropertyNames().iterator();
+        PropertyIterator iter = el.propertyIterator();
         while (iter.hasNext())
         {
-            String propName = (String) iter.next();
-            Object propValue = el.getProperty(propName);
-            if (propValue instanceof String)
+            JMeterProperty prop = iter.next();
+            if (prop instanceof TestElementProperty)
             {
-                Object newValue = getNewValue((String) propValue);
-                el.setProperty(propName, newValue);
+                replaceValues((TestElement) prop.getObjectValue());
             }
-            else if (propValue instanceof TestElement)
+            else if (prop instanceof CollectionProperty)
             {
-                replaceValues((TestElement) propValue);
+                replaceValues((CollectionProperty) prop);
             }
-            else if (propValue instanceof Collection)
+            else if (prop instanceof MapProperty)
             {
-                el.setProperty(propName, replaceValues((Collection) propValue));
+                replaceValues((MapProperty) prop);
+            }
+            else if (prop instanceof StringProperty)
+            {
+                JMeterProperty newValue = getNewValue((StringProperty) prop);
+                el.setProperty(newValue);
             }
         }
     }
 
-    private Object getNewValue(String propValue) throws InvalidVariableException
+    private JMeterProperty getNewValue(StringProperty prop) throws InvalidVariableException
     {
-        Object newValue = propValue;
+        JMeterProperty newValue = prop;
         masterFunction.clear();
-        masterFunction.setParameters((String) propValue);
-        log.debug("value replacer looking at: " + propValue);
+        masterFunction.setParameters(prop.getStringValue());
+        log.debug("value replacer looking at: " + prop.getStringValue());
         if (masterFunction.hasFunction())
         {
-            newValue = masterFunction.getFunction();
-            log.debug("replaced with: " + newValue);
+            newValue = new FunctionProperty(prop.getName(), masterFunction.getFunction());
+            log.debug("replaced with function: " + newValue.getStringValue());
         }
         else if (masterFunction.hasStatics())
         {
-            newValue = masterFunction.getStaticSubstitution();
-            log.debug("replaced with: " + newValue);
+            newValue = new StringProperty(prop.getName(), masterFunction.getStaticSubstitution());
+            log.debug("replaced with static string: " + newValue.getStringValue());
         }
         return newValue;
     }
@@ -98,109 +107,232 @@ public class ValueReplacer
         setUserDefinedVariables(tp.getUserDefinedVariables());
     }
 
-    public Collection replaceValues(Collection values) throws InvalidVariableException
+    public void replaceValues(CollectionProperty values) throws InvalidVariableException
     {
         Collection newColl = null;
         try
         {
-            newColl = (Collection) values.getClass().newInstance();
+            newColl = (Collection) values.getObjectValue().getClass().newInstance();
         }
         catch (Exception e)
         {
             log.error("", e);
-            return values;
+            return;
         }
-        Iterator iter = values.iterator();
+        PropertyIterator iter = values.iterator();
         while (iter.hasNext())
         {
-            Object val = iter.next();
-            if (val instanceof TestElement)
+            JMeterProperty val = iter.next();
+            if (val instanceof TestElementProperty)
             {
-                replaceValues((TestElement) val);
+                replaceValues((TestElement) val.getObjectValue());
             }
-            else if (val instanceof String)
+            else if (val instanceof StringProperty)
             {
-                val = getNewValue((String) val);
+                val = getNewValue((StringProperty) val);
             }
-            else if (val instanceof Collection)
+            else if (val instanceof CollectionProperty)
             {
-                val = replaceValues((Collection) val);
+                replaceValues((CollectionProperty) val);
+            }
+            else if (val instanceof MapProperty)
+            {
+                replaceValues((MapProperty) val);
             }
             newColl.add(val);
         }
-        return newColl;
+        values.setCollection(newColl);
+    }
+
+    private void replaceValues(MapProperty values) throws InvalidVariableException
+    {
+        Map newMap = null;
+        try
+        {
+            newMap = (Map) values.getObjectValue().getClass().newInstance();
+        }
+        catch (Exception e)
+        {
+            log.error("", e);
+            return;
+        }
+        PropertyIterator iter = values.valueIterator();
+        while (iter.hasNext())
+        {
+            JMeterProperty val = iter.next();
+            if (val instanceof TestElementProperty)
+            {
+                replaceValues((TestElement) val.getObjectValue());
+            }
+            else if (val instanceof StringProperty)
+            {
+                val = getNewValue((StringProperty) val);
+            }
+            else if (val instanceof CollectionProperty)
+            {
+                replaceValues((CollectionProperty) val);
+            }
+            else if (val instanceof MapProperty)
+            {
+                replaceValues((MapProperty) val);
+            }
+            newMap.put(val.getName(), val);
+        }
+        values.setMap(newMap);
     }
 
     /**
      * Replaces raw values with user-defined variable names.
      */
-    public Collection reverseReplace(Collection values)
+    public void reverseReplace(CollectionProperty prop)
     {
         Collection newColl = null;
         try
         {
-            newColl = (Collection) values.getClass().newInstance();
+            newColl = (Collection) prop.getObjectValue().getClass().newInstance();
         }
         catch (Exception e)
         {
             log.error("", e);
-            return values;
+            return;
         }
-        Iterator iter = values.iterator();
+        PropertyIterator iter = prop.iterator();
         while (iter.hasNext())
         {
-            Object val = iter.next();
-            if (val instanceof TestElement)
+            JMeterProperty val = iter.next();
+            if (val instanceof TestElementProperty)
             {
-                reverseReplace((TestElement) val);
+                reverseReplace((TestElement) val.getObjectValue());
             }
-            else if (val instanceof String)
+            else if (val instanceof StringProperty)
             {
-                val = substituteValues((String) val);
+                val = substituteValues((StringProperty) val);
             }
-            else if (val instanceof Collection)
+            else if (val instanceof CollectionProperty)
             {
-                val = reverseReplace((Collection) val);
+                reverseReplace((CollectionProperty) val);
+            }
+            else if (val instanceof MapProperty)
+            {
+                reverseReplace((MapProperty) val);
             }
             newColl.add(val);
         }
-        return newColl;
+        prop.setCollection(newColl);
     }
+
+    private void reverseReplace(MapProperty prop)
+    {
+        Map newMap = null;
+        try
+        {
+            newMap = (Map) prop.getObjectValue().getClass().newInstance();
+        }
+        catch (Exception e)
+        {
+            log.error("", e);
+            return;
+        }
+        PropertyIterator iter = prop.valueIterator();
+        while (iter.hasNext())
+        {
+            JMeterProperty val = iter.next();
+            if (val instanceof TestElementProperty)
+            {
+                reverseReplace((TestElement) val.getObjectValue());
+            }
+            else if (val instanceof StringProperty)
+            {
+                val = substituteValues((StringProperty) val);
+            }
+            else if (val instanceof CollectionProperty)
+            {
+                reverseReplace((CollectionProperty) val);
+            }
+            else if (val instanceof MapProperty)
+            {
+                reverseReplace((MapProperty) val);
+            }
+            newMap.put(val.getName(), val);
+        }
+        prop.setMap(newMap);
+    }
+    
+    private void undoReverseReplace(MapProperty prop)
+        {
+            Map newMap = null;
+            try
+            {
+                newMap = (Map) prop.getObjectValue().getClass().newInstance();
+            }
+            catch (Exception e)
+            {
+                log.error("", e);
+                return;
+            }
+            PropertyIterator iter = prop.valueIterator();
+            while (iter.hasNext())
+            {
+                JMeterProperty val = iter.next();
+                if (val instanceof TestElementProperty)
+                {
+                    undoReverseReplace((TestElement) val.getObjectValue());
+                }
+                else if (val instanceof StringProperty)
+                {
+                    val = substituteReferences((StringProperty) val);
+                }
+                else if (val instanceof CollectionProperty)
+                {
+                    undoReverseReplace((CollectionProperty) val);
+                }
+                else if (val instanceof MapProperty)
+                {
+                    undoReverseReplace((MapProperty) val);
+                }
+                newMap.put(val.getName(), val);
+            }
+            prop.setMap(newMap);
+        }
 
     /**
          * Remove variables references and replace with the raw string values.
          */
-    public Collection undoReverseReplace(Collection values)
+    public void undoReverseReplace(CollectionProperty prop)
     {
         Collection newColl = null;
         try
         {
-            newColl = (Collection) values.getClass().newInstance();
+            newColl = (Collection) prop.getClass().newInstance();
         }
         catch (Exception e)
         {
             log.error("", e);
-            return values;
+            return;
         }
-        Iterator iter = values.iterator();
+        PropertyIterator iter = prop.iterator();
         while (iter.hasNext())
         {
-            Object val = iter.next();
-            if (val instanceof TestElement)
+            JMeterProperty val = iter.next();
+            if (val instanceof TestElementProperty)
             {
-                undoReverseReplace((TestElement) val);
+                undoReverseReplace((TestElement) val.getObjectValue());
             }
-            else if (val instanceof String)
+            else if (val instanceof StringProperty)
             {
-                val = substituteReferences((String) val);
+                val = substituteReferences((StringProperty) val);
             }
-            else if (val instanceof Collection)
+            else if (val instanceof CollectionProperty)
             {
-                val = undoReverseReplace((Collection) val);
+                undoReverseReplace((CollectionProperty) val);
+            }
+            else if (val instanceof MapProperty)
+            {
+                undoReverseReplace((MapProperty) val);
             }
             newColl.add(val);
         }
-        return newColl;
+        prop.setCollection(newColl);
     }
 
     /**
@@ -209,23 +341,25 @@ public class ValueReplacer
      */
     public void undoReverseReplace(TestElement el)
     {
-        Iterator iter = el.getPropertyNames().iterator();
+        PropertyIterator iter = el.propertyIterator();
         while (iter.hasNext())
         {
-            String propName = (String) iter.next();
-            Object propValue = el.getProperty(propName);
-            if (propValue instanceof String)
+            JMeterProperty prop = iter.next();
+            if (prop instanceof StringProperty)
             {
-                Object newValue = substituteReferences((String) propValue);
-                el.setProperty(propName, newValue);
+                el.setProperty(substituteReferences((StringProperty) prop));
             }
-            else if (propValue instanceof TestElement)
+            else if (prop instanceof TestElementProperty)
             {
-                undoReverseReplace((TestElement) propValue);
+                undoReverseReplace((TestElement) prop.getObjectValue());
             }
-            else if (propValue instanceof Collection)
+            else if (prop instanceof CollectionProperty)
             {
-                el.setProperty(propName, undoReverseReplace((Collection) propValue));
+                undoReverseReplace((CollectionProperty) prop);
+            }
+            else if (prop instanceof MapProperty)
+            {
+                undoReverseReplace((MapProperty) prop);
             }
         }
     }
@@ -235,49 +369,53 @@ public class ValueReplacer
      */
     public void reverseReplace(TestElement el)
     {
-        Iterator iter = el.getPropertyNames().iterator();
+        PropertyIterator iter = el.propertyIterator();
         while (iter.hasNext())
         {
-            String propName = (String) iter.next();
-            Object propValue = el.getProperty(propName);
-            if (propValue instanceof String)
+            JMeterProperty prop = iter.next();
+            if (prop instanceof StringProperty)
             {
-                Object newValue = substituteValues((String) propValue);
-                el.setProperty(propName, newValue);
+                el.setProperty(substituteValues((StringProperty) prop));
             }
-            else if (propValue instanceof TestElement)
+            else if (prop instanceof TestElementProperty)
             {
-                reverseReplace((TestElement) propValue);
+                reverseReplace((TestElement) prop.getObjectValue());
             }
-            else if (propValue instanceof Collection)
+            else if (prop instanceof CollectionProperty)
             {
-                el.setProperty(propName, reverseReplace((Collection) propValue));
+                reverseReplace((CollectionProperty) prop);
+            }
+            else if (prop instanceof MapProperty)
+            {
+                reverseReplace((MapProperty) prop);
             }
         }
     }
 
-    private String substituteValues(String input)
+    private StringProperty substituteValues(StringProperty prop)
     {
         Iterator iter = variables.keySet().iterator();
+        String input = prop.getStringValue();
         while (iter.hasNext())
         {
             String key = (String) iter.next();
             String value = (String) variables.get(key);
             input = StringUtilities.substitute(input, value, "${" + key + "}");
         }
-        return input;
+        return new StringProperty(prop.getName(), input);
     }
 
-    private String substituteReferences(String input)
+    private StringProperty substituteReferences(StringProperty prop)
     {
         Iterator iter = variables.keySet().iterator();
+        String input = prop.getStringValue();
         while (iter.hasNext())
         {
             String key = (String) iter.next();
             String value = (String) variables.get(key);
             input = StringUtilities.substitute(input, "${" + key + "}", value);
         }
-        return input;
+        return new StringProperty(prop.getName(),input);
     }
 
     public static class Test extends TestCase
@@ -298,7 +436,7 @@ public class ValueReplacer
             variables.addParameter("regex", ".*");
             JMeterVariables vars = new JMeterVariables();
             vars.put("server", "jakarta.apache.org");
-           JMeterContextService.getContext().setVariables(vars);
+            JMeterContextService.getContext().setVariables(vars);
         }
 
         public void testReverseReplacement() throws Exception
@@ -307,15 +445,15 @@ public class ValueReplacer
             assertTrue(variables.getUserDefinedVariables().containsKey("server"));
             assertTrue(replacer.variables.containsKey("server"));
             TestElement element = new TestPlan();
-            element.setProperty("domain", "jakarta.apache.org");
+            element.setProperty(new StringProperty("domain", "jakarta.apache.org"));
             List args = new ArrayList();
             args.add("username is jack");
             args.add("jacks_password");
-            element.setProperty("args", args);
+            element.setProperty(new CollectionProperty("args", args));
             replacer.reverseReplace(element);
-            assertEquals("${server}", element.getProperty("domain"));
-            args = (List) element.getProperty("args");
-            assertEquals("${password}", args.get(1));
+            assertEquals("${server}", element.getPropertyAsString("domain"));
+            args = (List) element.getProperty("args").getObjectValue();
+            assertEquals("${password}", ((JMeterProperty)args.get(1)).getStringValue());
         }
 
         public void testReplace() throws Exception
@@ -323,9 +461,11 @@ public class ValueReplacer
             ValueReplacer replacer = new ValueReplacer();
             replacer.setUserDefinedVariables(variables.getUserDefinedVariables());
             TestElement element = new ConfigTestElement();
-            element.setProperty("domain", "${server}");
+            element.setProperty(new StringProperty("domain", "${server}"));
             replacer.replaceValues(element);
-            assertEquals("jakarta.apache.org", ((CompoundVariable) element.getProperty("domain")).execute());
+            log.debug("domain property = " + element.getProperty("domain"));
+            element.setRunningVersion(true);
+            assertEquals("jakarta.apache.org", element.getPropertyAsString("domain"));
         }
     }
 }

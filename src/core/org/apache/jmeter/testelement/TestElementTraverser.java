@@ -1,7 +1,6 @@
 package org.apache.jmeter.testelement;
 
-import java.util.Collection;
-import java.util.Map;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 
 /**
  * For traversing Test Elements, which contain property that can be other test
@@ -31,43 +30,13 @@ public interface TestElementTraverser
      * @param key
      * @param value
      */
-    public void startProperty(Object key);
+    public void startProperty(JMeterProperty key);
     
     /**
      * Notification that a property is ending.  Again, this could be a test
      * element or a Map property, dependig on the context.
      * @param key
      */
-    public void endProperty(Object key);
+    public void endProperty(JMeterProperty key);
     
-    /**
-     * Notification of the occurence of a property value that is a simple
-     * object, such as a String, or Integer, etc.  Which property it relates to
-     * is dependent on the context.
-     * @param value
-     */
-    public void simplePropertyValue(Object value);
-    
-    /**
-     * Notification that a Map object is starting.
-     * @param map
-     */
-    public void startMap(Map map);
-    
-    /**
-     * Notification that a Map object is ending.
-     * @param map
-     */
-    public void endMap(Map map);
-    
-    /**
-     * Notification that a collection object is starting.
-     */
-    public void startCollection(Collection col);
-    
-    /**
-     * Notification that a collection object is ending.
-     * @param col
-     */
-    public void endCollection(Collection col);
 }

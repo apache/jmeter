@@ -67,6 +67,7 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
+import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 /****************************************
@@ -161,9 +162,14 @@ public class JMeterTreeModel extends DefaultTreeModel
         
         //This check the state of the TestElement and if returns false it disable the loaded node
         try{
-            if(((String)component.getProperty(TestElement.ENABLED)).equals("false"))
+            if(component.getProperty(TestElement.ENABLED) instanceof NullProperty || 
+                    component.getPropertyAsBoolean(TestElement.ENABLED))
             {
-                newNode.setEnabled(false);           
+                newNode.setEnabled(true);           
+            }
+            else
+            {
+                newNode.setEnabled(false);
             }
         }catch(Exception e){
             newNode.setEnabled(true);

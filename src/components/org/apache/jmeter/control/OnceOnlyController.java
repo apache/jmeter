@@ -131,11 +131,11 @@ public class OnceOnlyController extends GenericController implements Serializabl
 					TestElement sampler = controller.next();
 					if(i == 0 && counter < 2)
 					{
-						assertEquals(interleaveOrder[counter],sampler.getProperty(TestElement.NAME));
+						assertEquals(interleaveOrder[counter],sampler.getPropertyAsString(TestElement.NAME));
 					}
 					else
 					{
-						assertEquals(order[counter],sampler.getProperty(TestElement.NAME));
+						assertEquals(order[counter],sampler.getPropertyAsString(TestElement.NAME));
 					}
 					counter++;
 				}

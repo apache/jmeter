@@ -760,7 +760,6 @@ public class HashTree implements Serializable,Map
 		while(iter.hasNext())
 		{
 			Object temp = iter.next();
-			log.debug("Getting tree for " +temp);
 			tree = tree.getTree(temp);
 		}
 		return tree;

@@ -9,7 +9,7 @@ set LOCALCLASSPATH=%JAVA_HOME%\lib\tools.jar
 set OLDPATH=%PATH%
 set PATH=%JAVA_HOME%\bin;%PATH%
 
-for %%i in (".\lib\*.jar") do CALL lcp %%i
+for %%i in (".\lib\*.jar") do if not "%%i" == ".\lib\jorphan.jar" CALL lcp %%i
 for %%i in (".\ext\*.jar") do CALL lcp %%i
 
 for %%i in (..\jakarta-site2\lib\*.jar) do CALL lcp %%i

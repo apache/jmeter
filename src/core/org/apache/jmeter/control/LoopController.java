@@ -58,6 +58,9 @@ import java.io.Serializable;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.testelement.PerSampleClonable;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.property.StringProperty;
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
  *
@@ -87,8 +90,13 @@ public class LoopController extends GenericController implements Serializable
 	 ***************************************/
 	public void setLoops(int loops)
 	{
-		setProperty(LOOPS,new Integer(loops));
+		setProperty(new IntegerProperty(LOOPS,loops));
 	}
+    
+    public void setLoops(String loopValue)
+    {
+        setProperty(new StringProperty(LOOPS,loopValue));
+    }
 
 	/****************************************
 	 * !ToDoo (Method description)
@@ -107,7 +115,7 @@ public class LoopController extends GenericController implements Serializable
 	 ***************************************/
 	public void setContinueForever(boolean forever)
 	{
-		setProperty(CONTINUE_FOREVER,new Boolean(forever));
+		setProperty(new BooleanProperty(CONTINUE_FOREVER,forever));
 	}
 
 
@@ -209,7 +217,7 @@ public class LoopController extends GenericController implements Serializable
 				while(controller.hasNext())
 				{
 					TestElement sampler = controller.next();
-					assertEquals(order[counter++],sampler.getProperty(TestElement.NAME));
+					assertEquals(order[counter++],sampler.getPropertyAsString(TestElement.NAME));
 				}
 			}
 		}

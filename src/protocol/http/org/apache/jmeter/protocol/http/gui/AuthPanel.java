@@ -143,7 +143,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener
     public void modifyTestElement(TestElement el)
     {
         el.clear();
-        el.addTestElement(tableModel.manager);
+        el.addTestElement((TestElement)tableModel.manager.clone());
         configureTestElement(el);
     }
 
@@ -156,7 +156,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener
 	{
 		super.configure(el);
         tableModel.manager.clear();
-		tableModel.manager.addTestElement((AuthManager)el);
+		tableModel.manager.addTestElement((AuthManager)el.clone());
 	}
 
 	/****************************************
@@ -545,7 +545,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener
 		public void setValueAt(Object value, int row, int column)
 		{
 			Authorization auth = manager.getAuthObjectAt(row);
-
+            log.debug("Setting auth value: " + value);
 			if(column == 0)
 			{
 				auth.setURL((String)value);

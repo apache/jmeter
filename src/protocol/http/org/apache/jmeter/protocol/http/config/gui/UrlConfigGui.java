@@ -75,6 +75,8 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
 
@@ -140,17 +142,17 @@ public class UrlConfigGui extends JPanel
         Arguments args = (Arguments) argsPanel.createTestElement();
 
         HTTPArgument.convertArgumentsToHTTP(args);
-        element.setProperty(HTTPSampler.ARGUMENTS, args);
+        element.setProperty(new TestElementProperty(HTTPSampler.ARGUMENTS, args));
         element.setProperty(HTTPSampler.DOMAIN, domain.getText());
         element.setProperty(HTTPSampler.PORT, port.getText());
         element.setProperty(HTTPSampler.PROTOCOL, protocol.getText());
         element.setProperty(HTTPSampler.METHOD,
                 (post.isSelected() ? "POST" : "GET"));
         element.setProperty(HTTPSampler.PATH, path.getText());
-        element.setProperty(HTTPSampler.FOLLOW_REDIRECTS,
-                new Boolean(followRedirects.isSelected()));
-        element.setProperty(HTTPSampler.USE_KEEPALIVE,
-                new Boolean(useKeepAlive.isSelected()));
+        element.setProperty(new BooleanProperty(HTTPSampler.FOLLOW_REDIRECTS,
+                followRedirects.isSelected()));
+        element.setProperty(new BooleanProperty(HTTPSampler.USE_KEEPALIVE,
+                useKeepAlive.isSelected()));
         return element;
     }
 
@@ -176,9 +178,9 @@ public class UrlConfigGui extends JPanel
      ***************************************/
     public void configure(TestElement el)
     {
-        setName((String) el.getProperty(TestElement.NAME));
-        argsPanel.configure((TestElement) el.getProperty(HTTPSampler.ARGUMENTS));
-        domain.setText((String) el.getProperty(HTTPSampler.DOMAIN));
+        setName(el.getPropertyAsString(TestElement.NAME));
+        argsPanel.configure((TestElement) el.getProperty(HTTPSampler.ARGUMENTS).getObjectValue());
+        domain.setText(el.getPropertyAsString(HTTPSampler.DOMAIN));
         
         String portString = (String) el.getPropertyAsString(HTTPSampler.PORT);
 
@@ -191,7 +193,7 @@ public class UrlConfigGui extends JPanel
         {
             port.setText(portString);
         }
-        protocol.setText((String) el.getProperty(HTTPSampler.PROTOCOL));
+        protocol.setText(el.getPropertyAsString(HTTPSampler.PROTOCOL));
         if ("POST".equals(el.getProperty(HTTPSampler.METHOD)))
         {
             post.setSelected(true);
@@ -202,7 +204,7 @@ public class UrlConfigGui extends JPanel
             get.setSelected(true);
             post.setSelected(false);
         }
-        path.setText((String) el.getProperty(HTTPSampler.PATH));
+        path.setText(el.getPropertyAsString(HTTPSampler.PATH));
         followRedirects.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSampler.FOLLOW_REDIRECTS));
         useKeepAlive.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSampler.USE_KEEPALIVE));
     }

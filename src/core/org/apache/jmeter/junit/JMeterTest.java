@@ -16,6 +16,8 @@ import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
@@ -62,25 +64,25 @@ public class JMeterTest extends TestCase
 					item.getStaticLabel(), item.getName());
 			TestElement el = item.createTestElement();
 			assertEquals("GUI-CLASS: Failed on " + item.getClass().getName(), item.getClass().getName(),
-					el.getProperty(TestElement.GUI_CLASS));
+					el.getPropertyAsString(TestElement.GUI_CLASS));
 			assertEquals("NAME: Failed on " + item.getClass().getName(), item.getName(),
-					el.getProperty(TestElement.NAME));
+					el.getPropertyAsString(TestElement.NAME));
 			assertEquals("TEST-CLASS: Failed on " + item.getClass().getName(),
-					el.getClass().getName(), el.getProperty(TestElement.TEST_CLASS));
+					el.getClass().getName(), el.getPropertyAsString(TestElement.TEST_CLASS));
             TestElement el2 = item.createTestElement();
 			el.setProperty(TestElement.NAME, "hey, new name!:");
 			el.setProperty("NOT","Shouldn't be here");
 			if(!(item instanceof UnsharedComponent))
 			{
-				assertNull("GUI-CLASS: Failed on " + item.getClass().getName(),
-						el2.getProperty("NOT"));
+				assertEquals("GUI-CLASS: Failed on " + item.getClass().getName(),"",
+						el2.getPropertyAsString("NOT"));
 			}
             
 			el = SaveService.createTestElement(SaveService.getConfigForTestElement(null,
 					el));
 			item.configure(el);
 			assertEquals("CONFIGURE-TEST: Failed on " + item.getClass().getName(),
-					el.getProperty(TestElement.NAME), item.getName());
+					el.getPropertyAsString(TestElement.NAME), item.getName());
             item.modifyTestElement(el2);
             assertEquals("Modify Test: Failed on " + item.getClass().getName(),"hey, new name!:",el2.getPropertyAsString(TestElement.NAME));
 		}
@@ -194,14 +196,12 @@ public class JMeterTest extends TestCase
 	{
 		TestElement clonedItem = (TestElement)item.clone();
 		cloneTesting(item, clonedItem);
-		Iterator iter2 = item.getPropertyNames().iterator();
+		PropertyIterator iter2 = item.propertyIterator();
 		while(iter2.hasNext())
 		{
-			Object item2 = iter2.next();
-			if(item2 instanceof TestElement)
-			{
-				checkElementCloning((TestElement)item2);
-			}
+			JMeterProperty item2 = iter2.next();
+			assertEquals(item2,clonedItem.getProperty(item2.getName()));
+            assertTrue(item2 != clonedItem.getProperty(item2.getName()));
 		}
 	}
 

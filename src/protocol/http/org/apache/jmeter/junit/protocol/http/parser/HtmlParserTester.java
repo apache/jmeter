@@ -1,12 +1,14 @@
 package org.apache.jmeter.junit.protocol.http.parser;
 
-import java.net.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import junit.framework.TestCase;
 
 import org.apache.jmeter.protocol.http.modifier.AnchorModifier;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.samplers.SampleResult;
-
-import junit.framework.TestCase;
+import org.apache.jmeter.threads.JMeterContextService;
 
 /************************************************************
  *  Title: Description: Copyright: Copyright (c) 2001 Company:
@@ -30,6 +32,7 @@ public class HtmlParserTester extends TestCase
 	{
 		super(name);
 	}
+    
 
 	/************************************************************
 	 *  A unit test for JUnit
@@ -43,10 +46,13 @@ public class HtmlParserTester extends TestCase
 		String responseText = "<html><head><title>Test page</title></head><body>" +
 				"<a href=\"index.html\">Goto index page</a></body></html>";
 		SampleResult result = new SampleResult();
+        JMeterContextService.getContext().setCurrentSampler(context);
+        JMeterContextService.getContext().setCurrentSampler(config);
 		result.setResponseData(responseText.getBytes());
 		result.setSampleLabel(context.toString());
-		result.setSamplerData(context);
-		parser.modifyEntry(config, result);
+		result.setSamplerData(context.toString());
+        JMeterContextService.getContext().setPreviousResult(result);
+		parser.process();
 		assertEquals("http://www.apache.org:80/subdir/index.html",
 				config.getUrl().toString());
 	}
@@ -61,8 +67,10 @@ public class HtmlParserTester extends TestCase
 		SampleResult result = new SampleResult();
 		result.setResponseData(responseText.getBytes());
 		result.setSampleLabel(context.toString());
-		result.setSamplerData(context);
-		parser.modifyEntry(config, result);
+        JMeterContextService.getContext().setCurrentSampler(context);
+        JMeterContextService.getContext().setCurrentSampler(config);
+        JMeterContextService.getContext().setPreviousResult(result);
+        parser.process();
 		String newUrl = config.getUrl().toString();
 		assertTrue("http://www.apache.org:80/index.html".equals(newUrl)
 				|| "http://www.apache.org:80/subdir/lowerdir/index.html".equals(newUrl));
@@ -79,8 +87,10 @@ public class HtmlParserTester extends TestCase
 		SampleResult result = new SampleResult();
 		result.setResponseData(responseText.getBytes());
 		result.setSampleLabel(context.toString());
-		result.setSamplerData(context);
-		parser.modifyEntry(config, result);
+        JMeterContextService.getContext().setCurrentSampler(context);
+        JMeterContextService.getContext().setCurrentSampler(config);
+        JMeterContextService.getContext().setPreviousResult(result);
+        parser.process();
 		String newUrl = config.getUrl().toString();
 		assertEquals("http://www.apache.org:80/home/index.html?param1=value1",newUrl);
 	}
@@ -94,8 +104,10 @@ public class HtmlParserTester extends TestCase
 		SampleResult result = new SampleResult();
 		result.setResponseData(responseText.getBytes());
 		result.setSampleLabel(context.toString());
-		result.setSamplerData(context);
-		parser.modifyEntry(config, result);
+        JMeterContextService.getContext().setCurrentSampler(context);
+        JMeterContextService.getContext().setCurrentSampler(config);
+        JMeterContextService.getContext().setPreviousResult(result);
+        parser.process();
 		String newUrl = config.getUrl().toString();
 		assertEquals("http://www.apache.org:80/subdir/index.html",newUrl);
 	}
@@ -109,8 +121,10 @@ public class HtmlParserTester extends TestCase
 		SampleResult result = new SampleResult();
 		result.setResponseData(responseText.getBytes());
 		result.setSampleLabel(context.toString());
-		result.setSamplerData(context);
-		parser.modifyEntry(config, result);
+        JMeterContextService.getContext().setCurrentSampler(context);
+        JMeterContextService.getContext().setCurrentSampler(config);
+        JMeterContextService.getContext().setPreviousResult(result);
+        parser.process();
 		String newUrl = config.getUrl().toString();
 		assertEquals("http://www.apache.org:80/subdir/index.html",newUrl);
 	}
@@ -125,8 +139,10 @@ public class HtmlParserTester extends TestCase
 		String newUrl = config.getUrl().toString();
 		result.setResponseData(responseText.getBytes());
 		result.setSampleLabel(context.toString());
-		result.setSamplerData(context);
-		parser.modifyEntry(config, result);
+        JMeterContextService.getContext().setCurrentSampler(context);
+        JMeterContextService.getContext().setCurrentSampler(config);
+        JMeterContextService.getContext().setPreviousResult(result);
+        parser.process();
 		assertEquals(newUrl,config.getUrl().toString());
 	}
 	
@@ -140,8 +156,10 @@ public class HtmlParserTester extends TestCase
 		String newUrl = config.getUrl().toString();
 		result.setResponseData(responseText.getBytes());
 		result.setSampleLabel(context.toString());
-		result.setSamplerData(context);
-		parser.modifyEntry(config, result);
+        JMeterContextService.getContext().setCurrentSampler(context);
+        JMeterContextService.getContext().setCurrentSampler(config);
+        JMeterContextService.getContext().setPreviousResult(result);
+        parser.process();
 		assertEquals(newUrl+"?param1=value1",config.getUrl().toString());
 	}
 
@@ -154,10 +172,11 @@ public class HtmlParserTester extends TestCase
 		SampleResult result = new SampleResult();
 		result.setResponseData(responseText.getBytes());
 		result.setSampleLabel(context.toString());
-		result.setSamplerData(context);
-		parser.modifyEntry(config, result);
+        JMeterContextService.getContext().setCurrentSampler(context);
+        JMeterContextService.getContext().setPreviousResult(result);
+        parser.process();
 		String newUrl = config.getUrl().toString();
-		this.assertTrue(!"http://www.apache.org:80/home/index.html?param1=value1".equals(newUrl));
+		assertTrue(!"http://www.apache.org:80/home/index.html?param1=value1".equals(newUrl));
 		assertEquals(config.getUrl().toString(),newUrl);
 	}
 
@@ -178,8 +197,10 @@ public class HtmlParserTester extends TestCase
 		SampleResult result = new SampleResult();
 		result.setResponseData(responseText.getBytes());
 		result.setSampleLabel(context.toString());
-		result.setSamplerData(context);
-		parser.modifyEntry(config, result);
+        JMeterContextService.getContext().setCurrentSampler(context);
+        JMeterContextService.getContext().setCurrentSampler(config);
+        JMeterContextService.getContext().setPreviousResult(result);
+        parser.process();
 		assertEquals("http://www.apache.org:80/subdir/index.html",
 				config.getUrl().toString());
 		assertEquals("test=goto",config.getQueryString());
@@ -201,9 +222,11 @@ public class HtmlParserTester extends TestCase
 				" value=\"goto\">Goto index page</form></body></html>";
 		SampleResult result = new SampleResult();
 		result.setResponseData(responseText.getBytes());
-		result.setSampleLabel(context.toString());
-		result.setSamplerData(context);
-		parser.modifyEntry(config, result);
+		result.setSampleLabel(context.toString());        
+        JMeterContextService.getContext().setCurrentSampler(context);
+        JMeterContextService.getContext().setCurrentSampler(config);
+        JMeterContextService.getContext().setPreviousResult(result);
+        parser.process();
 		assertEquals("http://www.apache.org:80/subdir/index.html",
 				config.getUrl().toString());
 		assertEquals("te%24st=goto",config.getQueryString());

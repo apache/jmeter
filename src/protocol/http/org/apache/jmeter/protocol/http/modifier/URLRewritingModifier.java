@@ -1,6 +1,8 @@
 package org.apache.jmeter.protocol.http.modifier;
 import java.io.Serializable;
+
 import junit.framework.TestCase;
+
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ResponseBasedModifier;
@@ -9,6 +11,7 @@ import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 import org.apache.oro.text.regex.MalformedPatternException;
@@ -112,7 +115,7 @@ public class URLRewritingModifier
 	}
 	public void setPathExtension(boolean pathExt)
 	{
-		setProperty(PATH_EXTENSION, new Boolean(pathExt));
+		setProperty(new BooleanProperty(PATH_EXTENSION,pathExt));
 	}
 	public boolean isPathExtension()
 	{
@@ -146,7 +149,7 @@ public class URLRewritingModifier
 			Arguments args = sampler.getArguments();
 			assertEquals(
 				"jfdkjdkf jddkfdfjkdjfdf\"",
-				((Argument) args.getArguments().get(0)).getValue());
+				((Argument) args.getArguments().get(0).getObjectValue()).getValue());
 			assertEquals(
 				"http://server.com:80/index.html?session_id=jfdkjdkf+jddkfdfjkdjfdf%22",
 				sampler.toString());
@@ -168,7 +171,7 @@ public class URLRewritingModifier
 			Arguments args = sampler.getArguments();
 			assertEquals(
 				"jfdkjdkfjddkfdfjkdjfdf",
-				((Argument) args.getArguments().get(0)).getValue());
+				((Argument) args.getArguments().get(0).getObjectValue()).getValue());
 		}
 		
 		public void testGrabSessionId3() throws Exception
@@ -188,7 +191,7 @@ public class URLRewritingModifier
 			Arguments args = sampler.getArguments();
 			assertEquals(
 				"jfdkjdkfjddkfdfjkdjfdf",
-				((Argument) args.getArguments().get(0)).getValue());
+				((Argument) args.getArguments().get(0).getObjectValue()).getValue());
 		}
 	}
 }

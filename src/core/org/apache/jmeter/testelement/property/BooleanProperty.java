@@ -1,38 +1,36 @@
 package org.apache.jmeter.testelement.property;
 
-
 /**
  * @author Administrator
  *
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class StringProperty extends AbstractProperty
+public class BooleanProperty extends AbstractProperty
 {
-    String value;
+    boolean value;
     
-    public StringProperty(String name,String value)
+    public BooleanProperty(String name,boolean v)
     {
         super(name);
-        this.value = value;
+        value = v;
     }
     
-    public StringProperty()
+    public BooleanProperty()
     {
         super();
-    }
-
-    /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
-     */
-    public void setRunningVersion(boolean runningVersion)
-    {
-        super.setRunningVersion(runningVersion);
     }
     
     public void setObjectValue(Object v)
     {
-        value = v.toString();
+        if(v instanceof Boolean)
+        {
+            value = ((Boolean)v).booleanValue();
+        }
+        else
+        {
+            value = Boolean.valueOf(v.toString()).booleanValue();
+        }
     }
 
     /**
@@ -40,7 +38,7 @@ public class StringProperty extends AbstractProperty
      */
     public String getStringValue()
     {
-        return value;
+        return Boolean.toString(value);
     }
 
     /**
@@ -48,7 +46,7 @@ public class StringProperty extends AbstractProperty
      */
     public Object getObjectValue()
     {
-        return value;
+        return new Boolean(value);
     }
 
     /**
@@ -56,18 +54,17 @@ public class StringProperty extends AbstractProperty
      */
     public Object clone()
     {
-        StringProperty prop = (StringProperty)super.clone();
+        BooleanProperty prop = (BooleanProperty)super.clone();
         prop.value = value;
         return prop;
-    }    
+    }
 
     /**
-     * Sets the value.
-     * @param value The value to set
+     * @see org.apache.jmeter.testelement.property.JMeterProperty#getBooleanValue()
      */
-    public void setValue(String value)
+    public boolean getBooleanValue()
     {
-        this.value = value;
+        return super.getBooleanValue();
     }
 
 }

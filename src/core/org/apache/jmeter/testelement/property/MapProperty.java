@@ -18,12 +18,37 @@ public class MapProperty extends AbstractProperty
     public MapProperty(String name, Map value)
     {
         super(name);
-        this.value = value;
+        this.value = normalizeMap(value);
     }
 
     public MapProperty()
     {
         super();
+    }
+
+    public void setObjectValue(Object v)
+    {
+        if (v instanceof Map)
+        {
+            value = normalizeMap((Map) v);
+        }
+    }
+
+    /**
+         * Figures out what kind of properties this collection is holding and
+         * returns the class type.
+         * @see org.apache.jmeter.testelement.property.AbstractProperty#getPropertyType()
+         */
+    protected Class getPropertyType()
+    {
+        if (value.size() > 0)
+        {
+            return valueIterator().next().getClass();
+        }
+        else
+        {
+            return NullProperty.class;
+        }
     }
 
     /**
@@ -48,8 +73,28 @@ public class MapProperty extends AbstractProperty
     public Object clone()
     {
         MapProperty prop = (MapProperty) super.clone();
-        prop.value = value;
+        prop.value = cloneMap();
         return value;
+    }
+
+    private Map cloneMap()
+    {
+        try
+        {
+            Map newCol = (Map) value.getClass().newInstance();
+            PropertyIterator iter = valueIterator();
+            while (iter.hasNext())
+            {
+                JMeterProperty item = iter.next();
+                newCol.put(item.getName(), item.clone());
+            }
+            return newCol;
+        }
+        catch (Exception e)
+        {
+            log.error("Couldn't clone map", e);
+            return value;
+        }
     }
 
     public PropertyIterator valueIterator()
@@ -62,6 +107,10 @@ public class MapProperty extends AbstractProperty
      */
     public void mergeIn(JMeterProperty prop)
     {
+        if (((MapProperty) prop).value == value)
+        {
+            return;
+        }
         if (prop instanceof MapProperty)
         {
             PropertyIterator iter = ((MapProperty) prop).valueIterator();
@@ -74,6 +123,23 @@ public class MapProperty extends AbstractProperty
                 }
             }
         }
+        else
+        {
+            addProperty(prop.getName(), prop);
+        }
+    }
+
+    public void addProperty(String name, JMeterProperty prop)
+    {
+        if (value.size() == 0 || value.values().iterator().next().getClass().equals(prop.getClass()))
+        {
+            value.put(name, prop);
+        }
+    }
+
+    public void setMap(Map newMap)
+    {
+        value = newMap;
     }
 
     /**
@@ -89,7 +155,10 @@ public class MapProperty extends AbstractProperty
             if (prop.isTemporary(owner))
             {
                 iter.remove();
-                value.remove(name);
+            }
+            else
+            {
+                prop.recoverRunningVersion(owner);
             }
         }
     }

@@ -63,15 +63,15 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.http.util.Base64Encoder;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
 /****************************************
@@ -101,8 +101,14 @@ public class AuthManager extends ConfigTestElement implements ConfigElement,
 	 ***************************************/
 	public AuthManager()
 	{
-		setProperty(AUTH_LIST, new ArrayList());
+		setProperty(new CollectionProperty(AUTH_LIST, new ArrayList()));
 	}
+    
+    public void clear()
+    {
+        super.clear();
+        setProperty(new CollectionProperty(AUTH_LIST, new ArrayList()));
+    }
 
 	/****************************************
 	 * update an authentication record
@@ -117,28 +123,11 @@ public class AuthManager extends ConfigTestElement implements ConfigElement,
 		Authorization auth = new Authorization(url, user, pass);
 		if(index >= 0)
 		{
-			getAuthObjects().set(index, auth);
+			getAuthObjects().set(index, new TestElementProperty(auth.getName(),auth));
 		}
 		else
 		{
-			getAuthObjects().add(auth);
-		}
-	}
-	
-	public void addTestElement(TestElement el)
-	{
-		if(el.getProperty("password") != null &&
-				el.getProperty("username") != null &&
-				el.getProperty("url") != null)
-		{
-            
-            addAuth(new Authorization(el.getPropertyAsString("url"),
-					el.getPropertyAsString("username"),
-					el.getPropertyAsString("password")));
-		}
-		else
-		{
-			super.addTestElement(el);
+			getAuthObjects().addItem(auth);
 		}
 	}
 
@@ -157,9 +146,9 @@ public class AuthManager extends ConfigTestElement implements ConfigElement,
 	 *
 	 *@return   !ToDo (Return description)
 	 ***************************************/
-	public List getAuthObjects()
+	public CollectionProperty getAuthObjects()
 	{
-        return (List)getProperty(AUTH_LIST);
+        return (CollectionProperty)getProperty(AUTH_LIST);
 	}
 
 
@@ -204,7 +193,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement,
 	 ***************************************/
 	public Authorization getAuthObjectAt(int row)
 	{
-		return (Authorization)getAuthObjects().get(row);
+		return (Authorization)getAuthObjects().get(row).getObjectValue();
 	}
 
 	/****************************************
@@ -272,9 +261,9 @@ public class AuthManager extends ConfigTestElement implements ConfigElement,
 		}
 
 		StringBuffer header = new StringBuffer();
-		for(Iterator enum = getAuthObjects().iterator(); enum.hasNext(); )
+		for(PropertyIterator enum = getAuthObjects().iterator(); enum.hasNext(); )
 		{
-			Authorization auth = (Authorization)enum.next();
+			Authorization auth = (Authorization)enum.next().getObjectValue();
 			if(url.toString().startsWith(auth.getURL()))
 			{
 				header.append("Basic " + Base64Encoder.encode(auth.getUser() + ":" + auth.getPass()));
@@ -299,7 +288,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement,
 	 ***************************************/
 	public String getName()
 	{
-		return (String)getProperty(TestElement.NAME);
+		return getPropertyAsString(TestElement.NAME);
 	}
 
 	/****************************************
@@ -316,7 +305,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement,
 	 ***************************************/
 	public void addAuth(Authorization auth)
 	{
-		getAuthObjects().add(auth);
+		getAuthObjects().addItem(auth);
 	}
 
 	/****************************************
@@ -324,7 +313,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement,
 	 ***************************************/
 	public void addAuth()
 	{
-		getAuthObjects().add(new Authorization());
+		getAuthObjects().addItem(new Authorization());
 	}
 
 	/****************************************
@@ -404,7 +393,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement,
 				String user = st.nextToken();
 				String pass = st.nextToken();
 				Authorization auth = new Authorization(url, user, pass);
-				getAuthObjects().add(auth);
+				getAuthObjects().addItem(auth);
 			}
 			catch(Exception e)
 			{

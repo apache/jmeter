@@ -56,10 +56,12 @@ package org.apache.jmeter.config;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
 // Mark Walsh, 2002-08-03 add method addArgument(String name, Object value, Object metadata)
@@ -92,32 +94,32 @@ public class Arguments extends ConfigTestElement implements Serializable
 	 ***************************************/
 	public Arguments()
 	{
-		setProperty(ARGUMENTS,new ArrayList());
+		setProperty(new CollectionProperty(ARGUMENTS,new ArrayList()));
 	}
 
-	public List getArguments()
+	public CollectionProperty getArguments()
 	{
-		return (List)getProperty(ARGUMENTS);
+		return (CollectionProperty)getProperty(ARGUMENTS);
 	}
     
     public void clear()
     {
         super.clear();
-        setProperty(ARGUMENTS,new ArrayList());
+        setProperty(new CollectionProperty(ARGUMENTS,new ArrayList()));
     }
 	
 	public void setArguments(List arguments)
 	{
-		setProperty(ARGUMENTS,arguments);
+		setProperty(new CollectionProperty(ARGUMENTS,arguments));
 	}
 	
 	public Map getArgumentsAsMap()
 	{
-		Iterator iter = getArguments().iterator();
+		PropertyIterator iter = getArguments().iterator();
 		Map argMap = new HashMap();
 		while(iter.hasNext())
 		{
-			Argument arg = (Argument)iter.next();
+			Argument arg = (Argument)iter.next().getObjectValue();
 			argMap.put(arg.getName(),arg.getValue());
 		}
 		return argMap;
@@ -129,14 +131,19 @@ public class Arguments extends ConfigTestElement implements Serializable
 	 *@param name   !ToDo
 	 *@param value  !ToDo
 	 ***************************************/
-	public void addArgument(String name, Object value)
+	public void addArgument(String name, String value)
 	{
-		getArguments().add(new Argument(name, value, null));
+		addArgument(new Argument(name, value, null));
 	}
 	
 	public void addArgument(Argument arg)
 	{
-		getArguments().add(arg);
+        TestElementProperty newArg = new TestElementProperty(arg.getName(),arg);
+        if(isRunningVersion())
+        {
+            newArg.setTemporary(true,this);
+        }
+        getArguments().addItem(newArg);
 	}
 
 	/****************************************
@@ -146,9 +153,9 @@ public class Arguments extends ConfigTestElement implements Serializable
 	 *@param value  !ToDo
 	 *@param metadata  Hold addition information
 	 ***************************************/
-	public void addArgument(String name, Object value, Object metadata)
+	public void addArgument(String name, String value, String metadata)
 	{
-		getArguments().add(new Argument(name, value, metadata));
+		addArgument(new Argument(name, value, metadata));
 	}
 
 	/****************************************
@@ -156,7 +163,7 @@ public class Arguments extends ConfigTestElement implements Serializable
 	 *
 	 *@return   !ToDo (Return description)
 	 ***************************************/
-	public Iterator iterator()
+	public PropertyIterator iterator()
 	{
 		return getArguments().iterator();
 	}
@@ -169,10 +176,10 @@ public class Arguments extends ConfigTestElement implements Serializable
 	public String toString()
 	{
 		StringBuffer str = new StringBuffer();
-		Iterator iter = getArguments().iterator();
+		PropertyIterator iter = getArguments().iterator();
 		while(iter.hasNext())
 		{
-			Argument arg = (Argument)iter.next();
+			Argument arg = (Argument)iter.next().getObjectValue();
 			if (arg.getMetaData() == null) {
 			    str.append(arg.getName() + "=" + arg.getValue());
 			} else {
@@ -206,15 +213,23 @@ public class Arguments extends ConfigTestElement implements Serializable
 	 ***************************************/
 	public void removeArgument(Argument arg)
 	{
-		getArguments().remove(arg);
+		PropertyIterator iter = getArguments().iterator();
+        while(iter.hasNext())
+        {
+            Argument item = (Argument)iter.next().getObjectValue();
+            if(arg.equals(item))
+            {
+                iter.remove();
+            }
+        }
 	}
 	
 	public void removeArgument(String argName)
 	{
-		Iterator iter = getArguments().iterator();
+		PropertyIterator iter = getArguments().iterator();
 		while(iter.hasNext())
 		{
-			Argument arg = (Argument)iter.next();
+			Argument arg = (Argument)iter.next().getObjectValue();
 			if(arg.getName().equals(argName))
 			{
 				iter.remove();
@@ -227,10 +242,7 @@ public class Arguments extends ConfigTestElement implements Serializable
 	 ***************************************/
 	public void removeAllArguments()
 	{
-		if(getArguments().size() > 0)
-		{
-			getArguments().clear();
-		}
+		getArguments().clear();
 	}
 
 	/****************************************
@@ -238,7 +250,7 @@ public class Arguments extends ConfigTestElement implements Serializable
 	 ***************************************/
 	public void addEmptyArgument()
 	{
-		getArguments().add(new Argument("", "",null));
+		addArgument(new Argument("", "",null));
 	}
 
 	/****************************************
