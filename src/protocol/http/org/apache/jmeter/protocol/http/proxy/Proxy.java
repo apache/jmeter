@@ -88,7 +88,9 @@ public class Proxy extends Thread
 
     /** Target to receive the generated sampler. */
     private ProxyControl target;
-
+    
+    /** Whether or not to capture the HTTP headers. */
+    private boolean captureHttpHeaders;
 
     /**
      * Default constructor.
@@ -122,6 +124,7 @@ public class Proxy extends Thread
     {
         this.target = target;
         this.clientSocket = clientSocket;
+        this.captureHttpHeaders = target.getCaptureHttpHeaders();
     }
 
     /**
@@ -131,24 +134,30 @@ public class Proxy extends Thread
     {
         HttpRequestHdr request = new HttpRequestHdr();
         byte[] serverResponse = new byte[0];
-        HeaderManager headers = new HeaderManager();
+        HeaderManager headers = null;
+
         HTTPSampler sampler = new HTTPSampler();
         try
         {
             byte[] clientRequest = //TODO: var not used, but call may be needed for side effects?
                 request.parse(
                     new BufferedInputStream(clientSocket.getInputStream()));
-            headers = request.getHeaderManager();
 
             sampler = request.getSampler();
-            sampler.setHeaderManager(headers);
+            if (captureHttpHeaders)
+            {
+                headers = request.getHeaderManager();
+                sampler.setHeaderManager(headers);
+            }
 
             serverResponse = sampler.sample().getResponseData();
             writeToClient(
                 serverResponse,
                 new BufferedOutputStream(clientSocket.getOutputStream()));
-            headers.removeHeaderNamed("cookie");
-
+            if (captureHttpHeaders)
+            {
+            	headers.removeHeaderNamed("cookie");
+            }
            
         }
         catch (UnknownHostException uhe)
