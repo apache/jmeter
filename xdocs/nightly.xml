@@ -23,14 +23,16 @@
 <section name="Downloading nightly builds">
 	<p></p>
 	<h2>Where are the nightly builds?</h2>
-	<p>There are at present two sources of nightly builds:</p>
+	<p>There are usually some zip files at the following locations:</p>
 	<ul>
-		<li>Zips: <a href="http://gump.covalent.net/jars/latest/jakarta-jmeter/">
+		<li>CVS HEAD Zips: <a href="http://gump.covalent.net/jars/latest/jakarta-jmeter/">
 			http://gump.covalent.net/jars/latest/jakarta-jmeter/</a>
 			Log: <a href="http://gump.covalent.net/log/jakarta-jmeter-test.html">Test log</a>
 		</li>
-		<li>Zips: <a href="http://lsd.student.utwente.nl/gump/jars/jakarta-jmeter/jars/">
-			http://lsd.student.utwente.nl/gump/jars/jakarta-jmeter/jars/</a></li>
+		<li>2.0 Branch Zips: <a href="http://gump.covalent.net/jars/latest/jakarta-jmeter-20/">
+			http://gump.covalent.net/jars/latest/jakarta-jmeter-20/</a>
+			Log: <a href="http://gump.covalent.net/log/jakarta-jmeter-20-test.html">Test log</a>
+		</li>
 	</ul>
 	<h2>What do they consist of?</h2>
 <p>
