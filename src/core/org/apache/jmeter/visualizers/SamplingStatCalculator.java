@@ -44,6 +44,7 @@ public class SamplingStatCalculator implements Serializable
    static Logger log = LoggingManager.getLoggerForClass();
     private static DecimalFormat rateFormatter = new DecimalFormat("#.0");
     private static DecimalFormat errorFormatter = new DecimalFormat("#0.00%");
+	private static DecimalFormat kbFormatter = new DecimalFormat("#0.00");
     
     private StatCalculator calculator = new StatCalculator();
     private ArrayList storedValues = new ArrayList();
@@ -174,6 +175,33 @@ public class SamplingStatCalculator implements Serializable
         return (rval);
     }
 
+	/**
+	 * calculates the average page size, which means
+	 * divide the bytes by number of samples.
+	 * @return
+	 */
+	public double getPageSize()
+	{
+		double rate = 0;
+		if (this.getElapsed() > 0 && calculator.getTotalBytes() > 0){
+			rate = (double)calculator.getTotalBytes()/
+				((double)this.getElapsed()/1000);
+		}
+		if (rate < 0){
+			rate = 0;
+		}
+		return rate;
+	}
+	
+	/**
+	 * formats the rate
+	 * @return
+	 */
+	public String getPageSizeString(){
+		double rate = getPageSize()/1024;
+		return kbFormatter.format(rate);
+	}
+	
     public String getLabel()
     {
         return label;
@@ -189,6 +217,7 @@ public class SamplingStatCalculator implements Serializable
        synchronized(calculator)
        {
           calculator.addValue(res.getTime());
+          calculator.addBytes((long)res.getResponseData().length);
         setStartTime(res);         
         long eCount = getCurrentSample().errorCount;
         if (!res.isSuccessful())
