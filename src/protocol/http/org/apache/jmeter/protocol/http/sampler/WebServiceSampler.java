@@ -435,7 +435,6 @@ public class WebServiceSampler extends HTTPSampler
                         .getResString("read_response_message")
                         .getBytes());
             }
-            RESULT.setTimeStamp(System.currentTimeMillis());
             RESULT.setSuccessful(true);
             RESULT.setSamplerData(
                 getUrl().getProtocol()
