@@ -120,7 +120,7 @@ public class FTPSampler extends AbstractSampler
         res.setSampleLabel(getLabel());
         //LoginConfig loginConfig =
         //  (LoginConfig)e.getConfigElement(LoginConfig.class);
-        long start = System.currentTimeMillis();
+        res.sampleStart();
         try
         {
             FtpClient ftp = new FtpClient();
@@ -146,9 +146,7 @@ public class FTPSampler extends AbstractSampler
             res.setResponseData(ex.toString().getBytes());
         }
 
-        // Calculate response time
-        long end = System.currentTimeMillis();
-        res.setTime(end - start);
+        res.sampleEnd();
 
         // Set if we were successful or not
         res.setSuccessful(isSuccessful);

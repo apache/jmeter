@@ -405,7 +405,7 @@ public class WebServiceSampler extends HTTPSampler
 
             // send the message
             Message msg = new Message();
-            long start = System.currentTimeMillis();
+            RESULT.sampleStart();
             msg.send(this.getUrl(), this.getSoapAction(), msgEnv);
 
             SOAPTransport st = msg.getSOAPTransport();
@@ -419,7 +419,7 @@ public class WebServiceSampler extends HTTPSampler
                 {
                     buf.append(line);
                 }
-                RESULT.setTime(System.currentTimeMillis() - start);
+                RESULT.sampleEnd();
                 // set the response
                 RESULT.setResponseData(buf.toString().getBytes());
             }
@@ -429,7 +429,7 @@ public class WebServiceSampler extends HTTPSampler
                 // for real, it improves the
                 // performance on slow clients
                 br.read();
-                RESULT.setTime(System.currentTimeMillis() - start);
+				RESULT.sampleEnd();
                 RESULT.setResponseData(
                     JMeterUtils
                         .getResString("read_response_message")
