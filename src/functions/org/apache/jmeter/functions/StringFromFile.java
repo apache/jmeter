@@ -59,6 +59,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -97,7 +98,7 @@ import org.apache.log.Logger;
  */
 public class StringFromFile extends AbstractFunction implements Serializable
 {
-    private static Logger log = LoggingManager.getLoggerForClass();
+	private static Logger log = LoggingManager.getLoggerForClass();
 
     private static final List desc = new LinkedList();
     private static final String KEY = "_StringFromFile";//$NON-NLS-1$
@@ -108,7 +109,14 @@ public class StringFromFile extends AbstractFunction implements Serializable
     static {
         desc.add(JMeterUtils.getResString("string_from_file_file_name"));//$NON-NLS-1$
         desc.add(JMeterUtils.getResString("function_name_param"));//$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("string_from_file_seq_start"));//$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("string_from_file_seq_final"));//$NON-NLS-1$
     }
+	private static final int MIN_PARAM_COUNT = 1;
+	private static final int PARAM_NAME = 2;
+	private static final int PARAM_START = 3;
+	private static final int PARAM_END = 4;
+	private static final int MAX_PARAM_COUNT = 4;
 
     private String myValue = ERR_IND;
     private String myName = "StringFromFile_";//$NON-NLS-1$ - Name to store the value in
@@ -161,10 +169,45 @@ public class StringFromFile extends AbstractFunction implements Serializable
 		}
     }
 
+    private int myStart = 0;
+    private int myCurrent = 0;
+	private int myEnd = 0;
+	
     private void openFile()
     {
 		String tn = Thread.currentThread().getName();
         fileName = ((CompoundVariable) values[0]).execute();
+
+		if (values.length >= PARAM_START)
+		{
+			String tmp = ((CompoundVariable) values[PARAM_START-1]).execute();
+			myStart = Integer.valueOf(tmp).intValue();
+			// Have we use myCurrent yet?
+			if (myCurrent == 0) myCurrent=myStart;
+		}
+
+		if (values.length >= PARAM_END)
+		{
+			String tmp = ((CompoundVariable) values[PARAM_END-1]).execute();
+			myEnd = Integer.valueOf(tmp).intValue();
+		}
+
+		if (values.length >= PARAM_START)
+		{
+			log.info("Start ="+myStart+" Current = "+myCurrent+" End ="+myEnd);//$NON-NLS-1$
+			if (values.length >= PARAM_END){
+				if (myCurrent > myEnd){
+					log.info("No more files to process, "+myCurrent+" > "+myEnd);//$NON-NLS-1$
+					myBread=null;
+					return;
+				}
+			}
+			log.info("Using format "+fileName);
+			DecimalFormat myFormatter = new DecimalFormat(fileName);
+			fileName = myFormatter.format(myCurrent);
+			myCurrent++;// for next time
+        }
+
 		log.info(tn + " opening file " + fileName);//$NON-NLS-1$
         try
         {
@@ -189,9 +232,9 @@ public class StringFromFile extends AbstractFunction implements Serializable
 
         JMeterVariables vars = getVariables();
 
-        if (values.length >= 2)
+        if (values.length >= PARAM_NAME)
         {
-            myName = ((CompoundVariable) values[1]).execute();
+            myName = ((CompoundVariable) values[PARAM_NAME-1]).execute();
         }
 
         myValue = ERR_IND;
@@ -230,12 +273,22 @@ public class StringFromFile extends AbstractFunction implements Serializable
 				String tn = Thread.currentThread().getName();
                 log.error(tn + " error reading file " + e.toString());//$NON-NLS-1$
             }
+        } else { // File was not opened successfully
+        	if (values.length >= PARAM_END){// Are we processing a file sequence?
+        		log.info("Detected end of sequence.");
+        		throw new RuntimeException("Stop Thread");//TODO there has to be a better way...
+        	}
         }
 
-        vars.put(myName, myValue);
-
-        log.debug(this +"::StringFromFile.execute() name:" + myName + " value:" + myValue);//$NON-NLS-1$
-
+        if (myName.length() > 0){
+			vars.put(myName, myValue);
+        }
+        
+        if (log.isDebugEnabled()){
+            log.debug(this +"::StringFromFile.execute() name:" //$NON-NLS-1$ 
+                 + myName + " value:" + myValue);//$NON-NLS-1$
+        }
+        
         return myValue;
 
     }
@@ -255,7 +308,7 @@ public class StringFromFile extends AbstractFunction implements Serializable
 
         values = parameters.toArray();
 
-        if ((values.length > 2) || (values.length < 1))
+        if ((values.length > MAX_PARAM_COUNT) || (values.length < MIN_PARAM_COUNT))
         {
             throw new InvalidVariableException("Wrong number of parameters");//$NON-NLS-1$
         }
