@@ -1,4 +1,5 @@
-/* ====================================================================
+/*
+ * ====================================================================
  * The Apache Software License, Version 1.1
  *
  * Copyright (c) 2001 The Apache Software Foundation.  All rights
@@ -54,9 +55,12 @@
 package org.apache.jmeter.assertions.gui;
 
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -65,6 +69,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.ButtonGroup;
+import javax.swing.JRadioButton;
 
 import org.apache.jmeter.assertions.SizeAssertion;
 import org.apache.jmeter.testelement.TestElement;
@@ -83,12 +89,13 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *@version   1.0
  ***************************************/
 
-public class SizeAssertionGui extends AbstractAssertionGui implements FocusListener
+public class SizeAssertionGui extends AbstractAssertionGui implements FocusListener, ActionListener
 {
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.elements");
 
 	private JTextField size;
+	SizeAssertion sa = new SizeAssertion();
 
 	/****************************************
 	 * !ToDo (Constructor description)
@@ -114,8 +121,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 	public TestElement createTestElement()
 	{
 		//ResponseAssertion el = new ResponseAssertion();
-		SizeAssertion el = new SizeAssertion();
-		configureTestElement(el);
+		configureTestElement(sa);
 		String sizeString = size.getText();
 		long assertionSize = 0;
 		try {
@@ -124,8 +130,8 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 		catch (NumberFormatException e) {
 			assertionSize = Long.MAX_VALUE;
 		}
-		el.setAllowedSize(assertionSize);
-		return el;
+		sa.setAllowedSize(assertionSize);
+		return sa;
 	}
 
 	/****************************************
@@ -169,7 +175,53 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 		size = new JTextField(5);
 		size.addFocusListener(this);
 		sizePanel.add(size);
-
+		
+		ButtonGroup comparatorButtonGroup = new ButtonGroup();
+		
+		JRadioButton equalButton = new JRadioButton("=");
+		equalButton.setSelected(true);
+		equalButton.setActionCommand(new Integer(SizeAssertion.EQUAL).toString());
+		equalButton.addActionListener(this);
+		comparatorButtonGroup.add(equalButton);
+				
+		JRadioButton notequalButton = new JRadioButton("!=");
+		notequalButton.setActionCommand(new Integer(SizeAssertion.NOTEQUAL).toString());
+		notequalButton.addActionListener(this);
+		comparatorButtonGroup.add(notequalButton);
+		
+		JRadioButton greaterthanButton = new JRadioButton(">");
+		greaterthanButton.setActionCommand(new Integer(SizeAssertion.GREATERTHAN).toString());
+		greaterthanButton.addActionListener(this);
+		comparatorButtonGroup.add(greaterthanButton);
+		
+		JRadioButton lessthanButton = new JRadioButton("<");
+		lessthanButton.setActionCommand(new Integer(SizeAssertion.LESSTHAN).toString());
+		lessthanButton.addActionListener(this);
+		comparatorButtonGroup.add(lessthanButton);
+		
+		JRadioButton greaterthanequalButton = new JRadioButton(">=");
+		greaterthanequalButton.setActionCommand(new Integer(SizeAssertion.GREATERTHANEQUAL).toString());
+		greaterthanequalButton.addActionListener(this);
+		comparatorButtonGroup.add(greaterthanequalButton);
+		
+		JRadioButton lessthanequalButton = new JRadioButton("<=");
+		lessthanequalButton.setActionCommand(new Integer(SizeAssertion.LESSTHANEQUAL).toString());
+		lessthanequalButton.addActionListener(this);
+		comparatorButtonGroup.add(lessthanequalButton);
+		
+		//Put the check boxes in a column in a panel
+        JPanel checkPanel = new JPanel();
+        checkPanel.setLayout(new GridLayout(0, 1));
+        JLabel compareLabel = new JLabel(JMeterUtils.getResString("size_assertion_comparator_label"));
+        checkPanel.add(compareLabel);
+        checkPanel.add(equalButton);
+        checkPanel.add(notequalButton);
+        checkPanel.add(greaterthanButton);
+        checkPanel.add(lessthanButton);
+        checkPanel.add(greaterthanequalButton);
+        checkPanel.add(lessthanequalButton);
+        sizePanel.add(checkPanel);
+		
 		mainPanel.add(sizePanel);
 		this.add(mainPanel);
 
@@ -208,5 +260,15 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 	 ***************************************/
 	public void focusGained(FocusEvent e) {
 	}
-
+	
+	/****************************************
+	 * Description of the Method
+	 *
+	 *@param e ActionEvent
+	 ***************************************/
+	public void actionPerformed(ActionEvent e) {
+		int comparator = new Integer(e.getActionCommand()).intValue(); 
+    	sa.setLogicalComparator(comparator);
+    }
+    
 }
