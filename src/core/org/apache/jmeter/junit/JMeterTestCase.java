@@ -21,6 +21,7 @@ import org.apache.log.Logger;
  */
 public abstract class JMeterTestCase extends TestCase
 {
+	private static final String filePrefix; 
 	public JMeterTestCase(){
 		super();
 	}
@@ -49,12 +50,28 @@ public abstract class JMeterTestCase extends TestCase
 				// Also need to set working directory so test files can be found
 				System.setProperty("user.dir",System.getProperty("user.dir")+File.separatorChar+"bin");
 				System.out.println("Setting user.dir="+System.getProperty("user.dir"));
+				filePrefix="bin/";
+			} else {
+				filePrefix="";
 			}
     		JMeterUtils jmu = new JMeterUtils();
     		jmu.initializeProperties(file);
+    	} else {
+    		filePrefix="";
     	}
     }
     
+	// Helper method to find a file
+	protected static File findTestFile(String file)
+	{
+		File f= new File(file);
+		if (filePrefix.length() > 0 && !f.isAbsolute())
+		{
+			f= new File(filePrefix+file);// Add the offset
+		}
+		return f;
+	}
+
     protected static final Logger testLog = LoggingManager.getLoggerForClass();
 }
 
