@@ -1,6 +1,5 @@
 package org.apache.jmeter.protocol.http.modifier;
 import java.io.Serializable;
-import java.net.URLDecoder;
 
 import junit.framework.TestCase;
 
@@ -16,11 +15,11 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
+
 /**
  * @author mstover
  *

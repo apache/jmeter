@@ -1,10 +1,10 @@
 package org.apache.jmeter.visualizers.gui;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.util.Arrays;
 import java.util.Collection;
 
-import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JPopupMenu;
 import javax.swing.event.ChangeEvent;
