@@ -105,13 +105,36 @@ public class RunningSample {
     }
 
     /**
-     * Returns a String that represents the idealized throughput for that
-     * sample.  Uses the following equation:<p>
-     * Rn = (TotalTime * NumberOfThreads) / averageTime
+     * Returns the throughput associated to this sampler in requests per second.
+     * May be slightly skewed because it takes the timestamps of the first and
+     * last samples as the total time passed, and the test may actually have
+     * started before that start time and ended after that end time.
+     **/
+    public double getRate() {
+      long howLongRunning = lastTime - firstTime;
+
+      if (howLongRunning == 0) return Double.MAX_VALUE;
+      return (double)counter / howLongRunning * 1000.0;
+    }
+
+    /**
+     * Returns the throughput associated to this sampler in requests per min.
+     * May be slightly skewed because it takes the timestamps of the first and
+     * last samples as the total time passed, and the test may actually have
+     * started before that start time and ended after that end time.
+     **/
+    public double getRatePerMin() {
+      long howLongRunning = lastTime - firstTime;
+
+      if (howLongRunning == 0) return Double.MAX_VALUE;
+      return (double)counter / howLongRunning * 60000.0;
+    }
+
+    /**
+     * Returns a String that represents the throughput associated for this
+     * sampler, in units appropriate to its dimension:
      * <p>
-     * Where Rn = # requests per TotalTime period.
-     * <p>
-     * This number is then represented in requests/second or requests/minute or requests/hour.
+     * The number is represented in requests/second or requests/minute or requests/hour.
      * <p>
      * Examples:
      *      "34.2/sec"
@@ -121,24 +144,24 @@ public class RunningSample {
      * @return a String representation of the rate the samples are being taken at.
      */
     public String getRateString() {
-        long howLongRunning = lastTime - firstTime;
+        double rate= getRate();
 
-        if (howLongRunning == 0) return ("N/A");
-	double rate= (double)howLongRunning / counter / 1000.0;
-	String unit="sec";
+        if (rate == Double.MAX_VALUE) return "N/A";
+ 
+        String unit="sec";
         if (rate < 1.0) {
-            rate *= 60.0;
-            unit = "min";
+	    rate *= 60.0;
+	    unit = "min";
         }
         if (rate < 1.0) {
-            rate *= 60.0;
-            unit = "hour";
+	    rate *= 60.0;
+	    unit = "/hour";
         }
-        
+
         String rval = rateFormatter.format(rate) + "/" + unit;
         return (rval);
     }
-    
+
     public String getLabel()
     {
     	return label;
