@@ -23,9 +23,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 import org.apache.jmeter.control.ReplaceableController;
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -83,6 +87,25 @@ public abstract class AbstractAction implements Command
                 tree.remove(item);
             }
 
+        }
+    }
+
+    /**
+     * @param e
+     */
+    protected void popupShouldSave(ActionEvent e)
+    {
+        if(!( ((Save) ActionRouter.getInstance().getAction(
+                "save",
+                "org.apache.jmeter.gui.action.Save")).hasTestPlanFile()))
+        {
+            if(JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
+                    JMeterUtils.getResString("should_save"),JMeterUtils.getResString("warning"),
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION)
+            {
+                ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(),e.getID(),Save.SAVE));
+            }
         }
     }
 }

@@ -76,6 +76,7 @@ public class Start extends AbstractAction
     {
         if (e.getActionCommand().equals(JMeterMenuBar.ACTION_START))
         {
+            popupShouldSave(e);
             startEngine();
         }
         else if (e.getActionCommand().equals(JMeterMenuBar.ACTION_STOP))

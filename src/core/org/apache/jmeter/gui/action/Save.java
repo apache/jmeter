@@ -20,6 +20,7 @@ package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Writer;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -34,6 +35,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.SaveService;
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -78,11 +80,24 @@ public class Save implements Command
     {
         return commands;
     }
+    
+    public boolean hasTestPlanFile()
+    {
+        return testPlanFile != null;
+    }
 
     public void setTestPlanFile(String f)
     {
         testPlanFile = f;
-        GuiPackage.getInstance().getMainFrame().setTitle(JMeterUtils.getExtendedFrameTitle(testPlanFile)); 
+        GuiPackage.getInstance().getMainFrame().setTitle(JMeterUtils.getExtendedFrameTitle(testPlanFile));
+        try
+        {
+            FileServer.getFileServer().setBasedir(testPlanFile);
+        }
+        catch(IOException e1)
+        {
+            log.error("Failure setting file server's base dir",e1);
+        } 
     }
 
     public void doAction(ActionEvent e) throws IllegalUserActionException
@@ -120,7 +135,7 @@ public class Save implements Command
             updateFile = chooser.getSelectedFile().getAbsolutePath();
             if (!e.getActionCommand().equals(SAVE_AS))
             {
-                testPlanFile = updateFile;
+                setTestPlanFile(updateFile);
             }
         }
         // TODO: doesn't putting this here mark the tree as

@@ -75,11 +75,13 @@ public class RemoteStart extends AbstractAction
         }
         else if (action.equals("remote_start"))
         {
+            popupShouldSave(e);
             doRemoteInit(name);
             doRemoteStart(name);
         }
         else if (action.equals("remote_start_all"))
         {
+            popupShouldSave(e);
             String remote_hosts_string =
                 JMeterUtils.getPropDefault("remote_hosts", "127.0.0.1");
             java.util.StringTokenizer st =
