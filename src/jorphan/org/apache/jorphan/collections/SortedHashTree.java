@@ -20,6 +20,7 @@ package org.apache.jorphan.collections;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -43,16 +44,30 @@ import java.util.TreeMap;
 public class SortedHashTree extends HashTree implements Serializable
 {
     //NOTUSED private static Logger log = LoggingManager.getLoggerForClass();
+    protected Comparator comparator;
 
     public SortedHashTree()
     {
         data = new TreeMap();
+    }
+    
+    public SortedHashTree(Comparator comper)
+    {
+        comparator = comper;
+        data = new TreeMap(comparator);
     }
 
     public SortedHashTree(Object key)
     {
         data = new TreeMap();
         data.put(key, new SortedHashTree());
+    }
+    
+    public SortedHashTree(Object key,Comparator comper)
+    {
+        comparator = comper;
+        data = new TreeMap(comparator);
+        data.put(key, new SortedHashTree(comparator));
     }
 
     public SortedHashTree(Collection keys)
@@ -64,6 +79,17 @@ public class SortedHashTree extends HashTree implements Serializable
             data.put(it.next(), new SortedHashTree());
         }
     }
+    
+    public SortedHashTree(Collection keys,Comparator comper)
+    {
+        comparator = comper;
+        data = new TreeMap(comparator);
+        Iterator it = keys.iterator();
+        while (it.hasNext())
+        {
+            data.put(it.next(), new SortedHashTree(comparator));
+        }
+    }
 
     public SortedHashTree(Object[] keys)
     {
@@ -73,26 +99,71 @@ public class SortedHashTree extends HashTree implements Serializable
             data.put(keys[x], new SortedHashTree());
         }
     }
-
-    public HashTree createNewTree()
+    
+    public SortedHashTree(Object[] keys,Comparator comper)
     {
-        return new SortedHashTree();
+        comparator = comper;
+        data = new TreeMap(comparator);
+        for (int x = 0; x < keys.length; x++)
+        {
+            data.put(keys[x], new SortedHashTree(comparator));
+        }
     }
 
-    public HashTree createNewTree(Object key)
+    protected HashTree createNewTree()
     {
-        return new SortedHashTree(key);
+        if(comparator == null)
+        {
+            return new SortedHashTree();
+        }
+        else
+        {
+            return new SortedHashTree(comparator);
+        }
     }
 
-    public HashTree createNewTree(Collection values)
+    protected HashTree createNewTree(Object key)
     {
-        return new SortedHashTree(values);
+        if(comparator == null)
+        {
+            return new SortedHashTree(key);
+        }
+        else
+        {
+            return new SortedHashTree(key,comparator);
+        }
+    }
+
+    protected HashTree createNewTree(Collection values)
+    {
+        if(comparator == null)
+        {
+            return new SortedHashTree(values);
+        }
+        else
+        {
+            return new SortedHashTree(values,comparator);
+        }
     }
 
     public Object clone()
     {
-        HashTree newTree = new SortedHashTree();
+        HashTree newTree = null;
+        if(comparator == null)
+        {
+            newTree = new SortedHashTree();
+        }
+        else
+        {
+            newTree = new SortedHashTree(comparator);
+        }
         newTree.data = (Map) ((HashMap) data).clone();
         return newTree;
+    }
+    /**
+     * @param comparator The comparator to set.
+     */
+    public void setComparator(Comparator comparator) {
+        this.comparator = comparator;
     }
 }

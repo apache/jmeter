@@ -18,6 +18,9 @@
 
 package org.apache.jorphan.collections;
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -389,6 +392,42 @@ public class Data implements Serializable
     public boolean next()
     {
         return (++currentPos < size);
+    }
+    
+    /**
+     * Gets a Data object from a ResultSet.
+     *
+     * @param  rs ResultSet passed in from a database query
+     * @return    a Data object
+     * @throws    java.sql.SQLException
+     */
+    public static Data getDataFromResultSet(ResultSet rs) throws SQLException
+    {
+        ResultSetMetaData meta = rs.getMetaData();
+        Data data = new Data();
+
+        int numColumns = meta.getColumnCount();
+        String[] dbCols = new String[numColumns];
+        for (int i = 0; i < numColumns; i++)
+        {
+            dbCols[i] = meta.getColumnName(i + 1);
+            data.addHeader(dbCols[i]);
+        }
+        
+        while (rs.next())
+        {
+            data.next();
+            for (int i = 0; i < numColumns; i++)
+            {
+                Object o = rs.getObject(i + 1);
+                if (o instanceof byte[])
+                {
+                    o = new String((byte[]) o);
+                }
+                data.addColumnValue(dbCols[i], o);
+            }
+        }
+        return data;
     }
 
     /**

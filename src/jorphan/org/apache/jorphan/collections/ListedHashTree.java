@@ -148,12 +148,18 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable
         return new ListedHashTree(values);
     }
 
-    public void add(Object key)
+    public HashTree add(Object key)
     {
         if (!data.containsKey(key))
         {
-            data.put(key, createNewTree());
+            HashTree newTree = createNewTree();
+            data.put(key, newTree);
             order.add(key);
+            return newTree;
+        }
+        else
+        {
+            return getTree(key);
         }
     }
 
@@ -322,5 +328,12 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable
 			assertFalse(tree3.equals(tree4));
 			assertFalse(tree4.equals(tree3));
 		}
+    }
+    /* (non-Javadoc)
+     * @see java.util.Map#clear()
+     */
+    public void clear() {
+        super.clear();
+        order.clear();
     }
 }
