@@ -239,7 +239,7 @@ POST content.</p>
  	should be available in the LDAP Server. The execution time is calculated.</p></li></ol></ol>
 </component>
 
-<component name="Webservice(SOAP) Request" index="13.1.7" screenshot="../images/screenshots/webservice_sampler.png">
+<component name="WebService(SOAP) Request (Alpha Code)" index="13.1.7" screenshot="../images/screenshots/webservice_sampler.png">
 
 <description><p>This sampler has been tested with IIS Webservice running .NET 1.0. It hasn't been tested with SUN or IBM webservices providers, but it should work. The sampler uses Apache SOAP driver, to serialize the message and set the header with the correct SOAPAction. Right now the sampler doesn't support automatic WSDL handling, since Apache SOAP currently doesn't provide support for it. Both IBM and SUN provide WSDL drivers.</p>
 </description>
@@ -292,14 +292,17 @@ requests. See the table below for the sequence JMeter sends the HTTP Requests.</
 <table border="1" cellspacing="0" cellpadding="4">
 <tr valign="top"><td>Loop Iteration</td><td>Each JMeter Thread Sends These HTTP Requests</td></tr>
 <tr valign="top"><td>1</td><td>News Page</td></tr>
+<tr valign="top"><td>2</td><td>Log Page</td></tr>
 <tr valign="top"><td>2</td><td>FAQ Page</td></tr>
+<tr valign="top"><td>2</td><td>Log Page</td></tr>
 <tr valign="top"><td>3</td><td>Gump Page</td></tr>
+<tr valign="top"><td>2</td><td>Log Page</td></tr>
 <tr valign="top"><td>4</td><td>Because there are no more requests in controller, JMeter start over and sends the first HTTP Request, which is the News Page.</td></tr>
+<tr valign="top"><td>2</td><td>Log Page</td></tr>
 <tr valign="top"><td>5</td><td>FAQ Page</td></tr>
+<tr valign="top"><td>2</td><td>Log Page</td></tr>
 </table>
 
-<p>Note, the File Reporter is configured to store the results in a file named
-"interleave-test.dat" in the current directory.</p>
 
 </example>
 

@@ -320,7 +320,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         mainPanel = new VerticalPanel();
         mainPanel.setBorder(
             BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), JMeterUtils.getResString("scheduler_cofiguration")));
+                BorderFactory.createEtchedBorder(), JMeterUtils.getResString("scheduler_configuration")));
         mainPanel.add(createStartTimePanel());
         mainPanel.add(createEndTimePanel());
         mainPanel.setVisible(false);
