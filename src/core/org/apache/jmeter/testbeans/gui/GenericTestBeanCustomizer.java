@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2004 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -135,7 +135,7 @@ import org.apache.log.Logger;
  * available (where <b><i>group</i></b> is the group name).
  * </dl>
  */
-class GenericTestBeanCustomizer extends JPanel
+public class GenericTestBeanCustomizer extends JPanel
         implements SharedCustomizer, PropertyChangeListener 
 {
     private static Logger log = LoggingManager.getLoggerForClass();
