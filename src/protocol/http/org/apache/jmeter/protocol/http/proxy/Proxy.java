@@ -140,9 +140,7 @@ public class Proxy extends Thread
         HTTPSampler sampler = new HTTPSampler();
         try
         {
-            byte[] clientRequest = //TODO: var not used, but call may be needed for side effects?
-                request.parse(
-                    new BufferedInputStream(clientSocket.getInputStream()));
+           request.parse(new BufferedInputStream(clientSocket.getInputStream()));
 
             sampler = request.getSampler();
             
@@ -155,7 +153,7 @@ public class Proxy extends Thread
 
             result = sampler.sample();
             writeToClient(
-                result.getResponseData(),
+                result,
                 new BufferedOutputStream(clientSocket.getOutputStream()));
             /*
              * We don't want to store any cookies in the generated test plan
@@ -199,13 +197,14 @@ public class Proxy extends Thread
      * @throws IOException  if an IOException occurs while writing
      */
     private void writeToClient(
-        byte[] inBytes,
+        SampleResult res,
         OutputStream out)
         throws IOException
     {
         try
         {
-            out.write(inBytes);
+        	out.write((res.getResponseHeaders()+"\n").getBytes());
+            out.write(res.getResponseData());
             out.flush();
             log.debug("Done writing to client");
         }
