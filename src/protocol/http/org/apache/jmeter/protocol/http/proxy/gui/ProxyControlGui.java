@@ -94,6 +94,8 @@ import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.protocol.http.proxy.ProxyControl;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /****************************************
  * Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:
@@ -104,423 +106,427 @@ import org.apache.jmeter.util.JMeterUtils;
  *@version   1.0
  ***************************************/
 
-public class ProxyControlGui extends JPanel implements JMeterGUIComponent, ActionListener,
-		KeyListener,FocusListener,UnsharedComponent
+public class ProxyControlGui extends JPanel implements JMeterGUIComponent, ActionListener, KeyListener, FocusListener, UnsharedComponent
 {
+    transient private static Logger log =
+            Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    NamePanel namePanel;
+    JTextField portField;
 
-	NamePanel namePanel;
-	JTextField portField;
+    ProxyControl model;
 
-	ProxyControl model;
+    JTable excludeTable;
+    PowerTableModel excludeModel;
+    JTable includeTable;
+    PowerTableModel includeModel;
+    JButton addExclude, deleteExclude, addInclude, deleteInclude;
 
-	JTable excludeTable;
-	PowerTableModel excludeModel;
-	JTable includeTable;
-	PowerTableModel includeModel;
-	JButton addExclude,deleteExclude,addInclude,deleteInclude;
+    JButton stop, start, restart;
+    private final static String STOP = "stop";
+    private final static String START = "start";
+    private final static String RESTART = "restart";
+    private final static String ADD_INCLUDE = "add_include";
+    private final static String ADD_EXCLUDE = "add_exclude";
+    private final static String DELETE_INCLUDE = "delete_include";
+    private final static String DELETE_EXCLUDE = "delete_exclude";
 
-	JButton stop, start,restart;
-	private final static String STOP = "stop";
-	private final static String START = "start";
-	private final static String RESTART = "restart";
-	private final static String ADD_INCLUDE = "add_include";
-	private final static String ADD_EXCLUDE = "add_exclude";
-	private final static String DELETE_INCLUDE = "delete_include";
-	private final static String DELETE_EXCLUDE = "delete_exclude";
+    private final static String INCLUDE_COL = JMeterUtils.getResString("patterns_to_include");
+    private final static String EXCLUDE_COL = JMeterUtils.getResString("patterns_to_exclude");
 
-	private final static String INCLUDE_COL = JMeterUtils.getResString("patterns_to_include");
-	private final static String EXCLUDE_COL = JMeterUtils.getResString("patterns_to_exclude");
+    /****************************************
+     * !ToDo (Constructor description)
+     ***************************************/
+    public ProxyControlGui()
+    {
+        namePanel = new NamePanel();
+        setName(getStaticLabel());
+        init();
+    }
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public ProxyControlGui()
-	{
-		namePanel = new NamePanel();
-		setName(getStaticLabel());
-		init();
-	}
+    public JPopupMenu createPopupMenu()
+    {
+        return MenuFactory.getDefaultTimerMenu();
+    }
 
-	public JPopupMenu createPopupMenu()
-	{
-		return MenuFactory.getDefaultTimerMenu();
-	}
+    public TestElement createTestElement()
+    {
+        if (model == null)
+        {
+            model = new ProxyControl();
+            model.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
+            model.setProperty(TestElement.TEST_CLASS, model.getClass().getName());
+        }
+        log.debug("creating/configuring model = " + model);
+        model.setProperty(TestElement.NAME, getName());
+        model.setPort(Integer.parseInt(portField.getText()));
+        setIncludeListInProxyControl(model);
+        setExcludeListInProxyControl(model);
+        return model;
+    }
 
-	public TestElement createTestElement()
-	{
-		if(model == null)
-		{
-			model = new ProxyControl();
-			model.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
-			model.setProperty(TestElement.TEST_CLASS, model.getClass().getName());
-		}
-		model.setProperty(TestElement.NAME,getName());
-		model.setPort(Integer.parseInt(portField.getText()));
-		setIncludeListInProxyControl(model);
-		setExcludeListInProxyControl(model);
-		return model;
-	}
+    protected void setIncludeListInProxyControl(ProxyControl element)
+    {
+        List includeList = getDataList(includeModel, INCLUDE_COL);
+        element.setIncludeList(includeList);
+    }
 
-	protected void setIncludeListInProxyControl(ProxyControl element) {
-		List includeList = getDataList(includeModel,INCLUDE_COL);
-		element.setIncludeList(includeList);
-	}
+    protected void setExcludeListInProxyControl(ProxyControl element)
+    {
+        List excludeList = getDataList(excludeModel, EXCLUDE_COL);
+        element.setExcludeList(excludeList);
+    }
 
-	protected void setExcludeListInProxyControl(ProxyControl element)
-	{
-		List excludeList = getDataList(excludeModel,EXCLUDE_COL);
-		element.setExcludeList(excludeList);
-	}
+    private List getDataList(PowerTableModel model, String colName)
+    {
+        String[] dataArray = model.getData().getColumn(colName);
+        List list = new LinkedList();
+        for (int i = 0; i < dataArray.length; i++)
+        {
+            list.add(dataArray[i]);
+        }
+        return list;
+    }
 
-	private List getDataList(PowerTableModel model,String colName) {
-		String[] dataArray = model.getData().getColumn(colName);
-		List list = new LinkedList();
-		for(int i = 0;i < dataArray.length;i++)
-		{
-			list.add(dataArray[i]);
-		}
-		return list;
-	}
+    public void setName(String name)
+    {
+        super.setName(name);
+        namePanel.setName(name);
+    }
 
+    public String getName()
+    {
+        return namePanel.getName();
+    }
 
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("proxy_title");
+    }
 
-	public void setName(String name)
-	{
-		super.setName(name);
-		namePanel.setName(name);
-	}
+    public Collection getMenuCategories()
+    {
+        return Arrays.asList(new String[] { MenuFactory.NON_TEST_ELEMENTS });
+    }
 
-	public String getName()
-	{
-		return namePanel.getName();
-	}
+    public void configure(TestElement element)
+    {
+        log.debug("Configuring gui with " + element);
+        if (model != null && model != element)
+        {
+            model.addTestElement(element);
+        }
+        if(model == null)
+        {
+            model = (ProxyControl)element;
+        }
+        setName(model.getProperty(TestElement.NAME).toString());
+        portField.setText(model.getProperty(ProxyControl.PORT).toString());
+        populateTable(includeModel, model.getIncludePatterns().iterator());
+        populateTable(excludeModel, model.getExcludePatterns().iterator());
+        repaint();
+    }
 
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("proxy_title");
-	}
+    private void populateTable(PowerTableModel model, Iterator iter)
+    {
+        model.clearData();
+        while (iter.hasNext())
+        {
+            model.addRow(new Object[] { iter.next()});
+        }
+        model.fireTableDataChanged();
+    }
 
-	public Collection getMenuCategories()
-	{
-		return Arrays.asList(new String[]{MenuFactory.NON_TEST_ELEMENTS});
-	}
+    public void focusLost(FocusEvent e)
+    {
+        try
+        {
+            ((JTable) e.getSource()).getCellEditor().stopCellEditing();
+        }
+        catch (Exception err)
+        {}
+    }
 
-	public void configure(TestElement element)
-	{
-		ProxyControl el = (ProxyControl)element;
-		setName(element.getProperty(TestElement.NAME).toString());
-		portField.setText(element.getProperty(ProxyControl.PORT).toString());
-		populateTable(includeModel,el.getIncludePatterns().iterator());
-		populateTable(excludeModel,el.getExcludePatterns().iterator());
-		model = el;
-	}
+    public void focusGained(FocusEvent e)
+    {}
 
-	private void populateTable(PowerTableModel model,Iterator iter) {
-		while(iter.hasNext())
-		{
-			model.addRow(new Object[]{iter.next()});
-		}
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@param action  !ToDo (Parameter description)
+     ***************************************/
+    public void actionPerformed(ActionEvent action)
+    {
+        String command = action.getActionCommand();
 
-	public void focusLost(FocusEvent e)
-	{
-		try
-		{
-			((JTable)e.getSource()).getCellEditor().stopCellEditing();
-		}
-		catch(Exception err)
-		{
-		}
-	}
+        if (command.equals(STOP))
+        {
+            model.stopProxy();
+            stop.setEnabled(false);
+            start.setEnabled(true);
+        }
+        else if (command.equals(START))
+        {
+            model = (ProxyControl) createTestElement();
+            startProxy();
+        }
+        else if (command.equals(RESTART))
+        {
+            model.stopProxy();
+            model = (ProxyControl) createTestElement();
+            startProxy();
+        }
+        else if (command.equals(this.ADD_EXCLUDE))
+        {
+            excludeModel.addNewRow();
+            excludeModel.fireTableDataChanged();
+            if (stop.isEnabled())
+                enableRestart();
+        }
+        else if (command.equals(this.ADD_INCLUDE))
+        {
+            includeModel.addNewRow();
+            includeModel.fireTableDataChanged();
+            enableRestart();
+        }
+        else if (command.equals(this.DELETE_EXCLUDE))
+        {
+            excludeModel.removeRow(excludeTable.getSelectedRow());
+            excludeModel.fireTableDataChanged();
+            enableRestart();
+        }
+        else if (command.equals(this.DELETE_INCLUDE))
+        {
+            includeModel.removeRow(includeTable.getSelectedRow());
+            includeModel.fireTableDataChanged();
+            enableRestart();
+        }
+    }
 
-	public void focusGained(FocusEvent e)
-	{
-	}
+    private void startProxy()
+    {
+        ValueReplacer replacer = GuiPackage.getInstance().getReplacer();
+        try
+        {
+            replacer.replaceValues(model);
+            model.startProxy();
+            start.setEnabled(false);
+            stop.setEnabled(true);
+            restart.setEnabled(false);
+        }
+        catch (InvalidVariableException e)
+        {
+            JOptionPane.showMessageDialog(this, JMeterUtils.getResString("invalid_variables"), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param action  !ToDo (Parameter description)
-	 ***************************************/
-	public void actionPerformed(ActionEvent action)
-	{
-		String command = action.getActionCommand();
+    private void enableRestart()
+    {
+        if (stop.isEnabled())
+        {
+            restart.setEnabled(true);
+        }
+    }
 
-		if(command.equals(STOP))
-		{
-			model.stopProxy();
-			stop.setEnabled(false);
-			start.setEnabled(true);
-			model = null;
-		}
-		else if(command.equals(START))
-		{
-			model = (ProxyControl)createTestElement();
-			startProxy();
-		}
-		else if(command.equals(RESTART))
-		{
-			model.stopProxy();
-			model = (ProxyControl)createTestElement();
-			startProxy();
-		}
-		else if(command.equals(this.ADD_EXCLUDE))
-		{
-			excludeModel.addNewRow();
-			excludeModel.fireTableDataChanged();
-			if(model != null)
-			enableRestart();
-		}
-		else if(command.equals(this.ADD_INCLUDE))
-		{
-			includeModel.addNewRow();
-			includeModel.fireTableDataChanged();
-			enableRestart();
-		}
-		else if(command.equals(this.DELETE_EXCLUDE))
-		{
-			excludeModel.removeRow(excludeTable.getSelectedRow());
-			excludeModel.fireTableDataChanged();
-			enableRestart();
-		}
-		else if(command.equals(this.DELETE_INCLUDE))
-		{
-			includeModel.removeRow(includeTable.getSelectedRow());
-			includeModel.fireTableDataChanged();
-			enableRestart();
-		}
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@param e  !ToDo (Parameter description)
+     ***************************************/
+    public void keyPressed(KeyEvent e)
+    {}
 
-	private void startProxy()
-	{
-		ValueReplacer replacer = GuiPackage.getInstance().getReplacer();
-		try
-		{
-			replacer.replaceValues(model);
-			model.startProxy();
-			start.setEnabled(false);
-			stop.setEnabled(true);
-			restart.setEnabled(false);
-		}
-		catch (InvalidVariableException e)
-		{
-			JOptionPane.showMessageDialog(this,JMeterUtils.getResString(
-					"invalid_variables"),"Error",JOptionPane.ERROR_MESSAGE);
-		}
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@param e  !ToDo (Parameter description)
+     ***************************************/
+    public void keyTyped(KeyEvent e)
+    {}
 
-	private void enableRestart()
-	{
-		if(stop.isEnabled())
-		{
-			restart.setEnabled(true);
-		}
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@param e  !ToDo (Parameter description)
+     ***************************************/
+    public void keyReleased(KeyEvent e)
+    {
+        String fieldName = e.getComponent().getName();
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void keyPressed(KeyEvent e) { }
+        if (fieldName.equals(ProxyControl.PORT))
+        {
+            try
+            {
+                Integer.parseInt(portField.getText());
+            }
+            catch (NumberFormatException nfe)
+            {
+                if (portField.getText().length() > 0)
+                {
+                    JOptionPane.showMessageDialog(this, "You must enter a valid number", "Invalid data", JOptionPane.WARNING_MESSAGE);
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void keyTyped(KeyEvent e) { }
+                    // Right now, the cleanest thing to do is simply clear the
+                    // entire text field. We do not want to set the text to
+                    // the default because that would be confusing to the user.
+                    // For example, the user typed "5t" instead of "56". After
+                    // the user closes the error dialog, the text would change
+                    // from "5t" to "1".  A litle confusing. If anything, it
+                    // should display just "5". Future enhancement...
+                    portField.setText("");
+                }
+            }
+        }
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void keyReleased(KeyEvent e)
-	{
-		String fieldName = e.getComponent().getName();
+    private void init()
+    {
+        this.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = gbc.WEST;
+        gbc.fill = gbc.BOTH;
+        gbc.gridheight = 1;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
 
-		if(fieldName.equals(ProxyControl.PORT))
-		{
-			try
-			{
-				Integer.parseInt(portField.getText());
-			}
-			catch(NumberFormatException nfe)
-			{
-				if(portField.getText().length() > 0)
-				{
-					JOptionPane.showMessageDialog(this, "You must enter a valid number",
-							"Invalid data", JOptionPane.WARNING_MESSAGE);
+        // MAIN PANEL
+        JPanel mainPanel = new JPanel();
+        add(mainPanel, gbc.clone());
+        Border margin = new EmptyBorder(10, 10, 5, 10);
+        mainPanel.setBorder(margin);
+        mainPanel.setLayout(new GridBagLayout());
+        //gbc.fill = gbc.NONE;
+        gbc.weighty = 0;
 
-					// Right now, the cleanest thing to do is simply clear the
-					// entire text field. We do not want to set the text to
-					// the default because that would be confusing to the user.
-					// For example, the user typed "5t" instead of "56". After
-					// the user closes the error dialog, the text would change
-					// from "5t" to "1".  A litle confusing. If anything, it
-					// should display just "5". Future enhancement...
-					portField.setText("");
-				}
-			}
-		}
-	}
+        // TITLE
+        JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("proxy_title"));
+        Font curFont = panelTitleLabel.getFont();
+        int curFontSize = curFont.getSize();
+        curFontSize += 4;
+        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
+        mainPanel.add(panelTitleLabel, gbc.clone());
+        gbc.gridy++;
 
-	private void init()
-	{
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.anchor = gbc.WEST;
-		gbc.fill = gbc.BOTH;
-		gbc.gridheight = 1;
-		gbc.gridwidth = 1;
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.weightx = 1;
-		gbc.weighty = 1;
+        // NAME
+        mainPanel.add(namePanel, gbc.clone());
+        gbc.gridy++;
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		add(mainPanel,gbc.clone());
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new GridBagLayout());
-		//gbc.fill = gbc.NONE;
-		gbc.weighty = 0;
+        mainPanel.add(createPortPanel(), gbc.clone());
+        gbc.gridy++;
+        gbc.fill = gbc.BOTH;
+        gbc.weighty = .5;
+        mainPanel.add(createIncludePanel(), gbc.clone());
+        gbc.gridy++;
+        mainPanel.add(createExcludePanel(), gbc.clone());
+        gbc.gridy++;
+        gbc.fill = gbc.NONE;
+        gbc.weighty = 0;
+        mainPanel.add(createControls(), gbc.clone());
 
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("proxy_title"));
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel,gbc.clone());
-		gbc.gridy++;
+    }
 
-		// NAME
-		mainPanel.add(namePanel,gbc.clone());
-		gbc.gridy++;
+    private JPanel createControls()
+    {
+        JPanel panel = new JPanel();
 
-		mainPanel.add(createPortPanel(),gbc.clone());
-		gbc.gridy++;
-		gbc.fill = gbc.BOTH;
-		gbc.weighty = .5;
-		mainPanel.add(createIncludePanel(),gbc.clone());
-		gbc.gridy++;
-		mainPanel.add(createExcludePanel(),gbc.clone());
-		gbc.gridy++;
-		gbc.fill = gbc.NONE;
-		gbc.weighty = 0;
-		mainPanel.add(createControls(),gbc.clone());
+        start = new JButton(JMeterUtils.getResString("start"));
+        start.addActionListener(this);
+        start.setActionCommand(START);
 
-	}
+        stop = new JButton(JMeterUtils.getResString("stop"));
+        stop.addActionListener(this);
+        stop.setActionCommand(STOP);
 
-	private JPanel createControls()
-	{
-		JPanel panel = new JPanel();
+        restart = new JButton(JMeterUtils.getResString("restart"));
+        restart.addActionListener(this);
+        restart.setActionCommand(RESTART);
 
-		start = new JButton(JMeterUtils.getResString("start"));
-		start.addActionListener(this);
-		start.setActionCommand(START);
+        panel.add(start);
+        panel.add(stop);
+        panel.add(restart);
+        start.setEnabled(true);
+        stop.setEnabled(false);
+        restart.setEnabled(false);
 
-		stop = new JButton(JMeterUtils.getResString("stop"));
-		stop.addActionListener(this);
-		stop.setActionCommand(STOP);
+        return panel;
+    }
 
-		restart = new JButton(JMeterUtils.getResString("restart"));
-		restart.addActionListener(this);
-		restart.setActionCommand(RESTART);
+    private JPanel createPortPanel()
+    {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-		panel.add(start);
-		panel.add(stop);
-		panel.add(restart);
-		start.setEnabled(true);
-		stop.setEnabled(false);
-		restart.setEnabled(false);
+        panel.add(new JLabel(JMeterUtils.getResString("port")));
 
-		return panel;
-	}
+        portField = new JTextField(8);
+        portField.setName(ProxyControl.PORT);
+        portField.addKeyListener(this);
+        portField.setText("8080");
+        panel.add(portField);
+        panel.revalidate();
+        return panel;
+    }
 
-	private JPanel createPortPanel()
-	{
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    private JPanel createIncludePanel()
+    {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("patterns_to_include")));
+        includeTable = new JTable();
+        includeModel = new PowerTableModel(new String[] { INCLUDE_COL }, new Class[] { String.class });
+        JScrollPane scroller = new JScrollPane(includeTable);
+        scroller.setBackground(panel.getBackground());
+        includeTable.setModel(includeModel);
+        addInclude = new JButton(JMeterUtils.getResString("add"));
+        deleteInclude = new JButton(JMeterUtils.getResString("delete"));
+        addInclude.setActionCommand(ADD_INCLUDE);
+        deleteInclude.setActionCommand(DELETE_INCLUDE);
+        addInclude.addActionListener(this);
+        deleteInclude.addActionListener(this);
+        panel.add(scroller, BorderLayout.CENTER);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(addInclude);
+        buttonPanel.add(deleteInclude);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+        includeTable.addFocusListener(this);
+        return panel;
+    }
 
-		panel.add(new JLabel(JMeterUtils.getResString("port")));
-
-		portField = new JTextField(8);
-		portField.setName(ProxyControl.PORT);
-		portField.addKeyListener(this);
-		portField.setText("8080");
-		panel.add(portField);
-		panel.revalidate();
-		return panel;
-	}
-
-	private JPanel createIncludePanel()
-	{
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-				JMeterUtils.getResString("patterns_to_include")));
-		includeTable = new JTable();
-		includeModel = new PowerTableModel(new String[]{INCLUDE_COL},
-					new Class[]{String.class});
-		JScrollPane scroller = new JScrollPane(includeTable);
-		scroller.setBackground(panel.getBackground());
-		includeTable.setModel(includeModel);
-		addInclude = new JButton(JMeterUtils.getResString("add"));
-		deleteInclude = new JButton(JMeterUtils.getResString("delete"));
-		addInclude.setActionCommand(ADD_INCLUDE);
-		deleteInclude.setActionCommand(DELETE_INCLUDE);
-		addInclude.addActionListener(this);
-		deleteInclude.addActionListener(this);
-		panel.add(scroller,BorderLayout.CENTER);
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.add(addInclude);
-		buttonPanel.add(deleteInclude);
-		panel.add(buttonPanel,BorderLayout.SOUTH);
-		includeTable.addFocusListener(this);
-		return panel;
-	}
-
-	private JPanel createExcludePanel()
-	{
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-				JMeterUtils.getResString("patterns_to_exclude")));
-		excludeTable = new JTable();
-		excludeModel = new PowerTableModel(new String[]{EXCLUDE_COL},
-					new Class[]{String.class});
-		JScrollPane scroller = new JScrollPane(excludeTable);
-		scroller.setBackground(panel.getBackground());
-		excludeTable.setModel(excludeModel);
-		addExclude = new JButton(JMeterUtils.getResString("add"));
-		deleteExclude = new JButton(JMeterUtils.getResString("delete"));
-		addExclude.setActionCommand(ADD_EXCLUDE);
-		deleteExclude.setActionCommand(DELETE_EXCLUDE);
-		addExclude.addActionListener(this);
-		deleteExclude.addActionListener(this);
-		panel.add(scroller,BorderLayout.CENTER);
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.add(addExclude);
-		buttonPanel.add(deleteExclude);
-		panel.add(buttonPanel,BorderLayout.SOUTH);
-		excludeTable.addFocusListener(this);
-		return panel;
-	}
-
+    private JPanel createExcludePanel()
+    {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("patterns_to_exclude")));
+        excludeTable = new JTable();
+        excludeModel = new PowerTableModel(new String[] { EXCLUDE_COL }, new Class[] { String.class });
+        JScrollPane scroller = new JScrollPane(excludeTable);
+        scroller.setBackground(panel.getBackground());
+        excludeTable.setModel(excludeModel);
+        addExclude = new JButton(JMeterUtils.getResString("add"));
+        deleteExclude = new JButton(JMeterUtils.getResString("delete"));
+        addExclude.setActionCommand(ADD_EXCLUDE);
+        deleteExclude.setActionCommand(DELETE_EXCLUDE);
+        addExclude.addActionListener(this);
+        deleteExclude.addActionListener(this);
+        panel.add(scroller, BorderLayout.CENTER);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(addExclude);
+        buttonPanel.add(deleteExclude);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+        excludeTable.addFocusListener(this);
+        return panel;
+    }
 
     public void setNode(JMeterTreeNode node)
     {
         namePanel.setNode(node);
     }
 
-	/**
-	 * Returns the portField.
-	 * @return JTextField
-	 */
-	protected JTextField getPortField()
-	{
-		return portField;
-	}
+    /**
+     * Returns the portField.
+     * @return JTextField
+     */
+    protected JTextField getPortField()
+    {
+        return portField;
+    }
 
 }
