@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 /**
  * @author    Michael Stover
- * @created   March 13, 2001
- * @version   $Revision$
+ * Created   March 13, 2001
+ * @version   $Revision$ Last updated: $Date$
  */
 public class WorkBench extends AbstractTestElement implements Serializable
 {

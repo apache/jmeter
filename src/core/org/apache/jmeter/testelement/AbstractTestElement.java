@@ -82,7 +82,7 @@ import org.apache.log.Logger;
  */
 public abstract class AbstractTestElement implements TestElement, Serializable
 {
-    protected static Logger log = LoggingManager.getLoggerForClass();
+    protected static final Logger log = LoggingManager.getLoggerForClass();
 
     private Map propMap = Collections.synchronizedMap(new HashMap());
     private Set temporaryProperties;
@@ -118,7 +118,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable
         propMap.remove(key);
     }
 
-    public boolean equals(Object o)
+    public boolean equals(Object o) //TODO: probably ought to use hashCode() from Map as well
     {
         if (o instanceof AbstractTestElement)
         {
