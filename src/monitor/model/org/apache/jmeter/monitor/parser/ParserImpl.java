@@ -60,7 +60,7 @@ public abstract class ParserImpl implements Parser
 
 	/**
 	 * parse byte array and return Status object
-	 * @param byte[]
+	 * @param bytes
 	 * @return Status
 	 */
     public Status parseBytes(byte[] bytes)
@@ -82,7 +82,7 @@ public abstract class ParserImpl implements Parser
     }
 
 	/**
-	 * @param String data
+	 * @param content
 	 * @return Status
 	 */
     public Status parseString(String content)
@@ -91,7 +91,7 @@ public abstract class ParserImpl implements Parser
     }
 
 	/**
-	 * @param SampleResult result
+	 * @param result
 	 * @return Status
 	 */
     public Status parseSampleResult(SampleResult result)
