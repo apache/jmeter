@@ -97,7 +97,7 @@ public class JMeterTest extends JMeterTestCase
     /*
      * Extract titles from component_reference.xml
      */
-    public void createTitleSet() throws JDOMException
+    public void createTitleSet() throws Exception
     {
 		guiTitles = new HashSet(90);
 		
