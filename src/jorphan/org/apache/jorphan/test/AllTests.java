@@ -173,15 +173,16 @@ public final class AllTests
 		logprop("os.version");
 		logprop("os.arch");
 		logprop("java.class.version");
-		//logprop("java.class.path");
-		String cp = System.getProperty("java.class.path");
-		String cpe[]= JMeterUtils.split(cp,";","");
-		StringBuffer sb = new StringBuffer(3000);
-		for (int i=0;i<cpe.length;i++){
-			sb.append(cpe[i]);
-			sb.append("\n");
-		}
-		log.info(sb.toString());
+		logprop("java.class.path");
+		//TODO - re-enable when split available in jorphan?
+//		String cp = System.getProperty("java.class.path");
+//		String cpe[]= JMeterUtils.split(cp,";","");
+//		StringBuffer sb = new StringBuffer(3000);
+//		for (int i=0;i<cpe.length;i++){
+//			sb.append(cpe[i]);
+//			sb.append("\n");
+//		}
+//		log.info(sb.toString());
 
 //++
 // GUI tests throw the error 
