@@ -7,39 +7,36 @@
 
 <body>
 
-<section name="1. Introduction">
+<section name="1. Introduction" anchor="intro">
 <p>
 <b>Apache JMeter</b> is a 100% pure Java desktop application designed
-	  to load test client/server software
-	  (such as a web application).  It may be used
-	  to test performance both on static and dynamic
-	  resources (files, Servlets, Perl scripts, Java Objects, Data Bases and
-	  Queries, FTP Servers and more). It can be used to simulate a heavy
+to load test client/server software
+(such as a <a href="build-web-test-plan.html">web application</a>).  It may be used
+to test performance both on static and dynamic
+resources such as static files, Java Servlets, CGI scripts, Java objects, <a href="build-db-test-plan.html">databases</a>, 
+<a href="build-ftp-test-plan.html">FTP servers</a>, and more. JMeter can be used to simulate a heavy
 load on a server, network or object to test its strength or to analyze
-overall performance under different load types.
-</p>
+overall performance under different load types.</p>
 <p>
-Additionally, JMeter can help you regression test your application by using
-test scripts with assertions to validate that your application is returning the
-results you expect.  These assertions use regular expressions to give you maximum
-flexibility in designing these test.
+Additionally, JMeter can help you regression test your application by letting you create
+test scripts with <a href="assertion.html">assertions</a> to validate that your application is returning the
+results you expect.  For maximum flexibility, JMeter lets you create these assertions using
+regular expressions.</p>
+</section>
+
+<section name="1.1 History" anchor="history">
+<p>Stefano Mazzocchi of the Apache Software Foundation was the original developer of JMeter.
+He wrote it primarily to test the performance of Apache JServ (a project that has
+since been replaced by the Apache Tomcat project).  We redesigned JMeter to enhance the GUI 
+and to add functional-testing capabilities.
 </p>
 </section>
 
-<section name="1.1 History">
-<p>JMeter was originally written by Stefano Mazzocchi of the Apache Software
-Foundation, primarily to test the performance of Apache JServ (a project that has
-since been replaced by the Apache Tomcat project).  It has since been redesigned
-and re-implemented to improve the UI and JMeter's functional testing capabilities.
-</p>
-</section>
-
-<section name="1.2 The Future">
-<p>JMeter's future will hopefully see it's capabilities rapidly expand as developers
-take advantage of JMeter's pluggable architecture.  The primary goal of further
-development is to make JMeter the most useful regression testing tool as possible,
-without compromising JMeter's load-testing capabilities.
-</p>
+<section name="1.2 The Future" anchor="future">
+<p>We hope to see JMeter's capabilities rapidly expand as developers take advantage of its 
+pluggable architecture.  The primary goal of further development is to make JMeter the most 
+useful regression testing tool as possible, without compromising JMeter's load-testing 
+capabilities.</p>
 </section>
 
 
