@@ -561,7 +561,7 @@ public class HTTPSampler extends HTTPSamplerBase
                 }
 
                 if (isImageParser()
-                    && res.getDataType().equals(HTTPSampleResult.TEXT)
+                    && (HTTPSampleResult.TEXT).equals(res.getDataType())
                     && res.isSuccessful())
                 {
                     if (frameDepth > MAX_FRAME_DEPTH)

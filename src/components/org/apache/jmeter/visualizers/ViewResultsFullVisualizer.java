@@ -361,8 +361,7 @@ public class ViewResultsFullVisualizer
     	
         byte[] responseBytes = res.getResponseData();
         String response = null;
-        if (res.getDataType() != null
-            && res.getDataType().equals(SampleResult.TEXT))
+        if ((SampleResult.TEXT).equals(res.getDataType()))
         {
             try
             {
