@@ -111,6 +111,7 @@ public class StringFromFile extends AbstractFunction implements Serializable
     private String myName = "StringFromFile_"; // Name to store value in
     private Object[] values;
     private BufferedReader myBread; // Buffered reader
+    private boolean firstTime = false; // should we try to open the file?
     private boolean reopenFile = true; // Set from parameter list one day ...
     private String fileName; // needed for error messages
 
@@ -140,7 +141,7 @@ public class StringFromFile extends AbstractFunction implements Serializable
         }
         catch (Exception e)
         {
-            log.error("Error in openFile " + fileName, e);
+            log.error("openFile() error: " + e.toString());
         }
     }
 
@@ -161,6 +162,18 @@ public class StringFromFile extends AbstractFunction implements Serializable
         }
 
         myValue = "**ERR**";
+        
+        /*
+         * To avoid re-opening the file repeatedly after an error,
+         * only try to open it in the first execute() call
+         * (It may be re=opened at EOF, but that will cause at most
+         * one failure.)
+         */
+        if (firstTime) {
+        	openFile();
+        	firstTime=false;
+        }
+        
         if (null != myBread)
         { // Did we open the file?
             try
@@ -177,13 +190,13 @@ public class StringFromFile extends AbstractFunction implements Serializable
             }
             catch (Exception e)
             {
-                log.error("Error reading file " + fileName, e);
+                log.error("Error reading file " + e.toString());
             }
         }
 
         vars.put(myName, myValue);
 
-        log.debug(this +"::StringFromFile.execute() value " + myValue);
+        log.debug(this +"::StringFromFile.execute() name:" + myName + " value:" + myValue);
 
         return myValue;
 
@@ -209,10 +222,20 @@ public class StringFromFile extends AbstractFunction implements Serializable
             throw new InvalidVariableException("Wrong number of parameters");
         }
 
-        openFile();
-
-        log.info("Variable name: " + myName);
-
+		StringBuffer sb = new StringBuffer(40);
+		sb.append("setParameters(");
+		for (int i = 0; i< values.length;i++){
+			if (i > 0) sb.append(",");
+			sb.append(((CompoundVariable) values[i]).getRawParameters());
+		}
+		sb.append(")");
+		log.info(sb.toString());
+		
+		
+		//N.B. seteParameters is called before the test proper is started,
+		//     and thus variables are not interpreted at this point
+		// So defer the file open until later to allow variable file names to be used.
+		firstTime = true;
     }
 
     /* (non-Javadoc)
