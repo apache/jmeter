@@ -34,13 +34,20 @@ construct the Test Plan, you will use the following elements:
 <complink name="WebService(SOAP) Request (Beta Code)"/>, and
 <complink name="Graph Results"/>.</p>
 
-</section>
+<p>General notes on the webservices sampler. The current implementation uses
+Apache SOAP driver, which requires activation.jar and mail.jar from SUN. Due
+to license restrictions, JMeter does not include the jar files in the
+binary distribution. Please refer to <a href="http://ws.apache.org/soap/docs/index.html">
+SOAP documentation</a> for future details.</p>
 
-<!--
-<p>After starting JMeter, you see three items in the tree: Root (the parent of
-all tree elements), Test Plan (you place all of your elements here), and
-WorkBench (a temporary place to store your elements while constructing a Test
-Plan).</p>-->
+<p>If the sampler appears to be getting an error from the webservice, double check the
+SOAP message and make sure the format is correct. In particular, make sure the
+xmlns attributes are exactly the same as the WSDL. If the xml namespace is
+different, the webservice will likely return an error. <a href="http://www.xmethods.net">
+Xmethods</a> contains a list of public webservice for those who want to test
+their test plan.</p>
+
+</section>
 
 <section name="10.1 Adding Users" anchor="adding_users">
 <p>The first step you want to do with every JMeter Test Plan is to add a
