@@ -877,11 +877,12 @@ public class HTTPSampler extends AbstractSampler
         throws IOException
     {
         StringBuffer headerBuf= new StringBuffer();
-        headerBuf.append(conn.getHeaderField(0).substring(0, 8));
-        headerBuf.append(" ");
-        headerBuf.append(conn.getResponseCode());
-        headerBuf.append(" ");
-        headerBuf.append(conn.getResponseMessage());
+		headerBuf.append(conn.getHeaderField(0));//Leave header as is 
+//        headerBuf.append(conn.getHeaderField(0).substring(0, 8));
+//        headerBuf.append(" ");
+//        headerBuf.append(conn.getResponseCode());
+//        headerBuf.append(" ");
+//        headerBuf.append(conn.getResponseMessage());
         headerBuf.append("\n");
 
         for (int i= 1; conn.getHeaderFieldKey(i) != null; i++)
@@ -1079,7 +1080,7 @@ public class HTTPSampler extends AbstractSampler
 
             String ct= conn.getHeaderField("Content-type");
             res.setContentType(ct);
-            if (ct.startsWith("image/"))
+            if (ct != null && ct.startsWith("image/"))
             {
                 res.setDataType(HTTPSampleResult.BINARY);
             }
