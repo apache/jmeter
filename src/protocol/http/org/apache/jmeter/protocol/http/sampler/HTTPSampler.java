@@ -438,7 +438,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable
      *
      *@param e  <code>Entry</code> to be sampled
      *@return   results of the sampling
-     *@see      #sample(Entry, int)
+     *@see      #sample(int)
      ***************************************/
     public SampleResult sample(Entry e)
     {

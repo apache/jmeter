@@ -24,8 +24,8 @@ public class URLRewritingModifierGui extends AbstractResponseBasedModifierGui {
 	JCheckBox pathExtNoEquals;
 	private final static String title = JMeterUtils.getResString("http_url_rewriting_modifier_title");
 
-	/**
-	 * @see JMeterGUIComponent#getStaticLabel()
+    /* (non-Javadoc)
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
 	 */
 	public String getStaticLabel() {
 		return title;
@@ -57,8 +57,8 @@ public class URLRewritingModifierGui extends AbstractResponseBasedModifierGui {
 		add(mainPanel, BorderLayout.CENTER);
 	}
 
-	/**
-	 * @see JMeterGUIComponent#createTestElement()
+    /* (non-Javadoc)
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
 	 */
 	public TestElement createTestElement() {
 		URLRewritingModifier modifier = new URLRewritingModifier();
