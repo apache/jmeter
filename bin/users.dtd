@@ -1,0 +1,11 @@
+<!ELEMENT allthreads (thread+)>
+<!ATTLIST thread
+>
+<!ELEMENT thread (parameter+)>
+<!ATTLIST parameter
+>
+<!ELEMENT parameter (paramname,paramvalue) >
+<!ELEMENT paramname   (#PCDATA)   >
+<!ELEMENT paramvalue  (#PCDATA)  >
+
+
