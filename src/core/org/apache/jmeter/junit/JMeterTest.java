@@ -367,7 +367,9 @@ public class JMeterTest extends JMeterTestCase
 				(!title.equals("Example2"))
 			)
 			{// No, not a work in progress ...
-				assertTrue("component_reference.xml needs '"+title+"' anchor for "+guiItem.getClass().getName(),ct);
+				String s = "component_reference.xml needs '"+title+"' anchor for "+guiItem.getClass().getName();
+				if (!ct) log.warn(s); // Record in log as well
+				assertTrue(s,ct);
 			}
 		}
 	}
@@ -386,7 +388,9 @@ public class JMeterTest extends JMeterTestCase
                 && title.indexOf("(EXPERIMENTAL") == -1
 			)
 			{// No, not a work in progress ...
-				assertTrue("function.xml needs '"+title+"' entry for "+funcItem.getClass().getName(),ct);
+				String s = "function.xml needs '"+title+"' entry for "+funcItem.getClass().getName();
+				if (!ct) log.warn(s); // Record in log as well
+				assertTrue(s,ct);
 			}
 		}
 	}
