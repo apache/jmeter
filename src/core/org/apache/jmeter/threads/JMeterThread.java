@@ -312,6 +312,12 @@ public class JMeterThread implements Runnable, java.io.Serializable
         {
             log.error("Test failed!", e);
         }
+		catch (ThreadDeath e){
+			throw e; // Must not ignore this one
+		}
+		catch (Error e){// Make sure errors are output to the log file
+			log.error("Test failed!", e);
+		}
         finally
         {
             threadContext.clear();
