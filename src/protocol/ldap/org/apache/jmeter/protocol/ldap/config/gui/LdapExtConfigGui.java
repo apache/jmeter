@@ -124,11 +124,9 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener
         init();
     }
 
-	
-   /* Implements JMeterGUIComponent.getStaticLabel() */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return  JMeterUtils.getResString("Ldapext_sample_title");
+        return  "ldapext_sample_title";
     }
 
     /**
