@@ -3,6 +3,7 @@ import java.awt.BorderLayout;
 import java.util.Collection;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -139,7 +140,12 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
     {
         this.setLayout(new BorderLayout(10, 10));
         this.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 5));
-        this.add(getNamePanel(), BorderLayout.NORTH);
+        
+        Box northPanel = Box.createVerticalBox();
+        northPanel.add(createTitleLabel());
+        northPanel.add(getNamePanel());
+        add(northPanel, BorderLayout.NORTH);
+
         JPanel southPanel = new JPanel(new BorderLayout());
         functionalMode = new JCheckBox(JMeterUtils.getResString("functional_mode"));
         southPanel.add(functionalMode, BorderLayout.NORTH);
@@ -147,6 +153,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
         explain.setEditable(false);
         explain.setBackground(this.getBackground());
         southPanel.add(explain, BorderLayout.CENTER);
+
         add(getVariablePanel(), BorderLayout.CENTER);
         add(southPanel, BorderLayout.SOUTH);
     }

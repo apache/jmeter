@@ -56,7 +56,6 @@ package org.apache.jmeter.protocol.http.proxy.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -377,20 +376,11 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
         add(createTitleLabel());
-
-        add(namePanel);
+        add(getNamePanel());
         add(createPortPanel());
         add(createIncludePanel());
         add(createExcludePanel());
         add(createControls());        
-    }
-
-    private JLabel createTitleLabel() {
-        JLabel titleLabel = new JLabel(JMeterUtils.getResString("proxy_title"));
-        Font curFont = titleLabel.getFont();
-        titleLabel.setFont(curFont.deriveFont((float)curFont.getSize() + 4));
-        titleLabel.setAlignmentX(0.5f);
-        return titleLabel;
     }
     
     private JPanel createControls()
@@ -491,7 +481,7 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
 
     public void setNode(JMeterTreeNode node)
     {
-        namePanel.setNode(node);
+        getNamePanel().setNode(node);
     }
 
     /**

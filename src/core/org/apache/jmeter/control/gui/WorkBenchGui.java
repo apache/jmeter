@@ -53,10 +53,8 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control.gui;
-import java.awt.Font;
 import java.util.Collection;
 
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -131,7 +129,7 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent
 	 ***************************************/
 	public void configure(TestElement element)
 	{
-		namePanel.configure(element);
+		getNamePanel().configure(element);
 	}
 
 	/****************************************
@@ -159,7 +157,7 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent
 	 ***************************************/
 	public String getStaticLabel()
 	{
-		return JMeterUtils.getResString("workbench");
+		return JMeterUtils.getResString("workbench_title");
 	}
 
 	private void init()
@@ -172,16 +170,7 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent
 		mainPanel.setBorder(margin);
 		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("workbench_title"));
-
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
-
-		// NAME
+		mainPanel.add(createTitleLabel());
 		mainPanel.add(getNamePanel());
 
 		this.add(mainPanel);
@@ -191,6 +180,6 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent
     public void setNode(JMeterTreeNode node)
     {
         this.node = node;
-        namePanel.setNode(node);
+        getNamePanel().setNode(node);
     }
 }

@@ -151,7 +151,22 @@ public abstract class AbstractJMeterGuiComponent
 	}
 	
 	protected NamePanel namePanel;
-	
+    
+    /**
+     * Provides a label containing the title for the component.  Subclasses
+     * typically place this label at the top of their GUI.  The title is set
+     * to the name returned from the component's
+     * {@link JMeterGuiComponent#getStaticLabel() getStaticLabel()} method.
+     * 
+     * @return a JLabel which subclasses can add to their GUI
+     */
+    protected JLabel createTitleLabel() {
+        JLabel titleLabel = new JLabel(getStaticLabel());
+        Font curFont = titleLabel.getFont();
+        titleLabel.setFont(curFont.deriveFont((float)curFont.getSize() + 4));
+        titleLabel.setAlignmentX(0.5f);
+        return titleLabel;
+    }
 
 	/**
 	 * This method should be overriden, but the extending class should also still call it, as
