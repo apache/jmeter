@@ -113,6 +113,6 @@ public class Remove implements Command
 	}
 	static
 	{
-		commands.add(JMeterUtils.getResString("remove"));
+		commands.add("remove");
 	}
 }

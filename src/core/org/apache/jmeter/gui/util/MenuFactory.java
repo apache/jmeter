@@ -192,7 +192,7 @@ public class MenuFactory
 		addSeparator(menu);
 		if(removable)
 		{
-			menu.add(makeMenuItem(JMeterUtils.getResString("remove"), "Remove", JMeterUtils.getResString("remove")));
+			menu.add(makeMenuItem(JMeterUtils.getResString("remove"), "Remove","remove"));
 		}
 		menu.add(makeMenuItem(JMeterUtils.getResString("cut"), "Cut", "Cut"));
 		menu.add(makeMenuItem(JMeterUtils.getResString("copy"), "Copy", "Copy"));
@@ -208,7 +208,7 @@ public class MenuFactory
 	public static void addFileMenu(JPopupMenu menu)
 	{
 		addSeparator(menu);
-		menu.add(makeMenuItem(JMeterUtils.getResString("open"), "Open", JMeterUtils.getResString("open")));
+		menu.add(makeMenuItem(JMeterUtils.getResString("open"), "Open", "open"));
 		menu.add(makeMenuItem(JMeterUtils.getResString("save"), "Save", "save"));
 		JMenuItem disabled = makeMenuItem(JMeterUtils.getResString("disable"),"Disable","disable");
 		JMenuItem enabled = makeMenuItem(JMeterUtils.getResString("enable"),"Enable","enable");

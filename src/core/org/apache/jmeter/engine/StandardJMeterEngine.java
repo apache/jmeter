@@ -242,6 +242,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 			catch (InterruptedException e)
 			{
 			}
+			log.debug("Waiting for notifier thread to stop");
 		}
 		while(iter.hasNext())
 		{
