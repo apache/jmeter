@@ -104,7 +104,7 @@ public class RemoteJMeterEngineImpl
      * Adds a feature to the ThreadGroup attribute of the RemoteJMeterEngineImpl
      * object.
      *
-     * @param  tGroup the feature to be added to the ThreadGroup attribute
+     * @param  testTree the feature to be added to the ThreadGroup attribute
      */
     public void configure(HashTree testTree) throws RemoteException
     {

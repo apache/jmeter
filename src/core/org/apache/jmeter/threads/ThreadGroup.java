@@ -163,7 +163,7 @@ public class ThreadGroup
     /**
      * Set the StartTime value.
      *
-     * @param StartTime the StartTime value.
+     * @param stime - the StartTime value.
      */
     public void setStartTime(long stime)
     {
@@ -203,7 +203,7 @@ public class ThreadGroup
     /**
      * Set the EndTime value.
      *
-     * @param EndTime the EndTime value.
+     * @param etime - the EndTime value.
      */
     public void setEndTime(long etime)
     {

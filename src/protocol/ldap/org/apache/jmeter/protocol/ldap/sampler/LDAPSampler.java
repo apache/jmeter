@@ -187,7 +187,7 @@ public class LDAPSampler extends AbstractSampler
     /**
      * Sets the Rootdn attribute of the LDAPSampler object.
      *
-     * @param  rootdn  the new rootdn value
+     * @param  newRootdn  the new rootdn value
      */
     public void setRootdn(String newRootdn)
     {
