@@ -70,7 +70,7 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.processor.PreProcessor;
-import org.apache.jmeter.protocol.http.parser.HtmlParser;
+import org.apache.jmeter.protocol.http.parser.HtmlParsingUtils;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -134,7 +134,7 @@ public class AnchorModifier
             {
                 index = 0;
             }
-            html = (Document) HtmlParser.getDOM(responseText.substring(index));
+            html = (Document) HtmlParsingUtils.getDOM(responseText.substring(index));
         }
         catch (SAXException e)
         {
@@ -180,7 +180,7 @@ public class AnchorModifier
             replacementArg = (Argument) iter.next().getObjectValue();
             try
             {
-                if (HtmlParser.isArgumentMatched(replacementArg, arg))
+                if (HtmlParsingUtils.isArgumentMatched(replacementArg, arg))
                 {
                     possibleReplacements.add(replacementArg);
                 }
@@ -221,7 +221,7 @@ public class AnchorModifier
         for (int x = 0; x < rootList.getLength(); x++)
         {
             urls.addAll(
-                HtmlParser.createURLFromForm(
+                HtmlParsingUtils.createURLFromForm(
                     rootList.item(x),
                     (HTTPSampler) JMeterContextService
                         .getContext()
@@ -234,7 +234,7 @@ public class AnchorModifier
             try
             {
                 newUrl.setMethod(HTTPSampler.POST);
-                if (HtmlParser.isAnchorMatched(newUrl, config))
+                if (HtmlParsingUtils.isAnchorMatched(newUrl, config))
                 {
                     potentialLinks.add(newUrl);
                 }
@@ -266,14 +266,14 @@ public class AnchorModifier
             try
             {
                 HTTPSampler newUrl =
-                    HtmlParser.createUrlFromAnchor(
+                    HtmlParsingUtils.createUrlFromAnchor(
                         hrefStr,
                         (HTTPSampler) JMeterContextService
                             .getContext()
                             .getPreviousSampler());
                 newUrl.setMethod(HTTPSampler.GET);
                 log.debug("possible match: " + newUrl);
-                if (HtmlParser.isAnchorMatched(newUrl, config))
+                if (HtmlParsingUtils.isAnchorMatched(newUrl, config))
                 {
                     log.debug("Is a match! " + newUrl);
                     potentialLinks.add(newUrl);
