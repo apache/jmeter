@@ -80,7 +80,6 @@ import org.apache.log.Logger;
  * For efficiency reasons, most customizers should implement
  * SharedCustomizer.
  * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision$ updated on $Date$
  */
 public class TestBeanGUI
@@ -433,4 +432,12 @@ public class TestBeanGUI
         
         if (customizer != null) add((Component)customizer, BorderLayout.CENTER);
     }
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getLabelResource()
+	 */
+	public String getLabelResource() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
