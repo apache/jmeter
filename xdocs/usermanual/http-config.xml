@@ -12,23 +12,187 @@
 </section>
 
 <section name="4.7.1 HTTP Authorization Manager">
-<p>Put description text here...</p>
-<p><img src="../images/screenshots/http-config/http-auth-manager.gif" width="575" height="340"></img></p>
+<p>The Authorization Manager lets you specify one or more user logins for web pages that are 
+restricted using Basic HTTP Authentication.  You see this type of authentication when you use 
+your browser to access a restricted page, and your browser displays a login dialog box.  JMeter 
+transmits the login information when it encounters this type of page.</p>
+
+<p>
+<table border="1" cellspacing="0" cellpadding="5">
+  <tr><td><b>NOTE:</b> In the current release, all JMeter threads in a Thread Group use the same username/password 
+for a given Base URL even if you create multiple users with the same Base URL in the authorization table. 
+We plan to correct this in a future release.  As a workwaround, you can create multiple Thread Groups for your 
+Test Plan, with each Thread Group having its own Authorization Manager.</td></tr>
+</table>
+</p>
+
+<p><b>Control Panel</b></p>
+<p><img src="../images/screenshots/http-config/http-auth-manager.gif" width="575" height="340"></img>
+<br>Figure 1 - Authorization Manager Control Panel</br></p>
+<p>Properties:
+<ul>
+  <li>Name - Descriptive name for this element that is shown in the tree. </li>
+  <li>Base URL - A partial or complete URL that matches one or more HTTP Request URLs.  As an example, 
+say you specify a Base URL of "http://jakarta.apache.org/restricted/" with a username of "jmeter" and 
+a password of "jmeter".  If you send an HTTP request to the URL 
+"http://jakarta.apache.org/restricted/ant/myPage.html", the Authorization Manager sends the login 
+information for the user named, "jmeter".</li>
+  <li>Username - The username to authorize.</li>
+  <li>Password - The password to authorize.</li>
+  <li>Add Button - Add an entry to the authorization table.</li>
+  <li>Delete Button - Delete the currently selected table entry.</li>
+  <li>Load Button - Load a previously saved authorization table and add the entries to the existing 
+authorization table entries.</li>
+  <li>Save As Button - Save the current authorization table to a file.</li>
+</ul>
+</p>
+
+<p>
+<table border="1" cellspacing="0" cellpadding="5">
+  <tr><td><b>NOTE:</b> When you save the Test Plan, JMeter automatically saves all of the authorization 
+table entries.</td></tr>
+</table>
+</p>
+
+<p><b>Example</b></p>
+
+<p><a href="../demos/AuthManagerTestPlan.jmx">Download</a> this example.  In this example, we created a Test Plan on a local server that sends three HTTP requests, two requiring a login and the 
+other is open to everyone.  See figure 2 to see the makeup of our Test Plan.  On our server, we have a restricted 
+directory named, "secret", which contains two files, "index.html" and "index2.html".  We created a login id named, "kevin", 
+which has a password of "spot".  So, in our Authorization Manager, we created an entry for the restricted directory and 
+a username and password (see figure 3).  The two HTTP requests named "SecretPage1" and "SecretPage2" make requests 
+to "/secret/index1.html" and "/secret/index2.html".  The other HTTP request, named "NoSecretPage" makes a request to 
+"/index.html".</p>
+
+<p>When we run the Test Plan, JMeter looks in the Authorization table for the URL it is requesting.  If the Base URL matches 
+the URL, then JMeter passes this information along with the request.</p>
+
+<p>
+<table border="1" cellspacing="0" cellpadding="5">
+  <tr><td><b>NOTE:</b> You can download the Test Plan, but since it is built as a test for our local server, you will not 
+be able to run it.  However, you can use it as a reference in constructing your own Test Plan.</td></tr>
+</table>
+</p>
+
+<p><img src="../images/screenshots/http-config/auth-manager-example1a.gif" width="292" height="205"></img>
+<br>Figure 2 - Test Plan</br></p>
+
+<p><img src="../images/screenshots/http-config/auth-manager-example1b.gif" width="572" height="341"></img>
+<br>Figure 3 - Authorization Manager Control Panel</br></p>
+
 </section>
 
 <section name="4.7.2 HTTP Cookie Manager">
 <p>Put description text here...</p>
-<p><img src="../images/screenshots/http-config/http-cookie-manager.gif" width="573" height="340"></img></p>
+<p><b>Control Panel</b></p>
+<p><img src="../images/screenshots/http-config/http-cookie-manager.gif" width="573" height="340"></img>
+<br>Figure 3 - Cookie Manager Control Panel</br></p>
+<p>Properties:
+<ul>
+  <li>Name - Descriptive name for this element that is shown in the tree. </li>
+  <li>Base URL - A partial or complete URL that matches one or more HTTP Request URLs.  As an example, 
+say you specify a Base URL of "http://jakarta.apache.org/restricted/" with a username of "jmeter" and 
+a password of "jmeter".  If you send an HTTP request to the URL 
+"http://jakarta.apache.org/restricted/ant/myPage.html", the Authorization Manager sends the login 
+information for the user named, "jmeter".</li>
+  <li>Username - The username to authorize.</li>
+  <li>Password - The password to authorize.</li>
+  <li>Add Button - Add an entry to the authorization table.</li>
+  <li>Delete Button - Delete the currently selected table entry.</li>
+  <li>Load Button - Load a previously saved authorization table and add the entries to the existing 
+authorization table entries.</li>
+  <li>Save As Button - Save the current authorization table to a file.</li>
+</ul>
+</p>
+
 </section>
 
 <section name="4.7.3 HTTP Header Manager">
-<p>Put description text here...</p>
-<p><img src="../images/screenshots/http-config/http-header-manager.gif" width="574" height="341"></img></p>
+<p>The Header Manager lets you add or override HTTP request headers.</p>
+<p><b>Control Panel</b></p>
+<p><img src="../images/screenshots/http-config/http-header-manager.gif" width="574" height="341"></img>
+<br>Figure 6 - Header Manager Control Panel</br></p>
+<p>Properties:
+<ul>
+  <li>Name - Descriptive name for this element that is shown in the tree. </li>
+  <li>Name (Header) - Name of the request header. Two common request headers you may want to experiment with 
+are "User-Agent" and "Referer".</li>
+  <li>Value - Request header value.</li>
+  <li>Add Button - Add an entry to the header table.</li>
+  <li>Delete Button - Delete the currently selected table entry.</li>
+  <li>Load Button - Load a previously saved header table and add the entries to the existing 
+header table entries.</li>
+  <li>Save As Button - Save the current header table to a file.</li>
+</ul>
+</p>
+
+<p><b>Example</b></p>
+
+<p><a href="../demos/HeaderManagerTestPlan.jmx">Download</a> this example.  In this example, we created a Test Plan 
+that tells JMeter to override the default "User-Agent" request header and use a particular Internet Explorer agent string 
+instead. (see figures 7 and 8).</p>
+
+<p><img src="../images/screenshots/http-config/header-manager-example1a.gif" width="205" height="150"></img>
+<br>Figure 7 - Test Plan</br></p>
+
+<p><img src="../images/screenshots/http-config/header-manager-example1b.gif" width="573" height="334"></img>
+<br>Figure 8 - Header Manager Control Panel</br></p>
+
+
 </section>
 
 <section name="4.7.4 HTTP Proxy Server">
-<p>Put description text here...</p>
-<p><img src="../images/screenshots/http-config/http-proxy-server.gif" width="398" height="288"></img></p>
+<p>The Proxy Server acts as a gateway between your web browser and the Internet (or your ISP's proxy server, if applicable).  
+Instead of manually creating HTTP Request controllers, you can use a web browser.  In order to do this, you need to configure 
+your browser to use the JMeter proxy server.  This proxy server listens to your browser's HTTP requests and creates the necessary HTTP Request 
+controllers. You can place the Proxy Server element in the Thread Group.  It is ok to leave this element when you run the 
+Test Plan because it will not affect JMeter.</p>
+<p>JMeter places the HTTP Request controllers in the Thread Group, or if you have a Simple Logic Controller,  JMeter places 
+them there.  Also, if you have a HTTP Request Defaults element, then the HTTP Request controllers will have empty fields for 
+the default values you specified.</p>
+<p>
+<table border="1" cellspacing="0" cellpadding="5">
+  <tr><td><b>NOTE:</b> If you have more than one Simple Logic Controller, JMeter adds HTTP Request Controllers to each 
+of your Simple Logic Controllers.  We plan to correct this in a future release.</td></tr>
+</table>
+</p>
+<p>The Include and Exclude fields allow you to filter requests. If, for example, you leave both fields blank, then JMeter 
+will record every action of your browser. This can often result in 20+ test samples being recorded for each web page 
+(it will record all image requests, CSS files, Javascript files, etc). This is probably not desirable.  The Include/Exclude fields 
+give you some say over what gets recorded. </p>
+<p>If the Include field is left empty, then all requests will "pass" the include test. If the Exclude field is left empty, then all 
+request will "pass" the exclude test. Once the Include field has at least one entry, then only those requests that match at 
+least one entry will "pass" ("pass" means "be recorded"). </p>
+<p>If the Exclude field is left empty, then all requests (that have passed the Include field check) will pass. If there are 
+entries in the Exclude field, then any request that matches at least one entry will not be recorded.</p>
+<p><b>Control Panel</b></p>
+<p><img src="../images/screenshots/http-config/http-proxy-server.gif" width="398" height="288"></img>
+<br>Figure 9 - Proxy Server Control Panel</br></p>
+<p>Properties:
+<ul>
+  <li>Name - Descriptive name for this element that is shown in the tree. </li>
+  <li>Port - Port the proxy server listens for your browser's requests.  The default port is 8080.</li>
+  <li>Patterns to Include - Regular expression patterns describing which links you want JMeter to create 
+HTTP Request controllers.  For example, the pattern, <b>.*\.jsp</b>, means all links that have an extension of ".jsp".  After 
+typing the regular expression, press the ENTER/RETURN key to add the regular expression to the list.</li>
+  <li>Patterns to Exclude - Regular expression patterns describing which links you do not want JMeter to create 
+HTTP Request controllers.  After typing the regular expression, press the ENTER/RETURN key to add the regular expression 
+to the list.</li>
+  <li>Clear Buttons - Remove all regular expressions from the list.</li>
+  <li>Start Button - Start the proxy server.  JMeter writes the following message to the console once the proxy server 
+has started up and is ready to take requests: "Proxy up and running!".</li>
+  <li>Stop Button - Stop the proxy server.</li>
+</ul>
+</p>
+<p><b>Example</b></p>
+
+<p><a href="../demos/ProxyServerTestPlan.jmx">Download</a> this example.  In this example, we created a basic Test Plan 
+that tells JMeter to create a proxy server (see figure 10).</p>
+
+<p><img src="../images/screenshots/http-config/proxy-server-example1a.gif" width="188" height="112"></img>
+<br>Figure 10 - Test Plan</br></p>
+
+
 </section>
 
 <section name="4.7.5 HTTP Request Defaults">
