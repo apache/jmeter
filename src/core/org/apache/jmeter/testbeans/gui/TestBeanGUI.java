@@ -233,7 +233,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
         {
             log.error("Can't get beanInfo for "+testBeanClass.getName(),
                 e);
-            throw new Error(e); // Programming error. Don't continue.
+            throw new Error(e.toString()); // Programming error. Don't continue.
         }
 
 		// Sort the property descriptors:
@@ -273,12 +273,12 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
                 catch (InstantiationException e)
                 {
                     log.error("Can't create property editor.", e);
-                    throw new Error(e);
+                    throw new Error(e.toString());
                 }
                 catch (IllegalAccessException e)
                 {
                     log.error("Can't create property editor.", e);
-                    throw new Error(e);
+                    throw new Error(e.toString());
                 }
             }
             else
@@ -459,7 +459,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
 				// But for the time being, I just prefer to be aware of any
 				// problems occuring here, most likely programming errors,
 				// so I'll bail out.
-				throw new Error("Bad property value.", e);
+				throw new Error("Bad property value."+e);
 				// TODO: review this and possibly change to:
 				// setEditorValue(i, descriptors[i].getValue("default"); 
 			}
@@ -473,7 +473,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
 	 * @return the index of that property in the descriptors array, or -1 if 
 	 * 			there's no property of this name.
 	 */
-	private int descriptorIndex(String name)
+	private int descriptorIndex(String name) //NOTUSED
 	{
 		for (int i=0; i<descriptors.length; i++)
 		{
@@ -496,12 +496,12 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
         catch (InstantiationException e)
         {
             log.error("Can't create test element", e);
-            throw new Error(e); // Programming error. Don't continue.
+            throw new Error(e.toString()); // Programming error. Don't continue.
         }
         catch (IllegalAccessException e)
         {
             log.error("Can't create test element", e);
-            throw new Error(e); // Programming error. Don't continue.
+            throw new Error(e.toString()); // Programming error. Don't continue.
         }
     }
 
@@ -655,7 +655,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
         
         GridBagConstraints cl= new GridBagConstraints(); // for labels
 		cl.gridx= 0;
-		cl.anchor= GridBagConstraints.LINE_END;
+		cl.anchor= GridBagConstraints.EAST;//JDK1.4: was LINE_END
 		cl.insets= new Insets(0, 1, 0, 1);
 
 		GridBagConstraints ce= new GridBagConstraints(); // for editors
@@ -720,7 +720,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
 			cl.gridwidth= multiLineEditor ? 2 : 1;
 			cl.anchor= multiLineEditor 
 				? GridBagConstraints.CENTER
-				: GridBagConstraints.LINE_END;
+				: GridBagConstraints.EAST;//JDK1.4: was LINE_END
             currentPanel.add(label, cl);
 
 			ce.gridx= multiLineEditor ? 0 : 1;

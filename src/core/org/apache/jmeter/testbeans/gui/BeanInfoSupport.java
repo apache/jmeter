@@ -115,7 +115,7 @@ public abstract class BeanInfoSupport implements BeanInfo {
 				Introspector.IGNORE_IMMEDIATE_BEANINFO);
 		} catch (IntrospectionException e) {
 			log.error("Can't introspect.", e);
-			throw new Error(e); // Programming error: bail out.
+			throw new Error(e.toString()); // Programming error: bail out.
 		}
 	
 		try{
@@ -145,7 +145,7 @@ public abstract class BeanInfoSupport implements BeanInfo {
 			for (int i=0; i<properties.length; i++)
 			{
 				String name= properties[i].getName();
-				String s;
+				//String s;
 			
 				try
 				{
