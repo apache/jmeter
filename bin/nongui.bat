@@ -1,4 +1,4 @@
-@echo on
+@echo off
 set PROP=jmeter.properties
 rem set the log4j configuration file 
 set LOG4JCONFIG=log4j.configuration=log4j.conf
@@ -23,5 +23,9 @@ IF "%7" EQU "-h" set HOST=-Dhttp.proxyHost=%8 -Dhttps.proxyHost=%8
 IF "%7" EQU "-p" set PORT=-Dhttp.proxyPort=%8 -Dhttps.proxyPort=%8
 IF "%7" EQU "-o" set SRC=%8
 
-set CLSPATH=../lib/xerces.jar;ApacheJMeter.jar;../lib/Tidy.jar;../lib/log4j.jar;
-java -cp %CLASSPATH%;%CLSPATH% -D%LOG4JCONFIG% %HOST% %PORT% org.apache.jmeter.NonGuiDriver %PROP% %SRC%
+set LOCALCLASSPATH=%CLASSPATH%
+
+for %%i in ("..\lib\*.jar") do CALL ..\lcp %%i
+for %%i in ("..\ext\*.jar") do CALL ..\lcp %%i
+
+java -cp %LOCALCLASSPATH%;ApacheJMeter.jar -D%LOG4JCONFIG% %HOST% %PORT% org.apache.jmeter.NonGuiDriver %PROP% %SRC%
