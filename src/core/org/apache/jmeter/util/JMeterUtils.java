@@ -56,8 +56,6 @@ import org.xml.sax.XMLReader;
 /**
  * This class contains the static utility methods used by JMeter.
  * 
- * @author  Michael Stover
- * @author  <a href="mailto:klancast@swbell.net">Keith Lancaster</a>
  * @version $Revision$ updated on $Date$
  */
 public class JMeterUtils implements UnitTestManager
@@ -274,8 +272,9 @@ public class JMeterUtils implements UnitTestManager
      */
     public static String getResString(String key)
     {
-    	return getResStringDefault(key,"[res_key="+key+"]");
+    	return getResStringDefault(key,RES_KEY_PFX+key+"]");
     }
+    public static final String RES_KEY_PFX="[res_key=";
     
 	/**
 	 * Gets the resource string for this key.
