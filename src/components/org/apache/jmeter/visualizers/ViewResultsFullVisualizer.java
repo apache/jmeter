@@ -254,6 +254,8 @@ public class ViewResultsFullVisualizer
         try
         {
             statsDoc.remove(0, statsDoc.getLength());
+			sampleDataField.setText("");
+			results.setText("");
             if (node != null)
             {
                 SampleResult res = (SampleResult) node.getUserObject();
@@ -270,7 +272,16 @@ public class ViewResultsFullVisualizer
                     log.debug("valueChanged1 : load time - " + res.getTime());
                     if (res != null && res.getSamplerData() != null)
                     {
-                        sampleDataField.setText(res.getSamplerData().trim());
+                    	String sd;
+                    	String rh = res.getRequestHeaders();
+                    	if (rh==null)
+                    	{
+                    		sd=res.getSamplerData().trim();
+                    	} else {
+							sd=res.getSamplerData().trim()
+							   +"\n"+rh;
+                    	} 
+                        sampleDataField.setText(sd);
                     }
 
                     statsDoc.insertString(
