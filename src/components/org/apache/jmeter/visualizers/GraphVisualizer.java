@@ -57,6 +57,7 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
@@ -65,7 +66,6 @@ import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -263,14 +263,9 @@ public class GraphVisualizer extends AbstractVisualizer
         this.setLayout(new BorderLayout());
 
         // MAIN PANEL
-        JPanel mainPanel = new JPanel();
         Border margin = new EmptyBorder(10, 10, 5, 10);
 
-        mainPanel.setBorder(margin);
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-
-        // NAME
-        mainPanel.add(makeTitlePanel());
+        this.setBorder(margin);
 
 
         // Set up the graph with header, footer, Y axis and graph display
@@ -281,7 +276,7 @@ public class GraphVisualizer extends AbstractVisualizer
         graphPanel.add(createGraphInfoPanel(), BorderLayout.SOUTH);
 
         // Add the main panel and the graph
-        this.add(mainPanel, BorderLayout.NORTH);
+        this.add(makeTitlePanel(), BorderLayout.NORTH);
         this.add(graphPanel, BorderLayout.CENTER);
     }
 
@@ -417,7 +412,7 @@ public class GraphVisualizer extends AbstractVisualizer
      * 
      * @return a scroll pane containing the graph
      */
-    private JScrollPane createGraphPanel() {
+    private Component createGraphPanel() {
         JScrollPane graphScrollPanel =
             new JScrollPane(graph, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
                     JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

@@ -58,6 +58,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -128,6 +129,7 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 	int previousDragYLocation = 0;
 	private Set hosts = new HashSet();
 	JDialog stoppingMessage;
+    JPanel mainPanelView = new JPanel(new GridLayout(1,1));
 
 	/****************************************
 	 * !ToDo (Constructor description)
@@ -272,8 +274,9 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 	 ***************************************/
 	public void setMainPanel(JComponent comp)
 	{
-        mainPanel.setViewportView(comp);  
-        mainPanel.validate();      
+        mainPanelView.removeAll();
+        mainPanelView.add(comp);  
+        comp.revalidate();   
 		mainPanel.repaint();
 	}
 
@@ -404,7 +407,7 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 
 	private void createMainPanel()
 	{
-		mainPanel = new JScrollPane(Box.createGlue());
+		mainPanel = new JScrollPane(mainPanelView);
 	}
 
 	private JTree makeTree()
