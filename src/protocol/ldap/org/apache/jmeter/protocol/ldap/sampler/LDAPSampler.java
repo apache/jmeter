@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -79,24 +79,19 @@ import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
+/**
+ * Ldap Sampler class is main class for the LDAP test.  This will control all
+ * the test available in the LDAP Test.
  *
- *@author    T.Elanjchezhiyan(chezhiyan@siptech.co.in)
- *@created   Apr 29 2003 11:00 AM
- *@company   Sip Technologies and Exports Ltd.
- *@version   1.0
- ***************************************/
-
-/*****************************************************
- * Ldap Sampler class is main class for the LDAP test.
- * This will control all the test available in the LDAP Test.
- *****************************************************/
-
-public class LDAPSampler extends AbstractSampler  {
-
-    transient private static Logger log = Hierarchy.getDefaultHierarchy()
-    .getLoggerFor("jmeter.protocol.ldap");
+ * @author    T.Elanjchezhiyan(chezhiyan@siptech.co.in) - Sip Technologies and
+ *            Exports Ltd.
+ * @created   Apr 29 2003 11:00 AM
+ * @version   $Revision$
+ */
+public class LDAPSampler extends AbstractSampler
+{
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.ldap");
 
     public final static String SERVERNAME = "servername";
     public final static String PORT = "port";
@@ -114,17 +109,11 @@ public class LDAPSampler extends AbstractSampler  {
     //For In build test case using this counter 
     //create the new entry in the server
     public static int counter=0;
-    /************************************************************
-     *  !ToDo (Constructor description)
-     ***********************************************************/
+
     public LDAPSampler()
     {
     }
 
-
-    /************************************************************
-     *  
-     ***********************************************************/
 
     public void addCustomTestElement(TestElement element)
     {
@@ -134,177 +123,179 @@ public class LDAPSampler extends AbstractSampler  {
         }
     }
 
-    /************************************************************
-     *  Gets the username attribute of the LDAP object
+    /**
+     * Gets the username attribute of the LDAP object.
      *
-     *@return    The username
-     *************************************************************/
-
+     * @return    the username
+     */
     public String getUsername()
     {
         return getPropertyAsString(ConfigTestElement.USERNAME);
     }
-	
-    /************************************************************
-     *  Gets the password attribute of the LDAP object
-     *
-     *@return    The password
-     *************************************************************/
 
+    /**
+     * Gets the password attribute of the LDAP object.
+     *
+     * @return    the password
+     */
     public String getPassword()
     {
         return getPropertyAsString(ConfigTestElement.PASSWORD);
     }
 
-    /************************************************************
-     *  Sets the Servername attribute of the ServerConfig object
+    /**
+     * Sets the Servername attribute of the ServerConfig object.
      *
-     *@param  servername  The new servername value
-     ***********************************************************/
-    public void setServername(String servername) {
+     * @param  servername  the new servername value
+     */
+    public void setServername(String servername)
+    {
         setProperty(new StringProperty(SERVERNAME, servername));
     }
 
-    /************************************************************
-     *  Sets the Port attribute of the ServerConfig object
+    /**
+     * Sets the Port attribute of the ServerConfig object.
      *
-     *@param  port  The new Port value
-     ***********************************************************/
-    public void setPort(String port) {
+     * @param  port  the new Port value
+     */
+    public void setPort(String port)
+    {
         setProperty(new StringProperty(PORT, port));
     }
 
 
-    /************************************************************
-     *  Gets the servername attribute of the LDAPSampler object
+    /**
+     * Gets the servername attribute of the LDAPSampler object.
      *
-     *@return    The Servername value
-     ***********************************************************/
-
+     * @return    the Servername value
+     */
     public String getServername()
     {
         return getPropertyAsString(SERVERNAME);
     }
-	
-    /************************************************************
-     *  Gets the Port attribute of the LDAPSampler object
-     *
-     *@return    The Port value
-     *************************************************************/
 
+    /**
+     * Gets the Port attribute of the LDAPSampler object.
+     *
+     * @return    the Port value
+     */
     public String getPort()
     {
         return getPropertyAsString(PORT);
     }
-	
-    /************************************************************
-     *  Sets the Rootdn attribute of the LDAPSampler object
+
+    /**
+     * Sets the Rootdn attribute of the LDAPSampler object.
      *
-     *@param  rootdn  The new rootdn value
-     ***********************************************************/
+     * @param  rootdn  the new rootdn value
+     */
     public void setRootdn(String newRootdn)
     {
         this.setProperty(ROOTDN,newRootdn);
     }
-    /************************************************************
-     *  Gets the Rootdn attribute of the LDAPSampler object
+    
+    /**
+     * Gets the Rootdn attribute of the LDAPSampler object.
      *
-     *@return    The Rootdn value
-     ***********************************************************/
-    public String getRootdn() {
+     * @return    the Rootdn value
+     */
+    public String getRootdn()
+    {
         return getPropertyAsString(ROOTDN);
     }
 
-    /************************************************************
-     *  Sets the Test attribute of the LdapConfig object
+    /**
+     * Sets the Test attribute of the LdapConfig object.
      *
-     *@param  Test  The new test value(Add,Modify,Delete  and search)
-     ***********************************************************/
-    public void setTest(String newTest) {
+     * @param  newTest  the new test value(Add,Modify,Delete and search)
+     */
+    public void setTest(String newTest)
+    {
         this.setProperty(TEST,newTest);
     }
     
-    /************************************************************
-     *  Gets the test attribute of the LDAPSampler object
+    /**
+     * Gets the test attribute of the LDAPSampler object.
      *
-     *@return    The test value (Add,Modify,Delete  and search)
-     ***********************************************************/
+     * @return    the test value (Add, Modify, Delete and search)
+     */
     public String getTest()
     {
         return getPropertyAsString(TEST);
     }
 
-    /************************************************************
-     *  Sets the UserDefinedTest attribute of the LDAPSampler object
+    /**
+     * Sets the UserDefinedTest attribute of the LDAPSampler object.
      *
-     *@param  value  The  new UserDefinedTest value 
-     ***********************************************************/
+     * @param  value  the new UserDefinedTest value
+     */
     public void setUserDefinedTest(boolean value)
     {
         setProperty(new BooleanProperty(USER_DEFINED, value));
     }
 
-    /************************************************************
-     *  Gets the UserDefinedTest attribute of the LDAPSampler object
+    /**
+     * Gets the UserDefinedTest attribute of the LDAPSampler object.
      *
-     *@return    The test value true or false
-     *           if true it will do the UserDefinedTest else our own  
-     *           inbuild test case
-     ***********************************************************/
-    public boolean getUserDefinedTest() {
+     * @return    the test value true or false.  If true it will do the
+     *            UserDefinedTest else our own inbuild test case.
+     */
+    public boolean getUserDefinedTest()
+    {
         return getPropertyAsBoolean(USER_DEFINED);
     }
 
-
-    /************************************************************
-     *  Sets the Base Entry DN attribute of the LDAPSampler object
+    /**
+     * Sets the Base Entry DN attribute of the LDAPSampler object.
      *
-     *@param  value  The  new Base entry DN value 
-     ***********************************************************/
-    public void setBaseEntryDN(String  newbaseentry) {
+     * @param  newbaseentry  the new Base entry DN value 
+     */
+    public void setBaseEntryDN(String  newbaseentry)
+    {
         setProperty(new StringProperty(BASE_ENTRY_DN, newbaseentry));
     }
 
-    /************************************************************
-     *  Gets the BaseEntryDN attribute of the LDAPSampler object
+    /**
+     * Gets the BaseEntryDN attribute of the LDAPSampler object.
      *
-     *@return    The  Base entry DN value
-     ***********************************************************/
-    public String getBaseEntryDN() {
+     * @return    the Base entry DN value
+     */
+    public String getBaseEntryDN()
+    {
         return getPropertyAsString(BASE_ENTRY_DN);
     }
 
-    /************************************************************
-     *  Sets the Arguments attribute of the LdapConfig object
-     *  This will collect values from the table for user defined test
-     *  case 
-     *@param  value  The  arguments 
-     ***********************************************************/
+    /**
+     * Sets the Arguments attribute of the LdapConfig object.  This will
+     * collect values from the table for user defined test case.
+     *  
+     * @param  value the arguments 
+     */
     public void setArguments(Arguments value)
     {
         setProperty(new TestElementProperty(ARGUMENTS, value));
     }
 
-    /************************************************************
-     *  Gets the Arguments attribute of the LdapConfig object
+    /**
+     * Gets the Arguments attribute of the LdapConfig object.
      *
-     *@return    The  arguments
-     *           user defined test  case
-     ***********************************************************/
+     * @return   the arguments.  User defined test case.
+     */
     public Arguments getArguments()
     {
         return (Arguments) getProperty(ARGUMENTS).getObjectValue();
     }
-	
 
-    /************************************************************
-     * Collect all the value from the table (Arguments), using  this
-     * create the basicAttributes 
-     * This will create the Basic Attributes for the User defined 
-     * TestCase  for Add Test
-     *@return    The  BasicAttributes
-     ***********************************************************/
-    public BasicAttributes getUserAttributes() {
+
+    /**
+     * Collect all the value from the table (Arguments), using this create the
+     * basicAttributes.  This will create the Basic Attributes for the User
+     * defined TestCase  for Add Test.
+     * 
+     * @return    the BasicAttributes
+     */
+    public BasicAttributes getUserAttributes()
+    {
         boolean add =true;
         BasicAttribute basicattribute = new BasicAttribute("objectclass");
         basicattribute.add("top");
@@ -316,7 +307,8 @@ public class LDAPSampler extends AbstractSampler  {
         BasicAttribute attr;
         PropertyIterator iter = getArguments().iterator();
          
-        while (iter.hasNext()) {
+        while (iter.hasNext())
+        {
             Argument item = (Argument) iter.next().getObjectValue();
             attr = getBasicAttribute( item.getName(),item.getValue());
             attrs.put(attr);
@@ -325,36 +317,42 @@ public class LDAPSampler extends AbstractSampler  {
     }
 
 
-    /************************************************************
-     * Collect all the value from the table (Arguments), using  this
-     * create the basicAttributes 
-     * This will create the Basic Attributes for the User defined 
-     * TestCase for Modify test
-     *@return    The  BasicAttributes
-     ***********************************************************/
-    public ModificationItem[] getUserModAttributes() {
-        ModificationItem[] mods =new  ModificationItem[getArguments().getArguments().size()];
-        boolean add =true;
+    /**
+     * Collect all the value from the table (Arguments), using this create the
+     * basicAttributes.  This will create the Basic Attributes for the User
+     * defined TestCase for Modify test.
+     * 
+     * @return   the BasicAttributes
+     */
+    public ModificationItem[] getUserModAttributes()
+    {
+        ModificationItem[] mods =
+            new ModificationItem[getArguments().getArguments().size()];
+        boolean add = true;
         BasicAttributes attrs = new BasicAttributes(true);
         BasicAttribute attr;
         PropertyIterator iter = getArguments().iterator();
         int count =0;
-        while (iter.hasNext()) {
+        while (iter.hasNext())
+        {
             Argument item = (Argument) iter.next().getObjectValue();
             attr = getBasicAttribute( item.getName(),item.getValue());
-            mods[count ] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attr);
+            mods[count] =
+                new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attr);
             count=+1;
         }
         return mods;
     }
 
 
-    /************************************************************
-     * This will create the Basic Attributes for the Inbuilt  
-     * TestCase  for Modify test
-     *@return    The  BasicAttributes
-     ***********************************************************/
-    public ModificationItem[] getModificationItem() {
+    /**
+     * This will create the Basic Attributes for the Inbuilt TestCase for
+     * Modify test.
+     * 
+     * @return    the BasicAttributes
+     */
+    public ModificationItem[] getModificationItem()
+    {
         ModificationItem[] mods = new ModificationItem[2];
         // replace (update)  attribute
         Attribute mod0 = new BasicAttribute("userpassword",
@@ -369,12 +367,14 @@ public class LDAPSampler extends AbstractSampler  {
         return mods;
     }
 
-    /************************************************************
-     * This will create the Basic Attributes for the In build  
-     * TestCase for Add Test
-     *@return    The  BasicAttributes
-     ***********************************************************/
-    public  BasicAttributes getBasicAttributes() {
+    /**
+     * This will create the Basic Attributes for the In build TestCase for Add
+     * Test.
+     * 
+     * @return    the BasicAttributes
+     */
+    public BasicAttributes getBasicAttributes()
+    {
         BasicAttributes basicattributes = new BasicAttributes();
         BasicAttribute basicattribute = new BasicAttribute("objectclass");
         basicattribute.add("top");
@@ -396,12 +396,12 @@ public class LDAPSampler extends AbstractSampler  {
         return basicattributes;
     }
 
-    /************************************************************
-     * This will create the Basic Attribute for the give name 
-     * value pair
-     *@return    The  BasicAttribute
-     ***********************************************************/
-    public BasicAttribute getBasicAttribute(String name,String value)
+    /**
+     * This will create the Basic Attribute for the given name value pair.
+     * 
+     * @return    the BasicAttribute
+     */
+    public BasicAttribute getBasicAttribute(String name, String value)
     {
         BasicAttribute attr = new BasicAttribute(name,value);
         return attr;
@@ -409,107 +409,136 @@ public class LDAPSampler extends AbstractSampler  {
 
     /**
      * Returns a formatted string label describing this sampler
-     * Example output:
      *
      * @return a formatted string label describing this sampler
      */
-    public String getLabel() {
-        return ("ldap://" + this.getServername() +":"+getPort()+ "/" + this.getRootdn());
+    public String getLabel()
+    {
+        return (
+            "ldap://"
+                + this.getServername()
+                + ":"
+                + getPort()
+                + "/"
+                + this.getRootdn());
     }
 
 
-    /************************************************************
-     * This will do the add test  for the User defined 
-     * TestCase  as well as inbuilt test case
-     *@return    executed time for the give test case
-     ***********************************************************/
-    public long addTest(LdapClient ldap)throws NoPermissionException,NamingException{
-        long start =0L;
-        long end =0L;
-        if (getPropertyAsBoolean(USER_DEFINED)){
+    /**
+     * This will do the add test for the User defined TestCase  as well as
+     * inbuilt test case.
+     * 
+     * @return    executed time for the give test case
+     */
+    public long addTest(LdapClient ldap)
+        throws NoPermissionException, NamingException
+    {
+        long start = 0L;
+        long end = 0L;
+        if (getPropertyAsBoolean(USER_DEFINED))
+        {
             start = System.currentTimeMillis();
-            ldap.createTest(getUserAttributes(), getPropertyAsString(BASE_ENTRY_DN));
+            ldap.createTest(
+                getUserAttributes(),
+                getPropertyAsString(BASE_ENTRY_DN));
             end = System.currentTimeMillis();
-        } else{
+        }
+        else
+        {
             start = System.currentTimeMillis();
             ldap.createTest(getBasicAttributes(), getPropertyAsString(ADD));
             end = System.currentTimeMillis();
             ldap.deleteTest(getPropertyAsString(ADD));
         }
-        return (end-start);
+        return (end - start);
     }
          
 
-    /************************************************************
-     * This will do the delete test  for the User defined 
-     * TestCase  as well as inbuilt test case
-     *@return    executed time for the give test case
-     ***********************************************************/
-    public long deleteTest(LdapClient ldap)throws NoPermissionException,NamingException {
-        long start =0L;
-        long end =0L;
-        if (! getPropertyAsBoolean(USER_DEFINED)){
+    /**
+     * This will do the delete test  for the User defined TestCase  as well as
+     * inbuilt test case.
+     * 
+     * @return    executed time for the give test case
+     */
+    public long deleteTest(LdapClient ldap)
+        throws NoPermissionException, NamingException
+    {
+        long start = 0L;
+        long end = 0L;
+        if (!getPropertyAsBoolean(USER_DEFINED))
+        {
             ldap.createTest(getBasicAttributes(), getPropertyAsString(ADD));
-            setProperty(new StringProperty(DELETE,getPropertyAsString(ADD)));
+            setProperty(new StringProperty(DELETE, getPropertyAsString(ADD)));
         }
         start = System.currentTimeMillis();
         ldap.deleteTest(getPropertyAsString(DELETE));
         end = System.currentTimeMillis();
-        return (end-start);
+        return (end - start);
     }
 
-    /************************************************************
-     * This will do the search test  for the User defined 
-     * TestCase  as well as inbuilt test case
-     *@return    executed time for the give test case
-     ***********************************************************/
-    public long searchTest(LdapClient ldap)throws NoPermissionException,NamingException {
-        long start =0L;
-        long end =0L;
+    /**
+     * This will do the search test  for the User defined TestCase  as well as
+     * inbuilt test case.
+     * 
+     * @return    executed time for the give test case
+     */
+    public long searchTest(LdapClient ldap)
+        throws NoPermissionException, NamingException
+    {
+        long start = 0L;
+        long end = 0L;
 
-        if (! getPropertyAsBoolean(USER_DEFINED)){
+        if (!getPropertyAsBoolean(USER_DEFINED))
+        {
             ldap.createTest(getBasicAttributes(), getPropertyAsString(ADD));
-            setProperty(new StringProperty(SEARCHBASE,getPropertyAsString(ADD)));
-            setProperty(new StringProperty(SEARCHFILTER,getPropertyAsString(ADD)));
+            setProperty(
+                new StringProperty(SEARCHBASE, getPropertyAsString(ADD)));
+            setProperty(
+                new StringProperty(SEARCHFILTER, getPropertyAsString(ADD)));
         }
         start = System.currentTimeMillis();
-        ldap.searchTest(getPropertyAsString(SEARCHBASE),getPropertyAsString(SEARCHFILTER));
+        ldap.searchTest(
+            getPropertyAsString(SEARCHBASE),
+            getPropertyAsString(SEARCHFILTER));
         end = System.currentTimeMillis();
-        if (! getPropertyAsBoolean(USER_DEFINED)){
+        if (!getPropertyAsBoolean(USER_DEFINED))
+        {
             ldap.deleteTest(getPropertyAsString(ADD));
         }
-        return (end-start);
+        return (end - start);
     }
 
-    /************************************************************
-     * This will do the search test  for the User defined 
-     * TestCase  as well as inbuilt test case
-     *@return    executed time for the give test case
-     ***********************************************************/
-    public long modifyTest(LdapClient ldap)throws NoPermissionException,NamingException{
-        long start =0L;
-        long end =0L;
-        if (getPropertyAsBoolean(USER_DEFINED)){
+    /**
+     * This will do the search test  for the User defined TestCase  as well as
+     * inbuilt test case.
+     * 
+     * @return    executed time for the give test case
+     */
+    public long modifyTest(LdapClient ldap)
+        throws NoPermissionException, NamingException
+    {
+        long start = 0L;
+        long end = 0L;
+        if (getPropertyAsBoolean(USER_DEFINED))
+        {
             start = System.currentTimeMillis();
-            ldap.modifyTest(getUserModAttributes(), getPropertyAsString(BASE_ENTRY_DN));
+            ldap.modifyTest(
+                getUserModAttributes(),
+                getPropertyAsString(BASE_ENTRY_DN));
             end = System.currentTimeMillis();
-        } else{
+        }
+        else
+        {
             ldap.createTest(getBasicAttributes(), getPropertyAsString(ADD));
-            setProperty(new StringProperty(MODIFY,getPropertyAsString(ADD)));
+            setProperty(new StringProperty(MODIFY, getPropertyAsString(ADD)));
             start = System.currentTimeMillis();
             ldap.modifyTest(getModificationItem(), getPropertyAsString(MODIFY));
             end = System.currentTimeMillis();
             ldap.deleteTest(getPropertyAsString(ADD));
         }
-        return (end-start);
+        return (end - start);
     }
          
-    /************************************************************
-     *  !ToDo (Method description)
-     *
-     *@param  e  !ToDo (Parameter description)
-     *@return    !ToDo (Return description)
-     ***********************************************************/
     public SampleResult sample(Entry e)
     {
         SampleResult res = new SampleResult();
@@ -517,29 +546,46 @@ public class LDAPSampler extends AbstractSampler  {
         res.setSampleLabel(getLabel()+": "+getPropertyAsString(TEST));
         long time=0L;
         LdapClient ldap = new LdapClient();
+
         try
         {
-            ldap.connect(getServername(),getPort(),getRootdn(),getUsername(),getPassword());
-            if (getPropertyAsString(TEST).equals("add")) {
-                time =addTest(ldap);
-            }else if (getPropertyAsString(TEST).equals("delete")) {
+            ldap.connect(
+                getServername(),
+                getPort(),
+                getRootdn(),
+                getUsername(),
+                getPassword());
+
+            if (getPropertyAsString(TEST).equals("add"))
+            {
+                time = addTest(ldap);
+            }
+            else if (getPropertyAsString(TEST).equals("delete"))
+            {
                 time = deleteTest(ldap);
-            }else if (getPropertyAsString(TEST).equals("modify")) {
+            }
+            else if (getPropertyAsString(TEST).equals("modify"))
+            {
                 time = modifyTest(ldap);
-            }else if (getPropertyAsString(TEST).equals("search")) {
+            }
+            else if (getPropertyAsString(TEST).equals("search"))
+            {
                 time = searchTest(ldap);
             }
+
             res.setResponseData("success full".getBytes());
             isSuccessful = true;
             ldap.disconnect();
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             res.setResponseData(ex.toString().getBytes());
             log.error("Ldap client - ",ex);
             ldap.disconnect();
             isSuccessful = false;
             time = 0L;
         }
+
         // Calculate response time
         res.setTime(time);
         // Set if we were successful or not
