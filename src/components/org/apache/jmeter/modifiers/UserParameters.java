@@ -28,7 +28,7 @@ public class UserParameters extends AbstractTestElement implements Serializable,
     public static final String THREAD_VALUES = "UserParameters.thread_values";
     public static final String PER_ITERATION = "UserParameters.per_iteration";
     private int counter = 0;
-    transient private Object lock = new Object();
+	private Integer lock = new Integer(0);
 
     public CollectionProperty getNames()
     {
