@@ -268,7 +268,7 @@ public abstract class AbstractProperty implements JMeterProperty
      * @param arg0 JMeterProperty to compare against
      * @return 0 if equal values or both values null;
      * -1 otherwise
-     * @seeComparable#compareTo(Object)
+     * @see Comparable#compareTo(Object)
      */
     public int compareTo(Object arg0)
     {
