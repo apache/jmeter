@@ -151,6 +151,8 @@
 					  unless="jsse.present"/>
 		  <exclude name="org/apache/jmeter/visualizers/MailerVisualizer.java"
 					  unless="javamail.complete"/>
+		  <exclude name="org/apache/jmeter/visualizers/MailerModel.java"
+					  unless="javamail.complete"/>
 		  <exclude name="org/apache/jmeter/reporters/MailerResultCollector.java"
 					  unless="javamail.complete"/>
 		  <classpath refid="classpath"/>
@@ -178,8 +180,6 @@
 					  unless="isasilk.present"/>
 		  <exclude name="org/apache/jmeter/util/keystore/DefaultKeyStore.java"
 					  unless="jsse.present"/>
-		  <exclude name="org/apache/jmeter/visualizers/MailerVisualizer.java"
-					  unless="javamail.complete"/>
 		  <exclude name="org/apache/jmeter/reporters/MailerResultCollector.java"
 					  unless="javamail.complete"/>
 		  <classpath>
@@ -201,6 +201,8 @@
 				 target="1.3">
 		  <include name="**/*.java"/>
 		  <exclude name="org/apache/jmeter/visualizers/MailerVisualizer.java"
+					  unless="javamail.complete"/>
+		  <exclude name="org/apache/jmeter/visualizers/MailerModel.java"
 					  unless="javamail.complete"/>
 		  <exclude name="org/apache/jmeter/reporters/MailerResultCollector.java"
 					  unless="javamail.complete"/>
