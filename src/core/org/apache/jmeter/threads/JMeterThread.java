@@ -294,6 +294,16 @@ public class JMeterThread implements Runnable, java.io.Serializable
                 }
             }
         }
+        // Might be found by contoller.next()
+        catch (JMeterStopTestException e)
+		{
+        	log.info("Stopping Test: "+e.toString());
+        	stopTest();
+		}
+        catch (JMeterStopThreadException e)
+		{
+        	log.info("Stop Thread seen: "+e.toString());
+		}
         finally
         {
             threadContext.clear();
