@@ -192,7 +192,7 @@ public class JMeter implements JMeterPlugin {
 	 */
 	public void startGui(CLOption testFile) throws IllegalUserActionException, IllegalAccessException, ClassNotFoundException, InstantiationException {
 
-        PluginManager.install(this);
+        PluginManager.install(this, true);
 		JMeterTreeModel treeModel = new JMeterTreeModel();
 		JMeterTreeListener treeLis = new JMeterTreeListener(treeModel);
 		treeLis.setActionHandler(ActionRouter.getInstance());
@@ -329,7 +329,7 @@ public class JMeter implements JMeterPlugin {
 	public void startNonGui(CLOption testFile, CLOption logFile)
 		throws IllegalUserActionException, IllegalAccessException, ClassNotFoundException, InstantiationException {
 		JMeter driver = new JMeter();
-        PluginManager.install(this);
+        PluginManager.install(this, false);
 
 		if (testFile == null) {
 			throw new IllegalUserActionException();
