@@ -51,6 +51,15 @@ For the less experienced LDAP users, I build a <a href="ldapops_tutor.html">smal
 LDAP tutorial</a> which shortly explains 
 the several LDAP operations that can be used in building a complex testplan.
 </p>
+<p>
+Take care when using LDAP special characters in the distinghuished name, in that case (eg, you want to use a + sign in a 
+distinghuished name) you need to escape the character by adding an "\" sign before that character.
+extra exeption: if you want to add a \ character in a distinghuised name (in an add or rename operation), you need to use 4 backslashes. 
+examples:
+cn=dolf\+smits to add/search an entry with the name like cn=dolf+smits
+cn=dolf \\ smits to search an entry with the name cn=dolf \ smits
+cn=c:\\\\log.txt to add an entry with a name like cn=c:\log.txt
+</p>
 
 
 	<subsection name="9b.1 Adding Users" anchor="ext_adding_users">
@@ -353,8 +362,8 @@ Select the "Rename Entry" button.
 </li>
 <li>
 enter the name of the entry, relative to the baseDN, in the "old entry name-Field".<br/>
-that is, if you want to remove "cn=john doe,ou=people,dc=siemens,dc=com", and you set the baseDN to "dc=siemens,dc=com",
-you need to enter "cn=john doe,ou=people" in the Delete-field.
+that is, if you want to rename "cn=john doe,ou=people,dc=siemens,dc=com", and you set the baseDN to "dc=siemens,dc=com",
+you need to enter "cn=john doe,ou=people" in the old entry name-field.
 </li>
 <li>
 enter the new name of the entry, relative to the baseDN, in the "new distinghuised name-Field".<br/>
