@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,8 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- 
- package org.apache.jmeter.threads;
+package org.apache.jmeter.threads;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -61,44 +60,47 @@ import java.util.Map;
 
 /**
  * @author Thad Smith
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
+ * @version $Revision$
  */
-public class JMeterContextService implements Serializable {
+public class JMeterContextService implements Serializable
+{
+    static private JMeterContextService _instance = null;
+    static private Map contextMap = new HashMap();
 
-	static private JMeterContextService _instance = null;
-	static private Map contextMap = new HashMap();
-	
-	private JMeterContextService() {
-	}
-	
-	static private void init() {
-		if ( _instance == null ) {
-			_instance = new JMeterContextService(); 
-		}
-	}
+    private JMeterContextService()
+    {
+    }
 
-	static public JMeterContext getContext() {
-		
-		init();
-	
-		JMeterContext context = (JMeterContext)contextMap.get(Thread.currentThread().getName());
+    static private void init()
+    {
+        if (_instance == null)
+        {
+            _instance = new JMeterContextService();
+        }
+    }
 
-		if ( context == null ) {
-			context = new JMeterContext();
-			setContext(context);
-		}
-		
-		return context;
-		
-	}
+    static public JMeterContext getContext()
+    {
 
-	static void setContext(JMeterContext context) {
-		init();
-		contextMap.put(Thread.currentThread().getName(),context);
-	}	
+        init();
+
+        JMeterContext context =
+            (JMeterContext) contextMap.get(Thread.currentThread().getName());
+
+        if (context == null)
+        {
+            context = new JMeterContext();
+            setContext(context);
+        }
+
+        return context;
+
+    }
+
+    static void setContext(JMeterContext context)
+    {
+        init();
+        contextMap.put(Thread.currentThread().getName(), context);
+    }
 
 }

@@ -25,8 +25,11 @@ import org.apache.log.Logger;
  * increased in an attempt to help it to keep up.
  *
  * @see org.apache.jmeter.samplers.SampleListener
+ * 
+ * @version $Revision$
  */
-public class ListenerNotifier {
+public class ListenerNotifier
+{
     private static Logger log =
         LoggingManager.getLoggerFor(JMeterUtils.ENGINE);
 
@@ -67,7 +70,8 @@ public class ListenerNotifier {
      * any events remaining in the notification queue before it actually
      * stops, but this method will return immediately.
      */
-    public void stop() {
+    public void stop()
+    {
         running = false;
     }
 
@@ -79,7 +83,8 @@ public class ListenerNotifier {
      * @return  true if the ListenerNotifier has completely stopped, false
      *          otherwise
      */
-    public boolean isStopped() {
+    public boolean isStopped()
+    {
         return isStopped;
     }
 
@@ -95,46 +100,58 @@ public class ListenerNotifier {
      * 2 seconds after the beginning of the last batch.  This exact
      * behavior is subject to change.
      */
-    public void run() {
+    public void run()
+    {
         boolean isMaximumPriority = false;
         int normalCount = 0;
 
-        while (running) {
+        while (running)
+        {
             long startTime = System.currentTimeMillis();
             processNotifications();
             long sleep = SLEEP_TIME - (System.currentTimeMillis() - startTime);
 
             // If the thread has been told to stop then we shouldn't sleep
-            if (!running) {
+            if (!running)
+            {
                 break;
             }
 
-            if (sleep < 0) {
+            if (sleep < 0)
+            {
                 isMaximumPriority = true;
                 normalCount = 0;
-                if (log.isInfoEnabled()) {
+                if (log.isInfoEnabled())
+                {
                     log.info("ListenerNotifier exceeded maximum " +
                             "notification time by " + (-sleep) + "ms");
                 }
                 boostPriority();
-            } else {
+            }
+            else
+            {
                 normalCount++;
 
                 // If there have been three consecutive iterations since the
                 // last iteration which took too long to execute, return the
                 // thread to normal priority.
-                if (isMaximumPriority && normalCount >= 3) {
+                if (isMaximumPriority && normalCount >= 3)
+                {
                     isMaximumPriority = false;
                     unboostPriority();
                 }
 
-                if (log.isDebugEnabled()) {
+                if (log.isDebugEnabled())
+                {
                     log.debug("ListenerNotifier sleeping for " + sleep + "ms");
                 }
 
-                try {
-                    Thread.sleep (sleep);
-                } catch (InterruptedException e) {
+                try
+                {
+                    Thread.sleep(sleep);
+                }
+                catch (InterruptedException e)
+                {
                 }
             }
         }
@@ -151,14 +168,17 @@ public class ListenerNotifier {
      * added between the time when this method is called and when it exits are
      * saved for the next batch.
      */
-    private void processNotifications() {
+    private void processNotifications()
+    {
         int listenerEventsSize = listenerEvents.size();
-        if (log.isDebugEnabled()) {
+        if (log.isDebugEnabled())
+        {
             log.debug ("ListenerNotifier: processing " + listenerEventsSize +
                     " events");
         }
 
-        while (listenerEventsSize > 0) {
+        while (listenerEventsSize > 0)
+        {
             // Since this is a FIFO and this is the only place we remove
             // from it (only from a single thread) we don't have to remove
             // these two items in one atomic operation.  Each individual
@@ -179,8 +199,10 @@ public class ListenerNotifier {
      * the thread is already at maximum priority then this will have no
      * effect.
      */
-    private void boostPriority() {
-        if (Thread.currentThread().getPriority() != Thread.MAX_PRIORITY) {
+    private void boostPriority()
+    {
+        if (Thread.currentThread().getPriority() != Thread.MAX_PRIORITY)
+        {
             log.info("ListenerNotifier: Boosting thread priority to maximum.");
             Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         }
@@ -190,8 +212,10 @@ public class ListenerNotifier {
      * Return the priority of the current thread to normal.  If the thread
      * is already at normal priority then this will have no effect.
      */
-    private void unboostPriority() {
-        if (Thread.currentThread().getPriority() != Thread.NORM_PRIORITY) {
+    private void unboostPriority()
+    {
+        if (Thread.currentThread().getPriority() != Thread.NORM_PRIORITY)
+        {
             log.info("ListenerNotifier: Returning thread priority to normal.");
             Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
         }
@@ -205,9 +229,11 @@ public class ListenerNotifier {
      *                  This list must not be null and must contain only
      *                  SampleListener elements.
      */
-    public void notifyListeners(SampleEvent res, List listeners) {
+    public void notifyListeners(SampleEvent res, List listeners)
+    {
         Iterator iter = listeners.iterator();
-        while (iter.hasNext()) {
+        while (iter.hasNext())
+        {
             ((SampleListener) iter.next()).sampleOccurred(res);
         }
     }
@@ -222,10 +248,12 @@ public class ListenerNotifier {
      *                  This list must not be null and must contain only
      *                  SampleListener elements.
      */
-    public void addLast(SampleEvent item, List listeners) {
+    public void addLast(SampleEvent item, List listeners)
+    {
         // Must use explicit synchronization here so that the item and
         // listeners are added together atomically
-        synchronized (listenerEvents) {
+        synchronized (listenerEvents)
+        {
             listenerEvents.add(item);
             listenerEvents.add(listeners);
         }

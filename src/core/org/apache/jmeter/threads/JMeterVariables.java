@@ -5,12 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * @author default
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
+ * @version $Revision$
  */
 public class JMeterVariables
 {
@@ -18,7 +13,8 @@ public class JMeterVariables
     private int iteration = 0;
 
     public JMeterVariables()
-    {}
+    {
+    }
 
     public String getThreadName()
     {
@@ -47,7 +43,7 @@ public class JMeterVariables
     
     public void putObject(String key, Object value)
     {
-    	variables.put(key,value);
+        variables.put(key, value);
     }
 
     public void putAll(Map vars)
@@ -67,9 +63,8 @@ public class JMeterVariables
     }
 
     /**
-     * Returns null values if variable doesn't exist.   Users of this must check for null.
-     * @param key
-     * @return
+     * Returns null values if variable doesn't exist.  Users of this must check
+     * for null.
      */
     public String get(String key)
     {
@@ -78,7 +73,6 @@ public class JMeterVariables
     
     public Object getObject(String key)
     {
-    	return variables.get(key);
+        return variables.get(key);
     }
-
 }

@@ -80,8 +80,8 @@ import org.apache.log.Logger;
 /**
  * ThreadGroup
  *
- *@author Michael Stover
- *@version $Id$
+ * @author Michael Stover
+ * @version $Id$
  */
 public class ThreadGroup
     extends AbstractTestElement
@@ -414,7 +414,7 @@ public class ThreadGroup
     }
     
     /* (non-Javadoc)
-     * @see org.apache.jmeter.control.Controller#addIterationListener(LoopIterationListener)
+     * @see Controller#addIterationListener(LoopIterationListener)
      */
     public void addIterationListener(LoopIterationListener lis)
     {
@@ -422,7 +422,7 @@ public class ThreadGroup
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.control.Controller#initialize()
+     * @see Controller#initialize()
      */
     public void initialize()
     {
