@@ -2,7 +2,7 @@
 <document index="yes">
 
 <properties>
-  <title>User's Manual: Samplers</title>
+  <title>User's Manual: Component Reference</title>
 </properties>
 
 <body>
@@ -1232,8 +1232,8 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 </description>
 </component>
 
-<component index="13.9.4" name="__sumInt">
-<description><p>The sumInt function can be used to compute the sum of two or more integer values.
+<component index="13.9.4" name="__intsum">
+<description><p>The intsum function can be used to compute the sum of two or more integer values.
 </p></description>
 
 <properties>
@@ -1245,6 +1245,35 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 </properties>
 </component>
 
+<component index="13.9.5" name="_StringFromFile">
+<description>
+	<p>
+	The StringFromFile function can be used to read strings from a text file. 
+	This is useful for running tests that require lots of variable data.
+	For example when testing a banking application, 100s or 1000s of different account numbers might be required.
+	</p>
+	<p>
+	Each time it is called it reads the next line from the file.
+	When the end of the file is reached, it will start reading again from the beginning.
+	If there are multiple references to the function in a test script, each will open the file independently,
+	even if the file names are the same.
+	[If the value is to be used again elsewhere, use different variable names for each function call.]
+	</p>
+	<p>If an error occurs opening or reading the file, then the function returns the string "**ERR**"</p>
+</description>
+
+<properties>
+        <property name="First argument" required="Yes">Path to the file name.
+        	(The path can be relative to the JMeter launch directory)
+        </property>
+        <property name="Second argument" required="No">
+        	A reference name - refName - for reusing the value created by this function.
+			Stored values are of the form ${refName}.
+        </property>
+</properties>
+<p>The file name parameter is resolved when the file is opened or re-opened.</p>
+<p>The reference name parameter (if supplied) is resolved every time the function is executed.</p>
+</component>
 </section>
 </body>
 </document>
