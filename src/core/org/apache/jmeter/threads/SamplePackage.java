@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.assertions.Assertion;
-import org.apache.jmeter.extractor.Extractor;
+import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.timers.Timer;
@@ -45,7 +45,7 @@ public class SamplePackage
 		return timers;
 	}
     
-    public void addExtractor(Extractor ex)
+    public void addExtractor(PostProcessor ex)
     {
         extractors.add(ex);
     }

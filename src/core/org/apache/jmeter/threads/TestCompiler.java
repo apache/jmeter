@@ -13,7 +13,7 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.Modifier;
 import org.apache.jmeter.config.ResponseBasedModifier;
 import org.apache.jmeter.control.GenericController;
-import org.apache.jmeter.extractor.Extractor;
+import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -223,7 +223,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
                 {
                     assertions.add(item);
                 }
-                if (item instanceof Extractor)
+                if (item instanceof PostProcessor)
                 {
                     extractors.add(item);
                 }
@@ -504,13 +504,13 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         iter = configs.getExtractors().iterator();
         while (iter.hasNext())
         {
-            Extractor ex = (Extractor) iter.next();
+            PostProcessor ex = (PostProcessor) iter.next();
             TestElement cloned = (TestElement) cloneIfNecessary(ex);
             if (objectsWithFunctions.contains(ex))
             {
                 replaceValues(cloned);
             }
-            ret.addExtractor((Extractor) cloned);
+            ret.addExtractor((PostProcessor) cloned);
         }
     }
 

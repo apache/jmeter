@@ -110,7 +110,7 @@ public class MenuFactory
 	 ***************************************/
 	public final static String MODIFIERS = "menu_modifiers";
     
-    public final static String EXTRACTORS = "menu_extractors";
+    public final static String POST_PROCESSORS = "menu_extractors";
 	/****************************************
 	 * !ToDo (Field description)
 	 ***************************************/
@@ -286,7 +286,7 @@ public class MenuFactory
 				MenuFactory.RESPONSE_BASED_MODIFIERS,
 				MenuFactory.TIMERS,
 				MenuFactory.LISTENERS,
-                MenuFactory.EXTRACTORS},
+                MenuFactory.POST_PROCESSORS},
 				JMeterUtils.getResString("Add"),
 				"Add"));
 		pop.add(makeMenus(new String[]{MenuFactory.CONTROLLERS},
@@ -460,7 +460,7 @@ public class MenuFactory
 			menuMap.put(NON_TEST_ELEMENTS, nonTestElements);
 			menuMap.put(RESPONSE_BASED_MODIFIERS, responseBasedModifiers);
 			menuMap.put(SAMPLERS, samplers);
-            menuMap.put(EXTRACTORS,extractors);
+            menuMap.put(POST_PROCESSORS,extractors);
 			Collections.sort(guiClasses);
 			Iterator iter = guiClasses.iterator();
 			while(iter.hasNext())
@@ -491,7 +491,7 @@ public class MenuFactory
 							item.getClass().getName()));
 				}
                 
-                if(categories.contains(EXTRACTORS))
+                if(categories.contains(POST_PROCESSORS))
                 {
                     extractors.add(new MenuInfo(item.getStaticLabel(), item.getClass().getName()));
                 }
