@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+	 <author email="bburns@apache.org">Michael Stover, brendan Burns, et al.</author>
+	 <title>ThreadGroups</title>
+  </properties>
+<body>
+<section name="ThreadGroups">
+
+<h2>ThreadGroups hold test scripts</h2>:
+<p>A ThreadGroup primarily holds controllers which deliver test cases to be tested.
+During test run, a ThreadGroup will iterate through all its controllers and extract
+test samples to execute.  The order of iteration is determined by the order the controllers
+appear in the tree.
+</p>
+<p>
+Controllers can be nested, so the actual behavior of the iterative process can
+be arbitrarily complex.
+</p>
+<p>
+Additionally, ThreadGroups can have timers added to them.  The timer will be used to
+create a delay between the execution of samples.  Although multiple timers can be
+added to a ThreadGroup, there isn't much point to doing so.  The timers delay values
+will simply be summed.
+</p>
+<p>
+Listeners can also be added to ThreadGroups.  Listeners collect test data and do
+some useful function with the data, such as displaying the data visually (sometimes,
+such listeners are called visualizers).  Other listeners save the data to file.
+Multiple visualizers can be added, allowing one multiple views of the data.
+</p>
+<p>
+Probably the most important concept to understand is the layering of logic that occurs
+when a test script is compiled and run.  ThreadGroups can have config elements added
+to them.  These config elements can be used to generate default settings for any
+sample that gets executed.
+</p>
+<p>
+Let's say one creates 10 web samples and configures them all, but leaves the "server"
+field blank.  One can then add a URL sample element to the ThreadGroup which has only
+its server field filled in.  When this script runs, all the test samples that get
+generated will have this top level config element applied to them, and their server fields
+will get filled in.  Note that fields from lower level samples are never overwritten by
+higher level config elements - they're only filled in if not already present.
+</p>
+<p>
+Two very common uses of this is to add a cookie manager to the ThreadGroup - this ensures that all
+samples are run with the same cookies.  Otherwise, one would have to use multiple
+cookie managers added to each separate controller, and there would be no guarantee that
+the same cookies were being used for all samples (actually, you'd be guaranteed that
+the cookies would be different).  Another common use is to have a single top level
+URL config element that specifies the server.  This allows a script to be portable
+from one server to another with only a single change.
+</p>
+</section>
+</body>
+</document>
