@@ -60,8 +60,8 @@ import java.util.Vector;
  * This class contains frequently-used static utility methods.
  *
  * @author     <a href="mailto://jsalvata@atg.com">Jordi Salvat i Alabart</a>
- * @created    27th December 2002
- * @version    $Revision$
+ * Created    27th December 2002
+ * @version    $Revision$ Last updated: $Date$
  */
 public final class JOrphanUtils
 {

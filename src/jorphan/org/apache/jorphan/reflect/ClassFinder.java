@@ -262,7 +262,8 @@ public final class ClassFinder
     }
     private static String fixDotDir(String path)
     {
-        if (path != null && path.equals("."))
+    	if (path == null) return null;
+        if (path.equals("."))
         {
             return System.getProperty("user.dir");
         }
@@ -490,11 +491,6 @@ public final class ClassFinder
                 // might throw an exception, assume this is ignorable
                 try
                 {
-                    // Class.forName() doesn't like nulls
-                    if (strClassName == null)
-                    {
-                        continue;
-                    }
                     c =
                         Class.forName(
                             strClassName,
