@@ -29,7 +29,7 @@ public class URLRewritingModifier
     implements Serializable, PreProcessor
 {
 
-    private Pattern equalsRegexp, formRegexp1, formRegexp2, noEqualsRegexp;
+    private Pattern pathExtensionEqualsRegexp, parameterRegexp, pathExtensionNoEqualsRegexp;
     //transient Perl5Compiler compiler = new Perl5Compiler();
     private final static String ARGUMENT_NAME = "argument_name";
     private final static String PATH_EXTENSION = "path_extension";
@@ -51,7 +51,7 @@ public class URLRewritingModifier
         String value = "";
         if (isPathExtension() && isPathExtensionNoEquals())
         {
-            if (matcher.contains(text, noEqualsRegexp))
+            if (matcher.contains(text, pathExtensionNoEqualsRegexp))
             {
                 MatchResult result = matcher.getMatch();
                 value = result.group(1);
@@ -59,7 +59,7 @@ public class URLRewritingModifier
         }
         else if (isPathExtension()) // && ! isPathExtensionNoEquals
         {
-            if (matcher.contains(text, equalsRegexp))
+            if (matcher.contains(text, pathExtensionEqualsRegexp))
             {
                 MatchResult result = matcher.getMatch();
                 value = result.group(1);
@@ -67,20 +67,14 @@ public class URLRewritingModifier
         }
         else // if ! isPathExtension()
         {
-            if (matcher.contains(text, equalsRegexp))
+            if (matcher.contains(text, parameterRegexp))
             {
                 MatchResult result = matcher.getMatch();
-                value = result.group(1);
-            }
-            else if (matcher.contains(text, formRegexp1))
-            {
-                MatchResult result = matcher.getMatch();
-                value = result.group(1);
-            }
-            else if (matcher.contains(text, formRegexp2))
-            {
-                MatchResult result = matcher.getMatch();
-                value = result.group(1);
+                for (int i=1; i<result.groups(); i++)
+                {
+                    value = result.group(i);
+                    if (value != null) break;
+                }
             }
         }
 
@@ -114,19 +108,31 @@ public class URLRewritingModifier
     }
     private void initRegex(String argName)
     {
-        equalsRegexp =
+        pathExtensionEqualsRegexp =
             JMeterUtils.getPatternCache().getPattern(
-                argName + "=([^\"'>&\\s;]*)[&\\s\"'>;]?$?",
+                ";"+argName + "=([^\"'>&\\s;]*)[&\\s\"'>;]?$?",
                 Perl5Compiler.MULTILINE_MASK);
-        formRegexp1 =
+
+        pathExtensionNoEqualsRegexp =
             JMeterUtils.getPatternCache().getPattern(
-                "[Nn][Aa][Mm][Ee]=[\"']"
+                ";"+argName + "([^\"'>&\\s;]*)[&\\s\"'>;]?$?",
+                Perl5Compiler.MULTILINE_MASK);
+
+        parameterRegexp =
+            JMeterUtils.getPatternCache().getPattern(
+                "[;\\?&]"+argName + "=([^\"'>&\\s;]*)[&\\s\"'>;]?$?"
+                + "|\\s[Nn][Aa][Mm][Ee]\\s*=\\s*[\"']"
                     + argName
-                    + "[\"'][^>]+[vV][Aa][Ll][Uu][Ee]=[\"']([^\"']*)[\"']",
-                Perl5Compiler.MULTILINE_MASK);
-        formRegexp2 =
-            JMeterUtils.getPatternCache().getPattern(
-                "[vV][Aa][Ll][Uu][Ee]=[\"']([^\"']*)[\"'][^>]+[Nn][Aa][Mm][Ee]=[\"']"
+                    + "[\"']"
+                    + "[^>]*"
+                    + "\\s[vV][Aa][Ll][Uu][Ee]\\s*=\\s*[\"']"
+                    + "([^\"']*)"
+                    + "[\"']"
+                + "|\\s[vV][Aa][Ll][Uu][Ee]\\s*=\\s*[\"']"
+                    + "([^\"']*)"
+                    + "[\"']"
+                    + "[^>]*"
+                    + "\\s[Nn][Aa][Mm][Ee]\\s*=\\s*[\"']"
                     + argName
                     + "[\"']",
                 Perl5Compiler.MULTILINE_MASK);
@@ -134,13 +140,6 @@ public class URLRewritingModifier
             // more accurate, but I can't imagine a session id containing
             // either, so we should be OK. The whole set of expressions is a
             // quick hack anyway, so who cares.
-            
-        // case1 could be re-written "=?([^..."  instead of creating a new
-        // pattern? Maybe not: note the semicolons
-        noEqualsRegexp =
-            JMeterUtils.getPatternCache().getPattern(
-                argName + "([^\"'>&\\s]*)[&\\s\"'>]?$?",
-                Perl5Compiler.MULTILINE_MASK);
     }
     public String getArgumentName()
     {
