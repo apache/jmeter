@@ -433,8 +433,8 @@ XML.</p>
 </component>
 
 
-<component name="WebService(SOAP) Request (Beta Code)" index="16.1.7" screenshot="webservice_sampler.png">
-
+<component name="WebService(SOAP) Request" index="16.1.7" screenshot="webservice_sampler.png">
+<center><h2>(Beta Code)</h2></center>
 <description><p>This sampler has been tested with IIS Webservice running .NET 1.0. It
  hasn't been tested with SUN or IBM webservices providers, but it should work.
  The sampler uses Apache SOAP driver to serialize the message and set the header
