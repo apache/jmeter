@@ -104,39 +104,6 @@ public class HTTPSampler2 extends HTTPSamplerBase
 //        /*postWriter.*/
 //    	setHeaders(post, this);
     }
-    
-//    protected final static String BOUNDARY =
-//        "---------------------------7d159c1302d0y0";
-//    //protected final static byte[] CRLF = { 0x0d, 0x0A };
-//
-//    public void setHeaders(HttpMethod method, HTTPSampler2 sampler)
-//    throws IOException
-//    {
-//
-//    // If filename was specified then send the post using multipart syntax
-//    String filename = sampler.getFileField();
-//    if ((filename != null) && (filename.trim().length() > 0))
-//    {
-//    	method.setRequestHeader(
-//            "Content-type",
-//            "multipart/form-data; boundary=" + BOUNDARY);
-////        connection.setDoOutput(true);
-////        connection.setDoInput(true);
-//    }
-//
-//    // No filename specified, so send the post using normal syntax
-//    else
-//    {
-//        String postData = sampler.getQueryString();
-//    	method.setRequestHeader(
-//            "Content-length",
-//            "" + postData.length());
-//    	method.setRequestHeader(
-//            "Content-type",
-//            "application/x-www-form-urlencoded");
-////        connection.setDoOutput(true);
-//    }
-//}
 
     /**
      * Send POST data from <code>Entry</code> to the open connection.
