@@ -63,8 +63,6 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -87,8 +85,6 @@ public class HeaderManager extends ConfigTestElement implements Serializable
     private final static int columnCount = 2;
     private final static String[] columnNames =
         { JMeterUtils.getResString("name"), JMeterUtils.getResString("value")};
-
-    private static List addableList = new LinkedList();
 
     public HeaderManager()
     {

@@ -66,7 +66,6 @@ import java.util.List;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -142,7 +141,6 @@ public class CSVRead extends AbstractFunction implements Serializable
         try
         {
 
-            JMeterVariables vars = getVariables();
             ArrayList processedLines = null;
             String fileName = null;
 

@@ -60,7 +60,6 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.io.Serializable;
-import java.util.Hashtable;
 
 /**
  * A vertical layout manager similar to java.awt.FlowLayout. Like FlowLayout
@@ -124,8 +123,6 @@ public class VerticalLayout implements LayoutManager, Serializable
      */
     private int anchor;
     
-    private Hashtable comps;
-
     //Constructors
     /**
      * Constructs an instance of VerticalLayout with a vertical vgap of 5
@@ -188,7 +185,7 @@ public class VerticalLayout implements LayoutManager, Serializable
     public void layoutContainer(Container parent)
     {
         Insets insets = parent.getInsets();
-        Dimension dim = layoutSize(parent, false);
+        //NOTUSED Dimension dim = layoutSize(parent, false);
         synchronized (parent.getTreeLock())
         {
             int n = parent.getComponentCount();

@@ -60,14 +60,11 @@ import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.apache.jorphan.logging.LoggingManager;
@@ -243,7 +240,8 @@ public final class ClassFinder
      *
      * @param  theClass     the class to get interfaces for
      * @param  hInterfaces  a Map to store the discovered interfaces in
-     */
+     *
+     * NOTUSED
     private static void getAllInterfaces(Class theClass, Map hInterfaces)
     {
         Class[] interfaces = theClass.getInterfaces();
@@ -253,6 +251,7 @@ public final class ClassFinder
             getAllInterfaces(interfaces[i], hInterfaces);
         }
     }
+    */
     private static String[] fixDotDirs(String[] paths)
     {
         for (int i = 0; i < paths.length; i++)
@@ -340,12 +339,13 @@ public final class ClassFinder
     }
     
     /**
-     * Determine if the class implements the interface.
+     *   NOTUSED
+     *  * Determine if the class implements the interface.
      *
      * @param  theClass      the class to check
      * @param  theInterface  the interface to look for
      * @return               boolean true if it implements
-     */
+     *
     private static boolean classImplementsInterface(
         Class theClass,
         Class theInterface)
@@ -365,6 +365,7 @@ public final class ClassFinder
         }
         return false;
     }
+    */
     
     /**
      * Convenience method for <code>findAllSubclasses(List, List,
@@ -374,13 +375,15 @@ public final class ClassFinder
      * @param  listSuperClasses  the base classes to find subclasses for
      * @param  listAllClasses    the collection of classes to search in
      * @return                   ArrayList of the subclasses
-     */
+     *
+     * NOTUSED
     private static ArrayList findAllSubclasses(
         List listSuperClasses,
         List listAllClasses)
     {
         return findAllSubclasses(listSuperClasses, listAllClasses, false);
     }
+    */
     
     /**
      * Finds all classes that extend the classes in the listSuperClasses
@@ -441,7 +444,8 @@ public final class ClassFinder
      * @param  theClass        the parent class
      * @param  listAllClasses  the collection of classes to search in
      * @param  listSubClasses  the collection of discovered subclasses
-     */
+     *
+     *   NOTUSED
     private static void findAllSubclassesOneClass(
         Class theClass,
         List listAllClasses,
@@ -453,6 +457,7 @@ public final class ClassFinder
             listSubClasses,
             false);
     }
+    */
     
     /**
      * Finds all classes that extend the class, searching in the listAllClasses
@@ -472,11 +477,8 @@ public final class ClassFinder
     {
         Iterator iterClasses = null;
         String strClassName = null;
-        String strSuperClassName = null;
         Class c = null;
-        Class cParent = null;
         boolean bIsSubclass = false;
-        strSuperClassName = theClass.getName();
         iterClasses = listAllClasses.iterator();
         while (iterClasses.hasNext())
         {
@@ -540,9 +542,7 @@ public final class ClassFinder
         throws IOException
     {
         File file = null;
-        String strPathName = null;
         ZipFile zipFile = null;
-        ZipEntry zipEntry = null;
         Enumeration entries = null;
         String strEntry = null;
         file = new File(strPath);

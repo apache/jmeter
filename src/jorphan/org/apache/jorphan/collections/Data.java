@@ -261,7 +261,6 @@ public class Data implements Serializable
         int x = start, y = end - 1;
         String basis =
             ((List) data.get(column)).get((int) ((x + y) / 2)).toString();
-        Object temp;
         if (x == y)
         {
             return;
@@ -722,7 +721,6 @@ public class Data implements Serializable
      */
     public String[] getDataAsText()
     {
-        List tempList;
         StringBuffer temp = new StringBuffer("");
         String[] line = new String[size + 1];
         String[] elements = getHeaders();
