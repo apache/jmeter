@@ -18,7 +18,7 @@
 </javac>
 </target>
 <target name="package" depends="compile">
-<jar jarfile="ApacheJMeter.jar" basedir="bin/classes" manifest="src/Manifest"/>
+<jar jarfile="ApacheJMeter.jar" basedir="bin/classes" manifest="src/MANIFEST"/>
 </target>
 <target name="install" depends="package">
 <copyfile src="ApacheJMeter.jar" dest="bin/ApacheJMeter.jar"/>
