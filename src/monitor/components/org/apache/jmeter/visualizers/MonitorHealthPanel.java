@@ -26,7 +26,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import java.util.HashMap;
-import java.util.Random;
 
 import javax.swing.JScrollPane;
 
@@ -76,7 +75,11 @@ public class MonitorHealthPanel extends JPanel
         init();
     }
 
-	private void init(){
+	/**
+	 * init is responsible for creating the necessary legends
+	 * and information for the health panel.
+	 */
+	protected void init(){
 		this.setLayout(new BorderLayout());
 		ImageIcon legend = JMeterUtils.getImage("monitor-legend.gif");
 		JLabel label = new JLabel(legend);
@@ -104,24 +107,6 @@ public class MonitorHealthPanel extends JPanel
 		this.add(eqs,BorderLayout.SOUTH);
 	}
 
-	public void createTestData(){	
-		Random ran = new Random(System.currentTimeMillis());
-		for (int idx = 0; idx < 21; idx++){
-			MonitorStats stat = new MonitorStats();
-			stat.host = "localhost" + idx;
-			stat.port = "8080";
-			stat.protocol = "http";
-			stat.health = ran.nextInt(3);
-			stat.load = ran.nextInt(100);
-			stat.timestamp = (System.currentTimeMillis() - ran.nextLong());
-			
-			MonitorModel mm = new MonitorModel(stat);
-			ServerPanel sp = new ServerPanel(mm);
-			this.SERVERMAP.put(stat.getURL(),sp);
-			this.SERVERS.add(sp);
-		}
-	}
-	
 	/**
 	 * 
 	 * @param model
@@ -136,17 +121,21 @@ public class MonitorHealthPanel extends JPanel
 				SERVERMAP.put(model.getURL(),pane);
 			}
 			pane.updateGui(model);
-			this.SERVERS.updateUI();
 		} else {
 			ServerPanel newpane = new ServerPanel(model);
 			SERVERMAP.put(model.getURL(),newpane);
 			this.SERVERS.add(newpane);
 			newpane.updateGui(model);
-			this.SERVERS.updateUI();
 		}
+		this.SERVERS.updateUI();
 	}
 
+	/**
+	 * clear will clear the hashmap, remove all ServerPanels
+	 * from the servers pane, and update the ui.
+	 */
 	public void clear(){
+		this.SERVERMAP.clear();
 		this.SERVERS.removeAll();
 		this.SERVERS.updateUI();
 	}

@@ -53,6 +53,8 @@ public class MonitorHealthVisualizer extends AbstractVisualizer
 	private MonitorAccumModel MODEL;
 	private MonitorGraph GRAPH;
 	
+	public static final String BUFFER = "monitor.buffer.size";
+	
     /**
      * Constructor for the GraphVisualizer object.
      */
@@ -61,6 +63,7 @@ public class MonitorHealthVisualizer extends AbstractVisualizer
     	MODEL = new MonitorAccumModel();
     	GRAPH = new MonitorGraph(MODEL);
     	init();
+		MODEL.setBufferSize(JMeterUtils.getPropDefault(BUFFER,800));
     }
 
     public String getLabelResource()

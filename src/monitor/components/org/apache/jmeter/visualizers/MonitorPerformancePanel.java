@@ -114,7 +114,11 @@ public class MonitorPerformancePanel extends JSplitPane
         init();
     }
 
-	public void init(){
+	/**
+	 * init() will create all the necessary swing panels,
+	 * labels and icons for the performance panel.
+	 */
+	protected void init(){
 		ROOTSAMPLE = new SampleResult();
 		ROOTSAMPLE.setSampleLabel(SERVER_TITLE);
 		ROOTSAMPLE.setSuccessful(true);
@@ -149,6 +153,12 @@ public class MonitorPerformancePanel extends JSplitPane
 		this.add(right,JSplitPane.RIGHT);		
 	}
 	
+	/**
+	 * Method will create the legends at the bottom of
+	 * the performance tab explaining the meaning of
+	 * each line.
+	 * @return JPanel
+	 */
 	public JPanel createLegend(){
 		Dimension lsize = new Dimension(130,18);
 		
@@ -179,7 +189,12 @@ public class MonitorPerformancePanel extends JSplitPane
 		legend.add(thd);
 		return legend;
 	}
-	
+
+	/**
+	 * Method is responsible for creating the left
+	 * grid labels.
+	 * @return JPanel
+	 */	
 	public JPanel createLeftGridLabels(){
 		Dimension lsize = new Dimension(33,20);
 		JPanel labels = new JPanel();
@@ -202,6 +217,11 @@ public class MonitorPerformancePanel extends JSplitPane
 		return labels;
 	}
 	
+	/**
+	 * Method is responsible for creating the grid labels
+	 * on the right for "healthy" and "dead"
+	 * @return JPanel
+	 */
 	public JPanel createRightGridLabels(){
 		JPanel labels = new JPanel();
 		labels.setLayout(new BorderLayout());
@@ -219,6 +239,10 @@ public class MonitorPerformancePanel extends JSplitPane
 		return labels;
 	}
 	
+	/**
+	 * MonitorAccumModel will call this method to notify
+	 * the component data has changed.
+	 */
 	public void addSample(MonitorModel model){
 		if (!SERVERMAP.containsKey(model.getURL())){
 			DefaultMutableTreeNode newnode =
@@ -226,7 +250,7 @@ public class MonitorPerformancePanel extends JSplitPane
 			newnode.setAllowsChildren(false);
 			SERVERMAP.put(model.getURL(),newnode);
 			ROOTNODE.add(newnode);
-			TREEPANE.updateUI();
+			this.TREEPANE.updateUI();
 		}
 		DefaultMutableTreeNode node =
 			(DefaultMutableTreeNode) SERVERTREE.getLastSelectedPathComponent();
@@ -244,17 +268,26 @@ public class MonitorPerformancePanel extends JSplitPane
 	 */
 	public void valueChanged(TreeSelectionEvent e)
 	{
-		DefaultMutableTreeNode node =
-			(DefaultMutableTreeNode) SERVERTREE.getLastSelectedPathComponent();
-		Object usrobj = node.getUserObject();
-		if (usrobj instanceof MonitorModel && usrobj != null){
-			MonitorModel mo = (MonitorModel)usrobj;
-			GRAPH.updateGui(mo);
-			this.updateUI();
+		// we check to see if the lastSelectedPath is null
+		// after we clear, it would return null
+		if (SERVERTREE.getLastSelectedPathComponent() != null){
+			DefaultMutableTreeNode node =
+				(DefaultMutableTreeNode) SERVERTREE.getLastSelectedPathComponent();
+			Object usrobj = node.getUserObject();
+			if ( usrobj != null && usrobj instanceof MonitorModel){
+				MonitorModel mo = (MonitorModel)usrobj;
+				GRAPH.updateGui(mo);
+				this.updateUI();
+			}
+			TREEPANE.updateUI();
 		}
-		TREEPANE.updateUI();
 	}
 	
+	/**
+	 * clear will remove all child nodes from the ROOTNODE,
+	 * clear the HashMap, update the graph and jpanel for
+	 * the server tree.
+	 */
 	public void clear(){
 		this.SERVERMAP.clear();
 		ROOTNODE.removeAllChildren();
