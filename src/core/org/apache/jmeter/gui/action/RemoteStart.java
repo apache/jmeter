@@ -68,7 +68,7 @@ import org.apache.jmeter.engine.JMeterEngineException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -78,8 +78,7 @@ import org.apache.log.Logger;
  */
 public class RemoteStart extends AbstractAction
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     private static Set commands = new HashSet();
     static

@@ -72,7 +72,7 @@ import org.apache.jmeter.assertions.SizeAssertion;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -84,8 +84,7 @@ public class SizeAssertionGui
     extends AbstractAssertionGui
     implements FocusListener, ActionListener
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     private JTextField size;
     private JRadioButton equalButton,

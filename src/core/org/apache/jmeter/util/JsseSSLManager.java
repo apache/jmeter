@@ -64,7 +64,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 import org.apache.jmeter.util.keystore.JmeterKeyStore;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 import com.sun.net.ssl.HostnameVerifier;
@@ -90,8 +90,7 @@ import com.sun.net.ssl.X509TrustManager;
  */
 public class JsseSSLManager extends SSLManager
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.util");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     /**
      *  Cache the SecureRandom instance because it takes a long time to create

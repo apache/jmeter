@@ -79,7 +79,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 
@@ -103,8 +103,7 @@ import org.apache.log.Logger;
 public class MailerVisualizer extends AbstractVisualizer
         implements Clearable, ChangeListener
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     private JButton testerButton;
     private JTextField addressField;

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -19,8 +19,7 @@ public class MailerResultCollector
     extends ResultCollector
     implements Serializable
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     public static final String MAILER_MODEL =
         "MailerResultCollector.mailer_model";
 

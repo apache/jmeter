@@ -74,7 +74,7 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.SearchByClass;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -86,8 +86,7 @@ import org.apache.log.Logger;
  */
 public class JMeterThread implements Runnable, java.io.Serializable
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     static Map samplers = new HashMap();
     int initialDelay = 0;
     Controller controller;

@@ -62,7 +62,7 @@ import java.util.Set;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.jmeter.assertions.AssertionResult;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -107,8 +107,7 @@ public class SampleResult implements Serializable
 
     private final static String TOTAL_TIME = "totalTime";
 
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     public void setMarked(String filename)
     {

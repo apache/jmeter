@@ -63,7 +63,7 @@ import java.util.Set;
 
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.config.ConfigElement;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -72,8 +72,7 @@ import org.apache.log.Logger;
  */
 public class Entry
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     Map configSet;
     Set clonedSet;
     Class sampler;

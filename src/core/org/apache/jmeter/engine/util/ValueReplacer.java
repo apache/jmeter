@@ -22,7 +22,7 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -30,8 +30,7 @@ import org.apache.log.Logger;
  */
 public class ValueReplacer
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ENGINE);
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     CompoundVariable masterFunction = new CompoundVariable();
     Map variables = new HashMap();
     TestPlan tp;

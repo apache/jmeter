@@ -66,7 +66,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.keystore.JmeterKeyStore;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -82,8 +82,7 @@ import org.apache.log.Logger;
  */
 public abstract class SSLManager
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.util");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     /** Singleton instance of the manager */
     private static SSLManager manager;
     private static boolean isIAIKProvider = false;

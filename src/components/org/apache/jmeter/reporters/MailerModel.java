@@ -75,7 +75,7 @@ import javax.swing.event.ChangeListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 
@@ -101,8 +101,7 @@ public class MailerModel extends AbstractTestElement implements Serializable
     private static final String FAILURE_LIMIT_KEY = "MailerModel.failureLimit";
     private static final String SUCCESS_LIMIT_KEY = "MailerModel.successLimit";
 
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ELEMENTS);
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     /** The listener for changes. */
     ChangeListener changeListener;

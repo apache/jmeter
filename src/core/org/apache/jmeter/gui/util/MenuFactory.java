@@ -77,7 +77,7 @@ import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -86,8 +86,7 @@ import org.apache.log.Logger;
  */
 public final class MenuFactory
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     public final static String TIMERS = "menu_timer";
     public final static String CONTROLLERS = "menu_logic_controller";

@@ -11,7 +11,7 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -20,8 +20,7 @@ import org.apache.log.Logger;
  */
 public class PreCompiler implements HashTreeTraverser
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ENGINE);
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     private Map userDefinedVariables;
     private boolean testValid = true;
     private ValueReplacer replacer;
