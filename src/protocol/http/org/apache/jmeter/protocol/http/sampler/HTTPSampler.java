@@ -1369,12 +1369,15 @@ public class HTTPSampler extends AbstractSampler
 
     protected void disconnect(HttpURLConnection conn)
     {
-        String connection= conn.getHeaderField("Connection");
-        String protocol= conn.getHeaderField(0);
-        if ((connection == null && (protocol == null || !protocol.startsWith("HTTP/1.1")))
-            || (connection != null && connection.equalsIgnoreCase("close")))
+        if (conn != null)
         {
-            conn.disconnect();
+            String connection= conn.getHeaderField("Connection");
+            String protocol= conn.getHeaderField(0);
+            if ((connection == null && (protocol == null || !protocol.startsWith("HTTP/1.1")))
+                || (connection != null && connection.equalsIgnoreCase("close")))
+            {
+                conn.disconnect();
+            }
         }
     }
 
