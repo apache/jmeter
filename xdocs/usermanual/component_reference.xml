@@ -929,8 +929,15 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
         <property name="Port" required="Yes">The port that the Proxy Server listens to.  8080 is the default, but you can change it
         <!--TODO: there's some undocumented flags here -->
         <property name="Target Controller" required="Yes">The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.</property>
-        <property name="Grouping" required="Yes">Whether to group samplers for requests received without significant time separation.</property>
-        <!-- TODO: describe all available gruping modes -->
+        <property name="Grouping" required="Yes">Whether to group samplers for requests received without significant time separation, and how to represent that grouping in the recording:
+          <ul>
+            <li>Do not group samplers: store all recorded samplers sequentially.
+            <li>Add separators between groups: add a controller named "--------------" to create a visual separation between the groups. Otherwise the samplers are all stored sequentially.
+            <li>Put each group in a new controller: create a new <complink name="Simple Controller"/> for each group, and store all samplers for that group in it.
+            <li>Store 1st sampler of each group only: only the first request in each group will be recorded. The "Follow Redirects" and "Retrieve All Embedded Resources..." flags will be turned on in those samplers.
+          </ul>
+        </property>
+        <!-- TODO:property name="Group Separation Interval">Inactivity time between two requests needed to consider them in two separate groups.</property-->
         <property name="Patterns to Include" required="No">Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
         those that meet the requirements of the Include/Exclude fields are <i>recorded</i>.  If both Include and Exclude are
         left empty, then everything is recorded (which can result in dozens of samples recorded for each page, as images, stylesheets,
