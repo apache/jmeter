@@ -8,7 +8,7 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
 
 /**
  * @author sebb at apache dot org
- * @version $revision$ $date$
+ * @version $Revision$ $Date$
  */
 public abstract class OnErrorTestElement extends AbstractTestElement
 {

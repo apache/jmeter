@@ -11,7 +11,7 @@ import java.io.OutputStream;
 
 /**
  * @author sebb AT apache DOT org
- * @version $revision$ $date$
+ * @version $Revision$ $Date$
  */
 public interface TCPClient
 {
