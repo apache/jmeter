@@ -73,13 +73,14 @@ public class MultipartUrlConfigGui
         return ce;
     }
 
-    public void configureSampler(HTTPSampler sampler)
-    {
-        sampler.setMimetype(mimetypeField.getText());
-        sampler.setFileField(paramNameField.getText());
-        sampler.setFilename(filenameField.getText());
-        super.configureSampler(sampler);
-    }
+// does not appear to be used
+//    public void configureSampler(HTTPSampler sampler)
+//    {
+//        sampler.setMimetype(mimetypeField.getText());
+//        sampler.setFileField(paramNameField.getText());
+//        sampler.setFilename(filenameField.getText());
+//        super.configureSampler(sampler);
+//    }
 
     public void configure(TestElement el)
     {
