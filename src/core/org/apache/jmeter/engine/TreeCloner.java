@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.reporters.ResultCollector;
-import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.CollectionProperty;
