@@ -3,8 +3,8 @@ package org.apache.jmeter.protocol.http.parser;
 import java.util.List;
 
 /**
- * @created    June 16, 2001
- * @version    $Revision$
+ * Created    June 16, 2001
+ * @version    $Revision$ Last updated: $Date$
  */
 public class FormElement
 {

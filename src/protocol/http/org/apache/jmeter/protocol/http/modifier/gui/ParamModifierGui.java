@@ -22,19 +22,19 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  * @author    David La France
  * @author     <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
- * @created   Jan 18, 2002
- * @version   $Revision$
+ * Created   Jan 18, 2002
+ * @version   $Revision$ Last updated: $Date$
  */
 public class ParamModifierGui
     extends AbstractPreProcessorGui
     implements FocusListener
 {
-    private final String NAME = "name";
-    private final String PREFIX = "prefix";
-    private final String LOWERBOUND = "lowerBound";
-    private final String UPPERBOUND = "upperBound";
-    private final String INCREMENT = "increment";
-    private final String SUFFIX = "suffix";
+    private static final String NAME = "name";
+    private static final String PREFIX = "prefix";
+    private static final String LOWERBOUND = "lowerBound";
+    private static final String UPPERBOUND = "upperBound";
+    private static final String INCREMENT = "increment";
+    private static final String SUFFIX = "suffix";
 
     private JTextField _fieldName;
     private JTextField _prefix;

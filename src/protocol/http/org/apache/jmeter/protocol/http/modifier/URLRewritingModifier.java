@@ -30,7 +30,7 @@ public class URLRewritingModifier
 {
 
     private Pattern case1, case2, case3, case4;
-    transient Perl5Compiler compiler = new Perl5Compiler();
+    //transient Perl5Compiler compiler = new Perl5Compiler();
     private final static String ARGUMENT_NAME = "argument_name";
     private final static String PATH_EXTENSION = "path_extension";
     private final static String PATH_EXTENSION_NO_EQUALS =
@@ -241,7 +241,7 @@ public class URLRewritingModifier
             context.setCurrentSampler(sampler);
             context.setPreviousResult(response);
             mod.process();
-            Arguments args = sampler.getArguments();//NOTUSED - should it be?
+            //Arguments args = sampler.getArguments();
             assertEquals(
                 "index.html;%24sid%24KQNq3AAADQZoEQAxlkX8uQV5bjqVBPbT",
                 sampler.getPath());

@@ -11,8 +11,8 @@ import org.apache.jmeter.testelement.property.LongProperty;
  *
  * @author     David La France
  * @author     <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
- * @created    Jan 18, 2002
- * @version   $Revivion:$
+ * Created    Jan 18, 2002
+ * @version   $Revivion:$ Last updated: $Date$
  */
 public class ParamMask extends AbstractTestElement implements Serializable
 {

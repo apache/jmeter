@@ -207,7 +207,7 @@ public class CookieManager
                 int path = 2;
                 if (st[path].equals(" "))
                     st[path] = "/";
-                boolean secure = new Boolean(st[3]).booleanValue();
+                boolean secure = Boolean.valueOf(st[3]).booleanValue();
                 long expires = new Long(st[4]).longValue();
                 int name = 5;
                 int value = 6;
