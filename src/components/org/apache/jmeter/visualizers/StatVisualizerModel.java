@@ -54,6 +54,7 @@
  */
 package org.apache.jmeter.visualizers; // java
 import java.util.*; // apache
+import junit.framework.TestCase;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
@@ -140,6 +141,11 @@ public class StatVisualizerModel implements Clearable
 		return (RunningSample)runningSamples.get(index);
 	}
 
+	public RunningSample getRunningSample(String label)
+	{
+		return (RunningSample)labelMap.get(label);
+	}
+
 	public RunningSample getRunningSampleTotal() {
 	  	return total;
 	}
@@ -207,5 +213,62 @@ public class StatVisualizerModel implements Clearable
 			}
 			((AccumListener) myObj).updateGui(s);
 		}
+	}
+
+	public static class Test extends junit.framework.TestCase
+	{
+	  public Test(String name)
+	  {
+	    super(name);
+	  }
+
+	  private SampleResult sample(String label, long timestamp,
+	      				long time, boolean ok)
+	  {
+	    SampleResult res= new SampleResult();
+	    res.setSampleLabel(label);
+	    res.setTimeStamp(timestamp);
+	    res.setTime(time);
+	    res.setSuccessful(ok);
+	    return res;
+	  }
+
+	  public void testStatisticsCalculation() {
+	    StatVisualizerModel m= new StatVisualizerModel();
+	    long t0= System.currentTimeMillis();
+	    m.addNewSample(sample("1", t0+0, 100, true));
+	    m.addNewSample(sample("2", t0+250, 200, true));
+	    m.addNewSample(sample("1", t0+500, 300, true));
+	    assertEquals(2, m.getRunningSampleCount());
+	    assertEquals(2, m.labelMap.size());
+
+	    {
+	    RunningSample s= m.getRunningSample("1");
+	    assertEquals("1", s.getLabel());
+	    assertEquals(2, s.getNumSamples());
+	    assertEquals(100, s.getMin());
+	    assertEquals(300, s.getMax());
+	    assertEquals(200, s.getAverage());
+	    assertEquals(4.0, s.getRate(), 1e-6);
+	    }
+
+	    {
+	    RunningSample s= m.getRunningSample("2");
+	    assertEquals("2", s.getLabel());
+	    assertEquals(1, s.getNumSamples());
+	    assertEquals(200, s.getMin());
+	    assertEquals(200, s.getMax());
+	    assertEquals(200, s.getAverage());
+	    }
+
+	    {
+	    RunningSample s= m.getRunningSampleTotal();
+	    assertEquals(3, s.getNumSamples());
+	    assertEquals(100, s.getMin());
+	    assertEquals(300, s.getMax());
+	    assertEquals(200, s.getAverage());
+	    assertEquals(6.0, s.getRate(), 1e-6);
+	    }
+	  }
 	}
 }
