@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import junit.framework.TestCase;
+//import junit.framework.TestCase;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
@@ -45,6 +45,7 @@ import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
 import org.apache.jmeter.assertions.AssertionResult;
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -1161,7 +1162,7 @@ public final class SaveService implements SaveServiceConstants
         return subTree;
     }
 
-    public static class Test extends TestCase
+    public static class Test extends JMeterTestCase
     {
         private static final String[] FILES =
             new String[] {
@@ -1219,7 +1220,7 @@ public final class SaveService implements SaveServiceConstants
                         "Loading file bin/testfiles/"
                             + FILES[i]
                             + " and "
-                            + "saving it back changes its contents.");
+                            + "saving it back changes its size from "+len+" to "+out.size()+".");
                 }
 
                 // Note this test will fail if a property is added or
