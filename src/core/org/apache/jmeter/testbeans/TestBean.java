@@ -77,6 +77,8 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MapProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * This is an experimental class. An attempt to address the complexity of
@@ -89,12 +91,13 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
  */
 public abstract class TestBean extends AbstractTestElement
 {
+	protected static final Logger log = LoggingManager.getLoggerForClass();
+
     /**
      * Property name to property descriptor method map.
      */
-    private static Map descriptors= null;
+    private Map descriptors;
 
-    
     /**
      * Parameter-less constructor.
      * <p>
@@ -105,27 +108,24 @@ public abstract class TestBean extends AbstractTestElement
     {
         super();
         
-        if (descriptors == null)
-        {
-            try
-            {
-            	// Obtain the property descriptors:
-                BeanInfo beanInfo= Introspector.getBeanInfo(this.getClass(),
-                    TestBean.class);
-                PropertyDescriptor[] desc= beanInfo.getPropertyDescriptors();
-                descriptors= new HashMap();
-                for (int i=0; i<desc.length; i++)
-                {
-                	descriptors.put(desc[i].getName(), desc[i]);
-                }
-            }
-            catch (IntrospectionException e)
-            {
-                log.error("Can't get beanInfo for "+this.getClass().getName(),
-                    e);
-                throw new Error(e.toString()); // Programming error. Don't continue.
-            }
-        }
+		try
+		{
+			// Obtain the property descriptors:
+			BeanInfo beanInfo= Introspector.getBeanInfo(this.getClass(),
+				TestBean.class);
+			PropertyDescriptor[] desc= beanInfo.getPropertyDescriptors();
+			descriptors= new HashMap();
+			for (int i=0; i<desc.length; i++)
+			{
+				descriptors.put(desc[i].getName(), desc[i]);
+			}
+		}
+		catch (IntrospectionException e)
+		{
+			log.error("Can't get beanInfo for "+this.getClass().getName(),
+				e);
+			throw new Error(e.toString()); // Programming error. Don't continue.
+		}
     }
 
     /**
@@ -138,16 +138,27 @@ public abstract class TestBean extends AbstractTestElement
     {
         Object[] param= new Object[1];
         
+        if (log.isDebugEnabled()) log.debug("Preparing "+this.getClass());
+        
         for (PropertyIterator jprops= propertyIterator(); jprops.hasNext(); )
         {
             // Obtain a value of the appropriate type for this property. 
             JMeterProperty jprop= jprops.next();
             PropertyDescriptor descriptor= (PropertyDescriptor)descriptors.get(jprop.getName());
 
-            if (descriptor == null) continue; // ignore auxiliary properties like gui_class 
+            if (descriptor == null)
+            {
+            	if (log.isDebugEnabled())
+            	{
+					log.debug("Ignoring auxiliary property "+jprop.getName());
+            	}
+				continue; 
+            }
 
             Class type= descriptor.getPropertyType();
             Object value= unwrapProperty(jprop, type);
+            
+			if (log.isDebugEnabled()) log.debug("Setting "+jprop.getName()+"="+value);
 
             // Set the bean's property to the value we just obtained:
 			if (value != null || !type.isPrimitive())
