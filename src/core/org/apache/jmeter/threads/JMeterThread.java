@@ -70,6 +70,7 @@ import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.timers.Timer;
@@ -373,7 +374,9 @@ public class JMeterThread implements Runnable, java.io.Serializable
         Iterator iter = timers.iterator();
         while (iter.hasNext())
         {
-            sum += ((Timer) iter.next()).delay();
+        	Timer timer= (Timer) iter.next();
+        	if (timer instanceof TestBean) ((TestBean)timer).prepare();
+            sum += timer.delay();
         }
         if (sum > 0)
         {
