@@ -160,9 +160,11 @@ class RegexpHTMLParser extends HTMLParser
     transient private static Logger log= LoggingManager.getLoggerForClass();
 
     /**
-     * This is a singleton class:
+     * Make sure to compile the regular expression upon instantiation:
      */
-    static {
+    protected RegexpHTMLParser() {
+        super();
+        
         // Compile the regular expression:
         try
         {
