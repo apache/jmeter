@@ -26,7 +26,6 @@
  */
 package org.apache.jmeter.functions;
 
-//import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -49,8 +48,8 @@ public class PackageTest extends JMeterTestCase
 	transient private static final Logger log = LoggingManager.getLoggerForClass();
 
     static{
-//	    LoggingManager.setPriority("DEBUG","jmeter");
-//	    LoggingManager.setTarget(new PrintWriter(System.out));
+	    //LoggingManager.setPriority("DEBUG","jmeter");
+	    //LoggingManager.setTarget(new java.io.PrintWriter(System.out));
     }
 
     public PackageTest(String arg0)
@@ -70,6 +69,20 @@ public class PackageTest extends JMeterTestCase
 		return cr;
 	}
 
+	// Create the StringFromFile function and set its parameters.
+	private static StringFromFile SFFParams(String p1, String p2, String p3, String p4)
+	throws Exception
+	{
+		StringFromFile sff = new StringFromFile();
+		Collection parms = new LinkedList();
+		if (p1 != null) parms.add(new CompoundVariable(p1));
+		if (p2 != null) parms.add(new CompoundVariable(p2));
+		if (p3 != null) parms.add(new CompoundVariable(p3));
+		if (p4 != null) parms.add(new CompoundVariable(p4));
+		sff.setParameters(parms);
+		return sff;
+	}
+
 	public static Test suite() throws Exception
 	{
 		   TestSuite suite = new TestSuite("SingleThreaded");
@@ -87,9 +100,33 @@ public class PackageTest extends JMeterTestCase
 		   par.addTest(new PackageTest("CSVThread1"));
 		   par.addTest(new PackageTest("CSVThread2"));
 		   suite.addTest(par);
+		   
+		   TestSuite sff = new TestSuite("StringFromFile");
+		   sff.addTest(new PackageTest("SFFTest1"));
+		   suite.addTest(sff);
 		   return suite;
     }
     
+    public void SFFTest1() throws Exception
+    {
+		StringFromFile sff1 = SFFParams("testfiles/SFFTest#.txt","","1","3");
+		assertEquals("uno",sff1.execute());
+		assertEquals("dos",sff1.execute());
+		assertEquals("tres",sff1.execute());
+		assertEquals("cuatro",sff1.execute());
+		assertEquals("cinco",sff1.execute());
+		assertEquals("one",sff1.execute());
+		assertEquals("two",sff1.execute());
+		sff1.execute();
+		sff1.execute();
+		assertEquals("five",sff1.execute());
+		assertEquals("eins",sff1.execute());
+		sff1.execute();
+		sff1.execute();
+		sff1.execute();
+		assertEquals("fuenf",sff1.execute());
+		assertEquals("**ERR**",sff1.execute());
+    }
     
     // Function objects to be tested
     private static CSVRead cr1, cr2, cr3, cr4, cr5, cr6;
