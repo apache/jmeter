@@ -363,8 +363,6 @@
     <delete file="lib/jorphan.jar"/>
     <delete dir="${jar.dest}"/>
     <delete dir="${build.dir}"/>
-    <delete dir="${docs.api.dest}" defaultexcludes="yes"/> <!-- redundant but future-proof -->
-    <delete dir="${docs.dest}" defaultexcludes="yes"/>
     <delete dir="${dist.dir}"/>
   </target>
 
