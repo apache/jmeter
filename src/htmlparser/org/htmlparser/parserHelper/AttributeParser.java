@@ -153,11 +153,11 @@ public class AttributeParser
             }
             else
             {
-                if (nextPart != null && (0 < nextPart.length()))
+                if (nextPart != null)
                 {
                     if (name == null)
                     {
-                        if (!nextPart.substring(0, 1).equals(" "))
+                        if (0 < nextPart.length() && !nextPart.substring(0, 1).equals(" "))
                         {
                             name = nextPart;
                             waitingForEqual = true;
@@ -222,7 +222,7 @@ public class AttributeParser
         while (isDataReady == false && tokenizer.hasMoreTokens())
         {
             currentToken = tokenizer.nextToken(deli);
-            //
+			//
             // First let's combine tokens that are inside "" or ''
             //
             if (isDoubleQuote || isSingleQuote)
