@@ -71,6 +71,8 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.property.LongProperty;
+import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
@@ -91,6 +93,11 @@ public class ThreadGroup
     public final static String NUM_THREADS = "ThreadGroup.num_threads";
     public final static String RAMP_TIME = "ThreadGroup.ramp_time";
     public final static String MAIN_CONTROLLER = "ThreadGroup.main_controller";
+
+    public final static String SCHEDULER = "ThreadGroup.scheduler";
+    public final static String START_TIME= "ThreadGroup.start_time";
+    public final static String END_TIME= "ThreadGroup.end_time";
+
 
     private final int DEFAULT_NUM_THREADS = 1;
     private final int DEFAULT_RAMP_UP = 0;
@@ -124,6 +131,68 @@ public class ThreadGroup
     public Sampler next()
     {
         return getSamplerController().next();
+    }
+
+
+
+    /**
+     * Set the Scheduler value.
+     *
+     * @param Scheduler the Scheduler value.
+     */
+    public void setScheduler(boolean Scheduler)
+    {
+        setProperty(new BooleanProperty(SCHEDULER,Scheduler));
+    }
+
+    /**
+     * Get the Scheduler value.
+     *
+     * @return the Scheduler value.
+     */
+    public boolean getScheduler()
+    {
+        return getPropertyAsBoolean(SCHEDULER);
+    }
+
+    /**
+     * Set the StartTime value.
+     *
+     * @param StartTime the StartTime value.
+     */
+    public void setStartTime(long stime)
+    {
+        setProperty(new LongProperty(START_TIME,stime));
+    }
+
+    /**
+     * Get the start time value.
+     *
+     * @return the start time value.
+     */
+    public long getStartTime()
+    {
+        return getPropertyAsLong(START_TIME);
+    }
+
+    /**
+     * Set the EndTime value.
+     *
+     * @param EndTime the EndTime value.
+     */
+    public void setEndTime(long etime)
+    {
+        setProperty(new LongProperty(END_TIME, etime));
+    }
+
+    /**
+     * Get the end time value.
+     *
+     * @return the end time  value.
+     */
+    public long getEndTime()
+    {
+        return getPropertyAsLong(END_TIME);
     }
 
     /**
