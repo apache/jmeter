@@ -38,6 +38,13 @@ public interface TestElement extends Cloneable
     
     public void setProperty(String key,String value);
     
+	/**
+	 * Check if ENABLED property is present and true ; defaults to true
+	 * 
+	 * @return true if element is enabled
+	 */
+	public boolean isEnabled();
+	
     /**
      * Returns true or false whether the element is the running version.
      */
