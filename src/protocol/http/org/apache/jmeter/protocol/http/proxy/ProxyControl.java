@@ -59,10 +59,12 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
 import junit.framework.TestCase;
+
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.control.gui.LogicControllerGui;
+import org.apache.jmeter.control.gui.RecordController;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
@@ -302,7 +304,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
 	{
 		TestElement urlConfig = null;
 		JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
-		List nodes = treeModel.getNodesOfType(LogicControllerGui.class);
+		List nodes = treeModel.getNodesOfType(RecordController.class);
 		if (nodes.size() == 0)
 		{
 			nodes = treeModel.getNodesOfType(ThreadGroupGui.class);
