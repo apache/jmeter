@@ -27,7 +27,7 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.processor.PreProcessor;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -110,11 +110,11 @@ public class UserParameterModifier
     public void process()
     {
         Sampler entry = getThreadContext().getCurrentSampler();
-        if (!(entry instanceof HTTPSampler))
+        if (!(entry instanceof HTTPSamplerBase))
         {
             return;
         }
-        HTTPSampler config = (HTTPSampler) entry;
+        HTTPSamplerBase config = (HTTPSamplerBase) entry;
         Map currentUser = allAvailableUsers.getNextUserMods();
         PropertyIterator iter = config.getArguments().iterator();
         while (iter.hasNext())
