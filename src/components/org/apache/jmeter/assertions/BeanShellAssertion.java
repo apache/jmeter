@@ -106,7 +106,9 @@ public class BeanShellAssertion extends AbstractTestElement
 			bshInterpreter.set("Parameters",getParameters());// as a single line $NON-NLS-1$
 			bshInterpreter.set("bsh.args",//$NON-NLS-1$
 					JOrphanUtils.split(getParameters()," "));//$NON-NLS-1$
-			
+
+			// Add SamplerData for consistency with BeanShell Sampler
+			bshInterpreter.set("SampleResult",response);// Raw access to the response //$NON-NLS-1$
 			bshInterpreter.set("Response",response);// Raw access to the response //$NON-NLS-1$
 			bshInterpreter.set("ResponseData",response.getResponseData());//$NON-NLS-1$
 			bshInterpreter.set("ResponseCode",response.getResponseCode());//$NON-NLS-1$
