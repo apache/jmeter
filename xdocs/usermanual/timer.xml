@@ -7,36 +7,80 @@
 
 <body>
 
-<section name="4.4 Timers">
-<p>
-Timers help program flow by controlling how long JMeter's engine delays between each sample attempt. 
-Each sampling thread that runs will pause between every sample, depending on which timers have been chosen. 
+<section name="4.4 Timers" anchor="timers">
+
+<p>By default, a JMeter thread sends requests without pausing between each request. 
+We recommend that you specify a delay by adding one of the three timers to 
+your Thread Group. If you do not add a delay, JMeter could overwhelm your server by 
+making too many requests in a very short amount of time.
+
+<ul>
+  <li><b>Constant Timer</b> <br></br>Pause each thread request for a particular  
+(constant) amount of time.</li> 
+
+  <li><b>Gaussian Random Timer</b> <br></br>Pause each thread request for a random 
+amount of time, with most of the time intervals occurring near a particular value.</li> 
+
+  <li><b>Uniform Random Timer</b> <br></br>Pause each thread request for a random 
+amount of time, with each time interval having the same probability of occurring.</li> 
+</ul>
 </p>
+
 <p>
-Timers are added to ThreadGroups. Multiple timers can be added to a ThreadGroup. 
-In this case, the sampling thread will sum results from each timer, and delay for that period of time. 
-</p>
+If you choose to add more than one timer to a Thread Group, JMeter takes the sum of 
+the timers and pauses for that amount of time.</p>
 </section>
 
-<section name="4.4.1 Constant Timer">
-<p>Put description text here...</p>
-<p>
-<img src="../images/screenshots/constant_timer.gif" width="390" height="100" alt="Constant Timer"></img>
+<section name="4.4.1 Constant Timer" anchor="constant">
+<p>If you want to have each thread pause for the same amount of time between 
+requests, use this timer.</p>
+
+<p><img src="../images/screenshots/timers/constant_timer.gif" width="390" height="100" alt="Constant Timer"></img></p>
+
+<p><b>Property Descriptions:</b>
+<ul>
+  <li><b>Name</b> - Descriptive name for this timer that is shown in the tree. </li>
+  <li><b>Thread Delay</b> - Number of milliseconds to pause.</li>
+</ul>
 </p>
+
+
 </section>
 
-<section name="4.4.2 Gaussian Random Timer">
-<p>Put description text here...</p>
-<p>
-<img src="../images/screenshots/gauss_random_timer.gif" width="390" height="182" alt="Gaussian Random Timer"></img>
+<section name="4.4.2 Gaussian Random Timer" anchor="gaussian">
+<p>This timer pauses each thread request for a random amount of time, with most 
+of the time intervals ocurring near a particular value.  The total delay is the 
+sum of the Gaussian distributed value (with mean 0.0 and standard deviation 1.0) times
+the deviation value you specify, and the offset value.</p>
+<p><img src="../images/screenshots/timers/gauss_random_timer.gif" width="390" height="182" alt="Gaussian Random Timer"></img></p>
+
+<p><b>Property Descriptions:</b>
+<ul>
+  <li><b>Name</b> - Descriptive name for this timer that is shown in the tree. </li>
+  <li><b>Deviation</b> - Deviation in milliseconds.</li>
+  <li><b>Constant Delay Offset</b> - Numer of milliseconds to pause in addition 
+to the random delay.</li>
+</ul>
 </p>
+
 </section>
 
-<section name="4.4.3 Uniform Random Timer">
-<p>Put description text here...</p>
-<p>
-<img src="../images/screenshots/uniform_random_timer.gif" width="390" height="182" alt="Uniform Random Timer"></img>
+<section name="4.4.3 Uniform Random Timer" anchor="uniform">
+<p>This timer pauses each thread request for a random amount of time, with 
+each time interval having the same probability of occurring. The total delay
+is the sum of the random value and the offset value.</p>
+<p><img src="../images/screenshots/timers/uniform_random_timer.gif" width="390" height="182" alt="Uniform Random Timer"></img></p>
+
+<p><b>Property Descriptions:</b>
+<ul>
+  <li><b>Name</b> - Descriptive name for this timer that is shown in the tree. </li>
+  <li><b>Random Delay Maximum</b> - Maxium random number of milliseconds to 
+pause.</li>
+  <li><b>Constant Delay Offset</b> - Numer of milliseconds to pause in addition 
+to the random delay.</li>
+</ul>
 </p>
+
 </section>
 
 
