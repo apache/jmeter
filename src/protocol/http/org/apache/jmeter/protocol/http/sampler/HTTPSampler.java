@@ -63,7 +63,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.control.AuthManager;
@@ -78,6 +77,7 @@ import org.apache.jmeter.testelement.PerSampleClonable;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.SSLManager;
@@ -222,9 +222,22 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
     public void setProperty(String key, String prop)
     {
         super.setProperty(key, prop);
+        log.error("Setting property in HTTPSampler: " + key);
         if (PATH.equals(key))
         {
-            setEncodedPath(prop.toString());
+            log.error("Setting encoded path");
+            setEncodedPath(prop);
+        }
+    }
+    
+    public void setProperty(JMeterProperty prop)
+    {
+        log.debug("setting property " + prop.getName() + " in HTTPSampler");
+        super.setProperty(prop);
+        if (PATH.equals(prop.getName()))
+        {
+            log.error("Setting encoded path");
+            setEncodedPath(prop.getStringValue());
         }
     }
 
