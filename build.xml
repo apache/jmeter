@@ -107,7 +107,8 @@
   [The defaults are /findbugs and high]
    -->
    <property name="findbugs.home" value="/findbugs" />
-   <property name="findbugs.level" value="high" />
+   <property name="findbugs.level" value="medium" />
+   <property name="findbugs.outName" value="reports/jmeter-fb" />
    <target name="findbugs">
     <taskdef name="findbugs" 
         classpath="${findbugs.home}/lib/findbugs-ant.jar" 
@@ -116,7 +117,7 @@
               output="xml"
               reportlevel="${findbugs.level}"
               excludeFilter="fb-excludes.xml"
-              outputFile="jmeter-fb.xml" >
+              outputFile="${findbugs.outName}.xml" >
       <class location="${dest.jar}/*.jar" />
       <class location="${dest.jar.jmeter}/*.jar" />
       <sourcePath path="${src.core}" />
@@ -159,8 +160,19 @@
       <auxClasspath path="${js.jar}" />
       
     </findbugs>
+    <antcall target="findbugs-style"/>
   </target>
-   
+  
+  <!-- Convert findbugs XML output to HTML -->
+   <target name="findbugs-style">
+   <xslt style="fb-csv.xsl" 
+   force="true"
+   in="${findbugs.outName}.xml" 
+   out="${findbugs.outName}.csv">
+   <param name="messagefile" expression="${findbugs.home}/plugin/messages.xml"/>
+   </xslt>
+   </target>
+
   <!-- Where the Sources live -->
   <property name="src.dir" value="src"/>
   <property name="src.core" value="src/core"/>
