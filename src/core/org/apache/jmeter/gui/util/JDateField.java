@@ -130,6 +130,12 @@ public class JDateField extends JTextField
         setText(myString);
     }
 
+    // Dummy constructor to allo JUnit tests to work
+    JDateField()
+    {
+    	this(new Date());
+    }
+    
     /**
      * Set the date to the Date mask control.
      */
