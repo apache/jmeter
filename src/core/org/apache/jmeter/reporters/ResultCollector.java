@@ -92,6 +92,7 @@ import org.xml.sax.SAXException;
  * Title: Description: Copyright: Copyright (c) 2001 Company:
  *
  * @author Michael Stover
+ * @author     <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell</a>
  * @version $Id$
  */
 public class ResultCollector extends AbstractListenerElement
@@ -226,13 +227,27 @@ public class ResultCollector extends AbstractListenerElement
 
     private static void writeFileStart(PrintWriter writer)
     {
-        writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        writer.println("<testResults>");
+        if (SaveService.getOutputFormat() == SaveService.SAVE_AS_XML)
+        {
+            writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+            writer.println("<testResults>");
+        }
+        else if (SaveService.getOutputFormat() == SaveService.SAVE_AS_CSV)
+        {
+            if (SaveService.getPrintFieldNames())
+            {
+                writer.println(SaveService.printableFieldNamesToString());
+            }
+        }
     }
+
 
     private void writeFileEnd()
     {
-        out.print("</testResults>");
+        if (SaveService.getOutputFormat() == SaveService.SAVE_AS_XML)
+        {
+            out.print("</testResults>");
+        }
     }
 
     private static synchronized PrintWriter getFileWriter(String filename) throws IOException
@@ -362,14 +377,32 @@ public class ResultCollector extends AbstractListenerElement
     public void sampleStopped(SampleEvent e)
     {}
 
+
+    /**
+        When a test result is received, display it and save it.
+        @param  e the sample event that was received
+    **/
+
     public void sampleOccurred(SampleEvent e)
     {
-        if (!isErrorLogging() || !e.getResult().isSuccessful())
+        SampleResult result = e.getResult();
+
+        if (!isErrorLogging() || !result.isSuccessful())
         {
-            sendToVisualizer(e.getResult());
+            sendToVisualizer(result);
+
             try
             {
-                recordResult(e.getResult());
+                if (SaveService.getOutputFormat() == SaveService.SAVE_AS_CSV)
+                {
+                    String savee = SaveService.resultToDelimitedString(result);
+                    out.println(savee);
+                }
+                // Save results as XML
+                else
+                {
+                    recordResult(result);
+                }
             }
             catch (Exception err)
             {
