@@ -1218,7 +1218,6 @@ public class HTTPSampler extends AbstractSampler
         int frameDepth)
     {
         HTTPSampleResult totalRes= new HTTPSampleResult(res);
-        totalRes.sampleStart();
         HTTPSampleResult lastRes= res;
 
         int redirect;

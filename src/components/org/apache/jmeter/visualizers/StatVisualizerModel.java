@@ -235,13 +235,14 @@ public class StatVisualizerModel implements Clearable
             super(name);
         }
 
-        private SampleResult sample(String label, long timestamp,
-                long time, boolean ok)
+        private SampleResult sample(String label, long start,
+                long elapsed, boolean ok)
         {
-            SampleResult res = new SampleResult(timestamp,time);
+            SampleResult res = SampleResult.createTestSample(start, start+elapsed);
 
             res.setSampleLabel(label);
             res.setSuccessful(ok);
+            assertEquals(elapsed,res.getTime());
             return res;
         }
 
@@ -250,9 +251,18 @@ public class StatVisualizerModel implements Clearable
             StatVisualizerModel m = new StatVisualizerModel();
             long t0 = System.currentTimeMillis();
 
-            m.addNewSample(sample("1", t0 + 100, 100, true));
-            m.addNewSample(sample("2", t0 + 350, 200, true));
-            m.addNewSample(sample("1", t0 + 600, 300, true));
+
+			//m.addNewSample(sample("1", t0 + 100, 100, true));
+			//m.addNewSample(sample("2", t0 + 350, 200, true));
+			//m.addNewSample(sample("1", t0 + 600, 300, true));
+
+            /*
+             * Create 3 samples lasting a total of 600 ms
+             */
+            m.addNewSample(sample("1", t0 + 000, 100, true));
+            m.addNewSample(sample("2", t0 + 150, 200, true));
+            m.addNewSample(sample("1", t0 + 300, 300, true));
+            
             assertEquals(2, m.getRunningSampleCount());
             assertEquals(2, m.labelMap.size());
 
@@ -264,6 +274,7 @@ public class StatVisualizerModel implements Clearable
                 assertEquals(100, s.getMin());
                 assertEquals(300, s.getMax());
                 assertEquals(200, s.getAverage());
+				assertEquals(600, s.getElapsed());
             }
 
             {
@@ -274,6 +285,7 @@ public class StatVisualizerModel implements Clearable
                 assertEquals(200, s.getMin());
                 assertEquals(200, s.getMax());
                 assertEquals(200, s.getAverage());
+				assertEquals(200, s.getElapsed());
             }
 
             {
@@ -283,6 +295,7 @@ public class StatVisualizerModel implements Clearable
                 assertEquals(100, s.getMin());
                 assertEquals(300, s.getMax());
                 assertEquals(200, s.getAverage());
+                assertEquals(600, s.getElapsed());
                 assertEquals(5.0, s.getRate(), 1e-6);
             }
         }
