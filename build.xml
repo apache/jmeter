@@ -307,7 +307,7 @@
   <property name="xerces.jar" value="${lib.dir}/xercesImpl.jar"/>
   <property name="xml-apis.jar" value="${lib.dir}/xml-apis.jar"/>
   
-  <property name="jdom.jar" value="${lib.dir}/jdom-b9.jar"/>
+  <property name="jdom.jar" value="${lib.dir}/jdom-1.0.jar"/>
   <property name="js.jar" value="${lib.dir}/js.jar"/>
   <property name="soap.jar" value="${lib.dir}/soap.jar"/>
   <property name="tidy.jar" value="${lib.dir}/Tidy.jar"/>
@@ -374,7 +374,7 @@
   -->
   <path id="anakia.classpath">
     <fileset dir="${lib.dir}" includes="velocity*.jar"/>
-    <fileset dir="${legacy.dir}" includes="jdom-*.jar"/>
+    <fileset dir="${legacy.dir}" includes="jdom-b9.jar"/>
     <fileset dir="${lib.dir}" includes="commons-collections*.jar"/>
     <fileset dir="${lib.dir}" includes="logkit-*.jar"/>
   </path>
