@@ -66,8 +66,8 @@ import org.apache.jmeter.testelement.TestElement;
 
 /**
  * @author     Michael Stover
- * @created    March 13, 2001
- * @version    $Revision$
+ * Created      March 13, 2001
+ * @version    $Revision$ Last updated: $Date$
  */
 public class OnceOnlyController
     extends GenericController
