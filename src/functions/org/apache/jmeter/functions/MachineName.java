@@ -75,6 +75,8 @@ public class MachineName extends AbstractFunction implements Serializable {
 	private static final List desc = new LinkedList();
 	private static final String KEY = "__machineName";
 	
+	// Number of parameters expected - used to reject invalid calls
+	private static final int PARAMETER_COUNT = 1;
 	static {
 //		desc.add("Use fully qualified host name: TRUE/FALSE (Default FALSE)");
 		desc.add(JMeterUtils.getResString("function_name_param"));
@@ -126,8 +128,8 @@ public class MachineName extends AbstractFunction implements Serializable {
 
 		values = parameters.toArray();
 		
-		if ( values.length < 2 ) {
-			throw new InvalidVariableException();
+		if ( values.length != PARAMETER_COUNT ) {
+			throw new InvalidVariableException("Parameter Count != "+PARAMETER_COUNT);
 		}
 
 	}
