@@ -307,8 +307,8 @@ public class JDBCSampler extends AbstractSampler
     {
         return getUrl()+", user: "+getUsername()+"\n"+getQuery();
     }
-    /**
-     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.IterationEvent)
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(LoopIterationEvent)
      */
     public void testIterationStart(LoopIterationEvent event)
     {}

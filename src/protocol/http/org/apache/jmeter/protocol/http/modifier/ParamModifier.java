@@ -152,7 +152,7 @@ public class ParamModifier extends AbstractTestElement implements TestListener,P
 		return false;
 	}
     /**
-     * @see org.apache.jmeter.testelement.TestListener#iterationStart(org.apache.jmeter.engine.event.IterationEvent)
+     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(LoopIterationEvent)
      */
     public void testIterationStart(LoopIterationEvent event)
     {}

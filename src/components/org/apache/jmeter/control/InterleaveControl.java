@@ -90,7 +90,7 @@ public class InterleaveControl extends GenericController implements Serializable
     public InterleaveControl()
     {}
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.jmeter.control.GenericController#reInitialize()
      */
     public void reInitialize()
@@ -113,7 +113,7 @@ public class InterleaveControl extends GenericController implements Serializable
         return getPropertyAsInt(STYLE);
     }
     
-	/**
+    /* (non-Javadoc)
 	 * @see org.apache.jmeter.control.Controller#next()
 	 */
 	public Sampler next()
@@ -126,8 +126,8 @@ public class InterleaveControl extends GenericController implements Serializable
 		return super.next();
 	}
 
-    /**
-     * @see org.apache.jmeter.control.GenericController#nextIsAController(org.apache.jmeter.testelement.TestElement)
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.control.GenericController#nextIsAController(Controller)
      */
     protected Sampler nextIsAController(Controller controller) throws NextIsNullException
     {
@@ -153,8 +153,8 @@ public class InterleaveControl extends GenericController implements Serializable
         }
     }
 
-    /**
-     * @see org.apache.jmeter.control.GenericController#nextIsASampler(org.apache.jmeter.testelement.TestElement)
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.control.GenericController#nextIsASampler(Sampler)
      */
     protected Sampler nextIsASampler(Sampler element) throws NextIsNullException
     {
@@ -175,8 +175,8 @@ public class InterleaveControl extends GenericController implements Serializable
         return next();
     }
 
-    /**
-     * @see org.apache.jmeter.control.GenericController#setCurrentElement(org.apache.jmeter.testelement.TestElement)
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.control.GenericController#setCurrentElement(TestElement)
      */
     protected void setCurrentElement(TestElement currentElement) throws NextIsNullException
     {
