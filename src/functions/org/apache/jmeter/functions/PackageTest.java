@@ -8,7 +8,7 @@
  */
 package org.apache.jmeter.functions;
 
-import java.io.PrintWriter;
+//import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -18,23 +18,23 @@ import junit.framework.TestSuite;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+//import org.apache.jorphan.logging.LoggingManager;
+//import org.apache.log.Logger;
 
 /**
- * @author sebb 'AT apache DOT org
+ * @author sebb AT apache DOT org
  * @version $Revision$ $Date$
  */
 public class PackageTest extends JMeterTestCase
 {
 
 //	transient private static final Logger log = LoggingManager.getLoggerForClass();
-//
-//    static{
+
+    static{
 //	    LoggingManager.setPriority("DEBUG","jmeter");
 //	    LoggingManager.setTarget(new PrintWriter(System.out));
-//    }
-//
+    }
+
     public PackageTest(String arg0)
     {
         super(arg0);
@@ -55,23 +55,25 @@ public class PackageTest extends JMeterTestCase
 	public static Test suite() throws Exception
 	{
 		   TestSuite suite = new TestSuite("SingleThreaded");
+		   suite.addTest(new PackageTest("CSVParams"));
 		   suite.addTest(new PackageTest("CSVNoFile"));
-		   suite.addTest(new PackageTest("CSV2Setup"));
-		   suite.addTest(new PackageTest("CSV2Run"));
+		   suite.addTest(new PackageTest("CSVSetup"));
+		   suite.addTest(new PackageTest("CSVRun"));
 
+           suite.addTest(new PackageTest("CSValias"));
 
            //Reset files
-           suite.addTest(new PackageTest("CSV2Setup"));
+           suite.addTest(new PackageTest("CSVSetup"));
 		   TestSuite par = new ActiveTestSuite("Parallel");
-		   par.addTest(new PackageTest("Thread1"));
-		   par.addTest(new PackageTest("Thread2"));
+		   par.addTest(new PackageTest("CSVThread1"));
+		   par.addTest(new PackageTest("CSVThread2"));
 		   suite.addTest(par);
 		   return suite;
     }
     
     
     // Function objects to be tested
-    private static CSVRead cr1, cr2, cr3, cr4;
+    private static CSVRead cr1, cr2, cr3, cr4, cr5, cr6;
     
     // Helper class used to implement co-routine between two threads
     private static class Baton{
@@ -99,7 +101,7 @@ public class PackageTest extends JMeterTestCase
     
     private static Baton baton = new Baton();
 
-	public void Thread1() throws Exception
+	public void CSVThread1() throws Exception
 	{
 		Thread.currentThread().setName("One");
 		synchronized(baton){
@@ -128,7 +130,7 @@ public class PackageTest extends JMeterTestCase
 		}
 	}
 
-	public void Thread2() throws Exception
+	public void CSVThread2() throws Exception
 	{
 		Thread.currentThread().setName("Two");
 		Thread.sleep(500);// Allow other thread to start
@@ -157,7 +159,7 @@ public class PackageTest extends JMeterTestCase
 	}
 
     
-    public void CSV2Run() throws Exception
+    public void CSVRun() throws Exception
     {
     	assertEquals("b1",cr1.execute(null,null));
 		assertEquals("c1",cr2.execute(null,null));
@@ -183,17 +185,16 @@ public class PackageTest extends JMeterTestCase
 		assertEquals("c1",cr2.execute(null,null));
 		assertEquals("d1",cr3.execute(null,null));
     }
-
-    public void CSV2Setup() throws Exception
+    
+    public void CSVParams() throws Exception
     {
-    	/*
-    	try {
+		try {
 			setParams(null,null);
 			fail("Should have failed");
-    	}
-    	catch (InvalidVariableException e)
-    	{
-    	}
+		}
+		catch (InvalidVariableException e)
+		{
+		}
 		try {
 			setParams(null,"");
 			fail("Should have failed");
@@ -208,19 +209,66 @@ public class PackageTest extends JMeterTestCase
 		catch (InvalidVariableException e)
 		{
 		}
-		*/
+    }
+
+    public void CSVSetup() throws Exception
+    {
     	cr1=setParams("testfiles/test.csv","1");
 		cr2=setParams("testfiles/test.csv","2");
 		cr3=setParams("testfiles/test.csv","3");
 		cr4=setParams("testfiles/test.csv","next");
     }
+    
+    public void CSValias() throws Exception
+    {
+    	cr1 = setParams("testfiles/test.csv","*A");
+    	cr2 = setParams("*A","1");
+		cr3 = setParams("*A","next");
+
+		cr4 = setParams("testfiles/test.csv","*B");
+		cr5 = setParams("*B","2");
+		cr6 = setParams("*B","next");
+
+		String s;
+		
+		s = cr1.execute(null,null);
+		assertEquals("",s);
+		s = cr2.execute(null,null);
+		assertEquals("b1",s);
+		
+
+		s = cr4.execute(null,null);
+		assertEquals("",s);
+		s = cr5.execute(null,null);
+		assertEquals("c1",s);
+		
+		s = cr3.execute(null,null);
+		assertEquals("",s);
+		s = cr2.execute(null,null);
+		assertEquals("b2",s);
+		s = cr5.execute(null,null);
+		assertEquals("c1",s);
+
+    }
+
     public void CSVNoFile() throws Exception
     {
-    	//TODO - fix file not found error handling in CSVRead ...
-    	CSVRead c1,c2;
-		c1 = setParams("xtestfiles/test.csv","1");
-		c1.execute(null,null);
-		c2 = setParams("xtestfiles/test.csv","next");
-		c2.execute(null,null);
+    	String s;
+
+		cr1 = setParams("xtestfiles/test.csv","1");
+		s = cr1.execute(null,null);
+		assertEquals("",s);
+
+		cr2 = setParams("xtestfiles/test.csv","next");
+		s = cr2.execute(null,null);
+		assertEquals("",s);
+
+		cr3 = setParams("xtestfiles/test.csv","*ABC");
+		s = cr3.execute(null,null);
+		assertEquals("",s);
+
+		cr4 = setParams("*ABC","1");
+		s = cr4.execute(null,null);
+		assertEquals("",s);
     }
 }
