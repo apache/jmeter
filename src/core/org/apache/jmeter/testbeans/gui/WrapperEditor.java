@@ -87,39 +87,39 @@ import org.apache.log.Logger;
  * choose whether they make valid property values).
  */
 class WrapperEditor extends PropertyEditorSupport
-		implements PropertyChangeListener
+        implements PropertyChangeListener
 {
     protected static Logger log= LoggingManager.getLoggerForClass();
 
-	/**
-	 * The type's property editor.
-	 */
-	PropertyEditor typeEditor;
-	
-	/**
-	 * The gui property editor
-	 */
-	PropertyEditor guiEditor;
-
-	/**
-	 * Whether to allow <b>null</b> as a property value.
-	 */
-	boolean acceptsNull;
-	
-	/**
-	 * Whether to allow JMeter 'expressions' as property values.
-	 */
-	boolean acceptsExpressions;
-
-	/**
-	 * Whether to allow any constant values different from the provided tags. 
-	 */
-	boolean acceptsOther;
+    /**
+     * The type's property editor.
+     */
+    PropertyEditor typeEditor;
+    
+    /**
+     * The gui property editor
+     */
+    PropertyEditor guiEditor;
 
     /**
-   	 * Keep track of the last valid value in the editor, so that we can
-   	 * revert to it if the user enters an invalid value.
-   	 */
+     * Whether to allow <b>null</b> as a property value.
+     */
+    boolean acceptsNull;
+    
+    /**
+     * Whether to allow JMeter 'expressions' as property values.
+     */
+    boolean acceptsExpressions;
+
+    /**
+     * Whether to allow any constant values different from the provided tags. 
+     */
+    boolean acceptsOther;
+
+    /**
+     * Keep track of the last valid value in the editor, so that we can
+     * revert to it if the user enters an invalid value.
+     */
     private String lastValidValue= null;
 
 /*
@@ -133,153 +133,223 @@ I said above is true (so I won't need to reinstate this code).
 
     private static Class objectType(Class type)
     {
-    	// Sorry for this -- I have not found a better way:
+        // Sorry for this -- I have not found a better way:
         if (! type.isPrimitive()) return type;
-    	else if (type == boolean.class) return Boolean.class;
-    	else if (type == char.class) return Character.class;
-    	else if (type == byte.class) return Byte.class;
-    	else if (type == short.class) return Short.class;
-    	else if (type == int.class) return Integer.class;
-    	else if (type == long.class) return Long.class;
-    	else if (type == float.class) return Float.class;
-    	else if (type == double.class) return Double.class;
-    	else if (type == void.class) return Void.class;
-    	else
-    	{
-    		log.error("Class "+type+" is an unknown primitive type.");
-    		throw new Error("Class "+type+" is an unknown primitive type");
-    			// programming error: bail out.
-    	}
+        else if (type == boolean.class) return Boolean.class;
+        else if (type == char.class) return Character.class;
+        else if (type == byte.class) return Byte.class;
+        else if (type == short.class) return Short.class;
+        else if (type == int.class) return Integer.class;
+        else if (type == long.class) return Long.class;
+        else if (type == float.class) return Float.class;
+        else if (type == double.class) return Double.class;
+        else if (type == void.class) return Void.class;
+        else
+        {
+            log.error("Class "+type+" is an unknown primitive type.");
+            throw new Error("Class "+type+" is an unknown primitive type");
+                // programming error: bail out.
+        }
     }
 */
-	public WrapperEditor(
-			PropertyEditor typeEditor, 
-			PropertyEditor guiEditor,
-			boolean acceptsNull, 
-			boolean acceptsExpressions, 
-			boolean acceptsOther) {
-		super();
-		this.typeEditor= typeEditor;
-		this.guiEditor= guiEditor;
-		this.acceptsNull= acceptsNull;
-		this.acceptsExpressions= acceptsExpressions;
-		this.acceptsOther= acceptsOther;
-		
-		guiEditor.addPropertyChangeListener(this);
-	}
+
+    /**
+     * Constructor for use when a PropertyEditor is delegating to us.
+     */
+    WrapperEditor(
+            Object source,
+            PropertyEditor typeEditor, 
+            PropertyEditor guiEditor,
+            boolean acceptsNull, 
+            boolean acceptsExpressions, 
+            boolean acceptsOther,
+            Object defaultValue)
+    {
+        super(source);
+        initialize(typeEditor, guiEditor, acceptsNull, acceptsExpressions,
+            acceptsOther, defaultValue);
+    }
+
+    /**
+     * Constructor for use for regular instantiation and by subclasses.
+     */
+    WrapperEditor(
+            PropertyEditor typeEditor, 
+            PropertyEditor guiEditor,
+            boolean acceptsNull, 
+            boolean acceptsExpressions, 
+            boolean acceptsOther,
+            Object defaultValue)
+    {
+        super();
+        initialize(typeEditor, guiEditor, acceptsNull, acceptsExpressions,
+            acceptsOther, defaultValue);
+    }
+
+    /**
+     * Constructor for backward compatibility -- will soon be removed.
+     */
+    WrapperEditor(
+            PropertyEditor typeEditor, 
+            PropertyEditor guiEditor,
+            boolean acceptsNull, 
+            boolean acceptsExpressions, 
+            boolean acceptsOther)
+    {
+        super();
+        initialize(typeEditor, guiEditor, acceptsNull, acceptsExpressions,
+            acceptsOther, null);
+    }
+    
+    private void initialize(
+            PropertyEditor typeEditor, 
+            PropertyEditor guiEditor,
+            boolean acceptsNull, 
+            boolean acceptsExpressions, 
+            boolean acceptsOther,
+            Object defaultValue)
+    {
+        this.typeEditor= typeEditor;
+        this.guiEditor= guiEditor;
+        this.acceptsNull= acceptsNull;
+        this.acceptsExpressions= acceptsExpressions;
+        this.acceptsOther= acceptsOther;
+
+        setValue(defaultValue);
+
+        if (guiEditor instanceof ComboStringEditor)
+        {
+            String[] tags= ((ComboStringEditor)guiEditor).getTags();
+
+            // Provide an initial edit value if necessary -- this is an
+            // heuristic that tries to provide the most convenient
+            // initial edit value:
+        
+            String v;
+            if (! acceptsOther) v="${}";
+            else if (isValidValue("")) v= "";
+            else if (acceptsExpressions) v= "${}";
+            else if (tags != null && tags.length>0) v= tags[0];
+            else v= getAsText();
+
+            ((ComboStringEditor)guiEditor).setInitialEditValue(v);
+        }
+
+        guiEditor.addPropertyChangeListener(this);
+    }
 
     public boolean supportsCustomEditor()
     {
         return true;
     }
 
-	public Component getCustomEditor()
-	{
-		return guiEditor.getCustomEditor();
-	}
-
-	public String[] getTags()
-	{
-		return guiEditor.getTags();
-	}
-
-	/**
-	 * Determine wheter a string is one of the known tags.
-	 * 
-	 * @param text
-	 * @return true iif text equals one of the getTags()
-	 */
-	private boolean isATag(String text)
-	{
-		String[] tags= getTags();
-		if (tags == null) return false;
-		for (int i=0; i<tags.length; i++)
-		{
-			if (tags[i].equals(text)) return true;
-		}
-		return false;
-	}
-	
-    /**
- 	 * Determine whether a string is a valid value for the property.
-   	 * 
-   	 * @param text the value to be checked
-   	 * @return true iif text is a valid value
-   	 */
-    private boolean isValidValue(String text)
+    public Component getCustomEditor()
     {
-		if (text == null) return acceptsNull;
-
-    	if (acceptsExpressions && isExpression(text)) return true;
-
-    	// Not an expression (isn't or can't be), not null.
-    	
-		// The known tags are assumed to be valid:
-		if (isATag(text)) return true;
-		
-		// Was not a tag, so if we can't accept other values...
-		if (! acceptsOther) return false;
-		
-		// Delegate the final check to the typeEditor:
-    	try
-    	{
-    		typeEditor.setAsText(text);
-    	}
-    	catch (IllegalArgumentException e1)
-    	{
-    		// setAsText failed: not valid
-    		return false;
-    	}
-    	// setAsText succeeded: valid
-    	return true;
+        return guiEditor.getCustomEditor();
     }
 
-	/**
-	 * This method is used to do some low-cost defensive programming:
-	 * it is called when a condition that the program logic should prevent
-	 * from happening occurs. I hope this will help early detection of
-	 * logical bugs in property value handling.
-	 * 
-	 * @throws Error always throws an error.
-	 */
-	private final void shouldNeverHappen() throws Error
-	{
-		throw new Error(); // Programming error: bail out.
-	}
+    public String[] getTags()
+    {
+        return guiEditor.getTags();
+    }
 
-	/**
-	 * Same as shouldNeverHappen(), but provide a source exception.
-	 * 
-	 * @param e the exception that helped identify the problem
-	 * @throws Error always throws one.
-	 */
-	private final void shouldNeverHappen(Exception e) throws Error
-	{
-		throw new Error(e.toString()); // Programming error: bail out.
-	}
+    /**
+     * Determine wheter a string is one of the known tags.
+     * 
+     * @param text
+     * @return true iif text equals one of the getTags()
+     */
+    private boolean isATag(String text)
+    {
+        String[] tags= getTags();
+        if (tags == null) return false;
+        for (int i=0; i<tags.length; i++)
+        {
+            if (tags[i].equals(text)) return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Determine whether a string is a valid value for the property.
+     * 
+     * @param text the value to be checked
+     * @return true iif text is a valid value
+     */
+    private boolean isValidValue(String text)
+    {
+        if (text == null) return acceptsNull;
 
-	/**
-	 * Check if a string is a valid JMeter 'expression'.
-	 * <p>
-	 * The current implementation is very basic: it just accepts any
-	 * string containing "${" as a valid expression.
-	 * TODO: improve, but keep returning true for "${}". 
-	 */
-	private final boolean isExpression(String text)
-	{
-		return text.indexOf("${") != -1;
-	}
+        if (acceptsExpressions && isExpression(text)) return true;
 
-	/**
-	 * Same as isExpression(String).
-	 * 
-	 * @param text
-	 * @return true iif text is a String and isExpression(text).
-	 */
-	private final boolean isExpression(Object text)
-	{
-		return text instanceof String && isExpression((String)text);
-	}
+        // Not an expression (isn't or can't be), not null.
+        
+        // The known tags are assumed to be valid:
+        if (isATag(text)) return true;
+        
+        // Was not a tag, so if we can't accept other values...
+        if (! acceptsOther) return false;
+        
+        // Delegate the final check to the typeEditor:
+        try
+        {
+            typeEditor.setAsText(text);
+        }
+        catch (IllegalArgumentException e1)
+        {
+            // setAsText failed: not valid
+            return false;
+        }
+        // setAsText succeeded: valid
+        return true;
+    }
+
+    /**
+     * This method is used to do some low-cost defensive programming:
+     * it is called when a condition that the program logic should prevent
+     * from happening occurs. I hope this will help early detection of
+     * logical bugs in property value handling.
+     * 
+     * @throws Error always throws an error.
+     */
+    private final void shouldNeverHappen() throws Error
+    {
+        throw new Error(); // Programming error: bail out.
+    }
+
+    /**
+     * Same as shouldNeverHappen(), but provide a source exception.
+     * 
+     * @param e the exception that helped identify the problem
+     * @throws Error always throws one.
+     */
+    private final void shouldNeverHappen(Exception e) throws Error
+    {
+        throw new Error(e.toString()); // Programming error: bail out.
+    }
+
+    /**
+     * Check if a string is a valid JMeter 'expression'.
+     * <p>
+     * The current implementation is very basic: it just accepts any
+     * string containing "${" as a valid expression.
+     * TODO: improve, but keep returning true for "${}". 
+     */
+    private final boolean isExpression(String text)
+    {
+        return text.indexOf("${") != -1;
+    }
+
+    /**
+     * Same as isExpression(String).
+     * 
+     * @param text
+     * @return true iif text is a String and isExpression(text).
+     */
+    private final boolean isExpression(Object text)
+    {
+        return text instanceof String && isExpression((String)text);
+    }
 
     /**
      * @see java.beans.PropertyEditor#getValue()
@@ -289,37 +359,37 @@ I said above is true (so I won't need to reinstate this code).
     {
         String text= (String)guiEditor.getValue();
     
-		Object value;
+        Object value;
 
-		if (text == null)
-		{
-			if (!acceptsNull) shouldNeverHappen();
-			value= null;
-		}
-    	else
-    	{
-    		if (acceptsExpressions && isExpression(text))
-    		{
-    			value= text;
-    		}
-    		else
-    		{
-    			// not an expression (isn't or can't be), not null.
-				
-				// a check, just in case:
-				if (! acceptsOther && ! isATag(text)) shouldNeverHappen();
+        if (text == null)
+        {
+            if (!acceptsNull) shouldNeverHappen();
+            value= null;
+        }
+        else
+        {
+            if (acceptsExpressions && isExpression(text))
+            {
+                value= text;
+            }
+            else
+            {
+                // not an expression (isn't or can't be), not null.
+                
+                // a check, just in case:
+                if (! acceptsOther && ! isATag(text)) shouldNeverHappen();
 
-    			try
-    			{
-    				typeEditor.setAsText(text);
-    			}
-    			catch (IllegalArgumentException e)
-    			{
-    				shouldNeverHappen(e);
-    			}
-				value= typeEditor.getValue();
-    		}
-    	}
+                try
+                {
+                    typeEditor.setAsText(text);
+                }
+                catch (IllegalArgumentException e)
+                {
+                    shouldNeverHappen(e);
+                }
+                value= typeEditor.getValue();
+            }
+        }
     
         if (log.isDebugEnabled())
         {
@@ -334,124 +404,121 @@ I said above is true (so I won't need to reinstate this code).
 
     public void setValue(Object value)
     {
-    	String text;
+        String text;
 
-    	if (log.isDebugEnabled())
-    	{
-    		log.debug(
-    			"<-"
-    				+ (value != null ? value.getClass().getName() : "NULL")
-    				+ ":"
-    				+ value);
-    	}
+        if (log.isDebugEnabled())
+        {
+            log.debug(
+                "<-"
+                    + (value != null ? value.getClass().getName() : "NULL")
+                    + ":"
+                    + value);
+        }
 
-    	if (value == null)
-    	{
-    		if (!acceptsNull) throw new IllegalArgumentException();
-    		text= null;
-    	}
-    	else if (acceptsExpressions && isExpression(value))
-    	{
-    		text= (String)value;
-    	}
-    	else
-    	{
-			// Not an expression (isn't or can't be), not null.
-    		typeEditor.setValue(value); // may throw IllegalArgumentExc.
-    		text= typeEditor.getAsText();
-    		
-    		if (! acceptsOther && ! isATag(text)) throw new IllegalArgumentException();
-    	}
+        if (value == null)
+        {
+            if (!acceptsNull) throw new IllegalArgumentException();
+            text= null;
+        }
+        else if (acceptsExpressions && isExpression(value))
+        {
+            text= (String)value;
+        }
+        else
+        {
+            // Not an expression (isn't or can't be), not null.
+            typeEditor.setValue(value); // may throw IllegalArgumentExc.
+            text= typeEditor.getAsText();
+            
+            if (! acceptsOther && ! isATag(text)) throw new IllegalArgumentException();
+        }
 
-    	guiEditor.setValue(text);
-    	
-    	firePropertyChange();
+        guiEditor.setValue(text);
     }
 
     public String getAsText()
     {
-    	String text= guiEditor.getAsText();
+        String text= guiEditor.getAsText();
     
-		if (text == null)
-		{
-			if (!acceptsNull) shouldNeverHappen();
-		}
-    	else if (!acceptsExpressions || !isExpression(text))
-    	{
-    		// not an expression (can't be or isn't), not null.
-			try
-			{
-				typeEditor.setAsText(text);
-			}
-			catch (IllegalArgumentException e)
-			{
-				shouldNeverHappen(e);
-			}
-			text= typeEditor.getAsText();
+        if (text == null)
+        {
+            if (!acceptsNull) shouldNeverHappen();
+        }
+        else if (!acceptsExpressions || !isExpression(text))
+        {
+            // not an expression (can't be or isn't), not null.
+            try
+            {
+                typeEditor.setAsText(text);
+            }
+            catch (IllegalArgumentException e)
+            {
+                shouldNeverHappen(e);
+            }
+            text= typeEditor.getAsText();
 
-			// a check, just in case:
-			if (! acceptsOther && ! isATag(text)) shouldNeverHappen();
-    	}
+            // a check, just in case:
+            if (! acceptsOther && ! isATag(text)) shouldNeverHappen();
+        }
     
-    	if (log.isDebugEnabled())
-    	{
-    		log.debug("->\"" + text + "\"");
-    	}
-    	return text;
+        if (log.isDebugEnabled())
+        {
+            log.debug("->\"" + text + "\"");
+        }
+        return text;
     }
 
     public void setAsText(String text) throws IllegalArgumentException
     {
-		if (log.isDebugEnabled())
-		{
-			log.debug(text == null ? "<-null" : "<-\"" + text + "\"");
-		}
-    		
-		String value;
+        if (log.isDebugEnabled())
+        {
+            log.debug(text == null ? "<-null" : "<-\"" + text + "\"");
+        }
+            
+        String value;
 
-		if (text == null)
-		{
-			if (! acceptsNull) throw new IllegalArgumentException();
-			value= null;
-		}
-		else 
-		{
-			if (acceptsExpressions && isExpression(text))
-			{
-				value= text;
-			}
-			else
-			{
-				// Some editors do tiny transformations (e.g. "true" to "True",...):
-				typeEditor.setAsText(text); // may throw IllegalArgumentException
-				value= typeEditor.getAsText();
-				
-				if (! acceptsOther && ! isATag(text)) throw new IllegalArgumentException();
-			}
-		}
+        if (text == null)
+        {
+            if (! acceptsNull) throw new IllegalArgumentException();
+            value= null;
+        }
+        else 
+        {
+            if (acceptsExpressions && isExpression(text))
+            {
+                value= text;
+            }
+            else
+            {
+                // Some editors do tiny transformations (e.g. "true" to "True",...):
+                typeEditor.setAsText(text); // may throw IllegalArgumentException
+                value= typeEditor.getAsText();
+                
+                if (! acceptsOther && ! isATag(text)) throw new IllegalArgumentException();
+            }
+        }
 
-		guiEditor.setValue(value);
-
-		firePropertyChange();
-	}
+        guiEditor.setValue(value);
+    }
 
     public void propertyChange(PropertyChangeEvent event)
     {
-    	String text= guiEditor.getAsText();
-		if (isValidValue(text))
-		{
-			lastValidValue= text;
-		}
-		else
-		{
-			if (log.isDebugEnabled())
-			{
-				log.debug("Invalid value. Reverting to last valid value.");
-			}
-			// TODO: warn the user. Maybe with a pop-up? A bell?
+        String text= guiEditor.getAsText();
+        if (isValidValue(text))
+        {
+            lastValidValue= text;
+            firePropertyChange();
+        }
+        else
+        {
+            if (log.isDebugEnabled())
+            {
+                log.debug("Invalid value. Reverting to last valid value.");
+            }
+            // TODO: warn the user. Maybe with a pop-up? A bell?
     
-			// Revert to the previously unselected (presumed valid!) value:
-			guiEditor.setAsText(lastValidValue);
-		}
+            // Revert to the previously unselected (presumed valid!) value:
+            guiEditor.setAsText(lastValidValue);
+        }
     }
 }
