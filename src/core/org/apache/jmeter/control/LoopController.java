@@ -57,8 +57,7 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
-import junit.framework.TestSuite;
-
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
@@ -191,7 +190,19 @@ public class LoopController extends GenericController implements Serializable
         return loopCount + 1;
     }
 
-    public static class Test extends junit.framework.TestCase
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.control.GenericController#reInitialize()
+	 */
+	protected void reInitialize()
+	{
+		setFirst(true);
+		resetCurrent();
+		incrementLoopCount();
+	}
+
+///////////////////////// Start of Test code ///////////////////////////////
+
+    public static class Test extends JMeterTestCase
     {
         public Test(String name)
         {
@@ -268,27 +279,6 @@ public class LoopController extends GenericController implements Serializable
                 assertNotNull(loop.next());
             }
         }
-    }
 
-    public static void main(String args[])
-    {
-        junit.textui.TestRunner.run(suite());
-    }
-
-    public static TestSuite suite()
-    {
-        TestSuite suite = new TestSuite();
-        suite.addTest(new Test("testProcessing"));
-        return suite;
-    }
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.control.GenericController#reInitialize()
-     */
-    protected void reInitialize()
-    {
-        setFirst(true);
-        resetCurrent();
-        incrementLoopCount();
-    }
-
+	}
 }
