@@ -29,9 +29,9 @@ import javax.swing.JComponent;
 import javax.swing.Scrollable;
 
 import org.apache.jmeter.samplers.Clearable;
-import org.apache.jorphan.logging.LoggingManager;
+//import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.math.NumberComparator;
-import org.apache.log.Logger;
+//import org.apache.log.Logger;
 
 /**
  * New graph for drawing distribution graph of the results. It is
@@ -50,7 +50,7 @@ public class DistributionGraph
     extends JComponent
     implements Scrollable, Clearable
 {
-    private static Logger log = LoggingManager.getLoggerForClass();
+    //private static Logger log = LoggingManager.getLoggerForClass();
 
     private SamplingStatCalculator model;
     private static int width = 600;
@@ -175,10 +175,10 @@ public class DistributionGraph
         }
     }
 
-    private void drawSample(SamplingStatCalculator model, Graphics g)
+    private void drawSample(SamplingStatCalculator p_model, Graphics g)
     {
         width = getWidth();
-        double height = (double)getHeight() - 1.0;
+        double height = getHeight() - 1.0;
 
         // first lets draw the grid
         for (int y=0; y < 4; y++){
@@ -197,13 +197,13 @@ public class DistributionGraph
         // for it to generate half way decent distribution
         // graph. the larger the sample, the better the
         // results.
-        if (model != null && model.getCount() > 50){
+        if (p_model != null && p_model.getCount() > 50){
 			// now draw the bar chart
-			Number ninety = model.getPercentPoint(0.90);
-			Number fifty = model.getPercentPoint(0.50);
+			Number ninety = p_model.getPercentPoint(0.90);
+			Number fifty = p_model.getPercentPoint(0.50);
 
-			total = model.getCount();
-			Collection values = model.getDistribution().values();
+			total = p_model.getCount();
+			Collection values = p_model.getDistribution().values();
 			Object[] objval = new Object[values.size()];
 			objval = values.toArray(objval);
 			// we sort the objects
@@ -229,7 +229,7 @@ public class DistributionGraph
 				if (num[0].longValue() == ninety.longValue()){
 					g.setColor(Color.red);
 					g.drawLine(ix,(int)height,ix,55);
-					g.drawLine(ix,(int)35,ix,0);
+					g.drawLine(ix,35,ix,0);
 					g.drawString("90%",ix - 30,20);
 					g.drawString(String.valueOf(num[0].longValue()),ix + 8, 20);
 				}
