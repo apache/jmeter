@@ -51,6 +51,10 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
+ * 
+ * @author  Michael Stover
+ * @author	<a href="mailto:klancast@swbell.net">Keith Lancaster</a>
+ * @version $Id$
  */
 package org.apache.jmeter.util;
 
@@ -91,11 +95,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
 import org.xml.sax.XMLReader;
 
 /**
- *  This class contains the static utility methods used by JMeter.
- *
- *@author     <a href="mailto://stefano@apache.org">Stefano Mazzocchi</a>
- *Created    June 28, 2001
- *@version    $Revision$ $Date$
+ * This class contains the static utility methods used by JMeter.
  */
 public class JMeterUtils implements UnitTestManager
 {
@@ -1074,5 +1074,26 @@ public class JMeterUtils implements UnitTestManager
     public static String getJMeterVersion()
     {
         return JMeterVersion.VERSION;
+    }
+
+    /**
+    *  Builds the string used as the main frame title
+    *  @param the fully qualified name of the current working file
+    *  @return a string of the form "FileName (<full path>/FileName) - Apache JMeter".
+    *  If fname is null, returns "Apache JMeter".
+    */
+    public static String getExtendedFrameTitle(String fname)
+    {
+        // file New operation may set to null, so just return
+        // app name
+        if (fname == null)
+        {
+            return "Apache JMeter";
+        }
+
+        // allow for windows / chars in filename
+        String temp = fname.replace('\\','/');
+        String simpleName = temp.substring(temp.lastIndexOf("/") + 1);
+        return simpleName + " (" + fname + ") - Apache JMeter";
     }
 }
