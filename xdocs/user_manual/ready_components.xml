@@ -20,9 +20,9 @@ Sample generation controllers (test controllers) typically change nothing about 
 instead, are responsible for generation of the test samples.  So, for instance, the Web Test controller is responsible
 for creating URL objects to be tested.
 <ul>
-<li>Web Test Controller</li>
-<li>JDBC Test Controller</li>
-<li>FTP Test Controller</li>
+<li><a href="web_test.html">Web Test Controller</a></li>
+<li><a href="jdbc_test.html">JDBC Test Controller</a></li>
+<li><a href="ftp_test.html">FTP Test Controller</a></li>
 </ul>
 </section>
 </body>
