@@ -131,7 +131,7 @@ public class JDateField extends JTextField
     }
 
     // Dummy constructor to allo JUnit tests to work
-    JDateField()
+    public JDateField()
     {
     	this(new Date());
     }
