@@ -27,11 +27,24 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 	
 	
 	protected void initializeTableModel() {
-		tableModel = new ObjectTableModel(new String[]{Arguments.COLUMN_NAMES[0],Arguments.COLUMN_NAMES[1],
-				ENCODE_OR_NOT,INCLUDE_EQUALS},
-				new String[]{"name","value","alwaysEncoded","useEquals"},
-                new Class[]{String.class,String.class,boolean.class,boolean.class},
-                new Class[]{String.class,String.class,Boolean.class,Boolean.class},
+        tableModel =
+            new ObjectTableModel(
+                new String[] {
+                    ArgumentsPanel.COLUMN_NAMES[0],
+                    ArgumentsPanel.COLUMN_NAMES[1],
+                    ENCODE_OR_NOT,
+                    INCLUDE_EQUALS },
+                new String[] { "name", "value", "alwaysEncoded", "useEquals" },
+                new Class[] {
+                    String.class,
+                    String.class,
+                    boolean.class,
+                    boolean.class },
+                new Class[] {
+                    String.class,
+                    String.class,
+                    Boolean.class,
+                    Boolean.class },
                 new HTTPArgument());
 	}
     
@@ -110,5 +123,4 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
     {
         return arg.getMetaData() == null || arg.getMetaData().equals("=") || (arg.getValue() != null && arg.getValue().toString().length() > 0);
     }
-
 }
