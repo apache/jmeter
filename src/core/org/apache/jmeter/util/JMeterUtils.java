@@ -76,8 +76,8 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.jorphan.logging.LoggingManager;
-import org.jorphan.test.UnitTestManager;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.test.UnitTestManager;
 import org.xml.sax.XMLReader;
 /**
  *  This class contains the static utility methods used by JMeter.

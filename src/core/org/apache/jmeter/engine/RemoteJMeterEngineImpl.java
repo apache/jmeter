@@ -59,7 +59,7 @@ import java.rmi.RemoteException;
 
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.HashTree;
 
 
 /************************************************************

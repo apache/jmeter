@@ -18,7 +18,7 @@ import org.apache.log.Logger;
 import org.apache.oro.text.perl.Perl5Util;
 import org.apache.oro.text.regex.PatternCompiler;
 import org.apache.oro.text.regex.Perl5Compiler;
-import org.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.reflect.ClassFinder;
 
 /**
  * @author mstover

@@ -4,7 +4,7 @@ import java.awt.event.MouseEvent;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Logger;
-import org.jorphan.logging.LoggingManager;
+import org.apache.jorphan.logging.LoggingManager;
 /**
  * @author Administrator
  *

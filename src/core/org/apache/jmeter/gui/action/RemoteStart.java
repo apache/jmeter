@@ -69,7 +69,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.HashTree;
 
 /****************************************
  * Title: Description: Copyright: Copyright (c) 2001 Company:

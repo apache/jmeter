@@ -73,7 +73,7 @@ import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.reflect.ClassFinder;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache

@@ -7,7 +7,7 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Logger;
-import org.jorphan.logging.LoggingManager;
+import org.apache.jorphan.logging.LoggingManager;
 /**
  * @author Administrator
  *

@@ -17,7 +17,7 @@ import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.jorphan.gui.layout.VerticalLayout;
+import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache

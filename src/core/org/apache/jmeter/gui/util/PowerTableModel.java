@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 
-import org.jorphan.collections.Data;
+import org.apache.jorphan.collections.Data;
 /**
  * @author mstover
  *

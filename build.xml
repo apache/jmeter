@@ -9,6 +9,7 @@
   <property name="build.java" value="build/protocol/java"/>
   <property name="build.components" value="build/components"/>
   <property name="build.functions" value="build/functions"/>
+  <property name="build.jorphan" value="build/jorphan"/>
   
   <!-- Where the Sources live -->
   <property name="src.dir" value="src"/>
@@ -19,6 +20,7 @@
   <property name="src.java" value="src/protocol/java"/>
   <property name="src.components" value="src/components"/>
   <property name="src.functions" value="src/functions"/>
+  <property name="src.jorphan" value="src/jorphan"/>
   
   <!-- Where the API documentation lives -->
   <property name="docs.api.dest.dir" value="docs/api"/>
@@ -55,6 +57,7 @@
   		<pathelement location="${src.ftp}"/>
   		<pathelement location="${src.jdbc}"/>
   		<pathelement location="${src.java}"/>
+  		<pathelement location="${src.jorphan}"/>
   </path>
   
   <target name="init">
@@ -66,6 +69,7 @@
   	<mkdir dir="${build.java}"/>
   	<mkdir dir="${build.components}"/>
   	<mkdir dir="${build.functions}"/>
+  	<mkdir dir="${build.jorphan}"/>
   </target>
 
 
@@ -283,7 +287,21 @@
 		</javac>
 	</target>
 	
-	<target name="compile_protocols" depends="clean,compile_http,compile_ftp,compile_jdbc,compile_java"/>
+	<target name="compile_jorphan" depends="init,compile_all">
+		<javac srcdir="${src.jorphan}"
+				 destdir="${build.jorphan}"
+				 optimize="${optimize}"
+				 debug="on"
+				 target="1.3">
+		  <include name="**/*.java"/>
+		  <classpath>
+		  	<path refid="classpath"/>
+		  	<pathelement location="${build.dir}"/>
+		  </classpath>
+		</javac>
+	</target>
+	
+	<target name="compile_protocols" depends="clean,compile_http,compile_ftp,compile_jdbc,compile_java,compile_jorphan"/>
 	
 	<target name="compile" depends="clean,compile_core,compile_components,compile_functions,compile_protocols"/>
 
@@ -292,6 +310,7 @@
 	  	<classpath>
 	  		<path refid="classpath"/>      
 	  		<pathelement path="${build.core}"/>
+	  		<pathelement path="${build.jorphan}"/>
 	  	</classpath>
 	  </rmic>
 	  	
@@ -339,6 +358,7 @@
 	  <jar jarfile="./lib/ext/ApacheJMeter_ftp.jar" basedir="${build.ftp}"/>
 	  <jar jarfile="./lib/ext/ApacheJMeter_jdbc.jar" basedir="${build.jdbc}"/>
 	  <jar jarfile="./lib/ext/ApacheJMeter_java.jar" basedir="${build.java}"/>
+	  <jar jarfile="./lib/jorphan.jar" basedir="${build.jorphan}"/>
 	</target>
 
 	<!--

@@ -72,7 +72,7 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
-import org.jorphan.gui.layout.VerticalLayout;
+import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * This class implements a statistical analyser that calculates both the average

@@ -64,7 +64,7 @@ import org.apache.jmeter.save.old.xml.TagHandler;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.reflect.ClassFinder;
 import org.xml.sax.Attributes;
 
 /**
