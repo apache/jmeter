@@ -58,6 +58,8 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.Authenticator;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
@@ -69,6 +71,8 @@ import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.control.gui.AbstractControllerGui;
 import org.apache.jmeter.control.gui.TestPlanGui;
 import org.apache.jmeter.control.gui.WorkBenchGui;
+import org.apache.jmeter.engine.ClientJMeterEngine;
+import org.apache.jmeter.engine.JMeterEngine;
 import org.apache.jmeter.engine.RemoteJMeterEngine;
 import org.apache.jmeter.engine.RemoteJMeterEngineImpl;
 import org.apache.jmeter.engine.StandardJMeterEngine;
@@ -85,6 +89,7 @@ import org.apache.jmeter.plugin.PluginManager;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.reporters.ResultCollector;
+import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestListener;
@@ -120,6 +125,7 @@ public class JMeter implements JMeterPlugin {
 	private   static final int JMETER_PROPERTY = 'J';
 	private   static final int SYSTEM_PROPERTY = 'D';
 	private   static final int LOGLEVEL = 'L';
+    private static final int REMOTE_OPT = 'r';
 
 	/**
 	 *  Define the understood options. Each CLOptionDescriptor contains:
@@ -205,6 +211,11 @@ public class JMeter implements JMeterPlugin {
 				| CLOptionDescriptor.ARGUMENTS_REQUIRED_2,
 				LOGLEVEL,
 				"Define loglevel: [category=]level e.g. jorphan=INFO or jmeter.util=DEBUG"),
+            new CLOptionDescriptor(
+                            "runremote",
+                            CLOptionDescriptor.ARGUMENT_DISALLOWED,
+                            REMOTE_OPT,
+                            "Start remote servers from non-gui mode")
 			};
 
 	public JMeter() {
@@ -276,7 +287,8 @@ public class JMeter implements JMeterPlugin {
 			} else {
 				startNonGui(
 					parser.getArgumentById(TESTFILE_OPT),
-					parser.getArgumentById(LOGFILE_OPT));
+					parser.getArgumentById(LOGFILE_OPT),
+                    parser.getArgumentById(REMOTE_OPT));
 			}
 		} catch (IllegalUserActionException e) {
 			System.out.println(e.getMessage());
@@ -394,7 +406,7 @@ public class JMeter implements JMeterPlugin {
 		}
 	}
 
-	public void startNonGui(CLOption testFile, CLOption logFile)
+	public void startNonGui(CLOption testFile, CLOption logFile,CLOption remoteStart)
 		throws IllegalUserActionException, IllegalAccessException, ClassNotFoundException, InstantiationException {
 		JMeter driver = new JMeter();
         PluginManager.install(this, false);
@@ -403,13 +415,13 @@ public class JMeter implements JMeterPlugin {
 			throw new IllegalUserActionException();
 		}
 		if (logFile == null) {
-			driver.run(testFile.getArgument(), null);
+			driver.run(testFile.getArgument(), null,remoteStart != null);
 		} else {
-			driver.run(testFile.getArgument(), logFile.getArgument());
+			driver.run(testFile.getArgument(), logFile.getArgument(),remoteStart != null);
 		}
 	}
 
-	private void run(String testFile, String logFile) {// run test in batch mode
+	private void run(String testFile, String logFile, boolean remoteStart) {// run test in batch mode
 		FileInputStream reader = null;
 		try {
 			File f = new File(testFile);
@@ -430,25 +442,69 @@ public class JMeter implements JMeterPlugin {
 			}
 			tree.add(tree.getArray()[0],new ListenToTest());			
 			println("Created the tree successfully");
-			StandardJMeterEngine engine = new StandardJMeterEngine();
-			engine.configure(tree);
-			println("Starting the test");
-			engine.runTest();
-
+			JMeterEngine engine = null;
+            if(!remoteStart)
+            {
+                engine = new StandardJMeterEngine();
+                engine.configure(tree);
+                            println("Starting the test");
+                            engine.runTest();
+            }
+            else
+            {
+                String remote_hosts_string = JMeterUtils.getPropDefault("remote_hosts",
+                                   "127.0.0.1");
+                 java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, ",");
+                 List engines = new LinkedList();
+                 while(st.hasMoreElements())
+                 {
+                     String el = (String)st.nextElement();
+                     engines.add(doRemoteInit(el.trim(),tree));
+                 }
+                 Iterator iter = engines.iterator();
+                 while(iter.hasNext())
+                 {
+                     engine = (JMeterEngine)iter.next();
+                     engine.runTest();
+                 }
+            }
 		} catch (Exception e) {
 			System.out.println("Error in NonGUIDriver" + e.getMessage());
 			log.error("",e);
 		}
 	}
+    
+    private JMeterEngine doRemoteInit(String hostName,HashTree testTree)
+    {
+        JMeterEngine engine = null;
+        try
+        {
+            engine = new ClientJMeterEngine(hostName);
+        }
+        catch (Exception e)
+        {
+            log.fatalError("Failure connecting to remote host",e);
+            System.exit(0);
+        }
+        engine.configure(testTree);
+        return engine;        
+    }
 	
 	/**
 	 * Listen to test and exit program after test completes, after a 5 second delay to give listeners
 	 * a chance to close out their files.
 	 */
-	private class ListenToTest implements TestListener,Runnable
+	private class ListenToTest implements TestListener,Runnable,Remoteable
 	{
-		public void testEnded(String host)
+        int started = 0;
+		public synchronized void testEnded(String host)
 		{
+            started--;
+            log.info("Remote host " + host + " finished");
+            if(started == 0)
+            {
+                testEnded();
+            }
 		}
 		
 		public void testEnded()
@@ -457,8 +513,10 @@ public class JMeter implements JMeterPlugin {
 			stopSoon.start();			
 		}
 		
-		public void testStarted(String host)
+		public synchronized void testStarted(String host)
 		{
+            started++;
+            log.info("Started remote host: " + host);
 		}
 		
 		public void testStarted()
