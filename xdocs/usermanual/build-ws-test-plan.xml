@@ -103,9 +103,9 @@ the webservice sampler, we won't go into the details of writing a
 webservice. If you don't know how to write a webservice, google for
 webservice and familiarize yourself with writing webservices for
 Java and .NET. It should be noted there is a significant difference
-between how .NET and Java implement webservices. .NET webservices are
-document centric, whereas Java webservices tend to be RPC centric.
-Neither approach is perfect and each has limitations.</p>
+between how .NET and Java implement webservices. The topic is too
+broad to cover in the user manual. Please refer to other sources to
+get a better idea of the differences.</p>
 
 <note>JMeter sends requests in the order that they appear in the tree.</note>
 
@@ -127,7 +127,8 @@ Figure 10.3. Webservice Request</figure>
 be populated. If the drop down remains blank, it means there was a problem
 getting the WSDL. You can test the WSDL using a browser that reads XML.
 For example, if you're testing an IIS webservice the URL will look like this:
-http://localhost/myWebService/Service.asmx?WSDL.</p>
+http://localhost/myWebService/Service.asmx?WSDL. At this point, SOAPAction, URL
+and SOAP Data should be blank.</p>
 
 <p>Next, select the web method and click "Configure". The sampler should
 populate the "URL" and "SOAPAction" text fields. Assuming the WSDL is valid,
@@ -139,6 +140,12 @@ text area. You can optionally save the soap message to a file and browse
 to the location. For convienance, there is a third option of using a
 message folder. The sampler will randomly select files from a given
 folder and use the text for the soap message.</p>
+
+<p>If you do not want JMeter to read the response from the SOAP Webservice,
+uncheck "Read Soap Responses." If the test plan is intended to stress test
+a webservice, the box should be unchecked. If the test plan is a functional
+test, the box should be checked. When "Read Soap Responses" is unchecked,
+no result will be displayed in view result tree or view results in table.</p>
 
 <p>An important note on the sampler. It will automatically use the proxy host
 and port passed to JMeter from command line, if thoe fields in the sampler are
