@@ -122,7 +122,7 @@ public abstract class AbstractVisualizer
     SampleSaveConfiguration saveConfig;
     
     protected ResultCollector collector = new ResultCollector();
-	private boolean isStats = true;
+	protected boolean isStats = false;
 
     public AbstractVisualizer()
     {
