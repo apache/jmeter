@@ -391,8 +391,12 @@ public class StandardJMeterEngine
         //if true the Scheduler is enabled
         if (group.getScheduler())
         {
-            //set the starttime for the Thread
-            thread.setStartTime(group.getStartTime());
+			//set the starttime for the Thread
+        	if (group.getDelay() > 0 ){// Duration is  in seconds
+				thread.setStartTime(group.getDelay()*1000+(new Date().getTime()));
+        	} else {
+				thread.setStartTime(group.getStartTime());
+        	}
             
 			//set the endtime for the Thread
             if (group.getDuration() > 0){// Duration is  in seconds
