@@ -184,6 +184,10 @@ public class WebServiceSamplerGui
 	 */
 	JLabel proxyMessage = 
 		new JLabel(JMeterUtils.getResString("webservice_proxy_note"));
+	JLabel proxyMessage2 = 
+		new JLabel(JMeterUtils.getResString("webservice_proxy_note2"));
+	JLabel proxyMessage3 = 
+		new JLabel(JMeterUtils.getResString("webservice_proxy_note3"));
 
     public WebServiceSamplerGui()
     {
@@ -351,8 +355,13 @@ public class WebServiceSamplerGui
 		useProxy.addActionListener(this);
 		mainPanel.add(proxyHost);
 		mainPanel.add(proxyPort);
+		// add the proxy notes
 		proxyMessage.setFont(plainText);
+		proxyMessage2.setFont(plainText);
+		proxyMessage3.setFont(plainText);
 		mainPanel.add(proxyMessage);
+		mainPanel.add(proxyMessage2);
+		mainPanel.add(proxyMessage3);
 		
         this.add(mainPanel);
     }
