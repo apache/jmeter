@@ -82,7 +82,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable
         propMap.remove(key);
     }
 
-    public boolean equals(Object o) //TODO: probably ought to use hashCode() from Map as well
+    public boolean equals(Object o)
     {
         if (o instanceof AbstractTestElement)
         {
@@ -94,12 +94,22 @@ public abstract class AbstractTestElement implements TestElement, Serializable
         }
     }
 
-    // Ensure equals agrees with hash
-    public int hashCode()
-    {
-    	return propMap.hashCode();
-    	
-    }
+	/*
+	 * URGENT:
+	 * TODO - sort out equals and hashCode() - at present equal instances can/will have
+	 * different hashcodes - problem is, when a proper hashcode is used, tests stop working,
+	 * e.g. listener data disappears when switching views...
+	 * This presumably means that instances currently regarded as equal, aren't really equal...
+	 *  
+	 *  (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+// This would be sensible, but does not work:
+//	  public int hashCode()
+//	  {
+//		return propMap.hashCode();
+//	  }
+    
     public void addTestElement(TestElement el)
     {
         mergeIn(el);
