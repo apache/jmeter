@@ -334,6 +334,8 @@ public class JavaTest
 		}
 
 		// Record sample start time.
+		results.sampleStart();
+		
 		long start = System.currentTimeMillis();
 
 		// Generate a random value using the current time.
@@ -352,8 +354,7 @@ public class JavaTest
             results.setSuccessful(false);
         } finally{
 			// Record end time and populate the results.
-			long end = System.currentTimeMillis();
-			results.setTime(end - start);
+			results.sampleEnd();
         }
 
         if (getLogger().isDebugEnabled())

@@ -124,7 +124,7 @@ public class BeanShellSampler extends AbstractSampler
         SampleResult res = new SampleResult();
         boolean isSuccessful = false;
         res.setSampleLabel(getLabel());
-        long start = System.currentTimeMillis();
+        res.sampleStart();
         try
         {
         	String request=getScript();
@@ -198,9 +198,7 @@ public class BeanShellSampler extends AbstractSampler
 			res.setResponseMessage(ex.toString());
 		}
 
-        // Calculate response time
-        long end = System.currentTimeMillis();
-        res.setTime(end - start);
+        res.sampleEnd();
 
         // Set if we were successful or not
         res.setSuccessful(isSuccessful);
