@@ -1,18 +1,18 @@
 // $Header$
 /*
  * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy
+ * of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.jmeter.testbeans.gui;
 
@@ -43,6 +43,7 @@ import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.AbstractProperty;
@@ -58,323 +59,362 @@ import org.apache.log.Logger;
  * JMeter GUI element editing for TestBean elements.
  * <p>
  * The actual GUI is always a bean customizer: if the bean descriptor provides
- * one, it will be used; otherwise, a GenericTestBeanCustomizer will be
- * created for this purpose.
+ * one, it will be used; otherwise, a GenericTestBeanCustomizer will be created
+ * for this purpose.
  * <p>
  * Those customizers deviate from the standards only in that, instead of a
  * bean, they will receive a Map in the setObject call. This will be a property
  * name to value Map. The customizer is also in charge of initializing empty
  * Maps with sensible initial values.
  * <p>
- * If the provided Customizer class implements the SharedCustomizer
- * interface, the same instance of the customizer will be reused for all
- * beans of the type: setObject(map) can then be called multiple times.
- * Otherwise, one separate instance will be used for each element.
- * For efficiency reasons, most customizers should implement
- * SharedCustomizer.
+ * If the provided Customizer class implements the SharedCustomizer interface,
+ * the same instance of the customizer will be reused for all beans of the
+ * type: setObject(map) can then be called multiple times. Otherwise, one
+ * separate instance will be used for each element. For efficiency reasons,
+ * most customizers should implement SharedCustomizer.
  * 
  * @version $Revision$ updated on $Date$
  */
-public class TestBeanGUI
-    extends AbstractJMeterGuiComponent
-    implements JMeterGUIComponent
+public class TestBeanGUI extends AbstractJMeterGuiComponent implements
+      JMeterGUIComponent
 {
-    private static Logger log = LoggingManager.getLoggerForClass();
+   private static Logger log = LoggingManager.getLoggerForClass();
 
-    private Class testBeanClass;
-    
-    private BeanInfo beanInfo;
+   private Class testBeanClass;
 
-    private Class customizerClass;
+   private BeanInfo beanInfo;
 
-    /**
-     * The single customizer if the customizer class implements
-     * SharedCustomizer, null otherwise.
-     */
-    private Customizer customizer= null;
+   private Class customizerClass;
 
-    /**
-     * TestElement to Customizer map if customizer is null. This is necessary to avoid
-     * the cost of creating a new customizer on each edit. The cache size needs to be
-     * limited, though, to avoid memory issues when editing very large test plans.
-     */
-    private Map customizers= new LRUMap(20);
+   /**
+    * The single customizer if the customizer class implements
+    * SharedCustomizer, null otherwise.
+    */
+   private Customizer customizer = null;
 
-    /**
-     * Index of the customizer in the JPanel's child component list:
-     */
-    private int customizerIndexInPanel;
-    
-    /**
-     * The property name to value map that the active customizer
-     * edits:
-     */
-    private Map propertyMap= new HashMap();
+   /**
+    * TestElement to Customizer map if customizer is null. This is necessary to
+    * avoid the cost of creating a new customizer on each edit. The cache size
+    * needs to be limited, though, to avoid memory issues when editing very
+    * large test plans.
+    */
+   private Map customizers = new LRUMap(20);
 
-    /**
-     * Whether the GUI components have been created. 
-     */
-    private boolean initialized= false;
+   /**
+    * Index of the customizer in the JPanel's child component list:
+    */
+   private int customizerIndexInPanel;
 
-    static
-    {
-        List paths= new LinkedList();
-        paths.add("org.apache.jmeter.testbeans.gui");
-        paths.addAll(Arrays.asList(PropertyEditorManager.getEditorSearchPath()));
-        String s= JMeterUtils.getPropDefault("propertyEditorSearchPath", null) ;
-        if (s != null)
-        {
-            paths.addAll(Arrays.asList(JMeterUtils.split(s, ",", "")));
-        }
-        PropertyEditorManager.setEditorSearchPath((String[])paths.toArray(new String[0]));
-    }
+   /**
+    * The property name to value map that the active customizer edits:
+    */
+   private Map propertyMap = new HashMap();
 
-    // Dummy for JUnit test
-    public TestBeanGUI()
-    {
-    	log.warn("Only for use in testing");
-    }
-    
-    public TestBeanGUI(Class testBeanClass)
-    {
-        super();
-        log.warn("testing class: " + testBeanClass.getName());
-        // A quick verification, just in case:
-        if (! TestBean.class.isAssignableFrom(testBeanClass))
-        {
-            Error e= new Error();
-            log.error("This should never happen!", e);
-            throw e; // Programming error: bail out.
-        }
+   /**
+    * Whether the GUI components have been created.
+    */
+   private boolean initialized = false;
 
-        this.testBeanClass= testBeanClass;
-                
-        // Get the beanInfo:
-        try
-        {
-            beanInfo= Introspector.getBeanInfo(testBeanClass);
-        }
-        catch (IntrospectionException e)
-        {
-            log.error("Can't get beanInfo for "+testBeanClass.getName(),
-                e);
-            throw new Error(e.toString()); // Programming error. Don't continue.
-        }
+   static
+   {
+      List paths = new LinkedList();
+      paths.add("org.apache.jmeter.testbeans.gui");
+      paths.addAll(Arrays.asList(PropertyEditorManager.getEditorSearchPath()));
+      String s = JMeterUtils.getPropDefault("propertyEditorSearchPath", null);
+      if (s != null)
+      {
+         paths.addAll(Arrays.asList(JMeterUtils.split(s, ",", "")));
+      }
+      PropertyEditorManager.setEditorSearchPath((String[]) paths
+            .toArray(new String[0]));
+   }
 
-        customizerClass= beanInfo.getBeanDescriptor().getCustomizerClass();
+   // Dummy for JUnit test
+   public TestBeanGUI()
+   {
+      log.warn("Only for use in testing");
+   }
 
-        // Creation of the customizer and GUI initialization is delayed until the first
-        // configure call. We don't need all that just to find out the static label, menu
-        // categories, etc!
-        initialized= false;
-    }
+   public TestBeanGUI(Class testBeanClass)
+   {
+      super();
+      log.warn("testing class: " + testBeanClass.getName());
+      // A quick verification, just in case:
+      if (!TestBean.class.isAssignableFrom(testBeanClass))
+      {
+         Error e = new Error();
+         log.error("This should never happen!", e);
+         throw e; // Programming error: bail out.
+      }
 
-    private Customizer createCustomizer()
-    {
-        try
-        {
-            return (Customizer)customizerClass.newInstance();
-        }
-        catch (InstantiationException e)
-        {
-            log.error("Could not instantiate customizer of class "+customizerClass, e);
-            throw new Error(e.toString());
-        }
-        catch (IllegalAccessException e)
-        {
-            log.error("Could not instantiate customizer of class "+customizerClass, e);
-            throw new Error(e.toString());
-        }
-    }
+      this.testBeanClass = testBeanClass;
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-     */
-    public String getStaticLabel()
-    {
-        if (beanInfo == null) return "null";
-        return beanInfo.getBeanDescriptor().getDisplayName();
-    }
+      // Get the beanInfo:
+      try
+      {
+         beanInfo = Introspector.getBeanInfo(testBeanClass);
+      }
+      catch (IntrospectionException e)
+      {
+         log.error("Can't get beanInfo for " + testBeanClass.getName(), e);
+         throw new Error(e.toString()); // Programming error. Don't continue.
+      }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-     */
-    public TestElement createTestElement()
-    {
-        try
-        {
-            TestElement element= (TestElement)testBeanClass.newInstance();
-            //configure(element);
-            //super.clear(); // set name, enabled.
-            modifyTestElement(element); // put the default values back into the new element
-            return element;
-        }
-        catch (InstantiationException e)
-        {
-            log.error("Can't create test element", e);
-            throw new Error(e.toString()); // Programming error. Don't continue.
-        }
-        catch (IllegalAccessException e)
-        {
-            log.error("Can't create test element", e);
-            throw new Error(e.toString()); // Programming error. Don't continue.
-        }
-    }
+      customizerClass = beanInfo.getBeanDescriptor().getCustomizerClass();
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
-     */
-    public void modifyTestElement(TestElement element)
-    {
-        configureTestElement(element);
-        
-        // Copy all property values from the map into the element:
-        PropertyDescriptor[] props= beanInfo.getPropertyDescriptors();
-        for (int i=0; i<props.length; i++)
-        {
-            String name= props[i].getName();
-            Object value= propertyMap.get(name);
-            log.debug("Modify "+name+" to "+value);
-            if (value == null)
+      // Creation of the customizer and GUI initialization is delayed until the
+      // first
+      // configure call. We don't need all that just to find out the static
+      // label, menu
+      // categories, etc!
+      initialized = false;
+   }
+
+   private Customizer createCustomizer()
+   {
+      try
+      {
+         return (Customizer) customizerClass.newInstance();
+      }
+      catch (InstantiationException e)
+      {
+         log.error("Could not instantiate customizer of class "
+               + customizerClass, e);
+         throw new Error(e.toString());
+      }
+      catch (IllegalAccessException e)
+      {
+         log.error("Could not instantiate customizer of class "
+               + customizerClass, e);
+         throw new Error(e.toString());
+      }
+   }
+
+   /*
+    * (non-Javadoc)
+    * 
+    * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
+    */
+   public String getStaticLabel()
+   {
+      if (beanInfo == null) return "null";
+      return beanInfo.getBeanDescriptor().getDisplayName();
+   }
+
+   /*
+    * (non-Javadoc)
+    * 
+    * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+    */
+   public TestElement createTestElement()
+   {
+      try
+      {
+         TestElement element = (TestElement) testBeanClass.newInstance();
+         //configure(element);
+         //super.clear(); // set name, enabled.
+         modifyTestElement(element); // put the default values back into the
+                                     // new element
+         return element;
+      }
+      catch (InstantiationException e)
+      {
+         log.error("Can't create test element", e);
+         throw new Error(e.toString()); // Programming error. Don't continue.
+      }
+      catch (IllegalAccessException e)
+      {
+         log.error("Can't create test element", e);
+         throw new Error(e.toString()); // Programming error. Don't continue.
+      }
+   }
+
+   /*
+    * (non-Javadoc)
+    * 
+    * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
+    */
+   public void modifyTestElement(TestElement element)
+   {
+      configureTestElement(element);
+
+      // Copy all property values from the map into the element:
+      PropertyDescriptor[] props = beanInfo.getPropertyDescriptors();
+      for (int i = 0; i < props.length; i++)
+      {
+         String name = props[i].getName();
+         Object value = propertyMap.get(name);
+         log.debug("Modify " + name + " to " + value);
+         if (value == null)
+         {
+            if (((Boolean) props[i].getValue(BeanInfoSupport.NOT_UNDEFINED))
+                  .booleanValue())
             {
-                element.removeProperty(name);
+               setPropertyInElement(element, name, props[i]
+                     .getValue(BeanInfoSupport.DEFAULT));
             }
             else
             {
-                JMeterProperty jprop= AbstractProperty.createProperty(propertyMap.get(name));
-                jprop.setName(name);
-                element.setProperty(jprop);
+               element.removeProperty(name);
             }
-        }
-    }
+         }
+         else
+         {
+            setPropertyInElement(element, name, propertyMap.get(name));
+         }
+      }
+   }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createPopupMenu()
-     */
-    public JPopupMenu createPopupMenu()
-    {
-        // TODO: this menu is too wide (allows, e.g. to add controllers, no matter the
-        // type of the element). Change to match the actual bean's capabilities.
-        return MenuFactory.getDefaultControllerMenu();
-    }
+   /**
+    * @param element
+    * @param name
+    */
+   private void setPropertyInElement(TestElement element, String name,
+         Object value)
+   {
+      JMeterProperty jprop = AbstractProperty.createProperty(value);
+      jprop.setName(name);
+      element.setProperty(jprop);
+   }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(org.apache.jmeter.testelement.TestElement)
-     */
-    public void configure(TestElement element)
-    {
-        if (! initialized) init();
-        clear();
+   /*
+    * (non-Javadoc)
+    * 
+    * @see org.apache.jmeter.gui.JMeterGUIComponent#createPopupMenu()
+    */
+   public JPopupMenu createPopupMenu()
+   {
+      // TODO: this menu is too wide (allows, e.g. to add controllers, no
+      // matter the
+      // type of the element). Change to match the actual bean's capabilities.
+      return MenuFactory.getDefaultControllerMenu();
+   }
 
-        super.configure(element);
+   /*
+    * (non-Javadoc)
+    * 
+    * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(org.apache.jmeter.testelement.TestElement)
+    */
+   public void configure(TestElement element)
+   {
+      if (!initialized) init();
+      clear();
 
-        // Copy all property values into the map:
-        for (PropertyIterator jprops= element.propertyIterator(); jprops.hasNext(); )
-        {
-            JMeterProperty jprop= jprops.next();
-            propertyMap.put(jprop.getName(), jprop.getObjectValue());
-        }
+      super.configure(element);
 
-        if (customizer != null)
-        {
-            customizer.setObject(propertyMap);
-        }
-        else
-        {
-            if (initialized) remove(customizerIndexInPanel);
-            Customizer c= (Customizer)customizers.get(element);
-            if (c == null)
-            {
-                c= createCustomizer();
-                c.setObject(propertyMap);
-                customizers.put(element, c);
-            }
-            add((Component)c, BorderLayout.CENTER);
-        }
+      // Copy all property values into the map:
+      for (PropertyIterator jprops = element.propertyIterator(); jprops
+            .hasNext();)
+      {
+         JMeterProperty jprop = jprops.next();
+         propertyMap.put(jprop.getName(), jprop.getObjectValue());
+      }
 
-        initialized= true;
-    }
+      if (customizer != null)
+      {
+         customizer.setObject(propertyMap);
+      }
+      else
+      {
+         if (initialized) remove(customizerIndexInPanel);
+         Customizer c = (Customizer) customizers.get(element);
+         if (c == null)
+         {
+            c = createCustomizer();
+            c.setObject(propertyMap);
+            customizers.put(element, c);
+         }
+         add((Component) c, BorderLayout.CENTER);
+      }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getMenuCategories()
-     */
-    public Collection getMenuCategories()
-    {
-        List menuCategories= new LinkedList();
+      initialized = true;
+   }
 
-        // We don't want to show expert beans in the menus unless we're
-        // in expert mode:
-        if (beanInfo.getBeanDescriptor().isExpert()
-            && ! JMeterUtils.isExpertMode())
-        {
-            return null;
-        }
-        
-        // TODO: there must be a nicer way...
-        if (Assertion.class.isAssignableFrom(testBeanClass))
-        {
-            menuCategories.add(MenuFactory.ASSERTIONS);
-        }
-        if (ConfigElement.class.isAssignableFrom(testBeanClass))
-        {
-            menuCategories.add(MenuFactory.CONFIG_ELEMENTS);
-        }
-        if (Controller.class.isAssignableFrom(testBeanClass))
-        {
-            menuCategories.add(MenuFactory.CONTROLLERS);
-        }
-        if (Visualizer.class.isAssignableFrom(testBeanClass))
-        {
-            menuCategories.add(MenuFactory.LISTENERS);
-        }
-        if (PostProcessor.class.isAssignableFrom(testBeanClass))
-        {
-            menuCategories.add(MenuFactory.POST_PROCESSORS);
-        }
-        if (PreProcessor.class.isAssignableFrom(testBeanClass))
-        {
-            menuCategories.add(MenuFactory.PRE_PROCESSORS);
-        }
-        if (Sampler.class.isAssignableFrom(testBeanClass))
-        {
-            menuCategories.add(MenuFactory.SAMPLERS);
-        }
-        if (Timer.class.isAssignableFrom(testBeanClass))
-        {
-            menuCategories.add(MenuFactory.TIMERS);
-        }
-        return menuCategories;
-    }
-    
-    private void init()
-    {
-        setLayout(new BorderLayout(0, 5));
+   /*
+    * (non-Javadoc)
+    * 
+    * @see org.apache.jmeter.gui.JMeterGUIComponent#getMenuCategories()
+    */
+   public Collection getMenuCategories()
+   {
+      List menuCategories = new LinkedList();
 
-        setBorder(makeBorder());
-        add(makeTitlePanel(), BorderLayout.NORTH);
+      // We don't want to show expert beans in the menus unless we're
+      // in expert mode:
+      if (beanInfo.getBeanDescriptor().isExpert()
+            && !JMeterUtils.isExpertMode()) { return null; }
 
-        customizerIndexInPanel= getComponentCount();
+      // TODO: there must be a nicer way...
+      if (Assertion.class.isAssignableFrom(testBeanClass))
+      {
+         menuCategories.add(MenuFactory.ASSERTIONS);
+      }
+      if (ConfigElement.class.isAssignableFrom(testBeanClass))
+      {
+         menuCategories.add(MenuFactory.CONFIG_ELEMENTS);
+      }
+      if (Controller.class.isAssignableFrom(testBeanClass))
+      {
+         menuCategories.add(MenuFactory.CONTROLLERS);
+      }
+      if (Visualizer.class.isAssignableFrom(testBeanClass))
+      {
+         menuCategories.add(MenuFactory.LISTENERS);
+      }
+      if (PostProcessor.class.isAssignableFrom(testBeanClass))
+      {
+         menuCategories.add(MenuFactory.POST_PROCESSORS);
+      }
+      if (PreProcessor.class.isAssignableFrom(testBeanClass))
+      {
+         menuCategories.add(MenuFactory.PRE_PROCESSORS);
+      }
+      if (Sampler.class.isAssignableFrom(testBeanClass))
+      {
+         menuCategories.add(MenuFactory.SAMPLERS);
+      }
+      if (Timer.class.isAssignableFrom(testBeanClass))
+      {
+         menuCategories.add(MenuFactory.TIMERS);
+      }
+      return menuCategories;
+   }
 
-        if (customizerClass == null)
-        {
-            customizer= new GenericTestBeanCustomizer(beanInfo);
-        }
-        else if (SharedCustomizer.class.isAssignableFrom(customizerClass))
-        {
-            customizer= createCustomizer();
-        }
-        
-        if (customizer != null) add((Component)customizer, BorderLayout.CENTER);
-    }
+   private void init()
+   {
+      setLayout(new BorderLayout(0, 5));
 
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getLabelResource()
-	 */
-	public String getLabelResource() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-   /* (non-Javadoc)
+      setBorder(makeBorder());
+      add(makeTitlePanel(), BorderLayout.NORTH);
+
+      customizerIndexInPanel = getComponentCount();
+
+      if (customizerClass == null)
+      {
+         customizer = new GenericTestBeanCustomizer(beanInfo);
+      }
+      else if (SharedCustomizer.class.isAssignableFrom(customizerClass))
+      {
+         customizer = createCustomizer();
+      }
+
+      if (customizer != null) add((Component) customizer, BorderLayout.CENTER);
+   }
+
+   /*
+    * (non-Javadoc)
+    * 
+    * @see org.apache.jmeter.gui.JMeterGUIComponent#getLabelResource()
+    */
+   public String getLabelResource()
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   /*
+    * (non-Javadoc)
+    * 
     * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
     */
    public void clear()

@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.protocol.http.util.accesslog;
 
+import org.apache.jmeter.testelement.TestElement;
+
 /**
  * Description:<br>
  * <br>
@@ -45,19 +47,14 @@ public interface LogParser {
 	public void close();
 	
 	/**
-	 * Concrete parsers need to have a generator
-	 * to recieve the parsed result.
-	 * @param generator
-	 */
-	public void setGenerator(Generator generator);
-	
-	/**
 	 * the method will parse the given number of
-	 * lines. Pass "-1" to parse the entire file.
+	 * lines. Pass "-1" to parse the entire file.  If the end of
+	 * the file is reached without parsing a line, a 0 is returned.  If
+	 * the method is subsequently called again, it will restart parsing at the beginning.
 	 * @param count
 	 * @return int
 	 */
-	public int parse(int count);
+	public int parseAndConfigure(int count,TestElement el);
 	
 	/**
 	 * We allow for filters, so that users can

@@ -23,6 +23,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.logging.LoggingManager;
@@ -121,6 +122,7 @@ public class ClientJMeterEngine implements JMeterEngine,Runnable
         
         try
         {
+           JMeterContextService.startTest();
             remote.setHost(host);
             log.info("sent host ="+host);
             remote.configure(test);

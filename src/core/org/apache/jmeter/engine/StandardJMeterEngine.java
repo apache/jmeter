@@ -227,6 +227,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
             verifyThreadsStopped();
             notifyTestListenersOfEnd();
          }
+         JMeterContextService.endTest();
       }
    }
 
@@ -248,6 +249,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
       {
          serialized = true;
       }
+      JMeterContextService.startTest();
       compileTree();
       /** 
        * Notification of test listeners needs to happen after function replacement, but before

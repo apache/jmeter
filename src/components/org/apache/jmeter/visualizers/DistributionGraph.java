@@ -31,9 +31,8 @@ import javax.swing.SwingUtilities;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 import org.apache.jorphan.math.NumberComparator;
-import org.apache.jorphan.math.StatCalculator;
+import org.apache.log.Logger;
 
 /**
  * New graph for drawing distribution graph of the results. It is
@@ -54,7 +53,7 @@ public class DistributionGraph
 {
     private static Logger log = LoggingManager.getLoggerForClass();
 
-    private GraphModel model;
+    private SamplingStatCalculator model;
     private static int width = 600;
     private int xborder = 30;
     
@@ -84,7 +83,7 @@ public class DistributionGraph
     /**
      * Constructor for the Graph object.
      */
-    public DistributionGraph(GraphModel model)
+    public DistributionGraph(SamplingStatCalculator model)
     {
         this();
         setModel(model);
@@ -119,7 +118,7 @@ public class DistributionGraph
      */
     private void setModel(Object model)
     {
-        this.model = (GraphModel) model;
+        this.model = (SamplingStatCalculator) model;
         repaint();
     }
 
@@ -178,7 +177,7 @@ public class DistributionGraph
 	 */
     public void updateGui(final Sample oneSample)
     {
-        final GraphModel m = this.model;
+        final SamplingStatCalculator m = this.model;
         SwingUtilities.invokeLater(new Runnable()
         {
             public void run()
@@ -198,14 +197,14 @@ public class DistributionGraph
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
-        final GraphModel m = this.model;
+        final SamplingStatCalculator m = this.model;
         synchronized (m)
         {
         	drawSample(m, g);
         }
     }
 
-    private void drawSample(GraphModel model, Graphics g)
+    private void drawSample(SamplingStatCalculator model, Graphics g)
     {
         width = getWidth();
         double height = (double)getHeight() - 1.0;
@@ -227,14 +226,13 @@ public class DistributionGraph
         // for it to generate half way decent distribution
         // graph. the larger the sample, the better the
         // results.
-        if (model != null && model.getSampleCount() > 50){
+        if (model != null && model.getCount() > 50){
 			// now draw the bar chart
-			StatCalculator sc = model.getStatCalc();
-			Number ninety = sc.getPercentPoint(0.90);
-			Number fifty = sc.getPercentPoint(0.50);
+			Number ninety = model.getPercentPoint(0.90);
+			Number fifty = model.getPercentPoint(0.50);
 
-			total = sc.getCount();
-			Collection values = sc.getDistribution().values();
+			total = model.getCount();
+			Collection values = model.getDistribution().values();
 			Object[] objval = new Object[values.size()];
 			objval = values.toArray(objval);
 			// we sort the objects

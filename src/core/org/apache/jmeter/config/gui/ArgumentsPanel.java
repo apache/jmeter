@@ -43,6 +43,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
+import org.apache.jorphan.reflect.Functor;
 
 /**
  * A GUI panel allowing the user to enter name-value argument pairs.  These
@@ -372,10 +373,13 @@ public class ArgumentsPanel
                 new String[] {
                     COLUMN_NAMES[0],
                     COLUMN_NAMES[1] },
-                new String[] { "name", "value" },
-                new Class[] { String.class, String.class },
-                new Class[] { String.class, String.class },
-                new Argument());
+                new Functor[] {new Functor("getName"),
+                      new Functor("getValue")
+                },
+                new Functor[] {new Functor("setName"),
+                      new Functor("setValue")
+                },
+                new Class[] { String.class, String.class });
     }
 
     /**

@@ -212,6 +212,7 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo
 	{
 		for (int i=0; i<names.length; i++)
 		{
+		   log.debug("Getting property for: " + names[i]);
 			PropertyDescriptor p= property(names[i]);
 			p.setValue(GenericTestBeanCustomizer.GROUP, group);
 			p.setValue(GenericTestBeanCustomizer.ORDER, new Integer(i));

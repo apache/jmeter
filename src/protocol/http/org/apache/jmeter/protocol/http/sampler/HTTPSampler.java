@@ -38,6 +38,7 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.parser.HTMLParser;
 
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 
@@ -86,7 +87,7 @@ public class HTTPSampler extends HTTPSamplerBase
      * @param conn       <code>URLConnection</code> to set headers on
      * @exception IOException  if an I/O exception occurs
      */
-    public void setPostHeaders(URLConnection conn) throws IOException
+    protected void setPostHeaders(URLConnection conn) throws IOException
     {
         postWriter.setHeaders(conn, this);
     }
@@ -98,7 +99,7 @@ public class HTTPSampler extends HTTPSamplerBase
      *                   be sent
      * @exception IOException  if an I/O exception occurs
      */
-    public void sendPostData(URLConnection connection) throws IOException
+    protected void sendPostData(URLConnection connection) throws IOException
     {
         postWriter.sendPostData(connection, this);
     }
@@ -213,7 +214,7 @@ public class HTTPSampler extends HTTPSamplerBase
      * @return                 response content
      * @exception IOException  if an I/O exception occurs
      */
-    protected byte[] readResponse(HttpURLConnection conn) throws IOException
+    protected byte[] readResponse(HttpURLConnection conn, SampleResult res) throws IOException
     {
         byte[] readBuffer= getThreadContext().getReadBuffer();
         BufferedInputStream in;
@@ -263,8 +264,14 @@ public class HTTPSampler extends HTTPSamplerBase
         }
         java.io.ByteArrayOutputStream w= new ByteArrayOutputStream();
         int x= 0;
+        boolean first = true;
         while ((x= in.read(readBuffer)) > -1)
         {
+           if(first)
+           {
+              res.latencyEnd();
+              first = false;
+           }
             w.write(readBuffer, 0, x);
         }
         in.close();
@@ -452,7 +459,6 @@ public class HTTPSampler extends HTTPSamplerBase
         }
 		res.setSampleLabel(urlStr);
 		res.sampleStart(); // Count the retries as well in the time
-
         try
         {
             // Sampling proper - establish the connection and read the response:
@@ -496,7 +502,7 @@ public class HTTPSampler extends HTTPSamplerBase
                 sendPostData(conn);
             }
             // Request sent. Now get the response:
-            byte[] responseData= readResponse(conn);
+            byte[] responseData= readResponse(conn, res);
 
             res.sampleEnd();
             // Done with the sampling proper.
