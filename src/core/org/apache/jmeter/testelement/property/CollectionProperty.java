@@ -28,6 +28,18 @@ public class CollectionProperty extends AbstractProperty
         super();
     }
 
+    public boolean equals(Object o)
+    {
+        if (o instanceof CollectionProperty)
+        {
+            if (value != null)
+            {
+                return value.equals(((JMeterProperty) o).getObjectValue());
+            }
+        }
+        return false;
+    }
+
     public void remove(String prop)
     {
         PropertyIterator iter = iterator();
