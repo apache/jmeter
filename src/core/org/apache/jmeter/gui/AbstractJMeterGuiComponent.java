@@ -316,4 +316,9 @@ public abstract class AbstractJMeterGuiComponent
 	{
 		return JMeterUtils.getResString(getLabelResource());
 	}
+
+	public String getDocAnchor()
+	{
+		return getStaticLabel().replace(' ', '_');
+	}
 }

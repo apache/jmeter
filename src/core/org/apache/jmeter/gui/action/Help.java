@@ -113,8 +113,8 @@ public class Help implements Command
                     .getInstance()
                     .getTreeListener()
                     .getCurrentNode()
-                    .getStaticLabel()
-                    .replace(' ', '_'));
+                    .getDocAnchor());
+                    
         }
     }
 
