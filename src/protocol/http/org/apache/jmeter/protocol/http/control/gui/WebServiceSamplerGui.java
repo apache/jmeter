@@ -221,6 +221,7 @@ public class WebServiceSamplerGui
             {
                 sampler.setPort(80);
             }
+			sampler.setWsdlURL(wsdlField.getText());
             sampler.setProtocol(url.getProtocol());
             sampler.setMethod(HTTPSamplerBase.POST);
             sampler.setPath(url.getPath());
@@ -335,6 +336,7 @@ public class WebServiceSamplerGui
     {
         super.configure(el);
         WebServiceSampler sampler = (WebServiceSampler) el;
+        wsdlField.setText(sampler.getWsdlURL());
         try
         {
             // only set the URL if the host is not null
