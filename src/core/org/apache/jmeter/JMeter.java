@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2000-2004 The Apache Software Foundation.
  *
@@ -71,7 +70,6 @@ import org.apache.log.Logger;
 
 /**
  * @author mstover
- * @version $Revision$
  */
 public class JMeter implements JMeterPlugin
 {
@@ -256,11 +254,10 @@ public class JMeter implements JMeterPlugin
             setProxy(parser);
             log.info("Version " + JMeterUtils.getJMeterVersion());
 			log.info("java.version="+System.getProperty("java.version"));
+			log.info(JMeterUtils.getJMeterCopyright());
             if (parser.getArgumentById(VERSION_OPT) != null)
             {
-                System.out.println(
-                    "Apache JMeter, Copyright (c) 2002,2003 " +
-                    "The Apache Software Foundation");
+                System.out.println(JMeterUtils.getJMeterCopyright());
                 System.out.println("Version " + JMeterUtils.getJMeterVersion());
             }
             else if (parser.getArgumentById(HELP_OPT) != null)

@@ -64,6 +64,12 @@ public class AssertionGui extends AbstractAssertionGui
 	/** Radio button indicating that the responseCode should be tested. */
 	private JRadioButton responseCodeButton;
 
+	/**
+	 * Checkbox to indicate whether the response should be forced successful before testing.
+	 * This is intended for use when checking the status code or status message.
+	 */
+	private JCheckBox assumeSuccess;
+	
     /**
      * Radio button indicating to test if the field contains one of the
      * patterns.
@@ -147,7 +153,9 @@ public class AssertionGui extends AbstractAssertionGui
                 ra.setTestField(ResponseAssertion.RESPONSE_DATA);
             }
 
-            if (containsBox.isSelected())
+           	ra.setAssumeSuccess(assumeSuccess.isSelected());
+
+           	if (containsBox.isSelected())
             {
                 ra.setToContainsType();
             }
@@ -217,6 +225,8 @@ public class AssertionGui extends AbstractAssertionGui
             labelButton.setSelected(true);
         }
 
+        assumeSuccess.setSelected(model.getAssumeSuccess());
+        
         tableModel.clearData();
         PropertyIterator tests = model.getTestStrings().iterator();
         while (tests.hasNext())
@@ -286,6 +296,9 @@ public class AssertionGui extends AbstractAssertionGui
 		panel.add(responseMessageButton);
 		
         responseStringButton.setSelected(true);
+        
+        assumeSuccess = new JCheckBox(JMeterUtils.getResString("assertion_assume_success"));
+        panel.add(assumeSuccess);
 
         return panel;
     }

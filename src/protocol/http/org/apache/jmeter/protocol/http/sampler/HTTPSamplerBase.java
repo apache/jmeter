@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -20,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
@@ -27,6 +27,8 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.parser.HTMLParseException;
+import org.apache.jmeter.protocol.http.parser.HTMLParser;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
@@ -34,7 +36,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.FunctionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -52,7 +53,6 @@ import org.apache.oro.text.regex.Util;
 /**
  * Common constants and methods for HTTP samplers
  * 
- * @version $Revision$ Last updated $Date$
  */
 public abstract class HTTPSamplerBase extends AbstractSampler implements TestListener
 {
@@ -604,6 +604,85 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	    };
 	private static Substitution spaceSub = new StringSubstitution("%20");
 
+    /**
+     * Download the resources of an HTML page.
+     * <p>
+     * If createContainerResult is true, the returned result will contain one 
+     * subsample for each request issued, including the original one that was 
+     * passed in. It will otherwise look exactly like that original one.
+     * <p>
+     * If createContainerResult is false, one subsample will be added to the
+     * provided result for each requests issued.
+     * 
+     * @param res           result of the initial request - must contain an HTML
+     *                      response
+     * @param createContainerResult whether to create a "container" or just
+     *                      use the provided <code>res</code> for that purpose
+     * @param frameDepth    Depth of this target in the frame structure.
+     *                      Used only to prevent infinite recursion.
+     * @return              "Container" result with one subsample per request
+     *                      issued
+     */
+    protected HTTPSampleResult downloadPageResources(
+        HTTPSampleResult res,
+        boolean createContainerResult,
+        int frameDepth)
+    {
+        Iterator urls= null;
+        try
+        {
+        	if (res.getContentType().toLowerCase().indexOf("text/html") != -1)
+        	{
+            urls=
+                HTMLParser.getParser().getEmbeddedResourceURLs(
+                    res.getResponseData(),
+                    res.getURL());
+        	}
+        }
+        catch (HTMLParseException e)
+        {
+            // Don't break the world just because this failed:
+            res.addSubResult(errorResult(e, null, 0));
+            res.setSuccessful(false);
+        }
+
+        // Iterate through the URLs and download each image:
+        if (urls != null && urls.hasNext())
+        {
+            if (createContainerResult)
+            {
+                res= new HTTPSampleResult(res);
+            }
+
+            while (urls.hasNext())
+            {
+                Object binURL= urls.next();
+                try
+                {
+                    HTTPSampleResult binRes=
+                        sample(
+                            (URL)binURL,
+                            GET,
+                            false,
+                            frameDepth + 1);
+                    res.addSubResult(binRes);
+                    res.setSuccessful(
+                        res.isSuccessful() && binRes.isSuccessful());
+                }
+                catch (ClassCastException e)
+                {
+                    res.addSubResult(
+                        errorResult(
+                            new Exception(binURL + " is not a correct URI"),
+                            null,
+                            0));
+                    res.setSuccessful(false);
+                    continue;
+                }
+            }
+        }
+        return res;
+    }
 
 	protected String encodeSpaces(String path) {
 		// TODO JDK1.4 

@@ -1060,6 +1060,15 @@ public class JMeterUtils implements UnitTestManager
     }
 
     /**
+     * Gets the JMeter copyright.
+     * @return the JMeter copyright string
+     */
+    public static String getJMeterCopyright()
+    {
+        return JMeterVersion.COPYRIGHT;
+    }
+
+    /**
     *  Builds the string used as the main frame title
     * 
     *  @param fname the fully qualified name of the current working file

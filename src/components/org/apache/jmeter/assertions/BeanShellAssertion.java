@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -33,7 +32,6 @@ import org.apache.log.Logger;
 /**
  * A sampler which understands BeanShell
  *
- * @version    $Revision$ Updated on: $Date$
  */
 public class BeanShellAssertion extends AbstractTestElement
     implements Serializable, Assertion
@@ -96,8 +94,7 @@ public class BeanShellAssertion extends AbstractTestElement
 			bshInterpreter.set("SamplerData",response.getSamplerData());
 			bshInterpreter.set("Successful",response.isSuccessful());
 
-			bshInterpreter.set("Result",result);// Raw access to the result
-
+			// The following are used to set the Result details on return from the script:
 			bshInterpreter.set("FailureMessage","");
 			bshInterpreter.set("Failure",false);
 
@@ -117,7 +114,7 @@ public class BeanShellAssertion extends AbstractTestElement
 			result.setError(false);
         }
 /*
- * To avoid class loading problems when bsh,jar is missing,
+ * To avoid class loading problems when the BSH jar is missing,
  * we don't try to catch this error separately
  * 		catch (bsh.EvalError ex)
 		{
@@ -128,10 +125,10 @@ public class BeanShellAssertion extends AbstractTestElement
  */
         // but we do trap this error to make tests work better
         catch(NoClassDefFoundError ex){
-			result.setError(true);
 			log.error("BeanShell Jar missing? "+ex.toString());
+			result.setError(true);
+			result.setFailureMessage("BeanShell Jar missing? "+ex.toString());
 			response.setStopThread(true); // No point continuing
-			result.setFailureMessage("");
         }
 		catch (IOException ex)
 		{

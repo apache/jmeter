@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -41,7 +40,6 @@ import org.apache.log.output.io.WriterTarget;
  * This is a nice packaging for the various information returned from taking a
  * sample of an entry.
  *
- * @version    $Revision$ $Date$
  */
 public class SampleResult implements Serializable
 {
@@ -71,7 +69,7 @@ public class SampleResult implements Serializable
     private String threadName;
     private String responseMessage="";
     private String responseHeaders=""; // Never return null
-    private String contentType; // e.g. text/html; charset=utf-8
+    private String contentType=""; // e.g. text/html; charset=utf-8
     private String requestHeaders="";
     private long timeStamp = 0;// the time stamp - can be start or end
     private long startTime = 0;
@@ -502,7 +500,7 @@ public class SampleResult implements Serializable
     }
 
     /**
-     * @return the content type - text or bin
+     * @return the content type - e.g. text/html [;charset=utf-8 ]
      */
     public String getContentType()
     {
