@@ -355,6 +355,7 @@
     <include name="${lib.dir}/"/>
     <include name="${jar.dest}/"/> <!-- redundant but future-proof -->
     <include name="${docs.dest}/"/>
+    <include name="${printable_docs.dest}/**"/>
       <exclude name="${docs.api.dest}/"/>
     <exclude name="**/mail.jar"/>
     <exclude name="**/activation.jar"/>
@@ -446,12 +447,6 @@
   <target name="printable-docs" depends="init-docs" if="AnakiaTask.present" description="Generate printable HTML documentation.">
     <taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask"/>
     <anakia basedir="${docs.src}" destdir="${printable_docs.dest}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site_printable.vsl" projectFile="./stylesheets/project.xml" excludes="**/stylesheets/**" includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${docs.src}/velocity.properties"/>
-    <copy todir="${printable_docs.dest}">
-      <fileset dir="${docs.dest}">
-        <include name="images/**"/>
-        <include name="demos/**"/>
-      </fileset>
-    </copy>
   </target>
 
   <target name="all-docs" depends="docs,printable-docs,api-docs" description="Generate documentation."/>

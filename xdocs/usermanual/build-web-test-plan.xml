@@ -48,7 +48,7 @@ in the tree, if you have not already selected it. You should now see the Thread
 Group Control Panel in the right section of the JMeter window (see Figure 5.1
 below)</p>
 
-<figure image="../images/screenshots/webtest/threadgroup.png">
+<figure image="webtest/threadgroup.png">
 Figure 5.1. Thread Group with Default Values</figure>
 
 <p>Start by providing a more descriptive name for our Thread Group. In the name
@@ -78,7 +78,7 @@ leave the Control Panel (for example, when selecting another tree element).</not
 
 <p>See Figure 5.2 for the completed Jakarta Users Thread Group.</p>
 
-<figure image="../images/screenshots/webtest/threadgroup2.png">
+<figure image="webtest/threadgroup2.png">
 Figure 5.2. Jakarta Users Thread Group</figure>
 
 </section>
@@ -94,7 +94,7 @@ to get the Add menu, and then select Add --&gt; Config Element --&gt; HTTP Reque
 Defaults. Then, select this new element to view its Control Panel (see Figure 5.3).
 </p>
 
-<figure image="../images/screenshots/webtest/http-defaults1.png">
+<figure image="webtest/http-defaults1.png">
 Figure 5.3. HTTP Request Defaults</figure>
 
 <p>
@@ -114,7 +114,7 @@ HTTP Request elements use.</note>
 
 <p>See Figure 5.4 for the completed HTTP Request Defaults element</p>
 
-<figure image="../images/screenshots/webtest/http-defaults2.png">
+<figure image="webtest/http-defaults2.png">
 Figure 5.4. HTTP Defaults for our Test Plan</figure>
 
 </section>
@@ -153,7 +153,7 @@ element.</li>
 </ol>
 </p>
 
-<figure image="../images/screenshots/webtest/http-request1.png">
+<figure image="webtest/http-request1.png">
 Figure 5.5. HTTP Request for Jakarta Home Page</figure>
 
 <p>Next, add the second HTTP Request and edit the following properties (see
@@ -164,7 +164,7 @@ Figure 5.6:
 </ol>
 </p>
 
-<figure image="../images/screenshots/webtest/http-request2.png">
+<figure image="webtest/http-request2.png">
 Figure 5.6. HTTP Request for Jakarta Project Guidelines Page</figure>
 
 </section>
@@ -180,7 +180,7 @@ a visual model of the data.</p>
 output file.  You can either type it into the filename field, or select the
 Browse button and browse to a directory and then enter a filename.</p>
 
-<figure image="../images/screenshots/graph_results.png">
+<figure image="graph_results.png">
 Figure 5.7. Graph Results Listener</figure>
 
 </section>

@@ -45,7 +45,7 @@ in the tree, if you have not already selected it. You should now see the Thread
 Group Control Panel in the right section of the JMeter window (see Figure 7.1
 below)</p>
 
-<figure image="../images/screenshots/webtest/threadgroup.png">
+<figure image="webtest/threadgroup.png">
 Figure 7.1. Thread Group with Default Values</figure>
 
 <p>Start by providing a more descriptive name for our Thread Group. In the name
@@ -79,7 +79,7 @@ leave the Control Panel (for example, when selecting another tree element).</not
 
 <p>See Figure 7.2 for the completed JDBC Users Thread Group.</p>
 
-<figure image="../images/screenshots/jdbctest/threadgroup2.png">
+<figure image="jdbctest/threadgroup2.png">
 Figure 7.2. JDBC Users Thread Group</figure>
 
 </section>
@@ -98,7 +98,7 @@ in this example.</note>
 to get the Add menu, and then select Add --&gt; Sampler --&gt; JDBC Request.
 Then, select this new element to view its Control Panel (see Figure 7.3).</p>
 
-<figure image="../images/screenshots/jdbctest/JDBCRequest.png">
+<figure image="jdbctest/JDBCRequest.png">
 Figure 7.3. JDBC Request</figure>
 
 <p>In our Test Plan, we will make two JDBC requests. The first one is for
@@ -121,7 +121,7 @@ are illustrated below.</p>
 </ol>
 </p>
 
-<figure image="../images/screenshots/jdbctest/JDBCRequest2.png">
+<figure image="jdbctest/JDBCRequest2.png">
 Figure 7.4. JDBC Request for Eastman Kodak stock</figure>
 
 <p>Next, add the second JDBC Request and edit the following properties (see
@@ -138,7 +138,7 @@ Figure 7.5):
 </ol>
 </p>
 
-<figure image="../images/screenshots/jdbctest/JDBCRequest3.png">
+<figure image="jdbctest/JDBCRequest3.png">
 Figure 7.6. JDBC Request for Pfizer stock</figure>
 
 </section>
@@ -152,7 +152,7 @@ and presenting a visual model of the data.</p>
 <p>Select the JDBC Users element and add a <complink name="Graph Results"/>
 listener (Add --&gt; Listener --&gt; Graph Results).</p>
 
-<figure image="../images/screenshots/jdbctest/graph-results.png">
+<figure image="jdbctest/graph-results.png">
 Figure 7.6. Graph results Listener</figure>
 
 </section>

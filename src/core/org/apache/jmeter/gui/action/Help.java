@@ -29,7 +29,7 @@ public class Help implements Command
 	private static String helpPage =
 		"file:///"
 			+ JMeterUtils.getJMeterHome()
-			+ "/docs/usermanual/component_reference.html";
+			+ "/printable_docs/usermanual/component_reference.html";
 	private static JDialog helpWindow;
 	private static HtmlPane helpDoc;
 	private static JScrollPane scroller;

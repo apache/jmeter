@@ -10,7 +10,7 @@
 
 <section name="13.1 Samplers" anchor="samplers">
 
-<component index="13.1.1" name="FTP Request" screenshot="../images/screenshots/gen-controller/ftp-request.gif">
+<component index="13.1.1" name="FTP Request" screenshot="gen-controller/ftp-request.gif">
 <description>This controller lets you send an FTP "retrieve file" request to an FTP server.
 If you are going to send multiple requests to the same FTP server, consider
 using a <complink name="FTP Request Defaults"/> Configuration
@@ -32,7 +32,7 @@ JMeter assumes the FTP server is listening on the default port.</property>
 
 </component>
 
-<component name="HTTP Request" index="13.1.2" screenshot="../images/screenshots/gen-controller/http-request.png">
+<component name="HTTP Request" index="13.1.2" screenshot="gen-controller/http-request.png">
 
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
@@ -108,7 +108,7 @@ and send HTTP/HTTPS requests for all images and Java applets referenced in the f
 
 </component>
 
-<component name="JDBC Request" index="13.1.3" screenshot="../images/screenshots/gen-controller/jdbc-request.gif">
+<component name="JDBC Request" index="13.1.3" screenshot="gen-controller/jdbc-request.gif">
 
 <description><p>This sampler lets you send an JDBC Request (an SQL query) to a database.</p>
 <p>If you are going to send multiple requests to the same database, consider
@@ -148,7 +148,7 @@ a new instance).</property>
 
 </component>
 
-<component name="Java Request" index="13.1.4" screenshot="../images/screenshots/java_request.gif">
+<component name="Java Request" index="13.1.4" screenshot="java_request.gif">
 
 <description><p>This sampler lets you control a java class that implements the
 JavaSamplerClient interface.  By writing your own implementation of this interface,
@@ -171,7 +171,7 @@ provided.</p></description>
 
 </component>
 
-<component name="SOAP/XML-RPC Request" index="13.1.5" screenshot="../images/screenshots/soap_sampler.png">
+<component name="SOAP/XML-RPC Request" index="13.1.5" screenshot="soap_sampler.png">
 
 <description><p>This sampler lets you send a SOAP request to a webservice.  It can also be
 used to send XML-RPC over HTTP.  It creates an HTTP POST request, with the specified XML as the
@@ -188,7 +188,7 @@ POST content.</p>
 
 </component>
 
-<component name="LDAP Request" index="13.1.6" screenshot="../images/screenshots/ldap_request.png">
+<component name="LDAP Request" index="13.1.6" screenshot="ldap_request.png">
   <description>This Sampler lets you send a different Ldap request(Add, Modify, Delete and Search) to a LDAP server.
     <p>If you are going to send multiple requests to the same LDAP server, consider
       using an <complink name="LDAP Request Defaults"/>
@@ -268,7 +268,7 @@ POST content.</p>
                                       </links>
 
 </component>
-<component name="WebService(SOAP) Request (Alpha Code)" index="13.1.7" screenshot="../images/screenshots/webservice_sampler.png">
+<component name="WebService(SOAP) Request (Alpha Code)" index="13.1.7" screenshot="webservice_sampler.png">
 
 <description><p>This sampler has been tested with IIS Webservice running .NET 1.0. It hasn't been tested with SUN or IBM webservices providers, but it should work. The sampler uses Apache SOAP driver, to serialize the message and set the header with the correct SOAPAction. Right now the sampler doesn't support automatic WSDL handling, since Apache SOAP currently doesn't provide support for it. Both IBM and SUN provide WSDL drivers.</p>
 </description>
@@ -287,7 +287,7 @@ POST content.</p>
 
 <section name="13.2 Logic Controllers" anchor="logic_controllers">
 
-<component index="13.2.1" name="Interleave Controller" screenshot="../images/screenshots/logic-controller/interleave-controller.gif">
+<component index="13.2.1" name="Interleave Controller" screenshot="logic-controller/interleave-controller.gif">
 <description><p>If you add Generative or Logic Controllers to an Interleave Controller, JMeter will alternate among each of the
 other controllers for each loop iteration. </p>
 </description>
@@ -316,7 +316,7 @@ Group to loop, here is the sequence in which JMeter sends the requests:
 we configured the Thread Group to have two threads and a loop count of five, for a total of ten
 requests per thread. See the table below for the sequence JMeter sends the HTTP Requests.</p>
 
-<figure image="../images/screenshots/logic-controller/interleave.png">Figure 1 - Interleave Controller Example 1</figure>
+<figure image="logic-controller/interleave.png">Figure 1 - Interleave Controller Example 1</figure>
 
 <table border="1" cellspacing="0" cellpadding="4">
 <tr valign="top"><td>Loop Iteration</td><td>Each JMeter Thread Sends These HTTP Requests</td></tr>
@@ -342,7 +342,7 @@ example, we configured the Thread Group
 to have a single thread and a loop count of eight.  Notice that the Test Plan has an outer Interleave Controller with
 two Interleave Controllers inside of it.</p>
 
-<figure image="../images/screenshots/logic-controller/interleave2.png">
+<figure image="logic-controller/interleave2.png">
         Figure 2 - Interleave Controller Example 2
 </figure>
 
@@ -353,7 +353,7 @@ Note, the File Reporter is configured to store the results in a file named "inte
 </example>
 </component>
 
-<component index="13.2.2" name="Loop Controller" anchor="loop" screenshot="../images/screenshots/logic-controller/loop-controller.gif">
+<component index="13.2.2" name="Loop Controller" anchor="loop" screenshot="logic-controller/loop-controller.gif">
 <description><p>If you add Generative or Logic Controllers to a Loop Controller, JMeter will
 loop through them a certain number of times, in addition to the loop value you
 specified for the Thread Group.  For example, if you add one HTTP Request to a
@@ -377,7 +377,7 @@ count to three, JMeter will send a total of 2 * 3 = 6 HTTP Requests.
 In this example, we created a Test Plan that sends a particular HTTP Request
 only once and sends another HTTP Request five times.</p>
 
-<figure image="../images/screenshots/logic-controller/loop-example.gif">Figure 3 - Loop Controller Example</figure>
+<figure image="logic-controller/loop-example.gif">Figure 3 - Loop Controller Example</figure>
 
 <p>We configured the Thread Group for a single thread and a loop count value of
 one. Instead of letting the Thread Group control the looping, we used a Loop
@@ -393,7 +393,7 @@ is configured to store the results in a file named "loop-test.dat" in the curren
 </component>
 
 <component index="13.2.3" name="Once Only Controller" anchor="once_only_controller"
-screenshot="../images/screenshots/logic-controller/once-only-controller.gif">
+screenshot="logic-controller/once-only-controller.gif">
 <description>
 <p>The Once Only Logic Controller tells JMeter to process the controller(s) inside it only once, and pass over any requests under it
 during further iterations through the test plan.</p>
@@ -413,14 +413,14 @@ In this example, we created a Test Plan that has two threads that send HTTP requ
 Each thread sends one request to the Home Page, followed by three requests to the Bug Page.
 Although we configured the Thread Group to iterate three times, each JMeter thread only
 sends one request to the Home Page because this request lives inside a Once Only Controller.</p>
-<figure image="../images/screenshots/logic-controller/once-only-example.png">Figure 4. Once Only Controller Example</figure>
+<figure image="logic-controller/once-only-example.png">Figure 4. Once Only Controller Example</figure>
 <p>Each JMeter thread will send the requests in the following order: Home Page, Bug Page,
 Bug Page, Bug Page. Note, the File Reporter is configured to store the results in a file named "loop-test.dat" in the current directory.</p>
 
 </example>
 </component>
 
-<component index="13.2.4" name="Simple Controller" anchor="simple_controller" screenshot="../images/screenshots/logic-controller/simple-controller.gif">
+<component index="13.2.4" name="Simple Controller" anchor="simple_controller" screenshot="logic-controller/simple-controller.gif">
 <description>
 <p>The Simple Logic Controller lets  you organize your Samplers and other
 Logic Controllers.  Unlike other Logic Controllers, this controller provides no functionality beyond that of a
@@ -439,12 +439,12 @@ processes the controller(s) you add to it.  So, in this example, JMeter sends th
 following order: Ant Home Page, Ant News Page, Log4J Home Page, Log4J History Page.
 Note, the File Reporter
 is configured to store the results in a file named "simple-test.dat" in the current directory.</p>
-<figure image="../images/screenshots/logic-controller/simple-example.gif">Figure 5 Simple Controller Example</figure>
+<figure image="logic-controller/simple-example.gif">Figure 5 Simple Controller Example</figure>
 
 </example>
 </component>
 
-<component index="13.2.5" name="Random Controller" screenshot="../images/screenshots/logic-controller/random-controller.gif">
+<component index="13.2.5" name="Random Controller" screenshot="logic-controller/random-controller.gif">
 <description>
 <p>The Random Logic Controller acts similarly to the Interleave Controller, except that
 instead of going in order through its sub-controllers and samplers, it picks one
@@ -459,7 +459,7 @@ what results any given interaction will give</note>
 
 </component>
 
-<component index="13.2.6" name="Recording Controller" screenshot="../images/screenshots/logic-controller/recording-controller.gif">
+<component index="13.2.6" name="Recording Controller" screenshot="logic-controller/recording-controller.gif">
 <description>
 <p>The Recording Controller is a place holder indicating where the proxy server should
 record samples to.  During test run, it has no effect, similar to the Simple Controller.  But during
@@ -473,7 +473,7 @@ be saved under the Recording Controller.</p>
 
 </component>
 
-<component index="13.2.7" name="Module Controller" screenshot="../images/screenshots/module_controller.png">
+<component index="13.2.7" name="Module Controller" screenshot="module_controller.png">
 <description>
 <p>The Module Controller provides a mechanism for substituting test plan fragments into the current test plan at run-time.  To use this
 module effectively, one might have a number of Controllers under the <complink name="WorkBench"/>, each with a different series of
@@ -490,7 +490,7 @@ the appropriate controller in it's drop down box.  This provides convenience for
 
 </component>
 
-<component index="13.2.8" name="Throughput Controller" screenshot="../images/screenshots/throughput_controller.png">
+<component index="13.2.8" name="Throughput Controller" screenshot="throughput_controller.png">
 <description>
 <p>The Throughput Controller allows the user to control how often it is executed.  There are two modes - percent execution and total executions.  Percent executions causes the controller to execute a certain percentage of the iterations through the test plan.  Total
 executions causes the controller to stop executing after a certain number of executions have occurred.  Like the Once Only Controller, this
@@ -517,15 +517,16 @@ save, and read saved test results.
 The saving and reading of test results is generic.  The various
 listeners generally have a panel whereby one can specify the file to
 which the results will be written (or read).  By default,
-the results are stored as XML
-files, typically with a ".jtl" extension.</p>
+the results are stored as CSV
+files, typically with a ".jtl" extension.  Storing as CSV is the most efficient option, but is less detailed than XML (the other available option).</p>
+<p>To change the format, in jmeter.properties, find the following line:</p>
+<p>jmeter.save.saveservice.output_format=csv</p>
+<p>Change "csv" to "xml" for greater detail.</p>
 <p>
-The information to be saved is configurable.  If one specifies the
-"Functional Test Mode" on the Test Plan element, one gets the largest
-amount of information.  If this box is not checked, the default saved
+The information to be saved is configurable.  For maximum information, choose "xml" as the format and specify "Functional Test Mode" on the Test Plan element.  If this box is not checked, the default saved
 data includes a time stamp (the number of milliseconds since midnight,
 January 1, 1970 UTC), the data type, the thread name, the label, the
-response time, message, and code, and a success indicator.</p>
+response time, message, and code, and a success indicator.  If checked, all information, including the full response data will be logged.</p>
 <p>
 One can get a more selective set of information my modifying the
 jmeter.properties file.  The following example indicates how to set
@@ -594,14 +595,10 @@ Bear in mind that choosing a date format other than "ms" is likely to
 make it impossible for JMeter to interpret the value when it is read
 in later for viewing purposes.</p>
 <p>
-Note that reading of comma-separated values is also not
-supported.  This format is provided for use with external viewing
-and data manipulation tools like spreadsheets or databases.</p>
-<p>
 The internal viewing capabilities are described in the following subsections.</p>
 
 </description>
-<component index="13.3.1" name="Mailer Visualizer" screenshot="../images/screenshots/mailer_vis.png">
+<component index="13.3.1" name="Mailer Visualizer" screenshot="mailer_vis.png">
 <description><p>The mailer visualizer can be set up to send email if a test run receives too many
 failed responses from the server.</p></description>
 
@@ -628,7 +625,7 @@ failed responses from the server.</p></description>
 <description>No Description</description>
 </component>
 
-<component index="13.3.3" name="Graph Results" screenshot="../images/screenshots/graph_results.png">
+<component index="13.3.3" name="Graph Results" screenshot="graph_results.png">
 <description><p>The Graph Results listener generates a simple graph that plots all sample times.  Along
 the bottom of the graph, the current sample (black), the current average of all samples(blue), the
 current standard deviation (red), and the current throughput rate (green) are displayed in milliseconds.</p>
@@ -641,14 +638,14 @@ that factored out delays and JMeter's processing, it would be unclear what you c
 number.</p></description>
 </component>
 
-<component index="13.3.4" name="Spline Visualizer" screenshot="../images/screenshots/spline_visualizer.png">
+<component index="13.3.4" name="Spline Visualizer" screenshot="spline_visualizer.png">
 <description><p>The Spline Visualizer provides a view of all sample times from the start
 of the test till the end, regardless of how many samples have been taken.  The spline
 has 10 points, each representing 10% of the samples, and connected using spline
 logic to show a single continuous line.</p></description>
 </component>
 
-<component index="13.3.5" name="Assertion Results" screenshot="../images/screenshots/assertion_results.png">
+<component index="13.3.5" name="Assertion Results" screenshot="assertion_results.png">
 <description><p>The Assertion Results visualizer shows the URL of each sample taken (no time information
 is shown).  It also reports failures of any <a href="test_plan.html#assertions">Assertions</a> that
 are part of the test plan.</p></description>
@@ -658,7 +655,7 @@ are part of the test plan.</p></description>
 </links>
 </component>
 
-<component index="13.3.6" name="View Results Tree" screenshot="../images/screenshots/view_results_tree.png">
+<component index="13.3.6" name="View Results Tree" screenshot="view_results_tree.png">
 <description>The View Results Tree shows a tree of all sample responses, allowing you to view the
 response for any sample.  In addition to showing the response, you can see the time it took to get
 this response, and some response codes.
@@ -672,13 +669,13 @@ approximation that is helpful for initial result evaluation.</p>
 </description>
 </component>
 
-<component index="13.3.7" name="Aggregate Report" screenshot="../images/screenshots/aggregate_report.png">
+<component index="13.3.7" name="Aggregate Report" screenshot="aggregate_report.png">
 <description>The aggregate report creates a table row for each differently named request in your test.  For each
 request, it totals the response information and provides request count, min, max, average, error rate, and an
 idealized throughput calculation.</description>
 </component>
 
-<component index="13.3.8" name="View Results in Table" screenshot="../images/screenshots/table_results.png">
+<component index="13.3.8" name="View Results in Table" screenshot="table_results.png">
 <description>This visualizer creates a row for every sample result.  Each sample result's URL,
 time in milliseconds, success/failure is displayed.  Like the <complink name="View Results Tree"/>,
 this visualizer uses a lot of memory.</description>
@@ -694,7 +691,7 @@ recording data by eliminating GUI overhead.</description>
 
 <section name="13.4 Configuration Elements" anchor="config_elements">
 
-<component index="13.4.1" name="HTTP Authorization Manager" screenshot="../images/screenshots/http-config/http-auth-manager.gif">
+<component index="13.4.1" name="HTTP Authorization Manager" screenshot="http-config/http-auth-manager.gif">
 
 <description>
 <p>The Authorization Manager lets you specify one or more user logins for web pages that are
@@ -741,8 +738,8 @@ a username and password (see figure 7).  The two HTTP requests named "SecretPage
 to "/secret/index1.html" and "/secret/index2.html".  The other HTTP request, named "NoSecretPage" makes a request to
 "/index.html".</p>
 
-<figure image="../images/screenshots/http-config/auth-manager-example1a.gif">Figure 6 - Test Plan</figure>
-<figure image="../images/screenshots/http-config/auth-manager-example1b.gif">Figure 7 - Authorization Manager Control Panel</figure>
+<figure image="http-config/auth-manager-example1a.gif">Figure 6 - Test Plan</figure>
+<figure image="http-config/auth-manager-example1b.gif">Figure 7 - Authorization Manager Control Panel</figure>
 
 <p>When we run the Test Plan, JMeter looks in the Authorization table for the URL it is requesting.  If the Base URL matches
 the URL, then JMeter passes this information along with the request.</p>
@@ -753,7 +750,7 @@ be able to run it.  However, you can use it as a reference in constructing your 
 
 </component>
 
-<component index="13.4.2" name="HTTP Cookie Manager" screenshot="../images/screenshots/http-config/http-cookie-manager.gif">
+<component index="13.4.2" name="HTTP Cookie Manager" screenshot="http-config/http-cookie-manager.gif">
 
 <description><p>The Cookie Manager element has two functions:<br/>
 First, it stores and sends cookies just like a web browser. If you have an HTTP Request and
@@ -778,7 +775,7 @@ cookie table entries.</property>
 
 </component>
 
-<component index="13.4.3" name="HTTP Proxy Server" screenshot="../images/screenshots/proxy_control.png">
+<component index="13.4.3" name="HTTP Proxy Server" screenshot="proxy_control.png">
 
 <description><p>The Proxy Server allows JMeter to watch and record your actions while you browse your web application
 with your normal browser (such as Internet Explorer).  JMeter will create test sample objects and store them
@@ -838,7 +835,7 @@ cookie manager, etc.</p>
 </component>
 
 <component index="13.4.4" name="HTTP Request Defaults"
-        screenshot="../images/screenshots/http-config/http-request-defaults.png">
+        screenshot="http-config/http-request-defaults.png">
 <description><p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are
 creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server,
 you could add a single HTTP Request Defaults element with the "Server Name or IP" field filled in.  Then, when
@@ -866,28 +863,28 @@ resource requires query string parameters, add them below in the
 </component>
 
 <component index="13.4.5" name="FTP Request Defaults"
-                screenshot="../images/screenshots/ftp-config/ftp-request-defaults.gif">
+                screenshot="ftp-config/ftp-request-defaults.gif">
 <description></description>
 </component>
 
 <component index="13.4.6" name="JDBC Database Connection Pool Defaults"
-                screenshot="../images/screenshots/jdbc-config/jdbc-db-conn-pool.gif">
+                screenshot="jdbc-config/jdbc-db-conn-pool.gif">
 <description></description>
 </component>
 
 <component index="13.4.7" name="JDBC Database Login Defaults"
-                screenshot="../images/screenshots/jdbc-config/jdbc-db-login.gif">
+                screenshot="jdbc-config/jdbc-db-login.gif">
 <description></description>
 </component>
 
 <component index="13.4.8" name="JDBC SQL Query Defaults"
-                screenshot="../images/screenshots/jdbc-config/jdbc-sql-query.gif">
+                screenshot="jdbc-config/jdbc-sql-query.gif">
 <description></description>
 </component>
 
 
 
-<component index="13.4.9" name="HTTP Header Manager" screenshot="../images/screenshots/http-config/http-header-manager.gif">
+<component index="13.4.9" name="HTTP Header Manager" screenshot="http-config/http-header-manager.gif">
 <description><p>The Header Manager lets you add or override HTTP request headers.</p>
 </description>
 
@@ -910,13 +907,13 @@ header table entries.</property>
 that tells JMeter to override the default "User-Agent" request header and use a particular Internet Explorer agent string
 instead. (see figures 9 and 10).</p>
 
-<figure image="../images/screenshots/http-config/header-manager-example1a.gif">Figure 9 - Test Plan</figure>
-<figure image="../images/screenshots/http-config/header-manager-example1b.gif">Figure 10 - Header Manager Control Panel</figure>
+<figure image="http-config/header-manager-example1a.gif">Figure 9 - Test Plan</figure>
+<figure image="http-config/header-manager-example1b.gif">Figure 10 - Header Manager Control Panel</figure>
 </example>
 
 </component>
 
-<component index="13.4.10" name="Login Config Element" screenshot="../images/screenshots/login-config.png">
+<component index="13.4.10" name="Login Config Element" screenshot="login-config.png">
 <description><p>The Login Config Element lets you add or override username and password settings in samplers that use username and password as part of their setup.</p>
 </description>
 
@@ -928,7 +925,7 @@ instead. (see figures 9 and 10).</p>
 
 </component>
 
-<component index="13.4.11" name="Simple Config Element" screenshot="../images/screenshots/simple_config_element.png">
+<component index="13.4.11" name="Simple Config Element" screenshot="simple_config_element.png">
 <description><p>The Simple Config Element lets you add or override arbitrary values in samplers.  You can choose the name of the value
 and the value itself.  Although some adventurous users might find a use for this element, it's here primarily for developers as a basic
 GUI that they can use while developing new JMeter components.</p>
@@ -943,13 +940,13 @@ GUI that they can use while developing new JMeter components.</p>
 
 </component>
 
-<component index="13.4.12" name="LDAP Request Defaults" screenshot="../images/screenshots/ldap_defaults.png">
+<component index="13.4.12" name="LDAP Request Defaults" screenshot="ldap_defaults.png">
 <description><p>The LDAP Request Defaults component lets you set default values for LDAP testing.  See the <complink name="LDAP Request"/>.</p>
 </description>
 
 </component>
 
-<component index="13.4.13" name="Java Request Defaults" screenshot="../images/screenshots/java_defaults.png">
+<component index="13.4.13" name="Java Request Defaults" screenshot="java_defaults.png">
 <description><p>The Java Request Defaults component lets you set default values for Java testing.  See the <complink name="Java Request"/>.</p>
 </description>
 
@@ -959,7 +956,7 @@ GUI that they can use while developing new JMeter components.</p>
 
 <section name="13.5 Assertions" anchor="assertions">
 
-<component index="13.5.1" name="Response Assertion" anchor="basic_assertion" screenshot="../images/screenshots/assertion/assertion.gif">
+<component index="13.5.1" name="Response Assertion" anchor="basic_assertion" screenshot="assertion/assertion.gif">
 
 <description><p>The response assertion control panel let's you add strings to be tested. These strings can
 be regular expressions. You can also choose whether the strings will be expected
@@ -980,16 +977,16 @@ strings. You can attach multiple assertions to any controller for additionaly fl
 </properties>
 
 <example title="Assertion Examples" anchor="assertion_examples">
-<figure image="../images/screenshots/assertion/example1a.png">Figure 7 - Test Plan</figure>
-<figure image="../images/screenshots/assertion/example1b.gif">Figure 8 - Assertion Control Panel with Pattern</figure>
-<figure image="../images/screenshots/assertion/example1c-pass.gif">Figure 9 - Assertion Listener Results (Pass)</figure>
-<figure image="../images/screenshots/assertion/example1c-fail.gif">Figure 10 - Assertion Listener Results (Fail)</figure>
+<figure image="assertion/example1a.png">Figure 7 - Test Plan</figure>
+<figure image="assertion/example1b.gif">Figure 8 - Assertion Control Panel with Pattern</figure>
+<figure image="assertion/example1c-pass.gif">Figure 9 - Assertion Listener Results (Pass)</figure>
+<figure image="assertion/example1c-fail.gif">Figure 10 - Assertion Listener Results (Fail)</figure>
 </example>
 
 
 </component>
 
-<component index="13.5.2" name="Duration Assertion" screenshot="../images/screenshots/duration_assertion.png">
+<component index="13.5.2" name="Duration Assertion" screenshot="duration_assertion.png">
 <description><p>The Duration Assertion tests that each response was received within a given amount
 of time.  Any response that takes longer than the given number of milliseconds (specified by the
 user) is marked as a failed response.</p></description>
@@ -1002,7 +999,7 @@ user) is marked as a failed response.</p></description>
 </properties>
 </component>
 
-<component index="13.5.3" name="Size Assertion" screenshot="../images/screenshots/size_assertion.png">
+<component index="13.5.3" name="Size Assertion" screenshot="size_assertion.png">
 <description><p>The Size Assertion tests that each response contains the right number of bytes in it.  You can specify that
 the size be equal to, greater than, less than, or not equal to a given number of bytes.</p></description>
 
@@ -1015,7 +1012,7 @@ the size be equal to, greater than, less than, or not equal to a given number of
 </properties>
 </component>
 
-<component index="13.5.4" name="XML Assertion" screenshot="../images/screenshots/xml_assertion.png">
+<component index="13.5.4" name="XML Assertion" screenshot="xml_assertion.png">
 <description><p>The XML Assertion tests that the response data consists of a formally correct XML document.  It does not
 validate the XML based on a DTD or schema or do any further validation.</p></description>
 
@@ -1029,7 +1026,7 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 
 <section name="13.6 Timers" anchor="timers">
 
-<component index="13.6.1" name="Constant Timer" anchor="constant" screenshot="../images/screenshots/timers/constant_timer.gif">
+<component index="13.6.1" name="Constant Timer" anchor="constant" screenshot="timers/constant_timer.gif">
 <description>
 <p>If you want to have each thread pause for the same amount of time between
 requests, use this timer.</p></description>
@@ -1040,7 +1037,7 @@ requests, use this timer.</p></description>
 </properties>
 </component>
 
-<component index="13.6.2" name="Gaussian Random Timer" screenshot="../images/screenshots/timers/gauss_random_timer.gif">
+<component index="13.6.2" name="Gaussian Random Timer" screenshot="timers/gauss_random_timer.gif">
 
 <description><p>This timer pauses each thread request for a random amount of time, with most
 of the time intervals ocurring near a particular value.  The total delay is the
@@ -1057,7 +1054,7 @@ to the random delay.</property>
 
 </component>
 
-<component index="13.6.3" name="Uniform Random Timer" screenshot="../images/screenshots/timers/uniform_random_timer.gif">
+<component index="13.6.3" name="Uniform Random Timer" screenshot="timers/uniform_random_timer.gif">
 
 <description><p>This timer pauses each thread request for a random amount of time, with
 each time interval having the same probability of occurring. The total delay
@@ -1073,7 +1070,7 @@ to the random delay.</property>
 
 </component>
 
-<component index="13.6.4" name="Constant Throughput Timer" screenshot="../images/screenshots/timers/constant_throughput_timer.gif">
+<component index="13.6.4" name="Constant Throughput Timer" screenshot="timers/constant_throughput_timer.gif">
 
 <description><p>This timer introduces variable pauses, calculated to keep the total throughput (in terms of samples per minute) as close as possible to a give figure. Of course the throughput will be lower if the server is not capable of handling it, or if other timers or time-consuming test elements prevent it.</p>
 
@@ -1129,7 +1126,7 @@ anything, the modifier will probably have a list of radio buttons to choose from
 will choose at random, and replace the value in your URL test sample.  Each time through
 the test, a new random value will be chosen.</p>
 
-<figure image="../images/screenshots/modification.png">Figure 8 - Online Poll Example</figure>
+<figure image="modification.png">Figure 8 - Online Poll Example</figure>
 
 <note>One important thing to remember is that you must create a test sample immediately
 prior that will return an HTML page with the links and forms that are relevant to
@@ -1138,7 +1135,7 @@ your dynamic test sample.</note>
 
 </component>
 
-<component index="13.7.2" name="HTTP URL Re-writing Modifier" screenshot="../images/screenshots/url_rewriter.png">
+<component index="13.7.2" name="HTTP URL Re-writing Modifier" screenshot="url_rewriter.png">
 <description><p>This modifier works similarly to the HTML Link Parser, except it has a specific purpose for which
 it is easier to use than the HTML Link Parser, and more efficient.  For web applications that
 use URL Re-writing to store session ids instead of cookies, this element can be attached at the
@@ -1161,7 +1158,7 @@ Clever users will even determine that this modifier can be used to grab values t
 </properties>
 </component>
 
-<component index="13.7.3" name="HTML Parameter Mask" useinstead="Counter" screenshot="../images/screenshots/parameter_mask.png">
+<component index="13.7.3" name="HTML Parameter Mask" useinstead="Counter" screenshot="parameter_mask.png">
 <description><p>The HTML Parameter Mask is used to generate unique values for HTML arguments.  By
 specifying the name of the parameter, a value prefix and suffix, and counter parameters, this
 modifier will generate values of the form "<code>name=prefixcountersuffix</code>".  Any HTTP
@@ -1189,7 +1186,7 @@ user_4, etc.</p></description>
 </properties>
 </component>
 
-<component index="13.7.4" name="HTTP User Parameter Modifier" useinstead="User Parameters" screenshot="../images/screenshots/user_param_modifier.gif">
+<component index="13.7.4" name="HTTP User Parameter Modifier" useinstead="User Parameters" screenshot="user_param_modifier.gif">
 <description><p>The User Parameter Modifier uses an XML file get values for HTTP arguments.  Any
 HTTP Request that this modifier modifies will be checked for the existence of the specified
 arguments.  If found, the values for those arguments will be replaced by the values found in the
@@ -1208,7 +1205,7 @@ any other thread</note>
 </properties>
 </component>
 
-<component index="13.7.5" name="User Parameters" screenshot="../images/screenshots/user_params.png">
+<component index="13.7.5" name="User Parameters" screenshot="user_params.png">
 <description><p>Allows the user to specify values for User Variables specific to individual threads.</p>
 <p>User Variables can also be specified in the Test Plan but not specific to individual threads. This panel allows
 you to specify a series of values for any User Variable. For each thread, the variable will be assigned one of the values from the series
@@ -1232,7 +1229,7 @@ To add a new value to the series, click the 'Add User' button and fill in the de
 </properties>
 </component>
 
-<component index="13.7.6" name="Counter" screenshot="../images/screenshots/counter.png">
+<component index="13.7.6" name="Counter" screenshot="counter.png">
 <description><p>Allows the user to create a counter that can be referenced anywhere
 in the Thread Group.  The counter config lets the user configure a starting point, a maximum,
 and the increment.  The counter will loop from the start to the max, and then start over
@@ -1255,7 +1252,7 @@ with the start, continuing on like that until the test is ended.  </p></descript
 </section>
 
 <section name="13.8 Post-Processors" anchor="postprocessors">
-<component index="13.8.1" name="Regular Expression Extractor" screenshot="../images/screenshots/regex_extractor.png">
+<component index="13.8.1" name="Regular Expression Extractor" screenshot="regex_extractor.png">
 <description><p>Allows the user to extract values from a server response using a Perl-type regular expression.  As a post-processor,
 this element will execute after each Sample request in its <scope/>, applying the regular expression, extracting the requested values,
 generate the template string, and store the result into the given variable name.</p></description>
@@ -1276,11 +1273,11 @@ generate the template string, and store the result into the given variable name.
 
 <section name="13.9 Miscellaneous Features" anchor="Miscellaneous_Features">
 
-<component index="13.9.1" name="Test Plan" screenshot="../images/screenshots/testplan.png">
+<component index="13.9.1" name="Test Plan" screenshot="testplan.png">
 <description><p>At the Test Plan level, static variables can be defined that allow users to abstract values that are repeated throughout their tests, such as server names.  Here, one can instruct JMeter to save the maximum sample information to file by selecting "functional testing".  Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.</p></description>
 </component>
 
-<component index="13.9.2" name="Thread Group" screenshot="../images/screenshots/threadgroup.png">
+<component index="13.9.2" name="Thread Group" screenshot="threadgroup.png">
 <description><p>A Thread Group defines a pool of users that will execute a particular test case against your server.  In the Thread Group GUI, you can control the number of users simulated (num of threads), the ramp up time (how long it takes to start all the threads), the number of times to perform the test, and optionally, a start and stop time for the test.</p></description>
 
 <properties>
@@ -1292,7 +1289,7 @@ generate the template string, and store the result into the given variable name.
         <property name="End Time" required="No">If the scheduler checkbox is selected, one can choose an absolute end time.  When you start your test, JMeter will wait until the specified start time to begin testing, and it will stop at the specified end time.</property></properties>
 </component>
 
-<component index="13.9.3" name="WorkBench" screenshot="../images/screenshots/workbench.png">
+<component index="13.9.3" name="WorkBench" screenshot="workbench.png">
 <description><p>The WorkBench simply provides a place to temporarily store test elements while not in use, for copy/paste purposes, or any other purpose you desire.  When you save your test plan, WorkBench items are not saved with it.  Your WorkBench can be saved independently, if you like (right-click on WorkBench and choose Save).</p></description>
 </component>
 
