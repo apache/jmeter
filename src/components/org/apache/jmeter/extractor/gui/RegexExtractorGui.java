@@ -1,11 +1,11 @@
 package org.apache.jmeter.extractor.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.extractor.RegexExtractor;
@@ -77,11 +77,11 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
     
     private void init()
     {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BorderLayout());
         setBorder(makeBorder());
         
-        add(makeTitlePanel());
-        add(makeParameterPanel());
+        add(makeTitlePanel(),BorderLayout.NORTH);
+        add(makeParameterPanel(),BorderLayout.CENTER);
     }
     
     private JPanel makeParameterPanel()

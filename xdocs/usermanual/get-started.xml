@@ -29,7 +29,9 @@ over your Test Plans.</p>
 <p>JMeter requires your computing environment meets some minimum requirements.</p>
 
 <subsection name="2.1.1 Java Version" anchor="java_ver">
-<p>JMeter (as of version 1.8) requires a fully compliant JDK1.4 (or higher) environment. Because JMeter uses only
+<p>JMeter version 1.8 requires a fully compliant JDK1.4 or higher.</p>
+<p>JMeter 1.8.1 and 1.9 requires a fully compliant JDK1.3 or higher.  This may seem odd, but we are making a strong effort
+currently to be compatible with the 1.3 JDK's, though it is expected JMeter performs best with 1.4 or better. Because JMeter uses only
 standard Java APIs (java.*), please do not file bug reports if your JRE fails to run
 JMeter because of JRE implementation issues.</p>
 <note>JDK1.4.1Beta appears to be buggy, and there are some GUI elements that won't work correctly in this JVM.</note>
@@ -47,7 +49,7 @@ that has a compliant Java implementation.</p>
 
 
 <subsection name="2.2.1 Java Compiler" anchor="opt_compiler">
-<p>If you want to build the JMeter source or develop JMeter plugins, then you will need a fully compliant JDK1.2 or higher compiler.</p>
+<p>If you want to build the JMeter source or develop JMeter plugins, then you will need a fully compliant JDK1.3 (1.4 for JMeter 1.8) or higher compiler.</p>
 </subsection>
 
 <subsection name="2.2.2 SAX XML Parser" anchor="opt_sax">
@@ -59,7 +61,7 @@ implementation.</p>
 
 <subsection name="2.2.3 Email Support" anchor="opt_email">
 <p>JMeter has limited Email capabilities (it can send email based on test results).
-To enable Email support, add Sun's JavaMail packages to JMeter's <a href="#classpath">classpath</a>.</p>
+To enable Email support, add Sun's JavaMail packages and the activation packages to JMeter's <a href="#classpath">classpath</a>.</p>
 </subsection>
 
 <subsection name="2.2.4 SSL Encryption" anchor="opt_ssl">
@@ -134,16 +136,14 @@ the following command options</p>
 
 <subsection name="2.4.4 Server Mode" anchor="server">
 <p>For <a href="remote-test.html">distributed testing</a>, run JMeter in server mode, and then control each server from the GUI.
-  
-<note>You must first run <b>rmiregistry</b> from your JDK installation with the ApacheJMeter_core.jar added to your
-system classpath. ApacheJMeter_core.jar resides in JMeter's /lib/ext directory.</note>
+<note>The jmeter-server/jmeter-server.bat script should start rmiregistry for you with the appropriate classpath.  if it fails to
+do so, <a href="remote-test.html#detail_instructions">read the details</a> about starting the jmeter server.</note>
 
-Then, run JMeter, using the -s option:</p>
-<p>-s This specifies JMeter is to run as a server</p>
+Run jmeter-server/jmeter-server.bat, plus these optional commands:</p>
 <p>The script also lets you specify the optional firewall/proxy server information:</p>
 <p>-H [proxy server hostname or ip address]<br/>
 -P [proxy server port]</p>
-<p><b>Example</b>: jmeter -s -H my.proxy.server -P 8000</p>
+<p><b>Example</b>: jmeter-server -H my.proxy.server -P 8000</p>
 </subsection>
 </section>
 
@@ -154,9 +154,10 @@ Then, run JMeter, using the -s option:</p>
   (jmeter [properties file]).
   </p>
   <properties>
-	<property name="ssl.provider">You must specify the class for your SSL
+	<property name="ssl.provider">You can specify the class for your SSL
 	implementation.  If you are using the JSSE from sun, then it is:<br/>
-	com.sun.net.ssl.internal.ssl.Provider.</property>
+	com.sun.net.ssl.internal.ssl.Provider.  JMeter, by default, should provide https support is you are
+	using JDK1.4 or if you use JDK1.3 with the JSSE class jars in your JMeter classpath.</property>
 	<property name="xml.parser">You can specify an implementation as your XML
 	parser.  The default value is: org.apache.xerces.parsers.SAXParser</property>
   <property name="user.dir">The directory JMeter will first go to for saving and

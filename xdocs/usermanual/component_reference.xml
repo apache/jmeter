@@ -438,6 +438,24 @@ be saved under the Recording Controller.</p>
 </properties>
 
 </component>
+
+<component index="13.2.8" name="Module Controller" screenshot="../images/screenshots/module_controller.png">
+<description>
+<p>The Module Controller provides a mechanism for substituting test plan fragments into the current test plan at run-time.  To use this
+module effectively, one might have a number of Controllers under the <complink name="Workbench"/>, each with a different series of
+samplers under them.  The module controller can then be used to easily switch between these multiple test cases simply by choosing
+the appropriate controller in it's drop down box.  This provides convenience for running many alternate test plans quickly and easily.
+</p>
+</description>
+<note>The Module Controller should not be used with remote testing since the Workbench test elements are not part of remote testing, and 
+the test run will fail.</note>
+<properties>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Module to Run" required="Yes">The module controller provides a list of all controllers loaded into the gui.  Select
+        the one you want to substitute in at runtime.</property>
+</properties>
+
+</component>
 </section>
 
 <section name="13.3 Listeners" anchor="listeners">
@@ -848,40 +866,6 @@ instead. (see figures 9 and 10).</p>
 
 </component>
 
-<component index="13.4.10" name="User Parameters" screenshot="../images/screenshots/user_params.png">
-<description><p>Allows the user to specify values for User Variables specific to individual threads.</p>
-<p>User Variables can also be specified in the Test Plan but not specific to individual threads. This panel allows
-you to specify a series of values for any User Variable. For each thread, the variable will be assigned one of the values from the series
-in sequence. If there are more threads than values, the values get re-used. For example, this can be used to assign a distinct
-user id to be used by each thread. User variables can be referenced in any field of any jMeter Component.</p>
-
-<p>The variable is specified by clicking the Add Variable button in the bottom of the panel and filling in the Variable name in the 'Name:' column.
-To add a new value to the series, click the 'Add User' button and fill in the desired value in the newly added column.</p>
-
-<p>Values can be accessed in any test component in the same thread group, using the <a href="functions.html">function syntax</a>: ${variable}.</p>
-</description>
-</component>
-
-<component index="13.4.11" name="Counter" screenshot="../images/screenshots/counter.png">
-<description><p>Allows the user to create a counter that can be referenced anywhere
-in the Thread Group.  The counter config lets the user configure a starting point, a maximum,
-and the increment.  The counter will loop from the start to the max, and then start over
-with the start, continuing on like that until the test is ended.  </p></description>
-<properties>
-        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Start" required="Yes">The starting number for the counter.  The counter will equal this
-        number during the first iteration.</property>
-        <property name="Increment" required="Yes">How much to increment the counter by after each
-        iteration.</property>
-        <property name="Maximum" required="Yes">If the counter exceeds the maximum, then it is reset to the Start value.</property>
-        <property name="Reference Name" required="Yes">This controls how you refer to this value in other elements.  Syntax is
-        as in <a href="functions.html">user-defined values</a>: <code>$(reference_name}</code>.</property>
-        <property name="Track Counter Independently for each User" required="No">In other words, is this a global counter, or does each user get their
-        own counter?  If unchecked, the counter is global (ie, user #1 will get value "1", and user #2 will get value "2" on
-        the first iteration).  If checked, each user has an independent counter.</property>
-</properties>
-</component>
-
 </section>
 
 <section name="13.5 Assertions" anchor="assertions">
@@ -925,6 +909,29 @@ user) is marked as a failed response.</p></description>
 <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
         <property name="Duration in Milliseconds" required="Yes">The maximum number of milliseconds
         each response is allowed before being marked as failed.</property>
+
+</properties>
+</component>
+
+<component index="13.5.3" name="Size Assertion" screenshot="../images/screenshots/size_assertion.png">
+<description><p>The Size Assertion tests that each response contains the right number of bytes in it.  You can specify that
+the size be equal to, greater than, less than, or not equal to a given number of bytes.</p></description>
+
+<properties>
+<property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Size in bytes" required="Yes">The number of bytes to use in testing the size of the response.</property>
+        <property name="Type of Comparison" required="Yes">Whether to test that the response is equal to, greater than, less than,
+        or not equal to, the number of bytes specified.</property>
+
+</properties>
+</component>
+
+<component index="13.5.4" name="XML Assertion" screenshot="../images/screenshots/xml_assertion.png">
+<description><p>The XML Assertion tests that the response data consists of a formally correct XML document.  It does not
+validate the XML based on a DTD or schema or do any further validation.</p></description>
+
+<properties>
+<property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
 
 </properties>
 </component>
@@ -991,7 +998,7 @@ to the random delay.</property>
 </component>
 </section>
 
-<section name="13.7 Modifiers" anchor="Modifiers">
+<section name="13.7 Pre Processors" anchor="preprocessors">
 <component index="13.7.1" name="HTML Link Parser" anchor="html_link_parser">
 <description>
 <p>This modifier parses HTML response from the server and extracts
@@ -1006,7 +1013,7 @@ expressions are used to find matches.</p>
 <p>Consider a simple example: let's say you wanted JMeter to &quot;spider&quot; through your site,
 hitting link after link parsed from the HTML returned from your server (this is not
 actually the most useful thing to do, but it serves as a good example).  You would create
-a <complink name="Simple Controller"/>, and add the &quot;HTML Link Parser&quot; to it.  Then, create a
+a <complink name="Simple Controller"/>, and add the &quot;HTML Link Parser&quot; to it.  Then, create an
 HTTP Request, and set the domain to &quot;.*&quot;, and the path likewise. This will
 cause your test sample to match with any link found on the returned pages.  If you wanted to
 restrict the spidering to a particular domain, then change the domain value
@@ -1111,11 +1118,75 @@ any other thread</note>
 </properties>
 </component>
 
+<component index="13.7.5" name="User Parameters" screenshot="../images/screenshots/user_params.png">
+<description><p>Allows the user to specify values for User Variables specific to individual threads.</p>
+<p>User Variables can also be specified in the Test Plan but not specific to individual threads. This panel allows
+you to specify a series of values for any User Variable. For each thread, the variable will be assigned one of the values from the series
+in sequence. If there are more threads than values, the values get re-used. For example, this can be used to assign a distinct
+user id to be used by each thread. User variables can be referenced in any field of any jMeter Component.</p>
+
+<p>The variable is specified by clicking the Add Variable button in the bottom of the panel and filling in the Variable name in the 'Name:' column.
+To add a new value to the series, click the 'Add User' button and fill in the desired value in the newly added column.</p>
+
+<p>Values can be accessed in any test component in the same thread group, using the <a href="functions.html">function syntax</a>: ${variable}.</p>
+</description>
+
+<properties>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Update Once Per Iteration" required="Yes">A flag to indicate whether the User Paramters element
+        should update it's variables only once per iteration.  if you embed functions into the UP, then you may need greater
+        control over how often the values of the variables are updated.  Keep this box checked to ensure the values are
+        updated each time through the UP's parent controller.  Uncheck the box, and the UP will update the parameters for 
+        every sample request made within it's <a href="build-test-plan.html#scoping_rules">scope</a>.</property>
+        
+</properties>
+</component>
+
+<component index="13.7.6" name="Counter" screenshot="../images/screenshots/counter.png">
+<description><p>Allows the user to create a counter that can be referenced anywhere
+in the Thread Group.  The counter config lets the user configure a starting point, a maximum,
+and the increment.  The counter will loop from the start to the max, and then start over
+with the start, continuing on like that until the test is ended.  </p></description>
+<properties>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Start" required="Yes">The starting number for the counter.  The counter will equal this
+        number during the first iteration.</property>
+        <property name="Increment" required="Yes">How much to increment the counter by after each
+        iteration.</property>
+        <property name="Maximum" required="Yes">If the counter exceeds the maximum, then it is reset to the Start value.</property>
+        <property name="Reference Name" required="Yes">This controls how you refer to this value in other elements.  Syntax is
+        as in <a href="functions.html">user-defined values</a>: <code>$(reference_name}</code>.</property>
+        <property name="Track Counter Independently for each User" required="No">In other words, is this a global counter, or does each user get their
+        own counter?  If unchecked, the counter is global (ie, user #1 will get value "1", and user #2 will get value "2" on
+        the first iteration).  If checked, each user has an independent counter.</property>
+</properties>
+</component>
+
 </section>
 
-<section name="13.8 Miscellaneous Features" anchor="Miscellaneous_Features">
+<section name="13.8 Post-Processors" anchor="postprocessors">
+<component index="13.8.1" name="Regular Expression Extractor" screenshot="../images/screenshots/regex_extractor.png">
+<description><p>Allows the user to extract values from a server response using a Perl-type regular expression.  As a post-processor,
+this element will execute after each Sample request in its <scope/>, applying the regular expression, extracting the requested values,
+generate the template string, and store the result into the given variable name.</p></description>
+<properties>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.</property>
+        <property name="Regular Expression" required="Yes">The regular expression used to parse the response data.</property>
+        <property name="Template" required="Yes">The template used to create a string from the matches found.  This is an arbitrary string
+        with special elements to refer to groups within the regular expression.  The syntax to refer to a group is: '$1$' to refer to
+        group 1, '$2$' to refer to group 2, etc.</property>
+        <property name="Match No." required="Yes">Indicates which match to use.  The regular expression may match multiple times.  Use a
+        value of zero to indicate JMeter should choose a match at random.  Otherwise, select the numbered match assuming they
+        are ordered as they appear in the response data.</property>
+        <property name="Default Value" required="No">If no matches are found, the default value is stored in the variable.</property>
+</properties>
+</component>
+</section>
 
-<component index="13.8.1" name="SSL Manager" screenshot="">
+<section name="13.9 Miscellaneous Features" anchor="Miscellaneous_Features">
+
+<component index="13.9.1" name="SSL Manager" screenshot="">
 <p>
   The SSL Manager is a way to select a client certificate so that you can test
   applications that use Public Key Infrastructure (PKI).  In order to use it,
@@ -1170,11 +1241,11 @@ any other thread</note>
 </component>
 </section>
 
-<section name="13.9 Functions" anchor="functions">
+<section name="13.10 Functions" anchor="functions">
 <p>Please read the <a href="functions.html">general description</a> of how functions work.  Here is given only the details of
 specific functions.</p>
 
-<component index="13.9.1" name="__regexFunction">
+<component index="13.10.1" name="__regexFunction">
 <description><p>The Regex Function is used to parse the previous response using any regular
 expression (provided by user).  The function returns the template string with variable values filled
 in.</p>
@@ -1221,7 +1292,7 @@ replacement string") parsed by this function</li>
 </properties>
 </component>
 
-<component index="13.9.2" name="__counter">
+<component index="13.10.2" name="__counter">
 <description><p>The counter generates a new number each time it is called, starting with 1
 and incrementing by +1 each time.  The counter can be configured to keep each simulated user's values
 separate, or to use the same counter for all user.  If each user's values is incremented separately,
@@ -1238,7 +1309,7 @@ counting how many times that request was run.</p></description>
 </properties>
 </component>
 
-<component index="13.9.3" name="__threadNum">
+<component index="13.10.3" name="__threadNum">
 <description><p>The thread number function simply returns the number of the thread currently
 being executed.  These numbers are independent of ThreadGroup, meaning thread #1 in one threadgroup
 is indistinguishable from thread #1 in another threadgroup, from the point of view of this function.</p>
@@ -1247,7 +1318,7 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 </description>
 </component>
 
-<component index="13.9.4" name="__intsum">
+<component index="13.10.4" name="__intsum">
 <description><p>The intsum function can be used to compute the sum of two or more integer values.
 </p></description>
 
@@ -1260,7 +1331,7 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 </properties>
 </component>
 
-<component index="13.9.5" name="_StringFromFile">
+<component index="13.10.5" name="_StringFromFile">
 <description>
 	<p>
 	The StringFromFile function can be used to read strings from a text file. 

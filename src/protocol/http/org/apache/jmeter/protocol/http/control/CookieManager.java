@@ -80,6 +80,7 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
@@ -214,6 +215,7 @@ public class CookieManager extends ConfigTestElement implements Serializable
     public void add(Cookie c)
     {
         getCookies().addItem(c);
+        JMeterContextService.getContext().getVariables().put(c.getName(),c.getValue());
     }
 
     /** add an empty cookie */
@@ -372,12 +374,12 @@ public class CookieManager extends ConfigTestElement implements Serializable
         for (Enumeration e = removeIndices.elements(); e.hasMoreElements();)
         {
             index = ((Integer) e.nextElement()).intValue();
-            getCookies().remove(index);
+            remove(index);
         }
 
         if (newCookie.getExpires() >= System.currentTimeMillis())
         {
-            getCookies().addItem(newCookie);
+            add(newCookie);
         }
     }
 
@@ -456,4 +458,5 @@ public class CookieManager extends ConfigTestElement implements Serializable
             assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
         }
     }
+
 }
