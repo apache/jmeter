@@ -1,5 +1,6 @@
-@echo on
+@echo off
 set PROP=jmeter.properties
+set LOG4JCONFIG=log4j.configuration=log4j.conf
 set HOST=
 set PORT=
 IF "%1" EQU "-f" set PROP=%2
@@ -18,4 +19,4 @@ for %%i in ("..\lib\*.jar") do CALL ..\lcp %%i
 for %%i in ("..\ext\*.jar") do CALL ..\lcp %%i
 
 
-java -cp %LOCALCLASSPATH%;ApacheJMeter.jar %HOST% %PORT% org.apache.jmeter.NewDriver %PROP%
+java -cp %LOCALCLASSPATH%;ApacheJMeter.jar -D%LOG4JCONFIG% %HOST% %PORT% org.apache.jmeter.NewDriver %PROP%
