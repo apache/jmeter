@@ -495,9 +495,25 @@ public class WebServiceSampler extends HTTPSampler
             // if use proxy is set, we create the soaphttpconnection
             // and set the host and port
 			if (this.getUseProxy()){
+				String phost = "";
+				int pport = 0;
+				if (this.getProxyHost().length() > 0 &&
+				this.getProxyPort() > 0){
+					phost = this.getProxyHost();
+					pport = this.getProxyPort();
+				} else {
+					if (System.getProperty("http.proxyHost") != null ||
+						System.getProperty("http.proxyPort") != null){
+							phost = System.getProperty("http.proxyHost");
+							pport = Integer.parseInt(
+								System.getProperty("http.proxyPort"));
+						}
+				}
+				// if for some reason the host is blank and the port is
+				// zero, the sampler will fail silently
 				SOAPHTTPConnection spconn = new SOAPHTTPConnection();
-				spconn.setProxyHost(this.getProxyHost());
-				spconn.setProxyPort(this.getProxyPort());
+				spconn.setProxyHost(phost);
+				spconn.setProxyPort(pport);
 				msg.setSOAPTransport(spconn);
 			}
             msg.send(this.getUrl(), this.getSoapAction(), msgEnv);
