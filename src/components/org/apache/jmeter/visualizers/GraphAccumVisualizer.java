@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -60,6 +60,7 @@ import java.awt.Font;
 import java.awt.Image;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -71,7 +72,6 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
@@ -226,7 +226,7 @@ public class GraphAccumVisualizer extends AbstractVisualizer
         Border margin = new EmptyBorder(10, 10, 5, 10);
 
         mainPanel.setBorder(margin);
-        mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
         // TITLE
         JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("graph_full_results_title"));
@@ -237,7 +237,7 @@ public class GraphAccumVisualizer extends AbstractVisualizer
         panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
         mainPanel.add(panelTitleLabel);
 
-        mainPanel.add(this.getNamePanel());
+        mainPanel.add(getNamePanel());
         mainPanel.add(getFilePanel());
 
         JScrollPane graphScrollPanel = new

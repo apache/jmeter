@@ -2,7 +2,7 @@
  *  ====================================================================
  *  The Apache Software License, Version 1.1
  *
- *  Copyright (c) 2001 The Apache Software Foundation.  All rights
+ *  Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  *  reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -143,7 +143,6 @@ public class GraphAccum extends JComponent implements Scrollable,
     public GraphAccum()
     {
         log.debug("Start : GraphAnnum1");
-        this.setPreferredSize(new Dimension(width, 800));
         log.debug("End : GraphAnnum1");
     }
 
