@@ -69,6 +69,14 @@ import java.beans.PropertyDescriptor;
  * This is the BeanInfo object for the TestBean class. It acts as a "stopper"
  * for the introspector: we don't want it to look at properties defined at this
  * or higher classes.
+ * <p>
+ * Note this is really needed since using Introspector.getBeanInfo with a
+ * stop class is not an option because:
+ * <ol>
+ * <li>The API does not define a 3-parameter getBeanInfo in which you can use
+ * a stop class AND flags. [Why? I guess this is a bug in the spec.]
+ * <li>java.beans.Introspector is buggy and, opposite to what's stated in the
+ * Javadocs, only results of getBeanInfo(Class) are actually cached.
  */
 public class TestBeanBeanInfo implements BeanInfo {
 
@@ -123,7 +131,6 @@ public class TestBeanBeanInfo implements BeanInfo {
 	 * @see java.beans.BeanInfo#getPropertyDescriptors()
 	 */
 	public PropertyDescriptor[] getPropertyDescriptors() {
-		// TODO Auto-generated method stub
 		return new PropertyDescriptor[0];
 	}
 }

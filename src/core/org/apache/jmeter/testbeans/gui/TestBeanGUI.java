@@ -130,8 +130,6 @@ public class TestBeanGUI
     
     private BeanInfo beanInfo;
 
-    private PropertyDescriptor[] properties;
-
     private Class customizerClass;
 
     /**
@@ -197,7 +195,7 @@ public class TestBeanGUI
         // Get the beanInfo:
         try
         {
-            beanInfo= Introspector.getBeanInfo(testBeanClass, TestBean.class);
+            beanInfo= Introspector.getBeanInfo(testBeanClass);
         }
         catch (IntrospectionException e)
         {
@@ -206,7 +204,6 @@ public class TestBeanGUI
             throw new Error(e.toString()); // Programming error. Don't continue.
         }
 
-        properties= beanInfo.getPropertyDescriptors();
         customizerClass= beanInfo.getBeanDescriptor().getCustomizerClass();
 
         // Creation of the customizer and GUI initialization is delayed until the first
@@ -273,16 +270,25 @@ public class TestBeanGUI
      */
     public void modifyTestElement(TestElement element)
     {
-        super.configureTestElement(element);
+        configureTestElement(element);
         
         // Copy all property values from the map into the element:
         PropertyDescriptor[] props= beanInfo.getPropertyDescriptors();
         for (int i=0; i<props.length; i++)
         {
             String name= props[i].getName();
-            JMeterProperty jprop= wrapInProperty(propertyMap.get(name));
-            jprop.setName(name);
-            element.setProperty(jprop);
+            Object value= propertyMap.get(name);
+            log.debug("Modify "+name+" to "+value);
+            if (value == null)
+            {
+                element.removeProperty(name);
+            }
+            else
+            {
+                JMeterProperty jprop= wrapInProperty(propertyMap.get(name));
+                jprop.setName(name);
+                element.setProperty(jprop);
+            }
         }
     }
 
