@@ -144,13 +144,15 @@ public class StandardJMeterEngine
         Iterator iter = testListeners.getSearchResults().iterator();
         while (iter.hasNext())
         {
+        	TestListener it = (TestListener)iter.next();
+        	log.info("Notifying test listener: " + it.getClass().getName());
             if (host == null)
             {
-                ((TestListener) iter.next()).testStarted();
+                it.testStarted();
             }
             else
             {
-                ((TestListener) iter.next()).testStarted(host);
+                it.testStarted(host);
             }
         }
     }
@@ -240,13 +242,24 @@ public class StandardJMeterEngine
             serialized = true;
         }
         compileTree();
+        
+        /** 
+         * Notification of test listeners needs to happen after function replacement, but before
+         * setting RunningVersion to true.
+         */
+        testListeners = new SearchByClass(TestListener.class);
+        getTestTree().traverse(testListeners);
+        log.info("About to call test listeners");
+        notifyTestListenersOfStart();
+        
+        getTestTree().traverse(new TurnElementsOn());
+        
         List testLevelElements =
             new LinkedList(getTestTree().list(getTestTree().getArray()[0]));
         removeThreadGroups(testLevelElements);
         SearchByClass searcher = new SearchByClass(ThreadGroup.class);
-        testListeners = new SearchByClass(TestListener.class);
+        
         setMode();
-        getTestTree().traverse(testListeners);
         getTestTree().traverse(searcher);
         TestCompiler.initialize();
         //for each thread group, generate threads
@@ -263,10 +276,7 @@ public class StandardJMeterEngine
          */
         System.gc();
         
-        if (iter.hasNext())
-        {
-            notifyTestListenersOfStart();
-        }
+        
         notifier = new ListenerNotifier();
         
         schcdule_run = true;

@@ -18,32 +18,29 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 
-
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
-
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
-
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
-
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.FunctionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-
 import org.apache.jorphan.util.JOrphanUtils;
-
 import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -57,7 +54,7 @@ import org.apache.oro.text.regex.Util;
  * 
  * @version $Revision$ Last updated $Date$
  */
-public abstract class HTTPSamplerBase extends AbstractSampler
+public abstract class HTTPSamplerBase extends AbstractSampler implements TestListener
 {
 
     public static final int DEFAULT_HTTPS_PORT = 443;
@@ -96,7 +93,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     /** A number to indicate that the port has not been set.  **/
     public static final int UNSPECIFIED_PORT= 0;
-    
+    boolean dynamicPath = false;
 	protected final static String NON_HTTP_RESPONSE_CODE=
 		"Non HTTP response code";
 	protected final static String NON_HTTP_RESPONSE_MESSAGE=
@@ -182,28 +179,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
     }
 
-    public String getEncodedPath()
-    {
-        return getPropertyAsString(ENCODED_PATH);
-    }
-
-    /**
-     * Stores the property.
-     * If it is the PATH that is being stored, also creates and stores
-     * the encoded path name
-     */
-    public void setProperty(JMeterProperty prop)
-    {
-        super.setProperty(prop);
-        if (PATH.equals(prop.getName()))
-        {
-            setEncodedPath(prop.getStringValue());
-        }
-    }
-
     public String getPath()
     {
-        return getPropertyAsString(PATH);
+        String p = getPropertyAsString(PATH);
+        if(dynamicPath)
+        {
+           return encodeSpaces(p);
+        }
+        return p;
     }
 
     public void setFollowRedirects(boolean value)
@@ -428,18 +411,18 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         if (this.getMethod().equals(GET)
             && getQueryString().length() > 0)
         {
-            if (this.getEncodedPath().indexOf("?") > -1)
+            if (this.getPath().indexOf("?") > -1)
             {
-                pathAndQuery= this.getEncodedPath() + "&" + getQueryString();
+                pathAndQuery= this.getPath() + "&" + getQueryString();
             }
             else
             {
-                pathAndQuery= this.getEncodedPath() + "?" + getQueryString();
+                pathAndQuery= this.getPath() + "?" + getQueryString();
             }
         }
         else
         {
-            pathAndQuery= this.getEncodedPath();
+            pathAndQuery= this.getPath();
         }
         if (!pathAndQuery.startsWith("/"))
         {
@@ -621,10 +604,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 	    };
 	private static Substitution spaceSub = new StringSubstitution("%20");
 
-	public void setEncodedPath(String path) {
-	    path= encodeSpaces(path);
-	    setProperty(ENCODED_PATH, path);
-	}
 
 	protected String encodeSpaces(String path) {
 		// TODO JDK1.4 
@@ -644,4 +623,60 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
 	protected static final int MAX_REDIRECTS = 5;
 	protected static final int MAX_FRAME_DEPTH = 5;
+   /* (non-Javadoc)
+    * @see org.apache.jmeter.testelement.TestListener#testEnded()
+    */
+   public void testEnded()
+   {
+      dynamicPath = false;
+   }
+   /* (non-Javadoc)
+    * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
+    */
+   public void testEnded(String host)
+   {
+      testEnded();
+   }
+   /* (non-Javadoc)
+    * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+    */
+   public void testIterationStart(LoopIterationEvent event)
+   {
+   }
+   /* (non-Javadoc)
+    * @see org.apache.jmeter.testelement.TestListener#testStarted()
+    */
+   public void testStarted()
+   {
+      JMeterProperty pathP = getProperty(PATH);
+      log.info("path property is a " + pathP.getClass().getName());
+      log.info("path beginning value = " + pathP.getStringValue());
+      if(pathP instanceof StringProperty && !"".equals(pathP.getStringValue()))
+      {
+         log.info("Encoding spaces in path");
+         pathP.setObjectValue(encodeSpaces(pathP.getStringValue()));
+      }
+      else
+      {
+         log.info("setting dynamic path to true");
+         dynamicPath = true;
+      }
+      log.info("path ending value = " + pathP.getStringValue());
+   }
+   /* (non-Javadoc)
+    * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
+    */
+   public void testStarted(String host)
+   {
+      testStarted();
+   }
+   /* (non-Javadoc)
+    * @see java.lang.Object#clone()
+    */
+   public Object clone()
+   {
+      HTTPSamplerBase base = (HTTPSamplerBase)super.clone();
+      base.dynamicPath = dynamicPath;
+      return base;
+   }
 }
