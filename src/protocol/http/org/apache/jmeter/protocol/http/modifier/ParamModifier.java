@@ -23,7 +23,7 @@ import java.io.Serializable;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.processor.PreProcessor;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
@@ -117,14 +117,14 @@ public class ParamModifier
     public void process()
     {
         Sampler sam = getThreadContext().getCurrentSampler();
-        HTTPSampler sampler = null;
-        if (!(sam instanceof HTTPSampler))
+        HTTPSamplerBase sampler = null;
+        if (!(sam instanceof HTTPSamplerBase))
         {
             return;
         }
         else
         {
-            sampler = (HTTPSampler) sam;
+            sampler = (HTTPSamplerBase) sam;
         }
         boolean modified = false;
         PropertyIterator iter = sampler.getArguments().iterator();
