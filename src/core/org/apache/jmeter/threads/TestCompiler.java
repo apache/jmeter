@@ -180,10 +180,6 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
 
     private void trackIterationListeners(TestElement child)
     {
-        if (child instanceof LoopIterationListener)
-        {
-            loopIterListeners.add(child);
-        }
         if (child instanceof Controller)
         {
             Iterator iter = loopIterListeners.iterator();
@@ -192,6 +188,10 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
                 ((Controller) child).addIterationListener((LoopIterationListener) iter.next());
                 iter.remove();
             }
+        }
+        if (child instanceof LoopIterationListener)
+        {
+            loopIterListeners.add(child);
         }
     }
 
