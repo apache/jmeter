@@ -1,8 +1,6 @@
 package org.apache.jmeter.protocol.tcp.control.gui;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import org.apache.jmeter.config.gui.LoginConfigGui;
