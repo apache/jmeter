@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,10 +54,9 @@
  */
 package org.apache.jmeter.protocol.http.proxy.gui;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -70,6 +69,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -78,8 +78,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.functions.InvalidVariableException;
@@ -103,24 +101,23 @@ import org.apache.log.Logger;
  *
  *@author    Michael Stover
  *@created   $Date$
- *@version   1.0
+ *@version $Revision$
  ***************************************/
 
 public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMeterGUIComponent, ActionListener, KeyListener, FocusListener, UnsharedComponent
 {
     transient private static Logger log =
             Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
-    JTextField portField;
+    private JTextField portField;
 
-    ProxyControl model;
+    private ProxyControl model;
 
-    JTable excludeTable;
-    PowerTableModel excludeModel;
-    JTable includeTable;
-    PowerTableModel includeModel;
-    JButton addExclude, deleteExclude, addInclude, deleteInclude;
+    private JTable excludeTable;
+    private PowerTableModel excludeModel;
+    private JTable includeTable;
+    private PowerTableModel includeModel;
 
-    JButton stop, start, restart;
+    private JButton stop, start, restart;
     private final static String STOP = "stop";
     private final static String START = "start";
     private final static String RESTART = "restart";
@@ -376,53 +373,26 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
 
     private void init()
     {
-        this.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.gridheight = 1;
-        gbc.gridwidth = 1;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
+        setBorder (BorderFactory.createEmptyBorder(10, 10, 5, 10));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        
+        add(createTitleLabel());
 
-        // MAIN PANEL
-        JPanel mainPanel = new JPanel();
-        add(mainPanel, gbc.clone());
-        Border margin = new EmptyBorder(10, 10, 5, 10);
-        mainPanel.setBorder(margin);
-        mainPanel.setLayout(new GridBagLayout());
-        //gbc.fill = gbc.NONE;
-        gbc.weighty = 0;
-
-        // TITLE
-        JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("proxy_title"));
-        Font curFont = panelTitleLabel.getFont();
-        int curFontSize = curFont.getSize();
-        curFontSize += 4;
-        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-        mainPanel.add(panelTitleLabel, gbc.clone());
-        gbc.gridy++;
-
-        // NAME
-        mainPanel.add(namePanel, gbc.clone());
-        gbc.gridy++;
-
-        mainPanel.add(createPortPanel(), gbc.clone());
-        gbc.gridy++;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weighty = .5;
-        mainPanel.add(createIncludePanel(), gbc.clone());
-        gbc.gridy++;
-        mainPanel.add(createExcludePanel(), gbc.clone());
-        gbc.gridy++;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.weighty = 0;
-        mainPanel.add(createControls(), gbc.clone());
-
+        add(namePanel);
+        add(createPortPanel());
+        add(createIncludePanel());
+        add(createExcludePanel());
+        add(createControls());        
     }
 
+    private JLabel createTitleLabel() {
+        JLabel titleLabel = new JLabel(JMeterUtils.getResString("proxy_title"));
+        Font curFont = titleLabel.getFont();
+        titleLabel.setFont(curFont.deriveFont((float)curFont.getSize() + 4));
+        titleLabel.setAlignmentX(0.5f);
+        return titleLabel;
+    }
+    
     private JPanel createControls()
     {
         JPanel panel = new JPanel();
@@ -460,7 +430,6 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
         portField.addKeyListener(this);
         portField.setText("8080");
         panel.add(portField);
-        panel.revalidate();
         return panel;
     }
 
@@ -468,48 +437,56 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
     {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("patterns_to_include")));
-        includeTable = new JTable();
+
         includeModel = new PowerTableModel(new String[] { INCLUDE_COL }, new Class[] { String.class });
+        includeTable = new JTable(includeModel);
+        includeTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
+        
         JScrollPane scroller = new JScrollPane(includeTable);
         scroller.setBackground(panel.getBackground());
-        includeTable.setModel(includeModel);
-        addInclude = new JButton(JMeterUtils.getResString("add"));
-        deleteInclude = new JButton(JMeterUtils.getResString("delete"));
-        addInclude.setActionCommand(ADD_INCLUDE);
-        deleteInclude.setActionCommand(DELETE_INCLUDE);
-        addInclude.addActionListener(this);
-        deleteInclude.addActionListener(this);
         panel.add(scroller, BorderLayout.CENTER);
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(addInclude);
-        buttonPanel.add(deleteInclude);
+        
+        JPanel buttonPanel = createTableButtonPanel(ADD_INCLUDE, DELETE_INCLUDE);
         panel.add(buttonPanel, BorderLayout.SOUTH);
+        
         includeTable.addFocusListener(this);
         return panel;
     }
-
+    
     private JPanel createExcludePanel()
     {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("patterns_to_exclude")));
-        excludeTable = new JTable();
+
         excludeModel = new PowerTableModel(new String[] { EXCLUDE_COL }, new Class[] { String.class });
+        excludeTable = new JTable(excludeModel);
+        excludeTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
+
         JScrollPane scroller = new JScrollPane(excludeTable);
         scroller.setBackground(panel.getBackground());
-        excludeTable.setModel(excludeModel);
-        addExclude = new JButton(JMeterUtils.getResString("add"));
-        deleteExclude = new JButton(JMeterUtils.getResString("delete"));
-        addExclude.setActionCommand(ADD_EXCLUDE);
-        deleteExclude.setActionCommand(DELETE_EXCLUDE);
-        addExclude.addActionListener(this);
-        deleteExclude.addActionListener(this);
         panel.add(scroller, BorderLayout.CENTER);
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(addExclude);
-        buttonPanel.add(deleteExclude);
+        
+        JPanel buttonPanel = createTableButtonPanel(ADD_EXCLUDE, DELETE_EXCLUDE);
         panel.add(buttonPanel, BorderLayout.SOUTH);
+        
         excludeTable.addFocusListener(this);
         return panel;
+    }
+
+    private JPanel createTableButtonPanel(String addCommand, String deleteCommand) {
+        JPanel buttonPanel = new JPanel();
+
+        JButton addButton = new JButton(JMeterUtils.getResString("add"));
+        addButton.setActionCommand(ADD_INCLUDE);
+        addButton.addActionListener(this);
+        buttonPanel.add(addButton);
+
+        JButton deleteButton = new JButton(JMeterUtils.getResString("delete"));
+        deleteButton.setActionCommand(deleteCommand);
+        deleteButton.addActionListener(this);
+        buttonPanel.add(deleteButton);
+        
+        return buttonPanel;        
     }
 
     public void setNode(JMeterTreeNode node)
