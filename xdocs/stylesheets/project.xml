@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Velocity"
+        href="http://jakarta.apache.org/jmeter/">
+
+    <title>JMeter</title>
+    <!--
+    <logo href="/images/logo.gif">JMeter</logo>
+    -->
+    <body>
+    <menu name="About">
+        <item name="Overview"               href="/index.html"/>
+        <item name="Usage"                  href="/how_to_use_jmeter.html"/>
+        <item name="Download"               href="http://jakarta.apache.org/builds/jakarta-jmeter/"/>
+        <item name="Install"                href="/installing.html"/>
+        <item name="Running"                href="/running.html"/>
+        <item name="Extending"              href="/extending.html"/>
+        <item name="Changes"                href="/changes.html"/>
+        <item name="Known Bugs"             href="/bugs.html"/>
+        <item name="License"                href="/license.html"/>
+        <item name="TODO"                   href="/todo.html"/>
+    </menu>
+    <menu name="Community">
+        <item name="Get Involved"           href="/site/getinvolved.html"/>
+        <item name="Mailing Lists"          href="/site/mail.html"/>
+        <item name="CVS Repositories"       href="/site/cvsindex.html"/>
+    </menu>
+    </body>
+</project>
