@@ -65,6 +65,7 @@ import java.util.StringTokenizer;
 
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.functions.InvalidVariableException;
+import org.apache.jmeter.functions.util.ArgumentDecoder;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
@@ -130,7 +131,6 @@ public class CompoundVariable implements Function
         staticSubstitution = "";
     }
 
-    
 	public String execute() 
 	{
 		JMeterContext context = JMeterContextService.getContext();
@@ -176,7 +176,7 @@ public class CompoundVariable implements Function
                 results.append(item);
             }
         }
-        return results.toString();
+        return ArgumentDecoder.decode( results.toString() );
     }
 
     public CompoundVariable getFunction()
@@ -346,8 +346,18 @@ public class CompoundVariable implements Function
     	{
     		buffer.append( st.nextElement() );
     		token = buffer.toString();
+    		boolean foundOpen = false;
+    		int searchIndex = -1;
     		
-    		if ( token.indexOf("(") != -1 ) 
+    		while ( ! foundOpen ) {
+				searchIndex = token.indexOf("(", searchIndex+1);
+				if ( searchIndex == -1 ) 
+					break;
+				else if ( searchIndex == 0 || token.charAt(searchIndex-1 ) != '\\' )
+					foundOpen = true;
+    		}
+    		
+    		if ( foundOpen ) 
     		{	
     			if ( findMatching( "(", ")", token) != -1 ) 
     			{
