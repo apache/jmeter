@@ -289,6 +289,7 @@ public class StandardJMeterEngine
         notifier = new ListenerNotifier();
         schcdule_run = true;
         JMeterContextService.getContext().setSamplingStarted(true);
+        int groupCount = 1;
         while (iter.hasNext())
         {
             ThreadGroup group = (ThreadGroup) iter.next();
@@ -310,12 +311,12 @@ public class StandardJMeterEngine
                     (int) (((float) (group.getRampUp() * 1000)
                         / (float) group.getNumThreads())
                         * (float) i));
-                threads[i].setThreadName(group.getName() + "-" + (i + 1));
+                threads[i].setThreadName(group.getName() + (groupCount++) + "-" + (i + 1));
 
                 scheduleThread(threads[i], group);
 
                 Thread newThread = new Thread(threads[i]);
-                newThread.setName(group.getName() + "-" + (i + 1));
+                newThread.setName(threads[i].getThreadName());
                 allThreads.put(threads[i], newThread);
                 if (serialized
                     && !iter.hasNext()
