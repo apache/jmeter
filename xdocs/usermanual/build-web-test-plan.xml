@@ -38,12 +38,8 @@ requests, and the how many requests they should send.</p>
 <p>Go ahead and add the ThreadGroup element by first selecting the Test Plan,
 and then from the Edit menu, select Add --&gt; ThreadGroup.</p>
 
-<p>
-<table border="1" cellspacing="0" cellpadding="5">
-  <tr><td><b>TIP:</b> You can also access the Edit menu by selecting an element
-and then clicking your right mouse button.</td></tr>
-</table>
-</p>
+<note>You can also access the Edit menu by selecting an element
+and then clicking your right mouse button.</note>
 
 <p>You should now see the Thread Group element under Test Plan.  If you do not
 see the element, then "expand" the Test Plan tree by double-clicking on the
@@ -54,8 +50,8 @@ in the tree, if you have not already selected it. You should now see the Thread
 Group Control Panel in the right section of the JMeter window (see Figure 5.1
 below)</p>
 
-<p><img src="../images/screenshots/webtest/threadgroup.gif" width="555" height="297"></img>
-<br>Figure 5.1. Thread Group with Default Values</br></p>
+<figure image="../images/screenshots/webtest/threadgroup.gif">
+Figure 5.1. Thread Group with Default Values</figure>
 
 <p>Start by providing a more descriptive name for our Thread Group. In the name
 field, enter Jakarta Users.</p>
@@ -76,20 +72,16 @@ test. If you enter a loop count value of 0, then JMeter will run your test only
 once. To have JMeter repeatedly run your Test Plan, select the Forever
 checkbox.</p>
 
-<p>
-<table border="1" cellspacing="0" cellpadding="5">
-  <tr><td><b>NOTE:</b> In most applications, you have to manually accept
+<note>In most applications, you have to manually accept
 changes you make in a Control Panel.  However, in JMeter, the Control Panel
 automatically accepts your changes as you make them.  If you change the
 name of an element, the tree will be updated with the new text after you
-leave the Control Panel (for example, when selecting another tree element).</td></tr>
-</table>
-</p>
+leave the Control Panel (for example, when selecting another tree element).</note>
 
 <p>See Figure 5.2 for the completed Jakarta Users Thread Group.</p>
 
-<p><img src="../images/screenshots/webtest/threadgroup2.gif" width="555" height="297"></img>
-<br>Figure 5.2. Jakarta Users Thread Group</br></p>
+<figure image="../images/screenshots/webtest/threadgroup2.gif">
+Figure 5.2. Jakarta Users Thread Group</figure>
 
 </section>
 
@@ -103,8 +95,8 @@ elements which use some of the default settings you specified here.</p>
 Add --&gt; Config Element --&gt; HTTP Request Defaults. Then, select this new
 element to view its Control Panel (see Figure 5.3).</p>
 
-<p><img src="../images/screenshots/webtest/http-defaults1.gif" width="633" height="326"></img>
-<br>Figure 5.3. HTTP Request Defaults</br></p>
+<figure image="../images/screenshots/webtest/http-defaults1.gif">
+Figure 5.3. HTTP Request Defaults</figure>
 
 <p>
 Like most JMeter elements, the <complink name="HTTP Request Defaults"/> Control
@@ -117,33 +109,38 @@ Web server, jakarta.apache.org.  Enter this domain name into the field.
 This is the only field that we will specify a default, so leave the remaining
 fields with their default values.</p>
 
-<p>
-<table border="1" cellspacing="0" cellpadding="5">
-  <tr><td><b>NOTE:</b> The HTTP Request Defaults element does not tell JMeter
+<note>The HTTP Request Defaults element does not tell JMeter
 to send an HTTP request.  It simply defines the default values that the
-HTTP Request elements use.</td></tr>
-</table>
-</p>
+HTTP Request elements use.</note>
+
 <p>See Figure 5.4 for the completed HTTP Request Defaults element</p>
 
-<p><img src="../images/screenshots/webtest/http-defaults2.gif" width="633" height="326"></img>
-<br>Figure 5.4. HTTP Defaults for our Test Plan</br></p>
+<figure image="../images/screenshots/webtest/http-defaults2.gif">
+Figure 5.4. HTTP Defaults for our Test Plan</figure>
 
 </section>
 
+<section name="5.3 Adding Cookie Support" anchor="adding_cookie_support">
+<p>Nearly all web testing should use cookie support, unless your application
+specifically doesn't use cookies.  To add cookie support, simply add an
+<complink name="HTTP Cookie Manager"/> to each <a href="test_plan.html#thread_group">Thread
+Group</a> in your test plan.  This will ensure that each thread gets its own
+cookies, but shared across all <complink name="HTTP Request"/> objects.</p>
 
-<section name="5.3 Adding HTTP Requests" anchor="adding_requests">
+<p>To add the <complink name="HTTP Cookie Manager"/>, simply select the
+<a href="test_plan.html#thread_group">Thread Group</a>, and choose Add-&gt;Config Element-&gt;HTTP
+Cookie Manager, either from the Edit Menu, or from the right-click pop-up menu.</p>
+</section>
+
+
+<section name="5.4 Adding HTTP Requests" anchor="adding_requests">
 
 <p>In our Test Plan, we need to make two HTTP requests. The first one is for the
 Jakarta home page (http://jakarta.apache.org/), and the second one is for the
 Project Guidelines page (http://jakarta.apache.org/site/guidelines.html).</p>
 
-<p>
-<table border="1" cellspacing="0" cellpadding="5">
-  <tr><td><b>NOTE:</b> JMeter sends requests in the order that you add them
-to the tree.</td></tr>
-</table>
-</p>
+<note>JMeter sends requests in the order that you add them
+to the tree.</note>
 
 <p>Start by adding the first <complink name="HTTP Request"/>
 to the Jakarta Users element (Add --&gt; Generative Controller --&gt; HTTP Request).
@@ -157,8 +154,8 @@ element.</li>
 </ol>
 </p>
 
-<p><img src="../images/screenshots/webtest/http-request1.gif" width="633" height="326"></img>
-<br>Figure 5.5. HTTP Request for Jakarta Home Page</br></p>
+<figure image="../images/screenshots/webtest/http-request1.gif">
+Figure 5.5. HTTP Request for Jakarta Home Page</figure>
 
 <p>Next, add the second HTTP Request and edit the following properties (see
 Figure 5.56:
@@ -168,12 +165,12 @@ Figure 5.56:
 </ol>
 </p>
 
-<p><img src="../images/screenshots/webtest/http-request2.gif" width="633" height="326"></img>
-<br>Figure 5.6. HTTP Request for Jakarta Project Guidelines Page</br></p>
+<figure image="../images/screenshots/webtest/http-request2.gif">
+Figure 5.6. HTTP Request for Jakarta Project Guidelines Page</figure>
 
 </section>
 
-<section name="5.4 Adding a File Reporter to Store the Test Results" anchor="adding_file_reporter">
+<section name="5.5 Adding a File Reporter to Store the Test Results" anchor="adding_file_reporter">
 <p>The final element you need to add to your Test Plan is a
 <complink name="File Reporter"/> Listener. This element is
 responsible for storing all of the results of your HTTP requests in a file.</p>
@@ -184,49 +181,37 @@ output file.  You can either type it into the filename field, or select the
 Browse button and browse to a directory and then enter a filename.  Leave
 all of the other fields with their default values (see Figure 5.7).</p>
 
-<p><img src="../images/screenshots/webtest/file-reporter.gif" width="633" height="340"></img>
-<br>Figure 5.7. File Reporter Listener</br></p>
+<figure image="../images/screenshots/webtest/file-reporter.gif">
+Figure 5.7. File Reporter Listener</figure>
 
 </section>
 
-<section name="5.5 Saving the Test Plan" anchor="saving">
+<section name="5.6 Saving the Test Plan" anchor="saving">
 <p>Although it is not required, we recommend that you save the Test Plan to a
 file before running it.  To save the Test Plan, select the Test Plan element
 in the tree. Then, select Save As from the File menu.</p>
 
-<p>
-<table border="1" cellspacing="0" cellpadding="5">
-  <tr><td><b>NOTE:</b> JMeter allows you to save the entire Test Plan tree or
+<note>JMeter allows you to save the entire Test Plan tree or
 only a portion of it.  JMeter uses the currently selected tree element
 and saves all elements located in that particular "branch" of the tree.
 Because you want to save all of the elements, you must select the Test Plan
-element before selecting File --&gt; Save As.</td></tr>
-</table>
-</p>
+element before selecting File --&gt; Save As.</note>
 
-<p>
-<table border="1" cellspacing="0" cellpadding="5">
-  <tr><td><b>TIP:</b> You can also access the Save As menu item by selecting an
-element and then clicking your right mouse button.</td></tr>
-</table>
-</p>
+<note>You can also access the Save As menu item by selecting an
+element and then clicking your right mouse button.</note>
 
 </section>
 
-<section name="5.6 Running the Test Plan" anchor="running">
+<section name="5.7 Running the Test Plan" anchor="running">
 <p>Before running the Test Plan, You have to manually open the File Reporter
 output file. Select the File Reporter tree element, and select the Open button,
 which is located at the bottom of the Control Panel.</p>
 
 <p>From the Run menu, select Run.</p>
 
-<p>
-<table border="1" cellspacing="0" cellpadding="5">
-  <tr><td><b>NOTE:</b> The current version of JMeter does not let you know
+<note>The current version of JMeter does not let you know
 when it has finished running your Test Plan.  You have to determine this
-by viewing the console output or the File Reporter output file.</td></tr>
-</table>
-</p>
+by viewing the console output or the File Reporter output file.</note>
 
 <p>Once JMeter has finished running your Test Plan, select Stop from the
 Run menu.</p>
@@ -236,8 +221,8 @@ Control Panel.</p>
 <p>To view the results, open the File Reporter output file in a text
 editor (see Figure 5.8). The format is [URL][space][Response time in milliseconds].</p>
 
-<p><img src="../images/screenshots/webtest/file-reporter-results.gif" width="432" height="396"></img>
-<br>Figure 5.8. Test Plan Results</br></p>
+<figure image="../images/screenshots/webtest/file-reporter-results.gif">
+Figure 5.8. Test Plan Results</figure>
 
 </section>
 
