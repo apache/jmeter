@@ -70,11 +70,12 @@ import org.apache.jmeter.functions.ValueReplacer;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui;
+import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.RecordingController;
-import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
-import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
@@ -310,11 +311,14 @@ public class ProxyControl extends ConfigTestElement implements Serializable
             else
             {
                 Enumeration enum = node.children();
+                String guiClassName = null;
                 while (enum.hasMoreElements())
                 {
                     JMeterTreeNode subNode = (JMeterTreeNode) enum.nextElement();
                     TestElement sample = (TestElement) subNode.createTestElement();
-                    if (sample.getPropertyAsString(TestElement.GUI_CLASS).equals("org.apache.jmeter.protocol.http.config.gui.UrlConfigGui"))
+                    guiClassName = sample.getPropertyAsString(TestElement.GUI_CLASS);
+                    if (guiClassName.equals(UrlConfigGui.class.getName())
+                        || guiClassName.equals(HttpDefaultsGui.class.getName()))
                     {
                         urlConfig = sample;
                         break;
@@ -348,13 +352,22 @@ public class ProxyControl extends ConfigTestElement implements Serializable
     }
     private void removeValuesFromSampler(HTTPSampler sampler, TestElement urlConfig)
     {
-        if (urlConfig != null && sampler.getDomain().equals(urlConfig.getProperty(HTTPSampler.DOMAIN)))
+        if (urlConfig != null)
         {
-            sampler.setDomain("");
-        }
-        if (urlConfig != null && sampler.getPath().equals(urlConfig.getProperty(HTTPSampler.PATH)))
-        {
-            sampler.setPath("");
+            if (sampler.getDomain().equals(urlConfig.getProperty(HTTPSampler.DOMAIN)))
+            {
+                sampler.setDomain("");
+            }
+            /* Need to add some kind of "ignore-me" value
+               if (("" + sampler.getPort()).equals(urlConfig.getProperty(HTTPSampler.PORT)))
+               {
+               sampler.setPort(0);
+               }
+            */
+            if (sampler.getPath().equals(urlConfig.getProperty(HTTPSampler.PATH)))
+            {
+                sampler.setPath("");
+            }
         }
     }
     private boolean areMatched(HTTPSampler sampler, TestElement urlConfig)
