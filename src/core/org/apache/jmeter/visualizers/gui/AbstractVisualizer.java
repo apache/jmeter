@@ -94,7 +94,6 @@ import org.apache.log.Logger;
  * {@link org.apache.jmeter.visualizers.MailerVisualizer MailerVisualizer}.
  * <p>
  *
- * @author    Michael Stover
  * @version   $Revision$
  */
 public abstract class AbstractVisualizer
