@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -86,6 +86,7 @@ import org.apache.log.Logger;
  *
  *
  * @author  Tom Schneider
+ * @version $Revision$
  */
 public class FileReporter extends JPanel
 {
@@ -161,7 +162,9 @@ public class FileReporter extends JPanel
         return (Vector) data.get(key);
     }
 
-    /** show main panel with length, graph, and stats */
+    /**
+     * Show main panel with length, graph, and stats.
+     */
     public void showPanel()
     {
         JFrame f = new JFrame("Data File Report");
@@ -179,9 +182,10 @@ public class FileReporter extends JPanel
 }
 
 
-/** Graph panel generates all the panels for this reporter.
- *  Data is organized based on thread name in a hashtable.
- *  The data itself is a Vector of Integer objects
+/**
+ * Graph panel generates all the panels for this reporter.
+ * Data is organized based on thread name in a hashtable.
+ * The data itself is a Vector of Integer objects
  */
 class graphPanel extends JPanel
 {
@@ -215,7 +219,9 @@ class graphPanel extends JPanel
         }
     }
 
-    /** get the maximum for all the data */
+    /**
+     * Get the maximum for all the data.
+     */
     public float getMax()
     {
         float maxValue = 0;
@@ -235,7 +241,9 @@ class graphPanel extends JPanel
         return (float) (maxValue + maxValue * 0.1);
     }
 
-    /** get the minimum for all the data */
+    /**
+     * Get the minimum for all the data.
+     */
     public float getMin()
     {
         float minValue = 9999999;
@@ -255,7 +263,9 @@ class graphPanel extends JPanel
         return (float) (minValue - minValue * 0.1);
     }
 
-    /** get the legend panel */
+    /**
+     * Get the legend panel.
+     */
     public JPanel getLegend()
     {
         JPanel main = new JPanel();
@@ -273,7 +283,8 @@ class graphPanel extends JPanel
             String key = (String) keys.elementAt(t);
             JLabel colorSwatch = new JLabel("  ");
 
-            colorSwatch.setBackground((Color) colorList.elementAt(t % colorList.size()));
+            colorSwatch.setBackground(
+                (Color) colorList.elementAt(t % colorList.size()));
             colorSwatch.setOpaque(true);
             c.gridx = 1;
             c.gridy = t;
@@ -289,7 +300,9 @@ class graphPanel extends JPanel
         return main;
     }
 
-    /** get the stats panel */
+    /**
+     * Get the stats panel.
+     */
     public JPanel getStats()
     {
         int total = 0;
@@ -352,7 +365,9 @@ class graphPanel extends JPanel
         return main;
     }
 
-    /** gets the size of the biggest Vector */
+    /**
+     * Gets the size of the biggest Vector.
+     */
     public int getDataWidth()
     {
         int size = 0;
@@ -367,7 +382,9 @@ class graphPanel extends JPanel
         return size;
     }
 
-    /** draws the graph */
+    /**
+     * Draws the graph.
+     */
     public void update(Graphics g)
     {
         // setup drawing area
@@ -396,13 +413,20 @@ class graphPanel extends JPanel
         // draw axis
         for (int t = 1; t < dataWidth; t += (dataWidth / 25 + 1))
         {
-            g.drawString((new Integer(t)).toString(), t * increment + 2, height - 2);
+            g.drawString(
+                (new Integer(t)).toString(),
+                t * increment + 2,
+                height - 2);
         }
         float incrementValue = (maxValue - minValue) / (10 - 1);
 
         for (int t = 0; t < 10; t++)
         {
-            g.drawString(new Integer(Math.round(minValue + (t * incrementValue))).toString(), 2, height - t * yIncrement - 2 - base);
+            g.drawString(
+                new Integer(Math.round(minValue + (t * incrementValue)))
+                    .toString(),
+                2,
+                height - t * yIncrement - 2 - base);
         }
         // draw data lines
         int start = 0;

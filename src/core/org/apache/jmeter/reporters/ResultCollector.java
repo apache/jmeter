@@ -90,14 +90,19 @@ import org.xml.sax.SAXException;
 
 
 /**
- * Title: Description: Copyright: Copyright (c) 2001 Company:
- *
  * @author Michael Stover
- * @author     <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell</a>
+ * @author <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell</a>
  * @version $Id$
  */
-public class ResultCollector extends AbstractListenerElement
-        implements SampleListener, Clearable, Serializable, TestListener, Remoteable,NoThreadClone
+public class ResultCollector
+    extends AbstractListenerElement
+    implements
+        SampleListener,
+        Clearable,
+        Serializable,
+        TestListener,
+        Remoteable,
+        NoThreadClone
 {
     transient private static Logger log =
             Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
@@ -145,9 +150,9 @@ public class ResultCollector extends AbstractListenerElement
     }
 
     /**
-     * Sets the filename attribute of the ResultCollector object
+     * Sets the filename attribute of the ResultCollector object.
      *
-     * @param f The new filename value.
+     * @param f the new filename value
      */
     public void setFilename(String f)
     {
@@ -192,7 +197,8 @@ public class ResultCollector extends AbstractListenerElement
         testStarted("local");
     }
 
-    public void loadExistingFile() throws SAXException, IOException, ConfigurationException
+    public void loadExistingFile()
+        throws SAXException, IOException, ConfigurationException
     {
         inLoading = true;
         if (new File(getFilename()).exists())
@@ -236,7 +242,8 @@ public class ResultCollector extends AbstractListenerElement
         }
     }
 
-    private static synchronized PrintWriter getFileWriter(String filename) throws IOException
+    private static synchronized PrintWriter getFileWriter(String filename)
+        throws IOException
     {
         if (filename == null || filename.length() == 0)
         {
@@ -248,10 +255,13 @@ public class ResultCollector extends AbstractListenerElement
         if (writer == null)
         {
             trimmed = trimLastLine(filename);
-            writer = new PrintWriter(
-            			new OutputStreamWriter(
-							new BufferedOutputStream(new FileOutputStream(filename, trimmed)),
-						"UTF-8"), true);
+            writer =
+                new PrintWriter(
+                    new OutputStreamWriter(
+                        new BufferedOutputStream(
+                            new FileOutputStream(filename, trimmed)),
+                        "UTF-8"),
+                    true);
             files.put(filename, writer);
         }
         if (!trimmed)
@@ -294,20 +304,23 @@ public class ResultCollector extends AbstractListenerElement
     }
 
     /**
-     * Gets the serializedSampleResult attribute of the ResultCollector object
+     * Gets the serializedSampleResult attribute of the ResultCollector object.
      *
-     * @param result Description of the Parameter
-     * @return The serializedSampleResult value
+     * @param result description of the Parameter
+     * @return the serializedSampleResult value
      */
     private String getSerializedSampleResult(SampleResult result)
             throws SAXException, IOException, ConfigurationException
     {
         ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
 
-        serializer.serialize(tempOut, SaveService.getConfiguration(result, getFunctionalMode()));
+        serializer.serialize(
+            tempOut,
+            SaveService.getConfiguration(result, getFunctionalMode()));
         String serVer = tempOut.toString();
 
-        return serVer.substring(serVer.indexOf(System.getProperty("line.separator")));
+        return serVer.substring(
+            serVer.indexOf(System.getProperty("line.separator")));
     }
 
     private void readSamples(Configuration testResults)
@@ -325,10 +338,9 @@ public class ResultCollector extends AbstractListenerElement
     }
 
     /**
-     * Gets the configuration attribute of the ResultCollector object
+     * Gets the configuration attribute of the ResultCollector object.
      *
-     * @param filename Description of the Parameter
-     * @return The configuration value
+     * @return the configuration value
      */
     private Configuration getConfiguration(String filename)
             throws SAXException, IOException, ConfigurationException
@@ -349,13 +361,16 @@ public class ResultCollector extends AbstractListenerElement
     }
 
     public void setListener(Object l)
-    {}
+    {
+    }
 
     public void sampleStarted(SampleEvent e)
-    {}
+    {
+    }
 
     public void sampleStopped(SampleEvent e)
-    {}
+    {
+    }
 
 
     /**
@@ -375,7 +390,8 @@ public class ResultCollector extends AbstractListenerElement
             {
                 if (SaveService.getOutputFormat() == SaveService.SAVE_AS_CSV)
                 {
-                    if (out != null) {
+                    if (out != null)
+                    {
                         String savee =
                                 SaveService.resultToDelimitedString(result);
                         out.println(savee);
@@ -425,7 +441,8 @@ public class ResultCollector extends AbstractListenerElement
         return marked;
     }
 
-    private void initializeFileOutput() throws IOException, ConfigurationException, SAXException
+    private void initializeFileOutput()
+        throws IOException, ConfigurationException, SAXException
     {
 
         if (out == null && getFilename() != null)
@@ -456,9 +473,9 @@ public class ResultCollector extends AbstractListenerElement
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(LoopIterationEvent)
+     * @see TestListener#testIterationStart(LoopIterationEvent)
      */
     public void testIterationStart(LoopIterationEvent event)
-    {}
-
+    {
+    }
 }
