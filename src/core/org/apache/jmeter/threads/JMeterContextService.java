@@ -19,8 +19,6 @@
 package org.apache.jmeter.threads;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Thad Smith
@@ -28,10 +26,12 @@ import java.util.Map;
  */
 public final class JMeterContextService implements Serializable
 {
-    static private JMeterContextService _instance = null;
-    static private Map contextMap = new HashMap();
-
-//TODO: consider using ThreadLocal instead?
+    static private ThreadLocal threadContext = new ThreadLocal(){
+        public Object initialValue()
+        {
+           return new JMeterContext();
+        }
+     };
 
     /**
      * Private constructor to prevent instantiation.
@@ -40,36 +40,9 @@ public final class JMeterContextService implements Serializable
     {
     }
 
-    static private void init()
-    {
-        if (_instance == null)
-        {
-            _instance = new JMeterContextService();
-        }
-    }
-
     static public JMeterContext getContext()
     {
-
-        init();
-
-        JMeterContext context =
-            (JMeterContext) contextMap.get(Thread.currentThread().getName());
-
-        if (context == null)
-        {
-            context = new JMeterContext();
-            setContext(context);
-        }
-
-        return context;
+    	return (JMeterContext) threadContext.get();
 
     }
-
-    static void setContext(JMeterContext context)
-    {
-        init();
-        contextMap.put(Thread.currentThread().getName(), context);
-    }
-
 }
