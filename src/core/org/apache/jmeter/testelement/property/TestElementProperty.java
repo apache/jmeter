@@ -50,6 +50,10 @@ public class TestElementProperty extends MultiProperty
         }
         return false;
     }
+    public int hashCode()
+	{
+    	return value == null ? 0 : hashCode();
+    }
 
     /* (non-Javadoc)
      * #getStringValue()
