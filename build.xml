@@ -130,7 +130,6 @@
     -->
     <target name="install" depends="package">
         <copy file="ApacheJMeter.jar" toFile="bin/ApacheJMeter.jar"/>
-        <copy file="src/org/apache/jmeter/jmeter.properties" toFile="bin/jmeter.properties"/>
         <delete file="ApacheJMeter.jar"/>
     </target>
 
