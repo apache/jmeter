@@ -276,4 +276,16 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
         filenamePanel.add(browseFileButton, BorderLayout.EAST);
         return filenamePanel;
     }
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.protocol.http.config.gui.UrlConfigGui#clear()
+     */
+    public void clear()
+    {
+        // TODO Auto-generated method stub
+        super.clear();
+        filenameField.setText("");
+        mimetypeField.setText("");
+        paramNameField.setText("");
+    }
+
 }

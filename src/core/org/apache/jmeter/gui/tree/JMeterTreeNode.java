@@ -168,7 +168,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode
 
 	public String getStaticLabel()
 	{
-		return ((TestElement)getUserObject()).getPropertyAsString(TestElement.NAME);
+		return GuiPackage.getInstance().getGui((TestElement)getUserObject()).getStaticLabel();
 	}
 
 	/************************************************************

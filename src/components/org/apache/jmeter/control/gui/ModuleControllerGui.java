@@ -96,7 +96,7 @@ public class ModuleControllerGui extends AbstractControllerGui /*implements Unsh
 	private JComboBox nodes;
 	private DefaultComboBoxModel nodesModel;
 
-	public static String STATIC_LABEL = "ModuleController";
+	public static String STATIC_LABEL = JMeterUtils.getResString("module_controller_title");
 	public static String CONTROLLER = "Module To Run";
 	
 
