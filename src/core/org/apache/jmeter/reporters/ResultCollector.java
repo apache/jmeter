@@ -20,7 +20,6 @@ package org.apache.jmeter.reporters;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -41,7 +40,7 @@ import java.util.Set;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
-import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
+//import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.samplers.Clearable;
@@ -80,7 +79,7 @@ public class ResultCollector extends AbstractListenerElement implements
    public static final String ERROR_LOGGING = "ResultCollector.error_logging";
    // protected List results = Collections.synchronizedList(new ArrayList());
    //private int current;
-   transient private DefaultConfigurationSerializer serializer;
+   //transient private DefaultConfigurationSerializer serializer;
    //private boolean inLoading = false;
    transient private volatile PrintWriter out;
    private boolean inTest = false;
@@ -94,7 +93,7 @@ public class ResultCollector extends AbstractListenerElement implements
    public ResultCollector()
    {
       //current = -1;
-      serializer = new DefaultConfigurationSerializer();
+      //serializer = new DefaultConfigurationSerializer();
       setErrorLogging(false);
       setProperty(new ObjectProperty(SAVE_CONFIG,new SampleSaveConfiguration()));
    }
@@ -168,8 +167,7 @@ public class ResultCollector extends AbstractListenerElement implements
       testStarted("local");
    }
 
-   public void loadExistingFile() throws SAXException, IOException,
-         ConfigurationException
+   public void loadExistingFile() throws IOException
    {
       //inLoading = true;
       boolean parsedOK = false;
@@ -185,7 +183,7 @@ public class ResultCollector extends AbstractListenerElement implements
          }
          catch (Exception e)
          {
-            log.warn("File load failure, trying old data format.",e);
+            log.warn("File load failure, trying old data format.");
             try
             {
                Configuration savedSamples = getConfiguration(getFilename());
@@ -344,18 +342,19 @@ public class ResultCollector extends AbstractListenerElement implements
     *           description of the Parameter
     * @return the serializedSampleResult value
     */
-   private String getSerializedSampleResult(SampleResult result)
-         throws SAXException, IOException, ConfigurationException
-   {
-      ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
-
-      serializer.serialize(tempOut, OldSaveService.getConfiguration(result,
-            getFunctionalMode()));
-      String serVer = tempOut.toString();
-
-      return serVer.substring(serVer.indexOf(System
-            .getProperty("line.separator")));
-   }
+   //NOTUSED
+//   private String getSerializedSampleResult(SampleResult result)
+//         throws SAXException, IOException, ConfigurationException
+//   {
+//      ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
+//
+//      serializer.serialize(tempOut, OldSaveService.getConfiguration(result,
+//            getFunctionalMode()));
+//      String serVer = tempOut.toString();
+//
+//      return serVer.substring(serVer.indexOf(System
+//            .getProperty("line.separator")));
+//   }
 
    private void readSamples(TestResultWrapper testResults) throws Exception
    {
@@ -391,9 +390,9 @@ public class ResultCollector extends AbstractListenerElement implements
       finalizeFileOutput();
    }
 
-   public void setListener(Object l)
-   {
-   }
+//   public void setListener(Object l)
+//   {
+//   }
 
    public void sampleStarted(SampleEvent e)
    {
@@ -416,14 +415,17 @@ public class ResultCollector extends AbstractListenerElement implements
       if (!isErrorLogging() || !result.isSuccessful())
       {
          sendToVisualizer(result);
-
-         try
+		 
+		 SampleSaveConfiguration config = getSaveConfig();
+		 result.setSaveConfig(config);
+		 
+		 try
          {
-            if (!getSaveConfig().saveAsXml())
+            if (!config.saveAsXml())
             {
                if (out != null)
                {
-                  String savee = OldSaveService.resultToDelimitedString(result,getSaveConfig());
+                  String savee = OldSaveService.resultToDelimitedString(result);
                   out.println(savee);
                }
             }
@@ -454,7 +456,6 @@ public class ResultCollector extends AbstractListenerElement implements
       {
          if (!isResultMarked(result) && !this.isStats)
          {
-            result.setSaveConfig(getSaveConfig());
             SaveService.saveSampleResult(result, out);
          }
       }
@@ -488,8 +489,7 @@ public class ResultCollector extends AbstractListenerElement implements
       return marked;
    }
 
-   private void initializeFileOutput() throws IOException,
-         ConfigurationException, SAXException
+   private void initializeFileOutput() throws IOException
    {
 
       String filename = getFilename();
