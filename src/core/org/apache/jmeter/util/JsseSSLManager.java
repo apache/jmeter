@@ -85,8 +85,8 @@ import com.sun.net.ssl.X509TrustManager;
  *  more information.
  *
  *@author     <a href="bloritsch@apache.org">Berin Loritsch</a>
- *@created    March 21, 2002
- *@version    CVS $Revision$ $Date$
+ *Created    March 21, 2002
+ *@version    $Revision$ $Date$
  */
 public class JsseSSLManager extends SSLManager
 {
@@ -264,7 +264,7 @@ public class JsseSSLManager extends SSLManager
 
     /**
      * @author     MStover
-     * @created    March 21, 2002
+     * Created    March 21, 2002
      */
     protected static class AlwaysTrustManager implements X509TrustManager
     {
@@ -350,7 +350,7 @@ public class JsseSSLManager extends SSLManager
      * selecting the proper key and certificate based on the keystore available.
      *
      * @author     MStover
-     * @created    March 21, 2002
+     * Created    March 21, 2002
      */
     private static class WrappedX509KeyManager implements X509KeyManager
     {
