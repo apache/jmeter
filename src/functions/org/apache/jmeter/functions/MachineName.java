@@ -121,10 +121,11 @@ public class MachineName extends AbstractFunction implements Serializable {
 
 	}
 
-	public void setParameters(Collection parameters)
+	public void setParameters(String parameters)
 			throws InvalidVariableException {
 
-		values = parameters.toArray();
+		Collection params = parseArguments2(parameters);
+		values = params.toArray();
 		
 		if ( values.length < 2 ) {
 			throw new InvalidVariableException();
