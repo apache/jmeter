@@ -122,7 +122,7 @@ Figure 8.4. FTP Defaults for our Test Plan</figure>
 O'Reilly mSQL Java README file (ftp://ftp.oro.com/pub/msql/java/README), and the
 second is for the tutorial file (ftp://ftp.oro.com/pub/msql/java/tutorial.txt).</p>
 
-<note>JMeter sends requests in the order that you add them to the tree.</note>
+<note>JMeter sends requests in the order that they appear in the tree.</note>
 
 <p>Start by adding the first <complink name="FTP Request"/>
 to the O'Reilly Users element (Add --&gt; Sampler --&gt; FTP Request).

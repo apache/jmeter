@@ -22,14 +22,14 @@ is wrapped in ${}.</p>
 
 <subsection name="14.1 What can functions do" anchor="what_can_do">
 <p>There are two kinds of functions: user-defined static values, and built-in functions.<br/>
-User-defined static values allows the user to define variables to be replaced with their static value when
+User-defined static values allow the user to define variables to be replaced with their static value when
 a test tree is compiled and submitted to be run.  This replacement happens once at the beginning of the test
 run.  This could be used to replace the DOMAIN field of all HTTP requests, for example - making it a simple 
 matter to change a test to target a different server with the same test.
 </p>
 <p>This type of replacement is possible without functions, but was less convenient and less intuitive.
 It required users to create default config elements that would fill in blank values of Samplers.  User-defined
-functions allows one to replace only part of any given value, not just filling in blank values.</p>
+functions allow one to replace only part of any given value, not just filling in blank values.</p>
 <p>
 With built-in functions users can compute new values at run-time based on previous response data, which
 thread the function is in, the time, and many other sources.  These values are generated fresh for every

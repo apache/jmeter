@@ -87,11 +87,25 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
             if(match != null)
             {
                 context.getVariables().put(getRefName(), generateResult(match));
+                saveGroups(context.getVariables(),getRefName(),match);
             }
         }
         catch (RuntimeException e)
         {
             log.warn("Error while generating result");
+        }
+    }
+    
+    private void saveGroups(JMeterVariables vars,String basename,MatchResult match)
+    {
+        StringBuffer buf = new StringBuffer();
+        for(int x = 0;x < match.groups();x++)
+        {
+            buf.append(basename);
+            buf.append("_g");
+            buf.append(x);
+            vars.put(buf.toString(),match.group(x));
+            buf.setLength(0);
         }
     }
     

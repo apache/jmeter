@@ -154,7 +154,19 @@ To do so, use the following options:</p>
 <p>-D[prop_name]=[value] - defines a java system property value.</p>
 <p>-J[prop name]=[value] - overrides a JMeter property.</p>
 <p>-L[category]=[priority] - overrides a logging setting, setting a particular category to the given priority level.</p>
-<p><b>Example</b>: jmeter -Duser.dir=/home/mstover/jmeter_stuff -Jremote_hosts=127.0.0.1 -Ljmeter.engine=DEBUG</p>
+<p>The -L flag can also be used without the category name to set the root logging level.</p>
+	<p><b>Examples</b>:
+<pre>
+jmeter -Duser.dir=/home/mstover/jmeter_stuff \
+    -Jremote_hosts=127.0.0.1 -Ljmeter.engine=DEBUG
+
+jmeter -LDEBUG</pre>
+</p>
+<p>
+<b>N.B.<br/>
+	The command line properties are processed early in startup, but after the logging system has been set up.
+	Attempts to use the -J flag to update log_level or log_file properties will have no effect.</b>
+	</p>
 </subsection>
 </section>
 
