@@ -128,7 +128,8 @@ Group</a> in your test plan.  This will ensure that each thread gets its own
 cookies, but shared across all <complink name="HTTP Request"/> objects.</p>
 
 <p>To add the <complink name="HTTP Cookie Manager"/>, simply select the
-<a href="test_plan.html#thread_group">Thread Group</a>, and choose Add-&gt;Config Element-&gt;HTTP
+<a href="test_plan.html#thread_group">Thread Group</a>, and choose Add --&gt;
+Config Element --&gt; HTTP
 Cookie Manager, either from the Edit Menu, or from the right-click pop-up menu.</p>
 </section>
 
@@ -220,6 +221,8 @@ the File Reporter tree element, and select the Close button on the
 Control Panel.</p>
 <p>To view the results, open the File Reporter output file in a text
 editor (see Figure 5.8). The format is [URL][space][Response time in milliseconds].</p>
+<p>Alternatively, you can use the <complink name="Data Analyzer"/> for a graphical
+view of the data.</p>
 
 <figure image="../images/screenshots/webtest/file-reporter-results.gif">
 Figure 5.8. Test Plan Results</figure>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<document>
+<document index="yes">
 
 <properties>
   <title>User's Manual: Generative Controllers</title>
@@ -7,11 +7,8 @@
 
 <body>
 
-<section name="13. Component Reference">
 
-
-
-<subsection name="13.1 Generative Controllers" anchor="generative_controllers">
+<section name="13.1 Generative Controllers" anchor="generative_controllers">
 
 <component index="13.1.1" name="FTP Request" screenshot="../images/screenshots/gen-controller/ftp-request.gif">
 <description>This controller lets you send an FTP "retrieve file" request to an FTP server.
@@ -145,9 +142,9 @@ a new instance).</property>
 </links>
 
 </component>
-</subsection>
+</section>
 
-<subsection name="13.2 Logic Controllers" anchor="logic_controllers">
+<section name="13.2 Logic Controllers" anchor="logic_controllers">
 
 <component index="13.2.1" name="Interleave Controller" screenshot="../images/screenshots/logic-controller/interleave-controller.gif">
 <description><p>If you add Generative or Logic Controllers to an Interleave Controller, JMeter will alternate among each of the
@@ -319,9 +316,9 @@ is configured to store the results in a file named "simple-test.dat" in the curr
 
 </example>
 </component>
-</subsection>
+</section>
 
-<subsection name="13.3 Listeners" anchor="listeners">
+<section name="13.3 Listeners" anchor="listeners">
 
 <component index="13.3.1" name="View Graph Tree" screenshot="">
 <description>No Description</description>
@@ -405,9 +402,9 @@ response for any sample.  In addition to showing the response, you can see the t
 this response, and some response codes.</description>
 </component>
 
-</subsection>
+</section>
 
-<subsection name="13.4 Configuration Elements" anchor="config_elements">
+<section name="13.4 Configuration Elements" anchor="config_elements">
 
 <component index="13.4.1" name="HTTP Authorization Manager" screenshot="../images/screenshots/http-config/http-auth-manager.gif">
 
@@ -674,9 +671,9 @@ instead. (see figures 9 and 10).</p>
 </example>
 
 </component>
-</subsection>
+</section>
 
-<subsection name="13.5 Assertions" anchor="assertions">
+<section name="13.5 Assertions" anchor="assertions">
 
 <component index="13.5.1" name="Basic Assertion" anchor="basic_assertion" screenshot="../images/screenshots/assertion/assertion.gif">
 
@@ -708,9 +705,9 @@ strings. You can attach multiple assertions to any controller for additionaly fl
 
 </component>
 
-</subsection>
+</section>
 
-<subsection name="13.6 Timers" anchor="timers">
+<section name="13.6 Timers" anchor="timers">
 
 <component index="13.6.1" name="Constant Timer" anchor="constant" screenshot="../images/screenshots/timers/constant_timer.gif">
 <description>
@@ -750,12 +747,21 @@ is the sum of the random value and the offset value.</p></description>
 	<property name="Name" required="No">Descriptive name for this timer that is shown in the tree. </property>
   <property name="Random Delay Maximum" required="Yes">Maxium random number of milliseconds to
 pause.</property>
-  <property name="Constant Delay Offset" required="Yes">Numer of milliseconds to pause in addition
+  <property name="Constant Delay Offset" required="Yes">Number of milliseconds to pause in addition
 to the random delay.</property>
 </properties>
 
 </component>
-</subsection>
+</section>
+
+<section name="13.7 Miscellaneous Features" anchor="Miscellaneous_Features">
+<component index="13.7.1" name="Data Analyzer" screenshot="../images/screenshots/data_analyzer.gif">
+<description><p>The Data Analyzer presents a graphical view of data stored using the <complink name="File Reporter"/>.</p>
+<p>To use the Data Analyzer, goto the Report --&gt; Analyze Data File main menu option.  Then,
+when prompted, select the file where the data is stored.  JMeter will present the data
+as a graph with multiple lines.  Each line represents a different HTTP Request from your test and
+its response times.</p></description>
+</component>
 </section>
 </body>
 </document>

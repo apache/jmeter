@@ -10,7 +10,6 @@ set OLDPATH=%PATH%
 set PATH=%JAVA_HOME%\bin;%PATH%
 
 for %%i in (".\lib\*.jar") do CALL lcp %%i
-echo %LOCALCLASSPATH%
 
 for %%i in (..\jakarta-site2\lib\*.jar) do CALL lcp %%i
 
