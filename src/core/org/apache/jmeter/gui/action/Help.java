@@ -28,7 +28,7 @@ public class Help implements Command
 	private static Set commands = new HashSet();
 	public final static String HELP = "help";
 	private static String helpPage =
-		"file://"
+		"file:///"
 			+ JMeterUtils.getJMeterHome()
 			+ "/docs/usermanual/component_reference.html";
 	private static JDialog helpWindow;
