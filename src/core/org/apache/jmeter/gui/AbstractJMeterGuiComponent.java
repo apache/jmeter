@@ -119,7 +119,8 @@ public abstract class AbstractJMeterGuiComponent
     }
 
     /** 
-     * Provides a default implementation for the name property.  It's unlikely developers will need to override.
+     * Provides a default implementation for the name property.  It's unlikely
+     * developers will need to override.
      */
     public void setName(String name)
     {
@@ -127,7 +128,8 @@ public abstract class AbstractJMeterGuiComponent
     }
 
     /** 
-     * Provides a default implementation for the enabled property.  It's unlikely developers will need to override.
+     * Provides a default implementation for the enabled property.  It's
+     * unlikely developers will need to override.
      */
     public boolean isEnabled()
     {
@@ -135,7 +137,8 @@ public abstract class AbstractJMeterGuiComponent
     }
 
     /** 
-     * Provides a default implementation for the enabled property.  It's unlikely developers will need to override.
+     * Provides a default implementation for the enabled property.  It's
+     * unlikely developers will need to override.
      */
     public void setEnabled(boolean e)
     {
@@ -144,7 +147,8 @@ public abstract class AbstractJMeterGuiComponent
     }
 
     /** 
-     * Provides a default implementation for the name property.  It's unlikely developers will need to override.
+     * Provides a default implementation for the name property.  It's unlikely
+     * developers will need to override.
      */
     public String getName()
     {
@@ -209,8 +213,10 @@ public abstract class AbstractJMeterGuiComponent
     }
     
     /**
-     * Provides a default implementat that resets the name field to the value of getStaticLabel(), and sets enabled to true.  Your GUI may need more things 
-     * cleared, in which case you should override, clear the extra fields, and still call super.clear().
+     * Provides a default implementat that resets the name field to the value
+     * of getStaticLabel(), and sets enabled to true.  Your GUI may need more
+     * things cleared, in which case you should override, clear the extra
+     * fields, and still call super.clear().
      */
     public void clear()
     {
@@ -220,10 +226,11 @@ public abstract class AbstractJMeterGuiComponent
 
     /**
      * This provides a convenience for extenders when they implement the
-     * {@link JMeterGUIComponent#modifyTestElement(TestElement)} method.  This method
-     * will set the name, gui class, and test class for the created Test
-     * Element.  It should be called by every extending class when creating/modifying
-     * Test Elements, as that will best assure consistent behavior.
+     * {@link JMeterGUIComponent#modifyTestElement(TestElement)} method.  This
+     * method will set the name, gui class, and test class for the created Test
+     * Element.  It should be called by every extending class when
+     * creating/modifying Test Elements, as that will best assure consistent
+     * behavior.
      * 
      * @param mc  the TestElement being created.
      */
@@ -247,7 +254,8 @@ public abstract class AbstractJMeterGuiComponent
     }
 
     /**
-     * Provides a default implementation for the node property.  It is unlikely developers would need to override this method. 
+     * Provides a default implementation for the node property.  It is unlikely
+     * developers would need to override this method. 
      */
     public void setNode(JMeterTreeNode node)
     {
@@ -256,7 +264,8 @@ public abstract class AbstractJMeterGuiComponent
     }
 
     /**
-     * Provides a default implementation for the node property.  It is unlikely developers would need to override this method. 
+     * Provides a default implementation for the node property.  It is unlikely
+     * developers would need to override this method. 
      */
     protected JMeterTreeNode getNode()
     {
@@ -280,9 +289,10 @@ public abstract class AbstractJMeterGuiComponent
     }
     
     /**
-     * Create a top-level Border which can be added to JMeter components.  Components
-     * typically set this as their border in their init method.  It simply provides a nice spacing between the GUI components used and the edges of the
-     * window in which they appear.
+     * Create a top-level Border which can be added to JMeter components.
+     * Components typically set this as their border in their init method.  It
+     * simply provides a nice spacing between the GUI components used and the
+     * edges of the window in which they appear.
      * 
      * @return a Border for JMeter components
      */
@@ -295,8 +305,9 @@ public abstract class AbstractJMeterGuiComponent
      * Create a scroll panel that sets it's preferred size to it's minimum
      * size.  Explicitly for scroll panes that live inside other scroll panes,
      * or within containers that stretch components to fill the area they exist
-     * in.  Use this for any component you would put in a scroll pane (such as TextAreas, tables, JLists, etc).  It is here for convenience and to avoid
-     * duplicate code.  JMeter displays best if you follow this custom.
+     * in.  Use this for any component you would put in a scroll pane (such as
+     * TextAreas, tables, JLists, etc).  It is here for convenience and to
+     * avoid duplicate code.  JMeter displays best if you follow this custom.
      * 
      * @param comp the component which should be placed inside the scroll pane
      * @return a JScrollPane containing the specified component
@@ -312,8 +323,9 @@ public abstract class AbstractJMeterGuiComponent
      * Create a scroll panel that sets it's preferred size to it's minimum
      * size.  Explicitly for scroll panes that live inside other scroll panes,
      * or within containers that stretch components to fill the area they exist
-     * in.  Use this for any component you would put in a scroll pane (such as TextAreas, tables, JLists, etc).  It is here for convenience and to avoid
-     * duplicate code.  JMeter displays best if you follow this custom.
+     * in.  Use this for any component you would put in a scroll pane (such as
+     * TextAreas, tables, JLists, etc).  It is here for convenience and to
+     * avoid duplicate code.  JMeter displays best if you follow this custom.
      * 
      * @see javax.swing.ScrollPaneConstants
      * 
