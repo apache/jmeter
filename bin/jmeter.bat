@@ -30,4 +30,16 @@ goto setupArgs
 rem This label provides a place for the argument list loop to break out 
 rem and for NT handling to skip to.
 
-java -server -Xmx256m -jar ApacheJMeter.jar %JMETER_CMD_LINE_ARGS%
+rem See the unix startup file for the rationale of the following parameters,
+rem including some tuning recommendations
+set HEAP=-Xms256m -Xmx256m
+set NEW=-XX:NewSize=128m -XX:MaxNewSize=128m
+set SURVIVOR=-XX:SurvivorRatio=8 -XX:TargetSurvivorRatio=80%
+set TENURING=-XX:MaxTenuringThreshold=2
+set EVACUATION=-XX:MaxLiveObjectEvacuationRatio=20%
+set RMIGC=-Dsun.rmi.dgc.client.gcInterval=600000 -Dsun.rmi.dgc.server.gcInterval=600000
+set PERM=-XX:PermSize=64m -XX:MaxPermSize=64m
+set DEBUG=-verbose:gc -XX:+PrintTenuringDistribution
+set ARGS=%HEAP% %NEW% %SURVIVOR% %TENURING% %EVACUATION% %RMIGC% %PERM% %DEBUG%
+
+java %ARGS% -jar ApacheJMeter.jar %JMETER_CMD_LINE_ARGS%
