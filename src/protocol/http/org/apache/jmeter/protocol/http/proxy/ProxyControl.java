@@ -70,6 +70,7 @@ import junit.framework.TestCase;
 import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.control.GenericController;
+import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.gui.GuiPackage;
@@ -85,11 +86,13 @@ import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
 
 import org.apache.jorphan.logging.LoggingManager;
@@ -387,7 +390,58 @@ public class ProxyControl extends GenericController implements Serializable
         sc.setName(name);
         model.addComponent(sc,node);
     }
-    
+
+    /**
+     * Helpler method to replicate any timers found within the Proxy Controller
+     * into the provided sampler, while replacing any occurences of string _T_
+     * in the timer's configuration with the provided deltaT.
+     * 
+     * @param model  Test component tree model
+     * @param node   Sampler node in where we will add the timers
+     * @param deltaT Time interval from the previous request
+     */
+    private void addTimers(
+        JMeterTreeModel model,
+        JMeterTreeNode node,
+        long deltaT)
+    {
+        TestPlan variables= new TestPlan();
+        variables.addParameter("T", Long.toString(deltaT));
+        ValueReplacer replacer= new ValueReplacer(variables);
+        JMeterTreeNode mySelf= model.getNodeOf(this);
+        Enumeration children= mySelf.children();
+        while (children.hasMoreElements())
+        {
+            JMeterTreeNode templateNode= (JMeterTreeNode)children.nextElement();
+            if (templateNode.isEnabled())
+            {
+                TestElement template= templateNode.createTestElement();
+                if (template instanceof Timer)
+                {
+                    TestElement timer= (TestElement)template.clone();
+                    try
+                    {
+                        replacer.undoReverseReplace(timer);
+                        model.addComponent(timer, node);
+                    }
+                    catch (InvalidVariableException e)
+                    {
+                        // Not 100% sure, but I believe this can't happen, so
+                        // I'll log and throw an error:
+                        log.error("Program error",e);
+                        throw new Error(e);
+                    } catch (IllegalUserActionException e)
+                    {
+                        // Not 100% sure, but I believe this can't happen, so
+                        // I'll log and throw an error:
+                        log.error("Program error",e);
+                        throw new Error(e);
+                    }
+                }
+            }
+        }
+    }
+                
     private void placeConfigElement(
         HTTPSampler sampler,
         TestElement[] subConfigs)
@@ -450,7 +504,8 @@ public class ProxyControl extends GenericController implements Serializable
             {
                 boolean firstInBatch=false;
                 long now = System.currentTimeMillis();
-                if (now - lastTime > sampleGap){
+                long deltaT= now - lastTime;
+                if (deltaT > sampleGap){
                     if (!myTarget.isLeaf() 
                             && groupingMode == GROUPING_ADD_SEPARATORS)
                     {
@@ -462,6 +517,7 @@ public class ProxyControl extends GenericController implements Serializable
                     }
                     firstInBatch=true;//Remember this was first in its batch
                 }
+                if (lastTime == 0) deltaT= 0; // Decent value for timers
                 lastTime = now;
 
                 if (groupingMode == GROUPING_STORE_FIRST_ONLY)
@@ -494,6 +550,7 @@ public class ProxyControl extends GenericController implements Serializable
                             
                 if(firstInBatch){
                     addAssertion(treeModel,newNode);
+                    addTimers(treeModel, newNode, deltaT);
                     firstInBatch=false;
                 }
 
