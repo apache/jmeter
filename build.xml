@@ -103,16 +103,18 @@
    
    To use the findbugs target, download and install the findbugs binary distribution
    Set the value of findbugs.home according to where you installed findbugs, for example:
-   ant findbugs -Dfindbugs.home=/etc/findbugs
-   [The default is /findbugs]
+   ant findbugs -Dfindbugs.home=/etc/findbugs -Dfindbugs.level=medium
+  [The defaults are /findbugs and high]
    -->
    <property name="findbugs.home" value="/findbugs" />
+   <property name="findbugs.level" value="high" />
    <target name="findbugs">
     <taskdef name="findbugs" 
         classpath="${findbugs.home}/lib/findbugs-ant.jar" 
         classname="edu.umd.cs.findbugs.anttask.FindBugsTask"/>
     <findbugs home="${findbugs.home}"
               output="xml"
+              reportlevel="${findbugs.level}"
               excludeFilter="fb-excludes.xml"
               outputFile="jmeter-fb.xml" >
       <class location="${dest.jar}/*.jar" />
@@ -150,6 +152,10 @@
       <auxClasspath path="${lib.dir}/${bsh.jar}" />
       <auxClasspath path="${lib.opt}/${bsf.jar}" />
       <auxClasspath path="${lib.opt}/${bsh.jar}" />
+      <auxClasspath path="${lib.dir}/activation.jar" />
+      <auxClasspath path="${lib.dir}/mail.jar" />
+      <auxClasspath path="${lib.opt}/activation.jar" />
+      <auxClasspath path="${lib.opt}/mail.jar" />
       <auxClasspath path="${js.jar}" />
       
     </findbugs>
