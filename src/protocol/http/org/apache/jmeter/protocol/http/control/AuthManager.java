@@ -33,6 +33,7 @@ import java.util.StringTokenizer;
 
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.util.Base64Encoder;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -338,9 +339,42 @@ public class AuthManager
         return getAuthObjects().size();
     }
 
-    private boolean isSupportedProtocol(URL url)
+    private static boolean isSupportedProtocol(URL url)
     {
         return url.getProtocol().toUpperCase().equals("HTTP")
             || url.getProtocol().toUpperCase().equals("HTTPS");
     }
+    
+	//////////////////////// UNIT TESTS ////////////////////////////
+	
+	public static class Test extends JMeterTestCase{
+        public Test(String name)
+        {
+            super(name);
+        }
+
+        public void testHttp() throws Exception
+		{
+        	assertTrue(isSupportedProtocol(new URL("http:")));
+        }
+        public void testHttps() throws Exception
+		{
+        	assertTrue(isSupportedProtocol(new URL("https:")));
+        }
+        public void testFile() throws Exception
+		{
+        	AuthManager am = new AuthManager();
+        	CollectionProperty ao = am.getAuthObjects();
+        	assertEquals(0,ao.size());
+        	am.addFile("testfiles/TestAuth.txt");
+        	assertEquals(5,ao.size());
+        	Authorization at;
+        	at = am.getAuthForURL(new URL("http://a.b.c/"));
+        	assertEquals("login",at.getUser());
+        	assertEquals("password",at.getPass());
+        	at = am.getAuthForURL(new URL("http://a.b.c/1"));
+        	assertEquals("login1",at.getUser());
+        	assertEquals("password1",at.getPass());
+        }
+	}
 }
