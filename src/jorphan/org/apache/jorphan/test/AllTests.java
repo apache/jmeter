@@ -139,7 +139,7 @@ public final class AllTests
 		logprop("java.vendor");
 		logprop("java.home",true);
 		logprop("user.home");
-		logprop("user.dir");
+		logprop("user.dir",true);
 		logprop("os.name");
 		logprop("os.version");
 		logprop("os.arch");
