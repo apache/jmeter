@@ -175,7 +175,7 @@ public class RunningSample
         if (rate < 1.0)
         {
             rate *= 60.0;
-            unit = "/hour";
+            unit = "hour";
         }
 
         String rval = rateFormatter.format(rate) + "/" + unit;
