@@ -70,7 +70,7 @@ public class HTTPArgument extends Argument implements Serializable
     {
         boolean eq = getPropertyAsBoolean(USE_EQUALS);
         if (getMetaData().equals("=")
-            || (getValue() != null && getValue().toString().length() > 0))
+            || (getValue() != null && getValue().length() > 0))
         {
             setUseEquals(true);
             return true;
@@ -105,7 +105,7 @@ public class HTTPArgument extends Argument implements Serializable
             try
             {
                 name = JOrphanUtils.decode(name, "UTF-8");
-                value = JOrphanUtils.decode(value.toString(), "UTF-8");
+                value = JOrphanUtils.decode(value, "UTF-8");
             }
             catch (UnsupportedEncodingException e)
             {

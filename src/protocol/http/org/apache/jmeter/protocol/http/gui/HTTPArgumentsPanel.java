@@ -132,6 +132,6 @@ public class HTTPArgumentsPanel extends ArgumentsPanel
         return arg.getMetaData() == null
             || arg.getMetaData().equals("=")
             || (arg.getValue() != null &&
-                arg.getValue().toString().length() > 0);
+                arg.getValue().length() > 0);
     }
 }
