@@ -1,5 +1,6 @@
 package org.apache.jmeter.protocol.http.util;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import org.apache.oro.util.Cache;
@@ -27,11 +28,17 @@ public class EncoderCache
         {
             return (String)encodedValue;
         }
-        encodedValue = URLEncoder.encode(k);
+        try
+        {
+            encodedValue = URLEncoder.encode(k, "utf8");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            // This can't happen (how should utf8 not be supported!?!),
+            // so just throw an Error:
+            throw new Error(e);
+        }
         cache.addElement(k,encodedValue);
         return (String)encodedValue;
     }
-    
-    
-
 }
