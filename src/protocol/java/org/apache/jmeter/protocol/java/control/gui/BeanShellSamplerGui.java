@@ -120,7 +120,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui
 
     public String getStaticLabel()
     {
-        return JMeterUtils.getResString("bsh_sampler_title") + " (BETA CODE)";
+        return JMeterUtils.getResString("bsh_sampler_title");
     }
 
     
