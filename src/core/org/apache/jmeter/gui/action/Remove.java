@@ -75,6 +75,6 @@ public class Remove implements Command
     public static void removeNode(JMeterTreeNode node)
     {
         GuiPackage.getInstance().getTreeModel().removeNodeFromParent(node);
-        GuiPackage.getInstance().removeNode(node.createTestElement());
+        GuiPackage.getInstance().removeNode(node.getTestElement());
     }
 }

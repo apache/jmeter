@@ -86,7 +86,7 @@ public class ModuleController
     {
         if (selectedNode != null)
         {
-            return selectedNode.createTestElement();
+            return selectedNode.getTestElement();
         }
         else
         {

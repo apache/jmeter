@@ -62,13 +62,13 @@ public class JMeterTreeNode
     public boolean isEnabled()
     {
         return (
-            (AbstractTestElement) createTestElement()).getPropertyAsBoolean(
+            (AbstractTestElement) getTestElement()).getPropertyAsBoolean(
             TestElement.ENABLED);
     }
 
     public void setEnabled(boolean enabled)
     {
-        createTestElement().setProperty(
+        getTestElement().setProperty(
             new BooleanProperty(TestElement.ENABLED, enabled));
     }
 
@@ -80,12 +80,12 @@ public class JMeterTreeNode
     {
         try
         {
-            if (createTestElement() instanceof TestBean)
+            if (getTestElement() instanceof TestBean)
             {
                 try
                 {
                     Image img= Introspector.getBeanInfo(
-                        createTestElement().getClass())
+                        getTestElement().getClass())
                             .getIcon(BeanInfo.ICON_COLOR_16x16);
                     if (img == null) return null;
                     return new ImageIcon(img);
@@ -100,13 +100,13 @@ public class JMeterTreeNode
             {
                 return GUIFactory.getIcon(
                     Class.forName(
-                        createTestElement().getPropertyAsString(
+                        getTestElement().getPropertyAsString(
                             TestElement.GUI_CLASS)));
             }
         }
         catch (ClassNotFoundException e)
         {
-            log.warn("Can't get icon for class " + createTestElement(), e);
+            log.warn("Can't get icon for class " + getTestElement(), e);
             return null;
         }
     }
@@ -117,7 +117,7 @@ public class JMeterTreeNode
         {
             return GuiPackage
                 .getInstance()
-                .getGui(createTestElement())
+                .getGui(getTestElement())
                 .getMenuCategories();
         }
         catch (Exception e)
@@ -133,7 +133,7 @@ public class JMeterTreeNode
         {
             return GuiPackage
                 .getInstance()
-                .getGui(createTestElement())
+                .getGui(getTestElement())
                 .createPopupMenu();
         }
         catch (Exception e)
@@ -156,7 +156,7 @@ public class JMeterTreeNode
 
     }
 
-    public TestElement createTestElement()
+    public TestElement getTestElement()
     {
         return (TestElement) getUserObject();
     }

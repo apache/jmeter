@@ -84,7 +84,7 @@ public class Clear implements Command
                 {
                     Clearable item =
                         (Clearable) guiPackage.getGui(
-                            ((JMeterTreeNode) iter.next()).createTestElement());
+                            ((JMeterTreeNode) iter.next()).getTestElement());
                     item.clear();
                 }
                 catch (Exception ex)

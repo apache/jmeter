@@ -166,7 +166,7 @@ public class Save implements Command
         {
             JMeterTreeNode item = (JMeterTreeNode) iter.next();
             convertSubTree(tree.getTree(item));
-            TestElement testElement = item.createTestElement();
+            TestElement testElement = item.getTestElement();
             tree.replace(item, testElement);
         }
     }
@@ -193,18 +193,18 @@ public class Save implements Command
             save.convertSubTree(tree);
             assertEquals(
                 tree.getArray()[0].getClass().getName(),
-                root.createTestElement().getClass().getName());
+                root.getTestElement().getClass().getName());
             tree = tree.getTree(tree.getArray()[0]);
             assertEquals(
                 tree.getArray()[0].getClass().getName(),
-                root.createTestElement().getClass().getName());
+                root.getTestElement().getClass().getName());
             assertEquals(
                 tree
                     .getTree(tree.getArray()[0])
                     .getArray()[0]
                     .getClass()
                     .getName(),
-                root.createTestElement().getClass().getName());
+                root.getTestElement().getClass().getName());
         }
     }
 
