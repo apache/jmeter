@@ -68,6 +68,7 @@
   <!-- Where the doc sources and results live -->
   <property name="docs.src" value="xdocs"/>
   <property name="docs.dest" value="docs"/>
+  <property name="extras.dir" value="extras"/>
   <property name="printable_docs.dest" value="printable_docs"/>
 
   <!-- Where the distribution packages will be created -->
@@ -356,6 +357,7 @@
     <include name="${jar.dest}/"/> <!-- redundant but future-proof -->
     <include name="${docs.dest}/"/>
     <include name="${printable_docs.dest}/**"/>
+    <include name="${extras.dir}/**"/>
       <exclude name="${docs.api.dest}/"/>
     <exclude name="**/mail.jar"/>
     <exclude name="**/activation.jar"/>
