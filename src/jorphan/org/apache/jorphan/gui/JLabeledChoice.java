@@ -110,7 +110,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField
 
     public void setEditable(boolean editable)
     {
-        choiceList.setEditable(false);
+        choiceList.setEditable(false);//TODO - is this correct?
     }
 
     public void addValue(String item)
