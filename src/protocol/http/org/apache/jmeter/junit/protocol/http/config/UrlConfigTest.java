@@ -21,6 +21,7 @@ package org.apache.jmeter.junit.protocol.http.config;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
@@ -69,9 +70,9 @@ public class UrlConfigTest extends JMeterTestCase
 
     public void testOverRide()
     {
-        assertTrue(
-            new NullProperty().equals(
-                partialConfig.getProperty(HTTPSampler.DOMAIN)));
+    	JMeterProperty jmp =partialConfig.getProperty(HTTPSampler.DOMAIN);
+        assertTrue(jmp instanceof NullProperty);
+        assertTrue(new NullProperty(HTTPSampler.DOMAIN).equals(jmp));
         partialConfig.addTestElement(defaultConfig);
         assertEquals(
             partialConfig.getPropertyAsString(HTTPSampler.DOMAIN),
