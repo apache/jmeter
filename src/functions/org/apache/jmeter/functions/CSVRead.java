@@ -155,7 +155,6 @@ public class CSVRead extends AbstractFunction implements Serializable
             // if argument is 'next' - go to the next line
             if (columnOrNext.equals("next()") || columnOrNext.equals("next"))
             {
-                myfileData.incrementRowPosition();
                 storeCurrentLine(null);
                 /*
                  * All done now ,so return the empty string - this allows the caller to
@@ -175,6 +174,7 @@ public class CSVRead extends AbstractFunction implements Serializable
             if (myfileData != null && processedLines == null)
             {
                 processedLines = (ArrayList) myfileData.getNextLine();
+				myfileData.incrementRowPosition();
                 this.storeCurrentLine(processedLines);
             }
 
