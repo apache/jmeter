@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+	 <author email="bburns@apache.org">Michael Stover, brendan Burns, et al.</author>
+	 <title>Extending JMeter</title>
+  </properties>
+<body>
+<section name="Extending JMeter">
+
+<h2>Extending JMeter</h2>:
+<p>There are several ways to extend JMeter and add functionality.  JMeter is designed
+to make this task easier.
+</p>
+<ul>
+	<li>Creating your own Timer</li>
+	<li>Creating your own SampleListener (such as a visualizer, or reporter)</li>
+	<li>Creating your own Config Element</li>
+	<li>Creating your own logic SamplerController</li>
+	<li>Creating your own test sample SamplerController</li>
+	<li>Creating your own Sampler</li>
+	<li>Making your custom elements saveable and loadable from within JMeter</li>
+	<li>Making your custom elements play nice as a JMeter UI component</li>
+</ul>
+<h3>Creating your own Timer</h3>
+<p>The timer interface:</p>
+<pre>
+	  public long delay();
+</pre>
+<p>Not too complicated.  Your delay method must, each time it is called, return a
+long representing the number of milliseconds to delay.  The constant timer returns the
+same number every time it's called.  A random timer returns a different number each time.
+</p>
+<h3>Creating your own SampleListener</h3>
+<p>The SampleListener interface:</p>
+<pre>
+	  public void sampleOccurred(SampleEvent e);
+	  public void sampleStarted(SampleEvent e);
+	  public void sampleStopped(SampleEvent e);
+</pre>
+<p>sampleOccurred is the method called when a sample is completed, and the data has been
+collected.  The SampleEvent object should contain all the information gathered
+from the sample.  If your sample listener is primarily concerned with collecting the
+data from a test run, you can implement this method - the other two are for other purposes and
+can be ignored (though the methods have to be there for your class to compile).
+</p>
+<p>sampleStarted and sampleStopped are used to indicate the state of the sampling thread.
+This is useful for visualizers that show the user the state of all running threads
+(ie, they are running and waiting for response, or they're stopped and waiting
+to begin again).
+</p>
+<h3>Creating your own Config Element</h3>
+<p>The ConfigElement interface:</p>
+<pre>
+	  public void addConfigElement(ConfigElement config);
+	  public boolean expectsModification();
+	  public Object clone();
+</pre>
+<p>The ConfigElement interface is sparse.  All ConfigElements are expected to implement
+a public clone method.  The reason for this is that config elements will be cloned
+for each different sampling thread, and most will be cloned for each sample.  </p>
+<p>If your config element expects to be modified in the process of a test run,
+and you want those modifications to carry over from sample to sample (as in
+a cookie manager - you want to save all cookies that gets set throughout
+the test), then return true for this method. Your config element will not be
+cloned for each sample. If your config elements are more static in nature,
+return false. If in doubt, return false.</p>
+<p>The addConfigElement is required so that config elements can be layered.  For
+instance, let's say a user creates a URL entry that contains default values -
+they might use this to specify a server.  Then, all their test samples configure
+individual test cases, but leave out the server field.  This information is combined
+via the addConfigElement method.  Your custom config elements should do the right
+thing when this method is called.  Normally, this involves ignoring such calls unless
+the passed in ConfigElement is of the same type as yours, and then only merging in
+values that are not already set in the object receiving the call (ie you probably
+don't want to overwrite any values).
+</p>
+<p>You may have noticed there's no specification on how to get the config information
+<b>out</b> of a ConfigElement.  This raises the question, who is going to use it?
+At the end of the line, there will be a Sampler that will need the information held
+in your config element.  The sampler that uses your config element needs to know more
+about the class than the rest of JMeter - that information is not part of this interface.
+</p>
+<p>If at all possible, extend AbstractConfigElement when creating your own.  By doing so,
+and by following some simple rules, you will get cloning and saving to XML of your
+config element for free (as in, you don't have to do anything!).  AbstractConfigElement
+stores all it's values in a Map, and provides getProperty and putProperty methods.  Your
+config element can provide getXXX() and setXXX() methods, but these should delegate
+to getProperty() and setProperty(), probably using static Strings as keys in the Map.
+<br/>You can store any type of object, provided the objects are clonable and Saveable
+(Strings, Integer, Long, Double, Float are all good in this regard).
+</p>
+<p>One caveat - if your config element has been restored from file, all the values
+held in the Map will be String objects (except for elements that implement Saveable
+on their own), and you may have to do casting and parsing.  Example: an Integer will
+have to be converted from a String to an int, so your getXXX() method should check
+for this possibility to avoid exceptions.
+</p>
+
+</section>
+</body>
+</document>

@@ -12,10 +12,10 @@
 	<li><a href="#overview">Overview</a></li>
 	<li><a HREF="threadgroups.html">Creating ThreadGroups</a></li>
 	<li><a HREF="test_samples.html">Creating Test Samples</a></li>
-	<li><a HREF="#Choosing_a_delay">Creating Flow Logic Controls</a></li>
-	<li><a HREF="#Managing_Thread_Groups">Using Visualizers</a></li>
-	<li><a HREF="#Choosing_a_Visualizer">Choosing a Visualizer</a></li>
-	<li><a HREF="#Running_the_test script">Running the test script</a></li>
+	<li><a HREF="logical_controllers.html">Creating Flow Logic Controls</a></li>
+	<li><a HREF="visualizers.html">Using Visualizers</a></li>
+	<li><a HREF="timers.html">Using Timers</a></li>
+	<li><a HREF="Running.html">Running the test script</a></li>
 	<li><a href="saving.html">Saving test script elements</a></li>
 </UL>
 
@@ -27,6 +27,11 @@ a tree which represents your test configuration.  Trees are good for representin
 data that is hierarchical and ordered, and your test data is both. On the right,
 or the main window, control panels will be shown allowing you to enter your test data for
 each element in the tree.  It is also the window for you to view the data visualizers.
+</p>
+<p>
+Throughout this documentation, examples will most often be given in terms of testing
+web applications, although JMeter is capable of testing most any type of server-client
+application.
 </p>
 <table border="5"><tr><td><b>Most functions in the UI are available from popup menus
 that appear when you right-click on the element you wish to affect</b></td></tr></table>
