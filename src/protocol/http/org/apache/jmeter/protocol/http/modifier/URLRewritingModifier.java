@@ -49,12 +49,18 @@ public class URLRewritingModifier
     implements Serializable, PreProcessor
 {
 
-    private Pattern pathExtensionEqualsRegexp, parameterRegexp, pathExtensionNoEqualsRegexp;
+    private Pattern pathExtensionEqualsQuestionmarkRegexp;
+    private Pattern pathExtensionEqualsNoQuestionmarkRegexp;
+    private Pattern parameterRegexp;
+    private Pattern pathExtensionNoEqualsQuestionmarkRegexp;
+    private Pattern pathExtensionNoEqualsNoQuestionmarkRegexp;
     //transient Perl5Compiler compiler = new Perl5Compiler();
     private final static String ARGUMENT_NAME = "argument_name";
     private final static String PATH_EXTENSION = "path_extension";
     private final static String PATH_EXTENSION_NO_EQUALS =
         "path_extension_no_equals";
+    private final static String PATH_EXTENSION_NO_QUESTIONMARK =
+        "path_extension_no_questionmark";
 
     public void process()
     {
@@ -69,17 +75,33 @@ public class URLRewritingModifier
         String text = new String(responseText.getResponseData());
         Perl5Matcher matcher = JMeterUtils.getMatcher();
         String value = "";
-        if (isPathExtension() && isPathExtensionNoEquals())
+        if (isPathExtension() && isPathExtensionNoEquals() && isPathExtensionNoQuestionmark())
         {
-            if (matcher.contains(text, pathExtensionNoEqualsRegexp))
+            if (matcher.contains(text, pathExtensionNoEqualsNoQuestionmarkRegexp))
             {
                 MatchResult result = matcher.getMatch();
                 value = result.group(1);
             }
         }
-        else if (isPathExtension()) // && ! isPathExtensionNoEquals
+        else if (isPathExtension() && isPathExtensionNoEquals()) // && ! isPathExtensionNoQuestionmark
         {
-            if (matcher.contains(text, pathExtensionEqualsRegexp))
+            if (matcher.contains(text, pathExtensionNoEqualsQuestionmarkRegexp))
+            {
+                MatchResult result = matcher.getMatch();
+                value = result.group(1);
+            }
+        }
+        else if (isPathExtension() && isPathExtensionNoQuestionmark()) // && ! isPathExtensionNoEquals
+        {
+            if (matcher.contains(text, pathExtensionEqualsNoQuestionmarkRegexp))
+            {
+                MatchResult result = matcher.getMatch();
+                value = result.group(1);
+            }
+        }
+        else if (isPathExtension()) // && ! isPathExtensionNoEquals && ! isPathExtensionNoQuestionmark
+        {
+            if (matcher.contains(text, pathExtensionEqualsQuestionmarkRegexp))
             {
                 MatchResult result = matcher.getMatch();
                 value = result.group(1);
@@ -128,14 +150,24 @@ public class URLRewritingModifier
     }
     private void initRegex(String argName)
     {
-        pathExtensionEqualsRegexp =
+        pathExtensionEqualsQuestionmarkRegexp =
             JMeterUtils.getPatternCache().getPattern(
                 ";"+argName + "=([^\"'>&\\s;]*)[&\\s\"'>;]?$?",
                 Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
 
-        pathExtensionNoEqualsRegexp =
+        pathExtensionEqualsNoQuestionmarkRegexp =
+            JMeterUtils.getPatternCache().getPattern(
+                ";"+argName + "=([^\"'>&\\s;?]*)[&\\s\"'>;?]?$?",
+                Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
+
+        pathExtensionNoEqualsQuestionmarkRegexp =
             JMeterUtils.getPatternCache().getPattern(
                 ";"+argName + "([^\"'>&\\s;]*)[&\\s\"'>;]?$?",
+                Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
+
+        pathExtensionNoEqualsNoQuestionmarkRegexp =
+            JMeterUtils.getPatternCache().getPattern(
+                ";"+argName + "([^\"'>&\\s;?]*)[&\\s\"'>;?]?$?",
                 Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
 
         parameterRegexp =
@@ -174,6 +206,11 @@ public class URLRewritingModifier
         setProperty(
             new BooleanProperty(PATH_EXTENSION_NO_EQUALS, pathExtNoEquals));
     }
+    public void setPathExtensionNoQuestionmark(boolean pathExtNoQuestionmark)
+    {
+        setProperty(
+            new BooleanProperty(PATH_EXTENSION_NO_QUESTIONMARK, pathExtNoQuestionmark));
+    }
     public boolean isPathExtension()
     {
         return getPropertyAsBoolean(PATH_EXTENSION);
@@ -181,6 +218,10 @@ public class URLRewritingModifier
     public boolean isPathExtensionNoEquals()
     {
         return getPropertyAsBoolean(PATH_EXTENSION_NO_EQUALS);
+    }
+    public boolean isPathExtensionNoQuestionmark()
+    {
+        return getPropertyAsBoolean(PATH_EXTENSION_NO_QUESTIONMARK);
     }
     
    // TODO: add test cases for new jakarta commons http client
