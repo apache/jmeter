@@ -31,11 +31,11 @@ order)
   thread groups individually, add test samples on the fly, etc.</li>
   <li><strong>Drag n Drop</strong> allow users to move test elements around the tree
   easily</li>
-  <li>Controllers that enable spidering and/or dynamic modification of test entries
-  based on responses from previous samples (<b>Currently being developed</b>)</li>
-  <li>Assertions - allowing users to assert what the results from test samples should look like, thus allowing
-  JMeter to act as an automated functional tester (<b>Currently being developed</b>)</li>
-  <li>Proxy server to enable recording of browser activity (<b>Currently being developed</b>)</li>
+  <li><b>OffLine reporting</b> - Enable the various visualizers to display test results
+  only after the run is finished.  This would facilitate heavier loads since constantly
+  updating the GUI takes up so much processing</li>
+  <li><b>Running indicator</b> - JMeter needs to do something lightweight, yet effective,
+  to indicate to the user when it is running a test</li>
 </ul>
 </section>
 </body>

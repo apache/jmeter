@@ -12,7 +12,7 @@
 </p>
 
 <b>Changes:</b>
-<h3>Current in CVS</h3>
+<h3>Version 1.7Beta</h3>
 <ul>
 <li>Better XML support for special characters (Tushar Bhatia) </li>
 <li>Non-GUI functioning  &amp; Non-GUI test plan execution  (Tushar Bhatia)</li>
@@ -26,13 +26,17 @@
 <li>HTTP Header class for Header customization</li>
 <li>Extracting HTTP Header information from responses (Jamie Davidson)</li>
 <li>Mailer Visualizer re-added to JMeter</li>
-<li>JMeter now url encodes paramter names and values</li>
+<li>JMeter now url encodes parameter names and values</li>
 <li>listeners no longer give exceptions if their gui's haven't been initialized</li>
 <li>HTTPS and Authorization working together</li>
 <li>New Http sampling that automatically parses HTML response for images to download, and includes the downloading of
 these images in total time for request (Neth neth6@atozasia.com) </li>
 <li>HTTP responses from server can be parsed for links and forms, and dynamic data can be extracted and added to test
-samples at run-time (documented)</li> </ul>
+samples at run-time (documented)</li> 
+<li>New Ramp-up feature (Jonathan O'Keefe)</li>
+<li>New visualizers (Neth)</li>
+<li>New Assertions for functional testing</li>
+</ul>
 
 <h3>Version 1.6.1</h3>
 <ul>
