@@ -15,11 +15,6 @@ commons-httpclient-2.0
 commons-logging
 - httpclient
 
-excalibur-compatibility
-- CLI in JMeter.java
-
-excalibur-i18n-1.1
-
 excalibur-logger-1.1
 - httpclient?
 
