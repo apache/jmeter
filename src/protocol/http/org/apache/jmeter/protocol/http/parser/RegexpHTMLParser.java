@@ -125,7 +125,7 @@ class RegexpHTMLParser extends HTMLParser
     private static final String REGEXP=
         "<(?:"
             +  "BASE(?=\\s)[^\\>]*\\sHREF\\s*=\\s*\"([^\">]*)\""
-            + "|(?:IMG|SCRIPT)(?=\\s)[^\\>]*\\sSRC\\s*=\\s*\"([^\">]*)\""
+            + "|(?:IMG|SCRIPT|FRAME|IFRAME)(?=\\s)[^\\>]*\\sSRC\\s*=\\s*\"([^\">]*)\""
             + "|APPLET(?=\\s)[^\\>]*\\sCODE(?:BASE)?\\s*=\\s*\"([^\">]*)\""
             + "|(?:EMBED|OBJECT)(?=\\s)[^\\>]*\\s(?:SRC|CODEBASE)\\s*=\\s*\"([^\">]*)\""
             + "|(?:BODY|TABLE|TR|TD)(?=\\s)[^\\>]*\\sBACKGROUND\\s*=\\s*\"([^\">]*)\""
