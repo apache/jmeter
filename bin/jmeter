@@ -3,13 +3,13 @@ USAGE=$0" [-h proxyHost] [-p proxyPort] [-f property-file]"
 
 PROPERTIES=jmeter.properties
 
-while getopts h:p:f: x; do 
-    case $x in
+while getopts h:p:f: x; do
+	 case $x in
 	h) JAVA_PROPS=$JAVAPROPS" -Dhttp.proxyHost="$OPTARG;;
 	p) JAVA_PROPS=$JAVAPROPS" -Dhttp.proxyPort="$OPTARG;;
 	f) PROPERTIES=$OPTARG;;
 	?) echo $USAGE; exit -1;;
-    esac;
+	 esac;
 done
 
-java -classpath $CLASSPATH:`dirname $0`/../lib/xerces.jar:`dirname $0`/../lib/util.jar:`dirname $0`/ApacheJMeter.jar org.apache.jmeter.Driver $JAVA_PROPS $PROPERTIES
+java -classpath $CLASSPATH:`dirname $0`/../lib/xerces.jar:`dirname $0`/../lib/util.jar:`dirname $0`/ApacheJMeter.jar org.apache.jmeter.NewDriver $JAVA_PROPS $PROPERTIES
