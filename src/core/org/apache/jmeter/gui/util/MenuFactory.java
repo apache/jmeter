@@ -72,7 +72,6 @@ import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.util.ClassFinder;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log4j.Category;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -84,11 +83,7 @@ import org.apache.log4j.Category;
 
 public class MenuFactory
 {
-	/****************************************
-	 * !ToDo (Field description)
-	 ***************************************/
-	public static Category catClass =
-			Category.getInstance(MenuFactory.class.getName());
+
 
 	/****************************************
 	 * !ToDo (Field description)
@@ -144,6 +139,8 @@ public class MenuFactory
 	private static JMenu insertControllerMenu;
 	static
 	{
+		try
+		{
 		String[] classesToSkip = JMeterUtils.split(
 				JMeterUtils.getPropDefault("not_in_menu", ""), ",");
 		for(int i = 0; i < classesToSkip.length; i++)
@@ -152,6 +149,11 @@ public class MenuFactory
 		}
 
 		initializeMenus();
+		}
+		catch(Throwable e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 
@@ -441,8 +443,16 @@ public class MenuFactory
 			Iterator iter = guiClasses.iterator();
 			while(iter.hasNext())
 			{
-				JMeterGUIComponent item = (JMeterGUIComponent)Class.forName(
+				JMeterGUIComponent item;
+				try
+				{
+					item = (JMeterGUIComponent)Class.forName(
 						(String)iter.next()).newInstance();
+				}
+				catch(Throwable e)
+				{
+					continue;
+				}
 				if(elementsToSkip.contains(item.getClass().getName()) ||
 						elementsToSkip.contains(item.getStaticLabel()))
 				{
