@@ -238,11 +238,13 @@ public class ResultCollector
         	 {
         	 	trimmed = trimLastLine(filename);	
         	 }
+        	 File ofile = new File(filename);
+        	 ofile.mkdirs();
             writer =
                 new PrintWriter(
                     new OutputStreamWriter(
                         new BufferedOutputStream(
-                            new FileOutputStream(filename, trimmed)),
+                            new FileOutputStream(ofile, trimmed)),
                         "UTF-8"),
                     true);
             files.put(filename, writer);
