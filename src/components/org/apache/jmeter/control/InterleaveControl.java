@@ -67,8 +67,8 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
 
 /**
  * @author    Michael Stover
- * @created   March 13, 2001
- * @version   $Revision$
+ * Created     March 13, 2001
+ * @version   $Revision$ Last updated: $Date$
  */
 public class InterleaveControl extends GenericController implements Serializable
 {
