@@ -56,6 +56,8 @@ package org.apache.jmeter.visualizers;
 
 // java
 import java.text.DecimalFormat;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.jmeter.samplers.SampleResult;
 
@@ -74,6 +76,9 @@ import org.apache.jmeter.samplers.SampleResult;
  * @version 1.0
  */
 public class RunningSample {
+	
+	private static DecimalFormat rateFormatter = new DecimalFormat("#.0");	
+   private static DecimalFormat errorFormatter = new DecimalFormat("#0.00%");
 
     private long counter;
     private long runningSum;
@@ -81,6 +86,7 @@ public class RunningSample {
     private long errorCount;
     private long firstTime;
     private long lastTime;
+    private Set threadNames;
 
     /**
      * use this constructor.
@@ -93,10 +99,18 @@ public class RunningSample {
         errorCount = 0L;
         firstTime = 0L;
         lastTime = 0L;
+        threadNames = new HashSet();
     }
 
     /**
-     * Returns a String that shows the rate the samples are being taken.
+     * Returns a String that represents the idealized throughput for that
+     * sample.  Uses the following equation:<p>
+     * Rn = (TotalTime * NumberOfThreads) / averageTime
+     * <p>
+     * Where Rn = # requests per TotalTime period.
+     * <p>
+     * This number is then represented in requests/second or requests/minute or requests/hour.
+     * <p>
      * Examples:
      *      "34.2/sec"
      *      "0.1/sec"
@@ -108,7 +122,9 @@ public class RunningSample {
         long howLongRunning = lastTime - firstTime;
 
         if (howLongRunning == 0) return ("N/A");
-        double samplesPerSecond = ((double) counter / ((double) howLongRunning / 1000.0));
+        double samplesPerSecond = (double)((double)howLongRunning * threadNames.size()) / (double)getAverage();
+        double factor = (double)((double)1000 / (double)howLongRunning);
+        samplesPerSecond = samplesPerSecond * factor;
 //        System.out.println("Running for " + howLongRunning + " seconds - " + samplesPerSecond + " samples per second.");
         String perString = "/sec";
         if (samplesPerSecond < 1.0) {
@@ -119,12 +135,8 @@ public class RunningSample {
             samplesPerSecond *= 60;
             perString = "/hour";
         }
-        // i guess now, samplesPerSECOND really might NOT be that. :-)
-
-        /** @todo probably should turn this DecimalFormat (and the one used below a few methods) into static member
-         variables, so the decimal formatter isn't instantiated in each call to this method.. */
-        DecimalFormat myDF = new DecimalFormat("#.0");
-        String rval = myDF.format(samplesPerSecond) + perString;
+        
+        String rval = rateFormatter.format(samplesPerSecond) + perString;
         return (rval);
     }
 
@@ -135,6 +147,7 @@ public class RunningSample {
      * @arg aSuccessFlag Flag for if this sample was successful or not
      */
     public synchronized void addSample(SampleResult res) {
+    	threadNames.add(res.getThreadName());
 		long aTimeInMillis = res.getTime();
 		boolean aSuccessFlag = res.isSuccessful();
 		lastTime = res.getTimeStamp();
@@ -209,8 +222,7 @@ public class RunningSample {
      */
     public String getErrorPercentageString() {
         double myErrorPercentage = this.getErrorPercentage();
-        DecimalFormat myDF = new DecimalFormat("#0.00%");
-        return (myDF.format(myErrorPercentage));
+        return (errorFormatter.format(myErrorPercentage));
     }
 
     /**
