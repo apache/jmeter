@@ -165,8 +165,15 @@ public class ThreadGroupGui
             mainPanel.setVisible(false);
         }
 
-        start.setDate(new Date(tg.getPropertyAsLong(ThreadGroup.START_TIME)));
-        end.setDate(new Date(tg.getPropertyAsLong(ThreadGroup.END_TIME)));
+        // Check if the property exists
+        String s = tg.getPropertyAsString(ThreadGroup.START_TIME);
+        if (s.length() == 0) {// Must be an old test plan
+        	start.setDate(new Date());
+        	end.setDate(new Date());
+        } else {
+            start.setDate(new Date(tg.getPropertyAsLong(ThreadGroup.START_TIME)));
+            end.setDate(new Date(tg.getPropertyAsLong(ThreadGroup.END_TIME)));
+        }
 		duration.setText(tg.getPropertyAsString(ThreadGroup.DURATION));
 		delay.setText(tg.getPropertyAsString(ThreadGroup.DELAY));
         
@@ -212,7 +219,7 @@ public class ThreadGroupGui
     {
         loopPanel = new LoopControlPanel(false);
         LoopController looper = (LoopController) loopPanel.createTestElement();
-        looper.setLoops(-1);
+        looper.setLoops(1);
         loopPanel.configure(looper);
         return loopPanel;
     }
