@@ -718,7 +718,9 @@
     </javac>
   </target>
 
-  <target name="compile-jms" depends="compile-jorphan,compile-core,compile-components">
+  <target name="compile-jms" depends="compile-jorphan,compile-core,compile-components" 
+      	description="Compile components specific to JMS sampling."
+  	    if="jms.present">
     <mkdir dir="${build.jms}"/>
     <javac srcdir="${src.jms}" destdir="${build.jms}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
