@@ -59,8 +59,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -92,7 +90,7 @@ import org.apache.jmeter.util.JMeterUtils;
  *@version   $Revision$
  ***************************************/
 
-public class AssertionGui extends AbstractAssertionGui implements FocusListener
+public class AssertionGui extends AbstractAssertionGui
 {
     static final String COL_NAME = JMeterUtils.getResString("assertion_patterns_to_test");
 
@@ -227,8 +225,8 @@ public class AssertionGui extends AbstractAssertionGui implements FocusListener
         box.add(makeTitlePanel());
         box.add(createFieldPanel());
         box.add(createTypePanel());
-        box.add(createStringPanel());
         add(box,BorderLayout.NORTH);
+        add(createStringPanel(),BorderLayout.CENTER);
     }
 
     private JPanel createFieldPanel()
@@ -263,35 +261,10 @@ public class AssertionGui extends AbstractAssertionGui implements FocusListener
         return panel;
     }
 
-    /****************************************
-     * Description of the Method
-     *
-     *@param e  Description of Parameter
-     ***************************************/
-    public void focusLost(FocusEvent e)
-    {
-        try
-        {
-            stringTable.getCellEditor().stopCellEditing();
-        }
-        catch (NullPointerException err)
-        {}
-    }
-
-    /****************************************
-     * Description of the Method
-     *
-     *@param e  Description of Parameter
-     ***************************************/
-    public void focusGained(FocusEvent e)
-    {}
-
     private JPanel createStringPanel()
     {
         tableModel = new PowerTableModel(new String[] { COL_NAME }, new Class[] { String.class });
         stringTable = new JTable(tableModel);
-
-        stringTable.addFocusListener(this);
         TextAreaCellRenderer renderer = new TextAreaCellRenderer();
         stringTable.setRowHeight(renderer.getPreferredHeight());
         stringTable.setDefaultRenderer(String.class, renderer);

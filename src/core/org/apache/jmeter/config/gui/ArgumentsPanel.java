@@ -59,8 +59,6 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -71,8 +69,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 
 import junit.framework.TestCase;
@@ -96,7 +92,7 @@ import org.apache.log.Logger;
  */
 public class ArgumentsPanel
     extends AbstractConfigGui
-    implements FocusListener, ActionListener, CellEditorListener
+    implements  ActionListener
 {
     /** Logging. */
     private static transient Logger log =
@@ -174,6 +170,7 @@ public class ArgumentsPanel
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
     public void modifyTestElement(TestElement args)
     {
+        stopTableEditing();
         Iterator modelData = tableModel.iterator();
         Arguments arguments = null;
         if (args instanceof Arguments)
@@ -410,7 +407,7 @@ public class ArgumentsPanel
     {
         initializeTableModel();
         table = new JTable(tableModel);
-        table.addFocusListener(this);
+        //table.addFocusListener(this);
         // use default editor/renderer to fix bug #16058
         //    TextAreaTableCellEditor editor = new TextAreaTableCellEditor();
         //    table.setDefaultEditor(String.class, editor);
@@ -474,34 +471,6 @@ public class ArgumentsPanel
 
         table.revalidate();
         sizeColumns(table);
-    }
-
-
-    // CellEditorListener implementation
-    
-    /* Implements CellEditorListener.editingCanceled(ChangeEvent) */
-    public void editingCanceled(ChangeEvent e)
-    {
-    }
-
-    /* Implements CellEditorListener.editingStopped(ChangeEvent) */
-    public void editingStopped(ChangeEvent e)
-    {
-    }
-
-
-    // FocusListener implementation
-
-    /* Implements FocusListener.focusLost(FocusEvent) */
-    public void focusLost(FocusEvent e)
-    {
-        log.debug("Focus lost on table");
-        stopTableEditing();
-    }
-
-    /* Implements FocusListener.focusGained(FocusEvent) */
-    public void focusGained(FocusEvent e)
-    {
     }
 
 

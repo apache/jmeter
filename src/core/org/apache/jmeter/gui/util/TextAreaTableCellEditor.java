@@ -1,20 +1,21 @@
 package org.apache.jmeter.gui.util;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
+import java.io.Serializable;
 import java.util.EventObject;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
+import javax.swing.AbstractCellEditor;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
+import javax.swing.JTree;
 import javax.swing.table.TableCellEditor;
+import javax.swing.tree.TreeCellEditor;
 
 /**
  * @author mstover
@@ -22,118 +23,288 @@ import javax.swing.table.TableCellEditor;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class TextAreaTableCellEditor implements TableCellEditor,FocusListener {
-	JScrollPane pane;
-	JTextArea editor;
-	String value = "";
-	LinkedList listeners = new LinkedList();
-	int row,col;
-	
-	public Component getTableCellEditorComponent(JTable table,
-                                             Object value,
-                                             boolean isSelected,
-                                             int row,
-                                             int column)
-    {
-    	editor = new JTextArea(value.toString());
-    	editor.addFocusListener(this);
-    	editor.setEnabled(true);
-    	editor.setRows(editor.getRows());
-    	editor.revalidate();
-    	pane = new JScrollPane(editor,JScrollPane.VERTICAL_SCROLLBAR_NEVER,
-    			JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    	pane.validate();
-    	this.row = row;
-    	this.col = column;
-    	return pane;
-    }
-    
-    public int getColumn()
-    {
-    	return col;
-    }
-    
-    public int getRow()
-    {
-    	return row;
-    }
-    
-    public void focusLost(FocusEvent fe)
-    {
-    	stopCellEditing();
-    }
-    
-    public void focusGained(FocusEvent fe)
-    {
-    }
-    
+public class TextAreaTableCellEditor extends AbstractCellEditor implements TableCellEditor, TreeCellEditor
+{
+
+    //
+    //Instance Variables
+    //
+
+    /** The Swing component being edited. */
+    protected JTextArea editorComponent;
+    /**
+     * The delegate class which handles all methods sent from the
+     * <code>CellEditor</code>.
+     */
+    protected EditorDelegate delegate;
+    /**
+     * An integer specifying the number of clicks needed to start editing.
+     * Even if <code>clickCountToStart</code> is defined as zero, it
+     * will not initiate until a click occurs.
+     */
+    protected int clickCountToStart = 1;
+
+    //
+    //Constructors
+    //
+
+    /**
+     * Constructs a <code>DefaultCellEditor</code> that uses a text field.
+     *
+     * @param x  a <code>JTextField</code> object
+     */
     public TextAreaTableCellEditor()
     {
-    	editor = new JTextArea();
-    	editor.setRows(3);
-    }
-    
-    public Component getComponent()
-    {
-    	return editor;
-    }
-    
-    public Object getCellEditorValue()
-    {
-    	return editor.getText();
-    }
-    
-    public void cancelCellEditing()
-    {
-    	Iterator iter = ((List)listeners.clone()).iterator();
-    	while(iter.hasNext())
-    	{
-    		((CellEditorListener)iter.next()).editingCanceled(new ChangeEvent(this));
-    	}
-    }
-    
-    public boolean stopCellEditing()
-    {
-    	Iterator iter = ((List)listeners.clone()).iterator();
-    	while(iter.hasNext())
-    	{
-    		((CellEditorListener)iter.next()).editingStopped(new ChangeEvent(this));
-    	}
-    	return true;
-    }
-    
-    public void addCellEditorListener(CellEditorListener lis)
-    {
-    	listeners.add(lis);
-    }
-    
-    public boolean isCellEditable(EventObject anEvent)
-    {
-    	if (anEvent instanceof MouseEvent)
-		{
-			if (((MouseEvent)anEvent).getClickCount() > 0)
-			{
-				return true;
-			}
-		}
-		else if(anEvent instanceof FocusEvent)
-		{
-			if(((FocusEvent)anEvent).getID() == FocusEvent.FOCUS_GAINED)
-			{
-				return true;
-			}
-		}
-		return true;
-    }
-    
-    public void removeCellEditorListener(CellEditorListener lis)
-    {
-    	listeners.remove(lis);
-    }
-    
-    public boolean shouldSelectCell(EventObject eo)
-    {
-    	return true;
+        editorComponent = new JTextArea();
+        editorComponent.setRows(3);
+        this.clickCountToStart = 2;
+        delegate = new EditorDelegate()
+        {
+            public void setValue(Object value)
+            {
+                editorComponent.setText((value != null) ? value.toString() : "");
+            }
+
+            public Object getCellEditorValue()
+            {
+                return editorComponent.getText();
+            }
+        };
+        editorComponent.addFocusListener(delegate);
     }
 
+    /**
+     * Returns a reference to the editor component.
+     *
+     * @return the editor <code>Component</code>
+     */
+    public Component getComponent()
+    {
+        return editorComponent;
+    }
+
+    //
+    //Modifying
+    //
+
+    /**
+     * Specifies the number of clicks needed to start editing.
+     *
+     * @param count  an int specifying the number of clicks needed to start editing
+     * @see #getClickCountToStart
+     */
+    public void setClickCountToStart(int count)
+    {
+        clickCountToStart = count;
+    }
+
+    /**
+     * Returns the number of clicks needed to start editing.
+     * @returns the number of clicks needed to start editing
+     */
+    public int getClickCountToStart()
+    {
+        return clickCountToStart;
+    }
+
+    //
+    //Override the implementations of the superclass, forwarding all methods 
+    //from the CellEditor interface to our delegate. 
+    //
+
+    /**
+     * Forwards the message from the <code>CellEditor</code> to
+     * the <code>delegate</code>.
+     * @see EditorDelegate#getCellEditorValue
+     */
+    public Object getCellEditorValue()
+    {
+        return delegate.getCellEditorValue();
+    }
+
+    /**
+     * Forwards the message from the <code>CellEditor</code> to
+     * the <code>delegate</code>.
+     * @see EditorDelegate#isCellEditable(EventObject)
+     */
+    public boolean isCellEditable(EventObject anEvent)
+    {
+        return delegate.isCellEditable(anEvent);
+    }
+
+    /**
+     * Forwards the message from the <code>CellEditor</code> to
+     * the <code>delegate</code>.
+     * @see EditorDelegate#shouldSelectCell(EventObject)
+     */
+    public boolean shouldSelectCell(EventObject anEvent)
+    {
+        return delegate.shouldSelectCell(anEvent);
+    }
+
+    /**
+     * Forwards the message from the <code>CellEditor</code> to
+     * the <code>delegate</code>.
+     * @see EditorDelegate#stopCellEditing
+     */
+    public boolean stopCellEditing()
+    {
+        return delegate.stopCellEditing();
+    }
+
+    /**
+     * Forwards the message from the <code>CellEditor</code> to
+     * the <code>delegate</code>.
+     * @see EditorDelegate#cancelCellEditing
+     */
+    public void cancelCellEditing()
+    {
+        delegate.cancelCellEditing();
+    }
+
+    //
+    //Implementing the TreeCellEditor Interface
+    //
+
+    /** Implements the <code>TreeCellEditor</code> interface. */
+    public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row)
+    {
+        String stringValue = tree.convertValueToText(value, isSelected, expanded, leaf, row, false);
+
+        delegate.setValue(stringValue);
+        return new JScrollPane(editorComponent);
+    }
+
+    //
+    //Implementing the CellEditor Interface
+    //
+    /** Implements the <code>TableCellEditor</code> interface. */
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
+    {
+        delegate.setValue(value);
+        return new JScrollPane(editorComponent);
+    }
+
+    //
+    //Protected EditorDelegate class
+    //
+
+    /**
+     * The protected <code>EditorDelegate</code> class.
+     */
+    protected class EditorDelegate implements FocusListener, Serializable
+    {
+
+        /**  The value of this cell. */
+        protected Object value;
+
+        /**
+         * Returns the value of this cell. 
+         * @return the value of this cell
+         */
+        public Object getCellEditorValue()
+        {
+            return value;
+        }
+
+        /**
+         * Sets the value of this cell. 
+         * @param value the new value of this cell
+         */
+        public void setValue(Object value)
+        {
+            this.value = value;
+        }
+
+        /**
+         * Returns true if <code>anEvent</code> is <b>not</b> a
+         * <code>MouseEvent</code>.  Otherwise, it returns true
+         * if the necessary number of clicks have occurred, and
+         * returns false otherwise.
+         *
+         * @param   anEvent         the event
+         * @return  true  if cell is ready for editing, false otherwise
+         * @see #setClickCountToStart
+         * @see #shouldSelectCell
+         */
+        public boolean isCellEditable(EventObject anEvent)
+        {
+            if (anEvent instanceof MouseEvent)
+            {
+                return ((MouseEvent) anEvent).getClickCount() >= clickCountToStart;
+            }
+            return true;
+        }
+
+        /**
+         * Returns true to indicate that the editing cell may
+         * be selected.
+         *
+         * @param   anEvent         the event
+         * @return  true 
+         * @see #isCellEditable
+         */
+        public boolean shouldSelectCell(EventObject anEvent)
+        {
+            return true;
+        }
+
+        /**
+         * Returns true to indicate that editing has begun.
+         *
+         * @param anEvent          the event
+         */
+        public boolean startCellEditing(EventObject anEvent)
+        {
+            return true;
+        }
+
+        /**
+         * Stops editing and
+         * returns true to indicate that editing has stopped.
+         * This method calls <code>fireEditingStopped</code>.
+         *
+         * @return  true 
+         */
+        public boolean stopCellEditing()
+        {
+            fireEditingStopped();
+            return true;
+        }
+
+        /**
+         * Cancels editing.  This method calls <code>fireEditingCanceled</code>.
+         */
+        public void cancelCellEditing()
+        {
+            fireEditingCanceled();
+        }
+
+        /**
+         * When an action is performed, editing is ended.
+         * @param e the action event
+         * @see #stopCellEditing
+         */
+        public void actionPerformed(ActionEvent e)
+        {
+            TextAreaTableCellEditor.this.stopCellEditing();
+        }
+
+        /**
+         * When an item's state changes, editing is ended.
+         * @param e the action event
+         * @see #stopCellEditing
+         */
+        public void itemStateChanged(ItemEvent e)
+        {
+            TextAreaTableCellEditor.this.stopCellEditing();
+        }
+        public void focusLost(FocusEvent ev)
+        {
+            TextAreaTableCellEditor.this.stopCellEditing();
+        }
+
+        public void focusGained(FocusEvent ev)
+        {}
+    }
 }
