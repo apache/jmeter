@@ -19,7 +19,6 @@ import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -30,7 +29,7 @@ import org.apache.log.Logger;
  */
 public class HttpRequestHdr
 {
-    Logger log = LoggingManager.getLoggerFor(JMeterUtils.HTTP);
+    Logger log = LoggingManager.getLoggerForClass();
 
     /**
      * Http Request method. Such as get or post.

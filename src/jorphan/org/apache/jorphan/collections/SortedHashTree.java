@@ -61,8 +61,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+//NOTUSED import org.apache.jorphan.logging.LoggingManager;
+//NOTUSED import org.apache.log.Logger;
 
 /**
  * SortedHashTree is a different implementation of the {@link HashTree}
@@ -78,8 +78,7 @@ import org.apache.log.Logger;
  */
 public class SortedHashTree extends HashTree implements Serializable
 {
-    private static Logger log =
-        LoggingManager.getLoggerFor("jorphan.collections");
+    //NOTUSED private static Logger log = LoggingManager.getLoggerForClass();
 
     public SortedHashTree()
     {

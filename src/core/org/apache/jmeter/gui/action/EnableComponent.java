@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -14,7 +13,7 @@ import org.apache.log.Logger;
  */
 public class EnableComponent implements Command
 {
-    private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
+    private static Logger log = LoggingManager.getLoggerForClass();
 
     public static final String ENABLE = "enable";
     public static final String DISABLE = "disable";

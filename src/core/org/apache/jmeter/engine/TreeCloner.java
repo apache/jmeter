@@ -12,7 +12,6 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.collections.ListedHashTree;
@@ -24,7 +23,7 @@ import org.apache.log.Logger;
  */
 public class TreeCloner implements HashTreeTraverser
 {
-    Logger log = LoggingManager.getLoggerFor(JMeterUtils.ENGINE);
+    Logger log = LoggingManager.getLoggerForClass();
     ListedHashTree newTree;
     LinkedList objects = new LinkedList();
     boolean forThread = true;

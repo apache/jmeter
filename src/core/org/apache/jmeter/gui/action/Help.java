@@ -18,8 +18,7 @@ import org.apache.log.Logger;
 
 public class Help implements Command
 {
-    transient private static Logger log =
-        LoggingManager.getLoggerFor(JMeterUtils.GUI);
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     public final static String HELP = "help";
     private static Set commands = new HashSet();

@@ -93,7 +93,7 @@ import org.apache.log.Logger;
 public class HashTree implements Serializable, Map
 {
     private static Logger log =
-        LoggingManager.getLoggerFor("jorphan.collections");
+        LoggingManager.getLoggerForClass();
 
     /**
      * Creates an empty new HashTree.

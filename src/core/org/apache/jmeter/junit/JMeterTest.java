@@ -29,7 +29,7 @@ import org.apache.log.Logger;
  */
 public class JMeterTest extends TestCase
 {
-    private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.TEST);
+    private static Logger log = LoggingManager.getLoggerForClass();
 
     public JMeterTest(String name)
     {

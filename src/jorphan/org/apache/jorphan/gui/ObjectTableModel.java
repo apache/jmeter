@@ -18,7 +18,7 @@ import org.apache.log.Logger;
  */
 public class ObjectTableModel extends DefaultTableModel
 {
-    private static Logger log = LoggingManager.getLoggerFor("jorphan.gui");
+    private static Logger log = LoggingManager.getLoggerForClass();
     private transient ArrayList objects = new ArrayList();
     private transient List headers = new ArrayList();
     private transient ArrayList classes = new ArrayList();

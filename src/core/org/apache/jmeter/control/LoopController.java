@@ -65,9 +65,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+//NOTUSED import org.apache.jorphan.logging.LoggingManager;
+//NOTUSED import org.apache.log.Logger;
 
 /**
  * @author    Michael Stover
@@ -76,8 +75,7 @@ import org.apache.log.Logger;
  */
 public class LoopController extends GenericController implements Serializable
 {
-    private static Logger log =
-        LoggingManager.getLoggerFor(JMeterUtils.ELEMENTS);
+    //NOTUSED private static Logger log = LoggingManager.getLoggerForClass();
 
     private final static String LOOPS = "LoopController.loops";
     private final static String CONTINUE_FOREVER =

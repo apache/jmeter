@@ -98,7 +98,7 @@ import org.xml.sax.XMLReader;
  */
 public class JMeterUtils implements UnitTestManager
 {
-    private static final String VERSION = "1.9.20030910";
+    private static final String VERSION = "1.9.20030915";
     private static PatternCacheLRU patternCache =
         new PatternCacheLRU(1000, new Perl5Compiler());
 
@@ -173,7 +173,7 @@ public class JMeterUtils implements UnitTestManager
         }
         appProperties = p;
         LoggingManager.initializeLogging(appProperties);
-        log = LoggingManager.getLoggerFor(UTIL);
+        log = LoggingManager.getLoggerForClass();
         String loc = appProperties.getProperty("language");
         if (loc != null)
         {
