@@ -130,6 +130,7 @@ the following command options</p>
 <p>-n This specifies JMeter is to run in non-gui mode</p>
 <p>-t [name of JMX file that contains the Test Plan].</p>
 <p>-l [name of JTL file to log sample results to].</p>
+<p>-r Run all remote servers specified in jmeter.properties (or remote servers specified on command line by overriding properties)</p>
 <p>The script also lets you specify the optional firewall/proxy server information:</p>
 <p>-H [proxy server hostname or ip address]<br/>
 -P [proxy server port]</p>
