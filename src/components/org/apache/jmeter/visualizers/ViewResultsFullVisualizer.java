@@ -58,16 +58,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.UnsupportedEncodingException;
 
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
+import javax.swing.JEditorPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
@@ -97,46 +97,34 @@ import org.apache.log.Logger;
  ***************************************/
 public class ViewResultsFullVisualizer extends AbstractVisualizer implements ActionListener, TreeSelectionListener, Clearable
 {
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+
     public final static Color SERVER_ERROR_COLOR = Color.red;
     public final static Color CLIENT_ERROR_COLOR = Color.blue;
     public final static Color REDIRECT_COLOR = Color.green;
-    protected static final String HTML_BUTTON_LABEL = "Render HTML";
-    protected static final String TEXT_BUTTON_LABEL = "Show Text";
-    protected DefaultMutableTreeNode root;
-    protected DefaultTreeModel treeModel;
-    //    protected GridBagLayout gridBag;
-    //    protected GridBagConstraints gbc;
-    //    private JScrollPane textScrollArea;
+    
+    private static final String HTML_BUTTON_LABEL = "Render HTML";
+    private static final String TEXT_BUTTON_LABEL = "Show Text";
+    
+    private static final String HTML_COMMAND = "html";
+    private static final String TEXT_COMMAND = "text";
+    private boolean textMode = true;
+    
+    private DefaultMutableTreeNode root;
+    private DefaultTreeModel treeModel;
 
-    /** The button that will pop up the response as rendered HTML or
-     text.  **/
-    protected JButton htmlOrTextButton;
+    private JTextArea stats;
+    private JEditorPane results;
+    private JTextArea sampleDataField;
 
-    /** The response to be displayed.  **/
-    //    protected String response;
+    private JTree jTree;
 
-    /** The pane where the rendered HTML response is displayed.  **/
-    //    transient protected JEditorPane htmlEditPane;
-    //    private JSplitPane treeSplitPane;
-
-    /** The text area where the response is displayed.  **/
-    //    protected JTextArea textArea;
-    protected JTree jTree;
-    protected int childIndex;
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
-
-    //    private JLabel loadTimeLabel;
-    //    private JLabeledTextArea postDataField;
-    //    private JLabel responseCodeLabel;
-    //    private JLabel responseMsgLabel;
-    /****************************************
-     * !ToDo (Constructor description)
-     ***************************************/
     public ViewResultsFullVisualizer()
     {
         super();
-        init();
         log.debug("Start : ViewResultsFullVisualizer1");
+        init();
         log.debug("End : ViewResultsFullVisualizer1");
     }
 
@@ -198,16 +186,13 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
         if (log.isDebugEnabled())
             log.debug("clear1 : total child - " + totalChild);
         for (int i = 0; i < totalChild; i++)
-        { // the child to be removed will always be 0 'cos as the nodes are removed
-            // the nth node will become (n-1)th
+        {
+            // the child to be removed will always be 0 'cos as the nodes are
+            // removed the nth node will become (n-1)th
             treeModel.removeNodeFromParent((DefaultMutableTreeNode) root.getChildAt(0));
         }
 
         results.setText("");
-        //            textArea.setText("");
-        //        textScrollArea.setViewportView(textArea);
-        // reset the child index
-        childIndex = 0;
         log.debug("End : clear1");
     }
 
@@ -257,28 +242,16 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
                 log.debug("valueChanged1 : load time - " + res.getTime());
                 if (res != null && res.getSamplerData() != null)
                 {
-                    sampleDataField.setText("Request data: " + res.getSamplerData().trim());
-                    //                    postDataField.setText(res.getSamplerData().toString());
+                    sampleDataField.setText(res.getSamplerData().trim());
                 }
 
                 stats.append("Load time: " + res.getTime() + "\n");
-                //                loadTimeLabel.setText("Load time : " + res.getTime());
-                //                gbc.gridx = 0;
-                //                gbc.gridy = 0;
-                // keep all of the labels to the left
-                //                gbc.anchor = GridBagConstraints.WEST;
-                // with weightx != 0.0, components won't clump in the center
-                //                gbc.weightx = 1.0;
-                // pad a bit from the display area
-                //                gbc.insets = new Insets(0, 10, 0, 0);
-                // response code label
 
                 String responseCode = res.getResponseCode();
-
                 log.debug("valueChanged1 : response code - " + responseCode);
-                int responseLevel = 0;
 
-                if (responseCode != null)
+                int responseLevel = 0;
+                if (responseCode != null) {
                     try
                     {
                         responseLevel = Integer.parseInt(responseCode) / 100;
@@ -287,27 +260,30 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
                     {
                         // no need to change the foreground color
                     }
+                }
+                
                 switch (responseLevel)
                 {
                     case 3 :
-                        //                        responseCodeLabel.setForeground(REDIRECT_COLOR);
+                        // responseCodeLabel.setForeground(REDIRECT_COLOR);
                         break;
                     case 4 :
-                        //                        responseCodeLabel.setForeground(CLIENT_ERROR_COLOR);
+                        // responseCodeLabel.setForeground(CLIENT_ERROR_COLOR);
                         break;
                     case 5 :
-                        //                        responseCodeLabel.setForeground(SERVER_ERROR_COLOR);
+                        // responseCodeLabel.setForeground(SERVER_ERROR_COLOR);
                         break;
                 }
                 stats.append("HTTP response code: " + responseCode + "\n");
-                //                responseCodeLabel.setText(JMeterUtils.getResString("HTTP response code") + " : " + responseCode);
-                // response message label
+                // responseCodeLabel.setText(JMeterUtils.getResString("HTTP response code") + " : " + responseCode);
 
+                // response message label
                 String responseMsgStr = res.getResponseMessage();
 
                 log.debug("valueChanged1 : response message - " + responseMsgStr);
                 stats.append("HTTP response message: " + responseMsgStr);
-                //                responseMsgLabel.setText("HTTP response message : " + responseMsgStr);
+                // responseMsgLabel.setText("HTTP response message : " + responseMsgStr);
+
                 // get the text response and image icon
                 // to determine which is NOT null
                 byte[] responseBytes = (byte[]) res.getResponseData();
@@ -330,14 +306,9 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
                 }
                 if (response != null)
                 {
-                    // Text display <=> HTML labeled button
-                    if (HTML_BUTTON_LABEL.equals(htmlOrTextButton.getText()))
-                    {
+                    if (textMode) {
                         showTextResponse(response);
-                    }
-                    // HTML display <=> Text labeled button
-                    else
-                    {
+                    } else {
                         showRenderedResponse(response);
                     }
                 }
@@ -372,10 +343,9 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
     */
     protected void showTextResponse(String response)
     {
-        //        textArea.setText(response);
-        //        textArea.setCaretPosition(0);
         //        textScrollArea.setViewportView(textArea);
-        results.setText(response);
+        results.setContentType("text/plain");
+        results.setText(response == null ? "" : response);
         results.setCaretPosition(0);
     }
 
@@ -387,45 +357,40 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 
     public void actionPerformed(ActionEvent e)
     {
-        // If the htmlOrTextButton is clicked, show the response in the
-        // appropriate way, and change the button label
-        if (htmlOrTextButton.equals(e.getSource()))
-        {
+        String command = e.getActionCommand();
+        
+        if (command != null
+            && command.equals(TEXT_COMMAND)
+            || command.equals(HTML_COMMAND)) {
 
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
-            if (node == null)
-            {
+            // Switch to the other mode
+            textMode = !textMode;
+                            
+            DefaultMutableTreeNode node =
+                (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
+
+            if (node == null) {
                 results.setText("");
+                return;
             }
-            else
-            {
-                SampleResult res = (SampleResult) node.getUserObject();
-                byte[] responseBytes = (byte[]) res.getResponseData();
-                String response = null;
-                if (res.getDataType() != null && res.getDataType().equals(SampleResult.TEXT))
-                {
-                    try
-                    {
-                        response = new String(responseBytes, "utf-8");
-                    }
-                    catch (UnsupportedEncodingException err)
-                    {
-                        response = new String(responseBytes);
-                    }
-                }
 
-                // Show rendered HTML
-                if (HTML_BUTTON_LABEL.equals(htmlOrTextButton.getText()))
-                {
-                    showRenderedResponse(response);
-                    htmlOrTextButton.setText(TEXT_BUTTON_LABEL);
+            SampleResult res = (SampleResult) node.getUserObject();
+            byte[] responseBytes = (byte[]) res.getResponseData();
+            String response = null;
+
+            if (res.getDataType() != null
+                && res.getDataType().equals(SampleResult.TEXT)) {
+                try {
+                    response = new String(responseBytes, "utf-8");
+                } catch (UnsupportedEncodingException err) {
+                    response = new String(responseBytes);
                 }
-                // Show the textual response
-                else
-                {
-                    showTextResponse(response);
-                    htmlOrTextButton.setText(HTML_BUTTON_LABEL);
-                }
+            }
+
+            if (textMode) {
+                showTextResponse(response);
+            } else {
+                showRenderedResponse(response);
             }
         }
     }
@@ -441,6 +406,11 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
     */
     protected void showRenderedResponse(String response)
     {
+        if (response == null) {
+            results.setText("");
+            return;
+        }
+        
         int htmlIndex = response.indexOf("<HTML>");
 
         // Look for a case variation
@@ -449,30 +419,37 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
             htmlIndex = response.indexOf("<html>");
         }
 
-        // If there is text, render it
-        if (htmlIndex > -1)
-        {
-            String html = response.substring(htmlIndex, response.length());
-
-            //            htmlEditPane.setText(html);
-            results.setText(html);
+        // If we still can't find it, just try using all of the text
+        if (htmlIndex < 0) {
+            htmlIndex = 0;
         }
-        // No HTML tag, so try to render what's there
-        else
-        {
-            //            htmlEditPane.setText(response);
-            results.setText(response);
-        }
+        
+        String html = response.substring(htmlIndex);
+        results.setContentType("text/html");
+        results.setText(html);
         results.setCaretPosition(0);
-        //        htmlEditPane.setCaretPosition(0);
-        //        textScrollArea.setViewportView(htmlEditPane);
-
     }
 
-    protected void initHtmlOrTextButton()
+    protected Component createHtmlOrTextPane()
     {
-        htmlOrTextButton = new JButton(HTML_BUTTON_LABEL);
-        htmlOrTextButton.addActionListener(this);
+        ButtonGroup group = new ButtonGroup();
+
+        JRadioButton textButton = new JRadioButton(TEXT_BUTTON_LABEL);
+        textButton.setActionCommand(TEXT_COMMAND);
+        textButton.addActionListener(this);
+        textButton.setSelected(textMode);
+        group.add(textButton);
+        
+        JRadioButton htmlButton = new JRadioButton(HTML_BUTTON_LABEL);
+        htmlButton.setActionCommand(HTML_COMMAND);
+        htmlButton.addActionListener(this);
+        htmlButton.setSelected(!textMode);
+        group.add(htmlButton);
+        
+        JPanel pane = new JPanel();
+        pane.add(textButton);
+        pane.add(htmlButton);
+        return pane;
     }
 
     /*
@@ -496,79 +473,82 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
             return outerPanel;
         }
     */
-    private JTextArea stats;
-    private JTextArea results;
-    private JTextArea sampleDataField;
-
-    protected void initSampleDataArea()
-    {
-        sampleDataField = new JTextArea();
-        sampleDataField.setLineWrap(true);
-        sampleDataField.setWrapStyleWord(true);
-    }
 
     /****************************************
      * Initialize this visualizer
      ***************************************/
     protected void init()
     {
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
 
         add(makeTitlePanel(), BorderLayout.NORTH);
 
+        Component topLeft = createTopLeftPanel();
+        Component bottomLeft = createBottomLeftPanel();
+        JSplitPane leftSide = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topLeft, bottomLeft);
+        
+        Component topRight = createTopRightPanel();
+        Component bottomRight = createBottomRightPanel();
+        JSplitPane rightSide = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topRight, bottomRight);
+
+        JSplitPane mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftSide, rightSide);
+        add(mainSplit, BorderLayout.CENTER);
+    }
+
+    private Component createTopLeftPanel() {
         SampleResult rootSampleResult = new SampleResult();
         rootSampleResult.setSampleLabel("Root");
         rootSampleResult.setSuccessful(true);
         root = new DefaultMutableTreeNode(rootSampleResult);
-
+        
         treeModel = new DefaultTreeModel(root);
         jTree = new JTree(treeModel);
         jTree.setCellRenderer(new ResultsNodeRenderer());
         jTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         jTree.addTreeSelectionListener(this);
         jTree.setShowsRootHandles(true);
-
+        
         JScrollPane treePane = new JScrollPane(jTree);
-        treePane.setPreferredSize(new Dimension(100, 70));
-
-        JPanel statsPane = new JPanel(new GridLayout(1, 1));
-        stats = new JTextArea();
-
-        statsPane.add(makeScrollPane(stats));
-        initSampleDataArea();
-        initHtmlOrTextButton();
-        results = new JTextArea();
-        JPanel resultsPane = makeResultPane();
-
-        JSplitPane split2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, treePane, statsPane);
-
-        JSplitPane mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, split2, resultsPane);
-        add(mainSplit, BorderLayout.CENTER);
+        treePane.setPreferredSize(new Dimension(200, 300));
+        return treePane;
     }
 
-    protected JPanel makeResultPane()
-    {
-        JPanel resultsPane = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.gridheight = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.gridwidth = 1;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1;
-        gbc.weighty = .1;
-        resultsPane.add(makeScrollPane(sampleDataField), gbc.clone());
-        gbc.gridy++;
-        gbc.weighty = .9;
-        resultsPane.add(makeScrollPane(results),gbc.clone());
-        gbc.gridy++;
-        gbc.weighty = 0;
-        resultsPane.add(htmlOrTextButton,gbc.clone());
+    private Component createBottomLeftPanel() {
+        stats = new JTextArea();
+        stats.setEditable(false);
+        stats.setBackground(getBackground());
+
+        JScrollPane pane = makeScrollPane(stats);
+        pane.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+        return pane;
+    }
+
+    private Component createTopRightPanel() {
+        sampleDataField = new JTextArea();
+        sampleDataField.setEditable(false);
+        sampleDataField.setLineWrap(true);
+        sampleDataField.setWrapStyleWord(true);
+//        sampleDataField.setRows(4);
+
+        JPanel pane = new JPanel (new BorderLayout(0, 5));
+        pane.setBorder(BorderFactory.createTitledBorder("Request Data"));
+        pane.add (makeScrollPane(sampleDataField));
+        return pane;
+    }
+
+    private Component createBottomRightPanel() {
+        results = new JEditorPane();
+        results.setEditable(false);
+        
+        JPanel resultsPane = new JPanel(new BorderLayout());
+        resultsPane.setBorder(BorderFactory.createTitledBorder("Response Data"));
+        resultsPane.add(makeScrollPane(results), BorderLayout.CENTER);
+        resultsPane.add(createHtmlOrTextPane(), BorderLayout.SOUTH);
+
         return resultsPane;
     }
-
+    
     private class ResultsNodeRenderer extends DefaultTreeCellRenderer
     {
         public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus)
