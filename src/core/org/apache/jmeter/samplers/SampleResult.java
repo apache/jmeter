@@ -72,7 +72,7 @@ public class SampleResult implements Serializable
     private String threadName;
     private String responseMessage="";
     private String responseHeaders=""; // Never return null
-    private String contentType;
+    private String contentType; // e.g. text/html; charset=utf-8
     private String requestHeaders="";
     private long timeStamp = 0;// the time stamp - can be start or end
     private long startTime = 0;
@@ -84,10 +84,11 @@ public class SampleResult implements Serializable
     private String dataType;
     private boolean success;
     private Set files;
-    private String dataEncoding;
+    private String dataEncoding;// (is this really the character set?) e.g. ISO-8895-1, UTF-8
     private long time = 0;
     private boolean stopThread = false; //Should thread terminate?
 	private boolean stopTest = false;   //Should test terminate?
+	//TODO do contentType and/or dataEncoding belong in HTTPSampleResult instead?
 
     private final static String TOTAL_TIME = "totalTime";
 
@@ -418,13 +419,13 @@ public class SampleResult implements Serializable
         }
         else
         {
-            return "8859-1";
+            return "ISO-8859-1";// 8859-1 is not a valid Java data encoding ..
         }
     }
 
     /**
      * Sets the dataEncoding.
-     * @param dataEncoding the dataEncoding to set
+     * @param dataEncoding the dataEncoding to set, e.g. ISO-8895-1, UTF-8
      */
     public void setDataEncoding(String dataEncoding)
     {
