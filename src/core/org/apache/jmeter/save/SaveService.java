@@ -185,15 +185,15 @@ public class SaveService
 	private static void checkVersions()
 	{
 		versionsOK=true;
-		checkVersion(BooleanPropertyConverter.class,"1.3");
+		checkVersion(BooleanPropertyConverter.class,"1.4");
 		checkVersion(HashTreeConverter.class,"1.2");
-		checkVersion(IntegerPropertyConverter.class,"1.2");
-		checkVersion(LongPropertyConverter.class,"1.2");
-		checkVersion(MultiPropertyConverter.class,"1.2");
+		checkVersion(IntegerPropertyConverter.class,"1.3");
+		checkVersion(LongPropertyConverter.class,"1.3");
+		checkVersion(MultiPropertyConverter.class,"1.3");
 		checkVersion(SampleResultConverter.class,"1.2");
-		checkVersion(StringPropertyConverter.class,"1.3");
+		checkVersion(StringPropertyConverter.class,"1.5");
 		checkVersion(TestElementConverter.class,"1.2");
-		checkVersion(TestElementPropertyConverter.class,"1.2");
+		checkVersion(TestElementPropertyConverter.class,"1.3");
 		checkVersion(ScriptWrapperConverter.class,"1.2");
 		if (!PROPVERSION.equalsIgnoreCase(propertiesVersion))
 		{
