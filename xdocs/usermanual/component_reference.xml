@@ -1535,13 +1535,24 @@ A reference name - refName - for reusing the value created by this function. Sto
 
 <component index="13.10.9" name="__property">
 <description><p>The property function returns the value of a JMeter property. 
-	If the property value cannot be found, it returns the property name.</p>
+	If the property value cannot be found, and no default has been supplied, it returns the property name.
+	When supplying a default value, there is no need to provide a function name - the parameter can be set to null, and it will be ignored.
+	</p>For example:<p>
+<code>
+<pre>
+__property(user.dir) - return value of user.dir
+__property(user.dir,UDIR) - return value of user.dir and save in UDIR
+__property(abcd,ABCD,atod) - return value of property abcd (or "atod" if not defined) and save in ABCD
+__property(abcd,,atod) - return value of property abcd (or "atod" if not defined) but don't save it
+</pre>
+</code></p>
 	</description>
 
 <properties>
         <property name="Property Name" required="Yes">The property name to be retrieved.</property>
         <property name="Name of function" required="No">A reference name for reusing the value
                 computed by this function.</property>
+        <property name="Default Value" required="No">The default value for the property.</property>
 </properties>
 </component>
 
