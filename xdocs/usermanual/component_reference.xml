@@ -278,9 +278,15 @@ POST content.</p>
                                       </links>
 
 </component>
+
 <component name="WebService(SOAP) Request (Alpha Code)" index="13.1.7" screenshot="webservice_sampler.png">
 
-<description><p>This sampler has been tested with IIS Webservice running .NET 1.0. It hasn't been tested with SUN or IBM webservices providers, but it should work. The sampler uses Apache SOAP driver, to serialize the message and set the header with the correct SOAPAction. Right now the sampler doesn't support automatic WSDL handling, since Apache SOAP currently doesn't provide support for it. Both IBM and SUN provide WSDL drivers.</p>
+<description><p>This sampler has been tested with IIS Webservice running .NET 1.0. It
+ hasn't been tested with SUN or IBM webservices providers, but it should work.
+ The sampler uses Apache SOAP driver, to serialize the message and set the header
+ with the correct SOAPAction. Right now the sampler doesn't support automatic WSDL
+ handling, since Apache SOAP currently does not provide support for it. Both IBM
+ and SUN provide WSDL drivers.</p>
 </description>
 
 <properties>
@@ -290,6 +296,60 @@ POST content.</p>
         <property name="SOAPAction" required="Yes">The SOAPAction defined in the webservice description or WSDL.</property>
         <property name="Soap Data" required="Yes">The Soap XML message</property>
         </properties>
+
+</component>
+
+<component name="Access Log Sampler (Alpha Code" index="13.1.8" screenshot="">
+
+<description><p>AccessLogSampler was designed to read access logs and generate http requests.
+For those not familiar with the access log, it is the log the webserver maintains of every
+request it accepted. This means the every image and html file. The current implementation
+is complete, but some features have not been enabled. There is a filter for the access
+log parser, but I haven't figured out how to link to the pre-processor. Once I do, changes
+to the sampler will be made to enable that functionality.</p>
+<p>Tomcat uses the common format for access logs. This means any webserver that uses the
+common log format can use the AccessLogSampler. Server that don't use common log format
+include IIS, Netscape and SunOne. I'm sure there are other servers that don't use the
+common format, but we don't bother listing all of them here. Common log format looks
+like this:</p>
+<p>127.0.0.1 - - [21/Oct/2003:05:37:21 -0500] "GET /index.jsp?%2Findex.jsp= HTTP/1.1" 200 8343</p>
+<p>The current implemenation of the parser only looks at the text within the quotes.
+Everything else is stripped out and igored. For example, the response code is completely
+ignored by the parser. For the future, it might be nice to filter out entries that
+do not have a response code of 200. Extending the sampler should be fairly simple. There
+are two interfaces you have to implement.</p>
+<p>org.apache.jmeter.protocol.http.util.accesslog.LogParser</p>
+<p>org.apache.jmeter.protocol.http.util.accesslog.Generator</p>
+<p>The current implementation of AccessLogSampler uses the generator to create a new
+HTTPSampler. The servername, port and get images are set by AccessLogSampler. Next,
+the parser is called with integer 1, telling it to parse one entry. After that,
+HTTPSampler.sample() is called to make the request.
+<code>
+<pre>
+            samp = (HTTPSampler) GENERATOR.generateRequest();
+            samp.setDomain(this.getDomain());
+            samp.setPort(this.getPort());
+            samp.setImageParser(this.isImageParser());
+            PARSER.parse(1);
+            res = samp.sample();
+            res.setSampleLabel(samp.toString());
+</pre>
+</code>
+The required methods in LogParser are: setGenerator(Generator) and parse(int).
+Classes implementing Generator interface should provide concrete implementation
+for all the methods. For an example of how to implement either interface, refer to
+StandardGenerator and TCLogParser.
+</p>
+</description>
+
+<properties>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Server" required="Yes">Domain name or IP address of the web server.</property>
+        <property name="Port" required="No (defaults to 80)">Port the web server is listening to.</property>
+        <property name="Log parser class" required="No (default provided)">The log parser class is responsible for parsing the logs.</property>
+        <property name="Generator class" required="No (default provided)">The generator class is responsible for creating HTTPSampler objects.</property>
+        <property name="Location of log file" required="Yes">The location of the access log file.</property>
+</properties>
 
 </component>
 
