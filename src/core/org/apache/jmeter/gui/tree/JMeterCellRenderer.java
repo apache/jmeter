@@ -55,10 +55,11 @@
 package org.apache.jmeter.gui.tree;
 
 
-import javax.swing.tree.*;
-import javax.swing.*;
-
 import java.awt.Component;
+
+import javax.swing.ImageIcon;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeCellRenderer;
 
 /**
  * Title:        JMeter

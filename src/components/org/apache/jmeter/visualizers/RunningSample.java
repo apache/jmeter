@@ -57,8 +57,6 @@ package org.apache.jmeter.visualizers;
 
 // java
 import java.text.DecimalFormat;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.jmeter.samplers.SampleResult;
 

@@ -54,9 +54,9 @@
  */
 package org.apache.jmeter.control;
 import java.io.Serializable;
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.testelement.TestElement;
+
 import org.apache.jmeter.samplers.AbstractSampler;
+import org.apache.jmeter.testelement.TestElement;
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
  *

@@ -55,14 +55,13 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
-import java.util.*;
-import java.lang.reflect.*;
-import javax.swing.*;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.apache.jmeter.gui.*;
-import org.apache.jmeter.gui.tree.*;
-import org.apache.jmeter.gui.util.*;
-import org.apache.jmeter.util.*;
+import javax.swing.JOptionPane;
+
+import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache

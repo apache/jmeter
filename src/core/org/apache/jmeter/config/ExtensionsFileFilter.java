@@ -6,9 +6,10 @@
  */
 package org.apache.jmeter.config;
 
-import javax.swing.filechooser.FileFilter;
-import java.util.ArrayList;
 import java.io.File;
+import java.util.ArrayList;
+
+import javax.swing.filechooser.FileFilter;
 
 /**
  * This FileFilter allows for a list of file extensions

@@ -53,18 +53,18 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.assertions;
-
-import java.util.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
-
-import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.MalformedCachePatternException;
+import org.apache.oro.text.PatternCacheLRU;
+import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
-import org.apache.oro.text.regex.Pattern;
-
 /************************************************************
  *  Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:
  *  Apache
@@ -74,332 +74,312 @@ import org.apache.oro.text.regex.Pattern;
  * @created    $Date$
  * @version    $Revision$
  ***********************************************************/
-
-public class ResponseAssertion extends AbstractTestElement implements Serializable, Assertion
+public class ResponseAssertion
+   extends AbstractTestElement
+   implements Serializable, Assertion
 {
-
-	public final static String TEST_FIELD = "Assertion.test_field";
-	public final static String TEST_TYPE = "Assertion.test_type";
-	public final static String TEST_STRINGS = "Asserion.test_strings";
-	public final static String SAMPLE_LABEL = "Assertion.sample_label";
-	public final static String RESPONSE_DATA = "Assertion.response_data";
-
-
-	private String notMessage = "";
-	private String failMessage = "to contain: ";
-	public final static int MATCH = 1 << 0;
-	public final static int CONTAINS = 1 << 1;
-	public final static int NOT = 1 << 2;
-
-	private static ThreadLocal matcher =
-	    new ThreadLocal()
-	    {
-			protected Object initialValue()
-			{
-			    return new Perl5Matcher();
-			}
-	    };
-	private static PatternCacheLRU patternCache =
-		new PatternCacheLRU(1000, new Perl5Compiler());
-
-	/************************************************************
-	 *  !ToDo (Constructor description)
-	 ***********************************************************/
-	public ResponseAssertion()
-	{
-		setProperty(TEST_STRINGS,new ArrayList());
-	}
-
-	/************************************************************
-	 *  !ToDo (Constructor description)
-	 *
-	 *@param  field   !ToDo (Parameter description)
-	 *@param  type    !ToDo (Parameter description)
-	 *@param  string  !ToDo (Parameter description)
-	 ***********************************************************/
-	public ResponseAssertion(String field, int type, String string)
-	{
-		this();
-		setTestField(field);
-		setTestType(type);
-		getTestStrings().add(string);
-	}
-
-	/************************************************************
-	 *  !ToDo (Method description)
-	 *
-	 *@param  testField  !ToDo (Parameter description)
-	 ***********************************************************/
-	public void setTestField(String testField)
-	{
-		setProperty(TEST_FIELD,testField);
-	}
-
-	/************************************************************
-	 *  !ToDo (Method description)
-	 *
-	 *@param  testType  !ToDo (Parameter description)
-	 ***********************************************************/
-	public void setTestType(int testType)
-	{
-		setProperty(TEST_TYPE,new Integer(testType));
-		if ((testType & NOT) > 0)
-		{
-			notMessage = "not ";
-		}
-		else
-		{
-			notMessage = "";
-		}
-		if ((testType & CONTAINS) > 0)
-		{
-			failMessage = "to contain: ";
-		}
-		else
-		{
-			failMessage = "to match: ";
-		}
-	}
-
-	/************************************************************
-	 *  !ToDo (Method description)
-	 *
-	 *@param  testString  !ToDo (Parameter description)
-	 ***********************************************************/
-	public void addTestString(String testString)
-	{
-		getTestStrings().add(testString);
-	}
-
-	public void setTestString(String testString,int index)
-	{
-		getTestStrings().set(index,testString);
-	}
-
-	public void removeTestString(String testString)
-	{
-		getTestStrings().remove(testString);
-	}
-
-	public void removeTestString(int index)
-	{
-		getTestStrings().remove(index);
-	}
-
-	public void clearTestStrings()
-	{
-		getTestStrings().clear();
-	}
-
-	/************************************************************
-	 *  !ToDoo (Method description)
-	 *
-	 *@param  response  !ToDo (Parameter description)
-	 *@return           !ToDo (Return description)
-	 ***********************************************************/
-	public AssertionResult getResult(SampleResult response)
-	{
-		AssertionResult result;
-		if (!response.isSuccessful())
-		{
-			result = new AssertionResult();
-			result.setError(true);
-			result.setFailureMessage(new String((byte[])response.getResponseData()));
-			return result;
-		}
-		result = evaluateResponse(response);
-		return result;
-	}
-
-
-	/************************************************************
-	 *  !ToDoo (Method description)
-	 *
-	 *@return    !ToDo (Return description)
-	 ***********************************************************/
-	public String getTestField()
-	{
-		return (String)getProperty(TEST_FIELD);
-	}
-
-	/************************************************************
-	 *  !ToDoo (Method description)
-	 *
-	 *@return    !ToDo (Return description)
-	 ***********************************************************/
-	public int getTestType()
-	{
-		Object type = getProperty(TEST_TYPE);
-		if(type == null)
-		{
-			return CONTAINS;
-		}
-		else if(type instanceof Integer)
-		{
-			return ((Integer)type).intValue();
-		}
-		else
-		{
-			return Integer.parseInt((String)type);
-		}
-	}
-
-	/************************************************************
-	 *  !ToDoo (Method description)
-	 *
-	 *@return    !ToDo (Return description)
-	 ***********************************************************/
-	public List getTestStrings()
-	{
-		return (List)getProperty(TEST_STRINGS);
-	}
-
-	public boolean isContainsType()
-	{
-		return (getTestType() & CONTAINS) > 0;
-	}
-
-	public boolean isMatchType()
-	{
-		return (getTestType() & MATCH) > 0;
-	}
-
-	public boolean isNotType()
-	{
-		return (getTestType() & NOT) > 0;
-	}
-
-	public void setToContainsType()
-	{
-		setTestType((getTestType() | CONTAINS) & (MATCH ^ (CONTAINS | MATCH | NOT)));
-		failMessage = "to contain: ";
-	}
-
-	public void setToMatchType()
-	{
-		setTestType((getTestType() | MATCH) & (CONTAINS ^ (CONTAINS | MATCH | NOT)));
-		failMessage = "to match: ";
-	}
-
-	public void setToNotType()
-	{
-		setTestType((getTestType() | NOT));
-	}
-
-	public void unsetNotType()
-	{
-		setTestType(getTestType() & (NOT ^ (CONTAINS | MATCH | NOT)));
-	}
-
-    /**
-     * Make sure the response satisfies the specified assertion requirements.
-     * 
-     * @param response an instance of SampleResult
-     * @return an instance of AssertionResult
-     */
-    private AssertionResult evaluateResponse(SampleResult response)
-    {
-	boolean pass = true;
-	boolean not = (NOT & getTestType()) > 0;
-	AssertionResult result = new AssertionResult();
-	String responseString = new String(response.getResponseData());
-
-	try
-	{
-	    // Get the Matcher for this thread
-	    Perl5Matcher localMatcher = (Perl5Matcher)matcher.get();
-
-	    Iterator iter = getTestStrings().iterator();
-	    while (iter.hasNext())
-	    {
-		String stringPattern= (String) iter.next();
-		Pattern pattern = patternCache.getPattern(stringPattern, Perl5Compiler.READ_ONLY_MASK);
-		boolean found;
-		if ((CONTAINS & getTestType()) > 0)
-		{
-		    found = localMatcher.contains(responseString, pattern);
-		}
-		else
-		{
-		    found = localMatcher.matches(responseString, pattern);
-		}
-		pass = not ? !found : found;
-
-		if (!pass)
-		{
-		    result.setFailure(true);
-		    result.setFailureMessage("Test Failed, expected " +
-			    notMessage + failMessage + stringPattern);
-		    break;
-		}
-	    }
-	    if(pass)
-	    {
-		result.setFailure(false);
-	    }
-	    result.setError(false);
-	}
-	catch (MalformedCachePatternException e)
-	{
-	    result.setError(true);
-	    result.setFailure(false);
-	    result.setFailureMessage("Bad test configuration"+e);
-	}
-
-	return result;
-    }
-
-    public static class Test extends junit.framework.TestCase
-    {
-	int threadsRunning;
-	int failed;
-
-	public Test(String name)
-	{
-	    super(name);
-	}
-
-	public void testThreadSafety() throws Exception
-	{
-	    Thread[] threads= new Thread[100];
-	    for (int i= 0; i < threads.length; i++) {
-		threads[i]= new TestThread();
-	    }
-	    failed= 0;
-	    for (int i= 0; i < threads.length; i++) {
-		threads[i].start();
-		threadsRunning++;
-	    }
-	    synchronized (this)
-	    {
-		while (threadsRunning>0) wait();
-	    }
-	    assertEquals(failed, 0);
-	}
-
-	class TestThread extends Thread
-	{
-	    static final String TEST_STRING= "Dábale arroz a la zorra el abad.";
-	    static final String TEST_PATTERN= ".*á.*\\.";
-	    public void run()
-	    {
-		ResponseAssertion assertion= new ResponseAssertion(
-			RESPONSE_DATA, CONTAINS, TEST_PATTERN);
-		SampleResult response= new SampleResult();
-		response.setResponseData(TEST_STRING.getBytes());
-		for (int i= 0; i< 100; i++) {
-		    AssertionResult result;
-		    result= assertion.evaluateResponse(response);
-		    if (result.isFailure() || result.isError()) {
-			failed++;
-		    }
-		}
-		synchronized(Test.this) {
-		  threadsRunning--;
-		  Test.this.notify();
-		}
-	    }
-	}
-    }
-
+   public final static String TEST_FIELD = "Assertion.test_field";
+   public final static String TEST_TYPE = "Assertion.test_type";
+   public final static String TEST_STRINGS = "Asserion.test_strings";
+   public final static String SAMPLE_LABEL = "Assertion.sample_label";
+   public final static String RESPONSE_DATA = "Assertion.response_data";
+   private String notMessage = "";
+   private String failMessage = "to contain: ";
+   public final static int MATCH = 1 << 0;
+   public final static int CONTAINS = 1 << 1;
+   public final static int NOT = 1 << 2;
+   private static ThreadLocal matcher = new ThreadLocal()
+   {
+      protected Object initialValue()
+      {
+         return new Perl5Matcher();
+      }
+   };
+   private static PatternCacheLRU patternCache =
+      new PatternCacheLRU(1000, new Perl5Compiler());
+   /************************************************************
+    *  !ToDo (Constructor description)
+    ***********************************************************/
+   public ResponseAssertion()
+   {
+      setProperty(TEST_STRINGS, new ArrayList());
+   }
+   /************************************************************
+    *  !ToDo (Constructor description)
+    *
+    *@param  field   !ToDo (Parameter description)
+    *@param  type    !ToDo (Parameter description)
+    *@param  string  !ToDo (Parameter description)
+    ***********************************************************/
+   public ResponseAssertion(String field, int type, String string)
+   {
+      this();
+      setTestField(field);
+      setTestType(type);
+      getTestStrings().add(string);
+   }
+   /************************************************************
+    *  !ToDo (Method description)
+    *
+    *@param  testField  !ToDo (Parameter description)
+    ***********************************************************/
+   public void setTestField(String testField)
+   {
+      setProperty(TEST_FIELD, testField);
+   }
+   /************************************************************
+    *  !ToDo (Method description)
+    *
+    *@param  testType  !ToDo (Parameter description)
+    ***********************************************************/
+   public void setTestType(int testType)
+   {
+      setProperty(TEST_TYPE, new Integer(testType));
+      if ((testType & NOT) > 0)
+      {
+         notMessage = "not ";
+      }
+      else
+      {
+         notMessage = "";
+      }
+      if ((testType & CONTAINS) > 0)
+      {
+         failMessage = "to contain: ";
+      }
+      else
+      {
+         failMessage = "to match: ";
+      }
+   }
+   /************************************************************
+    *  !ToDo (Method description)
+    *
+    *@param  testString  !ToDo (Parameter description)
+    ***********************************************************/
+   public void addTestString(String testString)
+   {
+      getTestStrings().add(testString);
+   }
+   public void setTestString(String testString, int index)
+   {
+      getTestStrings().set(index, testString);
+   }
+   public void removeTestString(String testString)
+   {
+      getTestStrings().remove(testString);
+   }
+   public void removeTestString(int index)
+   {
+      getTestStrings().remove(index);
+   }
+   public void clearTestStrings()
+   {
+      getTestStrings().clear();
+   }
+   /************************************************************
+    *  !ToDoo (Method description)
+    *
+    *@param  response  !ToDo (Parameter description)
+    *@return           !ToDo (Return description)
+    ***********************************************************/
+   public AssertionResult getResult(SampleResult response)
+   {
+      AssertionResult result;
+      if (!response.isSuccessful())
+      {
+         result = new AssertionResult();
+         result.setError(true);
+         result.setFailureMessage(
+            new String((byte[]) response.getResponseData()));
+         return result;
+      }
+      result = evaluateResponse(response);
+      return result;
+   }
+   /************************************************************
+    *  !ToDoo (Method description)
+    *
+    *@return    !ToDo (Return description)
+    ***********************************************************/
+   public String getTestField()
+   {
+      return (String) getProperty(TEST_FIELD);
+   }
+   /************************************************************
+    *  !ToDoo (Method description)
+    *
+    *@return    !ToDo (Return description)
+    ***********************************************************/
+   public int getTestType()
+   {
+      Object type = getProperty(TEST_TYPE);
+      if (type == null)
+      {
+         return CONTAINS;
+      }
+      else if (type instanceof Integer)
+      {
+         return ((Integer) type).intValue();
+      }
+      else
+      {
+         return Integer.parseInt((String) type);
+      }
+   }
+   /************************************************************
+    *  !ToDoo (Method description)
+    *
+    *@return    !ToDo (Return description)
+    ***********************************************************/
+   public List getTestStrings()
+   {
+      return (List) getProperty(TEST_STRINGS);
+   }
+   public boolean isContainsType()
+   {
+      return (getTestType() & CONTAINS) > 0;
+   }
+   public boolean isMatchType()
+   {
+      return (getTestType() & MATCH) > 0;
+   }
+   public boolean isNotType()
+   {
+      return (getTestType() & NOT) > 0;
+   }
+   public void setToContainsType()
+   {
+      setTestType(
+         (getTestType() | CONTAINS) & (MATCH ^ (CONTAINS | MATCH | NOT)));
+      failMessage = "to contain: ";
+   }
+   public void setToMatchType()
+   {
+      setTestType(
+         (getTestType() | MATCH) & (CONTAINS ^ (CONTAINS | MATCH | NOT)));
+      failMessage = "to match: ";
+   }
+   public void setToNotType()
+   {
+      setTestType((getTestType() | NOT));
+   }
+   public void unsetNotType()
+   {
+      setTestType(getTestType() & (NOT ^ (CONTAINS | MATCH | NOT)));
+   }
+   /**
+    * Make sure the response satisfies the specified assertion requirements.
+    * 
+    * @param response an instance of SampleResult
+    * @return an instance of AssertionResult
+    */
+   private AssertionResult evaluateResponse(SampleResult response)
+   {
+      boolean pass = true;
+      boolean not = (NOT & getTestType()) > 0;
+      AssertionResult result = new AssertionResult();
+      String responseString = new String(response.getResponseData());
+      try
+      {
+         // Get the Matcher for this thread
+         Perl5Matcher localMatcher = (Perl5Matcher) matcher.get();
+         Iterator iter = getTestStrings().iterator();
+         while (iter.hasNext())
+         {
+            String stringPattern = (String) iter.next();
+            Pattern pattern =
+               patternCache.getPattern(
+                  stringPattern,
+                  Perl5Compiler.READ_ONLY_MASK);
+            boolean found;
+            if ((CONTAINS & getTestType()) > 0)
+            {
+               found = localMatcher.contains(responseString, pattern);
+            }
+            else
+            {
+               found = localMatcher.matches(responseString, pattern);
+            }
+            pass = not ? !found : found;
+            if (!pass)
+            {
+               result.setFailure(true);
+               result.setFailureMessage(
+                  "Test Failed, expected "
+                     + notMessage
+                     + failMessage
+                     + stringPattern);
+               break;
+            }
+         }
+         if (pass)
+         {
+            result.setFailure(false);
+         }
+         result.setError(false);
+      }
+      catch (MalformedCachePatternException e)
+      {
+         result.setError(true);
+         result.setFailure(false);
+         result.setFailureMessage("Bad test configuration" + e);
+      }
+      return result;
+   }
+   public static class Test extends junit.framework.TestCase
+   {
+      int threadsRunning;
+      int failed;
+      public Test(String name)
+      {
+         super(name);
+      }
+      public void testThreadSafety() throws Exception
+      {
+         Thread[] threads = new Thread[100];
+         for (int i = 0; i < threads.length; i++)
+         {
+            threads[i] = new TestThread();
+         }
+         failed = 0;
+         for (int i = 0; i < threads.length; i++)
+         {
+            threads[i].start();
+            threadsRunning++;
+         }
+         synchronized (this)
+         {
+            while (threadsRunning > 0)
+               wait();
+         }
+         assertEquals(failed, 0);
+      }
+      class TestThread extends Thread
+      {
+         static final String TEST_STRING = "Dábale arroz a la zorra el abad.";
+         static final String TEST_PATTERN = ".*á.*\\.";
+         public void run()
+         {
+            ResponseAssertion assertion =
+               new ResponseAssertion(RESPONSE_DATA, CONTAINS, TEST_PATTERN);
+            SampleResult response = new SampleResult();
+            response.setResponseData(TEST_STRING.getBytes());
+            for (int i = 0; i < 100; i++)
+            {
+               AssertionResult result;
+               result = assertion.evaluateResponse(response);
+               if (result.isFailure() || result.isError())
+               {
+                  failed++;
+               }
+            }
+            synchronized (Test.this)
+            {
+               threadsRunning--;
+               Test.this.notify();
+            }
+         }
+      }
+   }
 }

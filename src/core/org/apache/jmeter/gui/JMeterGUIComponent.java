@@ -55,9 +55,11 @@
 
 package org.apache.jmeter.gui;
 import java.util.Collection;
+
 import javax.swing.JPopupMenu;
-import org.apache.jmeter.testelement.TestElement;
+
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.testelement.TestElement;
 /****************************************
  * Implementing this interface indicates that the class is
  * a JMeter GUI Component.  A JMeter GUI Component is essentially 

@@ -55,20 +55,17 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
-import java.util.Set;
-import java.util.HashSet;
+import java.io.File;
 import java.util.Collections;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.border.*;
-import java.util.ResourceBundle;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
-
-import java.io.File;
-import javax.swing.filechooser.FileFilter;
 
 /**
  * SSL Manager Command.  The SSL Manager provides a mechanism to change your

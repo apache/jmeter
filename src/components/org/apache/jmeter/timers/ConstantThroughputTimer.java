@@ -55,11 +55,12 @@
 
 package org.apache.jmeter.timers;
 
-import java.util.*;
-import java.io.*;
+import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * This class implements a constant throughput timer. A Constant Throughtput

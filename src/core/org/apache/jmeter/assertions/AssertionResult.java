@@ -55,9 +55,7 @@
 
 package org.apache.jmeter.assertions;
 
-import java.io.*;
-
-import org.apache.avalon.framework.configuration.*;
+import java.io.Serializable;
 
 /**
  * Title:        Jakarta-JMeter

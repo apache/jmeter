@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.jmeter.functions.gui.FunctionHelper;
-import org.apache.jmeter.gui.GuiPackage;
 
 /**
  * @author Administrator

@@ -1,9 +1,6 @@
 package org.apache.jmeter.testelement;
-import java.io.*;
-import java.util.*;
-import org.apache.jmeter.control.gui.*;
-import org.apache.jmeter.gui.*;
-import org.apache.jmeter.gui.util.MenuFactory;
+import java.io.Serializable;
+import java.util.List;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache

@@ -55,12 +55,16 @@
 package org.apache.jmeter.visualizers; // java
 
 
-import java.util.*; // apache
-import junit.framework.TestCase;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
 import org.apache.jmeter.samplers.Clearable;
-import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.util.JMeterUtils;
 
 
 /****************************************

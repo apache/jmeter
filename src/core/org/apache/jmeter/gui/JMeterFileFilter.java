@@ -55,9 +55,7 @@
 
 package org.apache.jmeter.gui;
 
-import java.io.*;
-import javax.swing.*;
-import javax.swing.filechooser.*;
+import java.io.File;
 import java.util.Arrays;
 
 public class JMeterFileFilter extends javax.swing.filechooser.FileFilter 

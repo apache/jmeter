@@ -122,6 +122,7 @@ public class TestPlan extends AbstractTestElement implements Serializable
 	 ***************************************/
 	public void addTestElement(TestElement tg)
 	{
+        super.addTestElement(tg);
 		if(tg instanceof ThreadGroup)
 		{
 			addThreadGroup((ThreadGroup)tg);

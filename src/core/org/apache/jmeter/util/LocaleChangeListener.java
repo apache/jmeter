@@ -56,7 +56,6 @@
 package org.apache.jmeter.util;
 
 
-import org.apache.jmeter.util.LocaleChangeEvent;
 
 
 /**

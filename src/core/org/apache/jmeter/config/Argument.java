@@ -53,7 +53,8 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.config;
-import java.io.*;
+import java.io.Serializable;
+
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 

@@ -53,12 +53,8 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control;
-import java.util.*;
-import org.apache.jmeter.config.ConfigElement;
-import org.apache.jmeter.samplers.Entry;
-import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testelement.TestElement;
 
 /****************************************
  * This interface will typically be used in the following manner:
