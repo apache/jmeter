@@ -30,6 +30,7 @@
 <h4>New functionality:</h4>
 <ul>
 <li>Better checking of parameter count in JavaScript function</li>
+<li>XPath Assertion</li>
 </ul>
 <h4>Bug fixes:</h4>
 <ul>

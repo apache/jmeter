@@ -1554,6 +1554,24 @@ These are strings unless otherwise noted:
 
 </properties>
 </component>
+<component index="15.5.8" name="XPath Assertion" screenshot="xpath_assertion.png">
+<description><p>The XPath Assertion tests a document for well formedness, has the option
+of validating against a DTD, or putting the document through JTidy and testing for an
+XPath.  If that XPath exists, the Assertion is true.  Using "/" will match any well-formed
+document, and is the default XPath Expression.
+See <a href="http://www.w3.org/TR/xpath">http://www.w3.org/TR/xpath</a> for more information
+on XPath.
+</p></description>
+
+<properties>
+<property name="Name"		required="No">Descriptive name for this element that is shown in the tree.</property>
+<property name="Tidy"		required="No">Send the returning document through JTidy.</property>
+<property name="Validation"	required="No">Check the document against its schema.</property>
+<property name="XPath"		required="Yes">XPath to match in the document.</property>
+<property name="Whitespace"	required="No">Ignore Element Whitespace.</property>
+<property name="Negation"	required="No">True if a XPath expression is not matched</property>
+</properties>
+</component>
 
 </section>
 
