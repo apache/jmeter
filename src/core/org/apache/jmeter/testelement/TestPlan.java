@@ -17,8 +17,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * @author    Michael Stover
- * @created   March 13, 2001
- * @version   $Revision$
+ * Created   March 13, 2001
+ * @version   $Revision$ Last updated: $Date$
  */
 public class TestPlan extends AbstractTestElement implements Serializable
 {
