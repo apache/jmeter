@@ -322,18 +322,18 @@ public abstract class AbstractJMeterGuiComponent
 		return getStaticLabel().replace(' ', '_');
 	}
 	
-	/* 
-	 * Dummy implementation so existing code still compiles.
-	 * Throws an error because it should not be invoked - and cannot provide a useful value.
-	 * 
-	 * The target class should either implement getStaticLabel(), as before, or it
-	 * should implement getLabelResource()
-	 * 
-     * TODO: remove eventually
-	 */
-	public String getLabelResource()
-	{
-		throw new UnsupportedOperationException("Needs to be implemented by the class: "
-				+this.getClass().getName());
-	}
+//	/* 
+//	 * Dummy implementation so existing code still compiles.
+//	 * Throws an error because it should not be invoked - and cannot provide a useful value.
+//	 * 
+//	 * The target class should either implement getStaticLabel(), as before, or it
+//	 * should implement getLabelResource()
+//	 * 
+//   * DONE: remove eventually
+//	 */
+//	public String getLabelResource()
+//	{
+//		throw new UnsupportedOperationException("Needs to be implemented by the class: "
+//				+this.getClass().getName());
+//	}
 }
