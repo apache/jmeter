@@ -15,9 +15,7 @@ import javax.swing.JPanel;
 
 /**
  * @author ano ano
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * @version $Revision$
  */
 public class VerticalPanel extends JPanel
 {
@@ -30,15 +28,14 @@ public class VerticalPanel extends JPanel
         this(5, LEFT_ALIGNMENT);
     }
     
-    public VerticalPanel(int vgap, float horizontalAlign) {
+    public VerticalPanel(int vgap, float horizontalAlign)
+    {
         super(new BorderLayout());
         add(subPanel,BorderLayout.NORTH);
         this.vgap = vgap;
         this.horizontalAlign = horizontalAlign;
     }
     
-    
-
     /* (non-Javadoc)
      * @see java.awt.Container#add(java.awt.Component)
      */
@@ -46,15 +43,16 @@ public class VerticalPanel extends JPanel
     {
         // This won't work right if we remove components.  But we don't, so I'm
         // not going to worry about it right now.
-        if (vgap > 0 && subPanel.getComponentCount() > 0) {
+        if (vgap > 0 && subPanel.getComponentCount() > 0)
+        {
             subPanel.add(Box.createVerticalStrut(vgap));
         }
         
-        if (c instanceof JComponent) {
+        if (c instanceof JComponent)
+        {
             ((JComponent)c).setAlignmentX(horizontalAlign);
         }
         
         return subPanel.add(c);
     }
-
 }

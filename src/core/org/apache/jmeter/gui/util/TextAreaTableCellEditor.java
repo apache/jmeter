@@ -19,24 +19,25 @@ import javax.swing.tree.TreeCellEditor;
 
 /**
  * @author mstover
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
-public class TextAreaTableCellEditor extends AbstractCellEditor implements TableCellEditor, TreeCellEditor
+public class TextAreaTableCellEditor
+    extends AbstractCellEditor
+    implements TableCellEditor, TreeCellEditor
 {
-
     //
     //Instance Variables
     //
 
     /** The Swing component being edited. */
     protected JTextArea editorComponent;
+    
     /**
      * The delegate class which handles all methods sent from the
      * <code>CellEditor</code>.
      */
     protected EditorDelegate delegate;
+    
     /**
      * An integer specifying the number of clicks needed to start editing.
      * Even if <code>clickCountToStart</code> is defined as zero, it
@@ -49,9 +50,7 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
     //
 
     /**
-     * Constructs a <code>DefaultCellEditor</code> that uses a text field.
-     *
-     * @param x  a <code>JTextField</code> object
+     * Constructs a <code>TableCellEditor</code> that uses a text field.
      */
     public TextAreaTableCellEditor()
     {
@@ -62,7 +61,8 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
         {
             public void setValue(Object value)
             {
-                editorComponent.setText((value != null) ? value.toString() : "");
+                editorComponent.setText(
+                    (value != null) ? value.toString() : "");
             }
 
             public Object getCellEditorValue()
@@ -90,7 +90,8 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
     /**
      * Specifies the number of clicks needed to start editing.
      *
-     * @param count  an int specifying the number of clicks needed to start editing
+     * @param count  an int specifying the number of clicks needed to start
+     *               editing
      * @see #getClickCountToStart
      */
     public void setClickCountToStart(int count)
@@ -167,9 +168,22 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
     //
 
     /** Implements the <code>TreeCellEditor</code> interface. */
-    public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row)
+    public Component getTreeCellEditorComponent(
+        JTree tree,
+        Object value,
+        boolean isSelected,
+        boolean expanded,
+        boolean leaf,
+        int row)
     {
-        String stringValue = tree.convertValueToText(value, isSelected, expanded, leaf, row, false);
+        String stringValue =
+            tree.convertValueToText(
+                value,
+                isSelected,
+                expanded,
+                leaf,
+                row,
+                false);
 
         delegate.setValue(stringValue);
         return new JScrollPane(editorComponent);
@@ -179,7 +193,12 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
     //Implementing the CellEditor Interface
     //
     /** Implements the <code>TableCellEditor</code> interface. */
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
+    public Component getTableCellEditorComponent(
+        JTable table,
+        Object value,
+        boolean isSelected,
+        int row,
+        int column)
     {
         delegate.setValue(value);
         return new JScrollPane(editorComponent);
@@ -194,7 +213,6 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
      */
     protected class EditorDelegate implements FocusListener, Serializable
     {
-
         /**  The value of this cell. */
         protected Object value;
 
@@ -231,7 +249,8 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
         {
             if (anEvent instanceof MouseEvent)
             {
-                return ((MouseEvent) anEvent).getClickCount() >= clickCountToStart;
+                return ((MouseEvent) anEvent).getClickCount()
+                    >= clickCountToStart;
             }
             return true;
         }
@@ -305,6 +324,7 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
         }
 
         public void focusGained(FocusEvent ev)
-        {}
+        {
+        }
     }
 }
