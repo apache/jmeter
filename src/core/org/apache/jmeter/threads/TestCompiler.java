@@ -1,14 +1,14 @@
 package org.apache.jmeter.threads;
 
-//import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.HashMap;
-//import java.util.HashSet;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-//import java.util.Set;
+import java.util.Set;
 
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -40,29 +40,30 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
     transient private static Logger log = LoggingManager.getLoggerForClass();
     LinkedList stack = new LinkedList();
     Map samplerConfigMap = new HashMap();
-    //Set objectsWithFunctions = new HashSet();
+    Set objectsWithFunctions = new HashSet();
     HashTree testTree;
-    //SampleResult previousResult;
-    //Sampler currentSampler;
-    //JMeterVariables threadVars;
-    //private static Set pairing = new HashSet();
+    SampleResult previousResult;
+    Sampler currentSampler;
+    JMeterVariables threadVars;
+    private static Set pairing = new HashSet();
+    //TODO: should pairing be static?
 
-    //List loopIterListeners = new ArrayList();
+    List loopIterListeners = new ArrayList();
 
     public TestCompiler(HashTree testTree, JMeterVariables vars)
     {
-        //threadVars = vars;
+        threadVars = vars;
         this.testTree = testTree;
     }
 
-    public static void initialize()
+    public static synchronized void initialize()
     {
-        //pairing.clear();
+        pairing.clear();
     }
 
     public void sampleOccurred(SampleEvent e)
     {
-        //previousResult = e.getResult();
+        previousResult = e.getResult();
     }
 
     public void sampleStarted(SampleEvent e)
@@ -75,7 +76,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
 
     public SamplePackage configureSampler(Sampler sampler)
     {
-        //currentSampler = sampler;
+        currentSampler = sampler;
         SamplePackage pack = (SamplePackage) samplerConfigMap.get(sampler);
         pack.setSampler(sampler);
         runPreProcessors(pack.getPreProcessors());
@@ -117,18 +118,20 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
             saveSamplerConfigs((Sampler) child);
         }
         stack.removeLast();
-//        if (stack.size() > 0)
-//        {
-//            ObjectPair pair =
-//                new ObjectPair(
-//                    (TestElement) child,
-//                    (TestElement) stack.getLast());
-//            if (!pairing.contains(pair))
-//            {
-//                pair.addTestElements();
-//                pairing.add(pair);
-//            }
-//        }
+        if (stack.size() > 0)
+        {
+            ObjectPair pair =
+                new ObjectPair(
+                    (TestElement) child,
+                    (TestElement) stack.getLast());
+			synchronized (this){
+                if (!pairing.contains(pair))
+                {
+                    pair.addTestElements();
+					pairing.add(pair);
+                }
+            }
+        }
     }
 
     private void trackIterationListeners(LinkedList stack)
@@ -224,7 +227,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
     }
 
     /**
-     * @author
+     * @author    $Author$
      * @version   $Revision$
      */
     public static class Test extends junit.framework.TestCase
@@ -271,43 +274,43 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
     }
 
     /**
-     *
+     * @author    $Author$
      * @version   $Revision$
      */
-//    private class ObjectPair
-//    {
-//        TestElement child, parent;
-//
-//        public ObjectPair(TestElement one, TestElement two)
-//        {
-//            this.child = one;
-//            this.parent = two;
-//        }
-//
-//        public void addTestElements()
-//        {
-//            if (parent instanceof Controller
-//                && (child instanceof Sampler || child instanceof Controller))
-//            {
-//                parent.addTestElement(child);
-//            }
-//        }
-//
-//        public int hashCode()
-//        {
-//            return child.hashCode() + parent.hashCode();
-//        }
-//
-//        public boolean equals(Object o)
-//        {
-//            if (o instanceof ObjectPair)
-//            {
-//                return child == ((ObjectPair) o).child
-//                    && parent == ((ObjectPair) o).parent;
-//            }
-//            return false;
-//        }
-//    }
+    private class ObjectPair
+    {
+        TestElement child, parent;
+
+        public ObjectPair(TestElement one, TestElement two)
+        {
+            this.child = one;
+            this.parent = two;
+        }
+
+        public void addTestElements()
+        {
+            if (parent instanceof Controller
+                && (child instanceof Sampler || child instanceof Controller))
+            {
+                parent.addTestElement(child);
+            }
+        }
+
+        public int hashCode()
+        {
+            return child.hashCode() + parent.hashCode();
+        }
+
+        public boolean equals(Object o)
+        {
+            if (o instanceof ObjectPair)
+            {
+                return child == ((ObjectPair) o).child
+                    && parent == ((ObjectPair) o).parent;
+            }
+            return false;
+        }
+    }
 
     private void configureWithConfigElements(Sampler sam, List configs)
     {
