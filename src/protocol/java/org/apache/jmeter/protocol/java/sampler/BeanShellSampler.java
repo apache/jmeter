@@ -57,7 +57,7 @@ package org.apache.jmeter.protocol.java.sampler;
 
 import java.io.IOException;
 
-import bsh.EvalError;
+//import bsh.EvalError;
 import bsh.Interpreter;
    
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -134,7 +134,7 @@ public class BeanShellSampler extends AbstractSampler
         	} else {
 				res.setSamplerData(fileName);
         	}
-			
+
 			//TODO - set some more variables?
 			bshInterpreter.set("Label",getLabel());
 			bshInterpreter.set("FileName",getFilename());
@@ -168,15 +168,32 @@ public class BeanShellSampler extends AbstractSampler
 	        isSuccessful = Boolean.valueOf(bshInterpreter.get("IsSuccess") //$NON-NLS-1$
 	            .toString()).booleanValue();
         }
-		catch (EvalError ex)
+/*
+ * To avoid class loading problems when bsh,jar is missing,
+ * we don't try to catch this error separately
+ * 		catch (bsh.EvalError ex)
 		{
 			log.debug("",ex);
 			res.setResponseCode("500");//$NON-NLS-1$
 			res.setResponseMessage(ex.toString());
-		}
+		} 
+ */
+        // but we do trap this error to make tests work better
+        catch(NoClassDefFoundError ex){
+			log.error("BeanShell Jar missing? "+ex.toString());
+			res.setResponseCode("501");//$NON-NLS-1$
+			res.setResponseMessage(ex.toString());
+			res.setStopThread(true); // No point continuing
+        }
 		catch (IOException ex)
 		{
-			log.debug("",ex);
+			log.warn(ex.toString());
+			res.setResponseCode("500");//$NON-NLS-1$
+			res.setResponseMessage(ex.toString());
+		}
+		catch (Exception ex) // Mainly for bsh.EvalError
+		{
+			log.warn(ex.toString());
 			res.setResponseCode("500");//$NON-NLS-1$
 			res.setResponseMessage(ex.toString());
 		}
