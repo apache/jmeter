@@ -30,7 +30,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.jmeter.gui.GUIFactory;
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
@@ -45,7 +44,6 @@ import org.apache.log.Logger;
  */
 public class JMeterTreeNode
     extends DefaultMutableTreeNode
-    implements JMeterGUIComponent
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
     private JMeterTreeModel treeModel;
