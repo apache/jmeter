@@ -34,6 +34,7 @@ public class IterationCounter extends AbstractFunction implements Serializable
 
     private static final List desc = new LinkedList();
     private static final String KEY = "__counter";
+    private static final String perThreadCounter = "perThreadCounter";
 
     static {
         desc.add(JMeterUtils.getResString("iteration_counter_arg_1"));
@@ -76,7 +77,20 @@ public class IterationCounter extends AbstractFunction implements Serializable
 
         if (perThread)
         {
-            counterString = Integer.toString(vars.getIteration());
+//            counterString = Integer.toString(vars.getIteration());
+        	int counterInt;
+        	try
+			{
+        		counterInt = ((Integer) vars.getObject(perThreadCounter)).intValue()+1;
+
+			}
+        	catch(NullPointerException e)
+			{
+        		//First Time! Initialize
+        		counterInt = 1;
+			}
+    		vars.putObject(perThreadCounter, new Integer(counterInt));
+			counterString = Integer.toString(counterInt);
         }
         else
         {
