@@ -112,17 +112,22 @@ public interface JMeterGUIComponent
     String getStaticLabel();
 
     /**
-     * JMeter test components are separated into a model and a GUI representation.  The model holds the data and the GUI displays it.  The GUI class is
-     * responsible for knowing how to create and initialize with data the model class that it knows how to display, and this method is called when new test elements are
-     * created.  
+     * JMeter test components are separated into a model and a GUI
+     * representation.  The model holds the data and the GUI displays it.  The
+     * GUI class is responsible for knowing how to create and initialize with
+     * data the model class that it knows how to display, and this method is
+     * called when new test elements are created.  
      *
      * @return  the Test Element object that the GUI component represents.
      */
     TestElement createTestElement();
     
     /**
-     * GUI components are responsible for populating TestElements they create with the data currently held in the GUI components.  This method should 
-     * overwrite whatever data is currently in the TestElement as it is called after a user has filled out the form elements in the gui with new information.
+     * GUI components are responsible for populating TestElements they create
+     * with the data currently held in the GUI components.  This method should 
+     * overwrite whatever data is currently in the TestElement as it is called
+     * after a user has filled out the form elements in the gui with new
+     * information.
      * 
      * @param element the TestElement to modify
      */
@@ -155,19 +160,23 @@ public interface JMeterGUIComponent
     JPopupMenu createPopupMenu();
 
     /**
-     * The GUI must be able to extract the data from the TestElement and update all GUI fields to represent those data.
-     * This method is called to allow JMeter to show the user the GUI that represents the test element's data.
+     * The GUI must be able to extract the data from the TestElement and update
+     * all GUI fields to represent those data. This method is called to allow
+     * JMeter to show the user the GUI that represents the test element's data.
      *
      * @param element the TestElement to configure 
      */
     void configure(TestElement element);
 
     /**
-     * This is the list of add menu categories this gui component will be available
-     * under. For instance, if this represents a Controller, then the
-     * MenuFactory.CONTROLLERS category should be in the returned collection.  When a user right-clicks on a tree element and looks through
-     * the "add" menu, which category your GUI component shows up in is determined by which categories are returned by this method.  Most GUI's belong to 
-     * only one category, but it is possible for a component to exist in multiple categories.
+     * This is the list of add menu categories this gui component will be
+     * available under. For instance, if this represents a Controller, then the
+     * MenuFactory.CONTROLLERS category should be in the returned collection.
+     * When a user right-clicks on a tree element and looks through the "add"
+     * menu, which category your GUI component shows up in is determined by
+     * which categories are returned by this method.  Most GUI's belong to only
+     * one category, but it is possible for a component to exist in multiple
+     * categories.
      *
      * @return   a Collection of Strings, where each element is one of the
      *           constants defined in MenuFactory
@@ -184,8 +193,10 @@ public interface JMeterGUIComponent
     void setNode(JMeterTreeNode node);
     
     /**
-     * Clear the gui and return it to initial default values.  This is necessary because most gui classes are instantiated just once and re-used for multiple
-     * test element objects and thus they need to be cleared between use.
+     * Clear the gui and return it to initial default values.  This is
+     * necessary because most gui classes are instantiated just once and
+     * re-used for multiple test element objects and thus they need to be
+     * cleared between use.
      * TODO: implement this in all gui classes.
      */
     public void clear();
