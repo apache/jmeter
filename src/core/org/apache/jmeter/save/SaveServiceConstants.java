@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,6 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+
 package org.apache.jmeter.save;
 
 
@@ -104,6 +105,11 @@ public interface SaveServiceConstants
 
     /** A properties file indicator for all of a series.  **/
     public static final String ALL = "all";
+
+    /** The name of the property indicating which assertion results
+     should be saved.  **/
+    public static final String ASSERTION_RESULTS_FAILURE_MESSAGE_PROP
+            = "jmeter.save.saveservice.assertion_results_failure_message";
 
     /** The name of the property indicating which assertion results
      should be saved.  **/
