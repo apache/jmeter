@@ -15,8 +15,8 @@ IF "%5" == "-p" set PORT=-Dhttp.proxyPort=%6 -Dhttps.proxyPort=%6
 
 set LOCALCLASSPATH=%CLASSPATH%
 
-for %%i in ("..\lib\*.jar") do CALL ..\lcp %%i
-for %%i in ("..\ext\*.jar") do CALL ..\lcp %%i
+for %%i in ("..\lib\*.jar") do CALL ..\lcp.bat %%i
+for %%i in ("..\ext\*.jar") do CALL ..\lcp.bat %%i
 
 
 java -cp %LOCALCLASSPATH%;ApacheJMeter.jar -D%LOG4JCONFIG% %HOST% %PORT% org.apache.jmeter.NewDriver %PROP%
