@@ -58,9 +58,10 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 			}
 			else
 			{
-				HTTPArgument arg = new HTTPArgument((String)model.getColumnValue(Arguments.COLUMN_NAMES[0]),
-						model.getColumnValue(Arguments.COLUMN_NAMES[1]),true);
+				HTTPArgument arg = new HTTPArgument();
 				arg.setAlwaysEncode(false);
+				arg.setName((String)model.getColumnValue(Arguments.COLUMN_NAMES[0]));
+				arg.setValue(model.getColumnValue(Arguments.COLUMN_NAMES[1]));
 				args.addArgument(arg);
 			}
 		}

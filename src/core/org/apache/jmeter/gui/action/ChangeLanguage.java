@@ -30,7 +30,7 @@ public class ChangeLanguage implements Command
 	 */
 	public void doAction(ActionEvent e)
 	{
-		Locale loc = new Locale(((Component)e.getSource()).getName());
+		Locale loc = new Locale(((Component)e.getSource()).getName(),"");
 		log.debug("Changing language to "+loc.getLanguage());
 		JMeterUtils.reinitializeLocale(loc);
 	}
