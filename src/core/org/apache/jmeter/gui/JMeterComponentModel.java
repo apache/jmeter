@@ -57,12 +57,10 @@
 import java.util.*;
 
 /**
- * Title:        JMeter
- * Description:
- * Copyright:    Copyright (c) 2000
- * Company:      Apache
+ * This class is obsolete.
  * @author Michael Stover
  * @version 1.0
+ * 
  */
 
 public interface JMeterComponentModel

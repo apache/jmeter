@@ -62,6 +62,12 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jorphan.collections.HashTree;
 
 /**
+ * GuiPackage is a static class that provides convenient access to information about the 
+ * current state of JMeter's GUI.  Any GUI class can grab a handle to GuiPackage by 
+ * calling the static method 'getInstance()' and then use it to query the GUI about
+ * it's state.  When actions, for instance, need to affect the GUI, they
+ * typically use GuiPackage to get access to different parts of the GUI.
+ * 
  * Title:        JMeter
  * Description:
  * Copyright:    Copyright (c) 2000
@@ -76,6 +82,10 @@ public class GuiPackage
 	private static GuiPackage guiPack;
 	private boolean dirty = false;
 
+	/**
+	 * GuiPackage is a Singleton class.
+	 * @see java.lang.Object#Object()
+	 */
 	private GuiPackage()
 	{
 	}
@@ -84,6 +94,13 @@ public class GuiPackage
 	private org.apache.jmeter.gui.MainFrame mainFrame;
 	private org.apache.jmeter.gui.tree.JMeterTreeListener treeListener;
 
+	/**
+	 * When GuiPackage is requested for the first time, it should be given handles to
+	 * JMeter's Tree Listener and TreeModel.  
+	 * @param listener The TreeListener for JMeter's test tree.
+	 * @param treeModel The model for JMeter's test tree.
+	 * @return GuiPackage
+	 */
 	public static GuiPackage getInstance(JMeterTreeListener listener,
 							JMeterTreeModel treeModel)
 	{
@@ -96,11 +113,22 @@ public class GuiPackage
 		return guiPack;
 	}
 
+	/**
+	 * The dirty property is a flag that indicates whether there are parts of JMeter's test tree
+	 * that the user has not saved since last modification.  Various (@link Command actions) set
+	 * this property when components are modified/created/saved.
+	 * @param d
+	 */
 	public void setDirty(boolean d)
 	{
 		dirty = d;
 	}
 
+	/**
+	 * Retrieves the state of the 'dirty' property, a flag that indicates if there are test
+	 * tree components that have been modified since they were last saved.
+	 * @return boolean
+	 */
 	public boolean isDirty()
 	{
 		return dirty;
