@@ -88,6 +88,7 @@ public class JMeter19ConnectionPool implements ConnectionPool
     private int maxConnections;
 
     public JMeter19ConnectionPool(DBKey key, Map properties)
+        throws ConnectionPoolException
     {
         this.key = key;
 
@@ -109,6 +110,8 @@ public class JMeter19ConnectionPool implements ConnectionPool
         catch (SQLException e)
         {
             log.error("Error initializing JDBC connection pool", e);
+            throw new ConnectionPoolException(
+                "Error initializing JDBC connection pool: " + e);
         }
     }
 
@@ -170,7 +173,7 @@ public class JMeter19ConnectionPool implements ConnectionPool
      * Rents out a database connection object.
      * @return Connection object.
      */
-    public Connection getConnection() throws NoConnectionsAvailableException
+    public Connection getConnection() throws ConnectionPoolException
     {
         if (connectionArray.length == 0)
         {
