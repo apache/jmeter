@@ -35,7 +35,6 @@ public class MonitorGraph
     extends JComponent
     implements MouseListener, MonitorGuiListener, Clearable
 {
-	protected static int width = 500;
 	protected MonitorAccumModel MODEL;
 	protected MonitorModel CURRENT;
 	
