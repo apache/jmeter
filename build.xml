@@ -47,6 +47,17 @@
 		</fileset>
   </path>
   
+  <path id="srcpaths">
+  	<pathelement location="${src.core}"/>
+  		<pathelement location="${src.core}"/>
+  		<pathelement location="${src.components}"/>
+  		<pathelement location="${src.functions}"/>
+  		<pathelement location="${src.http}"/>
+  		<pathelement location="${src.ftp}"/>
+  		<pathelement location="${src.jdbc}"/>
+  		<pathelement location="${src.java}"/>
+  </path>
+  
   <target name="init">
   	<mkdir dir="${build.dir}"/>
   	<mkdir dir="${build.core}"/>
@@ -127,13 +138,9 @@
 				 optimize="${optimize}"
 				 debug="on"
 				 target="1.3">
-			<src path="${src.core}"/>			
-			<src path="${src.components}"/>
-			<src path="${src.functions}"/>
-			<src path="${src.http}"/>
-			<src path="${src.ftp}"/>
-			<src path="${src.jdbc}"/>
-			<src path="${src.java}"/>
+			<src>			
+				<path refid="srcpaths"/>
+			</src>
 		  <include name="**/*.java"/>
 		  <exclude name="org/apache/jmeter/util/JsseSSLManager.java"
 					  unless="jsse.present"/>
@@ -274,13 +281,13 @@
 	-->
 	<target name="api-docs">
 	  <mkdir dir="${docs.api.dest.dir}"/>
-	  <javadoc sourcepath="${sources.src.dir}"
+	  <javadoc sourcepathref="srcpaths"
 				  destdir="${docs.api.dest.dir}"
-				  private="yes" author="yes" version="yes"
+				  Protected="yes" author="yes" version="yes"
 				  doctitle="Apache JMeter APIs Specification"
 				  windowtitle="Apache JMeter API Specification"
 				  header="&lt;b&gt;Apache JMeter&lt;/b&gt;&lt;br&gt;&lt;font size='-1'&gt;1.7&lt;/font&gt;"
-				  bottom="Copyright &#169; 1998-2001 Apache Software Foundation. All Rights Reserved."
+				  bottom="Copyright &#169; 1998-2002 Apache Software Foundation. All Rights Reserved."
 				  packagenames="org.apache.jmeter.*">
 		 <classpath refid="classpath"/>
 	  </javadoc>
