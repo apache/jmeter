@@ -54,7 +54,7 @@
  */
 package org.apache.jmeter.control;
 
-import java.io.Serializable;
+import java.io.*;
 
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.BooleanProperty;
@@ -83,8 +83,8 @@ public class ThroughputController
 
 	private IntegerWrapper globalNumExecutions;
 	private IntegerWrapper globalIteration;
-	private Object numExecutionsLock;
-	private Object iterationLock;
+	private transient Object numExecutionsLock;
+	private transient Object iterationLock;
 	private int numExecutions, iteration, i=0;
 	
 	public ThroughputController() 
@@ -278,10 +278,20 @@ public class ThroughputController
 		((ThroughputController)o).iterationLock = iterationLock;
 		return o;
 	}
+	
+	private void readObject(java.io.ObjectInputStream in)
+		throws IOException, ClassNotFoundException 	
+	{
+		in.defaultReadObject();
+		numExecutionsLock = new Object();
+		iterationLock = new Object();
+	}
+
 
 }
 
 class IntegerWrapper
+	implements Serializable
 {
 	Integer i;
 
