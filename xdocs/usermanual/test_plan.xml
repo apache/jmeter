@@ -38,12 +38,12 @@ is set at one, then JMeter will execute the test only once before stopping.</p>
 
 <p> JMeter has two types of Controllers: Generative and Logical.</p>
 
-<p>Generative Controllers tell JMeter to send requests to a server. For
-example, add an HTTP Request Generative Controller if you want JMeter
+<p>Samplers tell JMeter to send requests to a server. For
+example, add an HTTP Request Sampler if you want JMeter
 to send an HTTP request.  You can also customize a request by adding one
-or more Configuration Elements to a Generative Controller.  For more
+or more Configuration Elements to a Sampler.  For more
 information, see
-<a href="#gen_controller">Generative Controllers</a>.</p>
+<a href="#samplers">Samplers</a>.</p>
 
 <p>Logical Controllers let you customize the logic that JMeter uses to
 decide when to send requests.  For example, you can add an Interleave
@@ -54,12 +54,12 @@ see <a href="#logic_controller">Logical Controllers</a>.</p>
 
 </subsection>
 
-<subsection name="4.2.1 Generative Controllers" anchor="gen_controller">
+<subsection name="4.2.1 Samplers" anchor="samplers">
 
-<p>Generative Controllers tell JMeter to send requests to a server. JMeter
-currently has three such controllers: FTP Request, HTTP Request, and JDBC
-request.  Each controller has several properties you can set.  You can further
-customize a controller by adding one or more Configuration Elements to it.
+<p>Samplers tell JMeter to send requests to a server. JMeter
+currently has four such samplers: FTP Request, HTTP Request, JDBC, and the Java object
+request.  Each sampler has several properties you can set.  You can further
+customize a sampler by adding one or more Configuration Elements to it.
 Also, note that JMeter sends requests in the order that you add them to the tree.</p>
 
 <p>If you are going to send multiple requests of the same type (for example,
@@ -77,13 +77,13 @@ may be missing sections. You could add assertions to check for certain HTML tags
 common error strings, and so on. JMeter lets you create these assertions using regular
 expressions.</p>
 
-<p><a href="component_reference.html#gen_controllers">JMeter's built-in generative controllers</a></p>
+<p><a href="component_reference.html#samplers">JMeter's built-in samplers</a></p>
 </subsection>
 
 <subsection name="4.2.2 Logic Controllers" anchor="logic_controller">
 <p>Logic Controllers let you customize the logic that JMeter uses to
 decide when to send requests.  Logic Controllers may have as child elements any
-of the following: Generative Controllers (requests), Configuration Elements, and other Logic
+of the following: Samplers (requests), Configuration Elements, and other Logic
 Controllers.  Logic Controllers can change the order of requests coming from their
 child elements.  They can modify the requests themselves, cause JMeter to repeat
 requests, etc.
@@ -102,11 +102,11 @@ following test tree:</p>
 			<ul>
 			<li>Login Request (an <complink name="HTTP Request"/>)</li>
 			</ul>
-		<li>Load Search Page (HTTP Generative Controller)</li>
+		<li>Load Search Page (HTTP Sampler)</li>
 		<li>Interleave Controller</li>
 			<ul>
-			<li>Search "A" (HTTP Generative Controller)</li>
-			<li>Search "B" (HTTP Generative Controller)</li>
+			<li>Search "A" (HTTP Sampler)</li>
+			<li>Search "B" (HTTP Sampler)</li>
 			<li>HTTP default request (Configuration Element)</li>
 			</ul>
 		<li>HTTP default request (Configuration Element)</li>
@@ -120,7 +120,7 @@ following test tree:</p>
 the first time through.  Subsequent iterations will skip it.  This is due to the
 effects of the <complink name="Once Only Controller"/>.</p>
 
-<p>After the login, the next Generative Controller loads the search page (imagine a
+<p>After the login, the next Sampler loads the search page (imagine a
 web application where the user logs in, and then goes to a search page to do a search).  This
 is just a simple request, not filtered through any Logic Controller.</p>
 
@@ -138,7 +138,7 @@ belongs to the Interleave Controller.  Imagine that "Search A" and "Search B" sh
 the same PATH info (an HTTP request specification includes domain, port, method, protocol,
 path, and arguments, plus other optional items).  This makes sense - both are search requests,
  hitting the same back-end search engine (a servlet or cgi-script, let's say).  Rather than
- configure both HTTP Generative Controllers with the same information in their PATH field, we
+ configure both HTTP Samplers with the same information in their PATH field, we
  can abstract that information out to a single Configuration Element.  When the Interleave
  Controller "passes on" requests from "Search A" or "Search B", it will fill in the blanks with
  values from the HTTP default request Configuration Element.  So, we leave the PATH field
@@ -149,10 +149,10 @@ case, this is a minor benefit at best, but it demonstrates the feature.</p>
 Thread Group itself.  The Thread Group has a built-in Logic Controller, and thus, it uses
 this Configuration Element exactly as described above.  It fills in the blanks of any
 Request that passes through.  It is extremely useful in web testing to leave the DOMAIN
-field blank in all your HTTP Generative Controller elements, and instead, put that information
+field blank in all your HTTP Sampler elements, and instead, put that information
 into an HTTP default request element, added to the Thread Group.  By doing so, you can
 test your application on a different server simply by changing one field in your Test Plan.
-Otherwise, you'd have to edit each and every Generative Controller.</p>
+Otherwise, you'd have to edit each and every Sampler.</p>
 
 <p>The last element is a <complink name="HTTP Cookie
 Manager"/>.  A Cookie Manager should be added to all web tests - otherwise JMeter will
@@ -166,15 +166,14 @@ Logic Controllers</a>.</p>
 <subsection name="4.3 Listeners" anchor="listeners">
 <p>Listeners provide access to the information JMeter gathers about the test cases while
 JMeter runs.  The simplest listener, the <complink name="Graph
-Results"/> listener plots the response times on a graph.  Listeners usually provide a
+Results"/> listener plots the response times on a graph.  Listeners provide a
 graphical view of the data that JMeter generates.</p>
 
-<p>An exception to this is the <complink name="File
-Reporter"/>, which, as you might expect, logs the result data to a file.  </p>
+<p>Additionally, listeners can direct the data they collect to a file for later use.  Every 
+listener in JMeter provides a field to indicate the file to store data to.</p>
 
-<p>Listeners can only be added to a Thread Group, and they only collect information
-specific to that Thread Group.  If you have 3 Thread Groups and a listener attached to
-each one, those three listeners will show three different sets of data.  </p>
+<p>Listeners can be added anywhere in the test.  They will collect data only from elements at or 
+below their level.  </p>
 
 <p>There are several <a href="component_reference.html#listeners">interesting listeners</a>
 that come with JMeter.</p>
@@ -207,7 +206,7 @@ particular text. The text you specify can be a Perl-style regular expression, an
 you can indicate that the response is to contain the text, or that it should match
 the whole response.</p>
 
-<p>You can add an assertion to any Generative Controller. For example, you can
+<p>You can add an assertion to any Sampler. For example, you can
 add an assertion to a HTTP Request that checks for the text, "&lt;/HTML&gt;".  JMeter
 will then check that the text is present in the HTTP response.  If JMeter cannot find the
 text, then it will mark this as a failed request.</p>
@@ -216,7 +215,7 @@ text, then it will mark this as a failed request.</p>
 </subsection>
 
 <subsection name="4.6 Configuration Elements" anchor="config_elements">
-<p>A configuration element works closely with a Generative Controller.  Although it does not send requests
+<p>A configuration element works closely with a Sampler.  Although it does not send requests
 (except for <complink name="HTTP Proxy Server"/>), it can add to or modify requests.</p>
 
 <p>A configuration element is accessible from only inside the tree branch where you place the element.
