@@ -108,7 +108,7 @@ public class StatVisualizer
 	 ***************************************/
 	protected JScrollPane myScrollPane;
 	private final static String VISUALIZER_NAME =
-		JMeterUtils.getResString("Aggregate Report");
+		JMeterUtils.getResString("aggregate_report");
 	private long sleepTill = 0;
 	private static int width = 2000;
 	//    private boolean data = true;
@@ -209,7 +209,6 @@ public class StatVisualizer
 	public void clear()
 	{
 		myStatTableModel.clear();
-		myJTable.tableChanged(new TableModelEvent(myStatTableModel));
 		model.clear();
 	}
 
@@ -220,8 +219,7 @@ public class StatVisualizer
 	 ***************************************/
 	public void updateGui(RunningSample s)
 	{
-		updateChart(myStatTableModel,s);
-		myStatTableModel.fireTableDataChanged();
+		myStatTableModel.rowChanged(s.getIndex());
 	}
 	// overrides AbstractVisualizer
 	// forces GUI update after sample file has been read
@@ -230,35 +228,6 @@ public class StatVisualizer
 		TestElement t = super.createTestElement();
 		sleepTill = 0;
 		return t;
-	}
-	/****************************************
-	 * Main method to update the chart with data contained in the passed-in-map. No
-	 * matter how quickly you repeatedly call this method, the table will only be
-	 * updated at most once per second.
-	 *
-	 *@param aTable   !ToDo (Parameter description)
-	 *@param dataset  !ToDo (Parameter description)
-	 *@return         A flag whether or not the graph was updated at all
-	 ***************************************/
-	public synchronized boolean updateChart(StatTableModel aTable, RunningSample rs)
-	{
-		int ridx = aTable.getRowWithKey(rs.getLabel());
-			aTable.setValueAt(rs.getLabel(), ridx, 0);
-			aTable.setValueAt(new Long(rs.getNumSamples()), ridx, 1);
-			aTable.setValueAt(new Long(rs.getAverage()), ridx, 2);
-			aTable.setValueAt(new Long(rs.getMin()), ridx, 3);
-			aTable.setValueAt(new Long(rs.getMax()), ridx, 4);
-			aTable.setValueAt(rs.getErrorPercentageString(), ridx, 5);
-			aTable.setValueAt(rs.getRateString(), ridx, 6);
-			if (rs.getErrorPercentage() > .5)
-			{
-				// have some fun with cell renderers later, change this text to red or something.
-				// here is where the logic would be.
-			}
-		// while
-		// we ended up updating the data in the table, so we'll return true so our caller can force a repaint
-		// of components
-		return (true);
 	}
 	/****************************************
 	 * Main visualizer setup..
@@ -280,7 +249,7 @@ public class StatVisualizer
 			new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
 		mainPanel.add(panelTitleLabel);
 		mainPanel.add(getFilePanel());
-		myStatTableModel = new StatTableModel();
+		myStatTableModel = new StatTableModel(model);
 		//        SortFilterModel mySortedModel = new SortFilterModel(myStatTableModel);
 		myJTable = new JTable(myStatTableModel);
 		myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
@@ -288,6 +257,130 @@ public class StatVisualizer
 		this.add(mainPanel, BorderLayout.NORTH);
 		this.add(myScrollPane, BorderLayout.CENTER);
 	}
+	/****************************************
+	 * Class which implements the model for our main table in this
+	 * visualizer.
+	 *
+	 * @author    $Author$
+	 * @created   $Date$
+	 * @version   $Revision$
+	 ***************************************/
+	class StatTableModel extends AbstractTableModel
+	{
+		private final String[] columnNames =
+			{ "URL", "Count", "Average", "Min", "Max", "Error%", "Rate" };
+		private final Class[] columnClasses =
+			{ String.class, Long.class, Double.class, Long.class, Long.class, String.class, String.class };
+		private final String TOTAL_LABEL= JMeterUtils.getResString("aggregate_report_total_label");
+
+		private transient StatVisualizerModel model;
+		private int currentRowCount= 0;
+
+		/****************************************
+		 * !ToDo (Constructor description)
+		 ***************************************/
+		public StatTableModel(StatVisualizerModel model)
+		{
+			super();
+			this.model= model;
+		}
+		
+		public void rowChanged(int index) {
+			TableModelEvent event;
+
+			// Create the table changed event, carefully handling the case where the
+			// table grows beyond its current known size:
+			synchronized(this) {
+			  if (index >= currentRowCount-1) {
+			    event= new TableModelEvent(this, currentRowCount-1, index, TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT);
+			    currentRowCount= index+2;
+			  }
+			  else event= new TableModelEvent(this, index);
+			}
+			// Fire the event:
+			fireTableChanged(event);
+			// No matter which row changes, the totals row will have changed too:
+			fireTableChanged(new TableModelEvent(this, currentRowCount));
+		}
+
+		/****************************************
+		 * !ToDoo (Method description)
+		 *
+		 *@return   !ToDo (Return description)
+		 ***************************************/
+		public int getColumnCount()
+		{
+			return columnNames.length;
+		}
+		/****************************************
+		 * !ToDoo (Method description)
+		 *
+		 *@return   !ToDo (Return description)
+		 ***************************************/
+		public int getRowCount()
+		{
+			currentRowCount= model.getRunningSampleCount() + 1;
+			return currentRowCount;
+		}
+		/****************************************
+		 * !ToDoo (Method description)
+		 *
+		 *@param col  !ToDo (Parameter description)
+		 *@return     !ToDo (Return description)
+		 ***************************************/
+		public String getColumnName(int col)
+		{
+			return columnNames[col];
+		}
+		/****************************************
+		 * !ToDoo (Method description)
+		 *
+		 *@param row  !ToDo (Parameter description)
+		 *@param col  !ToDo (Parameter description)
+		 *@return     !ToDo (Return description)
+		 ***************************************/
+		public Object getValueAt(int row, int col)
+		{
+			RunningSample s;
+
+			if (row==model.getRunningSampleCount()) {
+			  if (col==0) return TOTAL_LABEL;
+			  s= model.getRunningSampleTotal();
+			}
+			else {
+			  s= model.getRunningSample(row);
+			}
+
+			switch (col) {
+			  case 0: return s.getLabel();
+			  case 1: return new Long(s.getNumSamples());
+			  case 2: return new Double(s.getAverage());
+			  case 3: return new Long(s.getMin());
+			  case 4: return new Long(s.getMax());
+			  case 5: return s.getErrorPercentageString();
+			  case 6: return s.getRateString();
+			  default: return "__ERROR__";
+			}
+		}
+		/****************************************
+		 * !ToDoo (Method description)
+		 *
+		 *@param c  !ToDo (Parameter description)
+		 *@return   !ToDo (Return description)
+		 ***************************************/
+		public Class getColumnClass(int c)
+		{
+			return columnClasses[c];
+		}
+		/****************************************
+		 * !ToDo (Method description)
+		 ***************************************/
+		public void clear()
+		{
+			fireTableDataChanged();
+		}
+	}
+	// class StatTableModel
 }
 // class StatVisualizer
 /****************************************
@@ -462,148 +555,3 @@ class SortFilterModel extends AbstractTableModel
 	}
 }
 // class SortFilterModel
-/****************************************
- * Class which implements the model for our main table in this visualizer.
- *
- *@author    $Author$
- *@created   $Date$
- *@version   $Revision$
- ***************************************/
-class StatTableModel extends AbstractTableModel
-{
-	final String[] columnNames =
-		{ "URL", "Count", "Average", "Min", "Max", "Error%", "Rate" };
-	Vector data;
-	Map rowValues;
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public StatTableModel()
-	{
-		super();
-		data = new Vector();
-		rowValues = new HashMap();
-	}
-	
-	public int getRowWithKey(String key)
-	{
-		Integer row = (Integer)rowValues.get(key);
-		if(row == null)
-		{
-			return data.size();
-		}
-		else
-		{
-			return row.intValue();
-		}
-	}
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param value  !ToDo (Parameter description)
-	 *@param row    !ToDo (Parameter description)
-	 *@param col    !ToDo (Parameter description)
-	 ***************************************/
-	public void setValueAt(Object value, int row, int col)
-	{
-		Object[] temp;
-		if(col == 0)
-		{
-			if(!rowValues.containsKey(value))
-			{
-				rowValues.put(value,new Integer(row));
-			}
-		}
-		//Extends the size of the vector as needed (can be used for append)
-		if (row >= data.size())
-		{
-			data.setSize(row + 1);
-		}
-		//Check if the line is not empty
-		if ((Object[]) (data.get(row)) == null)
-		{
-			temp = new Object[this.getColumnCount()];
-		}
-		else
-		{
-			temp = (Object[]) (data.get(row));
-		}
-		temp[col] = value;
-		//Columns are stored as an array
-		data.set(row, temp);
-	}
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public int getColumnCount()
-	{
-		return columnNames.length;
-	}
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public int getRowCount()
-	{
-		return data.size();
-	}
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@param col  !ToDo (Parameter description)
-	 *@return     !ToDo (Return description)
-	 ***************************************/
-	public String getColumnName(int col)
-	{
-		return columnNames[col];
-	}
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@param row  !ToDo (Parameter description)
-	 *@param col  !ToDo (Parameter description)
-	 *@return     !ToDo (Return description)
-	 ***************************************/
-	public Object getValueAt(int row, int col)
-	{
-		//When created, rows are null, need to check that
-		if ((((Object[]) data.get(row))[col]) != null)
-		{
-			return (((Object[]) (data.get(row)))[col]);
-		}
-		else
-		{
-			return (" ");
-		}
-	}
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@param c  !ToDo (Parameter description)
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public Class getColumnClass(int c)
-	{
-		return getValueAt(0, c).getClass();
-	}
-	/****************************************
-	 * !ToDo (Method description)
-	 ***************************************/
-	public void clear()
-	{
-		data.clear();
-	}
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param row  !ToDo (Parameter description)
-	 ***************************************/
-	public void insertRowAt(int row)
-	{
-		data.insertElementAt(new Object[this.getColumnCount()], row);
-	}
-}
-// class StatTableModel
