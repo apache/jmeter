@@ -21,6 +21,8 @@ package org.apache.jmeter.engine;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -116,6 +118,15 @@ public class StandardJMeterEngine
     	}
     }
     // End of code to allow engine to be controlled remotely
+    
+    /*
+     * Allow functions etc to register for testStopped notification
+     */
+    private static List testList = null;
+    public static synchronized void register(TestListener tl)
+    {
+    	testList.add(tl);
+    }
     
     public StandardJMeterEngine()
     {
@@ -215,16 +226,20 @@ public class StandardJMeterEngine
 
     protected void notifyTestListenersOfEnd()
     {
+    	log.info("Notifying listeners of end of test");
+    	
         Iterator iter = testListeners.getSearchResults().iterator();
         while (iter.hasNext())
         {
+        	TestListener it = (TestListener)iter.next();
+        	log.info("Notifying test listener: " + it.getClass().getName());
             if (host == null)
             {
-                ((TestListener) iter.next()).testEnded();
+                it.testEnded();
             }
             else
             {
-                ((TestListener) iter.next()).testEnded(host);
+                it.testEnded(host);
             }
         }
         log.info("Test has ended");
@@ -284,6 +299,7 @@ public class StandardJMeterEngine
     {
         log.info("Running the test!");
         running = true;
+        testList = new ArrayList();
 
         SearchByClass testPlan = new SearchByClass(TestPlan.class);
         getTestTree().traverse(testPlan);
@@ -306,6 +322,9 @@ public class StandardJMeterEngine
         testListeners = new SearchByClass(TestListener.class);
         getTestTree().traverse(testListeners);
         log.info("About to call test listeners");
+        Collection col = testListeners.getSearchResults();
+        col.addAll(testList);
+        testList=null;
         notifyTestListenersOfStart();
         
         getTestTree().traverse(new TurnElementsOn());
