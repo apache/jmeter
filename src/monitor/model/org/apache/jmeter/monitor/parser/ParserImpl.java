@@ -16,7 +16,12 @@
  */
 package org.apache.jmeter.monitor.parser;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
 import org.xml.sax.SAXException;
+import org.xml.sax.InputSource;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -38,38 +43,60 @@ public abstract class ParserImpl implements Parser
     public ParserImpl(ObjectFactory factory)
     {
         super();
-        FACTORY = factory;
+        this.FACTORY = factory;
         try {
 			PARSERFACTORY = SAXParserFactory.newInstance();
 			PARSER = PARSERFACTORY.newSAXParser();
 			DOCHANDLER = new MonitorHandler();
+			DOCHANDLER.setObjectFactory(this.FACTORY);
         } catch (SAXException e) {
+        	// e.printStackTrace();
+        	// need to add logging later
         } catch (ParserConfigurationException e){
+			// e.printStackTrace();
+			// need to add logging later
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.monitor.parser.Parser#parseBytes(byte[])
-     */
+	/**
+	 * parse byte array and return Status object
+	 * @param byte[]
+	 * @return Status
+	 */
     public Status parseBytes(byte[] bytes)
     {
-        return null;
+    	try {
+			InputSource is = new InputSource();
+			is.setByteStream(new ByteArrayInputStream(bytes));
+			PARSER.parse(is,DOCHANDLER);
+			return DOCHANDLER.getContents();
+    	} catch (SAXException e){
+			e.printStackTrace();
+			// let bad input fail silently
+			return DOCHANDLER.getContents();
+    	} catch (IOException e){
+			e.printStackTrace();
+			// let bad input fail silently
+			return DOCHANDLER.getContents();
+    	}
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.monitor.parser.Parser#parseString(java.lang.String)
-     */
+	/**
+	 * @param String data
+	 * @return Status
+	 */
     public Status parseString(String content)
     {
-        return null;
+        return parseBytes(content.getBytes());
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.monitor.parser.Parser#parseSampleResult(org.apache.jmeter.samplers.SampleResult)
-     */
+	/**
+	 * @param SampleResult result
+	 * @return Status
+	 */
     public Status parseSampleResult(SampleResult result)
     {
-        return null;
+        return parseBytes(result.getResponseData());
     }
 
 }
