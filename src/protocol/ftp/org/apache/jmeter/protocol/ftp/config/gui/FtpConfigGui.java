@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,18 +53,18 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.ftp.config.gui;
+import java.awt.BorderLayout;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.ftp.sampler.FTPSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -79,8 +79,8 @@ public class FtpConfigGui extends AbstractConfigGui
 	private final static String SERVER = "server";
 	private final static String FILENAME = "filename";
 
-	private JTextField server = new JTextField(20);
-	private JTextField filename = new JTextField(20);
+	private JTextField server;
+	private JTextField filename;
 
 	private boolean displayName = true;
 
@@ -91,6 +91,17 @@ public class FtpConfigGui extends AbstractConfigGui
 	{
 		this(true);
 	}
+
+    /****************************************
+     * !ToDo (Constructor description)
+     *
+     *@param displayName  !ToDo (Parameter description)
+     ***************************************/
+    public FtpConfigGui(boolean displayName)
+    {
+        this.displayName = displayName;
+        init();
+    }
 
 	public String getStaticLabel()
 	{
@@ -122,63 +133,51 @@ public class FtpConfigGui extends AbstractConfigGui
         element.setProperty(FTPSampler.FILENAME,filename.getText());
     }
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 *
-	 *@param displayName  !ToDo (Parameter description)
-	 ***************************************/
-	public FtpConfigGui(boolean displayName)
-	{
-		this.displayName = displayName;
-		init();
-	}
-
 	private JPanel createServerPanel()
 	{
-		JPanel serverPanel = new JPanel();
-		serverPanel.add(new JLabel(JMeterUtils.getResString("server")));
+        JLabel label = new JLabel(JMeterUtils.getResString("server"));
+        
+        server = new JTextField(10);
 		server.setName(SERVER);
-		serverPanel.add(server);
+        label.setLabelFor(server);
 
+        JPanel serverPanel = new JPanel(new BorderLayout(5, 0));
+        serverPanel.add(label, BorderLayout.WEST);
+		serverPanel.add(server, BorderLayout.CENTER);
 		return serverPanel;
 	}
 
 	private JPanel createFilenamePanel()
 	{
-		JPanel filenamePanel = new JPanel();
-		filenamePanel.add(new JLabel(JMeterUtils.getResString("file_to_retrieve")));
+		JLabel label = new JLabel(JMeterUtils.getResString("file_to_retrieve"));
+        
+        filename = new JTextField(10);
 		filename.setName(FILENAME);
-		filenamePanel.add(filename);
-
+        label.setLabelFor(filename);
+        
+        JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
+        filenamePanel.add(label, BorderLayout.WEST);
+		filenamePanel.add(filename, BorderLayout.CENTER);
 		return filenamePanel;
 	}
 
 	private void init()
 	{
-		this.setLayout(new VerticalLayout(1, VerticalLayout.LEFT));
+        setLayout(new BorderLayout(0, 5));
+        
 		if(displayName)
 		{
-			this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+            setBorder(makeBorder());
+            add(makeTitlePanel(), BorderLayout.NORTH);
+        }
+        
+		// MAIN PANEL
+		VerticalPanel mainPanel = new VerticalPanel();
 
-			// MAIN PANEL
-			JPanel mainPanel = new JPanel();
-			Border margin = new EmptyBorder(10, 10, 5, 10);
-			mainPanel.setBorder(margin);
-			mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+		// LOOP
+		mainPanel.add(createServerPanel());
+		mainPanel.add(createFilenamePanel());
 
-			// NAME
-			mainPanel.add(makeTitlePanel());
-
-			// LOOP
-			mainPanel.add(createServerPanel());
-			mainPanel.add(createFilenamePanel());
-
-			this.add(mainPanel);
-		}
-		else
-		{
-			this.add(createServerPanel());
-			this.add(createFilenamePanel());
-		}
+		add(mainPanel, BorderLayout.CENTER);
 	}
 }
