@@ -26,6 +26,8 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * Description:<br>
@@ -76,6 +78,7 @@ import org.apache.jmeter.junit.JMeterTestCase;
 
 public class TCLogParser implements LogParser
 {
+   static Logger log = LoggingManager.getLoggerForClass();
 
     public static final String GET = "GET";
     public static final String POST = "POST";
@@ -292,12 +295,7 @@ public class TCLogParser implements LogParser
                 line = FILTER.filter(line);
                 if (line != null)
                 {
-                    String paramString = null;
-                    // check the URL for "?" symbol
-                    paramString = this.stripFile(line);
-                    this.checkParamFormat(line);
-                    // now that we have stripped the file, we can parse the parameters
-                    this.convertStringToJMRequest(paramString);
+                    createUrl(line);
                 }
             }
         }
@@ -307,16 +305,27 @@ public class TCLogParser implements LogParser
             COUNT++;
             // in the case when the filter is not set, we
             // parse all the lines
-            String paramString = null;
-            // check the URL for "?" symbol
-            paramString = this.stripFile(line);
-            this.checkParamFormat(line);
-            // now that we have stripped the file, we can parse the parameters
-            this.convertStringToJMRequest(paramString);
+            createUrl(line);
         }
     }
 
     /**
+    * @param line
+    */
+   private void createUrl(String line)
+   {
+      String paramString = null;
+        // check the URL for "?" symbol
+        paramString = this.stripFile(line);
+        if(paramString != null)
+        {
+           this.checkParamFormat(line);
+           // now that we have stripped the file, we can parse the parameters
+           this.convertStringToJMRequest(paramString);
+        }
+   }
+
+   /**
      * The method cleans the URL using the following
      * algorithm.
      * <ol>
@@ -360,6 +369,14 @@ public class TCLogParser implements LogParser
                     while (token2.hasMoreTokens())
                     {
                         String t = (String) token2.nextElement();
+                        if(t.equalsIgnoreCase(GET))
+                        {
+                           RMETHOD = GET;
+                        }
+                        else if(t.equalsIgnoreCase(POST))
+                        {
+                           RMETHOD = POST;
+                        }
                         // there should only be one token
                         // that starts with slash character
                         if (t.startsWith("/"))
@@ -424,7 +441,7 @@ public class TCLogParser implements LogParser
         else
         {
             this.GEN.setPath(url);
-            return url;
+            return null;
         }
     }
 
@@ -600,8 +617,11 @@ public class TCLogParser implements LogParser
 		
 		public void testcleanURL() throws Exception
 		{
+		   tclp.GEN = new StandardGenerator();
+		   tclp.GEN.generateRequest();
 			String res = tclp.cleanURL(URL1);
 			assertEquals("/addrbook/",res);
+			assertNull(tclp.stripFile(res));
 		}
 		public void testcheckURL() throws Exception
 		{
