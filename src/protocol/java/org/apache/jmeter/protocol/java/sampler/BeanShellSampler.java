@@ -53,13 +53,13 @@ public class BeanShellSampler extends AbstractSampler
 		String init="";
 		try{
 			bshInterpreter = new Interpreter();
+			bshInterpreter.set("log",log);  //$NON-NLS-1$
 			init = JMeterUtils.getPropDefault(INIT_FILE,null);
 			if (init != null)
 			{
 				try
 				{
-					 bshInterpreter.source(null);
-					 bshInterpreter.set("log",log);  //$NON-NLS-1$
+					 bshInterpreter.source(init);
 				} catch (IOException e){
 					log.warn("Error processing init file "+init+" "+e);
 				} catch (Exception e){
