@@ -87,288 +87,294 @@ import org.apache.log.Logger;
  *@created    $Date$
  *@version    $Revision$
  ***********************************************************/
-public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor,
-		Runnable,Serializable
+public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, Runnable, Serializable
 {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter.engine");
-	private Thread runningThread;
-	private static long WAIT_TO_DIE = 5 * 1000; //5 seconds
-	Map allThreads;
-	boolean running = false;
-	boolean serialized = false;
-	HashTree test;
-	SearchByClass testListeners;
-	String host = null;
-	ListenerNotifier notifier;
+    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
+    private Thread runningThread;
+    private static long WAIT_TO_DIE = 5 * 1000; //5 seconds
+    Map allThreads;
+    boolean running = false;
+    boolean serialized = false;
+    HashTree test;
+    SearchByClass testListeners;
+    String host = null;
+    ListenerNotifier notifier;
 
-	/************************************************************
-	 *  !ToDo (Constructor description)
-	 ***********************************************************/
-	public StandardJMeterEngine()
-	{
-		allThreads = new HashMap();
-	}
+    /************************************************************
+     *  !ToDo (Constructor description)
+     ***********************************************************/
+    public StandardJMeterEngine()
+    {
+        allThreads = new HashMap();
+    }
 
-	public StandardJMeterEngine(String host)
-	{
-		this();
-		this.host = host;
-	}
+    public StandardJMeterEngine(String host)
+    {
+        this();
+        this.host = host;
+    }
 
-	public void configure(HashTree testTree)
-	{
-		test = testTree;
-	}
-	
-	public void setHost(String host)
-	{
-		this.host = host;
-	}
+    public void configure(HashTree testTree)
+    {
+        test = testTree;
+    }
 
-	protected HashTree getTestTree()
-	{
-		return test;
-	}
-	
-	protected void compileTree()
-	{
-		PreCompiler compiler = new PreCompiler();
-		getTestTree().traverse(compiler);
-	}
+    public void setHost(String host)
+    {
+        this.host = host;
+    }
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 ***********************************************************/
-	public void runTest() throws JMeterEngineException
-	{
-		try
-		{
-			runningThread = new Thread(this);
-			runningThread.start();
-		}
-		catch(Exception err)
-		{
-			stopTest();
-			StringWriter string = new StringWriter();
-			PrintWriter writer = new PrintWriter(string);
-			err.printStackTrace(writer);
-			throw new JMeterEngineException(string.toString());
-		}
-	}
-	
-	private void removeThreadGroups(List elements)
-	{
-		Iterator iter = elements.iterator();
-		while(iter.hasNext())
-		{
-			Object item = iter.next();
-			if(item instanceof ThreadGroup)
-			{
-				iter.remove();
-			}
-			else if(!(item instanceof TestElement))
-			{
-				iter.remove();
-			}
-		}
-	}
-	
-	protected void setMode()
-	{
-		SearchByClass testPlan = new SearchByClass(TestPlan.class);
-		getTestTree().traverse(testPlan);
-		Object[] plan = testPlan.getSearchResults().toArray();
-		ResultCollector.enableFunctionalMode(((TestPlan)plan[0]).isFunctionalMode());
-	}
+    protected HashTree getTestTree()
+    {
+        return test;
+    }
 
-	protected void notifyTestListenersOfStart()
-	{
-		Iterator iter = testListeners.getSearchResults().iterator();
-		while(iter.hasNext())
-		{
-			if(host == null)
-			{
-				((TestListener)iter.next()).testStarted();
-			}
-			else
-			{
-				((TestListener)iter.next()).testStarted(host);
-			}
-		}
-	}
+    protected void compileTree()
+    {
+        PreCompiler compiler = new PreCompiler();
+        getTestTree().traverse(compiler);
+    }
 
+    /************************************************************
+     *  !ToDo (Method description)
+     ***********************************************************/
+    public void runTest() throws JMeterEngineException
+    {
+        try
+        {
+            runningThread = new Thread(this);
+            runningThread.start();
+        }
+        catch (Exception err)
+        {
+            stopTest();
+            StringWriter string = new StringWriter();
+            PrintWriter writer = new PrintWriter(string);
+            err.printStackTrace(writer);
+            throw new JMeterEngineException(string.toString());
+        }
+    }
 
-	protected void notifyTestListenersOfEnd()
-	{
-		Iterator iter = testListeners.getSearchResults().iterator();
-		while(iter.hasNext())
-		{
-			if(host == null)
-			{
-				((TestListener)iter.next()).testEnded();
-			}
-			else
-			{
-				((TestListener)iter.next()).testEnded(host);
-			}
-		}
-	}
+    private void removeThreadGroups(List elements)
+    {
+        Iterator iter = elements.iterator();
+        while (iter.hasNext())
+        {
+            Object item = iter.next();
+            if (item instanceof ThreadGroup)
+            {
+                iter.remove();
+            }
+            else if (!(item instanceof TestElement))
+            {
+                iter.remove();
+            }
+        }
+    }
 
-	private ListedHashTree cloneTree(ListedHashTree tree)
-	{
-		TreeCloner cloner = new TreeCloner(true);
-		tree.traverse(cloner);
-		return cloner.getClonedTree();
-	}
+    protected void setMode()
+    {
+        SearchByClass testPlan = new SearchByClass(TestPlan.class);
+        getTestTree().traverse(testPlan);
+        Object[] plan = testPlan.getSearchResults().toArray();
+        ResultCollector.enableFunctionalMode(((TestPlan) plan[0]).isFunctionalMode());
+    }
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 ***********************************************************/
-	public void reset()
-	{
-		if(running)
-		{
-			stopTest();
-		}
-	}
+    protected void notifyTestListenersOfStart()
+    {
+        Iterator iter = testListeners.getSearchResults().iterator();
+        while (iter.hasNext())
+        {
+            if (host == null)
+            {
+                ((TestListener) iter.next()).testStarted();
+            }
+            else
+            {
+                ((TestListener) iter.next()).testStarted(host);
+            }
+        }
+    }
 
-	public synchronized void threadFinished(JMeterThread thread)
-	{
-		allThreads.remove(thread);
-		if(!serialized && allThreads.size() == 0)
-		{
-			stopTest();
-		}
-	}
+    protected void notifyTestListenersOfEnd()
+    {
+        Iterator iter = testListeners.getSearchResults().iterator();
+        while (iter.hasNext())
+        {
+            if (host == null)
+            {
+                ((TestListener) iter.next()).testEnded();
+            }
+            else
+            {
+                ((TestListener) iter.next()).testEnded(host);
+            }
+        }
+    }
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 ***********************************************************/
-	public synchronized void stopTest()
-	{
-		if(running)
-		{
-			running = false;
-			tellThreadsToStop();
-			try
-			{
-				Thread.sleep(10 * allThreads.size());
-			}
-			catch (InterruptedException e)
-			{
-			}
-			verifyThreadsStopped();
-			notifyTestListenersOfEnd();	
-		}
-	}
-	
-	public void run()
-	{
-		log.info("Running the test!");
-		running = true;
-			
-		SearchByClass testPlan = new SearchByClass(TestPlan.class);
-		getTestTree().traverse(testPlan);
-		Object[] plan = testPlan.getSearchResults().toArray();
-		if(((TestPlan)plan[0]).isSerialized())
-			serialized = true;			
-		compileTree();
-		List testLevelElements = new LinkedList(getTestTree().list(getTestTree().getArray()[0]));
-		removeThreadGroups(testLevelElements);
-		SearchByClass searcher = new SearchByClass(ThreadGroup.class);
-		testListeners = new SearchByClass(TestListener.class);
-		setMode();
-		getTestTree().traverse(testListeners);
-		getTestTree().traverse(searcher);
-		TestCompiler.initialize();
-		//for each thread group, generate threads
-		// hand each thread the sampler controller
-		// and the listeners, and the timer
-		JMeterThread[] threads;
-		Iterator iter = searcher.getSearchResults().iterator();
-		if(iter.hasNext())
-		{
-			notifyTestListenersOfStart();
-		}
-		notifier = new ListenerNotifier();
-		while(iter.hasNext())
-		{
-			ThreadGroup group = (ThreadGroup)iter.next();
-			threads = new JMeterThread[group.getNumThreads()];
-			for(int i = 0;running && i < threads.length; i++)
-			{
-				ListedHashTree threadGroupTree = (ListedHashTree)searcher.getSubTree(group);
-				threadGroupTree.add(group,testLevelElements);
-				threads[i] = new JMeterThread(cloneTree(threadGroupTree),this,notifier);
-				threads[i].setThreadNum(i);
-				threads[i].setInitialContext(JMeterContextService.getContext());
-				threads[i].setInitialDelay((int)(((float)(group.getRampUp() * 1000) /
-						(float)group.getNumThreads()) * (float)i));
-				threads[i].setThreadName(group.getName()+"-"+(i+1));
-				Thread newThread = new Thread(threads[i]);
-				newThread.setName(group.getName()+"-"+(i+1));
-				allThreads.put(threads[i],newThread);
-				if (serialized && !iter.hasNext() && i==threads.length-1) //last thread
-				{
-					serialized = false;
-				}
-				newThread.start();
-			}
-			if (serialized)
-			{
-				while(running && allThreads.size()>0)
-				{
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {}
-				}
-			}
-		}
-	}
+    private ListedHashTree cloneTree(ListedHashTree tree)
+    {
+        TreeCloner cloner = new TreeCloner(true);
+        tree.traverse(cloner);
+        return cloner.getClonedTree();
+    }
 
-	private void verifyThreadsStopped()
-	{
-		Iterator iter = new HashSet(allThreads.keySet()).iterator();
-		while(iter.hasNext())
-		{
-			Thread t = (Thread)allThreads.get(iter.next());
-			if(t != null && t.isAlive())
-			{
-				try
-				{
-					t.join(WAIT_TO_DIE);
-				}
-				catch (InterruptedException e)
-				{
-				}
-				if(t.isAlive())
-				{
-					log.info("Thread won't die: "+t.getName());
-				}
-			}
-			log.debug("finished thread");
-		}
-	}
+    /************************************************************
+     *  !ToDo (Method description)
+     ***********************************************************/
+    public void reset()
+    {
+        if (running)
+        {
+            stopTest();
+        }
+    }
 
-	private void tellThreadsToStop()
-	{
-		Iterator iter = new HashSet(allThreads.keySet()).iterator();
-		while(iter.hasNext())
-		{
-			JMeterThread item = (JMeterThread)iter.next();
-			item.stop();
-			Thread t = (Thread)allThreads.get(item);
-			if(t != null)
-			{
-				t.interrupt();
-			}
-			else
-			{
-				log.warn("Lost thread: "+item.getThreadName());
-				allThreads.remove(item);
-			}
-		}
-	}
+    public synchronized void threadFinished(JMeterThread thread)
+    {
+        allThreads.remove(thread);
+        if (!serialized && allThreads.size() == 0)
+        {
+            stopTest();
+        }
+    }
+
+    /************************************************************
+     *  !ToDo (Method description)
+     ***********************************************************/
+    public synchronized void stopTest()
+    {
+        Thread stopThread = new Thread(new StopTest());
+        stopThread.start();
+    }
+
+    private class StopTest implements Runnable
+    {
+        public void run()
+        {
+            if (running)
+            {
+                running = false;
+                tellThreadsToStop();
+                try
+                {
+                    Thread.sleep(10 * allThreads.size());
+                }
+                catch (InterruptedException e)
+                {}
+                verifyThreadsStopped();
+                notifyTestListenersOfEnd();
+            }
+        }
+    }
+
+    public void run()
+    {
+        log.info("Running the test!");
+        running = true;
+
+        SearchByClass testPlan = new SearchByClass(TestPlan.class);
+        getTestTree().traverse(testPlan);
+        Object[] plan = testPlan.getSearchResults().toArray();
+        if (((TestPlan) plan[0]).isSerialized())
+            serialized = true;
+        compileTree();
+        List testLevelElements = new LinkedList(getTestTree().list(getTestTree().getArray()[0]));
+        removeThreadGroups(testLevelElements);
+        SearchByClass searcher = new SearchByClass(ThreadGroup.class);
+        testListeners = new SearchByClass(TestListener.class);
+        setMode();
+        getTestTree().traverse(testListeners);
+        getTestTree().traverse(searcher);
+        TestCompiler.initialize();
+        //for each thread group, generate threads
+        // hand each thread the sampler controller
+        // and the listeners, and the timer
+        JMeterThread[] threads;
+        Iterator iter = searcher.getSearchResults().iterator();
+        if (iter.hasNext())
+        {
+            notifyTestListenersOfStart();
+        }
+        notifier = new ListenerNotifier();
+        while (iter.hasNext())
+        {
+            ThreadGroup group = (ThreadGroup) iter.next();
+            threads = new JMeterThread[group.getNumThreads()];
+            for (int i = 0; running && i < threads.length; i++)
+            {
+                ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
+                threadGroupTree.add(group, testLevelElements);
+                threads[i] = new JMeterThread(cloneTree(threadGroupTree), this, notifier);
+                threads[i].setThreadNum(i);
+                threads[i].setInitialContext(JMeterContextService.getContext());
+                threads[i].setInitialDelay((int) (((float) (group.getRampUp() * 1000) / (float) group.getNumThreads()) * (float) i));
+                threads[i].setThreadName(group.getName() + "-" + (i + 1));
+                Thread newThread = new Thread(threads[i]);
+                newThread.setName(group.getName() + "-" + (i + 1));
+                allThreads.put(threads[i], newThread);
+                if (serialized && !iter.hasNext() && i == threads.length - 1) //last thread
+                {
+                    serialized = false;
+                }
+                newThread.start();
+            }
+            if (serialized)
+            {
+                while (running && allThreads.size() > 0)
+                {
+                    try
+                    {
+                        Thread.sleep(1000);
+                    }
+                    catch (InterruptedException e)
+                    {}
+                }
+            }
+        }
+    }
+
+    private void verifyThreadsStopped()
+    {
+        Iterator iter = new HashSet(allThreads.keySet()).iterator();
+        while (iter.hasNext())
+        {
+            Thread t = (Thread) allThreads.get(iter.next());
+            if (t != null && t.isAlive())
+            {
+                try
+                {
+                    t.join(WAIT_TO_DIE);
+                }
+                catch (InterruptedException e)
+                {}
+                if (t.isAlive())
+                {
+                    log.info("Thread won't die: " + t.getName());
+                }
+            }
+            log.debug("finished thread");
+        }
+    }
+
+    private void tellThreadsToStop()
+    {
+        Iterator iter = new HashSet(allThreads.keySet()).iterator();
+        while (iter.hasNext())
+        {
+            JMeterThread item = (JMeterThread) iter.next();
+            item.stop();
+            Thread t = (Thread) allThreads.get(item);
+            if (t != null)
+            {
+                t.interrupt();
+            }
+            else
+            {
+                log.warn("Lost thread: " + item.getThreadName());
+                allThreads.remove(item);
+            }
+        }
+    }
 
 }
