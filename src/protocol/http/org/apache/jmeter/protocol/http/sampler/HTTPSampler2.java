@@ -280,6 +280,7 @@ public class HTTPSampler2 extends HTTPSamplerBase
             res.setURL(u);
             res.setHTTPMethod(method);
             res.setRequestHeaders(hdrs);
+            res.setQueryString(getQueryString());
         }
 
         setConnectionAuthorization(httpMethod, u, getAuthManager());
@@ -553,8 +554,7 @@ public class HTTPSampler2 extends HTTPSamplerBase
                         res.addSubResult(
                             errorResult(
                                 new Exception("Maximum frame/iframe nesting depth exceeded."),
-                                null,
-                                0));
+                                res));
                     }
                     else
                     {
@@ -577,14 +577,14 @@ public class HTTPSampler2 extends HTTPSamplerBase
         catch (IllegalArgumentException e)// e.g. some kinds of invalid URL
         {
         	res.sampleEnd();
-            HTTPSampleResult err = errorResult(e, url.toString(), res.getTime());
+            HTTPSampleResult err = errorResult(e, res);
             err.setSampleLabel("Error: "+url.toString());
             return err;
         }
         catch (IOException e)
         {
         	res.sampleEnd();
-            HTTPSampleResult err = errorResult(e, url.toString(), res.getTime());
+            HTTPSampleResult err = errorResult(e, res);
             err.setSampleLabel("Error: "+url.toString());
             return err;
         }
@@ -632,7 +632,7 @@ public class HTTPSampler2 extends HTTPSamplerBase
             }
             catch (MalformedURLException e)
             {
-                lastRes= errorResult(e, location, 0);
+                lastRes= errorResult(e, lastRes);
             }
             totalRes.addSubResult(lastRes);
 
@@ -646,8 +646,7 @@ public class HTTPSampler2 extends HTTPSamplerBase
             lastRes=
                 errorResult(
                     new IOException("Exceeeded maximum number of redirects: "+MAX_REDIRECTS),
-                    null,
-                    0);
+                    lastRes);
             totalRes.addSubResult(lastRes);
         }
 
@@ -661,6 +660,7 @@ public class HTTPSampler2 extends HTTPSamplerBase
         // redirect chain in the location field. 
         totalRes.setURL(lastRes.getURL());
         totalRes.setHTTPMethod(lastRes.getHTTPMethod());
+        totalRes.setQueryString(lastRes.getQueryString());
         totalRes.setRequestHeaders(lastRes.getRequestHeaders());
 
         totalRes.setResponseData(lastRes.getResponseData());

@@ -250,8 +250,10 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
    public synchronized void threadFinished(JMeterThread thread)
    {
       allThreads.remove(thread);
+      log.info("Ending thread " + thread.getThreadNum());
       if (!serialized && allThreads.size() == 0 && !schcdule_run)
       {
+         log.info("Stopping test");
          stopTest();
       }
    }
@@ -266,22 +268,29 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
    {
       public void run()
       {
-         log.debug("Stopping test");
-         if (running)
+         try
          {
-            running = false;
-            tellThreadsToStop();
-            try
-            {
-               Thread.sleep(10 * allThreads.size());
-            }
-            catch (InterruptedException e)
-            {
-            }
-            verifyThreadsStopped();
-            notifyTestListenersOfEnd();
+	         log.debug("Stopping test");
+	         if (running)
+	         {
+	            running = false;
+	            tellThreadsToStop();
+	            try
+	            {
+	               Thread.sleep(10 * allThreads.size());
+	            }
+	            catch (InterruptedException e)
+	            {
+	            }
+	            verifyThreadsStopped();
+	            notifyTestListenersOfEnd();
+	         }
+	         JMeterContextService.endTest();
          }
-         JMeterContextService.endTest();
+         catch(Exception e)
+         {
+            log.error("Bad!",e);
+         }
       }
    }
 
