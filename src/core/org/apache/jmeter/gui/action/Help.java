@@ -2,15 +2,16 @@ package org.apache.jmeter.gui.action;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
+
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.ComponentUtil;
+import org.apache.jmeter.swing.HtmlPane;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LoggingManager;
 import org.apache.log.Hierarchy;
@@ -32,12 +33,12 @@ public class Help implements Command
 			+ JMeterUtils.getJMeterHome()
 			+ "/docs/usermanual/component_reference.html";
 	private static JDialog helpWindow;
-	private static JTextPane helpDoc;
+	private static HtmlPane helpDoc;
 	private static JScrollPane scroller;
 	private static String currentPage;
 	static {
 		commands.add(HELP);
-		helpDoc = new JTextPane();
+		helpDoc = new HtmlPane();
 		scroller = new JScrollPane(helpDoc);
 		helpDoc.setEditable(false);
 		try
