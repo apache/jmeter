@@ -84,7 +84,7 @@ import org.apache.log.Logger;
  * @author Michael Stover
  * @version $Revision$
  */
-public class GuiPackage
+public final class GuiPackage
 {
     /** Logging. */
     private static transient Logger log =

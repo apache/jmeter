@@ -5,9 +5,8 @@ import org.apache.oro.text.perl.Perl5Util;
 /**
  * @version $Revision$
  */
-public class ArgumentDecoder
+public final class ArgumentDecoder
 {
-
     private static Perl5Util util = new Perl5Util();
     private static String expression = "s#[\\\\](.)#$1#g";
 
@@ -16,4 +15,10 @@ public class ArgumentDecoder
         return util.substitute(expression, s);
     }
 
+    /**
+     * Prevent instantiation of utility class.
+     */
+    private ArgumentDecoder()
+    {
+    }
 }

@@ -161,7 +161,7 @@ public class JLabeledTextField
     public void focusLost(FocusEvent pFocusEvent)
     {
         // Compare if the value has changed, since we received focus.
-        if (oldValue.equals(mTextField.getText()) == false)
+        if (!oldValue.equals(mTextField.getText()))
         {
             notifyChangeListeners();
         }

@@ -75,7 +75,7 @@ import org.w3c.dom.Document;
  * @author Peter Lin
  * @version $Revision$
  */
-public class DOMPool
+public final class DOMPool
 {
     /**
      * The cache is created with an initial size of 50. Running a webservice
@@ -102,5 +102,12 @@ public class DOMPool
     public static void putDocument(Object key, Object data)
     {
         MEMCACHE.put(key, data);
+    }
+    
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private DOMPool()
+    {
     }
 }

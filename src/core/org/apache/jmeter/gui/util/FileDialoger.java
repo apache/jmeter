@@ -67,7 +67,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * @author    Michael Stover
  * @version   $Revision$
  */
-public class FileDialoger
+public final class FileDialoger
 {
     /**
      * The last directory visited by the user while choosing Files.
@@ -75,7 +75,10 @@ public class FileDialoger
     public static String lastJFCDirectory = null;
     public static JFileChooser jfc = new JFileChooser();
 
-    public FileDialoger()
+    /**
+     * Prevent instantiation of utility class.
+     */
+    private FileDialoger()
     {
     }
 

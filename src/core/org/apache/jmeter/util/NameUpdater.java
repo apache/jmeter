@@ -13,12 +13,12 @@ import org.apache.log.Logger;
  * @author ano ano
  * @version $Revision$
  */
-public class NameUpdater
+public final class NameUpdater
 {
     private static Properties nameMap;
     private static Logger log = LoggingManager.getLoggerForClass();
     
-    static{
+    static {
         nameMap = new Properties();
         try
         {
@@ -42,5 +42,12 @@ public class NameUpdater
             return nameMap.getProperty(guiName);
         }
         return guiName;
+    }
+    
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private NameUpdater()
+    {
     }
 }

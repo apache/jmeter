@@ -60,7 +60,7 @@ package org.apache.jmeter.protocol.http.util;
  *
  * @version    $Revision$
  */
-public class Base64Encoder
+public final class Base64Encoder
 {
     private final static char[] pem_array = {
             65, 66, 67, 68, 69, 70, 71, 72, 73, 74,
@@ -72,7 +72,10 @@ public class Base64Encoder
             51, 52, 53, 54, 55, 56, 57, 43, 47};
     private final static char eq = 61;
 
-    public Base64Encoder()
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private Base64Encoder()
     {
     }
 

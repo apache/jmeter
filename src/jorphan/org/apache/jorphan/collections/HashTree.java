@@ -225,7 +225,9 @@ public class HashTree implements Serializable, Map
         data = new HashMap();
         Iterator it = keys.iterator();
         while (it.hasNext())
+        {
             data.put(it.next(), new HashTree());
+        }
     }
     
     /**
@@ -236,7 +238,9 @@ public class HashTree implements Serializable, Map
     {
         data = new HashMap();
         for (int x = 0; x < keys.length; x++)
+        {
             data.put(keys[x], new HashTree());
+        }
     }
 
     /**
@@ -417,7 +421,9 @@ public class HashTree implements Serializable, Map
     public void add(Object key)
     {
         if (!data.containsKey(key))
+        {
             data.put(key, createNewTree());
+        }
     }
     
     /**
@@ -428,7 +434,9 @@ public class HashTree implements Serializable, Map
     public void add(Object[] keys)
     {
         for (int x = 0; x < keys.length; x++)
+        {
             add(keys[x]);
+        }
     }
     
     /**
@@ -440,7 +448,9 @@ public class HashTree implements Serializable, Map
     {
         Iterator it = keys.iterator();
         while (it.hasNext())
+        {
             add(it.next());
+        }
     }
     
     /**
@@ -726,9 +736,13 @@ public class HashTree implements Serializable, Map
     {
         HashTree temp = (HashTree) data.get(key);
         if (temp != null)
+        {
             return temp.list();
+        }
         else
+        {
             return null;
+        }
     }
     
     /**
@@ -906,12 +920,16 @@ public class HashTree implements Serializable, Map
                     Object temp = it.next();
                     flag = get(temp).equals(oo.get(temp));
                     if (!flag)
+                    {
                         break;
+                    }
                 }
             }
         }
         else
+        {
             flag = false;
+        }
         return flag;
     }
     
@@ -936,7 +954,9 @@ public class HashTree implements Serializable, Map
     {
         HashTree temp = null;
         if (data.containsKey(key))
+        {
             temp = (HashTree) data.get(key);
+        }
         else
         {
             Iterator it = list().iterator();
@@ -948,7 +968,9 @@ public class HashTree implements Serializable, Map
                     break;
                 }
                 else
+                {
                     break;
+                }
             }
         }
         return temp;

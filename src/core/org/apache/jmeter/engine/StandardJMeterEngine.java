@@ -266,7 +266,9 @@ public class StandardJMeterEngine
         getTestTree().traverse(testPlan);
         Object[] plan = testPlan.getSearchResults().toArray();
         if (((TestPlan) plan[0]).isSerialized())
+        {
             serialized = true;
+        }
         compileTree();
         List testLevelElements =
             new LinkedList(getTestTree().list(getTestTree().getArray()[0]));

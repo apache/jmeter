@@ -176,9 +176,13 @@ public class JMeterUtils implements UnitTestManager
         log = LoggingManager.getLoggerFor(UTIL);
         String loc = appProperties.getProperty("language");
         if (loc != null)
+        {
             setLocale(new Locale(loc, ""));
+        }
         else
+        {
             setLocale(Locale.getDefault());
+        }
         return p;
     }
 
@@ -652,9 +656,15 @@ public class JMeterUtils implements UnitTestManager
     public static Object instantiate(String className, String impls)
     {
         if (className != null)
+        {
             className.trim();
+        }
+
         if (impls != null)
+        {   // FIXME: Shouldn't this be impls.trim()?
             className.trim();
+        }
+
         try
         {
             Class c = Class.forName(impls);

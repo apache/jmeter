@@ -123,14 +123,14 @@ import org.apache.log.Logger;
  * @author     Michael Stover (mstover1 at apache.org)
  * @version $Revision$
  */
-public class AllTests
+public final class AllTests
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
     /**
-     * Constructor for the AllTests object.
+     * Private constructor to prevent instantiation.
      */
-    public AllTests()
+    private AllTests()
     {
     }
 

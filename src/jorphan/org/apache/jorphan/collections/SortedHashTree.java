@@ -97,14 +97,18 @@ public class SortedHashTree extends HashTree implements Serializable
         data = new TreeMap();
         Iterator it = keys.iterator();
         while (it.hasNext())
+        {
             data.put(it.next(), new SortedHashTree());
+        }
     }
 
     public SortedHashTree(Object[] keys)
     {
         data = new TreeMap();
         for (int x = 0; x < keys.length; x++)
+        {
             data.put(keys[x], new SortedHashTree());
+        }
     }
 
     public HashTree createNewTree()

@@ -65,7 +65,7 @@ import java.awt.Dimension;
  * @author  <a href="mailto:bo.regnlin@pc.nu">Bo Regnlin</a>
  * @version $Revision$
  */
-public class ComponentUtil
+public final class ComponentUtil
 {
     /**
      * Use this static method if you want to center and set its position
@@ -134,5 +134,12 @@ public class ComponentUtil
 
         toBeCentered.validate();
         toBeCentered.repaint();
+    }
+
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private ComponentUtil()
+    {
     }
 }

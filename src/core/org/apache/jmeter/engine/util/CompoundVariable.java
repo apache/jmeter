@@ -245,7 +245,9 @@ public class CompoundVariable implements Function
     {
         this.rawParameters = parameters;
         if (parameters == null || parameters.length() == 0)
+        {
             return;
+        }
 
         compiledComponents = functionParser.compileString(parameters);
         if (compiledComponents.size() > 1

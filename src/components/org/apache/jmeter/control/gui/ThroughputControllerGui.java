@@ -184,9 +184,13 @@ public class ThroughputControllerGui extends AbstractControllerGui
             {
                 if (((String) styleBox.getSelectedItem())
                     .equals(BYNUMBER_LABEL))
+                {
                     style = ThroughputController.BYNUMBER;
+                }
                 else
+                {
                     style = ThroughputController.BYPERCENT;
+                }
             }
         });
         add(styleBox);
@@ -212,9 +216,13 @@ public class ThroughputControllerGui extends AbstractControllerGui
             public void itemStateChanged(ItemEvent event)
             {
                 if (event.getStateChange() == ItemEvent.SELECTED)
+                {
                     isPerThread = true;
+                }
                 else
+                {
                     isPerThread = false;
+                }
             }
         });
         add(perthread);

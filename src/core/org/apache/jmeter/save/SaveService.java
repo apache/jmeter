@@ -102,7 +102,7 @@ import org.xml.sax.SAXException;
  * @author     <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell</a>
  * @version    $Revision$ $Date$
  */
-public class SaveService implements SaveServiceConstants
+public final class SaveService implements SaveServiceConstants
 {
     transient private static Logger log =
         Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.util");
@@ -183,7 +183,10 @@ public class SaveService implements SaveServiceConstants
         readProperties();
     } // static initialization
 
-    public SaveService()
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private SaveService()
     {
     }
 

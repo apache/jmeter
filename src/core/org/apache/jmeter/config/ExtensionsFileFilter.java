@@ -104,7 +104,7 @@ public class ExtensionsFileFilter extends FileFilter
         {
             return true;
         }
-        if (acceptableExtensions.contains(getExtension(pFile)) == true)
+        if (acceptableExtensions.contains(getExtension(pFile)))
         {
             return true;
         }

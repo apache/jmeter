@@ -222,9 +222,13 @@ public class ThroughputController
     protected int getExecutions()
     {
         if (!isPerThread())
+        {
             return globalNumExecutions.getInteger().intValue();
+        }
         else
+        {
             return numExecutions;
+        }
     }
 
     private void increaseExecutions()
@@ -235,16 +239,22 @@ public class ThroughputController
     protected void setIteration(int iteration)
     {
         if (!isPerThread())
+        {
             globalIteration.setInteger(new Integer(iteration));
+        }
         this.iteration = iteration;
     }
 
     protected int getIteration()
     {
         if (!isPerThread())
+        {
             return globalIteration.getInteger().intValue();
+        }
         else
+        {
             return iteration;
+        }
     }
 
     private void increaseIteration()
@@ -285,8 +295,10 @@ public class ThroughputController
     protected boolean canExecute()
     {
         if (returnTrue)
+        {
             return true;
-
+        }
+        
         int executions, iterations;
         boolean retval = false;
 
@@ -302,11 +314,15 @@ public class ThroughputController
         else
         {
             if (iteration == 0 && getPercentThroughputAsFloat() > 0)
+            {
                 retval = true;
+            }
             else if (
                 ((float) executions / iteration) * 100
                     <= getPercentThroughputAsFloat())
+            {
                 retval = true;
+            }
         }
         if (retval)
         {
@@ -322,13 +338,19 @@ public class ThroughputController
     public boolean isDone()
     {
         if (subControllersAndSamplers.size() == 0)
+        {
             return true;
+        }
         else if (
             getStyle() == BYNUMBER
                 && getExecutions() >= getMaxThroughputAsInt())
+        {
             return true;
+        }
         else
+        {
             return false;
+        }
     }
 
     public Object clone()
