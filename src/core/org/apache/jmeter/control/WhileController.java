@@ -88,6 +88,27 @@ public class WhileController extends GenericController implements Serializable
         }
     }
 
+    /*
+     * This skips controller entirely if the condition is false
+     * 
+     * TODO consider checking for previous sampler failure here -
+     * would need to distinguish this from previous failure *inside* loop 
+     * 
+     */
+    public Sampler next()
+    {
+    	// Don't enter if condition false 
+        if("false".equalsIgnoreCase(getCondition()))// $NON-NLS-1$
+        {
+            reInitialize();
+            return null;
+        }
+        else
+        {
+            return super.next();
+        }
+    }
+
 	/**
 	 * @param string the condition to save
 	 */
