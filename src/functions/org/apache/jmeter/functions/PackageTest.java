@@ -79,6 +79,7 @@ public class PackageTest extends JMeterTestCase
 		   suite.addTest(new PackageTest("CSVRun"));
 
            suite.addTest(new PackageTest("CSValias"));
+           suite.addTest(new PackageTest("CSVBlankLine"));
 
            //Reset files
            suite.addTest(new PackageTest("CSVSetup"));
@@ -306,5 +307,30 @@ public class PackageTest extends JMeterTestCase
 		log.info("Expecting cannot open file");
 		s = cr4.execute(null,null);
 		assertEquals("",s);
+    }
+    
+    // Check blank lines are treated as EOF
+    public void CSVBlankLine() throws Exception
+    {
+    	CSVRead csv1 = setParams("testfiles/testblank.csv","1");
+		CSVRead csv2 = setParams("testfiles/testblank.csv","next");
+    	
+    	String s;
+    	
+    	for (int i = 1; i<=2; i++)
+    	{
+	    	s= csv1.execute(null,null);
+	    	assertEquals("b1",s);
+	    	
+			s= csv2.execute(null,null);
+			assertEquals("",s);
+	    	
+			s= csv1.execute(null,null);
+			assertEquals("b2",s);
+	    	
+			s= csv2.execute(null,null);
+			assertEquals("",s);
+		}
+    	
     }
 }
