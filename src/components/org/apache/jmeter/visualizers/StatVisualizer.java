@@ -63,7 +63,8 @@ public class StatVisualizer extends AbstractVisualizer implements
          JMeterUtils.getResString("aggregate_report_min"),
          JMeterUtils.getResString("aggregate_report_max"), 
          JMeterUtils.getResString("aggregate_report_error%"),
-         JMeterUtils.getResString("aggregate_report_rate")};
+         JMeterUtils.getResString("aggregate_report_rate"),
+         JMeterUtils.getResString("aggregate_report_bandwidth")};
    private final String TOTAL_ROW_LABEL = JMeterUtils.getResString("aggregate_report_total_label");
    protected JTable myJTable;
 
@@ -80,10 +81,11 @@ public class StatVisualizer extends AbstractVisualizer implements
             new Functor("getPercentPoint", new Object[] { new Float(.900)}),
             new Functor("getMin"), new Functor("getMax"),
             new Functor("getErrorPercentageString"),
-            new Functor("getRateString")}, new Functor[] { null, null, null,
-            null, null, null, null, null, null}, new Class[] { String.class,
+            new Functor("getRateString"),
+			new Functor("getPageSizeString")}, new Functor[] { null, null, null,
+            null, null, null, null, null, null, null}, new Class[] { String.class,
             Long.class, Long.class, Long.class, Long.class, Long.class,
-            Long.class, String.class, String.class});
+            Long.class, String.class, String.class, String.class});
       clear();
       init();
    }
