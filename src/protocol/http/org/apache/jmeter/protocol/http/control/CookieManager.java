@@ -289,7 +289,9 @@ public class CookieManager
             String host= "."+url.getHost();
             if (host.endsWith(cookie.getDomain())
                 && url.getFile().startsWith(cookie.getPath())
-                && (System.currentTimeMillis() / 1000) <= cookie.getExpires())
+                && ((cookie.getExpires()==0) // treat as never expiring (bug 27713)
+				    ||
+                	(System.currentTimeMillis() / 1000) <= cookie.getExpires())				)
             {
                 if (header.length() > 0)
                 {
