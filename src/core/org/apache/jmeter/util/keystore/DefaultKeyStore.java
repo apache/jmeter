@@ -90,11 +90,11 @@ public class DefaultKeyStore extends JmeterKeyStore {
 
         Enumeration aliases = store.aliases();
         while (aliases.hasMoreElements()) {
+	    this.alias = (String) aliases.nextElement();
             if (store.isKeyEntry(alias)) {
                 key = (PrivateKey) store.getKey(alias, pword.toCharArray());
                 Certificate[] chain = store.getCertificateChain(alias);
                 certChain = new X509Certificate[chain.length];
-                this.alias = (String) aliases.nextElement();
 
                 for (int i = 0; i < chain.length; i++) {
                     certChain[i] = (X509Certificate) chain[i];

@@ -169,15 +169,12 @@ public abstract class SSLManager {
                 File initStore = new File(fileName);
 
                 if (initStore.exists()) {
-                    try {
-                        this.keyStore.load(new FileInputStream(initStore), password);
-                    } catch (Exception e) {
-                        throw new RuntimeException("Can't load KeyStore!!!  " + e.getMessage());
-                    }
+		    this.keyStore.load(new FileInputStream(initStore),password);
                 } else {
                     this.keyStore.load(null, password);
                 }
             } catch (Exception e) {
+	      throw new RuntimeException("Can't load KeyStore", e);
             }
 
         log.info("JmeterKeyStore Location: " + fileName);
@@ -215,15 +212,12 @@ public abstract class SSLManager {
                 File initStore = new File(fileName);
 
                 if (initStore.exists()) {
-                    try {
-                        this.trustStore.load(new FileInputStream(initStore), null);
-                    } catch (Exception e) {
-                        throw new RuntimeException("Can't load KeyStore!!!  " + e.getMessage());
-                    }
+		    this.trustStore.load(new FileInputStream(initStore), null);
                 } else {
                     this.trustStore.load(null, null);
                 }
             } catch (Exception e) {
+	      throw new RuntimeException("Can't load TrustStore", e);
             }
 
             log.info("TrustStore Location: " + fileName);
