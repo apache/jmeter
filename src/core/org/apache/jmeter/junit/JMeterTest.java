@@ -19,6 +19,8 @@ import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.save.SaveService;
+import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -136,6 +138,14 @@ public class JMeterTest extends JMeterTestCase
 			ts.addTest(new JMeterTest("runGUITitle",item));
 			suite.addTest(ts);
 		}
+        iter = getObjects(TestBean.class).iterator();
+        while (iter.hasNext())
+        {
+            JMeterGUIComponent item = new TestBeanGUI(iter.next().getClass());
+            TestSuite ts = new TestSuite(item.getClass().getName());
+            ts.addTest(new JMeterTest("runGUIComponents",item));
+            suite.addTest(ts);
+        }
 		return suite;
 	}
 	

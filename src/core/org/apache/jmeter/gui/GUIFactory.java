@@ -61,6 +61,8 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
+import org.apache.jmeter.testbeans.gui.TestBeanGUI;
+
 
 /**
  * Provides a way to register and retrieve GUI classes and icons.
@@ -162,17 +164,27 @@ public final class GUIFactory
      * 
      * @param key       the name which can be used to retrieve this GUI later
      * @param guiClass  the class object for the GUI component
+     * @param testClass the class of the objects edited by this GUI
      * 
      * @throws InstantiationException if an instance of the GUI class can not
      *    be instantiated
      * @throws IllegalAccessException if access rights do not permit an instance
      *    of the GUI class to be created
      */
-    public static void registerGUI(String key, Class guiClass)
+    public static void registerGUI(String key, Class guiClass, Class testClass)
             throws InstantiationException, IllegalAccessException
     {
         // TODO: This method doesn't appear to be used.
-        JMeterGUIComponent gui = (JMeterGUIComponent) guiClass.newInstance();
+        JMeterGUIComponent gui;
+        
+        if (guiClass == TestBeanGUI.class)
+        {
+            gui= new TestBeanGUI(testClass);
+        }
+        else
+        {
+            gui = (JMeterGUIComponent) guiClass.newInstance();
+        }
         GUI_MAP.put(key, gui);
     }
 }
