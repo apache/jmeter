@@ -73,8 +73,8 @@ public class ColorHelper
    * If all the components are the same value increment in the order of
    * red, green and blue.
    *
-   * @param inc		value to increment the color components
-   * @return		the color after change
+   * @param inc     value to increment the color components
+   * @return        the color after change
    */
   public static Color changeColorCyclicIncrement(Color col, int inc)
   {

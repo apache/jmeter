@@ -57,18 +57,22 @@ package org.apache.jmeter.visualizers;
 import org.apache.jmeter.samplers.SampleResult;
 
 /**
- * Implement this method to be a Visualizer for JMeter.  This interface defines a single method, "add()", that provides the means by which 
- * {@link org.apache.jmeter.samplers.SampleResult SampleResults} are passed to the implementing visualizer for display/logging.  
- * The easiest way to create the visualizer is to extend the {@link org.apache.jmeter.visualizers.gui.AbstractVisualizer AbstractVisualizer} class.
+ * Implement this method to be a Visualizer for JMeter.  This interface defines
+ * a single method, "add()", that provides the means by which
+ * {@link org.apache.jmeter.samplers.SampleResult SampleResults} are passed to
+ * the implementing visualizer for display/logging.  The easiest way to create
+ * the visualizer is to extend the
+ * {@link org.apache.jmeter.visualizers.gui.AbstractVisualizer AbstractVisualizer}
+ * class.
  *
  * @author  <a href="mailto:mstoer1@apache.org">Michael Stover</a>
  * @version $Revision$ $Date$
  */
-public interface Visualizer {
-
-	 /**
-	  * This method is called by sampling thread to inform
-	  * the visualizer about the arrival of a new sample.
-	  */
-	 public void add(SampleResult sample);
+public interface Visualizer
+{
+    /**
+     * This method is called by sampling thread to inform
+     * the visualizer about the arrival of a new sample.
+     */
+    public void add(SampleResult sample);
 }

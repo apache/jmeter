@@ -91,15 +91,19 @@ public abstract class JmeterKeyStore
         {
             try
             {
-                Class PKCS12 = Class.forName("org.apache.jmeter.util.keystore.PKCS12KeyStore");
-                Constructor con = PKCS12.getConstructor(new Class[] { String.class });
+                Class PKCS12 =
+                    Class.forName(
+                        "org.apache.jmeter.util.keystore.PKCS12KeyStore");
+                Constructor con =
+                    PKCS12.getConstructor(new Class[] { String.class });
                 return (JmeterKeyStore) con.newInstance(new Object[] { type });
             }
             catch (Exception e)
             {}
         }
 
-        Class keyStore = Class.forName("org.apache.jmeter.util.keystore.DefaultKeyStore");
+        Class keyStore =
+            Class.forName("org.apache.jmeter.util.keystore.DefaultKeyStore");
         Constructor con = keyStore.getConstructor(new Class[] { String.class });
         return (JmeterKeyStore) con.newInstance(new Object[] { type });
     }
