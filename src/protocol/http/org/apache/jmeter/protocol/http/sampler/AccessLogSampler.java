@@ -57,14 +57,11 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import javax.swing.JOptionPane;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.protocol.http.util.accesslog.LogParser;
 import org.apache.jmeter.protocol.http.util.accesslog.Generator;
 import org.apache.jmeter.protocol.http.util.accesslog.LogFilter;
-import org.apache.jmeter.protocol.http.control.gui.AccessLogSamplerGui;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Title:		Apache Jakarta JMeter<br>
@@ -125,19 +122,9 @@ public class AccessLogSampler extends HTTPSampler
 	private Generator GENERATOR = null;
 	private LogParser PARSER = null;
 	private LogFilter FILTER = null;
-	private AccessLogSamplerGui GUI = null;
 	private Class GENERATORCLASS = null;
 	private Class PARSERCLASS = null;
 
-	/**
-	 * I haven't decided on exactly how I want things, but for now
-	 * I'll call back to the gui to instantiate the objects.
-	 * @param gui
-	 */
-	public void setSamplerGUI(AccessLogSamplerGui gui){
-		GUI = gui;
-	}
-	
     /**
      * Set the path where XML messages are stored for random selection.
      */
@@ -237,6 +224,8 @@ public class AccessLogSampler extends HTTPSampler
 	 */
 	public SampleResult sampleWithGenerator()
 	{
+		checkParser();
+		checkGenerator();
 		this.instantiateParser();
 		this.instantiateGenerator();
 		HTTPSampler samp = null;
@@ -260,7 +249,7 @@ public class AccessLogSampler extends HTTPSampler
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
 		return res;
 	}
@@ -285,11 +274,6 @@ public class AccessLogSampler extends HTTPSampler
 		{
 			try
 			{
-				if (GENERATORCLASS == null)
-				{
-					GENERATORCLASS =
-						Class.forName(this.getGeneratorClassName());
-				}
 				GENERATOR = (Generator) GENERATORCLASS.newInstance();
 				if (GENERATOR != null)
 				{
@@ -307,37 +291,44 @@ public class AccessLogSampler extends HTTPSampler
 					PARSER.setGenerator(GENERATOR);
 				}
 			}
-			catch (ClassNotFoundException e)
-			{
-				// we should pop up a dialog
-				JOptionPane.showConfirmDialog(
-					GUI,
-					JMeterUtils.getResString("generator_cnf_msg"),
-					"Warning",
-					JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.ERROR_MESSAGE);
-			}
 			catch (InstantiationException e)
 			{
-				// we should pop up a dialog
-				JOptionPane.showConfirmDialog(
-					GUI,
-					JMeterUtils.getResString("generator_instantiate_msg"),
-					"Warning",
-					JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.ERROR_MESSAGE);
+				// e.printStackTrace();
 			}
 			catch (IllegalAccessException e)
 			{
-				// we should pop up a dialog
-				JOptionPane.showConfirmDialog(
-					GUI,
-					JMeterUtils.getResString("generator_illegal_msg"),
-					"Warning",
-					JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.ERROR_MESSAGE);
+				// e.printStackTrace();
 			}
 		}
+	}
+	
+	/**
+	 * Method will instantiate the generator. This is done to
+	 * make it easier for users to extend and plugin their
+	 * own generators.
+	 */
+	public boolean checkGenerator(){
+		if (this.getGeneratorClassName() != null
+			&& this.getGeneratorClassName().length() > 0)
+		{
+			try
+			{
+				if (GENERATORCLASS == null)
+				{
+					GENERATORCLASS =
+						Class.forName(this.getGeneratorClassName());
+				}
+				return true;
+			}
+			catch (ClassNotFoundException e)
+			{
+				// since samplers shouldn't deal with
+				// gui stuff, bad class names will
+				// fail silently.
+				return false;
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -353,10 +344,6 @@ public class AccessLogSampler extends HTTPSampler
 		{
 			try
 			{
-				if (PARSERCLASS == null)
-				{
-					PARSERCLASS = Class.forName(this.getParserClassName());
-				}
 				if (PARSER == null)
 				{
 					if (this.getLogFile() != null
@@ -367,36 +354,49 @@ public class AccessLogSampler extends HTTPSampler
 					}
 				}
 			}
-			catch (ClassNotFoundException e)
-			{
-				// we should pop up a dialog
-				JOptionPane.showConfirmDialog(
-					GUI,
-					JMeterUtils.getResString("log_parser_cnf_msg"),
-					"Warning",
-					JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.ERROR_MESSAGE);
-			}
 			catch (InstantiationException e)
 			{
-				// we should pop up a dialog
-				JOptionPane.showConfirmDialog(
-					GUI,
-					JMeterUtils.getResString("log_parser_instantiate_msg"),
-					"Warning",
-					JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.ERROR_MESSAGE);
+				// since samplers shouldn't deal with
+				// gui stuff, bad class names will
+				// fail silently.
 			}
 			catch (IllegalAccessException e)
 			{
-				// we should pop up a dialog
-				JOptionPane.showConfirmDialog(
-					GUI,
-					JMeterUtils.getResString("log_parser_illegal_msg"),
-					"Warning",
-					JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.ERROR_MESSAGE);
+				// since samplers shouldn't deal with
+				// gui stuff, bad class names will
+				// fail silently.
 			}
+		}
+	}
+
+	/**
+	 * Method will instantiate the log parser based on
+	 * the class in the text field. This was done to
+	 * make it easier for people to plugin their own log parser
+	 * and use different log parser.
+	 * @return
+	 */
+	public boolean checkParser()
+	{
+		if (this.getParserClassName() != null && this.getParserClassName().length() > 0)
+		{
+			try
+			{
+				if (PARSERCLASS == null)
+				{
+					PARSERCLASS = Class.forName(this.getParserClassName());
+				}
+				return true;
+			}
+			catch (ClassNotFoundException e)
+			{
+				// since samplers shouldn't deal with
+				// gui stuff, bad class names will
+				// fail silently.
+				return false;
+			}
+		} else {
+			return false;
 		}
 	}
 
