@@ -1,5 +1,6 @@
 package org.apache.jmeter.functions;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -70,7 +71,15 @@ public abstract class AbstractFunction implements Function
             }
             else if (!arg.equals(","))
             {
-                arguments.add(URLDecoder.decode(arg));
+                try
+                {
+                    arguments.add(URLDecoder.decode(arg, "UTF-8"));
+                }
+                catch (UnsupportedEncodingException e)
+                {
+                    // UTF-8 unsupported? You must be joking!
+                    throw new Error(e);
+                }
             }
             previous = arg;
         }
