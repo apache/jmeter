@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <author email="bburns@apache.org">Brendan Burns, et al.</author>
+    <title>Contributing to The Jakarta Project</title>
+  </properties>
+<body>
+<section name="Contributing To The Jakarta Project">
+<p>
+The Jakarta Project is an open volunteer project. This means that anyone may
+partecipate to the development process even actively (writing, discussing, proposing code)
+or passively (listening and learning). You are more than welcome to join our group of
+developers if you feel you are ready for it and wish to give a hand. 
+</p>
+<p>
+If you want more info about Jakarta development (mailing list, CVS info, code
+style, subprojects, people to ask) check out our web site:
+</p>
+<a HREF="http://jakarta.apache.org">
+<p>http://jakarta.apache.org</p></a>
+</section>
+</body>
+</document>
