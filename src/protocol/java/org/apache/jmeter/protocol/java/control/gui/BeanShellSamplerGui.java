@@ -1,4 +1,8 @@
 /*
+ * $Header$
+ * $Revision$
+ * $Date$
+ * 
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -77,16 +81,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class BeanShellSamplerGui extends AbstractSamplerGui implements ActionListener
 {
-	private static final String staticLabel
-	    = JMeterUtils.getResString("bsh_sampler_title","BeanShell Sampler (BETA CODE)");
-	
-	private static final String fileLabel =
-	    JMeterUtils.getResString("bsh_script_file","BeanShell Script File");
-
-	private static final String scriptLabel =
-	    JMeterUtils.getResString("bsh_script","BeanShell Script");
-	
-    public BeanShellSamplerGui()
+	public BeanShellSamplerGui()
     {
         init();
     }
@@ -119,14 +114,14 @@ public class BeanShellSamplerGui extends AbstractSamplerGui implements ActionLis
 
     public String getStaticLabel()
     {
-        return staticLabel;
+        return JMeterUtils.getResString("bsh_sampler_title" + "(BETA CODE)");
     }
     private JTextField filename;
     
 
 	private JPanel createFilenamePanel()//TODO ought to be a FileChooser ...
 	{
-		JLabel label = new JLabel(fileLabel);
+		JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_file"));
 		
 		filename = new JTextField(10);
 		filename.setName(BeanShellSampler.FILENAME);
@@ -166,7 +161,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui implements ActionLis
 		scriptField.setLineWrap(true);
 		scriptField.setWrapStyleWord(true);
 
-		JLabel label = new JLabel(scriptLabel);
+		JLabel label = new JLabel(JMeterUtils.getResString("bsh_script"));
 		label.setLabelFor(scriptField);
 
 		JPanel panel = new JPanel(new BorderLayout());
