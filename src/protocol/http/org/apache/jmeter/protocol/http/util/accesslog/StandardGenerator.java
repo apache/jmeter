@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 
 /**
  * Description:<br>
@@ -56,7 +57,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 
 public class StandardGenerator implements Generator, Serializable {
 
-	protected HTTPSampler SAMPLE = null;
+	protected HTTPSamplerBase SAMPLE = null;
 	transient protected FileWriter WRITER = null;
 	transient protected OutputStream OUTPUT = null;
 	protected String FILENAME = null;
