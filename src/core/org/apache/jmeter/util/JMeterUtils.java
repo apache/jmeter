@@ -203,7 +203,15 @@ public class JMeterUtils implements UnitTestManager
     }
     public static String[] getSearchPaths()
     {
-        return new String[] { getJMeterHome() + "/lib/ext" };
+        String[] paths= 
+            JMeterUtils.getPropDefault("search_paths", null).split(";");
+        String[] result= new String[paths.length+1];
+        result[0]= getJMeterHome() + "/lib/ext";
+        for (int i=1; i<result.length; i++)
+        {
+            result[i]= paths[i-1];
+        }
+        return result;
     }
 
     /**
