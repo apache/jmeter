@@ -8,3 +8,4 @@ jmeter-fb.*
 .classpath
 .project
 .externalToolBuilders
+reports
