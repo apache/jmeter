@@ -1,3 +1,5 @@
+package org.apache.jmeter.visualizers;
+
 /*
  * ====================================================================
  * The Apache Software License, Version 1.1
@@ -53,8 +55,6 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.jmeter.visualizers;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,9 +70,9 @@ import org.apache.log.Logger;
  *  This class implements the TableModel for the information kept
  *  by the GraphModel.
  *
- *@author     <a href="mailto:alf@i100.no">Alf Hogemark</a>Hogemark
- *@created    March 10, 2002
- *@version    1.0
+ * @author     <a href="mailto:alf@i100.no">Alf Hogemark</a>Hogemark
+ * @created    March 10, 2002
+ * @version    1.0
  */
 public class TableDataModel extends GraphModel implements TableModel
 {
@@ -111,7 +111,7 @@ public class TableDataModel extends GraphModel implements TableModel
 	 */
 	public String getClassLabel()
 	{
-		return "View Results in Table";
+		return JMeterUtils.getResString("view_results_in_table");
 	}
 
 	public Sample addNewSample(long time,long timeStamp,boolean success,String url)
@@ -243,6 +243,7 @@ public class TableDataModel extends GraphModel implements TableModel
 	public void removeTableModelListener(TableModelListener l)
 	{
 	}
+
 }
 
 
