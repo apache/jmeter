@@ -28,7 +28,7 @@ NEW="-XX:NewSize=128m -XX:MaxNewSize=128m"
 
 # This ratio and target have been proven OK in tests with a specially high
 # amount of per-sample objects (the HtmlParserHTMLParser tests):
-SURVIVOR="-XX:SurvivorRatio=8 -XX:TargetSurvivorRatio=80%"
+SURVIVOR="-XX:SurvivorRatio=8 -XX:TargetSurvivorRatio=50%"
 
 # Think about it: trying to keep per-run objects in tenuring definitely
 # represents a cost, but where's the benefit? They won't disappear before
