@@ -88,12 +88,16 @@ import org.apache.log.Logger;
  * @author Michael Stover (mstover1 at apache.org)
  * @see HashTreeTraverser
  * @see SearchByClass
- * @version $Revision$
+ * @version $Revision$ Updated on: $Date$
  */
 public class HashTree implements Serializable, Map
 {
-    private static Logger log =
-        LoggingManager.getLoggerForClass();
+// GetLoggerForClass() uses ClassContext, which
+// causes a Security violation in RemoteJMeterImpl
+// Currently log is only used by test code, so moved there.
+// N.B. Can still add logging, but would beed to use getLoggerFor() instead
+//    private static Logger log =
+//        LoggingManager.getLoggerForClass();
 
     /**
      * Creates an empty new HashTree.
@@ -1098,6 +1102,8 @@ public class HashTree implements Serializable, Map
 
         public void testAdd1() throws Exception
         {
+			Logger log =
+				LoggingManager.getLoggerForClass();
             Collection treePath =
                 Arrays.asList(new String[] { "1", "2", "3", "4" });
             HashTree tree = new HashTree();
