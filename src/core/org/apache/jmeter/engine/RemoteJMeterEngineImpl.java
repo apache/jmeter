@@ -82,12 +82,13 @@ public class RemoteJMeterEngineImpl
                     InetAddress.getLocalHost().getHostName());
             Naming.rebind("JMeterEngine", this);
         }
-        catch (Exception ex)
-        {
-            log.error(
-                "rmiregistry needs to be running to start JMeter in server " +
-                "mode",
-                ex);
+        catch(Exception ex){
+			log.error(
+				"rmiregistry needs to be running to start JMeter in server " +
+				"mode",
+				ex);
+			// Throw an Exception to ensure caller knows ...
+			throw new RemoteException("Cannot start. See server log file.");
         }
     }
 
