@@ -859,6 +859,7 @@ public class HashTree implements Serializable, Map
         Iterator iter = treePath.iterator();
         while (iter.hasNext())
         {
+            if(tree == null) return null;
             Object temp = iter.next();
             tree = tree.getTree(temp);
         }
