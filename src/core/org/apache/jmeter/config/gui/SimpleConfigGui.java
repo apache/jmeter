@@ -147,7 +147,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
     /* Implements JMeterGUIComponent.getStaticLabel() */
     public String getStaticLabel()
     {
-        return JMeterUtils.getResString("Simple Config Element");
+        return JMeterUtils.getResString("simple_config_element");
     }
 
     /**

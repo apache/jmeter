@@ -136,7 +136,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener
     /* Implements JMeterGUIComponent.getStaticLabel() */
     public String getStaticLabel()
     {
-        return JMeterUtils.getResString("Java Request Defaults");
+        return JMeterUtils.getResString("java_request_defaults");
     }
 
     /**

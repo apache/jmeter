@@ -57,7 +57,7 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
      ***************************************/
     public String getStaticLabel()
     {
-        return JMeterUtils.getResString("HTML Parameter Mask");
+        return JMeterUtils.getResString("html_parameter_mask");
     }
 
     /****************************************
@@ -225,7 +225,7 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
     private long checkTextField(FocusEvent evt, String defaultValue)
     {
         JTextField temp = (JTextField) evt.getSource();
-        boolean pass = true;
+        //boolean pass = true;
         long longVal = 0;
 
         try

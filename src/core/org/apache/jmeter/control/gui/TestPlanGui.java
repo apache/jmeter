@@ -104,7 +104,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
     /* Implements JMeterGUIComponent.getStaticLabel() */
     public String getStaticLabel()
     {
-        return JMeterUtils.getResString("Test Plan");
+        return JMeterUtils.getResString("test_plan");
     }
 
     /**

@@ -111,7 +111,7 @@ public class UserParameterModifierGui extends AbstractPreProcessorGui {
 	 ***********************************************************/
 	public void updateGui() {}
 	public String getStaticLabel() {
-		return JMeterUtils.getResString("HTTP User Parameter Modifier");
+		return JMeterUtils.getResString("http_user_parameter_modifier");
 	}
 	
 	public void configure(TestElement el)

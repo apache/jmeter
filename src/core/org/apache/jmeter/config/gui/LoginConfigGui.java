@@ -114,7 +114,7 @@ public class LoginConfigGui extends AbstractConfigGui
     /* Implements JMeterGUIComponent.getStaticLabel() */
     public String getStaticLabel()
     {
-        return JMeterUtils.getResString("Login Config Element");
+        return JMeterUtils.getResString("login_config_element");
     }
 
     /**
