@@ -181,6 +181,8 @@ public final class AllTests
 //			System.out.println("Instantiated: "+n);
 		} catch (Exception e1) {
 			System.out.println("Error finding class "+n+" "+e1);
+		} catch (java.lang.InternalError e1){
+			System.out.println("Error finding class "+n+" "+e1);
 		}
 
 		System.out.println("------------");
@@ -207,7 +209,9 @@ public final class AllTests
 			System.out.println("Instantiated: "+n);
 		} catch (Exception e1) {
 			System.out.println("Error with class "+n+" "+e1);
-		}
+		} catch (java.lang.InternalError e1){
+		    System.out.println("Error with class "+n+" "+e1);
+	    }
 		System.out.println("------------");
 //--
         System.exit(0);
