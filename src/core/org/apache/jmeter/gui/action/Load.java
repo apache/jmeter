@@ -162,6 +162,7 @@ public class Load implements Command
 		//convertTree(tree);
         boolean isTestPlan = tree.getArray()[0] instanceof TestPlan;
 		HashTree newTree = GuiPackage.getInstance().addSubTree(tree);
+        GuiPackage.getInstance().updateCurrentGui();
         GuiPackage.getInstance().getMainFrame().getTree().setSelectionPath(
         new TreePath(((JMeterTreeNode)newTree.getArray()[0]).getPath()));
 		tree = GuiPackage.getInstance().getCurrentSubTree();				
