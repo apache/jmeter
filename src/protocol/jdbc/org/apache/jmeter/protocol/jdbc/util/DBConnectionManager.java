@@ -59,6 +59,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 
@@ -186,13 +187,10 @@ public class DBConnectionManager
 
     public void shutdown()
     {
-        synchronized (connections)
+        Iterator iter = new HashSet(connections.keySet()).iterator();
+        while (iter.hasNext())
         {
-            Iterator iter = connections.keySet().iterator();
-            while (iter.hasNext())
-            {
-                close((DBKey) iter.next());
-            }
+            close((DBKey) iter.next());
         }
 
     }
