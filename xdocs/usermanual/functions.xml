@@ -105,7 +105,7 @@ replacement string") parsed by this function</li>
 </p></description>
 
 <properties>
-        <property name="First arguement" required="Yes">The first argument is the regular expression
+        <property name="First argument" required="Yes">The first argument is the regular expression
         to be applied to the response data.  It will grab all matches.  Any parts of this expression
         that you wish to use in your template string, be sure to surround in parentheses.  Example:
         &amp;lt;a href="(.*)"&amp;gt;.  This will grab the value of the link and store it as the first group (there is
@@ -381,9 +381,12 @@ the second would return 1 and the last would return www.dummy.org
 
 <properties>
         <property name="String to be logged" required="Yes">A string</property>
-        <property name="Log Level" required="No">DEBUG, INFO (default), WARN or ERROR</property>
+        <property name="Log Level" required="No">OUT, ERR, DEBUG, INFO (default), WARN or ERROR</property>
         <property name="Throwable text" required="No">If non-empty, creates a Throwable to pass to the logger</property>
 </properties>
+<p>The OUT and ERR log level names are used to direct the output to System.out and System.err respectively.
+	In this case, the output is always printed - it does not depend on the current log setting.
+</p>
 </component>
 
 <component index="16.5.12" name="__logn">
@@ -395,9 +398,12 @@ the second would return 1 and the last would return www.dummy.org
 
 <properties>
         <property name="String to be logged" required="Yes">A string</property>
-        <property name="Log Level" required="No">DEBUG, INFO (default), WARN or ERROR</property>
+        <property name="Log Level" required="No">OUT, ERR, DEBUG, INFO (default), WARN or ERROR</property>
         <property name="Throwable text" required="No">If non-empty, creates a Throwable to pass to the logger</property>
 </properties>
+<p>The OUT and ERR log level names are used to direct the output to System.out and System.err respectively.
+	In this case, the output is always printed - it does not depend on the current log setting.
+</p>
 </component>
 
 <component index="16.5.13" name="__BeanShell">

@@ -91,13 +91,46 @@ public class LogFunction extends AbstractFunction implements Serializable
 			t = new Throwable(((CompoundVariable) values[2]).execute());
 		}
 		
-		// N.B. if the string is not recognised, DEBUG is assumed
-        Priority p = Priority.getPriorityForName(priorityString);
-
-        log.log(p,stringToLog,t);
-        
+		logDetails(log,stringToLog,priorityString,t);
+		
         return stringToLog;
 
+    }
+
+    // Common output function
+    private static void printDetails(java.io.PrintStream ps,String s, Throwable t)
+    {
+		String tn = Thread.currentThread().getName();
+		if (t != null)
+		{
+			ps.print("Log: "+ tn + " : " + s + " ");
+			t.printStackTrace(ps);
+		}
+		else
+		{
+			ps.println("Log: "+ tn + " : " + s);
+		}
+    }
+    
+    // Routine to perform the output (also used by __logn() function)
+    static void logDetails(Logger l,String s,String prio,Throwable t)
+    {
+		if (prio.equalsIgnoreCase("OUT")) //$NON-NLS-1
+		{
+			printDetails(System.out,s,t);
+		}
+		else 
+		if (prio.equalsIgnoreCase("ERR")) //$NON-NLS-1
+		{
+			printDetails(System.err,s,t);
+		}
+		else
+		{
+			// N.B. if the string is not recognised, DEBUG is assumed
+			Priority p = Priority.getPriorityForName(prio);
+            log.log(p,s,t);
+		}
+    	
     }
 
     public void setParameters(Collection parameters)
