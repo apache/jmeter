@@ -114,7 +114,6 @@ public class Proxy extends Thread
             */
             headers = request.getHeaderManager();
             sampler.setHeaderManager(headers);
-
             result = sampler.sample();
             writeToClient(
                 result,
