@@ -242,6 +242,15 @@ public class LoopController extends GenericController implements Serializable
                 }
             }
         }
+        
+        public void testLoopZeroTimes() throws Exception
+        {
+            LoopController loop = new LoopController();
+            loop.setLoops(0);
+            loop.addTestElement(new TestSampler("never run"));
+            loop.initialize();
+            assertNull(loop.next());
+        }
     }
 
     public static void main(String args[])
