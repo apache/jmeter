@@ -82,11 +82,11 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 public class GaussianRandomTimerGui extends AbstractTimerGui
 {
 
-    private final String DELAY_FIELD = "Delay Field";
-    private final String RANGE_FIELD = "Range Field";
+    private static final String DELAY_FIELD = "Delay Field";
+    private static final String RANGE_FIELD = "Range Field";
 
-    public final String DEFAULT_DELAY = "300";
-    public final String DEFAULT_RANGE = "100.0";
+    public static final String DEFAULT_DELAY = "300";
+    public static final String DEFAULT_RANGE = "100.0";
 
     private JTextField delayField;
     private JTextField rangeField;
