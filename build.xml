@@ -307,7 +307,10 @@
   <property name="version" value="1.9.${DSTAMP}"/>
   </target>
 
-  <target name="init" depends="check-libs,report-missing-libs,init-version"/>
+  <target name="init" depends="check-libs,report-missing-libs,init-version">
+    <!-- Create the optional directory (fileset complains if it is missing) -->
+    <mkdir dir="${lib.opt}"/>
+  </target>
 
   	<!-- JMeter Javadoc version (own variable is used so can be overriden independently) -->
   <property name="docversion" value="${version}"/>
