@@ -148,6 +148,10 @@ public class CLDemo {
                 "-a=bc", "-a bc" "-abc".
                 </p>
                 <p>
+                In the case of a long option with an optional argument, the '=' sign is required.
+                For example. --optarg=1, not --optarg 1.
+                </p>
+                <p>
                 In some cases it is also necessary to disable command line parsing so that you
                 can pass a text argument to the program that starts with a '-' character. To do
                 this insert the sequence '--' onto the command line with no text immediately
