@@ -11,4 +11,5 @@ IF "%3" EQU "-p" set PORT=-Dhttp.proxyPort=%4
 IF "%5" EQU "-f" set PROP=%6
 IF "%5" EQU "-h" set HOST=-Dhttp.proxyHost=%6
 IF "%5" EQU "-p" set PORT=-Dhttp.proxyPort=%6
-java -cp %CLASSPATH%;ApacheJMeter.jar %HOST% %PORT% org.apache.jmeter.Driver %PROP%
+java -cp %CLASSPATH%;../lib/xerces.jar;ApacheJMeter.jar %HOST% %PORT% 
+org.apache.jmeter.Driver %PROP%
