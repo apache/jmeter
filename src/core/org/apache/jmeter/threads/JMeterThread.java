@@ -253,17 +253,20 @@ public class JMeterThread implements Runnable, java.io.Serializable
                         sampler.setThreadName(threadName);
                         if (sampler instanceof TestBean) ((TestBean)sampler).prepare();               
                         SampleResult result = sampler.sample(null); // TODO: remove this useless Entry parameter
-                        result.setThreadName(threadName);
-                        threadContext.setPreviousResult(result);
-                        runPostProcessors(pack.getPostProcessors());
-                        checkAssertions(pack.getAssertions(), result);
-                        notifyListeners(pack.getSampleListeners(), result);
-                        compiler.done(pack);
-                        if (result.isStopThread() || (!result.isSuccessful() && onErrorStopThread)){
-                        	stopThread();
-                        }
-                        if (result.isStopTest() || (!result.isSuccessful() && onErrorStopTest)){
-                        	stopTest();
+                        if (result != null)
+                        {
+	                        result.setThreadName(threadName);
+                        	threadContext.setPreviousResult(result);
+	                        runPostProcessors(pack.getPostProcessors());
+    	                    checkAssertions(pack.getAssertions(), result);
+        	                notifyListeners(pack.getSampleListeners(), result);
+            	            compiler.done(pack);
+                	        if (result.isStopThread() || (!result.isSuccessful() && onErrorStopThread)){
+                    	    	stopThread();
+                        	}
+                        	if (result.isStopTest() || (!result.isSuccessful() && onErrorStopTest)){
+                        		stopTest();
+                        	}
                         }
                         if (scheduler)
                         {
