@@ -54,13 +54,11 @@
  */
 package org.apache.jmeter.protocol.http.control.gui;
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -160,19 +158,9 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         Border margin = new EmptyBorder(10, 10, 5, 10);
         mainPanel.setBorder(margin);
         mainPanel.setLayout(new BorderLayout());
-        JPanel titlePanel = new JPanel(new BorderLayout());
-
-        // TITLE
-        JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("web_testing_title"));
-        Font curFont = panelTitleLabel.getFont();
-        int curFontSize = curFont.getSize();
-        curFontSize += 4;
-        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-        titlePanel.add(panelTitleLabel, BorderLayout.NORTH);
 
         // NAME
-        titlePanel.add(getNamePanel(), BorderLayout.SOUTH);
-        mainPanel.add(titlePanel, BorderLayout.NORTH);
+        mainPanel.add(makeTitlePanel(), BorderLayout.NORTH);
 
         // URL CONFIG
         urlConfigGui = new MultipartUrlConfigGui();
@@ -182,6 +170,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         mainPanel.add(createOptionalTasksPanel(), BorderLayout.SOUTH);
 
         this.add(mainPanel);
+        revalidate();
+        setMinimumSize(this.getPreferredSize());
     }
 
     private JPanel createOptionalTasksPanel()
