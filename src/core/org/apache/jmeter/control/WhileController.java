@@ -70,7 +70,7 @@ public class WhileController extends GenericController implements Serializable
      * @param loopEnd - are we at loop end?
      * @return true means OK to continue 
      */
-    private boolean conditionTrue(boolean loopEnd)
+    private boolean endOfLoop(boolean loopEnd)
     {
 //		clear cached condition
 		getProperty(CONDITION).recoverRunningVersion(null);
@@ -81,16 +81,16 @@ public class WhileController extends GenericController implements Serializable
     	if ((loopEnd && cnd.length() == 0) 
     			|| "LAST".equalsIgnoreCase(cnd)) {// $NON-NLS-1$
 			if (testMode) {
-			 	res=testModeResult;
+			 	res=!testModeResult;
 			} else {
         	    JMeterVariables threadVars = 
         		    JMeterContextService.getContext().getVariables();
         	    // Use !false rather than true, so that null is treated as true 
-       	        res = !"false".equalsIgnoreCase(threadVars.get(JMeterThread.LAST_SAMPLE_OK));// $NON-NLS-1$
+       	        res = "false".equalsIgnoreCase(threadVars.get(JMeterThread.LAST_SAMPLE_OK));// $NON-NLS-1$
     	    }
     	} else {
     		// cnd may be blank if next() called us
-    		res = !"false".equalsIgnoreCase(cnd);// $NON-NLS-1$
+    		res = "false".equalsIgnoreCase(cnd);// $NON-NLS-1$
     	}
     	log.debug("Condition value: "+res);
         return res;
@@ -103,7 +103,7 @@ public class WhileController extends GenericController implements Serializable
     protected Sampler nextIsNull() throws NextIsNullException
     {
         reInitialize();
-        if (conditionTrue(true))
+        if (!endOfLoop(true))
         {
             return super.next();
         }
@@ -120,7 +120,7 @@ public class WhileController extends GenericController implements Serializable
 			return super.next();
 		}
 		// Must be start of loop
-        if(conditionTrue(false)) // Still OK
+        if(!endOfLoop(false))
         {
             return super.next(); // OK to continue
         }
