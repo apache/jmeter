@@ -64,7 +64,7 @@ import javax.swing.table.TableModel;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 
@@ -78,8 +78,8 @@ import org.apache.log.Logger;
  */
 public class TableDataModel extends GraphModel implements TableModel
 {
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-                    "jmeter.gui");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
+
     List urlList = new ArrayList();
 
     /**
@@ -207,10 +207,10 @@ public class TableDataModel extends GraphModel implements TableModel
         }
         else if (columnIndex == 1)
         {
-            log.info("rowIndex = " + rowIndex);
+            log.debug("rowIndex = " + rowIndex);
             if ((rowIndex >= 0) && (rowIndex < urlList.size()))
             {
-                log.info(" url = " + urlList.get(rowIndex));
+                log.debug(" url = " + urlList.get(rowIndex));
                 return urlList.get(rowIndex);
             }
         }
