@@ -11,6 +11,7 @@ package org.apache.jmeter.protocol.tcp.sampler;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.net.SocketTimeoutException;
 
@@ -85,10 +86,23 @@ public class TCPClientImpl implements TCPClient
 			{
 				w.write(buffer, 0, x);
 			}
-		} catch (SocketTimeoutException e) {
+		/*
+		 * Timeout is reported as follows:
+		 * JDK1.3: InterruptedIOException
+		 * JDK1.4: SocketTimeoutException, which extends InterruptedIOException
+		 * 
+		 * So to make the code work on both, just check for InterruptedIOException
+		 *
+		 * If 1.3 support is dropped, can change to using SocketTimeoutException
+		 *  
+		 * For more accurate detection of timeouts under 1.3,
+		 * one could perhaps examine the Exception message text...
+		 * 
+		 */
+		} catch (InterruptedIOException e) {
 			// drop out to handle buffer
 		} catch (IOException e) {
-			log.debug("Read error",e);
+			log.warn("Read error:"+e);
 			return "";
 		}
 		
