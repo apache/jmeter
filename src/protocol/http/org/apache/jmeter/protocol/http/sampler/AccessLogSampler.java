@@ -73,7 +73,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean
    transient private LogParser PARSER = null;
    //NOTUSED private Class PARSERCLASS = null;
    private String logFile, parserClassName, filterClassName;
-   private Filter filter;
+   transient private Filter filter;
    private int count = 0;
 
    /**

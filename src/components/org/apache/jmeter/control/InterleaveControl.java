@@ -37,7 +37,7 @@ public class InterleaveControl extends GenericController implements Serializable
     public static final int IGNORE_SUB_CONTROLLERS = 0;
     public static final int USE_SUB_CONTROLLERS = 1;
     private boolean skipNext;
-    private TestElement searchStart = null;
+    transient private TestElement searchStart = null;
     private boolean currentReturnedAtLeastOne;
     private boolean stillSame = true;
 
