@@ -39,7 +39,7 @@ import org.apache.log.Logger;
 public class BeanShellAssertion extends AbstractTestElement
     implements Serializable, Assertion
 {
-	protected static Logger log = LoggingManager.getLoggerForClass();
+	private static Logger log = LoggingManager.getLoggerForClass();
 
     public static final String FILENAME   = "BeanShellAssertion.filename"; //$NON-NLS-1$
 	public static final String SCRIPT     = "BeanShellAssertion.query"; //$NON-NLS-1$
@@ -55,7 +55,6 @@ public class BeanShellAssertion extends AbstractTestElement
 		String init="";
 		try{
 			bshInterpreter = new Interpreter();
-			bshInterpreter.set("log",log);  //$NON-NLS-1$
 			init = JMeterUtils.getPropDefault(INIT_FILE,null);
 			if (init != null)
 			{
@@ -68,8 +67,6 @@ public class BeanShellAssertion extends AbstractTestElement
 					log.warn("Error processing init file "+init+" "+e);
 				}
 			}
-		} catch (Exception e){
-			log.warn("Error setting log object "+e);
 		} catch (NoClassDefFoundError e){
 			bshInterpreter=null;
 		}
@@ -101,8 +98,11 @@ public class BeanShellAssertion extends AbstractTestElement
         {
         	String request=getScript();
         	String fileName=getFilename();
-
-			bshInterpreter.set("FileName",getFilename());//$NON-NLS-1$
+        	
+        	// Has to be done after construction, otherwise fails serialisation check
+        	bshInterpreter.set("log",log);  //$NON-NLS-1$
+			
+        	bshInterpreter.set("FileName",getFilename());//$NON-NLS-1$
 			bshInterpreter.set("Parameters",getParameters());// as a single line $NON-NLS-1$
 			bshInterpreter.set("bsh.args",//$NON-NLS-1$
 					JOrphanUtils.split(getParameters()," "));//$NON-NLS-1$

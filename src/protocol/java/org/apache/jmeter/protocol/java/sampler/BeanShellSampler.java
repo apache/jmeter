@@ -53,7 +53,6 @@ public class BeanShellSampler extends AbstractSampler
 		String init="";
 		try{
 			bshInterpreter = new Interpreter();
-			bshInterpreter.set("log",log);  //$NON-NLS-1$
 			init = JMeterUtils.getPropDefault(INIT_FILE,null);
 			if (init != null)
 			{
@@ -66,8 +65,6 @@ public class BeanShellSampler extends AbstractSampler
 					log.warn("Error processing init file "+init+" "+e);
 				}
 			}
-		} catch (Exception e){
-			log.warn("Error setting log object "+e);
 		} catch (NoClassDefFoundError e){
 			bshInterpreter=null;
 		}
@@ -115,12 +112,13 @@ public class BeanShellSampler extends AbstractSampler
         	} else {
 				res.setSamplerData(fileName);
         	}
+        	// Has to be done after construction, otherwise fails serialisation check
+        	bshInterpreter.set("log",log);  //$NON-NLS-1$
 
-			//TODO - set some more variables?
 			bshInterpreter.set("Label",getLabel());  //$NON-NLS-1$
 			bshInterpreter.set("FileName",getFilename()); //$NON-NLS-1$
 			bshInterpreter.set("SampleResult",res); //$NON-NLS-1$
-			bshInterpreter.set("Parameters",getParameters());// as a single line
+			bshInterpreter.set("Parameters",getParameters());// as a single line//$NON-NLS-1$
 			bshInterpreter.set("bsh.args",JOrphanUtils.split(getParameters()," "));
 
             // Set default values
