@@ -650,6 +650,38 @@ public class JMeterUtils implements UnitTestManager
         return ans;
     }
     /**
+     *  Get a String value with NO default if not present.
+     *
+     *@param  propName    the name of the property.
+     *@return             The PropDefault value
+     */
+    public static String getProperty(String propName)
+    {
+        String ans = null;
+        try
+        {
+            ans = appProperties.getProperty(propName);
+        }
+        catch (Exception e)
+        {
+            ans = null;
+        }
+        return ans;
+    }
+
+    /**
+     *  Set a String value
+     *
+     *@param  propName    the name of the property.
+     *@param propValue    the value of the property
+     *@return             the previous value of the property
+     */
+    public static Object setProperty(String propName, String propValue)
+    {
+         return appProperties.setProperty(propName,propValue);
+    }
+
+    /**
      * Sets the selection of the JComboBox to the Object 'name' from the list
      * in namVec.
      */
