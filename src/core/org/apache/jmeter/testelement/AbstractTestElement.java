@@ -485,4 +485,13 @@ public abstract class AbstractTestElement implements TestElement, Serializable
 	public boolean canRemove(){
 		return true;
 	}
+
+	// Moved from JMeter class
+	public boolean isEnabled()
+	{
+    	return 
+    	getProperty(TestElement.ENABLED) instanceof NullProperty
+    	||
+    	getPropertyAsBoolean(TestElement.ENABLED);
+	}
 }
