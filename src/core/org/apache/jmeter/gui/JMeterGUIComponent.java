@@ -59,71 +59,99 @@ import javax.swing.JPopupMenu;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 /****************************************
- * <p>
- *
- * Title: Jakarta JMeter</p> <p>
- *
- * Description: Load testing software</p> <p>
- *
- * Copyright: Copyright (c) 2002</p> <p>
- *
- * Company: Apache Foundation</p>
- *
+ * Implementing this interface indicates that the class is
+ * a JMeter GUI Component.  A JMeter GUI Component is essentially 
+ * the GUI display code associated with a JMeter Test Element.  The writer of
+ * the component must take care to make the component be consistent with the
+ * rest of JMeter's GUI look and feel and behavior.  Use of the provided abstract
+ * classes is highly recommended to make this task easier.
+ * 
  *@author    Michael Stover
  *@created   $Date$
  *@version   1.0
+ * 
+ * 
+ * 
+ * @see AbstractJMeterGuiComponent
+ * @see org.apache.jmeter.config.gui.AbstractConfigGui
+ * @see org.apache.jmeter.config.gui.AbstractModifierGui
+ * @see org.apache.jmeter.config.gui.AbstractResponseBasedModifierGui
+ * @see org.apache.jmeter.assertions.gui.AbstractAssertionGui
+ * @see org.apache.jmeter.control.gui.AbstractControllerGui
+ * @see org.apache.jmeter.timers.gui.AbstractTimerGui
+ * @see org.apache.jmeter.visualizers.gui.AbstractVisualizer
+ * @see org.apache.jmeter.samplers.gui.AbstractSamplerGui
  ***************************************/
 
 public interface JMeterGUIComponent
 {
 
 	/****************************************
-	 * !ToDo (Method description)
+	 * Sets the name of the JMeter GUI Component.  The name
+	 * of the component is used in the Test Tree as the name of the
+	 * tree node.
 	 *
-	 *@param name  !ToDo (Parameter description)
+	 *@param name  )
 	 ***************************************/
 	public void setName(String name);
 
 	/****************************************
-	 * !ToDoo (Method description)
+	 * Gets the name of the JMeter GUI component.  The name
+	 * of the component is used in the Test Tree as the name of the tree node.
 	 *
-	 *@return   !ToDo (Return description)
+	 *@return   The name of the component)
 	 ***************************************/
 	public String getName();
 
 	/****************************************
-	 * !ToDoo (Method description)
+	 * Get the component's label.  This label is used in drop down
+	 * lists that give the user the option of choosing one type of
+	 * component in a list of many.  It should therefore be a descriptive
+	 * name for the end user to see.
 	 *
-	 *@return   !ToDo (Return description)
+	 *@return   GUI label for the component.
 	 ***************************************/
 	public String getStaticLabel();
 
 	/****************************************
-	 * !ToDo (Method description)
+	 * When a test is started, GUI components are converted into
+	 * test elements.  This is the method called on each component
+	 * to get the test element equivalent.  
 	 *
-	 *@return   !ToDo (Return description)
+	 *@return  The Test Element object that the GUI component 
+	 * represents.
 	 ***************************************/
 	public TestElement createTestElement();
 
 	/**
-	 * Test GUI elements can be turned disabled, in which case
+	 * Test GUI elements can be  disabled, in which case
 	 * they do not become part of the test when run.
 	 */
 	public boolean isEnabled();
 
+	/**
+	 * Set whether this component is enabled.
+	 * @param enabled true for enabled, false for disabled.
+	 */
 	public void setEnabled(boolean enabled);
 
 	/****************************************
-	 * !ToDo (Method description)
+	 * When a user right-clicks on the component in the test tree, or
+	 * selects the edit menu when the component is selected, the 
+	 * component will be asked to return a JPopupMenu that provides
+	 * all the options available to the user from this component.
 	 *
-	 *@return   !ToDo (Return description)
+	 *@return   A JPopupMenu appropriate for the component.
 	 ***************************************/
 	public JPopupMenu createPopupMenu();
 
 	/****************************************
-	 * !ToDo (Method description)
+	 * A newly created component can be initialized with the contents of
+	 * a Test Element object by calling this method.  The component is
+	 * responsible for querying the Test Element object for the
+	 * relevant information to display in its GUI.
 	 *
-	 *@param element  !ToDo (Parameter description)
+	 *@param element 
 	 ***************************************/
 	public void configure(TestElement element);
 
@@ -136,6 +164,9 @@ public interface JMeterGUIComponent
 	 ***************************************/
 	public Collection getMenuCategories();
 
-
+	/**
+	 * 
+	 *@param node
+	 */
     public void setNode(JMeterTreeNode node);
 }
