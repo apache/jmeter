@@ -23,14 +23,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.apache.avalon.framework.configuration.Configuration;
@@ -47,7 +45,6 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MapProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
@@ -67,81 +64,11 @@ public final class OldSaveService implements SaveServiceConstants
 {
     transient private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final int SAVE_NO_ASSERTIONS = 0;
-    private static final int SAVE_FIRST_ASSERTION = SAVE_NO_ASSERTIONS + 1;
-    private static final int SAVE_ALL_ASSERTIONS = SAVE_FIRST_ASSERTION + 1;
-
-    /** A formatter for the time stamp. */
-    private static SimpleDateFormat formatter = null;
-
-    /** A flag to indicate which output format to use for results. */
-    private static int outputFormat = SAVE_AS_XML;
-
-    /** A flag to indicate whether to print the field names for delimited
-        result files. */
-    private static boolean printFieldNames = false;
-
-    /** A flag to indicate whether the data type should
-        be saved to the test results. */
-    private static boolean saveDataType = true;
-
-    /** A flag to indicate whether the assertion result's failure message
-        should be saved to the test results. */
-    private static boolean saveAssertionResultsFailureMessage = false;
-
-    /** A flag to indicate whether the label should be saved to the test
-        results. */
-    private static boolean saveLabel = true;
-
-    /** A flag to indicate whether the response code should be saved to the
-        test results. */
-    private static boolean saveResponseCode = false;
-
-    /** A flag to indicate whether the response data should be saved to the
-        test results. */
-    private static boolean saveResponseData = false;
-
-    /** A flag to indicate whether the response message should be saved to the
-        test results. */
-    private static boolean saveResponseMessage = false;
-
-    /** A flag to indicate whether the success indicator should be saved to the
-        test results. */
-    private static boolean saveSuccessful = true;
-
-    /** A flag to indicate whether the thread name should be saved to the test
-        results. */
-    private static boolean saveThreadName = true;
-
-    /** A flag to indicate whether the time should be saved to the test
-        results. */
-    private static boolean saveTime = true;
-
-    /** A flag to indicate the format of the time stamp within the test
-        results. */
-    private static String timeStampFormat = MILLISECONDS;
-
-    /** A flag to indicate whether the time stamp should be printed in
-        milliseconds. */
-    private static boolean printMilliseconds = true;
-
-    /** A flag to indicate which assertion results should be saved to the test
-        results.  Legitimate values include none, first, all. */
-    private static String whichAssertionResults = FIRST;
-
-    private static int assertionsResultsToSave = SAVE_NO_ASSERTIONS;
-
-    /** The string used to separate fields when stored to disk, for example,
-        the comma for CSV files. */
-    private static String defaultDelimiter = ",";
-
+	// Initial config from properties
+	static private final SampleSaveConfiguration _saveConfig = SampleSaveConfiguration.staticConfig();
+	
     private static DefaultConfigurationBuilder builder =
         new DefaultConfigurationBuilder();
-
-    // Initialize various variables based on properties.
-    static {
-        readProperties();
-    } // static initialization
 
     /**
      * Private constructor to prevent instantiation.
@@ -150,125 +77,6 @@ public final class OldSaveService implements SaveServiceConstants
     {
     }
 
-    /**
-     * Read in the properties having to do with saving from a properties file.
-     */
-    private static void readProperties()
-    {
-        Properties systemProps = System.getProperties();
-        Properties props = new Properties(systemProps);
-
-        try
-        {
-            props = JMeterUtils.getJMeterProperties();
-        }
-        catch (Exception e)
-        {
-            log.error(
-                "SaveService.readProperties: Problem loading properties file: ",
-                e);
-        }
-
-        printFieldNames =
-            TRUE.equalsIgnoreCase(
-                props.getProperty(PRINT_FIELD_NAMES_PROP, FALSE));
-
-        saveDataType =
-            TRUE.equalsIgnoreCase(props.getProperty(SAVE_DATA_TYPE_PROP, TRUE));
-
-        saveLabel =
-            TRUE.equalsIgnoreCase(props.getProperty(SAVE_LABEL_PROP, TRUE));
-
-        saveResponseCode =
-            TRUE.equalsIgnoreCase(
-                props.getProperty(SAVE_RESPONSE_CODE_PROP, TRUE));
-
-        saveResponseData =
-            TRUE.equalsIgnoreCase(
-                props.getProperty(SAVE_RESPONSE_DATA_PROP, FALSE));
-
-        saveResponseMessage =
-            TRUE.equalsIgnoreCase(
-                props.getProperty(SAVE_RESPONSE_MESSAGE_PROP, TRUE));
-
-        saveSuccessful =
-            TRUE.equalsIgnoreCase(
-                props.getProperty(SAVE_SUCCESSFUL_PROP, TRUE));
-
-        saveThreadName =
-            TRUE.equalsIgnoreCase(
-                props.getProperty(SAVE_THREAD_NAME_PROP, TRUE));
-
-        saveTime =
-            TRUE.equalsIgnoreCase(props.getProperty(SAVE_TIME_PROP, TRUE));
-
-        timeStampFormat =
-            props.getProperty(TIME_STAMP_FORMAT_PROP, MILLISECONDS);
-
-        printMilliseconds = MILLISECONDS.equalsIgnoreCase(timeStampFormat);
-
-        // Prepare for a pretty date
-        if (!printMilliseconds
-            && !NONE.equalsIgnoreCase(timeStampFormat)
-            && (timeStampFormat != null))
-        {
-            formatter = new SimpleDateFormat(timeStampFormat);
-        }
-
-        whichAssertionResults = props.getProperty(ASSERTION_RESULTS_PROP, NONE);
-        saveAssertionResultsFailureMessage =
-            TRUE.equalsIgnoreCase(
-                props.getProperty(
-                    ASSERTION_RESULTS_FAILURE_MESSAGE_PROP,
-                    FALSE));
-
-        if (NONE.equals(whichAssertionResults))
-        {
-            assertionsResultsToSave = SAVE_NO_ASSERTIONS;
-        }
-        else if (FIRST.equals(whichAssertionResults))
-        {
-            assertionsResultsToSave = SAVE_FIRST_ASSERTION;
-        }
-        else if (ALL.equals(whichAssertionResults))
-        {
-            assertionsResultsToSave = SAVE_ALL_ASSERTIONS;
-        }
-
-        String howToSave = props.getProperty(OUTPUT_FORMAT_PROP, XML);
-
-        if (CSV.equals(howToSave))
-        {
-            outputFormat = SAVE_AS_CSV;
-        }
-        else
-        {
-            outputFormat = SAVE_AS_XML;
-        }
-
-        defaultDelimiter = props.getProperty(DEFAULT_DELIMITER_PROP, ",");
-    }
-
-    /**
-     * Return the format for the saved results, e.g., csv or xml.
-     * 
-     * @return  the format for the saved results
-     */
-    public static int getOutputFormat()
-    {
-        return outputFormat;
-    }
-
-    /**
-     * Return whether the field names should be printed to a delimited results
-     * file.
-     * @return  whether the field names should be printed
-     */
-    public static boolean getPrintFieldNames()
-    {
-        return printFieldNames;
-    }
-    
     /**
      * Make a SampleResult given a delimited string.
      * @param delim
@@ -280,23 +88,23 @@ public final class OldSaveService implements SaveServiceConstants
         SampleResult result = null;
         long timeStamp = 0;
         long elapsed = 0;
-        StringTokenizer splitter = new StringTokenizer(delim,defaultDelimiter);
+        StringTokenizer splitter = new StringTokenizer(delim,_saveConfig.getDelimiter());
         String text = null;
         
         try {
-				if (printMilliseconds)
+				if (_saveConfig.printMilliseconds())
 				{
 				    text = splitter.nextToken();
 				    timeStamp = Long.parseLong(text);
 				}
-			   else if (formatter != null)
+			   else if (_saveConfig.formatter() != null)
 			   {
 			        text = splitter.nextToken();
-			        Date stamp = formatter.parse(text);
+			        Date stamp = _saveConfig.formatter().parse(text);
 					timeStamp = stamp.getTime();
 			   }
 			
-			   if (saveTime)
+			   if (_saveConfig.saveTime())
 			   {
 			       text = splitter.nextToken();
 			       elapsed = Long.parseLong(text);
@@ -304,42 +112,42 @@ public final class OldSaveService implements SaveServiceConstants
 			
 			   result = new SampleResult(timeStamp,elapsed);
 			   
-			   if (saveLabel)
+			   if (_saveConfig.saveLabel())
 			   {
 			       text = splitter.nextToken();
 			       result.setSampleLabel(text);  
 			   }
-			   if (saveResponseCode)
+			   if (_saveConfig.saveCode())
 			   {
 			       text = splitter.nextToken();
 			       result.setResponseCode(text);
 			   }
 			
-			   if (saveResponseMessage)
+			   if (_saveConfig.saveMessage())
 			   {
 			       text = splitter.nextToken();
 			       result.setResponseMessage(text);
 			   }
 			
-			   if (saveThreadName)
+			   if (_saveConfig.saveThreadName())
 			   {
 			       text = splitter.nextToken();
 			       result.setThreadName(text);
 			   }
 			
-			   if (saveDataType)
+			   if (_saveConfig.saveDataType())
 			   {
 			       text = splitter.nextToken();
 			       result.setDataType(text);
 			   }
 			
-			   if (saveSuccessful)
+			   if (_saveConfig.saveSuccess())
 			   {
 			       text = splitter.nextToken();
 			       result.setSuccessful(Boolean.valueOf(text).booleanValue());
 			   }
 			
-			   if (saveAssertionResultsFailureMessage)
+			   if (_saveConfig.saveAssertionResultsFailureMessage())
 			   {
 			       text = splitter.nextToken();
 			   }
@@ -361,63 +169,63 @@ public final class OldSaveService implements SaveServiceConstants
     {
         StringBuffer text = new StringBuffer();
 
-        if (printMilliseconds || (formatter != null))
+        if (_saveConfig.printMilliseconds() || (_saveConfig.formatter() != null))
         {
             text.append(SaveServiceConstants.TIME_STAMP);
-            text.append(defaultDelimiter);
+            text.append(_saveConfig.getDelimiter());
         }
 
-        if (saveTime)
+        if (_saveConfig.saveTime())
         {
             text.append(SaveServiceConstants.TIME);
-            text.append(defaultDelimiter);
+            text.append(_saveConfig.getDelimiter());
         }
 
-        if (saveLabel)
+        if (_saveConfig.saveLabel())
         {
             text.append(SaveServiceConstants.LABEL);
-            text.append(defaultDelimiter);
+            text.append(_saveConfig.getDelimiter());
         }
 
-        if (saveResponseCode)
+        if (_saveConfig.saveCode())
         {
             text.append(SaveServiceConstants.RESPONSE_CODE);
-            text.append(defaultDelimiter);
+            text.append(_saveConfig.getDelimiter());
         }
 
-        if (saveResponseMessage)
+        if (_saveConfig.saveMessage())
         {
             text.append(SaveServiceConstants.RESPONSE_MESSAGE);
-            text.append(defaultDelimiter);
+            text.append(_saveConfig.getDelimiter());
         }
 
-        if (saveThreadName)
+        if (_saveConfig.saveThreadName())
         {
             text.append(SaveServiceConstants.THREAD_NAME);
-            text.append(defaultDelimiter);
+            text.append(_saveConfig.getDelimiter());
         }
 
-        if (saveDataType)
+        if (_saveConfig.saveDataType())
         {
             text.append(SaveServiceConstants.DATA_TYPE);
-            text.append(defaultDelimiter);
+            text.append(_saveConfig.getDelimiter());
         }
 
-        if (saveSuccessful)
+        if (_saveConfig.saveSuccess())
         {
             text.append(SaveServiceConstants.SUCCESSFUL);
-            text.append(defaultDelimiter);
+            text.append(_saveConfig.getDelimiter());
         }
 
-        if (saveAssertionResultsFailureMessage)
+        if (_saveConfig.saveAssertionResultsFailureMessage())
         {
             text.append(SaveServiceConstants.FAILURE_MESSAGE);
-            text.append(defaultDelimiter);
+            text.append(_saveConfig.getDelimiter());
         }
 
         String resultString = null;
         int size = text.length();
-        int delSize = defaultDelimiter.length();
+        int delSize = _saveConfig.getDelimiter().length();
 
         // Strip off the trailing delimiter
         if (size >= delSize)
@@ -584,43 +392,43 @@ public final class OldSaveService implements SaveServiceConstants
                 SAMPLE_RESULT_TAG_NAME,
                 "JMeter Save Service");
 
-        if (saveTime)
+        if (_saveConfig.saveTime())
         {
             config.setAttribute(TIME, "" + result.getTime());
         }
-        if (saveLabel)
+        if (_saveConfig.saveLabel())
         {
             config.setAttribute(LABEL, result.getSampleLabel());
         }
-        if (saveResponseCode)
+        if (_saveConfig.saveCode())
         {
             config.setAttribute(RESPONSE_CODE, result.getResponseCode());
         }
-        if (saveResponseMessage)
+        if (_saveConfig.saveMessage())
         {
             config.setAttribute(RESPONSE_MESSAGE, result.getResponseMessage());
         }
-        if (saveThreadName)
+        if (_saveConfig.saveThreadName())
         {
             config.setAttribute(THREAD_NAME, result.getThreadName());
         }
-        if (saveDataType)
+        if (_saveConfig.saveDataType())
         {
             config.setAttribute(DATA_TYPE, result.getDataType());
         }
 
-        if (printMilliseconds)
+        if (_saveConfig.printMilliseconds())
         {
             config.setAttribute(TIME_STAMP, "" + result.getTimeStamp());
         }
-        else if (formatter != null)
+        else if (_saveConfig.formatter() != null)
         {
-            String stamp = formatter.format(new Date(result.getTimeStamp()));
+            String stamp = _saveConfig.formatter().format(new Date(result.getTimeStamp()));
 
             config.setAttribute(TIME_STAMP, stamp);
         }
 
-        if (saveSuccessful)
+        if (_saveConfig.saveSuccess())
         {
             config.setAttribute(
                 SUCCESSFUL,
@@ -656,7 +464,7 @@ public final class OldSaveService implements SaveServiceConstants
         // whether to save the response data
         else
         {
-            if (assertionsResultsToSave == SAVE_ALL_ASSERTIONS)
+            if (_saveConfig.assertionsResultsToSave() == SampleSaveConfiguration.SAVE_ALL_ASSERTIONS)
             {
                 config.addChild(
                     createConfigForString(
@@ -671,14 +479,14 @@ public final class OldSaveService implements SaveServiceConstants
                 }
             }
             else if (
-                (assertionsResultsToSave == SAVE_FIRST_ASSERTION)
+                (_saveConfig.assertionsResultsToSave() == SampleSaveConfiguration.SAVE_FIRST_ASSERTION)
                     && assResults != null
                     && assResults.length > 0)
             {
                 config.addChild(getConfiguration(assResults[0]));
             }
 
-            if (saveResponseData)
+            if (_saveConfig.saveResponseData())
             {
                 config.addChild(getConfiguration(result.getResponseData()));
             }
@@ -693,9 +501,9 @@ public final class OldSaveService implements SaveServiceConstants
      * @param sample the test result to be converted
      * @return       the separated value representation of the result
      */
-    public static String resultToDelimitedString(SampleResult sample,SampleSaveConfiguration saveConfig)
+    public static String resultToDelimitedString(SampleResult sample)
     {
-        return resultToDelimitedString(sample, defaultDelimiter);
+        return resultToDelimitedString(sample, sample.getSaveConfig().getDelimiter());
     }
 
     /**
@@ -711,62 +519,63 @@ public final class OldSaveService implements SaveServiceConstants
         String delimiter)
     {
         StringBuffer text = new StringBuffer();
+		SampleSaveConfiguration saveConfig=sample.getSaveConfig();
 
-        if (printMilliseconds)
+        if (saveConfig.saveTimestamp())
         {
-            text.append("" + sample.getTimeStamp());
+            text.append(sample.getTimeStamp());
             text.append(delimiter);
         }
-        else if (formatter != null)
+        else if (saveConfig.formatter() != null)
         {
-            String stamp = formatter.format(new Date(sample.getTimeStamp()));
+            String stamp = _saveConfig.formatter().format(new Date(sample.getTimeStamp()));
             text.append(stamp);
             text.append(delimiter);
         }
 
-        if (saveTime)
+        if (saveConfig.saveTime())
         {
-            text.append("" + sample.getTime());
+            text.append(sample.getTime());
             text.append(delimiter);
         }
 
-        if (saveLabel)
+        if (saveConfig.saveLabel())
         {
             text.append(sample.getSampleLabel());
             text.append(delimiter);
         }
 
-        if (saveResponseCode)
+        if (saveConfig.saveCode())
         {
             text.append(sample.getResponseCode());
             text.append(delimiter);
         }
 
-        if (saveResponseMessage)
+        if (saveConfig.saveMessage())
         {
             text.append(sample.getResponseMessage());
             text.append(delimiter);
         }
 
-        if (saveThreadName)
+        if (saveConfig.saveThreadName())
         {
             text.append(sample.getThreadName());
             text.append(delimiter);
         }
 
-        if (saveDataType)
+        if (saveConfig.saveDataType())
         {
             text.append(sample.getDataType());
             text.append(delimiter);
         }
 
-        if (saveSuccessful)
+        if (saveConfig.saveSuccess())
         {
-            text.append("" + sample.isSuccessful());
+            text.append(sample.isSuccessful());
             text.append(delimiter);
         }
 
-        if (saveAssertionResultsFailureMessage)
+        if (saveConfig.saveAssertionResultsFailureMessage())
         {
             String message = null;
             AssertionResult[] results = sample.getAssertionResults();
@@ -776,11 +585,10 @@ public final class OldSaveService implements SaveServiceConstants
                 message = results[0].getFailureMessage();
             }
 
-            if (message == null)
+            if (message != null)
             {
-                message = "";
+	            text.append(message);
             }
-            text.append(message);
             text.append(delimiter);
         }
         // text.append(sample.getSamplerData().toString());
@@ -955,7 +763,7 @@ public final class OldSaveService implements SaveServiceConstants
     {
         TestElement element = null;
 
-		String testClass= (String) config.getAttribute("class");
+		String testClass= config.getAttribute("class");
         element = (TestElement) Class.forName(
         	NameUpdater.getCurrentName(testClass)).newInstance();
         Configuration[] children = config.getChildren();
@@ -1009,7 +817,7 @@ public final class OldSaveService implements SaveServiceConstants
     {
         Collection coll =
             (Collection) Class
-                .forName((String) config.getAttribute("class"))
+                .forName(config.getAttribute("class"))
                 .newInstance();
         Configuration[] items = config.getChildren();
 
@@ -1050,7 +858,6 @@ public final class OldSaveService implements SaveServiceConstants
 
     private static JMeterProperty createProperty(Configuration config, String testClass)
         throws
-            ConfigurationException,
             IllegalAccessException,
             ClassNotFoundException,
             InstantiationException
@@ -1087,7 +894,7 @@ public final class OldSaveService implements SaveServiceConstants
     {
         Map map =
             (Map) Class
-                .forName((String) config.getAttribute("class"))
+                .forName(config.getAttribute("class"))
                 .newInstance();
         Configuration[] items = config.getChildren();
 
