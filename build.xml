@@ -832,7 +832,9 @@ some of its classes - at present JMeter can only run from jar files.
 
   <target name="test" depends="install,test-only" description="Run tests"/>
   
-  <target name="test-only">
+  <target name="test-only" depends="test-headless,test-headed"/>
+  
+  <target name="test-headless">
    <echo >
    gump.run = ${gump.run}
    Test with headless=true
@@ -850,6 +852,8 @@ some of its classes - at present JMeter can only run from jar files.
       <arg value="./jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>
+    </target>
+    <target name="test-headed">
    <!-- TEMP test again non-headless-->
    <echo >
    gump.run = ${gump.run}
