@@ -1164,6 +1164,7 @@ public class HTTPSampler extends AbstractSampler
         catch (IOException e)
         {
         	res.sampleEnd();
+        	res.setURL(url);
             return errorResult(e, url.toString(), res.getTime());
         }
         finally
