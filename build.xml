@@ -333,6 +333,7 @@
   <patternset id="dist.sources">
   <include name="${src.dir}/"/>
   <include name="${docs.src}/"/>
+  <include name="*"/>
   </patternset>
 
   <target name="dist" depends="assume-libs-present,clean,install,all-docs,test" description="Create the distribution packages.">
