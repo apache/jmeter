@@ -94,6 +94,23 @@ public class RunningSample
         this.index = index;
         init();
     }
+    
+    /**
+     * Copy constructor to a duplicate of existing instance
+     * (without the disadvantages of clone()0
+     * @param src RunningSample
+     */
+    public RunningSample(RunningSample src){
+    	this.counter    = src.counter;
+    	this.errorCount = src.errorCount;
+    	this.firstTime  = src.firstTime;
+    	this.index      = src.index;
+    	this.label      = src.label;
+    	this.lastTime   = src.lastTime;
+    	this.max        = src.max;
+		this.min        = src.min;
+		this.runningSum = src.runningSum;
+    }
 
     private void init(){
         counter = 0L;
@@ -112,6 +129,15 @@ public class RunningSample
 	public synchronized void clear(){
 		init();
 	}
+	
+	/**
+	 * Get the elapsed time for the samples
+	 * @return how long the samples took
+	 */
+	public long getElapsed(){
+		if (lastTime == 0) return 0;// No samples collected ...
+		return lastTime - firstTime;
+	}
     /**
      * Returns the throughput associated to this sampler in requests per second.
      * May be slightly skewed because it takes the timestamps of the first and
@@ -120,6 +146,8 @@ public class RunningSample
      **/
     public double getRate()
     {
+		if (counter == 0) return 0.0; //Better behaviour when howLong=0 or lastTime=0
+             
         long howLongRunning = lastTime - firstTime;
 
         if (howLongRunning == 0)
@@ -138,6 +166,8 @@ public class RunningSample
      **/
     public double getRatePerMin()
     {
+		if (counter == 0) return 0.0; //Better behaviour when howLong=0 or lastTime=0
+             
         long howLongRunning = lastTime - firstTime;
 
         if (howLongRunning == 0)
@@ -236,6 +266,23 @@ public class RunningSample
             errorCount++;
         } 
     }
+
+
+	/**
+	 * Adds another RunningSample to this one
+	 * Does not check if it has the same label and index
+	 */
+	public synchronized void addSample(RunningSample rs)
+	{
+		this.counter += rs.counter;
+		this.errorCount += rs.errorCount;
+		this.runningSum += rs.runningSum;
+		if (this.firstTime > rs.firstTime) this.firstTime = rs.firstTime;
+		if (this.lastTime  < rs.lastTime)  this.lastTime  = rs.lastTime;
+		if (this.max < rs.max) this.max = rs.max;
+		if (this.min > rs.min) this.min = rs.min;
+	}
+
 
     /**
      * Returns the time in milliseconds of the quickest sample.
