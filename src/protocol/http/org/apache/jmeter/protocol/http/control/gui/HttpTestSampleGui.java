@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,24 +54,21 @@
  */
 package org.apache.jmeter.protocol.http.control.gui;
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import junit.framework.TestCase;
 
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.config.gui.MultipartUrlConfigGui;
 import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -151,48 +148,38 @@ public class HttpTestSampleGui extends AbstractSamplerGui
 
     private void init()
     {
-        this.setLayout(new GridLayout(1, 1));
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
 
-        // MAIN PANEL
-        JPanel mainPanel = new JPanel();
-        Border margin = new EmptyBorder(10, 10, 5, 10);
-        mainPanel.setBorder(margin);
-        mainPanel.setLayout(new BorderLayout());
-
-        // NAME
-        mainPanel.add(makeTitlePanel(), BorderLayout.NORTH);
+        add(makeTitlePanel(), BorderLayout.NORTH);
 
         // URL CONFIG
         urlConfigGui = new MultipartUrlConfigGui();
-        mainPanel.add(urlConfigGui, BorderLayout.CENTER);
+        add(urlConfigGui, BorderLayout.CENTER);
 
         // OPTIONAL TASKS
-        mainPanel.add(createOptionalTasksPanel(), BorderLayout.SOUTH);
-
-        this.add(mainPanel);
-        revalidate();
-        setMinimumSize(this.getPreferredSize());
+        add(createOptionalTasksPanel(), BorderLayout.SOUTH);
     }
 
     private JPanel createOptionalTasksPanel()
     {
         // OPTIONAL TASKS
-        JPanel optionalTasksPanel = new JPanel();
-        optionalTasksPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        VerticalPanel optionalTasksPanel = new VerticalPanel();
         optionalTasksPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("optional_tasks")));
 
         // RETRIEVE IMAGES
         JPanel retrieveImagesPanel = new JPanel();
-        retrieveImagesPanel.setLayout(new BoxLayout(retrieveImagesPanel, BoxLayout.X_AXIS));
-        retrieveImagesPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         getImages = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images"));
         retrieveImagesPanel.add(getImages);
 
         optionalTasksPanel.add(retrieveImagesPanel);
-
         return optionalTasksPanel;
     }
-    
+        
+    public Dimension getPreferredSize() {
+        return getMinimumSize();
+    }
+
     public static class Test extends TestCase
     {
         HttpTestSampleGui gui;

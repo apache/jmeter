@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,17 +53,20 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.modifier.gui;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.config.gui.AbstractModifierGui;
 import org.apache.jmeter.protocol.http.modifier.UserParameterModifier;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 /************************************************************
  *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
  *
@@ -121,25 +124,41 @@ public class UserParameterModifierGui extends AbstractModifierGui {
 	 * Methods Private
 	 *--------------------------------------------------------------------------------------------*/
 	private void init() {
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-		// NAME
-		mainPanel.add(makeTitlePanel());
-		// FILE LOCATOR
-		mainPanel.add(getFileLocator());
-		mainPanel.add(new JLabel(JMeterUtils.getResString("user_param_mod_help_note")));
-		this.add(mainPanel);
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
+        add(makeTitlePanel(), BorderLayout.NORTH);
+
+        JPanel mainPanel = new JPanel(new BorderLayout(0, 5));
+		mainPanel.add(getFileLocator(), BorderLayout.NORTH);
+        
+        // We want the help text to look like a label, but wrap like a text area
+        JTextArea helpText = new JTextArea(JMeterUtils.getResString("user_param_mod_help_note"));
+        helpText.setLineWrap(true);
+        helpText.setWrapStyleWord(true);
+        helpText.setBackground(getBackground());
+        helpText.setEditable(false);
+        JLabel dummyLabel = new JLabel();
+        helpText.setFont(dummyLabel.getFont());
+        helpText.setForeground(dummyLabel.getForeground());
+        JScrollPane scroller = new JScrollPane(helpText);
+        scroller.setBorder(BorderFactory.createEmptyBorder());
+        mainPanel.add(scroller, BorderLayout.CENTER);
+        
+		add(mainPanel, BorderLayout.CENTER);
 	}
+    
 	private JPanel getFileLocator() {
-		JPanel fileLocator = new JPanel();
-		JLabel fileName = new JLabel(JMeterUtils.getResString("filename"));
-		fileLocator.add(fileName);
 		fileNameField = new JTextField("users.xml", 15);
-		fileLocator.add(fileNameField);
+        JLabel label = new JLabel(JMeterUtils.getResString("filename"));
+        label.setLabelFor(fileNameField);
+        
+        JPanel fileLocator = new JPanel(new BorderLayout());
+        fileLocator.add(label, BorderLayout.WEST);
+		fileLocator.add(fileNameField, BorderLayout.CENTER);
 		return fileLocator;
 	}
+    
+    public Dimension getPreferredSize() {
+        return getMinimumSize();
+    }
 }

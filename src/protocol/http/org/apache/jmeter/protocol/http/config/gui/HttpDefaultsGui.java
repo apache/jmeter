@@ -57,20 +57,19 @@ package org.apache.jmeter.protocol.http.config.gui;
 
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
-import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
+import javax.swing.Box;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 
 /**
@@ -139,22 +138,35 @@ public class HttpDefaultsGui extends AbstractConfigGui
 	
 	private void init()
 	{
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		this.setBorder(margin);
-		this.setLayout(new BorderLayout());
-		argPanel = new HTTPArgumentsPanel();
-		this.add(argPanel,BorderLayout.CENTER);
-		protocol = new JLabeledTextField(JMeterUtils.getResString("url_config_protocol"));
-		domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain"));
-		path = new JLabeledTextField(JMeterUtils.getResString("path"));
-		port = new JLabeledTextField(JMeterUtils.getResString("web_server_port"));
-		JPanel topPanel = new JPanel(new VerticalLayout(5,VerticalLayout.LEFT));
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
 
-		topPanel.add(makeTitlePanel());
-		topPanel.add(protocol);
-		topPanel.add(domain);
-		topPanel.add(path);
-		topPanel.add(port);
-		this.add(topPanel,BorderLayout.NORTH);
+        add(makeTitlePanel(), BorderLayout.NORTH);
+
+        Box mainPanel = Box.createVerticalBox();
+        
+        VerticalPanel urlPanel = new VerticalPanel();
+		protocol = new JLabeledTextField(JMeterUtils.getResString("url_config_protocol"));
+        urlPanel.add(protocol);
+        
+		domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain"));
+        urlPanel.add(domain);
+        
+		path = new JLabeledTextField(JMeterUtils.getResString("path"));
+        urlPanel.add(path);
+        
+		port = new JLabeledTextField(JMeterUtils.getResString("web_server_port"));
+        urlPanel.add(port);
+        
+        mainPanel.add(urlPanel);
+
+        argPanel = new HTTPArgumentsPanel();
+        mainPanel.add(argPanel);
+        
+		add(mainPanel, BorderLayout.CENTER);
 	}
+    
+    public Dimension getPreferredSize() {
+        return getMinimumSize();
+    }
 }

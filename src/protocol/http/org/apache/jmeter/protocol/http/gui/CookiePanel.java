@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.gui;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -60,19 +61,11 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellEditor;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
@@ -83,7 +76,6 @@ import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
@@ -99,34 +91,45 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
 {
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.protocol.http");
-	private final static int columnCount = 6;
-	private final static String[] columnNames = {
-		 JMeterUtils.getResString("name"),
-		 JMeterUtils.getResString("value"),
-		 JMeterUtils.getResString("domain"),
-		 JMeterUtils.getResString("path"),
-		 JMeterUtils.getResString("secure"),
-		 JMeterUtils.getResString("expiration"),
-	};
-	
-	JTable cookieTable;
-	JTextField nicknameField;
-	JButton addButton;
-	JButton deleteButton;
-	JButton loadButton;
-	JButton saveButton;
-	JPanel cookieManagerPanel;
-	JTextPane nicknameTextPane;
-	JTextArea nicknameText;
-	PowerTableModel tableModel;
+            
+    private static final String ADD_COMMAND = "Add";
+    private static final String DELETE_COMMAND = "Delete";
+    private static final String LOAD_COMMAND = "Load";
+    private static final String SAVE_COMMAND = "Save";
+
+	private JTable cookieTable;
+    private PowerTableModel tableModel;
+
+    private static final String[] columnNames = {
+         JMeterUtils.getResString("name"),
+         JMeterUtils.getResString("value"),
+         JMeterUtils.getResString("domain"),
+         JMeterUtils.getResString("path"),
+         JMeterUtils.getResString("secure"),
+         JMeterUtils.getResString("expiration"),
+    };
+    
+    private static final Class[] columnClasses = {
+        String.class,
+        String.class,
+        String.class,
+        String.class,
+        Boolean.class,
+        Long.class,
+    };
+    
+
+	private JButton addButton;
+    private JButton deleteButton;
+    private JButton loadButton;
+    private JButton saveButton;
 
 	/****************************************
 	 * Default constructor
 	 ***************************************/
 	public CookiePanel()
 	{
-		tableModel = new PowerTableModel(columnNames,new Class[]{String.class,
-				String.class,String.class,String.class,Boolean.class,Long.class});
+		tableModel = new PowerTableModel(columnNames, columnClasses);
 		init();
 	}
 
@@ -335,16 +338,11 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
 	 ***************************************/
 	public void init()
 	{
-		// set the layout of the control panel
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		this.setBorder(margin);
-
-		this.add(makeTitlePanel());
-
-		JPanel cookieTablePanel = createCookieTablePanel();
-		this.add(cookieTablePanel);
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
+        
+		add (makeTitlePanel(), BorderLayout.NORTH);
+        add (createCookieTablePanel(), BorderLayout.CENTER);
 	}
 
 	/****************************************
@@ -354,83 +352,43 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
 	 ***************************************/
 	public JPanel createCookieTablePanel()
 	{
-		Border margin = new EmptyBorder(5, 10, 10, 10);
-
-		JPanel tempPanel = new JPanel();
-		tempPanel.setLayout(new VerticalLayout(0, VerticalLayout.CENTER));
-		tempPanel.setBorder(new CompoundBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("cookies_stored")), margin));
-
 		// create the JTable that holds one cookie per row
 		cookieTable = new JTable(tableModel);
-		cookieTable.setCellSelectionEnabled(true);
-		cookieTable.setRowSelectionAllowed(true);
-		cookieTable.setColumnSelectionAllowed(false);
 		cookieTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        cookieTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
-		// create a JScrollPane and place the cookie JTable inside it
-		JScrollPane scroller = new JScrollPane(cookieTable);
-		cookieTable.setPreferredScrollableViewportSize(new Dimension(520, 150));
-		JTableHeader tableHeader = cookieTable.getTableHeader();
-		scroller.setColumnHeaderView(tableHeader);
+        JPanel buttonPanel = createButtonPanel();
 
-		tempPanel.add(scroller);
+        JPanel panel = new JPanel(new BorderLayout(0, 5));
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("cookies_stored")));
 
-		// ADD button
-		addButton = new JButton(JMeterUtils.getResString("add"));
-		addButton.setMnemonic('A');
-		addButton.setActionCommand("Add");
-		addButton.addActionListener(this);
-
-		// DELETE button
-		deleteButton = new JButton(JMeterUtils.getResString("delete"));
-
-		if(tableModel.getRowCount() == 0)
-		{
-			deleteButton.setEnabled(false);
-		}
-		else
-		{
-			deleteButton.setEnabled(true);
-		}
-
-		deleteButton.setMnemonic('D');
-		deleteButton.setActionCommand("Delete");
-		deleteButton.addActionListener(this);
-
-		// LOAD button
-		loadButton = new JButton(JMeterUtils.getResString("load"));
-		loadButton.setMnemonic('L');
-		loadButton.setActionCommand("Load");
-		loadButton.addActionListener(this);
-
-		// SAVE button
-		saveButton = new JButton(JMeterUtils.getResString("save"));
-
-		if(tableModel.getRowCount() == 0)
-		{
-			saveButton.setEnabled(false);
-		}
-		else
-		{
-			saveButton.setEnabled(true);
-		}
-
-		saveButton.setMnemonic('S');
-		saveButton.setActionCommand("Save");
-		saveButton.addActionListener(this);
-
-		// Button Panel
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.add(addButton);
-		buttonPanel.add(deleteButton);
-		buttonPanel.add(loadButton);
-		buttonPanel.add(saveButton);
-
-		tempPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-		tempPanel.add(buttonPanel);
-
-		return tempPanel;
+        panel.add(new JScrollPane(cookieTable), BorderLayout.CENTER);
+		panel.add(buttonPanel, BorderLayout.SOUTH);
+		return panel;
 	}
 
-	
+    private JButton createButton(String resName, char mnemonic, String command, boolean enabled) {
+        JButton button = new JButton(JMeterUtils.getResString(resName));
+        button.setMnemonic(mnemonic);
+        button.setActionCommand(command);
+        button.setEnabled(enabled);
+        button.addActionListener(this);
+        return button;
+    }
+    
+    private JPanel createButtonPanel() {
+        boolean tableEmpty = (tableModel.getRowCount() == 0);
+        
+        addButton = createButton("add", 'A', ADD_COMMAND, true);
+        deleteButton = createButton("delete", 'D', DELETE_COMMAND, !tableEmpty);
+        loadButton = createButton("load", 'L', LOAD_COMMAND, true);
+        saveButton = createButton("save", 'S', SAVE_COMMAND, !tableEmpty);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(addButton);
+        buttonPanel.add(deleteButton);
+        buttonPanel.add(loadButton);
+        buttonPanel.add(saveButton);
+        return buttonPanel;
+    }
 }

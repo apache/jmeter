@@ -61,6 +61,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -68,10 +69,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 
 /****************************************
@@ -85,13 +86,10 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListener
 {
 
-    JTextField filenameField;
-    JTextField paramNameField;
-    JTextField mimetypeField;
-    JLabel filenameLabel;
-    JLabel paramNameLabel;
-    JLabel mimetypeLabel;
-    JButton browseFileButton;
+    private JTextField filenameField;
+    private JTextField paramNameField;
+    private JTextField mimetypeField;
+
     private static String FILENAME = "filename";
     private static String BROWSE = "browse";
     private static String PARAMNAME = "paramname";
@@ -192,27 +190,23 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
         this.setLayout(new BorderLayout());
 
         // WEB SERVER PANEL
-        JPanel webServerPanel = new JPanel();
-
-        webServerPanel.setLayout(new BorderLayout());
+        VerticalPanel webServerPanel = new VerticalPanel();
         webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("web_server")));
-        webServerPanel.add(getDomainPanel(), BorderLayout.NORTH);
-        webServerPanel.add(getPortPanel(), BorderLayout.SOUTH);
+        webServerPanel.add(getDomainPanel());
+        webServerPanel.add(getPortPanel());
 
         // WEB REQUEST PANEL
-        JPanel webRequestPanel = new JPanel(new BorderLayout());
-        JPanel northPanel = new JPanel(new BorderLayout());
-
+        JPanel webRequestPanel = new JPanel();
+        webRequestPanel.setLayout(new BoxLayout(webRequestPanel, BoxLayout.Y_AXIS));
         webRequestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("web_request")));
-        northPanel.add(getProtocolAndMethodPanel(), BorderLayout.NORTH);
-        northPanel.add(getPathPanel(), BorderLayout.SOUTH);
-        webRequestPanel.add(northPanel, BorderLayout.NORTH);
-        webRequestPanel.add(getParameterPanel(), BorderLayout.CENTER);
-        webRequestPanel.add(getFilePanel(), BorderLayout.SOUTH);
-
-        // If displayName is TRUE, then this GUI is not embedded in another GUI.
+        
+        webRequestPanel.add(getProtocolAndMethodPanel());
+        webRequestPanel.add(getPathPanel());
+        webRequestPanel.add(getParameterPanel());
+        webRequestPanel.add(getFilePanel());
+        
         this.add(webServerPanel, BorderLayout.NORTH);
         this.add(webRequestPanel, BorderLayout.CENTER);
     }
@@ -224,79 +218,62 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
      ***************************************/
     protected JPanel getFilePanel()
     {
-        // FILE PANEL (all main components are add to this panel)
-        JPanel filePanel = new JPanel();
+        JPanel filePanel = new VerticalPanel();
+        filePanel.setBorder(
+            BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("send_file")));
 
-        filePanel.setLayout(new VerticalLayout(1, VerticalLayout.LEFT));
-        filePanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-
-        // SEND FILE LABEL
-        JLabel sendFileLabel = new JLabel(JMeterUtils.getResString("send_file"));
-
-        filePanel.add(sendFileLabel);
-
-        // FILENAME PANEL (contains filename label and text field and Browse button)
-        JPanel filenamePanel = new JPanel();
-
-        filenamePanel.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
-
-        // --- FILENAME LABEL
-        filenameLabel = new JLabel(JMeterUtils.getResString("send_file_filename_label"));
-        filenameLabel.setEnabled(true);
-
-        // --- FILENAME TEXT FIELD
-        filenameField = new JTextField(15);
-        filenameField.setEnabled(true);
-        filenameField.setName(FILENAME);
-
-        // --- BROWSE BUTTON
-        browseFileButton = new JButton(JMeterUtils.getResString("send_file_browse"));
-        browseFileButton.setEnabled(true);
-        browseFileButton.setActionCommand(BROWSE);
-        browseFileButton.addActionListener(this);
-
-        filenamePanel.add(filenameLabel);
-        filenamePanel.add(filenameField);
-        filenamePanel.add(browseFileButton);
-
-        // PARAM NAME PANEL (contains param name label and text field)
-        JPanel paramNamePanel = new JPanel();
-
-        paramNamePanel.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
-
-        // --- PARAM NAME LABEL
-        paramNameLabel = new JLabel(JMeterUtils.getResString("send_file_param_name_label"));
-        paramNameLabel.setEnabled(true);
-
-        // --- PARAM NAME TEXT FIELD
-        paramNameField = new JTextField(15);
-        paramNameField.setName(PARAMNAME);
-        paramNameField.setEnabled(true);
-
-        paramNamePanel.add(paramNameLabel);
-        paramNamePanel.add(paramNameField);
-
-        // MIME TYPE PANEL (contains mime type label and text field)
-        JPanel mimePanel = new JPanel();
-
-        mimePanel.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
-
-        // --- MIME TYPE LABEL
-        mimetypeLabel = new JLabel(JMeterUtils.getResString("send_file_mime_label"));
-        mimetypeLabel.setEnabled(true);
-
-        // --- MIME TYPE TEXT FIELD
-        mimetypeField = new JTextField(15);
-        mimetypeField.setEnabled(true);
-        mimetypeField.setName(MIMETYPE);
-
-        mimePanel.add(mimetypeLabel);
-        mimePanel.add(mimetypeField);
-
-        filePanel.add(filenamePanel);
-        filePanel.add(paramNamePanel);
-        filePanel.add(mimePanel);
+        filePanel.add(createFilenamePanel());
+        filePanel.add(createFileParamNamePanel());
+        filePanel.add(createFileMimeTypePanel());
 
         return filePanel;
+    }
+
+    private JPanel createFileMimeTypePanel() {
+        mimetypeField = new JTextField(15);
+        mimetypeField.setName(MIMETYPE);
+        
+        JLabel mimetypeLabel = new JLabel(JMeterUtils.getResString("send_file_mime_label"));
+        mimetypeLabel.setLabelFor(mimetypeField);
+        
+        JPanel mimePanel = new JPanel(new BorderLayout(5, 0));
+        mimePanel.add(mimetypeLabel, BorderLayout.WEST);
+        mimePanel.add(mimetypeField, BorderLayout.CENTER);
+        return mimePanel;
+    }
+
+    private JPanel createFileParamNamePanel() {
+        paramNameField = new JTextField(15);
+        paramNameField.setName(PARAMNAME);
+
+        JLabel paramNameLabel = new JLabel(JMeterUtils.getResString("send_file_param_name_label"));
+        paramNameLabel.setLabelFor(paramNameField);
+        
+
+        JPanel paramNamePanel = new JPanel(new BorderLayout(5, 0));        
+        paramNamePanel.add(paramNameLabel, BorderLayout.WEST);
+        paramNamePanel.add(paramNameField, BorderLayout.CENTER);
+        return paramNamePanel;
+    }
+
+    private JPanel createFilenamePanel() {
+        filenameField = new JTextField(15);
+        filenameField.setName(FILENAME);
+
+        JLabel filenameLabel = new JLabel(JMeterUtils.getResString("send_file_filename_label"));
+        filenameLabel.setLabelFor(filenameField);        
+        
+        JButton browseFileButton = new JButton(JMeterUtils.getResString("send_file_browse"));
+        browseFileButton.setActionCommand(BROWSE);
+        browseFileButton.addActionListener(this);
+        
+
+        JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));        
+        filenamePanel.add(filenameLabel, BorderLayout.WEST);
+        filenamePanel.add(filenameField, BorderLayout.CENTER);
+        filenamePanel.add(browseFileButton, BorderLayout.EAST);
+        return filenamePanel;
     }
 }
