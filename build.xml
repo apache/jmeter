@@ -1242,7 +1242,10 @@ some of its classes - at present JMeter can only run from jar files.
 	<fileset dir="${dest.jar}" includes="*.jar"/>
       </classpath>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
-      <arg value="../lib/ext"/>
+   	<!-- Ensure jorphan classes are picked up by tests: -->
+      <sysproperty key="search_paths" value="lib/jorphan.jar"/>
+   	<!-- Ensure test classes are found: -->
+      <arg value="../lib/ext,jorphan.jar"/>
       <arg value="./jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>
