@@ -1,12 +1,13 @@
 package org.apache.jmeter.functions;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testelement.PerThreadClonable;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -20,7 +21,6 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class IterationCounter extends AbstractFunction
 {
-	private JMeterVariables vars;
 	private static int counter;
 	private static final List desc = new LinkedList();
 	private boolean perThread = true;
@@ -28,13 +28,16 @@ public class IterationCounter extends AbstractFunction
 	static
 	{
 		desc.add(JMeterUtils.getResString("iteration_counter_arg_1"));
+		desc.add(JMeterUtils.getResString("function_name_param"));
 	}
 	
 	private static final String KEY = "__counter";
+	private String trueCount;
+	private String falseCount;
 	
 	public IterationCounter()
 	{
-		counter = 1;
+		counter = 0;
 	}
 	
 	public Object clone()
@@ -48,13 +51,20 @@ public class IterationCounter extends AbstractFunction
 	 */
 	public String execute(SampleResult previousResult, Sampler currentSampler)
 		throws InvalidVariableException {
+		counter++;
+		JMeterVariables vars = getVariables();
+		String falseCounterString = Integer.toString(counter);
+		String trueCounterString = Integer.toString(vars.getIteration());
+		vars.put(trueCount,trueCounterString);
+		vars.put(falseCount,falseCounterString);
+		
 		if(perThread)
 		{
-			return Integer.toString(vars.getIteration());
+			return trueCounterString;
 		}
 		else
 		{
-			return Integer.toString(counter++);
+			return falseCounterString;
 		}
 	}
 
@@ -66,6 +76,11 @@ public class IterationCounter extends AbstractFunction
 			Collection params = this.parseArguments(parameters);
 			String[] values = (String[])params.toArray(new String[0]);
 			perThread = new Boolean(values[0]).booleanValue();
+			if(values.length > 1)
+			{
+				trueCount = values[1]+"_true";
+				falseCount = values[1]+"_false";
+			}
 	}
 
 	/**
@@ -80,16 +95,6 @@ public class IterationCounter extends AbstractFunction
 	 */
 	public List getArgumentDesc() {
 		return desc;
-	}
-
-	/**
-	 * @see org.apache.jmeter.functions.Function#setJMeterVariables(JMeterVariables)
-	 */
-	public void setJMeterVariables(JMeterVariables jmv) {
-		if(vars == null)
-		{
-			vars = jmv;
-		}
 	}
 
 }

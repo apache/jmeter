@@ -53,18 +53,24 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.threads;
-import java.util.*;
-import org.apache.jmeter.assertions.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.jmeter.assertions.Assertion;
+import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.control.Controller;
-import org.apache.jmeter.control.NoEntryException;
-import org.apache.jmeter.samplers.*;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.ListedHashTree;
-import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.SearchByClass;
 /****************************************
  * The JMeter interface to the sampling process, allowing JMeter to see the
  * timing, add listeners for sampling events and to stop the sampling process.
@@ -83,6 +89,8 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 	JMeterThreadMonitor monitor;
 	String threadName;
 	JMeterVariables threadVars;
+	Collection threadListeners;
+	
 	/****************************************
 	 * !ToDo (Constructor description)
 	 ***************************************/
@@ -93,6 +101,9 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 		testTree = test;
 		compiler = new TestCompiler(testTree,threadVars);
 		controller = (Controller) testTree.getArray()[0];
+		SearchByClass threadListenerSearcher = new SearchByClass(ThreadListener.class);
+		test.traverse(threadListenerSearcher);
+		threadListeners = threadListenerSearcher.getSearchResults();
 	}
 
 	public void setThreadName(String threadName)
@@ -105,6 +116,7 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 	public void run() {
 		try
 		{
+			initializeThreadListeners();
 			testTree.traverse(compiler);
 			running = true;
 			//listeners = controller.getListeners();
@@ -113,7 +125,7 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 			System.out.println("Thread "+Thread.currentThread().getName()+" started");
 			while (running) {
 				while (controller.hasNext() && running) {
-					threadVars.incIteration();
+					notifyThreadListeners();
 					try
 					{
 						SamplePackage pack = compiler.configureSampler(controller.next());
@@ -170,6 +182,26 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 			}
 		}
 	}
+	
+	private void initializeThreadListeners()
+	{
+		Iterator iter = threadListeners.iterator();
+		while(iter.hasNext())
+		{
+			((ThreadListener)iter.next()).setJMeterVariables(threadVars);
+		}
+	}
+	
+	private void notifyThreadListeners()
+	{
+		threadVars.incIteration();
+		Iterator iter = threadListeners.iterator();
+		while(iter.hasNext())
+		{
+			((ThreadListener)iter.next()).iterationStarted(threadVars.getIteration());
+		}
+	}
+	
 	private void notifyListeners(List listeners, SampleResult result) {
 		SampleEvent event =
 			new SampleEvent(result, (String) controller.getProperty(TestElement.NAME));

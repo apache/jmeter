@@ -43,6 +43,7 @@ public class RegexFunction extends AbstractFunction {
 	String valueIndex,defaultValue,between;
 	PatternCompiler compiler = new Perl5Compiler();
 	Pattern templatePattern;
+	private String name;
 	
 	static
 	{
@@ -51,6 +52,7 @@ public class RegexFunction extends AbstractFunction {
 		desc.add(JMeterUtils.getResString("regexfunc_param_3"));
 		desc.add(JMeterUtils.getResString("regexfunc_param_4"));
 		desc.add(JMeterUtils.getResString("regexfunc_param_5"));
+		desc.add(JMeterUtils.getResString("function_name_param"));
 	}
 	
 	public RegexFunction()
@@ -107,20 +109,36 @@ public class RegexFunction extends AbstractFunction {
 		}
 		else if(valueIndex.equals(RAND))
 		{
-			return generateResult((MatchResult)collectAllMatches.get(
-					rand.nextInt(collectAllMatches.size())));
+			System.out.println("Number of matches = "+collectAllMatches.size());
+			MatchResult result = (MatchResult)collectAllMatches.get(
+					rand.nextInt(collectAllMatches.size()));
+			return generateResult(result);
 		}
 		else
 		{
 			try {
 				int index = Integer.parseInt(valueIndex) - 1;
-				return generateResult((MatchResult)collectAllMatches.get(index));
+				MatchResult result = (MatchResult)collectAllMatches.get(index);
+				return generateResult(result);
 			} catch(NumberFormatException e) {
 				float ratio = Float.parseFloat(valueIndex);
-				return generateResult((MatchResult)collectAllMatches.get(
-						(int)(collectAllMatches.size() * ratio + .5) - 1));
+				MatchResult result = (MatchResult)collectAllMatches.get(
+						(int)(collectAllMatches.size() * ratio + .5) - 1);
+				return generateResult(result);
 			}
 		}			
+	}
+	
+	private void saveGroups(MatchResult result)
+	{
+		if(result != null)
+		{
+			JMeterVariables vars = getVariables();
+			for(int x = 0;x < result.groups();x++)
+			{
+				vars.put(name+"_g"+x,result.group(x));
+			}
+		}
 	}
 	
 	public List getArgumentDesc()
@@ -130,6 +148,7 @@ public class RegexFunction extends AbstractFunction {
 	
 	private String generateResult(MatchResult match)
 	{
+		saveGroups(match);
 		StringBuffer result = new StringBuffer();
 		for(int a = 0;a < template.length;a++)
 		{
@@ -150,10 +169,6 @@ public class RegexFunction extends AbstractFunction {
 		return KEY;
 	}
 	
-	public void setJMeterVariables(JMeterVariables xxx)
-	{
-	}
-	
 	public void setParameters(String params) throws InvalidVariableException
 	{
 		try
@@ -167,6 +182,7 @@ public class RegexFunction extends AbstractFunction {
 			if(tk.hasNext())
 			{
 				valueIndex = (String)tk.next();
+				System.out.println("Value index = "+valueIndex);
 			}
 			if(tk.hasNext())
 			{
@@ -175,6 +191,10 @@ public class RegexFunction extends AbstractFunction {
 			if(tk.hasNext())
 			{
 				defaultValue = (String)tk.next();
+			}
+			if(tk.hasNext())
+			{
+				name = (String)tk.next();
 			}
 		} catch(MalformedPatternException e) {
 				e.printStackTrace();
@@ -263,7 +283,7 @@ public class RegexFunction extends AbstractFunction {
 		public void testVariableExtraction() throws Exception
 		{
 			variable.setParameters(URLEncoder.encode("<value field=\"(pinposition\\d+)\">(\\d+)</value>")+",$2$,2");
-			
+			variable.setJMeterVariables(new JMeterVariables());
 			String match = variable.execute(result,null);
 			assertEquals("5",match);			
 		}
@@ -271,6 +291,7 @@ public class RegexFunction extends AbstractFunction {
 		public void testVariableExtraction2() throws Exception
 		{
 			variable.setParameters(URLEncoder.encode("<value field=\"(pinposition\\d+)\">(\\d+)</value>")+",$1$,3");
+			variable.setJMeterVariables(new JMeterVariables());
 			String match = variable.execute(result,null);
 			assertEquals("pinposition3",match);			
 		}
@@ -278,6 +299,7 @@ public class RegexFunction extends AbstractFunction {
 		public void testComma() throws Exception
 		{
 			variable.setParameters(URLEncoder.encode("<value,? field=\"(pinposition\\d+)\">(\\d+)</value>")+",$1$,3");
+			variable.setJMeterVariables(new JMeterVariables());
 			String match = variable.execute(result,null);
 			assertEquals("pinposition3",match);			
 		}
@@ -286,6 +308,7 @@ public class RegexFunction extends AbstractFunction {
 		{
 			variable.setParameters(URLEncoder.encode("<value field=\"(pinposition\\d+)\">(\\d+)</value>")+
 					",_$1$,.5");
+			variable.setJMeterVariables(new JMeterVariables());
 			String match = variable.execute(result,null);
 			assertEquals("_pinposition2",match);			
 		}
@@ -295,6 +318,7 @@ public class RegexFunction extends AbstractFunction {
 			variable.setParameters(URLEncoder.encode(
 					"<value field=\"(pinposition\\d+)\">(\\d+)</value>")+","+URLEncoder.encode("$2$, ")+
 					",.333");
+			variable.setJMeterVariables(new JMeterVariables());
 			
 			String match = variable.execute(result,null);
 			assertEquals("1, ",match);			
@@ -305,6 +329,7 @@ public class RegexFunction extends AbstractFunction {
 			variable.setParameters(URLEncoder.encode(
 					"<value,, field=\"(pinposition\\d+)\">(\\d+)</value>")+","+URLEncoder.encode("$2$, ")+
 					",.333,,No Value Found");
+			variable.setJMeterVariables(new JMeterVariables());
 			
 			String match = variable.execute(result,null);
 			assertEquals("No Value Found",match);			
