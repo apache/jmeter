@@ -205,7 +205,7 @@
     </javac>
   </target>
 
-  <target name="update-version">
+  <target name="update-version" unless="version.noupdate">
     <echo>Updating version string</echo>
     <replaceregexp file="${src.core}/org/apache/jmeter/util/JMeterVersion.java"
     	match="VERSION = &quot;.*?&quot;"
