@@ -1204,10 +1204,17 @@ public class HTTPSampler extends AbstractSampler
         byte[] ret = readResponse(conn);
         byte[] head = getResponseHeaders(conn, res);
         time = System.currentTimeMillis() - time;
-        byte[] complete = new byte[ret.length + head.length];
-        System.arraycopy(head, 0, complete, 0, head.length);
-        System.arraycopy(ret, 0, complete, head.length, ret.length);
-        res.setResponseData(complete);
+        String ct = conn.getHeaderField("Content-type");
+        res.setContentType(ct); 
+		if (ct.startsWith("image/")){
+			res.setDataType(SampleResult.BINARY);
+			res.setResponseData(ret);
+		} else {
+	        byte[] complete = new byte[ret.length + head.length];
+	        System.arraycopy(head, 0, complete, 0, head.length);
+	        System.arraycopy(ret, 0, complete, head.length, ret.length);
+	        res.setResponseData(complete);
+		}
         res.setSuccessful(true);
         return time;
     }
