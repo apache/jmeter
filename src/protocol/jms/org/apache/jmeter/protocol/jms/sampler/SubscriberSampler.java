@@ -66,8 +66,10 @@ public class SubscriberSampler
 		testStarted();
 	}
 	
-    /* (non-Javadoc)
-     * @see junit.framework.TestListener#endTest(junit.framework.Test)
+    /**
+     * testEnded is called by Jmeter's engine. the implementation
+     * will reset the count, set RUN to false and clear the 
+     * StringBuffer.
      */
     public synchronized void testEnded() {
 		log.info("SubscriberSampler.testEnded called");
@@ -94,6 +96,11 @@ public class SubscriberSampler
 	public void testIterationStart(LoopIterationEvent event){
 	}
 
+	/**
+	 * Create the OnMessageSubscriber client and set the sampler
+	 * as the message listener.
+	 * @return
+	 */
     public synchronized OnMessageSubscriber initListenerClient() {
         OnMessageSubscriber sub = (OnMessageSubscriber)ClientPool.get(this);
         if (sub == null) {
@@ -118,6 +125,9 @@ public class SubscriberSampler
         return sub;
     }
 
+	/**
+	 * Create the ReceiveSubscriber client for the sampler.
+	 */
     public void initReceiveClient() {
         this.SUBSCRIBER =
             new ReceiveSubscriber(
@@ -249,7 +259,7 @@ public class SubscriberSampler
 	}
 	
 	/**
-	 * 
+	 * increment the count and return the new value.
 	 * @param count
 	 * @return
 	 */
@@ -259,8 +269,8 @@ public class SubscriberSampler
 	}
 	
 	/**
-	 * 
-	 *
+	 * resetCount will set the counter to zero and set the
+	 * length of the StringBuffer to zero.
 	 */
 	public synchronized void resetCount(){
 		this.counter = 0;
@@ -268,10 +278,18 @@ public class SubscriberSampler
 	}
 	
 	// ----------- get/set methods ------------------- //
+	/**
+	 * Set the client choice. There are two options: ReceiveSusbscriber
+	 * and OnMessageSubscriber.
+	 */
 	public void setClientChoice(String choice){
 		setProperty(CLIENT_CHOICE,choice);
 	}
-	
+
+	/**
+	 * Return the client choice.
+	 * @return
+	 */	
 	public String getClientChoice(){
 		return getPropertyAsString(CLIENT_CHOICE);
 	}
