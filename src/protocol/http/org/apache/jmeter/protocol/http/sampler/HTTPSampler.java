@@ -708,10 +708,13 @@ public class HTTPSampler extends HTTPSamplerBase
         Iterator urls= null;
         try
         {
+        	if (res.getContentType().toLowerCase().indexOf("text/html") != -1)
+        	{
             urls=
                 HTMLParser.getParser().getEmbeddedResourceURLs(
                     res.getResponseData(),
                     res.getURL());
+        	}
         }
         catch (HTMLParseException e)
         {
