@@ -95,6 +95,7 @@ public class InterleaveControl extends GenericController implements Serializable
      */
     public void reInitialize()
     {
+        setFirst(true);
         currentReturnedAtLeastOne = false;
         searchStart = null;
         stillSame = true;
@@ -171,10 +172,6 @@ public class InterleaveControl extends GenericController implements Serializable
     protected Sampler nextIsNull()
     {
         resetCurrent();
-        if (getStyle() == USE_SUB_CONTROLLERS)
-        {
-            setFirst(true);            
-        }
         return next();
     }
 
