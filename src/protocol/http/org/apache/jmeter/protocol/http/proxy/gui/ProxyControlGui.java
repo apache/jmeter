@@ -272,26 +272,26 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
             model = (ProxyControl) createTestElement();
             startProxy();
         }
-        else if (command.equals(this.ADD_EXCLUDE))
+        else if (command.equals(ADD_EXCLUDE))
         {
             excludeModel.addNewRow();
             excludeModel.fireTableDataChanged();
             if (stop.isEnabled())
                 enableRestart();
         }
-        else if (command.equals(this.ADD_INCLUDE))
+        else if (command.equals(ADD_INCLUDE))
         {
             includeModel.addNewRow();
             includeModel.fireTableDataChanged();
             enableRestart();
         }
-        else if (command.equals(this.DELETE_EXCLUDE))
+        else if (command.equals(DELETE_EXCLUDE))
         {
             excludeModel.removeRow(excludeTable.getSelectedRow());
             excludeModel.fireTableDataChanged();
             enableRestart();
         }
-        else if (command.equals(this.DELETE_INCLUDE))
+        else if (command.equals(DELETE_INCLUDE))
         {
             includeModel.removeRow(includeTable.getSelectedRow());
             includeModel.fireTableDataChanged();
@@ -378,8 +378,8 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
     {
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = gbc.WEST;
-        gbc.fill = gbc.BOTH;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.BOTH;
         gbc.gridheight = 1;
         gbc.gridwidth = 1;
         gbc.gridx = 0;
@@ -411,13 +411,13 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
 
         mainPanel.add(createPortPanel(), gbc.clone());
         gbc.gridy++;
-        gbc.fill = gbc.BOTH;
+        gbc.fill = GridBagConstraints.BOTH;
         gbc.weighty = .5;
         mainPanel.add(createIncludePanel(), gbc.clone());
         gbc.gridy++;
         mainPanel.add(createExcludePanel(), gbc.clone());
         gbc.gridy++;
-        gbc.fill = gbc.NONE;
+        gbc.fill = GridBagConstraints.NONE;
         gbc.weighty = 0;
         mainPanel.add(createControls(), gbc.clone());
 
