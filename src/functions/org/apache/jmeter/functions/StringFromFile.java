@@ -96,18 +96,11 @@ public class StringFromFile extends AbstractFunction implements Serializable
 		}
     }
 
-	protected void finalize() throws Throwable{
-		if (log.isDebugEnabled())
-		{
-		    log.debug("-------- Finalize "+this);
-		}
-	}
-
     public Object clone()
     {
         StringFromFile newReader = new StringFromFile();
         if (log.isDebugEnabled())
-        { // Skip expensive paramter creation ..
+        { // Skip expensive parameter creation ..
             log.debug(this +"::StringFromFile.clone()", new Throwable("debug"));//$NON-NLS-1$
         }
 
@@ -116,7 +109,7 @@ public class StringFromFile extends AbstractFunction implements Serializable
     
 /*
  * Warning: the file will generally be left open at the end of a test run.
- * This is because functions don't have any way to find out when a test has
+ * This is because functions don't (yet) have any way to find out when a test has
  * ended ... 
  */
     private void closeFile(){
