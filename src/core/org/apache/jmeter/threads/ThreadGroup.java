@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,7 +52,9 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+ 
 package org.apache.jmeter.threads;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Iterator;
@@ -71,284 +73,289 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
-/****************************************
- * Title: Apache JMeter Description: Copyright: Copyright (c) 2000 Company:
- * Apache Foundation
+/**
+ * Threadgroup
  *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
-public class ThreadGroup extends AbstractTestElement implements SampleListener,
-		Serializable,Controller,PerThreadClonable
+ *@author Michael Stover
+ *@version $Id$
+ */
+public class ThreadGroup
+    extends AbstractTestElement
+    implements SampleListener, Serializable, Controller, PerThreadClonable
 {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter.elements");
-	/****************************************
-	 * !ToDo (Field description)
-	 ***************************************/
-	public final static String NUM_THREADS = "ThreadGroup.num_threads";
-	/****************************************
-	 * !ToDo (Field description)
-	 ***************************************/
-	public final static String RAMP_TIME = "ThreadGroup.ramp_time";
-	/****************************************
-	 * !ToDo (Field description)
-	 ***************************************/
-	public final static String MAIN_CONTROLLER = "ThreadGroup.main_controller";
-	private final int DEFAULT_NUM_THREADS = 1;
-	private final int DEFAULT_RAMP_UP = 0;
-	private SampleQueue queue = null;
-	private int threadsStarted = 0;
-	private LinkedList listeners = new LinkedList();
-	private LinkedList remoteListeners = new LinkedList();
+    private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+    /****************************************
+     * !ToDo (Field description)
+     ***************************************/
+    public final static String NUM_THREADS = "ThreadGroup.num_threads";
+    /****************************************
+     * !ToDo (Field description)
+     ***************************************/
+    public final static String RAMP_TIME = "ThreadGroup.ramp_time";
+    /****************************************
+     * !ToDo (Field description)
+     ***************************************/
+    public final static String MAIN_CONTROLLER = "ThreadGroup.main_controller";
+    private final int DEFAULT_NUM_THREADS = 1;
+    private final int DEFAULT_RAMP_UP = 0;
+    private SampleQueue queue = null;
+    private int threadsStarted = 0;
+    private LinkedList listeners = new LinkedList();
+    private LinkedList remoteListeners = new LinkedList();
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public ThreadGroup()
-	{
-	}
+    /****************************************
+     * !ToDo (Constructor description)
+     ***************************************/
+    public ThreadGroup()
+    {
+    }
 
-	/****************************************
-	 * !ToDo (Method aadescription)
-	 *
-	 *@param numThreads  !ToDo (Parameter description)
-	 ***************************************/
-	public void setNumThreads(int numThreads)
-	{
-		setProperty(NUM_THREADS,new Integer(numThreads));
-	}
+    /****************************************
+     * !ToDo (Method aadescription)
+     *
+     *@param numThreads  !ToDo (Parameter description)
+     ***************************************/
+    public void setNumThreads(int numThreads)
+    {
+        setProperty(NUM_THREADS, new Integer(numThreads));
+    }
 
-	public boolean isDone()
-	{
-		return getSamplerController().isDone();
-	}
+    public boolean isDone()
+    {
+        return getSamplerController().isDone();
+    }
 
-	public boolean hasNext()
-	{
-		return getSamplerController().hasNext();
-	}
+    public boolean hasNext()
+    {
+        return getSamplerController().hasNext();
+    }
 
-	public Sampler next()
-	{
-		return getSamplerController().next();
-	}
+    public Sampler next()
+    {
+        return getSamplerController().next();
+    }
 
-	/****************************************
-	 * !ToDo (Method aadescription)
-	 *
-	 *@param rampUp  !ToDo (Parameter description)
-	 ***************************************/
-	public void setRampUp(int rampUp)
-	{
-		setProperty(RAMP_TIME,new Integer(rampUp));
-	}
-	
-	public boolean isNextFirst()
-	{
-		return getSamplerController().isNextFirst();
-	}
+    /****************************************
+     * !ToDo (Method aadescription)
+     *
+     *@param rampUp  !ToDo (Parameter description)
+     ***************************************/
+    public void setRampUp(int rampUp)
+    {
+        setProperty(RAMP_TIME, new Integer(rampUp));
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public int getRampUp()
-	{
-		return getPropertyAsInt(this.RAMP_TIME);
-	}
+    public boolean isNextFirst()
+    {
+        return getSamplerController().isNextFirst();
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public Controller getSamplerController()
-	{
-		return (Controller)getProperty(MAIN_CONTROLLER);
-	}
+    /****************************************
+     * !ToDoo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public int getRampUp()
+    {
+        return getPropertyAsInt(ThreadGroup.RAMP_TIME);
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param c  !ToDo (Parameter description)
-	 ***************************************/
-	public void setSamplerController(LoopController c)
-	{
-		c.setContinueForever(false);
-		setProperty(MAIN_CONTROLLER, c);
-	}
+    /****************************************
+     * !ToDoo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public Controller getSamplerController()
+    {
+        return (Controller) getProperty(MAIN_CONTROLLER);
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public int getNumThreads()
-	{
-		return this.getPropertyAsInt(this.NUM_THREADS);
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@param c  !ToDo (Parameter description)
+     ***************************************/
+    public void setSamplerController(LoopController c)
+    {
+        c.setContinueForever(false);
+        setProperty(MAIN_CONTROLLER, c);
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public int getDefaultNumThreads()
-	{
-		return this.DEFAULT_NUM_THREADS;
-	}
+    /****************************************
+     * !ToDoo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public int getNumThreads()
+    {
+        return this.getPropertyAsInt(ThreadGroup.NUM_THREADS);
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public int getDefaultRampUp()
-	{
-		return this.DEFAULT_RAMP_UP;
-	}
+    /****************************************
+     * !ToDoo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public int getDefaultNumThreads()
+    {
+        return this.DEFAULT_NUM_THREADS;
+    }
 
+    /****************************************
+     * !ToDoo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public int getDefaultRampUp()
+    {
+        return this.DEFAULT_RAMP_UP;
+    }
 
-	/****************************************
-	 * !ToDo
-	 *
-	 *@param child  !ToDo
-	 ***************************************/
-	public void addTestElement(TestElement child)
-	{
-		getSamplerController().addTestElement(child);
-	}
+    /****************************************
+     * !ToDo
+     *
+     *@param child  !ToDo
+     ***************************************/
+    public void addTestElement(TestElement child)
+    {
+        getSamplerController().addTestElement(child);
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void sampleOccurred(SampleEvent e)
-	{
-		if(queue == null)
-		{
-			queue = new SampleQueue();
-			Thread thread = new Thread(queue);
-			//thread.setPriority(Thread.MAX_PRIORITY);
-			thread.start();
-		}
-		queue.sampleOccurred(e);
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@param e  !ToDo (Parameter description)
+     ***************************************/
+    public void sampleOccurred(SampleEvent e)
+    {
+        if (queue == null)
+        {
+            queue = new SampleQueue();
+            Thread thread = new Thread(queue);
+            //thread.setPriority(Thread.MAX_PRIORITY);
+            thread.start();
+        }
+        queue.sampleOccurred(e);
+    }
 
-	/****************************************
-	 * A sample has started.
-	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void sampleStarted(SampleEvent e)
-	{
-	}
+    /****************************************
+     * A sample has started.
+     *
+     *@param e  !ToDo (Parameter description)
+     ***************************************/
+    public void sampleStarted(SampleEvent e)
+    {
+    }
 
-	/****************************************
-	 * A sample has stopped.
-	 *
-	 *@param e  !ToDo (Parameter description)
-	 ***************************************/
-	public void sampleStopped(SampleEvent e)
-	{
-	}
+    /****************************************
+     * A sample has stopped.
+     *
+     *@param e  !ToDo (Parameter description)
+     ***************************************/
+    public void sampleStopped(SampleEvent e)
+    {
+    }
 
-	/****************************************
-	 * Separate thread to deliver all SampleEvents. This ensures that sample
-	 * listeners will get sample events 1 at a time, and can thus ignore thread
-	 * issues.
-	 *
-	 *@author    $Author$
-	 *@created   $Date$
-	 *@version   $Revision$
-	 ***************************************/
-	private class SampleQueue implements Runnable, Serializable
-	{
-		List occurredQ = Collections.synchronizedList(new LinkedList());
+    /****************************************
+     * Separate thread to deliver all SampleEvents. This ensures that sample
+     * listeners will get sample events 1 at a time, and can thus ignore thread
+     * issues.
+     *
+     *@author    $Author$
+     *@created   $Date$
+     *@version   $Revision$
+     ***************************************/
+    private class SampleQueue implements Runnable, Serializable
+    {
+        List occurredQ = Collections.synchronizedList(new LinkedList());
 
-		/****************************************
-		 * !ToDo (Constructor description)
-		 ***************************************/
-		public SampleQueue() { }
+        /****************************************
+         * !ToDo (Constructor description)
+         ***************************************/
+        public SampleQueue()
+        {
+        }
 
-		/****************************************
-		 * !ToDo (Method description)
-		 *
-		 *@param e  !ToDo (Parameter description)
-		 ***************************************/
-		public synchronized void sampleOccurred(SampleEvent e)
-		{
-			occurredQ.add(e);
-			this.notify();
-		}
+        /****************************************
+         * !ToDo (Method description)
+         *
+         *@param e  !ToDo (Parameter description)
+         ***************************************/
+        public synchronized void sampleOccurred(SampleEvent e)
+        {
+            occurredQ.add(e);
+            this.notify();
+        }
 
-		/****************************************
-		 * !ToDo (Method description)
-		 ***************************************/
-		public void run()
-		{
-			SampleEvent event = null;
-			while(true)
-			{
-				try
-				{
-					event = (SampleEvent)occurredQ.remove(0);
-				}
-				catch(Exception ex)
-				{
-					waitForSamples();
-					continue;
-				}
-				try
-				{
-					if(event != null)
-					{
-						Iterator iter = listeners.iterator();
-						while(iter.hasNext())
-						{
-							((SampleListener)iter.next()).sampleOccurred(event);
-						}
-						iter = remoteListeners.iterator();
-						while(iter.hasNext())
-						{
-							try
-							{
-								((RemoteSampleListener)iter.next()).sampleOccurred(event);
-							}
-							catch(Exception ex)
-							{
-								log.error("",ex);
-							}
-						}
-					}
-					else
-					{
-						waitForSamples();
-					}
-				}
-				catch(Throwable ex)
-				{
-					log.error("",ex);
-				}
+        /****************************************
+         * !ToDo (Method description)
+         ***************************************/
+        public void run()
+        {
+            SampleEvent event = null;
+            while (true)
+            {
+                try
+                {
+                    event = (SampleEvent) occurredQ.remove(0);
+                }
+                catch (Exception ex)
+                {
+                    waitForSamples();
+                    continue;
+                }
+                try
+                {
+                    if (event != null)
+                    {
+                        Iterator iter = listeners.iterator();
+                        while (iter.hasNext())
+                        {
+                            ((SampleListener) iter.next()).sampleOccurred(
+                                event);
+                        }
+                        iter = remoteListeners.iterator();
+                        while (iter.hasNext())
+                        {
+                            try
+                            {
+                                (
+                                    (RemoteSampleListener) iter
+                                        .next())
+                                        .sampleOccurred(
+                                    event);
+                            }
+                            catch (Exception ex)
+                            {
+                                log.error("", ex);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        waitForSamples();
+                    }
+                }
+                catch (Throwable ex)
+                {
+                    log.error("", ex);
+                }
 
-			}
-		}
+            }
+        }
 
-		private synchronized void waitForSamples()
-		{
-			try
-			{
-				this.wait();
-			}
-			catch(Exception ex)
-			{
-				log.error("",ex);
-			}
-		}
-	}
+        private synchronized void waitForSamples()
+        {
+            try
+            {
+                this.wait();
+            }
+            catch (Exception ex)
+            {
+                log.error("", ex);
+            }
+        }
+    }
+    
 }
