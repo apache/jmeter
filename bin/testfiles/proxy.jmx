@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<ThreadGroup name="Thread Group" numThreads="1" rampUp="0">
+<controllers>
+<LoopController type="org.apache.jmeter.control.LoopController" name="Loop Controller" iterations="-1">
+<configElements>
+</configElements>
+<controllers>
+<Controller type="org.apache.jmeter.control.LogicController" name="Simple Controller">
+<configElements>
+<ConfigElement type="org.apache.jmeter.protocol.http.config.UrlConfig">
+<property name="name">HTTP Request Defaults</property>
+<property name="PROTOCOL">http</property>
+<property name="domain">jakarta.apache.org</property>
+<property name="arguments"><Arguments>
+</Arguments>
+</property>
+<property name="method">GET</property>
+</ConfigElement>
+</configElements>
+<controllers>
+</controllers>
+</Controller>
+</controllers>
+</LoopController>
+</controllers>
+<timers>
+</timers>
+<listeners>
+</listeners>
+</ThreadGroup>
