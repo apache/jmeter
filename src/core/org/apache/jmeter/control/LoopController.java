@@ -272,4 +272,12 @@ public class LoopController extends GenericController implements Serializable
 		  public org.apache.jmeter.samplers.SampleResult sample(org.apache.jmeter.samplers.Entry e) { return null; }
 		}
 	}
+    /**
+     * @see org.apache.jmeter.control.GenericController#getIterCount()
+     */
+    protected int getIterCount()
+    {
+        return loopCount + 1;
+    }
+
 }

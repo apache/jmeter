@@ -5,9 +5,10 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.engine.event.IterationEvent;
+import org.apache.jmeter.engine.event.IterationListener;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -20,7 +21,7 @@ import org.apache.jmeter.threads.JMeterVariables;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class UserParameters extends ConfigTestElement implements Serializable, PreProcessor,ThreadListener
+public class UserParameters extends ConfigTestElement implements Serializable, PreProcessor,IterationListener
 {
 
     public static final String NAMES = "UserParameters.names";
@@ -132,7 +133,7 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
     /**
      * @see org.apache.jmeter.testelement.ThreadListener#iterationStarted(int)
      */
-    public void iterationStarted(int iterationCount)
+    public void iterationStart(IterationEvent event)
     {
         if(isPerIteration())
         {

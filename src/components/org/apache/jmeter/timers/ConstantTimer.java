@@ -59,8 +59,9 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.jmeter.engine.event.IterationEvent;
+import org.apache.jmeter.engine.event.IterationListener;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.VariablesCollection;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
@@ -77,7 +78,7 @@ import org.apache.log.Logger;
  */
 public class ConstantTimer
     extends AbstractTestElement
-    implements Timer, Serializable, ThreadListener
+    implements Timer, Serializable, IterationListener
 {
     private static Logger log =
         Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
@@ -161,23 +162,10 @@ public class ConstantTimer
      * 
      * @see org.apache.jmeter.testelement.ThreadListener#iterationStarted(int)
      */
-    public void iterationStarted(int iterationCount)
+    public void iterationStart(IterationEvent event)
     {
-        variables = vars.getVariables();
-
-        try
-        {
-            delay = getPropertyAsLong(DELAY);
-        }
-        catch (ClassCastException ex)
-        {
-            log.error(
-                "Unable to determine delay - you may have used an undefined "
-                    + "variable in the test element with the name: "
-                    + getName(),
-                ex);
-            delay = 0;
-        }
+        delay = getPropertyAsLong(DELAY);
+        
     }
 
     /**

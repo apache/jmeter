@@ -60,11 +60,13 @@ import java.util.Map;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.config.Modifier;
+import org.apache.jmeter.engine.event.IterationEvent;
+import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 /************************************************************
@@ -82,7 +84,7 @@ import org.apache.log.Logger;
  ***********************************************************/
 public class UserParameterModifier
 	extends ConfigTestElement
-	implements Modifier, Serializable, TestListener
+	implements PreProcessor, Serializable, TestListener
 {
 	transient private static Logger log =
 		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
@@ -149,15 +151,15 @@ public class UserParameterModifier
 	 * @param entry Entry object containing information about the current test
 	 * @return <code>True</code> if modified, else <code>false</code>
 	 */
-	public boolean modifyEntry(Sampler entry)
+	public void process()
 	{
+        Sampler entry = JMeterContextService.getContext().getCurrentSampler();
 		if (!(entry instanceof HTTPSampler))
 		{
-			return false;
+			return;
 		}
 		HTTPSampler config = (HTTPSampler) entry;
 		Map currentUser = allAvailableUsers.getNextUserMods();
-		boolean changeValue = false;
 		PropertyIterator iter = config.getArguments().iterator();
 		while (iter.hasNext())
 		{
@@ -170,7 +172,6 @@ public class UserParameterModifier
 				arg.setValue((String)currentUser.get(arg.getName()));
 			}
 		}
-		return changeValue;
 	}
 	/*----------------------------------------------------------------------------------------------
 	 * Methods (used by UserParameterModifierGui to get/set the name of XML parameter file)
@@ -191,4 +192,10 @@ public class UserParameterModifier
 	{
 		setProperty(XMLURI, xmlURI);
 	}
+    /**
+     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.IterationEvent)
+     */
+    public void testIterationStart(IterationEvent event)
+    {}
+
 }

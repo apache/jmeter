@@ -62,20 +62,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.protocol.jdbc.config.DbConfig;
-import org.apache.jmeter.protocol.jdbc.config.PoolConfig;
-import org.apache.jmeter.protocol.jdbc.config.SqlConfig;
+import org.apache.jmeter.engine.event.IterationEvent;
 import org.apache.jmeter.protocol.jdbc.util.DBConnectionManager;
 import org.apache.jmeter.protocol.jdbc.util.DBKey;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.PerSampleClonable;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jorphan.collections.Data;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.apache.jorphan.collections.Data;
 /************************************************************
  *  A sampler which understands JDBC database requests
  *
@@ -181,7 +178,7 @@ public class JDBCSampler extends AbstractSampler
             stmt.close();
             manager.releaseConnection(con);
             res.setResponseData(data.toString().getBytes());
-            res.setDataType(res.TEXT);
+            res.setDataType(SampleResult.TEXT);
             res.setSuccessful(true);
         }
         catch (Exception ex)
@@ -243,7 +240,7 @@ public class JDBCSampler extends AbstractSampler
 
     public int getMaxUse()
     {
-        return getPropertyAsInt(this.MAXUSE);
+        return getPropertyAsInt(MAXUSE);
     }
 
     public int getNumConnections()
@@ -310,4 +307,10 @@ public class JDBCSampler extends AbstractSampler
     {
         return getUrl()+", user: "+getUsername()+"\n"+getQuery();
     }
+    /**
+     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.IterationEvent)
+     */
+    public void testIterationStart(IterationEvent event)
+    {}
+
 }

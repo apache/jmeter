@@ -166,6 +166,7 @@ public class InterleaveControl extends GenericController implements Serializable
 
 	public Sampler next()
 	{
+        fireIterEventAsNeeded();
 		setInterleave(DEFAULT_STYLE);
 		TestElement controller = getCurrentController();
 		if(controller == null)
