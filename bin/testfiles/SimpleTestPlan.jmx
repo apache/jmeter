@@ -55,6 +55,7 @@
 <property xml:space="preserve" name="HTTPSampler.mimetype"/>
 <property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
 <property xml:space="preserve" name="HTTPSampler.path">/ant/index.html</property>
+<property xml:space="preserve" name="HTTPSampler.encoded_path">/ant/index.html</property>
 <collection class="java.util.ArrayList" name="AbstractSampler.assertions"/>
 <property xml:space="preserve" name="HTTPSampler.FILE_FIELD"/>
 <property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
@@ -79,6 +80,7 @@
 <property xml:space="preserve" name="HTTPSampler.mimetype"/>
 <property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
 <property xml:space="preserve" name="HTTPSampler.path">/ant/antnews.html</property>
+<property xml:space="preserve" name="HTTPSampler.encoded_path">/ant/antnews.html</property>
 <collection class="java.util.ArrayList" name="AbstractSampler.assertions"/>
 <property xml:space="preserve" name="HTTPSampler.FILE_FIELD"/>
 <property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
@@ -110,6 +112,7 @@
 <property xml:space="preserve" name="HTTPSampler.mimetype"/>
 <property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
 <property xml:space="preserve" name="HTTPSampler.path">/log4j/index.html</property>
+<property xml:space="preserve" name="HTTPSampler.encoded_path">/log4j/index.html</property>
 <collection class="java.util.ArrayList" name="AbstractSampler.assertions"/>
 <property xml:space="preserve" name="HTTPSampler.FILE_FIELD"/>
 <property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
@@ -134,6 +137,7 @@
 <property xml:space="preserve" name="HTTPSampler.mimetype"/>
 <property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</property>
 <property xml:space="preserve" name="HTTPSampler.path">/log4j/docs/history.html</property>
+<property xml:space="preserve" name="HTTPSampler.encoded_path">/log4j/docs/history.html</property>
 <collection class="java.util.ArrayList" name="AbstractSampler.assertions"/>
 <property xml:space="preserve" name="HTTPSampler.FILE_FIELD"/>
 <property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</property>
