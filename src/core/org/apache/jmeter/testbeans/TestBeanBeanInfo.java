@@ -36,6 +36,7 @@ import java.beans.PropertyDescriptor;
  * a stop class AND flags. [Why? I guess this is a bug in the spec.]
  * <li>java.beans.Introspector is buggy and, opposite to what's stated in the
  * Javadocs, only results of getBeanInfo(Class) are actually cached.
+ * </ol>
  * 
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision$ updated on $Date$
