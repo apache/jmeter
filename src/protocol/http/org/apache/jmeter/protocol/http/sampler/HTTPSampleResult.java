@@ -92,6 +92,7 @@ public class HTTPSampleResult extends SampleResult
         setResponseMessage(res.getResponseMessage());
         setDataType(res.getDataType());
         setResponseHeaders(res.getResponseHeaders());
+        setCookies(res.getCookies());
 
         addSubResult(res);
     }
@@ -166,4 +167,22 @@ public class HTTPSampleResult extends SampleResult
         }
         return sb.toString();
     }
+    
+    private String cookies=""; // never null
+    /**
+     * @return cookies as a string
+     */
+    public String getCookies()
+    {
+        return cookies;
+    }
+
+    /**
+     * @param string representing the cookies
+     */
+    public void setCookies(String string)
+    {
+        cookies = string;
+    }
+
 }
