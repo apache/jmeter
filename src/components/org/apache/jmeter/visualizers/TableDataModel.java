@@ -194,7 +194,7 @@ public class TableDataModel extends GraphModel implements TableModel
 		{
 			if((rowIndex >= 0) && (rowIndex < getSampleCount()))
 			{
-				return new Integer(rowIndex);
+				return new Integer(rowIndex+1);
 			}
 		}
 		else if(columnIndex == 1)
