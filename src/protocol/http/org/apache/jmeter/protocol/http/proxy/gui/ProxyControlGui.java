@@ -66,7 +66,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -93,6 +92,7 @@ import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.protocol.http.proxy.ProxyControl;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
@@ -223,12 +223,12 @@ public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMete
         repaint();
     }
 
-    private void populateTable(PowerTableModel model, Iterator iter)
+    private void populateTable(PowerTableModel model, PropertyIterator iter)
     {
         model.clearData();
         while (iter.hasNext())
         {
-            model.addRow(new Object[] { iter.next()});
+            model.addRow(new Object[] { iter.next().getStringValue()});
         }
         model.fireTableDataChanged();
     }

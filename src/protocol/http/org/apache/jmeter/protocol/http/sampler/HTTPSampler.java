@@ -79,6 +79,7 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -204,6 +205,11 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
 
     public void setEncodedPath(String path)
     {
+        path = encodePath(path);
+        setProperty(ENCODED_PATH, path);
+    }
+    private String encodePath(String path)
+    {
         path =
             Util.substitute(
                 (Perl5Matcher) localMatcher.get(),
@@ -211,33 +217,29 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
                 spaceSub,
                 path,
                 Util.SUBSTITUTE_ALL);
-        setProperty(ENCODED_PATH, path);
+        return path;
     }
 
     public String getEncodedPath()
     {
         return getPropertyAsString(ENCODED_PATH);
     }
-
-    public void setProperty(String key, String prop)
-    {
-        super.setProperty(key, prop);
-        log.error("Setting property in HTTPSampler: " + key);
-        if (PATH.equals(key))
-        {
-            log.error("Setting encoded path");
-            setEncodedPath(prop);
-        }
-    }
     
     public void setProperty(JMeterProperty prop)
     {
-        log.debug("setting property " + prop.getName() + " in HTTPSampler");
         super.setProperty(prop);
         if (PATH.equals(prop.getName()))
         {
-            log.error("Setting encoded path");
             setEncodedPath(prop.getStringValue());
+        }
+    }
+    
+    public void addProperty(JMeterProperty prop)
+    {
+        super.addProperty(prop);
+        if(PATH.equals(prop.getName()))
+        {
+            super.addProperty(new StringProperty(ENCODED_PATH,encodePath(prop.getStringValue())));
         }
     }
 
@@ -414,8 +416,10 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
     public URL getUrl() throws MalformedURLException
     {
         String pathAndQuery = null;
+        log.debug("#4, encoded path = " + getEncodedPath());
         if (this.getMethod().equals(HTTPSampler.GET) && getQueryString().length() > 0)
         {
+            log.debug("Path = " + getPath() + "Encoded path = " + getEncodedPath());
             if (this.getEncodedPath().indexOf("?") > -1)
             {
                 pathAndQuery = this.getEncodedPath() + "&" + getQueryString();
@@ -427,6 +431,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
         }
         else
         {
+            log.debug("Path = " + getPath() + "Encoded path = " + getEncodedPath());
             pathAndQuery = this.getEncodedPath();
         }
         if (!pathAndQuery.startsWith("/"))
@@ -868,6 +873,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
         log.debug("Start : sample2");
         long time = System.currentTimeMillis();
         SampleResult res = new SampleResult();
+        log.debug("#4, encoded path = " + getEncodedPath());
         URL u = null;
         try
         {
