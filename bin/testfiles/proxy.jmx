@@ -1,24 +1,24 @@
-<jmeterTestPlan version="2.0.20040619">
+<jmeterTestPlan version="1.0" properties="1.5">
   <hashTree>
-    <org.apache.jmeter.testelement.TestPlan>
+    <TestPlan>
       <collectionProp name="TestPlan.thread_groups"/>
       <elementProp name="TestPlan.user_defined_variables" elementType="org.apache.jmeter.config.Arguments">
         <stringProp name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</stringProp>
         <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
         <collectionProp name="Arguments.arguments"/>
-        <stringProp name="TestElement.name">User Defined Variables</stringProp>
+        <stringProp name="TestElement.name">User+Defined+Variables</stringProp>
         <boolProp name="TestElement.enabled">true</boolProp>
       </elementProp>
       <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.TestPlanGui</stringProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
       <stringProp name="TestElement.test_class">org.apache.jmeter.testelement.TestPlan</stringProp>
-      <stringProp name="TestElement.name">Test Plan</stringProp>
+      <stringProp name="TestElement.name">Test+Plan</stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
       <boolProp name="TestElement.enabled">true</boolProp>
       <stringProp name="TestPlan.comments"></stringProp>
-    </org.apache.jmeter.testelement.TestPlan>
+    </TestPlan>
     <hashTree>
-      <org.apache.jmeter.threads.ThreadGroup>
+      <ThreadGroup>
         <longProp name="ThreadGroup.start_time">0</longProp>
         <stringProp name="TestElement.test_class">org.apache.jmeter.threads.ThreadGroup</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
@@ -31,32 +31,31 @@
           <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</stringProp>
           <intProp name="LoopController.loops">-1</intProp>
           <stringProp name="TestElement.test_class">org.apache.jmeter.control.LoopController</stringProp>
-          <stringProp name="TestElement.name">Loop Controller</stringProp>
+          <stringProp name="TestElement.name">Loop+Controller</stringProp>
           <boolProp name="TestElement.enabled">true</boolProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="TestElement.name">Thread Group</stringProp>
+        <stringProp name="TestElement.name">Thread+Group</stringProp>
         <longProp name="ThreadGroup.end_time">0</longProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <stringProp name="ThreadGroup.ramp_time">0</stringProp>
-      </org.apache.jmeter.threads.ThreadGroup>
+      </ThreadGroup>
       <hashTree>
-        <org.apache.jmeter.control.GenericController>
+        <GenericController>
           <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
           <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Simple Controller</stringProp>
+          <stringProp name="TestElement.name">Simple+Controller</stringProp>
           <boolProp name="TestElement.enabled">true</boolProp>
-        </org.apache.jmeter.control.GenericController>
+        </GenericController>
         <hashTree>
-          <org.apache.jmeter.config.ConfigTestElement>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui</stringProp>
+          <ConfigTestElement>
             <stringProp name="HTTPSampler.path"></stringProp>
+            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui</stringProp>
             <stringProp name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</stringProp>
-            <stringProp name="TestElement.name">HTTP Request Defaults</stringProp>
+            <stringProp name="TestElement.name">HTTP+Request+Defaults</stringProp>
             <stringProp name="HTTPSampler.domain">jakarta.apache.org</stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <boolProp name="TestElement.enabled">true</boolProp>
-            <stringProp name="HTTPSampler.port"></stringProp>
             <elementProp name="HTTPsampler.Arguments" elementType="org.apache.jmeter.config.Arguments">
               <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</stringProp>
               <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
@@ -64,7 +63,8 @@
               <stringProp name="TestElement.name"></stringProp>
               <boolProp name="TestElement.enabled">true</boolProp>
             </elementProp>
-          </org.apache.jmeter.config.ConfigTestElement>
+            <stringProp name="HTTPSampler.port"></stringProp>
+          </ConfigTestElement>
           <hashTree/>
         </hashTree>
       </hashTree>
