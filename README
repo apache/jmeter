@@ -22,13 +22,12 @@
   The following requirements exist for installing Apache JMeter:
 
    o  Java Interpreter:
-   ***Currently in this Beta release a 1.2 runtime is required,
 
-      A fully compliant Java 1.1 Runtime Environment is required for 
-      Apache JMeter to execute. Since Apache JMeter uses _only_ standard
-      Java APIs (java.*), please, do not file in a bug report if your 
-      JRE fails to execute Apache JMeter because a class implementation
-      is missing, or not fully compliant.
+      A fully compliant Java 1.3 Runtime Environment is required (a Java 1.4
+      Runtime Environment is recomendend) for Apache JMeter to execute. 
+      Since Apache JMeter uses _only_ standard Java APIs (java.*), please,
+      do not file in a bug report if your JRE fails to execute Apache JMeter
+      because a class implementation is missing, or not fully compliant.
 
    o  Java JFC (Swing components):
 
@@ -63,13 +62,20 @@
   should compile the application and enable you to run jmeter from the /bin
   directory.
 
-  NOTES for 1.7.1
-  ---------------
 
-  JDBC testing is working correctly in this version.
 
-  Recording HTTP sampes via the proxy server has been improved.  It is more robust.
-  The HTML Link Parser has been improved to be more forgiving.
+  Changes since 1.8
+  -----------------
+
+  - Bug Fix Release. Many bugs were fixed.
+  - Removed redundant "Root" node from test tree.
+  - Re-introduced Icons in test tree.
+  - Some re-organization of code to improve build process.
+  - View Results Tree has added option to view results as web document
+    (still buggy at this point).
+  - New Total line in Aggregate Listener (still buggy at this point).
+  - Improvements to ability to change JMeter's Locale settings.
+  - Improvements to SSL Manager.
 
 
 
