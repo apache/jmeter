@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+
+<TestPlan>
+<threadgroups>
+<ThreadGroup name="Jakarta Users" numThreads="2" rampUp="0">
+<controllers>
+<LoopController type="org.apache.jmeter.control.LoopController" name="Loop Controller" iterations="5">
+<configElements>
+</configElements>
+<controllers>
+<Controller type="org.apache.jmeter.control.InterleaveControl" name="Interleave Controller">
+<configElements>
+<ConfigElement type="org.apache.jmeter.protocol.http.config.UrlConfig">
+<property name="name">Defaults</property>
+<property name="PROTOCOL">http</property>
+<property name="arguments"><Arguments>
+</Arguments>
+</property>
+<property name="method">GET</property>
+</ConfigElement>
+</configElements>
+<controllers>
+<HttpTestSample type="org.apache.jmeter.protocol.http.control.HttpTestSample" name="News Page" getImages="false">
+<defaultUrl>
+<ConfigElement type="org.apache.jmeter.protocol.http.config.MultipartUrlConfig">
+<property name="PROTOCOL">http</property>
+<property name="domain"></property>
+<property name="arguments"><Arguments>
+</Arguments>
+</property>
+<property name="path">/site/news.html</property>
+<property name="method">GET</property>
+</ConfigElement></defaultUrl>
+<configElements>
+</configElements>
+<controllers>
+</controllers>
+</HttpTestSample>
+
+<HttpTestSample type="org.apache.jmeter.protocol.http.control.HttpTestSample" name="FAQ Page" getImages="false">
+<defaultUrl>
+<ConfigElement type="org.apache.jmeter.protocol.http.config.MultipartUrlConfig">
+<property name="PROTOCOL">http</property>
+<property name="arguments"><Arguments>
+</Arguments>
+</property>
+<property name="path">/site/faqs.html</property>
+<property name="method">GET</property>
+</ConfigElement></defaultUrl>
+<configElements>
+</configElements>
+<controllers>
+</controllers>
+</HttpTestSample>
+
+<HttpTestSample type="org.apache.jmeter.protocol.http.control.HttpTestSample" name="Gump Page" getImages="false">
+<defaultUrl>
+<ConfigElement type="org.apache.jmeter.protocol.http.config.MultipartUrlConfig">
+<property name="PROTOCOL">http</property>
+<property name="arguments"><Arguments>
+</Arguments>
+</property>
+<property name="path">/gump</property>
+<property name="method">GET</property>
+</ConfigElement></defaultUrl>
+<configElements>
+</configElements>
+<controllers>
+</controllers>
+</HttpTestSample>
+
+</controllers>
+</Controller>
+</controllers>
+</LoopController>
+</controllers>
+<timers>
+</timers>
+<listeners>
+<Filer type="org.apache.jmeter.reporters.Filer" name="File Reporter" verbose="true" append="false" autoFlush="false" viewSubmitData="true" file="interleave-test.dat"/>
+</listeners>
+</ThreadGroup>
+
+</threadgroups>
+<configElements>
+</configElements>
+</TestPlan>
