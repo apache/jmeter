@@ -72,7 +72,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-// TODO: look at using Java 1.4 regexp instead of ORO.
+// NOTE: Also looked at using Java 1.4 regexp instead of ORO. The change was
+// trivial. Performance did not improve -- at least not significantly. [Jordi]
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternMatcherInput;
