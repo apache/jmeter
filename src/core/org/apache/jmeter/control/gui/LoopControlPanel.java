@@ -196,18 +196,22 @@ public class LoopControlPanel
             new JLabel(JMeterUtils.getResString("iterator_num"));
         loopPanel.add(loopsLabel, BorderLayout.WEST);
 
+		JPanel loopSubPanel = new JPanel(new BorderLayout(5, 0));
+
         // TEXT FIELD
         loops = new JTextField("1", 5);
         loops.setName(LOOPS);
         loopsLabel.setLabelFor(loops);
-        loopPanel.add(loops, BorderLayout.CENTER);
+        loopSubPanel.add(loops, BorderLayout.CENTER);
 
         // FOREVER CHECKBOX
         infinite = new JCheckBox(JMeterUtils.getResString("infinite"));
         infinite.setActionCommand(INFINITE);
         infinite.addActionListener(this);
-        loopPanel.add(infinite, BorderLayout.EAST);
-
+        loopSubPanel.add(infinite, BorderLayout.WEST);
+        
+        loopPanel.add(loopSubPanel,BorderLayout.CENTER);
+	
         loopPanel.add(
             Box.createHorizontalStrut(
                 loopsLabel.getPreferredSize().width
