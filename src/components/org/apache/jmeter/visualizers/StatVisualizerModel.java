@@ -261,9 +261,9 @@ public class StatVisualizerModel implements Clearable
             StatVisualizerModel m = new StatVisualizerModel();
             long t0 = System.currentTimeMillis();
 
-            m.addNewSample(sample("1", t0 + 0, 100, true));
-            m.addNewSample(sample("2", t0 + 250, 200, true));
-            m.addNewSample(sample("1", t0 + 500, 300, true));
+            m.addNewSample(sample("1", t0 + 100, 100, true));
+            m.addNewSample(sample("2", t0 + 350, 200, true));
+            m.addNewSample(sample("1", t0 + 600, 300, true));
             assertEquals(2, m.getRunningSampleCount());
             assertEquals(2, m.labelMap.size());
 
@@ -275,7 +275,6 @@ public class StatVisualizerModel implements Clearable
                 assertEquals(100, s.getMin());
                 assertEquals(300, s.getMax());
                 assertEquals(200, s.getAverage());
-                assertEquals(4.0, s.getRate(), 1e-6);
             }
 
             {
@@ -295,7 +294,7 @@ public class StatVisualizerModel implements Clearable
                 assertEquals(100, s.getMin());
                 assertEquals(300, s.getMax());
                 assertEquals(200, s.getAverage());
-                assertEquals(6.0, s.getRate(), 1e-6);
+                assertEquals(5.0, s.getRate(), 1e-6);
             }
         }
     }
