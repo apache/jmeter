@@ -79,16 +79,13 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
      */
     public void modifyTestElement(TestElement plan)
     {
+        super.configureTestElement(plan);
         if (plan instanceof TestPlan)
         {
             TestPlan tp = (TestPlan) plan;
-            tp.setName(getName());
             tp.setFunctionalMode(functionalMode.isSelected());
             tp.setUserDefinedVariables((Arguments) argsPanel.createTestElement());
         }
-        plan.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
-        plan.setProperty(TestElement.TEST_CLASS, TestPlan.class.getName());
-
     }
 
     /****************************************

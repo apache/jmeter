@@ -9,6 +9,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.PropertyIteratorImpl;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
@@ -25,6 +28,9 @@ public abstract class AbstractTestElement implements TestElement,Serializable
     private Map testInfo = Collections.synchronizedMap(new HashMap());
     transient private static Logger log =
             Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+    private List temporaryMembers;
+            
+    private boolean runningVersion;
 
     /****************************************
      * !ToDo (Method description)
@@ -67,7 +73,21 @@ public abstract class AbstractTestElement implements TestElement,Serializable
      ***************************************/
     public void addTestElement(TestElement el)
     {
-        if(el.getClass().equals(this.getClass()))
+        if(isRunningVersion())
+        {
+            Iterator iter = temporaryMembers.iterator();
+            while (iter.hasNext())
+            {
+                TestElement item = (TestElement)iter.next();
+                if(item.getClass().equals(el.getClass()))
+                {
+                    item.addTestElement(el);
+                    return;
+                }                
+            }
+            temporaryMembers.add(el);
+        }        
+        else if(el.getClass().equals(this.getClass()))
         {
             mergeIn(el);
         }
@@ -404,6 +424,15 @@ public abstract class AbstractTestElement implements TestElement,Serializable
     {
         return getCollectionValue(getProperty(key));
     }
+    
+    public void addProperty(JMeterProperty property)
+    {
+    }
+    
+    public PropertyIterator propertyIterator()
+    {
+        return new PropertyIteratorImpl(testInfo.values());
+    }
 
     /****************************************
      * !ToDo (Method description)
@@ -461,5 +490,35 @@ public abstract class AbstractTestElement implements TestElement,Serializable
                 }
             }
         }
+    }
+    /**
+     * Returns the runningVersion.
+     * @return boolean
+     */
+    public boolean isRunningVersion()
+    {
+        return runningVersion;
+    }
+
+    /**
+     * Sets the runningVersion.
+     * @param runningVersion The runningVersion to set
+     */
+    public void setRunningVersion(boolean runningVersion)
+    {
+        if(runningVersion)
+        {
+            temporaryMembers = new LinkedList();
+        }
+        else
+        {
+            temporaryMembers = null;
+        }
+        this.runningVersion = runningVersion;
+    }
+    
+    public void recoverRunningVersion()
+    {
+        temporaryMembers.clear();
     }
 }
