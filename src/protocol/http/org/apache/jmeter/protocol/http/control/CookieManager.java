@@ -186,6 +186,7 @@ public class CookieManager
             }
             catch (Exception e)
             {
+            	reader.close();
                 throw new IOException(
                     "Error parsing cookie line\n\t'" + line + "'\n\t" + e);
             }
