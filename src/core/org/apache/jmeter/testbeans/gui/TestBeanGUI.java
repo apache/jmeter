@@ -436,7 +436,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
 			if (notOther) v="${}";
 			else if (notNull) v= "";
 			else if (defaultValue != null) v= wrapper.getAsText();
-			else if (tags != null) v= tags[1];
+			else if (tags != null && tags.length>0) v= tags[1];
 			else if (notExpression) v= "";
 			else v="${}";
 
