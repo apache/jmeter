@@ -235,6 +235,7 @@ public class SampleResult implements Serializable
      * 
      * Must not be used in conjunction with sampleStart()/End()
      * 
+     * @deprecated use sampleStart() and sampleEnd() instead
      * @param elapsed time in milliseconds
      */
     public void setTime(long elapsed){
