@@ -344,8 +344,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, 
         //		table.setRowHeight(renderer.getPreferredHeight());
         //		table.setDefaultRenderer(String.class,renderer);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        return new JScrollPane(table);
+        JScrollPane pane = new JScrollPane(table);
+        pane.setPreferredSize(pane.getMinimumSize());
+        return pane;
     }
 
     private JPanel makeButtonPanel() {

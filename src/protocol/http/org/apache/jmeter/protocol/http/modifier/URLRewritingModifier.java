@@ -5,13 +5,15 @@ import junit.framework.TestCase;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.config.ResponseBasedModifier;
+import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
@@ -26,7 +28,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class URLRewritingModifier extends AbstractTestElement implements Serializable, ResponseBasedModifier
+public class URLRewritingModifier extends AbstractTestElement implements Serializable, PreProcessor
 {
     transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
     private Pattern case1, case2, case3, case4;
@@ -37,8 +39,10 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
     /**
      * @see ResponseBasedModifier#modifyEntry(Sampler, SampleResult)
      */
-    public boolean modifyEntry(Sampler sampler, SampleResult responseText)
+    public void process()
     {
+        Sampler sampler = JMeterContextService.getContext().getCurrentSampler();
+        SampleResult responseText = JMeterContextService.getContext().getPreviousResult();
         initRegex(getArgumentName());
         String text = new String(responseText.getResponseData());
         Perl5Matcher matcher = JMeterUtils.getMatcher();
@@ -65,11 +69,6 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
         }
 
         modify((HTTPSampler) sampler, value);
-        if (value.length() > 0)
-        {
-            return true;
-        }
-        return false;
     }
     private void modify(HTTPSampler sampler, String value)
     {
@@ -131,12 +130,15 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
     public static class Test extends TestCase
     {
         SampleResult response;
+        JMeterContext context;
         public Test(String name)
         {
             super(name);
         }
         public void setUp()
-        {}
+        {
+            context = JMeterContextService.getContext();
+        }
         public void testGrabSessionId() throws Exception
         {
             String html = "location: http://server.com/index.html?session_id=jfdkjdkf%20jddkfdfjkdjfdf%22;";
@@ -146,7 +148,9 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
             mod.setArgumentName("session_id");
             HTTPSampler sampler = createSampler();
             sampler.addArgument("session_id", "adfasdfdsafasdfasd");
-            mod.modifyEntry(sampler, response);
+            context.setCurrentSampler(sampler);
+            context.setPreviousResult(response);
+            mod.process();
             Arguments args = sampler.getArguments();
             assertEquals("jfdkjdkf jddkfdfjkdjfdf\"", ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
             assertEquals("http://server.com:80/index.html?session_id=jfdkjdkf+jddkfdfjkdjfdf%22", sampler.toString());
@@ -159,7 +163,9 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
             URLRewritingModifier mod = new URLRewritingModifier();
             mod.setArgumentName("session_id");
             HTTPSampler sampler = createSampler();
-            mod.modifyEntry(sampler, response);
+            context.setCurrentSampler(sampler);
+            context.setPreviousResult(response);
+            mod.process();
             Arguments args = sampler.getArguments();
             assertEquals("jfdkjdkfjddkfdfjkdjfdf", ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
         }
@@ -181,7 +187,9 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
             URLRewritingModifier mod = new URLRewritingModifier();
             mod.setArgumentName("session_id");
             HTTPSampler sampler = createSampler();
-            mod.modifyEntry(sampler, response);
+            context.setCurrentSampler(sampler);
+            context.setPreviousResult(response);
+            mod.process();
             Arguments args = sampler.getArguments();
             assertEquals("jfdkjdkfjddkfdfjkdjfdf", ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
         }
@@ -196,7 +204,9 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
             mod.setPathExtension(true);
             mod.setPathExtensionNoEquals(true);
             HTTPSampler sampler = createSampler();
-            mod.modifyEntry(sampler, response);
+            context.setCurrentSampler(sampler);
+            context.setPreviousResult(response);
+            mod.process();
             Arguments args = sampler.getArguments();
             assertEquals("index.html;%24sid%24KQNq3AAADQZoEQAxlkX8uQV5bjqVBPbT", sampler.getPath());
         }

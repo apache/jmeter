@@ -11,8 +11,6 @@ import java.util.Set;
 
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.config.Modifier;
-import org.apache.jmeter.config.ResponseBasedModifier;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.engine.event.LoopIterationListener;
@@ -120,8 +118,6 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         pack.setSampler(sampler);
         runPreProcessors(pack.getPreProcessors());
         configureWithConfigElements(sampler, pack.getConfigs());
-        configureWithResponseModifiers(sampler, pack.getResponseModifiers());
-        configureWithModifiers(sampler, pack.getModifiers());
         //replaceStatics(ret);
         return pack;
     }
@@ -228,14 +224,6 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
                 if ((item instanceof ConfigTestElement))
                 {
                     configs.add(item);
-                }
-                if (item instanceof Modifier)
-                {
-                    modifiers.add(item);
-                }
-                if (item instanceof ResponseBasedModifier)
-                {
-                    responseModifiers.add(item);
                 }
                 if (item instanceof SampleListener)
                 {
@@ -386,29 +374,6 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         while (iter.hasNext())
         {
             sam.addTestElement((ConfigTestElement) iter.next());
-        }
-    }
-
-    private void configureWithModifiers(Sampler sam, List modifiers)
-    {
-        Iterator iter = modifiers.iterator();
-        while (iter.hasNext())
-        {
-            Modifier mod = (Modifier) iter.next();
-            mod.modifyEntry(sam);
-        }
-    }
-
-    private void configureWithResponseModifiers(Sampler sam, List responseModifiers)
-    {
-        Iterator iter = responseModifiers.iterator();
-        while (iter.hasNext())
-        {
-            ResponseBasedModifier mod = (ResponseBasedModifier) iter.next();
-            if (previousResult != null)
-            {
-                mod.modifyEntry(sam, previousResult);
-            }
         }
     }
 }

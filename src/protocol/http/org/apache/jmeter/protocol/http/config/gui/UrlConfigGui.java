@@ -57,6 +57,7 @@ package org.apache.jmeter.protocol.http.config.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -69,7 +70,6 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -222,7 +222,7 @@ public class UrlConfigGui extends JPanel
         webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("web_server")));
         webServerPanel.add(getDomainPanel(), BorderLayout.NORTH);
-        webServerPanel.add(getPortPanel(), BorderLayout.SOUTH);
+        webServerPanel.add(getPortPanel(), BorderLayout.WEST);
 
         JPanel webRequestPanel = new JPanel();
 
@@ -233,7 +233,7 @@ public class UrlConfigGui extends JPanel
 
         northPanel.add(getProtocolAndMethodPanel(), BorderLayout.NORTH);
         northPanel.add(getPathPanel(), BorderLayout.SOUTH);
-        webRequestPanel.add(northPanel, BorderLayout.NORTH);
+        webServerPanel.add(northPanel, BorderLayout.SOUTH);
         webRequestPanel.add(getParameterPanel(), BorderLayout.CENTER);
 
         this.add(webServerPanel, BorderLayout.NORTH);
@@ -303,7 +303,7 @@ public class UrlConfigGui extends JPanel
         useKeepAlive.setName(USE_KEEPALIVE);
         useKeepAlive.setSelected(true);
 
-        Box panel = Box.createHorizontalBox();
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.add(label);
         panel.add(Box.createHorizontalStrut(5));
         panel.add(path);
@@ -311,6 +311,7 @@ public class UrlConfigGui extends JPanel
         panel.add(followRedirects);
         panel.add(Box.createHorizontalStrut(5));
         panel.add(useKeepAlive);
+        panel.setMinimumSize(panel.getPreferredSize());
         return panel;
     }
 
@@ -341,7 +342,7 @@ public class UrlConfigGui extends JPanel
         JLabel methodLabel = new JLabel(JMeterUtils.getResString("method"));
 
 
-        JPanel panel = new HorizontalPanel();
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         panel.add(protocolLabel);
         panel.add(protocol);
@@ -350,7 +351,7 @@ public class UrlConfigGui extends JPanel
         panel.add(methodLabel);
         panel.add(get);
         panel.add(post);
-
+        panel.setMinimumSize(panel.getPreferredSize());
         return panel;
     }
 

@@ -4,8 +4,8 @@ import java.awt.BorderLayout;
 
 import javax.swing.JCheckBox;
 
-import org.apache.jmeter.config.gui.AbstractResponseBasedModifierGui;
 import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.protocol.http.modifier.URLRewritingModifier;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -17,7 +17,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class URLRewritingModifierGui extends AbstractResponseBasedModifierGui {
+public class URLRewritingModifierGui extends AbstractPreProcessorGui {
 	
 	JLabeledTextField argumentName;
 	JCheckBox pathExt;
