@@ -3,7 +3,7 @@
   <!-- Where the class files should live -->
   <property name="classes.dest.dir" value="bin/classes"/>
   <!-- Where the Sources live -->
-  <property name="sources.src.dir" value="src"/>
+  <property name="sources.src.dir" value="src_1"/>
   <!-- Where the API documentation lives -->
   <property name="docs.api.dest.dir" value="docs/api"/>
   <property name="version" value="1.7"/>
@@ -24,6 +24,7 @@
   <path id="testClasspath">
 		<path refid="classpath"/>
 		<pathelement location="./bin/ApacheJMeter.jar"/>
+		<pathelement location="./lib/ext/ApacheJMeter_core.jar"/>
   </path>
 
 
@@ -166,8 +167,12 @@
 			<exclude name="*eucJP*"/>
 		</fileset>
 	  </copy>
+	  <copy toFile="${classes.dest.dir}/org/apache/jmeter/help.txt" 
+	  		file="${sources.src.dir}/org/apache/jmeter/help.txt"/>	
+	  <mkdir dir="./lib/ext/"/> 
 
-	  <jar jarfile="ApacheJMeter.jar" manifest="${sources.src.dir}/MANIFEST" basedir="${classes.dest.dir}"/>
+	  <jar jarfile="./lib/ext/ApacheJMeter_core.jar" excludes="**/NewDriver.class,**/NonGuiDriver.class" manifest="${sources.src.dir}/MANIFEST" basedir="${classes.dest.dir}"/>
+	  <jar jarfile="ApacheJMeter.jar" includes="**/NewDriver.class,**/NonGuiDriver.class" manifest="${sources.src.dir}/MANIFEST" basedir="${classes.dest.dir}"/>	  
 	</target>
 
 	<!--
@@ -246,9 +251,9 @@
 	</target>
 
 	<target name="test" depends="install">
-	  <java classname="org.apache.jmeter.junit.AllTests" fork="yes" dir="${basedir}">
+	  <java classname="org.apache.jmeter.junit.AllTests" fork="yes" dir="${basedir}/bin">
 		 <classpath refid="testClasspath"/>
-		 <arg value="./bin/jmeter.properties"/>
+		 <arg value="./jmeter.properties"/>
 	  </java>
   </target>
 

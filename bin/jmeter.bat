@@ -19,4 +19,4 @@ for %%i in ("..\lib\*.jar") do CALL ..\lcp.bat %%i
 for %%i in ("..\ext\*.jar") do CALL ..\lcp.bat %%i
 
 
-java -cp %LOCALCLASSPATH%;ApacheJMeter.jar -D%LOG4JCONFIG% %HOST% %PORT% org.apache.jmeter.NewDriver %PROP%
+java -cp ApacheJMeter.jar -D%LOG4JCONFIG% %HOST% %PORT% org.apache.jmeter.NewDriver %PROP%
