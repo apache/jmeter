@@ -23,6 +23,7 @@
 	 </menu>
 	 <menu name="JMeter Resources">
 	 		<item name="JMeter Articles" href="http://nagoya.apache.org/wiki/apachewiki.cgi?JMeterLinks"/>
+	 		<item name="JMeter on IRC" href="/jmeter_irc.html"/>
 	 </menu>
 	 <menu name="Community">
 		  <item name="Get Involved"           href="/site/getinvolved.html"/>
