@@ -66,8 +66,8 @@ import org.apache.log4j.Category;
  * Stores the configuration for JNDI lookup
  *
  * @author	Khor Soon Hin
- * @created	2001 Dec 19
- * @modified	2001 Dec 19
+ * Created	2001 Dec 19
+ * @version $Revision$ Last Updated: $Date$
  */
 public class LookupConfig extends AbstractConfigElement implements Serializable
 {

@@ -73,8 +73,8 @@ import org.apache.log4j.Category;
  * Controls how the sampling is done
  *
  * @author	Khor Soon Hin
- * @created	20 Dec 2001
- * @modified	20 Dec 2001
+ * Created	20 Dec 2001
+ * @version $Revision$ Last Updated: $Date$
  */
 public class JndiTestSample extends AbstractGenerativeController 
 	implements Serializable

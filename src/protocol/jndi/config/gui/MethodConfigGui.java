@@ -91,9 +91,8 @@ import org.apache.log.Logger;
 /**
  * Provides the gui interface to configure remote method execution
  * @author	Khor Soon Hin
- * @version	1.0
- * @created	2001 Dec 24
- * @modified	2001 Dec 30
+ * @version	$Revision$ Last Updated: $Date$
+ * Created	2001 Dec 24
  */
 public class MethodConfigGui
 	extends JPanel

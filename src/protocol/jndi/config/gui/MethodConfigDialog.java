@@ -67,10 +67,9 @@ import org.apache.log4j.Category;
 /**
  * Dialog to allow user to key in value for their method parameters
  *
- * @author	Khor Soon Hin
- * @version	1.0
- * @created	2002 Jan 08
- * @modified	2002 Jan 08
+ * @author	  Khor Soon Hin
+ * @version  $Revision$ Last Updated: $Date$
+ * Created	  2002 Jan 08
  */
 public class MethodConfigDialog extends JDialog
 {

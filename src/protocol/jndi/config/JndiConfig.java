@@ -68,8 +68,8 @@ import org.apache.log4j.Category;
  * Stores the configuration for JNDI sampling
  *
  * @author	Khor Soon Hin
- * @created	2001 Dec 17
- * @modified	2001 Dec 17
+ * Created	2001 Dec 17
+ * @version $Revision$ Last Updated: $Date$
  */
 public class JndiConfig extends AbstractConfigElement implements Serializable
 {
