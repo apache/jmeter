@@ -71,8 +71,8 @@ import org.apache.jmeter.testelement.TestElement;
 
 public class Argument extends AbstractTestElement implements Serializable
 {
-	private final static String NAME = "Argument.name";
-	private final static String VALUE = "Argument.value";
+	protected final static String NAME = "Argument.name";
+	protected final static String VALUE = "Argument.value";
         private final static String METADATA = "Argument.metadata";
     
 	/****************************************

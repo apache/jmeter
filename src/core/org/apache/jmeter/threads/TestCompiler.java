@@ -464,5 +464,4 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 		}
 		return newColl;
 	}
-
 }
