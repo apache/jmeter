@@ -22,7 +22,6 @@ import java.io.Serializable;
 
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.testelement.property.StringProperty;
 
 /**
@@ -73,7 +72,7 @@ public class ForeachController extends GenericController implements Serializable
      */
     public boolean isDone()
     {
-        JMeterContext context = JMeterContextService.getContext();
+        JMeterContext context = getThreadContext();
     	String inputVariable=getInputValString()+"_"+(loopCount+1);
     	if (context.getVariables().get(inputVariable) != null) 
     	{
@@ -86,7 +85,7 @@ public class ForeachController extends GenericController implements Serializable
 
     private boolean endOfArguments()
     {
-        JMeterContext context = JMeterContextService.getContext();
+        JMeterContext context = getThreadContext();
     	String inputVariable=getInputValString()+"_"+(loopCount+1);
     	if (context.getVariables().get(inputVariable) != null) 
     	{

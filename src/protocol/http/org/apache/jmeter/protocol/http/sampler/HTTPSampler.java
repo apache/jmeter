@@ -54,8 +54,6 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
-import org.apache.jmeter.threads.JMeterContextService;
-
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
 
@@ -804,7 +802,7 @@ public class HTTPSampler extends AbstractSampler
      */
     protected byte[] readResponse(HttpURLConnection conn) throws IOException
     {
-        byte[] readBuffer= JMeterContextService.getContext().getReadBuffer();
+        byte[] readBuffer= getThreadContext().getReadBuffer();
         BufferedInputStream in;
         boolean logError=false; // Should we log the error?
         try

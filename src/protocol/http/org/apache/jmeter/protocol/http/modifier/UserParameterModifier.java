@@ -31,7 +31,6 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.PropertyIterator;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -110,7 +109,7 @@ public class UserParameterModifier
      */
     public void process()
     {
-        Sampler entry = JMeterContextService.getContext().getCurrentSampler();
+        Sampler entry = getThreadContext().getCurrentSampler();
         if (!(entry instanceof HTTPSampler))
         {
             return;

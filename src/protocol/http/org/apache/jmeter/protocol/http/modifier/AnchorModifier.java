@@ -42,6 +42,7 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.io.TextFile;
 import org.apache.jorphan.logging.LoggingManager;
@@ -71,8 +72,9 @@ public class AnchorModifier
      */
     public void process()
     {
-        Sampler sam = JMeterContextService.getContext().getCurrentSampler();
-        SampleResult res = JMeterContextService.getContext().getPreviousResult();
+    	JMeterContext context = getThreadContext();
+        Sampler sam = context.getCurrentSampler();
+        SampleResult res = context.getPreviousResult();
         HTTPSampler sampler = null;
         HTTPSampleResult result = null;
         if (res == null 
@@ -259,6 +261,12 @@ public class AnchorModifier
         {
             super(name);
         }
+        private JMeterContext jmctx = null;
+        
+        public void setUp()
+    	{
+        	jmctx = JMeterContextService.getContext();
+        }
 
         public void testProcessingHTMLFile(String HTMLFileName) throws Exception
         {
@@ -278,8 +286,8 @@ public class AnchorModifier
                             System.getProperty("user.dir")
                                 + "/testfiles/Load_JMeter_Page.jmx"))
                     .getArray()[0];
-            JMeterContextService.getContext().setCurrentSampler(context);
-            JMeterContextService.getContext().setCurrentSampler(config);
+            jmctx.setCurrentSampler(context);
+            jmctx.setCurrentSampler(config);
             result.setResponseData(
                 new TextFile(
                     System.getProperty("user.dir")
@@ -289,8 +297,9 @@ public class AnchorModifier
             result.setSampleLabel(context.toString());
             result.setSamplerData(context.toString());
             result.setURL(new URL("http://nagoya.apache.org/fakepage.html"));
-            JMeterContextService.getContext().setPreviousResult(result);
+            jmctx.setPreviousResult(result);
             AnchorModifier modifier = new AnchorModifier();
+            modifier.setThreadContext(jmctx);
             modifier.process();
             assertEquals(
                 "http://nagoya.apache.org/bugzilla/buglist.cgi?"

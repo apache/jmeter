@@ -26,7 +26,6 @@ import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -52,8 +51,7 @@ public class CounterConfig
      */
     public synchronized void iterationStart(LoopIterationEvent event)
     {
-        JMeterVariables variables =
-            JMeterContextService.getContext().getVariables();
+        JMeterVariables variables = getThreadContext().getVariables();
         int start = getStart(), end = getEnd(), increment = getIncrement();
         if (!isPerUser())
         {

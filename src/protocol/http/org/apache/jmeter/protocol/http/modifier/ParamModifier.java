@@ -29,7 +29,6 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.apache.jmeter.threads.JMeterContextService;
 
 /**
  * This modifier will replace any single http sampler's url parameter value
@@ -117,7 +116,7 @@ public class ParamModifier
      */
     public void process()
     {
-        Sampler sam = JMeterContextService.getContext().getCurrentSampler();
+        Sampler sam = getThreadContext().getCurrentSampler();
         HTTPSampler sampler = null;
         if (!(sam instanceof HTTPSampler))
         {
