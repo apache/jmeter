@@ -71,7 +71,7 @@ public class Converter
         }
         else if(toType.equals(boolean.class) || toType.equals(Boolean.class))
         {
-            return new Boolean(getBoolean(value));
+            return JOrphanUtils.valueOf(getBoolean(value));
         }
         else if(toType.equals(java.util.Date.class))
         {
@@ -297,7 +297,7 @@ public class Converter
            {
               return ((Boolean)o).booleanValue();
            }
-           else return new Boolean(o.toString()).booleanValue();
+           else return Boolean.valueOf(o.toString()).booleanValue();
         }
 
         /**
