@@ -87,36 +87,27 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-/************************************************************
- *  Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:
- *  Apache
- *
- *@author     Michael Stover
- *@created    $Date$
- *@version    1.0
- ***********************************************************/
-
-public class AnchorModifier extends AbstractTestElement implements PreProcessor, Serializable
+/**
+ * @author     Michael Stover
+ * @version    $Revision$
+ */
+public class AnchorModifier
+    extends AbstractTestElement
+    implements PreProcessor, Serializable
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
     private static Random rand = new Random();
 
-    /************************************************************
-     *  !ToDo (Constructor description)
-     ***********************************************************/
     public AnchorModifier()
     {}
 
-    /************************************************************
-     *  Modifies an Entry object based on HTML response text.
-     *
-     *@param  entry   !ToDo (Parameter description)
-     *@param  result  !ToDo (Parameter description)
-     *@return         !ToDo (Return description)
-     ***********************************************************/
+    /**
+     * Modifies an Entry object based on HTML response text.
+     */
     public void process()
     {
-        SampleResult result = JMeterContextService.getContext().getPreviousResult();
+        SampleResult result =
+            JMeterContextService.getContext().getPreviousResult();
         Sampler sam = JMeterContextService.getContext().getCurrentSampler();
         HTTPSampler sampler = null;
         if (result == null || !(sam instanceof HTTPSampler))
@@ -153,7 +144,9 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
         addFormUrls(html, result, sampler, potentialLinks);
         if (potentialLinks.size() > 0)
         {
-            HTTPSampler url = (HTTPSampler) potentialLinks.get(rand.nextInt(potentialLinks.size()));
+            HTTPSampler url =
+                (HTTPSampler) potentialLinks.get(
+                    rand.nextInt(potentialLinks.size()));
             sampler.setDomain(url.getDomain());
             sampler.setPath(url.getPath());
             if (url.getMethod().equals(HTTPSampler.POST))
@@ -197,31 +190,42 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
                 log.error("", ex);
             }
         }
+
         if (possibleReplacements.size() > 0)
         {
-            replacementArg = (Argument) possibleReplacements.get(rand.nextInt(possibleReplacements.size()));
+            replacementArg =
+                (Argument) possibleReplacements.get(
+                    rand.nextInt(possibleReplacements.size()));
             arg.setName(replacementArg.getName());
             arg.setValue(replacementArg.getValue());
-            log.debug("Just set argument to values: " + arg.getName() + " = " + arg.getValue());
+            log.debug(
+                "Just set argument to values: "
+                    + arg.getName()
+                    + " = "
+                    + arg.getValue());
             args.removeArgument(replacementArg);
         }
     }
 
-    /************************************************************
-     *  !ToDo
-     *
-     *@param  config  !ToDo
-     ***********************************************************/
     public void addConfigElement(ConfigElement config)
     {}
 
-    private void addFormUrls(Document html, SampleResult result, HTTPSampler config, List potentialLinks)
+    private void addFormUrls(
+        Document html,
+        SampleResult result,
+        HTTPSampler config,
+        List potentialLinks)
     {
         NodeList rootList = html.getChildNodes();
         List urls = new LinkedList();
         for (int x = 0; x < rootList.getLength(); x++)
         {
-            urls.addAll(HtmlParser.createURLFromForm(rootList.item(x), (HTTPSampler) JMeterContextService.getContext().getPreviousSampler()));
+            urls.addAll(
+                HtmlParser.createURLFromForm(
+                    rootList.item(x),
+                    (HTTPSampler) JMeterContextService
+                        .getContext()
+                        .getPreviousSampler()));
         }
         Iterator iter = urls.iterator();
         while (iter.hasNext())
@@ -242,7 +246,11 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
         }
     }
 
-    private void addAnchorUrls(Document html, SampleResult result, HTTPSampler config, List potentialLinks)
+    private void addAnchorUrls(
+        Document html,
+        SampleResult result,
+        HTTPSampler config,
+        List potentialLinks)
     {
         NodeList nodeList = html.getElementsByTagName("a");
         for (int i = 0; i < nodeList.getLength(); i++)
@@ -257,7 +265,12 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
             String hrefStr = namedItem.getNodeValue();
             try
             {
-                HTTPSampler newUrl = HtmlParser.createUrlFromAnchor(hrefStr, (HTTPSampler) JMeterContextService.getContext().getPreviousSampler());
+                HTTPSampler newUrl =
+                    HtmlParser.createUrlFromAnchor(
+                        hrefStr,
+                        (HTTPSampler) JMeterContextService
+                            .getContext()
+                            .getPreviousSampler());
                 newUrl.setMethod(HTTPSampler.GET);
                 log.debug("possible match: " + newUrl);
                 if (HtmlParser.isAnchorMatched(newUrl, config))
@@ -284,25 +297,64 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 
         public void testModifySampler() throws Exception
         {
-            HTTPSampler config = (HTTPSampler) SaveService.loadSubTree(new FileInputStream(System.getProperty("user.dir") + "/testfiles/load_bug_list.jmx")).getArray()[0];
+            HTTPSampler config =
+                (HTTPSampler) SaveService
+                    .loadSubTree(
+                        new FileInputStream(
+                            System.getProperty("user.dir")
+                                + "/testfiles/load_bug_list.jmx"))
+                    .getArray()[0];
             config.setRunningVersion(true);
             SampleResult result = new SampleResult();
-            HTTPSampler context = (HTTPSampler) SaveService.loadSubTree(new FileInputStream(System.getProperty("user.dir") + "/testfiles/Load_JMeter_Page.jmx")).getArray()[0];
+            HTTPSampler context =
+                (HTTPSampler) SaveService
+                    .loadSubTree(
+                        new FileInputStream(
+                            System.getProperty("user.dir")
+                                + "/testfiles/Load_JMeter_Page.jmx"))
+                    .getArray()[0];
             JMeterContextService.getContext().setCurrentSampler(context);
             JMeterContextService.getContext().setCurrentSampler(config);
-            result.setResponseData(new TextFile(System.getProperty("user.dir") + "/testfiles/jmeter_home_page.html").getText().getBytes());
+            result.setResponseData(
+                new TextFile(
+                    System.getProperty("user.dir")
+                        + "/testfiles/jmeter_home_page.html")
+                    .getText()
+                    .getBytes());
             result.setSampleLabel(context.toString());
             result.setSamplerData(context.toString());
             JMeterContextService.getContext().setPreviousResult(result);
             AnchorModifier modifier = new AnchorModifier();
             modifier.process();
             assertEquals(
-                "http://nagoya.apache.org/bugzilla/buglist.cgi?bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&email1=&emailtype1=substring&emailassigned_to1=1&email2=&emailtype2=substring&emailreporter2=1&bugidtype=include&bug_id=&changedin=&votes=&chfieldfrom=&chfieldto=Now&chfieldvalue=&product=JMeter&short_desc=&short_desc_type=substring&long_desc=&long_desc_type=substring&bug_file_loc=&bug_file_loc_type=substring&keywords=&keywords_type=anywords&field0-0-0=noop&type0-0-0=noop&value0-0-0=&cmdtype=doit&order=Reuse+same+sort+as+last+time",
+                "http://nagoya.apache.org/bugzilla/buglist.cgi?"
+                    + "bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED"
+                    + "&email1=&emailtype1=substring&emailassigned_to1=1"
+                    + "&email2=&emailtype2=substring&emailreporter2=1"
+                    + "&bugidtype=include&bug_id=&changedin=&votes="
+                    + "&chfieldfrom=&chfieldto=Now&chfieldvalue="
+                    + "&product=JMeter&short_desc=&short_desc_type=substring"
+                    + "&long_desc=&long_desc_type=substring&bug_file_loc="
+                    + "&bug_file_loc_type=substring&keywords="
+                    + "&keywords_type=anywords"
+                    + "&field0-0-0=noop&type0-0-0=noop&value0-0-0="
+                    + "&cmdtype=doit&order=Reuse+same+sort+as+last+time",
                 config.toString());
             config.recoverRunningVersion();
-            assertEquals("http://nagoya.apache.org/bugzilla/buglist.cgi?bug_status=.*&bug_status=.*&bug_status=.*&email1=&emailtype1=substring&emailassigned_to1=1&email2=&emailtype2=substring&emailreporter2=1&bugidtype=include&bug_id=&changedin=&votes=&chfieldfrom=&chfieldto=Now&chfieldvalue=&product=JMeter&short_desc=&short_desc_type=substring&long_desc=&long_desc_type=substring&bug_file_loc=&bug_file_loc_type=substring&keywords=&keywords_type=anywords&field0-0-0=noop&type0-0-0=noop&value0-0-0=&cmdtype=doit&order=Reuse+same+sort+as+last+time",
-            config.toString());
+            assertEquals(
+                "http://nagoya.apache.org/bugzilla/buglist.cgi?"
+                    + "bug_status=.*&bug_status=.*&bug_status=.*&email1="
+                    + "&emailtype1=substring&emailassigned_to1=1&email2="
+                    + "&emailtype2=substring&emailreporter2=1"
+                    + "&bugidtype=include&bug_id=&changedin=&votes="
+                    + "&chfieldfrom=&chfieldto=Now&chfieldvalue="
+                    + "&product=JMeter&short_desc=&short_desc_type=substring"
+                    + "&long_desc=&long_desc_type=substring&bug_file_loc="
+                    + "&bug_file_loc_type=substring&keywords="
+                    + "&keywords_type=anywords&field0-0-0=noop"
+                    + "&type0-0-0=noop&value0-0-0=&cmdtype=doit"
+                    + "&order=Reuse+same+sort+as+last+time",
+                config.toString());
         }
-
     }
 }

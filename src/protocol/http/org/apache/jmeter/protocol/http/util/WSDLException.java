@@ -52,48 +52,34 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-
 package org.apache.jmeter.protocol.http.util;
 
 /**
- * Title:		JMeter Access Log utilities<br>
- * Copyright:	Apache.org<br>
- * Company:		nobody<br>
- * License:<br>
- * <br>
- * Look at the apache license at the top.<br>
- * <br>
- * Description:<br>
- * <br>
- * Author:	Peter Lin<br>
- * Version: 	0.1<br>
- * Created on:	Jun 3, 2003<br>
- * Last Modified:	6:37:53 AM<br>
+ * Created on:  Jun 3, 2003<br>
+ * @author  Peter Lin
+ * @version $Revision$
  */
+public class WSDLException extends Exception
+{
 
-public class WSDLException extends Exception {
+    public WSDLException()
+    {
+        super();
+    }
 
-	/**
-	 * 
-	 */
-	public WSDLException() {
-		super();
-	}
+    /**
+     * @param message
+     */
+    public WSDLException(String message)
+    {
+        super(message);
+    }
 
-	/**
-	 * @param message
-	 */
-	public WSDLException(String message) {
-		super(message);
-	}
-
-	/**
-	 * @param message
-	 */
-	public WSDLException(Exception exception) {
-		super(exception.getMessage());
-	}
-
-	public static void main(String[] args) {
-	}
+    /**
+     * @param message
+     */
+    public WSDLException(Exception exception)
+    {
+        super(exception.getMessage());
+    }
 }

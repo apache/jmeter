@@ -65,22 +65,19 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
-/************************************************************
- *  Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:
- *  Apache
- * <P>The handler used to read in XML parameter data
- *@author     Mark Walsh
- *@created    $Date$
- *@version    1.0
- ***********************************************************/
-   
-public class UserParameterXMLContentHandler implements ContentHandler {
-
+/**
+ * The handler used to read in XML parameter data.
+ * 
+ * @author     Mark Walsh
+ * @version    $Revision$
+ */
+public class UserParameterXMLContentHandler implements ContentHandler
+{
     //-------------------------------------------
     // Constants and Data Members
     //-------------------------------------------
 
-    // Note UserParameterXML access this variable
+    // Note UserParameterXML accesses this variable
     // to obtain the Set data via method getParsedParameters()
     private List userThreads = new LinkedList();
 
@@ -88,114 +85,115 @@ public class UserParameterXMLContentHandler implements ContentHandler {
     private String paramvalue = "";
     private Map nameValuePair = new HashMap();
 
-    // buffers for collecting data from the 
-    // "characters" SAX event
+    /** Buffer for collecting data from the "characters" SAX event. */
     private CharArrayWriter contents = new CharArrayWriter();
-
-
-    //-------------------------------------------
-    // Constructors
-    //-------------------------------------------
 
     //-------------------------------------------
     // Methods
     //-------------------------------------------
 
-    /*----------------------------------------------------------------------------------------------
+    /*-------------------------------------------------------------------------
      * Methods implemented from org.xml.sax.ContentHandler
-     *--------------------------------------------------------------------------------------------*/
-    public void setDocumentLocator(Locator locator) {
+     *----------------------------------------------------------------------- */
+    public void setDocumentLocator(Locator locator)
+    {
     }
 
-    public void startDocument()
-	throws SAXException {
+    public void startDocument() throws SAXException
+    {
     }
 
-    public void endDocument()
-	throws SAXException {
+    public void endDocument() throws SAXException
+    {
     }
 
-    public void startPrefixMapping(String prefix,
-				   String uri)
-	throws SAXException {
+    public void startPrefixMapping(String prefix, String uri)
+        throws SAXException
+    {
     }
 
-    public void endPrefixMapping(String prefix)
-	throws SAXException {
+    public void endPrefixMapping(String prefix) throws SAXException
+    {
     }
 
-    public void startElement(String namespaceURL,
-			     String localName,
-			     String qName,
-			     Attributes atts)
-	throws SAXException {
+    public void startElement(
+        String namespaceURL,
+        String localName,
+        String qName,
+        Attributes atts)
+        throws SAXException
+    {
 
-	contents.reset();
+        contents.reset();
 
-	// haven't got to reset paramname & paramvalue
-	// but did it to keep the code looking correct
-	if (qName.equals("parameter")) {
-	    paramname="";
-	    paramvalue="";
-	}
+        // haven't got to reset paramname & paramvalue
+        // but did it to keep the code looking correct
+        if (qName.equals("parameter"))
+        {
+            paramname = "";
+            paramvalue = "";
+        }
 
-	// must create a new object,
-	// or else end up with a set full of the same Map object
-	  if (qName.equals("thread")) {
-	      nameValuePair = new HashMap();
-	  }
+        // must create a new object,
+        // or else end up with a set full of the same Map object
+        if (qName.equals("thread"))
+        {
+            nameValuePair = new HashMap();
+        }
 
     }
 
-    public void endElement(String namespaceURI,
-			   String localName,
-			   String qName)
-	throws SAXException {
-	if (qName.equals("paramname")) {
-	    paramname = contents.toString();
-	}
-	if (qName.equals("paramvalue")) {
-	    paramvalue = contents.toString();
-	}
-	if (qName.equals("parameter")) {
-	    nameValuePair.put(paramname,paramvalue);
-	}
-	if (qName.equals("thread")) {
-	    userThreads.add(nameValuePair);
-	}
+    public void endElement(String namespaceURI, String localName, String qName)
+        throws SAXException
+    {
+        if (qName.equals("paramname"))
+        {
+            paramname = contents.toString();
+        }
+        if (qName.equals("paramvalue"))
+        {
+            paramvalue = contents.toString();
+        }
+        if (qName.equals("parameter"))
+        {
+            nameValuePair.put(paramname, paramvalue);
+        }
+        if (qName.equals("thread"))
+        {
+            userThreads.add(nameValuePair);
+        }
     }
 
-    public void characters(char ch[],
-			   int start,
-			   int length)
-	throws SAXException {
-	contents.write(ch, start, length);
+    public void characters(char ch[], int start, int length)
+        throws SAXException
+    {
+        contents.write(ch, start, length);
     }
 
-    public void ignorableWhitespace(char ch[],
-				    int start,
-				    int length)
-	throws SAXException {
+    public void ignorableWhitespace(char ch[], int start, int length)
+        throws SAXException
+    {
     }
 
-    public void processingInstruction(String target,
-				      String date)
-	throws SAXException {
+    public void processingInstruction(String target, String date)
+        throws SAXException
+    {
     }
 
-    public void skippedEntity(String name)
-	throws SAXException {
+    public void skippedEntity(String name) throws SAXException
+    {
     }
 
-    /*----------------------------------------------------------------------------------------------
+    /*-------------------------------------------------------------------------
      * Methods (used by UserParameterXML to get XML parameters from XML file)
-     *--------------------------------------------------------------------------------------------*/
+     *----------------------------------------------------------------------- */
 
     /**
      * results of parsing all user parameter data defined in XML file.
      * @return all users name value pairs obtained from XML file
      */
-    public List getParsedParameters() {
-	return userThreads;
+    public List getParsedParameters()
+    {
+        return userThreads;
     }
-} // end class
+}

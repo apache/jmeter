@@ -24,23 +24,27 @@ import org.apache.oro.text.regex.Perl5Matcher;
 
 /**
  * @author mstover
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
-public class URLRewritingModifier extends AbstractTestElement implements Serializable, PreProcessor
+public class URLRewritingModifier
+    extends AbstractTestElement
+    implements Serializable, PreProcessor
 {
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+
     private Pattern case1, case2, case3, case4;
     transient Perl5Compiler compiler = new Perl5Compiler();
     private final static String ARGUMENT_NAME = "argument_name";
     private final static String PATH_EXTENSION = "path_extension";
-    private final static String PATH_EXTENSION_NO_EQUALS = "path_extension_no_equals";
+    private final static String PATH_EXTENSION_NO_EQUALS =
+        "path_extension_no_equals";
 
     public void process()
     {
         Sampler sampler = JMeterContextService.getContext().getCurrentSampler();
-        SampleResult responseText = JMeterContextService.getContext().getPreviousResult();
+        SampleResult responseText =
+            JMeterContextService.getContext().getPreviousResult();
         if(responseText == null)
         {
             return;
@@ -78,17 +82,20 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
         {
             if (isPathExtensionNoEquals())
             {
-                sampler.setPath(sampler.getPath() + ";" + getArgumentName() + value);
+                sampler.setPath(
+                    sampler.getPath() + ";" + getArgumentName() + value);
             }
             else
             {
-                sampler.setPath(sampler.getPath() + ";" + getArgumentName() + "=" + value);
+                sampler.setPath(
+                    sampler.getPath() + ";" + getArgumentName() + "=" + value);
             }
         }
         else
         {
             sampler.getArguments().removeArgument(getArgumentName());
-            sampler.getArguments().addArgument(new HTTPArgument(getArgumentName(), value, true));
+            sampler.getArguments().addArgument(
+                new HTTPArgument(getArgumentName(), value, true));
         }
     }
     public void setArgumentName(String argName)
@@ -97,17 +104,28 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
     }
     private void initRegex(String argName)
     {
-        case1 = JMeterUtils.getPatternCache().getPattern(argName + "=([^\"'>& \n\r;]*)[& \\n\\r\"'>;]?$?", Perl5Compiler.MULTILINE_MASK);
+        case1 =
+            JMeterUtils.getPatternCache().getPattern(
+                argName + "=([^\"'>& \n\r;]*)[& \\n\\r\"'>;]?$?",
+                Perl5Compiler.MULTILINE_MASK);
         case2 =
             JMeterUtils.getPatternCache().getPattern(
-                "[Nn][Aa][Mm][Ee]=\"" + argName + "\"[^>]+[vV][Aa][Ll][Uu][Ee]=\"([^\"]*)\"",
+                "[Nn][Aa][Mm][Ee]=\""
+                    + argName
+                    + "\"[^>]+[vV][Aa][Ll][Uu][Ee]=\"([^\"]*)\"",
                 Perl5Compiler.MULTILINE_MASK);
         case3 =
             JMeterUtils.getPatternCache().getPattern(
-                "[vV][Aa][Ll][Uu][Ee]=\"([^\"]*)\"[^>]+[Nn][Aa][Mm][Ee]=\"" + argName + "\"",
+                "[vV][Aa][Ll][Uu][Ee]=\"([^\"]*)\"[^>]+[Nn][Aa][Mm][Ee]=\""
+                    + argName
+                    + "\"",
                 Perl5Compiler.MULTILINE_MASK);
-        // case1 could be re-written "=?([^..."  instead of creating a new pattern?
-        case4 = JMeterUtils.getPatternCache().getPattern(argName + "([^\"'>& \n\r]*)[& \\n\\r\"'>]?$?", Perl5Compiler.MULTILINE_MASK);
+        // case1 could be re-written "=?([^..."  instead of creating a new
+        // pattern?
+        case4 =
+            JMeterUtils.getPatternCache().getPattern(
+                argName + "([^\"'>& \n\r]*)[& \\n\\r\"'>]?$?",
+                Perl5Compiler.MULTILINE_MASK);
     }
     public String getArgumentName()
     {
@@ -119,7 +137,8 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
     }
     public void setPathExtensionNoEquals(boolean pathExtNoEquals)
     {
-        setProperty(new BooleanProperty(PATH_EXTENSION_NO_EQUALS, pathExtNoEquals));
+        setProperty(
+            new BooleanProperty(PATH_EXTENSION_NO_EQUALS, pathExtNoEquals));
     }
     public boolean isPathExtension()
     {
@@ -143,7 +162,9 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
         }
         public void testGrabSessionId() throws Exception
         {
-            String html = "location: http://server.com/index.html?session_id=jfdkjdkf%20jddkfdfjkdjfdf%22;";
+            String html =
+                "location: http://server.com/index.html"
+                    + "?session_id=jfdkjdkf%20jddkfdfjkdjfdf%22;";
             response = new SampleResult();
             response.setResponseData(html.getBytes());
             URLRewritingModifier mod = new URLRewritingModifier();
@@ -154,12 +175,20 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
             context.setPreviousResult(response);
             mod.process();
             Arguments args = sampler.getArguments();
-            assertEquals("jfdkjdkf jddkfdfjkdjfdf\"", ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
-            assertEquals("http://server.com/index.html?session_id=jfdkjdkf+jddkfdfjkdjfdf%22", sampler.toString());
+            assertEquals(
+                "jfdkjdkf jddkfdfjkdjfdf\"",
+                ((Argument) args.getArguments().get(0).getObjectValue())
+                    .getValue());
+            assertEquals(
+                "http://server.com/index.html?"
+                    + "session_id=jfdkjdkf+jddkfdfjkdjfdf%22",
+                sampler.toString());
         }
         public void testGrabSessionId2() throws Exception
         {
-            String html = "<a href=\"http://server.com/index.html?session_id=jfdkjdkfjddkfdfjkdjfdf\">";
+            String html =
+                "<a href=\"http://server.com/index.html?"
+                    + "session_id=jfdkjdkfjddkfdfjkdjfdf\">";
             response = new SampleResult();
             response.setResponseData(html.getBytes());
             URLRewritingModifier mod = new URLRewritingModifier();
@@ -169,7 +198,10 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
             context.setPreviousResult(response);
             mod.process();
             Arguments args = sampler.getArguments();
-            assertEquals("jfdkjdkfjddkfdfjkdjfdf", ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
+            assertEquals(
+                "jfdkjdkfjddkfdfjkdjfdf",
+                ((Argument) args.getArguments().get(0).getObjectValue())
+                    .getValue());
         }
         private HTTPSampler createSampler()
         {
@@ -193,12 +225,16 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
             context.setPreviousResult(response);
             mod.process();
             Arguments args = sampler.getArguments();
-            assertEquals("jfdkjdkfjddkfdfjkdjfdf", ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
+            assertEquals(
+                "jfdkjdkfjddkfdfjkdjfdf",
+                ((Argument) args.getArguments().get(0).getObjectValue())
+                    .getValue());
         }
 
         public void testGrabSessionId4() throws Exception
         {
-            String html = "href='index.html;%24sid%24KQNq3AAADQZoEQAxlkX8uQV5bjqVBPbT'";
+            String html =
+                "href='index.html;%24sid%24KQNq3AAADQZoEQAxlkX8uQV5bjqVBPbT'";
             response = new SampleResult();
             response.setResponseData(html.getBytes());
             URLRewritingModifier mod = new URLRewritingModifier();
@@ -210,8 +246,9 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
             context.setPreviousResult(response);
             mod.process();
             Arguments args = sampler.getArguments();
-            assertEquals("index.html;%24sid%24KQNq3AAADQZoEQAxlkX8uQV5bjqVBPbT", sampler.getPath());
+            assertEquals(
+                "index.html;%24sid%24KQNq3AAADQZoEQAxlkX8uQV5bjqVBPbT",
+                sampler.getPath());
         }
-
     }
 }

@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.modifier.gui;
+
 import java.awt.BorderLayout;
 
 import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
@@ -60,36 +61,28 @@ import org.apache.jmeter.protocol.http.modifier.AnchorModifier;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Kevin Hammond
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
+/**
+ * @author    Kevin Hammond
+ * @version   $Revision$
+ */
 public class AnchorModifierGui extends AbstractPreProcessorGui
 {
+    public AnchorModifierGui()
+    {
+        init();
+    }
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public AnchorModifierGui()
-	{
-		init();
-	}
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("anchor_modifier_title");
+    }
 
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("anchor_modifier_title");
-	}
-
-	public TestElement createTestElement()
-	{
-		AnchorModifier modifier = new AnchorModifier();
-		modifyTestElement(modifier);
-		return modifier;
-	}
+    public TestElement createTestElement()
+    {
+        AnchorModifier modifier = new AnchorModifier();
+        modifyTestElement(modifier);
+        return modifier;
+    }
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
@@ -100,11 +93,11 @@ public class AnchorModifierGui extends AbstractPreProcessorGui
         configureTestElement(modifier);
     }
 
-	private void init()
-	{
+    private void init()
+    {
         setLayout(new BorderLayout());
         setBorder(makeBorder());
-        
+
         add(makeTitlePanel(), BorderLayout.NORTH);
-	}
+    }
 }

@@ -17,17 +17,18 @@ import org.apache.jmeter.protocol.http.modifier.ParamModifier;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
+/**
  * A swing panel to allow UI with the ParamModifier class.
  *
- *@author    David La France
- *@author     <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
- *@created   Jan 18, 2002
- *@version   $Revision$
- ***************************************/
-public class ParamModifierGui extends AbstractPreProcessorGui implements FocusListener
+ * @author    David La France
+ * @author     <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
+ * @created   Jan 18, 2002
+ * @version   $Revision$
+ */
+public class ParamModifierGui
+    extends AbstractPreProcessorGui
+    implements FocusListener
 {
-
     private final String NAME = "name";
     private final String PREFIX = "prefix";
     private final String LOWERBOUND = "lowerBound";
@@ -42,29 +43,16 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
     private JTextField _increment;
     private JTextField _suffix;
 
-    /****************************************
-     * !ToDo (Constructor description)
-     ***************************************/
     public ParamModifierGui()
     {
         init();
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public String getStaticLabel()
     {
         return JMeterUtils.getResString("html_parameter_mask");
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param el  !ToDo (Parameter description)
-     ***************************************/
     public void configure(TestElement el)
     {
         super.configure(el);
@@ -72,11 +60,6 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
         updateGui(model);
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public TestElement createTestElement()
     {
         ParamModifier modifier = new ParamModifier();
@@ -104,19 +87,9 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
         }
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param evt  !ToDo (Parameter description)
-     ***************************************/
     public void focusGained(FocusEvent evt)
     {}
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param evt  !ToDo (Parameter description)
-     ***************************************/
     public void focusLost(FocusEvent evt)
     {
         String name = ((Component) evt.getSource()).getName();
@@ -138,9 +111,6 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
         }
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     ***************************************/
     protected void init()
     {
         setLayout(new BorderLayout());
@@ -151,11 +121,6 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
         // this.updateUI();
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param model  !ToDo (Parameter description)
-     ***************************************/
     private void updateGui(ParamModifier model)
     {
         _fieldName.setText(model.getMask().getFieldName());
@@ -166,7 +131,8 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
         _suffix.setText(model.getMask().getSuffix());
     }
 
-    private JPanel createLabeledField(String labelResName, JTextField field) {
+    private JPanel createLabeledField(String labelResName, JTextField field)
+    {
         JLabel label = new JLabel(JMeterUtils.getResString(labelResName));
         label.setLabelFor(field);
         
@@ -178,8 +144,12 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
     
     private JPanel getParameterMaskPanel()
     {
-        HorizontalPanel panel = new HorizontalPanel(10, HorizontalPanel.TOP_ALIGNMENT);
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("HTML Parameter Mask")));
+        HorizontalPanel panel =
+            new HorizontalPanel(10, HorizontalPanel.TOP_ALIGNMENT);
+        panel.setBorder(
+            BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("HTML Parameter Mask")));
 
         _fieldName = new JTextField(10);
         _fieldName.setName(NAME);
@@ -213,15 +183,13 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
         return mainPanel;
     }
 
-    /****************************************
+    /**
      * Used to validate a text field that requires a <code>long</code> input.
-     * Returns the <code>long</code> if valid, else creates a pop-up error message
-     * and throws a NumberFormatException.
+     * Returns the <code>long</code> if valid, else creates a pop-up error
+     * message and throws a NumberFormatException.
      *
-     *@param evt                        !ToDo (Parameter description)
-     *@param defaultValue               !ToDo (Parameter description)
-     *@return                           The number entered in the text field
-     ***************************************/
+     * @return  the number entered in the text field
+     */
     private long checkTextField(FocusEvent evt, String defaultValue)
     {
         JTextField temp = (JTextField) evt.getSource();
@@ -234,11 +202,14 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
         }
         catch (NumberFormatException err)
         {
-            JOptionPane.showMessageDialog(this, "This field must have a long value!", "Value Required", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                this,
+                "This field must have a long value!",
+                "Value Required",
+                JOptionPane.ERROR_MESSAGE);
             temp.setText(defaultValue);
             temp.requestFocus();
         }
         return longVal;
     }
-
 }

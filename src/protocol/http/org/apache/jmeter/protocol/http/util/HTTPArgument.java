@@ -67,27 +67,16 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 
-/**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- */
 public class HTTPArgument extends Argument implements Serializable
 {
-
     private static final String ALWAYS_ENCODE = "HTTPArgument.always_encode";
     private static final String USE_EQUALS = "HTTPArgument.use_equals";
 
     private static EncoderCache cache = new EncoderCache(1000);
 
-    /****************************************
-     * Constructor for the Argument object
-     *
-     *@param name   Description of Parameter
-     *@param value  Description of Parameter
-     *@param metadata Description of Parameter
-     ***************************************/
+    /**
+     * Constructor for the Argument object.
+     */
     public HTTPArgument(String name, String value, String metadata)
     {
         this(name, value, false);
@@ -110,7 +99,8 @@ public class HTTPArgument extends Argument implements Serializable
     public boolean isUseEquals()
     {
         boolean eq = getPropertyAsBoolean(USE_EQUALS);
-        if(getMetaData().equals("=") || (getValue() != null && getValue().toString().length() > 0))
+        if (getMetaData().equals("=")
+            || (getValue() != null && getValue().toString().length() > 0))
         {
             setUseEquals(true);
             return true;
@@ -129,12 +119,9 @@ public class HTTPArgument extends Argument implements Serializable
         return getPropertyAsBoolean(ALWAYS_ENCODE);
     }
 
-    /****************************************
-     * Constructor for the Argument object
-     *
-     *@param name   Description of Parameter
-     *@param value  Description of Parameter
-     ***************************************/
+    /**
+     * Constructor for the Argument object.
+     */
     public HTTPArgument(String name, String value)
     {
         this(name, value, false);
@@ -153,7 +140,11 @@ public class HTTPArgument extends Argument implements Serializable
         setMetaData("=");
     }
 
-    public HTTPArgument(String name, String value, String metaData, boolean alreadyEncoded)
+    public HTTPArgument(
+        String name,
+        String value,
+        String metaData,
+        boolean alreadyEncoded)
     {
         this(name, value, alreadyEncoded);
         setMetaData(metaData);
@@ -164,17 +155,17 @@ public class HTTPArgument extends Argument implements Serializable
         this(arg.getName(), arg.getValue(), arg.getMetaData());
     }
 
-    /****************************************
+    /**
      * Constructor for the Argument object
-     ***************************************/
+     */
     public HTTPArgument()
     {}
 
-    /****************************************
-     * Sets the Name attribute of the Argument object
+    /**
+     * Sets the Name attribute of the Argument object.
      *
-     *@param newName  The new Name value
-     ***************************************/
+     * @param newName  the new Name value
+     */
     public void setName(String newName)
     {
         if (newName == null || !newName.equals(getName()))
@@ -252,7 +243,8 @@ public class HTTPArgument extends Argument implements Serializable
             args.addArgument("name$of property", "value_.+");
             HTTPArgument.convertArgumentsToHTTP(args);
             CollectionProperty argList = args.getArguments();
-            HTTPArgument httpArg = (HTTPArgument) argList.get(0).getObjectValue();
+            HTTPArgument httpArg =
+                (HTTPArgument) argList.get(0).getObjectValue();
             assertEquals("name.%3F", httpArg.getEncodedName());
             assertEquals("value_+here", httpArg.getEncodedValue());
             httpArg = (HTTPArgument) argList.get(1).getObjectValue();
@@ -260,5 +252,4 @@ public class HTTPArgument extends Argument implements Serializable
             assertEquals("value_.%2B", httpArg.getEncodedValue());
         }
     }
-
 }
