@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,20 +57,19 @@ package org.apache.jorphan.test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.Properties;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import junit.textui.TestRunner;
 
-import org.apache.log.Hierarchy;
-import org.apache.log.Logger;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /************************************************************
  *  Provides a quick and easy way to run all <a href="http://junit.sourceforge.net">junit</a> unit tests in your java project.  It will 
@@ -147,18 +146,15 @@ public class AllTests
 		initializeLogging(args);
 		initializeManager(args);
 		// end : added - 11 July 2001
-		try
-		{
-			TestSuite suite = suite(args[0]);
-			PrintStream out = new PrintStream(new FileOutputStream("testresults.txt"));
-			junit.textui.TestRunner runner = new junit.textui.TestRunner(out);
-			runner.run(suite);
-			out.close();
-		}
-		catch (FileNotFoundException e)
-		{
-			log.error("",e);
-		}
+
+		TestSuite suite = suite(args[0]);
+        // Jeremy Arnold: This method used to attempt to write results to
+        // a file, but it had a bug and instead just wrote to System.out.
+        // Since nobody has complained about this behavior, I'm changing
+        // the code to not attempt to write to a file, so it will continue
+        // behaving as it did before.  It would be simple to make it write
+        // to a file instead if that is the desired behavior.
+		TestRunner.run(suite);
 		System.exit(0);
 	}
 
