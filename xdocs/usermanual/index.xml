@@ -37,7 +37,6 @@
   <li><a href="#build-db-test-plan">+</a>...<a href="build-db-test-plan.html">7. Building a Database Test Plan</a></li>
   <li><a href="#build-ftp-test-plan">+</a>...<a href="build-ftp-test-plan.html">8. Building an FTP Test Plan</a></li>
   <li><a href="#build-ldap-test-plan">+</a>...<a href="build-ldap-test-plan.html">9. Building an LDAP Test Plan</a></li>
-  <li><a href="#build-ldapext-test-plan">+</a>...<a href="build-ldapext-test-plan.html">9b. Building an Extended LDAP Test Plan</a></li>
   <li><a href="#build-ws-test-plan">+</a>...<a href="build-ws-test-plan.html">10. Building a Webservice Test Plan</a></li>
   <li><a href="#build-monitor-test-plan">+</a>...<a href="build-monitor-test-plan.html">11. Building a Monitor Test Plan</a></li>
   <li><a href="#remote-test">+</a>...<a href="remote-test.html">12. Remote Testing</a></li>

@@ -468,7 +468,6 @@ return "Data from sample with Label "+Label;
 
 
 <component name="BSF Sampler" index="15.1.10" screenshot="">
-<center><h2>(ALPHA Code)</h2></center>
 	<description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
 		
 		<br></br>
@@ -836,14 +835,16 @@ which clearly won't match. Thus the For 2 Sampler will not be run.
 <component name="While Controller" index="15.2.13" screenshot="">
 	<description>
 <note>ALPHA CODE</note>
-		<p>The While Controller runs its children until the condition is false, i.e. not "true"
-If the condition is equal to "false" intially, the Controller does not run at all.
-		</p>
+<p>
+The While Controller runs its children until the condition is "false".
+</p>
 
 <p>Possible condition values:</p>
 <ul>
-<li>LAST (or blank) - true whilst last sample is successful</li>
-<li>Otherwise - the condition is evaluated as a string, which is compared with "true"</li>
+<li>blank - exit loop when last sample in loop fails</li>
+<li>LAST - exit loop when last sample in loop fails. 
+If the last sample just before the loop failed, don't enter loop.</li>
+<li>Otherwise - exit (or don't enter) the loop when the condition is "false"</li>
 </ul>
 	</description>
 <properties>
@@ -1152,7 +1153,8 @@ cookie table entries.</property>
 </component>
 
 <component index="15.4.3" name="HTTP Proxy Server" screenshot="proxy_control.png">
-
+<note>The Proxy Server can only record HTTP traffic. 
+There is currently no support for recording HTTPS (SSL) sessions.</note>
 <description><p>The Proxy Server allows JMeter to watch and record your actions while you browse your web application
 with your normal browser (such as Internet Explorer).  JMeter will create test sample objects and store them
 directly into your test plan as you go (so you can view samples interactively while you make them).</p>
