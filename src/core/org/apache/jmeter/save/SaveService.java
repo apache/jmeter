@@ -93,93 +93,90 @@ import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 import org.xml.sax.SAXException;
 
-/************************************************************
- *  This class provides a means for saving test results.  Test
- *  results are typically saved in an XML file, but other
- *  storage mechanisms may also be used, for instance, CSV
- *  files or databases.
+/**
+ * This class provides a means for saving test results.  Test results are
+ * typically saved in an XML file, but other storage mechanisms may also be
+ * used, for instance, CSV files or databases.
  *
- *@author     Mike Stover
- *@author     <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell</a>
- *@created    $Date$
- *@version    $Revision$ $Date$
- ***********************************************************/
-
+ * @author     Mike Stover
+ * @author     <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell</a>
+ * @version    $Revision$ $Date$
+ */
 public class SaveService implements SaveServiceConstants
 {
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.util");
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.util");
 
     protected static final int SAVE_NO_ASSERTIONS = 0;
     protected static final int SAVE_FIRST_ASSERTION = SAVE_NO_ASSERTIONS + 1;
     protected static final int SAVE_ALL_ASSERTIONS = SAVE_FIRST_ASSERTION + 1;
-    ;
 
-    /** A formatter for the time stamp.  **/
+    /** A formatter for the time stamp. */
     protected static SimpleDateFormat formatter = null;
 
-    /** A flag to indicate which output format to use for results.  **/
+    /** A flag to indicate which output format to use for results. */
     protected static int outputFormat = SAVE_AS_XML;
 
     /** A flag to indicate whether to print the field names for delimited
-        result files.  **/
+        result files. */
     protected static boolean printFieldNames = false;
 
     /** A flag to indicate whether the data type should
-     be saved to the test results.  **/
+        be saved to the test results. */
     protected static boolean saveDataType = true;
 
     /** A flag to indicate whether the assertion result's failure message
-     should be saved to the test results.  **/
+        should be saved to the test results. */
     protected static boolean saveAssertionResultsFailureMessage = false;
 
-    /** A flag to indicate whether the label should
-     be saved to the test results.  **/
+    /** A flag to indicate whether the label should be saved to the test
+        results. */
     protected static boolean saveLabel = true;
 
-    /** A flag to indicate whether the response code should
-     be saved to the test results.  **/
+    /** A flag to indicate whether the response code should be saved to the
+        test results. */
     protected static boolean saveResponseCode = false;
 
-    /** A flag to indicate whether the response data should
-     be saved to the test results.  **/
+    /** A flag to indicate whether the response data should be saved to the
+        test results. */
     protected static boolean saveResponseData = false;
 
-    /** A flag to indicate whether the response message should
-     be saved to the test results.  **/
+    /** A flag to indicate whether the response message should be saved to the
+        test results. */
     protected static boolean saveResponseMessage = false;
 
-    /** A flag to indicate whether the success indicator should
-     be saved to the test results.  **/
+    /** A flag to indicate whether the success indicator should be saved to the
+        test results. */
     protected static boolean saveSuccessful = true;
 
-    /** A flag to indicate whether the thread name should
-     be saved to the test results.  **/
+    /** A flag to indicate whether the thread name should be saved to the test
+        results. */
     protected static boolean saveThreadName = true;
 
-    /** A flag to indicate whether the time should
-     be saved to the test results.  **/
+    /** A flag to indicate whether the time should be saved to the test
+        results. */
     protected static boolean saveTime = true;
 
-    /** A flag to indicate the format of the time stamp within
-     the test results.  **/
+    /** A flag to indicate the format of the time stamp within the test
+        results. */
     protected static String timeStampFormat = MILLISECONDS;
 
-    /** A flag to indicate whether the time stamp should be printed
-     in milliseconds.  **/
+    /** A flag to indicate whether the time stamp should be printed in
+        milliseconds. */
     protected static boolean printMilliseconds = true;
 
-    /** A flag to indicate which assertion results should
-     be saved to the test results.  Legitimate values include
-     none, first, all.  **/
+    /** A flag to indicate which assertion results should be saved to the test
+        results.  Legitimate values include none, first, all. */
     protected static String whichAssertionResults = FIRST;
 
     protected static int assertionsResultsToSave = SAVE_NO_ASSERTIONS;
 
     /** The string used to separate fields when stored to disk, for example,
-        the comma for CSV files.  **/
+        the comma for CSV files. */
     protected static String defaultDelimiter = ",";
 
-    private static DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
+    private static DefaultConfigurationBuilder builder =
+        new DefaultConfigurationBuilder();
 
     // Initialize various variables based on properties.
     static {
@@ -187,12 +184,12 @@ public class SaveService implements SaveServiceConstants
     } // static initialization
 
     public SaveService()
-    {}
+    {
+    }
 
     /**
-        Read in the properties having to do with saving from a properties file.
-    **/
-
+     * Read in the properties having to do with saving from a properties file.
+     */
     protected static void readProperties()
     {
         Properties systemProps = System.getProperties();
@@ -204,29 +201,63 @@ public class SaveService implements SaveServiceConstants
         }
         catch (Exception e)
         {
-            log.error("SaveService.readProperties: Problem loading properties file: ", e);
+            log.error(
+                "SaveService.readProperties: Problem loading properties file: ",
+                e);
         }
 
-        printFieldNames = TRUE.equalsIgnoreCase(props.getProperty(PRINT_FIELD_NAMES_PROP, FALSE));
-        saveDataType = TRUE.equalsIgnoreCase(props.getProperty(SAVE_DATA_TYPE_PROP, TRUE));
-        saveLabel = TRUE.equalsIgnoreCase(props.getProperty(SAVE_LABEL_PROP, TRUE));
-        saveResponseCode = TRUE.equalsIgnoreCase(props.getProperty(SAVE_RESPONSE_CODE_PROP, TRUE));
-        saveResponseData = TRUE.equalsIgnoreCase(props.getProperty(SAVE_RESPONSE_DATA_PROP, FALSE));
-        saveResponseMessage = TRUE.equalsIgnoreCase(props.getProperty(SAVE_RESPONSE_MESSAGE_PROP, TRUE));
-        saveSuccessful = TRUE.equalsIgnoreCase(props.getProperty(SAVE_SUCCESSFUL_PROP, TRUE));
-        saveThreadName = TRUE.equalsIgnoreCase(props.getProperty(SAVE_THREAD_NAME_PROP, TRUE));
-        saveTime = TRUE.equalsIgnoreCase(props.getProperty(SAVE_TIME_PROP, TRUE));
-        timeStampFormat = props.getProperty(TIME_STAMP_FORMAT_PROP, MILLISECONDS);
+        printFieldNames =
+            TRUE.equalsIgnoreCase(
+                props.getProperty(PRINT_FIELD_NAMES_PROP, FALSE));
+
+        saveDataType =
+            TRUE.equalsIgnoreCase(props.getProperty(SAVE_DATA_TYPE_PROP, TRUE));
+
+        saveLabel =
+            TRUE.equalsIgnoreCase(props.getProperty(SAVE_LABEL_PROP, TRUE));
+
+        saveResponseCode =
+            TRUE.equalsIgnoreCase(
+                props.getProperty(SAVE_RESPONSE_CODE_PROP, TRUE));
+
+        saveResponseData =
+            TRUE.equalsIgnoreCase(
+                props.getProperty(SAVE_RESPONSE_DATA_PROP, FALSE));
+
+        saveResponseMessage =
+            TRUE.equalsIgnoreCase(
+                props.getProperty(SAVE_RESPONSE_MESSAGE_PROP, TRUE));
+
+        saveSuccessful =
+            TRUE.equalsIgnoreCase(
+                props.getProperty(SAVE_SUCCESSFUL_PROP, TRUE));
+
+        saveThreadName =
+            TRUE.equalsIgnoreCase(
+                props.getProperty(SAVE_THREAD_NAME_PROP, TRUE));
+
+        saveTime =
+            TRUE.equalsIgnoreCase(props.getProperty(SAVE_TIME_PROP, TRUE));
+
+        timeStampFormat =
+            props.getProperty(TIME_STAMP_FORMAT_PROP, MILLISECONDS);
+
         printMilliseconds = MILLISECONDS.equalsIgnoreCase(timeStampFormat);
 
         // Prepare for a pretty date
-        if (!printMilliseconds && !NONE.equalsIgnoreCase(timeStampFormat) && (timeStampFormat != null))
+        if (!printMilliseconds
+            && !NONE.equalsIgnoreCase(timeStampFormat)
+            && (timeStampFormat != null))
         {
             formatter = new SimpleDateFormat(timeStampFormat);
         }
 
         whichAssertionResults = props.getProperty(ASSERTION_RESULTS_PROP, NONE);
-        saveAssertionResultsFailureMessage = TRUE.equalsIgnoreCase(props.getProperty(ASSERTION_RESULTS_FAILURE_MESSAGE_PROP, FALSE));
+        saveAssertionResultsFailureMessage =
+            TRUE.equalsIgnoreCase(
+                props.getProperty(
+                    ASSERTION_RESULTS_FAILURE_MESSAGE_PROP,
+                    FALSE));
 
         if (NONE.equals(whichAssertionResults))
         {
@@ -256,31 +287,29 @@ public class SaveService implements SaveServiceConstants
     }
 
     /**
-        Return the format for the saved results, e.g., csv or xml.
-        @return  the format for the saved results
-    **/
-
+     * Return the format for the saved results, e.g., csv or xml.
+     * 
+     * @return  the format for the saved results
+     */
     public static int getOutputFormat()
     {
         return outputFormat;
     }
 
     /**
-        Return whether the field names should be printed to a delimited
-        results file
-        @return  whether the field names should be printed
-    **/
-
+     * Return whether the field names should be printed to a delimited results
+     * file.
+     * @return  whether the field names should be printed
+     */
     public static boolean getPrintFieldNames()
     {
         return printFieldNames;
     }
 
     /**
-        Return whether the field names should be printed to the output file
-        @return whether the field names should be printed to the output file
-    **/
-
+     * Return whether the field names should be printed to the output file.
+     * @return whether the field names should be printed to the output file
+     */
     public static String printableFieldNamesToString()
     {
         StringBuffer text = new StringBuffer();
@@ -355,10 +384,13 @@ public class SaveService implements SaveServiceConstants
         return resultString;
     }
 
-    public static void saveSubTree(HashTree subTree, OutputStream writer) throws IOException
+    public static void saveSubTree(HashTree subTree, OutputStream writer)
+        throws IOException
     {
-        Configuration config = (Configuration) getConfigsFromTree(subTree).get(0);
-        DefaultConfigurationSerializer saver = new DefaultConfigurationSerializer();
+        Configuration config =
+            (Configuration) getConfigsFromTree(subTree).get(0);
+        DefaultConfigurationSerializer saver =
+            new DefaultConfigurationSerializer();
 
         saver.setIndent(true);
         try
@@ -394,7 +426,8 @@ public class SaveService implements SaveServiceConstants
         {
             result.addSubResult(getSampleResult(subResults[i]));
         }
-        Configuration[] assResults = config.getChildren(ASSERTION_RESULT_TAG_NAME);
+        Configuration[] assResults =
+            config.getChildren(ASSERTION_RESULT_TAG_NAME);
 
         for (int i = 0; i < assResults.length; i++)
         {
@@ -417,7 +450,8 @@ public class SaveService implements SaveServiceConstants
         while (iter.hasNext())
         {
             TestElement item = (TestElement) iter.next();
-            DefaultConfiguration config = new DefaultConfiguration("node", "node");
+            DefaultConfiguration config =
+                new DefaultConfiguration("node", "node");
 
             config.addChild(getConfigForTestElement(null, item));
             List configList = getConfigsFromTree(subTree.getTree(item));
@@ -434,7 +468,8 @@ public class SaveService implements SaveServiceConstants
 
     public static Configuration getConfiguration(byte[] bin)
     {
-        DefaultConfiguration config = new DefaultConfiguration(BINARY, "JMeter Save Service");
+        DefaultConfiguration config =
+            new DefaultConfiguration(BINARY, "JMeter Save Service");
 
         try
         {
@@ -474,7 +509,10 @@ public class SaveService implements SaveServiceConstants
 
     public static Configuration getConfiguration(AssertionResult assResult)
     {
-        DefaultConfiguration config = new DefaultConfiguration(ASSERTION_RESULT_TAG_NAME, "JMeter Save Service");
+        DefaultConfiguration config =
+            new DefaultConfiguration(
+                ASSERTION_RESULT_TAG_NAME,
+                "JMeter Save Service");
 
         config.setAttribute(FAILURE_MESSAGE, assResult.getFailureMessage());
         config.setAttribute(ERROR, "" + assResult.isError());
@@ -483,17 +521,21 @@ public class SaveService implements SaveServiceConstants
     }
 
     /**
-     This method determines the content of the result data that
-     will be stored.
-     @param result the object containing all of the data that has
-     been collected.
-     @param funcTest an indicator of whether the user wants all
-     data recorded.
-     **/
-
-    public static Configuration getConfiguration(SampleResult result, boolean funcTest)
+     * This method determines the content of the result data that will be
+     * stored.
+     * @param result   the object containing all of the data that has been
+     *                 collected.
+     * @param funcTest an indicator of whether the user wants all data
+     *                 recorded.
+     */
+    public static Configuration getConfiguration(
+        SampleResult result,
+        boolean funcTest)
     {
-        DefaultConfiguration config = new DefaultConfiguration(SAMPLE_RESULT_TAG_NAME, "JMeter Save Service");
+        DefaultConfiguration config =
+            new DefaultConfiguration(
+                SAMPLE_RESULT_TAG_NAME,
+                "JMeter Save Service");
 
         if (saveTime)
         {
@@ -533,7 +575,9 @@ public class SaveService implements SaveServiceConstants
 
         if (saveSuccessful)
         {
-            config.setAttribute(SUCCESSFUL, new Boolean(result.isSuccessful()).toString());
+            config.setAttribute(
+                SUCCESSFUL,
+                new Boolean(result.isSuccessful()).toString());
         }
 
         SampleResult[] subResults = result.getSubResults();
@@ -550,7 +594,8 @@ public class SaveService implements SaveServiceConstants
 
         if (funcTest)
         {
-            config.addChild(createConfigForString("samplerData", result.getSamplerData()));
+            config.addChild(
+                createConfigForString("samplerData", result.getSamplerData()));
             if (assResults != null)
             {
                 for (int i = 0; i < assResults.length; i++)
@@ -566,7 +611,10 @@ public class SaveService implements SaveServiceConstants
         {
             if (assertionsResultsToSave == SAVE_ALL_ASSERTIONS)
             {
-                config.addChild(createConfigForString("samplerData", result.getSamplerData()));
+                config.addChild(
+                    createConfigForString(
+                        "samplerData",
+                        result.getSamplerData()));
                 if (assResults != null)
                 {
                     for (int i = 0; i < assResults.length; i++)
@@ -575,7 +623,10 @@ public class SaveService implements SaveServiceConstants
                     }
                 }
             }
-            else if ((assertionsResultsToSave == SAVE_FIRST_ASSERTION) && assResults != null && assResults.length > 0)
+            else if (
+                (assertionsResultsToSave == SAVE_FIRST_ASSERTION)
+                    && assResults != null
+                    && assResults.length > 0)
             {
                 config.addChild(getConfiguration(assResults[0]));
             }
@@ -589,26 +640,28 @@ public class SaveService implements SaveServiceConstants
     }
 
     /**
-        Convert a result into a string, where the fields of the result are
-        separated by the default delimiter.
-        @param  sample the test result to be converted
-        @return  the separated value representation of the result
-    **/
-
+     * Convert a result into a string, where the fields of the result are
+     * separated by the default delimiter.
+     * 
+     * @param sample the test result to be converted
+     * @return       the separated value representation of the result
+     */
     public static String resultToDelimitedString(SampleResult sample)
     {
         return resultToDelimitedString(sample, defaultDelimiter);
     }
 
     /**
-        Convert a result into a string, where the fields of the result are
-        separated by a specified String.
-        @param  sample the test result to be converted
-        @param  delimiter the separation string
-        @return  the separated value representation of the result
-    **/
-
-    public static String resultToDelimitedString(SampleResult sample, String delimiter)
+     * Convert a result into a string, where the fields of the result are
+     * separated by a specified String.
+     * 
+     * @param sample    the test result to be converted
+     * @param delimiter the separation string
+     * @return          the separated value representation of the result
+     */
+    public static String resultToDelimitedString(
+        SampleResult sample,
+        String delimiter)
     {
         StringBuffer text = new StringBuffer();
 
@@ -702,12 +755,15 @@ public class SaveService implements SaveServiceConstants
         return resultString;
     }
 
-    public static Configuration getConfigForTestElement(String named, TestElement item)
+    public static Configuration getConfigForTestElement(
+        String named,
+        TestElement item)
     {
         TestElementSaver saver = new TestElementSaver(named);
         item.traverse(saver);
         Configuration config = saver.getConfiguration();
-        /* DefaultConfiguration config = new DefaultConfiguration("testelement", "testelement");
+        /* DefaultConfiguration config =
+           new DefaultConfiguration("testelement", "testelement");
         
          if (named != null)
          {
@@ -715,7 +771,8 @@ public class SaveService implements SaveServiceConstants
          }
          if (item.getProperty(TestElement.TEST_CLASS) != null)
          {
-             config.setAttribute("class", (String) item.getProperty(TestElement.TEST_CLASS));
+             config.setAttribute("class",
+                    (String) item.getProperty(TestElement.TEST_CLASS));
          }
          else
          {
@@ -730,11 +787,13 @@ public class SaveService implements SaveServiceConstants
         
              if (value instanceof TestElement)
              {
-                 config.addChild(getConfigForTestElement(name, (TestElement) value));
+                 config.addChild(getConfigForTestElement(name,
+                        (TestElement) value));
              }
              else if (value instanceof Collection)
              {
-                 config.addChild(createConfigForCollection(name, (Collection) value));
+                 config.addChild(createConfigForCollection(name,
+                        (Collection) value));
              }
              else if (value != null)
              {
@@ -744,9 +803,12 @@ public class SaveService implements SaveServiceConstants
         return config;
     }
 
-    private static Configuration createConfigForCollection(String propertyName, Collection list)
+    private static Configuration createConfigForCollection(
+        String propertyName,
+        Collection list)
     {
-        DefaultConfiguration config = new DefaultConfiguration("collection", "collection");
+        DefaultConfiguration config =
+            new DefaultConfiguration("collection", "collection");
 
         if (propertyName != null)
         {
@@ -761,11 +823,13 @@ public class SaveService implements SaveServiceConstants
 
             if (item instanceof TestElement)
             {
-                config.addChild(getConfigForTestElement(null, (TestElement) item));
+                config.addChild(
+                    getConfigForTestElement(null, (TestElement) item));
             }
             else if (item instanceof Collection)
             {
-                config.addChild(createConfigForCollection(null, (Collection) item));
+                config.addChild(
+                    createConfigForCollection(null, (Collection) item));
             }
             else
             {
@@ -777,20 +841,24 @@ public class SaveService implements SaveServiceConstants
 
     private static Configuration createConfigForString(String value)
     {
-        DefaultConfiguration config = new DefaultConfiguration("string", "string");
+        DefaultConfiguration config =
+            new DefaultConfiguration("string", "string");
 
         config.setValue(value);
         config.setAttribute(XML_SPACE, PRESERVE);
         return config;
     }
 
-    private static Configuration createConfigForString(String name, String value)
+    private static Configuration createConfigForString(
+        String name,
+        String value)
     {
         if (value == null)
         {
             value = "";
         }
-        DefaultConfiguration config = new DefaultConfiguration("property", "property");
+        DefaultConfiguration config =
+            new DefaultConfiguration("property", "property");
 
         config.setAttribute("name", name);
         config.setValue(value);
@@ -798,7 +866,8 @@ public class SaveService implements SaveServiceConstants
         return config;
     }
 
-    public synchronized static HashTree loadSubTree(InputStream in) throws IOException
+    public synchronized static HashTree loadSubTree(InputStream in)
+        throws IOException
     {
         try
         {
@@ -809,22 +878,33 @@ public class SaveService implements SaveServiceConstants
         }
         catch (ConfigurationException e)
         {
-            log.error("Problem loading using Avalon Configuration tools", e);
-            throw new IOException("Problem loading using Avalon Configuration tools");
+            String message = "Problem loading using Avalon Configuration tools";
+            log.error(message, e);
+            throw new IOException(message);
         }
         catch (SAXException e)
         {
-            log.error("Problem with SAX implementation", e);
-            throw new IOException("Problem with SAX implementation");
+            String message = "Problem with SAX implementation";
+            log.error(message, e);
+            throw new IOException(message);
         }
     }
 
     public static TestElement createTestElement(Configuration config)
-        throws ConfigurationException, ClassNotFoundException, IllegalAccessException, InstantiationException
+        throws
+            ConfigurationException,
+            ClassNotFoundException,
+            IllegalAccessException,
+            InstantiationException
     {
         TestElement element = null;
 
-        element = (TestElement) Class.forName(NameUpdater.getCurrentName((String) config.getAttribute("class"))).newInstance();
+        element =
+            (TestElement) Class
+                .forName(
+                    NameUpdater.getCurrentName(
+                        (String) config.getAttribute("class")))
+                .newInstance();
         Configuration[] children = config.getChildren();
 
         for (int i = 0; i < children.length; i++)
@@ -843,24 +923,40 @@ public class SaveService implements SaveServiceConstants
             }
             else if (children[i].getName().equals("testelement"))
             {
-                element.setProperty(new TestElementProperty(children[i].getAttribute("name"), createTestElement(children[i])));
+                element.setProperty(
+                    new TestElementProperty(
+                        children[i].getAttribute("name"),
+                        createTestElement(children[i])));
             }
             else if (children[i].getName().equals("collection"))
             {
-                element.setProperty(new CollectionProperty(children[i].getAttribute("name"), createCollection(children[i])));
+                element.setProperty(
+                    new CollectionProperty(
+                        children[i].getAttribute("name"),
+                        createCollection(children[i])));
             }
             else if (children[i].getName().equals("map"))
             {
-                element.setProperty(new MapProperty(children[i].getAttribute("name"), createMap(children[i])));
+                element.setProperty(
+                    new MapProperty(
+                        children[i].getAttribute("name"),
+                        createMap(children[i])));
             }
         }
         return element;
     }
 
     private static Collection createCollection(Configuration config)
-        throws ConfigurationException, ClassNotFoundException, IllegalAccessException, InstantiationException
+        throws
+            ConfigurationException,
+            ClassNotFoundException,
+            IllegalAccessException,
+            InstantiationException
     {
-        Collection coll = (Collection) Class.forName((String) config.getAttribute("class")).newInstance();
+        Collection coll =
+            (Collection) Class
+                .forName((String) config.getAttribute("class"))
+                .newInstance();
         Configuration[] items = config.getChildren();
 
         for (int i = 0; i < items.length; i++)
@@ -890,19 +986,34 @@ public class SaveService implements SaveServiceConstants
     }
 
     private static JMeterProperty createProperty(Configuration config)
-        throws ConfigurationException, IllegalAccessException, ClassNotFoundException, InstantiationException
+        throws
+            ConfigurationException,
+            IllegalAccessException,
+            ClassNotFoundException,
+            InstantiationException
     {
         String value = config.getValue("");
-        JMeterProperty prop =
-            (JMeterProperty) Class.forName(config.getAttribute("propType", "org.apache.jmeter.testelement.property.StringProperty")).newInstance();
+        JMeterProperty prop = (JMeterProperty) Class.forName(
+                config.getAttribute(
+                    "propType",
+                    "org.apache.jmeter.testelement.property.StringProperty"))
+                .newInstance();
         prop.setName(config.getAttribute("name", value));
         prop.setObjectValue(value);
         return prop;
     }
 
-    private static Map createMap(Configuration config) throws ConfigurationException, ClassNotFoundException, IllegalAccessException, InstantiationException
+    private static Map createMap(Configuration config)
+        throws
+            ConfigurationException,
+            ClassNotFoundException,
+            IllegalAccessException,
+            InstantiationException
     {
-        Map map = (Map) Class.forName((String) config.getAttribute("class")).newInstance();
+        Map map =
+            (Map) Class
+                .forName((String) config.getAttribute("class"))
+                .newInstance();
         Configuration[] items = config.getChildren();
 
         for (int i = 0; i < items.length; i++)
@@ -914,11 +1025,15 @@ public class SaveService implements SaveServiceConstants
             }
             else if (items[i].getName().equals("testelement"))
             {
-                map.put(items[i].getAttribute("name"), createTestElement(items[i]));
+                map.put(
+                    items[i].getAttribute("name"),
+                    createTestElement(items[i]));
             }
             else if (items[i].getName().equals("collection"))
             {
-                map.put(items[i].getAttribute("name"), createCollection(items[i]));
+                map.put(
+                    items[i].getAttribute("name"),
+                    createCollection(items[i]));
             }
             else if (items[i].getName().equals("map"))
             {
@@ -987,7 +1102,8 @@ public class SaveService implements SaveServiceConstants
 
             for (int i = 0; i < FILES.length; i++)
             {
-                InputStream in = new FileInputStream(new File("testfiles/" + FILES[i]));
+                InputStream in =
+                    new FileInputStream(new File("testfiles/" + FILES[i]));
                 int len = in.read(original);
 
                 in.close();
@@ -1009,7 +1125,11 @@ public class SaveService implements SaveServiceConstants
                 // enough to detect most problem cases...
                 if (len != out.size())
                 {
-                    fail("Loading file bin/testfiles/" + FILES[i] + " and " + "saving it back changes its contents.");
+                    fail(
+                        "Loading file bin/testfiles/"
+                            + FILES[i]
+                            + " and "
+                            + "saving it back changes its contents.");
                 }
 
                 // Note this test will fail if a property is added or
