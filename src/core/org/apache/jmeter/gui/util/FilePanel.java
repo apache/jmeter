@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,7 +52,8 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */package org.apache.jmeter.gui.util;
-import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
@@ -123,14 +124,18 @@ public class FilePanel extends JPanel implements ActionListener
 	 */
 	private void init()
 	{
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createTitledBorder(title));
-		add(label);
-		add(filename);
+		add(label, BorderLayout.WEST);
+		add(filename, BorderLayout.CENTER);
 		filename.addActionListener(this);
-		add(browse);
+		add(browse, BorderLayout.EAST);
 		browse.setActionCommand("browse");
 		browse.addActionListener(this);
+        
+        // Allow this component to expand horizontally but not vertically
+        setMaximumSize(
+            new Dimension(getMaximumSize().width, getPreferredSize().height));
 	}
 
 	/**

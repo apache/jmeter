@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,6 +58,7 @@ package org.apache.jmeter.visualizers;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -378,7 +379,6 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
     protected void initTextArea()
     {
         textArea = new JTextArea();
-        textArea.setColumns(70);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         textArea.setTabSize(4);
@@ -488,7 +488,9 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
         jTree.getSelectionModel().setSelectionMode(
                 TreeSelectionModel.SINGLE_TREE_SELECTION);
         jTree.addTreeSelectionListener(this);
+        jTree.setShowsRootHandles(true);
         treePane = new JScrollPane(jTree);
+        treePane.setPreferredSize(new Dimension(100, 100));
         gridBag = new GridBagLayout();
         gbc = new GridBagConstraints();
         resultPanel = new JPanel(gridBag);
@@ -498,7 +500,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
         initHtmlEditPane();
         treeSplitPane =
                 new JSplitPane(JSplitPane.VERTICAL_SPLIT, treePane, resultPane);
-        getFilePanel().add(getErrorLoggingCheckbox());
+        getFilePanel().add(getErrorLoggingCheckbox(), BorderLayout.SOUTH);
         add(getFilePanel(), BorderLayout.NORTH);
         add(treeSplitPane, BorderLayout.CENTER);
     }
