@@ -12,11 +12,12 @@
 <p>Generative Controllers tell JMeter to send requests to a server. JMeter
 currently has three such controllers: FTP Request, HTTP Request, and JDBC
 request.  Each controller has several properties you can set.  You can further 
-customize a controller by adding one or more Configuration Elements to it.</p>
+customize a controller by adding one or more Configuration Elements to it.
+Also, note that JMeter sends requests in the order that you add them to the tree.</p>
 
 <p>If you are going to send multiple requests of the same type (for example, 
 HTTP Request) to the same server, consider using a Defaults Configuration
-Element. Each controller has its own Defaults element (see below).</p>
+Element. Each controller has its own Defaults element (see below). </p>
 
 <p>Remember to add a Listener to your Thread Group to view and/or store the
 results of your requests to disk.</p>
