@@ -100,7 +100,7 @@
 				 destdir="${classes.dest.dir}"
 				 optimize="${optimize}"
 				 debug="on"
-				 target="1.2">
+				 target="1.3">
 		  <exclude name="**/*.df*"/>
 		  <exclude name="**/*.html"/>
 		  <exclude name="**/*.tpr"/>
@@ -184,6 +184,7 @@
 	<target name="install" depends="package">
 	  <copy file="ApacheJMeter.jar" toFile="bin/ApacheJMeter.jar"/>
 	  <delete file="ApacheJMeter.jar"/>
+	  <fixcrlf srcdir="." eol="lf" includes="**/jmeter,**/jmeter-server" />
 	</target>
 
 	<!--

@@ -28,7 +28,7 @@ controls for a thread group allow you to:
 <li>Set the number of times to execute the test</li>
 </ul></p>
 
-<p>Each thread will execute the test plan in its entirety and completely independent
+<p>Each thread will execute the test plan in its entirety and completely independently
 of other test threads.  Multiple threads are used to simulate concurrent connections
 to your server application.</p>
 
@@ -56,9 +56,9 @@ information, see
 
 <p>Logical Controllers let you customize the logic that JMeter uses to
 decide when to send requests.  For example, you can add an Interleave
-Logic Controller to alternate between two HTTP Request Generative
-Controllers.  Also, one particular Logic Controller, the Modification
-Manager, lets you modify the results of a request.  For more information,
+Logic Controller to alternate between two HTTP Request Samplers.  Also,
+one particular Logic Controller, the Modification Manager, lets you modify
+the results of a request.  For more information,
 see <a href="#logic_controller">Logical Controllers</a>.</p>
 
 </subsection>
@@ -66,14 +66,14 @@ see <a href="#logic_controller">Logical Controllers</a>.</p>
 <subsection name="4.2.1 Samplers" anchor="samplers">
 
 <p>Samplers tell JMeter to send requests to a server. JMeter
-currently has four such samplers: FTP Request, HTTP Request, JDBC, and the Java object
-request.  Each sampler has several properties you can set.  You can further
-customize a sampler by adding one or more Configuration Elements to it.
+currently has four such samplers: FTP Request, HTTP Request, JDBC Request, and
+the Java object request.  Each sampler has several properties you can set.
+You can further customize a sampler by adding one or more Configuration Elements to it.
 Also, note that JMeter sends requests in the order that you add them to the tree.</p>
 
 <p>If you are going to send multiple requests of the same type (for example,
 HTTP Request) to the same server, consider using a Defaults Configuration
-Element. Each controller has its own Defaults element (see below). </p>
+Element. Each controller has one or more Defaults elements (see below). </p>
 
 <p>Remember to add a Listener to your Thread Group to view and/or store the
 results of your requests to disk.</p>
