@@ -106,10 +106,12 @@ public class GraphVisualizer extends AbstractVisualizer
     private JCheckBox average;
     private JCheckBox deviation;
     private JCheckBox throughput;
+    private JCheckBox median;
     private JTextField dataField;
     private JTextField averageField;
     private JTextField deviationField;
     private JTextField throughputField;
+    private JTextField medianField;
     private boolean perSecond = false;
 
     /****************************************
@@ -148,6 +150,7 @@ public class GraphVisualizer extends AbstractVisualizer
         averageField.setText(Long.toString(model.getCurrentAverage()));
         deviationField.setText(Long.toString(model.getCurrentDeviation()));
         throughputField.setText(Float.toString(model.getCurrentThroughput()) + "/" + minute);
+        medianField.setText(Long.toString(model.getCurrentMedian()));
         updateYAxis();
     }
 
@@ -165,6 +168,7 @@ public class GraphVisualizer extends AbstractVisualizer
         averageField.setText(Long.toString(s.average));
         deviationField.setText(Long.toString(s.deviation));
         throughputField.setText(Float.toString(s.throughput) + "/" + minute);
+        medianField.setText(Long.toString(s.median));
         updateYAxis();
     }
 
@@ -211,6 +215,10 @@ public class GraphVisualizer extends AbstractVisualizer
         {
             this.graph.enableThroughput(e.getStateChange() == ItemEvent.SELECTED);
         }
+        else if(e.getItem() == median)
+        {
+            this.graph.enableMedian(e.getStateChange() == ItemEvent.SELECTED);
+        }
         this.graph.repaint();
     }
 
@@ -225,6 +233,7 @@ public class GraphVisualizer extends AbstractVisualizer
         averageField.setText("0000");
         deviationField.setText("0000");
         throughputField.setText("0/" + minute);
+        medianField.setText("0000");
         updateYAxis();
         repaint();
     }
@@ -377,10 +386,12 @@ public class GraphVisualizer extends AbstractVisualizer
         deviation = createChooseCheckBox("graph_results_deviation", Color.red);
         throughput = createChooseCheckBox("graph_results_throughput",
                         JMeterColor.dark_green);
+        median = createChooseCheckBox("graph_results_median", JMeterColor.purple);
 
         chooseGraphsPanel.add(selectGraphsLabel);
         chooseGraphsPanel.add(data);
         chooseGraphsPanel.add(average);
+        chooseGraphsPanel.add(median);
         chooseGraphsPanel.add(deviation);
         chooseGraphsPanel.add(throughput);
         return chooseGraphsPanel;
@@ -444,6 +455,7 @@ public class GraphVisualizer extends AbstractVisualizer
         averageField = createInfoField(Color.blue, 5);
         deviationField = createInfoField(Color.red, 5);
         throughputField = createInfoField(JMeterColor.dark_green, 15);
+        medianField = createInfoField(JMeterColor.purple,5);
 
         graphInfoPanel.add(createInfoColumn(
                     createInfoLabel("graph_results_no_samples", noSamplesField),
@@ -462,8 +474,8 @@ public class GraphVisualizer extends AbstractVisualizer
         graphInfoPanel.add(createInfoColumn(
                     createInfoLabel("graph_results_average", averageField),
                     averageField,
-                    null,
-                    null));
+        createInfoLabel("graph_results_median", medianField),
+        medianField));
         graphInfoPanel.add(Box.createHorizontalGlue());
 
         return graphInfoPanel;

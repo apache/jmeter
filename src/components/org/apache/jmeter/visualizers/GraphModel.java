@@ -54,7 +54,6 @@
  */
 package org.apache.jmeter.visualizers;
 
-
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Iterator;
@@ -63,7 +62,7 @@ import java.util.List;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
-
+import org.apache.jorphan.math.*;
 
 /**
  *  Title: Apache JMeter Description: Copyright: Copyright (c) 2000 Company:
@@ -74,23 +73,19 @@ import org.apache.jmeter.samplers.SampleResult;
  *@version    1.0
  */
 
-
 public class GraphModel implements Clearable, Serializable
 {
 
     private String name;
     private List samples;
     private List listeners;
-    private long sum = 0;
-    private long sumOfSquares = 0;
-    private long counter = 0;
     private long previous = 0;
-    private long max = 1;
     private boolean bigChange = false;
-    private Sample current = new Sample(0, 0, 0, 0, false);
+    private Sample current = new Sample(0, 0, 0, 0, 0,false);
     private long startTime = 0;
     private int throughputMax = 20;
     private long graphMax = 20;
+    private StatCalculator statCalc = new StatCalculator();
 
     /**
      *  Constructor for the GraphModel object
@@ -133,6 +128,11 @@ public class GraphModel implements Clearable, Serializable
     {
 
         return current.average;
+    }
+    
+    public long getCurrentMedian()
+    {
+        return current.median;
     }
 
     /**
@@ -204,7 +204,7 @@ public class GraphModel implements Clearable, Serializable
      */
     public long getMaxSample()
     {
-        return max;
+        return statCalc.getMax().longValue();
     }
 
     public long getGraphMax()
@@ -247,14 +247,11 @@ public class GraphModel implements Clearable, Serializable
     public void clear()
     {
         samples.clear();
-        sum = 0;
-        sumOfSquares = 0;
-        counter = 0;
         previous = 0;
-        max = 1;
         graphMax = 1;
         bigChange = true;
-        current = new Sample(0, 0, 0, 0, false);
+        current = new Sample(0, 0, 0, 0, 0,false);
+        statCalc.clear();
         this.fireDataChanged();
     }
 
@@ -302,32 +299,28 @@ public class GraphModel implements Clearable, Serializable
      */
     protected Sample addNewSample(long sample, long timeStamp, boolean success)
     {
+        int counter = 0;
+        float average;
+        long deviation, median;
+        synchronized (statCalc)
+        {
+            statCalc.addValue(sample);
+            counter = statCalc.getCount();
+            average = (float) statCalc.getMean();
+            deviation = (long) statCalc.getStandardDeviation();
+            median = statCalc.getMedian().longValue();
+        }
+
         if (samples.size() == 0)
         {
             startTime = timeStamp;
         }
-        if (sample > max)
-        {
-            max = sample;
-        }
-
-        counter++;
-
-        sum += sample;
-        float average = ((float)sum) / counter;
-
-        sumOfSquares += sample * sample;
-        // Standard deviation is the mean of the squares minus the square
-        // of the mean
-        long deviation = (long)Math.sqrt(
-	        (sumOfSquares / counter) - average * average);
 
         float throughput = 0;
 
         if (timeStamp - startTime > 0)
         {
-            throughput = (float) (((float) (samples.size() + 1))
-                    / ((float) (timeStamp - startTime)) * 60000);
+            throughput = (float) (((float) (samples.size() + 1)) / ((float) (timeStamp - startTime)) * 60000);
         }
         if (throughput > throughputMax)
         {
@@ -337,15 +330,14 @@ public class GraphModel implements Clearable, Serializable
         if (average > graphMax)
         {
             bigChange = true;
-            graphMax = (long)average * 3;
+            graphMax = (long) average * 3;
         }
         if (deviation > graphMax)
         {
             bigChange = true;
             graphMax = deviation * 3;
         }
-        Sample s = new Sample(sample, (long)average, deviation,
-                        throughput, !success);
+        Sample s = new Sample(sample, (long) average, deviation, throughput, median,!success);
 
         previous = sample;
         current = s;
@@ -353,4 +345,3 @@ public class GraphModel implements Clearable, Serializable
         return s;
     }
 }
-
