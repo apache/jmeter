@@ -144,21 +144,22 @@ public class Proxy extends Thread
                     new BufferedInputStream(clientSocket.getInputStream()));
 
             sampler = request.getSampler();
-            if (captureHttpHeaders)
-            {
-                headers = request.getHeaderManager();
-                sampler.setHeaderManager(headers);
-            }
+            
+            /*
+             * Create a Header Manager to ensure that the browsers headers
+             * are captured and sent to the server
+            */
+            headers = request.getHeaderManager();
+            sampler.setHeaderManager(headers);
 
             serverResponse = sampler.sample().getResponseData();
             writeToClient(
                 serverResponse,
                 new BufferedOutputStream(clientSocket.getOutputStream()));
-            if (captureHttpHeaders)
-            {
-            	headers.removeHeaderNamed("cookie");
-            }
-           
+            /*
+             * We don't want to store any cookies in the generated test plan
+             */
+          	headers.removeHeaderNamed("cookie");// Always remove cookies
         }
         catch (UnknownHostException uhe)
         {
@@ -173,9 +174,11 @@ public class Proxy extends Thread
         finally
         {
             target.deliverSampler(
-                                       sampler,
-                                       new TestElement[] { headers },
-                                       serverResponse);
+                                  sampler,
+                                  new TestElement[] { 
+                                  	captureHttpHeaders ? headers : null 
+                                  	},
+                                  serverResponse);
             try
             {
                 clientSocket.close();
@@ -203,7 +206,7 @@ public class Proxy extends Thread
         {
             out.write(inBytes);
             out.flush();
-            log.info("Done writing to client");
+            log.debug("Done writing to client");
         }
         catch (IOException e)
         {
