@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,63 +58,56 @@ import java.io.Serializable;
 
 import org.apache.jmeter.testelement.property.StringProperty;
 
-/************************************************************
- *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author     Michael Stover
- *@created    March 13, 2001
- *@version    1.0
- ***********************************************************/
-
+/**
+ * @author     Michael Stover
+ * @version    $Revision$
+ */
 public class LoginConfig extends ConfigTestElement implements Serializable
 {
+    /**
+     * Constructor for the LoginConfig object.
+     */
+    public LoginConfig()
+    {
+    }
 
-	/************************************************************
-	 *  Constructor for the LoginConfig object
-	 ***********************************************************/
-	public LoginConfig()
-	{
-	}
+    /**
+     * Sets the Username attribute of the LoginConfig object.
+     *
+     * @param  username  the new Username value
+     */
+    public void setUsername(String username)
+    {
+        setProperty(new StringProperty(ConfigTestElement.USERNAME, username));
+    }
 
-	/************************************************************
-	 *  Sets the Username attribute of the LoginConfig object
-	 *
-	 *@param  username  The new Username value
-	 ***********************************************************/
-	public void setUsername(String username)
-	{
-		setProperty(new StringProperty(ConfigTestElement.USERNAME, username));
-	}
+    /**
+     * Sets the Password attribute of the LoginConfig object.
+     *
+     * @param  password  the new Password value
+     */
+    public void setPassword(String password)
+    {
+        setProperty(new StringProperty(ConfigTestElement.PASSWORD, password));
+    }
 
-	/************************************************************
-	 *  Sets the Password attribute of the LoginConfig object
-	 *
-	 *@param  password  The new Password value
-	 ***********************************************************/
-	public void setPassword(String password)
-	{
-		setProperty(new StringProperty(ConfigTestElement.PASSWORD, password));
-	}
+    /**
+     * Gets the Username attribute of the LoginConfig object.
+     *
+     * @return    the Username value
+     */
+    public String getUsername()
+    {
+        return getPropertyAsString(ConfigTestElement.USERNAME);
+    }
 
-
-	/************************************************************
-	 *  Gets the Username attribute of the LoginConfig object
-	 *
-	 *@return    The Username value
-	 ***********************************************************/
-	public String getUsername()
-	{
-		return getPropertyAsString(ConfigTestElement.USERNAME);
-	}
-
-	/************************************************************
-	 *  Gets the Password attribute of the LoginConfig object
-	 *
-	 *@return    The Password value
-	 ***********************************************************/
-	public String getPassword()
-	{
-		return getPropertyAsString(ConfigTestElement.PASSWORD);
-	}
-
+    /**
+     * Gets the Password attribute of the LoginConfig object.
+     *
+     * @return    the Password value
+     */
+    public String getPassword()
+    {
+        return getPropertyAsString(ConfigTestElement.PASSWORD);
+    }
 }

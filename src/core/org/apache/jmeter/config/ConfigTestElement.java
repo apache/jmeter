@@ -1,38 +1,30 @@
 package org.apache.jmeter.config;
+
 import java.io.Serializable;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
-public class ConfigTestElement extends AbstractTestElement implements Serializable
+/**
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
+public class ConfigTestElement
+    extends AbstractTestElement
+    implements Serializable
 {
+    public final static String USERNAME = "ConfigTestElement.username";
+    public final static String PASSWORD = "ConfigTestElement.password";
 
-	public final static String USERNAME = "ConfigTestElement.username";
-	public final static String PASSWORD = "ConfigTestElement.password";
+    public ConfigTestElement()
+    {
+    }
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public ConfigTestElement() { }
-
-	/****************************************
-	 * !ToDo
-	 *
-	 *@param parm1  !ToDo
-	 ***************************************/
-	public void addTestElement(TestElement parm1)
-	{
-		if(parm1 instanceof ConfigTestElement)
-		{
-			mergeIn(parm1);
-		}
-	}
+    public void addTestElement(TestElement parm1)
+    {
+        if (parm1 instanceof ConfigTestElement)
+        {
+            mergeIn(parm1);
+        }
+    }
 }
