@@ -57,15 +57,10 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 
 /************************************************************
@@ -111,19 +106,10 @@ public class SimpleDataWriter
 
     private void init()
     {
-        this.setLayout(new BorderLayout());
-
-        // MAIN PANEL
-        JPanel mainPanel = new JPanel();
-        Border margin = new EmptyBorder(10, 10, 5, 10);
-
-        mainPanel.setBorder(margin);
-        mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-        // NAME
-        mainPanel.add(makeTitlePanel());
-
-        this.add(mainPanel, BorderLayout.NORTH);
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
+        
+        add(makeTitlePanel(), BorderLayout.NORTH);
     }
 
 
