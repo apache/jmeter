@@ -258,7 +258,7 @@ public class RegexFunction extends AbstractFunction implements Serializable
         return KEY;
     }
 
-    public void setParameters(Collection parameters)
+    public synchronized void setParameters(Collection parameters)
         throws InvalidVariableException
     {
         values = parameters.toArray();
