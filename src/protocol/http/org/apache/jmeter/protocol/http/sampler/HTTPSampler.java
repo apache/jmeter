@@ -58,6 +58,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.BindException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -526,7 +527,9 @@ public class HTTPSampler extends AbstractSampler
         res.setSampleLabel("Error");
         res.setSamplerData(data);
         res.setDataType(HTTPSampleResult.TEXT);
-        res.setResponseData(e.toString().getBytes());
+        ByteArrayOutputStream text= new ByteArrayOutputStream(200);
+        e.printStackTrace(new PrintStream(text));
+        res.setResponseData(text.toByteArray());
         res.setResponseCode(NON_HTTP_RESPONSE_CODE);
         res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
         res.setTime(time);
