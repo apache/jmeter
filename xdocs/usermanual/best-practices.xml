@@ -52,16 +52,14 @@ JMeter to record your actions to define some test cases.  Once you have finished
 definite series of steps, save the entire test case in an appropriately named file.  Then, wipe
 clean and start a new test case.  By doing this, you can quickly record a large number of
 test case "rough drafts".</p>
-<p>The test cases will likely need to be further modified.  For instance, there may
-have been some dynamic data in one or more of the samples.  If so, these samples will
- need to be put under a <complink name="Modification Manager"/>.  Currently, there is
- no convenient way to do this other than saving the samples temporarily, deleting them, adding
-the Modification Manager, and then reloading the saved samples into the Modification Manager.
-This will be fixed in 1.8.</p>
-<p>You may also want to put any login pages within a <complink name="Once Only Controller"/>,
-so that the login action is done only once per test.  Alternatively, you might put all
-the samples but the login page within a <complink name="Loop Controller"/>, to execute
-X number of times before repeating the login request.</p>
+<p>One of the most useful features of the Proxy Server is that you can abstract out
+certain common elements from the recorded samples.  By attaching an <complink name="HTTP Request Defaults"/>,
+with the "domain" property specified (eg jakarta.apache.org), to your <complink name="Simple Controller"/>,
+you can direct JMeter to:</p>
+<ol><li>Only record samples with matching "domain" fields under this Controller, and</li>
+<li>Remove the "domain" field from the recorded sample.</li>
+</ol>
+<p>You can do the same with the "Path" field.</p>
 </section>
 
 </body>
