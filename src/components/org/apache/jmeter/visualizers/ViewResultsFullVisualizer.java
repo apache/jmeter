@@ -215,7 +215,8 @@ public class ViewResultsFullVisualizer
                 (DefaultMutableTreeNode) root.getChildAt(0));
         }
 
-        results.setText("");
+        results.setText("");//Response Data
+        sampleDataField.setText("");//Request Data
         log.debug("End : clear1");
     }
 
