@@ -320,7 +320,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         
         public void addTestElements()
         {
-            if(parent instanceof Controller && child instanceof Sampler)
+            if(parent instanceof Controller && (child instanceof Sampler || child instanceof Controller))
             {
                 parent.addTestElement(child);
             }
