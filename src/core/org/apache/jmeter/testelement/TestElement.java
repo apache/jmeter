@@ -25,6 +25,21 @@ public interface TestElement extends Cloneable
     public boolean isRunningVersion();
     
     /**
+     * Test whether a given property is only a temporary resident of the TestElement
+     * @param property
+     * @return
+     * boolean
+     */
+    public boolean isTemporary(JMeterProperty property);
+    
+    /**
+     * Indicate that the given property should be only a temporary property in the TestElement
+     * @param property
+     * void
+     */
+    public void setTemporary(JMeterProperty property);
+    
+    /**
      * Return a property as a boolean value.
      */
     public boolean getPropertyAsBoolean(String key);

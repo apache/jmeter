@@ -92,15 +92,6 @@ public abstract class MultiProperty extends AbstractProperty
      */
     public abstract void clear();
 
-    public void setTemporary(boolean temporary, TestElement owner)
-    {
-        super.setTemporary(temporary, owner);
-        PropertyIterator iter = iterator();
-        while (iter.hasNext())
-        {
-            iter.next().setTemporary(temporary, owner);
-        }
-    }
 
     public void setRunningVersion(boolean running)
     {
@@ -118,7 +109,7 @@ public abstract class MultiProperty extends AbstractProperty
         while (iter.hasNext())
         {
             JMeterProperty prop = iter.next();
-            if (prop.isTemporary(owner) || prop.isTemporary(null))
+            if (owner.isTemporary(prop))
             {
                 iter.remove();
             }

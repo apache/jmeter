@@ -174,7 +174,7 @@ public class MapProperty extends MultiProperty
 
     public PropertyIterator valueIterator()
     {
-        return new PropertyIteratorImpl(value.values());
+        return getIterator(value.values());
     }
 
     public void addProperty(String name, JMeterProperty prop)

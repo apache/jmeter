@@ -158,7 +158,7 @@ public class Arguments extends ConfigTestElement implements Serializable
             new TestElementProperty(arg.getName(), arg);
         if (isRunningVersion())
         {
-            newArg.setTemporary(true, this);
+            this.setTemporary(newArg);
         }
         getArguments().addItem(newArg);
     }

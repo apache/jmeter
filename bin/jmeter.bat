@@ -30,4 +30,4 @@ goto setupArgs
 rem This label provides a place for the argument list loop to break out 
 rem and for NT handling to skip to.
 
-java -Xincgc -Xmx256m -jar ApacheJMeter.jar %JMETER_CMD_LINE_ARGS%
+java -server -Xmx512m -jar ApacheJMeter.jar %JMETER_CMD_LINE_ARGS%

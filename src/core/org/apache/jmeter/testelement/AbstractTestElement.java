@@ -57,13 +57,17 @@
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.jmeter.control.NextIsNullException;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MapProperty;
+import org.apache.jmeter.testelement.property.MultiProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.PropertyIteratorImpl;
@@ -81,6 +85,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable
     protected static Logger log = LoggingManager.getLoggerForClass();
 
     private Map propMap = Collections.synchronizedMap(new HashMap());
+    private Set temporaryProperties;
 
     private boolean runningVersion = false;
 
@@ -239,11 +244,11 @@ public abstract class AbstractTestElement implements TestElement, Serializable
     {
         if (isRunningVersion())
         {
-            property.setTemporary(true, this);
+            setTemporary(property);
         }
         else
         {
-            property.clearTemporary(this);
+            clearTemporary(property);
         }
         JMeterProperty prop = getProperty(property.getName());
 
@@ -256,6 +261,14 @@ public abstract class AbstractTestElement implements TestElement, Serializable
         else
         {
             prop.mergeIn(property);
+        }
+    }
+    
+    protected void clearTemporary(JMeterProperty property)
+    {
+        if(temporaryProperties != null)
+        {
+            temporaryProperties.remove(property);
         }
     }
 
@@ -275,7 +288,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable
                     "Property "
                         + prop.getName()
                         + " is temp? "
-                        + prop.isTemporary(this)
+                        + isTemporary(prop)
                         + " and is a "
                         + prop.getObjectValue());
             }
@@ -346,19 +359,29 @@ public abstract class AbstractTestElement implements TestElement, Serializable
 
     public void recoverRunningVersion()
     {
-        PropertyIterator iter = propertyIterator();
+        Iterator iter = propMap.entrySet().iterator();
         while (iter.hasNext())
         {
-            JMeterProperty prop = iter.next();
-            if (prop.isTemporary(this))
+            Map.Entry entry = (Map.Entry)iter.next();
+            JMeterProperty prop = (JMeterProperty)entry.getValue();
+            if (isTemporary(prop))
             {
                 iter.remove();
-                prop.clearTemporary(this);
+                clearTemporary(prop);
             }
             else
             {
                 prop.recoverRunningVersion(this);
             }
+        }
+        emptyTemporary();
+    }
+    
+    protected void emptyTemporary()
+    {
+        if(temporaryProperties != null)
+        {
+            temporaryProperties.clear();
         }
     }
 
@@ -366,4 +389,39 @@ public abstract class AbstractTestElement implements TestElement, Serializable
     {
         return null;
     }
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestElement#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)
+     */
+    public boolean isTemporary(JMeterProperty property)
+    {
+        if(temporaryProperties == null)
+        {
+            return false;
+        }
+        else
+        {
+            return temporaryProperties.contains(property);
+        }
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestElement#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)
+     */
+    public void setTemporary(JMeterProperty property)
+    {
+        if(temporaryProperties == null)
+        {
+            temporaryProperties = new HashSet();
+        }
+        temporaryProperties.add(property);
+        if(property instanceof MultiProperty)
+        {
+            PropertyIterator iter = ((MultiProperty)property).iterator();
+            while(iter.hasNext())
+            {
+                setTemporary(iter.next());
+            }
+        }
+    }
+
 }
