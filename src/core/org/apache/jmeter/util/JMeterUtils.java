@@ -196,7 +196,13 @@ public class JMeterUtils implements UnitTestManager
     {
         System.out.println("Initializing Properties: " + file);
         getProperties(file);
-        String home = file.substring(0, file.lastIndexOf("/"));
+		String home;
+        int pathend=file.lastIndexOf("/");
+        if (pathend == -1){// No path separator found, must be in current directory
+			home = ".";
+        } else {
+			home = file.substring(0, pathend);
+        }
         home = new File(home + "/..").getAbsolutePath();
         System.out.println("Setting JMeter home: " + home);
         setJMeterHome(home);
