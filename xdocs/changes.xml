@@ -29,6 +29,8 @@
 <li>JMeter now url encodes paramter names and values</li>
 <li>listeners no longer give exceptions if their gui's haven't been initialized</li>
 <li>HTTPS and Authorization working together</li>
+<li>New Http sampling that automatically parses HTML response for images to download, and includes the downloading of
+these images in total time for request (Neth neth6@atozasia.com) </li>
 </ul>
 
 <h3>Version 1.6.1</h3>
