@@ -131,7 +131,7 @@ public class HttpRequestHdr
 		{
 			String name = token.trim().substring(0,token.trim().length()-1);
 			String value = getRemainder(tz);
-			headers.put(name,value);
+			headers.put(name.toLowerCase(),new Header(name,value));
 			if(name.equalsIgnoreCase("content-length"))
 			{
 				return Integer.parseInt(value);
@@ -147,10 +147,9 @@ public class HttpRequestHdr
 		while(keys.hasNext())
 		{
 			String key = (String)keys.next();
-			if(!key.equalsIgnoreCase("proxy-connection") && !key.equalsIgnoreCase("content-length"))
+			if(!key.equals("proxy-connection") && !key.equals("content-length"))
 			{
-				Header h = new Header(key,(String)headers.get(key));
-				manager.add(h);
+				manager.add((Header)headers.get(key));
 			}
 		}
 		manager.setName("Browser-derived headers");
@@ -171,16 +170,12 @@ public class HttpRequestHdr
 
 	public String getContentType()
 	{
-		String contentType = (String)headers.get("Content-Type");
-		if(contentType == null)
+		Header contentTypeHeader = (Header)headers.get("content-type");
+		if(contentTypeHeader != null)
 		{
-			contentType = (String)headers.get("Content-type");
+			return contentTypeHeader.getValue();
 		}
-		if(contentType == null)
-		{
-			contentType = (String)headers.get("content-type");
-		}
-		return contentType;
+		return "";
 	}
 	
 	public static MultipartUrlConfig isMultipart(String contentType)
