@@ -372,11 +372,10 @@ public class HTTPSamplerFull extends HTTPSampler
 		log.debug("Start : loadBinary");
 		byte[] ret = new byte[0];
 		res.setSamplerData(new HTTPSampler(url));
-		HttpURLConnection conn = null;
 		try
 		{
 			conn = setupConnection(url, GET);
-			conn.connect();
+			connect();
 		}
 		catch(IOException ioe)
 		{
