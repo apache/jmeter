@@ -86,7 +86,7 @@ public class PackageTest extends JMeterTestCase
 		return sff;
 	}
 
-	// Create the StringFromFile function and set its parameters.
+	// Create the SplitFile function and set its parameters.
 	private static SplitFunction SplitParams(String p1, String p2, String p3)
 	throws Exception
 	{
@@ -99,10 +99,31 @@ public class PackageTest extends JMeterTestCase
 		return split;
 	}
 
+	// Create the BeanShell function and set its parameters.
+	private static BeanShell BSHFParams(String p1, String p2, String p3)
+	throws Exception
+	{
+		BeanShell bsh = new BeanShell();
+		bsh.setParameters(MakeParams(p1,p2,p3));
+		return bsh;
+	}
+	private static Collection MakeParams(String p1, String p2, String p3)
+	{
+		Collection parms = new LinkedList();
+		if (p1 != null) parms.add(new CompoundVariable(p1));
+		if (p2 != null) parms.add(new CompoundVariable(p2));
+		if (p3 != null) parms.add(new CompoundVariable(p3));
+		return parms;	
+	}
+
 	public static Test suite() throws Exception
 	{
 		   TestSuite allsuites = new TestSuite();
 		   
+		   TestSuite bsh = new TestSuite("BeanShell");
+		   bsh.addTest( new PackageTest("BSH1"));
+		   allsuites.addTest(bsh);
+   
 		   TestSuite suite = new TestSuite("SingleThreaded");
   		   suite.addTest(new PackageTest("CSVParams"));
 		   suite.addTest(new PackageTest("CSVNoFile"));
@@ -144,6 +165,47 @@ public class PackageTest extends JMeterTestCase
     	vars = jmctx.getVariables();
     }
 
+    public void BSH1() throws Exception
+	{
+    	BeanShell bsh;
+    	try
+		{
+    	    bsh = BSHFParams(null,null,null);
+    	    fail("Expected InvalidVariableException");
+		}  	catch (InvalidVariableException e) {}
+    	
+    	try
+		{
+    	    bsh = BSHFParams("","","");
+    	    fail("Expected InvalidVariableException");
+		}  	catch (InvalidVariableException e) {}
+		
+		bsh = BSHFParams("","",null);
+		assertEquals("",bsh.execute());
+		
+		bsh = BSHFParams("1",null,null);
+		assertEquals("1",bsh.execute());
+
+		bsh = BSHFParams("1+1","VAR",null);
+		assertEquals("2",bsh.execute());
+		assertEquals("2",vars.get("VAR"));
+
+		// Check persistence
+		bsh = BSHFParams("${SCR1}",null,null);
+
+		vars.put("SCR1","var1=11");
+		assertEquals("11",bsh.execute());
+
+		vars.put("SCR1","var2=22");
+		assertEquals("22",bsh.execute());
+
+		vars.put("SCR1","x=var1");
+		assertEquals("11",bsh.execute());
+
+		vars.put("SCR1","x");
+		assertEquals("11",bsh.execute());
+
+	}
     public void SplitTest1() throws Exception
     {
     	SplitFunction split=null;
