@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+	 <author email="bburns@apache.org">Brendan Burns, et al.</author>
+	 <title>Running Apache JMeter</title>
+  </properties>
+<body>
+<section name="Running Apache JMeter">
+<h1 align="center">Running Apache JMeter</h1>
+
+<h2><a NAME="scripts"></a>Using system wrappers</h2>
+
+<blockquote>
+  <p>Apache JMeter comes with startup scripts to help you run the application. They are
+  located in the directory /bin and are called jmeter for UNIX systems and jmeter.bat for
+  Windows systems. Make sure the file <code>ApacheJMeter.jar</code> and <code>jmeter.properties</code> is located in the same
+  directory and type <tt>jmeter [properties file]</tt> to start.</p>
+  <p>Since those scripts assumes you have your classpath already setup and the java
+  interpreter in your path. It this is not the case, setup you Java environment first and
+  edit the script to match your system.</p>
+  <p>In addition to the standard Java libraries that come with the JRE, you may need to download three other API's:
+</p> <ul>
+	<li><STRONG>XML</STRONG>: <a HREF="http://xml.apache.org/dist/xerces-j">xerces</a> from <a
+HREF="http://xml.apache.org">Apache</a>, 	or <a HREF="http://java.sun.com/xml/download.html">JAXP</a> from <a
+HREF="http://java.sun.com">sun</a> or any other SAX 1.0 compliant XML Parser.<br/>
+To enable XML (which is necessary for saving your test samples and test scripts), add the xerces.jar (Xerces) or jaxp.jar
+&amp; parser.jar (JAXP) to your classpath or $JAVA_HOME/jre/lib/ext directory.<p>
+	Currrently, <strong>jmeter.properties</strong> is set to use the parser in xerces by default.  To change to Sun's parser,
+be sure to change the line in jmeter.properties that instructs JMeter which SAX parser to use.  This line looks like this:</p>
+<p><code>xml.parser=org.apache.xerces.parsers.SAXParser</code></p></li>
+	<li><STRONG>Mail</STRONG>: <a HREF="http://java.sun.com/products/javamail/index.html">Java Mail<sup><font
+size="-2">tm</font></sup></a> API as well as the <a
+href="http://www.javasoft.com/beans/glasgow/jaf">javax.activation</a> API 	from <a
+HREF="http://java.sun.com">Sun</a>.<br/> 	To enable the MailVisualizer, add mail.jar and activation.jar from Sun's
+JavaMail download to your classpath or $JAVA_HOME/jre/lib/ext directory.</li>
+<li><p><strong>JSSE</strong>: <a
+href="http://java.sun.com/products/jsse/">JSSE</a> is available from <a HREF="http://java.sun.com">sun</a>.<br/> 	JSSE
+is an SSL encryption provider that is used to enable JMeter to test websites using the https protocol.</p> 	<p>To turn
+SSL support on, make sure all the jars that come with JSSE are in your classpath (jsse.jar, jnet.jar, jcert.jar), and
+modify <strong>jmeter.properties</strong> to instruct JMeter which SSL Provider you are using.  For JSSE, set the line
+as 	follows:</p> 	<p>ssl.provider=com.sun.net.ssl.internal.ssl.Provider</p></li>
+</ul>
+</blockquote>
+
+<h2><a NAME="command"></a>From the command line</h2>
+
+<blockquote>
+  <p>If you don't like script you can use the command line as follows </p>
+  <blockquote>
+	 <tt>UNIX: &lt;java interpreterer&gt; &lt;options&gt; -classpath
+	 $CLASSPATH:ApacheJMeter.jar org.apache.jmeter.Driver  [properties file]
+	 </tt> <br/>
+	 <tt>Windows: &lt;java interpreter&gt; &lt;options&gt; -classapth
+	 %classpath%;ApacheJMeter.jar org.apache.jmeter.Driver [properties file]
+	 </tt>
+  </blockquote>
+  <p>where options are usually not needed. </p>
+  <p><strong>In case you use the Java 2 platform you can type </strong></p>
+  <blockquote>
+	 <tt><strong>java -jar ApacheJMeter.jar</strong></tt>
+  </blockquote>
+  <p><strong>or double click on the file</strong>. </p>
+</blockquote>
+<h2><a NAME="properties"></a>Modifying Properties</h2>
+
+<blockquote>
+  <p>If you wish to modify the properties with which JMeter runs you need to
+  either modify the jmeter.properties inside of the /bin directory or create
+  your own copy of the jmeter.properties and specify it in the command line
+  (above).
+  </p>
+  <b>Properties to modify</b>
+  <ul>
+  <li><b><tt>timer.*</tt></b> These properties define the implementations of the
+  <tt>org.apache.jmeter.timers.Timer</tt> interface that you wish to be
+  available to JMeter.</li>
+  <li><b><tt>visualizer.*</tt></b> These properties define the implementations of
+  the <tt>org.apache.jmeter.visualizers.Visualizer</tt> interface that you
+  wish to be available to JMeter.</li>
+  <li><b><tt>controller.*</tt></b> These properties define the implementations of
+  the <tt>org.apache.jmeter.samplers.SamplerController</tt> interface that
+  you wish to be available to JMeter.</li>
+  <li><b><tt>xml.parser</tt></b> The class name of the XML Parser implementing the
+  <tt>org.xml.sax.Parser</tt> interface.</li>
+  <li><b><tt>xml.handler.*</tt></b> The class names of the implementations of
+  <tt>org.xml.sax.DocumentHandler</tt> interface that JMeter should be able
+  to user</li>
+	<li><b><tt>user.dir</tt></b> The directory JMeter should default to on startup as the working
+directory</li>
+	<li><b><tt>threads.max</tt></b> The maximum number of threads that can be selected for a single threadgroup</li>
+  </ul>
+</blockquote>
+
+<p align="center"><font size="-1">Copyright (c) 1998-99 <a href="http://java.apache.org">The Java Apache
+Project</a>.<br/>
+$Id$</font> <br/>
+<font size="-1">All rights reserved.</font></p>
+</section>
+</body>
+</document>
