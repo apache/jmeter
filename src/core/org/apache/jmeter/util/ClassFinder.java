@@ -742,7 +742,7 @@ public class ClassFinder {
 		
 		 ***********************************************************/
 		public void testFindClassesInPaths() {
-			String testPath = System.getProperty("user.dir") + "/classes";
+			String testPath = JMeterUtils.getJMeterHome() + "/build";
 			List listPaths = new ArrayList();
 			ArrayList listClasses = new ArrayList();
 			// listPaths will contain the path/jars where all classes will be listed
