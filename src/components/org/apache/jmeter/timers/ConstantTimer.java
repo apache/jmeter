@@ -55,10 +55,13 @@
 
 package org.apache.jmeter.timers;
 
-import java.util.*;
-import java.io.*;
+import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.VariablesCollection;
@@ -75,6 +78,9 @@ import org.apache.jmeter.threads.JMeterVariables;
 public class ConstantTimer extends AbstractTestElement 
         implements Timer, Serializable, ThreadListener
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.elements");
+
 	public final static String DELAY = "ConstantTimer.delay";
 	private VariablesCollection vars = new VariablesCollection();
 	private JMeterVariables variables;
@@ -83,8 +89,6 @@ public class ConstantTimer extends AbstractTestElement
 
 	/**
 	 * No-arg constructor.
-	 * 
-	 * @see java.lang.Object#Object()
 	 */
 	public ConstantTimer()
 	{
@@ -159,8 +163,17 @@ public class ConstantTimer extends AbstractTestElement
 	public void iterationStarted(int iterationCount)
 	{
 		variables = vars.getVariables();
-		String delayString = (String) getProperty(DELAY);
-		delay = Long.parseLong(delayString);
+		
+        try
+        {
+            String delayString = (String) getProperty(DELAY);
+            delay = Long.parseLong(delayString);
+        }
+        catch (ClassCastException ex)
+        {
+            log.error("Unable to determine delay - you may have used an undefined variable in the test element with the name: " + getName(), ex);
+            delay = 0;
+        }
 	}
 
 	/**
