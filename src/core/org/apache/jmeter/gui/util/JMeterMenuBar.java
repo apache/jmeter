@@ -87,8 +87,9 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
     JMenu fileMenu;
     JMenuItem file_save_as;
     JMenuItem file_load;
+    JMenuItem file_merge;
     JMenuItem file_exit;
-    JMenuItem file_new;
+    JMenuItem file_close;
     JMenu editMenu;
     JMenu edit_add;
     //JMenu edit_add_submenu;
@@ -141,6 +142,10 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
         {
             file_load.setEnabled(enabled);
         }
+		if (file_merge != null)
+		{
+			file_merge.setEnabled(enabled);
+		}
     }
 
     public void setEditEnabled(boolean enabled)
@@ -442,7 +447,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
         file_save_as.setActionCommand("save_all_as");
         file_save_as.addActionListener(ActionRouter.getInstance());
         file_save_as.setEnabled(true);
-        file_load = new JMenuItem(JMeterUtils.getResString("open"), 'O');
+        
+        file_load = new JMenuItem(JMeterUtils.getResString("menu_open"), 'O');
         file_load.setAccelerator(
             KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_MASK));
         file_load.addActionListener(ActionRouter.getInstance());
@@ -450,18 +456,31 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
         // is selected is ROOT, which does not allow items to be inserted.
         file_load.setEnabled(false);
         file_load.setActionCommand("open");
-        file_new = new JMenuItem(JMeterUtils.getResString("new"), 'N');
-        file_new.setAccelerator(
-            KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_MASK));
-        file_new.setActionCommand("new");
-        file_new.addActionListener(ActionRouter.getInstance());
+        
+        file_close = new JMenuItem(JMeterUtils.getResString("menu_close"), 'C');
+        file_close.setAccelerator(
+            KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_MASK));
+        file_close.setActionCommand("close");
+        file_close.addActionListener(ActionRouter.getInstance());
+
         file_exit = new JMenuItem(JMeterUtils.getResString("exit"), 'X');
         file_exit.setAccelerator(
             KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_MASK));
         file_exit.setActionCommand("exit");
         file_exit.addActionListener(ActionRouter.getInstance());
-        fileMenu.add(file_new);
+
+		file_merge = new JMenuItem(JMeterUtils.getResString("menu_merge"), 'M');
+		//file_merge.setAccelerator(
+		//    KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_MASK));
+		file_merge.addActionListener(ActionRouter.getInstance());
+		// Set default SAVE menu item to disabled since the default node that
+		// is selected is ROOT, which does not allow items to be inserted.
+		file_merge.setEnabled(false);
+		file_merge.setActionCommand("merge");
+
+        fileMenu.add(file_close);
         fileMenu.add(file_load);
+		fileMenu.add(file_merge);
         fileMenu.add(file_save);
         fileMenu.add(file_save_as);
         fileMenu.addSeparator();
