@@ -61,7 +61,6 @@ import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -171,16 +170,27 @@ public class UrlConfigGui extends JPanel
     }
 
     /****************************************
-     * !ToDo (Method description)
+     * Set the text, etc. in the UI.
      *
-     *@param el  !ToDo (Parameter description)
+     *@param el contains the data to be displayed
      ***************************************/
     public void configure(TestElement el)
     {
         setName((String) el.getProperty(TestElement.NAME));
         argsPanel.configure((TestElement) el.getProperty(HTTPSampler.ARGUMENTS));
         domain.setText((String) el.getProperty(HTTPSampler.DOMAIN));
-        port.setText((String) el.getPropertyAsString(HTTPSampler.PORT));
+        
+        String portString = (String) el.getPropertyAsString(HTTPSampler.PORT);
+
+        // Only display the port number if it is meaningfully specified
+        if (portString.equals("" + HTTPSampler.UNSPECIFIED_PORT))
+        {
+                port.setText("");
+        }
+        else
+        {
+            port.setText(portString);
+        }
         protocol.setText((String) el.getProperty(HTTPSampler.PROTOCOL));
         if ("POST".equals(el.getProperty(HTTPSampler.METHOD)))
         {

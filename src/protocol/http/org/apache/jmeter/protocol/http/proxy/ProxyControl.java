@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -358,12 +358,13 @@ public class ProxyControl extends ConfigTestElement implements Serializable
             {
                 sampler.setDomain("");
             }
-            /* Need to add some kind of "ignore-me" value
-               if (("" + sampler.getPort()).equals(urlConfig.getProperty(HTTPSampler.PORT)))
-               {
-               sampler.setPort(0);
-               }
-            */
+            
+            // Need to add some kind of "ignore-me" value
+            if (("" + sampler.getPort()).equals(urlConfig.getProperty(HTTPSampler.PORT)))
+            {
+                sampler.setPort(HTTPSampler.UNSPECIFIED_PORT);
+            }
+            
             if (sampler.getPath().equals(urlConfig.getProperty(HTTPSampler.PATH)))
             {
                 sampler.setPath("");
