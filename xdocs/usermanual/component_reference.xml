@@ -145,12 +145,12 @@ a new instance).</property>
 
 <component name="Java Request" index="13.1.4" screenshot="../images/screenshots/java_request.gif">
 
-<description><p>This sampler lets you control a java class that implements the 
+<description><p>This sampler lets you control a java class that implements the
 JavaSamplerClient interface.  By writing your own implementation of this interface,
 you can use JMeter to harness multiple threads, input parameter control, and
 data collection.</p>
 <p>The pull-down menu provides the list of all such implementations found by
-JMeter in its classpath.  The parameters can then be specified in the 
+JMeter in its classpath.  The parameters can then be specified in the
 table below - as defined by your implementation.  A simple example (SleepTest) is
 provided.</p></description>
 
@@ -328,7 +328,7 @@ is configured to store the results in a file named "simple-test.dat" in the curr
 instead of going in order through its sub-controllers and samplers, it picks one
 at random at each pass.</p>
 <note>Interactions between multiple controllers can yield complex behavior.
-This is particularly true of the Random Controller.  Experiment before you assume 
+This is particularly true of the Random Controller.  Experiment before you assume
 what results any given interaction will give</note>
 </description>
 <properties>
@@ -567,57 +567,9 @@ resource requires query string parameters, add them below in the
 <description></description>
 </component>
 
-<component index="13.4.9" name="HTML Link Parser" anchor="html_link_parser">
-<description>
-<p>This modifier parses HTML response from the server and extracts
-links and forms.  A URL test sample that passes through this modifier will be examined to
-see if it &quot;matches&quot; any of the links or forms extracted
-from the immediately previous response.  It would then replace the values in the URL
-test sample with appropriate values from the matching link or form.  Perl-type regular
-expressions are used to find matches.</p>
-</description>
 
-<example title="Spidering Example" anchor="spider_example">
-<p>Consider a simple example: let's say you wanted JMeter to &quot;spider&quot; through your site,
-hitting link after link parsed from the HTML returned from your server (this is not
-actually the most useful thing to do, but it serves as a good example).  You would create
-a <complink anchor="modification_manager" name="Modification Manager"/>, and add the &quot;HTML Link Parser&quot; to it.  Then, create a
-Web Test controller, and set the domain to &quot;.*&quot;, and the path likewise. This will
-cause your test sample to match with any link found on the returned pages.  If you wanted to
-restrict the spidering to a particular domain, then change the domain value
-to the one you want.  Then, only links to that domain will be followed.
-</p>
-</example>
 
-<example title="Poll Example" anchor="poll_example">
-<p>A more useful example: given a web polling application, you might have a page with
-several poll options as radio buttons for the user to select.  Let's say the values
-of the poll options are very dynamic - maybe user generated.  If you wanted JMeter to
-test the poll, you could either create test samples with hardcoded values chosen, or you
-could let the HTML Link Parser parse the form, and insert a random poll option into
-your URL test sample.  To do this, follow the above example, except, when configuring
-your Web Test controller's URL options, be sure to choose &quot;POST&quot; as the
-method.  Put in hard-coded values for the domain, path, and any additional form parameters.
-Then, for the actual radio button parameter, put in the name (let's say it's called &quot;poll_choice&quot;),
-and then &quot;.*&quot; for the value of that parameter.  When the modifier examines
-this URL test sample, it will find that it &quot;matches&quot; the poll form (and
-it shouldn't match any other form, given that you've specified all the other aspects of
-the URL test sample), and it will replace your form parameters with the matching
-parameters from the form.  Since the regular expression &quot;.*&quot; will match with
-anything, the modifier will probably have a list of radio buttons to choose from.  It
-will choose at random, and replace the value in your URL test sample.  Each time through
-the test, a new random value will be chosen.</p>
-
-<figure image="../images/screenshots/modification.gif">Figure 8 - Online Poll Example</figure>
-
-<note>One important thing to remember is that you must create a test sample immediately
-prior that will return an HTML page with the links and forms that are relevant to
-your dynamic test sample.</note>
-</example>
-
-</component>
-
-<component index="13.4.10" name="HTTP Header Manager" screenshot="../images/screenshots/http-config/http-header-manager.gif">
+<component index="13.4.9" name="HTTP Header Manager" screenshot="../images/screenshots/http-config/http-header-manager.gif">
 <description><p>The Header Manager lets you add or override HTTP request headers.</p>
 </description>
 
@@ -729,8 +681,60 @@ to the random delay.</property>
 </component>
 </section>
 
-<section name="13.7 Miscellaneous Features" anchor="Miscellaneous_Features">
-<component index="13.7.1" name="Data Analyzer" screenshot="../images/screenshots/data_analyzer.gif">
+<section name="13.7 Modifiers" anchor="Modifiers">
+<component index="13.7.1" name="HTML Link Parser" anchor="html_link_parser">
+<description>
+<p>This modifier parses HTML response from the server and extracts
+links and forms.  A URL test sample that passes through this modifier will be examined to
+see if it &quot;matches&quot; any of the links or forms extracted
+from the immediately previous response.  It would then replace the values in the URL
+test sample with appropriate values from the matching link or form.  Perl-type regular
+expressions are used to find matches.</p>
+</description>
+
+<example title="Spidering Example" anchor="spider_example">
+<p>Consider a simple example: let's say you wanted JMeter to &quot;spider&quot; through your site,
+hitting link after link parsed from the HTML returned from your server (this is not
+actually the most useful thing to do, but it serves as a good example).  You would create
+a <complink anchor="modification_manager" name="Modification Manager"/>, and add the &quot;HTML Link Parser&quot; to it.  Then, create a
+Web Test controller, and set the domain to &quot;.*&quot;, and the path likewise. This will
+cause your test sample to match with any link found on the returned pages.  If you wanted to
+restrict the spidering to a particular domain, then change the domain value
+to the one you want.  Then, only links to that domain will be followed.
+</p>
+</example>
+
+<example title="Poll Example" anchor="poll_example">
+<p>A more useful example: given a web polling application, you might have a page with
+several poll options as radio buttons for the user to select.  Let's say the values
+of the poll options are very dynamic - maybe user generated.  If you wanted JMeter to
+test the poll, you could either create test samples with hardcoded values chosen, or you
+could let the HTML Link Parser parse the form, and insert a random poll option into
+your URL test sample.  To do this, follow the above example, except, when configuring
+your Web Test controller's URL options, be sure to choose &quot;POST&quot; as the
+method.  Put in hard-coded values for the domain, path, and any additional form parameters.
+Then, for the actual radio button parameter, put in the name (let's say it's called &quot;poll_choice&quot;),
+and then &quot;.*&quot; for the value of that parameter.  When the modifier examines
+this URL test sample, it will find that it &quot;matches&quot; the poll form (and
+it shouldn't match any other form, given that you've specified all the other aspects of
+the URL test sample), and it will replace your form parameters with the matching
+parameters from the form.  Since the regular expression &quot;.*&quot; will match with
+anything, the modifier will probably have a list of radio buttons to choose from.  It
+will choose at random, and replace the value in your URL test sample.  Each time through
+the test, a new random value will be chosen.</p>
+
+<figure image="../images/screenshots/modification.gif">Figure 8 - Online Poll Example</figure>
+
+<note>One important thing to remember is that you must create a test sample immediately
+prior that will return an HTML page with the links and forms that are relevant to
+your dynamic test sample.</note>
+</example>
+
+</component>
+</section>
+
+<section name="13.8 Miscellaneous Features" anchor="Miscellaneous_Features">
+<component index="13.8.1" name="Data Analyzer" screenshot="../images/screenshots/data_analyzer.gif">
 <description><p>The Data Analyzer presents a graphical view of data stored using the <complink name="File Reporter"/>.</p>
 <p>To use the Data Analyzer, goto the Report --&gt; Analyze Data File main menu option.  Then,
 when prompted, select the file where the data is stored.  JMeter will present the data
@@ -738,7 +742,7 @@ as a graph with multiple lines.  Each line represents a different HTTP Request f
 its response times.</p></description>
 </component>
 
-<component index="13.7.2" name="SSL Manager" screenshot="">
+<component index="13.8.2" name="SSL Manager" screenshot="">
 <p>
   The SSL Manager is a way to select a client certificate so that you can test
   applications that use Public Key Infrastructure (PKI).  In order to use it,
