@@ -59,57 +59,49 @@ import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
+/**
+ * A generic controller component.
  *
- *@author    Kevin Hammond
- *@created   $Date$
- *@version   $Revision$
- ***************************************/
-
+ * @author    Kevin Hammond
+ * @version   $Revision$
+ */
 public class LogicControllerGui extends AbstractControllerGui
 {
-
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public LogicControllerGui()
-	{
-		init();
-	}
-
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public TestElement createTestElement()
-	{
-		GenericController lc = new GenericController();
-		configureTestElement(lc);
-		return lc;
-	}
-    
     /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     * Create a new LogicControllerGui instance.
      */
+    public LogicControllerGui()
+    {
+        init();
+    }
+
+    /* Implements JMeterGUIComponent.createTestElement() */
+    public TestElement createTestElement()
+    {
+        GenericController lc = new GenericController();
+        configureTestElement(lc);
+        return lc;
+    }
+
+    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
     public void modifyTestElement(TestElement el)
     {
         configureTestElement(el);
     }
 
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("logic_controller_title");
-	}
+    /* Implements JMeterGUIComponent.getStaticLabel() */
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("logic_controller_title");
+    }
 
-	public void updateGui() { }
-
-	private void init()
-	{
-		setLayout(new BorderLayout());
-		setBorder(makeBorder());
-		add(makeTitlePanel(), BorderLayout.NORTH);
-	}
+    /**
+     * Initialize the GUI components and layout for this component.
+     */
+    private void init()
+    {
+        setLayout(new BorderLayout());
+        setBorder(makeBorder());
+        add(makeTitlePanel(), BorderLayout.NORTH);
+    }
 }
