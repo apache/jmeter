@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -282,9 +282,9 @@ public class CookieManager
             return null;
 
         StringBuffer header = new StringBuffer();
-        for (PropertyIterator enum = getCookies().iterator(); enum.hasNext();)
+        for (PropertyIterator iter = getCookies().iterator(); iter.hasNext();)
         {
-            Cookie cookie = (Cookie) enum.next().getObjectValue();
+            Cookie cookie = (Cookie) iter.next().getObjectValue();
             // Add a leading dot to the host name so that host X matches
             // domain .X. This is a breach of the standard, but it's how
             // browsers behave:

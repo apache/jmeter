@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -209,11 +209,11 @@ public class AuthManager
         if (url2 != null) s2= url2.toString();
         
         // TODO should really return most specific (i.e. longest) match.
-        for (PropertyIterator enum = getAuthObjects().iterator();
-            enum.hasNext();
+        for (PropertyIterator iter = getAuthObjects().iterator();
+            iter.hasNext();
             )
         {
-            Authorization auth = (Authorization) enum.next().getObjectValue();
+            Authorization auth = (Authorization) iter.next().getObjectValue();
             
             String uRL = auth.getURL();
 			if (s1.startsWith(uRL) || s2 != null && s2.startsWith(uRL))

@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -496,11 +496,11 @@ public class ProxyControl extends GenericController implements Serializable
         LinkedList elements= new LinkedList();
         
         // Look for elements directly within the HTTP proxy: 
-        Enumeration enum = treeModel.getNodeOf(this).children();
-        while (enum.hasMoreElements())
+        Enumeration kids = treeModel.getNodeOf(this).children();
+        while (kids.hasMoreElements())
         { 
             JMeterTreeNode subNode =
-                (JMeterTreeNode) enum.nextElement();
+                (JMeterTreeNode) kids.nextElement();
             if (subNode.isEnabled())
             {
                 TestElement element= (TestElement)subNode.getUserObject();
@@ -517,11 +517,11 @@ public class ProxyControl extends GenericController implements Serializable
              controller != null;
              controller= (JMeterTreeNode)controller.getParent())
         {
-            enum = controller.children();
-            while (enum.hasMoreElements())
+            kids = controller.children();
+            while (kids.hasMoreElements())
             {
                 JMeterTreeNode subNode =
-                    (JMeterTreeNode) enum.nextElement();
+                    (JMeterTreeNode) kids.nextElement();
                 if (subNode.isEnabled())
                 {
                     TestElement element= (TestElement)subNode.getUserObject();
@@ -776,11 +776,11 @@ public class ProxyControl extends GenericController implements Serializable
     {
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
-        Enumeration enum = myNode.children();
-        while (enum.hasMoreElements())
+        Enumeration kids = myNode.children();
+        while (kids.hasMoreElements())
         { 
             JMeterTreeNode subNode =
-                (JMeterTreeNode) enum.nextElement();
+                (JMeterTreeNode) kids.nextElement();
             if (subNode.isEnabled()) {
                 TestElement testElement =
                     (TestElement) subNode.getTestElement();
@@ -799,11 +799,11 @@ public class ProxyControl extends GenericController implements Serializable
     {
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
-        Enumeration enum = myNode.children();
-        while (enum.hasMoreElements())
+        Enumeration kids = myNode.children();
+        while (kids.hasMoreElements())
         {
             JMeterTreeNode subNode =
-                (JMeterTreeNode) enum.nextElement();
+                (JMeterTreeNode) kids.nextElement();
             if (subNode.isEnabled()) {
                 TestElement testElement =
                     (TestElement) subNode.getTestElement();
@@ -822,11 +822,11 @@ public class ProxyControl extends GenericController implements Serializable
     {
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
-        Enumeration enum = myNode.children();
-        while (enum.hasMoreElements())
+        Enumeration kids = myNode.children();
+        while (kids.hasMoreElements())
         {
             JMeterTreeNode subNode =
-                (JMeterTreeNode) enum.nextElement();
+                (JMeterTreeNode) kids.nextElement();
             if (subNode.isEnabled()) {
                 TestElement testElement =
                     (TestElement) subNode.getTestElement();
