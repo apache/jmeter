@@ -23,7 +23,7 @@
 
 <body>
 
-<section name="15. Functions" anchor="functions">
+<section name="16. Functions" anchor="functions">
 <p>
 JMeter functions are special values that can populate fields of any Sampler or other configuration
 element in a test tree.  A function looks like this:</p>
@@ -36,7 +36,7 @@ to function.  Functions that require no parameters can leave off the parentheses
 is wrapped in ${}.</p>
 
 
-<subsection name="15.1 What can functions do" anchor="what_can_do">
+<subsection name="16.1 What can functions do" anchor="what_can_do">
 <p>There are two kinds of functions: user-defined static values, and built-in functions.<br/>
 User-defined static values allow the user to define variables to be replaced with their static value when
 a test tree is compiled and submitted to be run.  This replacement happens once at the beginning of the test
@@ -52,7 +52,7 @@ thread the function is in, the time, and many other sources.  These values are g
 request throughout the course of the test. </p>
 </subsection>
 
-<subsection name="15.2 Where can functions be used?" anchor="where">
+<subsection name="16.2 Where can functions be used?" anchor="where">
 <p>A user-defined function can be written into any field of any test component.  Some fields do not allow random strings 
 because they are expecting numbers, and thus will not accept a function.  However, most fields will allow
 functions.</p>
@@ -60,7 +60,7 @@ functions.</p>
 Samplers, Timers, Listeners, Modifiers, Assertions, Pre-Processors, Post-Processors and Config Elements.</p>
 </subsection>
 
-<subsection name="15.3 Writing the function string" anchor="how">
+<subsection name="16.3 Writing the function string" anchor="how">
 <p>User-defined functions take the form: <code>${varName}</code>.  In the TestPlan tree element, a two-column table
 of user-defined values is kept, matching up variable names with static values.  Referencing the
 variable in a test element is done by bracketing the variable name with '${' and '}'.</p>
@@ -74,7 +74,7 @@ function calls for various built-in functions, which you can then copy-paste.  I
 variable will override the built-in function.</note>
 </subsection>
 
-<subsection name="15.4 The Function Helper Dialog" anchor="function_helper">
+<subsection name="16.4 The Function Helper Dialog" anchor="function_helper">
 <p>The Function Helper dialog is available from JMeter's Tools menu.</p>
 <figure image="function_helper_dialog.png">Function Helper Dialog</figure>
 <p>Using the Function Helper, you can select a function from the pull down, and assign
@@ -85,9 +85,9 @@ functions take different arguments.</p>
 for you to copy-paste into your test plan wherever you like.</p>
 </subsection>
 
-<subsection name="15.5 Functions" anchor="functions">
+<subsection name="16.5 Functions" anchor="functions">
 
-<component index="15.5.1" name="__regexFunction">
+<component index="16.5.1" name="__regexFunction">
 <description><p>The Regex Function is used to parse the previous response using any regular
 expression (provided by user).  The function returns the template string with variable values filled
 in.</p>
@@ -134,7 +134,7 @@ replacement string") parsed by this function</li>
 </properties>
 </component>
 
-<component index="15.5.2" name="__counter">
+<component index="16.5.2" name="__counter">
 <description><p>The counter generates a new number each time it is called, starting with 1
 and incrementing by +1 each time.  The counter can be configured to keep each simulated user's values
 separate, or to use the same counter for all user.  If each user's values is incremented separately,
@@ -151,7 +151,7 @@ counting how many times that request was run.</p></description>
 </properties>
 </component>
 
-<component index="15.5.3" name="__threadNum">
+<component index="16.5.3" name="__threadNum">
 <description><p>The thread number function simply returns the number of the thread currently
 being executed.  These numbers are independent of ThreadGroup, meaning thread #1 in one threadgroup
 is indistinguishable from thread #1 in another threadgroup, from the point of view of this function.</p>
@@ -160,7 +160,7 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 </description>
 </component>
 
-<component index="15.5.4" name="__intSum">
+<component index="16.5.4" name="__intSum">
 <description><p>The intsum function can be used to compute the sum of two or more integer values.
 </p></description>
 
@@ -173,7 +173,7 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 </properties>
 </component>
 
-<component index="15.5.5" name="_StringFromFile">
+<component index="16.5.5" name="_StringFromFile">
 <description>
 	<p>
 	The StringFromFile function can be used to read strings from a text file. 
@@ -230,7 +230,7 @@ Examples:
 	</p>
 </component>
 
-<component index="15.5.6" name="__machineName">
+<component index="16.5.6" name="__machineName">
 <description><p>The machineName function returns the local host name</p></description>
 
 <properties>
@@ -239,7 +239,7 @@ Examples:
 </properties>
 </component>
 
-<component index="15.5.7" name="__javaScript">
+<component index="16.5.7" name="__javaScript">
 <description><p>The javaScript function executes a piece of JavaScript (not Java!) code and returns its value</p>
 	</description>
 
@@ -258,7 +258,7 @@ Examples:
 </properties>
 </component>
 
-<component index="15.5.8" name="__Random">
+<component index="16.5.8" name="__Random">
 <description><p>The random function returns a random number that lies between the given min and max values.</p></description>
 
 <properties>
@@ -269,7 +269,7 @@ Examples:
 </properties>
 </component>
 
-<component index="15.5.8" name="__CSVRead">
+<component index="16.5.8" name="__CSVRead">
 <description><p>The CSVFile function returns a string from a CSV file (c.f. <a href="#_StringFromFile">StringFromFile</a>)</p>
 	<p>NOTE: versions up to 1.9.1 only supported a single file. 
 		JMeter versions since 1.9.1 support multiple file names.
@@ -306,7 +306,7 @@ Examples:
 </properties>
 </component>
 
-<component index="15.5.9" name="__property">
+<component index="16.5.9" name="__property">
 <description><p>The property function returns the value of a JMeter property. 
 	If the property value cannot be found, and no default has been supplied, it returns the property name.
 	When supplying a default value, there is no need to provide a function name - the parameter can be set to null, and it will be ignored.
@@ -329,7 +329,7 @@ ${__property(abcd,,atod)} - return value of property abcd (or "atod" if not defi
 </properties>
 </component>
 
-<component index="15.5.10" name="__P">
+<component index="16.5.10" name="__P">
 <description><p>This is a simplified property function which is
 	intended for use with properties defined on the command line.
 	If the property is not found, the default is returned.
@@ -359,7 +359,7 @@ the second would return 1 and the last would return www.dummy.org
 </properties>
 </component>
 
-<component index="15.5.11" name="__log">
+<component index="16.5.11" name="__log">
 <description>
 	<p>
 	The log function logs a message, and returns its input string
@@ -373,7 +373,7 @@ the second would return 1 and the last would return www.dummy.org
 </properties>
 </component>
 
-<component index="15.5.12" name="__logn">
+<component index="16.5.12" name="__logn">
 <description>
 	<p>
 	The logn function logs a message, and returns the empty string
@@ -387,7 +387,7 @@ the second would return 1 and the last would return www.dummy.org
 </properties>
 </component>
 
-<component index="15.5.13" name="__BeanShell">
+<component index="16.5.13" name="__BeanShell">
 <description>
 	<p>
 	The BeanShell function evaluates the script passed to it, and returns the result.

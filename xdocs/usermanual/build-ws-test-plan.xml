@@ -15,7 +15,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<document prev="get-started.html" next="build_ws_test_plan.html" date="$Date$">
+<document prev="build-ftp-test-plan.html" next="build-monitor-test-plan.html" date="$Date$">
 
 <properties>
   <title>User's Manual: Building a WebService Test Plan</title>
@@ -181,7 +181,7 @@ the Edit menu.
 
 </section>
 
-<section name="10.7 Running the Test Plan" anchor="running">
+<section name="10.5 Running the Test Plan" anchor="running">
 
 <p>From the Run menu, select Run.</p>
 

@@ -126,19 +126,20 @@
 	 </ul>
   <li><a href="build-ldap-test-plan.html">9. Building an LDAP Test Plan</a></li>
   <li><a href="build-ws-test-plan.html">10. Building a Webservice Test Plan</a></li>
-  <li><a href="remote-test.html">11. Remote Testing</a></li>
-  <li><a href="best-practices.html">12. Best Practices</a></li>
+  <li><a href="build-monitor-test-plan.html">11. Building a Monitor Test Plan</a></li>
+  <li><a href="remote-test.html">12. Remote Testing</a></li>
+  <li><a href="best-practices.html">13. Best Practices</a></li>
   <ul>
-	 <li><a href="best-practices.html#limit_threads">12.1 [ALL] Limit the Number of Threads</a></li>
-	 <li><a href="best-practices.html#put_cookie_manager">12.2 [HTTP] Where to Put the Cookie Manager</a></li>
-	 <li><a href="best-practices.html#put_auth_manager">12.3 [HTTP] Where to Put the Authorization Manager</a></li>
-	 <li><a href="best-practices.html#proxy_server">12.4 Using the Proxy Server to record test scripts</a></li>
+	 <li><a href="best-practices.html#limit_threads">13.1 [ALL] Limit the Number of Threads</a></li>
+	 <li><a href="best-practices.html#put_cookie_manager">13.2 [HTTP] Where to Put the Cookie Manager</a></li>
+	 <li><a href="best-practices.html#put_auth_manager">13.3 [HTTP] Where to Put the Authorization Manager</a></li>
+	 <li><a href="best-practices.html#proxy_server">13.4 Using the Proxy Server to record test scripts</a></li>
   </ul>
-  <li><a href="boss.html">13. Help! My boss wants me to load test our web app!</a></li>
+  <li><a href="boss.html">14. Help! My boss wants me to load test our web app!</a></li>
 
-  <li><a href="component_reference.html">14. Component Reference</a></li>
-  <li><a href="functions.html">15. Functions</a></li>
-  <li><a href="glossary.html">16. Glossary</a></li>
+  <li><a href="component_reference.html">15. Component Reference</a></li>
+  <li><a href="functions.html">16. Functions</a></li>
+  <li><a href="glossary.html">17. Glossary</a></li>
 </ul>
 
 </section>
