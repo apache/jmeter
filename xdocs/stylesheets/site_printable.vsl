@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<!-- Content Stylesheet for Site -->
+
+    ## Defined variables
+    #set ($bodybg = "#ffffff")
+    #set ($bodyfg = "#000000")
+    #set ($bodylink = "#525D76")
+    #set ($bannerbg = "#525D76")
+    #set ($bannerfg = "#ffffff")
+    #set ($subbannerbg = "#828DA6")
+    #set ($subbannerfg = "#ffffff")
+    #set ($tablethbg = "#039acc")
+    #set ($tabletdbg = "#a0ddf0")
+
+<!-- start the processing -->
+#document()
+<!-- end the processing -->
+
+## This is where the macro's live
+
+#macro ( table $table)
+<table>
+    #foreach ( $items in $table.getChildren() )
+        #if ($items.getName().equals("tr"))
+            #tr ($items)
+        #end
+    #end
+</table>
+#end
+
+#macro ( tr $tr)
+<tr>
+    #foreach ( $items in $tr.getChildren() )
+        #if ($items.getName().equals("td"))
+            #td ($items)
+        #elseif ($items.getName().equals("th"))
+            #th ($items)
+        #end
+    #end
+</tr>
+#end
+
+#macro ( td $value)
+#if ($value.getAttributeValue("colspan"))
+#set ($colspan = $value.getAttributeValue("colspan"))
+#end
+#if ($value.getAttributeValue("rowspan"))
+#set ($rowspan = $value.getAttributeValue("rowspan"))
+#end
+<td bgcolor="$tabletdbg" colspan="$!colspan" rowspan="$!rowspan" valign="top" align="left">
+    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+        #if ($value.getText().length() != 0 || $value.hasChildren())
+        $xmlout.outputString($value, true)
+        #else
+        &nbsp;
+        #end
+    </font>
+</td>
+#end
+
+#macro ( th $value)
+#if ($value.getAttributeValue("colspan"))
+#set ($colspan = $value.getAttributeValue("colspan"))
+#end
+#if ($value.getAttributeValue("rowspan"))
+#set ($rowspan = $value.getAttributeValue("rowspan"))
+#end
+<td bgcolor="$tablethbg" colspan="$!colspan" rowspan="$!rowspan" valign="top" align="left">
+    <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+        #if ($value.getText().length() != 0 || $value.hasChildren())
+        $xmlout.outputString($value, true)
+        #else
+        &nbsp;
+        #end
+    </font>
+</td>
+#end
+
+#macro ( projectanchor $name $value )
+#if ($value.startsWith("http://"))
+    &#149;&nbsp;<a href="$value">$name</a>
+#elseif ($value.startsWith("/site"))
+    &#149;&nbsp;<a href="http://jakarta.apache.org$value">$name</a>
+#else
+    &#149;&nbsp;<a href="$relativePath$value">$name</a>
+#end
+#end
+
+#macro ( metaauthor $author $email )
+            <meta name="author" value="$author">
+            <meta name="email" value="$email">
+#end
+
+#macro ( image $value )
+#if ($value.getAttributeValue("width"))
+#set ($width=$value.getAttributeValue("width"))
+#end
+#if ($value.getAttributeValue("height"))
+#set ($height=$value.getAttributeValue("height"))
+#end
+#if ($value.getAttributeValue("align"))
+#set ($align=$value.getAttributeValue("align"))
+#end
+<img src="$relativePath$value.getAttributeValue("src")" width="$!width" height="$!height" align="$!align">
+#end
+
+#macro ( source $value)
+    <div align="left">
+      <font size="2"><pre>$escape.getText($value.getText())</pre></font>
+    </div>
+#end
+
+#macro ( subsection $subsection)
+    <table border="0" cellspacing="0" cellpadding="2" width="100%">
+      <tr><td bgcolor="$subbannerbg">
+        <font color="$subbannerfg" face="arial,helvetica,sanserif">
+          <a name="$subsection.getAttributeValue("name")"><strong>$subsection.getAttributeValue("name")</strong></a>
+        </font>
+      </td></tr>
+      <tr><td><br/></td></tr>
+      <tr><td>
+        <blockquote>
+        #foreach ( $items in $subsection.getChildren() )
+            #if ($items.getName().equals("img"))
+                #image ($items)
+            #elseif ($items.getName().equals("source"))
+                #source ($items)
+            #elseif ($items.getName().equals("table"))
+                #table ($items)
+            #else
+                $xmlout.outputString($items)
+            #end
+        #end
+        </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+#end
+
+#macro ( section $section)
+    <table border="0" cellspacing="0" cellpadding="2" width="100%">
+      <tr><td bgcolor="$bannerbg">
+        <font color="$bannerfg" face="arial,helvetica,sanserif">
+          <a name="$section.getAttributeValue("name")"><strong>$section.getAttributeValue("name")</strong></a>
+        </font>
+      </td></tr>
+      <tr><td><br/></td></tr>
+      <tr><td>
+        <!--<blockquote>-->
+        #foreach ( $items in $section.getChildren() )
+            #if ($items.getName().equals("img"))
+                #image ($items)
+            #elseif ($items.getName().equals("source"))
+                #source ($items)
+            #elseif ($items.getName().equals("table"))
+                #table ($items)
+            #elseif ($items.getName().equals("subsection"))
+                #subsection ($items)
+            #else
+                $xmlout.outputString($items)
+            #end
+        #end
+        <!--</blockquote>-->
+        </p>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+#end
+
+#macro (getProjectImage)
+#if ($project.getChild("logo"))
+<td align="left">
+<a href="http://jakarta.apache.org"><img src="http://jakarta.apache.org/images/jakarta-logo.gif" border="0"/></a>
+
+#set ( $logoString = $project.getChild("logo").getAttributeValue("href") )
+#if ( $logoString.startsWith("/") )
+<a href="$project.getAttributeValue("href")"><img src="$relativePath$logoString" alt="$project.getChild("logo").getText()" border="0"/></a>
+#else
+<a href="$project.getAttributeValue("href")"><img src="$relativePath/$logoString" alt="$project.getChild("logo").getText()" border="0"/></a>
+#end
+</td>
+#else
+<td>
+<a href="http://jakarta.apache.org"><img src="http://jakarta.apache.org/images/jakarta-logo.gif" align="left" border="0"/></a>
+</td>
+#end
+#end
+
+#macro ( makeHorizontalProject )
+    #set ($menus = $project.getChild("body").getChildren("menu"))
+    <table cellspacing="4">
+    #foreach ( $menu in $menus )
+        <tr><td>
+        <strong>$menu.getAttributeValue("name")</strong>
+        </td><td>
+        #foreach ( $item in $menu.getChildren() )
+            #set ($name = $item.getAttributeValue("name"))
+             #projectanchor($name $item.getAttributeValue("href"))&nbsp;
+        #end
+        </td>
+        </tr>
+    #end
+    </table>
+#end
+
+#macro (document)
+    <!-- ====================================================================== -->
+    <!-- Main Page Section -->
+    <!-- ====================================================================== -->
+    <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+
+            #set ($authors = $root.getChild("properties").getChildren("author"))
+            #foreach ( $au in $authors )
+                #metaauthor ( $au.getText() $au.getAttributeValue("email") )
+            #end
+
+            <title>$project.getChild("title").getText() - $root.getChild("properties").getChild("title").getText()</title>
+        </head>
+
+        <body bgcolor="$bodybg" text="$bodyfg" link="$bodylink">        
+            <table border="0" width="100%" cellspacing="0">
+                <!-- TOP IMAGE -->
+                <tr>
+                    #getProjectImage()
+                </tr>
+            </table>
+            <table border="0" width="100%" cellspacing="4">
+                <tr><td>
+                    <hr noshade="" size="1"/>
+                </td></tr>
+                <tr>
+                    <td align="left" valign="top">
+                    #set ($allSections = $root.getChild("body").getChildren("section"))
+                    #foreach ( $section in $allSections )
+                        #section ($section)
+                    #end
+                    </td>
+                </tr>
+                <tr><td>
+                    <hr noshade="" size="1"/>
+                </td></tr>
+                <tr><td>
+                <!-- FOOT Navigation -->
+                #makeHorizontalProject ()
+                <!-- FOOTER -->
+                <tr><td>
+                    <hr noshade="" size="1"/>
+                </td></tr>
+                <tr><td>
+                    <div align="center"><font color="$bodylink" size="-1"><em>
+                    Copyright &#169; 1999-2001, Apache Software Foundation
+                    </em></font></div>
+                </td></tr>
+            </table>
+        </body>
+    </html>
+#end
