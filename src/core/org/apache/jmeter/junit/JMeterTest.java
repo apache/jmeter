@@ -21,6 +21,7 @@ import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
+import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -106,7 +107,14 @@ public class JMeterTest extends JMeterTestCase
         // ensure the GuiPackage is initialized.
         JMeterTreeModel treeModel = new JMeterTreeModel();
         JMeterTreeListener treeLis = new JMeterTreeListener(treeModel);
+        treeLis.setActionHandler(ActionRouter.getInstance());
         GuiPackage.getInstance(treeLis, treeModel);
+        // The GuiPackage needs a MainFrame to work:
+        org.apache.jmeter.gui.MainFrame main =
+            new org.apache.jmeter.gui.MainFrame(
+                ActionRouter.getInstance(),
+                treeModel,
+                treeLis);
 
     	TestSuite suite = new TestSuite();
     	suite.addTest(new JMeterTest("createTitleSet"));
