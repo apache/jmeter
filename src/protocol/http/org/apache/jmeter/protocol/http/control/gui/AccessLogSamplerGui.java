@@ -69,6 +69,7 @@ import org.apache.jmeter.protocol.http.sampler.AccessLogSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.layout.VerticalLayout;
@@ -110,7 +111,7 @@ import junit.framework.TestCase;
  */
 public class AccessLogSamplerGui
     extends AbstractSamplerGui
-    implements ChangeListener
+    implements ChangeListener, UnsharedComponent
 {
 
     private static final String label = JMeterUtils.getResString("log_sampler");
