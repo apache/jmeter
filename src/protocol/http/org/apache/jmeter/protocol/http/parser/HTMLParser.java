@@ -57,21 +57,26 @@
  */
 package org.apache.jmeter.protocol.http.parser;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
-import junit.framework.TestCase;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -83,9 +88,6 @@ public abstract class HTMLParser
 {
     /** Used to store the Logger (used for debug and error messages). */
 	transient private static Logger log = LoggingManager.getLoggerForClass();
-
-//    /** Singleton */
-//    private static HTMLParser parser;
 
 	private static final String PARSER_METHOD = "getParserInstance";
 	private static final String PARSER_REUSABLE = "isParserReusable";
@@ -231,25 +233,6 @@ public abstract class HTMLParser
         }
     	return pars;
     }
-//    /**
-//     * Obtain the (singleton) HtmlParser. 
-//     * 
-//     * @return The single HtmlParser instance.
-//     */
-//    public static final synchronized HTMLParser xgetParser()
-//    {
-//        if (parser == null) {
-//            initialize();
-//        }
-//        return parser;
-//    }
-
-	/**
-	 * Obtain the (singleton) HtmlParser. 
-	 * 
-	 * @return The single HtmlParser instance.
-	 */
-	//public static abstract HTMLParser xgetParserInstance();
 
     /**
      * Get the URLs for all the resources that a browser would automatically
@@ -298,71 +281,199 @@ public abstract class HTMLParser
 	                                                  Collection coll)
 		throws HTMLParseException;
 
-    public static class HTMLParserTest extends TestCase
+
+
+//////////////////////////// TEST CODE FOLLOWS /////////////////////////////
+
+
+    public static class HTMLParserTest extends JMeterTestCase
     {
-		private static final String TESTFILE1= "testfiles/HTMLParserTestCase.html";
-        private static final String TESTFILE2= "testfiles/HTMLParserTestCaseWithBaseHRef.html";
-		private static final String URL1 = "http://myhost/mydir/myfile.html";
-		private static final String[] EXPECTED_RESULT1 = new String[] {
-			"http://myhost/mydir/images/image-a.gif",
-			"http://myhost/mydir/images/image-b.gif",
-			"http://myhost/mydir/images/image-c.gif",
-			"http://myhost/mydir/images/image-d.gif",
-			"http://myhost/mydir/images/image-e.gif",
-			"http://myhost/mydir/images/image-f.gif",
-			"http://myhost/mydir/images/image-a2.gif",
-			"http://myhost/mydir/images/image-b2.gif",
-			"http://myhost/mydir/images/image-c2.gif",
-			"http://myhost/mydir/images/image-d2.gif",
-			"http://myhost/mydir/images/image-e2.gif",
-			"http://myhost/mydir/images/image-f2.gif",
-		};
-		
-		private static final String[] EXPECTED_RESULT1A = new String[] {
-			"http://myhost/mydir/images/image-a.gif",
-			"http://myhost/mydir/images/image-b.gif",
-			"http://myhost/mydir/images/image-b.gif",
-			"http://myhost/mydir/images/image-c.gif",
-			"http://myhost/mydir/images/image-d.gif",
-			"http://myhost/mydir/images/image-e.gif",
-			"http://myhost/mydir/images/image-f.gif",
-			"http://myhost/mydir/images/image-a2.gif",
-			"http://myhost/mydir/images/image-b2.gif",
-			"http://myhost/mydir/images/image-c2.gif",
-			"http://myhost/mydir/images/image-d2.gif",
-			"http://myhost/mydir/images/image-d2.gif",
-			"http://myhost/mydir/images/image-e2.gif",
-			"http://myhost/mydir/images/image-f2.gif",
-		};
-        public HTMLParserTest() {
-            super();
+		private String parserName;
+        private int testNumber=0;
+
+        public HTMLParserTest(String name) {
+			super(name);
+		}
+
+		public HTMLParserTest(String name, int test) {
+			super(name);
+			testNumber = test;
+		}
+
+		public HTMLParserTest(String name, String parser, int test) {
+			super(name);
+			testNumber = test;
+			parserName = parser;
+		}
+
+
+		private static class TestClass //Can't instantiate
+		{
+    	    private TestClass(){};	 
+		}
+
+    	private static class TestData
+    	{
+    		private String fileName;
+			private String baseURL;
+			private String expectedSet;
+			private String expectedList;
+
+			private TestData(String f, String b, String s, String l){
+				fileName = f;
+				baseURL  = b;
+				expectedSet = s;
+				expectedList = l;
+			}
+
+			private TestData(String f, String b, String s){
+				this(f,b,s,null);
+			}
+    	}
+
+        // List of parsers to test. Should probably be derived automatically
+        private static final String []  PARSERS = {
+			"org.apache.jmeter.protocol.http.parser.HtmlParserHTMLParser",
+			"org.apache.jmeter.protocol.http.parser.JTidyHTMLParser",
+			"org.apache.jmeter.protocol.http.parser.RegexpHTMLParser"
+        };
+        private static final TestData[] TESTS = new TestData[]{
+        	new TestData(
+        	             "testfiles/HTMLParserTestCase.html",
+			             "http://myhost/mydir/myfile.html",
+			             "testfiles/HTMLParserTestCase.set",
+			              "testfiles/HTMLParserTestCase.all"
+        	             ),
+			new TestData(
+			             "testfiles/HTMLParserTestCaseWithBaseHRef.html",
+						 "http://myhost/mydir/myfile.html",
+						 "testfiles/HTMLParserTestCase.set",
+						  "testfiles/HTMLParserTestCase.all"
+						 ),
+			new TestData(
+						 "testfiles/HTMLParserTestCase2.html",
+						 "http:", //Dummy, as the file has no entries
+						 "",
+						 ""
+						 ),
+			new TestData(
+						 "testfiles/HTMLParserTestCase3.html",
+						 "http:", //Dummy, as the file has no entries
+						 "",
+						 ""
+						 ),
+        };
+
+        public static Test suite(){
+        	TestSuite suite = new TestSuite();
+        	suite.addTest(new HTMLParserTest("testDefaultParser"));
+			suite.addTest(new HTMLParserTest("testParserDefault"));
+			suite.addTest(new HTMLParserTest("testParserMissing"));
+			suite.addTest(new HTMLParserTest("testNotParser"));
+			suite.addTest(new HTMLParserTest("testNotCreatable"));
+			for (int i = 0;i<PARSERS.length;i++){
+				TestSuite ps = new TestSuite(PARSERS[i]);// Identify the subtests
+				ps.addTest(new HTMLParserTest("testParserProperty",PARSERS[i],0));
+				for (int j=0;j<TESTS.length;j++){
+					TestSuite ts = new TestSuite(TESTS[j].fileName);
+					ts.addTest(new HTMLParserTest("testParserSet",PARSERS[i],j));
+					ts.addTest(new HTMLParserTest("testParserList",PARSERS[i],j));
+					ps.addTest(ts);
+				}
+				suite.addTest(ps);
+			}
+        	return suite;
         }
+        
         // Test if can instantiate parser using property name
-        public static void testParser(String s) throws Exception
+        public void testParserProperty() throws Exception
         {
 			Properties p = JMeterUtils.getJMeterProperties();
 			if (p == null){
 				p=JMeterUtils.getProperties("jmeter.properties");
 			}
-			p.setProperty(PARSER_CLASSNAME,s);
-        	testParser(getParser());
-			testParser(getParser());// check re-usability
+			p.setProperty(PARSER_CLASSNAME,parserName);
+			getParser();
         }
         
-        //TODO - this test won't work for non-reusable parsers
-        public static void testParser(HTMLParser p) throws Exception
+		public void testDefaultParser() throws Exception {
+			getParser(); 
+		}
+
+		public void testParserDefault() throws Exception {
+			getParser(DEFAULT_PARSER); 
+		}
+
+		public void testParserMissing() throws Exception {
+			try{
+			    getParser("no.such.parser");
+			}
+			catch (Error e)
+			{
+				if (e.getCause() instanceof ClassNotFoundException)
+				{
+					 //	This is OK
+				}
+				else
+				{
+					throw e;
+				}
+			}
+		}
+
+		public void testNotParser() throws Exception {
+			try{
+                getParser("java.lang.String");
+			}
+			catch (Error e)
+			{
+				if (e.getCause() instanceof NoSuchMethodException)
+				{
+					 //	This is OK
+				}
+				else
+				{
+					throw e;
+				}
+			}
+		}
+
+		public void testNotCreatable() throws Exception {
+			try
+			{
+				getParser(TestClass.class.getName());
+			}
+			catch (Error e)
+			{
+				if (e.getCause() instanceof NoSuchMethodException)
+				{
+					 //	This is OK
+				}
+				else
+				{
+					throw e;
+				}
+			}
+		}
+
+        public void testParserSet() throws Exception
         {
-        	filetest(p,TESTFILE1,URL1,EXPECTED_RESULT1,null);
-			filetest(p,TESTFILE1,URL1,EXPECTED_RESULT1,null);// See if reusable
-			filetest(p,TESTFILE1,URL1,EXPECTED_RESULT1A,new Vector());
-			filetest(p,TESTFILE1,URL1,EXPECTED_RESULT1A,new Vector());
-            // Test for BASE HREF support:
-            filetest(p,TESTFILE2,URL1,EXPECTED_RESULT1,null);
-            filetest(p,TESTFILE2,URL1,EXPECTED_RESULT1A,new Vector());
+			HTMLParser p = getParser(parserName);
+        	filetest(p,TESTS[testNumber].fileName,TESTS[testNumber].baseURL,TESTS[testNumber].expectedSet,null);
         }
 
-		private static void filetest(HTMLParser p,String file, String url, String[] expected_result,
-		              Collection c) throws Exception
+		public void testParserList() throws Exception
+		{
+			HTMLParser p = getParser(parserName);
+			filetest(p,TESTS[testNumber].fileName,TESTS[testNumber].baseURL,TESTS[testNumber].expectedList,new Vector());
+		}
+
+		private static void filetest(HTMLParser p,
+		                               String file,
+		                               String url,
+		                               String resultFile,
+		                               Collection c)
+		throws Exception
 		{
 			log.info("file   "+file);
 			log.info("parser "+p.getClass().getName());
@@ -376,7 +487,7 @@ public abstract class HTMLParser
 			} else {
 			    result = p.getEmbeddedResourceURLs(buffer,new URL(url),c);
 			}
-			Iterator expected= Arrays.asList(expected_result).iterator();
+			Iterator expected= getFile(resultFile).iterator();
 			while (expected.hasNext()) {
 				assertTrue(result.hasNext());
 				assertEquals(expected.next(), result.next().toString());
@@ -384,8 +495,23 @@ public abstract class HTMLParser
 			assertFalse(result.hasNext());
 		}
 
-        public void testDefaultParser() throws Exception {
-            testParser(getParser());
-        }
+        // Get expected results as a List
+		private static List getFile(String file)
+		    throws Exception
+		{
+			ArrayList al = new ArrayList();
+			if (file != null && file.length() > 0){
+			  BufferedReader br = 
+			    new BufferedReader(
+			        new FileReader(new File(file)));
+			  String line = br.readLine();
+			  while (line != null){
+				al.add(line);
+				line = br.readLine();
+			  }
+			  br.close();
+			}
+			return al;
+		}
     }
 }
