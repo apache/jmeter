@@ -19,8 +19,10 @@
 package org.apache.jmeter.protocol.tcp.config.gui;
 import java.awt.BorderLayout;
 
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.config.ConfigTestElement;
@@ -29,6 +31,7 @@ import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.tcp.sampler.TCPSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * @version   $Revision$ $Date$
@@ -40,13 +43,16 @@ public class TCPConfigGui extends AbstractConfigGui
 	private final static String FILENAME = "filename"; //$NON-NLS-1$ 
 	private final static String TIMEOUT = "timeout";   //$NON-NLS-1$
 	private final static String NODELAY = "nodelay";   //$NON-NLS-1$
+	private final static String REQUEST = "request";   //$NON-NLS-1$
 
     private JTextField server;
     private JTextField port;
 	private JTextField filename;
 	private JTextField timeout;
-	private JTextField nodelay;
+    private JCheckBox setNoDelay;
 
+    private JTextArea requestData;
+    
     private boolean displayName = true;
 
     public TCPConfigGui()
@@ -70,9 +76,10 @@ public class TCPConfigGui extends AbstractConfigGui
         super.configure(element);
         server.setText(element.getPropertyAsString(TCPSampler.SERVER));
         port.setText(element.getPropertyAsString(TCPSampler.PORT));
-		filename.setText(element.getPropertyAsString(TCPSampler.FILENAME));
+		//filename.setText(element.getPropertyAsString(TCPSampler.FILENAME));
 		timeout.setText(element.getPropertyAsString(TCPSampler.TIMEOUT));
-		nodelay.setText(element.getPropertyAsString(TCPSampler.NODELAY));
+		setNoDelay.setSelected(element.getPropertyAsBoolean(TCPSampler.NODELAY));
+		requestData.setText(element.getPropertyAsString(TCPSampler.REQUEST));
 	}
 
     public TestElement createTestElement()
@@ -91,9 +98,10 @@ public class TCPConfigGui extends AbstractConfigGui
         configureTestElement(element);
         element.setProperty(TCPSampler.SERVER, server.getText());
         element.setProperty(TCPSampler.PORT, port.getText());
-		element.setProperty(TCPSampler.FILENAME, filename.getText());
-		element.setProperty(TCPSampler.NODELAY, nodelay.getText());
+		//element.setProperty(TCPSampler.FILENAME, filename.getText());
+		element.setProperty(TCPSampler.NODELAY, JOrphanUtils.booleanToString(setNoDelay.isSelected()));
 		element.setProperty(TCPSampler.TIMEOUT, timeout.getText());
+		element.setProperty(TCPSampler.REQUEST, requestData.getText());
     }
 
     private JPanel createTimeoutPanel()
@@ -114,13 +122,13 @@ public class TCPConfigGui extends AbstractConfigGui
 	{
 		JLabel label = new JLabel(JMeterUtils.getResString("tcp_nodelay"));
 
-		nodelay = new JTextField(10);
-		nodelay.setName(NODELAY);
-		label.setLabelFor(nodelay);
+		setNoDelay = new JCheckBox();
+		setNoDelay.setName(NODELAY);
+		label.setLabelFor(setNoDelay);
 
 		JPanel nodelayPanel = new JPanel(new BorderLayout(5, 0));
 		nodelayPanel.add(label, BorderLayout.WEST);
-		nodelayPanel.add(nodelay, BorderLayout.CENTER);
+		nodelayPanel.add(setNoDelay, BorderLayout.CENTER);
 		return nodelayPanel;
 	}
 
@@ -152,8 +160,22 @@ public class TCPConfigGui extends AbstractConfigGui
         return PortPanel;
     }
 
-	private JPanel createFilenamePanel()
+    private JPanel createRequestPanel()
+	{    	
+		JLabel reqLabel = new JLabel(JMeterUtils.getResString("tcp_request_data"));
+		requestData = new JTextArea(3,0);
+		requestData.setName(REQUEST);
+		reqLabel.setLabelFor(requestData);
+	
+		JPanel reqDataPanel = new JPanel(new BorderLayout(5, 0));
+		reqDataPanel.add(reqLabel, BorderLayout.WEST);
+		reqDataPanel.add(requestData, BorderLayout.CENTER);
+		return reqDataPanel;
+
+	}
+    private JPanel createFilenamePanel()//Not used yet
 	{
+		
 		JLabel label = new JLabel(JMeterUtils.getResString("file_to_retrieve"));
 
 		filename = new JTextField(10);
@@ -181,8 +203,9 @@ public class TCPConfigGui extends AbstractConfigGui
         mainPanel.add(createPortPanel());
 		mainPanel.add(createTimeoutPanel());
 		mainPanel.add(createNoDelayPanel());
+		mainPanel.add(createRequestPanel());
 
-		mainPanel.add(createFilenamePanel());
+		//mainPanel.add(createFilenamePanel());
 		add(mainPanel, BorderLayout.CENTER);
     }
 }
