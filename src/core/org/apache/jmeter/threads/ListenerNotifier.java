@@ -250,7 +250,12 @@ public class ListenerNotifier
         Iterator iter = listeners.iterator();
         while (iter.hasNext())
         {
-            ((SampleListener) iter.next()).sampleOccurred(res);
+            try {
+				((SampleListener) iter.next()).sampleOccurred(res);
+			} catch (RuntimeException e) {
+				log.error("Detected problem in Listener: ",e);
+				log.info("Continuing to process further listeners");
+			}
         }
     }
 

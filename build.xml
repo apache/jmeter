@@ -1051,8 +1051,8 @@ some of its classes - at present JMeter can only run from jar files.
   </target>
   
   <target name="_gump_properties">
-  <echo>
-  Gump properties for this run
+  <echo level="info">
+ Gump properties for this run
   jmeter.version      = ${jmeter.version}
   gump.run            = ${gump.run}
   date.projectfile    = ${date.projectfile}
@@ -1064,6 +1064,9 @@ some of its classes - at present JMeter can only run from jar files.
   deprecation         = ${deprecation}
   encoding            = ${encoding}
   </echo>
+  <echoproperties prefix="ant"/>
+  <echoproperties prefix="gump"/>
+  <echoproperties prefix="os"/>
 
   </target>
 

@@ -48,9 +48,9 @@ public class CheckDirty
     public static final String SUB_TREE_SAVED = "sub_tree_saved";
     public static final String SUB_TREE_LOADED = "sub_tree_loaded";
     public static final String ADD_ALL = "add_all";
-    public static final String SAVE = "save_as";
-    public static final String SAVE_ALL = "save_all";
-    public static final String SAVE_TO_PREVIOUS = "save";
+    //Not implemented: public static final String SAVE = "save_as";
+    //Not implemented: public static final String SAVE_ALL = "save_all";
+    //Not implemented: public static final String SAVE_TO_PREVIOUS = "save";
     public static final String REMOVE = "check_remove";
 
     boolean checkMode = false;

@@ -73,7 +73,7 @@ public class JavaScript extends AbstractFunction implements Serializable
 
         String script = ((CompoundVariable) values[0]).execute();
         String varName =
-            ((CompoundVariable) values[values.length - 1]).execute();
+            ((CompoundVariable) values[1]).execute();
         String resultStr = "";
 
         Context cx = Context.enter();
@@ -120,9 +120,10 @@ public class JavaScript extends AbstractFunction implements Serializable
 
         values = parameters.toArray();
 
-        if (values.length < 2)
+        if (values.length != 2)
         {
-            throw new InvalidVariableException();
+            throw new InvalidVariableException(
+            		"Expecting 2 parameters, but found " + values.length);//$NON-NLS-1$
         }
 
     }

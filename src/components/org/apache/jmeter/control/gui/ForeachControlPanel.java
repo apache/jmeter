@@ -19,6 +19,8 @@
 package org.apache.jmeter.control.gui;
 
 import java.awt.BorderLayout;
+
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -53,7 +55,9 @@ public class ForeachControlPanel
      */
     private JTextField returnVal;
 
-
+	// Should we add the "_" separator?
+	private JCheckBox useSeparator;
+	
     /**
      * Boolean indicating whether or not this component should display its
      * name. If true, this is a standalone component. If false, this component
@@ -103,6 +107,7 @@ public class ForeachControlPanel
         super.configure(element);
         inputVal.setText(((ForeachController) element).getInputValString());
         returnVal.setText(((ForeachController) element).getReturnValString());
+		useSeparator.setSelected(((ForeachController) element).getUseSeparator());
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
@@ -135,6 +140,7 @@ public class ForeachControlPanel
             {
                 ((ForeachController) lc).setReturnVal("");
             }
+			((ForeachController) lc).setUseSeparator(useSeparator.isSelected());
         }
     }
 
@@ -207,8 +213,12 @@ public class ForeachControlPanel
         returnValSubPanel.add(returnValLabel, BorderLayout.WEST);
         returnValSubPanel.add(returnVal, BorderLayout.CENTER);
 
+		// Checkbox
+		useSeparator = new JCheckBox(JMeterUtils.getResString("foreach_use_separator"),true);
+		
         loopPanel.add(inputValSubPanel);
         loopPanel.add(returnValSubPanel);
+		loopPanel.add(useSeparator);
 
         return loopPanel;
     }

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-   Copyright 2001-2004 The Apache Software Foundation
+   Copyright 2001-2005 The Apache Software Foundation
  
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -47,9 +47,10 @@ is wrapped in ${}.</p>
         <li><a href="#__property">read a property</a></li>
         <li><a href="#__P">P -read a property</a></li>
         <li><a href="#__log">log - log a message</a></li>
-        <li><a href="#__logn">log - log a message</a></li>
+        <li><a href="#__logn">logn - log a message</a></li>
         <li><a href="#__BeanShell">BeanShell - run BeanShell</a></li>
         <li><a href="#__split">split - Split a string into variables</a></li>
+        <li><a href="#__XPath">XPath - XPath use an xpath expression</a></li>
 </ul>
 
 <subsection name="16.1 What can functions do" anchor="what_can_do">
@@ -74,6 +75,15 @@ because they are expecting numbers, and thus will not accept a function.  Howeve
 functions.</p>
 <p>Built-in functions can be written into any field of non-controller test components. This includes
 Samplers, Timers, Listeners, Modifiers, Assertions, Pre-Processors, Post-Processors and Config Elements.</p>
+<note>When using variable/function references in SQL code (etc),
+remember to include any necessary quotes for text strings,
+i.e. use<br></br>
+SELECT item from table where name='${VAR}'
+<br></br><b>not</b>
+<br></br>
+SELECT item from table where name=${VAR}
+<br></br>(unless VAR itself contains the quotes)
+</note>
 </subsection>
 
 <subsection name="16.3 Writing the function string" anchor="how">
@@ -520,7 +530,29 @@ If omitted, "," is used. Note that "," would need to be specified as "\,".
         
 </properties>
 </component>
+<component index="16.5.15" name="__XPath">
+<description>
+	<p>
+	The XPath function reads an XML file and matches the XPath, each
+	of the node match's are iterated through similar to the CVSReader.
+	</p>
+	<p/>
+	Example:
+	<code>
+	<br/>
+		
+	<br/>
+	${__XPath(/path/to/build.xml, //target/@name)}
+	<br/>
+	This will match all targets in build.xml and return the name variable
+	</code>
+</description>
 
+<properties>
+        <property name="XML file to parse" required="Yes"> a XML file to parse</property>
+        <property name="XPath" required="Yes"> a XPath expression to match nodes in the XML file</property>        
+</properties>
+</component>
 </subsection>
 
 </section>

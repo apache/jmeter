@@ -111,8 +111,8 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         //NOTREAD currentSampler = sampler;
         SamplePackage pack = (SamplePackage) samplerConfigMap.get(sampler);
         pack.setSampler(sampler);
-        runPreProcessors(pack.getPreProcessors());
         configureWithConfigElements(sampler, pack.getConfigs());
+        runPreProcessors(pack.getPreProcessors());
         //replaceStatics(ret);
         return pack;
     }
@@ -214,6 +214,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         LinkedList pres = new LinkedList();
         for (int i = stack.size(); i > 0; i--)
         {
+            addDirectParentControllers(controllers, (TestElement)stack.get(i-1));
             Iterator iter = testTree.list(stack.subList(0, i)).iterator();
             List tempPre = new LinkedList();
             List tempPost = new LinkedList();
@@ -244,10 +245,6 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
                 {
                     tempPre.add(item);
                 }
-                if(item instanceof Controller)
-                {
-                   controllers.add(item);
-                }
             }
             pres.addAll(0,tempPre);
             posts.addAll(0,tempPost);
@@ -267,6 +264,19 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         pack.setSampler(sam);
         pack.setRunningVersion(true);
         samplerConfigMap.put(sam, pack);
+    }
+
+    /**
+     * @param controllers
+     * @param i
+     */
+    private void addDirectParentControllers(List controllers, TestElement maybeController)
+    {
+        if(maybeController instanceof Controller)
+            {
+            log.info("adding controller: " + maybeController + " to sampler config");
+               controllers.add(maybeController);
+            }
     }
 
     /**

@@ -141,6 +141,14 @@ public class BeanShellAssertionGui extends AbstractAssertionGui
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(label, BorderLayout.NORTH);
 		panel.add(new JScrollPane(scriptField), BorderLayout.CENTER);
+
+		JTextArea explain = new JTextArea(
+				JMeterUtils.getResString("bsh_assertion_script_variables"));
+		explain.setLineWrap(true);
+        explain.setEditable(false);
+        explain.setBackground(this.getBackground());
+		panel.add(explain, BorderLayout.SOUTH);
+
 		return panel;
 	}
 }

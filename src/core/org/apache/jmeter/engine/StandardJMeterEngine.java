@@ -22,7 +22,6 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -460,27 +459,22 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
       //if true the Scheduler is enabled
       if (group.getScheduler())
       {
-         //set the starttime for the Thread
-         if (group.getDelay() > 0)
-         {// Duration is in seconds
-            thread.setStartTime(group.getDelay() * 1000
-                  + (new Date().getTime()));
-         }
-         else
-         {
-            thread.setStartTime(group.getStartTime());
-         }
+         long now = System.currentTimeMillis();
+			//set the start time for the Thread
+        	if (group.getDelay() > 0 ){// Duration is  in seconds
+				thread.setStartTime(group.getDelay()*1000+now);
+        	} else {
+        		long start = group.getStartTime();
+        		if (start < now) start = now; // Force a sensible start time
+				thread.setStartTime(start);
+        	}
 
          //set the endtime for the Thread
-         if (group.getDuration() > 0)
-         {// Duration is in seconds
-            thread.setEndTime(group.getDuration() * 1000
-                  + (new Date().getTime()));
-         }
-         else
-         {
-            thread.setEndTime(group.getEndTime());
-         }
+            if (group.getDuration() > 0){// Duration is  in seconds
+				thread.setEndTime(group.getDuration()*1000+(thread.getStartTime()));
+            } else {
+				thread.setEndTime(group.getEndTime());
+            }
 
          //Enables the scheduler
          thread.setScheduled(true);
