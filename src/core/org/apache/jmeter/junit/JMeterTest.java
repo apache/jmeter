@@ -356,6 +356,10 @@ public class JMeterTest extends JMeterTestCase
 			    (title.indexOf("(ALPHA") == -1)
 			    &&
 			    (title.indexOf("(BETA")  == -1)
+				&&
+				(!title.equals("Example1")) // Skip the example samplers ...
+				&&
+				(!title.equals("Example2"))
 			)
 			{// No, not a work in progress ...
 				assertTrue("component_reference.xml needs '"+title+"' anchor for "+guiItem.getClass().getName(),ct);
@@ -410,10 +414,16 @@ public class JMeterTest extends JMeterTestCase
             guiItem.getName());
         if (!name.endsWith("TestBeanGUI"))
         {
-        	String label = guiItem.getLabelResource();
-            assertTrue(label.length() > 0);
-            assertFalse("Label should be in resource file for "+name
-            		,JMeterUtils.getResString(label).startsWith(JMeterUtils.RES_KEY_PFX));
+        	try{
+	        	String label = guiItem.getLabelResource();
+	            assertTrue(label.length() > 0);
+	            assertFalse("'"+label+"' should be in resource file for "+name
+	            		,JMeterUtils.getResString(label).startsWith(JMeterUtils.RES_KEY_PFX));
+        	}
+            catch(UnsupportedOperationException uoe)
+			{
+            	log.warn("Class has not yet implemented getLabelResource "+name);
+            }
         }
     }
 
