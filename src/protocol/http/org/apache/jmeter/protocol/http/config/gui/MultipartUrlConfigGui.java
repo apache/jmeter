@@ -34,7 +34,7 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.VerticalPanel;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -67,14 +67,14 @@ public class MultipartUrlConfigGui
         TestElement ce = super.createTestElement();
 
         configureTestElement(ce);
-        ce.setProperty(HTTPSampler.MIMETYPE, mimetypeField.getText());
-        ce.setProperty(HTTPSampler.FILE_NAME, filenameField.getText());
-        ce.setProperty(HTTPSampler.FILE_FIELD, paramNameField.getText());
+        ce.setProperty(HTTPSamplerBase.MIMETYPE, mimetypeField.getText());
+        ce.setProperty(HTTPSamplerBase.FILE_NAME, filenameField.getText());
+        ce.setProperty(HTTPSamplerBase.FILE_FIELD, paramNameField.getText());
         return ce;
     }
 
 // does not appear to be used
-//    public void configureSampler(HTTPSampler sampler)
+//    public void configureSampler(HTTPSamplerBase sampler)
 //    {
 //        sampler.setMimetype(mimetypeField.getText());
 //        sampler.setFileField(paramNameField.getText());
@@ -85,9 +85,9 @@ public class MultipartUrlConfigGui
     public void configure(TestElement el)
     {
         super.configure(el);
-        mimetypeField.setText(el.getPropertyAsString(HTTPSampler.MIMETYPE));
-        filenameField.setText(el.getPropertyAsString(HTTPSampler.FILE_NAME));
-        paramNameField.setText(el.getPropertyAsString(HTTPSampler.FILE_FIELD));
+        mimetypeField.setText(el.getPropertyAsString(HTTPSamplerBase.MIMETYPE));
+        filenameField.setText(el.getPropertyAsString(HTTPSamplerBase.FILE_NAME));
+        paramNameField.setText(el.getPropertyAsString(HTTPSamplerBase.FILE_FIELD));
     }
 
     public String getLabelResource()
