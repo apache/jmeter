@@ -44,7 +44,7 @@ public class MonitorHealthPanel extends JPanel
 	private MonitorAccumModel MODEL;
 	private JScrollPane SCROLL = null;
 	
-	Font plainText = new Font("plain", Font.PLAIN, 9);
+	//NOTUSED Font plainText = new Font("plain", Font.PLAIN, 9);
 	public static final String INFO_H =
 		JMeterUtils.getResString("monitor_equation_healthy");
 	public static final String INFO_A =
