@@ -16,6 +16,11 @@ import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+/**
+ * 
+ * @author unattributed
+ * @version $revision$ $date$
+ */
 public class Help implements Command
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
@@ -54,7 +59,6 @@ public class Help implements Command
         {
         	String msg = "Couldn't load help file " + err.toString();
             log.error(msg);
-            helpDoc.setText(msg);
             currentPage="";// Avoid NPE in resetPage()
         }
     }
@@ -100,13 +104,6 @@ public class Help implements Command
     {
         if (!currentPage.equals(source))
         {
-        	if (currentPage.length()==0){
-        		helpDoc = new HtmlPane();// setText seems to mangle the old one
-        		scroller.setViewportView(helpDoc);
-				helpDoc.setEditable(false);
-				//TODO: still does not recover completely, but is usable
-				// and unlikely to be needed now that HELP_PAGE is shared string
-        	}
             try
             {
                 helpDoc.setPage(source);
@@ -114,9 +111,8 @@ public class Help implements Command
             }
             catch (IOException err)
             {
-				String msg = "Couldn't load page " + source + " " + err.toString();
-                log.error(msg);
-                helpDoc.setText(msg);
+                log.error(err.toString());
+				JMeterUtils.reportErrorToUser("Problem loading a help page - see log for details");
                 currentPage="";
             }
         }
