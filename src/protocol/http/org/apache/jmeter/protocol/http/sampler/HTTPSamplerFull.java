@@ -288,6 +288,10 @@ public class HTTPSamplerFull extends HTTPSampler
 
 			binRes = new SampleResult();
 			namedItem = nnm.getNamedItem(srcTag);
+			if(namedItem == null)
+			{
+				continue;
+			}
 			String binUrlStr = namedItem.getNodeValue();
 			// set the baseUrl and binUrl so that if error occurs
 			// due to MalformedException then at least the values will be
