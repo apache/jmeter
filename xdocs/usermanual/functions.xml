@@ -175,15 +175,43 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 </description>
 
 <properties>
-        <property name="First argument" required="Yes">Path to the file name.
+        <property name="File Name" required="Yes">Path to the file name.
         	(The path can be relative to the JMeter launch directory)
+        	If using optional sequence numbers, the path name should be suitable for passing to DecimalFormat.
+        	See below for examples.
         </property>
-        <property name="Second argument" required="No">
+        <property name="Variable Name" required="No">
 A reference name - refName - for reusing the value created by this function. Stored values are of the form ${refName}.
         </property>
+        <property name="Start sequence number" required="No">Initial Sequence number</property>
+        <property name="End   sequence number" required="No">Final sequence number (if omitted, seqence numbers can increase without limit)</property>
 </properties>
 <p>The file name parameter is resolved when the file is opened or re-opened.</p>
 <p>The reference name parameter (if supplied) is resolved every time the function is executed.</p>
+<p><b>Using sequence numbers:</b></p>
+<p>When using the optional sequence numbers, the path name is used as the format string for java.text.DecimalFormat.
+	The current sequence number is passed in as the only parameter.
+    If the optional sequence numbers are not used, the path name is used as is.
+	Useful formatting sequences are:
+<pre>
+# - insert the number, with no leading zeros or spaces
+000 - insert the number packed out to 3 digits with leading zeros if necessary
+
+Examples:
+ pin#.dat -> pin1.dat, ... pin9.dat, pin10.dat, ... pin9999.dat
+ pin000.dat -> pin001.dat ... pin099.dat ... pin999.dat ... pin9999.dat
+</pre>
+	If more digits are required than there are formatting characters, the number will be
+	expanded as necessary. To prevent a formatting character from being interpreted,
+	enclose it in single quotes. See the documentation for DecimalFormat for full details.
+	<br></br>
+	If the path name does not contain any special formatting characters,
+	it will be unaffected by the current sequence number. 
+	In this case, specifying only a start sequence number will have no effect,
+	but specifying a start and end sequence number will result in the file
+	being used at mose end-start+1 times.
+	
+	</p>
 </component>
 
 <component index="15.5.6" name="__machineName">
