@@ -8,7 +8,7 @@
  */
 package org.apache.jmeter.functions;
 
-import java.io.PrintWriter;
+//import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -19,7 +19,7 @@ import junit.framework.TestSuite;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jorphan.logging.LoggingManager;
-//import org.apache.log.Logger;
+import org.apache.log.Logger;
 
 /**
  * @author sebb AT apache DOT org
@@ -28,7 +28,7 @@ import org.apache.jorphan.logging.LoggingManager;
 public class PackageTest extends JMeterTestCase
 {
 
-//	transient private static final Logger log = LoggingManager.getLoggerForClass();
+	transient private static final Logger log = LoggingManager.getLoggerForClass();
 
     static{
 //	    LoggingManager.setPriority("DEBUG","jmeter");
@@ -55,19 +55,19 @@ public class PackageTest extends JMeterTestCase
 	public static Test suite() throws Exception
 	{
 		   TestSuite suite = new TestSuite("SingleThreaded");
-		   suite.addTest(new PackageTest("CSVParams"));
+  		   suite.addTest(new PackageTest("CSVParams"));
 		   suite.addTest(new PackageTest("CSVNoFile"));
 		   suite.addTest(new PackageTest("CSVSetup"));
 		   suite.addTest(new PackageTest("CSVRun"));
 
-//           suite.addTest(new PackageTest("CSValias"));
-//
-//           //Reset files
-//           suite.addTest(new PackageTest("CSVSetup"));
-//		   TestSuite par = new ActiveTestSuite("Parallel");
-//		   par.addTest(new PackageTest("CSVThread1"));
-//		   par.addTest(new PackageTest("CSVThread2"));
-//		   suite.addTest(par);
+           suite.addTest(new PackageTest("CSValias"));
+
+           //Reset files
+           suite.addTest(new PackageTest("CSVSetup"));
+		   TestSuite par = new ActiveTestSuite("Parallel");
+		   par.addTest(new PackageTest("CSVThread1"));
+		   par.addTest(new PackageTest("CSVThread2"));
+		   suite.addTest(par);
 		   return suite;
     }
     
@@ -238,31 +238,30 @@ public class PackageTest extends JMeterTestCase
 
 		String s;
 		
-		s = cr1.execute(null,null);
+		s = cr1.execute(null,null); // open as *A
 		assertEquals("",s);
-		s = cr2.execute(null,null);
+		s = cr2.execute(null,null); // col 1, line 1, *A
 		assertEquals("b1",s);
 		
 
-		s = cr4.execute(null,null);
+		s = cr4.execute(null,null);// open as *B
 		assertEquals("",s);
-		s = cr5.execute(null,null);
+		s = cr5.execute(null,null);// col2 line 1
 		assertEquals("c1",s);
 		
-		s = cr3.execute(null,null);
+		s = cr3.execute(null,null);// *A next
 		assertEquals("",s);
-		s = cr2.execute(null,null);
+		s = cr2.execute(null,null);// col 1, line 2, *A
 		assertEquals("b2",s);
 		
-		// Empty string
-		s = cr5.execute(null,null);
-		assertEquals("d1",s);
+		s = cr5.execute(null,null);// col2, line 1, *B
+		assertEquals("c1",s);
 
-		s = cr6.execute(null,null);
+		s = cr6.execute(null,null);// *B next
 		assertEquals("",s);
 
-		s = cr5.execute(null,null);
-		assertEquals("d2",s);
+		s = cr5.execute(null,null);// col2, line 2, *B
+		assertEquals("c2",s);
 
     }
 
@@ -271,18 +270,22 @@ public class PackageTest extends JMeterTestCase
     	String s;
 
 		cr1 = setParams("xtestfiles/test.csv","1");
+		log.info("Expecting file not found");
 		s = cr1.execute(null,null);
 		assertEquals("",s);
 
 		cr2 = setParams("xtestfiles/test.csv","next");
+		log.info("Expecting no entry for file");
 		s = cr2.execute(null,null);
 		assertEquals("",s);
 
 		cr3 = setParams("xtestfiles/test.csv","*ABC");
+		log.info("Expecting file not found");
 		s = cr3.execute(null,null);
 		assertEquals("",s);
 
 		cr4 = setParams("*ABC","1");
+		log.info("Expecting cannot open file");
 		s = cr4.execute(null,null);
 		assertEquals("",s);
     }
