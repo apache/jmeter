@@ -12,11 +12,6 @@
 <property name="url">http://localhost/secret</property>
 <property name="username">kevin</property>
 </ConfigElement>
-<ConfigElement type="org.apache.jmeter.protocol.http.control.Authorization">
-<property name="password">dog</property>
-<property name="url">http://localhost/secret</property>
-<property name="username">jim</property>
-</ConfigElement>
 </AuthManager>
 
 <ConfigElement type="org.apache.jmeter.protocol.http.config.UrlConfig">
@@ -35,7 +30,6 @@
 <defaultUrl>
 <ConfigElement type="org.apache.jmeter.protocol.http.config.MultipartUrlConfig">
 <property name="PROTOCOL">http</property>
-<property name="domain"></property>
 <property name="arguments"><Arguments>
 </Arguments>
 </property>
