@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -94,6 +94,7 @@ import org.xml.sax.SAXException;
  *  storage mechanisms may also be used, for instance, CSV
  *  files or databases.
  *
+ *@author     Mike Stover
  *@author     <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell</a>
  *@created    $Date$
  *@version    $Revision$ $Date$
@@ -110,6 +111,13 @@ public class SaveService implements SaveServiceConstants
 
     /** A formatter for the time stamp.  **/
     protected static SimpleDateFormat formatter = null;
+
+    /** A flag to indicate which output format to use for results.  **/
+    protected static int outputFormat = SAVE_AS_XML;
+
+    /** A flag to indicate whether to print the field names for delimited
+        result files.  **/
+    protected static boolean printFieldNames = false;
 
     /** A flag to indicate whether the data type should
      be saved to the test results.  **/
@@ -158,18 +166,30 @@ public class SaveService implements SaveServiceConstants
 
     protected static int assertionsResultsToSave = SAVE_NO_ASSERTIONS;
 
+    /** The string used to separate fields when stored to disk, for example,
+        the comma for CSV files.  **/
+    protected static String defaultDelimiter = ",";
+
+
     private static DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
+
 
     // Initialize various variables based on properties.
     static
     {
-        readAndSetSaveProperties();
+        readProperties();
     }       // static initialization
+
 
     public SaveService()
     {}
 
-    protected static void readAndSetSaveProperties()
+
+    /**
+        Read in the properties having to do with saving from a properties file.
+    **/
+
+    protected static void readProperties()
     {
         Properties systemProps = System.getProperties();
         Properties props = new Properties(systemProps);
@@ -180,15 +200,17 @@ public class SaveService implements SaveServiceConstants
         }
         catch (Exception e)
         {
-            log.error("SaveService.readAndSetSaveProperties: Problem loading properties file " + PROPS_FILE, e);
+            log.error("SaveService.readProperties: Problem loading properties file " + PROPS_FILE, e);
         }
 
+        printFieldNames =
+            TRUE.equalsIgnoreCase(props.getProperty(PRINT_FIELD_NAMES_PROP,
+                                                    FALSE));
         saveDataType =
             TRUE.equalsIgnoreCase(props.getProperty(SAVE_DATA_TYPE_PROP,
                                                     TRUE));
         saveLabel =
-            TRUE.equalsIgnoreCase(props.getProperty(SAVE_LABEL_PROP,
-                                                    TRUE));
+            TRUE.equalsIgnoreCase(props.getProperty(SAVE_LABEL_PROP, TRUE));
         saveResponseCode =
             TRUE.equalsIgnoreCase(props.getProperty(SAVE_RESPONSE_CODE_PROP,
                                                     TRUE));
@@ -205,12 +227,12 @@ public class SaveService implements SaveServiceConstants
             TRUE.equalsIgnoreCase(props.getProperty(SAVE_THREAD_NAME_PROP,
                                                     TRUE));
         saveTime =
-            TRUE.equalsIgnoreCase(props.getProperty(SAVE_TIME_PROP,
-                                                    TRUE));
+            TRUE.equalsIgnoreCase(props.getProperty(SAVE_TIME_PROP, TRUE));
         timeStampFormat =
             props.getProperty(TIME_STAMP_FORMAT_PROP, MILLISECONDS);
         printMilliseconds = MILLISECONDS.equalsIgnoreCase(timeStampFormat);
-        //
+
+        // Prepare for a pretty date
         if (!printMilliseconds && !NONE.equalsIgnoreCase(timeStampFormat)
             && (timeStampFormat != null))
         {
@@ -232,7 +254,121 @@ public class SaveService implements SaveServiceConstants
         {
             assertionsResultsToSave = SAVE_ALL_ASSERTIONS;
         }
+
+        String howToSave = props.getProperty(OUTPUT_FORMAT_PROP, XML);
+
+        if (CSV.equals(howToSave))
+        {
+            outputFormat = SAVE_AS_CSV;
+        }
+        else
+        {
+            outputFormat = SAVE_AS_XML;
+        }
+
+
+        defaultDelimiter = props.getProperty(DEFAULT_DELIMITER_PROP, ",");
     }
+
+
+    /**
+        Return the format for the saved results, e.g., csv or xml.
+        @return  the format for the saved results
+    **/
+
+    public static int getOutputFormat()
+    {
+        return outputFormat;
+    }
+
+
+    /**
+        Return whether the field names should be printed to a delimited
+        results file
+        @return  whether the field names should be printed
+    **/
+
+    public static boolean getPrintFieldNames()
+    {
+        return printFieldNames;
+    }
+
+
+    /**
+        Return whether the field names should be printed to the output file
+        @return whether the field names should be printed to the output file
+    **/
+
+    public static String printableFieldNamesToString()
+    {
+        StringBuffer text = new StringBuffer();
+
+        if (printMilliseconds || (formatter != null))
+        {
+            text.append(SaveServiceConstants.TIME_STAMP);
+            text.append(defaultDelimiter);
+        }
+
+        if (saveTime)
+        {
+            text.append(SaveServiceConstants.TIME);
+            text.append(defaultDelimiter);
+        }
+
+        if (saveLabel)
+        {
+            text.append(SaveServiceConstants.LABEL);
+            text.append(defaultDelimiter);
+        }
+
+        if (saveResponseCode)
+        {
+            text.append(SaveServiceConstants.RESPONSE_CODE);
+            text.append(defaultDelimiter);
+        }
+
+        if (saveResponseMessage)
+        {
+            text.append(SaveServiceConstants.RESPONSE_MESSAGE);
+            text.append(defaultDelimiter);
+        }
+
+        if (saveThreadName)
+        {
+            text.append(SaveServiceConstants.THREAD_NAME);
+            text.append(defaultDelimiter);
+        }
+
+        if (saveDataType)
+        {
+            text.append(SaveServiceConstants.DATA_TYPE);
+            text.append(defaultDelimiter);
+        }
+
+        if (saveSuccessful)
+        {
+            text.append(SaveServiceConstants.SUCCESSFUL);
+            text.append(defaultDelimiter);
+        }
+        // text.append(sample.getSamplerData().toString());
+        // text.append(getAssertionResult(sample));
+
+        String resultString = null;
+        int size = text.length();
+        int delSize = defaultDelimiter.length();
+
+        // Strip off the trailing delimiter
+        if (size >= delSize)
+        {
+            resultString = text.substring(0, size - delSize);
+        }
+        else
+        {
+            resultString = text.toString();
+        }
+        return resultString;
+    }
+
 
     public static void saveSubTree(HashTree subTree, OutputStream writer) throws
             IOException
@@ -454,6 +590,105 @@ public class SaveService implements SaveServiceConstants
         }
         return config;
     }
+
+
+    /**
+        Convert a result into a string, where the fields of the result are
+        separated by the default delimiter.
+        @param  sample the test result to be converted
+        @return  the separated value representation of the result
+    **/
+
+    public static String resultToDelimitedString(SampleResult sample)
+    {
+        return resultToDelimitedString(sample, defaultDelimiter);
+    }
+
+
+    /**
+        Convert a result into a string, where the fields of the result are
+        separated by a specified String.
+        @param  sample the test result to be converted
+        @param  delimiter the separation string
+        @return  the separated value representation of the result
+    **/
+
+    public static String resultToDelimitedString(SampleResult sample,
+                                                 String delimiter)
+    {
+        StringBuffer text = new StringBuffer();
+
+        if (printMilliseconds)
+        {
+            text.append("" + sample.getTimeStamp());
+            text.append(delimiter);
+        }
+        else if (formatter != null)
+        {
+            String stamp = formatter.format(new Date(sample.getTimeStamp()));
+            text.append(stamp);
+        }
+
+        if (saveTime)
+        {
+            text.append("" + sample.getTime());
+            text.append(delimiter);
+        }
+
+        if (saveLabel)
+        {
+            text.append(sample.getSampleLabel());
+            text.append(delimiter);
+        }
+
+        if (saveResponseCode)
+        {
+            text.append(sample.getResponseCode());
+            text.append(delimiter);
+        }
+
+        if (saveResponseMessage)
+        {
+            text.append(sample.getResponseMessage());
+            text.append(delimiter);
+        }
+
+        if (saveThreadName)
+        {
+            text.append(sample.getThreadName());
+            text.append(delimiter);
+        }
+
+        if (saveDataType)
+        {
+            text.append(sample.getDataType());
+            text.append(delimiter);
+        }
+
+        if (saveSuccessful)
+        {
+            text.append("" + sample.isSuccessful());
+            text.append(delimiter);
+        }
+        // text.append(sample.getSamplerData().toString());
+        // text.append(getAssertionResult(sample));
+
+        String resultString = null;
+        int size = text.length();
+        int delSize = delimiter.length();
+
+        // Strip off the trailing delimiter
+        if (size >= delSize)
+        {
+            resultString = text.substring(0, size - delSize);
+        }
+        else
+        {
+            resultString = text.toString();
+        }
+        return resultString;
+    }
+
 
     public static Configuration getConfigForTestElement(String named, TestElement item)
     {
