@@ -24,6 +24,7 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.MethodDescriptor;
 import java.beans.PropertyDescriptor;
+import java.beans.SimpleBeanInfo;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -62,8 +63,7 @@ import org.apache.log.Logger;
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision$ updated on $Date$
  */
-public abstract class BeanInfoSupport 
-        implements BeanInfo
+public abstract class BeanInfoSupport extends SimpleBeanInfo
 {
 
 	private static transient Logger log = LoggingManager.getLoggerForClass();
@@ -82,15 +82,14 @@ public abstract class BeanInfoSupport
     public static final String RESOURCE_BUNDLE=
             GenericTestBeanCustomizer.RESOURCE_BUNDLE;
 
-	/**
-	 * The class for which we're providing the bean info.
-	 */
+	/** The class for which we're providing the bean info. */
 	private Class beanClass;
 
-	/**
-	 * The BeanInfo for our class as obtained by the introspector.
-	 */
+	/** The BeanInfo for our class as obtained by the introspector. */
 	private BeanInfo rootBeanInfo;
+
+    /** The icons for this bean. */
+    private Image[] icons= new Image[5];
 
 	/**
 	 * Construct a BeanInfo for the given class.
@@ -184,6 +183,18 @@ public abstract class BeanInfoSupport
 		return null;
 	}
 
+    /**
+     * Set the bean's 16x16 colour icon.
+     * 
+     * @param resourceName A pathname relative to the directory holding the
+     *                      class file of the current class.
+     */
+    protected void setIcon(String resourceName)
+    {
+        icons[ICON_COLOR_16x16]= loadImage(resourceName);
+    }
+    
+    /** Number of groups created so far by createPropertyGroup. */
 	private int numCreatedGroups= 0;
 	
 	/**
@@ -233,7 +244,7 @@ public abstract class BeanInfoSupport
 	}
 
 	public Image getIcon(int iconKind) {
-		return rootBeanInfo.getIcon(iconKind);
+        return icons[iconKind];
 	}
 
 	public MethodDescriptor[] getMethodDescriptors() {
