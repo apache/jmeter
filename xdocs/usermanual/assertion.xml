@@ -8,7 +8,69 @@
 <body>
 
 <section name="4.5 Assertions">
-<p>Put description text here...</p>
+<p><b>WORK IN PROGRESS</b></p>
+
+<p>Assertions allow you to assert facts about responses received from the 
+server being tested. Using an assertion, you can essentially "test" that your 
+application is returning the results you expect it to. </p>
+
+<p>For instance, you can assert that the response to a query will contain some 
+particular text. The text you specify can be a Perl-style regular expression, and 
+you can indicate that the response is to contain the text, or that it should match 
+the whole response.</p>
+
+<p>You can add an assertion to any Generative Controller. For example, you can 
+add an assertion to a HTTP Request that checks for the text, "&lt;/HTML&gt;".  JMeter 
+will then check that the text is present in the HTTP response.  If JMeter cannot find the 
+text, then it will mark this as a failed request.</p>
+
+<p>To view the assertion results, add an Assertion Listener to the Thread Group.</p>
+
+<p><b>Control Panel</b></p>
+<p><img src="../images/screenshots/assertion/assertion.gif" width="446" height="296"></img>
+<br>Figure 1 - Assertion Control Panel</br></p>
+<p>Properties:
+<ul>
+  <li>Name - Descriptive name for this element that is shown in the tree. </li>
+  <li><i>Response Field to Test</i></li>
+  <ul>
+    <li>Text Response - </li>
+    <li>URL Sampled - </li>
+  </ul>
+  <li><i>Pattern Matching Rules</i></li>
+  <ul>
+    <li>Contains - </li>
+    <li>Matches - </li>
+    <li>Not - </li>
+  </ul>
+  <li><i>Patterns to Test</i></li>
+  <ul>
+    <li>(Text Area) - </li>
+    <li>Add Button - </li>
+    <li>Clear Button - </li>
+  </ul>
+</ul>
+</p>
+
+<p><b>Example</b></p>
+
+<p><img src="../images/screenshots/assertion/example1a.gif" width="190" height="170"></img>
+<br>Figure 2 - Test Plan</br></p>
+
+<p><img src="../images/screenshots/assertion/example1b.gif" width="489" height="298"></img>
+<br>Figure 3 - Assertion Control Panel with Pattern</br></p>
+
+<p><img src="../images/screenshots/assertion/example1c-pass.gif" width="474" height="265"></img>
+<br>Figure 4 - Assertion Listener Results (Pass)</br></p>
+
+<p><img src="../images/screenshots/assertion/example1c-fail.gif" width="474" height="265"></img>
+<br>Figure 5 - Assertion Listener Results (Fail)</br></p>
+
+<p>The assertion control panel let's you add strings to be tested. These strings can 
+be regular expressions. You can also choose whether the strings will be expected 
+to match the entire response, or if the response is only expected to contain the 
+strings. You can attach multiple assertions to any controller for additionaly flexibility.</p>
+
 </section>
 
 </body>
