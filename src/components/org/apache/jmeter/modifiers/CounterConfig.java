@@ -36,7 +36,7 @@ public class CounterConfig
 	private int end = Integer.MAX_VALUE;
 	private int currentIterationCount = -1;
 	/**
-	 * @see org.apache.jmeter.testelement.ThreadListener#iterationStarted(int)
+	 * @see org.apache.jmeter.engine.event.IterationListener#iterationStarted(org.apache.jmeter.engine.event.IterationEvent)
 	 */
 	public synchronized void iterationStart(IterationEvent event)
 	{

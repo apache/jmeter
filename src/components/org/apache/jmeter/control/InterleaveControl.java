@@ -53,9 +53,8 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control;
-import java.io.Serializable;
 
-import junit.framework.*;
+import java.io.Serializable;
 
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Sampler;
@@ -128,8 +127,12 @@ public class InterleaveControl extends GenericController implements Serializable
 			else
 			{
 				currentHasNextIsFalse();
-				if (searchStart == null )
-					searchStart = (Controller)controller;
+				if(((Controller)controller).samplersReturned() == 0)
+				{
+					interleave = false;
+					if (searchStart == null )
+						searchStart = (Controller)controller;
+				}
 				retVal = hasNext();
 			}
 		}
@@ -184,9 +187,9 @@ public class InterleaveControl extends GenericController implements Serializable
 
 	public Sampler next()
 	{
-        fireIterEvents();
 		setInterleave(DEFAULT_STYLE);
 		TestElement controller = getCurrentController();
+		fireIterEvents(controller);
 		if(controller == null)
 		{
 			nextAtEnd();
@@ -403,5 +406,9 @@ public class InterleaveControl extends GenericController implements Serializable
 		  public void addCustomTestElement(TestElement t) { }
 		  public org.apache.jmeter.samplers.SampleResult sample(org.apache.jmeter.samplers.Entry e) { return null; }
 		}
+	}
+	
+	public static void main(String args[]) { 
+		junit.textui.TestRunner.run(new Test("testProcessing"));
 	}
 }

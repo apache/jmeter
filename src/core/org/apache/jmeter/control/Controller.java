@@ -81,18 +81,21 @@ public interface Controller extends TestElement
     public void addIterationListener(IterationListener lis);
 	/**
 	 * Delivers the next Sampler.
+	 * @return org.apache.jmeter.samplers.Sampler
 	 */
 	public Sampler next();
 
 	/**
 	 * Indicates whether the Controller has another Sampler to deliver during the
 	 * current test iteration.
+	 * @return boolean
 	 */
 	public boolean hasNext();
 
 	/**
 	 * Indicates whether the Controller is done delivering Samplers for the rest
 	 * of the test.
+	 * @return boolean
 	 */
 	public boolean isDone();
 	
@@ -102,4 +105,11 @@ public interface Controller extends TestElement
 	 * @return boolean
 	 */
 	public boolean isNextFirst();
+	
+	/**
+	 * Returns the number of samplers that the controller has returned
+	 * via next() during the current iteration
+	 * @return int
+	 */
+	public int samplersReturned();
 }
