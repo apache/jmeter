@@ -123,6 +123,15 @@
   <path id="classpath">
     <fileset dir="${lib.dir}" includes="*.jar"/>
   </path>
+  
+  <!-- Anakia classpath -->
+  <path id="anakia.classpath">
+    <fileset dir="${lib.dir}" includes="velocity*.jar"/>
+    <fileset dir="." includes="${jdom.jar}"/>
+    <fileset dir="." includes="${commons-collections.jar}"/>
+    <fileset dir="." includes="${logkit.jar}"/>
+  </path>
+  
 
   <target name="init" depends="check-libs,report-missing-libs">
   	<tstamp/>
@@ -174,7 +183,7 @@
     - Check for anakia task
     -->
   <target name="check-anakia">
-    <available classname="org.apache.velocity.anakia.AnakiaTask" property="AnakiaTask.present"/>
+    <available classpathref="anakia.classpath" classname="org.apache.velocity.anakia.AnakiaTask" property="AnakiaTask.present"/>
   </target>
   <target name="report-anakia-missing" depends="check-anakia" unless="AnakiaTask.present">
     <echo>
@@ -454,12 +463,12 @@
   </target>
 
   <target name="docs" depends="init-docs" if="AnakiaTask.present" description="Generate browsable HTML documentation.">
-    <taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask"/>
+    <taskdef name="anakia" classpathref="anakia.classpath" classname="org.apache.velocity.anakia.AnakiaTask"/>
     <anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site.vsl" projectFile="./stylesheets/project.xml" excludes="**/stylesheets/**" includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${docs.src}/velocity.properties"/>
   </target>
 
   <target name="printable-docs" depends="init-docs" if="AnakiaTask.present" description="Generate printable HTML documentation.">
-    <taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask"/>
+    <taskdef name="anakia" classpathref="anakia.classpath" classname="org.apache.velocity.anakia.AnakiaTask"/>
     <anakia basedir="${docs.src}" destdir="${printable_docs.dest}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site_printable.vsl" projectFile="./stylesheets/printable_project.xml" excludes="**/stylesheets/**" includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${docs.src}/velocity.properties"/>
   </target>
 
