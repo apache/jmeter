@@ -344,6 +344,179 @@ public final class ClutilTestCase
         assertEquals( ((CLOption)clOptions.get( 0 )).getDescriptor().getId(), FILE_OPT );
         assertEquals( ((CLOption)clOptions.get( 0 )).getArgument(), "myfile.txt" );
     }
+    public void testSingleArg2()
+    {
+        final CLOptionDescriptor[] options = new CLOptionDescriptor[]
+        {
+            FILE
+        };
+
+        final CLArgsParser parser = new CLArgsParser( 
+				new String[]{"-f-=,=-"} // Check delimiters are allowed
+				, options );
+
+        assertNull( parser.getErrorString(), parser.getErrorString() );
+
+        final List clOptions = parser.getArguments();
+        final int size = clOptions.size();
+
+        assertEquals( 1, size );
+        assertEquals( FILE_OPT ,((CLOption)clOptions.get( 0 )).getDescriptor().getId() );
+        assertEquals( "-=,=-", ((CLOption)clOptions.get( 0 )).getArgument() );
+    }
+
+    public void testSingleArg3()
+    {
+        final CLOptionDescriptor[] options = new CLOptionDescriptor[]
+        {
+            FILE
+        };
+
+        final CLArgsParser parser = new CLArgsParser( 
+				new String[]{"--file=-=,-"} // Check delimiters are allowed
+				, options );
+
+        assertNull( parser.getErrorString(), parser.getErrorString() );
+
+        final List clOptions = parser.getArguments();
+        final int size = clOptions.size();
+
+        assertEquals( 1, size );
+        assertEquals( FILE_OPT, ((CLOption)clOptions.get( 0 )).getDescriptor().getId() );
+        assertEquals( "-=,-" , ((CLOption)clOptions.get( 0 )).getArgument() );
+    }
+
+    public void testSingleArg4()
+    {
+        final CLOptionDescriptor[] options = new CLOptionDescriptor[]
+        {
+            FILE
+        };
+
+        final CLArgsParser parser = new CLArgsParser( 
+				new String[]{"--file","myfile.txt"}
+				, options );
+
+        assertNull( parser.getErrorString(), parser.getErrorString() );
+
+        final List clOptions = parser.getArguments();
+        final int size = clOptions.size();
+
+        assertEquals( 1, size );
+        assertEquals( FILE_OPT, ((CLOption)clOptions.get( 0 )).getDescriptor().getId() );
+        assertEquals( "myfile.txt", ((CLOption)clOptions.get( 0 )).getArgument() );
+    }
+
+    public void testSingleArg5()
+    {
+        final CLOptionDescriptor[] options = new CLOptionDescriptor[]
+        {
+            FILE
+        };
+
+        final CLArgsParser parser = new CLArgsParser( 
+				new String[]{"-f","myfile.txt"}
+				, options );
+
+        assertNull( parser.getErrorString(), parser.getErrorString() );
+
+        final List clOptions = parser.getArguments();
+        final int size = clOptions.size();
+
+        assertEquals( 1, size );
+        assertEquals( FILE_OPT, ((CLOption)clOptions.get( 0 )).getDescriptor().getId() );
+        assertEquals( "myfile.txt", ((CLOption)clOptions.get( 0 )).getArgument() );
+    }
+
+    public void testCombinedArgs1()
+    {
+        final CLOptionDescriptor[] options = new CLOptionDescriptor[]
+        {
+            BLEE, TAINT
+        };
+
+        final CLArgsParser parser = new CLArgsParser( 
+				new String[]{"-bT","rest"}
+				, options );
+
+        assertNull( parser.getErrorString(), parser.getErrorString() );
+
+        final List clOptions = parser.getArguments();
+        final int size = clOptions.size();
+        assertEquals( 3, size);
+        assertEquals( BLEE_OPT, ((CLOption)clOptions.get( 0 )).getDescriptor().getId());
+        assertEquals( TAINT_OPT, ((CLOption)clOptions.get( 1 )).getDescriptor().getId());
+        assertEquals( 0, ((CLOption)clOptions.get( 2 )).getDescriptor().getId());
+        assertEquals( "rest", ((CLOption)clOptions.get( 2 )).getArgument());
+    }
+
+    public void testCombinedArgs2()
+    {
+        final CLOptionDescriptor[] options = new CLOptionDescriptor[]
+        {
+            BLEE, TAINT, FILE
+        };
+
+        final CLArgsParser parser = new CLArgsParser( 
+				new String[]{"-bT","-fa"}
+				, options );
+
+        assertNull( parser.getErrorString(), parser.getErrorString() );
+
+        final List clOptions = parser.getArguments();
+        final int size = clOptions.size();
+        assertEquals( 3, size);
+        assertEquals( BLEE_OPT, ((CLOption)clOptions.get( 0 )).getDescriptor().getId());
+        assertEquals( TAINT_OPT, ((CLOption)clOptions.get( 1 )).getDescriptor().getId());
+        assertEquals( FILE_OPT, ((CLOption)clOptions.get( 2 )).getDescriptor().getId());
+        assertEquals( "a", ((CLOption)clOptions.get( 2 )).getArgument());
+    }
+
+    public void testCombinedArgs3()
+    {
+        final CLOptionDescriptor[] options = new CLOptionDescriptor[]
+        {
+            BLEE, TAINT, FILE
+        };
+
+        final CLArgsParser parser = new CLArgsParser( 
+				new String[]{"-bT","--","-fa"}// Should not detect trailing option
+				, options );
+
+        assertNull( parser.getErrorString(), parser.getErrorString() );
+
+        final List clOptions = parser.getArguments();
+        final int size = clOptions.size();
+        assertEquals( 3, size);
+        assertEquals( BLEE_OPT, ((CLOption)clOptions.get( 0 )).getDescriptor().getId());
+        assertEquals( TAINT_OPT, ((CLOption)clOptions.get( 1 )).getDescriptor().getId());
+        assertEquals( 0, ((CLOption)clOptions.get( 2 )).getDescriptor().getId());
+        assertEquals( "-fa", ((CLOption)clOptions.get( 2 )).getArgument());
+    }
+
+    public void testCombinedArgs4()
+    {
+        final CLOptionDescriptor[] options = new CLOptionDescriptor[]
+        {
+            BLEE, TAINT, FILE
+        };
+
+        final CLArgsParser parser = new CLArgsParser( 
+				new String[]{"-bT","rest","-fa"} // should detect trailing option
+				, options );
+
+        assertNull( parser.getErrorString(), parser.getErrorString() );
+
+        final List clOptions = parser.getArguments();
+        final int size = clOptions.size();
+        assertEquals( 4, size);
+        assertEquals( BLEE_OPT, ((CLOption)clOptions.get( 0 )).getDescriptor().getId());
+        assertEquals( TAINT_OPT, ((CLOption)clOptions.get( 1 )).getDescriptor().getId());
+        assertEquals( 0, ((CLOption)clOptions.get( 2 )).getDescriptor().getId());
+        assertEquals( "rest", ((CLOption)clOptions.get( 2 )).getArgument());
+        assertEquals( FILE_OPT, ((CLOption)clOptions.get( 3 )).getDescriptor().getId());
+        assertEquals( "a", ((CLOption)clOptions.get( 3 )).getArgument());
+    }
 
     public void test2ArgsParse()
     {
@@ -370,6 +543,55 @@ public final class ClutilTestCase
         final CLOption option = (CLOption)clOptions.get( 0 );
         assertEquals( "stupid", option.getArgument( 0 ) );
         assertEquals( "idiot", option.getArgument( 1 ) );
+    }
+
+    public void test2ArgsParse2()
+    {
+        final CLOptionDescriptor[] options = new CLOptionDescriptor[]
+        {
+            DEFINE
+        };
+
+        final CLArgsParser parser = new CLArgsParser( 
+				new String[] {"--define","a-b,c=d-e,f"}, // Check "-" is allowed in arg2 
+				options );
+
+        assertNull( parser.getErrorString(), parser.getErrorString() );
+
+        final List clOptions = parser.getArguments();
+        final int size = clOptions.size();
+
+        assertEquals( 1, size );
+        assertEquals( DEFINE_OPT, ((CLOption)clOptions.get( 0 )).getDescriptor().getId() );
+
+        final CLOption option = (CLOption)clOptions.get( 0 );
+        assertEquals( "a-b,c", option.getArgument( 0 ) );
+        assertEquals( "d-e,f", option.getArgument( 1 ) );
+    }
+
+	 // Should be same as above, but currently causes a parse error
+    public void test2ArgsParse3()
+    {
+        final CLOptionDescriptor[] options = new CLOptionDescriptor[]
+        {
+            DEFINE
+        };
+
+        final CLArgsParser parser = new CLArgsParser( 
+				new String[] {"-D","a-b,c=d-e,f"}, 
+				options );
+
+        assertNull( parser.getErrorString(), parser.getErrorString() );
+
+        final List clOptions = parser.getArguments();
+        final int size = clOptions.size();
+
+        assertEquals( 1, size );
+        assertEquals( DEFINE_OPT, ((CLOption)clOptions.get( 0 )).getDescriptor().getId() );
+
+        final CLOption option = (CLOption)clOptions.get( 0 );
+        assertEquals( "a-b,c", option.getArgument( 0 ) );
+        assertEquals( "d-e,f", option.getArgument( 1 ) );
     }
 
     public void testPartParse()
