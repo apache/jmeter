@@ -89,6 +89,29 @@ public class HTTPArgument extends Argument  implements Serializable {
 		}
 	}
 	
+	public void setProperty(String key,Object value)
+	{
+		if(value == null || !value.equals(getProperty(key)))
+		{
+			if(Argument.NAME.equals(key))
+			{
+				if(value == null)
+				{
+					encodeName("");
+				}
+				else
+				{
+					encodeName(value.toString());
+				}
+			}
+			else if(Argument.VALUE.equals(key))
+			{
+				encodeValue(value);
+			}
+			super.setProperty(key,value);
+		}
+	}
+	
 	public HTTPArgument(String name,Object value,Object metaData,boolean alreadyEncoded)
 	{
 		this(name,value,alreadyEncoded);
@@ -115,7 +138,6 @@ public class HTTPArgument extends Argument  implements Serializable {
 		if(newName == null || !newName.equals(getName()))
 		{
 			super.setName(newName);
-			encodeName(newName);
 		}
 	}
 	
@@ -139,7 +161,6 @@ public class HTTPArgument extends Argument  implements Serializable {
 		if(newValue == null || !newValue.equals(getValue()))
 		{
 			super.setValue(newValue);
-			encodeValue(newValue);
 		}
 	}
 	
