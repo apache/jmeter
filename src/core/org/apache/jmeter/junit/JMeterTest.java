@@ -15,8 +15,11 @@ import java.util.Set;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
+import org.apache.jmeter.gui.tree.JMeterTreeListener;
+import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testbeans.TestBean;
@@ -88,6 +91,11 @@ public class JMeterTest extends JMeterTestCase
 	 * Use a suite to allow the tests to be generated at run-time
 	 */
     public static Test suite() throws Exception{
+        // ensure the GuiPackage is initialized.
+        JMeterTreeModel treeModel = new JMeterTreeModel();
+        JMeterTreeListener treeLis = new JMeterTreeListener(treeModel);
+        GuiPackage.getInstance(treeLis, treeModel);
+
     	TestSuite suite = new TestSuite();
     	suite.addTest(new JMeterTest("createTitleSet"));
     	suite.addTest(suiteGUIComponents());
@@ -158,7 +166,6 @@ public class JMeterTest extends JMeterTestCase
 					JMeterGUIComponent item = new TestBeanGUI(c);
 					//JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
 		            TestSuite ts = new TestSuite(item.getClass().getName());
-					ts.addTest(new JMeterTest("GUIComponents1",item));
 					ts.addTest(new JMeterTest("GUIComponents2",item));
 		            suite.addTest(ts);
 				}
@@ -235,7 +242,7 @@ public class JMeterTest extends JMeterTestCase
 		if (!(guiItem instanceof UnsharedComponent))
 		{
 			assertEquals(
-				"GUI-CLASS: Failed on " + name,
+				"SHARED: Failed on " + name,
 				"",
 				el2.getPropertyAsString("NOT"));
 		}
@@ -283,19 +290,26 @@ public class JMeterTest extends JMeterTestCase
      */
     public void runSerialTest() throws Exception
     {
-		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		ObjectOutputStream out = new ObjectOutputStream(bytes);
-		out.writeObject(serObj);
-		out.close();
-		ObjectInputStream in =
-			new ObjectInputStream(
-				new ByteArrayInputStream(bytes.toByteArray()));
-		Object readObject = in.readObject();
-		in.close();
-		assertEquals(
-			"deserializing class: " + serObj.getClass().getName(),
-			serObj.getClass(),
-			readObject.getClass());
+        try
+        {
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(bytes);
+            out.writeObject(serObj);
+            out.close();
+            ObjectInputStream in =
+                new ObjectInputStream(
+                    new ByteArrayInputStream(bytes.toByteArray()));
+            Object readObject = in.readObject();
+            in.close();
+            assertEquals(
+                "deserializing class: " + serObj.getClass().getName(),
+                serObj.getClass(),
+                readObject.getClass());
+        }
+        catch (Throwable e)
+        {
+            fail("serialization of "+serObj.getClass().getName()+" failed: "+e);
+        }
     }
 
     /*
