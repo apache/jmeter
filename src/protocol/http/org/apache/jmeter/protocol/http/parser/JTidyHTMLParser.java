@@ -64,8 +64,6 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
-//import java.util.Set;
 
 import junit.framework.TestCase;
 
@@ -98,10 +96,9 @@ class JTidyHTMLParser extends HTMLParser
     /* (non-Javadoc)
      * @see org.apache.jmeter.protocol.http.parser.HTMLParser#getEmbeddedResourceURLs(byte[], java.net.URL)
      */
-    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl)
+    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, Collection urls)
         throws HTMLParseException
     {
-        LinkedHashSet uniqueURLs= new LinkedHashSet();
 		Document dom = null;
 		try
 		{
@@ -114,18 +111,18 @@ class JTidyHTMLParser extends HTMLParser
         
 		// Now parse the DOM tree
 		
-		scanNodes(dom,uniqueURLs, baseUrl);
+		scanNodes(dom,urls, baseUrl);
 
-		return uniqueURLs.iterator();
+		return urls.iterator();
 	}
 
     /** 
 	 * Scan nodes recursively, looking for embedded resources
 	 * @param node - initial node
-	 * @param uniqueURLs - container for URLs
+	 * @param urls - container for URLs
 	 * @param baseUrl - used to create absolute URLs
 	 */
-	private void scanNodes(Node node, Collection uniqueURLs, URL baseUrl)
+	private void scanNodes(Node node, Collection urls, URL baseUrl)
 	{
 		if ( node == null ) {
 		  return;
@@ -138,7 +135,7 @@ class JTidyHTMLParser extends HTMLParser
 	    switch ( type ) {
 
 	    case Node.DOCUMENT_NODE:
-		  scanNodes(((Document)node).getDocumentElement(),uniqueURLs,baseUrl);
+		  scanNodes(((Document)node).getDocumentElement(),urls,baseUrl);
 		  break;
 
 	    case Node.ELEMENT_NODE:
@@ -160,13 +157,13 @@ class JTidyHTMLParser extends HTMLParser
 		  
 		  if (name.equalsIgnoreCase("img"))
 		  {
-		  	addURL(uniqueURLs,getValue(attrs,"src"),baseUrl);
+		  	addURL(urls,getValue(attrs,"src"),baseUrl);
 			break;
           }
           
 		  if (name.equalsIgnoreCase("applet"))
 		  {
-		  	addURL(uniqueURLs,getValue(attrs,"code"),baseUrl);
+		  	addURL(urls,getValue(attrs,"code"),baseUrl);
 			  break;
 			}
 			if (name.equalsIgnoreCase("input"))
@@ -174,18 +171,18 @@ class JTidyHTMLParser extends HTMLParser
 				String src=getValue(attrs,"src");
 				String typ=getValue(attrs,"type");
 				if ((src!=null) &&(typ.equalsIgnoreCase("image")) ){ 
-					addURL(uniqueURLs,src,baseUrl);
+					addURL(urls,src,baseUrl);
 				}
 			  break;
 			}
 			if (name.equalsIgnoreCase("link"))
 			{
-				addURL(uniqueURLs,getValue(attrs,"href"),baseUrl);
+				addURL(urls,getValue(attrs,"href"),baseUrl);
 			  break;
 			}
 			String back=getValue(attrs,"background");
 			if (back != null){
-				addURL(uniqueURLs,back,baseUrl);
+				addURL(urls,back,baseUrl);
 				break;
 			}
 
@@ -193,7 +190,7 @@ class JTidyHTMLParser extends HTMLParser
 		  if ( children != null ) {
 			 int len = children.getLength();
 			 for ( int i = 0; i < len; i++ ) {
-				scanNodes(children.item(i),uniqueURLs,baseUrl);
+				scanNodes(children.item(i),urls,baseUrl);
 			 }
 		  }
 		  break;
@@ -221,23 +218,23 @@ class JTidyHTMLParser extends HTMLParser
 
     /*
      * Helper method to create and add a URL, if non-null
-     * @param uniqueURLs - set
+     * @param urls - set
      * @param url - may be null
      * @param baseUrl
      */
-    private void addURL(Collection uniqueURLs, String url, URL baseUrl)
+    private void addURL(Collection urls, String url, URL baseUrl)
     {
     	if (url == null) return;
     	boolean b=false;
 		try
 		{
-			b=uniqueURLs.add(new URL(baseUrl, url));
+			b=urls.add(new URL(baseUrl, url));
 		}
 		catch(MalformedURLException mfue)
 		{
 			// Can't build the URL. May be a site error: return
 			// the string.
-			b=uniqueURLs.add(url);
+			b=urls.add(url);
 		}
 		if (b) {
 			log.debug("Added   "+url);

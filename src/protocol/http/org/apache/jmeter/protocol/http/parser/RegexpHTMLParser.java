@@ -59,8 +59,7 @@ package org.apache.jmeter.protocol.http.parser;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Set;
-import java.util.LinkedHashSet;
+import java.util.Collection;
 import java.util.Iterator;
 
 import junit.framework.TestCase;
@@ -190,14 +189,8 @@ class RegexpHTMLParser extends HTMLParser
     /* (non-Javadoc)
      * @see org.apache.jmeter.protocol.http.parser.HtmlParser#getEmbeddedResourceURLs(byte[], java.net.URL)
      */
-    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl)
+    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, Collection urls)
     {
-        // This is used to ignore duplicated binary files.
-        // Using a LinkedHashSet to avoid unnecessary overhead in iterating
-        // the elements in the set later on. As a side-effect, this will keep
-        // them roughly in order, which should be a better model of browser
-        // behaviour.
-        Set uniqueURLs= new LinkedHashSet();
 
         Perl5Matcher matcher= (Perl5Matcher)localMatcher.get();
         PatternMatcherInput input= (PatternMatcherInput)localInput.get();
@@ -249,7 +242,7 @@ class RegexpHTMLParser extends HTMLParser
                 {
                     try
                     {
-                        uniqueURLs.add(new URL(baseUrl, s));
+                        urls.add(new URL(baseUrl, s));
                     }
                     catch (MalformedURLException e)
                     {
@@ -263,12 +256,12 @@ class RegexpHTMLParser extends HTMLParser
                                     + " in page "
                                     + baseUrl);
                         }
-                        uniqueURLs.add(s);
+                        urls.add(s);
                     }
                 }
             }
         }
-        return uniqueURLs.iterator();
+        return urls.iterator();
     }
     
     public static class Test extends TestCase
