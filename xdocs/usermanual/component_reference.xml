@@ -1651,8 +1651,21 @@ This is mainly intended for batch (non-GUI) runs.
         <property name="Number of Threads" required="Yes">Number of users to simulate.</property>
         <property name="Ramp-up Period" required="Yes">How long JMeter should take to get all the threads started.  If there are 10 threads and a ramp-up time of 100 seconds, then each thread will begin 10 seconds after the previous thread started, for a total time of 100 seconds to get the test fully up to speed.</property>
         <property name="Loop Count" required="No">Number of times to perform the test case.  Alternatively, "forever" can be selected causing the test to run until manually stopped.</property>
-        <property name="Start Time" required="No">If the scheduler checkbox is selected, one can choose an absolute start time.  When you start your test, JMeter will wait until the specified start time to begin testing.</property>
-        <property name="End Time" required="No">If the scheduler checkbox is selected, one can choose an absolute end time.  When you start your test, JMeter will wait until the specified start time to begin testing, and it will stop at the specified end time.</property></properties>
+        <property name="Start Time" required="No">If the scheduler checkbox is selected, one can choose an absolute start time.  When you start your test, JMeter will wait until the specified start time to begin testing.
+        	Note: the Startup Delay field over-rides this - see below.
+        	</property>
+        <property name="End Time" required="No">If the scheduler checkbox is selected, one can choose an absolute end time.  When you start your test, JMeter will wait until the specified start time to begin testing, and it will stop at the specified end time.
+        	Note: the Duration field over-rides this - see below.
+        	</property>
+        <property name="Duration (seconds)" required="No">
+        	If the scheduler checkbox is selected, one can choose a relative end time. 
+        	JMeter will use this to calculate the End Time, and ignore the End Time value.
+        </property>
+        <property name="Startup delay (seconds)" required="No">
+        	If the scheduler checkbox is selected, one can choose a relative startup delay.
+        	JMeter will use this to calculate the Start Time, and ignore the Start Time value.
+        </property>
+</properties>
 </component>
 
 <component index="14.9.3" name="WorkBench" screenshot="workbench.png">
