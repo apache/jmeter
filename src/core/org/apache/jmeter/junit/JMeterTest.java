@@ -476,7 +476,7 @@ public class JMeterTest extends JMeterTestCase
 		StringWriter writer = new StringWriter();
 		SaveService.saveElement(el, writer);
 		el =
-			SaveService.loadElement(new StringReader(writer.toString()));
+			(TestElement)SaveService.loadElement(new StringReader(writer.toString()));
 		log.debug("Successfully saved");
 		guiItem.configure(el);
 		assertEquals(
