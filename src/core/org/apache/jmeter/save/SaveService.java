@@ -201,11 +201,11 @@ public class SaveService implements SaveServiceConstants
 
         try
         {
-            props = JMeterUtils.getProperties(PROPS_FILE);
+            props = JMeterUtils.getJMeterProperties();
         }
         catch (Exception e)
         {
-            log.error("SaveService.readProperties: Problem loading properties file " + PROPS_FILE, e);
+            log.error("SaveService.readProperties: Problem loading properties file: ", e);
         }
 
         printFieldNames =
@@ -696,7 +696,7 @@ public class SaveService implements SaveServiceConstants
             String message = null;
             AssertionResult[] results = sample.getAssertionResults();
 
-            if (results.length > 0)
+            if ((results != null) && (results.length > 0))
             {
                 message = results[0].getFailureMessage();
             }
