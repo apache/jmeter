@@ -676,8 +676,10 @@ public class SampleResult implements Serializable
 			res.sampleResume();
 			Thread.sleep(100);
 			res.sampleEnd();
-			assertTrue(res.getTime()  >= 200);
-			assertFalse(res.getTime() >= 290); // we hope!
+			long sampleTime = res.getTime();
+			if ((sampleTime < 200) || (sampleTime > 290)) {
+				fail("Accumulated time ("+sampleTime+") was not between 200 and 290 ms");
+			}
 		}
 
 		private static Formatter fmt=new RawFormatter();
