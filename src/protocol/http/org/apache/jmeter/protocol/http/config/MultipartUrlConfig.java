@@ -153,7 +153,7 @@ public class MultipartUrlConfig implements Serializable
 		HTTPArgument arg = new HTTPArgument(name,value,true);
 		if(arg.getName().equals(arg.getEncodedName()) && arg.getValue().equals(arg.getEncodedValue()))
 		{
-			arg.setAlwaysEncode(false);
+			arg.setAlwaysEncoded(false);
 		}
 		args.addArgument(new HTTPArgument(name,value,true));
 	}

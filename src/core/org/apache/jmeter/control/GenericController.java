@@ -62,6 +62,7 @@ import java.util.List;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.PerSampleClonable;
 import org.apache.jmeter.testelement.PerThreadClonable;
 import org.apache.jmeter.testelement.TestElement;
 
@@ -364,7 +365,7 @@ public class GenericController extends AbstractTestElement implements Controller
 			s.setName(name);
 			return s;
 		}
-		class TestSampler extends AbstractSampler {
+		class TestSampler extends AbstractSampler implements PerSampleClonable {
 		  public void addCustomTestElement(TestElement t) { }
 		  public org.apache.jmeter.samplers.SampleResult sample(org.apache.jmeter.samplers.Entry e) { return null; }
 		}

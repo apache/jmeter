@@ -29,7 +29,7 @@ public class JMeterContext {
 		return variables;
 	}
 	
-	void setVariables( JMeterVariables vars ) {
+	public void setVariables( JMeterVariables vars ) {
 		this.variables = vars;
 	}
 	

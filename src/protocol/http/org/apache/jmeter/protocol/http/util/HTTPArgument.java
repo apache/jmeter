@@ -75,6 +75,7 @@ public class HTTPArgument extends Argument implements Serializable
 {
 
     private static final String ALWAYS_ENCODE = "HTTPArgument.always_encode";
+    private static final String USE_EQUALS = "HTTPArgument.use_equals";
 
     private static EncoderCache cache = new EncoderCache(1000);
 
@@ -90,13 +91,38 @@ public class HTTPArgument extends Argument implements Serializable
         this(name, value, false);
         this.setMetaData(metadata);
     }
+    
+    public void setUseEquals(boolean ue)
+    {
+        if(ue)
+        {
+            setMetaData("=");
+        }
+        else
+        {
+            setMetaData("");
+        }
+        setProperty(USE_EQUALS,new Boolean(ue));
+    }
+    
+    public boolean isUseEquals()
+    {
+        boolean eq = getPropertyAsBoolean(USE_EQUALS);
+        if(getMetaData().equals("=") || (getValue() != null && getValue().toString().length() > 0))
+        {
+            setUseEquals(true);
+            return true;
+        }
+        return eq;
+        
+    }
 
-    public void setAlwaysEncode(boolean ae)
+    public void setAlwaysEncoded(boolean ae)
     {
         setProperty(ALWAYS_ENCODE, new Boolean(ae));
     }
 
-    public boolean getAlwaysEncode()
+    public boolean isAlwaysEncoded()
     {
         return getPropertyAsBoolean(ALWAYS_ENCODE);
     }
@@ -114,7 +140,7 @@ public class HTTPArgument extends Argument implements Serializable
 
     public HTTPArgument(String name, Object value, boolean alreadyEncoded)
     {
-        setAlwaysEncode(true);
+        setAlwaysEncoded(true);
         if (alreadyEncoded)
         {
             name = URLDecoder.decode(name);
@@ -156,7 +182,7 @@ public class HTTPArgument extends Argument implements Serializable
 
     public String getEncodedValue()
     {
-        if (getAlwaysEncode())
+        if (isAlwaysEncoded())
         {
             return cache.getEncoded(getValue().toString());
         }
@@ -168,7 +194,7 @@ public class HTTPArgument extends Argument implements Serializable
 
     public String getEncodedName()
     {
-        if (getAlwaysEncode())
+        if (isAlwaysEncoded())
         {
             return cache.getEncoded(getName());
         }

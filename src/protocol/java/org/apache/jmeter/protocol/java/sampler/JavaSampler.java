@@ -64,6 +64,7 @@ import org.apache.jmeter.protocol.java.config.JavaConfig;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.PerThreadClonable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
@@ -73,7 +74,8 @@ import org.apache.log.Logger;
  */
 
 
-public class JavaSampler extends AbstractSampler implements JavaSamplerClient {
+public class JavaSampler extends AbstractSampler
+	implements JavaSamplerClient, PerThreadClonable {
 
 	/** Handle to Java client. **/
 	

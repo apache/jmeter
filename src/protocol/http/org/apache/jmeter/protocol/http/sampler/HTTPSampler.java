@@ -76,6 +76,7 @@ import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.PerSampleClonable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -95,8 +96,7 @@ import org.apache.oro.text.regex.Util;
  *@created   $Date$
  *@version   $Revision$
  ***************************************/
-public class HTTPSampler extends AbstractSampler
-{
+public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
     public final static String HEADERS = "headers";
     public final static String HEADER = "header";
     public final static String ARGUMENTS = "HTTPsampler.Arguments";
@@ -261,7 +261,7 @@ public class HTTPSampler extends AbstractSampler
         HTTPArgument arg = new HTTPArgument(name, value, metaData, true);
         if (arg.getName().equals(arg.getEncodedName()) && arg.getValue().equals(arg.getEncodedValue()))
         {
-            arg.setAlwaysEncode(false);
+            arg.setAlwaysEncoded(false);
         }
         args.addArgument(arg);
     }
