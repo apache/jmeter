@@ -78,7 +78,6 @@ import junit.framework.TestCase;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
-import org.apache.jmeter.testelement.PerThreadClonable;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
@@ -92,7 +91,7 @@ import org.apache.log.Logger;
  * @author  <a href="mailto:sdowd@arcmail.com">Sean Dowd</a>
  * @version $Revision$ $Date$
  */
-public class CookieManager extends ConfigTestElement implements Serializable, PerThreadClonable
+public class CookieManager extends ConfigTestElement implements Serializable
 {
     transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
 
