@@ -63,188 +63,101 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 
 
-/************************************************************
- *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author     Michael Stover
- *@created    $Date$
- *@version    1.0
- ***********************************************************/
-
-
+/**
+ * @author     Michael Stover
+ * @version    $Revision$
+ */
 public class SplineModel implements Clearable
 {
-
     public final int DEFAULT_NUMBER_OF_NODES = 10;
-
     public final int DEFAULT_REFRESH_PERIOD = 1;
 
     protected final boolean SHOW_INCOMING_SAMPLES = true;
-
     protected int numberOfNodes = DEFAULT_NUMBER_OF_NODES;
-
     protected int refreshPeriod = DEFAULT_REFRESH_PERIOD;
 
+    /** Current Spline curve. */
     protected Spline3 dataCurve = null;
-    // current Spline curve
 
-
+    /** Sum of the samples. */
     protected long sum = 0;
-    // sum of the samples
 
-
+    /** Average of the samples. */
     protected long average = 0;
-    // average of the samples
 
-
+    /** Number of collected samples. */
     protected long n = 0;
 
     ArrayList samples;
-    // number of collected samples
-
 
     private GraphListener listener;
 
-    private long minimum = Integer.MAX_VALUE, maximum = Integer.MIN_VALUE, incoming;
+    private long minimum = Integer.MAX_VALUE;
+    private long maximum = Integer.MIN_VALUE;
+    private long incoming;
 
     private String name;
 
-    /************************************************************
-     *  !ToDo (Constructor description)
-     ***********************************************************/
     public SplineModel()
     {
-
         samples = new ArrayList();
-
     }
 
-    /************************************************************
-     *  !ToDo (Method description)
-     *
-     *@param  vis  !ToDo (Parameter description)
-     ***********************************************************/
     public void setListener(GraphListener vis)
     {
-
         listener = vis;
-
     }
 
-    /************************************************************
-     *  !ToDo (Method description)
-     *
-     *@param  newName  !ToDo (Parameter description)
-     ***********************************************************/
     public void setName(String newName)
     {
         name = newName;
     }
 
-    /************************************************************
-     *  !ToDoo (Method description)
-     *
-     *@return    !ToDo (Return description)
-     ***********************************************************/
     public boolean isEditable()
     {
-
         return true;
     }
 
-    /************************************************************
-     *  !ToDoo (Method description)
-     *
-     *@return    !ToDo (Return description)
-     ***********************************************************/
     public Spline3 getDataCurve()
     {
-
         return dataCurve;
     }
 
-    /************************************************************
-     *  !ToDoo (Method description)
-     *
-     *@return    !ToDo (Return description)
-     ***********************************************************/
     public Class getGuiClass()
     {
-
         return org.apache.jmeter.visualizers.SplineVisualizer.class;
     }
 
-    /************************************************************
-     *  !ToDoo (Method description)
-     *
-     *@return    !ToDo (Return description)
-     ***********************************************************/
     public Collection getAddList()
     {
-
         return null;
     }
 
-    /************************************************************
-     *  !ToDoo (Method description)
-     *
-     *@return    !ToDo (Return description)
-     ***********************************************************/
     public String getClassLabel()
     {
-
         return JMeterUtils.getResString("spline_visualizer_title");
     }
 
-    /************************************************************
-     *  !ToDoo (Method description)
-     *
-     *@return    !ToDo (Return description)
-     ***********************************************************/
     public long getMinimum()
     {
-
         return minimum;
     }
 
-    /************************************************************
-     *  !ToDoo (Method description)
-     *
-     *@return    !ToDo (Return description)
-     ***********************************************************/
     public long getMaximum()
     {
-
         return maximum;
     }
 
-    /************************************************************
-     *  !ToDoo (Method description)
-     *
-     *@return    !ToDo (Return description)
-     ***********************************************************/
     public long getAverage()
     {
-
         return average;
     }
 
-    /************************************************************
-     *  !ToDoo (Method description)
-     *
-     *@return    !ToDo (Return description)
-     ***********************************************************/
     public long getCurrent()
     {
-
         return incoming;
     }
 
-    /************************************************************
-     *  !ToDoo (Method description)
-     *
-     *@return    !ToDo (Return description)
-     ***********************************************************/
     public long[] getSamples()
     {
         int n = samples.size();
@@ -257,12 +170,6 @@ public class SplineModel implements Clearable
         return longSample;
     }
 
-    /************************************************************
-     *  !ToDoo (Method description)
-     *
-     *@param  i  !ToDo (Parameter description)
-     *@return    !ToDo (Return description)
-     ***********************************************************/
     public long getSample(int i)
     {
         Long sample = (Long) this.samples.get(i);
@@ -270,52 +177,31 @@ public class SplineModel implements Clearable
         return sample.longValue();
     }
 
-    /************************************************************
-     *  !ToDoo (Method description)
-     *
-     *@return    !ToDo (Return description)
-     ***********************************************************/
     public int getNumberOfCollectedSamples()
     {
         return this.samples.size();
     }
 
-    /************************************************************
-     *  !ToDoo (Method description)
-     *
-     *@return    !ToDo (Return description)
-     ***********************************************************/
     public String getName()
     {
         return name;
     }
 
-    /************************************************************
-     *  !ToDo (Method description)
-     ***********************************************************/
     public void uncompile()
     {
         clear();
     }
 
-    /************************************************************
-     *  !ToDo (Method description)
-     ***********************************************************/
     public synchronized void clear()
     {
-
         // this.graph.clear();
-
         samples.clear();
 
         this.n = 0;
-
         this.sum = 0;
-
         this.average = 0;
 
         minimum = Integer.MAX_VALUE;
-
         maximum = Integer.MIN_VALUE;
 
         this.dataCurve = null;
@@ -324,14 +210,8 @@ public class SplineModel implements Clearable
         {
             listener.updateGui();
         }
-
     }
 
-    /************************************************************
-     *  !ToDo (Method description)
-     *
-     *@param  sampleResult  !ToDo (Parameter description)
-     ***********************************************************/
     public synchronized void add(SampleResult sampleResult)
     {
         long sample = sampleResult.getTime();

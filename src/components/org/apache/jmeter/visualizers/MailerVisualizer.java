@@ -92,17 +92,19 @@ import org.apache.log.Logger;
  * - suggestions ;-)
  */
 
-/************************************************************
- *  This class implements a visualizer that mails a message when an error
- *  occurs.
+/**
+ * This class implements a visualizer that mails a message when an error
+ * occurs.
  *
- *@author     <a href="mailto:stuart@personalmd.com">Stuart Schmukler</a> and <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
- *@created    $Date$
- *@version    $Revision$ $Date$
- ***********************************************************/
+ * @author <a href="mailto:stuart@personalmd.com">Stuart Schmukler</a>
+ * @author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
+ * @version    $Revision$ $Date$
+ */
 public class MailerVisualizer extends AbstractVisualizer
         implements Clearable, ChangeListener
 {
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
     private JButton testerButton;
     private JTextField addressField;
@@ -117,7 +119,6 @@ public class MailerVisualizer extends AbstractVisualizer
     private JPanel mainPanel;
     private JLabel panelTitleLabel;
 
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
     /**
      * Constructs the MailerVisualizer and initializes its GUI.
@@ -130,11 +131,6 @@ public class MailerVisualizer extends AbstractVisualizer
         initGui();
     }
 
-    /************************************************************
-     *  !ToDoo (Method description)
-     *
-     *@return    !ToDo (Return description)
-     ***********************************************************/
     public JPanel getControlPanel()
     {
         return this;
@@ -155,11 +151,6 @@ public class MailerVisualizer extends AbstractVisualizer
     {
     }
 
-    /************************************************************
-     *  !ToDo (Method description)
-     *
-     *@return    !ToDo (Return description)
-     ***********************************************************/
     public String toString()
     {
         return "E-Mail Notification";
@@ -185,7 +176,10 @@ public class MailerVisualizer extends AbstractVisualizer
         // mailer panel
         JPanel mailerPanel = new JPanel();
 
-        mailerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),getAttributesTitle()));
+        mailerPanel.setBorder(
+            BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(),
+                getAttributesTitle()));
         GridBagLayout g = new GridBagLayout();
 
         mailerPanel.setLayout(g);
@@ -330,7 +324,7 @@ public class MailerVisualizer extends AbstractVisualizer
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
+     * @see JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement c)
     {
@@ -389,7 +383,7 @@ public class MailerVisualizer extends AbstractVisualizer
     }
 
     /* (non-Javadoc)
-     * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+     * @see ChangeListener#stateChanged(ChangeEvent)
      */
     public void stateChanged(ChangeEvent e)
     {

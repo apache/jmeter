@@ -78,28 +78,20 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
 
-/****************************************
- * Title: StatVisualizer.java Description: Aggregrate Table-Based Reporting
- * Visualizer for JMeter Props to the people who've done the other visualizers
- * ahead of me (Stefano Mazzocchi), who I borrowed code from to start me off
- * (and much code may still exist).. Thank you! Copyright: Copyright (c) 2001
- * Company: Apache Foundation
+/**
+ * Aggregrate Table-Based Reporting Visualizer for JMeter.  Props to the people
+ * who've done the other visualizers ahead of me (Stefano Mazzocchi), who I
+ * borrowed code from to start me off (and much code may still exist). Thank
+ * you!
  *
- *@author    James Boutcher
- *@created   $Date$
- *@version   1.0
- ***************************************/
+ * @author    James Boutcher
+ * @version   $Revision$
+ */
 public class StatVisualizer extends AbstractVisualizer
         implements AccumListener, Clearable
 {
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
     protected JTable myJTable;
 
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
     protected JScrollPane myScrollPane;
     private final static String VISUALIZER_NAME =
             JMeterUtils.getResString("aggregate_report");
@@ -107,9 +99,6 @@ public class StatVisualizer extends AbstractVisualizer
     transient private StatVisualizerModel model;
     transient private StatTableModel myStatTableModel;
 
-    /****************************************
-     * Constructor for the Graph object
-     ***************************************/
     public StatVisualizer()
     {
         super();
@@ -118,40 +107,25 @@ public class StatVisualizer extends AbstractVisualizer
         init();
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public String getStaticLabel()
     {
         return VISUALIZER_NAME;
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param res  !ToDo (Parameter description)
-     ***************************************/
     public void add(SampleResult res)
     {
         model.addNewSample(res);
     }
 
-    /****************************************
-     * Clears this visualizer, it model, and forces a repaint of the table
-     ***************************************/
+    /**
+     * Clears this visualizer and its model, and forces a repaint of the table.
+     */
     public void clear()
     {
         myStatTableModel.clear();
         model.clear();
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param s  !ToDo (Parameter description)
-     ***************************************/
     public synchronized void updateGui(RunningSample s)
     {
         myStatTableModel.rowChanged(s.getIndex());
@@ -167,9 +141,9 @@ public class StatVisualizer extends AbstractVisualizer
         return t;
     }
 
-    /****************************************
-     * Main visualizer setup..
-     ***************************************/
+    /**
+     * Main visualizer setup.
+     */
     private void init()
     {
         this.setLayout(new BorderLayout());
@@ -183,7 +157,8 @@ public class StatVisualizer extends AbstractVisualizer
 
         mainPanel.add(makeTitlePanel());
         myStatTableModel = new StatTableModel(model);
-        // SortFilterModel mySortedModel = new SortFilterModel(myStatTableModel);
+        // SortFilterModel mySortedModel =
+        //       new SortFilterModel(myStatTableModel);
         myJTable = new JTable(myStatTableModel);
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
         myScrollPane = new JScrollPane(myJTable);
@@ -191,28 +166,31 @@ public class StatVisualizer extends AbstractVisualizer
         this.add(myScrollPane, BorderLayout.CENTER);
     }
 
-    /****************************************
+    /**
      * Class which implements the model for our main table in this
      * visualizer.
      *
-     * @author    $Author$
-     * @created   $Date$
      * @version   $Revision$
-     ***************************************/
+     */
     class StatTableModel extends AbstractTableModel
     {
         private final String[] columnNames =
-                { "URL", "Count", "Average", "Min", "Max", "Error%", "Rate" };
+            { "URL", "Count", "Average", "Min", "Max", "Error%", "Rate" };
         private final Class[] columnClasses =
-                { String.class, Long.class, Long.class, Long.class, Long.class, String.class, String.class };
-        private final String TOTAL_LABEL = JMeterUtils.getResString("aggregate_report_total_label");
+            {
+                String.class,
+                Long.class,
+                Long.class,
+                Long.class,
+                Long.class,
+                String.class,
+                String.class };
+        private final String TOTAL_LABEL =
+            JMeterUtils.getResString("aggregate_report_total_label");
 
         private transient StatVisualizerModel model;
         private int currentRowCount = 0;
 
-        /****************************************
-         * !ToDo (Constructor description)
-         ***************************************/
         public StatTableModel(StatVisualizerModel model)
         {
             super();
@@ -223,62 +201,46 @@ public class StatVisualizer extends AbstractVisualizer
         {
             TableModelEvent event;
 
-            // Create the table changed event, carefully handling the case where the
-            // table grows beyond its current known size:
+            // Create the table changed event, carefully handling the case
+            // where the table grows beyond its current known size.
             synchronized (this)
             {
                 if (index >= currentRowCount - 1)
                 {
-                    event = new TableModelEvent(this, currentRowCount - 1, index, TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT);
+                    event =
+                        new TableModelEvent(
+                            this,
+                            currentRowCount - 1,
+                            index,
+                            TableModelEvent.ALL_COLUMNS,
+                            TableModelEvent.INSERT);
                     currentRowCount = index + 2;
                 }
                 else event = new TableModelEvent(this, index);
             }
             // Fire the event:
             fireTableChanged(event);
-            // No matter which row changes, the totals row will have changed too:
+            // No matter which row changes, the totals row will have changed
+            // too:
             fireTableChanged(new TableModelEvent(this, currentRowCount));
         }
 
-        /****************************************
-         * !ToDoo (Method description)
-         *
-         *@return   !ToDo (Return description)
-         ***************************************/
         public int getColumnCount()
         {
             return columnNames.length;
         }
 
-        /****************************************
-         * !ToDoo (Method description)
-         *
-         *@return   !ToDo (Return description)
-         ***************************************/
         public int getRowCount()
         {
             currentRowCount = model.getRunningSampleCount() + 1;
             return currentRowCount;
         }
 
-        /****************************************
-         * !ToDoo (Method description)
-         *
-         *@param col  !ToDo (Parameter description)
-         *@return     !ToDo (Return description)
-         ***************************************/
         public String getColumnName(int col)
         {
             return columnNames[col];
         }
 
-        /****************************************
-         * !ToDoo (Method description)
-         *
-         *@param row  !ToDo (Parameter description)
-         *@param col  !ToDo (Parameter description)
-         *@return     !ToDo (Return description)
-         ***************************************/
         public Object getValueAt(int row, int col)
         {
             RunningSample s;
@@ -321,50 +283,32 @@ public class StatVisualizer extends AbstractVisualizer
             }
         }
 
-        /****************************************
-         * !ToDoo (Method description)
-         *
-         *@param c  !ToDo (Parameter description)
-         *@return   !ToDo (Return description)
-         ***************************************/
         public Class getColumnClass(int c)
         {
             return columnClasses[c];
         }
 
-        /****************************************
-         * !ToDo (Method description)
-         ***************************************/
         public void clear()
         {
             fireTableDataChanged();
         }
     }
-    // class StatTableModel
 }
 
 
-// class StatVisualizer
-/****************************************
+/**
  * Pulled this mainly out of a Core Java book to implement a sorted table -
  * haven't implemented this yet, it needs some non-trivial work done to it to
  * support our dynamically-sizing TableModel for this visualizer.
  *
- *@author    $Author$
- *@created   $Date$
- *@version   $Revision$
- ***************************************/
+ * @version   $Revision$
+ */
 class SortFilterModel extends AbstractTableModel
 {
     private TableModel model;
     private int sortColumn;
     private Row[] rows;
 
-    /****************************************
-     * !ToDo (Constructor description)
-     *
-     *@param m  !ToDo (Parameter description)
-     ***************************************/
     public SortFilterModel(TableModel m)
     {
         model = m;
@@ -377,91 +321,44 @@ class SortFilterModel extends AbstractTableModel
     }
 
     public SortFilterModel()
-    {}
+    {
+    }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param aValue  !ToDo (Parameter description)
-     *@param r       !ToDo (Parameter description)
-     *@param c       !ToDo (Parameter description)
-     ***************************************/
     public void setValueAt(Object aValue, int r, int c)
     {
         model.setValueAt(aValue, rows[r].index, c);
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@param r  !ToDo (Parameter description)
-     *@param c  !ToDo (Parameter description)
-     *@return   !ToDo (Return description)
-     ***************************************/
     public Object getValueAt(int r, int c)
     {
         return model.getValueAt(rows[r].index, c);
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@param r  !ToDo (Parameter description)
-     *@param c  !ToDo (Parameter description)
-     *@return   !ToDo (Return description)
-     ***************************************/
     public boolean isCellEditable(int r, int c)
     {
         return model.isCellEditable(rows[r].index, c);
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public int getRowCount()
     {
         return model.getRowCount();
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public int getColumnCount()
     {
         return model.getColumnCount();
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@param c  !ToDo (Parameter description)
-     *@return   !ToDo (Return description)
-     ***************************************/
     public String getColumnName(int c)
     {
         return model.getColumnName(c);
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@param c  !ToDo (Parameter description)
-     *@return   !ToDo (Return description)
-     ***************************************/
     public Class getColumnClass(int c)
     {
         return model.getColumnClass(c);
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param c  !ToDo (Parameter description)
-     ***************************************/
     public void sort(int c)
     {
         sortColumn = c;
@@ -469,51 +366,28 @@ class SortFilterModel extends AbstractTableModel
         fireTableDataChanged();
     }
 
-    /****************************************
-     * !ToDo
-     *
-     *@param table  !ToDo
-     ***************************************/
     public void addMouseListener(final JTable table)
     {
         table.getTableHeader().addMouseListener(new MouseAdapter()
+        {
+            public void mouseClicked(MouseEvent event)
+            {
+                if (event.getClickCount() < 2)
                 {
-                    public void mouseClicked(MouseEvent event)
-                    {
-                        if (event.getClickCount() < 2)
-                        {
-                            return;
-                        }
-                        int tableColumn = table.columnAtPoint(event.getPoint());
-                        int modelColumn = table.convertColumnIndexToModel(tableColumn);
-
-                        sort(modelColumn);
-                    }
+                    return;
                 }
-                );
+                int tableColumn = table.columnAtPoint(event.getPoint());
+                int modelColumn = table.convertColumnIndexToModel(tableColumn);
+
+                sort(modelColumn);
+            }
+        });
     }
 
-    /****************************************
-     * !ToDo (Class description)
-     *
-     *@author    $Author$
-     *@created   $Date$
-     *@version   $Revision$
-     ***************************************/
     private class Row implements Comparable
     {
-
-        /****************************************
-         * !ToDo (Field description)
-         ***************************************/
         public int index;
 
-        /****************************************
-         * !ToDo (Method description)
-         *
-         *@param other  !ToDo (Parameter description)
-         *@return       !ToDo (Return description)
-         ***************************************/
         public int compareTo(Object other)
         {
             Row otherRow = (Row) other;
@@ -530,5 +404,4 @@ class SortFilterModel extends AbstractTableModel
             }
         }
     }
-}
-// class SortFilterModel
+}  // class SortFilterModel

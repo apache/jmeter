@@ -74,7 +74,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/****************************************
+/**
  * This class implements a statistical analyser that calculates both the average
  * and the standard deviation of the sampling process. The samples are displayed
  * in a JTable, and the statistics are displayed at the bottom of the table.
@@ -82,8 +82,10 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *@author    <a href="mailto:alf@i100.no">Alf Hogemark</a>
  *@created   March 10, 2002
  *@version   $Revision$
- ***************************************/
-public class TableVisualizer extends AbstractVisualizer implements GraphListener, Clearable
+ */
+public class TableVisualizer
+    extends AbstractVisualizer
+    implements GraphListener, Clearable
 {
     private TableDataModel model = null;
     private JTable table = null;
@@ -93,9 +95,9 @@ public class TableVisualizer extends AbstractVisualizer implements GraphListener
     private JTextField noSamplesField = null;
     private JScrollPane tableScrollPanel = null;
 
-    /****************************************
-     * Constructor for the TableVisualizer object
-     ***************************************/
+    /**
+     * Constructor for the TableVisualizer object.
+     */
     public TableVisualizer()
     {
         super();
@@ -104,19 +106,11 @@ public class TableVisualizer extends AbstractVisualizer implements GraphListener
         init();
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public String getStaticLabel()
     {
         return JMeterUtils.getResString("view_results_in_table");
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     ***************************************/
     public void updateGui()
     {
         // Not completely sure if this is the correct way of updating the table
@@ -134,21 +128,11 @@ public class TableVisualizer extends AbstractVisualizer implements GraphListener
             deviationField.setText(Long.toString(model.getCurrentDeviation()));
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param res  !ToDo (Parameter description)
-     ***************************************/
     public void add(SampleResult res)
     {
         model.addSample(res);
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param s  !ToDo (Parameter description)
-     ***************************************/
     public void updateGui(Sample s)
     {
         // We have received one more sample
@@ -159,9 +143,6 @@ public class TableVisualizer extends AbstractVisualizer implements GraphListener
         updateTextFields();
     }
 
-    /****************************************
-     * Description of the Method
-     ***************************************/
     public synchronized void clear()
     {
         log.warn("Clear called",new Exception());
@@ -173,19 +154,11 @@ public class TableVisualizer extends AbstractVisualizer implements GraphListener
         repaint();
     }
 
-    /****************************************
-     * Description of the Method
-     *
-     *@return   Description of the Returned Value
-     ***************************************/
     public String toString()
     {
         return "Show the samples in a table";
     }
 
-    /****************************************
-     * Description of the Method
-     ***************************************/
     private void init()
     {
         this.setLayout(new BorderLayout());
@@ -204,12 +177,13 @@ public class TableVisualizer extends AbstractVisualizer implements GraphListener
         table = new JTable(model);
         // table.getTableHeader().setReorderingAllowed(false);
         tableScrollPanel = new JScrollPane(table);
-        tableScrollPanel.setViewportBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+        tableScrollPanel.setViewportBorder(
+            BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
         // Set up footer of table which displays numerics of the graphs
         JPanel dataPanel = new JPanel();
-        JLabel dataLabel = new JLabel(JMeterUtils.getResString("graph_results_latest_sample"));
-
+        JLabel dataLabel =
+            new JLabel(JMeterUtils.getResString("graph_results_latest_sample"));
         dataLabel.setForeground(Color.black);
         dataField = new JTextField(5);
         dataField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -218,9 +192,10 @@ public class TableVisualizer extends AbstractVisualizer implements GraphListener
         dataField.setBackground(getBackground());
         dataPanel.add(dataLabel);
         dataPanel.add(dataField);
-        JPanel averagePanel = new JPanel();
-        JLabel averageLabel = new JLabel(JMeterUtils.getResString("graph_results_average"));
 
+        JPanel averagePanel = new JPanel();
+        JLabel averageLabel =
+            new JLabel(JMeterUtils.getResString("graph_results_average"));
         averageLabel.setForeground(Color.blue);
         averageField = new JTextField(5);
         averageField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -229,9 +204,10 @@ public class TableVisualizer extends AbstractVisualizer implements GraphListener
         averageField.setBackground(getBackground());
         averagePanel.add(averageLabel);
         averagePanel.add(averageField);
-        JPanel deviationPanel = new JPanel();
-        JLabel deviationLabel = new JLabel(JMeterUtils.getResString("graph_results_deviation"));
 
+        JPanel deviationPanel = new JPanel();
+        JLabel deviationLabel =
+            new JLabel(JMeterUtils.getResString("graph_results_deviation"));
         deviationLabel.setForeground(Color.red);
         deviationField = new JTextField(5);
         deviationField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -240,8 +216,10 @@ public class TableVisualizer extends AbstractVisualizer implements GraphListener
         deviationField.setBackground(getBackground());
         deviationPanel.add(deviationLabel);
         deviationPanel.add(deviationField);
+ 
         JPanel noSamplesPanel = new JPanel();
-        JLabel noSamplesLabel = new JLabel(JMeterUtils.getResString("graph_results_no_samples"));
+        JLabel noSamplesLabel =
+            new JLabel(JMeterUtils.getResString("graph_results_no_samples"));
 
         noSamplesField = new JTextField(10);
         noSamplesField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -251,8 +229,8 @@ public class TableVisualizer extends AbstractVisualizer implements GraphListener
         noSamplesPanel.add(noSamplesLabel);
         noSamplesPanel.add(noSamplesField);
 
-        JPanel tableInfoPanel = new JPanel();
 
+        JPanel tableInfoPanel = new JPanel();
         tableInfoPanel.setLayout(new FlowLayout());
         tableInfoPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
@@ -272,5 +250,4 @@ public class TableVisualizer extends AbstractVisualizer implements GraphListener
         this.add(mainPanel, BorderLayout.NORTH);
         this.add(tablePanel, BorderLayout.CENTER);
     }
-
 }

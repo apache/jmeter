@@ -74,51 +74,26 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/****************************************
+/**
  * This class implements a statistical analyser that takes samples to process a
  * Spline interpolated curve. Currently, it tries to look mostly like the
  * GraphVisualizer.
  *
- *@author    <a href="mailto:norguet@bigfoot.com">Jean-Pierre Norguet</a>
- *@created   $Date$
- *@version   0.9.1
- ***************************************/
-public class SplineVisualizer extends AbstractVisualizer implements ImageVisualizer, GraphListener, Clearable
+ * @author    <a href="mailto:norguet@bigfoot.com">Jean-Pierre Norguet</a>
+ * @version   $Revision$
+ */
+public class SplineVisualizer
+    extends AbstractVisualizer
+    implements ImageVisualizer, GraphListener, Clearable
 {
 
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
     protected final Color BACKGROUND_COLOR = getBackground();
-
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
     protected final Color MINIMUM_COLOR = new Color(0F, 0.5F, 0F);
-
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
     protected final Color MAXIMUM_COLOR = new Color(0.9F, 0F, 0F);
-
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
     protected final Color AVERAGE_COLOR = new Color(0F, 0F, 0.75F);
-
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
     protected final Color INCOMING_COLOR = Color.black;
-
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
     protected final int NUMBERS_TO_DISPLAY = 4;
 
-    /****************************************
-     * !ToDo (Field description)
-     ***************************************/
     protected final boolean FILL_UP_WITH_ZEROS = false;
 
     transient private SplineGraph graph = null;
@@ -134,9 +109,6 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
     private JLabel incomingNumberLabel = null;
     transient private SplineModel model;
 
-    /****************************************
-     * !ToDo (Constructor description)
-     ***************************************/
     public SplineVisualizer()
     {
         super();
@@ -166,9 +138,6 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         model.clear();
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     ***************************************/
     public void setGUI()
     {
         Color backColor = BACKGROUND_COLOR;
@@ -186,16 +155,24 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
 
         // NAME
         mainPanel.add(makeTitlePanel());
-        maximumLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_maximum"));
+
+        maximumLabel =
+            new JLabel(JMeterUtils.getResString("spline_visualizer_maximum"));
         maximumLabel.setForeground(MAXIMUM_COLOR);
         maximumLabel.setBackground(backColor);
-        averageLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_average"));
+
+        averageLabel =
+            new JLabel(JMeterUtils.getResString("spline_visualizer_average"));
         averageLabel.setForeground(AVERAGE_COLOR);
         averageLabel.setBackground(backColor);
-        incomingLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_incoming"));
+
+        incomingLabel =
+            new JLabel(JMeterUtils.getResString("spline_visualizer_incoming"));
         incomingLabel.setForeground(INCOMING_COLOR);
         incomingLabel.setBackground(backColor);
-        minimumLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_minimum"));
+
+        minimumLabel =
+            new JLabel(JMeterUtils.getResString("spline_visualizer_minimum"));
         minimumLabel.setForeground(MINIMUM_COLOR);
         minimumLabel.setBackground(backColor);
 
@@ -203,14 +180,17 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         maximumNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
         maximumNumberLabel.setForeground(MAXIMUM_COLOR);
         maximumNumberLabel.setBackground(backColor);
+
         averageNumberLabel = new JLabel("0 ms");
         averageNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
         averageNumberLabel.setForeground(AVERAGE_COLOR);
         averageNumberLabel.setBackground(backColor);
+
         incomingNumberLabel = new JLabel("0 ms");
         incomingNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
         incomingNumberLabel.setForeground(INCOMING_COLOR);
         incomingNumberLabel.setBackground(backColor);
+
         minimumNumberLabel = new JLabel("0 ms");
         minimumNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
         minimumNumberLabel.setForeground(MINIMUM_COLOR);
@@ -256,9 +236,6 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         // add(infoPanel, BorderLayout.EAST);
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     ***************************************/
     public void updateGui()
     {
         repaint();
@@ -271,22 +248,11 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         }
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public String toString()
     {
         return "Show the samples analysis as a Spline curve";
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param measure  !ToDo (Parameter description)
-     *@return         !ToDo (Return description)
-     ***************************************/
     public String formatMeasureToDisplay(long measure)
     {
         String numberString = String.valueOf(measure);
@@ -301,11 +267,6 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         return numberString;
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param n  !ToDo (Parameter description)
-     ***************************************/
     public void setMinimum(long n)
     {
         String text = this.formatMeasureToDisplay(n) + " ms";
@@ -313,11 +274,6 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         this.minimumNumberLabel.setText(text);
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param n  !ToDo (Parameter description)
-     ***************************************/
     public void setMaximum(long n)
     {
         String text = this.formatMeasureToDisplay(n) + " ms";
@@ -325,11 +281,6 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         this.maximumNumberLabel.setText(text);
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param n  !ToDo (Parameter description)
-     ***************************************/
     public void setAverage(long n)
     {
         String text = this.formatMeasureToDisplay(n) + " ms";
@@ -337,11 +288,6 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         this.averageNumberLabel.setText(text);
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param n  !ToDo (Parameter description)
-     ***************************************/
     public void setIncoming(long n)
     {
         String text = this.formatMeasureToDisplay(n) + " ms";
@@ -349,21 +295,11 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         this.incomingNumberLabel.setText(text);
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public JPanel getControlPanel()
     {
         return this;
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public Image getImage()
     {
         Image result = graph.createImage(graph.getWidth(), graph.getHeight());
@@ -373,50 +309,26 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
         return result;
     }
 
-    /****************************************
+    /**
      * Component showing a Spline curve.
      *
-     *@author    $Author$
-     *@created   $Date$
-     *@version   $Revision$
-     ***************************************/
+     * @version   $Revision$
+     */
     public class SplineGraph extends JComponent
     {
-
-        /****************************************
-         * !ToDo (Field description)
-         ***************************************/
         public boolean reinterpolated = false;
-
-        /****************************************
-         * !ToDo (Field description)
-         ***************************************/
         protected final Color WAITING_COLOR = Color.darkGray;
-
-        /****************************************
-         * !ToDo (Field description)
-         ***************************************/
         protected int lastWidth = -1;
-
-        /****************************************
-         * !ToDo (Field description)
-         ***************************************/
         protected int lastHeight = -1;
-
-        /****************************************
-         * !ToDo (Field description)
-         ***************************************/
         protected int[] plot = null;
 
-        /****************************************
-         * !ToDo (Constructor description)
-         ***************************************/
         public SplineGraph()
-        {}
+        {
+        }
 
-        /****************************************
+        /**
          * Clear the Spline graph and get ready for the next wave.
-         ***************************************/
+         */
         public void clear()
         {
             lastWidth = -1;
@@ -425,11 +337,6 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
             this.repaint();
         }
 
-        /****************************************
-         * !ToDo (Method description)
-         *
-         *@param g  !ToDo (Parameter description)
-         ***************************************/
         public void paintComponent(Graphics g)
         {
             super.paintComponent(g);
@@ -443,7 +350,11 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
                 g.setColor(this.getBackground());
                 g.fillRect(0, 0, width, height);
                 g.setColor(WAITING_COLOR);
-                g.drawString(JMeterUtils.getResString("spline_visualizer_waitingmessage"), (width - 120) / 2, height - (height - 12) / 2);
+                g.drawString(
+                    JMeterUtils.getResString(
+                        "spline_visualizer_waitingmessage"),
+                    (width - 120) / 2,
+                    height - (height - 12) / 2);
                 return;
             }
 
