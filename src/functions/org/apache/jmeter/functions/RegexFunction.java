@@ -78,41 +78,47 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	
 
 	public String execute(SampleResult previousResult,Sampler currentSampler) 
-		throws InvalidVariableException {
-			
+		throws InvalidVariableException 
+	{	
 		try
 		{
-
 			searchPattern = compiler.compile(((CompoundVariable)values[0]).execute());
 			generateTemplate(((CompoundVariable)values[1]).execute());
 
-			if ( values.length > 2 ) {
+			if ( values.length > 2 ) 
+			{
 				valueIndex = ((CompoundVariable)values[2]).execute();
 			}
-			if ( valueIndex.equals("") ) {
+			if ( valueIndex.equals("") ) 
+			{
 					valueIndex = "1";
 			}
 	
-			if ( values.length > 3 ) {
+			if ( values.length > 3 ) 
+			{
 				between = ((CompoundVariable)values[3]).execute();
 			}
 
-			if ( values.length > 4 ) {
+			if ( values.length > 4 ) 
+			{
 				String dv = ((CompoundVariable)values[4]).execute();
 				if ( ! dv.equals("") ) {
 								defaultValue = dv;
 				}
 			}
 
-			if ( values.length > 5 ) {			
+			if ( values.length > 5 ) 
+			{			
 				name = ((CompoundVariable)values[values.length-1]).execute();
 			}
-
-
-		} catch(MalformedPatternException e) {
+		} 
+		catch(MalformedPatternException e) 
+		{
 			log.error("",e);
 			throw new InvalidVariableException("Bad regex pattern");
-		} catch(Exception e) {
+		} 
+		catch(Exception e) 
+		{
 			throw new InvalidVariableException(e.getMessage());
 		}
 
@@ -123,7 +129,8 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		}
 		
 		List collectAllMatches = new ArrayList();
-		try {
+		try 
+		{
 			PatternMatcher matcher = (PatternMatcher)localMatcher.get();
 			String responseText = new String(previousResult.getResponseData());
 			PatternMatcherInput input = new PatternMatcherInput(responseText);
