@@ -62,16 +62,17 @@ import java.util.Map;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.control.Controller;
+import org.apache.jmeter.extractor.Extractor;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.timers.Timer;
-import org.apache.log.Hierarchy;
-import org.apache.log.Logger;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.SearchByClass;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 /****************************************
  * The JMeter interface to the sampling process, allowing JMeter to see the
  * timing, add listeners for sampling events and to stop the sampling process.
@@ -80,164 +81,192 @@ import org.apache.jorphan.collections.SearchByClass;
  *@created   $Date$
  *@version   $Revision$
  ***************************************/
-public class JMeterThread implements Runnable, java.io.Serializable {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter.engine");
-	static Map samplers = new HashMap();
-	int initialDelay = 0;
-	Controller controller;
-	private boolean running;
-	HashTree testTree;
-	TestCompiler compiler;
-	JMeterThreadMonitor monitor;
-	String threadName;
-	JMeterVariables threadVars;
-	Collection threadListeners;
-	ListenerNotifier notifier;
-	
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public JMeterThread() {}
-	public JMeterThread(HashTree test, JMeterThreadMonitor monitor,ListenerNotifier note) {
-		this.monitor = monitor;
-		threadVars = new JMeterVariables();
-		testTree = test;
-		compiler = new TestCompiler(testTree,threadVars);
-		controller = (Controller) testTree.getArray()[0];
-		SearchByClass threadListenerSearcher = new SearchByClass(ThreadListener.class);
-		test.traverse(threadListenerSearcher);
-		threadListeners = threadListenerSearcher.getSearchResults();
-		notifier = note;
-	}
+public class JMeterThread implements Runnable, java.io.Serializable
+{
+    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
+    static Map samplers = new HashMap();
+    int initialDelay = 0;
+    Controller controller;
+    private boolean running;
+    HashTree testTree;
+    TestCompiler compiler;
+    JMeterThreadMonitor monitor;
+    String threadName;
+    JMeterVariables threadVars;
+    Collection threadListeners;
+    ListenerNotifier notifier;
 
-	public void setThreadName(String threadName)
-	{
-		this.threadName = threadName;
-	}
-	/****************************************
-	 * !ToDo (Method description)
-	 ***************************************/
-	public void run() {
-		try
-		{
-			initializeThreadListeners();
-			testTree.traverse(compiler);
-			running = true;
-			//listeners = controller.getListeners();
-			Sampler entry = null;
-			rampUpDelay();
-			log.info("Thread "+Thread.currentThread().getName()+" started");
-			while (running) {
-				while (controller.hasNext() && running) {
-					try
-					{
-						if(controller.isNextFirst())
-						{
-							notifyThreadListeners();
-						}
-						SamplePackage pack = compiler.configureSampler(controller.next());
-						delay(pack.getTimers());
-						SampleResult result = pack.getSampler().sample(null);
-						result.setThreadName(threadName);
-						result.setTimeStamp(System.currentTimeMillis());
-						checkAssertions(pack.getAssertions(), result);
-						notifyListeners(pack.getSampleListeners(), result);
-					}
-					catch(Exception e)
-					{
-						log.error("",e);
-					}
-				}
-				if (controller.isDone()) {
-					running = false;
-				}
-			}
-		}
-		finally
-		{
-			log.info("Thread "+threadName+" is done");
-			monitor.threadFinished(this);
-		}
-	}
-	
-	public String getThreadName()
-	{
-		return threadName;
-	}
-	
-	/****************************************
-	 * !ToDo (Method description)
-	 ***************************************/
-	public void stop() {
-		running = false;		
-		log.info("stopping "+threadName);
-	}
-	private void checkAssertions(List assertions, SampleResult result) {
-		Iterator iter = assertions.iterator();
-		while (iter.hasNext()) {
-			AssertionResult assertion = ((Assertion)iter.next()).getResult(result);
-			result.setSuccessful(result.isSuccessful() &&
-					!(assertion.isError() || assertion.isFailure()));
-			result.addAssertionResult(assertion);
-		}
-	}
-	private void delay(List timers) {
-		int sum = 0;
-		Iterator iter = timers.iterator();
-		while (iter.hasNext()) {
-			sum += ((Timer) iter.next()).delay();
-		}
-		if(sum > 0)
-		{
-			try {
-				Thread.sleep(sum);
-			}
-			catch (InterruptedException e) {
-				log.error("",e);
-			}
-		}
-	}
-	
-	private void initializeThreadListeners()
-	{
-		Iterator iter = threadListeners.iterator();
-		while(iter.hasNext())
-		{
-			((ThreadListener)iter.next()).setJMeterVariables(threadVars);
-		}
-	}
-	
-	private void notifyThreadListeners()
-	{
-		threadVars.incIteration();
-		Iterator iter = threadListeners.iterator();
-		while(iter.hasNext())
-		{
-			((ThreadListener)iter.next()).iterationStarted(threadVars.getIteration());
-		}
-	}
-	
-	private void notifyListeners(List listeners, SampleResult result) {
-		SampleEvent event =
-			new SampleEvent(result, (String) controller.getProperty(TestElement.NAME));
-		compiler.sampleOccurred(event);
-		notifier.addLast(event,listeners);
-		
-	}
-	public void setInitialDelay(int delay) {
-		initialDelay = delay;
-	}
-	/****************************************
-	 * Initial delay if ramp-up period is active for this group
-	 ***************************************/
-	private void rampUpDelay() {
-		if (initialDelay > 0) {
-			try {
-				Thread.sleep(initialDelay);
-			}
-			catch (InterruptedException e) {
-			}
-		}
-	}
+    /****************************************
+     * !ToDo (Constructor description)
+     ***************************************/
+    public JMeterThread()
+    {}
+    public JMeterThread(HashTree test, JMeterThreadMonitor monitor, ListenerNotifier note)
+    {
+        this.monitor = monitor;
+        threadVars = new JMeterVariables();
+        testTree = test;
+        compiler = new TestCompiler(testTree, threadVars);
+        controller = (Controller) testTree.getArray()[0];
+        SearchByClass threadListenerSearcher = new SearchByClass(ThreadListener.class);
+        test.traverse(threadListenerSearcher);
+        threadListeners = threadListenerSearcher.getSearchResults();
+        notifier = note;
+    }
+
+    public void setThreadName(String threadName)
+    {
+        this.threadName = threadName;
+    }
+    /****************************************
+     * !ToDo (Method description)
+     ***************************************/
+    public void run()
+    {
+        try
+        {
+            initializeThreadListeners();
+            testTree.traverse(compiler);
+            running = true;
+            //listeners = controller.getListeners();
+            Sampler entry = null;
+            rampUpDelay();
+            log.info("Thread " + Thread.currentThread().getName() + " started");
+            while (running)
+            {
+                while (controller.hasNext() && running)
+                {
+                    try
+                    {
+                        if (controller.isNextFirst())
+                        {
+                            notifyThreadListeners();
+                        }
+                        SamplePackage pack = compiler.configureSampler(controller.next());
+                        delay(pack.getTimers());
+                        SampleResult result = pack.getSampler().sample(null);
+                        result.setThreadName(threadName);
+                        result.setTimeStamp(System.currentTimeMillis());
+                        checkAssertions(pack.getAssertions(), result);
+                        runExtractors(pack.getExtractors(), result);
+                        notifyListeners(pack.getSampleListeners(), result);
+                    }
+                    catch (Exception e)
+                    {
+                        log.error("", e);
+                    }
+                }
+                if (controller.isDone())
+                {
+                    running = false;
+                }
+            }
+        }
+        finally
+        {
+            log.info("Thread " + threadName + " is done");
+            monitor.threadFinished(this);
+        }
+    }
+
+    public String getThreadName()
+    {
+        return threadName;
+    }
+
+    /****************************************
+     * !ToDo (Method description)
+     ***************************************/
+    public void stop()
+    {
+        running = false;
+        log.info("stopping " + threadName);
+    }
+    private void checkAssertions(List assertions, SampleResult result)
+    {
+        Iterator iter = assertions.iterator();
+        while (iter.hasNext())
+        {
+            AssertionResult assertion = ((Assertion) iter.next()).getResult(result);
+            result.setSuccessful(result.isSuccessful() && !(assertion.isError() || assertion.isFailure()));
+            result.addAssertionResult(assertion);
+        }
+    }
+
+    private void runExtractors(List extractors, SampleResult result)
+    {
+        Iterator iter = extractors.iterator();
+        while (iter.hasNext())
+        {
+            Extractor ex = (Extractor) iter.next();
+            ex.processResult(result);
+        }
+    }
+
+    private void delay(List timers)
+    {
+        int sum = 0;
+        Iterator iter = timers.iterator();
+        while (iter.hasNext())
+        {
+            sum += ((Timer) iter.next()).delay();
+        }
+        if (sum > 0)
+        {
+            try
+            {
+                Thread.sleep(sum);
+            }
+            catch (InterruptedException e)
+            {
+                log.error("", e);
+            }
+        }
+    }
+
+    private void initializeThreadListeners()
+    {
+        Iterator iter = threadListeners.iterator();
+        while (iter.hasNext())
+        {
+            ((ThreadListener) iter.next()).setJMeterVariables(threadVars);
+        }
+    }
+
+    private void notifyThreadListeners()
+    {
+        threadVars.incIteration();
+        Iterator iter = threadListeners.iterator();
+        while (iter.hasNext())
+        {
+            ((ThreadListener) iter.next()).iterationStarted(threadVars.getIteration());
+        }
+    }
+
+    private void notifyListeners(List listeners, SampleResult result)
+    {
+        SampleEvent event = new SampleEvent(result, (String) controller.getProperty(TestElement.NAME));
+        compiler.sampleOccurred(event);
+        notifier.addLast(event, listeners);
+
+    }
+    public void setInitialDelay(int delay)
+    {
+        initialDelay = delay;
+    }
+    /****************************************
+     * Initial delay if ramp-up period is active for this group
+     ***************************************/
+    private void rampUpDelay()
+    {
+        if (initialDelay > 0)
+        {
+            try
+            {
+                Thread.sleep(initialDelay);
+            }
+            catch (InterruptedException e)
+            {}
+        }
+    }
 }

@@ -59,11 +59,10 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.SearchByClass;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.apache.jorphan.collections.HashTree;
-import org.apache.jorphan.collections.ListedHashTree;
-import org.apache.jorphan.collections.SearchByClass;
 
 
 /************************************************************

@@ -53,15 +53,6 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.threads;
-import java.io.*;
-import java.util.*;
-import org.apache.jmeter.config.ConfigElement;
-import org.apache.jmeter.control.LoopController;
-import org.apache.jmeter.gui.*;
-import org.apache.jmeter.samplers.RemoteSampleListener;
-import org.apache.jmeter.samplers.SampleEvent;
-import org.apache.jmeter.samplers.SampleListener;
-import org.apache.jmeter.timers.Timer;
 
 /****************************************
  * ThreadGroup used for reflection purposes. ThreadGroup has a <code>LoopController</code>

@@ -53,11 +53,11 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control;
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+
+import org.apache.jmeter.samplers.AbstractSampler;
+import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.samplers.*;
-import org.apache.jmeter.util.JMeterUtils;
 
 /****************************************
  * Title: Description: Copyright: Copyright (c) 2001 Company:

@@ -1,11 +1,13 @@
 package org.apache.jmeter.threads;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.jmeter.assertions.Assertion;
+import org.apache.jmeter.extractor.Extractor;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.timers.Timer;
-import org.apache.jmeter.assertions.Assertion;
-
-import java.util.*;
 
 /**
  * Title:        JMeter
@@ -21,6 +23,7 @@ public class SamplePackage
 	List sampleListeners = new LinkedList();
 	List timers = new LinkedList();
 	List assertions = new LinkedList();
+    List extractors = new LinkedList();
 	Sampler sampler;
 
 	public SamplePackage()
@@ -41,6 +44,11 @@ public class SamplePackage
 	{
 		return timers;
 	}
+    
+    public void addExtractor(Extractor ex)
+    {
+        extractors.add(ex);
+    }
 
 	public void addTimer(Timer timer)
 	{
@@ -56,6 +64,11 @@ public class SamplePackage
 	{
 		return assertions;
 	}
+    
+    public List getExtractors()
+    {
+        return extractors;
+    }
 
 	public Sampler getSampler()
 	{

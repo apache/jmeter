@@ -9,7 +9,8 @@ package org.apache.jmeter.config;
  * @version 1.0
  */
 
-import org.apache.jmeter.samplers.*;
+import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.samplers.Sampler;
 
 public interface ResponseBasedModifier
 {

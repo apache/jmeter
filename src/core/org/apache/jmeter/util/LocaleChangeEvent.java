@@ -56,7 +56,8 @@
 package org.apache.jmeter.util;
 
 
-import java.util.*;
+import java.util.EventObject;
+import java.util.Locale;
 
 
 /**

@@ -54,18 +54,14 @@
  */
 package org.apache.jmeter.gui.action;
 import java.awt.event.ActionEvent;
-import java.io.*;
-import java.util.*;
-import javax.swing.JFileChooser;
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-import junit.framework.*;
-import org.apache.jmeter.exceptions.IllegalUserActionException;
-import org.apache.jmeter.gui.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.reporters.FileReporter;
-import org.apache.jmeter.save.*;
-import org.apache.jmeter.util.*;
+import org.apache.jmeter.util.JMeterUtils;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache

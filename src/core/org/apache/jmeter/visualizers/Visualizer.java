@@ -54,8 +54,6 @@
  */
 
 package org.apache.jmeter.visualizers;
-import javax.swing.JPanel;
-
 import org.apache.jmeter.samplers.SampleResult;
 
 /**

@@ -6,15 +6,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.swing.HtmlPane;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Logger;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 /**
  * @author Administrator
  *

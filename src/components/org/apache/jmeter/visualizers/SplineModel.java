@@ -55,11 +55,11 @@
 package org.apache.jmeter.visualizers;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import org.apache.jmeter.samplers.*;
-
-import org.apache.jmeter.gui.*;
+import org.apache.jmeter.samplers.Clearable;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 
 

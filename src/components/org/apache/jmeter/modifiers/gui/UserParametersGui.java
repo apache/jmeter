@@ -98,14 +98,6 @@ public class UserParametersGui extends AbstractConfigGui {
 		add(makeParameterPanel(), BorderLayout.CENTER);
 	}
 
-	private JPanel makeTitlePanel() {
-		JLabel title = new JLabel(JMeterUtils.getResString("user_parameters_title"));
-		JPanel titlePanel = new JPanel(new BorderLayout());
-		titlePanel.add(title, BorderLayout.NORTH);
-		titlePanel.add(getNamePanel(), BorderLayout.SOUTH);
-		return titlePanel;
-	}
-
 	private JPanel makeParameterPanel() {
 		JPanel paramPanel = new JPanel(new BorderLayout());
 		JLabel tableLabel =

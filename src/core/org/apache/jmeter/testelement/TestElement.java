@@ -1,5 +1,5 @@
 package org.apache.jmeter.testelement;
-import java.util.*;
+import java.util.Collection;
 
 /****************************************
  * <p>

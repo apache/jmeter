@@ -71,10 +71,10 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Hierarchy;
-import org.apache.log.Logger;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -109,6 +109,8 @@ public class MenuFactory
 	 * !ToDo (Field description)
 	 ***************************************/
 	public final static String MODIFIERS = "menu_modifiers";
+    
+    public final static String EXTRACTORS = "menu_extractors";
 	/****************************************
 	 * !ToDo (Field description)
 	 ***************************************/
@@ -130,7 +132,7 @@ public class MenuFactory
 
 	private static List timers, controllers, samplers,
 			configElements, modifiers, responseBasedModifiers,
-			assertions, listeners, nonTestElements;
+			assertions, listeners, nonTestElements,extractors;
 
 	private static JMenu timerMenu;
 	private static JMenu controllerMenu;
@@ -141,6 +143,7 @@ public class MenuFactory
 	private static JMenu assertionMenu;
 	private static JMenu configMenu;
 	private static JMenu insertControllerMenu;
+    private static JMenu extractorMenu;
 	static
 	{
 		try
@@ -282,7 +285,8 @@ public class MenuFactory
 				MenuFactory.ASSERTIONS,MenuFactory.MODIFIERS,
 				MenuFactory.RESPONSE_BASED_MODIFIERS,
 				MenuFactory.TIMERS,
-				MenuFactory.LISTENERS},
+				MenuFactory.LISTENERS,
+                MenuFactory.EXTRACTORS},
 				JMeterUtils.getResString("Add"),
 				"Add"));
 		pop.add(makeMenus(new String[]{MenuFactory.CONTROLLERS},
@@ -354,6 +358,14 @@ public class MenuFactory
 		MenuFactory.addFileMenu(pop);
 		return pop;
 	}
+    
+    public static JPopupMenu getDefaultExtractorMenu()
+    {
+        JPopupMenu pop = new JPopupMenu();
+                MenuFactory.addEditMenu(pop, true);
+                MenuFactory.addFileMenu(pop);
+                return pop;
+    }
 
 	/****************************************
 	 * !ToDo (Method description)
@@ -437,6 +449,7 @@ public class MenuFactory
 			responseBasedModifiers = new LinkedList();
 			assertions = new LinkedList();
 			listeners = new LinkedList();
+            extractors = new LinkedList();
 			nonTestElements = new LinkedList();
 			menuMap.put(TIMERS, timers);
 			menuMap.put(ASSERTIONS, assertions);
@@ -447,6 +460,7 @@ public class MenuFactory
 			menuMap.put(NON_TEST_ELEMENTS, nonTestElements);
 			menuMap.put(RESPONSE_BASED_MODIFIERS, responseBasedModifiers);
 			menuMap.put(SAMPLERS, samplers);
+            menuMap.put(EXTRACTORS,extractors);
 			Collections.sort(guiClasses);
 			Iterator iter = guiClasses.iterator();
 			while(iter.hasNext())
@@ -476,6 +490,11 @@ public class MenuFactory
 					timers.add(new MenuInfo(item.getStaticLabel(),
 							item.getClass().getName()));
 				}
+                
+                if(categories.contains(EXTRACTORS))
+                {
+                    extractors.add(new MenuInfo(item.getStaticLabel(), item.getClass().getName()));
+                }
 
 				if(categories.contains(CONTROLLERS))
 				{

@@ -55,9 +55,7 @@
  package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
-import java.util.*;
-
-import org.apache.jmeter.gui.*;
+import java.util.Set;
 
 /**
  * Title:        JMeter

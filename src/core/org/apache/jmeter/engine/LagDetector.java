@@ -122,7 +122,7 @@ public class LagDetector extends Thread
 			time = System.currentTimeMillis();
 			try
 			{
-				currentThread().sleep(incr);
+				Thread.sleep(incr);
 			}
 			catch(Exception e)
 			{

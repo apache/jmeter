@@ -61,8 +61,8 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Logger;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 /**
  * @author Administrator
  *

@@ -55,8 +55,7 @@
 
 package org.apache.jmeter.util;
 
-import java.awt.*;
-import java.math.*;
+import java.awt.Color;
 
 /**
  * This class contains the static utility methods to manipulate colors.

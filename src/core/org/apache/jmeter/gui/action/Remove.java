@@ -60,7 +60,6 @@ import java.util.Set;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.util.JMeterUtils;
 
 /**
  *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache

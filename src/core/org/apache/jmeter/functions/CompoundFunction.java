@@ -68,12 +68,12 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 import org.apache.oro.text.perl.Perl5Util;
 import org.apache.oro.text.regex.PatternCompiler;
 import org.apache.oro.text.regex.Perl5Compiler;
-import org.apache.jorphan.reflect.ClassFinder;
 
 /**
  * CompoundFunction

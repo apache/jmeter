@@ -60,11 +60,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.swing.JMenu;
-import javax.swing.MenuElement;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
+import javax.swing.MenuElement;
 import javax.swing.UIManager;
 
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -73,9 +73,9 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jmeter.util.SSLManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.apache.jorphan.util.JOrphanUtils;
 
 /****************************************
  * Title: Apache JMeter Description: Copyright: Copyright (c) 2000 Company:

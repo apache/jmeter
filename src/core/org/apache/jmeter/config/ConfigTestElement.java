@@ -1,7 +1,8 @@
 package org.apache.jmeter.config;
-import org.apache.jmeter.testelement.*;
-import org.apache.jmeter.testelement.TestElement;
 import java.io.Serializable;
+
+import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.TestElement;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
