@@ -29,6 +29,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -70,12 +71,17 @@ public class ResultCollector
         Remoteable,
         NoThreadClone
 {
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+    private static final String TESTRESULTS_START = "<testResults>";
+    private static final String TESTRESULTS_END = "</testResults>";
+	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+	private static final int MIN_XML_FILE_LEN = 
+			XML_HEADER.length() + TESTRESULTS_START.length() + TESTRESULTS_END.length();
+	transient private static Logger log = LoggingManager.getLoggerForClass();
     public final static String FILENAME = "filename";
     private static boolean functionalMode = false;
     public static final String ERROR_LOGGING = "ResultCollector.error_logging";
     // protected List results = Collections.synchronizedList(new ArrayList());
-    private int current;
+    //private int current;
     transient private DefaultConfigurationSerializer serializer;
     //private boolean inLoading = false;
     transient private PrintWriter out;
@@ -88,7 +94,7 @@ public class ResultCollector
      */
     public ResultCollector()
     {
-        current = -1;
+        //current = -1;
         serializer = new DefaultConfigurationSerializer();
         setErrorLogging(false);
     }
@@ -194,8 +200,8 @@ public class ResultCollector
     {
         if (SaveService.getOutputFormat() == SaveService.SAVE_AS_XML)
         {
-            writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            writer.println("<testResults>");
+            writer.println(XML_HEADER);
+            writer.println(TESTRESULTS_START);
         }
         else if (SaveService.getOutputFormat() == SaveService.SAVE_AS_CSV)
         {
@@ -207,11 +213,12 @@ public class ResultCollector
     }
 
 
-    private void writeFileEnd()
+    private static void writeFileEnd(PrintWriter pw)
     {
         if (SaveService.getOutputFormat() == SaveService.SAVE_AS_XML)
         {
-            out.print("\n</testResults>");
+            pw.print("\n");
+            pw.print(TESTRESULTS_END);
         }
     }
 
@@ -227,7 +234,10 @@ public class ResultCollector
 
         if (writer == null)
         {
-            trimmed = trimLastLine(filename);
+        	 if (SaveService.getOutputFormat() == SaveService.SAVE_AS_XML)
+        	 {
+        	 	trimmed = trimLastLine(filename);	
+        	 }
             writer =
                 new PrintWriter(
                     new OutputStreamWriter(
@@ -244,26 +254,50 @@ public class ResultCollector
         return writer;
     }
 
+    // returns false if the file did not contain the terminator
     private static boolean trimLastLine(String filename)
     {
-        // TODO: there must be more memory-efficient ways to do this!
+    	RandomAccessFile raf = null;
         try
         {
-            TextFile text = new TextFile(filename, "UTF-8");
-
-            if (!text.exists())
-            {
-                return false;
-            }
-            String xml = text.getText();
-
-            xml = xml.substring(0, xml.indexOf("</testResults>"));
-            text.setText(xml);
+        	raf = new RandomAccessFile(filename,"rw");
+        	long len = raf.length();
+        	if (len < MIN_XML_FILE_LEN)
+        	{
+        		return false;
+        	}
+        	raf.seek(len-TESTRESULTS_END.length()-10);//TODO: may not work on all OSes?
+        	String line;
+        	long pos = raf.getFilePointer();
+        	int end=0;
+        	while((line = raf.readLine()) != null)// reads to end of line OR file
+        	{
+            	end = line.indexOf(TESTRESULTS_END);
+            	if (end >= 0) // found the string
+            	{
+            		break;
+            	}
+            	pos = raf.getFilePointer();
+        	}
+        	if (line == null)
+        	{
+        		log.warn("Unexpected EOF trying to find XML end marker in "+filename);
+        		raf.close();
+        		return false;
+        	}
+        	raf.setLength(pos+end);// Truncate the file
+    		raf.close();
         }
-        catch (Exception e)
+        catch (FileNotFoundException e)
         {
             return false;
-        }
+        } catch (IOException e) {
+        	log.warn("Error trying to find XML terminator "+e.toString());
+    		try {
+				raf.close();
+			} catch (IOException e1) {}
+			return false;
+		}
         return true;
     }
 
@@ -326,7 +360,7 @@ public class ResultCollector
 
     public void clearVisualizer()
     {
-        current = -1;
+        //current = -1;
         if (getVisualizer() != null && getVisualizer() instanceof Clearable)
         {
             ((Clearable) getVisualizer()).clear();
@@ -405,11 +439,12 @@ public class ResultCollector
 
     private synchronized boolean isResultMarked(SampleResult res)
     {
-        boolean marked = res.isMarked(getFilename());
+        String filename = getFilename();
+		boolean marked = res.isMarked(filename);
 
         if (!marked)
         {
-            res.setMarked(getFilename());
+            res.setMarked(filename);
         }
         return marked;
     }
@@ -418,13 +453,14 @@ public class ResultCollector
         throws IOException, ConfigurationException, SAXException
     {
 
-        if (out == null && getFilename() != null)
+        String filename = getFilename();
+		if (out == null && filename != null)
         {
             if (out == null)
             {
                 try
                 {
-                    out = getFileWriter(getFilename());
+                    out = getFileWriter(filename);
                 }
                 catch (FileNotFoundException e)
                 {
@@ -438,7 +474,7 @@ public class ResultCollector
     {
         if (out != null)
         {
-            writeFileEnd();
+            writeFileEnd(out);
             out.close();
             files.remove(getFilename());
             out = null;
