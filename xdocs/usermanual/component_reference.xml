@@ -82,8 +82,7 @@ resource requires query string parameters, add them below in the
 	<p>
 	Additionally, you can specify whether each paramter should be URL encoded.  If you are not sure what this
 	means, it is probably best to select it.  If your values contain characters such as &amp;amp; or spaces, or 
-	question marks, then encoding is usually required.  The column labeled "Url Encoded Value" shows how the
-	parameter name and value will be sent to the server.  Do not edit this field - it will have no effect.</p></property>
+	question marks, then encoding is usually required.</p></property>
 	<property name="Filename" required="No">Name of the file to send.  If left blank, JMeter
 	does not send a file, if filled in, JMeter automatically sends the request as
 	a multipart form request.</property>
