@@ -103,13 +103,19 @@ public abstract class BeanInfoSupport implements BeanInfo {
 
 	private static transient Logger log = LoggingManager.getLoggerForClass();
 
-	// Some known attribute names, just for convenience:
-	public static final String TAGS= TestBeanGUI.TAGS;
-	public static final String NOT_UNDEFINED= TestBeanGUI.NOT_UNDEFINED;
-	public static final String NOT_EXPRESSION= TestBeanGUI.NOT_EXPRESSION;
-	public static final String NOT_OTHER= TestBeanGUI.NOT_OTHER;
-	public static final String DEFAULT= TestBeanGUI.DEFAULT;
-	public static final String RESOURCE_BUNDLE= TestBeanGUI.RESOURCE_BUNDLE;
+    // Some known attribute names, just for convenience:
+    public static final String TAGS=
+            GenericTestBeanCustomizer.TAGS;
+    public static final String NOT_UNDEFINED=
+            GenericTestBeanCustomizer.NOT_UNDEFINED;
+    public static final String NOT_EXPRESSION=
+            GenericTestBeanCustomizer.NOT_EXPRESSION;
+    public static final String NOT_OTHER=
+            GenericTestBeanCustomizer.NOT_OTHER;
+    public static final String DEFAULT=
+            GenericTestBeanCustomizer.DEFAULT;
+    public static final String RESOURCE_BUNDLE=
+            GenericTestBeanCustomizer.RESOURCE_BUNDLE;
 
 	/**
 	 * The class for which we're providing the bean info.
@@ -233,11 +239,12 @@ public abstract class BeanInfoSupport implements BeanInfo {
 		for (int i=0; i<names.length; i++)
 		{
 			PropertyDescriptor p= property(names[i]);
-			p.setValue(TestBeanGUI.GROUP, group);
-			p.setValue(TestBeanGUI.ORDER, new Integer(i));
+			p.setValue(GenericTestBeanCustomizer.GROUP, group);
+			p.setValue(GenericTestBeanCustomizer.ORDER, new Integer(i));
 		}
 		numCreatedGroups++;
-		getBeanDescriptor().setValue(TestBeanGUI.ORDER(group),
+		getBeanDescriptor().setValue(
+            GenericTestBeanCustomizer.ORDER(group),
 			new Integer(numCreatedGroups));
 	}
 
