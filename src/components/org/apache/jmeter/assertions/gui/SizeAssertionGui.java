@@ -121,7 +121,8 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 	public TestElement createTestElement()
 	{
 		//ResponseAssertion el = new ResponseAssertion();
-		configureTestElement(sa);
+		SizeAssertion el = new SizeAssertion();
+		configureTestElement(el);
 		String sizeString = size.getText();
 		long assertionSize = 0;
 		try {
@@ -130,8 +131,8 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 		catch (NumberFormatException e) {
 			assertionSize = Long.MAX_VALUE;
 		}
-		sa.setAllowedSize(assertionSize);
-		return sa;
+		el.setAllowedSize(assertionSize);
+		return el;
 	}
 
 	/****************************************
