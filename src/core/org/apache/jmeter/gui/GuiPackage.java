@@ -68,6 +68,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
+import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -86,51 +87,48 @@ import org.apache.log.Logger;
 public class GuiPackage
 {
     /** Logging. */
-    private static transient Logger log =
-        LoggingManager.getLoggerForClass();
+    private static transient Logger log = LoggingManager.getLoggerForClass();
 
     /** Singleton instance. */
     private static GuiPackage guiPack;
-    
+
     /**
      * Flag indicating whether or not parts of the tree have changed since
      * they were last saved.
      */
     private boolean dirty = false;
-    
+
     /** 
      * Map from TestElement to JMeterGUIComponent, mapping the nodes in the
      * tree to their corresponding GUI components.
      */
     private Map nodesToGui = new HashMap();
-    
+
     /**
      * Map from String to JMeterGUIComponent, mapping the fully qualified class
      * name of a GUI component to an instance of that component.
      */
     private Map guis = new HashMap();
-    
+
     /** The currently selected node in the tree. */
     private JMeterTreeNode currentNode = null;
-    
+
     /** The model for JMeter's test tree. */
     private JMeterTreeModel treeModel;
-    
+
     /** The listener for JMeter's test tree. */
     private JMeterTreeListener treeListener;
 
     /** The main JMeter frame. */
     private MainFrame mainFrame;
 
-    
     /**
      * Private constructor to permit instantiation only from within this class.
      * Use {@link #getInstance()} to retrieve a singleton instance.
      */
     private GuiPackage()
-    {
-    }
-    
+    {}
+
     /**
      * Retrieve the singleton GuiPackage instance.
      * 
@@ -140,7 +138,7 @@ public class GuiPackage
     {
         return guiPack;
     }
-    
+
     /**
      * When GuiPackage is requested for the first time, it should be given
      * handles to JMeter's Tree Listener and TreeModel.
@@ -150,9 +148,7 @@ public class GuiPackage
      * 
      * @return GuiPackage
      */
-    public static GuiPackage getInstance(
-        JMeterTreeListener listener,
-        JMeterTreeModel treeModel)
+    public static GuiPackage getInstance(JMeterTreeListener listener, JMeterTreeModel treeModel)
     {
         if (guiPack == null)
         {
@@ -227,7 +223,7 @@ public class GuiPackage
     {
         nodesToGui.remove(node);
     }
-    
+
     /**
      * Convenience method for grabbing the gui for the current node.
      * 
@@ -237,9 +233,12 @@ public class GuiPackage
     {
         try
         {
-            TestElement currentNode =
-                treeListener.getCurrentNode().createTestElement();
+            TestElement currentNode = treeListener.getCurrentNode().createTestElement();
             JMeterGUIComponent comp = getGui(currentNode);
+            if (!(comp instanceof AbstractVisualizer)) // a hack that needs to be fixed for 2.0
+            {
+                comp.clear();
+            }
             comp.configure(currentNode);
             return comp;
         }
@@ -249,7 +248,7 @@ public class GuiPackage
             return null;
         }
     }
-    
+
     /**
      * Find the JMeterTreeNode for a certain TestElement object.
      * @param userObject the test element to search for
@@ -259,7 +258,7 @@ public class GuiPackage
     {
         return treeModel.getNodeOf(userObject);
     }
-    
+
     /**
      * Create a TestElement corresponding to the specified GUI class. 
      * 
@@ -303,10 +302,7 @@ public class GuiPackage
      * @throws ClassNotFoundException if the specified GUI class cannot be
      *                                found
      */
-    private JMeterGUIComponent getGuiFromCache(String guiClass)
-        throws InstantiationException,
-               IllegalAccessException,
-               ClassNotFoundException
+    private JMeterGUIComponent getGuiFromCache(String guiClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException
     {
         JMeterGUIComponent comp = (JMeterGUIComponent) guis.get(guiClass);
         if (comp == null)
@@ -348,10 +344,8 @@ public class GuiPackage
         {
             if (currentNode != null)
             {
-                log.debug(
-                    "Updating current node " + currentNode.createTestElement());
-                JMeterGUIComponent comp =
-                    getGui(currentNode.createTestElement());
+                log.debug("Updating current node " + currentNode.createTestElement());
+                JMeterGUIComponent comp = getGui(currentNode.createTestElement());
                 TestElement el = currentNode.createTestElement();
                 comp.modifyTestElement(el);
             }
@@ -375,7 +369,7 @@ public class GuiPackage
     {
         this.dirty = dirty;
     }
-    
+
     /**
      * Retrieves the state of the 'dirty' property, a flag that indicates if
      * there are test tree components that have been modified since they were
@@ -388,7 +382,7 @@ public class GuiPackage
     {
         return dirty;
     }
-    
+
     /**
      * Add a subtree to the currently selected node.
      * 
@@ -399,12 +393,11 @@ public class GuiPackage
      * @throws IllegalUserActionException if a subtree cannot be added to the
      *         currently selected node
      */
-    public HashTree addSubTree(HashTree subTree)
-        throws IllegalUserActionException
+    public HashTree addSubTree(HashTree subTree) throws IllegalUserActionException
     {
         return treeModel.addSubTree(subTree, treeListener.getCurrentNode());
     }
-    
+
     /**
      * Get the currently selected subtree.
      * 
@@ -414,7 +407,7 @@ public class GuiPackage
     {
         return treeModel.getCurrentSubTree(treeListener.getCurrentNode());
     }
-    
+
     /**
      * Get the model for JMeter's test tree.
      * 
@@ -434,7 +427,7 @@ public class GuiPackage
     {
         treeModel = newTreeModel;
     }
-    
+
     /**
      * Get a ValueReplacer for the test tree.
      * 
@@ -442,11 +435,7 @@ public class GuiPackage
      */
     public ValueReplacer getReplacer()
     {
-        return new ValueReplacer(
-            (TestPlan) ((JMeterGUIComponent) getTreeModel()
-                .getTestPlan()
-                .getArray()[0])
-                .createTestElement());
+        return new ValueReplacer((TestPlan) ((JMeterGUIComponent) getTreeModel().getTestPlan().getArray()[0]).createTestElement());
     }
 
     /**
@@ -458,7 +447,7 @@ public class GuiPackage
     {
         mainFrame = newMainFrame;
     }
-    
+
     /**
      * Get the main JMeter frame.
      * 
@@ -468,7 +457,7 @@ public class GuiPackage
     {
         return mainFrame;
     }
-    
+
     /**
      * Set the listener for JMeter's test tree.
      * 
@@ -478,7 +467,7 @@ public class GuiPackage
     {
         treeListener = newTreeListener;
     }
-    
+
     /**
      * Get the listener for JMeter's test tree.
      * 
@@ -488,7 +477,7 @@ public class GuiPackage
     {
         return treeListener;
     }
-    
+
     /**
      * Display the specified popup menu with the source component and location
      * from the specified mouse event.
@@ -513,10 +502,8 @@ public class GuiPackage
     {
         if (popup != null)
         {
-            log.debug(
-                "Showing pop up for " + invoker
-                + " at x,y = " + e.getX() + "," + e.getY());
-                
+            log.debug("Showing pop up for " + invoker + " at x,y = " + e.getX() + "," + e.getY());
+
             popup.pack();
             popup.show(invoker, e.getX(), e.getY());
             popup.setVisible(true);

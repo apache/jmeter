@@ -231,7 +231,10 @@ public class CookieManager extends ConfigTestElement
     public void add(Cookie c)
     {
         getCookies().addItem(c);
-        JMeterContextService.getContext().getVariables().put(c.getName(),c.getValue());
+        if(JMeterContextService.getContext().isSamplingStarted())
+        {
+            JMeterContextService.getContext().getVariables().put(c.getName(),c.getValue());
+        }
     }
 
     /** add an empty cookie */

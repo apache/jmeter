@@ -34,7 +34,9 @@ over your Test Plans.</p>
 currently to be compatible with the 1.3 JDK's, though it is expected JMeter performs best with 1.4 or better. Because JMeter uses only
 standard Java APIs (java.*), please do not file bug reports if your JRE fails to run
 JMeter because of JRE implementation issues.</p>
-<note>JDK1.4.1Beta appears to be buggy, and there are some GUI elements that won't work correctly in this JVM.</note>
+<note>JDK1.4.1Beta appears to be buggy, and there are some GUI elements that won't work correctly in this JVM.<p>
+JDK1.3 + JMeter appears to have problems handling HTTP redirects correctly.  If you are getting very high time results 
+with redirected pages, you should try upgrading to jdk1.4</note>
 </subsection>
 
 <subsection name="2.1.2 Operating Systems" anchor="os">

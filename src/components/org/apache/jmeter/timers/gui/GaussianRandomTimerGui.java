@@ -198,5 +198,15 @@ public class GaussianRandomTimerGui extends AbstractTimerGui
 		// Set the initial focus to the delay field
 		new FocusRequester(rangeField);
 	}
+    
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+     */
+    public void clear()
+    {
+        rangeField.setText(DEFAULT_RANGE);
+        delayField.setText(DEFAULT_DELAY);
+        super.clear();
+    }
 	
 }

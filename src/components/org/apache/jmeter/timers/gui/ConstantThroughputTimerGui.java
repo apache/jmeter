@@ -156,4 +156,13 @@ public class ConstantThroughputTimerGui
         
 		add(throughputPanel);
     }    
+    
+    /* (non-Javadoc)
+         * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+         */
+        public void clear()
+        {
+            throughputField.setText(DEFAULT_THROUGHPUT);
+            super.clear();
+        }
 }

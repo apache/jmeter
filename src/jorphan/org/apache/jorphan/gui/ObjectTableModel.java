@@ -163,21 +163,27 @@ public class ObjectTableModel extends DefaultTableModel
      */
     public void setValueAt(Object cellValue, int row, int col)
     {
-        Object value = objects.get(row);
-        Method setMethod = (Method)setMethods.get(col);
-        try
+        if (row < objects.size())
         {
-            setMethod.invoke(value,new Object[]{cellValue});
+            Object value = objects.get(row);
+            if (col < setMethods.size())
+            {
+                Method setMethod = (Method) setMethods.get(col);
+                try
+                {
+                    setMethod.invoke(value, new Object[] { cellValue });
+                }
+                catch (IllegalAccessException e)
+                {
+                    log.error("Illegal method access", e);
+                }
+                catch (InvocationTargetException e)
+                {
+                    log.error("incorrect method access", e);
+                }
+                super.fireTableDataChanged();
+            }
         }
-        catch (IllegalAccessException e)
-        {
-            log.error("Illegal method access",e);
-        }
-        catch (InvocationTargetException e)
-        {
-            log.error("incorrect method access",e);
-        }
-        super.fireTableDataChanged();
     }
 
     /**

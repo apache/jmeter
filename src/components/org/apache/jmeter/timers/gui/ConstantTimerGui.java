@@ -167,4 +167,13 @@ public class ConstantTimerGui extends AbstractTimerGui
 
 		add(delayPanel);
 	}	
+    
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+     */
+    public void clear()
+    {
+        delayField.setText(DEFAULT_DELAY);
+        super.clear();
+    }
 }

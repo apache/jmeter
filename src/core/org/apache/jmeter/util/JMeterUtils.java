@@ -98,7 +98,7 @@ import org.xml.sax.XMLReader;
  */
 public class JMeterUtils implements UnitTestManager
 {
-    private static final String VERSION = "1.9";
+    private static final String VERSION = "1.9.1";
     private static PatternCacheLRU patternCache =
         new PatternCacheLRU(1000, new Perl5Compiler());
 
