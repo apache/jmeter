@@ -133,6 +133,20 @@ public class RegexExtractor
 				}
 				else // < 0 means we save all the matches
 				{
+					int prevCount = 0;
+					String prevString=(String)vars.get(refName+"_matchNr");
+					if (prevString != null)
+                    {
+                    try
+                    {
+                        prevCount = Integer.parseInt(prevString);
+                    }
+                    catch (NumberFormatException e1)
+                    {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+					}
 					vars.put(refName+"_matchNr", ""+matches.size());// Save the count
 					for (int i=1;i<=matches.size();i++) {
 						match = getCorrectMatch(matches, i);
@@ -141,6 +155,13 @@ public class RegexExtractor
 							vars.put(refName+"_"+i, generateResult(match));
 							saveGroups(vars, refName+"_"+i, match);
 						}
+					}
+					for (int i = matches.size()+1;i<=prevCount;i++)
+					{
+						vars.remove(refName+"_"+i);
+						vars.remove(refName+"_"+i+"_g0");// Remove known groups ...
+						vars.remove(refName+"_"+i+"_g1");// ...
+						//TODO remove other groups if present?
 					}
 				}
 			}
@@ -430,16 +451,27 @@ public class RegexExtractor
 		{
 			extractor.setRegex(
 				"<value field=\"(pinposition\\d+)\">(\\d+)</value>");
-			extractor.setTemplate("_$1$");
+			extractor.setTemplate("$1$");
 			extractor.setMatchNumber(-1);
 			extractor.process();
 			assertEquals("3",vars.get("regVal_matchNr"));
-			assertEquals("_pinposition1", vars.get("regVal_1"));
-			assertEquals("_pinposition2", vars.get("regVal_2"));
-			assertEquals("_pinposition3", vars.get("regVal_3"));
+			assertEquals("pinposition1", vars.get("regVal_1"));
+			assertEquals("pinposition2", vars.get("regVal_2"));
+			assertEquals("pinposition3", vars.get("regVal_3"));
 			assertEquals("pinposition1", vars.get("regVal_1_g1"));
 			assertEquals("1", vars.get("regVal_1_g2"));
 			assertEquals("<value field=\"pinposition1\">1</value>", vars.get("regVal_1_g0"));
+			assertNull(vars.get("regVal_4"));
+
+            // Check old values don't hang around:
+			extractor.setRegex("(\\w+)count"); // fewer matches
+			extractor.process();
+			assertEquals("2",vars.get("regVal_matchNr"));
+			assertEquals("position", vars.get("regVal_1"));
+			assertEquals("invalidpin", vars.get("regVal_2"));
+			assertNull("Unused variables should be null",vars.get("regVal_3"));
+			assertNull("Unused variables should be null",vars.get("regVal_3_g0"));
+			assertNull("Unused variables should be null",vars.get("regVal_3_g1"));
 		}
     }
 }
