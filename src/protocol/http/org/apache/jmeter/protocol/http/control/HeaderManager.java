@@ -355,7 +355,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable
     /**
      * Added support for SOAP related header stuff.
      * 1-29-04 Peter Lin
-     * @return
+     * @return the SOAP header Object
      */
     public Object getSOAPHeader(){
     	return this.SOAPHeader;

@@ -51,7 +51,6 @@ public class ConstantTimer
     /**
      * Set the delay for this timer.
      *  
-     * @see org.apache.jmeter.timers.Timer#setDelay(String)
      */
     public void setDelay(String delay)
     {
@@ -61,7 +60,6 @@ public class ConstantTimer
     /**
      * Set the range (not used for this timer).
      * 
-     * @see org.apache.jmeter.timers.Timer#setRange(double)
      */
     public void setRange(double range)
     {
@@ -71,7 +69,6 @@ public class ConstantTimer
      * Get the delay value for display.
      * 
      * @return the delay value for display.
-     * @see org.apache.jmeter.timers.Timer#getDelay()
      */
     public String getDelay()
     {
@@ -82,7 +79,6 @@ public class ConstantTimer
      * Retrieve the range (not used for this timer).
      * 
      * @return the range (always zero for this timer).
-     * @see org.apache.jmeter.timers.Timer#getRange()
      */
     public double getRange()
     {

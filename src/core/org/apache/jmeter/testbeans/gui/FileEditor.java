@@ -100,7 +100,7 @@ public class FileEditor implements PropertyEditor, ActionListener
     }
 
     /**
-     * @return
+     * @return the text
      */
     public String getAsText()
     {
@@ -108,7 +108,7 @@ public class FileEditor implements PropertyEditor, ActionListener
     }
 
     /**
-     * @return
+     * @return custom editor panel
      */
     public Component getCustomEditor()
     {
@@ -116,7 +116,7 @@ public class FileEditor implements PropertyEditor, ActionListener
     }
 
     /**
-     * @return
+     * @return the Java initialisation string
      */
     public String getJavaInitializationString()
     {
@@ -124,7 +124,7 @@ public class FileEditor implements PropertyEditor, ActionListener
     }
 
     /**
-     * @return
+     * @return the editor tags
      */
     public String[] getTags()
     {
@@ -132,7 +132,7 @@ public class FileEditor implements PropertyEditor, ActionListener
     }
 
     /**
-     * @return
+     * @return the value
      */
     public Object getValue()
     {
@@ -140,7 +140,7 @@ public class FileEditor implements PropertyEditor, ActionListener
     }
 
     /**
-     * @return
+     * @return true if the editor is paintable
      */
     public boolean isPaintable()
     {
@@ -182,7 +182,7 @@ public class FileEditor implements PropertyEditor, ActionListener
     }
 
     /**
-     * @return
+     * @return true if supports a custom editor
      */
     public boolean supportsCustomEditor()
     {

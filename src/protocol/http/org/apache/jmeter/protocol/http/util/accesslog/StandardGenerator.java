@@ -49,8 +49,8 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
  * option is to provide parameters, so the user can
  * pass the desired listener to the tool.
  * <p>
- * @author:	Peter Lin<br>
- * @version: 	$Revision$ last updated $Date$
+ * @author		Peter Lin<br>
+ * @version 	$Revision$ last updated $Date$
  * Created on:	Jul 1, 2003<br>
  */
 

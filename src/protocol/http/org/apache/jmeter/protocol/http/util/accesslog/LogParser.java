@@ -32,8 +32,8 @@ package org.apache.jmeter.protocol.http.util.accesslog;
  * make it more generic and extensible. The
  * first version was hard coded and written
  * over the weekend.<p>
- * @author:	Peter Lin<br>
- * @version: 	$Revision$ last updated $Date$
+ * @author		Peter Lin<br>
+ * @version 	$Revision$ last updated $Date$
  * Created on:	Jun 23, 2003<br>
  */
 

@@ -80,8 +80,8 @@ import org.apache.oro.text.regex.*;
  * will return null if it is filtered and replace
  * any part of the string that should be replaced.
  * <p>
- * @author:	Peter Lin<br>
- * @version: 	$Revision$ last updated $Date$
+ * @author		Peter Lin<br>
+ * @version 	$Revision$ last updated $Date$
  * Created on:	Jun 26, 2003<br>
  */
 
