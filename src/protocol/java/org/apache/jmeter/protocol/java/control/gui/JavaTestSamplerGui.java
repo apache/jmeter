@@ -65,7 +65,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 
 /**
- * The <code>JavaTestSamplerGui</code> class provides the user interface 
+ * The <code>JavaTestSamplerGui</code> class provides the user interface
  * for the {@link JavaSampler}.
  * 
  * @author Brad Kiewel
