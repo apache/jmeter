@@ -65,6 +65,8 @@ import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.control.gui.TestPlanGui;
 import org.apache.jmeter.control.gui.WorkBenchGui;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
+import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
@@ -163,10 +165,11 @@ public class JMeterTreeModel extends DefaultTreeModel
             TestElement.GUI_CLASS,
             NameUpdater.getCurrentName(
                 component.getPropertyAsString(TestElement.GUI_CLASS)));
-// Commenting these three lines fixed bug#24704 and bug#25166. TODO: remove them.
-//        JMeterGUIComponent guicomp = GuiPackage.getInstance().getGui(component);
-//        guicomp.configure(component);
-//        guicomp.modifyTestElement(component);
+        GuiPackage.getInstance().updateCurrentNode();
+        JMeterGUIComponent guicomp = GuiPackage.getInstance().getGui(component);
+        guicomp.configure(component);
+        guicomp.modifyTestElement(component);
+        GuiPackage.getInstance().getCurrentGui(); //put the gui object back to the way it was.
         JMeterTreeNode newNode =
             new JMeterTreeNode((TestElement) component, this);
 
