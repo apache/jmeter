@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,6 +53,8 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.config.gui;
+
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -76,6 +78,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
+
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
  *
@@ -87,249 +90,262 @@ import org.apache.jmeter.util.JMeterUtils;
 public class UrlConfigGui extends JPanel
 {
 
-	/****************************************
-	 * !ToDo (Field description)
-	 ***************************************/
-	protected HTTPArgumentsPanel argsPanel;
-	private static String DOMAIN = "domain";
-	private static String PORT = "port";
-	private static String PROTOCOL = "protocol";
-	private static String PATH = "path";
-	private static String FOLLOW_REDIRECTS = "follow_redirects";
-	private static String USE_KEEPALIVE = "use_keepalive";
-	private static String POST = "post";
-	private static String GET = "get";
-	private static String SEND_PARAM = "sendparam";
+    /****************************************
+     * !ToDo (Field description)
+     ***************************************/
+    protected HTTPArgumentsPanel argsPanel;
+    private static String DOMAIN = "domain";
+    private static String PORT = "port";
+    private static String PROTOCOL = "protocol";
+    private static String PATH = "path";
+    private static String FOLLOW_REDIRECTS = "follow_redirects";
+    private static String USE_KEEPALIVE = "use_keepalive";
+    private static String POST = "post";
+    private static String GET = "get";
+    private static String SEND_PARAM = "sendparam";
 
-	private JTextField domain;
-	private JTextField port;
-	private JTextField protocol;
-	private JTextField path;
-	private JCheckBox followRedirects;
-	private JCheckBox useKeepAlive;
-	private JRadioButton post;
-	private JRadioButton get;
+    private JTextField domain;
+    private JTextField port;
+    private JTextField protocol;
+    private JTextField path;
+    private JCheckBox followRedirects;
+    private JCheckBox useKeepAlive;
+    private JRadioButton post;
+    private JRadioButton get;
 
+    /****************************************
+     * !ToDo (Constructor description)
+     ***************************************/
+    public UrlConfigGui()
+    {
+        init();
+    }
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public UrlConfigGui()
-	{
-		init();
-	}
+    protected void configureTestElement(TestElement mc)
+    {
+        mc.setProperty(TestElement.NAME, getName());
+        mc.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
+        mc.setProperty(TestElement.TEST_CLASS, mc.getClass().getName());
+    }
 
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public TestElement createTestElement()
+    {
+        ConfigTestElement element = new ConfigTestElement();
 
-	  protected void configureTestElement(TestElement mc)
-	{
-		mc.setProperty(TestElement.NAME, getName());
-		mc.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
-		mc.setProperty(TestElement.TEST_CLASS, mc.getClass().getName());
-	}
+        this.configureTestElement(element);
+        Arguments args = (Arguments) argsPanel.createTestElement();
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public TestElement createTestElement()
-	{
-		ConfigTestElement element = new ConfigTestElement();
-		this.configureTestElement(element);
-		Arguments args = (Arguments)argsPanel.createTestElement();
-		HTTPArgument.convertArgumentsToHTTP(args);
-		element.setProperty(HTTPSampler.ARGUMENTS, args);
-		element.setProperty(HTTPSampler.DOMAIN, domain.getText());
-		element.setProperty(HTTPSampler.PORT, port.getText());
-		element.setProperty(HTTPSampler.PROTOCOL, protocol.getText());
-		element.setProperty(HTTPSampler.METHOD, (post.isSelected() ? "POST" : "GET"));
-		element.setProperty(HTTPSampler.PATH, path.getText());
-		element.setProperty(HTTPSampler.FOLLOW_REDIRECTS, new Boolean(followRedirects.isSelected()));
-		element.setProperty(HTTPSampler.USE_KEEPALIVE, new Boolean(useKeepAlive.isSelected()));
-		return element;
-	}
+        HTTPArgument.convertArgumentsToHTTP(args);
+        element.setProperty(HTTPSampler.ARGUMENTS, args);
+        element.setProperty(HTTPSampler.DOMAIN, domain.getText());
+        element.setProperty(HTTPSampler.PORT, port.getText());
+        element.setProperty(HTTPSampler.PROTOCOL, protocol.getText());
+        element.setProperty(HTTPSampler.METHOD,
+                (post.isSelected() ? "POST" : "GET"));
+        element.setProperty(HTTPSampler.PATH, path.getText());
+        element.setProperty(HTTPSampler.FOLLOW_REDIRECTS,
+                new Boolean(followRedirects.isSelected()));
+        element.setProperty(HTTPSampler.USE_KEEPALIVE,
+                new Boolean(useKeepAlive.isSelected()));
+        return element;
+    }
 
-	public void configureSampler(HTTPSampler sampler)
-	{
-		sampler.setArguments((Arguments)argsPanel.createTestElement());
-		sampler.setDomain(domain.getText());
-		sampler.setProtocol(protocol.getText());
-		sampler.setPath(path.getText());
-		sampler.setFollowRedirects(followRedirects.isSelected());
-		sampler.setUseKeepAlive(useKeepAlive.isSelected());
-		if(port.getText().length() > 0)
-		{
-			sampler.setPort(Integer.parseInt(port.getText()));
-		}
-		sampler.setMethod((post.isSelected() ? "POST" : "GET"));
-	}
+    public void configureSampler(HTTPSampler sampler)
+    {
+        sampler.setArguments((Arguments) argsPanel.createTestElement());
+        sampler.setDomain(domain.getText());
+        sampler.setProtocol(protocol.getText());
+        sampler.setPath(path.getText());
+        sampler.setFollowRedirects(followRedirects.isSelected());
+        sampler.setUseKeepAlive(useKeepAlive.isSelected());
+        if (port.getText().length() > 0)
+        {
+            sampler.setPort(Integer.parseInt(port.getText()));
+        }
+        sampler.setMethod((post.isSelected() ? "POST" : "GET"));
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param el  !ToDo (Parameter description)
-	 ***************************************/
-	public void configure(TestElement el)
-	{
-		setName((String)el.getProperty(TestElement.NAME));
-		argsPanel.configure((TestElement)el.getProperty(HTTPSampler.ARGUMENTS));
-		domain.setText((String)el.getProperty(HTTPSampler.DOMAIN));
-		port.setText((String)el.getPropertyAsString(HTTPSampler.PORT));
-		protocol.setText((String)el.getProperty(HTTPSampler.PROTOCOL));
-		if("POST".equals(el.getProperty(HTTPSampler.METHOD)))
-		{
-			post.setSelected(true);
-			get.setSelected(false);
-		}
-		else
-		{
-			get.setSelected(true);
-			post.setSelected(false);
-		}
-		path.setText((String)el.getProperty(HTTPSampler.PATH));
-		followRedirects.setSelected(((AbstractTestElement)el).getPropertyAsBoolean(HTTPSampler.FOLLOW_REDIRECTS));
-		useKeepAlive.setSelected(((AbstractTestElement)el).getPropertyAsBoolean(HTTPSampler.USE_KEEPALIVE));
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@param el  !ToDo (Parameter description)
+     ***************************************/
+    public void configure(TestElement el)
+    {
+        setName((String) el.getProperty(TestElement.NAME));
+        argsPanel.configure((TestElement) el.getProperty(HTTPSampler.ARGUMENTS));
+        domain.setText((String) el.getProperty(HTTPSampler.DOMAIN));
+        port.setText((String) el.getPropertyAsString(HTTPSampler.PORT));
+        protocol.setText((String) el.getProperty(HTTPSampler.PROTOCOL));
+        if ("POST".equals(el.getProperty(HTTPSampler.METHOD)))
+        {
+            post.setSelected(true);
+            get.setSelected(false);
+        }
+        else
+        {
+            get.setSelected(true);
+            post.setSelected(false);
+        }
+        path.setText((String) el.getProperty(HTTPSampler.PATH));
+        followRedirects.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSampler.FOLLOW_REDIRECTS));
+        useKeepAlive.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSampler.USE_KEEPALIVE));
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 ***************************************/
-	protected void init()
-	{
-		this.setLayout(new BorderLayout());
+    /****************************************
+     * !ToDo (Method description)
+     ***************************************/
+    protected void init()
+    {
+        this.setLayout(new BorderLayout());
 
-		JPanel webServerPanel = new JPanel();
-		webServerPanel.setLayout(new BorderLayout());
-		webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("web_server")));
-		webServerPanel.add(getDomainPanel(),BorderLayout.NORTH);
-		webServerPanel.add(getPortPanel(),BorderLayout.SOUTH);
+        JPanel webServerPanel = new JPanel();
 
-		JPanel webRequestPanel = new JPanel();
-		webRequestPanel.setLayout(new BorderLayout());
-		webRequestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("web_request")));
-		JPanel northPanel = new JPanel(new BorderLayout());
-		northPanel.add(getProtocolAndMethodPanel(),BorderLayout.NORTH);
-		northPanel.add(getPathPanel(),BorderLayout.SOUTH);
-		webRequestPanel.add(northPanel,BorderLayout.NORTH);
-		webRequestPanel.add(getParameterPanel(),BorderLayout.CENTER);
+        webServerPanel.setLayout(new BorderLayout());
+        webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("web_server")));
+        webServerPanel.add(getDomainPanel(), BorderLayout.NORTH);
+        webServerPanel.add(getPortPanel(), BorderLayout.SOUTH);
 
-		this.add(webServerPanel,BorderLayout.NORTH);
-		this.add(webRequestPanel,BorderLayout.CENTER);
-	}
+        JPanel webRequestPanel = new JPanel();
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	protected JPanel getPortPanel()
-	{
-		JPanel portP = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		portP.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 10));
-		portP.add(new JLabel(JMeterUtils.getResString("web_server_port")));
+        webRequestPanel.setLayout(new BorderLayout());
+        webRequestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("web_request")));
+        JPanel northPanel = new JPanel(new BorderLayout());
 
-		port = new JTextField(6);
+        northPanel.add(getProtocolAndMethodPanel(), BorderLayout.NORTH);
+        northPanel.add(getPathPanel(), BorderLayout.SOUTH);
+        webRequestPanel.add(northPanel, BorderLayout.NORTH);
+        webRequestPanel.add(getParameterPanel(), BorderLayout.CENTER);
 
-		port.setName(PORT);
-		portP.add(port);
+        this.add(webServerPanel, BorderLayout.NORTH);
+        this.add(webRequestPanel, BorderLayout.CENTER);
+    }
 
-		return portP;
-	}
+    /****************************************
+     * !ToDoo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    protected JPanel getPortPanel()
+    {
+        JPanel portP = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	protected JPanel getDomainPanel()
-	{
-		JPanel domainP = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		domainP.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 10));
-		domainP.add(new JLabel(JMeterUtils.getResString("web_server_domain")));
+        portP.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 10));
+        portP.add(new JLabel(JMeterUtils.getResString("web_server_port")));
 
-		domain = new JTextField(20);
-		domain.setName(DOMAIN);
-		domainP.add(domain);
+        port = new JTextField(6);
 
-		return domainP;
-	}
+        port.setName(PORT);
+        portP.add(port);
 
-	/****************************************
-	 * This method defines the Panel for the 
-	 * HTTP path, 'Follow Redirects' and
-	 * 'Use KeepAlive' elements.
-	 *
-	 *@return JPanel The Panel for the path,
-	 * 'Follow Redirects' and 'Use KeepAlive' elements.
-	 ***************************************/
-	protected JPanel getPathPanel()
-	{
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		panel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 10));
-		panel.add(new JLabel(JMeterUtils.getResString("path")));
+        return portP;
+    }
 
-		path = new JTextField(15);
-		path.setName(PATH);
-		panel.add(path);
+    /****************************************
+     * !ToDoo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    protected JPanel getDomainPanel()
+    {
+        JPanel domainP = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-		followRedirects= new JCheckBox(JMeterUtils.getResString("follow_redirects"));
-		followRedirects.setName(FOLLOW_REDIRECTS);
-		// Set this by default so as to stay compliant with the old
-		// behaviour:
-		followRedirects.setSelected(true);
-		panel.add(followRedirects);
+        domainP.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 10));
+        domainP.add(new JLabel(JMeterUtils.getResString("web_server_domain")));
 
-		useKeepAlive = new JCheckBox(JMeterUtils.getResString("use_keepalive"));
-		useKeepAlive.setName(USE_KEEPALIVE);
-		useKeepAlive.setSelected(true);
-		panel.add(useKeepAlive);
+        domain = new JTextField(20);
+        domain.setName(DOMAIN);
+        domainP.add(domain);
 
-		return panel;
-	}
+        return domainP;
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	protected JPanel getProtocolAndMethodPanel()
-	{
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		panel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 10));
+    /****************************************
+     * This method defines the Panel for the 
+     * HTTP path, 'Follow Redirects' and
+     * 'Use KeepAlive' elements.
+     *
+     *@return JPanel The Panel for the path,
+     * 'Follow Redirects' and 'Use KeepAlive' elements.
+     ***************************************/
+    protected JPanel getPathPanel()
+    {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-		// PROTOCOL
-		panel.add(new JLabel(JMeterUtils.getResString("protocol")));
-		protocol = new JTextField(4);
-		protocol.setName(PROTOCOL);
-		panel.add(protocol);
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 10));
+        panel.add(new JLabel(JMeterUtils.getResString("path")));
 
-		// METHOD
-		post = new JRadioButton(JMeterUtils.getResString("url_config_post"));
-		get = new JRadioButton(JMeterUtils.getResString("url_config_get"));
-		ButtonGroup methodButtonGroup = new ButtonGroup();
-		methodButtonGroup.add(post);
-		methodButtonGroup.add(get);
+        path = new JTextField(15);
+        path.setName(PATH);
+        panel.add(path);
 
-		panel.add(Box.createRigidArea(new Dimension(5, 0)));
-		panel.add(new JLabel(JMeterUtils.getResString("method")));
+        followRedirects = new JCheckBox(JMeterUtils.getResString("follow_redirects"));
+        followRedirects.setName(FOLLOW_REDIRECTS);
+        // Set this by default so as to stay compliant with the old
+        // behaviour:
+        followRedirects.setSelected(true);
+        panel.add(followRedirects);
 
-		post.setSelected(true);
+        useKeepAlive = new JCheckBox(JMeterUtils.getResString("use_keepalive"));
+        useKeepAlive.setName(USE_KEEPALIVE);
+        useKeepAlive.setSelected(true);
+        panel.add(useKeepAlive);
 
-		panel.add(get);
-		panel.add(post);
+        return panel;
+    }
 
-		return panel;
-	}
+    /****************************************
+     * !ToDoo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    protected JPanel getProtocolAndMethodPanel()
+    {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	protected JPanel getParameterPanel()
-	{
-		argsPanel = new HTTPArgumentsPanel();
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 10));
 
-		return argsPanel;
-	}
+        // PROTOCOL
+        panel.add(new JLabel(JMeterUtils.getResString("protocol")));
+        protocol = new JTextField(4);
+        protocol.setName(PROTOCOL);
+        panel.add(protocol);
+
+        // METHOD
+        post = new JRadioButton(JMeterUtils.getResString("url_config_post"));
+        get = new JRadioButton(JMeterUtils.getResString("url_config_get"));
+        ButtonGroup methodButtonGroup = new ButtonGroup();
+
+        methodButtonGroup.add(post);
+        methodButtonGroup.add(get);
+
+        panel.add(Box.createRigidArea(new Dimension(5, 0)));
+        panel.add(new JLabel(JMeterUtils.getResString("method")));
+
+        post.setSelected(true);
+
+        panel.add(get);
+        panel.add(post);
+
+        return panel;
+    }
+
+    /****************************************
+     * !ToDoo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    protected JPanel getParameterPanel()
+    {
+        argsPanel = new HTTPArgumentsPanel();
+
+        return argsPanel;
+    }
 }
