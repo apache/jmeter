@@ -18,7 +18,7 @@
  * 
  * @version $Id$
  -->
-<document index="yes" index-level-2="yes" colbreak="14.5"
+<document index="yes" index-level-2="yes" colbreak="15.4"
   prev="boss.html" next="functions.html" date="$Date$">
 
 <properties>
@@ -1075,6 +1075,7 @@ session information, each JMeter thread will have its own session.</p>
 
 <p>Second, you can manually add a cookie to the Cookie Manager.  However, if you do this,
 the cookie will be shared by all JMeter threads.</p>
+<p>Note that an Expiration time of 0 is treated as never expiring.</p>
 </description>
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
@@ -1428,6 +1429,20 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 </properties>
 </component>
 
+<component index="15.5.7" name="HTML Assertion" screenshot="assertion/HTMLAssertion.png">
+<description><p>The HTML Assertion allows the user to check the HTML syntax of the response data using JTidy.</p></description>
+
+<properties>
+<property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+<property name="doctype" required="Yes">omit/auto/strict/loose</property>
+<property name="Format" required="Yes">HTML, XHTML or XML</property>
+<property name="Errors only" required="Yes">Only take note of errors?</property>
+<property name="Error threshold" required="Yes">Number of errors allowed before classing the response as failed</property>
+<property name="Warning threshold" required="Yes">Number of warnings allowed before classing the response as failed</property>
+<property name="Filename" required="No">Name of file to which report is written</property>
+
+</properties>
+</component>
 
 </section>
 

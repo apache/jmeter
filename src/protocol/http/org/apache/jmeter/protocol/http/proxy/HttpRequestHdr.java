@@ -187,10 +187,12 @@ public class HttpRequestHdr
     	// Damn! A whole new GUI just to instantiate a test element?
     	// Isn't there a beter way? 
         HttpTestSampleGui tempGui = new HttpTestSampleGui();
-        tempGui.configure(createSampler());
-        HTTPSampler result = (HTTPSampler) tempGui.createTestElement();
+        HTTPSampler result = createSampler();
+        tempGui.configure(result);
+        tempGui.modifyTestElement(result);
         result.setFollowRedirects(false);
         result.setUseKeepAlive(true);
+        log.debug("getSampler: sampler path = " + result.getEncodedPath());
         return result;
     }
     
@@ -264,6 +266,7 @@ public class HttpRequestHdr
         {
             sampler.parseArguments(postData);
         }
+        log.debug("sampler path = " + sampler.getEncodedPath());
         return sampler;
     }
     

@@ -303,17 +303,28 @@ public class HTTPSampler extends HTTPSamplerBase
 
         for (int i= 1; conn.getHeaderFieldKey(i) != null; i++)
         {
-            if (!conn //TODO - why is this not saved?
-                .getHeaderFieldKey(i)
-                .equalsIgnoreCase("transfer-encoding"))
-            {
-                headerBuf.append(conn.getHeaderFieldKey(i));
-                headerBuf.append(": ");
-                headerBuf.append(conn.getHeaderField(i));
-                headerBuf.append("\n");
-            }
+            modifyHeaderValues(conn,i, headerBuf);
         }
         return headerBuf.toString();
+    }
+
+    /**
+     * @param conn
+     * @param headerBuf
+     * @param i
+     */
+    protected void modifyHeaderValues(HttpURLConnection conn, int headerIndex, StringBuffer resultBuf) 
+    {
+        if ("transfer-encoding" //TODO - why is this not saved? A: it might be a proxy server specific field.
+                	// If JMeter is using a proxy, the browser wouldn't know about that.
+            .equalsIgnoreCase(conn.getHeaderFieldKey(headerIndex)))
+        {
+           return; 
+        }
+        resultBuf.append(conn.getHeaderFieldKey(headerIndex));
+        resultBuf.append(": ");
+        resultBuf.append(conn.getHeaderField(headerIndex));
+        resultBuf.append("\n");
     }
 
     /**
@@ -550,7 +561,7 @@ public class HTTPSampler extends HTTPSamplerBase
                 }
 
                 if (isImageParser()
-                    && res.getDataType().equals(HTTPSampleResult.TEXT)
+                    && (HTTPSampleResult.TEXT).equals(res.getDataType())
                     && res.isSuccessful())
                 {
                     if (frameDepth > MAX_FRAME_DEPTH)
