@@ -68,6 +68,7 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.JMeterThreadMonitor;
+import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.threads.TestCompiler;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.ListedHashTree;
@@ -91,6 +92,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 	ListedHashTree test;
 	SearchByClass testListeners;
 	String host = null;
+	ListenerNotifier notifier;
 
 	/************************************************************
 	 *  !ToDo (Constructor description)
@@ -154,6 +156,8 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 			{
 				notifyTestListenersOfStart();
 			}
+			notifier = new ListenerNotifier();
+			notifier.start();
 			while(iter.hasNext())
 			{
 				ThreadGroup group = (ThreadGroup)iter.next();
@@ -162,7 +166,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 				{
 					ListedHashTree threadGroupTree = searcher.getSubTree(group);
 					threadGroupTree.add(group,testLevelElements);
-					threads[i] = new JMeterThread(cloneTree(threadGroupTree),this);
+					threads[i] = new JMeterThread(cloneTree(threadGroupTree),this,notifier);
 					threads[i].setInitialDelay((int)(((float)(group.getRampUp() * 1000) /
 							(float)group.getNumThreads()) * (float)i));
 					threads[i].setThreadName(group.getName()+"-"+(i+1));
@@ -227,6 +231,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 
 	protected void notifyTestListenersOfEnd()
 	{
+		notifier.stop();
 		Iterator iter = testListeners.getSearchResults().iterator();
 		while(iter.hasNext())
 		{
