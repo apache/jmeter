@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.save.converters;
 
@@ -33,58 +33,60 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 /**
  * @author mstover
- *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * 
+ * To change the template for this generated type comment go to Window -
+ * Preferences - Java - Code Generation - Code and Comments
  */
 public class StringPropertyConverter implements Converter
 {
-   transient private static final Logger log = LoggingManager.getLoggerForClass();
+   transient private static final Logger log = LoggingManager
+         .getLoggerForClass();
 
-    /** Returns the converter version; used to check for possible incompatibilities */
-	public static String getVersion(){	return "$Revision$";}
+   /**
+    * Returns the converter version; used to check for possible
+    * incompatibilities
+    */
+   public static String getVersion()
+   {
+      return "$Revision$";
+   }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    * 
     * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
     */
    public boolean canConvert(Class arg0)
    {
-      return StringProperty.class.equals(arg0);         
+      return StringProperty.class.equals(arg0);
    }
 
-   /* (non-Javadoc)
-    * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object, com.thoughtworks.xstream.io.HierarchicalStreamWriter, com.thoughtworks.xstream.converters.MarshallingContext)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object,
+    *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
+    *      com.thoughtworks.xstream.converters.MarshallingContext)
     */
    public void marshal(Object obj, HierarchicalStreamWriter writer,
          MarshallingContext arg2)
    {
-      StringProperty prop = (StringProperty)obj;
-      try
-      {
-         writer.addAttribute("name",URLEncoder.encode(prop.getName(),"UTF-8"));
-      }
-      catch (UnsupportedEncodingException e)
-      {
-         log.warn("System doesn't support utf-8",e);
-      }
-      writer.setValue(prop.getStringValue());
+      StringProperty prop = (StringProperty) obj;
+      writer.addAttribute("name", ConversionHelp.encode(prop.getName()));
+      writer.setValue(ConversionHelp.encode(prop.getStringValue()));
    }
 
-   /* (non-Javadoc)
-    * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader, com.thoughtworks.xstream.converters.UnmarshallingContext)
+   /*
+    * (non-Javadoc)
+    * 
+    * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
+    *      com.thoughtworks.xstream.converters.UnmarshallingContext)
     */
    public Object unmarshal(HierarchicalStreamReader reader,
          UnmarshallingContext arg1)
    {
-      try
-      {
-         StringProperty prop = new StringProperty(URLDecoder.decode(reader.getAttribute("name"),"UTF-8"),reader.getValue());
-         return prop;
-      }
-      catch (UnsupportedEncodingException e)
-      {
-         log.warn("System doesn't support utf-8",e);
-         return null;
-      }
+      StringProperty prop = new StringProperty(ConversionHelp.decode(reader
+            .getAttribute("name")), ConversionHelp.decode(reader.getValue()));
+      return prop;
    }
 }

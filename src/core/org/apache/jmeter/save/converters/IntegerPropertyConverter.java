@@ -51,7 +51,7 @@ public class IntegerPropertyConverter implements Converter
          MarshallingContext arg2)
    {
       IntegerProperty prop = (IntegerProperty)obj;
-      writer.addAttribute("name",prop.getName());
+      writer.addAttribute("name",ConversionHelp.encode(prop.getName()));
       writer.setValue(prop.getStringValue());
    }
 
@@ -61,7 +61,7 @@ public class IntegerPropertyConverter implements Converter
    public Object unmarshal(HierarchicalStreamReader reader,
          UnmarshallingContext arg1)
    {
-      IntegerProperty prop = new IntegerProperty(reader.getAttribute("name"),Integer.parseInt(reader.getValue()));
+      IntegerProperty prop = new IntegerProperty(ConversionHelp.decode(reader.getAttribute("name")),Integer.parseInt(reader.getValue()));
       return prop;
    }
 }

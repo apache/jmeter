@@ -52,7 +52,7 @@ public class BooleanPropertyConverter implements Converter
          MarshallingContext arg2)
    {
       BooleanProperty prop = (BooleanProperty)obj;
-      writer.addAttribute("name",prop.getName());
+      writer.addAttribute("name",ConversionHelp.encode(prop.getName()));
       writer.setValue(prop.getStringValue());
 
    }
@@ -63,7 +63,7 @@ public class BooleanPropertyConverter implements Converter
    public Object unmarshal(HierarchicalStreamReader reader,
          UnmarshallingContext arg1)
    {
-      BooleanProperty prop = new BooleanProperty(reader.getAttribute("name"),Boolean.valueOf(reader.getValue()).booleanValue());
+      BooleanProperty prop = new BooleanProperty(ConversionHelp.decode(reader.getAttribute("name")),Boolean.valueOf(reader.getValue()).booleanValue());
       return prop;
    }
 }

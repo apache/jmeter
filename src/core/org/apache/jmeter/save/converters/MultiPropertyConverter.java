@@ -57,7 +57,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter
          MarshallingContext context)
    {
       MultiProperty prop = (MultiProperty)arg0;
-      writer.addAttribute("name",prop.getName());
+      writer.addAttribute("name",ConversionHelp.encode(prop.getName()));
       PropertyIterator iter = prop.iterator();
       while(iter.hasNext())
       {
@@ -73,7 +73,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter
          UnmarshallingContext context)
    {
       MultiProperty prop = (MultiProperty)createCollection(context.getRequiredType());
-      prop.setName(reader.getAttribute("name"));
+      prop.setName(ConversionHelp.decode(reader.getAttribute("name")));
       while (reader.hasMoreChildren()) {
          reader.moveDown();
          JMeterProperty subProp = (JMeterProperty)readItem(reader, context, prop);
