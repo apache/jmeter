@@ -6,7 +6,8 @@ avalon-framework-4.1.4
 - Configuration (ResultCollector, SaveService, SampleResult, TestElementSaver)
 
 commons-collections
-- ListenerNotifier ONLY
+- ListenerNotifier
+- Anakia
 
 commons-httpclient-2.0
 - httpclient
@@ -29,6 +30,7 @@ jakarta-oro
 - regular expressions: various
 
 jdom-b9
+- Anakia
 - XMLAssertion, JMeterTest ONLY
 
 (jorphan)
@@ -41,6 +43,7 @@ junit
 
 logkit-1.2
 - logging
+- Anakia
 
 soap
 - WebServiceSampler ONLY
