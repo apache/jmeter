@@ -163,9 +163,9 @@ public class JMeterUtils implements UnitTestManager
 		{
 			try
 			{
-				p.load(
-					JMeterUtils.class.getClassLoader().getSystemResourceAsStream(
-						"org/apache/jmeter/jmeter.properties"));
+                p.load(
+                    ClassLoader.getSystemResourceAsStream(
+                        "org/apache/jmeter/jmeter.properties"));
 			}
 			catch (IOException ex)
 			{

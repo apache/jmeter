@@ -300,7 +300,7 @@ public class HtmlParser implements Serializable
 	 ***************************************/
 	public static Document createEmptyDoc()
 	{
-		return new Tidy().createEmptyDocument();
+		return Tidy.createEmptyDocument();
 	}
 
 	/****************************************

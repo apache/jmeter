@@ -292,7 +292,7 @@ public class ListedHashTree extends HashTree implements Serializable,Cloneable
 			assertEquals(1,tree.getTree("key").list().size());
 			assertEquals(0,tree.getTree("key").getTree("value").size());
 			assertEquals(tree.getTree("key").getArray()[0], "value");
-			this.assertNotNull(tree.getTree("key").get("value"));
+			assertNotNull(tree.getTree("key").get("value"));
 		}
 	}
 
