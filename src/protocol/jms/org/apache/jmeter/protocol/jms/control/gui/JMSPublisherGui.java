@@ -53,9 +53,12 @@ public class JMSPublisherGui
     extends AbstractSamplerGui
     implements java.awt.event.ActionListener, ChangeListener
 {
-	private String use_file = JMeterUtils.getResString("jms_use_file");
-	private String use_random = JMeterUtils.getResString("jms_use_random_file"); 
-	private String use_text = JMeterUtils.getResString("jms_use_text"); 
+	public static final String use_file =
+	  JMeterUtils.getResString("jms_use_file");
+	public static final String use_random =
+	  JMeterUtils.getResString("jms_use_random_file"); 
+	public static final String use_text =
+	  JMeterUtils.getResString("jms_use_text"); 
 	private String[] items = {use_file,use_random,use_text};
 	
 	private String text_msg = JMeterUtils.getResString("jms_text_message");
@@ -118,6 +121,10 @@ public class JMSPublisherGui
         init();
     }
 
+	/**
+	 * the name of the property for the JMSPublisherGui is
+	 * jms_publisher.
+	 */
     public String getLabelResource()
     {
         return "jms_publisher";
@@ -271,7 +278,8 @@ public class JMSPublisherGui
     }
     
     /**
-     * 
+     * When a widget state changes, it will notify this class
+     * so we can enable/disable the correct items.
      */
 	public void stateChanged(ChangeEvent event){
 		if (event.getSource() == this.configChoice){
@@ -290,7 +298,8 @@ public class JMSPublisherGui
 	}
 	
 	/**
-	 * 
+	 * Update config contains the actual logic for enabling
+	 * or disabling text message, file or random path.
 	 * @param command
 	 */
 	public void updateConfig(String command){
@@ -324,13 +333,5 @@ public class JMSPublisherGui
 					JOptionPane.ERROR_MESSAGE);
 			}
 		}
-	}
-	
-	/**
-	 * 
-	 * @param auth
-	 */
-	public void updateUseAuth(String auth){
-		
 	}
 }

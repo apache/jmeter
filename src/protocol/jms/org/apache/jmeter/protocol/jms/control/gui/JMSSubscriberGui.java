@@ -231,6 +231,10 @@ public class JMSSubscriberGui
     	}
     }
 
+	/**
+	 * When the state of a widget changes, it will notify the
+	 * gui. the method then enables or disables certain parameters.
+	 */
 	public void stateChanged(ChangeEvent event){
 		if (event.getSource() == useProperties){
 			if (useProperties.isSelected()){
