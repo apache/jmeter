@@ -54,11 +54,6 @@
  */
 package org.apache.jmeter.protocol.http.sampler;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
@@ -67,19 +62,13 @@ import java.util.Iterator;
 
 import junit.framework.TestCase;
 
-import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-// NOTE: Also looked at using Java 1.4 regexp instead of ORO. The change was
-// trivial. Performance did not improve -- at least not significantly. [Jordi]
-import org.apache.oro.text.regex.MatchResult;
-import org.apache.oro.text.regex.Pattern;
-import org.apache.oro.text.regex.PatternMatcherInput;
-import org.apache.oro.text.regex.Perl5Compiler;
-import org.apache.oro.text.regex.Perl5Matcher;
-import org.apache.oro.text.regex.MalformedPatternException;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * Parser class using regular expressions to scan HTML documents for images etc.
@@ -91,36 +80,23 @@ import org.apache.oro.text.regex.MalformedPatternException;
  *  <li>&lt;img src=<b>url</b> ... &gt;
  *  <li>&lt;script src=<b>url</b> ... &gt;
  *  <li>&lt;applet code=<b>url</b> ... &gt;
+ *  <li>&lt;applet ... codebase=<b>url</b> ... &gt;
  *  <li>&lt;input type=image src=<b>url</b> ... &gt;
  *  <li>&lt;body background=<b>url</b> ... &gt;
  *  <li>&lt;table background=<b>url</b> ... &gt;
  *  <li>&lt;td background=<b>url</b> ... &gt;
  *  <li>&lt;tr background=<b>url</b> ... &gt;
- *  <li>&lt;applet ... codebase=<b>url</b> ... &gt;
  *  <li>&lt;embed src=<b>url</b> ... &gt;
  *  <li>&lt;embed codebase=<b>url</b> ... &gt;
- *  <li>&lt;object codebase=<b>url</b> ... &gt;
  * </ul>
  *
  * Note that files that are duplicated within the enclosing document will
  * only be downloaded once.
+ * <p>
+ * This parser takes into account the following tag:
  * <ul>
  *  <li>&lt;base href=<b>url</b>&gt;
  * </ul>
- *
- * But not the following:
- * <ul>
- *  <li>&lt; ... codebase=<b>url</b> ... &gt;
- * </ul>
- *
- * The following parameters are not accounted for either (as the textbooks
- * say, they are left as an exercise for the interested reader):
- * <ul>
- *  <li>&lt;area href=<b>url</b> ... &gt;
- * </ul>
- *
- * <p>
- * Finally, this class does not process <b>Style Sheets</b> either.
  *
  * @author Jordi Salvat i Alabart <jsalvata@atg.com>
  * @version $Id$
@@ -152,20 +128,46 @@ public class ParseRegexp
     {
         protected Object initialValue()
         {
-            return new Perl5Matcher();
+            return pattern.matcher("");
         }
     };
 
     /**
-     * Thread-local input:
+     * CharSequence supported by a byte array. Works on the assumption that
+     * the character encoding is ISO-Latin1 -- which is not necessarily the case
+     * but probably OK for the purpose of this ParseRegexp class.
      */
-    private static ThreadLocal localInput = new ThreadLocal()
-    {
-        protected Object initialValue()
-        {
-            return new PatternMatcherInput(new char[0]);
+    private static class ByteArrayCharSequence implements CharSequence {
+        byte[] input;
+        int start, end;
+        public ByteArrayCharSequence(byte[] input) {
+            super();
+            setInput(input);
         }
-    };
+        public ByteArrayCharSequence(byte[] input, int start, int end) {
+            super();
+            this.input= input;
+            this.start= start;
+            this.end= end;
+        }
+        public void setInput(byte[] input) {
+            this.input= input;
+            start= 0;
+            end= input.length;
+        }
+        public char charAt(int index) {
+            return (char)input[start+index];
+        }
+        public int length() {
+            return end-start;
+        }
+        public CharSequence subSequence(int start, int end) {
+            return new ByteArrayCharSequence(input, start, end);
+        }
+        public String toString() {
+            return new String(input, start, end-start);
+        }
+    }
 
     /** Used to store the Logger (used for debug and error messages). */
     transient private static Logger log = LoggingManager.getLoggerForClass();
@@ -176,17 +178,15 @@ public class ParseRegexp
     static {
         // Compile the regular expression:
         try {
-            Perl5Compiler c= new Perl5Compiler();
-            pattern= c.compile(REGEXP,
-                    c.CASE_INSENSITIVE_MASK
-                    |c.SINGLELINE_MASK
-                    |c.READ_ONLY_MASK);
+            pattern= Pattern.compile(REGEXP,
+                    Pattern.CASE_INSENSITIVE
+                    |Pattern.DOTALL);
         }
-        catch(MalformedPatternException mpe)
+        catch(PatternSyntaxException e)
         {
             log.error("Internal error compiling regular expression in ParseRegexp.");
-            log.error("MalformedPatterException - " + mpe);
-            throw new Error(mpe);
+            log.error(e.toString());
+            throw new Error(e);
         }
     }
 
@@ -223,18 +223,13 @@ public class ParseRegexp
         Set uniqueRLs = new LinkedHashSet();
         
         // Look for unique RLs to be sampled.
-        Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
-        PatternMatcherInput input = (PatternMatcherInput) localInput.get();
-        // TODO: find a way to avoid the cost of creating a String here --
-        // probably a new PatternMatcherInput working on a byte[] would do
-        // better.
-        input.setInput(new String(res.getResponseData()));
-        while (matcher.contains(input, pattern)) {
-            MatchResult match= matcher.getMatch();
+        Matcher matcher = (Matcher) localMatcher.get();
+        matcher.reset(new ByteArrayCharSequence(res.getResponseData()));
+        while (matcher.find()) {
             String s;
-            if (log.isDebugEnabled()) log.debug("match groups "+match.groups());
+            if (log.isDebugEnabled()) log.debug("match groups "+matcher.groupCount());
             // Check for a BASE HREF:
-            s= match.group(1);
+            s= matcher.group(1);
             if (s!=null) {
                 try {
                     baseUrl= new URL(baseUrl, s);
@@ -251,9 +246,9 @@ public class ParseRegexp
                     return res;
                 }
             }
-            for (int g= 2; g < match.groups(); g++) {
-                s= match.group(g);
-                if (log.isDebugEnabled()) log.debug("group "+g+" - "+match.group(g));
+            for (int g= 2; g < matcher.groupCount(); g++) {
+                s= matcher.group(g);
+                if (log.isDebugEnabled()) log.debug("group "+g+" - "+s);
                 if (s!=null) uniqueRLs.add(s);
             }
         }
