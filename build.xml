@@ -362,7 +362,7 @@
   <target name="init-version">
   	<tstamp/>
   	<!-- JMeter version -->
-  <property name="jmeter.version" value="2.0.2.${DSTAMP}"/>
+  <property name="jmeter.version" value="2.0.3.${DSTAMP}"/>
   </target>
 
   <target name="init" depends="check-libs,report-missing-libs,init-version">
@@ -804,7 +804,6 @@ some of its classes - at present JMeter can only run from jar files.
     <include name="${dest.jar.jmeter}/jmeter*"/>
     <include name="${dest.jar.jmeter}/upgrade.properties"/>
     <include name="${dest.jar.jmeter}/users.*"/>
-    <include name="${dest.jar.jmeter}/testfiles/**"/>
     <include name="${dest.jar}/"/>
     <include name="${dest.printable_docs}/**"/>
     <include name="${extras.dir}/**"/>
