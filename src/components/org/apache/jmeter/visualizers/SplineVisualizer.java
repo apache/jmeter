@@ -322,17 +322,17 @@ public class SplineVisualizer
                 return;
             }
 
-            boolean resized = true; //TODO: remove? not read
+            //boolean resized = true;
 
             if (width == lastWidth && height == lastHeight)
             {
                 // dimension of the SplineGraph is the same
-                resized = false; //TODO: remove? not used
+                //resized = false;
             }
             else
             {
                 // dimension changed
-                resized = true; //TODO: remove? not used
+                //resized = true;
                 lastWidth = width;
                 lastHeight = height;
             }

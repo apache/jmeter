@@ -367,7 +367,6 @@ public class LogFilter implements Filter
      */
     protected boolean filterPattern(String text)
     {
-        boolean match = false;//TODO not used
         if (MATCHER == null)
         {
             MATCHER = new Perl5Matcher();

@@ -20,7 +20,7 @@ package org.apache.jmeter.reporters;
 
 
 import java.io.Serializable;
-import java.net.InetAddress;
+//import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -288,7 +288,7 @@ public class MailerModel extends AbstractTestElement implements Serializable
     {
         String host = smtpHost;
         boolean debug = Boolean.valueOf(host).booleanValue();
-        InetAddress remote = InetAddress.getByName(host);
+        //InetAddress remote = InetAddress.getByName(host);
 
         InternetAddress[] address = new InternetAddress[vEmails.size()];
 
@@ -351,20 +351,20 @@ public class MailerModel extends AbstractTestElement implements Serializable
         setProperty(SUCCESS_LIMIT_KEY,limit);
     }
 
-    private  void setSuccessCount(long count)
-    {
-        this.successCount = count;
-    }
+//    private  void setSuccessCount(long count)
+//    {
+//        this.successCount = count;
+//    }
 
     public void setFailureLimit(String limit)
     {
         setProperty(FAILURE_LIMIT_KEY,limit);
     }
 
-    private void setFailureCount(long count)
-    {
-        this.failureCount = count;
-    }
+//    private void setFailureCount(long count)
+//    {
+//        this.failureCount = count;
+//    }
 
     public String getToAddress()
     {
