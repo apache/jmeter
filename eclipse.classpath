@@ -1,44 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-    <classpathentry kind="src" output="build/jorphan" path="src/jorphan"/>
-    <classpathentry
-        excluding="org/apache/jmeter/images/|org/apache/jmeter/resources/*.properties|org/apache/jmeter/util/keystore/DefaultKeyStore.java|org/apache/jmeter/util/JsseSSLManager.java|org/apache/jmeter/util/keystore/PKCS12KeyStore.java"
-        kind="src" output="build/core" path="src/core"/>
-    <classpathentry
-        excluding="org/apache/jmeter/reporters/MailerModel.java|org/apache/jmeter/reporters/MailerResultCollector.java|org/apache/jmeter/visualizers/MailerVisualizer.java|org/apache/jmeter/assertions/**/BeanShell*.java"
-        kind="src" output="build/components" path="src/components"/>
-    <classpathentry kind="src" output="build/functions" path="src/functions"/>
-    <classpathentry
-        excluding="org/apache/jmeter/protocol/http/sampler/WebServiceSampler.java|org/apache/jmeter/protocol/http/control/gui/WebServiceSamplerGui.java"
-        kind="src" output="build/protocol/http" path="src/protocol/http"/>
-    <classpathentry kind="src" output="build/protocol/ftp" path="src/protocol/ftp"/>
-    <classpathentry kind="src" output="build/protocol/jdbc" path="src/protocol/jdbc"/>
-    <classpathentry
-        excluding="org/apache/jmeter/protocol/java/**/BeanShell*.java|org/apache/jmeter/protocol/java/**/BSF*.java"
-        kind="src" output="build/protocol/java" path="src/protocol/java"/>
-    <classpathentry kind="src" output="build/protocol/ldap" path="src/protocol/ldap"/>
-    <classpathentry kind="src" output="build/protocol/tcp" path="src/protocol/tcp"/>
-	<classpathentry kind="src" output="build/monitor/model" path="src/monitor/model"/>
-	<classpathentry kind="src" output="build/monitor/components" path="src/monitor/components"/>
-    <classpathentry kind="src" path="src/examples"/>
-    <classpathentry kind="src" output="build/htmlparser" path="src/htmlparser"/>
-    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-    <classpathentry kind="lib" path="lib/excalibur-compatibility-1.1.jar"/>
-    <classpathentry kind="lib" path="lib/excalibur-i18n-1.1.jar"/>
-    <classpathentry kind="lib" path="lib/excalibur-logger-1.1.jar"/>
-    <classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
-    <classpathentry kind="lib" path="lib/jakarta-oro-2.0.8.jar"/>
-    <classpathentry kind="lib" path="lib/js.jar"/>
-    <classpathentry kind="lib" path="lib/junit.jar"/>
-    <classpathentry kind="lib" path="lib/logkit-1.2.jar"/>
-    <classpathentry kind="lib" path="lib/Tidy.jar"/>
-    <classpathentry kind="lib" path="lib/commons-collections.jar"/>
-    <classpathentry kind="lib" path="lib/soap.jar"/>
-    <classpathentry kind="lib" path="lib/jdom-b9.jar"/>
-    <classpathentry kind="lib" path="lib/xalan.jar"/>
+	<classpathentry output="build/jorphan" kind="src" path="src/jorphan"/>
+	<classpathentry excluding="org/apache/jmeter/images/|org/apache/jmeter/resources/*.properties|org/apache/jmeter/util/keystore/DefaultKeyStore.java|org/apache/jmeter/util/JsseSSLManager.java|org/apache/jmeter/util/keystore/PKCS12KeyStore.java" output="build/core" kind="src" path="src/core"/>
+	<classpathentry excluding="org/apache/jmeter/reporters/MailerModel.java|org/apache/jmeter/reporters/MailerResultCollector.java|org/apache/jmeter/visualizers/MailerVisualizer.java|org/apache/jmeter/assertions/**/BeanShell*.java" output="build/components" kind="src" path="src/components"/>
+	<classpathentry output="build/functions" kind="src" path="src/functions"/>
+	<classpathentry excluding="org/apache/jmeter/protocol/http/sampler/WebServiceSampler.java|org/apache/jmeter/protocol/http/control/gui/WebServiceSamplerGui.java" output="build/protocol/http" kind="src" path="src/protocol/http"/>
+	<classpathentry output="build/protocol/ftp" kind="src" path="src/protocol/ftp"/>
+	<classpathentry output="build/protocol/jdbc" kind="src" path="src/protocol/jdbc"/>
+	<classpathentry excluding="org/apache/jmeter/protocol/java/**/BeanShell*.java|org/apache/jmeter/protocol/java/**/BSF*.java" output="build/protocol/java" kind="src" path="src/protocol/java"/>
+	<classpathentry output="build/protocol/ldap" kind="src" path="src/protocol/ldap"/>
+	<classpathentry output="build/protocol/tcp" kind="src" path="src/protocol/tcp"/>
+	<classpathentry output="build/monitor/model" kind="src" path="src/monitor/model"/>
+	<classpathentry output="build/monitor/components" kind="src" path="src/monitor/components"/>
+	<classpathentry output="build/htmlparser" kind="src" path="src/htmlparser"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/excalibur-compatibility-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/excalibur-i18n-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/excalibur-logger-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta-oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="lib/js.jar"/>
+	<classpathentry kind="lib" path="lib/junit.jar"/>
+	<classpathentry kind="lib" path="lib/logkit-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/Tidy.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections.jar"/>
+	<classpathentry kind="lib" path="lib/soap.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-b9.jar"/>
+	<classpathentry kind="lib" path="lib/xalan.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/commons-httpclient-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
-    <classpathentry kind="output" path="build/default"/>
+	<classpathentry kind="lib" path="lib/excalibur-datasource-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/excalibur-instrument-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/excalibur-pool-1.2.jar"/>
+	<classpathentry kind="output" path="build/default"/>
 </classpath>
