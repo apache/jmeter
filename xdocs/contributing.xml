@@ -5,34 +5,7 @@
     <title>Contributing to The Jakarta Project</title>
   </properties>
 <body>
-<section name="Contributors to Apache JMeter">
-<p>Many people have contributed code, documentation and bug reports to the JMeter project.  For this, we are grateful.  </p>
 
-<ul><strong>Contributors (in no particular order):</strong>
-<li>Berin Loritsch (committer)</li>
-<li>Martin Ramshaw</li>
-<li>Kevin Hammond (committer)</li>
-<li>Neth (committer)</li>
-<li>Derek Baum</li>
-<li>Jordi Salvat i Alabart (committer)</li>
-<li>William Weber</li>
-<li>Brendan Burns (committer)</li>
-<li>Michael Stover (commiter &amp; release manager)</li>
-<li>Jim Boucher (committer)</li>
-<li>Wolfram Rittmeyer (committer)</li>
-<li>Dion McMurtrie</li>
-<li>Keith Cassell (committer)</li>
-<li>Drew Gulino (committer)</li>
-<li>Michal Kostrzewa (committer)</li>
-<li>Scott Eade (committer)</li>
-<li>Oliver Rossmueller (committer)</li>
-<li>Jonathan Carlson</li>
-<li>Jeremy Arnold (committer)</li>
-<li>Thad Smith(committer)</li>
-</ul>
-<p>If your name does not appear here and you feel it should, please 
-send me an email (mstover1@apache.org).</p>
-</section>
 <section name="Contributing To The Jakarta Project">
 <p>
 The Jakarta Project is an open volunteer project. This means that anyone may
