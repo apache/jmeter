@@ -59,23 +59,21 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.net.UnknownHostException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.reporters.MailerModel;
+import org.apache.jmeter.reporters.MailerResultCollector;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
@@ -86,7 +84,6 @@ import org.apache.log.Logger;
 
 
 /*
- * TODO :
  * - Create a subpanel for other visualizers
  * - connect to the properties.
  * - Get the specific URL that is failing.
@@ -104,7 +101,7 @@ import org.apache.log.Logger;
  *@version    $Revision$ $Date$
  ***********************************************************/
 public class MailerVisualizer extends AbstractVisualizer
-        implements ActionListener, FocusListener, Clearable, ModelListener
+        implements Clearable, ChangeListener
 {
 
     private JButton testerButton;
@@ -120,8 +117,6 @@ public class MailerVisualizer extends AbstractVisualizer
     private JPanel mainPanel;
     private JLabel panelTitleLabel;
 
-    private MailerModel model;
-
     transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
     /**
@@ -130,10 +125,6 @@ public class MailerVisualizer extends AbstractVisualizer
     public MailerVisualizer()
     {
         super();
-
-        // construct the model
-        model = new MailerModel();
-        model.addModelListener(this);
 
         // initialize GUI.
         initGui();
@@ -150,22 +141,15 @@ public class MailerVisualizer extends AbstractVisualizer
     }
 
     /**
-     * Adds a SampleResult. Actually this method just delegates calls
-     * to the ActionModel.
-     *
-     * @param sample The SampleResult encapsulating informations about the last sample.
-     */
-    public synchronized void add(SampleResult sample)
-    {
-        model.add(sample);
-    }
-
-    /**
      * Clears any stored sampling-informations.
      */
     public synchronized void clear()
     {
-        model.clear();
+        ((MailerResultCollector)getModel()).getMailerModel().clear();
+    }
+    
+    public void add(SampleResult res)
+    {
     }
 
     /************************************************************
@@ -198,7 +182,7 @@ public class MailerVisualizer extends AbstractVisualizer
         // mailer panel
         JPanel mailerPanel = new JPanel();
 
-        mailerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), model.getAttributesTitle()));
+        mailerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),getAttributesTitle()));
         GridBagLayout g = new GridBagLayout();
 
         mailerPanel.setLayout(g);
@@ -209,10 +193,8 @@ public class MailerVisualizer extends AbstractVisualizer
         c.gridwidth = 1;
         mailerPanel.add(new JLabel("From:"));
 
-        fromField = new JTextField(model.getFromAddress(), 25);
+        fromField = new JTextField(25);
         fromField.setEditable(true);
-        fromField.addActionListener(this);
-        fromField.addFocusListener(this);
         c.gridwidth = GridBagConstraints.REMAINDER;
         g.setConstraints(fromField, c);
         mailerPanel.add(fromField);
@@ -222,10 +204,8 @@ public class MailerVisualizer extends AbstractVisualizer
         c.gridwidth = 1;
         mailerPanel.add(new JLabel("Addressie(s):"));
 
-        addressField = new JTextField(model.getToAddress(), 25);
+        addressField = new JTextField(25);
         addressField.setEditable(true);
-        addressField.addActionListener(this);
-        addressField.addFocusListener(this);
         c.gridwidth = GridBagConstraints.REMAINDER;
         g.setConstraints(addressField, c);
         mailerPanel.add(addressField);
@@ -233,10 +213,8 @@ public class MailerVisualizer extends AbstractVisualizer
         c.gridwidth = 1;
         mailerPanel.add(new JLabel("SMTP Host:"));
 
-        smtpHostField = new JTextField(model.getSmtpHost(), 25);
+        smtpHostField = new JTextField(25);
         smtpHostField.setEditable(true);
-        smtpHostField.addActionListener(this);
-        smtpHostField.addFocusListener(this);
         c.gridwidth = GridBagConstraints.REMAINDER;
         g.setConstraints(smtpHostField, c);
         mailerPanel.add(smtpHostField);
@@ -244,10 +222,8 @@ public class MailerVisualizer extends AbstractVisualizer
         c.gridwidth = 1;
         mailerPanel.add(new JLabel("Failure Subject:"));
 
-        failureSubjectField = new JTextField(model.getFailureSubject(), 25);
+        failureSubjectField = new JTextField(25);
         failureSubjectField.setEditable(true);
-        failureSubjectField.addActionListener(this);
-        failureSubjectField.addFocusListener(this);
         c.gridwidth = GridBagConstraints.REMAINDER;
         g.setConstraints(failureSubjectField, c);
         mailerPanel.add(failureSubjectField);
@@ -255,10 +231,8 @@ public class MailerVisualizer extends AbstractVisualizer
         c.gridwidth = 1;
         mailerPanel.add(new JLabel("Success Subject:"));
 
-        successSubjectField = new JTextField(model.getSuccessSubject(), 25);
+        successSubjectField = new JTextField(25);
         successSubjectField.setEditable(true);
-        successSubjectField.addActionListener(this);
-        successSubjectField.addFocusListener(this);
         c.gridwidth = GridBagConstraints.REMAINDER;
         g.setConstraints(successSubjectField, c);
         mailerPanel.add(successSubjectField);
@@ -266,10 +240,8 @@ public class MailerVisualizer extends AbstractVisualizer
         c.gridwidth = 1;
         mailerPanel.add(new JLabel("Failure Limit:"));
 
-        failureLimitField = new JTextField(Long.toString(model.getFailureLimit()), 6);
+        failureLimitField = new JTextField("2",25);
         failureLimitField.setEditable(true);
-        failureLimitField.addActionListener(this);
-        failureLimitField.addFocusListener(this);
         c.gridwidth = GridBagConstraints.REMAINDER;
         g.setConstraints(failureLimitField, c);
         mailerPanel.add(failureLimitField);
@@ -277,16 +249,13 @@ public class MailerVisualizer extends AbstractVisualizer
         c.gridwidth = 1;
         mailerPanel.add(new JLabel("Success Limit:"));
 
-        successLimitField = new JTextField(Long.toString(model.getSuccessLimit()), 6);
+        successLimitField = new JTextField("2",25);
         successLimitField.setEditable(true);
-        successLimitField.addActionListener(this);
-        successLimitField.addFocusListener(this);
         c.gridwidth = GridBagConstraints.REMAINDER;
         g.setConstraints(successLimitField, c);
         mailerPanel.add(successLimitField);
 
         testerButton = new JButton("Test Mail");
-        testerButton.addActionListener(this);
         testerButton.setEnabled(true);
         c.gridwidth = 1;
         g.setConstraints(testerButton, c);
@@ -296,7 +265,6 @@ public class MailerVisualizer extends AbstractVisualizer
         mailerPanel.add(new JLabel("Failures:"));
         failureField = new JTextField(6);
         failureField.setEditable(false);
-        failureField.addActionListener(this);
         c.gridwidth = GridBagConstraints.REMAINDER;
         g.setConstraints(failureField, c);
         mailerPanel.add(failureField);
@@ -330,133 +298,6 @@ public class MailerVisualizer extends AbstractVisualizer
         return JMeterUtils.getResString("mailer_attributes_panel");
     }
 
-    /**
-     * Does the actual EventHandling. Gets called by EventHandlers
-     * for either ActionEvents or FocusEvents.
-     *
-     * @param source The object that caused the event.
-     */
-    private void doEventHandling(Object source)
-    {
-        if (source == addressField)
-        {
-            model.setToAddress(this.addressField.getText());
-        }
-        else if (source == fromField)
-        {
-            model.setFromAddress(this.fromField.getText());
-        }
-        else if (source == smtpHostField)
-        {
-            model.setSmtpHost(this.smtpHostField.getText());
-        }
-        else if (source == failureSubjectField)
-        {
-            model.setFailureSubject(this.failureSubjectField.getText());
-        }
-        else if (source == successSubjectField)
-        {
-            model.setSuccessSubject(this.successSubjectField.getText());
-        }
-        else if (source == failureLimitField)
-        {
-            try
-            {
-                model.setFailureLimit(Long.parseLong(this.failureLimitField.getText()));
-            }
-            catch (NumberFormatException e)
-            {
-                log.warn("failureLimitField=" + failureLimitField.getText(), e);
-                JOptionPane.showMessageDialog(null, JMeterUtils.getResString("you_must_enter_a_valid_number"), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-        else if (source == successLimitField)
-        {
-            try
-            {
-                model.setSuccessLimit(Long.parseLong(this.successLimitField.getText()));
-            }
-            catch (NumberFormatException e)
-            {
-                log.warn("successLimitField=" + successLimitField.getText(), e);
-                JOptionPane.showMessageDialog(null, JMeterUtils.getResString("you_must_enter_a_valid_number"), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-
-    // ////////////////////////////////////////////////////////////
-    //
-    // Implementation of the ActionListener-Interface.
-    //
-    // ////////////////////////////////////////////////////////////
-
-    /**
-     * Reacts on an ActionEvent (like pressing a button).
-     *
-     * @param e The ActionEvent with information about the event and its source.
-     */
-    public void actionPerformed(ActionEvent e)
-    {
-        try
-        {
-            JComponent c = (JComponent) e.getSource();
-
-            if (c == testerButton)
-            {
-                String testString = "JMeter-Testmail" + "\n" + "To:  "
-                        + model.getToAddress() + "\n" + "Via:  "
-                        + model.getSmtpHost() + "\n" + "Fail Subject:  "
-                        + model.getFailureSubject() + "\n"
-                        + "Success Subject:  " + model.getSuccessSubject();
-
-                log.debug(testString);
-                model.sendMail(model.getFromAddress(), model.getAddressVector(), "Testing mail-addresses", testString, model.getSmtpHost());
-                log.info("Mail sent successfully!!");
-            }
-            else
-            {
-                doEventHandling(c);
-            }
-        }
-        catch (UnknownHostException e1)
-        {
-            log.error("Invalid Mail Server ", e1);
-            displayMessage(JMeterUtils.getResString("invalid_mail_server"), true);
-        }
-        catch (Exception ex)
-        {
-            log.error("Couldn't send mail...", ex);
-            displayMessage(JMeterUtils.getResString("invalid_mail_server"), true);
-        }
-    }
-
-    // ////////////////////////////////////////////////////////////
-    //
-    // Implementation of the FocusListener-Interface.
-    //
-    // ////////////////////////////////////////////////////////////
-
-    /**
-     * Empty implementation of the FocusListener-method.
-     */
-    public void focusGained(FocusEvent e)
-    {}
-
-    /**
-     * Called every time a element looses its focus. Here used to determine
-     * wether the text inside a JTextField has changed and wether
-     * the field has changed.
-     *
-     * @param e The FocusEvent-object encapsulating all relevant informations
-     * about the FocusEvent.
-     */
-    public void focusLost(FocusEvent e)
-    {
-        Object source = e.getSource();
-
-        doEventHandling(source);
-    }
-
     // ////////////////////////////////////////////////////////////
     //
     // Methods used to store and retrieve the MailerVisualizer.
@@ -469,8 +310,7 @@ public class MailerVisualizer extends AbstractVisualizer
     public void configure(TestElement el)
     {
         super.configure(el);
-        model.retrieveModel(el);
-        updateVisualizer();
+        updateVisualizer(((MailerResultCollector)el).getMailerModel());
     }
 
     /**
@@ -478,10 +318,28 @@ public class MailerVisualizer extends AbstractVisualizer
      */
     public TestElement createTestElement()
     {
-        TestElement element = super.createTestElement();
+        if (getModel() == null)
+        {
+            setModel( new MailerResultCollector());
+        }
+        modifyTestElement(getModel());
+        return getModel();
+    }
 
-        model.storeModel(element);
-        return element;
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
+     */
+    public void modifyTestElement(TestElement c)
+    {
+        super.modifyTestElement(c);
+        MailerModel mailerModel = ((MailerResultCollector)c).getMailerModel();
+        mailerModel.setFailureLimit(failureLimitField.getText());
+        mailerModel.setFailureSubject(failureSubjectField.getText());
+        mailerModel.setFromAddress(fromField.getText());
+        mailerModel.setSmtpHost(smtpHostField.getText());
+        mailerModel.setSuccessLimit(successLimitField.getText());
+        mailerModel.setSuccessSubject(successSubjectField.getText());
+        mailerModel.setToAddress(addressField.getText());
     }
     
 
@@ -496,7 +354,7 @@ public class MailerVisualizer extends AbstractVisualizer
      * Notifies this Visualizer about model-changes. Causes the Visualizer to
      * query the model about its new state.
      */
-    public void updateVisualizer()
+    public void updateVisualizer(MailerModel model)
     {
         addressField.setText(model.getToAddress());
         fromField.setText(model.getFromAddress());
@@ -526,13 +384,21 @@ public class MailerVisualizer extends AbstractVisualizer
         }
         JOptionPane.showMessageDialog(null, message, "Error", type);
     }
+
     /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
+     * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
      */
-    public void modifyTestElement(TestElement c)
+    public void stateChanged(ChangeEvent e)
     {
-        super.modifyTestElement(c);
-        model.storeModel(c);
+        if(e.getSource() instanceof MailerModel)
+        {
+            MailerModel testModel = (MailerModel)e.getSource();
+            updateVisualizer(testModel);
+        }
+        else
+        {
+            super.stateChanged(e);
+        }
     }
 
 }

@@ -77,9 +77,10 @@ public class JMeterTest extends TestCase
 				assertEquals("GUI-CLASS: Failed on " + item.getClass().getName(),"",
 						el2.getPropertyAsString("NOT"));
 			}
-            
+            log.debug("Saving element: " + el.getClass());
 			el = SaveService.createTestElement(SaveService.getConfigForTestElement(null,
 					el));
+            log.debug("Successfully saved");
 			item.configure(el);
 			assertEquals("CONFIGURE-TEST: Failed on " + item.getClass().getName(),
 					el.getPropertyAsString(TestElement.NAME), item.getName());
@@ -100,7 +101,6 @@ public class JMeterTest extends TestCase
 			}
 			try
 			{
-				log.debug("serializing class: "+serObj.getClass().getName());
 				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 				ObjectOutputStream out = new ObjectOutputStream(bytes);
 				out.writeObject(serObj);
