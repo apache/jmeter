@@ -280,5 +280,43 @@ public class WhileController extends GenericController implements Serializable
 			assertNull(nextName(controller));
         }
 
+		// Tests for Stack Overflow (bug 33954)
+		public void testAlwaysFailOK() throws Exception
+	    {
+			runTestAlwaysFail(true); // Should be OK
+	    }
+		
+		// TODO - re-enable when fix found
+		public void disabletestAlwaysFailBAD() throws Exception
+	    {
+			runTestAlwaysFail(false); // Currently fails
+	    }
+		
+		public void runTestAlwaysFail(boolean other)
+		{
+			testMode=true;
+			testModeResult=false;
+            LoopController controller = new LoopController();
+			controller.setContinueForever(true);
+			controller.setLoops(-1);
+            WhileController while_cont = new WhileController();
+			while_cont.setCondition("false");
+            while_cont.addTestElement(new TestSampler("one"));
+            while_cont.addTestElement(new TestSampler("two"));
+            controller.addTestElement(while_cont);			
+            if (other) controller.addTestElement(new TestSampler("three"));
+            controller.initialize();
+			try {
+				if (other){
+			    assertEquals("three",nextName(controller));
+				} else {
+					assertNull(nextName(controller));
+				}
+			} catch (StackOverflowError e){
+				//e.printStackTrace();
+				fail(e.toString());
+			}
+        }
+
    }
 }
