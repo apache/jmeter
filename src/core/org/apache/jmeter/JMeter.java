@@ -204,7 +204,11 @@ public class JMeter implements JMeterPlugin
     {
     }
 
-    /**
+	// Hack to allow automated tests to find when test has ended
+	transient boolean testEnded=false;
+	private JMeter parent;
+
+	/**
      * Starts up JMeter in GUI mode
      */
     public void startGui(CLOption testFile)
@@ -502,6 +506,7 @@ public class JMeter implements JMeterPlugin
     	// is running in NonGui mode
 		System.setProperty("JMeter.NonGui","true");    	
         JMeter driver = new JMeter();
+		driver.parent = this;
         PluginManager.install(this, false);
 
         if (testFile == null)
@@ -556,7 +561,7 @@ public class JMeter implements JMeterPlugin
             	Summariser summer=new Summariser(summariserName);
 				tree.add(tree.getArray()[0], summer);
             }
-            tree.add(tree.getArray()[0], new ListenToTest());
+            tree.add(tree.getArray()[0], new ListenToTest(parent));
             println("Created the tree successfully");
             JMeterEngine engine = null;
             if (!remoteStart)
@@ -660,7 +665,12 @@ public class JMeter implements JMeterPlugin
     private class ListenToTest implements TestListener, Runnable, Remoteable
     {
         int started = 0;
-        public synchronized void testEnded(String host)
+		private JMeter _parent;
+        private ListenToTest(JMeter parent) {
+			_parent=parent;
+		}
+
+		public synchronized void testEnded(String host)
         {
             started--;
             log.info("Remote host " + host + " finished");
@@ -706,8 +716,9 @@ public class JMeter implements JMeterPlugin
 				// ignored
             }
             println("... end of run");
-            System.exit(0);
+			_parent.testEnded=true;
         }
+
         /**
          * @see TestListener#testIterationStart(LoopIterationEvent)
          */
