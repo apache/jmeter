@@ -425,8 +425,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable
 	public JMeterContext getThreadContext() {
 		if (threadContext == null)
 		{
-			log.warn("ThreadContext was not set up - should only happen in JUnit testing..."
-					,new Throwable("Debug"));
+		/*
+		 * Only samplers have the thread context set up by JMeterThread at present,
+		 * so suppress the warning for now
+		 */
+//			log.warn("ThreadContext was not set up - should only happen in JUnit testing..."
+//					,new Throwable("Debug"));
 			threadContext = JMeterContextService.getContext();
 		}
 		return threadContext;
