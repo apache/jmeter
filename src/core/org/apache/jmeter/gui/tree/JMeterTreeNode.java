@@ -54,6 +54,9 @@
  */
 package org.apache.jmeter.gui.tree;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
 import java.util.Collection;
 
 import javax.swing.ImageIcon;
@@ -63,6 +66,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import org.apache.jmeter.gui.GUIFactory;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
@@ -113,10 +117,27 @@ public class JMeterTreeNode
     {
         try
         {
-            return GUIFactory.getIcon(
-                Class.forName(
-                    createTestElement().getPropertyAsString(
-                        TestElement.GUI_CLASS)));
+            if (createTestElement() instanceof TestBean)
+            {
+                try
+                {
+                    return new ImageIcon(Introspector.getBeanInfo(
+                        createTestElement().getClass())
+                            .getIcon(BeanInfo.ICON_COLOR_16x16));
+                }
+                catch (IntrospectionException e1)
+                {
+                    log.error("Can't obtain icon", e1);
+                    throw new Error(e1);
+                }
+            }
+            else
+            {
+                return GUIFactory.getIcon(
+                    Class.forName(
+                        createTestElement().getPropertyAsString(
+                            TestElement.GUI_CLASS)));
+            }
         }
         catch (ClassNotFoundException e)
         {
