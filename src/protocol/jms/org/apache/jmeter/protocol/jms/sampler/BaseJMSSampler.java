@@ -42,6 +42,7 @@ public abstract class BaseJMSSampler
 	public static final String CREDENTIALS = "jms.security_credentials";
 	public static final String ITERATIONS = "jms.iterations";
 	public static final String USE_AUTH = "jms.authenticate";
+	public static final String USE_PROPERTIES_FILE = "jms.jndi_properties";
 	public static String READ_RESPONSE = "jms.read_response";
 	public static String required = JMeterUtils.getResString("jms_auth_required");
 	public static String not_req = JMeterUtils.getResString("jms_auth_not_required");
@@ -229,5 +230,31 @@ public abstract class BaseJMSSampler
 	 */	
 	public boolean getReadResponseAsBoolean(){
 		return getPropertyAsBoolean(READ_RESPONSE);
+	}
+	
+	/**
+	 * if the sampler should use jndi.properties file, call
+	 * the method with true
+	 * @param properties
+	 */
+	public void setUseJNDIProperties(String properties){
+		setProperty(USE_PROPERTIES_FILE,properties);
+	}
+
+	/**
+	 * return whether the sampler should use properties file
+	 * instead of UI parameters.
+	 * @return
+	 */	
+	public String getUseJNDIProperties(){
+		return getPropertyAsString(USE_PROPERTIES_FILE);
+	}
+
+	/**
+	 * return the properties as boolean true/false.
+	 * @return
+	 */	
+	public boolean getUseJNDIPropertiesAsBoolean(){
+		return getPropertyAsBoolean(USE_PROPERTIES_FILE);
 	}
 }

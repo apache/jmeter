@@ -48,8 +48,9 @@ public class SubscriberSampler
 	static Logger log = LoggingManager.getLoggerForClass();
 	private transient ReceiveSubscriber SUBSCRIBER = null;
 
-	private StringBuffer BUFFER = null;
+	private StringBuffer BUFFER = new StringBuffer();
 	private transient int counter = 0;
+	private transient int loop = 0;
 	private transient boolean RUN = true;
 	
 	public static String CLIENT_CHOICE = "jms.client_choice";
@@ -88,7 +89,6 @@ public class SubscriberSampler
      * @see junit.framework.TestListener#startTest(junit.framework.Test)
      */
     public void testStarted() {
-    	this.BUFFER = new StringBuffer();
     }
 
 	public void testIterationStart(LoopIterationEvent event){
@@ -99,6 +99,7 @@ public class SubscriberSampler
         if (sub == null) {
             sub =
                 new OnMessageSubscriber(
+                    this.getUseJNDIPropertiesAsBoolean(),
                     this.getJNDIInitialContextFactory(),
                     this.getProviderUrl(),
                     this.getConnectionFactory(),
@@ -107,26 +108,31 @@ public class SubscriberSampler
                     this.getUsername(),
                     this.getPassword());
             sub.setMessageListener(this);
+            sub.resume();
             ClientPool.addClient(sub);
             ClientPool.put(this, sub);
+			log.info("SubscriberSampler.initListenerClient called");
+			log.info("loop count " + this.getIterations());
         }
         this.RUN = true;
-        log.info("SubscriberSampler.initClient called");
         return sub;
     }
 
-	public void initReceiveClient(){	
-		this.SUBSCRIBER = new ReceiveSubscriber(
-			this.getJNDIInitialContextFactory(),
-			this.getProviderUrl(),
-			this.getConnectionFactory(),
-			this.getTopic(),
-			this.getUseAuth(),
-			this.getUsername(),
-			this.getPassword());
-		ClientPool.addClient(this.SUBSCRIBER);
-		log.info("SubscriberSampler.initReceiveClient called");
-	}
+    public void initReceiveClient() {
+        this.SUBSCRIBER =
+            new ReceiveSubscriber(
+                this.getUseJNDIPropertiesAsBoolean(),
+                this.getJNDIInitialContextFactory(),
+                this.getProviderUrl(),
+                this.getConnectionFactory(),
+                this.getTopic(),
+                this.getUseAuth(),
+                this.getUsername(),
+                this.getPassword());
+        this.SUBSCRIBER.resume();
+        ClientPool.addClient(this.SUBSCRIBER);
+        log.info("SubscriberSampler.initReceiveClient called");
+    }
 	
     /* (non-Javadoc)
      * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
@@ -157,18 +163,16 @@ public class SubscriberSampler
 		result.setSampleLabel("SubscriberSampler:" + this.getTopic());
 		OnMessageSubscriber sub = initListenerClient();
 		
-		int loop = this.getIterationCount();
+		this.loop = this.getIterationCount();
 		
-		sub.resume();
         result.sampleStart();
-        while (this.RUN && this.count(0) < loop) {
+        while (this.RUN && this.count(0) < this.loop) {
             try {
-                Thread.sleep(0,500);
+                Thread.sleep(0,50);
             } catch (Exception e) {
-                // e.printStackTrace();
+                log.info(e.getMessage());
             }
         }
-		sub.pause();
 		result.sampleEnd();
         result.setResponseMessage(loop + " samples messages recieved");
         if (this.getReadResponseAsBoolean()){
@@ -197,16 +201,15 @@ public class SubscriberSampler
 			this.initReceiveClient();
 			this.SUBSCRIBER.start();
 		}
-		int loop = this.getIterationCount();
-		this.SUBSCRIBER.setLoop(loop);
+		this.loop = this.getIterationCount();
+		this.SUBSCRIBER.setLoop(this.loop);
 		
-		this.SUBSCRIBER.resume();
 		result.sampleStart();
-		while (this.SUBSCRIBER.count(0) < loop) {
+		while (this.SUBSCRIBER.count(0) < this.loop) {
 			try {
-				Thread.sleep(1);
+				Thread.sleep(0,50);
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.info(e.getMessage());
 			}
 		}
 		result.sampleEnd();
@@ -219,7 +222,7 @@ public class SubscriberSampler
 		result.setSuccessful(true);
 		result.setResponseCode(loop + " message(s) recieved successfully");
 		result.setSamplerData("Not applicable");
-		result.setSampleCount(loop);
+		result.setSampleCount(this.loop);
 
 		this.SUBSCRIBER.clear();
 		this.SUBSCRIBER.resetCount();
@@ -230,12 +233,15 @@ public class SubscriberSampler
 	 * The sampler implements MessageListener directly and sets itself
 	 * as the listener with the TopicSubscriber.
 	 */
-	public void onMessage(Message message){
+	public synchronized void onMessage(Message message){
 		try {
 			if (message instanceof TextMessage){
 				TextMessage msg = (TextMessage)message;
-				this.BUFFER.append(msg.getText());
-				count(1);
+				String content = msg.getText();
+				if (content != null){
+					this.BUFFER.append(content);
+					count(1);
+				}
 			}
 		} catch (JMSException e) {
 			log.error(e.getMessage());
