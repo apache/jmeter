@@ -191,11 +191,8 @@
     </echo>
   </target>
 
-  <target name="compile-core" depends="compile-jorphan" description="Compile JMeter core classes.">
+  <target name="compile-core" depends="compile-jorphan,update-version" description="Compile JMeter core classes.">
     <mkdir dir="${build.core}"/>
-    <replaceregexp file="${src.core}/org/apache/jmeter/util/JMeterUtils.java"
-    	match="VERSION = &quot;.*?&quot;"
-	replace="VERSION = &quot;${version}&quot;"/>
     <javac srcdir="${src.core}" destdir="${build.core}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <exclude name="org/apache/jmeter/util/JsseSSLManager.java" unless="jsse.present"/>
@@ -206,6 +203,13 @@
         <pathelement location="${build.jorphan}"/>
       </classpath>
     </javac>
+  </target>
+
+  <target name="update-version">
+    <echo>Updating version string</echo>
+    <replaceregexp file="${src.core}/org/apache/jmeter/util/JMeterVersion.java"
+    	match="VERSION = &quot;.*?&quot;"
+	replace="VERSION = &quot;${version}&quot;"/>
   </target>
 
   <target name="compile-components" depends="compile-jorphan,compile-core" description="Compile generic (protocol-independent) components.">
