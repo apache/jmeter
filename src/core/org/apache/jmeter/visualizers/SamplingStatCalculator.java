@@ -216,27 +216,46 @@ public class SamplingStatCalculator implements Serializable
        Sample s = null;
        synchronized(calculator)
        {
-          calculator.addValue(res.getTime());
-          calculator.addBytes((long)res.getResponseData().length);
-        setStartTime(res);         
-        long eCount = getCurrentSample().errorCount;
-        if (!res.isSuccessful())
-        {
-           eCount++;
-        } 
-        long endTime = getEndTime(res);
-        long howLongRunning = endTime - firstTime;
-        double throughput = 0;
-        if (howLongRunning <= 0)
-        {
+          long byteslength = 0;
+          // in case the sampler doesn't return the contents
+          // we see if the bytes was set
+          if (res.getResponseData() == null || res.getResponseData().length == 0){
+            byteslength = (long)res.getBytes();
+          } else {
+            byteslength = (long)res.getResponseData().length;
+          }
+          // if there was more than 1 loop in the sample, we
+          // handle it appropriately
+          if (res.getSampleCount() > 1){
+          	long time = res.getTime() / res.getSampleCount();
+          	long resbytes = byteslength/(long)res.getSampleCount();
+          	for (int idx=0; idx < res.getSampleCount(); idx++){
+				calculator.addValue(time);
+				calculator.addBytes(resbytes);
+          	}
+          } else {
+			calculator.addValue(res.getTime());
+			calculator.addBytes(byteslength);
+          }
+          setStartTime(res);         
+          long eCount = getCurrentSample().errorCount;
+          if (!res.isSuccessful())
+          {
+             eCount++;
+          } 
+          long endTime = getEndTime(res);
+          long howLongRunning = endTime - firstTime;
+          double throughput = 0;
+          if (howLongRunning <= 0)
+          {
             throughput = Double.MAX_VALUE;
-        }
-        throughput = (double) ((double)calculator.getCount() / (double)howLongRunning) * 1000.0;
-        if(throughput > maxThroughput)
-        {
-           maxThroughput = throughput;
-        }
-        s = new Sample(null,res.getTime(),(long)calculator.getMean(),
+          }
+          throughput = (double) ((double)calculator.getCount() / (double)howLongRunning) * 1000.0;
+          if(throughput > maxThroughput)
+          {
+             maxThroughput = throughput;
+          }
+          s = new Sample(null,res.getTime(),(long)calculator.getMean(),
               (long)calculator.getStandardDeviation(),
               calculator.getMedian().longValue(),
               calculator.getPercentPoint(0.500).longValue(),
@@ -245,7 +264,7 @@ public class SamplingStatCalculator implements Serializable
               res.isSuccessful(),
               storedValues.size()+1,
               endTime);
-        storedValues.add(s);
+         storedValues.add(s);
        }
        return s;
     }
