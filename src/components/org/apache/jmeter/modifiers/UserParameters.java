@@ -16,19 +16,18 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
-public class UserParameters extends AbstractTestElement implements Serializable, PreProcessor, LoopIterationListener
+public class UserParameters
+    extends AbstractTestElement
+    implements Serializable, PreProcessor, LoopIterationListener
 {
 
     public static final String NAMES = "UserParameters.names";
     public static final String THREAD_VALUES = "UserParameters.thread_values";
     public static final String PER_ITERATION = "UserParameters.per_iteration";
     private int counter = 0;
-	private Integer lock = new Integer(0);
+    private Integer lock = new Integer(0);
 
     public CollectionProperty getNames()
     {
@@ -41,8 +40,9 @@ public class UserParameters extends AbstractTestElement implements Serializable,
     }
 
     /**
-     * The list of names of the variables to hold values.  This list must come in
-     * the same order as the sub lists that are given to setThreadLists(List).
+     * The list of names of the variables to hold values.  This list must come
+     * in the same order as the sub lists that are given to
+     * {@link #setThreadLists(Collection)}.
      */
     public void setNames(Collection list)
     {
@@ -50,17 +50,18 @@ public class UserParameters extends AbstractTestElement implements Serializable,
     }
 
     /**
-         * The list of names of the variables to hold values.  This list must come in
-         * the same order as the sub lists that are given to setThreadLists(List).
-         */
+     * The list of names of the variables to hold values.  This list must come
+     * in the same order as the sub lists that are given to
+     * {@link #setThreadLists(CollectionProperty)}.
+     */
     public void setNames(CollectionProperty list)
     {
         setProperty(list);
     }
 
     /**
-     * The thread list is a list of lists.  Each list within the parent list is a
-     * collection of values for a simulated user.  As many different sets of 
+     * The thread list is a list of lists.  Each list within the parent list is
+     * a collection of values for a simulated user.  As many different sets of 
      * values can be supplied in this fashion to cause JMeter to set different 
      * values to variables for different test threads.
      */
@@ -70,11 +71,11 @@ public class UserParameters extends AbstractTestElement implements Serializable,
     }
 
     /**
-         * The thread list is a list of lists.  Each list within the parent list is a
-         * collection of values for a simulated user.  As many different sets of 
-         * values can be supplied in this fashion to cause JMeter to set different 
-         * values to variables for different test threads.
-         */
+     * The thread list is a list of lists.  Each list within the parent list is
+     * a collection of values for a simulated user.  As many different sets of 
+     * values can be supplied in this fashion to cause JMeter to set different 
+     * values to variables for different test threads.
+     */
     public void setThreadLists(CollectionProperty threadLists)
     {
         setProperty(threadLists);
@@ -82,10 +83,13 @@ public class UserParameters extends AbstractTestElement implements Serializable,
 
     private CollectionProperty getValues()
     {
-        CollectionProperty threadValues = (CollectionProperty) getProperty(THREAD_VALUES);
+        CollectionProperty threadValues =
+            (CollectionProperty) getProperty(THREAD_VALUES);
         if (threadValues.size() > 0)
         {
-            return (CollectionProperty) threadValues.get(JMeterContextService.getContext().getThreadNum() % threadValues.size());
+            return (CollectionProperty) threadValues.get(
+                JMeterContextService.getContext().getThreadNum()
+                    % threadValues.size());
         }
         else
         {
@@ -118,7 +122,8 @@ public class UserParameters extends AbstractTestElement implements Serializable,
             log.debug("Running up named: " + getName());
             PropertyIterator namesIter = getNames().iterator();
             PropertyIterator valueIter = getValues().iterator();
-            JMeterVariables jmvars = JMeterContextService.getContext().getVariables();
+            JMeterVariables jmvars =
+                JMeterContextService.getContext().getVariables();
             while (namesIter.hasNext() && valueIter.hasNext())
             {
                 String name = namesIter.next().getStringValue();
@@ -130,7 +135,7 @@ public class UserParameters extends AbstractTestElement implements Serializable,
     }
 
     /**
-     * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationStart(LoopIterationEvent)
+     * @see LoopIterationListener#iterationStart(LoopIterationEvent)
      */
     public void iterationStart(LoopIterationEvent event)
     {
@@ -143,7 +148,7 @@ public class UserParameters extends AbstractTestElement implements Serializable,
     /* This method doesn't appear to be used anymore.
      * jeremy_a@bigfoot.com  03 May 2003
      * 
-     * @see org.apache.jmeter.testelement.ThreadListener#setJMeterVariables(org.apache.jmeter.threads.JMeterVariables)
+     * @see ThreadListener#setJMeterVariables(JMeterVariables)
     public void setJMeterVariables(JMeterVariables jmVars)
     {}
      */
@@ -159,11 +164,10 @@ public class UserParameters extends AbstractTestElement implements Serializable,
     }
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.AbstractTestElement#mergeIn(org.apache.jmeter.testelement.TestElement)
+     * @see AbstractTestElement#mergeIn(TestElement)
      */
     protected void mergeIn(TestElement element)
     {
         // super.mergeIn(element);
     }
-
 }

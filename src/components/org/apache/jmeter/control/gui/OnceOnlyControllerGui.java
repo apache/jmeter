@@ -53,64 +53,49 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control.gui;
+
 import org.apache.jmeter.control.OnceOnlyController;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Kevin Hammond
- *@created   $Date$
- *@version   $Revision$
- ***************************************/
-
+/**
+ * @author    Kevin Hammond
+ * @version   $Revision$
+ */
 public class OnceOnlyControllerGui extends AbstractControllerGui
 {
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public OnceOnlyControllerGui()
-	{
-		init();
-	}
+    public OnceOnlyControllerGui()
+    {
+        init();
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public TestElement createTestElement()
-	{
-		OnceOnlyController oc = new OnceOnlyController();
-		modifyTestElement(oc);
-		return oc;
-	}
+    public TestElement createTestElement()
+    {
+        OnceOnlyController oc = new OnceOnlyController();
+        modifyTestElement(oc);
+        return oc;
+    }
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement oc)
     {
         configureTestElement(oc);
     }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("once_only_controller_title");
-	}
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("once_only_controller_title");
+    }
 
-	private void init()
-	{
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+    private void init()
+    {
+        setLayout(
+            new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
         setBorder(makeBorder());
-		add(makeTitlePanel());
-	}
+        add(makeTitlePanel());
+    }
 }
