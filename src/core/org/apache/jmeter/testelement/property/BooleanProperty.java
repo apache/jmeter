@@ -64,7 +64,7 @@ public class BooleanProperty extends AbstractProperty
      */
     public boolean getBooleanValue()
     {
-        return super.getBooleanValue();
+        return value;
     }
 
 }
