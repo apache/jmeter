@@ -1481,18 +1481,21 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 <property name="Script file" required="No">A file containing the BeanShell script to run</property>
 <property name="Script" required="No">The BeanShell script to run</property>
 </properties>
-<p>The following variables are defined to the script:
+<p>There's a <a href="../demos/BeanShellAssertion.bsh">sample script</a> you can try.</p>
+<p>The following variables are defined to the script. 
+These are strings unless otherwise noted:
 <ul>
+<li>log - the Logger Object. (e.g.) log.warn("Message"[,Throwable])</li>
 	<li>Response - the response Object; read-write</li>
 	<li>Failure - boolean; read-write; used to set the Assertion status</li>
 	<li>FailureMessage - String; read-write; used to set the Assertion message</li>
-	<li>ResponseData - the response body</li>
+	<li>ResponseData - the response body (byte [])</li>
 	<li>ResponseCode - e.g. 200</li>
 	<li>ResponseMessage - e.g. OK</li>
 	<li>ResponseHeaders - contains the HTTP headers</li>
-	<li>RequestHeaders - containse the HTTP headers sent to the server</li>
+	<li>RequestHeaders - contains the HTTP headers sent to the server</li>
 	<li>SampleLabel</li>
-	<li>SamplerData</li>
+	<li>SamplerData - data that was sent to the server</li>
 </ul>
 </p>
 </component>
