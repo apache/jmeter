@@ -186,6 +186,8 @@
   <property name="src.htmlparser" value="src/htmlparser"/>
   <property name="src.tcp" value="src/protocol/tcp"/>
   <property name="src.examples" value="src/examples"/>
+  <property name="src.monitor.components" value="src/monitor/components"/>
+  <property name="src.monitor.model" value="src/monitor/model"/>
 
   <!-- Where the documentation sources live -->
   <property name="src.docs" value="xdocs"/>
@@ -206,6 +208,8 @@
     <pathelement location="${src.htmlparser}"/>
     <pathelement location="${src.tcp}"/>
     <pathelement location="${src.examples}"/>
+    <pathelement location="${src.monitor.components}"/>
+    <pathelement location="${src.monitor.model}"/>
   </path>
 
   <!-- Temporary build directories: where the .class live -->
@@ -222,6 +226,8 @@
   <property name="build.htmlparser" location="build/htmlparser"/>
   <property name="build.tcp" location="build/protocol/tcp"/>
   <property name="build.examples" location="build/examples"/>
+  <property name="build.monitor.components" location="build/monitor/components"/>
+  <property name="build.monitor.model" location="build/monitor/model"/>
   
   <!-- Path prefix to allow Anakia to find stylesheets if running under Eclipse -->
   <!--
@@ -561,6 +567,33 @@
   <target name="compile-examples" depends="compile-jorphan,compile-core" description="Compile example components.">
     <mkdir dir="${build.examples}"/>
     <javac srcdir="${src.examples}" destdir="${build.examples}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+      <include name="**/*.java"/>
+      <classpath>
+        <path refid="classpath"/>
+        <pathelement location="${build.jorphan}"/>
+        <pathelement location="${build.core}"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="compile-monitor" depends="compile-monitor-components,compile-monitor-model" description="Compile Monitor components.">
+  </target>
+  
+  <target name="compile-monitor-components" depends="compile-jorphan,compile-core">
+    <mkdir dir="${build.monitor.components}"/>
+    <javac srcdir="${src.monitor.components}" destdir="${build.monitor.components}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+      <include name="**/*.java"/>
+      <classpath>
+        <path refid="classpath"/>
+        <pathelement location="${build.jorphan}"/>
+        <pathelement location="${build.core}"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="compile-monitor-model" depends="compile-jorphan,compile-core">
+    <mkdir dir="${build.monitor.model}"/>
+    <javac srcdir="${src.monitor.model}" destdir="${build.monitor.model}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -1047,6 +1080,8 @@ some of its classes - at present JMeter can only run from jar files.
    gump.run = ${gump.run}
    java.awt.headless = ${java.awt.headless}
    test.headless = ${test.headless}
+   user.dir = ${user.dir}
+   basedir = ${basedir}
    </echo>
    <java classname="org.apache.jorphan.test.AllTests" fork="yes" dir="${basedir}/bin">
       <classpath>
