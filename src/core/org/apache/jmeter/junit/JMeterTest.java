@@ -155,6 +155,7 @@ public class JMeterTest extends TestCase
                 .iterator();
         List objects = new LinkedList();
         String n="";
+        boolean caughtError=true;
     try {
         while (classes.hasNext())
         {
@@ -209,9 +210,12 @@ public class JMeterTest extends TestCase
 				}
             }
         }
+        caughtError=false;
     } finally {
-    	System.out.println("\nLast class="+n);
-    	System.out.println("objects.size="+objects.size());
+    	if (caughtError){
+			System.out.println("\nLast class="+n);
+			System.out.println("objects.size="+objects.size());
+    	}
     }
         return objects;
     }
