@@ -192,7 +192,7 @@ public class JMeterTest extends JMeterTestCase
 			    (title.indexOf("(BETA")  == -1)
 			)
 			{// No, not a work in progress ...
-				assertTrue("Component ref should contain entry for "+title,ct);
+				assertTrue("component_reference.xml needs '"+title+"' anchor for "+guiItem.getClass().getName(),ct);
 			}
 		}
 	}
