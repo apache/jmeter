@@ -1,7 +1,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <!-- Content Stylesheet for Site -->
-
+<!--
+	Java cannot currently handle HTML tags of the form <xxx />, e.g. <br/>;
+	the trailing > characters are output to the display, which messes it up.
+	Java does handle <br></br> OK, but as the output from this stylesheet
+	does not have to be XHTML, for simplicity the trailing slashes have been removed.
+-->
 	 ## Defined variables
 	 #set ($bodybg = "#ffffff")
 	 #set ($bodyfg = "#000000")
@@ -116,19 +121,19 @@
 	 <div align="left">
 	 <table cellspacing="4" cellpadding="0" border="0">
 	 <tr>
-		<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
-		<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
-		<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+		<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"></td>
+		<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"></td>
+		<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"></td>
 	 </tr>
 	 <tr>
-		<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+		<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"></td>
 		<td bgcolor="#ffffff"><pre>$escape.getText($value.getText())</pre></td>
-		<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+		<td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"></td>
 	 </tr>
 	 <tr>
-		<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
-		<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
-		<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
+		<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"></td>
+		<td bgcolor="#023264" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"></td>
+		<td bgcolor="#023264" width="1" height="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"></td>
 	 </tr>
 	 </table>
 	 </div>
@@ -171,12 +176,12 @@
 #end
 
 #macro (figure $figure)
-	<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img src="$sshotdir/$figure.getAttributeValue("image")"><br/>
+	<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img src="$sshotdir/$figure.getAttributeValue("image")"><br>
 	<font size="-1">#runloop($figure)</font></td></tr></table></p>
 #end
 
 #macro (example $example)
-	<a name="$example.getAttributeValue("anchor")"/>
+	<a name="$example.getAttributeValue("anchor")">
 	<p><b>$example.getAttributeValue("title")</b></p>
 	#runloop($example)
 #end
@@ -263,7 +268,7 @@
 				#end
 		  #end
 		</td></tr>
-		<tr><td><br/></td></tr>
+		<tr><td><br></td></tr>
 	 </table>
 	<hr>
 #end
@@ -286,7 +291,7 @@
 		  #end
 		  </blockquote>
 		</td></tr>
-		<tr><td><br/></td></tr>
+		<tr><td><br></td></tr>
 	 </table>
 #end
 
@@ -329,7 +334,7 @@
 		  </blockquote>
 		  </p>
 		</td></tr>
-		<tr><td><br/></td></tr>
+		<tr><td><br></td></tr>
 	 </table>
 #end
 
@@ -377,19 +382,19 @@
 #macro (getProjectImage)
 #if ($project.getChild("logo"))
 <td align="left">
-<a href="http://jakarta.apache.org"><img src="http://jakarta.apache.org/images/jakarta-logo.gif" border="0"/></a>
+<a href="http://jakarta.apache.org"><img src="http://jakarta.apache.org/images/jakarta-logo.gif" border="0"></a>
 </td>
 <td align="right">
 #set ( $logoString = $project.getChild("logo").getAttributeValue("href") )
 #if ( $logoString.startsWith("/") )
-<a href="$project.getAttributeValue("href")"><img src="$relativePath$logoString" alt="$project.getChild("logo").getText()" border="0"/></a>
+<a href="$project.getAttributeValue("href")"><img src="$relativePath$logoString" alt="$project.getChild("logo").getText()" border="0"></a>
 #else
-<a href="$project.getAttributeValue("href")"><img src="$relativePath/$logoString" alt="$project.getChild("logo").getText()" border="0"/></a>
+<a href="$project.getAttributeValue("href")"><img src="$relativePath/$logoString" alt="$project.getChild("logo").getText()" border="0"></a>
 #end
 </td>
 #else
 <td colspan="2">
-<a href="http://jakarta.apache.org"><img src="http://jakarta.apache.org/images/jakarta-logo.gif" align="left" border="0"/></a>
+<a href="http://jakarta.apache.org"><img src="http://jakarta.apache.org/images/jakarta-logo.gif" align="left" border="0"></a>
 </td>
 #end
 #end
@@ -400,7 +405,7 @@
 	 <!-- ====================================================================== -->
 	 <html>
 		  <head>
-				<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+				<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
 				#set ($authors = $root.getChild("properties").getChildren("author"))
 				#foreach ( $au in $authors )
@@ -422,13 +427,13 @@
 				</table>
 				<table border="0" width="600" cellspacing="4">
 					 <tr><td>
-						  <hr noshade="" size="1"/>
+						  <hr noshade="" size="1">
 					 </td></tr>
 
 					 <tr>
 						  <td align="left" valign="top">
 						  #pagelinks()
-						  <br/>
+						  <br>
 						  #if ($root.getAttributeValue("index") == "yes")
 							#makeIndex($root.getChild("body").getChildren("section"))
 						  #end
@@ -436,13 +441,13 @@
 						  #foreach ( $section in $allSections )
 								#section ($section)
 						  #end
-						  <br/>
+						  <br>
 						  #pagelinks()
 						  </td>
 					 </tr>
 
 					 <tr><td>
-						  <hr noshade="" size="1"/>
+						  <hr noshade="" size="1">
 					 </td></tr>
 					 <tr>
 					 <td>
