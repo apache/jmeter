@@ -64,6 +64,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 //import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.jmeter.config.Argument;
@@ -72,6 +73,8 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.parser.HTMLParseException;
+import org.apache.jmeter.protocol.http.parser.HTMLParser;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
@@ -139,8 +142,6 @@ public class HTTPSampler extends AbstractSampler
     private static final int MAX_REDIRECTS= 5; // As recommended by RFC 2068
     protected static String encoding= "iso-8859-1";
     private static final PostWriter postWriter= new PostWriter();
-    transient protected HttpURLConnection conn;
-    private HTTPSamplerFull imageSampler;
 
     static {
         System.setProperty(
@@ -498,12 +499,40 @@ public class HTTPSampler extends AbstractSampler
      */
     public SampleResult sample(Entry e)
     {
-        return sample(0);
+        return sample();
     }
 
     public SampleResult sample()
     {
-        return sample(0);
+        try
+        {
+            SampleResult res= sample(getUrl(), getMethod(), false);
+            res.setSampleLabel(getName());
+            return res;
+        }
+        catch (MalformedURLException e)
+        {
+            return errorResult(e, 0);
+        }
+    }
+
+    /**
+     * Obtain a result that will help inform the user that an error has occured
+     * during sampling, and how long it took to detect the error.
+     * 
+     * @param e Exception representing the error.
+     * @return a sampling result useful to inform the user about the exception.
+     */
+    private HTTPSampleResult errorResult(Throwable e, long time)
+    {
+        HTTPSampleResult res= new HTTPSampleResult();
+        res.setDataType(HTTPSampleResult.TEXT);
+        res.setResponseData(e.toString().getBytes());
+        res.setResponseCode(NON_HTTP_RESPONSE_CODE);
+        res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
+        res.setTime(time);
+        res.setSuccessful(false);
+        return res;
     }
 
     public URL getUrl() throws MalformedURLException
@@ -622,7 +651,7 @@ public class HTTPSampler extends AbstractSampler
     protected HttpURLConnection setupConnection(
         URL u,
         String method,
-        SampleResult res)
+        HTTPSampleResult res)
         throws IOException
     {
         HttpURLConnection conn;
@@ -678,13 +707,21 @@ public class HTTPSampler extends AbstractSampler
         if (res != null)
         {
             StringBuffer sb= new StringBuffer();
-            sb.append(this.toString());
+            if (method.equals(HTTPSampler.POST))
+            {
+                sb.append("Query data:\n");
+                sb.append(this.getQueryString());
+                sb.append('\n');
+            }
             if (cookies != null)
             { //TODO put these in requestHeaders.
                 sb.append("\nCookie Data:\n");
                 sb.append(cookies);
+                sb.append('\n');
             }
             res.setSamplerData(sb.toString());
+            res.setURL(u);
+            res.setHTTPMethod(method);
             res.setRequestHeaders("TODO"); //TODO
         }
         setConnectionAuthorization(conn, u, getAuthManager());
@@ -941,26 +978,6 @@ public class HTTPSampler extends AbstractSampler
         }
     }
 
-    /**
-     * Get the response code of the URL connection and divide it by 100 thus
-     * returning 2(for 2xx response codes), 3(for 3xx reponse codes), etc
-     *
-     * @param conn  <code>HttpURLConnection</code> of URL request
-     * @param res   where all results of sampling will be stored
-     * @return      HTTP response code divided by 100
-     */
-    private int getResponseCode(HttpURLConnection conn, SampleResult res)
-        throws IOException
-    {
-        int errorLevel= 200;
-        String message= null;
-        errorLevel= ((HttpURLConnection)conn).getResponseCode();
-        message= ((HttpURLConnection)conn).getResponseMessage();
-        res.setResponseCode(Integer.toString(errorLevel));
-        res.setResponseMessage(message);
-        return errorLevel;
-    }
-
     public void removeArguments()
     {
         setProperty(
@@ -968,138 +985,82 @@ public class HTTPSampler extends AbstractSampler
     }
 
     /**
-     * Follow redirection manually. Normally if the web server does a
-     * redirection the intermediate page is not returned. Only the resultant
-     * page and the response code for the page will be returned. With
-     * redirection turned off, the response code of 3xx will be returned
-     * together with a "Location" header-value pair to indicate that the
-     * "Location" value needs to be followed to get the resultant page.
-     *
-     * @param conn                       connection
-     * @param u
-     * @exception MalformedURLException  if URL is not understood
-     */
-    private void redirectUrl(HttpURLConnection conn, URL u)
-        throws MalformedURLException
-    {
-        String loc= conn.getHeaderField("Location");
-        if (loc != null)
-        {
-            if (loc.indexOf("http") == -1)
-            {
-                String tempURL= u.toString();
-                if (loc.startsWith("/"))
-                {
-                    int ind= tempURL.indexOf("//") + 2;
-                    loc=
-                        tempURL.substring(0, tempURL.indexOf("/", ind) + 1)
-                            + loc.substring(1);
-                }
-                else
-                {
-                    loc=
-                        u.toString().substring(
-                            0,
-                            u.toString().lastIndexOf('/') + 1)
-                            + loc;
-                }
-            }
-        }
-
-        URL newUrl= new URL(loc);
-        setMethod(GET); /* According to RFC 2068, this is an error, but it's
-        		           what all browsers seem to do.
-        		        */
-        setProtocol(newUrl.getProtocol());
-        setDomain(newUrl.getHost());
-        setPort(newUrl.getPort());
-        setPath(newUrl.getFile());
-        removeArguments();
-        parseArguments(newUrl.getQuery());
-    }
-
-    /**
-     * Establish the HTTP connection.
+     * Samples the URL passed in and stores the result in
+     * <code>HTTPSampleResult</code>, following redirects and downloading
+     * page resources as appropriate.
      * <p>
-     * May need to try several times if it hits a busy port. The time returned
-     * is the time at which the last attempt (the one that succeeded) started.
-     * 
-     * @return time at which connection establishment began
-     * @throws IOException
-     */
-    protected long connect() throws IOException
-    {
-        // Repeatedly try to connect:
-        for (int retry= 1; retry <= 10; retry++)
-        {
-            try
-            {
-                conn= setupConnection(getUrl(), getMethod(), null);
-                long time= System.currentTimeMillis();
-                conn.connect();
-                return time;
-            }
-            catch (BindException e)
-            {
-                log.debug("Bind exception, try again");
-                if (retry == 10)
-                {
-                    log.error("Can't connect", e);
-                    throw e;
-                }
-                conn.disconnect();
-                conn= null;
-                this.setUseKeepAlive(false);
-                continue; // try again
-            }
-            catch (IOException e)
-            {
-                log.debug("Connection failed, giving up");
-                conn.disconnect();
-                conn= null;
-                throw e;
-            }
-        }
-        // We should never get here, but in case...
-        throw new BindException();
-    }
-
-    /**
-     * Samples <code>Entry</code> passed in and stores the result in
-     * <code>SampleResult</code>.
+     * When getting a redirect target, redirects are not followed and 
+     * resources are not downloaded. The calling sample will take care of this.
      *
-     * @param redirects   the level of redirection we're processing (0 means
-     *                    original request) -- just used to prevent
-     *                    an infinite loop.
-     * @return            results of the sampling
+     * @param url               URL to sample
+     * @param method            HTTP method: GET, POST,...
+     * @param areFollowingRedirect whether we're getting a redirect target
+     * @return                  results of the sampling
      */
-    private SampleResult sample(int redirects)
+    private HTTPSampleResult sample(
+        URL url,
+        String method,
+        boolean areFollowingRedirect)
     {
-        log.debug("Start : sample, redirects =" + redirects);
+        HttpURLConnection conn= null;
         long t0= System.currentTimeMillis(); // connection start time
-        SampleResult res= new SampleResult();
-        URL url= null;
+        HTTPSampleResult res= new HTTPSampleResult();
+
+        log.debug("Start : sample");
 
         try
         {
-            url= getUrl();
-            res.setSampleLabel(getName());
+            res.setSampleLabel(url.toString());
             if (log.isDebugEnabled())
             {
                 log.debug("sample2 : sampling url - " + url);
             }
-            conn= setupConnection(url, getMethod(), res);
 
             // Sampling proper - establish the connection and read the response:
-            t0= connect();
-            if (getMethod().equals(HTTPSampler.POST)) {
+            // Repeatedly try to connect:
+            int retry;
+            for (retry= 1; retry <= 10; retry++)
+            {
+                try
+                {
+                    conn= setupConnection(url, method, res);
+                    t0= System.currentTimeMillis();
+                    conn.connect();
+                    break;
+                }
+                catch (BindException e)
+                {
+                    log.debug("Bind exception, try again");
+                    if (retry == 10)
+                    {
+                        log.error("Can't connect", e);
+                        throw e;
+                    }
+                    conn.disconnect();
+                    this.setUseKeepAlive(false);
+                    continue; // try again
+                }
+                catch (IOException e)
+                {
+                    log.debug("Connection failed, giving up");
+                    conn.disconnect();
+                    throw e;
+                }
+            }
+            if (retry > 10)
+            {
+                // This should never happen, but...
+                throw new BindException();
+            }
+            if (getMethod().equals(HTTPSampler.POST))
+            {
                 sendPostData(conn);
             }
             byte[] responseData= readResponse(conn);
             long t1= System.currentTimeMillis(); // response read finish time
             // Done with the sampling proper.
 
-            // Now collect the results into the SampleResult:
+            // Now collect the results into the HTTPSampleResult:
 
             res.setResponseData(responseData);
 
@@ -1113,60 +1074,61 @@ public class HTTPSampler extends AbstractSampler
             res.setContentType(ct);
             if (ct.startsWith("image/"))
             {
-                res.setDataType(SampleResult.BINARY);
+                res.setDataType(HTTPSampleResult.BINARY);
             }
             else
             {
-                res.setDataType(SampleResult.TEXT);
+                res.setDataType(HTTPSampleResult.TEXT);
             }
 
             res.setResponseHeaders(getResponseHeaders(conn));
+            if (res.isRedirect())
+            {
+                res.setRedirectLocation(conn.getHeaderField("Location"));
+            }
 
             res.setTime(t1 - t0);
 
             // Store any cookies received in the cookie manager:
             saveConnectionCookies(conn, url, getCookieManager());
 
-            // Process redirects OR download images:
-            if (301 <= errorLevel && errorLevel <= 303)
+            if (!areFollowingRedirect)
             {
-                if (redirects >= MAX_REDIRECTS)
+                boolean didFollowRedirects= false;
+                if (res.isRedirect())
                 {
-                    throw new IOException("Maximum number of redirects exceeded");
+                    if (log.isDebugEnabled())
+                    {
+                        log.debug(
+                            "Location set to - " + res.getRedirectLocation());
+                    }
+                    if (getFollowRedirects())
+                    {
+                        res= followRedirects(res);
+                        didFollowRedirects= true;
+                    }
                 }
 
-                if (getFollowRedirects())
+                if (isImageParser()
+                    && res.getDataType().equals(HTTPSampleResult.TEXT))
                 {
-                    redirectUrl(conn, url);
-                    SampleResult redirect= res;
-                    res= sample(redirects + 1);
-                    res.addSubResult(redirect);
-                    res.setTime(res.getTime() + redirect.getTime());
+                    // If we followed redirects, we already have a container:
+                    boolean createContainerResults= ! didFollowRedirects;
+                    
+                    res= downloadPageResources(res, createContainerResults);
                 }
             }
-            else
-            {
-                if (isImageParser())
-                {
-                    if (imageSampler == null)
-                    {
-                        imageSampler= new HTTPSamplerFull();
-                    }
-                    res= imageSampler.downloadEmbeddedResources(res, this);
-                }
-            }
-            log.debug("End : sample, redirects=" + redirects);
+
+            log.debug("End : sample");
             return res;
         }
-        catch (Exception ex)
+        catch (MalformedURLException e)
         {
-            log.warn(ex.getMessage(), ex);
-            res.setDataType(SampleResult.TEXT);
-            res.setResponseData(ex.toString().getBytes());
-            res.setResponseCode(NON_HTTP_RESPONSE_CODE);
-            res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
-            res.setTime(System.currentTimeMillis() - t0);
-            res.setSuccessful(false);
+            return errorResult(e, System.currentTimeMillis() - t0);
+        }
+        catch (IOException e)
+        {
+            return errorResult(e, System.currentTimeMillis() - t0);
         }
         finally
         {
@@ -1180,9 +1142,114 @@ public class HTTPSampler extends AbstractSampler
             catch (Exception e)
             {
             }
-
         }
-        log.debug("End : sample, redirects=" + redirects);
+    }
+
+    private HTTPSampleResult followRedirects(HTTPSampleResult res)
+    {
+        HTTPSampleResult totalRes= new HTTPSampleResult(res);
+        HTTPSampleResult lastRes= res;
+
+        int redirect;
+        for (redirect= 0; redirect < MAX_REDIRECTS; redirect++)
+        {
+            String location= lastRes.getRedirectLocation();
+            try
+            {
+                lastRes=
+                    sample(
+                        new URL(lastRes.getURL(), location),
+                        HTTPSampler.GET,
+                        true);
+            }
+            catch (MalformedURLException e)
+            {
+                lastRes= errorResult(e, 0);
+            }
+            totalRes.addSubResult(lastRes);
+            totalRes.setTime(totalRes.getTime() + lastRes.getTime());
+
+            if (!lastRes.isRedirect())
+            {
+                break;
+            }
+        }
+        if (redirect == MAX_REDIRECTS)
+        {
+            lastRes=
+                errorResult(
+                    new IOException("Maximum number of redirects exceeded."),
+                    0);
+            totalRes.addSubResult(lastRes);
+        }
+
+        // Now populate the any totalRes fields that need to
+        // come from lastRes:
+
+        totalRes.setSampleLabel(
+            totalRes.getSampleLabel() + "->" + lastRes.getSampleLabel());
+        totalRes.setURL(lastRes.getURL());
+        totalRes.setHTTPMethod(lastRes.getHTTPMethod());
+        totalRes.setRequestHeaders(lastRes.getRequestHeaders());
+
+        totalRes.setResponseData(lastRes.getResponseData());
+        totalRes.setResponseCode(lastRes.getResponseCode());
+        totalRes.setSuccessful(lastRes.isSuccessful());
+        totalRes.setResponseMessage(lastRes.getResponseMessage());
+        totalRes.setDataType(lastRes.getDataType());
+        totalRes.setResponseHeaders(lastRes.getResponseHeaders());
+        return totalRes;
+    }
+
+    private HTTPSampleResult downloadPageResources(
+        HTTPSampleResult res,
+        boolean createContainerResult)
+    {
+        Iterator urls= null;
+        try
+        {
+            urls=
+                HTMLParser.getParser().getEmbeddedResourceURLs(
+                    res.getResponseData(),
+                    res.getURL());
+        }
+        catch (HTMLParseException e)
+        {
+            // Don't break the world just because this failed:
+            res.addSubResult(errorResult(e, 0));
+            res.setSuccessful(false);
+        }
+
+        // Iterate through the URLs and download each image:
+        if (urls != null && urls.hasNext())
+        {
+            if (createContainerResult) {
+                res= new HTTPSampleResult(res);
+            }
+
+            while (urls.hasNext())
+            {
+                Object binURL= urls.next();
+                try
+                {
+                    HTTPSampleResult binRes=
+                        sample((URL)binURL, HTTPSampler.GET, false);
+                    res.addSubResult(binRes);
+                    res.setTime(res.getTime() + binRes.getTime());
+                    res.setSuccessful(
+                        res.isSuccessful() && binRes.isSuccessful());
+                }
+                catch (ClassCastException e)
+                {
+                    res.addSubResult(
+                        errorResult(
+                            new Exception(binURL + " is not a correct URI"),
+                            0));
+                    res.setSuccessful(false);
+                    continue;
+                }
+            }
+        }
         return res;
     }
 
