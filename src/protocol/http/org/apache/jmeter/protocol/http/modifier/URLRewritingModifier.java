@@ -89,7 +89,7 @@ public class URLRewritingModifier
 	{
 		try
 		{
-			case1 = compiler.compile(argName + "=([^\">& \n\r]*)[& \\n\\r\">]?$?");
+			case1 = compiler.compile(argName + "=([^\"'>& \n\r]*)[& \\n\\r\"'>]?$?");
 			case2 =
 				compiler.compile(
 					"[Nn][Aa][Mm][Ee]=\""
@@ -155,6 +155,26 @@ public class URLRewritingModifier
 		{
 			String html =
 				"<a href=\"http://server.com/index.html?session_id=jfdkjdkfjddkfdfjkdjfdf\">";
+			response = new SampleResult();
+			response.setResponseData(html.getBytes());
+			URLRewritingModifier mod = new URLRewritingModifier();
+			mod.setArgumentName("session_id");
+			HTTPSampler sampler = new HTTPSampler();
+			sampler.setDomain("server.com");
+			sampler.setPath("index.html");
+			sampler.setMethod(HTTPSampler.GET);
+			sampler.setProtocol("http");
+			mod.modifyEntry(sampler, response);
+			Arguments args = sampler.getArguments();
+			assertEquals(
+				"jfdkjdkfjddkfdfjkdjfdf",
+				((Argument) args.getArguments().get(0)).getValue());
+		}
+		
+		public void testGrabSessionId3() throws Exception
+		{
+			String html =
+				"href='index.html?session_id=jfdkjdkfjddkfdfjkdjfdf'";
 			response = new SampleResult();
 			response.setResponseData(html.getBytes());
 			URLRewritingModifier mod = new URLRewritingModifier();
