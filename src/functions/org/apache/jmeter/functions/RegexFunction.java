@@ -137,6 +137,8 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 				MatchResult result = (MatchResult)collectAllMatches.get(
 						(int)(collectAllMatches.size() * ratio + .5) - 1);
 				return generateResult(result);
+			}catch (IndexOutOfBoundsException e) {
+				 return defaultValue;
 			}
 		}			
 	}
@@ -316,6 +318,14 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 			String match = variable.execute(result,null);
 			assertEquals("pinposition1_pinposition2_pinposition3",match);			
 		}
+		
+		public void testVariableExtraction6() throws Exception
+				{
+					variable.setParameters(URLEncoder.encode("<value field=\"(pinposition\\d+)\">(\\d+)</value>")+",$2$,4,,default");
+					variable.setJMeterVariables(new JMeterVariables());
+					String match = variable.execute(result,null);
+					assertEquals("default",match);			
+				}
 		
 		public void testComma() throws Exception
 		{
