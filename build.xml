@@ -366,7 +366,7 @@
   <target name="init-version">
   	<tstamp/>
   	<!-- JMeter version -->
-  <property name="version" value="1.9.${DSTAMP}"/>
+  <property name="jmeter.version" value="1.9.${DSTAMP}"/>
   </target>
 
   <target name="init" depends="check-libs,report-missing-libs,init-version">
@@ -375,7 +375,7 @@
   </target>
 
   	<!-- JMeter Javadoc version (own variable is used so can be overriden independently) -->
-  <property name="docversion" value="${version}"/>
+  <property name="docversion" value="${jmeter.version}"/>
   
   <target name="init-docs" depends="check-anakia,report-anakia-missing"/>
 
@@ -462,7 +462,7 @@
     <echo>Updating version string</echo>
     <replaceregexp file="${src.core}/org/apache/jmeter/util/JMeterVersion.java"
     	match="VERSION = &quot;.*?&quot;"
-	replace="VERSION = &quot;${version}&quot;"/>
+	replace="VERSION = &quot;${jmeter.version}&quot;"/>
   </target>
 
   <target name="compile-components" depends="compile-jorphan,compile-core" description="Compile generic (protocol-independent) components.">
@@ -586,25 +586,10 @@
     </javac>
   </target>
 
-	<!--
-		Monitor currently requires the following JAXB jars:
-		
-		jaxb-api (run-time)
-		jaxb-impl (run-time)
-		jaxb-libs (compile)
-		namespace (compile)
-		relaxngDatatype (compile)
-		
-		jaxb-xjc is not required	
-	-->
-  <target name="install-monitor" depends="compile-monitor-model,compile-monitor-components" description="Compile Monitor components.">
-    <jar jarfile="${dest.jar}/ApacheJMeter_monitors.jar">
-      <fileset dir="${build.monitor.model}" includes="**/*.class" />
-      <fileset dir="${build.monitor.components}" includes="**/*.class" />
-    </jar>
-  </target>
-    
-  <target name="compile-monitor-components" depends="compile-jorphan,compile-core,compile-components">
+  <target name="compile-monitor" depends="compile-monitor-model,compile-monitor-components"/>
+
+  <target name="compile-monitor-components"
+    depends="compile-jorphan,compile-core,compile-components,compile-monitor-model">
     <mkdir dir="${build.monitor.components}"/>
     <javac srcdir="${src.monitor.components}" destdir="${build.monitor.components}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
@@ -669,7 +654,8 @@
     </javac>
   </target>
 
-  <target name="compile" depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-htmlparser" description="Compile everything."/>
+  <target name="compile" depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-htmlparser,compile-monitor"
+  description="Compile everything."/>
 
   <target name="package" depends="compile, package-only"/>
   
@@ -760,6 +746,12 @@ some of its classes - at present JMeter can only run from jar files.
       <fileset dir="${src.tcp}" includes="**/*.properties" />
     </jar>
     
+    <!-- monitor -->
+    <jar jarfile="${dest.jar}/ApacheJMeter_monitors.jar">
+      <fileset dir="${build.monitor.model}" includes="**/*.class" />
+      <fileset dir="${build.monitor.components}" includes="**/*.class" />
+    </jar>
+    
     <jar jarfile="${lib.dir}/htmlparser.jar" basedir="${build.htmlparser}"/>
     <jar jarfile="${lib.dir}/jorphan.jar" basedir="${build.jorphan}"/>
   </target>
@@ -845,7 +837,7 @@ some of its classes - at present JMeter can only run from jar files.
 
   <!-- N.B. this target is the one currently used by Gump -->
   <target name="dist" depends="assume-libs-present,clean,install,docs-all,test" description="Rebuild all and create the distribution packages.">
-    <property name="dist.name" value="jakarta-jmeter-${version}"/>
+    <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
     <antcall target="_pack-binaries"/>
     <antcall target="_pack-libraries"/>
     <antcall target="_pack-javadoc"/>
@@ -858,7 +850,7 @@ some of its classes - at present JMeter can only run from jar files.
   -->
   <target name="gump-build" depends="assume-libs-present,clean,install,docs-printable" 
           description="Build JMeter">
-    <property name="dist.name" value="jakarta-jmeter-${version}"/>
+    <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
     <antcall target="_pack-binaries"/>
     <antcall target="_pack-libraries"/>
     <antcall target="_pack-source"/>
@@ -876,17 +868,17 @@ some of its classes - at present JMeter can only run from jar files.
   </target>
   
   <target name="gump-javadoc" depends="docs-api" description="Create JMeter javadocs">
-    <property name="dist.name" value="jakarta-jmeter-${version}"/>
+    <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
     <antcall target="_pack-javadoc"/>
   </target>
   
   <target name="dist-src" depends="init-version" description="Create the source distribution packages.">
-    <property name="dist.name" value="jakarta-jmeter-${version}"/>
+    <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
     <antcall target="_pack-source"/>
   </target>
 
   <target name="pack-dist" depends="init-version" description="Create the distribution packages with no rebuild.">
-    <property name="dist.name" value="jakarta-jmeter-${version}"/>
+    <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
     <antcall target="_pack-binaries"/>
     <antcall target="_pack-libraries"/>
     <antcall target="_pack-javadoc"/>
@@ -958,7 +950,7 @@ some of its classes - at present JMeter can only run from jar files.
 
    <!-- When creating the tars for the web-site, no version prefix directory is added -->
    <target name="pack-site"  depends="init-version" description="Create tarballs for the web-site from existing docs.">
-     <property name="dist.name" value="jakarta-jmeter-${version}"/>
+     <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
      <antcall target="_pack_site_api"/>
      <antcall target="_pack_site_doc"/>
    </target>
