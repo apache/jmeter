@@ -78,7 +78,15 @@
 		<li><a href="build-adv-web-test-plan.html#header_manager">6.2 Using a Header Manager</a></li>
 	 </ul>
   <li><a href="build-db-test-plan.html">7. Building a Database Test Plan</a></li>
-  <li><a href="build-ftp-test-plan.html">8. Building a FTP Test Plan</a></li>
+  <li><a href="build-ftp-test-plan.html">8. Building an FTP Test Plan</a></li>
+	 <ul>
+		<li><a href="build-ftp-test-plan.html#adding_users">8.1 Adding Users</a></li>
+		<li><a href="build-ftp-test-plan.html#adding_defaults">8.2 Adding Default FTP Request Properties</a></li>
+		<li><a href="build-ftp-test-plan.html#adding_requests">8.3 Adding FTP Requests</a></li>
+		<li><a href="build-ftp-test-plan.html#adding_listener">8.4 Adding a Listener to View the Test Results</a></li>
+		<li><a href="build-ftp-test-plan.html#saving">8.5 Saving the Test Plan</a></li>
+		<li><a href="build-ftp-test-plan.html#running">8.6 Running the Test Plan</a></li>
+	 </ul>
   <li><a href="build-jndi-test-plan.html">9. Building a JNDI Test Plan</a></li>
   <li><a href="remote-test.html">10. Remote Testing</a></li>
   <li><a href="best-practices.html">11. Best Practices</a></li>
