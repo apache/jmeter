@@ -54,21 +54,21 @@ import org.apache.log.Logger;
 public class JMeterThread implements Runnable, java.io.Serializable
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
-    static Map samplers = new HashMap();
-    int initialDelay = 0;
-    Controller controller;
+    private static Map samplers = new HashMap();
+    private int initialDelay = 0;
+    private Controller controller;
     private boolean running;
-    HashTree testTree;
-    TestCompiler compiler;
-    JMeterThreadMonitor monitor;
-    String threadName;
-    JMeterContext threadContext;
-    JMeterVariables threadVars;
-    Collection testListeners;
-    ListenerNotifier notifier;
-    int threadNum = 0;
-    long startTime = 0; 
-    long endTime = 0;
+    private HashTree testTree;
+    private transient TestCompiler compiler;
+    private JMeterThreadMonitor monitor;
+    private String threadName;
+    private transient JMeterContext threadContext;
+    private transient JMeterVariables threadVars;
+    private Collection testListeners;
+    private transient ListenerNotifier notifier;
+    private int threadNum = 0;
+    private long startTime = 0; 
+    private long endTime = 0;
     private boolean scheduler = false;
     //based on this scheduler is enabled or disabled
     
