@@ -252,14 +252,15 @@ public class JMeterThread implements Runnable, java.io.Serializable
             testTree.traverse(compiler);
             running = true;
             //listeners = controller.getListeners();
-            rampUpDelay();
-            
+
             if (scheduler)
             {
                 //set the scheduler to start
                 startScheduler();
             }
 
+			rampUpDelay();
+            
             log.info("Thread " + Thread.currentThread().getName() + " started");
             controller.initialize();
             controller.addIterationListener(new IterationListener());
