@@ -54,9 +54,8 @@
  */
 package org.apache.jmeter.junit.protocol.http.config;
 
-import junit.framework.TestCase;
-
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -65,7 +64,7 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
  * @author Michael Stover
  * @version $Revision$
  */
-public class UrlConfigTest extends TestCase
+public class UrlConfigTest extends JMeterTestCase
 {
     HTTPSampler config;
     HTTPSampler defaultConfig;
