@@ -131,14 +131,23 @@ public class ResultSaver
 	/**
 	 * @return fileName composed of fixed prefix, a number,
 	 * and a suffix derived from the contentType
+	 * e.g. Content-Type: text/html;charset=ISO-8859-1
 	 */
 	private String makeFileName(String contentType) {
-		String suffix;
-		int i = contentType.indexOf("/");
-		if (i == -1){
-			suffix="unknown";
-		} else {
-			suffix=contentType.substring(i+1);
+		String suffix="unknown";
+		if (contentType!=null){
+			int i = contentType.indexOf("/");
+			if (i != -1){
+				int j = contentType.indexOf(";");
+				if (j != -1)
+				{
+					suffix=contentType.substring(i+1,j);					
+				} 
+				else
+				{
+					suffix=contentType.substring(i+1);
+				}
+			}
 		}
 		return getFilename()+sequenceNumber+"."+suffix;
 	}

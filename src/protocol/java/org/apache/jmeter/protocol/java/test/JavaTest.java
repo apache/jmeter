@@ -298,15 +298,20 @@ public class JavaTest
 		
 		long start = System.currentTimeMillis();
 
-		// Generate a random value using the current time.
-		long ct = start % getSleepMask();
+		// Generate a random offset value using the current time.
+        long sleep = getSleepTime() + (start % getSleepMask());
 
         try
         {
             // Execute the sample.  In this case sleep for the
             // specified time.
-            Thread.sleep(getSleepTime() + ct);
+            Thread.sleep(sleep);
             results.setSuccessful(success);
+        }
+        catch (InterruptedException e)
+        {
+            getLogger().warn("JavaTest: interrupted.");
+            results.setSuccessful(true);
         }
         catch (Exception e)
         {
