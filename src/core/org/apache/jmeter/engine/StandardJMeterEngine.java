@@ -53,16 +53,16 @@ public class StandardJMeterEngine
     implements JMeterEngine, JMeterThreadMonitor, Runnable, Serializable
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
-    private Thread runningThread;
+    private transient Thread runningThread;
     private static long WAIT_TO_DIE = 5 * 1000; //5 seconds
-    Map allThreads;
+    transient Map allThreads;
     boolean running = false;
     boolean serialized = false;
     boolean schcdule_run = false;
     HashTree test;
-    SearchByClass testListeners;
+    transient SearchByClass testListeners;
     String host = null;
-    ListenerNotifier notifier;
+    transient ListenerNotifier notifier;
 
     public StandardJMeterEngine()
     {
