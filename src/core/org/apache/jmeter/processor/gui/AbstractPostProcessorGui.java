@@ -1,4 +1,4 @@
-package org.apache.jmeter.extractor.gui;
+package org.apache.jmeter.processor.gui;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,7 +14,7 @@ import org.apache.jmeter.gui.util.MenuFactory;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public abstract class AbstractExtractorGui extends AbstractJMeterGuiComponent
+public abstract class AbstractPostProcessorGui extends AbstractJMeterGuiComponent
 {
 
     public JPopupMenu createPopupMenu()
@@ -24,7 +24,7 @@ public abstract class AbstractExtractorGui extends AbstractJMeterGuiComponent
 
    public Collection getMenuCategories()
    {
-      return Arrays.asList(new String[]{MenuFactory.EXTRACTORS});
+      return Arrays.asList(new String[]{MenuFactory.POST_PROCESSORS});
    }
 
 }

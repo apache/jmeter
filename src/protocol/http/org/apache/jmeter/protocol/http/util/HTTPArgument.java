@@ -52,7 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.protocol.http.util;
+package org.apache.jmeter.protocol.http.util;
 
 import java.io.Serializable;
 import java.net.URLDecoder;
@@ -71,149 +71,165 @@ import org.apache.jmeter.config.Arguments;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class HTTPArgument extends Argument  implements Serializable {
-	
-	private static final String ALWAYS_ENCODE = "HTTPArgument.always_encode";
-    
+public class HTTPArgument extends Argument implements Serializable
+{
+
+    private static final String ALWAYS_ENCODE = "HTTPArgument.always_encode";
+
     private static EncoderCache cache = new EncoderCache(1000);
-	
-	
-	/****************************************
-	 * Constructor for the Argument object
-	 *
-	 *@param name   Description of Parameter
-	 *@param value  Description of Parameter
-	 *@param metadata Description of Parameter
-	 ***************************************/
-	public HTTPArgument(String name, Object value, Object metadata)
-	{
-		this(name,value,false);
-		this.setMetaData(metadata);
-	}
-	
-	public void setAlwaysEncode(boolean ae)
-	{
-		setProperty(ALWAYS_ENCODE,new Boolean(ae));
-	}
-	
-	public boolean getAlwaysEncode()
-	{
-		return getPropertyAsBoolean(ALWAYS_ENCODE);
-	}
-    
-	/****************************************
-	 * Constructor for the Argument object
-	 *
-	 *@param name   Description of Parameter
-	 *@param value  Description of Parameter
-	 ***************************************/
-	public HTTPArgument(String name, Object value)
-	{
-		this(name,value,false);
-	}
-	
-	public HTTPArgument(String name, Object value, boolean alreadyEncoded)
-	{
-		setAlwaysEncode(true);
-        if(alreadyEncoded)
+
+    /****************************************
+     * Constructor for the Argument object
+     *
+     *@param name   Description of Parameter
+     *@param value  Description of Parameter
+     *@param metadata Description of Parameter
+     ***************************************/
+    public HTTPArgument(String name, Object value, Object metadata)
+    {
+        this(name, value, false);
+        this.setMetaData(metadata);
+    }
+
+    public void setAlwaysEncode(boolean ae)
+    {
+        setProperty(ALWAYS_ENCODE, new Boolean(ae));
+    }
+
+    public boolean getAlwaysEncode()
+    {
+        return getPropertyAsBoolean(ALWAYS_ENCODE);
+    }
+
+    /****************************************
+     * Constructor for the Argument object
+     *
+     *@param name   Description of Parameter
+     *@param value  Description of Parameter
+     ***************************************/
+    public HTTPArgument(String name, Object value)
+    {
+        this(name, value, false);
+    }
+
+    public HTTPArgument(String name, Object value, boolean alreadyEncoded)
+    {
+        setAlwaysEncode(true);
+        if (alreadyEncoded)
         {
             name = URLDecoder.decode(name);
             value = URLDecoder.decode(value.toString());
         }
-		setName(name);
-		setValue(value);
-	}
-	
-	public HTTPArgument(String name,Object value,Object metaData,boolean alreadyEncoded)
-	{
-		this(name,value,alreadyEncoded);
-		setMetaData(metaData);
-	}
-	
-	public HTTPArgument(Argument arg)
-	{
-		this(arg.getName(),arg.getValue(),arg.getMetaData());
-	}
+        setName(name);
+        setValue(value);
+    }
 
-	/****************************************
-	 * Constructor for the Argument object
-	 ***************************************/
-	public HTTPArgument() { }
-	
-	/****************************************
-	 * Sets the Name attribute of the Argument object
-	 *
-	 *@param newName  The new Name value
-	 ***************************************/
-	public void setName(String newName)
-	{
-		if(newName == null || !newName.equals(getName()))
-		{
-			super.setName(newName);
-		}
-	}
-	
-	public String getEncodedValue()
-	{
-		return cache.getEncoded(getValue().toString());
-	}
-	
-	public String getEncodedName()
-	{
-		return cache.getEncoded(getName());
-	}
-	
-	public static void convertArgumentsToHTTP(Arguments args)
-	{
-		List newArguments = new LinkedList();
-		Iterator iter = args.getArguments().iterator();
-		while(iter.hasNext())
-		{
-			Argument arg = (Argument)iter.next();
-			if(!(arg instanceof HTTPArgument))
-			{
-				newArguments.add(new HTTPArgument(arg));
-			}
-			else
-			{
-				newArguments.add(arg);
-			}
-		}
-		args.removeAllArguments();
-		args.setArguments(newArguments);
-	}
-	
-	public static class Test extends TestCase
-	{
-		public Test(String name)
-		{
-			super(name);
-		}
-		
-		public void testCloning() throws Exception
-		{
-			HTTPArgument arg = new HTTPArgument("name.?","value_ here");
-			assertEquals("name.%3F",arg.getEncodedName());
-			assertEquals("value_+here",arg.getEncodedValue());
-			HTTPArgument clone = (HTTPArgument)arg.clone();
-			assertEquals("name.%3F",clone.getEncodedName());
-			assertEquals("value_+here",clone.getEncodedValue());
-		}
-		
-		public void testConversion() throws Exception
-		{
-			Arguments args = new Arguments();
-			args.addArgument("name.?","value_ here");
-			args.addArgument("name$of property","value_.+");
-			HTTPArgument.convertArgumentsToHTTP(args);
-			List argList = args.getArguments();
-			HTTPArgument httpArg = (HTTPArgument)argList.get(0);
-			assertEquals("name.%3F",httpArg.getEncodedName());
-			assertEquals("value_+here",httpArg.getEncodedValue());
-			httpArg = (HTTPArgument)argList.get(1);
-			assertEquals("name%24of+property",httpArg.getEncodedName());
-			assertEquals("value_.%2B",httpArg.getEncodedValue());				
-		}
-	}
+    public HTTPArgument(String name, Object value, Object metaData, boolean alreadyEncoded)
+    {
+        this(name, value, alreadyEncoded);
+        setMetaData(metaData);
+    }
+
+    public HTTPArgument(Argument arg)
+    {
+        this(arg.getName(), arg.getValue(), arg.getMetaData());
+    }
+
+    /****************************************
+     * Constructor for the Argument object
+     ***************************************/
+    public HTTPArgument()
+    {}
+
+    /****************************************
+     * Sets the Name attribute of the Argument object
+     *
+     *@param newName  The new Name value
+     ***************************************/
+    public void setName(String newName)
+    {
+        if (newName == null || !newName.equals(getName()))
+        {
+            super.setName(newName);
+        }
+    }
+
+    public String getEncodedValue()
+    {
+        if (getAlwaysEncode())
+        {
+            return cache.getEncoded(getValue().toString());
+        }
+        else
+        {
+            return getValue().toString();
+        }
+    }
+
+    public String getEncodedName()
+    {
+        if (getAlwaysEncode())
+        {
+            return cache.getEncoded(getName());
+        }
+        else
+        {
+            return getName();
+        }
+
+    }
+
+    public static void convertArgumentsToHTTP(Arguments args)
+    {
+        List newArguments = new LinkedList();
+        Iterator iter = args.getArguments().iterator();
+        while (iter.hasNext())
+        {
+            Argument arg = (Argument) iter.next();
+            if (!(arg instanceof HTTPArgument))
+            {
+                newArguments.add(new HTTPArgument(arg));
+            }
+            else
+            {
+                newArguments.add(arg);
+            }
+        }
+        args.removeAllArguments();
+        args.setArguments(newArguments);
+    }
+
+    public static class Test extends TestCase
+    {
+        public Test(String name)
+        {
+            super(name);
+        }
+
+        public void testCloning() throws Exception
+        {
+            HTTPArgument arg = new HTTPArgument("name.?", "value_ here");
+            assertEquals("name.%3F", arg.getEncodedName());
+            assertEquals("value_+here", arg.getEncodedValue());
+            HTTPArgument clone = (HTTPArgument) arg.clone();
+            assertEquals("name.%3F", clone.getEncodedName());
+            assertEquals("value_+here", clone.getEncodedValue());
+        }
+
+        public void testConversion() throws Exception
+        {
+            Arguments args = new Arguments();
+            args.addArgument("name.?", "value_ here");
+            args.addArgument("name$of property", "value_.+");
+            HTTPArgument.convertArgumentsToHTTP(args);
+            List argList = args.getArguments();
+            HTTPArgument httpArg = (HTTPArgument) argList.get(0);
+            assertEquals("name.%3F", httpArg.getEncodedName());
+            assertEquals("value_+here", httpArg.getEncodedValue());
+            httpArg = (HTTPArgument) argList.get(1);
+            assertEquals("name%24of+property", httpArg.getEncodedName());
+            assertEquals("value_.%2B", httpArg.getEncodedValue());
+        }
+    }
 
 }
