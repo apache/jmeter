@@ -77,7 +77,10 @@ import java.util.Vector;
 import junit.framework.TestCase;
 
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -92,10 +95,12 @@ import org.apache.log.Logger;
  * @author  <a href="mailto:sdowd@arcmail.com">Sean Dowd</a>
  * @version $Revision$ $Date$
  */
-public class CookieManager extends ConfigTestElement implements Serializable
+public class CookieManager extends ConfigTestElement 
+	implements TestListener, Serializable
 {
     transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
 
+	public static final String CLEAR = "CookieManager.clearEachIteration";
     public static final String COOKIES = "CookieManager.cookies";
     /**
     	* A vector of Cookies managed by this class.
@@ -115,6 +120,7 @@ public class CookieManager extends ConfigTestElement implements Serializable
     public CookieManager()
     {
         setProperty(new CollectionProperty(COOKIES, new ArrayList()));
+		setProperty(new BooleanProperty(CLEAR, false));
     }
 
     public CollectionProperty getCookies()
@@ -125,6 +131,16 @@ public class CookieManager extends ConfigTestElement implements Serializable
     public int getCookieCount()
     {
         return getCookies().size();
+    }
+    
+    public boolean getClearEachIteration()
+    {
+    	return getPropertyAsBoolean(CLEAR);
+    }
+    
+    public void setClearEachIteration(boolean clear)
+    {
+    	setProperty(new BooleanProperty(CLEAR, clear));
     }
 
     // Incorrect method. Always returns String. I changed CookiePanel code to perform
@@ -226,7 +242,9 @@ public class CookieManager extends ConfigTestElement implements Serializable
     /***Remove all the cookie*/
     public void clear()
     {
+/*    	boolean clear = getClearEachIteration();
         super.clear();
+        setClearEachIteration(clear);*/
         setProperty(new CollectionProperty(COOKIES, new ArrayList()));
     }
 
@@ -431,6 +449,20 @@ public class CookieManager extends ConfigTestElement implements Serializable
     {
         return JMeterUtils.getResString("cookie_manager_title");
     }
+
+	public void testStarted() {}
+
+	public void testEnded() {}
+	
+	public void testStarted(String host) {}
+	
+	public void testEnded(String host) {}
+    
+	public void testIterationStart(LoopIterationEvent event) 
+	{
+		if (getClearEachIteration())
+			clear();
+	}
 
     public static class Test extends TestCase
     {
