@@ -32,6 +32,7 @@
 <li>Better checking of parameter count in JavaScript function</li>
 <li>XPath Assertion and XPath Function</li>
 <li>Allow CSVRead delimiter to be changed</li>
+<li>Bug 33796 - delete cookies with null/empty values</li>
 </ul>
 <h4>Bug fixes:</h4>
 <ul>
