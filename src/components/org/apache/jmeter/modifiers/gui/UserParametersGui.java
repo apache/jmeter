@@ -30,10 +30,8 @@ import org.apache.jmeter.util.JMeterUtils;
  * Window>Preferences>Java>Templates.
  */
 public class UserParametersGui extends AbstractConfigGui {
-	private static final String label =
-		JMeterUtils.getResString("user_parameters_title");
-	private static final String NAME_COLUMN = JMeterUtils.getResString("name");
-	private static final String THREAD_COLUMNS =
+
+	private String THREAD_COLUMNS =
 		JMeterUtils.getResString("user");
 
 	JTable paramTable;
@@ -53,7 +51,7 @@ public class UserParametersGui extends AbstractConfigGui {
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
 	 */
 	public String getStaticLabel() {
-		return label;
+		return JMeterUtils.getResString("user_parameters_title");
 	}
 	
 	public void configure(TestElement el)
@@ -84,7 +82,7 @@ public class UserParametersGui extends AbstractConfigGui {
 	 */
 	public TestElement createTestElement() {
 		UserParameters params = new UserParameters();
-		params.setNames(tableModel.getColumnData(NAME_COLUMN));
+		params.setNames(tableModel.getColumnData(JMeterUtils.getResString("name")));
 		List threadLists = new LinkedList();
 		for (int x = 1; x < tableModel.getColumnCount(); x++) {
 			threadLists.add(tableModel.getColumnData(THREAD_COLUMNS + "_" + x));
@@ -101,7 +99,7 @@ public class UserParametersGui extends AbstractConfigGui {
 	}
 
 	private JPanel makeTitlePanel() {
-		JLabel title = new JLabel(label);
+		JLabel title = new JLabel(JMeterUtils.getResString("user_parameters_title"));
 		JPanel titlePanel = new JPanel(new BorderLayout());
 		titlePanel.add(title, BorderLayout.NORTH);
 		titlePanel.add(getNamePanel(), BorderLayout.SOUTH);
@@ -115,7 +113,7 @@ public class UserParametersGui extends AbstractConfigGui {
 		tableModel =
 			new PowerTableModel(
 				new String[] {
-					NAME_COLUMN,
+					JMeterUtils.getResString("name"),
 					THREAD_COLUMNS + "_" + numUserColumns },
 				new Class[] { String.class, String.class });
 		paramTable = new JTable(tableModel);
