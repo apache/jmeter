@@ -106,15 +106,17 @@ public class JMeterTreeModel extends DefaultTreeModel
 	}
 
 	/****************************************
-	 * !ToDo
+	 * Adds the sub tree at the given node.  Returns a boolean indicating 
+	 * whether the added sub tree was a full test plan.
 	 *
 	 *@param subTree                         !ToDo
 	 *@param current                         !ToDo
 	 *@exception IllegalUserActionException  !ToDo (Exception description)
 	 ***************************************/
-	public void addSubTree(ListedHashTree subTree, JMeterTreeNode current)
+	public boolean addSubTree(ListedHashTree subTree, JMeterTreeNode current)
 			 throws IllegalUserActionException
 	{
+		boolean ret = false;
 		Iterator iter = subTree.list().iterator();
 		while(iter.hasNext())
 		{
@@ -124,12 +126,14 @@ public class JMeterTreeModel extends DefaultTreeModel
 				current = (JMeterTreeNode)((JMeterTreeNode)getRoot()).getChildAt(0);
 				current.configure(item.createTestElement());
 				addSubTree(subTree.get(item), current);
+				ret = true;
 			}
 			else
 			{
 				addSubTree(subTree.get(item), addComponent(item, current));
 			}
 		}
+		return ret;
 	}
 
 	/****************************************

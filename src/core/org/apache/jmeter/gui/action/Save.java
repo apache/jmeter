@@ -85,13 +85,17 @@ public class Save implements Command
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.gui");
 	private final static String SAVE_ALL = "save_all";
-	private final static String SAVE = "save";
+	private final static String SAVE = "save_as";
+	private final static String SAVE_TO_PREVIOUS = "save";
+	private String chosenFile;
+	private String testPlanFile;
 
 	private static Set commands = new HashSet();
 	static
 	{
 		commands.add(SAVE);
 		commands.add(SAVE_ALL);
+		commands.add(SAVE_TO_PREVIOUS);
 	}
 
 
@@ -110,6 +114,11 @@ public class Save implements Command
 	{
 		return commands;
 	}
+	
+	public void setTestPlanFile(String f)
+	{
+		testPlanFile = f;
+	}
 
 
 	/****************************************
@@ -124,7 +133,7 @@ public class Save implements Command
 		{
 			subTree = GuiPackage.getInstance().getCurrentSubTree();
 		}
-		else if(e.getActionCommand().equals(SAVE_ALL))
+		else if(e.getActionCommand().equals(SAVE_ALL) || e.getActionCommand().equals(SAVE_TO_PREVIOUS))
 		{
 			subTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
 		}
@@ -133,16 +142,33 @@ public class Save implements Command
 			convertSubTree(subTree);
 		}catch(Exception err)
 		{}
-		JFileChooser chooser = FileDialoger.promptToSaveFile(
-				GuiPackage.getInstance().getTreeListener().getCurrentNode().getName() + ".jmx");
-		if(chooser == null)
+		if(!SAVE_TO_PREVIOUS.equals(e.getActionCommand()) || testPlanFile == null)
 		{
-			return;
+			JFileChooser chooser = FileDialoger.promptToSaveFile(
+					GuiPackage.getInstance().getTreeListener().getCurrentNode().getName() + ".jmx");
+			if(chooser == null)
+			{
+				return;
+			}
+			if(e.getActionCommand().equals(SAVE_ALL) || e.getActionCommand().equals(SAVE_TO_PREVIOUS))
+			{
+				testPlanFile = chooser.getSelectedFile().getAbsolutePath();
+				chosenFile = testPlanFile;
+			}
+			else
+			{
+				chosenFile = chooser.getSelectedFile().getAbsolutePath();
+			}
 		}
+		else
+		{
+			chosenFile = testPlanFile;
+		}
+		
 		OutputStream writer = null;
 		try
 		{
-			writer = new FileOutputStream(chooser.getSelectedFile());
+			writer = new FileOutputStream(chosenFile);
 			SaveService.saveSubTree(subTree,writer);
 		}
 		catch(Throwable ex)

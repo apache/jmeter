@@ -397,7 +397,14 @@ public class JMeterMenuBar extends JMenuBar
 		// FILE MENU
 		fileMenu = new JMenu(JMeterUtils.getResString("file"));
 		fileMenu.setMnemonic('F');
-		file_save_all = new JMenuItem(JMeterUtils.getResString("save_all"), 'A');
+		JMenuItem file_save = new JMenuItem(JMeterUtils.getResString("save_all"), 'S');
+		file_save.setAccelerator(
+			KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK));
+		file_save.setActionCommand("save");
+		file_save.addActionListener(ActionRouter.getInstance());
+		file_save.setEnabled(true);
+		
+		file_save_all = new JMenuItem(JMeterUtils.getResString("save_all_as"), 'A');
 		file_save_all.setAccelerator(
 			KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK));
 		file_save_all.setActionCommand("save_all");
@@ -423,6 +430,7 @@ public class JMeterMenuBar extends JMenuBar
 		file_exit.addActionListener(ActionRouter.getInstance());
 		fileMenu.add(file_new);
 		fileMenu.add(file_load);
+		fileMenu.add(file_save);
 		fileMenu.add(file_save_all);
 		fileMenu.addSeparator();
 		fileMenu.add(file_exit);

@@ -36,6 +36,8 @@ import org.xml.sax.SAXException;
 
 public class SaveService
 {
+	private final static String XML_SPACE = "xml:space";
+	private final static String PRESERVE = "preserve";
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.util");
 	private static final String ASSERTION_RESULT_TAG_NAME = "assertionResult";
@@ -264,6 +266,7 @@ public class SaveService
 	{
 		DefaultConfiguration config = new DefaultConfiguration("string","string");
 		config.setValue(value);
+		config.setAttribute(XML_SPACE,PRESERVE);
 		return config;
 	}
 
@@ -276,6 +279,7 @@ public class SaveService
 		DefaultConfiguration config = new DefaultConfiguration("property","property");
 		config.setAttribute("name",name);
 		config.setValue(value);
+		config.setAttribute(XML_SPACE,PRESERVE);
 		return config;
 	}
 
