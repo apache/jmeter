@@ -5,11 +5,11 @@ PROPERTIES=`dirname $0`/jmeter.properties
 
 while getopts h:p:f: x; do
 	 case $x in
-	h) JAVA_PROPS=$JAVAPROPS" -Dhttp.proxyHost="$OPTARG;;
-	p) JAVA_PROPS=$JAVAPROPS" -Dhttp.proxyPort="$OPTARG;;
+	h) JAVA_PROPS=$JAVA_PROPS" -Dhttp.proxyHost="$OPTARG" -Dhttps.proxyHost="$OPTARG;;
+	p) JAVA_PROPS=$JAVA_PROPS" -Dhttp.proxyPort="$OPTARG" -Dhttps.proxyPort="$OPTARG;;
 	f) PROPERTIES=$OPTARG;;
 	?) echo $USAGE; exit -1;;
 	 esac;
 done
 echo `dirname $0`
-java -classpath $CLASSPATH:`dirname $0`/../lib/xerces.jar:`dirname $0`/../lib/util.jar:`dirname $0`/ApacheJMeter.jar:`dirname $0`/../lib/Tidy.jar:`dirname $0`/../lib/log4j-core.jar org.apache.jmeter.NewDriver $JAVA_PROPS $PROPERTIES
+java -classpath $CLASSPATH:`dirname $0`/../lib/xerces.jar:`dirname $0`/../lib/util.jar:`dirname $0`/ApacheJMeter.jar:`dirname $0`/../lib/Tidy.jar:`dirname $0`/../lib/log4j-core.jar $JAVA_PROPS org.apache.jmeter.NewDriver $PROPERTIES
