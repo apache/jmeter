@@ -230,11 +230,11 @@
 #end
 
 #macro (runloop $itemToLoop)
-	#foreach ($node in $itemToLoop.getMixedContent())
+	#foreach ($node in $itemToLoop.getContent())
 		#if($node.getClass().getName().indexOf("Element") > -1)
 			#unknown($node)
 		#else
-			$node
+			$node.getText()
 		#end
 	#end
 #end
