@@ -256,6 +256,7 @@ public class TCLogParser implements LogParser
                 {
                     break;
                 }
+                line = breader.readLine();
             }
         }
         catch (IOException ioe)
