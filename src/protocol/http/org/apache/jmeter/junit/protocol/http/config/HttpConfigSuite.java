@@ -54,7 +54,7 @@
  */
  package org.apache.jmeter.junit.protocol.http.config;
 
-import junit.framework.*;
+import junit.framework.TestSuite;
 /**
  * Title:        Apache JMeter
  * Description:

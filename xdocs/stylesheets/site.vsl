@@ -187,8 +187,12 @@
 	</table></p>
 #end
 
-#macro (scope)
-	<a href="build-test-plan.html#scoping_rules">scope</a>
+#macro (scope $scope)
+	#if ($scope.getText() == "")
+		<a href="build-test-plan.html#scoping_rules">scope</a>
+	#else
+		<a href="build-test-plan.html#scoping_rules">$scope.getText()</a>
+	#end
 #end
 
 #macro (unknown $u_node)
@@ -213,7 +217,7 @@
 	#elseif ($u_node.getName().equals("subsection"))
 		 #subsection ($u_node)
 	#elseif ($u_node.getName().equals("scope"))
-		 #scope ()
+		 #scope ($u_node)
 	#else
 		#outputTag($u_node)
 		#runloop($u_node)

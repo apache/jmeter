@@ -62,7 +62,7 @@ import java.util.List;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jorphan.math.*;
+import org.apache.jorphan.math.StatCalculator;
 
 /**
  *  Title: Apache JMeter Description: Copyright: Copyright (c) 2000 Company:

@@ -62,9 +62,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.apache.log.Logger;
-
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /************************************************************
  *  !ToDo (Class description)

@@ -69,8 +69,8 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-import org.apache.log.Logger;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 /**********************************************************************
 This class is used to create a tree structure of objects.  Each element in the tree
 is also a key to the next node down in the tree.  It provides many ways to add objects and 

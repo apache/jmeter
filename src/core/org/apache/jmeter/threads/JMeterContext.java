@@ -1,8 +1,7 @@
 package org.apache.jmeter.threads;
 
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jmeter.samplers.*;
+import org.apache.jmeter.samplers.Sampler;
 
 /**
  * @author Administrator

@@ -55,15 +55,20 @@
  
  package org.apache.jorphan.gui;
 
-import javax.swing.*;
-import java.util.*;
-import javax.swing.text.Document;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
 import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.awt.event.FocusListener;
 import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.text.Document;
 
 /**
  * A Helper component that wraps a JTextField with a label into

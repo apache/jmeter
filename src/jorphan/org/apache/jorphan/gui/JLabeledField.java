@@ -55,8 +55,9 @@
  
  package org.apache.jorphan.gui;
 
-import javax.swing.event.*;
-import java.util.*;
+import java.util.List;
+
+import javax.swing.event.ChangeListener;
 
 /**
  * Title:

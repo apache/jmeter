@@ -1,6 +1,7 @@
 package org.apache.jmeter.protocol.http.parser;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
 
 /************************************************************
  *  Title: Description: Copyright: Copyright (c) 2001 Company:

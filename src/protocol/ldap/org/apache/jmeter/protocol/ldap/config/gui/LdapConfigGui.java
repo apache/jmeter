@@ -53,29 +53,28 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.ldap.config.gui;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JRadioButton;
-import javax.swing.JCheckBox;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-
-import java.awt.BorderLayout;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
-import java.awt.CardLayout;
-
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.config.gui.ArgumentsPanel;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.ldap.sampler.LDAPSampler;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.util.JMeterUtils;
 
 /****************************************
