@@ -255,6 +255,17 @@ public class SampleResult implements Serializable
         return responseData;
     }
 
+	/**
+	 * Convenience method to return responseData as a String
+	 * 
+	 * @return the responseData as a string. If responseData is null
+	 * then the empty string is returned, rather than null.
+	 */
+	public String responseDatatoString()
+	{
+		return (responseData == null) ? "" : new String(responseData);
+	}
+
     public void setSamplerData(String s)
     {
         samplerData = s;
