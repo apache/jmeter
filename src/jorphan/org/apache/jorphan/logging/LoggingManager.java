@@ -77,7 +77,7 @@ public final class LoggingManager
 {
     private static PatternFormatter format =
         new PatternFormatter(
-            "%{time:MM/dd/yyyy h:mm:ss a} %5.5{priority} - "
+            "%{time:yyyy/MM/dd h:mm:ss a} %5.5{priority} - "
                 + "%{category}: %{message} %{throwable}\n");
 
     /** Used to hold the default logging target. */
