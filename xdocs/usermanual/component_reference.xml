@@ -39,7 +39,7 @@
 
 <section name="14.1 Samplers" anchor="samplers">
 
-<component index="14.1.1" name="FTP Request" screenshot="gen-controller/ftp-request.gif">
+<component name="FTP Request" index="14.1.1" screenshot="gen-controller/ftp-request.gif">
 <description>This controller lets you send an FTP "retrieve file" request to an FTP server.
 If you are going to send multiple requests to the same FTP server, consider
 using a <complink name="FTP Request Defaults"/> Configuration
@@ -456,7 +456,7 @@ StandardGenerator and TCLogParser.
 </component>
 
 
-<component name="BSF Sampler (ALPHA CODE)" index="14.1.10" screenshot="">
+<component name="BSF Sampler" index="14.1.10" screenshot="">
 <center><h2>(ALPHA Code)</h2></center>
 	<description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
 		
@@ -475,7 +475,8 @@ StandardGenerator and TCLogParser.
 TBC
 </component>
 
-<component name="TCP Sampler (ALPHA CODE)" index="14.1.11" screenshot="">
+<component name="TCP Sampler" index="14.1.11" screenshot="">
+	<center><h2>(ALPHA Code)</h2></center>
 <description>TBA
 </description>
 <properties>
@@ -782,6 +783,18 @@ out of the return page and puts them in the inputVar variable</p>
 <p>In the ForEach loop, a HTTP sampler is added which requests all the links that were extracted from the first returned HTML page.
 </p></example>
 
+</component>
+
+<component name="Transaction Controller" index="14.2.12" screenshot="">
+	<description>
+		<p>The Transaction Controller times how long it takes for all its children to run.
+			It then adds a "sample" entry to the test output with the total elapsed time.
+			The name of the element is used to name the "sample".
+		</p>
+	</description>
+<properties>
+	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+</properties>
 </component>
 
 </section>
@@ -1280,8 +1293,8 @@ The variables in User Defined Variables components will take precedence over tho
 </properties>
 </component>
 
-<component index="14.4.15" name="TCP Sampler Config (ALPHA CODE)" screenshot="">
-<description>TBA
+<component index="14.4.15" name="TCP Sampler Config" screenshot="">
+<description>ALPHA Code
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
