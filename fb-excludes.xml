@@ -1,5 +1,5 @@
 <FindBugsFilter>
      <Match classregex=".*" >
-       <BugCode name="Se" />
+       <BugCode name="xxx" />
      </Match>
 </FindBugsFilter>
