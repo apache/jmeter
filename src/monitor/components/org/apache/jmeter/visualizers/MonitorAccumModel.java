@@ -36,7 +36,7 @@ public class MonitorAccumModel implements Clearable, Serializable
 {
 
 	private HashMap MAP;
-	private MonitorModel CURRENT;
+	//private MonitorModel CURRENT;
 	private List listeners;
 	/**
 	 * By default, we set the default to 800
@@ -67,7 +67,7 @@ public class MonitorAccumModel implements Clearable, Serializable
      * @param model
      */
     public void addSample(MonitorModel model){
-		this.CURRENT = model;
+		//this.CURRENT = model;
     	if (MAP.containsKey(model.getURL())){
     		List newlist = updateArray(model,(List)MAP.get(model.getURL()));
     		MAP.put(model.getURL(),newlist);
@@ -134,7 +134,7 @@ public class MonitorAccumModel implements Clearable, Serializable
 		if (sample instanceof HTTPSampleResult){
 			surl = ((HTTPSampleResult)sample).getURL();
 		}
-		String rescontent = new String(sample.getResponseData());
+		//String rescontent = new String(sample.getResponseData());
 		if (sample.getResponseCode().equals("200") &&
 			((HTTPSampleResult)sample).isMonitor()){
 			ObjectFactory of = ObjectFactory.getInstance();
@@ -176,7 +176,7 @@ public class MonitorAccumModel implements Clearable, Serializable
 	 * with the given URL. This is used when the server
 	 * fails to respond fully, or is dead.
 	 * @param url
-	 * @return
+	 * @return new MonitorModel
 	 */
 	public MonitorModel createNewMonitorModel(URL url){
 		MonitorStats stat = new MonitorStats(Stats.DEAD,

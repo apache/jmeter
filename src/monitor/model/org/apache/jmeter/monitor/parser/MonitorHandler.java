@@ -16,7 +16,7 @@
  */
 package org.apache.jmeter.monitor.parser;
 
-import java.util.List;
+//import java.util.List;
 import java.util.Stack;
 
 import org.xml.sax.Attributes;
@@ -37,8 +37,8 @@ import org.apache.jmeter.monitor.model.WorkersImpl;
 
 public class MonitorHandler extends DefaultHandler
 {
-	private boolean startDoc = false;
-	private boolean endDoc = false;
+	//private boolean startDoc = false;
+	//private boolean endDoc = false;
 	private Stack stacktree = new Stack();
 
 	private ObjectFactory factory = null;	
@@ -50,7 +50,7 @@ public class MonitorHandler extends DefaultHandler
 	private RequestInfo requestinfo = null;
 	private Worker worker = null;
 	private Workers workers = null;
-	private List workerslist = null;
+	//private List workerslist = null;
 	
     /**
      * 
@@ -71,14 +71,14 @@ public class MonitorHandler extends DefaultHandler
 	public void startDocument ()
 	throws SAXException
 	{
-		this.startDoc = true;
+		//this.startDoc = true;
 	}
 	
 	public void endDocument ()
 	throws SAXException
 	{
-		this.startDoc = false;
-		this.endDoc = true;
+		//this.startDoc = false;
+		//this.endDoc = true;
 	}
 
 	/**
@@ -89,7 +89,9 @@ public class MonitorHandler extends DefaultHandler
 	 * each element (such as allocating a new tree node or writing
 	 * output to a file).</p>
 	 *
-	 * @param name The element type name.
+	 * @param uri
+	 * @param localName The element type name.
+	 * @param qName
 	 * @param attributes The specified or defaulted attributes.
 	 * @exception org.xml.sax.SAXException Any SAX exception, possibly
 	 *            wrapping another exception.
@@ -256,8 +258,9 @@ public class MonitorHandler extends DefaultHandler
 	 * each element (such as finalising a tree node or writing
 	 * output to a file).</p>
 	 *
-	 * @param name The element type name.
-	 * @param attributes The specified or defaulted attributes.
+	 * @param uri
+	 * @param localName The element type name.
+	 * @param qName The specified or defaulted attributes.
 	 * @exception org.xml.sax.SAXException Any SAX exception, possibly
 	 *            wrapping another exception.
 	 * @see org.xml.sax.ContentHandler#endElement
@@ -327,7 +330,7 @@ public class MonitorHandler extends DefaultHandler
 	 * Convienance method for parsing long. If the string
 	 * was not a number, the method returns zero.
 	 * @param data
-	 * @return
+	 * @return the value as a long
 	 */    
     public long parseLong(String data){
     	long val = 0;
@@ -344,7 +347,7 @@ public class MonitorHandler extends DefaultHandler
     /**
      * Convienance method for parsing integers. 
      * @param data
-     * @return
+     * @return the value as an integer
      */
     public int parseInt(String data){
     	int val = 0;
@@ -360,7 +363,7 @@ public class MonitorHandler extends DefaultHandler
     
     /**
      * method returns the status object.
-     * @return
+     * @return the status
      */
     public Status getContents(){
     	return this.status;
