@@ -32,16 +32,13 @@ public class ValueReplacer
     transient private static Logger log = LoggingManager.getLoggerForClass();
     CompoundVariable masterFunction = new CompoundVariable();
     Map variables = new HashMap();
-    TestPlan tp;
 
     public ValueReplacer()
     {
-        tp = new TestPlan();
     }
 
     public ValueReplacer(TestPlan tp)
     {
-        this.tp = tp;
         setUserDefinedVariables(tp.getUserDefinedVariables());
     }
 
@@ -90,10 +87,9 @@ public class ValueReplacer
 
     public void addVariable(String name, String value)
     {
-        tp.addParameter(name, value);
-        setUserDefinedVariables(tp.getUserDefinedVariables());
+        variables.put(name, value);
     }
-    
+
     private Collection replaceValues(
         PropertyIterator iter,
         ValueTransformer transform)
@@ -103,9 +99,18 @@ public class ValueReplacer
         while(iter.hasNext())
         {
             JMeterProperty val = iter.next();
+            if (log.isDebugEnabled())
+            {
+                log.debug("About to replace in property of tipe: "
+                  +val.getClass()+": "+val);
+            }
             if (val instanceof StringProperty)
             {
                 val = transform.transformValue((StringProperty) val);
+                if (log.isDebugEnabled())
+                {
+                    log.debug("Replacement result: " +val);
+                }
             }
             else if (val instanceof MultiProperty)
             {
@@ -117,6 +122,16 @@ public class ValueReplacer
                 while(propIter.hasNext())
                 {
                     multiVal.addProperty((JMeterProperty) propIter.next());
+                }
+                if (log.isDebugEnabled())
+                {
+                    log.debug("Replacement result: " +multiVal);
+                }
+            }
+            else {
+                if (log.isDebugEnabled())
+                {
+                    log.debug("Won't replace.");
                 }
             }
             props.add(val);
