@@ -34,7 +34,7 @@ import org.apache.log.Logger;
 public class WhileController extends GenericController implements Serializable
 {
     private static Logger log = LoggingManager.getLoggerForClass();
-	private final static String CONDITION = "WhenController.condition"; // $NON-NLS-1$
+	private final static String CONDITION = "WhileController.condition"; // $NON-NLS-1$
 
     public WhileController()
     {
@@ -46,31 +46,29 @@ public class WhileController extends GenericController implements Serializable
      */
     public boolean isDone()
     {
-        return false;//conditionTrue() ? super.isDone() : false;
+        return false;// Never want to remove the controller from the tree
     }
 
     /*
      * Evaluate the condition, which can be:
      * blank or LAST = was the last sampler OK?
-     * ALL = were all samplers OK?
-     * otherwise, evaluate the JavaScript condition
+     * otherwise, evaluate the condition
      */
     private boolean conditionTrue()
     {
-    	String cnd = getCondition();//
-    	if (cnd.length() == 0 || "LAST".equalsIgnoreCase(cnd)) {
+    	String cnd = getCondition();
+    	log.debug("Condition string:"+cnd);
+    	boolean res;
+    	if (cnd.length() == 0 || "LAST".equalsIgnoreCase(cnd)) {// $NON-NLS-1$
         	JMeterVariables threadVars = 
         		JMeterContextService.getContext().getVariables();
         	// Use !false rather than true, so that null is treated as true 
-       	    return !"false".equalsIgnoreCase(threadVars.get(JMeterThread.LAST_SAMPLE_OK));
+       	    res = !"false".equalsIgnoreCase(threadVars.get(JMeterThread.LAST_SAMPLE_OK));// $NON-NLS-1$
+    	} else {
+    		res = "true".equalsIgnoreCase(cnd);// $NON-NLS-1$
     	}
-    	if ("ALL".equalsIgnoreCase(cnd)) {
-        	JMeterVariables threadVars = 
-        		JMeterContextService.getContext().getVariables();
-        	// Use !false rather than true, so that null is treated as true 
-       	    return !"false".equalsIgnoreCase(threadVars.get(JMeterThread.ALL_SAMPLES_OK));
-    	}
-        return IfController.evaluateCondition(cnd);
+    	log.debug("Condition value: "+res);
+        return res;
     }
 
 	/* (non-Javadoc)
@@ -91,17 +89,20 @@ public class WhileController extends GenericController implements Serializable
     }
 
 	/**
-	 * @param string the condition
+	 * @param string the condition to save
 	 */
 	public void setCondition(String string) {
+		log.debug("setCondition("+ string+")");
 		setProperty(new StringProperty(CONDITION, string));
 	}
-
 
 	/**
 	 * @return the condition
 	 */
 	public String getCondition() {
-		return getPropertyAsString(CONDITION);
+		String cnd;
+		cnd=getPropertyAsString(CONDITION);
+		log.debug("getCondition() => "+cnd);
+		return cnd;
 	}
 }
