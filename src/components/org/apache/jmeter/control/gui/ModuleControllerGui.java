@@ -74,7 +74,6 @@ import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.ModuleController;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.NamePanel;
-import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -93,7 +92,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *@created   $Date$
  *@version   1.0
  ****************************************/
-public class ModuleControllerGui extends AbstractControllerGui implements UnsharedComponent {
+public class ModuleControllerGui extends AbstractControllerGui /*implements UnsharedComponent*/ {
 
 	private JMeterTreeNode selected = null;
 
@@ -142,6 +141,8 @@ public class ModuleControllerGui extends AbstractControllerGui implements Unshar
 	 */
 	public void configure(TestElement el) {
 		super.configure(el);
+		this.selected = ((ModuleController)el).getSelectedNode();
+		reinitialize();
 	}
 
 	/**
@@ -149,7 +150,6 @@ public class ModuleControllerGui extends AbstractControllerGui implements Unshar
 	 * @see	org.apache.jmeter.testelement.TestElement
 	 */
 	public TestElement createTestElement() {
-
 		ModuleController mc = new ModuleController();
 		configureTestElement(mc);
 		
@@ -158,19 +158,17 @@ public class ModuleControllerGui extends AbstractControllerGui implements Unshar
 		}
 
 		return mc;
-
 	}
 
 	/**
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
 	 */
 	public void modifyTestElement(TestElement element) {
-		
 		configureTestElement(element);
+		selected = ((TreeNodeWrapper)nodesModel.getSelectedItem()).getTreeNode();
 		if ( selected != null ) {
 			((ModuleController)element).setSelectedNode( selected );
 		}
-	
 	}
 
 	public JPopupMenu createPopupMenu()
@@ -225,12 +223,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Unshar
 		nodes = new JComboBox(nodesModel);
 		
 		reinitialize();
-		nodes.addActionListener( new ActionListener() {
-			public void actionPerformed( ActionEvent e ) {
-				selected = ((TreeNodeWrapper)nodesModel.getSelectedItem()).getTreeNode();
-			}
-		} );
-
+		
 		try {
 			
 			Class addToTree = Class.forName("org.apache.jmeter.gui.action.AddToTree");
@@ -255,8 +248,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Unshar
 	
 	private void reinitialize() {
 
-		TreeNodeWrapper selected, current;
-		selected = (TreeNodeWrapper)nodesModel.getSelectedItem();
+		TreeNodeWrapper current;
 		nodesModel.removeAllElements();
 		JMeterTreeNode wb = getWorkBench();
 		buildNodesModel( wb, "" );
@@ -264,8 +256,9 @@ public class ModuleControllerGui extends AbstractControllerGui implements Unshar
 		if ( selected != null ) {
 			for ( int i=0; i< nodesModel.getSize(); i++ ) {
 				current = (TreeNodeWrapper)nodesModel.getElementAt(i);
-				if ( current.getTreeNode().equals(selected.getTreeNode()) ) {
+				if ( current.getTreeNode().equals(selected) ) {
 					nodesModel.setSelectedItem(current);
+					break;
 				}
 			}
 		}
