@@ -897,19 +897,33 @@ some of its classes - at present JMeter can only run from jar files.
     optional.jar is normally found in ANT_HOME/lib
 -->
   <target name="junit"  description="Run individual JUnit test">
-  <property name="test.case" value="org.apache.jmeter.junit.JMeterTest"/>
+  <mkdir dir="reports"/>
+  <property name="test.case1" value="org.apache.jmeter.junit.JMeterTest"/>
+  <property name="test.case" value="org.apache.jorphan.test.AllTests"/>
   <junit fork="true"
    dir="${basedir}/bin"
    showoutput="true"
    printsummary="withOutAndErr">
   <formatter type="brief" usefile="no"/>
+  <formatter type="xml"/>
       <classpath>
         <path refid="classpath"/>
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <fileset dir="${lib.opt}" includes="optional.jar"/>
       </classpath>
-  <test name="${test.case}"/>
+  <test name="${test.case}" todir="reports"/>
   </junit>
+  </target>
+
+  <!-- Utility target to collate reports -->
+  <target name="junitreport">
+    <mkdir dir="reports"/>
+    <junitreport todir="reports">
+      <fileset dir="reports">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="frames" todir="reports"/>
+    </junitreport>
   </target>
 
   <!-- Run the HTML Parser unit tests -->
