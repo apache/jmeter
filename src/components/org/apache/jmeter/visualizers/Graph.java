@@ -66,7 +66,6 @@ import javax.swing.SwingUtilities;
 
 import org.apache.jmeter.gui.util.JMeterColor;
 import org.apache.jmeter.samplers.Clearable;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -81,7 +80,7 @@ public class Graph
     extends JComponent
     implements Scrollable, GraphListener, Clearable
 {
-    private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
+    private static Logger log = LoggingManager.getLoggerForClass();
     private boolean data = true;
     private boolean average = true;
     private boolean deviation = true;

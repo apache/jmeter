@@ -34,7 +34,7 @@ import org.apache.log.Logger;
  */
 public class UserParametersGui extends AbstractPreProcessorGui
 {
-    private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
+    private static Logger log = LoggingManager.getLoggerForClass();
     private String THREAD_COLUMNS = JMeterUtils.getResString("user");
 
     private JTable paramTable;
