@@ -328,9 +328,15 @@ public class ResultCollector
             tempOut,
             SaveService.getConfiguration(result, getFunctionalMode()));
         String serVer = tempOut.toString();
-
-        return serVer.substring(
-            serVer.indexOf(System.getProperty("line.separator")));//$NON-NLS-1$
+        int index = serVer.indexOf(System.getProperty("line.separator"));
+        if(index > -1)
+        {
+            return serVer.substring(index);
+        }
+        else
+        {
+            return serVer;
+        }
     }
 
     private void readSamples(Configuration testResults)
