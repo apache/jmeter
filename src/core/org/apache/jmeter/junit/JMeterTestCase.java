@@ -6,6 +6,8 @@
  */
 package org.apache.jmeter.junit;
 
+import java.io.File;
+
 import junit.framework.TestCase;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -36,8 +38,14 @@ public abstract class JMeterTestCase extends TestCase
      */
     static {
     	if (JMeterUtils.getJMeterProperties() == null){
+    		String file="jmetertest.properties";
+			File f = new File(file);
+			if (!f.canRead()){
+				System.out.println("Can't find "+file+" - trying bin directory");
+				file="bin/"+file;// JMeterUtils assumes Unix-style separators
+			}
     		JMeterUtils jmu = new JMeterUtils();
-    		jmu.initializeProperties("./jmetertest.properties");
+    		jmu.initializeProperties(file);
     	}
     }
     
