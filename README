@@ -62,6 +62,17 @@
   "build install" (Unix/Linux only).  This should compile the application and enable you to run jmeter from the /bin
 directory.
 
+        NOTES for 1.6.1
+        ---------------
+
+        JDBC testing does not appear to be working correctly in this version.
+
+        Saving and reloading test scripts has been fixed in this version.  Saving and testing of listeners and timers is
+also working.
+
+        HTTP testing now supports HTTPS.  Alternate ports can also be tested in this version.  Minor bugs with cookies
+has been fixed.
+
 
 
   Licensing and legal issues

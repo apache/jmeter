@@ -12,6 +12,14 @@
 </p>
 
 <b>Changes:</b>
+<h3>Version 1.6.1</h3>
+<ul>
+<li>Fixed saving and loading of test scripts (no more extra lines)</li>
+<li>Can save and load special characters (such as &quot;&amp;&quot; and &quot;&lt;&quot;).</li>
+<li>Can save and load timers and listeners.</li>
+<li>Minor bug fix for cookies (if you cookie value contained an &quot;=&quot;, then it broke).</li>
+<li>URL's can sample ports other than 80, and can test HTTPS, provided you have the necessary jars (JSSE)</li>
+</ul>
 <h3>Version 1.6 Alpha</h3>
 <ul>
 <li>New UI</li>
