@@ -195,6 +195,7 @@ public class JavaSampler extends AbstractSampler implements TestListener
      */
     public SampleResult sample(Entry entry)
     {
+    	context = new JavaSamplerContext(getArguments());
         if (javaClient == null)
         {
             log.debug(whoAmI() + "Creating Java Client");
