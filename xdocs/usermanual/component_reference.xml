@@ -963,6 +963,14 @@ if you wanted to include all .html files, you're regular expression might look l
 combination of includes and excludes, you should be able to record what you are interested in and skip what you are
 not.</p>
 
+<p>It is also possible to have the proxy add timers to the recorded script. To
+do this, create a timer directly within the HTTP Proxy Server component.
+The proxy will place a copy of this timer into each sample it records, or into
+the first sample of each group if you're using grouping. This copy will then be
+scanned for occurences of variable ${T} in its properties, and any such
+occurences will be replaced by the time gap from the previous sampler
+recorded (in milliseconds).</p>
+
 <p>
 N.B. the string that is matched by the regular expression must be the same as the <b>whole</b> host+path string.<br></br>Thus <b>&quot;\.html&quot;</b> will <b>not</b> match <b>j.a.o/index.html</b>
 </p>
