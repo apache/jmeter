@@ -22,6 +22,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.gui.action.ActionRouter;
+import org.apache.jmeter.gui.action.Help;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
@@ -181,9 +182,7 @@ public class FunctionHelper
         public void actionPerformed(ActionEvent e)
         {
             String[] source =
-                new String[] {
-                    JMeterUtils.getJMeterHome()
-                        + "/docs/usermanual/component_index.html",
+                new String[] { Help.HELP_PAGE,
                     functionList.getText()};
             ActionEvent helpEvent = new ActionEvent(source, e.getID(), "help");
             ActionRouter.getInstance().actionPerformed(helpEvent);
