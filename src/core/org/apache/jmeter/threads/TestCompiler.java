@@ -16,8 +16,7 @@ import org.apache.jmeter.config.ResponseBasedModifier;
 import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.functions.InvalidVariableException;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
-import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
@@ -317,28 +316,23 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
 			GenericController controller = new GenericController();
 			ConfigTestElement config1 = new ConfigTestElement();
 			config1.setName("config1");
-			config1.setProperty(HTTPSampler.DOMAIN, "www.jarkarta.org");
-			HTTPSampler sampler = new HTTPSampler();
+			config1.setProperty("test.property", "A test value");
+			TestSampler sampler = new TestSampler();
 			sampler.setName("sampler");
-			Arguments args = new Arguments();
-			args.addArgument("param1", "value1");
-			HTTPSampler sampler2 = new HTTPSampler();
-			sampler.setName("sampler2");
-			Arguments args2 = new Arguments();
-			args2.addArgument(new HTTPArgument("xml","<data>1234</data>"));
-			sampler2.setArguments(args2);
 			testing.add(controller, config1);
 			testing.add(controller, sampler);
-			testing.add(controller,sampler2);
-			testing.getTree(controller).add(sampler, args);
 			TestCompiler.initialize();
 
 			TestCompiler compiler = new TestCompiler(testing,new JMeterVariables());
 			testing.traverse(compiler);
-			sampler = (HTTPSampler)compiler.configureSampler(sampler).getSampler();
-			assertEquals(config1.getProperty(HTTPSampler.DOMAIN), sampler.getDomain());
-			assertEquals(args.getArgument(0).getName(), sampler.getArguments().getArgument(0).getName());
-			assertEquals(1,sampler.getArguments().getArguments().size());
+			sampler = (TestSampler)compiler.configureSampler(sampler).getSampler();
+			assertEquals("A test value", sampler.getProperty("test.property"));
+		}
+
+		class TestSampler extends AbstractSampler {
+		  public void addCustomTestElement(TestElement t) { }
+		  public org.apache.jmeter.samplers.SampleResult sample(org.apache.jmeter.samplers.Entry e) { return null; }
+		  public Object clone() { return new TestSampler(); }
 		}
 	}
 

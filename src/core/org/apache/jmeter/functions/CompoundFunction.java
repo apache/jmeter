@@ -335,7 +335,7 @@ public class CompoundFunction implements Function
 			function.setParameters("${__regexFunction(<html>(.*)</html>,$1$)}");
 			function.setJMeterVariables(new JMeterVariables());
 			assertEquals(1,function.compiledComponents.size());
-			assertTrue(function.compiledComponents.getFirst() instanceof RegexFunction);
+			assertEquals("org.apache.jmeter.functions.RegexFunction", function.compiledComponents.getFirst().getClass().getName());
 			assertTrue(function.hasFunction());
 			assertTrue(!function.hasStatics());
 			assertEquals("hello world",((Function)function.compiledComponents.getFirst()).execute(result,null));
@@ -419,7 +419,7 @@ public class CompoundFunction implements Function
 			function.setParameters("${__regexFunction(<html>(${my_regex})</html>,$1$)}");
 			function.setJMeterVariables(new JMeterVariables());
 			assertEquals(1,function.compiledComponents.size());
-			assertTrue(function.compiledComponents.getFirst() instanceof RegexFunction);
+			assertEquals("org.apache.jmeter.functions.RegexFunction", function.compiledComponents.getFirst().getClass().getName());
 			assertTrue(function.hasFunction());
 			assertTrue(function.hasStatics());
 			assertEquals("hello world",((Function)function.compiledComponents.getFirst()).execute(result,null));
