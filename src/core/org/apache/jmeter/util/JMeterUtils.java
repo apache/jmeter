@@ -102,6 +102,9 @@ public class JMeterUtils implements UnitTestManager
         new PatternCacheLRU(1000, new Perl5Compiler());
 
     transient private static Logger log = LoggingManager.getLoggerForClass();
+    
+    private static final String EXPERT_MODE_PROPERTY="jmeter.expertMode";
+
     private static final SAXParserFactory xmlFactory;
     static {
         SAXParserFactory temp = null;
@@ -1112,5 +1115,16 @@ public class JMeterUtils implements UnitTestManager
         String temp = fname.replace('\\','/');
         String simpleName = temp.substring(temp.lastIndexOf("/") + 1);
         return simpleName + " (" + fname + ") - Apache JMeter";
+    }
+    
+    /**
+     * Determine whether we are in 'expert' mode. Certain features may be
+     * hidden from user's view unless in expert mode.
+     *
+     * @return true iif we're in expert mode
+     */
+    public static boolean isExpertMode()
+    {
+        return JMeterUtils.getPropDefault(EXPERT_MODE_PROPERTY, false);
     }
 }

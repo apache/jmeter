@@ -369,6 +369,14 @@ public class TestBeanGUI
     {
         List menuCategories= new LinkedList();
 
+        // We don't want to show expert beans in the menus unless we're
+        // in expert mode:
+        if (beanInfo.getBeanDescriptor().isExpert()
+            && ! JMeterUtils.isExpertMode())
+        {
+            return null;
+        }
+        
         // TODO: there must be a nicer way...
         if (Assertion.class.isAssignableFrom(testBeanClass))
         {
