@@ -294,6 +294,7 @@ public class TCPSampler extends AbstractSampler implements TestListener
         SampleResult res = new SampleResult();
         boolean isSuccessful = false;
         res.setSampleLabel(getName());//Use the test element name for the label
+        res.setSamplerData("Host: "+getServer()+" Port: "+getPort());
         res.sampleStart();
         try
         {
