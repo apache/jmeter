@@ -62,7 +62,7 @@ import org.apache.jmeter.samplers.SampleResult;
  * {@link org.apache.jmeter.samplers.SampleResult SampleResults} are passed to
  * the implementing visualizer for display/logging.  The easiest way to create
  * the visualizer is to extend the
- * {@link org.apache.jmeter.visualizers.gui.AbstractVisualizer AbstractVisualizer}
+ * {@link org.apache.jmeter.visualizers.gui.AbstractVisualizer}
  * class.
  *
  * @author  <a href="mailto:mstoer1@apache.org">Michael Stover</a>

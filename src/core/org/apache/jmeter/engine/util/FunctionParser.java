@@ -17,9 +17,6 @@ import org.apache.log.Logger;
 
 /**
  * @author ano ano
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
  */
 class FunctionParser
 {
@@ -27,9 +24,6 @@ class FunctionParser
     
     /**
      * Compile a general string into a list of elements for a CompoundVariable.
-     * @param value
-     * @return
-     * @throws InvalidVariableException
      */
     LinkedList compileString(String value) throws InvalidVariableException
     {
@@ -49,7 +43,9 @@ class FunctionParser
                         {
                             break;
                         }
-                        if(current[0] != '$' && current[0] != ',' && current[0] != '\\')
+                        if (current[0] != '$'
+                            && current[0] != ','
+                            && current[0] != '\\')
                         {
                             buffer.append(previous);
                         }
@@ -94,9 +90,6 @@ class FunctionParser
     
     /**
      * Compile a string into a function or SimpleVariable.
-     * @param reader
-     * @return
-     * @throws InvalidVariableException
      */
     Object makeFunction(StringReader reader) throws InvalidVariableException
     {
@@ -120,7 +113,8 @@ class FunctionParser
                 }
                 else if(current[0] == '(' && previous != ' ')
                 {
-                    function = CompoundVariable.getNamedFunction(buffer.toString());
+                    function =
+                        CompoundVariable.getNamedFunction(buffer.toString());
                     buffer.setLength(0);
                     if(function instanceof Function)
                     {
@@ -138,7 +132,8 @@ class FunctionParser
                 }
                 else if(current[0] == '}')
                 {
-                    function = CompoundVariable.getNamedFunction(buffer.toString());
+                    function =
+                        CompoundVariable.getNamedFunction(buffer.toString());
                     buffer.setLength(0);
                     return function;
                 }
@@ -159,10 +154,8 @@ class FunctionParser
     }
     
     /**
-     * Compile a String into a list of parameters, each made into a CompoundVariable
-     * @param reader
-     * @return
-     * @throws InvalidVariableException
+     * Compile a String into a list of parameters, each made into a
+     * CompoundVariable.
      */
     LinkedList parseParams(StringReader reader) throws InvalidVariableException
     {
@@ -194,7 +187,10 @@ class FunctionParser
                     buffer.setLength(0);
                     result.add(param);
                 }
-                else if(current[0] == ')' && functionRecursion == 0 && parenRecursion == 0)
+                else if (
+                    current[0] == ')'
+                        && functionRecursion == 0
+                        && parenRecursion == 0)
                 {
                     CompoundVariable param = new CompoundVariable();
                     param.setParameters(buffer.toString());
@@ -214,7 +210,10 @@ class FunctionParser
                     previous = current[0];
                     functionRecursion--;
                 }
-                else if(current[0] == ')' && functionRecursion == 0 && parenRecursion > 0)
+                else if (
+                    current[0] == ')'
+                        && functionRecursion == 0
+                        && parenRecursion > 0)
                 {
                     buffer.append(current[0]);
                     previous = current[0];
@@ -243,5 +242,4 @@ class FunctionParser
         result.add(var);
         return result;
     }
-
 }

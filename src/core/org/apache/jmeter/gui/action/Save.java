@@ -184,7 +184,8 @@ public class Save implements Command
         {
             testPlanFile = null;
             log.error("", ex);
-            throw new IllegalUserActionException("Couldn't save test plan to file: " + chosenFile);
+            throw new IllegalUserActionException(
+                "Couldn't save test plan to file: " + chosenFile);
         }
         finally
         {

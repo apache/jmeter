@@ -52,7 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.testelement.property;
+package org.apache.jmeter.testelement.property;
 
 import java.util.Map;
 
@@ -71,7 +71,7 @@ public class MapProperty extends MultiProperty
         super(name);
         log.info("map = " + value);
         this.value = normalizeMap(value);
-        log.info("normalized map = "+this.value);
+        log.info("normalized map = " + this.value);
     }
 
     public MapProperty()
@@ -101,7 +101,7 @@ public class MapProperty extends MultiProperty
 
     public void addProperty(JMeterProperty prop)
     {
-        addProperty(prop.getName(),prop);
+        addProperty(prop.getName(), prop);
     }
 
     public JMeterProperty get(String key)
@@ -180,9 +180,9 @@ public class MapProperty extends MultiProperty
     public void addProperty(String name, JMeterProperty prop)
     {
         if (!value.containsKey(name))
-       {
-           value.put(name, prop);
-       }
+        {
+            value.put(name, prop);
+        }
     }
 
     public void setMap(Map newMap)
@@ -214,22 +214,20 @@ public class MapProperty extends MultiProperty
     {
         return valueIterator();
     }
-    
-    /* (non-Javadoc)
-        * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
-        */
-       public void setRunningVersion(boolean running)
-       {
-           // TODO Auto-generated method stub
-           super.setRunningVersion(running);
-           if(running)
-           {
-               savedValue = value;
-           }
-           else
-           {
-               savedValue = null;
-           }
-       }
 
+    /* (non-Javadoc)
+     * @see JMeterProperty#setRunningVersion(boolean)
+     */
+    public void setRunningVersion(boolean running)
+    {
+        super.setRunningVersion(running);
+        if (running)
+        {
+            savedValue = value;
+        }
+        else
+        {
+            savedValue = null;
+        }
+    }
 }

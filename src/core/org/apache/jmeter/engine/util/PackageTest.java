@@ -43,61 +43,91 @@ public class PackageTest extends TestCase
         variables.put("my_regex", ".*");
         variables.put("server", "jakarta.apache.org");
         result = new SampleResult();
-        result.setResponseData("<html>hello world</html> costs: $3.47,$5.67".getBytes());
-        transformer = new ReplaceStringWithFunctions(new CompoundVariable(), variables);
+        result.setResponseData(
+            "<html>hello world</html> costs: $3.47,$5.67".getBytes());
+        transformer =
+            new ReplaceStringWithFunctions(new CompoundVariable(), variables);
         JMeterContextService.getContext().setVariables(new JMeterVariables());
         JMeterContextService.getContext().setSamplingStarted(true);
         JMeterContextService.getContext().setPreviousResult(result);
-        JMeterContextService.getContext().getVariables().put("server", "jakarta.apache.org");
+        JMeterContextService.getContext().getVariables().put(
+            "server",
+            "jakarta.apache.org");
         JMeterContextService.getContext().getVariables().put("my_regex", ".*");
     }
 
     public void testFunctionParse1() throws Exception
     {
         StringProperty prop =
-            new StringProperty("date", "${__javaScript((new Date().getDate() / 100).toString().substr(${__javaScript(1+1,d\\,ay)}\\,2),heute)}");
+            new StringProperty(
+                "date",
+                "${__javaScript((new Date().getDate() / 100).toString()."
+                    + "substr(${__javaScript(1+1,d\\,ay)}\\,2),heute)}");
         JMeterProperty newProp = transformer.transformValue(prop);
         newProp.setRunningVersion(true);
-        assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
+        assertEquals(
+            "org.apache.jmeter.testelement.property.FunctionProperty",
+            newProp.getClass().getName());
         newProp.recoverRunningVersion(null);
         assertTrue(Integer.parseInt(newProp.getStringValue()) > -1);
-        assertEquals("2", JMeterContextService.getContext().getVariables().getObject("d,ay"));
+        assertEquals(
+            "2",
+            JMeterContextService.getContext().getVariables().getObject("d,ay"));
     }
 
     public void testParseExample1() throws Exception
     {
-        StringProperty prop = new StringProperty("html", "${__regexFunction(<html>(.*)</html>,$1$)}");
+        StringProperty prop =
+            new StringProperty(
+                "html",
+                "${__regexFunction(<html>(.*)</html>,$1$)}");
         JMeterProperty newProp = transformer.transformValue(prop);
         newProp.setRunningVersion(true);
-        assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
+        assertEquals(
+            "org.apache.jmeter.testelement.property.FunctionProperty",
+            newProp.getClass().getName());
         assertEquals("hello world", newProp.getStringValue());
     }
 
     public void testParseExample2() throws Exception
     {
-        StringProperty prop = new StringProperty("html", "It should say:\\${${__regexFunction(<html>(.*)</html>,$1$)}}");
+        StringProperty prop =
+            new StringProperty(
+                "html",
+                "It should say:\\${${__regexFunction(<html>(.*)</html>,$1$)}}");
         JMeterProperty newProp = transformer.transformValue(prop);
         newProp.setRunningVersion(true);
-        assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
+        assertEquals(
+            "org.apache.jmeter.testelement.property.FunctionProperty",
+            newProp.getClass().getName());
         assertEquals("It should say:${hello world}", newProp.getStringValue());
     }
 
     public void testParseExample3() throws Exception
     {
         StringProperty prop =
-            new StringProperty("html", "${__regexFunction(<html>(.*)</html>,$1$)}" + "${__regexFunction(<html>(.*o)(.*o)(.*)</html>," + "$1$$3$)}");
+            new StringProperty(
+                "html",
+                "${__regexFunction(<html>(.*)</html>,$1$)}"
+                    + "${__regexFunction(<html>(.*o)(.*o)(.*)</html>,"
+                    + "$1$$3$)}");
         JMeterProperty newProp = transformer.transformValue(prop);
         newProp.setRunningVersion(true);
-        assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
+        assertEquals(
+            "org.apache.jmeter.testelement.property.FunctionProperty",
+            newProp.getClass().getName());
         assertEquals("hello worldhellorld", newProp.getStringValue());
     }
 
     public void testParseExample4() throws Exception
     {
-        StringProperty prop = new StringProperty("html", "${non-existing function}");
+        StringProperty prop =
+            new StringProperty("html", "${non-existing function}");
         JMeterProperty newProp = transformer.transformValue(prop);
         newProp.setRunningVersion(true);
-        assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
+        assertEquals(
+            "org.apache.jmeter.testelement.property.FunctionProperty",
+            newProp.getClass().getName());
         assertEquals("${non-existing function}", newProp.getStringValue());
     }
 
@@ -106,7 +136,9 @@ public class PackageTest extends TestCase
         StringProperty prop = new StringProperty("html", "${server}");
         JMeterProperty newProp = transformer.transformValue(prop);
         newProp.setRunningVersion(true);
-        assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
+        assertEquals(
+            "org.apache.jmeter.testelement.property.FunctionProperty",
+            newProp.getClass().getName());
         assertEquals("jakarta.apache.org", newProp.getStringValue());
     }
 
@@ -115,62 +147,96 @@ public class PackageTest extends TestCase
         StringProperty prop = new StringProperty("html", "");
         JMeterProperty newProp = transformer.transformValue(prop);
         newProp.setRunningVersion(true);
-        assertEquals("org.apache.jmeter.testelement.property.StringProperty", newProp.getClass().getName());
+        assertEquals(
+            "org.apache.jmeter.testelement.property.StringProperty",
+            newProp.getClass().getName());
         assertEquals("", newProp.getStringValue());
     }
 
     public void testParseExample7() throws Exception
     {
-        StringProperty prop = new StringProperty("html", "${__regexFunction(\\<([a-z]*)\\>,$1$)}");
+        StringProperty prop =
+            new StringProperty(
+                "html",
+                "${__regexFunction(\\<([a-z]*)\\>,$1$)}");
         JMeterProperty newProp = transformer.transformValue(prop);
         newProp.setRunningVersion(true);
-        assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
+        assertEquals(
+            "org.apache.jmeter.testelement.property.FunctionProperty",
+            newProp.getClass().getName());
         assertEquals("html", newProp.getStringValue());
     }
-    
+
     public void testParseExample8() throws Exception
-        {
-            StringProperty prop = new StringProperty("html", "${__regexFunction((\\\\$\\d+\\.\\d+),$1$)}");
-            JMeterProperty newProp = transformer.transformValue(prop);
-            newProp.setRunningVersion(true);
-            assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
-            assertEquals("$3.47", newProp.getStringValue());
-        }
-        
+    {
+        StringProperty prop =
+            new StringProperty(
+                "html",
+                "${__regexFunction((\\\\$\\d+\\.\\d+),$1$)}");
+        JMeterProperty newProp = transformer.transformValue(prop);
+        newProp.setRunningVersion(true);
+        assertEquals(
+            "org.apache.jmeter.testelement.property.FunctionProperty",
+            newProp.getClass().getName());
+        assertEquals("$3.47", newProp.getStringValue());
+    }
+
     public void testParseExample9() throws Exception
-            {
-                StringProperty prop = new StringProperty("html", "${__regexFunction(([$]\\d+\\.\\d+),$1$)}");
-                JMeterProperty newProp = transformer.transformValue(prop);
-                newProp.setRunningVersion(true);
-                assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
-                assertEquals("$3.47", newProp.getStringValue());
-            }
-            
+    {
+        StringProperty prop =
+            new StringProperty(
+                "html",
+                "${__regexFunction(([$]\\d+\\.\\d+),$1$)}");
+        JMeterProperty newProp = transformer.transformValue(prop);
+        newProp.setRunningVersion(true);
+        assertEquals(
+            "org.apache.jmeter.testelement.property.FunctionProperty",
+            newProp.getClass().getName());
+        assertEquals("$3.47", newProp.getStringValue());
+    }
+
     public void testParseExample10() throws Exception
-                {
-                    StringProperty prop = new StringProperty("html", "${__regexFunction(\\ (\\\\\\$\\d+\\.\\d+\\,\\\\$\\d+\\.\\d+),$1$)}");
-                    JMeterProperty newProp = transformer.transformValue(prop);
-                    newProp.setRunningVersion(true);
-                    assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
-                    assertEquals("$3.47,$5.67", newProp.getStringValue());
-                }
+    {
+        StringProperty prop =
+            new StringProperty(
+                "html",
+                "${__regexFunction(\\ "
+                    + "(\\\\\\$\\d+\\.\\d+\\,\\\\$\\d+\\.\\d+),$1$)}");
+        JMeterProperty newProp = transformer.transformValue(prop);
+        newProp.setRunningVersion(true);
+        assertEquals(
+            "org.apache.jmeter.testelement.property.FunctionProperty",
+            newProp.getClass().getName());
+        assertEquals("$3.47,$5.67", newProp.getStringValue());
+    }
 
     public void testNestedExample1() throws Exception
     {
         StringProperty prop =
-            new StringProperty("html", "${__regexFunction(<html>(${my_regex})</html>," + "$1$)}${__regexFunction(<html>(.*o)(.*o)(.*)" + "</html>,$1$$3$)}");
+            new StringProperty(
+                "html",
+                "${__regexFunction(<html>(${my_regex})</html>,"
+                    + "$1$)}${__regexFunction(<html>(.*o)(.*o)(.*)"
+                    + "</html>,$1$$3$)}");
         JMeterProperty newProp = transformer.transformValue(prop);
         newProp.setRunningVersion(true);
-        assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
+        assertEquals(
+            "org.apache.jmeter.testelement.property.FunctionProperty",
+            newProp.getClass().getName());
         assertEquals("hello worldhellorld", newProp.getStringValue());
     }
 
     public void testNestedExample2() throws Exception
     {
-        StringProperty prop = new StringProperty("html", "${__regexFunction(<html>(${my_regex})</html>,$1$)}");
+        StringProperty prop =
+            new StringProperty(
+                "html",
+                "${__regexFunction(<html>(${my_regex})</html>,$1$)}");
         JMeterProperty newProp = transformer.transformValue(prop);
         newProp.setRunningVersion(true);
-        assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
+        assertEquals(
+            "org.apache.jmeter.testelement.property.FunctionProperty",
+            newProp.getClass().getName());
         assertEquals("hello world", newProp.getStringValue());
     }
 
