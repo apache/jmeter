@@ -118,7 +118,7 @@ public class JMeter19ConnectionPool implements ConnectionPool
 
     private void validateMaxConnections()
     {
-        Connection c = null;
+        //Connection c = null;
         try
         {
             DatabaseMetaData md =
@@ -155,17 +155,17 @@ public class JMeter19ConnectionPool implements ConnectionPool
         }
         finally
         {
-            if (c != null)
-            {
-                try
-                {
-                    c.close();
-                }
-                catch (SQLException e)
-                {
-                    log.warn("Error closing metadata database connection", e);
-                }
-            }
+//            if (c != null)
+//            {
+//                try
+//                {
+//                    c.close();
+//                }
+//                catch (SQLException e)
+//                {
+//                    log.warn("Error closing metadata database connection", e);
+//                }
+//            }
         }
     }
 
