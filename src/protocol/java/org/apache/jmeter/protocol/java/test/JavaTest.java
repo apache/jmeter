@@ -298,7 +298,8 @@ public class JavaTest
      * - responseData
      * </pre>
      * 
-     * @see org.apache.jmeter.samplers.SampleResult#setTime(long)
+     * @see org.apache.jmeter.samplers.SampleResult#sampleStart()
+     * @see org.apache.jmeter.samplers.SampleResult#sampleEnd()
      * @see org.apache.jmeter.samplers.SampleResult#setSuccessful(boolean)
      * @see org.apache.jmeter.samplers.SampleResult#setSampleLabel(String)
      * @see org.apache.jmeter.samplers.SampleResult#setResponseCode(String)

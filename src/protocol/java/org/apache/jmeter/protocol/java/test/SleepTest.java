@@ -139,15 +139,17 @@ public class SleepTest
     /**
      * Perform a single sample.  In this case, this method will
      * simply sleep for some amount of time.
-     * <p>
-     * This method returns a <code>SampleResult</code> object.
+     * Perform a single sample for each iteration.  This method
+     * returns a <code>SampleResult</code> object.
      * <code>SampleResult</code> has many fields which can be
      * used.  At a minimum, the test should use
-     * <code>SampleResult.setTime</code> to set the time that
+     * <code>SampleResult.sampleStart</code> and
+     * <code>SampleResult.sampleEnd</code>to set the time that
      * the test required to execute.  It is also a good idea to
      * set the sampleLabel and the successful flag.
      * 
-     * @see org.apache.jmeter.samplers.SampleResult#setTime(long)
+     * @see org.apache.jmeter.samplers.SampleResult#sampleStart()
+     * @see org.apache.jmeter.samplers.SampleResult#sampleEnd()
      * @see org.apache.jmeter.samplers.SampleResult#setSuccessful(boolean)
      * @see org.apache.jmeter.samplers.SampleResult#setSampleLabel(String)
      * 
