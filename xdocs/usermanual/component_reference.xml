@@ -926,16 +926,16 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-        <property name="Port" required="Yes">The port that the Proxy Server listens to.  8080 is the default, but you can change it
+        <property name="Port" required="Yes">The port that the Proxy Server listens to.  8080 is the default, but you can change it.</property>
         <!--TODO: there's some undocumented flags here -->
         <property name="Target Controller" required="Yes">The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.</property>
-        <property name="Grouping" required="Yes">Whether to group samplers for requests received without significant time separation, and how to represent that grouping in the recording:
-          <ul>
-            <li>Do not group samplers: store all recorded samplers sequentially.
-            <li>Add separators between groups: add a controller named "--------------" to create a visual separation between the groups. Otherwise the samplers are all stored sequentially.
-            <li>Put each group in a new controller: create a new <complink name="Simple Controller"/> for each group, and store all samplers for that group in it.
-            <li>Store 1st sampler of each group only: only the first request in each group will be recorded. The "Follow Redirects" and "Retrieve All Embedded Resources..." flags will be turned on in those samplers.
-          </ul>
+        <property name="Grouping" required="Yes">Whether to group samplers for requests from a single "click" (requests received without significant time separation), and how to represent that grouping in the recording:
+           <ul>
+             <li>Do not group samplers: store all recorded samplers sequentially, without any grouping.</li>
+             <li>Add separators between groups: add a controller named "--------------" to create a visual separation between the groups. Otherwise the samplers are all stored sequentially.</li>
+             <li>Put each group in a new controller: create a new <complink name="Simple Controller"/> for each group, and store all samplers for that group in it.</li>
+             <li>Store 1st sampler of each group only: only the first request in each group will be recorded. The "Follow Redirects" and "Retrieve All Embedded Resources..." flags will be turned on in those samplers.</li>
+           </ul>
         </property>
         <!-- TODO:property name="Group Separation Interval">Inactivity time between two requests needed to consider them in two separate groups.</property-->
         <property name="Patterns to Include" required="No">Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
@@ -946,10 +946,9 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
         <property name="Patterns to Exclude" required="No">Regular expressions that are matched against the URL that is sampled.
         <b>Any requests that match one or more Exclude pattern are <i>not</i> recorded</b>.</property>
         <property name="Clear Buttons" required="N/A">Remove all regular expressions from the list.</property>
-  <property name="Start Button" required="N/A">Start the proxy server.  JMeter writes the following message to the console once the proxy server
-has started up and is ready to take requests: "Proxy up and running!".</property>
-  <property name="Stop Button" required="N/A">Stop the proxy server.</property>
-  <property name="Restart Button" required="N/A">Stops and restarts the proxy server.  This is
+        <property name="Start Button" required="N/A">Start the proxy server.  JMeter writes the following message to the console once the proxy server has started up and is ready to take requests: "Proxy up and running!".</property>
+        <property name="Stop Button" required="N/A">Stop the proxy server.</property>
+        <property name="Restart Button" required="N/A">Stops and restarts the proxy server.  This is
   useful when you change/add/delete an include/exclude filter expression.</property>
 </properties>
 
