@@ -285,7 +285,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener
      */
     private JPanel createParameterPanel()
     {
-        argsPanel = new ArgumentsPanel();
+        argsPanel = new ArgumentsPanel(JMeterUtils.getResString("paramtable"));
         return argsPanel;
     }
 
