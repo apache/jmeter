@@ -65,6 +65,7 @@ import junit.framework.TestCase;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.jmeter.assertions.AssertionResult;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.LogTarget;
 import org.apache.log.Logger;
@@ -109,7 +110,7 @@ public class SampleResult implements Serializable
     private String responseHeaders=""; // Never return null
     private String contentType;
     private String requestHeaders="";
-    private long timeStamp = 0;// currently the end time stamp
+    private long timeStamp = 0;// the time stamp - can be start or end
     private long startTime = 0;
     private long endTime = 0;
     private long idleTime = 0;// Allow for non-sample time
@@ -127,6 +128,9 @@ public class SampleResult implements Serializable
     private final static String TOTAL_TIME = "totalTime";
 
     transient private static Logger log = LoggingManager.getLoggerForClass();
+
+    private final boolean startTimeStamp = 
+        JMeterUtils.getPropDefault("sampleresult.timestamp.start",false);
 
     public SampleResult()
     {
@@ -146,7 +150,7 @@ public class SampleResult implements Serializable
 	}
     
     /**
-     * Allow users to create a sample with specific start and elapsed times
+     * Allow users to create a sample with specific timestamp and elapsed times
      * for cloning and test purposes, but don't allow the times to be
      * changed later
      * 
@@ -208,17 +212,6 @@ public class SampleResult implements Serializable
         return timeStamp;
     }
     
-    /**
-     * @deprecated use sampleStart/sampleEnd instead
-     * 
-     * @param timeStamp
-     */
-
-    public void setTimeStamp(long timeStamp)
-    {
-        this.timeStamp = timeStamp;
-    }
-
     public String getSampleLabel()
     {
         return label;
@@ -281,15 +274,6 @@ public class SampleResult implements Serializable
     public void configure(Configuration info)
     {
         time = info.getAttributeAsLong(TOTAL_TIME, 0L);
-    }
-
-    /**
-     * Set the time this sample took to occur.
-     * @deprecated to be removed - use sampleStart() and sampleEnd() instead
-     */
-    public void setTime(long t)
-    {
-        time = t;
     }
 
     /**
@@ -482,6 +466,22 @@ public class SampleResult implements Serializable
         contentType = string;
     }
 
+	/**
+	 * @return the end time
+	 */
+	public long getEndTime()
+	{
+		return endTime;
+	}
+
+	/**
+	 * @return the start time
+	 */
+	public long getStartTime()
+	{
+		return startTime;
+	}
+
     /**
      * Record the start time of a sample
      *
@@ -490,6 +490,9 @@ public class SampleResult implements Serializable
     {
     	if (startTime == 0){
 			startTime = System.currentTimeMillis();
+			if (startTimeStamp){
+				timeStamp = startTime;
+			}
     	} else {
 			log.error("sampleStart called twice", new Throwable("Invalid call sequence"));
     	}
@@ -504,6 +507,10 @@ public class SampleResult implements Serializable
     	if (endTime == 0){
 			endTime = System.currentTimeMillis();
 			time = endTime - startTime - idleTime;
+			if (!startTimeStamp){
+				timeStamp = endTime;
+			}
+
     	} else {
     		log.error("sampleEnd called twice", new Throwable("Invalid call sequence"));
     	}
