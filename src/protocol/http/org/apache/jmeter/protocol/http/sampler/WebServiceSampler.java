@@ -499,17 +499,30 @@ public class WebServiceSampler extends HTTPSampler
         {
 			org.w3c.dom.Element rdoc = createDocument();
             Envelope msgEnv = Envelope.unmarshall(rdoc);
-			
-            // send the message
+            // create a new message
             Message msg = new Message();
             RESULT.sampleStart();
-            // if use proxy is set, we create the soaphttpconnection
-            // and set the host and port
+			SOAPHTTPConnection spconn = null;
+			// if a blank HeaderManager exists, try to
+			// get the SOAPHTTPConnection. After the first
+			// request, there should be a connection object
+			// stored with the cookie header info.
+			if (this.getHeaderManager() != null &&
+				this.getHeaderManager().getSOAPHeader() != null) {
+				spconn = (SOAPHTTPConnection)this.getHeaderManager().
+					getSOAPHeader();
+			} else {
+				spconn = new SOAPHTTPConnection();
+			} 
+			// check the proxy
+			String phost = "";
+			int pport = 0;
+			// if use proxy is set, we try to pick up the
+			// proxy host and port from either the text
+			// fields or from JMeterUtil if they were passed
+			// from command line
 			if (this.getUseProxy()){
-				String phost = "";
-				int pport = 0;
-				if (this.getProxyHost().length() > 0 &&
-				this.getProxyPort() > 0){
+				if (this.getProxyHost().length() > 0 &&	this.getProxyPort() > 0){
 					phost = this.getProxyHost();
 					pport = this.getProxyPort();
 				} else {
@@ -522,12 +535,19 @@ public class WebServiceSampler extends HTTPSampler
 				}
 				// if for some reason the host is blank and the port is
 				// zero, the sampler will fail silently
-				SOAPHTTPConnection spconn = new SOAPHTTPConnection();
-				spconn.setProxyHost(phost);
-				spconn.setProxyPort(pport);
-				msg.setSOAPTransport(spconn);
+				if (phost.length() > 0 && pport > 0){
+					spconn.setProxyHost(phost);
+					spconn.setProxyPort(pport);
+				}
 			}
+			// by default we maintain the session.	
+			spconn.setMaintainSession(true);
+			msg.setSOAPTransport(spconn);
             msg.send(this.getUrl(), this.getSoapAction(), msgEnv);
+
+			if (this.getHeaderManager() != null){
+				this.getHeaderManager().setSOAPHeader(spconn);
+			}
 
             SOAPTransport st = msg.getSOAPTransport();
             BufferedReader br = st.receive();
