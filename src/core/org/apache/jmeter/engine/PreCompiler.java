@@ -1,5 +1,9 @@
 package org.apache.jmeter.engine;
 
+import java.util.Iterator;
+import java.util.Map;
+
+import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.TestElement;
@@ -32,13 +36,13 @@ public class PreCompiler implements HashTreeTraverser
     {
         if (node instanceof TestPlan)
         {
-            replacer.setUserDefinedVariables(
-                ((TestPlan) node).getUserDefinedVariables());
-            JMeterVariables vars = new JMeterVariables();
-            vars.putAll(((TestPlan) node).getUserDefinedVariables());
+            Map args= ((TestPlan)node).getUserDefinedVariables();
+            replacer.setUserDefinedVariables(args);
+            JMeterVariables vars= new JMeterVariables();
+            vars.putAll(args);
             JMeterContextService.getContext().setVariables(vars);
         }
-        if (node instanceof TestElement)
+        else if (node instanceof TestElement)
         {
             try
             {
@@ -49,6 +53,17 @@ public class PreCompiler implements HashTreeTraverser
             {
                 log.error("invalid variables", e);
             }
+        }
+
+        if (node instanceof Arguments)
+        {
+            Map args= ((Arguments)node).getArgumentsAsMap();
+            for (Iterator a= args.entrySet().iterator(); a.hasNext(); )
+            {
+               Map.Entry e= (Map.Entry)a.next();
+               replacer.addVariable((String)e.getKey(), (String)e.getValue());
+            }
+            JMeterContextService.getContext().getVariables().putAll(args);
         }
     }
 
