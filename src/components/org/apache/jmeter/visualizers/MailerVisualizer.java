@@ -59,6 +59,10 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.UnknownHostException;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -84,6 +88,7 @@ import org.apache.log.Logger;
 
 
 /*
+ * TODO :
  * - Create a subpanel for other visualizers
  * - connect to the properties.
  * - Get the specific URL that is failing.
@@ -101,7 +106,7 @@ import org.apache.log.Logger;
  * @version    $Revision$ $Date$
  */
 public class MailerVisualizer extends AbstractVisualizer
-        implements Clearable, ChangeListener
+        implements ActionListener, Clearable, ChangeListener
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
@@ -252,6 +257,7 @@ public class MailerVisualizer extends AbstractVisualizer
         mailerPanel.add(successLimitField);
 
         testerButton = new JButton("Test Mail");
+        testerButton.addActionListener(this);
         testerButton.setEnabled(true);
         c.gridwidth = 1;
         g.setConstraints(testerButton, c);
@@ -292,6 +298,56 @@ public class MailerVisualizer extends AbstractVisualizer
     public String getAttributesTitle()
     {
         return JMeterUtils.getResString("mailer_attributes_panel");
+    }
+
+    // ////////////////////////////////////////////////////////////
+    //
+    // Implementation of the ActionListener-Interface.
+    //
+    // ////////////////////////////////////////////////////////////
+
+    /**
+     * Reacts on an ActionEvent (like pressing a button).
+     *
+     * @param e The ActionEvent with information about the event and its source.
+     */
+    public void actionPerformed(ActionEvent e)
+    {
+		if (e.getSource() == testerButton)
+		{
+			try
+			{
+				MailerModel model=((MailerResultCollector)getModel()).getMailerModel();
+
+				String to= addressField.getText();
+				String from= fromField.getText();
+				String via= smtpHostField.getText();
+				String fail= failureSubjectField.getText();
+				String success= successSubjectField.getText();
+				
+				String testString = "JMeter-Testmail" + "\n" 
+						+ "To:  " + to + "\n"
+                        + "Via:  " + via + "\n"
+						+ "Fail Subject:  " + fail + "\n"
+                        + "Success Subject:  " + success;
+
+                log.debug(testString);
+                Vector destination= new Vector();
+                destination.add(to);
+                model.sendMail(from, destination, "Testing mail-addresses", testString, via);
+                log.info("Mail sent successfully!!");
+			}
+			catch (UnknownHostException e1)
+			{
+				log.error("Invalid Mail Server ", e1);
+				displayMessage(JMeterUtils.getResString("invalid_mail_server"), true);
+			}
+			catch (Exception ex)
+			{
+				log.error("Couldn't send mail...", ex);
+				displayMessage(JMeterUtils.getResString("invalid_mail_server"), true);
+			}
+		}
     }
 
     // ////////////////////////////////////////////////////////////
