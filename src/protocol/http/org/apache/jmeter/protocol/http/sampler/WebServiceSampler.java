@@ -73,17 +73,17 @@ public class WebServiceSampler extends HTTPSampler
      * webservices and is defined by the
      * WSDL.
      */
-    protected String SOAPACTION = null;
+    private String SOAPACTION = null;
 
     /**
      * SampleResult which holds the response
      */
-    transient SampleResult RESULT = null;
+    private transient SampleResult RESULT = null;
 
     /**
      * The XML document
      */
-    protected Document XMLMSG = null;
+    private Document XMLMSG = null;
 
     /**
      * size of File[] array
@@ -109,9 +109,9 @@ public class WebServiceSampler extends HTTPSampler
      * consider using Apache commons pool to create a pool of document builders
      * or make sure XMLParserUtils creates builders efficiently.
      */
-    protected static DocumentBuilder XDB = null;
+    private static DocumentBuilder XDB = null;
 
-	protected String FILE_CONTENTS = null;
+	private String FILE_CONTENTS = null;
 	
     /**
      * Set the path where XML messages are stored for random selection.
