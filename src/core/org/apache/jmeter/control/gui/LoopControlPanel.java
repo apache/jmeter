@@ -3,7 +3,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,7 +12,6 @@ import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -134,25 +132,29 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
 
     private void init()
     {
-        // The Loop Controller panel can be displayed standalone or inside another panel.
-        // For standalone, we want to display the TITLE, NAME, etc. (everything). However,
-        // if we want to display it within another panel, we just display the Loop Count
-        // fields (not the TITLE and NAME).
+        // The Loop Controller panel can be displayed standalone or inside
+        // another panel.  For standalone, we want to display the TITLE, NAME,
+        // etc. (everything). However, if we want to display it within another
+        // panel, we just display the Loop Count fields (not the TITLE and
+        // NAME).
 
         // Standalone
         if (displayName)
         {
-            setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-            setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
-            add(makeTitlePanel());
-            add(createLoopCountPanel());
+            setLayout(new BorderLayout(0, 5));
+            setBorder(makeBorder());
+            add(makeTitlePanel(), BorderLayout.NORTH);
+            
+            JPanel mainPanel = new JPanel(new BorderLayout());
+            mainPanel.add(createLoopCountPanel(), BorderLayout.NORTH);
+            add(mainPanel, BorderLayout.CENTER);
         }
 
         // Embedded
         else
         {
             setLayout(new BorderLayout());
-            this.add(createLoopCountPanel(), BorderLayout.NORTH);
+            add(createLoopCountPanel(), BorderLayout.NORTH);
         }
     }
 
