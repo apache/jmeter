@@ -64,8 +64,8 @@ import javax.swing.JComponent;
 import javax.swing.tree.TreePath;
 
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
@@ -112,8 +112,8 @@ public class AddToTree implements Command
 	{
 		try
 		{
-			JMeterGUIComponent gui = (JMeterGUIComponent) Class.forName(((JComponent)e.getSource()).getName()).newInstance();
-			addObjectToTree(gui);
+			TestElement node = GuiPackage.getInstance().createTestElement(((JComponent)e.getSource()).getName());
+			addObjectToTree(node);
 		}
 		catch(Exception err)
 		{
@@ -121,10 +121,10 @@ public class AddToTree implements Command
 		}
 	}
 
-	protected void addObjectToTree(JMeterGUIComponent guiObject)
+	protected void addObjectToTree(TestElement el)
 	{
 		GuiPackage guiPackage = GuiPackage.getInstance();
-		JMeterTreeNode node = new JMeterTreeNode(guiObject, guiPackage.getTreeModel());
+		JMeterTreeNode node = new JMeterTreeNode(el, guiPackage.getTreeModel());
 		guiPackage.getTreeModel().insertNodeInto(node,
 				guiPackage.getTreeListener().getCurrentNode(),
 				guiPackage.getTreeListener().getCurrentNode().getChildCount());

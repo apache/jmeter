@@ -110,7 +110,7 @@ public class Clear implements Command
 		GuiPackage guiPackage = GuiPackage.getInstance();
 		if (e.getActionCommand().equals(CLEAR))
 		{
-			JMeterGUIComponent model = (JMeterGUIComponent)guiPackage.getTreeListener().getCurrentNode().getUserObject();
+			JMeterGUIComponent model = guiPackage.getCurrentGui();
 			try
 			{
 				((Clearable)model).clear();
@@ -127,7 +127,7 @@ public class Clear implements Command
 			{
 				try
 				{
-					Clearable item = (Clearable)((JMeterTreeNode)iter.next()).getUserObject();
+					Clearable item = (Clearable)guiPackage.getGui(((JMeterTreeNode)iter.next()).createTestElement());
 					item.clear();
 				}
 				catch (Exception ex)

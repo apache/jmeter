@@ -64,10 +64,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.apache.jorphan.reflect.ClassFinder;
 
 /**
  *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -99,6 +100,7 @@ public class ActionRouter implements ActionListener
 	{
 		try
 		{
+			GuiPackage.getInstance().updateCurrentNode();
 			Set commandObjects = (Set)commands.get(e.getActionCommand());
 			Iterator iter = commandObjects.iterator();
 			while(iter.hasNext())

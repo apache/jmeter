@@ -60,10 +60,10 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import javax.swing.JFileChooser;
+
 import junit.framework.TestCase;
 
 import org.apache.jmeter.control.gui.WorkBenchGui;
@@ -74,12 +74,9 @@ import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.collections.HashTree;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.apache.jorphan.collections.HashTree;
-import org.apache.jorphan.collections.ListedHashTree;
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -158,7 +155,7 @@ public class Load implements Command
 	 * Returns a boolean indicating whether the loaded tree was a full test plan
 	 * */
 	public boolean insertLoadedTree(int id, HashTree tree) throws Exception, IllegalUserActionException {
-		convertTree(tree);
+		//convertTree(tree);
 		boolean isTestPlan = GuiPackage.getInstance().addSubTree(tree);
 		tree = GuiPackage.getInstance().getCurrentSubTree();				
 		ActionRouter.getInstance().actionPerformed(new ActionEvent(
