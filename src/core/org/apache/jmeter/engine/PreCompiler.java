@@ -1,6 +1,5 @@
 package org.apache.jmeter.engine;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.jmeter.config.Arguments;
@@ -58,11 +57,7 @@ public class PreCompiler implements HashTreeTraverser
         if (node instanceof Arguments)
         {
             Map args= ((Arguments)node).getArgumentsAsMap();
-            for (Iterator a= args.entrySet().iterator(); a.hasNext(); )
-            {
-               Map.Entry e= (Map.Entry)a.next();
-               replacer.addVariable((String)e.getKey(), (String)e.getValue());
-            }
+            replacer.addVariables(args);
             JMeterContextService.getContext().getVariables().putAll(args);
         }
     }
