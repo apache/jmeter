@@ -98,7 +98,7 @@ public class MonitorAccumModel implements Clearable, Serializable
 	/**
 	 * Get all MonitorModels matching the URL.
 	 * @param url
-	 * @return
+	 * @return list
 	 */
 	public List getAllSamples(String url){
 		if (!MAP.containsKey(url)){
@@ -111,7 +111,7 @@ public class MonitorAccumModel implements Clearable, Serializable
 	/**
 	 * Get the MonitorModel matching the url.
 	 * @param url
-	 * @return
+	 * @return list
 	 */
 	public MonitorModel getSample(String url){
 		if (MAP.containsKey(url)){

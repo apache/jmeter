@@ -74,7 +74,7 @@ public class MonitorStats implements Serializable
 	/**
 	 * For convienance, this method returns the protocol,
 	 * host and port as a URL.
-	 * @return
+	 * @return protocol://host:port
 	 */
 	public String getURL(){
 		return protocol + "://" + host + ":" + port;

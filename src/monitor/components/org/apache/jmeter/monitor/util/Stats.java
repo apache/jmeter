@@ -57,7 +57,7 @@ public class Stats
 	 * free threads. Since memory is a bigger risk,
 	 * it counts for 2/3.<p>
 	 * @param stat
-	 * @return
+	 * @return calculated load value
 	 */
 	public static int calculateLoad(Status stat){
 		if (stat != null){
@@ -90,7 +90,7 @@ public class Stats
 	 * <li> none of the above is dead
 	 * </ol>
 	 * @param stat
-	 * @return
+	 * @return status
 	 */
 	public static int calculateStatus(Status stat){
 		if (stat != null){
@@ -119,7 +119,7 @@ public class Stats
 	 * integer between 1 and 100. It is the
 	 * percent memory used.
 	 * @param stat
-	 * @return
+	 * @return memory load
 	 */	
 	public static int calculateMemoryLoad(Status stat){
 		double load = 0;
@@ -137,7 +137,7 @@ public class Stats
 	 * integer between 1 and 100. It is the
 	 * percent busy.
 	 * @param stat
-	 * @return
+	 * @return thread load
 	 */	
 	public static int calculateThreadLoad(Status stat){
 		int load = 0;
