@@ -63,6 +63,7 @@ import java.util.Map;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.control.Controller;
+import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.processor.PostProcessor;
@@ -90,7 +91,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
     static Map samplers = new HashMap();
     int initialDelay = 0;
     Controller controller;
-    private boolean running;
+    private boolean running;//TODO should this be volatile?
     HashTree testTree;
     TestCompiler compiler;
     JMeterThreadMonitor monitor;
@@ -104,6 +105,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
     long endTime = 0;
     private boolean scheduler = false;
     //based on this scheduler is enabled or disabled
+    private StandardJMeterEngine engine = null;
 
     public JMeterThread()
     {
@@ -250,7 +252,6 @@ public class JMeterThread implements Runnable, java.io.Serializable
             testTree.traverse(compiler);
             running = true;
             //listeners = controller.getListeners();
-            Sampler entry = null;
             rampUpDelay();
             
             if (scheduler)
@@ -281,6 +282,12 @@ public class JMeterThread implements Runnable, java.io.Serializable
                         checkAssertions(pack.getAssertions(), result);
                         notifyListeners(pack.getSampleListeners(), result);
                         compiler.done(pack);
+                        if (result.isStopThread()){
+                        	stopThread();
+                        }
+						if (result.isStopTest()){
+							stopTest();
+						}
                         if (scheduler)
                         {
                             //checks the scheduler to stop the iteration
@@ -315,8 +322,22 @@ public class JMeterThread implements Runnable, java.io.Serializable
     public void stop()
     {
         running = false;
-        log.info("stopping " + threadName);
+        log.info("Stopping " + threadName);
     }
+	private void stopTest()
+	{
+		running = false;
+		log.info("Stop Test detected by thread " + threadName);
+		//engine.stopTest();
+		if (engine != null ) engine.askThreadsToStop();
+	}
+	private void stopThread()
+	{
+		running = false;
+		log.info("Stop Thread detected by thread " + threadName);
+	}
+
+
     private void checkAssertions(List assertions, SampleResult result)
     {
         Iterator iter = assertions.iterator();
@@ -445,4 +466,12 @@ public class JMeterThread implements Runnable, java.io.Serializable
             notifyTestListeners();
         }
     }
+    /**
+     * @param engine
+     */
+    public void setEngine(StandardJMeterEngine engine)
+    {
+        this.engine = engine;
+    }
+
 }
