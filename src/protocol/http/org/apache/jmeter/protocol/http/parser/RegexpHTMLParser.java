@@ -115,6 +115,9 @@ import org.apache.oro.text.regex.MalformedPatternException;
  */
 class RegexpHTMLParser extends HTMLParser
 {
+	/** Stores the singleton parser to be used */
+    private static HTMLParser myParser = new RegexpHTMLParser();
+
     /**
      * Regular expression used against the HTML code to find the URIs of
      * images, etc.:
@@ -163,7 +166,8 @@ class RegexpHTMLParser extends HTMLParser
     /**
      * Make sure to compile the regular expression upon instantiation:
      */
-    protected RegexpHTMLParser() {
+    //TODO make private? 
+    RegexpHTMLParser() {
         super();
         
         // Compile the regular expression:
@@ -270,7 +274,25 @@ class RegexpHTMLParser extends HTMLParser
             super();
         }
         public void testParser() throws Exception {
-            HTMLParserTest.testParser(new RegexpHTMLParser());
+			log.info("testParser");
+            HTMLParserTest.testParser(getParserInstance());
         }
+        public void testParserClass() throws Exception {
+		    log.info("testParserClass");
+		    HTMLParserTest.testParser("org.apache.jmeter.protocol.http.parser.RegexpHTMLParser");
+	    }
     }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.protocol.http.parser.HTMLParser#getParserInstance()
+     */
+    public static HTMLParser getParserInstance()
+    {
+        return myParser;
+    }
+
+	public static boolean isParserReusable(){
+		return true;
+	}
+
 }
