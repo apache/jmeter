@@ -52,7 +52,8 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.visualizers;
+package org.apache.jmeter.visualizers;
+
 
 import java.io.Serializable;
 import java.net.InetAddress;
@@ -83,404 +84,442 @@ import org.apache.log.Logger;
  * @author     <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
  * @version    $Revision$ $Date$
  */
-public class MailerModel extends AbstractTestElement implements Serializable {
+public class MailerModel extends AbstractTestElement implements Serializable
+{
 
-	private String addressie;
-	private String fromAddress;
-	private String smtpHost;
-	private String failureSubject;
-	private String successSubject;
-	private long failureCount = 0;
-	private long successCount = 0;
-	private long failureLimit = 2;
-	private long successLimit = 2;
-	private boolean failureMsgSent = false;
-	private boolean siteDown = false;
-	private boolean successMsgSent = false;
+    private String addressie;
+    private String fromAddress;
+    private String smtpHost;
+    private String failureSubject;
+    private String successSubject;
+    private long failureCount = 0;
+    private long successCount = 0;
+    private long failureLimit = 2;
+    private long successLimit = 2;
+    private boolean failureMsgSent = false;
+    private boolean siteDown = false;
+    private boolean successMsgSent = false;
 
-	private Properties appProperties;
+    private Properties appProperties;
 
-	private static final String FROM_KEY = "MailerModel.fromAddress";
-	private static final String TO_KEY = "MailerModel.addressie";
-	private static final String HOST_KEY = "MailerModel.smtpHost";
-	private static final String SUCCESS_KEY = "MailerModel.successSubject";
-	private static final String FAILURE_KEY = "MailerModel.failureSubject";
-	private static final String FAILURE_LIMIT_KEY = "MailerModel.failureLimit";
-	private static final String SUCCESS_LIMIT_KEY = "MailerModel.successLimit";
+    private static final String FROM_KEY = "MailerModel.fromAddress";
+    private static final String TO_KEY = "MailerModel.addressie";
+    private static final String HOST_KEY = "MailerModel.smtpHost";
+    private static final String SUCCESS_KEY = "MailerModel.successSubject";
+    private static final String FAILURE_KEY = "MailerModel.failureSubject";
+    private static final String FAILURE_LIMIT_KEY = "MailerModel.failureLimit";
+    private static final String SUCCESS_LIMIT_KEY = "MailerModel.successLimit";
 
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
-	/** The listener for changes. */
-	ModelListener changeListener;
+    /** The listener for changes. */
+    ModelListener changeListener;
 
-	/**
-	 * Constructs a MailerModel.
-	 */
-	public MailerModel() {
-		super();
+    /**
+     * Constructs a MailerModel.
+     */
+    public MailerModel()
+    {
+        super();
 
-		// Properties connection.
-		this.appProperties = JMeterUtils.getJMeterProperties();
+        // Properties connection.
+        this.appProperties = JMeterUtils.getJMeterProperties();
 
-		// retrieve successLimit from properties
-		try {
-			successLimit =	Long.parseLong(appProperties.getProperty("mailer.successlimit"));
-		}
-		catch (Exception ex) {
-			// Ignore any garbage
-		}
+        // retrieve successLimit from properties
+        try
+        {
+            successLimit = Long.parseLong(appProperties.getProperty("mailer.successlimit"));
+        }
+        catch (Exception ex)
+        {// Ignore any garbage
+        }
 
-		// retrieve failureLimit from properties
-		try {
-			failureLimit =	Long.parseLong(appProperties.getProperty("mailer.failurelimit"));
-		}
-		catch (Exception ex) {
-			// Ignore any garbage
-		}
-	}
+        // retrieve failureLimit from properties
+        try
+        {
+            failureLimit = Long.parseLong(appProperties.getProperty("mailer.failurelimit"));
+        }
+        catch (Exception ex)
+        {// Ignore any garbage
+        }
+    }
 
-	/**
-	 * Returns wether there had been more failures than acceptable.
-	 *
-	 * @return A boolean value indicating wether the limit of acceptable failures has been reached.
-	 */
-	public synchronized boolean isFailing()
-	{
-		return (failureCount > failureLimit);
-	}
+    /**
+     * Returns wether there had been more failures than acceptable.
+     *
+     * @return A boolean value indicating wether the limit of acceptable failures has been reached.
+     */
+    public synchronized boolean isFailing()
+    {
+        return (failureCount > failureLimit);
+    }
 
-	/**
-	 * Gets a Vector of String-objects. Each String is one mail-address
-	 * of the addresses-String set by <code>setToAddress(str)</code>.
-	 * The addresses must be seperated by commas. Only String-objects
-	 * containing a "@" are added to the returned Vector.
-	 *
-	 * @return A Vector of String-objects wherein each String represents a mail-address.
-	 */
-	public synchronized Vector getAddressVector()
-	{
-		String theAddressie = getToAddress();
-		Vector addressVector = new Vector();
-		if (theAddressie != null) {
-			String addressSep = ",";
+    /**
+     * Gets a Vector of String-objects. Each String is one mail-address
+     * of the addresses-String set by <code>setToAddress(str)</code>.
+     * The addresses must be seperated by commas. Only String-objects
+     * containing a "@" are added to the returned Vector.
+     *
+     * @return A Vector of String-objects wherein each String represents a mail-address.
+     */
+    public synchronized Vector getAddressVector()
+    {
+        String theAddressie = getToAddress();
+        Vector addressVector = new Vector();
 
-			StringTokenizer next = new StringTokenizer(theAddressie, addressSep);
+        if (theAddressie != null)
+        {
+            String addressSep = ",";
 
-			while (next.hasMoreTokens())
-			{
-				String theToken = next.nextToken().trim();
+            StringTokenizer next = new StringTokenizer(theAddressie, addressSep);
 
-				if (theToken.indexOf("@") > 0)
-				{
-					addressVector.addElement(theToken);
-				}
-			}
-		}
-		else {
-			return new Vector(0);
-		}
+            while (next.hasMoreTokens())
+            {
+                String theToken = next.nextToken().trim();
 
-		return addressVector;
-	}
+                if (theToken.indexOf("@") > 0)
+                {
+                    addressVector.addElement(theToken);
+                }
+            }
+        }
+        else
+        {
+            return new Vector(0);
+        }
 
+        return addressVector;
+    }
 
-	/**
-	 * Adds a SampleResult. If SampleResult represents a change concerning
-	 * the failure/success of the sampling a message might be send to the
-	 * addressies according to the settings of <code>successCount</code>
-	 * and <code>failureCount</code>.
-	 *
-	 * @param sample The SampleResult encapsulating informations about the last sample.
-	 */
-	public synchronized void add(SampleResult sample)
-	{
+    /**
+     * Adds a SampleResult. If SampleResult represents a change concerning
+     * the failure/success of the sampling a message might be send to the
+     * addressies according to the settings of <code>successCount</code>
+     * and <code>failureCount</code>.
+     *
+     * @param sample The SampleResult encapsulating informations about the last sample.
+     */
+    public synchronized void add(SampleResult sample)
+    {
 
-		// -1 is the code for a failed sample.
-		//
-		if (!sample.isSuccessful())
-		{
-			failureCount++;
-		}
-		else
-		{
-			successCount++;
-		}
+        // -1 is the code for a failed sample.
+        //
+        if (!sample.isSuccessful())
+        {
+            failureCount++;
+        }
+        else
+        {
+            successCount++;
+        }
 
-		if (this.isFailing() && !siteDown && !failureMsgSent)
-		{
-			// Send the mail ...
-			Vector addressVector = getAddressVector();
-			if (addressVector.size() != 0) {
-				try {
-					sendMail(fromAddress, addressVector, failureSubject, "URL Failed: " +
-						sample.getSampleLabel(), smtpHost);
-				}
-				catch (Exception e) {
-					log.error("Problem sending mail",e);
-				}
-				siteDown = true;
-				failureMsgSent = true;
-				successCount = 0;
-			}
-		}
+        if (this.isFailing() && !siteDown && !failureMsgSent)
+        {
+            // Send the mail ...
+            Vector addressVector = getAddressVector();
 
-		if (siteDown && (sample.getTime() != -1) & !successMsgSent)
-		{
-			// Send the mail ...
-			if (successCount > successLimit)
-			{
-				Vector addressVector = getAddressVector();
-				try {
-					sendMail(fromAddress, addressVector, successSubject, "URL Restarted: " +
-							sample.getSampleLabel(), smtpHost);
-				}
-				catch (Exception e) {
-					log.error("Problem sending mail",e);
-				}
-				siteDown = false;
-				successMsgSent = true;
-			}
-		}
+            if (addressVector.size() != 0)
+            {
+                try
+                {
+                    sendMail(fromAddress, addressVector, failureSubject, "URL Failed: " + sample.getSampleLabel(), smtpHost);
+                }
+                catch (Exception e)
+                {
+                    log.error("Problem sending mail", e);
+                }
+                siteDown = true;
+                failureMsgSent = true;
+                successCount = 0;
+            }
+        }
 
-		if (successMsgSent && failureMsgSent)
-		{
-			clear();
-		}
-		notifyChangeListeners();
-	}
+        if (siteDown && (sample.getTime() != -1) & !successMsgSent)
+        {
+            // Send the mail ...
+            if (successCount > successLimit)
+            {
+                Vector addressVector = getAddressVector();
 
-	/**
-	 * Resets the state of this object to its default. But: This method does not
-	 * reset any mail-specific attributes (like sender, mail-subject...)
-	 * since they are independent of the sampling.
-	 */
-	public synchronized void clear()
-	{
-		failureCount = 0;
-		successCount = 0;
-		siteDown = false;
-		successMsgSent = false;
-		failureMsgSent = false;
-		notifyChangeListeners();
-	}
+                try
+                {
+                    sendMail(fromAddress, addressVector, successSubject, "URL Restarted: " + sample.getSampleLabel(), smtpHost);
+                }
+                catch (Exception e)
+                {
+                    log.error("Problem sending mail", e);
+                }
+                siteDown = false;
+                successMsgSent = true;
+            }
+        }
 
-	/**
-	 * Returns a String-representation of this object. Returns always
-	 * "E-Mail-Notification". Might be enhanced in future versions to return
-	 * some kind of String-representation of the mail-parameters (like
-	 * sender, addressies, smtpHost...).
-	 *
-	 * @return A String-representation of this object.
-	 */
-	public String toString()
-	{
-		return "E-Mail Notification";
-	}
+        if (successMsgSent && failureMsgSent)
+        {
+            clear();
+        }
+        notifyChangeListeners();
+    }
 
-	/**
-	 * Sends a mail with the given parameters using SMTP.
-	 *
-	 * @param  from The sender of the mail as shown in the mail-client.
-	 * @param  vEmails All receivers of the mail. The receivers are seperated by commas.
-	 * @param  subject The subject of the mail.
-	 * @param  attText The message-body.
-	 * @param  smtpHost The smtp-server used to send the mail.
-	 */
-	public synchronized void sendMail(String from,
-			Vector vEmails,
-			String subject,
-			String attText,
-			String smtpHost) throws UnknownHostException, AddressException, MessagingException
-	{
-		String host = smtpHost;
-		boolean debug = Boolean.valueOf(host).booleanValue();
-		InetAddress remote = InetAddress.getByName(host);
+    /**
+     * Resets the state of this object to its default. But: This method does not
+     * reset any mail-specific attributes (like sender, mail-subject...)
+     * since they are independent of the sampling.
+     */
+    public synchronized void clear()
+    {
+        failureCount = 0;
+        successCount = 0;
+        siteDown = false;
+        successMsgSent = false;
+        failureMsgSent = false;
+        notifyChangeListeners();
+    }
 
-		InternetAddress[] address = new InternetAddress[vEmails.size()];
-		for (int k = 0; k < vEmails.size(); k++)
-		{
-			address[k] = new InternetAddress(vEmails.elementAt(k).toString());
-		}
+    /**
+     * Returns a String-representation of this object. Returns always
+     * "E-Mail-Notification". Might be enhanced in future versions to return
+     * some kind of String-representation of the mail-parameters (like
+     * sender, addressies, smtpHost...).
+     *
+     * @return A String-representation of this object.
+     */
+    public String toString()
+    {
+        return "E-Mail Notification";
+    }
 
-		// create some properties and get the default Session
-		Properties props = new Properties();
-		props.put("mail.smtp.host", host);
-		Session session = Session.getDefaultInstance(props, null);
-		session.setDebug(debug);
+    /**
+     * Sends a mail with the given parameters using SMTP.
+     *
+     * @param  from The sender of the mail as shown in the mail-client.
+     * @param  vEmails All receivers of the mail. The receivers are seperated by commas.
+     * @param  subject The subject of the mail.
+     * @param  attText The message-body.
+     * @param  smtpHost The smtp-server used to send the mail.
+     */
+    public synchronized void sendMail(String from,
+            Vector vEmails,
+            String subject,
+            String attText,
+            String smtpHost) throws UnknownHostException, AddressException, MessagingException
+    {
+        String host = smtpHost;
+        boolean debug = Boolean.valueOf(host).booleanValue();
+        InetAddress remote = InetAddress.getByName(host);
 
-		// create a message
-		Message msg = new MimeMessage(session);
-		msg.setFrom(new InternetAddress(from));
-		msg.setRecipients(Message.RecipientType.TO, address);
-		msg.setSubject(subject);
-		msg.setText(attText);
-		Transport.send(msg);
-	}
+        InternetAddress[] address = new InternetAddress[vEmails.size()];
 
+        for (int k = 0; k < vEmails.size(); k++)
+        {
+            address[k] = new InternetAddress(vEmails.elementAt(k).toString());
+        }
 
-	/**
-	 * Returns a String for the title of the attributes-panel
-	 * as set up in the properties-file using the lookup-constant
-	 * "mailer_attributes_panel".
-	 *
-	 * @return  The title of the component.
-	 */
-	public String getAttributesTitle()
-	{
-		return JMeterUtils.getResString("mailer_attributes_panel");
-	}
+        // create some properties and get the default Session
+        Properties props = new Properties();
 
-	//////////////////////////////////////////////////////////////
-	//
-	// setter/getter - JavaDoc-Comments not needed...
-	//
-	//////////////////////////////////////////////////////////////
+        props.put("mail.smtp.host", host);
+        Session session = Session.getDefaultInstance(props, null);
 
-	public void setToAddress(String str) {
-		this.addressie = str;
-	}
+        session.setDebug(debug);
 
-	public void setFromAddress(String str) {
-		this.fromAddress = str;
-	}
+        // create a message
+        Message msg = new MimeMessage(session);
 
-	public void setSmtpHost(String str) {
-		this.smtpHost = str;
-	}
+        msg.setFrom(new InternetAddress(from));
+        msg.setRecipients(Message.RecipientType.TO, address);
+        msg.setSubject(subject);
+        msg.setText(attText);
+        Transport.send(msg);
+    }
 
-	public void setFailureSubject(String str) {
-		this.failureSubject = str;
-	}
+    /**
+     * Returns a String for the title of the attributes-panel
+     * as set up in the properties-file using the lookup-constant
+     * "mailer_attributes_panel".
+     *
+     * @return  The title of the component.
+     */
+    public String getAttributesTitle()
+    {
+        return JMeterUtils.getResString("mailer_attributes_panel");
+    }
 
-	public void setSuccessSubject(String str) {
-		this.successSubject = str;
-	}
+    // ////////////////////////////////////////////////////////////
+    //
+    // setter/getter - JavaDoc-Comments not needed...
+    //
+    // ////////////////////////////////////////////////////////////
 
-	public void setSuccessLimit(long limit) {
-		this.successLimit = limit;
-	}
+    public void setToAddress(String str)
+    {
+        this.addressie = str;
+    }
 
-	public void setSuccessCount(long count) {
-		this.successCount = count;
-	}
+    public void setFromAddress(String str)
+    {
+        this.fromAddress = str;
+    }
 
-	public void setFailureLimit(long limit) {
-		this.failureLimit = limit;
-	}
+    public void setSmtpHost(String str)
+    {
+        this.smtpHost = str;
+    }
 
-	public void setFailureCount(long count) {
-		this.failureCount = count;
-	}
+    public void setFailureSubject(String str)
+    {
+        this.failureSubject = str;
+    }
 
-	public String getToAddress() {
-		return this.addressie;
-	}
+    public void setSuccessSubject(String str)
+    {
+        this.successSubject = str;
+    }
 
-	public String getFromAddress() {
-		return this.fromAddress;
-	}
+    public void setSuccessLimit(long limit)
+    {
+        this.successLimit = limit;
+    }
 
-	public String getSmtpHost() {
-		return this.smtpHost;
-	}
+    public void setSuccessCount(long count)
+    {
+        this.successCount = count;
+    }
 
-	public String getFailureSubject() {
-		return this.failureSubject;
-	}
+    public void setFailureLimit(long limit)
+    {
+        this.failureLimit = limit;
+    }
 
-	public String getSuccessSubject() {
-		return this.successSubject;
-	}
+    public void setFailureCount(long count)
+    {
+        this.failureCount = count;
+    }
 
-	public long getSuccessLimit() {
-		return this.successLimit;
-	}
+    public String getToAddress()
+    {
+        return this.addressie;
+    }
 
-	public long getSuccessCount() {
-		return this.successCount;
-	}
+    public String getFromAddress()
+    {
+        return this.fromAddress;
+    }
 
-	public long getFailureLimit() {
-		return this.failureLimit;
-	}
+    public String getSmtpHost()
+    {
+        return this.smtpHost;
+    }
 
-	public long getFailureCount() {
-		return this.failureCount;
-	}
+    public String getFailureSubject()
+    {
+        return this.failureSubject;
+    }
 
-	//////////////////////////////////////////////////////////////
-	//
-	// Storing and retrieving of model...
-	//
-	//////////////////////////////////////////////////////////////
+    public String getSuccessSubject()
+    {
+        return this.successSubject;
+    }
 
-	/**
-	 * Stores the attributes of the model as elements of the
-	 * given TestElement-object.
-	 *
-	 * @param element The TestElement to collect the model-attributes.
-	 */
-	public void storeModel(TestElement element) {
-		element.setProperty(TO_KEY, getToAddress());
-		element.setProperty(FROM_KEY, getFromAddress());
-		element.setProperty(HOST_KEY, getSmtpHost());
-		element.setProperty(SUCCESS_KEY, getSuccessSubject());
-		element.setProperty(FAILURE_KEY, getFailureSubject());
-		element.setProperty(FAILURE_LIMIT_KEY, new Long(getFailureLimit()));
-		element.setProperty(SUCCESS_LIMIT_KEY, new Long(getSuccessLimit()));
-	}
+    public long getSuccessLimit()
+    {
+        return this.successLimit;
+    }
 
-	/**
-	 * Retrieves the attribute of the model as elements of the
-	 * given TestElement-object.
-	 *
-	 * @param element The TestElement to collect the model-attributes.
-	 */
-	public void retrieveModel(TestElement element) {
-		try {
-			setToAddress(element.getPropertyAsString(TO_KEY));
-			setFromAddress(element.getPropertyAsString(FROM_KEY));
-			setSmtpHost(element.getPropertyAsString(HOST_KEY));
-			setSuccessSubject(element.getPropertyAsString(SUCCESS_KEY));
-			setFailureSubject(element.getPropertyAsString(FAILURE_KEY));
-			setFailureLimit(Long.parseLong((String)element.getProperty(FAILURE_LIMIT_KEY)));
-			setSuccessLimit(Long.parseLong((String)element.getProperty(SUCCESS_LIMIT_KEY)));
-		}
-		catch (Exception e) {
-			log.error("Couldn't load MailerVisualizer...");
-		}
-	}
+    public long getSuccessCount()
+    {
+        return this.successCount;
+    }
 
-	//////////////////////////////////////////////////////////////
-	//
-	// Notification of GUI.
-	//
-	//////////////////////////////////////////////////////////////
+    public long getFailureLimit()
+    {
+        return this.failureLimit;
+    }
 
-	/**
-	 * Adds a ModelListener that is to be notified if model changes.
-	 *
-	 * @param listener The callback-object to receive notifications if state changes.
-	 */
-	public void addModelListener(ModelListener listener) {
-		this.changeListener = listener;
-	}
+    public long getFailureCount()
+    {
+        return this.failureCount;
+    }
 
-	/**
-	 * Notify the assoziated ModelListener that the model has changed.
-	 */
-	private void notifyChangeListeners() {
-		this.changeListener.updateVisualizer();
-	}
+    // ////////////////////////////////////////////////////////////
+    //
+    // Storing and retrieving of model...
+    //
+    // ////////////////////////////////////////////////////////////
 
-	/**
-	 * Notify the assoziated ModelListener that the model has changed.
-	 *
-	 * @param messageString The message to be displayed.
-	 */
-	private void notifyChangeListenersAboutMessage(String messageString) {
-		this.changeListener.displayMessage(messageString, true);
-	}
+    /**
+     * Stores the attributes of the model as elements of the
+     * given TestElement-object.
+     *
+     * @param element The TestElement to collect the model-attributes.
+     */
+    public void storeModel(TestElement element)
+    {
+        element.setProperty(TO_KEY, getToAddress());
+        element.setProperty(FROM_KEY, getFromAddress());
+        element.setProperty(HOST_KEY, getSmtpHost());
+        element.setProperty(SUCCESS_KEY, getSuccessSubject());
+        element.setProperty(FAILURE_KEY, getFailureSubject());
+        element.setProperty(FAILURE_LIMIT_KEY, new Long(getFailureLimit()));
+        element.setProperty(SUCCESS_LIMIT_KEY, new Long(getSuccessLimit()));
+    }
+
+    /**
+     * Retrieves the attribute of the model as elements of the
+     * given TestElement-object.
+     *
+     * @param element The TestElement to collect the model-attributes.
+     */
+    public void retrieveModel(TestElement element)
+    {
+        try
+        {
+            setToAddress(element.getPropertyAsString(TO_KEY));
+            setFromAddress(element.getPropertyAsString(FROM_KEY));
+            setSmtpHost(element.getPropertyAsString(HOST_KEY));
+            setSuccessSubject(element.getPropertyAsString(SUCCESS_KEY));
+            setFailureSubject(element.getPropertyAsString(FAILURE_KEY));
+            setFailureLimit(Long.parseLong((String) element.getProperty(FAILURE_LIMIT_KEY)));
+            setSuccessLimit(Long.parseLong((String) element.getProperty(SUCCESS_LIMIT_KEY)));
+        }
+        catch (Exception e)
+        {
+            log.error("Couldn't load MailerVisualizer...");
+        }
+    }
+
+    // ////////////////////////////////////////////////////////////
+    //
+    // Notification of GUI.
+    //
+    // ////////////////////////////////////////////////////////////
+
+    /**
+     * Adds a ModelListener that is to be notified if model changes.
+     *
+     * @param listener The callback-object to receive notifications if state changes.
+     */
+    public void addModelListener(ModelListener listener)
+    {
+        this.changeListener = listener;
+    }
+
+    /**
+     * Notify the assoziated ModelListener that the model has changed.
+     */
+    private void notifyChangeListeners()
+    {
+        this.changeListener.updateVisualizer();
+    }
+
+    /**
+     * Notify the assoziated ModelListener that the model has changed.
+     *
+     * @param messageString The message to be displayed.
+     */
+    private void notifyChangeListenersAboutMessage(String messageString)
+    {
+        this.changeListener.displayMessage(messageString, true);
+    }
 }
-
 

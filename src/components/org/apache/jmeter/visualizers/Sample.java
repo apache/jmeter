@@ -52,9 +52,11 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.visualizers;
+package org.apache.jmeter.visualizers;
+
 
 import java.io.Serializable;
+
 
 /**
  * Title:        Apache JMeter
@@ -65,43 +67,44 @@ import java.io.Serializable;
  * @version 1.0
  */
 
-	public class Sample implements Serializable
-	{
+public class Sample implements Serializable
+{
 
-		/**
-		 *  Description of the Field
-		 */
-		public long data;
-		/**
-		 *  Description of the Field
-		 */
-		public long average;
-		/**
-		 *  Description of the Field
-		 */
-		public long deviation;
-		
-		public float throughput;
-		
-		public boolean error = false;
+    /**
+     *  Description of the Field
+     */
+    public long data;
 
-		/**
-		 *  Constructor for the Sample object
-		 *
-		 *@param  data       Description of Parameter
-		 *@param  average    Description of Parameter
-		 *@param  deviation  Description of Parameter
-		 */
-		public Sample(long data, long average, long deviation,float throughput,boolean error)
-		{
-			this.data = data;
-			this.average = average;
-			this.deviation = deviation;
-			this.throughput = throughput;
-			this.error = error;
-		}
-		
-		public Sample()
-		{
-		}
-	}
+    /**
+     *  Description of the Field
+     */
+    public long average;
+
+    /**
+     *  Description of the Field
+     */
+    public long deviation;
+
+    public float throughput;
+
+    public boolean error = false;
+
+    /**
+     *  Constructor for the Sample object
+     *
+     *@param  data       Description of Parameter
+     *@param  average    Description of Parameter
+     *@param  deviation  Description of Parameter
+     */
+    public Sample(long data, long average, long deviation, float throughput, boolean error)
+    {
+        this.data = data;
+        this.average = average;
+        this.deviation = deviation;
+        this.throughput = throughput;
+        this.error = error;
+    }
+
+    public Sample()
+    {}
+}

@@ -54,6 +54,7 @@
  */
 package org.apache.jmeter.visualizers;
 
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -76,256 +77,253 @@ import org.apache.jmeter.samplers.Clearable;
  *@version    1.0
  */
 
-public class Graph extends JComponent implements Scrollable,GraphListener,Clearable
+public class Graph extends JComponent implements Scrollable, GraphListener, Clearable
 {
 
-	private boolean data = true;
-	private boolean average = true;
-	private boolean deviation = true;
-	private boolean throughput = true;
+    private boolean data = true;
+    private boolean average = true;
+    private boolean deviation = true;
+    private boolean throughput = true;
 
-	private GraphModel model;
-	private static int width = 2000;
+    private GraphModel model;
+    private static int width = 2000;
 
+    /**
+     *  Constructor for the Graph object
+     */
+    public Graph()
+    {
+        this.setPreferredSize(new Dimension(width, 800));
+    }
 
-	/**
-	 *  Constructor for the Graph object
-	 */
-	public Graph()
-	{
-		this.setPreferredSize(new Dimension(width, 800));
-	}
+    /**
+     *  Constructor for the Graph object
+     *
+     *@param  model  Description of Parameter
+     */
+    public Graph(GraphModel model)
+    {
+        this();
+        setModel(model);
+    }
 
+    /**
+     *  Sets the Model attribute of the Graph object
+     *
+     *@param  model  The new Model value
+     */
+    private void setModel(Object model)
+    {
+        this.model = (GraphModel) model;
+        this.model.addGraphListener(this);
+        repaint();
+    }
 
-	/**
-	 *  Constructor for the Graph object
-	 *
-	 *@param  model  Description of Parameter
-	 */
-	public Graph(GraphModel model)
-	{
-		this();
-		setModel(model);
-	}
+    /**
+     *  Gets the PreferredScrollableViewportSize attribute of the Graph object
+     *
+     *@return    The PreferredScrollableViewportSize value
+     */
+    public Dimension getPreferredScrollableViewportSize()
+    {
+        return this.getPreferredSize();
+        // return new Dimension(width, 400);
+    }
 
+    /**
+     *  Gets the ScrollableUnitIncrement attribute of the Graph object
+     *
+     *@param  visibleRect  Description of Parameter
+     *@param  orientation  Description of Parameter
+     *@param  direction    Description of Parameter
+     *@return              The ScrollableUnitIncrement value
+     */
+    public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
+    {
+        return 5;
+    }
 
-	/**
-	 *  Sets the Model attribute of the Graph object
-	 *
-	 *@param  model  The new Model value
-	 */
-	private void setModel(Object model)
-	{
-		this.model = (GraphModel) model;
-		this.model.addGraphListener(this);
-		repaint();
-	}
+    /**
+     *  Gets the ScrollableBlockIncrement attribute of the Graph object
+     *
+     *@param  visibleRect  Description of Parameter
+     *@param  orientation  Description of Parameter
+     *@param  direction    Description of Parameter
+     *@return              The ScrollableBlockIncrement value
+     */
+    public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
+    {
+        return (int) (visibleRect.width * .9);
+    }
 
+    /**
+     *  Gets the ScrollableTracksViewportWidth attribute of the Graph object
+     *
+     *@return    The ScrollableTracksViewportWidth value
+     */
+    public boolean getScrollableTracksViewportWidth()
+    {
+        return false;
+    }
 
-	/**
-	 *  Gets the PreferredScrollableViewportSize attribute of the Graph object
-	 *
-	 *@return    The PreferredScrollableViewportSize value
-	 */
-	public Dimension getPreferredScrollableViewportSize()
-	{
-		return this.getPreferredSize();
-		//return new Dimension(width, 400);
-	}
+    /**
+     *  Gets the ScrollableTracksViewportHeight attribute of the Graph object
+     *
+     *@return    The ScrollableTracksViewportHeight value
+     */
+    public boolean getScrollableTracksViewportHeight()
+    {
+        return true;
+    }
 
+    /**
+     *  Clears this graph
+     */
+    public void clear()
+    {}
 
-	/**
-	 *  Gets the ScrollableUnitIncrement attribute of the Graph object
-	 *
-	 *@param  visibleRect  Description of Parameter
-	 *@param  orientation  Description of Parameter
-	 *@param  direction    Description of Parameter
-	 *@return              The ScrollableUnitIncrement value
-	 */
-	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
-	{
-		return 5;
-	}
+    /**
+     *  Description of the Method
+     *
+     *@param  value  Description of Parameter
+     */
+    public void enableData(boolean value)
+    {
+        this.data = value;
+    }
 
+    /**
+     *  Description of the Method
+     *
+     *@param  value  Description of Parameter
+     */
+    public void enableAverage(boolean value)
+    {
+        this.average = value;
+    }
 
-	/**
-	 *  Gets the ScrollableBlockIncrement attribute of the Graph object
-	 *
-	 *@param  visibleRect  Description of Parameter
-	 *@param  orientation  Description of Parameter
-	 *@param  direction    Description of Parameter
-	 *@return              The ScrollableBlockIncrement value
-	 */
-	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
-	{
-		return (int) (visibleRect.width * .9);
-	}
+    /**
+     *  Description of the Method
+     *
+     *@param  value  Description of Parameter
+     */
+    public void enableDeviation(boolean value)
+    {
+        this.deviation = value;
+    }
 
+    public void enableThroughput(boolean value)
+    {
+        throughput = value;
+    }
 
-	/**
-	 *  Gets the ScrollableTracksViewportWidth attribute of the Graph object
-	 *
-	 *@return    The ScrollableTracksViewportWidth value
-	 */
-	public boolean getScrollableTracksViewportWidth()
-	{
-		return false;
-	}
+    /**
+     *  Description of the Method
+     */
+    public void updateGui()
+    {
+        repaint();
+    }
 
+    /**
+     *  Description of the Method
+     *
+     *@param  oneSample  Description of Parameter
+     */
+    public void updateGui(final Sample oneSample)
+    {
+        final int xPos = model.getSampleCount();
 
-	/**
-	 *  Gets the ScrollableTracksViewportHeight attribute of the Graph object
-	 *
-	 *@return    The ScrollableTracksViewportHeight value
-	 */
-	public boolean getScrollableTracksViewportHeight()
-	{
-		return true;
-	}
+        SwingUtilities.invokeLater(
+                new Runnable()
+                {
+                    public void run()
+                    {
+                        Graphics g = getGraphics();
 
+                        if (g != null)
+                        {
+                            drawSample(xPos, oneSample, g);
+                        }
+                    }
+                }
+                );
+    }
 
-	/**
-	 *  Clears this graph
-	 */
-	public void clear() { }
+    /**
+     *  Description of the Method
+     *
+     *@param  g  Description of Parameter
+     */
+    public void paintComponent(Graphics g)
+    {
+        super.paintComponent(g);
 
+        Dimension d = this.getSize();
 
-	/**
-	 *  Description of the Method
-	 *
-	 *@param  value  Description of Parameter
-	 */
-	public void enableData(boolean value)
-	{
-		this.data = value;
-	}
+        synchronized (model.getSamples())
+        {
+            Iterator e = model.getSamples().iterator();
 
+            for (int i = 0; e.hasNext(); i++)
+            {
+                Sample s = (Sample) e.next();
 
-	/**
-	 *  Description of the Method
-	 *
-	 *@param  value  Description of Parameter
-	 */
-	public void enableAverage(boolean value)
-	{
-		this.average = value;
-	}
+                drawSample(i, s, g);
+            }
+        }
+    }
 
+    /**
+     *  Description of the Method
+     *
+     *@param  x          Description of Parameter
+     *@param  oneSample  Description of Parameter
+     *@param  g          Description of Parameter
+     */
+    private void drawSample(int x, Sample oneSample, Graphics g)
+    {
+        Dimension d = this.getSize();
 
-	/**
-	 *  Description of the Method
-	 *
-	 *@param  value  Description of Parameter
-	 */
-	public void enableDeviation(boolean value)
-	{
-		this.deviation = value;
-	}
-	
-	public void enableThroughput(boolean value)
-	{
-		throughput = value;
-	}
+        if (data)
+        {
+            int data = (int) (oneSample.data * d.height / model.getGraphMax());
 
+            if (!oneSample.error)
+            {
+                g.setColor(Color.black);
+            }
+            else
+            {
+                g.setColor(JMeterColor.YELLOW);
+            }
+            g.drawLine(x % width, d.height - data, x % width, d.height - data - 1);
+        }
 
-	/**
-	 *  Description of the Method
-	 */
-	public void updateGui()
-	{
-		repaint();
-	}
+        if (average)
+        {
+            int average = (int) (oneSample.average * d.height
+                    / model.getGraphMax());
 
+            g.setColor(Color.blue);
+            g.drawLine(x % width, d.height - average, x % width, (d.height - average - 1));
+        }
 
-	/**
-	 *  Description of the Method
-	 *
-	 *@param  oneSample  Description of Parameter
-	 */
-	public void updateGui(final Sample oneSample)
-	{
-		final int xPos = model.getSampleCount();
-		SwingUtilities.invokeLater(
-			new Runnable()
-			{
-				public void run()
-				{
-					Graphics g = getGraphics();
-					if (g != null)
-					{
-						drawSample(xPos, oneSample, g);
-					}
-				}
-			}
-				);
-	}
+        if (deviation)
+        {
+            int deviation = (int) (oneSample.deviation * d.height
+                    / model.getGraphMax());
 
+            g.setColor(Color.red);
+            g.drawLine(x % width, d.height - deviation, x % width, (d.height - deviation - 1));
+        }
+        if (throughput)
+        {
+            int throughput = (int) (oneSample.throughput * d.height
+                    / model.getThroughputMax());
 
-	/**
-	 *  Description of the Method
-	 *
-	 *@param  g  Description of Parameter
-	 */
-	public void paintComponent(Graphics g)
-	{
-		super.paintComponent(g);
-
-		Dimension d = this.getSize();
-
-		synchronized (model.getSamples())
-		{
-			Iterator e = model.getSamples().iterator();
-			for (int i = 0; e.hasNext(); i++)
-			{
-				Sample s = (Sample) e.next();
-				drawSample(i, s, g);
-			}
-		}
-	}
-
-
-	/**
-	 *  Description of the Method
-	 *
-	 *@param  x          Description of Parameter
-	 *@param  oneSample  Description of Parameter
-	 *@param  g          Description of Parameter
-	 */
-	private void drawSample(int x, Sample oneSample, Graphics g)
-	{
-		Dimension d = this.getSize();
-		if (data)
-		{
-			int data = (int) (oneSample.data * d.height / model.getGraphMax());
-			if(!oneSample.error)
-			{
-				g.setColor(Color.black);
-			}
-			else
-			{
-				g.setColor(JMeterColor.YELLOW);
-			}
-			g.drawLine(x % width, d.height - data, x % width, d.height - data - 1);
-		}
-
-		if (average)
-		{
-			int average = (int) (oneSample.average * d.height / model.getGraphMax());
-			g.setColor(Color.blue);
-			g.drawLine(x % width, d.height - average, x % width, (d.height - average - 1));
-		}
-
-		if (deviation)
-		{
-			int deviation = (int) (oneSample.deviation * d.height / model.getGraphMax());
-			g.setColor(Color.red);
-			g.drawLine(x % width, d.height - deviation, x % width, (d.height - deviation - 1));
-		}
-		if(throughput)
-		{
-			int throughput = (int) (oneSample.throughput * d.height / model.getThroughputMax());
-			g.setColor(JMeterColor.dark_green);
-			g.drawLine(x % width, d.height - throughput, x % width, (d.height - throughput - 1));
-		}
-	}
+            g.setColor(JMeterColor.dark_green);
+            g.drawLine(x % width, d.height - throughput, x % width, (d.height - throughput - 1));
+        }
+    }
 }

@@ -64,6 +64,7 @@ import java.util.List;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 
+
 /**
  *  Title: Apache JMeter Description: Copyright: Copyright (c) 2000 Company:
  *  Apache Foundation
@@ -74,292 +75,274 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 
 
-public class GraphModel implements Clearable,Serializable
+public class GraphModel implements Clearable, Serializable
 {
 
-	private String name;
-	private List samples;
-	private List listeners;
-	private long averageSum = 0;
-	private long variationSum = 0;
-	private long counter = 0;
-	private long previous = 0;
-	private long max = 1;
-	private boolean bigChange = false;
-	private Sample current = new Sample(0, 0, 0,0,false);
-	private long startTime = 0;
-	private int throughputMax = 20;
-	private long graphMax = 20;
+    private String name;
+    private List samples;
+    private List listeners;
+    private long averageSum = 0;
+    private long variationSum = 0;
+    private long counter = 0;
+    private long previous = 0;
+    private long max = 1;
+    private boolean bigChange = false;
+    private Sample current = new Sample(0, 0, 0, 0, false);
+    private long startTime = 0;
+    private int throughputMax = 20;
+    private long graphMax = 20;
 
-	/**
-	 *  Constructor for the GraphModel object
-	 */
+    /**
+     *  Constructor for the GraphModel object
+     */
 
-	public GraphModel()
-	{
-		listeners = new LinkedList();
-		samples = Collections.synchronizedList(new LinkedList());
-	}
+    public GraphModel()
+    {
+        listeners = new LinkedList();
+        samples = Collections.synchronizedList(new LinkedList());
+    }
 
+    /**
+     *  Sets the Name attribute of the GraphModel object
+     *
+     *@param  name  The new Name value
+     */
 
+    public void setName(String name)
+    {
+        this.name = name;
+    }
 
-	/**
-	 *  Sets the Name attribute of the GraphModel object
-	 *
-	 *@param  name  The new Name value
-	 */
+    /**
+     *  Gets the CurrentData attribute of the GraphModel object
+     *
+     *@return    The CurrentData value
+     */
+    public long getCurrentData()
+    {
 
-	public void setName(String name)
-	{
-		this.name = name;
-	}
+        return current.data;
+    }
 
-	/**
-	 *  Gets the CurrentData attribute of the GraphModel object
-	 *
-	 *@return    The CurrentData value
-	 */
-	public long getCurrentData()
-	{
+    /**
+     *  Gets the CurrentAverage attribute of the GraphModel object
+     *
+     *@return    The CurrentAverage value
+     */
+    public long getCurrentAverage()
+    {
 
-		return current.data;
-	}
+        return current.average;
+    }
 
+    /**
+     *  Gets the CurrentDeviation attribute of the GraphModel object
+     *
+     *@return    The CurrentDeviation value
+     */
+    public long getCurrentDeviation()
+    {
 
+        return current.deviation;
+    }
 
-	/**
-	 *  Gets the CurrentAverage attribute of the GraphModel object
-	 *
-	 *@return    The CurrentAverage value
-	 */
-	public long getCurrentAverage()
-	{
+    public float getCurrentThroughput()
+    {
+        return current.throughput;
+    }
 
-		return current.average;
-	}
+    /**
+     *  Gets the SampleCount attribute of the GraphModel object
+     *
+     *@return    The SampleCount value
+     */
+    public int getSampleCount()
+    {
 
+        return samples.size();
+    }
 
+    /**
+     *  Gets the Samples attribute of the GraphModel object
+     *
+     *@return    The Samples value
+     */
+    public List getSamples()
+    {
 
-	/**
-	 *  Gets the CurrentDeviation attribute of the GraphModel object
-	 *
-	 *@return    The CurrentDeviation value
-	 */
-	public long getCurrentDeviation()
-	{
+        return samples;
+    }
 
-		return current.deviation;
-	}
-	
-	public float getCurrentThroughput()
-	{
-		return current.throughput;
-	}
+    /**
+     *  Gets the GuiClass attribute of the GraphModel object
+     *
+     *@return    The GuiClass value
+     */
 
+    public Class getGuiClass()
+    {
 
+        return GraphVisualizer.class;
+    }
 
-	/**
-	 *  Gets the SampleCount attribute of the GraphModel object
-	 *
-	 *@return    The SampleCount value
-	 */
-	public int getSampleCount()
-	{
+    /**
+     *  Gets the Name attribute of the GraphModel object
+     *
+     *@return    The Name value
+     */
 
-		return samples.size();
-	}
+    public String getName()
+    {
 
+        return name;
+    }
 
+    /**
+     *  Gets the Max attribute of the GraphModel object
+     *
+     *@return    The Max value
+     */
+    public long getMaxSample()
+    {
+        return max;
+    }
 
-	/**
-	 *  Gets the Samples attribute of the GraphModel object
-	 *
-	 *@return    The Samples value
-	 */
-	public List getSamples()
-	{
+    public long getGraphMax()
+    {
+        return graphMax;
+    }
 
-		return samples;
-	}
+    public int getThroughputMax()
+    {
+        return throughputMax;
+    }
 
+    /**
+     *  Adds a feature to the ModelListener attribute of the GraphModel object
+     *
+     *@param  modelListener  The feature to be added to the ModelListener attribute
+     */
+    public void addGraphListener(GraphListener listener)
+    {
+        listeners.add(listener);
+    }
 
+    /**
+     *  Adds a feature to the Sample attribute of the GraphModel object
+     *
+     *@param  e  The feature to be added to the Sample attribute
+     *@return    Description of the Returned Value
+     */
+    public Sample addSample(SampleResult e)
+    {
+        Sample s = addNewSample(e.getTime(), e.getTimeStamp(), e.isSuccessful());
 
-	/**
-	 *  Gets the GuiClass attribute of the GraphModel object
-	 *
-	 *@return    The GuiClass value
-	 */
+        fireDataChanged();
+        return s;
+    }
 
-	public Class getGuiClass()
-	{
+    /**
+     *  Description of the Method
+     */
+    public void clear()
+    {
+        samples.clear();
+        averageSum = 0;
+        variationSum = 0;
+        counter = 0;
+        previous = 0;
+        max = 1;
+        graphMax = 1;
+        bigChange = true;
+        current = new Sample(0, 0, 0, 0, false);
+        this.fireDataChanged();
+    }
 
-		return GraphVisualizer.class;
-	}
+    /**
+     *  Description of the Method
+     */
+    protected void fireDataChanged()
+    {
+        Iterator iter = listeners.iterator();
 
+        if (bigChange)
+        {
+            while (iter.hasNext())
+            {
+                ((GraphListener) iter.next()).updateGui();
+            }
+            bigChange = false;
+        }
+        else
+        {
+            quickUpdate(current);
+        }
+    }
 
+    /**
+     *  Description of the Method
+     *
+     *@param  s  Description of Parameter
+     */
+    protected void quickUpdate(Sample s)
+    {
+        Iterator iter = listeners.iterator();
+        {
+            while (iter.hasNext())
+            {
+                ((GraphListener) iter.next()).updateGui(s);
+            }
+        }
+    }
 
-	/**
-	 *  Gets the Name attribute of the GraphModel object
-	 *
-	 *@return    The Name value
-	 */
+    /**
+     *  Adds a feature to the NewSample attribute of the GraphModel object
+     *
+     *@param  sample  The feature to be added to the NewSample attribute
+     */
+    protected Sample addNewSample(long sample, long timeStamp, boolean success)
+    {
+        if (samples.size() == 0)
+        {
+            startTime = timeStamp;
+        }
+        if (sample > max)
+        {
+            max = sample;
+        }
+        averageSum += sample;
+        long average = averageSum / ++counter;
 
-	public String getName()
-	{
+        variationSum += Math.pow(sample - average, 2);
+        long deviation = (long) Math.pow(variationSum / counter, 0.5);
+        float throughput = 0;
 
-		return name;
-	}
+        if (timeStamp - startTime > 0)
+        {
+            throughput = (float) (((float) (samples.size() + 1))
+                    / ((float) (timeStamp - startTime)) * 60000);
+        }
+        if (throughput > throughputMax)
+        {
+            bigChange = true;
+            throughputMax = (int) (throughput * 1.5F);
+        }
+        if (average > graphMax)
+        {
+            bigChange = true;
+            graphMax = average * 3;
+        }
+        if (deviation > graphMax)
+        {
+            bigChange = true;
+            graphMax = deviation * 3;
+        }
+        Sample s = new Sample(sample, average, deviation, throughput, !success);
 
-
-
-	/**
-	 *  Gets the Max attribute of the GraphModel object
-	 *
-	 *@return    The Max value
-	 */
-	public long getMaxSample()
-	{
-		return max;
-	}
-	
-	public long getGraphMax()
-	{
-		return graphMax;
-	}
-	
-	
-	public int getThroughputMax()
-	{
-		return throughputMax;
-	}
-
-
-
-	/**
-	 *  Adds a feature to the ModelListener attribute of the GraphModel object
-	 *
-	 *@param  modelListener  The feature to be added to the ModelListener attribute
-	 */
-	public void addGraphListener(GraphListener listener)
-	{
-		listeners.add(listener);
-	}
-
-
-	/**
-	 *  Adds a feature to the Sample attribute of the GraphModel object
-	 *
-	 *@param  e  The feature to be added to the Sample attribute
-	 *@return    Description of the Returned Value
-	 */
-	public Sample addSample(SampleResult e)
-	{
-		Sample s = addNewSample(e.getTime(),e.getTimeStamp(),e.isSuccessful());
-		fireDataChanged();
-		return s;
-	}
-
-
-	/**
-	 *  Description of the Method
-	 */
-	public void clear()
-	{
-		samples.clear();
-		averageSum = 0;
-		variationSum = 0;
-		counter = 0;
-		previous = 0;
-		max = 1;
-		graphMax = 1;
-		bigChange = true;
-		current = new Sample(0, 0,0,0,false);
-		this.fireDataChanged();
-	}
-
-
-
-	/**
-	 *  Description of the Method
-	 */
-	protected void fireDataChanged()
-	{
-		Iterator iter = listeners.iterator();
-		if (bigChange)
-		{
-			while (iter.hasNext())
-			{
-				((GraphListener) iter.next()).updateGui();
-			}
-			bigChange = false;
-		} else
-		{
-			quickUpdate(current);
-		}
-	}
-
-
-
-	/**
-	 *  Description of the Method
-	 *
-	 *@param  s  Description of Parameter
-	 */
-	protected void quickUpdate(Sample s)
-	{
-		Iterator iter = listeners.iterator();
-		{
-			while (iter.hasNext())
-			{
-				((GraphListener) iter.next()).updateGui(s);
-			}
-		}
-	}
-
-	/**
-	 *  Adds a feature to the NewSample attribute of the GraphModel object
-	 *
-	 *@param  sample  The feature to be added to the NewSample attribute
-	 */
-	protected Sample addNewSample(long sample,long timeStamp,boolean success)
-	{
-		if(samples.size() == 0)
-		{
-			startTime = timeStamp;
-		}
-		if (sample > max)
-		{
-			max = sample;
-		}
-		averageSum += sample;
-		long average = averageSum / ++counter;
-		variationSum += Math.pow(sample - average, 2);
-		long deviation = (long) Math.pow(variationSum / counter, 0.5);
-		float throughput = 0;
-		if(timeStamp-startTime > 0)
-		{
-			throughput = (float)(((float)(samples.size()+1))/((float)(timeStamp-startTime)) * 60000);
-		}
-		if(throughput > throughputMax)
-		{
-			bigChange = true;
-			throughputMax = (int)(throughput * 1.5F);
-		}
-		if(average > graphMax)
-		{
-			bigChange = true;
-			graphMax = average * 3;
-		}
-		if(deviation > graphMax)
-		{
-			bigChange = true;
-			graphMax = deviation * 3;
-		}
-		Sample s = new Sample(sample, average, deviation,throughput,!success);
-		previous = sample;
-		current = s;
-		samples.add(s);
-		return s;
-	}
+        previous = sample;
+        current = s;
+        samples.add(s);
+        return s;
+    }
 }
 

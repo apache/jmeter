@@ -1,4 +1,6 @@
 package org.apache.jmeter.visualizers;
+
+
 /**
  * @author Administrator
  *
@@ -7,6 +9,6 @@ package org.apache.jmeter.visualizers;
  */
 public interface AccumListener
 {
-	
-	public void updateGui(RunningSample s);
+
+    public void updateGui(RunningSample s);
 }
