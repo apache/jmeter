@@ -72,7 +72,7 @@ public class FileDataContainer
     private ArrayList fileData;
 
     /** Keeping track on which row was last read. */
-    private int rowPosition = -1;
+    private int rowPosition = 0;
 
     /**
      * FileDataContainer constructor comment.
@@ -81,6 +81,8 @@ public class FileDataContainer
     {
         super();
         this.fileData = new ArrayList();
+        rowPosition = 0;
+        log.debug(Thread.currentThread().getName() +" Constructed()");
     }
 
     /**
@@ -90,6 +92,8 @@ public class FileDataContainer
     {
         super();
         fileData = newFileData;
+		rowPosition = 0;
+		log.debug(Thread.currentThread().getName() +" Constructed(fileData)");
     }
 
     /**
@@ -110,13 +114,9 @@ public class FileDataContainer
         ArrayList result = null;
         if (fileData != null && fileData.size() > 0)
         {
-
-            // ensure row position has been initialized
-            if (rowPosition == -1)
-            {
-                rowPosition = 0;
-            }
-
+        	if (log.isDebugEnabled()) {
+				log.debug(Thread.currentThread().getName() +" getNextline, Row = " + rowPosition);
+        	}
             result = (ArrayList) fileData.get(rowPosition);
         }
         return result;
@@ -128,6 +128,9 @@ public class FileDataContainer
      */
     public int getRowPosition()
     {
+		if (log.isDebugEnabled()) {
+    	    log.debug(Thread.currentThread().getName() +" getRowPosition = " + rowPosition);
+		}
         return rowPosition;
     }
 
@@ -145,8 +148,10 @@ public class FileDataContainer
                 rowPosition = 0;
             }
         }
-        //    log.debug (Thread.currentThread().getName() +
-        //         " >>>> incrementRowPosition - returning : "+ rowPosition);
+        if (log.isDebugEnabled()){
+			log.debug (Thread.currentThread().getName() +
+				 " >>>> incrementRowPosition - returning : "+ rowPosition);
+        }
     }
     
     /**
