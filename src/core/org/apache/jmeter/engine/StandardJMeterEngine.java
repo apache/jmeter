@@ -281,6 +281,10 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor,Ru
 	public synchronized void threadFinished(JMeterThread thread)
 	{
 		allThreads.remove(thread);
+		if(allThreads.size() == 0)
+		{
+			stopTest();
+		}
 		/*if(allThreads.size() == 0)
 		{
 			notifyTestListenersOfEnd();
@@ -290,11 +294,14 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor,Ru
 	/************************************************************
 	 *  !ToDo (Method description)
 	 ***********************************************************/
-	public void stopTest()
+	public synchronized void stopTest()
 	{
-		running = false;		
-		Thread stopThread = new Thread(this);
-		stopThread.start();
+		if(running)
+		{
+			running = false;		
+			Thread stopThread = new Thread(this);
+			stopThread.start();
+		}
 	}
 	
 	public void run()
