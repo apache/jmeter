@@ -12,6 +12,7 @@ import junit.framework.TestCase;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.LoggingManager;
+import org.apache.jmeter.util.StringUtilities;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
@@ -25,7 +26,7 @@ public class ValueReplacer
 {
 	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(LoggingManager.ELEMENTS);
 	CompoundFunction masterFunction = new CompoundFunction();
-	Map reverseMap = new HashMap();
+	Map variables = new HashMap();
 	
 	public ValueReplacer()
 	{
@@ -39,12 +40,7 @@ public class ValueReplacer
 	public void setUserDefinedVariables(Map variables)
 	{
 		masterFunction.setUserDefinedVariables(variables);
-		Iterator iter = variables.keySet().iterator();
-		while(iter.hasNext())
-		{
-			Object key = iter.next();
-			reverseMap.put(variables.get(key),key);
-		}
+		this.variables = variables;
 	}
 	
 	public void replaceValues(TestElement el) throws InvalidVariableException
@@ -116,9 +112,78 @@ public class ValueReplacer
 		return newColl;
 	}
 	
-	public void reverseReplace(TestElement element)
+	/**
+	 * Replaces raw values with user-defined variable names.
+	 */
+	public Collection reverseReplace(Collection values)
 	{
+		Collection newColl = null;
+		try {
+			newColl = (Collection)values.getClass().newInstance();
+		} catch(Exception e) {
+			log.error("",e);
+			return values;
+		} 
+		Iterator iter = values.iterator();
+		while(iter.hasNext())
+		{
+			Object val = iter.next();
+			if(val instanceof TestElement)
+			{
+				reverseReplace((TestElement)val);
+			}
+			else if(val instanceof String)
+			{
+				val = substituteValues((String)val);
+			}
+			else if(val instanceof Collection)
+			{
+				val = reverseReplace((Collection)val);
+			}
+			newColl.add(val);
+		}
+		return newColl;
+	} 
+	
+	/**
+	 * Replaces raw values with user-defined variable names.
+	 */
+	public void reverseReplace(TestElement el)
+	{
+		Iterator iter = el.getPropertyNames().iterator();
+		while(iter.hasNext())
+		{
+			String propName = (String)iter.next();
+			Object propValue = el.getProperty(propName);
+			if(propValue instanceof String)
+			{
+				Object newValue = substituteValues((String)propValue);
+				el.setProperty(propName,newValue);
+			}
+			else if(propValue instanceof TestElement)
+			{
+				reverseReplace((TestElement)propValue);
+			}
+			else if(propValue instanceof Collection)
+			{
+				el.setProperty(propName,reverseReplace((Collection)propValue));
+			}
+		}
 	}
+	
+	private String substituteValues(String input)
+	{
+		Iterator iter = variables.keySet().iterator();
+		while(iter.hasNext())
+		{
+			String key = (String)iter.next();
+			String value = (String)variables.get(key);
+			input = StringUtilities.substitute(input,value,"${"+key+"}");
+		}
+		return input;
+	}
+			
+			
 	
 	public static class Test extends TestCase
 	{
