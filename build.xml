@@ -147,6 +147,8 @@
       <auxClasspath path="${tidy.jar}" />
       <auxClasspath path="${logkit.jar}" />
       <auxClasspath path="${excalibur-logger.jar}" />
+      <auxClasspath path="${excalibur-compatibility.jar}" />
+      <auxClasspath path="${excalibur-i18n.jar}" />
       <auxClasspath path="${avalon-excalibur.jar}" />
       <auxClasspath path="${avalon-framework.jar}" />
       <auxClasspath path="${commons-collections.jar}" />
@@ -291,6 +293,8 @@
   <property name="commons-httpclient.jar" value="${lib.dir}/commons-httpclient-2.0.jar"/>
   <property name="commons-logging.jar" value="${lib.dir}/commons-logging.jar"/>
   <property name="excalibur-logger.jar" value="${lib.dir}/excalibur-logger-1.1.jar"/>
+  <property name="excalibur-i18n.jar" value="${lib.dir}/excalibur-i18n-1.1.jar"/>
+  <property name="excalibur-compatibility.jar" value="${lib.dir}/excalibur-compatibility-1.1.jar"/>
   <property name="junit.jar" value="${lib.dir}/junit.jar"/>
   <property name="logkit.jar" value="${lib.dir}/logkit-1.2.jar"/>
   
@@ -318,6 +322,8 @@
     <include name="${commons-httpclient.jar}"/>
     <include name="${commons-logging.jar}"/>
     <include name="${excalibur-logger.jar}"/>
+    <include name="${excalibur-i18n.jar}"/>
+    <include name="${excalibur-compatibility.jar}"/>
     <include name="${junit.jar}"/>
     <include name="${logkit.jar}"/>
     <include name="${xalan.jar}"/>
@@ -352,8 +358,7 @@
     <!--
      Temporary hack because avalon-excalibur includes an old version of excalibur-logger
      -->
-    <fileset dir="${lib.dir}" includes="excalibur-logger*.jar"/>
-    <fileset dir="${lib.dir}" includes="*.jar" excludes="excalibur-logger*.jar"/>
+    <fileset dir="${lib.dir}" includes="*.jar" excludes="avalon-excalibur*.jar"/>
     <fileset dir="${lib.opt}" includes="*.jar"/>
   </path>
 
