@@ -52,10 +52,10 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport
       p.setValue(DEFAULT, "60000");
       p= property("autocommit");
       p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-      p.setValue(DEFAULT, new Boolean(true));
+      p.setValue(DEFAULT, Boolean.TRUE);
       p= property("keepAlive");
       p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-      p.setValue(DEFAULT, new Boolean(true));
+      p.setValue(DEFAULT, Boolean.TRUE);
       p= property("connectionAge");
       p.setValue(NOT_UNDEFINED, Boolean.TRUE);
       p.setValue(DEFAULT, "5000");
