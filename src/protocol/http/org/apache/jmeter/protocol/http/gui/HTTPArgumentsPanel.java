@@ -7,11 +7,10 @@ import javax.swing.table.TableColumn;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
-import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.collections.Data;
+import org.apache.jorphan.gui.ObjectTableModel;
 
 /**
  * @author Administrator
@@ -27,9 +26,12 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 	
 	
 	protected void initializeTableModel() {
-		tableModel = new PowerTableModel(new String[]{Arguments.COLUMN_NAMES[0],Arguments.COLUMN_NAMES[1],
+		tableModel = new ObjectTableModel(new String[]{Arguments.COLUMN_NAMES[0],Arguments.COLUMN_NAMES[1],
 				ENCODE_OR_NOT,INCLUDE_EQUALS},
-				new Class[]{String.class,String.class,Boolean.class,Boolean.class});
+				new String[]{"name","value","alwaysEncoded","useEquals"},
+                new Class[]{String.class,Object.class,boolean.class,boolean.class},
+                new Class[]{String.class,String.class,Boolean.class,Boolean.class},
+                new HTTPArgument());
 	}
     
     protected void sizeColumns(JTable table)
@@ -39,6 +41,14 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
         fixSize(table.getColumn(INCLUDE_EQUALS));   
         fixSize(table.getColumn(ENCODE_OR_NOT));
         table.setAutoResizeMode(resizeMode);  
+    }
+    
+    protected Object makeNewArgument()
+    {
+        HTTPArgument arg = new HTTPArgument("","");
+        arg.setAlwaysEncoded(false);
+        arg.setUseEquals(true);
+        return arg;
     }
 
     private void fixSize(TableColumn column)
@@ -62,44 +72,16 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 	 ***************************************/
 	public TestElement createTestElement()
 	{
-		Data model = tableModel.getData();
+		Iterator modelData = tableModel.iterator();
 		Arguments args = new Arguments();
-		model.reset();
-		while(model.next())
+		while(modelData.hasNext())
 		{
-			if(((Boolean)model.getColumnValue(ENCODE_OR_NOT)).booleanValue())
-			{
-                HTTPArgument arg = new HTTPArgument((String)model.getColumnValue(Arguments.COLUMN_NAMES[0]),
-                model.getColumnValue(Arguments.COLUMN_NAMES[1]));
-                setMetaData(arg);
-				args.addArgument(arg);
-			}
-			else
-			{
-				HTTPArgument arg = new HTTPArgument();
-				arg.setAlwaysEncode(false);
-				arg.setName((String)model.getColumnValue(Arguments.COLUMN_NAMES[0]));
-				arg.setValue(model.getColumnValue(Arguments.COLUMN_NAMES[1]));
-                setMetaData(arg);
-				args.addArgument(arg);
-			}
+            HTTPArgument arg = (HTTPArgument)modelData.next();
+            args.addArgument(arg);
 		}
 		this.configureTestElement(args);
 		return (TestElement)args.clone();
 	}
-    
-    protected void setMetaData(HTTPArgument arg)
-    {
-        Data model = tableModel.getData();
-        if(((Boolean)model.getColumnValue(INCLUDE_EQUALS)).booleanValue() || model.getColumnValue(Arguments.COLUMN_NAMES[1]).toString().length() > 0)
-        {
-            arg.setMetaData("=");
-        }
-        else
-        {
-            arg.setMetaData("");
-        }
-    }
 	
 	/****************************************
 	 * !ToDo (Method description)
@@ -117,8 +99,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 			while(iter.hasNext())
 			{
 				HTTPArgument arg = (HTTPArgument)iter.next();
-				tableModel.addRow(new Object[]{arg.getName(),arg.getValue(),
-						new Boolean(arg.getAlwaysEncode()), new Boolean(isMetaDataNormal(arg))});
+				tableModel.addRow(arg);
 			}
 		}
 		checkDeleteStatus();

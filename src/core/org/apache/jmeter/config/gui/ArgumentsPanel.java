@@ -79,10 +79,9 @@ import junit.framework.TestCase;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.collections.Data;
+import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
@@ -97,10 +96,10 @@ import org.apache.log.Logger;
 public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, ActionListener, CellEditorListener
 {
     transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.GUI);
-    JTable table;
+    transient JTable table;
     JButton add;
     JButton delete;
-    protected PowerTableModel tableModel;
+    protected transient ObjectTableModel tableModel;
     String name;
     JLabel tableLabel;
 
@@ -185,15 +184,17 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, 
      */
     public void modifyTestElement(TestElement args)
     {
-        Data model = tableModel.getData();
+        Iterator modelData = tableModel.iterator();
         Arguments arguments = null;
         if (args instanceof Arguments)
         {
             arguments = (Arguments) args;
-            model.reset();
-            while (model.next())
+            arguments.clear();
+            while (modelData.hasNext())
             {
-                arguments.addArgument((String) model.getColumnValue(Arguments.COLUMN_NAMES[0]), model.getColumnValue(Arguments.COLUMN_NAMES[1]), "=");
+                Argument arg = (Argument) modelData.next();
+                arg.setMetaData("=");
+                arguments.addArgument(arg);
             }
         }
         this.configureTestElement(args);
@@ -214,7 +215,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, 
             while (iter.hasNext())
             {
                 Argument arg = (Argument) iter.next();
-                tableModel.addRow(new Object[] { arg.getName(), arg.getValue()});
+                tableModel.addRow(arg);
             }
         }
         checkDeleteStatus();
@@ -301,8 +302,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, 
         // and stop the editing before adding a new row.
         stopTableEditing();
 
-        tableModel.addNewRow();
-        tableModel.fireTableDataChanged();
+        tableModel.addRow(makeNewArgument());
 
         // Enable DELETE (which may already be enabled, but it won't hurt)
         delete.setEnabled(true);
@@ -310,6 +310,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, 
         // Highlight (select) the appropriate row.
         int rowToSelect = tableModel.getRowCount() - 1;
         table.setRowSelectionInterval(rowToSelect, rowToSelect);
+    }
+
+    protected Object makeNewArgument()
+    {
+        return new Argument("","");
     }
 
     private void stopTableEditing()
@@ -371,7 +376,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, 
 
     protected void initializeTableModel()
     {
-        tableModel = new PowerTableModel(new String[] { Arguments.COLUMN_NAMES[0], Arguments.COLUMN_NAMES[1] }, new Class[] { String.class, String.class });
+        tableModel = new ObjectTableModel(new String[] { Arguments.COLUMN_NAMES[0], Arguments.COLUMN_NAMES[1] }, 
+                new String[]{"name","value"},new Class[]{String.class,Object.class},new Class[] { String.class, String.class },
+                new Argument());
     }
 
     protected void checkDeleteStatus()
@@ -434,7 +441,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, 
         public void testArgumentCreation() throws Exception
         {
             ArgumentsPanel gui = new ArgumentsPanel();
-            gui.tableModel.addNewRow();
+            gui.tableModel.addRow(new Argument());
             gui.tableModel.setValueAt("howdy", 0, 0);
             gui.tableModel.setValueAt("doody", 0, 1);
             assertEquals("=", ((Argument) ((Arguments) gui.createTestElement()).getArguments().get(0)).getMetaData());

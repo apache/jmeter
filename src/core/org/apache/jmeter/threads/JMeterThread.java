@@ -114,6 +114,11 @@ public class JMeterThread implements Runnable, java.io.Serializable
         threadListeners = threadListenerSearcher.getSearchResults();
         notifier = note;
     }
+    
+    public void setInitialContext(JMeterContext context)
+    {
+        threadVars.putAll(context.getVariables());
+    }
 
     public void setThreadName(String threadName)
     {
