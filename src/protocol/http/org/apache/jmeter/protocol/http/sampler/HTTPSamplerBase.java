@@ -90,7 +90,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     public final static String CONTENT_TYPE= "HTTPSampler.CONTENT_TYPE";
     public final static String NORMAL_FORM= "normal_form";
     public final static String MULTIPART_FORM= "multipart_form";
-    public final static String ENCODED_PATH= "HTTPSampler.encoded_path";
+    //public final static String ENCODED_PATH= "HTTPSampler.encoded_path";
     public final static String IMAGE_PARSER= "HTTPSampler.image_parser";
 	public final static String MONITOR = "HTTPSampler.monitor";
 
