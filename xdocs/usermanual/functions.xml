@@ -313,12 +313,13 @@ Examples:<br/>
 	If the property value cannot be found, and no default has been supplied, it returns the property name.
 	When supplying a default value, there is no need to provide a function name - the parameter can be set to null, and it will be ignored.
 	</p>For example:<p>
-<code>
-${__property(user.dir)} - return value of user.dir<br/>
-${__property(user.dir,UDIR)} - return value of user.dir and save in UDIR<br/>
-${__property(abcd,ABCD,atod)} - return value of property abcd (or "atod" if not defined) and save in ABCD<br/>
-${__property(abcd,,atod)} - return value of property abcd (or "atod" if not defined) but don't save it<br/>
-</code></p>
+		<ul>
+<li>${__property(user.dir)} - return value of user.dir</li>
+<li>${__property(user.dir,UDIR)} - return value of user.dir and save in UDIR</li>
+<li>${__property(abcd,ABCD,atod)} - return value of property abcd (or "atod" if not defined) and save in ABCD</li>
+<li>${__property(abcd,,atod)} - return value of property abcd (or "atod" if not defined) but don't save it</li>
+</ul>
+</p>
 	</description>
 
 <properties>
@@ -332,23 +333,30 @@ ${__property(abcd,,atod)} - return value of property abcd (or "atod" if not defi
 <component index="16.5.10" name="__P">
 <description><p>This is a simplified property function which is
 	intended for use with properties defined on the command line.
-	If the property is not found, the default is returned.
-	If no default was provided, then returns 1.
+	Unlike the __property function, there is no option to save the value in a variable,
+	and if no default value is supplied, it is assumed to be 1. 
+	The value of 1 was chosen because it is valid for common test variables such
+	as loops, thread count, ramp up etc.
 	</p>For example:<p>
 <code>
-Define the property value:<br/>
+Define the property value:
 <br/>
-jmeter -Jgroup1.threads=7 -Jhostname1=www.realhost.edu<br/>
+jmeter -Jgroup1.threads=7 -Jhostname1=www.realhost.edu
 <br/>
-Fetch the values:<br/>
-${__P(group1.threads)} - return the value of group1.threads<br/>
-${__P(group1.loops)} - return the value of group1.loops<br/>
-${__P(hostname,www.dummy.org)} - return value of property hostname or www.dummy.org if not defined<br/>
+
+Fetch the values:
 <br/>
+${__P(group1.threads)} - return the value of group1.threads
+<br/>
+${__P(group1.loops)} - return the value of group1.loops
+<br/>
+${__P(hostname,www.dummy.org)} - return value of property hostname or www.dummy.org if not defined
+<br/>
+</code>
 In the examples above, the first function call would return 7, 
 the second would return 1 and the last would return www.dummy.org
 (unless those properties were defined elsewhere!)
-</code></p>
+</p>
 	</description>
 
 <properties>
