@@ -98,7 +98,7 @@ import org.xml.sax.XMLReader;
  */
 public class JMeterUtils implements UnitTestManager
 {
-    private static final String VERSION = "1.9.20030915";
+    private static final String VERSION = "1.9.20030922";
     private static PatternCacheLRU patternCache =
         new PatternCacheLRU(1000, new Perl5Compiler());
 
@@ -299,7 +299,7 @@ public class JMeterUtils implements UnitTestManager
         catch (MissingResourceException mre)
         {
             log.warn("ERROR! Resource string not found: [" + key + "]");
-            resString = "";
+            resString = "[res_key="+key+"]";
         }
         return resString;
     }
