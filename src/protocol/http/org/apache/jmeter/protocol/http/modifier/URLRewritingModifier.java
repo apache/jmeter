@@ -36,9 +36,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
     private final static String ARGUMENT_NAME = "argument_name";
     private final static String PATH_EXTENSION = "path_extension";
     private final static String PATH_EXTENSION_NO_EQUALS = "path_extension_no_equals";
-    /**
-     * @see ResponseBasedModifier#modifyEntry(Sampler, SampleResult)
-     */
+
     public void process()
     {
         Sampler sampler = JMeterContextService.getContext().getCurrentSampler();

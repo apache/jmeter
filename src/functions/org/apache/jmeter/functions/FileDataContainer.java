@@ -149,7 +149,8 @@ public class FileDataContainer
     /**
      *
      * @param theLine
-     * @return
+     * @return        an ArrayList of Strings containing one element for each
+     *                value in the line
      */
     protected ArrayList processNextCSVLine(String theLine)
     {
