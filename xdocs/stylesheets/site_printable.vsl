@@ -288,6 +288,26 @@
 	 </table>
 #end
 
+#macro (pagelinks)
+  #if (($next != "") || ($prev != ""))
+		<table>
+		<td bgcolor="$bannerbg">
+        <div align="right"><a href="index.html"><font size=-1 color="$bannerfg" face="arial,helvetica,sanserif">Index</font></a></div>
+        </td>
+		#if ($next != "")
+		<td bgcolor="$bannerbg">
+        <div align="right"><a href="$next"><font size=-1 color="$bannerfg" face="arial,helvetica,sanserif">Next</font></a></div>
+        </td>
+        #end
+		#if ($prev != "")
+		<td bgcolor="$bannerbg">
+        <div align="right"><a href="$prev"><font size=-1 color="$bannerfg" face="arial,helvetica,sanserif">Prev</font></a></div>
+        </td>
+        #end
+         </table>
+      #end
+#end
+
 #macro ( section $section)
 	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 		<tr><td bgcolor="$bannerbg">
@@ -369,6 +389,9 @@
 				#foreach ( $au in $authors )
 					 #metaauthor ( $au.getText() $au.getAttributeValue("email") )
 				#end
+				#set ($next = $root.getAttributeValue("next"))
+				#set ($prev = $root.getAttributeValue("prev"))
+				#set ($updated = $root.getAttributeValue("date"))
 
 				<title>$project.getChild("title").getText() - $root.getChild("properties").getChild("title").getText()</title>
 		  </head>
@@ -387,6 +410,8 @@
 
 					 <tr>
 						  <td align="left" valign="top">
+						  #pagelinks()
+						  <br/>
 						  #if ($root.getAttributeValue("index") == "yes")
 							#makeIndex($root.getChild("body").getChildren("section"))
 						  #end
@@ -400,11 +425,30 @@
 					 <tr><td>
 						  <hr noshade="" size="1"/>
 					 </td></tr>
-					 <tr><td>
-						  <div align="center"><font color="$bodylink" size="-1"><em>
-						  Copyright &#169; 1999-2001, Apache Software Foundation
-						  </em></font></div>
-					 </td></tr>
+					 <tr>
+					 <td>
+					   <table width=100%>
+					     <tr>
+					     #if ($updated != "")
+					      <td>
+					     #else
+					      <td align="center">
+					     #end
+						    <font color="$bodylink" size="-1"><em>
+						    Copyright &#169; 1999-2003, Apache Software Foundation
+						    </em></font>
+					      </td>
+					       #if ($updated != "")
+					       <td align="right">
+					       <font color="$bodylink" size="-1"><em>
+							 Updated: $updated
+					 		</em></font>
+					       </td>
+					       #end
+					     </tr>
+					   </table>
+					  </td>
+					 </tr>
 				</table>
 		  </body>
 	 </html>
