@@ -437,6 +437,24 @@ the second would return 1 and the last would return www.dummy.org
     The split strings are returned in the variables ${VAR_1}, ${VAR_2} etc. 
     The count of variables is returned in ${VAR_n}. 
 	</p>
+	<p/>
+	Example:
+	<code>
+	<br/>
+	Define VAR="a,,c" in the test plan.
+	<br/>
+	${__split(${VAR},VAR)}
+	<br/>
+	This will return the contents of VAR, i.e. "a,,c" and set the following variables:
+	<br/>
+        VAR_1=a
+	<br/>
+        VAR_2=?
+	<br/>
+        VAR_3=c
+	<br/>
+        VAR_n=3
+	</code>
 </description>
 
 <properties>
