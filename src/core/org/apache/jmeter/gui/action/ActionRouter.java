@@ -342,7 +342,14 @@ public final class ActionRouter implements ActionListener
         }
         catch (Exception e)
         {
-            log.error("exception finding action handlers", e);
+        	if ("java.awt.HeadlessException".equals(e.getClass().getName())) //JDK1.4:
+        	{
+        		log.warn(e.toString());
+        	}
+        	else
+        	{
+                log.error("exception finding action handlers", e);
+        	}
         }
     }
 
