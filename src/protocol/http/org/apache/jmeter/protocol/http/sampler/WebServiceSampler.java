@@ -340,6 +340,16 @@ public class WebServiceSampler extends HTTPSampler
 	 * @return
 	 */	
 	public String getProxyHost(){
+		// we check to see the host is set
+		String host = this.getPropertyAsString(PROXY_HOST);
+		if (host == null || host.length() == 0){
+			// it's not set, lets check if the user passed
+			// proxy host and port from command line
+			if (System.getProperty("http.proxyHost") != null){
+				host = System.getProperty("http.proxyHost");
+				this.setProxyHost(host);
+			}
+		}
 		return this.getPropertyAsString(PROXY_HOST);
 	}
 
@@ -356,6 +366,15 @@ public class WebServiceSampler extends HTTPSampler
 	 * @return
 	 */	
 	public int getProxyPort(){
+		String port = this.getPropertyAsString(PROXY_PORT);
+		if (port == null || port.length() == 0){
+			// it's not set, lets check if the user passed
+			// proxy host and port from command line
+			if (System.getProperty("http.proxyPort") != null){
+				port = System.getProperty("http.proxyPort");
+				this.setProxyPort(port);
+			}
+		}
 		return this.getPropertyAsInt(PROXY_PORT);
 	}
 	
