@@ -223,12 +223,9 @@ public abstract class AbstractJMeterGuiComponent
 	}
     
     protected JPanel makeTitlePanel() {
-            JLabel title = new JLabel(getStaticLabel());
-            Font font = title.getFont();
-            title.setFont(new Font(font.getFontName(),font.getStyle(),font.getSize()+4));
-            JPanel titlePanel = new JPanel(new BorderLayout());
-            titlePanel.add(title, BorderLayout.NORTH);
-            titlePanel.add(getNamePanel(), BorderLayout.SOUTH);
-            return titlePanel;
-        }
+        JPanel titlePanel = new JPanel(new BorderLayout());
+        titlePanel.add(createTitleLabel(), BorderLayout.NORTH);
+        titlePanel.add(getNamePanel(), BorderLayout.SOUTH);
+        return titlePanel;
+    }
 }
