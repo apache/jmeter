@@ -58,6 +58,8 @@ import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.tree.TreePath;
+
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 
@@ -96,12 +98,15 @@ public class Remove implements Command
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeNode[] nodes =
             guiPackage.getTreeListener().getSelectedNodes();
-        guiPackage.getTreeListener().removedSelectedNode();
+        TreePath newTreePath = //Save parent node for later
+            guiPackage.getTreeListener().removedSelectedNode();
         for (int i = nodes.length - 1; i >= 0; i--)
         {
             removeNode(nodes[i]);
         }
-        guiPackage.getTreeListener().getJTree().setSelectionRow(1);
+		guiPackage.getTreeListener().getJTree().setSelectionPath(newTreePath);
+
+        //guiPackage.getTreeListener().getJTree().setSelectionRow(1);
 
     }
 
