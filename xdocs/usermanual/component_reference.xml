@@ -35,15 +35,15 @@ JMeter assumes the FTP server is listening on the default port.</property>
 <component name="HTTP Request" index="13.1.2" screenshot="../images/screenshots/gen-controller/http-request.gif">
 
 <description>
-	<p>This controller lets you send an HTTP/HTTPS request to a web server.  It
+	<p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
 	also lets you control whether or not JMeter parses HTML files for images and
 	Java applets and sends HTTP requests to retrieve them.</p>
 	<p>If you are going to send multiple requests to the same web server, consider
 	using an <complink name="HTTP Request Defaults"/>
 	Configuration Element so you do not have to enter the same information for each
-	HTTP Request controller.</p>
+	HTTP Request.</p>
 
-	<p>Or, instead of manually adding HTTP Request controllers, you may want to use
+	<p>Or, instead of manually adding HTTP Requests, you may want to use
 	JMeter's <complink name="HTTP Proxy Server"/> to create
 	them.  This can save you time if you have a lot of HTTP requests or requests with many
 	parameters.</p>
@@ -105,7 +105,7 @@ and send HTTP/HTTPS requests for all images and Java applets referenced in the f
 
 <component name="JDBC Request" index="13.1.3" screenshot="../images/screenshots/gen-controller/jdbc-request.gif">
 
-<description><p>This controller lets you send an JDBC Request (an SQL query) to a database.</p>
+<description><p>This sampler lets you send an JDBC Request (an SQL query) to a database.</p>
 <p>If you are going to send multiple requests to the same database, consider
 using one or more of the Defaults Configuration Elements:
 <complink name="JDBC Database Login Defaults"/>,
@@ -140,6 +140,29 @@ a new instance).</property>
 	<complink name="JDBC Database Connection Pool Defaults"/>
 	<complink name="JDBC SQL Query Defaults"/>
 </links>
+
+</component>
+
+<component name="Java Request" index="13.1.4" screenshot="../images/screenshots/java_request.gif">
+
+<description><p>This sampler lets you control a java class that implements the 
+JavaSamplerClient interface.  By writing your own implementation of this interface,
+you can use JMeter to harness multiple threads, input parameter control, and
+data collection.</p>
+<p>The pull-down menu provides the list of all such implementations found by
+JMeter in its classpath.  The parameters can then be specified in the 
+table below - as defined by your implementation.  A simple example (SleepTest) is
+provided.</p></description>
+
+<properties>
+	<property name="Name" required="No">Descriptive name for this sampler
+	 that is shown in the tree.</property>
+	<property name="Classname" required="Yes">The specific implementation of
+	the JavaSamplerClient interface to be sampled.</property>
+	<property name="Send Parameters with Request" required="No">A list of
+	arguments that will be passed to the sampled class.  All arguments
+	are sent as Strings.</property>
+	</properties>
 
 </component>
 
@@ -297,6 +320,21 @@ is configured to store the results in a file named "simple-test.dat" in the curr
 <figure image="../images/screenshots/logic-controller/simple-example.gif">Figure 5 Simple Controller Example</figure>
 
 </example>
+</component>
+
+<component index="13.2.6" name="Random Controller">
+<description>
+<p>The Random Logic Controller acts similarly to the Interleave Controller, except that
+instead of going in order through its sub-controllers and samplers, it picks one
+at random at each pass.</p>
+<note>Interactions between multiple controllers can yield complex behavior.
+This is particularly true of the Random Controller.  Experiment before you assume 
+what results any given interaction will give</note>
+</description>
+<properties>
+	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+</properties>
+
 </component>
 </section>
 
