@@ -862,6 +862,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable
         try
         {
             conn.connect();
+            connectionTries = 0;
         }
         catch (BindException e)
         {
@@ -992,7 +993,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable
             }
             return res;
         }
-        catch (IOException ex)
+        catch (Exception ex)
         {
             log.warn(ex.getMessage(), ex);
             res.setDataType(SampleResult.TEXT);
