@@ -27,6 +27,54 @@
 
 <b>Changes: for more info, contact <a href="mailto:mstover1@apache.org">Michael Stover</a></b>
 
+<h3>Version 2.0</h3>
+<ul>
+	<li>HTML parsing improved; now has choice of 3 parsers, and most embedded elements can now be detected and downloaded.</li>
+<li>Redirects can now be delegated to URLConnection by defining the JMeter property HTTPSamper.delegateRedirects=true (default is false) </li>
+<li>Stop Thread and Stop Test methods added for Samplers and Assertions etc. Samplers can call setStopThread(true) or setStopTest(true) if they detect an error that needs to stop the thread of the test after the sample has been processed </li>
+<li>Thread Group Gui now has an extra pane to specify what happens after a Sampler error: Continue (as now), Stop Thread or Stop Test. 
+    This needs to be extended to a lower level at some stage. </li>
+<li>Added Shutdown to Run Menu. This is the same as Stop except that it lets the Threads finish normally (i.e. after the next sample has been completed) </li>
+<li>Remote samples can be cached until the end of a test by defining the property hold_samples=true when running the server.
+More work is needed to be able to control this from the GUI </li>
+<li>Proxy server has option to skip recording browser headers </li>
+<li>Proxy restart works better (stop waits for daemon to finish) </li>
+<li>Scheduler ignores start if it has already passed </li>
+<li>Scheduler now has delay function </li>
+<li>added Summariser test element (mainly for non-GUI) testing. This prints summary statistics to System.out and/or the log file every so oftem (3 minutes by default). Multiple summarisers can be used; samples are accumulated by summariser name. </li>
+<li>Extra Proxy Server options: 
+Create all samplers with keep-alive disabled 
+Add Separator markers between sets of samples 
+Add Response Assertion to first sampler in each set </li>
+<li>Test Plan has a comment field</li>
+	
+	<li>Help Page can now be pushed to background</li>
+	<li>Separate Function help page</li>
+	<li>New / amended functions</li>
+	<ul>
+	  <li>__property() and __P() functions</li>
+	  <li>__log() and __logn() - for writing to the log file</li>
+      <li>_StringFromFile can now process a sequence of files, e.g. dir/file01.txt, dir/file02.txt etc </li>
+      <li>_StringFromFile() funtion can now use a variable or function for the file name </li>
+	</ul>
+	<li>New / amended Assertions</li>
+	<ul>
+        <li>Response Assertion now works for URLs, and it handles null data better </li>
+        <li>Response Assertion can now match on Response Code and Response message as well </li>
+		<li>HTML Assertion using JTidy to check for well-formed HTML</li>
+	</ul>
+	<li>If Controller (not fully functional yet)</li>
+	<li>Transaction Controller (aggregates the times of its children)</li>
+	<li>New Samplers</li>
+		<ul>
+			<li>Basic BSF Sampler (optional)</li>
+			<li>BeanShell Sampler (optional, needs to be downloaded from www.beanshell.org</li>
+			<li>Basic TCP Sampler</li>
+		</ul>
+     <li>Optionally start BeanShell server (allows remote access to JMeter variables and methods) </li>
+</ul>
+<h3>Version 1.9.1</h3>
+<p>TBA</p>
 <h3>Version 1.9</h3>
 <ul>
 <li>Sample result log files can now be in CSV or XML format</li>
