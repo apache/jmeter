@@ -128,6 +128,37 @@ public class SampleResult implements Serializable
 
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
+    public SampleResult()
+    {
+    	time = 0;
+    }
+    
+    /**
+     * Allow users to create a sample with a specific elapsed time
+     * for cloning and test purposes, but don't allow the time to be
+     * changed later
+     * 
+     * @param elapsed time
+     */
+	public SampleResult(long elapsed)
+	{
+		time = elapsed;
+	}
+    
+    /**
+     * Allow users to create a sample with specific start and elapsed times
+     * for cloning and test purposes, but don't allow the times to be
+     * changed later
+     * 
+     * @param stamp
+     * @param elapsed
+     */
+	public SampleResult(long stamp, long elapsed)
+	{
+		timeStamp = stamp;
+		time = elapsed;
+	}
+
     public void setMarked(String filename)
     {
         if (files == null)
@@ -249,7 +280,7 @@ public class SampleResult implements Serializable
 
     public void configure(Configuration info)
     {
-        setTime(info.getAttributeAsLong(TOTAL_TIME, 0L));
+        time = info.getAttributeAsLong(TOTAL_TIME, 0L);
     }
 
     /**
