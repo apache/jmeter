@@ -84,8 +84,8 @@ public class ArgumentsPanel
     /** Command for removing a row from the table. */
     private static final String DELETE = "delete";
 
-    private static final String COLUMN_NAMES_0 = JMeterUtils.getResString("name");
-    private static final String COLUMN_NAMES_1 = JMeterUtils.getResString("value");
+    public static final String COLUMN_NAMES_0 = JMeterUtils.getResString("name");
+    public static final String COLUMN_NAMES_1 = JMeterUtils.getResString("value");
     //NOTUSED private static final String COLUMN_NAMES_2 = JMeterUtils.getResString("metadata");
 
     /**
