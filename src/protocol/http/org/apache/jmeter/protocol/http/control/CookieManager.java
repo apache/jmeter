@@ -277,7 +277,7 @@ public class CookieManager extends ConfigTestElement implements
 			 String name = nvp.substring(0,index);
 			 String value = nvp.substring(index+1);
 			 String domain = url.getHost();
-			 String path = url.getFile();
+			 String path = "/";
 
 			 Cookie newCookie = new Cookie(name, value, domain, path, false,
 							System.currentTimeMillis() + 1000 * 60 * 60 * 24);
