@@ -77,7 +77,7 @@ import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.collections.SearchByClass;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -87,8 +87,7 @@ import org.apache.log.Logger;
 public class StandardJMeterEngine
     implements JMeterEngine, JMeterThreadMonitor, Runnable, Serializable
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     private Thread runningThread;
     private static long WAIT_TO_DIE = 5 * 1000; //5 seconds
     Map allThreads;

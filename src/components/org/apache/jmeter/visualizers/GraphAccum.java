@@ -73,7 +73,7 @@ import javax.swing.SwingUtilities;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.ColorHelper;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 
@@ -109,8 +109,7 @@ public class GraphAccum extends JComponent implements Scrollable,
     protected static int width = 2000;
 
     protected final static int PLOT_X_WIDTH = 10;
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
 
     /**

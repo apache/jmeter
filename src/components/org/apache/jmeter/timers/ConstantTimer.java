@@ -65,7 +65,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.VariablesCollection;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -80,8 +80,7 @@ public class ConstantTimer
     extends AbstractTestElement
     implements Timer, Serializable, LoopIterationListener
 {
-    private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+    private static Logger log = LoggingManager.getLoggerForClass();
 
     public final static String DELAY = "ConstantTimer.delay";
     private VariablesCollection vars = new VariablesCollection();

@@ -55,7 +55,7 @@
 
 package org.apache.jmeter.visualizers;
 
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 
@@ -133,8 +133,7 @@ import org.apache.log.Logger;
  */
 public class Spline3
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     protected float[][] _coefficients;
     protected float[][] _A;

@@ -14,7 +14,7 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -22,8 +22,7 @@ import org.apache.log.Logger;
  */
 public class ConvertListeners implements HashTreeTraverser
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     /* (non-Javadoc)
      * @see HashTreeTraverser#addNode(Object, HashTree)

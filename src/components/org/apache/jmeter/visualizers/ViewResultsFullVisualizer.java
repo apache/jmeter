@@ -90,7 +90,7 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -106,8 +106,7 @@ public class ViewResultsFullVisualizer
     extends AbstractVisualizer
     implements ActionListener, TreeSelectionListener, Clearable
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     public final static Color SERVER_ERROR_COLOR = Color.red;
     public final static Color CLIENT_ERROR_COLOR = Color.blue;

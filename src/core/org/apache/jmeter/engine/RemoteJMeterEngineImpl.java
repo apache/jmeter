@@ -59,7 +59,7 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 
 import org.apache.jorphan.collections.HashTree;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 
@@ -70,8 +70,7 @@ public class RemoteJMeterEngineImpl
     extends java.rmi.server.UnicastRemoteObject
     implements RemoteJMeterEngine
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     JMeterEngine backingEngine;
 
     public RemoteJMeterEngineImpl() throws RemoteException

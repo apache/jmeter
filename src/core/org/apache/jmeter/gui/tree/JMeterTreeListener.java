@@ -79,7 +79,7 @@ import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.MainFrame;
 import org.apache.jmeter.gui.action.DragNDrop;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -91,8 +91,7 @@ public class JMeterTreeListener
     implements TreeSelectionListener, MouseListener, KeyListener,
                MouseMotionListener
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     Container endWindow;
     JPopupMenu pop;
     TreePath currentPath;

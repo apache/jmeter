@@ -74,7 +74,7 @@ import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -83,8 +83,7 @@ import org.apache.log.Logger;
  */
 public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     JMenu fileMenu;
     JMenuItem file_save_all;
     JMenuItem file_load;

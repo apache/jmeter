@@ -84,7 +84,7 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jorphan.io.TextFile;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.xml.sax.SAXException;
 
@@ -104,8 +104,7 @@ public class ResultCollector
         Remoteable,
         NoThreadClone
 {
-    transient private static Logger log =
-            Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     private final static String COLLECTED = "collected";
     public final static String FILENAME = "filename";
     private static boolean functionalMode = false;
