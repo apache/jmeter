@@ -70,7 +70,7 @@ public abstract class MultiProperty extends AbstractProperty
         while (iter.hasNext())
         {
             JMeterProperty prop = iter.next();
-            if (prop.isTemporary(owner))
+            if (prop.isTemporary(owner) || prop.isTemporary(null))
             {
                 iter.remove();
             }
@@ -92,7 +92,12 @@ public abstract class MultiProperty extends AbstractProperty
             PropertyIterator iter = ((MultiProperty) prop).iterator();
             while (iter.hasNext())
             {
-                addProperty(iter.next());
+                JMeterProperty item = iter.next();
+                if(isRunningVersion())
+                {
+                    item.setTemporary(true,null);
+                }
+                addProperty(item);
             }
         }
         else

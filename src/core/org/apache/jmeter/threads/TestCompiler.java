@@ -21,6 +21,7 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jorphan.collections.HashTree;
@@ -123,10 +124,11 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
 
     private void runPreProcessors(List preProcessors)
     {
-        ListIterator iter = preProcessors.listIterator(preProcessors.size());
-        while (iter.hasPrevious())
+        Iterator iter = preProcessors.iterator();
+        while (iter.hasNext())
         {
-            PreProcessor ex = (PreProcessor) iter.previous();
+            PreProcessor ex = (PreProcessor) iter.next();
+            log.debug("Running preprocessor: " + ((AbstractTestElement)ex).getName());
             ex.process();
         }
     }
@@ -212,11 +214,13 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         List listeners = new LinkedList();
         List timers = new LinkedList();
         List assertions = new LinkedList();
-        List extractors = new LinkedList();
-        List pres = new LinkedList();
+        LinkedList posts = new LinkedList();
+        LinkedList pres = new LinkedList();
         for (int i = stack.size(); i > 0; i--)
         {
             Iterator iter = testTree.list(stack.subList(0, i)).iterator();
+            List tempPre = new LinkedList();
+            List tempPost = new LinkedList();
             while (iter.hasNext())
             {
                 TestElement item = (TestElement) iter.next();
@@ -238,15 +242,17 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
                 }
                 if (item instanceof PostProcessor)
                 {
-                    extractors.add(item);
+                    tempPost.add(item);
                 }
                 if (item instanceof PreProcessor)
                 {
-                    pres.add(item);
+                    tempPre.add(item);
                 }
             }
+            pres.addAll(0,tempPre);
+            posts.addAll(0,tempPost);
         }
-        SamplePackage pack = new SamplePackage(configs, modifiers, responseModifiers, listeners, timers, assertions, extractors, pres);
+        SamplePackage pack = new SamplePackage(configs, modifiers, responseModifiers, listeners, timers, assertions, posts, pres);
         pack.setSampler(sam);
         pack.setRunningVersion(true);
         samplerConfigMap.put(sam, pack);

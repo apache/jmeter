@@ -8,6 +8,7 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.processor.PreProcessor;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -114,6 +115,7 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
     {
         synchronized (lock)
         {
+            log.debug("Running up named: " + getName());
             PropertyIterator namesIter = getNames().iterator();
             PropertyIterator valueIter = getValues().iterator();
             JMeterVariables jmvars = JMeterContextService.getContext().getVariables();
@@ -121,6 +123,7 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
             {
                 String name = namesIter.next().getStringValue();
                 String value = valueIter.next().getStringValue();
+                log.debug("saving variable: " + name + "=" + value);
                 jmvars.put(name, value);
             }
         }
@@ -153,6 +156,34 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
         UserParameters up = (UserParameters) super.clone();
         up.lock = lock;
         return up;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestElement#recoverRunningVersion()
+     */
+    public void recoverRunningVersion()
+    {
+        log.warn("Recover UP running version: " + this);
+        // TODO Auto-generated method stub
+        super.recoverRunningVersion();
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestElement#setRunningVersion(boolean)
+     */
+    public void setRunningVersion(boolean runningVersion)
+    {
+        log.warn("set UP running version to: " + runningVersion + " for " +  this);
+        // TODO Auto-generated method stub
+        super.setRunningVersion(runningVersion);
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.AbstractTestElement#mergeIn(org.apache.jmeter.testelement.TestElement)
+     */
+    protected void mergeIn(TestElement element)
+    {
+        // super.mergeIn(element);
     }
 
 }
