@@ -55,6 +55,7 @@ public class UrlConfigGui extends JPanel
     private static String PROTOCOL = "protocol";
     private static String PATH = "path";
     private static String FOLLOW_REDIRECTS = "follow_redirects";
+    private static String AUTO_REDIRECTS = "auto_redirects";
     private static String USE_KEEPALIVE = "use_keepalive";
 
     private JTextField domain;
@@ -62,6 +63,7 @@ public class UrlConfigGui extends JPanel
     private JTextField protocol;
     private JTextField path;
     private JCheckBox followRedirects;
+    private JCheckBox autoRedirects;
     private JCheckBox useKeepAlive;
     private JRadioButton post;
     private JRadioButton get;
@@ -82,6 +84,7 @@ public class UrlConfigGui extends JPanel
     {
         domain.setText("");
         followRedirects.setSelected(true);
+        autoRedirects.setSelected(false);
         get.setSelected(true);
         path.setText("");
         port.setText("");
@@ -109,26 +112,30 @@ public class UrlConfigGui extends JPanel
         element.setProperty(HTTPSampler.PATH, path.getText());
         element.setProperty(new BooleanProperty(HTTPSampler.FOLLOW_REDIRECTS,
                 followRedirects.isSelected()));
+        element.setProperty(new BooleanProperty(HTTPSampler.AUTO_REDIRECTS,
+                autoRedirects.isSelected()));
         element.setProperty(new BooleanProperty(HTTPSampler.USE_KEEPALIVE,
                 useKeepAlive.isSelected()));
         return element;
     }
 
-    public void configureSampler(HTTPSampler sampler)
-    {
-        sampler.setArguments((Arguments) argsPanel.createTestElement());
-        sampler.setDomain(domain.getText());
-        sampler.setProtocol(protocol.getText());
-        sampler.setPath(path.getText());
-        sampler.setFollowRedirects(followRedirects.isSelected());
-        sampler.setUseKeepAlive(useKeepAlive.isSelected());
-        if (port.getText().length() > 0)
-        {
-            sampler.setPort(Integer.parseInt(port.getText()));
-        }
-        sampler.setMethod((post.isSelected() ? "POST" : "GET"));
-    }
-
+// Does not appear to be used
+//    public void configureSampler(HTTPSampler sampler)
+//    {
+//        sampler.setArguments((Arguments) argsPanel.createTestElement());
+//        sampler.setDomain(domain.getText());
+//        sampler.setProtocol(protocol.getText());
+//        sampler.setPath(path.getText());
+//        sampler.setFollowRedirects(followRedirects.isSelected());
+//        sampler.setDelegateRedirects(autoRedirects.isSelected());
+//        sampler.setUseKeepAlive(useKeepAlive.isSelected());
+//        if (port.getText().length() > 0)
+//        {
+//            sampler.setPort(Integer.parseInt(port.getText()));
+//        }
+//        sampler.setMethod((post.isSelected() ? "POST" : "GET"));
+//    }
+    
     /**
      * Set the text, etc. in the UI.
      *
@@ -169,6 +176,10 @@ public class UrlConfigGui extends JPanel
         followRedirects.setSelected(
             ((AbstractTestElement) el).getPropertyAsBoolean(
                 HTTPSampler.FOLLOW_REDIRECTS));
+
+        autoRedirects.setSelected(
+                ((AbstractTestElement) el).getPropertyAsBoolean(
+                    HTTPSampler.AUTO_REDIRECTS));
         useKeepAlive.setSelected(
             ((AbstractTestElement) el).getPropertyAsBoolean(
                 HTTPSampler.USE_KEEPALIVE));
@@ -251,6 +262,11 @@ public class UrlConfigGui extends JPanel
         JLabel label = new JLabel(JMeterUtils.getResString("path"));
         label.setLabelFor(path);
 
+        autoRedirects =
+            new JCheckBox(JMeterUtils.getResString("follow_redirects_auto"));
+        autoRedirects.setName(AUTO_REDIRECTS);
+        autoRedirects.setSelected(false);// will be reset by configure(TestElement)
+
         followRedirects =
             new JCheckBox(JMeterUtils.getResString("follow_redirects"));
         followRedirects.setName(FOLLOW_REDIRECTS);
@@ -265,6 +281,7 @@ public class UrlConfigGui extends JPanel
         panel.add(Box.createHorizontalStrut(5));
         panel.add(path);
         panel.add(Box.createHorizontalStrut(10));
+        panel.add(autoRedirects);
         panel.add(followRedirects);
         panel.add(Box.createHorizontalStrut(5));
         panel.add(useKeepAlive);
