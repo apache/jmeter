@@ -390,7 +390,7 @@
     </javac>
   </target>
 
-  <target name="compile-http" depends="compile-jorphan,compile-core" description="Compile components specific to HTTP sampling.">
+  <target name="compile-http" depends="compile-jorphan,compile-core,compile-htmlparser" description="Compile components specific to HTTP sampling.">
     <mkdir dir="${build.http}"/>
     <javac srcdir="${src.http}" destdir="${build.http}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
@@ -400,6 +400,7 @@
         <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
+        <pathelement location="${build.htmlparser}"/>
       </classpath>
     </javac>
   </target>
