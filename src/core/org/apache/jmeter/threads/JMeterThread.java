@@ -304,6 +304,10 @@ public class JMeterThread implements Runnable, java.io.Serializable
 		{
         	log.info("Stop Thread seen: "+e.toString());
 		}
+        catch (Exception e)
+        {
+            log.error("Test failed!", e);
+        }
         finally
         {
             threadContext.clear();
