@@ -101,7 +101,7 @@ public class JavaTest
     public static final long DEFAULT_SLEEP_TIME = 100;
 
     /** The name used to store the SleepTime parameter. */
-    private static final String SLEEP_NAME="SleepTime";
+    private static final String SLEEP_NAME="Sleep_Time";
 
 
     /**
@@ -118,7 +118,7 @@ public class JavaTest
         "0x" + (Long.toHexString(DEFAULT_SLEEP_MASK)).toUpperCase();
 
     /** The name used to store the SleepMask parameter. */
-    private static final String MASK_NAME="SleepMask";
+    private static final String MASK_NAME="Sleep_Mask";
 
 
     /** The label to store in the sample result. */
@@ -208,8 +208,8 @@ public class JavaTest
         getLogger().debug(whoAmI() + "\tsetupTest()");
         listParameters(context);
 
-        sleepTime = context.getLongParameter("SleepTime", DEFAULT_SLEEP_TIME);
-        sleepMask = context.getLongParameter("SleepMask", DEFAULT_SLEEP_MASK);
+        sleepTime = context.getLongParameter(MASK_NAME, DEFAULT_SLEEP_TIME);
+        sleepMask = context.getLongParameter(SLEEP_NAME, DEFAULT_SLEEP_MASK);
 
         responseMessage = context.getParameter(
                     RESPONSE_MESSAGE_NAME,
