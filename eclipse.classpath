@@ -18,6 +18,7 @@
         kind="src" output="build/protocol/java" path="src/protocol/java"/>
     <classpathentry kind="src" output="build/protocol/ldap" path="src/protocol/ldap"/>
     <classpathentry kind="src" output="build/protocol/tcp" path="src/protocol/tcp"/>
+    <classpathentry kind="src" path="src/examples"/>
     <classpathentry kind="src" output="build/htmlparser" path="src/htmlparser"/>
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
     <classpathentry kind="lib" path="lib/avalon-excalibur-4.1.jar"/>
@@ -30,5 +31,5 @@
     <classpathentry kind="lib" path="lib/commons-collections.jar"/>
     <classpathentry kind="lib" path="lib/soap.jar"/>
     <classpathentry kind="lib" path="lib/jdom-b9.jar"/>
-    <classpathentry kind="output" path="build"/>
+    <classpathentry kind="output" path="build/default"/>
 </classpath>
