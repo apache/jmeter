@@ -154,9 +154,16 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 		}
 		finally
 		{
+			log.info("Thread "+threadName+" is done");
 			monitor.threadFinished(this);
 		}
 	}
+	
+	public String getThreadName()
+	{
+		return threadName;
+	}
+	
 	/****************************************
 	 * !ToDo (Method description)
 	 ***************************************/
