@@ -84,7 +84,7 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 	public final static int GREATERTHANEQUAL = 5;
 	public final static int LESSTHANEQUAL = 6;
 	/** Key for storing assertion-informations in the jmx-file. */
-	private static final String SIZE_KEY = "size_assertion_size";
+	private static final String SIZE_KEY = "SizeAssertion.size";
 	byte[] resultData;
 	
 	/**
