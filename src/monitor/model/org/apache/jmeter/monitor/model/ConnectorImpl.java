@@ -1,4 +1,4 @@
-//$Header:
+// $Header$
 /*
  * Copyright 2004 The Apache Software Foundation.
  *
@@ -16,6 +16,10 @@
  */
 package org.apache.jmeter.monitor.model;
 
+/**
+ * 
+ * @version $Revision$ $Date$
+ */
 public class ConnectorImpl implements Connector
 {
 	private ThreadInfo threadinfo = null;
