@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -61,95 +61,134 @@ import java.io.*;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.testelement.AbstractTestElement;
 
-/************************************************************
- *  This class implements a constant throughput timer with its own panel and
- *  fields for value update and user interaction.
+/**
+ * This class implements a constant throughput timer. A Constant Throughtput
+ * Timer paces the samplers under it's influence so that the total number of
+ * samples per unit of time approaches a given constant as much as possible.
  *
- *@author     <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
- *@created    $Date$
- *@version    $Revision$ $Date$
- ***********************************************************/
-
-public class ConstantThroughputTimer extends AbstractTestElement implements Timer, Serializable
+ * @author  <a href="mailto:jsalvata@atg.com">Jordi Salvat i Alabart</a>
+ * @created $Date$
+ * @version $Revision$ $Date$
+ */
+public class ConstantThroughputTimer
+	extends AbstractTestElement
+	implements Timer, Serializable
 {
-	public final static String THROUGHPUT = "ConstantThroughputTimer.throughput";
-	private static List addableList = new LinkedList();
+    public final static String THROUGHPUT= "ConstantThroughputTimer.throughput";
+    private static List addableList= new LinkedList();
 
-	// The target time for the start of the next request:
-	private long targetTime= 0;
+    /**
+     * Target time for the start of the next request. The delay provided by
+     * the timer will be calculated so that the next request happens at this
+     * time.
+     */
+    private long targetTime= 0;
 
-	// Ideal interval between two requests to get the desired throughput:
-	private long delay;
+    /**
+     * Inverse of the configured throughput, in milliseconds. It's the interval
+     * at which sampling should ideally occur to get that throughput.
+     */
+    private long delay;
 
-	/************************************************************
-	 *  !ToDo (Constructor description)
-	 ***********************************************************/
-	public ConstantThroughputTimer()
+    /**
+     * Constructor for a non-configured ConstantThroughputTimer.
+     */
+    public ConstantThroughputTimer()
+    {
+    }
+
+    /**
+     * Sets the desired throughput.
+     *
+     * @param throughput Desired sampling rate, in samples per minute.
+     */
+    public void setThroughput(long throughput)
+    {
+	setProperty(THROUGHPUT,new Long(throughput));
+	delay= 60000/throughput;
+    }
+
+    /**
+     * Not implemented.
+     */
+    public void setRange(double range)
+    {
+    }
+
+    /**
+     * Not implemented.
+     */
+    public double getRange()
+    {
+	return (double)0;
+    }
+
+    /**
+     * Not implemented.
+     */
+    public void setDelay(long delay)
+    {
+    }
+
+    /**
+     * Not implemented.
+     */
+    public long getDelay()
+    {
+	return 0;
+    }
+
+    /**
+     * Gets the configured desired throughput.
+     *
+     * @return the rate at which samples should occur, in samples per minute.
+     */
+    public long getThroughput()
+    {
+	Object throughput = getProperty(THROUGHPUT);
+	if(throughput instanceof Long)
 	{
+	    return ((Long)throughput).longValue();
 	}
-
-	/************************************************************
-	 *  !ToDo (Method description)
-	 *
-	 *@param  throughput  !ToDo (Parameter description)
-	 ***********************************************************/
-	public void setThroughput(long throughput)
+	else
 	{
-		setProperty(THROUGHPUT,new Long(throughput));
-		delay= 60000/throughput;
+	    return Long.parseLong((String)throughput);
 	}
+    }
 
-	public void setRange(double range) { }
-	public double getRange() { return (double)0; }
-	public void setDelay(long delay) { }
-	public long getDelay() { return 0; }
-
-
-	/************************************************************
-	 *  !ToDoo (Method description)
-	 *
-	 *@return    !ToDo (Return description)
-	 ***********************************************************/
-	public long getThroughput()
+    public synchronized long delay()
+    {
+	long currentTime= System.currentTimeMillis();
+	long currentTarget= targetTime==0 ? currentTime : targetTime;
+	targetTime=currentTarget+delay;
+	if (currentTime > currentTarget)
 	{
-		Object throughput = getProperty(THROUGHPUT);
-		if(throughput instanceof Long)
-		{
-			return ((Long)throughput).longValue();
-		}
-		else
-		{
-			return Long.parseLong((String)throughput);
-		}
+	    // We're behind schedule -- try to catch up:
+	    return 0;
 	}
+	return currentTarget-currentTime;
+    }
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 *
-	 *@return    !ToDo (Return description)
-	 ***********************************************************/
-	public synchronized long delay()
-	{
-		long currentTime= System.currentTimeMillis();
-		long currentTarget= targetTime==0 ? currentTime : targetTime;
-		targetTime=currentTarget+delay;
-		if (currentTime > currentTarget) return 0;
-		return currentTarget-currentTime;
-	}
+    /************************************************************
+     *  !ToDo (Method description)
+     *
+     *@return    !ToDo (Return description)
+     ***********************************************************/
+    public String toString()
+    {
+	return JMeterUtils.getResString("constant_throughput_timer_memo");
+    }
 
-	/************************************************************
-	 *  !ToDo (Method description)
-	 *
-	 *@return    !ToDo (Return description)
-	 ***********************************************************/
-	public String toString()
-	{
-		return JMeterUtils.getResString("constant_throughput_timer_memo");
-	}
-
-	public Object clone() {
-	  ConstantThroughputTimer result= (ConstantThroughputTimer)super.clone();
-	  result.targetTime= 0;
-	  return result;
-	}
+    /**
+     * Creates a copy of this ConstantThroughputTimer, ready to start
+     * calculating delays for new samples. This is in assumption that cloning
+     * always happens just before a test starts running.
+     *
+     * @return a fresh copy of this ConstantThroughputTimer
+     */
+    public Object clone() {
+      ConstantThroughputTimer result= (ConstantThroughputTimer)super.clone();
+      result.targetTime= 0;
+      return result;
+    }
 }
