@@ -362,7 +362,7 @@
   <target name="init-version">
   	<tstamp/>
   	<!-- JMeter version -->
-  <property name="jmeter.version" value="2.0.1.${DSTAMP}"/>
+  <property name="jmeter.version" value="2.0.2.${DSTAMP}"/>
   </target>
 
   <target name="init" depends="check-libs,report-missing-libs,init-version">
