@@ -87,7 +87,7 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * autoscaling plots.
  *
  * @author    <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
- * @created   February 8, 2001
+ * Created     February 8, 2001
  * @version   $Revision$ $Date$
  */
 public class GraphVisualizer extends AbstractVisualizer

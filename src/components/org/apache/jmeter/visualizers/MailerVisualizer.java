@@ -115,8 +115,8 @@ public class MailerVisualizer extends AbstractVisualizer
     private JTextField failureLimitField;
     private JTextField successLimitField;
 
-    private JPanel mainPanel;
-    private JLabel panelTitleLabel;
+    //private JPanel mainPanel;
+    //private JLabel panelTitleLabel;
 
 
     /**
@@ -198,7 +198,7 @@ public class MailerVisualizer extends AbstractVisualizer
         c.anchor = GridBagConstraints.NORTHWEST;
         c.insets = new Insets(0, 0, 0, 0);
         c.gridwidth = 1;
-        mailerPanel.add(new JLabel("Addressie(s):"));
+        mailerPanel.add(new JLabel("Addressee(s):"));
 
         addressField = new JTextField(25);
         addressField.setEditable(true);

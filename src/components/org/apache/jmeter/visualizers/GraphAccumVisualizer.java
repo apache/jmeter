@@ -82,7 +82,7 @@ import org.apache.log.Logger;
  * number of times the set of pages is configured to load.
  *
  * @author    Khor Soon Hin
- * @created   2001/08/11
+ * Created     2001/08/11
  * @version   $Revision$ $Date$
  */
 public class GraphAccumVisualizer extends AbstractVisualizer

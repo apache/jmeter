@@ -66,8 +66,8 @@ import org.apache.jorphan.math.StatCalculator;
 
 /**
  * @author     Michael Stover
- * @created    February 8, 2001
- * @version    $Revision$
+ * Created      February 8, 2001
+ * @version    $Revision$ Last updated: $Date$
  */
 public class GraphModel implements Clearable, Serializable
 {
@@ -75,7 +75,7 @@ public class GraphModel implements Clearable, Serializable
     private String name;
     private List samples;
     private List listeners;
-    private long previous = 0;
+    //private long previous = 0;
     private boolean bigChange = false;
     private Sample current = new Sample(0, 0, 0, 0, 0,false);
     private long startTime = Long.MAX_VALUE;
@@ -232,7 +232,7 @@ public class GraphModel implements Clearable, Serializable
     public void clear()
     {
         samples.clear();
-        previous = 0;
+        //previous = 0;
         graphMax = 1;
         bigChange = true;
         current = new Sample(0, 0, 0, 0, 0,false);
@@ -332,7 +332,7 @@ public class GraphModel implements Clearable, Serializable
                 median,
                 !success);
 
-        previous = sample;
+        //previous = sample;
         current = s;
         samples.add(s);
         return s;
