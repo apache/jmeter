@@ -818,6 +818,23 @@ out of the return page and puts them in the inputVar variable</p>
 	<property name="Runtime (seconds)" required="Yes">Desired runtime in seconds</property>
 </properties>
 </component>
+<component name="While Controller" index="15.2.13" screenshot="">
+	<description>
+<note>ALPHA CODE: the current release does not evaluate the condition on initial entry</note>
+		<p>The While Controller runs its children until the condion is false
+		</p>
+
+<p>Possible condition values:</p>
+<ul>
+<li>LAST (or blank) - true whilst last sample is successful</li>
+<li>Otherwise - the condition is evaluated as a string, which is compared with "true"</li>
+</ul>
+	</description>
+<properties>
+	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+	<property name="Condition" required="No">blank, LAST, or variable/function</property>
+</properties>
+</component>
 
 </section>
 
