@@ -66,7 +66,7 @@ public class StringFromFile extends AbstractFunction implements Serializable
     private static final String KEY = "_StringFromFile";//$NON-NLS-1$
     // Function name (only 1 _)
     
-	private static final String ERR_IND = "**ERR**";//$NON-NLS-1$
+	static final String ERR_IND = "**ERR**";//$NON-NLS-1$
     
     static {
         desc.add(JMeterUtils.getResString("string_from_file_file_name"));//$NON-NLS-1$
@@ -86,7 +86,6 @@ public class StringFromFile extends AbstractFunction implements Serializable
 	transient private BufferedReader myBread; // Buffered reader
 	transient private FileReader fis; // keep this round to close it
     private boolean firstTime = false; // should we try to open the file?
-    private boolean reopenFile = true; // Set from parameter list one day ...
     private String fileName; // needed for error messages
 
     public StringFromFile()
@@ -124,9 +123,10 @@ public class StringFromFile extends AbstractFunction implements Serializable
 		}
     }
 
-    private int myStart = 0;
-    private int myCurrent = -1;
-	private int myEnd = 0;
+    private static final int COUNT_UNUSED = -2;
+    private int myStart = COUNT_UNUSED;
+    private int myCurrent = COUNT_UNUSED;
+	private int myEnd = COUNT_UNUSED;
 	
     private void openFile()
     {
@@ -143,11 +143,12 @@ public class StringFromFile extends AbstractFunction implements Serializable
 			}
 			catch (NumberFormatException e)
 			{
-				myStart=1;// so "" will give 1
+				myStart=COUNT_UNUSED;// Don't process invalid numbers
 			}
-			// Have we use myCurrent yet?
-			if (myCurrent == -1) myCurrent=myStart;
 		}
+		// Have we used myCurrent yet?
+		// Set to 1 if start number is missing (to allow for end without start)
+		if (myCurrent == COUNT_UNUSED) myCurrent = myStart == COUNT_UNUSED ? 1 : myStart;
 
 		if (values.length >= PARAM_END)
 		{
@@ -158,7 +159,7 @@ public class StringFromFile extends AbstractFunction implements Serializable
 			}
 			catch (NumberFormatException e)
 			{
-				myEnd=0;
+				myEnd=COUNT_UNUSED;// Don't process invalid numbers (including "")
 			}
 			
 		}
@@ -166,7 +167,7 @@ public class StringFromFile extends AbstractFunction implements Serializable
 		if (values.length >= PARAM_START)
 		{
 			log.info(tn+" Start = "+myStart+" Current = "+myCurrent+" End = "+myEnd);//$NON-NLS-1$
-			if (values.length >= PARAM_END){
+			if (myEnd != COUNT_UNUSED){
 				if (myCurrent > myEnd){
 					log.info(tn+" No more files to process, "+myCurrent+" > "+myEnd);//$NON-NLS-1$
 					myBread=null;
@@ -179,9 +180,9 @@ public class StringFromFile extends AbstractFunction implements Serializable
 			 * up the file name.
 			 * 
 			 */
-			if (start.length()>0) // Only try to format if there is a number
+			if (myStart != COUNT_UNUSED) // Only try to format if there is a number
 			{
-				log.info("Using format "+fileName);
+				log.info(tn + " using format "+fileName);
 				try {
 					DecimalFormat myFormatter = new DecimalFormat(fileName);
 					fileName = myFormatter.format(myCurrent);
@@ -241,17 +242,17 @@ public class StringFromFile extends AbstractFunction implements Serializable
             try
             {
                 String line = myBread.readLine();
-                if (line == null && reopenFile)
+                if (line == null)
                 { // EOF, re-open file
     				String tn = Thread.currentThread().getName();
-                    log.info(tn+" Reached EOF on " + fileName);//$NON-NLS-1$
+                    log.info(tn+" EOF on  file " + fileName);//$NON-NLS-1$
                     closeFile();
                     openFile();
                     if (myBread != null) {
 						line = myBread.readLine();
                     } else {
                     	line = ERR_IND;
-                    	if (values.length >= PARAM_END){// Are we processing a file sequence?
+                    	if (myEnd != COUNT_UNUSED){// Are we processing a file sequence?
                     		log.info(tn + " Detected end of sequence.");
                				throw new JMeterStopThreadException("End of sequence");
                     	}
@@ -265,7 +266,7 @@ public class StringFromFile extends AbstractFunction implements Serializable
                 log.error(tn + " error reading file " + e.toString());//$NON-NLS-1$
             }
         } else { // File was not opened successfully
-        	if (values.length >= PARAM_END){// Are we processing a file sequence?
+        	if (myEnd != COUNT_UNUSED){// Are we processing a file sequence?
 				String tn = Thread.currentThread().getName();
         		log.info(tn + " Detected end of sequence.");
    				throw new JMeterStopThreadException("End of sequence");
@@ -316,7 +317,7 @@ public class StringFromFile extends AbstractFunction implements Serializable
 		log.info(sb.toString());
 		
 		
-		//N.B. seteParameters is called before the test proper is started,
+		//N.B. setParameters is called before the test proper is started,
 		//     and thus variables are not interpreted at this point
 		// So defer the file open until later to allow variable file names to be used.
 		firstTime = true;
