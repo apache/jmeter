@@ -27,7 +27,7 @@ import org.apache.commons.collections.UnboundedFifoBuffer;
  *
  * @see org.apache.jmeter.samplers.SampleListener
  */
-public class ListenerNotifier implements Runnable {
+public class ListenerNotifier {
     private static Logger log =
         LoggingManager.getLoggerFor(JMeterUtils.ENGINE);
 
@@ -62,13 +62,6 @@ public class ListenerNotifier implements Runnable {
         BufferUtils.synchronizedBuffer(new UnboundedFifoBuffer());
 
 
-    /**
-     * Starts running the ListenerNotifier thread.
-     */
-    public void start() {
-        isStopped = false;
-        new Thread(this).start();
-    }
 
     /**
      * Stops the ListenerNotifier thread.  The thread will continue processing
@@ -213,7 +206,7 @@ public class ListenerNotifier implements Runnable {
      *                  This list must not be null and must contain only
      *                  SampleListener elements.
      */
-    private void notifyListeners(SampleEvent res, List listeners) {
+    public void notifyListeners(SampleEvent res, List listeners) {
         Iterator iter = listeners.iterator();
         while (iter.hasNext()) {
             ((SampleListener) iter.next()).sampleOccurred(res);
