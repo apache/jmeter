@@ -18,21 +18,21 @@
 package org.apache.jmeter.protocol.jms.control.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
+//import java.awt.Dimension;
 
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
+//import javax.swing.JComboBox;
+//import javax.swing.JPanel;
 
-import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.config.gui.ArgumentsPanel;
-import org.apache.jmeter.gui.util.VerticalPanel;
+//import org.apache.jmeter.config.Arguments;
+//import org.apache.jmeter.config.gui.ArgumentsPanel;
+//import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.jms.sampler.JMSSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.JLabeledChoice;
-import org.apache.jorphan.gui.JLabeledTextArea;
-import org.apache.jorphan.gui.JLabeledTextField;
+//import org.apache.jmeter.util.JMeterUtils;
+//import org.apache.jorphan.gui.JLabeledChoice;
+//import org.apache.jorphan.gui.JLabeledTextArea;
+//import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
  * @author MBlankestijn
