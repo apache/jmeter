@@ -311,35 +311,32 @@ public class ProxyControl extends GenericController implements Serializable
 
     protected boolean filterUrl(HTTPSampler sampler)
     {
-        boolean ok = false;
-        if (sampler.getDomain() == null || sampler.getDomain().equals(""))
-        {
-            return false;
-        }
-        if (getIncludePatterns().size() == 0)
-        {
-            ok = true;
-        }
-        else
-        {
-            ok = checkIncludes(sampler);
-        }
-        if (!ok)
-        {
-            return ok;
-        }
-        else
-        {
-            if (getExcludePatterns().size() == 0)
-            {
-                return ok;
-            }
-            else
-            {
-                ok = checkExcludes(sampler);
-            }
-        }
-        return ok;
+		String domain = sampler.getDomain();
+		if (domain == null || domain.length() == 0)
+		{
+			return false;
+		}
+    	
+		String url = generateMatchUrl(sampler);
+		CollectionProperty includePatterns = getIncludePatterns();
+		if (includePatterns.size() > 0)
+		{
+			if (!matchesPatterns(url, includePatterns))
+			{
+				return false;
+			}
+		}
+    	
+		CollectionProperty excludePatterns = getExcludePatterns();
+		if (excludePatterns.size() > 0)
+		{
+			if (matchesPatterns(url, excludePatterns))
+			{
+				return false;
+			}
+		}
+    	
+		return true;
     }
 
     /*
@@ -568,74 +565,45 @@ public class ProxyControl extends GenericController implements Serializable
                     sampler.getPath()));
     }
 
-    private boolean checkIncludes(HTTPSampler sampler)
-    {
-        boolean ok = false;
-		StringBuffer url = new StringBuffer(sampler.getDomain());
-		url.append(":");
-		url.append(sampler.getPort());
-		url.append(sampler.getPath());
+	private String generateMatchUrl(HTTPSampler sampler)
+	{
+		StringBuffer buf = new StringBuffer(sampler.getDomain());
+		buf.append(':');
+		buf.append(sampler.getPort());
+		buf.append(sampler.getPath());
 		if (sampler.getQueryString().length() > 0)
 		{
-			url.append("?");
-			url.append(sampler.getQueryString());
+			buf.append('?');
+			buf.append(sampler.getQueryString());
 		}
-        PropertyIterator iter = getIncludePatterns().iterator();
-        while (iter.hasNext())
-        {
-            String item = iter.next().getStringValue();
-			Pattern pattern;
-			try {
-				pattern =
-				    patternCache.getPattern(
-				        item,
-				        Perl5Compiler.READ_ONLY_MASK
-				            & Perl5Compiler.SINGLELINE_MASK);
-				ok = matcher.matches(url.toString(), pattern);
-			} catch (MalformedCachePatternException e) {
-				log.warn("Skipped invalid Include pattern "+item,e);
-			}
-            if (ok)
-            {
-                break;
-            }
-        }
-        return ok;
-    }
+		return buf.toString();
+	}
 
-    private boolean checkExcludes(HTTPSampler sampler)
+    private boolean matchesPatterns(String url, CollectionProperty patterns)
     {
-        boolean ok = true;
-		StringBuffer url = new StringBuffer(sampler.getDomain());
-		url.append(":");
-		url.append(sampler.getPort());
-		url.append(sampler.getPath());
-		if (sampler.getQueryString().length() > 0)
-		{
-			url.append("?");
-			url.append(sampler.getQueryString());
-		}
         PropertyIterator iter = getExcludePatterns().iterator();
         while (iter.hasNext())
         {
             String item = iter.next().getStringValue();
-			Pattern pattern=null;
-            try {
-                pattern =
-                patternCache.getPattern(
-                    item,
-                    Perl5Compiler.READ_ONLY_MASK
-                        & Perl5Compiler.SINGLELINE_MASK);
-				ok = ok && !matcher.matches(url.toString(), pattern);
-			} catch (MalformedCachePatternException e){
-				log.warn("Skipped invalid Exclude pattern: "+item,e);
-			}
-            if (!ok)
+            Pattern pattern = null;
+            try
             {
-                return ok;
+                pattern =
+                    patternCache.getPattern(
+                        item,
+                        Perl5Compiler.READ_ONLY_MASK
+                            | Perl5Compiler.SINGLELINE_MASK);
+                if (matcher.matches(url, pattern))
+                {
+                    return true;
+                }
+            }
+            catch (MalformedCachePatternException e)
+            {
+                log.warn("Skipped invalid pattern: " + item, e);
             }
         }
-        return ok;
+        return false;
     }
 
     protected void replaceValues(TestElement sampler, TestElement[] configs)
