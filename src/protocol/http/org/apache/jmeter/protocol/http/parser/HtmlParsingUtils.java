@@ -330,6 +330,10 @@ public final class HtmlParsingUtils implements Serializable
      * Create a new URL based on an HREF string plus a contextual URL object.
      * Given that an HREF string might be of three possible forms, some
      * processing is required.
+     * 
+     * TODO: review how is this any different from
+     *   <code>new URL(context.getURL(), parsedUrlString)</code>
+     * and possibly eliminate this method.
      */
     public static HTTPSampler createUrlFromAnchor(
         String parsedUrlString,
