@@ -450,12 +450,12 @@ public class ViewResultsFullVisualizer
             return;
         }
 
-        int htmlIndex = response.indexOf("<HTML>");
+        int htmlIndex = response.indexOf("<HTML"); // could be <HTML lang="">
 
         // Look for a case variation
         if (htmlIndex < 0)
         {
-            htmlIndex = response.indexOf("<html>");
+            htmlIndex = response.indexOf("<html"); // ditto
         }
 
         // If we still can't find it, just try using all of the text
