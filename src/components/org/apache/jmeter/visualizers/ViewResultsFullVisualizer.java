@@ -72,6 +72,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
@@ -237,7 +238,7 @@ public class ViewResultsFullVisualizer
     }
 
     /**
-     * Sets the bottom pane to correspond to the selected node of the top tree.
+     * Sets the right pane to correspond to the selected node of the left tree.
      */
     public void valueChanged(TreeSelectionEvent e)
     {
@@ -343,17 +344,30 @@ public class ViewResultsFullVisualizer
                     // get the text response and image icon
                     // to determine which is NOT null
                     byte[] responseBytes = (byte[]) res.getResponseData();
+
                     if (res.getDataType() != null
                         && res.getDataType().equals(SampleResult.TEXT))
                     {
                         String response = null;
                         try
                         {
-                            response = new String(responseBytes, "UTF-8");
+							// Showing large strings can be VERY costly, so we will avoid doing so if the response
+							// data is larger than 200K. TODO: instead, we could delay doing the result.setText
+							// call until the user chooses the "Response data" tab. Plus we could warn the user
+							// if this happens and revert the choice if he doesn't confirm he's ready to wait.
+							if (responseBytes.length > 200*1024)
+							{
+								response= 
+									("Response too large to be displayed ("+responseBytes.length+" bytes).");
+							}
+							else
+							{
+								response = new String(responseBytes, "UTF-8");
+							}
                         }
                         catch (UnsupportedEncodingException err)
                         {
-                            response = new String(responseBytes);
+                            throw new Error(err.toString()); // UTF-8 not supported? Com'on!
                         }
 
                         if (textMode)
@@ -391,7 +405,7 @@ public class ViewResultsFullVisualizer
     protected void showTextResponse(String response)
     {
         results.setContentType("text/plain");
-        results.setText(response == null ? "" : response);
+		results.setText(response == null ? "" : response);
         results.setCaretPosition(0);
         resultsScrollPane.setViewportView(results);
 
@@ -438,11 +452,24 @@ public class ViewResultsFullVisualizer
             {
                 try
                 {
-                    response = new String(responseBytes, "UTF-8");
+					// Showing large strings can be VERY costly, so we will avoid doing so if the response
+					// data is larger than 200K. TODO: instead, we could delay doing the result.setText
+					// call until the user chooses the "Response data" tab. Plus we could warn the user
+					// if this happens and revert the choice if he doesn't confirm he's ready to wait.
+					if (responseBytes.length > 200*1024)
+					{
+						response= 
+							("Response too large to be displayed ("+responseBytes.length+" bytes).");
+						log.warn("Response too large to display.");
+					}
+					else
+					{
+						response = new String(responseBytes, "UTF-8");
+					}
                 }
                 catch (UnsupportedEncodingException err)
                 {
-                    response = new String(responseBytes);
+                	throw new Error(err.toString()); // UTF-8 unsupported? Com'on!
                 }
             }
 
@@ -530,22 +557,20 @@ public class ViewResultsFullVisualizer
 
         add(makeTitlePanel(), BorderLayout.NORTH);
 
-        Component topLeft = createTopLeftPanel();
-        Component bottomLeft = createBottomLeftPanel();
-        JSplitPane leftSide =
-            new JSplitPane(JSplitPane.VERTICAL_SPLIT, topLeft, bottomLeft);
+        Component leftSide = createLeftPanel();
+        JTabbedPane rightSide= new JTabbedPane();
 
-        Component topRight = createTopRightPanel();
-        Component bottomRight = createBottomRightPanel();
-        JSplitPane rightSide =
-            new JSplitPane(JSplitPane.VERTICAL_SPLIT, topRight, bottomRight);
+		// TODO: i18n
+        rightSide.addTab("Sampler result", createResponseMetadataPanel());
+		rightSide.addTab("Request", createRequestPanel());
+		rightSide.addTab("Response data", createResponseDataPanel());
 
         JSplitPane mainSplit =
             new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftSide, rightSide);
         add(mainSplit, BorderLayout.CENTER);
     }
 
-    private Component createTopLeftPanel()
+    private Component createLeftPanel()
     {
         SampleResult rootSampleResult = new SampleResult();
         rootSampleResult.setSampleLabel("Root");
@@ -565,7 +590,7 @@ public class ViewResultsFullVisualizer
         return treePane;
     }
 
-    private Component createBottomLeftPanel()
+    private Component createResponseMetadataPanel()
     {
         stats = new JTextPane();
         stats.setEditable(false);
@@ -588,7 +613,7 @@ public class ViewResultsFullVisualizer
         return pane;
     }
 
-    private Component createTopRightPanel()
+    private Component createRequestPanel()
     {
         sampleDataField = new JTextArea();
         sampleDataField.setEditable(false);
@@ -596,12 +621,11 @@ public class ViewResultsFullVisualizer
         sampleDataField.setWrapStyleWord(true);
 
         JPanel pane = new JPanel(new BorderLayout(0, 5));
-        pane.setBorder(BorderFactory.createTitledBorder("Request Data"));
         pane.add(makeScrollPane(sampleDataField));
         return pane;
     }
 
-    private Component createBottomRightPanel()
+    private Component createResponseDataPanel()
     {
         results = new JEditorPane();
         results.setEditable(false);
@@ -610,8 +634,6 @@ public class ViewResultsFullVisualizer
         imageLabel = new JLabel();
 
         JPanel resultsPane = new JPanel(new BorderLayout());
-        resultsPane.setBorder(
-            BorderFactory.createTitledBorder("Response Data"));
         resultsPane.add(resultsScrollPane, BorderLayout.CENTER);
         resultsPane.add(createHtmlOrTextPane(), BorderLayout.SOUTH);
 
