@@ -66,9 +66,8 @@ JMeter is running, but the only way to be sure is to check the "run" menu.  If "
 is disabled, and "stop" is enabled, JMeter is running your test plan (or, at least, it
 thinks it is).</p>
 </subsection>
-</section>
 
-<section name="3.5 Scoping Rules" anchor="scoping_rules">
+<subsection name="3.5 Scoping Rules" anchor="scoping_rules">
 <p>
 The JMeter test tree contains elements that are both hierarchical and ordered.  Some elements in the test trees are strictly hierarchical (Listeners, Config Elements, Post-Procesors, Pre-Processors, Assertions, Timers), and some are primarily ordered (controllers, samplers).  When you create your test plan, you will create an ordered list of sample request (via Samplers) that represent a set of steps to be executed.  These requests are often organized within controllers that are also ordered.  Given the following test tree:</p>
 <figure image="scoping1.png">Example test tree</figure>
@@ -84,6 +83,8 @@ that Controller.  In the following test tree:</p>
 <figure image="scoping3.png">complex example</figure>
 <p>In this example, the requests are named to reflect the order in which they will be executed.  Timer #1 will apply to Requests Two, Three, and Four (notice how order is irrelevant for hierarchical elements).  Assertion #1 will apply only to Request Three.  Timer #2 will affect all the requests.</p>
 <p>Hopefully these examples make it clear how configuration (hierarchical) elements are applied.  If you imagine each Request being passed up the tree branches, to its parent, then to its parent's parent, etc, and each time collecting all the configuration elements of that parent, then you will see how it works.  </p>
+</subsection>
+
 </section>
 
 </body>
