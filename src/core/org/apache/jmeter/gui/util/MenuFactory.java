@@ -42,9 +42,10 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.visualizers.Printable;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -164,6 +165,14 @@ public final class MenuFactory
             makeMenuItem(JMeterUtils.getResString("open"), "Open", "open"));
         menu.add(
             makeMenuItem(JMeterUtils.getResString("save_as"), "Save As", "save_as"));
+        JMenuItem savePicture = makeMenuItem(JMeterUtils.getResString("save_as_image"),
+              "Save Image","save_graphics",KeyStroke.getKeyStroke(
+                    KeyEvent.VK_G, KeyEvent.CTRL_MASK));
+        menu.add(savePicture);
+        if(!(GuiPackage.getInstance().getCurrentGui() instanceof Printable))
+        {
+           savePicture.setEnabled(false);
+        }
         JMenuItem disabled =
             makeMenuItem(
                 JMeterUtils.getResString("disable"),
