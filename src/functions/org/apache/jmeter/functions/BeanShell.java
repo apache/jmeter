@@ -47,7 +47,7 @@ import org.apache.log.Logger;
 public class BeanShell extends AbstractFunction implements Serializable
 {
 
-	protected static Logger log = LoggingManager.getLoggerForClass();
+	private static Logger log = LoggingManager.getLoggerForClass();
 
     private static final List desc = new LinkedList();
     private static final String KEY = "__BeanShell";  //$NON-NLS-1$
@@ -59,7 +59,7 @@ public class BeanShell extends AbstractFunction implements Serializable
         desc.add(JMeterUtils.getResString("function_name_param"));//$NON-NLS1$
     }
 
-    private Object[] values;
+    transient private Object[] values;
 
     public BeanShell()
     {
