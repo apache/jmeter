@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+   $Header$
+   Copyright 2001-2004 The Apache Software Foundation
+ 
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<document prev="build-monitor-test-plan.html" next="remote-test.html" date="$Date$">
+
+<properties>
+  <title>User's Manual: Listeners</title>
+</properties>
+
+<body>
+
+<section name="12. Introduction to listeners" anchor="intro">
+<p>For those new to JMeter, a listener is a component that shows the results of the
+samples. The results can be shown in a tree, tables, graphs or simply written to a log
+file. To view the contents of a response from any given sampler, add either view
+results tree or in table to a test plan. To view the response time graphically, add
+graph results, spline results or distribution graph. For detailed explanation, of
+each listener, please go to the components page.</p>
+
+</section>
+
+<section name="12.1 Screen captures" anchor="screencap">
+<p>JMeter is capable of saving any listener as a PNG file. To do so, select the
+listener in the left panel. Click edit -> Save As Image. A file dialog will
+appear. Enter the desired name and save the listener.
+</p>
+<figure image="save_image.png">Figure 1 - Edit -> Save As Image</figure>
+
+</section>
+
+</body>
+</document>
