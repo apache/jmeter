@@ -56,9 +56,16 @@
 package org.apache.jmeter.control;
 
 import java.util.Enumeration;
+import java.util.Vector;
 
+import javax.swing.tree.TreeNode;
+
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jorphan.collections.HashTree;
 
 
@@ -81,6 +88,7 @@ import org.apache.jorphan.collections.HashTree;
  */
 public class ModuleController extends GenericController implements ReplaceableController {
 
+	private static final String NODE_PATH = "ModuleController.node_path";
 	private JMeterTreeNode selectedNode = null;
 
 
@@ -89,7 +97,20 @@ public class ModuleController extends GenericController implements ReplaceableCo
 	 * 
 	 * @see java.lang.Object#Object()
 	 */
-	public ModuleController() {
+	public ModuleController() 
+	{
+		super();
+	}
+	
+	public Object clone()
+	{
+		ModuleController clone = (ModuleController)super.clone();
+		if (selectedNode == null)
+		{
+			this.restoreSelected();
+		}
+		clone.selectedNode = selectedNode;
+		return clone;
 	}
 	
 
@@ -100,14 +121,14 @@ public class ModuleController extends GenericController implements ReplaceableCo
 	 * @see	org.apache.jmeter.testelement.TestElement
 	 * @see	org.apache.jmeter.control.ReplaceableController#getReplacement()
 	 */
-	public TestElement getReplacement() {
+	public TestElement getReplacement() 
+	{
 		if ( selectedNode != null ) {
 			return selectedNode.createTestElement();
 		} else {
 			return this;
 		}
 	}
-
 	
 	/**
 	 * Sets the (@link JMeterTreeNode) which represents the controller which
@@ -117,8 +138,10 @@ public class ModuleController extends GenericController implements ReplaceableCo
 	 * @param	tn - JMeterTreeNode
 	 * @see	org.apache.jmeter.gui.tree.JMeterTreeNode
 	 */
-	public void setSelectedNode( JMeterTreeNode tn ) {
+	public void setSelectedNode( JMeterTreeNode tn ) 
+	{
 		selectedNode = tn;
+		setNodePath();
 	}
 	
 	/**
@@ -126,8 +149,72 @@ public class ModuleController extends GenericController implements ReplaceableCo
 	 * 
 	 * @return JMeterTreeNode
 	 */
-	public JMeterTreeNode getSelectedNode() {
+	public JMeterTreeNode getSelectedNode() 
+	{
 		return selectedNode;
+	}
+	
+	private void setNodePath()
+	{
+		Vector nodePath = new Vector();
+		if (selectedNode != null)
+		{
+			TreeNode[] path = selectedNode.getPath();
+			for (int i=0; i<path.length; i++)
+			{
+				nodePath.add( ((JMeterTreeNode)path[i]).getName() );
+			}
+			nodePath.add(selectedNode.getName());
+		}
+		setProperty(new CollectionProperty(NODE_PATH,nodePath));
+	}
+	
+	private Vector getNodePath()
+	{
+		JMeterProperty prop = getProperty(NODE_PATH);
+		if (! (prop instanceof NullProperty) ) 
+		{
+			return (Vector)((CollectionProperty)prop).getObjectValue();
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	private void restoreSelected()
+	{
+		if (selectedNode == null)
+		{
+			Vector nodePath = getNodePath();
+			if (nodePath != null)
+			{
+				GuiPackage gp = GuiPackage.getInstance();
+				if ( gp != null ) 
+				{
+					JMeterTreeNode root = (JMeterTreeNode)gp.getTreeModel().getRoot();
+					nodePath.remove(0);
+					traverse(root,nodePath);
+				}
+			}
+		}
+	}
+	
+	private void traverse(JMeterTreeNode node, Vector nodePath)
+	{
+		if (node != null && nodePath.size()>0)
+		{
+			for ( int i=0; i<node.getChildCount(); i++ ) 
+			{
+				JMeterTreeNode cur = (JMeterTreeNode)node.getChildAt(i);
+				if ( cur.getName().equals(nodePath.elementAt(0).toString()) ) 
+				{
+					selectedNode = cur;
+					nodePath.remove(0);
+					traverse(cur,nodePath);
+				}
+			}
+		}
 	}
 
 	/**
@@ -135,11 +222,13 @@ public class ModuleController extends GenericController implements ReplaceableCo
 	 * 
 	 * @param tree - The current tree under which the nodes will be added
 	 */
-	public void replace( HashTree tree ) {
+	public void replace( HashTree tree ) 
+	{
 		createSubTree( tree, selectedNode );
 	}
-	
-	private void createSubTree( HashTree tree, JMeterTreeNode node ) {
+
+	private void createSubTree( HashTree tree, JMeterTreeNode node ) 
+	{
 		Enumeration e = node.children();
 		while ( e.hasMoreElements() ) {
 			JMeterTreeNode subNode = (JMeterTreeNode)e.nextElement();
