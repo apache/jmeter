@@ -94,76 +94,92 @@ public class JavaTest
     extends AbstractJavaSamplerClient
     implements Serializable
 {
-    /**
-     * The default value of the SleepTime parameter, in milliseconds.
-     */
-    public static final long DEFAULT_SLEEP_TIME = 100;
-	private static final String SLEEP_NAME="SleepTime";
-
-    /**
-     * The default value of the SleepMask parameter.
-     */
-    public static final long DEFAULT_SLEEP_MASK = 0xff;
-	private static final String DEFAULT_MASK_STRING 
-		= "0x" + (Long.toHexString(DEFAULT_SLEEP_MASK)).toUpperCase();
-	private static final String MASK_NAME="SleepMask";
-
-    /**
-     * The base number of milliseconds to sleep during each sample.
-     */
+    /** The base number of milliseconds to sleep during each sample. */
     private long sleepTime;
+
+    /** The default value of the SleepTime parameter, in milliseconds. */
+    public static final long DEFAULT_SLEEP_TIME = 100;
+
+    /** The name used to store the SleepTime parameter. */
+    private static final String SLEEP_NAME="SleepTime";
+
 
     /**
      * A mask to be applied to the current time in order to add a
-     * random component to the sleep time.
+     * semi-random component to the sleep time.
      */
     private long sleepMask;
 
-	/*
-	 * Holds the label to be stored in the sample result 
-	 * (can be overridden by the label parameter)
-	 */
-	private String label;
-	private static final String LABEL_DEFAULT="JavaTest";
-	private static final String LABEL_NAME="Label";
+    /** The default value of the SleepMask parameter. */
+    public static final long DEFAULT_SLEEP_MASK = 0xff;
+    
+    /** Formatted string representation of the default SleepMask. */
+    private static final String DEFAULT_MASK_STRING =
+        "0x" + (Long.toHexString(DEFAULT_SLEEP_MASK)).toUpperCase();
 
-	/*
-	 * Holds the responseMessage to be stored in the sample result
-	 * (can be overridden by the relevant parameter)
-	 */
-	private String responseMessage;
-	private static final String RESPONSEMESSAGE_DEFAULT="";
-	private static final String RESPONSEMESSAGE_NAME="ResponseMessage";
-	
-	/*
-	 * Holds the responseCode to be stored in the sample result
-	 * (can be overridden by the relevant parameter)
-	 */
-	private String responseCode;
-	private static final String RESPONSECODE_DEFAULT="";
-	private static final String RESPONSECODE_NAME="ResponseCode";
+    /** The name used to store the SleepMask parameter. */
+    private static final String MASK_NAME="SleepMask";
 
-    /*
-     * Holds the samplerData (shown as RequestData in the Tree display)  
-     */
-	private String samplerData;
-	private static final String SAMPLERDATA_NAME="SamplerData";
-	private static final String SAMPLERDATA_DEFAULT="";
+
+    /** The label to store in the sample result. */
+    private String label;
+
+    /** The default value of the Label parameter. */
+    private static final String LABEL_DEFAULT = "JavaTest";
+    
+    /** The name used to store the Label parameter. */
+    private static final String LABEL_NAME = "Label";
+
+
+    /** The response message to store in the sample result. */
+    private String responseMessage;
+    
+    /** The default value of the ResponseMessage parameter. */
+    private static final String RESPONSE_MESSAGE_DEFAULT = "";
+    
+    /** The name used to store the ResponseMessage parameter. */
+    private static final String RESPONSE_MESSAGE_NAME = "ResponseMessage";
+
+    
+    /** The response code to be stored in the sample result. */
+    private String responseCode;
+    
+    /** The default value of the ResponseCode parameter. */
+    private static final String RESPONSE_CODE_DEFAULT = "";
+    
+    /** The name used to store the ResponseCode parameter. */
+    private static final String RESPONSE_CODE_NAME = "ResponseCode";
+
+
+    /** The sampler data (shown as Request Data in the Tree display). */
+    private String samplerData;
+    
+    /** The default value of the SamplerData parameter. */
+    private static final String SAMPLER_DATA_DEFAULT = "";
+    
+    /** The name used to store the SamplerData parameter. */
+    private static final String SAMPLER_DATA_NAME = "SamplerData";
+
      
-	/*
-	 * Holds the samplerData (shown as RequestData in the Tree display)  
-	 */
-	private String resultData;
-	private static final String RESULTDATA_NAME="ResultData";
-	private static final String RESULTDATA_DEFAULT="";
-     
-	/*
-	 * Holds the success status to be stored in the sample result
-	 * (can be overridden by the relevant parameter)
-	 */
-	private boolean success;
-	private static final String SUCCESS_DEFAULT="OK";
-	private static final String SUCCESS_NAME="Status";
+    /** Holds the result data (shown as Response Data in the Tree display). */
+    private String resultData;
+    
+    /** The default value of the ResultData parameter. */
+    private static final String RESULT_DATA_DEFAULT = "";
+    
+    /** The name used to store the ResultData parameter. */
+    private static final String RESULT_DATA_NAME = "ResultData";
+
+
+    /** The success status to be stored in the sample result. */
+    private boolean success;
+    
+    /** The default value of the Success Status parameter. */
+    private static final String SUCCESS_DEFAULT = "OK";
+    
+    /** The name used to store the Success Status parameter. */
+    private static final String SUCCESS_NAME = "Status";
+
 
     /**
      * Default constructor for <code>JavaTest</code>.
@@ -194,42 +210,58 @@ public class JavaTest
 
         sleepTime = context.getLongParameter("SleepTime", DEFAULT_SLEEP_TIME);
         sleepMask = context.getLongParameter("SleepMask", DEFAULT_SLEEP_MASK);
-		responseMessage =context.getParameter(RESPONSEMESSAGE_NAME,RESPONSEMESSAGE_DEFAULT);
-		responseCode    =context.getParameter(RESPONSECODE_NAME,RESPONSEMESSAGE_DEFAULT);
-		success         =context.getParameter(SUCCESS_NAME,SUCCESS_DEFAULT).equalsIgnoreCase("OK");
-		label           =context.getParameter(LABEL_NAME,LABEL_DEFAULT);
-		samplerData     =context.getParameter(SAMPLERDATA_NAME,SAMPLERDATA_DEFAULT);
-		resultData     =context.getParameter(RESULTDATA_NAME,RESULTDATA_DEFAULT);
+
+        responseMessage = context.getParameter(
+                    RESPONSE_MESSAGE_NAME,
+                    RESPONSE_MESSAGE_DEFAULT);
+                    
+        responseCode =
+            context.getParameter(RESPONSE_CODE_NAME, RESPONSE_CODE_DEFAULT);
+
+        success =
+            context.getParameter(
+                SUCCESS_NAME,
+                SUCCESS_DEFAULT).equalsIgnoreCase(
+                "OK");
+
+        label = context.getParameter(LABEL_NAME, LABEL_DEFAULT);
+
+        samplerData =
+            context.getParameter(SAMPLER_DATA_NAME, SAMPLER_DATA_DEFAULT);
+
+        resultData = context.getParameter(
+                RESULT_DATA_NAME,
+                RESULT_DATA_DEFAULT);
     }
 
 
-	/**
-	 * Provide a list of parameters which this test supports.  Any
-	 * parameter names and associated values returned by this method
-	 * will appear in the GUI by default so the user doesn't have
-	 * to remember the exact names.  The user can add other parameters
-	 * which are not listed here.  If this method returns null then
-	 * no parameters will be listed.  If the value for some parameter
-	 * is null then that parameter will be listed in the GUI with
-	 * an empty value.
-	 * 
-	 * @return  a specification of the parameters used by this
-	 *           test which should be listed in the GUI, or null
-	 *           if no parameters should be listed.
-	 */
-	public Arguments getDefaultParameters()
-	{
-		Arguments params = new Arguments();
-		params.addArgument(SLEEP_NAME, String.valueOf(DEFAULT_SLEEP_TIME));
-		params.addArgument(MASK_NAME,DEFAULT_MASK_STRING);
-		params.addArgument(LABEL_NAME,LABEL_DEFAULT);
-		params.addArgument(RESPONSECODE_NAME,RESPONSECODE_DEFAULT);
-		params.addArgument(RESPONSEMESSAGE_NAME,RESPONSEMESSAGE_DEFAULT);
-		params.addArgument(SUCCESS_NAME,SUCCESS_DEFAULT);
-		params.addArgument(SAMPLERDATA_NAME,SAMPLERDATA_DEFAULT);
-		params.addArgument(RESULTDATA_NAME,SAMPLERDATA_DEFAULT);
-		return params;
-	}
+    /**
+     * Provide a list of parameters which this test supports.  Any
+     * parameter names and associated values returned by this method
+     * will appear in the GUI by default so the user doesn't have
+     * to remember the exact names.  The user can add other parameters
+     * which are not listed here.  If this method returns null then
+     * no parameters will be listed.  If the value for some parameter
+     * is null then that parameter will be listed in the GUI with
+     * an empty value.
+     * 
+     * @return  a specification of the parameters used by this
+     *           test which should be listed in the GUI, or null
+     *           if no parameters should be listed.
+     */
+    public Arguments getDefaultParameters()
+    {
+        Arguments params = new Arguments();
+        params.addArgument(SLEEP_NAME, String.valueOf(DEFAULT_SLEEP_TIME));
+        params.addArgument(MASK_NAME, DEFAULT_MASK_STRING);
+        params.addArgument(LABEL_NAME, LABEL_DEFAULT);
+        params.addArgument(RESPONSE_CODE_NAME, RESPONSE_CODE_DEFAULT);
+        params.addArgument(RESPONSE_MESSAGE_NAME, RESPONSE_MESSAGE_DEFAULT);
+        params.addArgument(SUCCESS_NAME, SUCCESS_DEFAULT);
+        params.addArgument(SAMPLER_DATA_NAME, SAMPLER_DATA_DEFAULT);
+        params.addArgument(RESULT_DATA_NAME, SAMPLER_DATA_DEFAULT);
+        return params;
+    }
 
     /**
      * Perform a single sample.  In this case, this method will
@@ -261,16 +293,18 @@ public class JavaTest
             // Record sample start time.
             long start = System.currentTimeMillis();
 
-			results.setResponseCode(responseCode);
-			results.setResponseMessage(responseMessage);
-			if (samplerData != null && samplerData.length() > 0){
-				results.setSamplerData(samplerData);
-			}
-			
-			if (resultData != null && resultData.length() > 0){
-				results.setResponseData(resultData.getBytes());
-				results.setDataType(SampleResult.TEXT);
-			}
+            results.setResponseCode(responseCode);
+            results.setResponseMessage(responseMessage);
+            if (samplerData != null && samplerData.length() > 0)
+            {
+                results.setSamplerData(samplerData);
+            }
+
+            if (resultData != null && resultData.length() > 0)
+            {
+                results.setResponseData(resultData.getBytes());
+                results.setDataType(SampleResult.TEXT);
+            }
 
             // Generate a random value using the current time.
             long ct = start % getSleepMask();
@@ -283,10 +317,8 @@ public class JavaTest
             long end = System.currentTimeMillis();
 
             results.setTime(end - start);
-			results.setSuccessful(success);
-//            results.setSampleLabel(
-//                "Sleep Test: time = " + (getSleepTime() + ct));
-			results.setSampleLabel(label);
+            results.setSuccessful(success);
+            results.setSampleLabel(label);
         }
         catch (Exception e)
         {
