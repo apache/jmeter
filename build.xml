@@ -329,6 +329,12 @@
     <include name="README"/>
     <include name="LICENSE"/>
   </patternset>
+  
+  <patternset id="dist.sources">
+  <include name="${src.dir}/"/>
+  <include name="${docs.src}/"/>
+  <include name="*"/>
+  </patternset>
 
   <target name="dist" depends="assume-libs-present,clean,install,all-docs,test" description="Create the distribution packages.">
     <property name="dist.name" value="jakarta-jmeter-${version}"/>
@@ -347,6 +353,36 @@
     <zip zipfile="${dist.dir}/${dist.name}.zip">
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist.binaries"/>
+      </zipfileset>
+    </zip>
+    <tar destfile="${dist.dir}/${dist.name}-javadoc.tar" longfile="gnu">
+      <tarfileset includes="${docs.api.dest}/" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
+    </tar>
+    <gzip zipfile="${dist.dir}/${dist.name}-javadoc.tgz" src="${dist.dir}/${dist.name}-javadoc.tar" />
+    <zip zipfile="${dist.dir}/${dist.name}-javadoc.zip">
+      <zipfileset includes="${docs.api.dest}/" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
+    </zip>
+  </target>
+  
+  <target name="src_dist" depends="assume-libs-present,clean,install,all-docs,test" description="Create the distribution packages.">
+    <property name="dist.name" value="jakarta-jmeter-${version}"/>
+    <mkdir dir="${dist.dir}"/>
+    <!-- copy 3rd party libraries if not already there -->
+    <copy todir="${lib.dir}" flatten="true">
+      <fileset refid="external.jars"/>
+    </copy>
+    <tar destfile="${dist.dir}/${dist.name}.src.tar" longfile="gnu">
+      <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
+        <patternset refid="dist.binaries"/>
+        <patternset refid="dist.sources"/>
+      </tarfileset>
+      <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
+    </tar>
+    <gzip zipfile="${dist.dir}/${dist.name}.src.tgz" src="${dist.dir}/${dist.name}.src.tar" />
+    <zip zipfile="${dist.dir}/${dist.name}.src.zip">
+      <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
+        <patternset refid="dist.binaries"/>
+        <patternset refid="dist.sources"/>
       </zipfileset>
     </zip>
     <tar destfile="${dist.dir}/${dist.name}-javadoc.tar" longfile="gnu">
