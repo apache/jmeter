@@ -74,13 +74,13 @@ import org.apache.log.Logger;
  * Kind of a hack, lots of room for optimizations.
  *
  * @author     mike
- * @created    August 31, 2001
- * @version $Revision$
+ * Created    August 31, 2001
+ * @version $Revision$ Last updated: $Date$
  */
 public class FtpClient
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
-    File f = new File("e:\\");
+    //File f = new File("e:\\");
     BufferedWriter out;
     BufferedReader in;
     Socket s;
@@ -293,8 +293,8 @@ public class FtpClient
      * Grabs the data from the dataport.
      *
      * @author     mike
-     * @created    August 31, 2001
-     * @version $Revision$
+     * Created    August 31, 2001
+     * @version $Revision$ Last updated: $Date$
      */
     public class dataGrabber implements Runnable
     {
