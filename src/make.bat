@@ -25,6 +25,9 @@ jar cmf0 ..\MANIFEST ..\..\bin\ApacheJMeter.jar *.* >nul
 cd ..
 
 echo  * Removing temp directory...
+rem windows 9x
 deltree /y temp >nul
+rem windows nt/2000
+del /F /S /Q temp >nul
 
 echo Done.
