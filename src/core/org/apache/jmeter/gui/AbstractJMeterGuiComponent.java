@@ -60,6 +60,7 @@ import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -249,4 +250,32 @@ public abstract class AbstractJMeterGuiComponent
     protected Border makeBorder() {
         return BorderFactory.createEmptyBorder(10, 10, 5, 10);
     }
+
+/**
+ * Create a scroll panel that sets it's preferred size to it's minimum size.  Explicitly for scroll panes that live inside other
+ * scroll panes, or within containers that stretch components to fill the area they exist in.
+ * @param comp
+ * @return
+ */
+    protected JScrollPane makeScrollPane(Component comp)
+    {
+        JScrollPane pane =  new JScrollPane(comp);
+        pane.setPreferredSize(pane.getMinimumSize());
+        return pane;
+    }
+    
+    /**
+     *  Create a scroll panel that sets it's preferred size to it's minimum size.  Explicitly for scroll panes that live inside other
+ * scroll panes, or within containers that stretch components to fill the area they exist in.
+     * @param comp
+     * @param verticalPolicy
+     * @param horizontalPolicy
+     * @return
+     */
+    protected JScrollPane makeScrollPane(Component comp,int verticalPolicy,int horizontalPolicy)
+        {
+            JScrollPane pane =  new JScrollPane(comp,verticalPolicy,horizontalPolicy);
+            pane.setPreferredSize(pane.getMinimumSize());
+            return pane;
+        }
 }

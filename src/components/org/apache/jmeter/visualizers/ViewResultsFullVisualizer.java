@@ -61,16 +61,12 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.UnsupportedEncodingException;
 
-import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JEditorPane;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -78,7 +74,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -88,8 +83,6 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
-import org.apache.jorphan.gui.JLabeledTextArea;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
@@ -111,31 +104,31 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
     protected static final String TEXT_BUTTON_LABEL = "Show Text";
     protected DefaultMutableTreeNode root;
     protected DefaultTreeModel treeModel;
-//    protected GridBagLayout gridBag;
-//    protected GridBagConstraints gbc;
-//    private JScrollPane textScrollArea;
+    //    protected GridBagLayout gridBag;
+    //    protected GridBagConstraints gbc;
+    //    private JScrollPane textScrollArea;
 
     /** The button that will pop up the response as rendered HTML or
      text.  **/
     protected JButton htmlOrTextButton;
 
     /** The response to be displayed.  **/
-//    protected String response;
+    //    protected String response;
 
     /** The pane where the rendered HTML response is displayed.  **/
-//    transient protected JEditorPane htmlEditPane;
-//    private JSplitPane treeSplitPane;
+    //    transient protected JEditorPane htmlEditPane;
+    //    private JSplitPane treeSplitPane;
 
     /** The text area where the response is displayed.  **/
-//    protected JTextArea textArea;
+    //    protected JTextArea textArea;
     protected JTree jTree;
     protected int childIndex;
     transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
-//    private JLabel loadTimeLabel;
-//    private JLabeledTextArea postDataField;
-//    private JLabel responseCodeLabel;
-//    private JLabel responseMsgLabel;
+    //    private JLabel loadTimeLabel;
+    //    private JLabeledTextArea postDataField;
+    //    private JLabel responseCodeLabel;
+    //    private JLabel responseMsgLabel;
     /****************************************
      * !ToDo (Constructor description)
      ***************************************/
@@ -204,14 +197,15 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 
         if (log.isDebugEnabled())
             log.debug("clear1 : total child - " + totalChild);
-        for (int i = 0; i < totalChild; i++) { // the child to be removed will always be 0 'cos as the nodes are removed
+        for (int i = 0; i < totalChild; i++)
+        { // the child to be removed will always be 0 'cos as the nodes are removed
             // the nth node will become (n-1)th
             treeModel.removeNodeFromParent((DefaultMutableTreeNode) root.getChildAt(0));
         }
-        
-results.setText("");
-//            textArea.setText("");
-//        textScrollArea.setViewportView(textArea);
+
+        results.setText("");
+        //            textArea.setText("");
+        //        textScrollArea.setViewportView(textArea);
         // reset the child index
         childIndex = 0;
         log.debug("End : clear1");
@@ -246,7 +240,7 @@ results.setText("");
             log.debug("valueChanged : selected node - " + node);
         }
 
-stats.setText("");
+        stats.setText("");
         if (node != null)
         {
             SampleResult res = (SampleResult) node.getUserObject();
@@ -263,22 +257,22 @@ stats.setText("");
                 log.debug("valueChanged1 : load time - " + res.getTime());
                 if (res != null && res.getSamplerData() != null)
                 {
-stats.append("Request data: " + res.getSamplerData() + "\n");
-//                    postDataField.setText(res.getSamplerData().toString());
+                    sampleDataField.setText("Request data: " + res.getSamplerData().trim());
+                    //                    postDataField.setText(res.getSamplerData().toString());
                 }
 
-stats.append("Load time: " + res.getTime() + "\n");
-//                loadTimeLabel.setText("Load time : " + res.getTime());
-//                gbc.gridx = 0;
-//                gbc.gridy = 0;
+                stats.append("Load time: " + res.getTime() + "\n");
+                //                loadTimeLabel.setText("Load time : " + res.getTime());
+                //                gbc.gridx = 0;
+                //                gbc.gridy = 0;
                 // keep all of the labels to the left
-//                gbc.anchor = GridBagConstraints.WEST;
+                //                gbc.anchor = GridBagConstraints.WEST;
                 // with weightx != 0.0, components won't clump in the center
-//                gbc.weightx = 1.0;
+                //                gbc.weightx = 1.0;
                 // pad a bit from the display area
-//                gbc.insets = new Insets(0, 10, 0, 0);
+                //                gbc.insets = new Insets(0, 10, 0, 0);
                 // response code label
-                
+
                 String responseCode = res.getResponseCode();
 
                 log.debug("valueChanged1 : response code - " + responseCode);
@@ -296,29 +290,29 @@ stats.append("Load time: " + res.getTime() + "\n");
                 switch (responseLevel)
                 {
                     case 3 :
-//                        responseCodeLabel.setForeground(REDIRECT_COLOR);
-break;
+                        //                        responseCodeLabel.setForeground(REDIRECT_COLOR);
+                        break;
                     case 4 :
-//                        responseCodeLabel.setForeground(CLIENT_ERROR_COLOR);
-break;
+                        //                        responseCodeLabel.setForeground(CLIENT_ERROR_COLOR);
+                        break;
                     case 5 :
-//                        responseCodeLabel.setForeground(SERVER_ERROR_COLOR);
-break;
+                        //                        responseCodeLabel.setForeground(SERVER_ERROR_COLOR);
+                        break;
                 }
-stats.append("HTTP response code: " + responseCode + "\n");                
-//                responseCodeLabel.setText(JMeterUtils.getResString("HTTP response code") + " : " + responseCode);
+                stats.append("HTTP response code: " + responseCode + "\n");
+                //                responseCodeLabel.setText(JMeterUtils.getResString("HTTP response code") + " : " + responseCode);
                 // response message label
-                
+
                 String responseMsgStr = res.getResponseMessage();
 
                 log.debug("valueChanged1 : response message - " + responseMsgStr);
-stats.append("HTTP response message: " + responseMsgStr);
-//                responseMsgLabel.setText("HTTP response message : " + responseMsgStr);
+                stats.append("HTTP response message: " + responseMsgStr);
+                //                responseMsgLabel.setText("HTTP response message : " + responseMsgStr);
                 // get the text response and image icon
                 // to determine which is NOT null
                 byte[] responseBytes = (byte[]) res.getResponseData();
                 ImageIcon icon = null;
-String response = null;
+                String response = null;
                 if (res.getDataType() != null && res.getDataType().equals(SampleResult.TEXT))
                 {
                     try
@@ -347,42 +341,42 @@ String response = null;
                         showRenderedResponse(response);
                     }
                 }
-/*                else if (icon != null)
-                {
-                    JLabel image = new JLabel();
-
-                    image.setIcon(icon);
-                    showImage(image);
-                }
-*/                
-//                treeSplitPane.revalidate();
-//                treeSplitPane.repaint();
+                /*                else if (icon != null)
+                                {
+                                    JLabel image = new JLabel();
+                
+                                    image.setIcon(icon);
+                                    showImage(image);
+                                }
+                */
+                //                treeSplitPane.revalidate();
+                //                treeSplitPane.repaint();
             }
         }
         log.debug("End : valueChanged1");
     }
-/*
-    protected void initTextArea()
-    {
-        textArea = new JTextArea();
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        textArea.setTabSize(4);
-        textArea.setRows(4);
-    }
-    
-    protected void showImage(JLabel image)
-    {
-        textScrollArea.setViewportView(image);
-    }
-*/
+    /*
+        protected void initTextArea()
+        {
+            textArea = new JTextArea();
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+            textArea.setTabSize(4);
+            textArea.setRows(4);
+        }
+        
+        protected void showImage(JLabel image)
+        {
+            textScrollArea.setViewportView(image);
+        }
+    */
     protected void showTextResponse(String response)
     {
-//        textArea.setText(response);
-//        textArea.setCaretPosition(0);
-//        textScrollArea.setViewportView(textArea);
-results.setText(response);
-results.setCaretPosition(0);
+        //        textArea.setText(response);
+        //        textArea.setCaretPosition(0);
+        //        textScrollArea.setViewportView(textArea);
+        results.setText(response);
+        results.setCaretPosition(0);
     }
 
     /**********************************************************************
@@ -391,52 +385,60 @@ results.setCaretPosition(0);
      * @param e the ActionEvent being processed
      *********************************************************************/
 
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
         // If the htmlOrTextButton is clicked, show the response in the
         // appropriate way, and change the button label
         if (htmlOrTextButton.equals(e.getSource()))
         {
 
-DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
-if (node == null) {
-    results.setText("");
-} else {
-  SampleResult res = (SampleResult) node.getUserObject();
-  byte[] responseBytes = (byte[]) res.getResponseData();
-  String response = null;
-  if (res.getDataType() != null && res.getDataType().equals(SampleResult.TEXT)) {
-    try {
-      response = new String(responseBytes, "utf-8");
-    } catch (UnsupportedEncodingException err) {
-      response = new String(responseBytes);
-    }
-  }
-
-            // Show rendered HTML
-            if (HTML_BUTTON_LABEL.equals(htmlOrTextButton.getText()))
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
+            if (node == null)
             {
-                showRenderedResponse(response);
-                htmlOrTextButton.setText(TEXT_BUTTON_LABEL);
+                results.setText("");
             }
-            // Show the textual response
             else
             {
-                showTextResponse(response);
-                htmlOrTextButton.setText(HTML_BUTTON_LABEL);
+                SampleResult res = (SampleResult) node.getUserObject();
+                byte[] responseBytes = (byte[]) res.getResponseData();
+                String response = null;
+                if (res.getDataType() != null && res.getDataType().equals(SampleResult.TEXT))
+                {
+                    try
+                    {
+                        response = new String(responseBytes, "utf-8");
+                    }
+                    catch (UnsupportedEncodingException err)
+                    {
+                        response = new String(responseBytes);
+                    }
+                }
+
+                // Show rendered HTML
+                if (HTML_BUTTON_LABEL.equals(htmlOrTextButton.getText()))
+                {
+                    showRenderedResponse(response);
+                    htmlOrTextButton.setText(TEXT_BUTTON_LABEL);
+                }
+                // Show the textual response
+                else
+                {
+                    showTextResponse(response);
+                    htmlOrTextButton.setText(HTML_BUTTON_LABEL);
+                }
             }
         }
-}
     }
 
-/*
-    protected void initHtmlEditPane()
-    {
-        htmlEditPane = new JEditorPane();
-        HTMLEditorKit htmlKit = new HTMLEditorKit();
-
-        htmlEditPane.setEditorKit(htmlKit);
-    }
-*/
+    /*
+        protected void initHtmlEditPane()
+        {
+            htmlEditPane = new JEditorPane();
+            HTMLEditorKit htmlKit = new HTMLEditorKit();
+    
+            htmlEditPane.setEditorKit(htmlKit);
+        }
+    */
     protected void showRenderedResponse(String response)
     {
         int htmlIndex = response.indexOf("<HTML>");
@@ -452,18 +454,18 @@ if (node == null) {
         {
             String html = response.substring(htmlIndex, response.length());
 
-//            htmlEditPane.setText(html);
-results.setText(html);
+            //            htmlEditPane.setText(html);
+            results.setText(html);
         }
         // No HTML tag, so try to render what's there
         else
         {
-//            htmlEditPane.setText(response);
-results.setText(response);
+            //            htmlEditPane.setText(response);
+            results.setText(response);
         }
-results.setCaretPosition(0);
-//        htmlEditPane.setCaretPosition(0);
-//        textScrollArea.setViewportView(htmlEditPane);
+        results.setCaretPosition(0);
+        //        htmlEditPane.setCaretPosition(0);
+        //        textScrollArea.setViewportView(htmlEditPane);
 
     }
 
@@ -473,29 +475,37 @@ results.setCaretPosition(0);
         htmlOrTextButton.addActionListener(this);
     }
 
-/*
-    protected Component getBottomPane()
+    /*
+        protected Component getBottomPane()
+        {
+            JPanel outerPanel = new JPanel(new BorderLayout());
+            JPanel panel = new JPanel(new VerticalLayout(5, VerticalLayout.LEFT));
+            postDataField = new JLabeledTextArea(JMeterUtils.getResString("request_data"), null);
+            loadTimeLabel = new JLabel();
+            panel.add(postDataField);
+            panel.add(loadTimeLabel);
+            responseCodeLabel = new JLabel();
+            panel.add(responseCodeLabel);
+            responseMsgLabel = new JLabel();
+            panel.add(responseMsgLabel);
+            initHtmlOrTextButton();
+            panel.add(htmlOrTextButton);
+            textScrollArea = new JScrollPane();
+            outerPanel.add(panel,BorderLayout.NORTH);
+            outerPanel.add(textScrollArea,BorderLayout.CENTER);
+            return outerPanel;
+        }
+    */
+    private JTextArea stats;
+    private JTextArea results;
+    private JTextArea sampleDataField;
+
+    protected void initSampleDataArea()
     {
-        JPanel outerPanel = new JPanel(new BorderLayout());
-        JPanel panel = new JPanel(new VerticalLayout(5, VerticalLayout.LEFT));
-        postDataField = new JLabeledTextArea(JMeterUtils.getResString("request_data"), null);
-        loadTimeLabel = new JLabel();
-        panel.add(postDataField);
-        panel.add(loadTimeLabel);
-        responseCodeLabel = new JLabel();
-        panel.add(responseCodeLabel);
-        responseMsgLabel = new JLabel();
-        panel.add(responseMsgLabel);
-        initHtmlOrTextButton();
-        panel.add(htmlOrTextButton);
-        textScrollArea = new JScrollPane();
-        outerPanel.add(panel,BorderLayout.NORTH);
-        outerPanel.add(textScrollArea,BorderLayout.CENTER);
-        return outerPanel;
+        sampleDataField = new JTextArea();
+        sampleDataField.setLineWrap(true);
+        sampleDataField.setWrapStyleWord(true);
     }
-*/
-private JTextArea stats;
-private JTextArea results;
 
     /****************************************
      * Initialize this visualizer
@@ -506,7 +516,7 @@ private JTextArea results;
         setBorder(makeBorder());
 
         add(makeTitlePanel(), BorderLayout.NORTH);
-        
+
         SampleResult rootSampleResult = new SampleResult();
         rootSampleResult.setSampleLabel("Root");
         rootSampleResult.setSuccessful(true);
@@ -522,22 +532,43 @@ private JTextArea results;
         JScrollPane treePane = new JScrollPane(jTree);
         treePane.setPreferredSize(new Dimension(100, 70));
 
-        JPanel statsPane = new JPanel(new GridLayout(1,1));
+        JPanel statsPane = new JPanel(new GridLayout(1, 1));
         stats = new JTextArea();
-        statsPane.add(new JScrollPane(stats));
-        
-        JPanel resultsPane = new JPanel(new BorderLayout());
-        results = new JTextArea();
+
+        statsPane.add(makeScrollPane(stats));
+        initSampleDataArea();
         initHtmlOrTextButton();
-        resultsPane.add(htmlOrTextButton, BorderLayout.NORTH);
-        resultsPane.add(new JScrollPane(results), BorderLayout.CENTER);
-                
+        results = new JTextArea();
+        JPanel resultsPane = makeResultPane();
+
         JSplitPane split2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, treePane, statsPane);
-        
+
         JSplitPane mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, split2, resultsPane);
-        add(mainSplit, BorderLayout.CENTER);        
+        add(mainSplit, BorderLayout.CENTER);
     }
-    
+
+    protected JPanel makeResultPane()
+    {
+        JPanel resultsPane = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridheight = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = .1;
+        resultsPane.add(makeScrollPane(sampleDataField), gbc.clone());
+        gbc.gridy++;
+        gbc.weighty = .9;
+        resultsPane.add(makeScrollPane(results),gbc.clone());
+        gbc.gridy++;
+        gbc.weighty = 0;
+        resultsPane.add(htmlOrTextButton,gbc.clone());
+        return resultsPane;
+    }
+
     private class ResultsNodeRenderer extends DefaultTreeCellRenderer
     {
         public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus)
@@ -551,4 +582,3 @@ private JTextArea results;
         }
     }
 }
-
