@@ -5,6 +5,9 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.VariablesCollection;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 /**
  * @author Administrator
  *
@@ -15,6 +18,7 @@ public class CounterConfig
 	extends ConfigTestElement
 	implements Serializable, ThreadListener
 {
+	private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.ELEMENTS);
 	private final static String START = "CounterConfig.start";
 	private final static String END = "CounterConfig.end";
 	private final static String INCREMENT = "CounterConfig.incr";
@@ -27,25 +31,49 @@ public class CounterConfig
 	private int start = 0;
 	private int end = Integer.MAX_VALUE;
 	private VariablesCollection vars = new VariablesCollection();
+	private int currentIterationCount = -1;
 	/**
 	 * @see org.apache.jmeter.testelement.ThreadListener#iterationStarted(int)
 	 */
 	public synchronized void iterationStarted(int iterationCount)
 	{
 		JMeterVariables variables = vars.getVariables();
-		if(perUser)
-		{
-			int value = start + (increment * (iterationCount-1));
-			value = value % end;
-			variables.put(getVarName(),Integer.toString(value));
-		}
-		else
+		if(!perUser)
 		{
 			globalCounter++;
 			int value = start + (increment * globalCounter);
-			value = value % end;
+			if(value > end)
+			{
+				globalCounter = 0;
+				value = start;
+			}
 			variables.put(getVarName(),Integer.toString(value));
-		}				
+		}
+		else
+		{		
+			String value = variables.get(getVarName());
+			if(value == null)
+			{
+				variables.put(getVarName(),Integer.toString(start));
+			}
+			else
+			{
+				try
+				{
+					int current = Integer.parseInt(value);
+					current += increment;
+					if(current > end)
+					{
+						current = start;
+					}
+					variables.put(getVarName(),Integer.toString(current));
+				}
+				catch(NumberFormatException e)
+				{
+					log.info("Bad number in Counter config",e);
+				}		
+			}	
+		}			
 	}
 	
 	/**
