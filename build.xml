@@ -149,6 +149,8 @@
       <auxClasspath path="${avalon-excalibur.jar}" />
       <auxClasspath path="${avalon-framework.jar}" />
       <auxClasspath path="${commons-collections.jar}" />
+      <auxClasspath path="${commons-logging.jar}" />
+      <auxClasspath path="${commons-httpclient.jar}" />
       <auxClasspath path="${lib.dir}/${bsf.jar}" />
       <auxClasspath path="${lib.dir}/${bsh.jar}" />
       <auxClasspath path="${lib.opt}/${bsf.jar}" />
@@ -285,6 +287,8 @@
   <property name="avalon-framework.jar" value="${lib.dir}/avalon-framework-4.1.4.jar"/>
   <property name="jakarta-oro.jar" value="${lib.dir}/jakarta-oro-2.0.8.jar"/>
   <property name="commons-collections.jar" value="${lib.dir}/commons-collections.jar"/>
+  <property name="commons-httpclient.jar" value="${lib.dir}/commons-httpclient-2.0.jar"/>
+  <property name="commons-logging.jar" value="${lib.dir}/commons-logging.jar"/>
   <property name="junit.jar" value="${lib.dir}/junit.jar"/>
   <property name="logkit.jar" value="${lib.dir}/logkit-1.2.jar"/>
   
@@ -299,12 +303,18 @@
   <property name="tidy.jar" value="${lib.dir}/Tidy.jar"/>
 
   <patternset id="external.jars">
+    <include name="LICENSE"/>
+    <include name="NOTICE"/>
+    <include name="README"/>
+    <include name="INSTALL"/>
     <include name="${lib.dir}/*.html"/>
     <include name="${lib.dir}/LICENSE*.*"/>
     <include name="${avalon-excalibur.jar}"/>
     <include name="${avalon-framework.jar}"/>
     <include name="${jakarta-oro.jar}"/>
     <include name="${commons-collections.jar}"/>
+    <include name="${commons-httpclient.jar}"/>
+    <include name="${commons-logging.jar}"/>
     <include name="${junit.jar}"/>
     <include name="${logkit.jar}"/>
     <include name="${xalan.jar}"/>
