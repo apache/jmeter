@@ -138,6 +138,12 @@ public class HTTPSampler2 extends AbstractSampler
                 "ssl.pkgs",
                 "com.sun.net.ssl.internal.www.protocol"));
         System.setProperty("javax.net.ssl.debug", "all");
+        // Set the default to Avalon Logkit, if not already defined:
+        if (System.getProperty("org.apache.commons.logging.Log")==null)
+        {
+        	System.setProperty("org.apache.commons.logging.Log"
+        			,"org.apache.commons.logging.impl.LogKitLogger");
+        }
     }
 
     /*
@@ -181,12 +187,12 @@ public class HTTPSampler2 extends AbstractSampler
     /* Should we delegate redirects to the URLConnection implementation?
      * This can be useful with alternate URLConnection implementations.
      * 
-     * Defaults to false, to maintain backward compatibility. 
+     * Defaults to true, because HttpClient handles redirects OK 
      */
     private static boolean delegateRedirects=
         JMeterUtils
             .getJMeterProperties()
-            .getProperty("HTTPSampler.delegateRedirects", "false")
+            .getProperty("HTTPSampler.delegateRedirects", "true")
             .equalsIgnoreCase("true");
 
 	/**
@@ -801,8 +807,9 @@ public class HTTPSampler2 extends AbstractSampler
         if (httpConn.isProxied() && httpConn.isSecure()) {
             httpMethod = new ConnectMethod(httpMethod);
         }
-
-        httpMethod.setFollowRedirects(delegateRedirects);
+        
+        // Allow HttpClient to handle the redirects:
+        httpMethod.setFollowRedirects(delegateRedirects && res.isRedirect());
         
         //HttpURLConnection conn=null;
 
