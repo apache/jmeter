@@ -357,8 +357,8 @@ public class ResponseAssertion
       }
       class TestThread extends Thread
       {
-         static final String TEST_STRING = "Dábale arroz a la zorra el abad.";
-         static final String TEST_PATTERN = ".*á.*\\.";
+         static final String TEST_STRING = "DÃ¡bale arroz a la zorra el abad.";
+         static final String TEST_PATTERN = ".*Ã¡.*\\.";
          public void run()
          {
             ResponseAssertion assertion =
