@@ -102,7 +102,7 @@ public class AboutCommand implements Command
             JLabel jmeter = new JLabel(JMeterUtils.getImage("jmeter.jpg"));
             JLabel copyright =
                 new JLabel(
-                    "Copyright (c) 1998-2003 The Apache Software Foundation",
+                    JMeterUtils.getJMeterCopyright(),
                     JLabel.CENTER);
             JLabel rights = new JLabel("All Rights Reserved.", JLabel.CENTER);
             JLabel version =
