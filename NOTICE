@@ -11,9 +11,6 @@ Unit testing support is provided by JUnit
 under the Common Public License Version 1.0: http://www.opensource.org/licenses/cpl.php
 See http://www.junit.org/
 
-JAI support is provided by Sun
-See http://java.sun.com/
-
 ===========
 This project makes use of HTMLParser.
 For detailed information about HTMLParser, the project is
