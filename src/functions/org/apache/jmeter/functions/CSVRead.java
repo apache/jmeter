@@ -55,6 +55,7 @@
 package org.apache.jmeter.functions;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
@@ -181,7 +182,12 @@ public class CSVRead extends AbstractFunction implements Serializable
             try
             {
                 int columnIndex = Integer.parseInt(columnOrNext); // what column is wanted?
-                myValue = (String) processedLines.get(columnIndex);
+                if (processedLines != null) {
+					myValue = (String) processedLines.get(columnIndex);
+                } else {
+                	log.error("No file data found");
+                }
+                
             }
             catch (NumberFormatException e)
             {
@@ -299,9 +305,9 @@ public class CSVRead extends AbstractFunction implements Serializable
             FileReader fis = new FileReader(fileName);
             myBread = new BufferedReader(fis);
         }
-        catch (Exception e)
+        catch (FileNotFoundException e)
         {
-            log.error("openFile", e);
+            log.error(e.toString());
         }
     }
     
