@@ -139,6 +139,13 @@ HTTP Request elements use.</td></tr>
 Jakarta home page (http://jakarta.apache.org/), and the second one is for the 
 Project Guidelines page (http://jakarta.apache.org/site/guidelines.html).</p>
 
+<p>
+<table border="1" cellspacing="0" cellpadding="5">
+  <tr><td><b>NOTE:</b> JMeter sends requests in the order that you add them
+to the tree.</td></tr>
+</table>
+</p>
+
 <p>Start by adding the first <a href="gen-controller.html#4.2.1.2">HTTP Request</a> 
 to the Jakarta Users element (Add --&gt; Generative Controller --&gt; HTTP Request). 
 Then, select the HTTP Request element in the tree and edit the following properties 
