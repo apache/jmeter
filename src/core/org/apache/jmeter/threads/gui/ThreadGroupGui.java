@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.threads.gui;
+import java.awt.BorderLayout;
 import java.util.Collection;
 
 import javax.swing.BorderFactory;
@@ -60,21 +61,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.control.gui.LoopControlPanel;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FocusRequester;
+import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.MenuFactory;
-import org.apache.jmeter.gui.util.NumberFieldErrorListener;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -197,52 +195,55 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent
 
     private void init()
     {
-        this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-
-        // MAIN PANEL
-        JPanel mainPanel = new JPanel();
-        Border margin = new EmptyBorder(10, 10, 5, 10);
-        mainPanel.setBorder(margin);
-        mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-        mainPanel.add(makeTitlePanel());
-
+        setLayout(new BorderLayout(0, 5));
+        setBorder(makeBorder());
+                
+        add(makeTitlePanel(), BorderLayout.NORTH);
+        
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        
         // THREAD PROPERTIES
-        JPanel threadPropsPanel = new JPanel();
-        margin = new EmptyBorder(5, 10, 10, 10);
-        threadPropsPanel.setLayout(new VerticalLayout(0, VerticalLayout.LEFT));
+        VerticalPanel threadPropsPanel = new VerticalPanel();
         threadPropsPanel.setBorder(
-            new CompoundBorder(
-                BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils.getResString("thread_delay_properties")),
-                margin));
+            BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("thread_delay_properties")));
 
         // NUMBER OF THREADS
-        JPanel threadPanel = new JPanel();
+        JPanel threadPanel = new JPanel(new BorderLayout(5, 0));
+
         JLabel threadLabel = new JLabel(JMeterUtils.getResString("number_of_threads"));
-        threadPanel.add(threadLabel);
-        threadInput = new JTextField(5);
-        threadInput.setText("1");
+        threadPanel.add(threadLabel, BorderLayout.WEST);
+
+        threadInput = new JTextField("1", 5);
         threadInput.setName(THREAD_NAME);
-        threadPanel.add(threadInput);
+        threadLabel.setLabelFor(threadInput);
+        threadPanel.add(threadInput, BorderLayout.CENTER);
+
         threadPropsPanel.add(threadPanel);
         new FocusRequester(threadInput);
 
         // RAMP-UP
-        JPanel rampPanel = new JPanel();
+        JPanel rampPanel = new JPanel(new BorderLayout(5, 0));
         JLabel rampLabel = new JLabel(JMeterUtils.getResString("ramp_up"));
-        rampPanel.add(rampLabel);
-        rampInput = new JTextField(5);
-        rampInput.setText("1");
+        rampPanel.add(rampLabel, BorderLayout.WEST);
+        
+        rampInput = new JTextField("1", 5);
         rampInput.setName(RAMP_NAME);
-        rampPanel.add(rampInput);
+        rampLabel.setLabelFor(rampInput);
+        rampPanel.add(rampInput, BorderLayout.CENTER);
+        
         threadPropsPanel.add(rampPanel);
 
         // LOOP COUNT
         threadPropsPanel.add(createControllerPanel());
 
-        mainPanel.add(threadPropsPanel);
-
-        this.add(mainPanel);
+        // Put the vertical panel inside a horizontal panel to prevent it from
+        // growing, because it looks bad for this component.
+        HorizontalPanel horizPanel = new HorizontalPanel();
+        horizPanel.add(threadPropsPanel);
+        mainPanel.add(horizPanel, BorderLayout.NORTH);
+        add(mainPanel, BorderLayout.CENTER);
     }
 
     public void setNode(JMeterTreeNode node)

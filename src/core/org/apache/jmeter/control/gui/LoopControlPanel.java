@@ -1,4 +1,5 @@
 package org.apache.jmeter.control.gui;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -150,38 +151,43 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
         // Embedded
         else
         {
-            this.add(createLoopCountPanel());
+            setLayout(new BorderLayout());
+            this.add(createLoopCountPanel(), BorderLayout.NORTH);
         }
     }
 
     private JPanel createLoopCountPanel()
     {
-        JPanel loopPanel = new JPanel();
+        JPanel loopPanel = new JPanel(new BorderLayout(5, 0));
 
         // LOOP LABEL
         JLabel loopsLabel = new JLabel(JMeterUtils.getResString("iterator_num"));
-        loopPanel.add(loopsLabel);
+        loopPanel.add(loopsLabel, BorderLayout.WEST);
 
         // TEXT FIELD
-        loops = new JTextField(5);
-        loopPanel.add(loops);
+        loops = new JTextField("1", 5);
         loops.setName(LOOPS);
-        loops.setText("1");
+        loopsLabel.setLabelFor(loops);
+        loopPanel.add(loops, BorderLayout.CENTER);
 
         // FOREVER CHECKBOX
         infinite = new JCheckBox(JMeterUtils.getResString("infinite"));
         infinite.setActionCommand(INFINITE);
         infinite.addActionListener(this);
-        loopPanel.add(infinite);
+        loopPanel.add(infinite, BorderLayout.EAST);
 
         return loopPanel;
     }
     
     private void setState(String loopCount)
     {
-        loops.setText(loopCount);
-        infinite.setSelected(false);
-        loops.setEnabled(true);
+        if (loopCount.startsWith("-")) {
+            setState(-1);
+        } else {
+            loops.setText(loopCount);
+            infinite.setSelected(false);
+            loops.setEnabled(true);
+        }
     }
 
     private void setState(int loopCount)
