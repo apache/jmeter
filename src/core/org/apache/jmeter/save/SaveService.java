@@ -1177,6 +1177,7 @@ public final class SaveService implements SaveServiceConstants
                 "proxy.jmx",
                 "ProxyServerTestPlan.jmx",
                 "SimpleTestPlan.jmx",
+                "GuiTest.jmx",
                 };
 
         public Test(String name)
@@ -1191,6 +1192,8 @@ public final class SaveService implements SaveServiceConstants
         {
             byte[] original = new byte[1000000];
 
+            boolean failed = false; // Did a test fail?
+            
             for (int i = 0; i < FILES.length; i++)
             {
                 InputStream in =
@@ -1216,7 +1219,9 @@ public final class SaveService implements SaveServiceConstants
                 // enough to detect most problem cases...
                 if (len != out.size())
                 {
-                    fail(
+                	failed=true;
+                	System.out.println();
+                    System.out.println(
                         "Loading file bin/testfiles/"
                             + FILES[i]
                             + " and "
@@ -1227,6 +1232,10 @@ public final class SaveService implements SaveServiceConstants
                 // removed to any of the components used in the test
                 // files. The way to solve this is to appropriately change
                 // the test file.
+            }
+            if (failed) //TODO make these separate tests?
+            {
+            	fail("One or more failures detected");
             }
         }
     }
