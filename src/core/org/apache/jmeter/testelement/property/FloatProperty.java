@@ -6,7 +6,7 @@ package org.apache.jmeter.testelement.property;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class FloatProperty extends AbstractProperty
+public class FloatProperty extends NumberProperty
 {
     float value;
     
@@ -25,21 +25,14 @@ public class FloatProperty extends AbstractProperty
         this.value = value;
     }
     
-    public void setObjectValue(Object v)
+    protected void setNumberValue(Number n)
     {
-        if(v instanceof Number)
-        {
-            value = ((Number)v).floatValue();
-        }
-        else
-        {
-            try
-            {
-                value = Float.parseFloat(v.toString());
-            }
-            catch (RuntimeException e)
-            {}
-        }
+        value = n.floatValue();
+    }
+    
+    protected void setNumberValue(String n) throws NumberFormatException
+    {
+        value = Float.parseFloat(n);
     }
 
     /**
@@ -66,33 +59,6 @@ public class FloatProperty extends AbstractProperty
         FloatProperty prop = (FloatProperty)super.clone();
         prop.value = value;
         return prop;
-    }
-
-    /**
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
-    public int compareTo(Object arg0)
-    {
-        if(arg0 instanceof JMeterProperty)
-        {
-            float argValue = ((JMeterProperty)arg0).getFloatValue();
-            if(value < argValue)
-            {
-                return -1;
-            }
-            else if(value == argValue)
-            {
-                return 0;
-            }
-            else
-            {
-                return 1;
-            }
-        }
-        else
-        {
-            return -1;
-        }
     }
 
     /**

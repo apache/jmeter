@@ -201,7 +201,7 @@ public class ResultCollector extends AbstractListenerElement
             try
             {
                 Configuration savedSamples = getConfiguration(getFilename());
-                clear();
+                clearVisualizer();
                 readSamples(savedSamples);
             }
             catch (Exception e)
@@ -340,7 +340,7 @@ public class ResultCollector extends AbstractListenerElement
         return builder.buildFromFile(filename);
     }
 
-    public void clear()
+    public void clearVisualizer()
     {
         current = -1;
         if (getVisualizer() != null && getVisualizer() instanceof Clearable)

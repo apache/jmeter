@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.jmeter.testelement.TestElement;
 
-public class CollectionProperty extends AbstractProperty
+public class CollectionProperty extends MultiProperty
 {
 
     protected Collection value;
@@ -86,12 +86,9 @@ public class CollectionProperty extends AbstractProperty
     {
         if (v instanceof Collection)
         {
-            if (isRunningVersion())
-            {
-                savedValue = this.value;
-            }
-            value = normalizeList((Collection) v);
+            setCollection((Collection) v);
         }
+
     }
 
     public PropertyIterator iterator()
@@ -151,30 +148,11 @@ public class CollectionProperty extends AbstractProperty
 
     public void setCollection(Collection coll)
     {
-        value = coll;
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#mergeIn(org.apache.jmeter.testelement.property.JMeterProperty)
-     */
-    public void mergeIn(JMeterProperty prop)
-    {
-        if (((CollectionProperty) prop).value == this.value)
+        if (isRunningVersion())
         {
-            return;
+            savedValue = this.value;
         }
-        if (prop instanceof CollectionProperty)
-        {
-            PropertyIterator iter = ((CollectionProperty) prop).iterator();
-            while (iter.hasNext())
-            {
-                value.add(iter.next());
-            }
-        }
-        else
-        {
-            addProperty(prop);
-        }
+        value = normalizeList(coll);
     }
 
     public void clear()
@@ -216,16 +194,6 @@ public class CollectionProperty extends AbstractProperty
         }
     }
 
-    public void setRunningVersion(boolean running)
-    {
-        super.setRunningVersion(running);
-        PropertyIterator iter = iterator();
-        while (iter.hasNext())
-        {
-            iter.next().setRunningVersion(running);
-        }
-    }
-
     /* (non-Javadoc)
      * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
      */
@@ -236,32 +204,7 @@ public class CollectionProperty extends AbstractProperty
             value = savedValue;
             savedValue = null;
         }
-        PropertyIterator iter = iterator();
-        while (iter.hasNext())
-        {
-            JMeterProperty prop = iter.next();
-            if (prop.isTemporary(owner))
-            {
-                iter.remove();
-            }
-            else
-            {
-                prop.recoverRunningVersion(owner);
-            }
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#setTemporary(boolean, TestElement)
-     */
-    public void setTemporary(boolean temporary, TestElement owner)
-    {
-        super.setTemporary(temporary, owner);
-        PropertyIterator iter = iterator();
-        while (iter.hasNext())
-        {
-            iter.next().setTemporary(temporary, owner);
-        }
+        recoverRunningVersionOfSubElements(owner);
     }
 
 }

@@ -1,6 +1,5 @@
 package org.apache.jmeter.testelement.property;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.jmeter.testelement.TestElement;
@@ -11,7 +10,7 @@ import org.apache.jmeter.testelement.TestElement;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class MapProperty extends AbstractProperty
+public class MapProperty extends MultiProperty
 {
     Map value;
     Map savedValue = null;
@@ -43,20 +42,13 @@ public class MapProperty extends AbstractProperty
     {
         if (v instanceof Map)
         {
-            if (isRunningVersion())
-            {
-                savedValue = this.value;
-            }
-            value = normalizeMap((Map) v);
+            setMap((Map) v);
         }
     }
 
     public void addProperty(JMeterProperty prop)
     {
-        if (value.size() == 0 || valueIterator().next().getClass().equals(prop.getClass()))
-        {
-            value.put(prop.getName(), prop);
-        }
+        addProperty(prop.getName(),prop);
     }
 
     public JMeterProperty get(String key)
@@ -132,44 +124,24 @@ public class MapProperty extends AbstractProperty
         return new PropertyIteratorImpl(value.values());
     }
 
-    /**
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#mergeIn(org.apache.jmeter.testelement.property.JMeterProperty)
-     */
-    public void mergeIn(JMeterProperty prop)
-    {
-        if (((MapProperty) prop).value == value)
-        {
-            return;
-        }
-        if (prop instanceof MapProperty)
-        {
-            PropertyIterator iter = ((MapProperty) prop).valueIterator();
-            while (iter.hasNext())
-            {
-                JMeterProperty subProp = iter.next();
-                if (!value.containsKey(subProp.getName()))
-                {
-                    value.put(subProp.getName(), subProp);
-                }
-            }
-        }
-        else
-        {
-            addProperty(prop.getName(), prop);
-        }
-    }
-
     public void addProperty(String name, JMeterProperty prop)
     {
         if (value.size() == 0 || value.values().iterator().next().getClass().equals(prop.getClass()))
         {
-            value.put(name, prop);
+            if (!value.containsKey(name))
+           {
+               value.put(name, prop);
+           }
         }
     }
 
     public void setMap(Map newMap)
     {
-        value = newMap;
+        if (isRunningVersion())
+        {
+            savedValue = this.value;
+        }
+        value = normalizeMap(newMap);
     }
 
     /**
@@ -182,43 +154,20 @@ public class MapProperty extends AbstractProperty
             value = savedValue;
             savedValue = null;
         }
-        Iterator iter = value.keySet().iterator();
-        while (iter.hasNext())
-        {
-            String name = (String) iter.next();
-            JMeterProperty prop = (JMeterProperty) value.get(name);
-            if (prop.isTemporary(owner))
-            {
-                iter.remove();
-            }
-            else
-            {
-                prop.recoverRunningVersion(owner);
-            }
-        }
+        recoverRunningVersionOfSubElements(owner);
     }
 
-    public void setRunningVersion(boolean running)
+    public void clear()
     {
-        super.setRunningVersion(running);
-        PropertyIterator iter = valueIterator();
-        while (iter.hasNext())
-        {
-            iter.next().setRunningVersion(running);
-        }
+        value.clear();
     }
 
-    /**
-         * @see org.apache.jmeter.testelement.property.JMeterProperty#setTemporary(boolean, org.apache.jmeter.testelement.TestElement)
-         */
-    public void setTemporary(boolean temporary, TestElement owner)
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.property.MultiProperty#iterator()
+     */
+    public PropertyIterator iterator()
     {
-        super.setTemporary(temporary, owner);
-        PropertyIterator iter = valueIterator();
-        while (iter.hasNext())
-        {
-            iter.next().setTemporary(temporary, owner);
-        }
+        return valueIterator();
     }
 
 }
