@@ -88,8 +88,9 @@ public class ConnectionObject implements Runnable
     
     /**
      * Constructor - takes a connection object.
-     * @param man DBConnectionManager object.
+     * 
      * @param k DBKey object.
+     * @param maxUsage 
      */
     public ConnectionObject(DBKey k, int maxUsage) throws SQLException
     {
@@ -264,7 +265,6 @@ public class ConnectionObject implements Runnable
     /**
      * Resets the use count, the last accessed time, and the in Use values
      * and replaces the old connection object with the new one.
-     * @param c new connection object to set to
      */
     public void reset() throws SQLException
     {

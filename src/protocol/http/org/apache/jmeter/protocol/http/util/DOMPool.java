@@ -86,7 +86,7 @@ public final class DOMPool
 
     /**
      * Return a document.
-     * @param Object key
+     * @param key
      * @return Document
      */
     public static Document getDocument(Object key)
@@ -96,8 +96,8 @@ public final class DOMPool
 
     /**
      * Add an object to the cache.
-     * @param Object key
-     * @param Object data
+     * @param key
+     * @param data
      */
     public static void putDocument(Object key, Object data)
     {

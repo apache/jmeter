@@ -389,8 +389,8 @@ public class WebServiceSamplerGui
      * description is isolated to this method, we can
      * easily replace it with a different WSDL driver
      * later on.
-     * @param String url
-     * @return String[] 
+     * @param url
+     * @return array of web methods 
      */
     public String[] browseWSDL(String url)
     {
@@ -414,7 +414,7 @@ public class WebServiceSamplerGui
 
     /**
      * method from ActionListener
-     * @param ActionEvent event
+     * @param event that occurred
      */
     public void actionPerformed(ActionEvent event)
     {

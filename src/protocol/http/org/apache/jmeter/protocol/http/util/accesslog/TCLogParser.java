@@ -157,7 +157,7 @@ public class TCLogParser implements LogParser
     }
 
     /**
-     * @param String sourcefile
+     * @param source
      */
     public TCLogParser(String source)
     {
@@ -166,7 +166,7 @@ public class TCLogParser implements LogParser
 
     /**
      * Set the Generator
-     * @param Generator 
+     * @param generator 
      */
     public void setGenerator(Generator generator)
     {
@@ -179,7 +179,7 @@ public class TCLogParser implements LogParser
      * to provide the ability to filter the
      * log file later on. By default, the parser
      * uses the file in the log.
-     * @param boolean
+     * @param file
      */
     public void setUseParsedFile(boolean file)
     {
@@ -191,7 +191,7 @@ public class TCLogParser implements LogParser
      * in the access logs. This is provided as
      * a convienance and reduce the need to
      * spend hours cleaning up log files.
-     * @param Filter filter
+     * @param filter
      */
     public void setFilter(Filter filter)
     {
@@ -200,7 +200,7 @@ public class TCLogParser implements LogParser
 
     /**
      * Sets the source file.
-     * @param String source
+     * @param source
      */
     public void setSourceFile(String source)
     {
@@ -209,6 +209,7 @@ public class TCLogParser implements LogParser
 
     /**
      * Creates a new File object.
+     * @param filename
      */
     public File openFile(String filename)
     {
@@ -247,8 +248,8 @@ public class TCLogParser implements LogParser
      * the filter and number of lines in
      * the log. The method returns the
      * actual lines parsed.
-     * @param int count
-     * @return int lines parsed
+     * @param count
+     * @return lines parsed
      */
     public int parse(int count)
     {
@@ -264,7 +265,7 @@ public class TCLogParser implements LogParser
      * The method is responsible for reading each
      * line, and breaking out of the while loop
      * if a set number of lines is given.
-     * @param BufferedReader breader
+     * @param breader
      */
     protected void parse(BufferedReader breader)
     {
@@ -367,8 +368,8 @@ public class TCLogParser implements LogParser
      * 127.0.0.1 - - [08/Jan/2003:07:03:54 -0500]
      * 	"GET /addrbook/ HTTP/1.1" 200 1981
      * <p>
-     * @param String entry
-     * @return String url
+     * @param entry
+     * @return cleaned url
      */
     public String cleanURL(String entry)
     {
@@ -445,6 +446,7 @@ public class TCLogParser implements LogParser
      * Tokenize the URL into two tokens. If the URL has more than one "?", the
      * parse may fail. Only the first two tokens are used. The first token is
      * automatically parsed and set at URL_PATH.
+     * @param url
      * @return String parameters
      */
     public String stripFile(String url)
@@ -466,7 +468,7 @@ public class TCLogParser implements LogParser
     /**
      * Checks the string to make sure it has /path/file?name=value format. If
      * the string doesn't have "?", it will return false.
-     * @param String url
+     * @param url
      * @return boolean
      */
     public boolean checkURL(String url)
@@ -484,7 +486,7 @@ public class TCLogParser implements LogParser
     /**
      * Checks the string to see if it contains "&" and "=". If it does, return
      * true, so that it can be parsed.
-     * @param String text
+     * @param  text
      * @return boolean
      */
     public boolean checkParamFormat(String text)
@@ -501,7 +503,7 @@ public class TCLogParser implements LogParser
 
     /**
      * Convert a single line into XML
-     * @param String text
+     * @param text
      */
     public void convertStringToJMRequest(String text)
     {
@@ -513,7 +515,7 @@ public class TCLogParser implements LogParser
      * array. Once they are parsed, it is returned.
      * The method uses parseOneParameter(string)
      * to convert each pair.
-     * @param String stringparams
+     * @param stringparams
      */
     public NVPair[] convertStringtoNVPair(String stringparams)
     {
@@ -536,7 +538,7 @@ public class TCLogParser implements LogParser
      * and would not conform to HTTP spec. I should double
      * check the protocol spec to make sure this is
      * accurate.
-     * @param String text
+     * @param  parameter to be parsed
      * @return NVPair
      */
     protected NVPair parseOneParameter(String parameter)
@@ -570,7 +572,7 @@ public class TCLogParser implements LogParser
      * Some one could write the querystrings by hand,
      * but that would be round about and go against the
      * purpose of this utility.
-     * @param String parameters
+     * @param  parameters
      * @return Vector
      */
     protected Vector parseParameters(String parameters)
@@ -586,6 +588,8 @@ public class TCLogParser implements LogParser
 
     /**
      * Parses the line using java.util.StringTokenizer.
+     * @param line line to be parsed
+     * @param delim delimiter
      * @return StringTokenizer
      */
     public StringTokenizer tokenize(String line, String delim)

@@ -97,8 +97,6 @@ public class ParamModifier
      * Modifies an entry object to replace the value of any url parameter that
      * matches a defined mask.
      *
-     * @param  entry  entry object containing information about the current test
-     * @return        <code>True</code> if modified, else <code>false</code>
      */
     public void process()
     {

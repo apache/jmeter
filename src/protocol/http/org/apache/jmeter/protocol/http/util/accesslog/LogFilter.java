@@ -188,7 +188,7 @@ public class LogFilter implements Filter
 
     /**
      * Give the filter a list of files to include
-     * @param String[] file names
+     * @param filenames
      * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#includeFiles(java.lang.String[])
      */
     public void includeFiles(String[] filenames)
@@ -202,7 +202,7 @@ public class LogFilter implements Filter
 
     /**
      * Give the filter a list of files to exclude
-     * @param String[] file names
+     * @param filenames
      * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#excludeFiles(java.lang.String[])
      */
     public void excludeFiles(String[] filenames)
@@ -219,7 +219,7 @@ public class LogFilter implements Filter
      * to filter with for inclusion. This method hasn't
      * been fully implemented and test yet. The
      * implementation is not complete.
-     * @param String[]
+     * @param regexp
      * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#includePattern(String[])
      */
     public void includePattern(String[] regexp)
@@ -242,6 +242,8 @@ public class LogFilter implements Filter
      * to filter with for exclusion. This method hasn't
      * been fully implemented and test yet. The
      * implementation is not complete.
+     * @param regexp
+     * 
      * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#excludePattern(String[])
      */
     public void excludePattern(String[] regexp)
@@ -273,6 +275,7 @@ public class LogFilter implements Filter
      * matches, which means it should be
      * excluded.
      * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#isFiltered(java.lang.String)
+     * @param path
      * @return boolean 
      */
     public boolean isFiltered(String path)
@@ -319,7 +322,7 @@ public class LogFilter implements Filter
      * method throws an exception and tells the
      * user the same filename is in both the
      * include and exclude array.
-     * @param String file
+     * @param file
      * @return boolean
      */
     protected boolean filterFile(String file)
@@ -343,7 +346,7 @@ public class LogFilter implements Filter
      * through the array and uses indexOf. Once
      * it finds a match, it won't bother with
      * the rest of the filenames in the array.
-     * @param String text
+     * @param text
      * @return boolean include
      */
     public boolean incFile(String text)
@@ -370,7 +373,7 @@ public class LogFilter implements Filter
      * through the array and uses indexOf. Once it
      * finds a match, it won't bother with the
      * rest of the filenames in the array.
-     * @param String text
+     * @param text
      * @return boolean exclude
      */
     public boolean excFile(String text)
@@ -524,7 +527,7 @@ public class LogFilter implements Filter
     /**
      * create a new pattern object from
      * the string.
-     * @param String pattern
+     * @param  pattern
      * @return Pattern
      */
     public Pattern createPattern(String pattern)
