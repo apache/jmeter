@@ -90,9 +90,10 @@ public class ThroughputController
 	private transient Object iterationLock;
 	
 	private int numExecutions, iteration;
-	private boolean initialized;
+	private boolean returnTrue;
 
-	public ThroughputController() {
+	public ThroughputController() 
+	{
 		globalNumExecutions = new IntegerWrapper();
 		globalIteration = new IntegerWrapper();
 		numExecutionsLock = new Object();
@@ -101,13 +102,20 @@ public class ThroughputController
 		setPerThread(true);
 		setMaxThroughput(1);
 		setPercentThroughput(100);
-		initialized = true;
+		returnTrue = false;
 	}
-	
-	public void initialize() {
+
+	public void initialize() 
+	{
 		setExecutions(0);
 		setIteration(-1);
 		super.initialize();
+	}
+	
+	public void reInitialize()
+	{
+		returnTrue = false;
+		super.reInitialize();
 	}
 	
 	public void setStyle(int style) 
@@ -162,61 +170,35 @@ public class ThroughputController
 	protected int getExecutions()
 	{
 		if (!isPerThread())
-		{
-			int retValue;
-			retValue = globalNumExecutions.getInteger().intValue();
-			return retValue;
-		}
-		return numExecutions;
+			return globalNumExecutions.getInteger().intValue();
+		else
+			return numExecutions;
 	}
 	
 	
 	private void increaseExecutions() 
 	{
-		if (!isPerThread())
-		{
-			synchronized (numExecutionsLock)
-			{
-				setExecutions(getExecutions()+1);
-			}
-		}  
-		else
-		{
-			setExecutions(getExecutions()+1);
-		}
+		setExecutions(getExecutions()+1);
 	}
 	
 	protected void setIteration(int iteration)
 	{
 		if (!isPerThread())
-		{
 			globalIteration.setInteger(new Integer(iteration));
-		}
 		this.iteration = iteration;
 	}
 	
 	protected int getIteration()
 	{
 		if (!isPerThread())
-		{
 			return globalIteration.getInteger().intValue();
-		}
-		return iteration;
+		else
+			return iteration;
 	}
 	
 	private void increaseIteration() 
 	{
-		if (!isPerThread()) 
-		{
-			synchronized (iterationLock)
-			{
-				setIteration(getIteration()+1);
-			}
-		}
-		else 
-		{
-			setIteration(getIteration()+1);
-		}  
+		setIteration(getIteration()+1); 
 	}
 
 	
@@ -226,52 +208,59 @@ public class ThroughputController
 	public Sampler next()
 	{
 		Sampler retVal = null;
-		if ( getSubControllers().size()>0 && current<=getSubControllers().size() )
+		if ( getSubControllers().size()>0 && current<getSubControllers().size() )
 		{
-			if (current==getSubControllers().size())
+			if (!isPerThread())
 			{
-				increaseExecutions();
+				synchronized(numExecutionsLock)
+				{
+					if ( canExecute() ) 
+					{
+						retVal = super.next();
+					}
+				}
 			}
-			else 
+			else
 			{
 				if ( canExecute() ) 
+				{
 					retVal = super.next();
+				}
 			}
 		}
 		return retVal;
 	}
-	
-	public boolean canExecute() {
-		
+
+	public boolean canExecute() 
+	{
+		if (returnTrue)
+			return true;
+
 		int executions, iterations;
-		
-		if (!isPerThread())
-		{
-			synchronized(numExecutionsLock)
+		boolean retval = false;
+
+		executions = getExecutions();
+		iterations = getIteration();
+		if ( getStyle() == BYNUMBER )
+		{ 
+			if ( executions < getMaxThroughput() )
 			{
-				executions = getExecutions();
-			}
-			synchronized(iterationLock)
-			{
-				iterations = getIteration();
+				retval = true;
 			}
 		}
-		else
-		{
-			executions = getExecutions();
-			iterations = getIteration();
-		}
-		
-		if ( getStyle() == BYNUMBER ) 
-			return executions < getMaxThroughput(); 
 		else 
 		{
 			if (iteration==0 && getPercentThroughput()>0)
-				return true;
+				retval = true;
 			else if ( (executions/iteration)*100 <= getPercentThroughput() )
-				return true;
+				retval = true;
 		}
-		return false;		
+		if (retval)
+		{
+			returnTrue = true;
+			increaseExecutions();
+		}
+		return retval;
 	}
 
 	/**
@@ -296,7 +285,7 @@ public class ThroughputController
 		clone.globalIteration = globalIteration;
 		clone.numExecutionsLock = numExecutionsLock;
 		clone.iterationLock = iterationLock;
-		clone.initialized = initialized;
+		clone.returnTrue = false;
 		return clone;
 	}
 	
@@ -314,7 +303,17 @@ public class ThroughputController
      */
     public void iterationStart(LoopIterationEvent iterEvent)
     {
-        increaseIteration();
+    	if (!isPerThread()) 
+    	{
+    		synchronized (iterationLock)
+    		{
+    			increaseIteration();
+    		}
+    	}
+    	else
+    	{
+	        increaseIteration();
+    	}
         reInitialize();
     }
     
@@ -332,6 +331,7 @@ public class ThroughputController
 	
 		public void setInteger(Integer i)
 		{
+			System.out.println(((Object)this).toString());
 			this.i = i;
 		}
 	
