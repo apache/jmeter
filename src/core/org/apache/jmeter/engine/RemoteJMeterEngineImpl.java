@@ -96,6 +96,7 @@ public class RemoteJMeterEngineImpl
 	
 	public void setHost(String host)
 	{
+        log.warn("received host");
 		backingEngine.setHost(host);
 	}
 
@@ -109,6 +110,7 @@ public class RemoteJMeterEngineImpl
 	 ***********************************************************/
 	public void configure(HashTree testTree) throws RemoteException
 	{
+        log.warn("received test tree");
 		backingEngine.configure(testTree);
 	}
 
@@ -119,6 +121,7 @@ public class RemoteJMeterEngineImpl
 	 ***********************************************************/
 	public void runTest() throws RemoteException,JMeterEngineException
 	{
+        log.warn("running test");
 		backingEngine.runTest();
 	}
 
