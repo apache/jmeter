@@ -325,34 +325,40 @@ public class JMeter implements JMeterPlugin
         {
             if (parser.getArgumentById(PROXY_PASSWORD) != null)
             {
+				String u,p;
                 Authenticator.setDefault(
                     new ProxyAuthenticator(
-                        parser.getArgumentById(PROXY_USERNAME).getArgument(),
-                        parser.getArgumentById(PROXY_PASSWORD).getArgument()));
+                        u=parser.getArgumentById(PROXY_USERNAME).getArgument(),
+                        p=parser.getArgumentById(PROXY_PASSWORD).getArgument()));
+				log.info("Set Proxy login: "+u+"/"+p);
             }
             else
             {
+				String u;
                 Authenticator.setDefault(
                     new ProxyAuthenticator(
-                        parser.getArgumentById(PROXY_USERNAME).getArgument(),
+                        u=parser.getArgumentById(PROXY_USERNAME).getArgument(),
                         ""));
+				log.info("Set Proxy login: "+u);
             }
         }
         if (parser.getArgumentById(PROXY_HOST) != null
             && parser.getArgumentById(PROXY_PORT) != null)
         {
+			String h,p;
             System.setProperty(
                 "http.proxyHost",
-                parser.getArgumentById(PROXY_HOST).getArgument());
+                h=parser.getArgumentById(PROXY_HOST).getArgument());
             System.setProperty(
                 "https.proxyHost",
                 parser.getArgumentById(PROXY_HOST).getArgument());
             System.setProperty(
                 "http.proxyPort",
-                parser.getArgumentById(PROXY_PORT).getArgument());
+                p=parser.getArgumentById(PROXY_PORT).getArgument());
             System.setProperty(
                 "https.proxyPort",
                 parser.getArgumentById(PROXY_PORT).getArgument());
+			log.info("Set http[s].proxyHost: "+h+" Port: "+p);
         }
         else if (
             parser.getArgumentById(PROXY_HOST) != null
@@ -393,7 +399,7 @@ public class JMeter implements JMeterPlugin
             String name = option.getArgument(0);
             String value = option.getArgument(1);
 
-            switch (option.getId())
+            switch (option.getDescriptor().getId())
             {
                 case SYSTEM_PROPERTY :
                     if (value.length() > 0)
