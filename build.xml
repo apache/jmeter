@@ -580,28 +580,76 @@ some of its classes - at present JMeter can only run from jar files.
 -->
   <target name="package-only" description="Package already-compiled classes (shortcut for IDE users)">
     <mkdir dir="${dest.jar}"/>
-    <jar jarfile="${dest.jar}/ApacheJMeter_core.jar" excludes="**/NewDriver*" manifest="${src.core}/MANIFEST">
-      <!-- Only include class files - see above -->
+    
+    <!-- perhaps ought to include a basic jmeter.properties file in one of the jars,
+    given that JMeterUtils looks for it if it cannot find the external one
+    - otherwise, change utils to ignore it -->
+    
+    <!-- JMeter launch jar -->
+    <jar jarfile="${dest.jar.jmeter}/ApacheJMeter.jar" includes="**/NewDriver*" 
+        manifest="${src.core}/MANIFEST" 
+        basedir="${build.core}"/>
+
+    <!-- core -->    
+    <jar jarfile="${dest.jar}/ApacheJMeter_core.jar" excludes="**/NewDriver*">
+      <!-- Only include class files from build tree - see above -->
       <fileset dir="${build.core}" includes="**/*.class"/>
       <fileset dir="${src.core}" includes="org/apache/jmeter/images/"/>
-      <fileset dir="${src.core}" includes="org/apache/jmeter/resources/">
+      <fileset dir="${src.core}" includes="**/*.properties">
         <exclude name="*eucJP*"/>
       </fileset>
       <!-- This file is used by the jmeter -h option -->
       <fileset dir="${src.core}" includes="org/apache/jmeter/help.txt"/>
     </jar>
-    <jar jarfile="${dest.jar.jmeter}/ApacheJMeter.jar" includes="**/NewDriver*" manifest="${src.core}/MANIFEST" basedir="${build.core}"/>
-    <!-- perhaps ought to include a basic jmeter.properties file in one of the jars,
-    given that JMeterUtils looks for it if it cannot find the external one
-    - otherwise, change utils to ignore it -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_components.jar" basedir="${build.components}"/>
-    <jar jarfile="${dest.jar}/ApacheJMeter_functions.jar" basedir="${build.functions}"/>
-    <jar jarfile="${dest.jar}/ApacheJMeter_http.jar" basedir="${build.http}"/>
-    <jar jarfile="${dest.jar}/ApacheJMeter_ftp.jar" basedir="${build.ftp}"/>
-    <jar jarfile="${dest.jar}/ApacheJMeter_jdbc.jar" basedir="${build.jdbc}"/>
-    <jar jarfile="${dest.jar}/ApacheJMeter_java.jar" basedir="${build.java}"/>
-    <jar jarfile="${dest.jar}/ApacheJMeter_ldap.jar" basedir="${build.ldap}"/>
-    <jar jarfile="${dest.jar}/ApacheJMeter_tcp.jar" basedir="${build.tcp}"/>
+    
+    <!-- components -->
+    <jar jarfile="${dest.jar}/ApacheJMeter_components.jar">
+      <fileset dir="${build.components}" includes="**/*.class" />
+      <fileset dir="${src.components}" includes="**/*.properties" />
+    </jar>
+    
+    <!-- functions -->
+    <jar jarfile="${dest.jar}/ApacheJMeter_functions.jar">
+      <fileset dir="${build.functions}" includes="**/*.class" />
+      <fileset dir="${src.functions}" includes="**/*.properties" />
+    </jar>
+
+    <!-- http -->
+    <jar jarfile="${dest.jar}/ApacheJMeter_http.jar">
+      <fileset dir="${build.http}" includes="**/*.class" />
+      <fileset dir="${src.http}" includes="**/*.properties" />
+    </jar>
+    
+    <!-- ftp -->
+    <jar jarfile="${dest.jar}/ApacheJMeter_ftp.jar">
+      <fileset dir="${build.ftp}" includes="**/*.class" />
+      <fileset dir="${src.ftp}" includes="**/*.properties" />
+    </jar>
+    
+    <!-- jdbc -->
+    <jar jarfile="${dest.jar}/ApacheJMeter_jdbc.jar">
+      <fileset dir="${build.jdbc}" includes="**/*.class" />
+      <fileset dir="${src.jdbc}" includes="**/*.properties" />
+    </jar>
+    
+    <!-- java -->
+    <jar jarfile="${dest.jar}/ApacheJMeter_java.jar">
+      <fileset dir="${build.java}" includes="**/*.class" />
+      <fileset dir="${src.java}" includes="**/*.properties" />
+    </jar>
+    
+    <!-- ldap -->
+    <jar jarfile="${dest.jar}/ApacheJMeter_ldap.jar">
+      <fileset dir="${build.ldap}" includes="**/*.class" />
+      <fileset dir="${src.ldap}" includes="**/*.properties" />
+    </jar>
+    
+    <!-- tcp -->
+    <jar jarfile="${dest.jar}/ApacheJMeter_tcp.jar">
+      <fileset dir="${build.tcp}" includes="**/*.class" />
+      <fileset dir="${src.tcp}" includes="**/*.properties" />
+    </jar>
+    
     <jar jarfile="${lib.dir}/htmlparser.jar" basedir="${build.htmlparser}"/>
     <jar jarfile="${lib.dir}/jorphan.jar" basedir="${build.jorphan}"/>
   </target>
