@@ -1,9 +1,20 @@
 /*
- * Created on Jun 13, 2004
+ * Copyright 2001-2004 The Apache Software Foundation.
  *
- * To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
- */
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+*/
+
 package org.apache.jmeter.save;
 
 import java.io.BufferedInputStream;
@@ -20,6 +31,7 @@ import org.apache.jmeter.save.converters.HashTreeConverter;
 import org.apache.jmeter.save.converters.IntegerPropertyConverter;
 import org.apache.jmeter.save.converters.LongPropertyConverter;
 import org.apache.jmeter.save.converters.MultiPropertyConverter;
+import org.apache.jmeter.save.converters.SampleResultConverter;
 import org.apache.jmeter.save.converters.StringPropertyConverter;
 import org.apache.jmeter.save.converters.TestElementConverter;
 import org.apache.jmeter.save.converters.TestElementPropertyConverter;
@@ -39,8 +51,6 @@ import org.apache.log.Logger;
 import com.thoughtworks.xstream.XStream;
 
 /**
- * @author mstover
- *
  * @author     Mike Stover
  * @author     <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell</a>
  */
@@ -48,6 +58,10 @@ public class SaveService
 {
    private static XStream saver = new XStream();
    private static Logger log = LoggingManager.getLoggerForClass();
+   
+   // Version information for test plan header
+   static String version="1.0";
+   static String propertiesVersion="";//read from properties file
    
    // Helper method to simplify alias creation from properties
    private static void makeAlias(String alias,String clazz)
@@ -77,7 +91,21 @@ public class SaveService
 		 while (it.hasNext())
 		 {
 		 	Map.Entry me = (Map.Entry) it.next();
-		  	makeAlias((String)me.getKey(),(String)me.getValue());
+		 	String key = (String)me.getKey();
+		 	String val = (String)me.getValue();
+		 	if (!key.startsWith("_"))
+		 	{
+		 		makeAlias(key,val);
+		 	}
+		 	else
+		 	{
+		 		//process special keys
+		 		if (key.equalsIgnoreCase("_version"))
+		 		{
+		 			log.info("Using SaveService properties file "+val);
+		 			propertiesVersion=val;
+		 		}
+		 	}
 		 }
 	  }
 	  catch (Exception e)
@@ -85,6 +113,7 @@ public class SaveService
 	     log.error("Bad saveservice properties file",e);
 	  }
 	
+	  
       saver.alias("stringProp",StringProperty.class);
       saver.alias("intProp",IntegerProperty.class);
       saver.alias("longProp",LongProperty.class);
@@ -103,6 +132,8 @@ public class SaveService
       saver.registerConverter(new TestElementPropertyConverter(saver.getClassMapper(),"class"));
       saver.registerConverter(new HashTreeConverter(saver.getClassMapper(),"class"));
       saver.registerConverter(new ScriptWrapperConverter(saver.getClassMapper()));
+      
+      checkVersions();
    }
 
    public static void saveTree(HashTree tree,Writer writer) throws Exception
@@ -112,6 +143,43 @@ public class SaveService
       saver.toXML(wrapper,writer);
    }
    
+   static boolean versionsOK = true;
+   
+	private static void checkVersion(Class clazz, String expected) {
+	
+		String actual="*NONE*";
+		try {
+			actual=(String)clazz.getMethod("getVersion",null).invoke(null,null);
+			actual = actual.substring("$Revision: ".length(),actual.length()-2);
+		} catch (Exception e) {
+		}
+		if (0!=actual.compareTo(expected))
+		{
+			versionsOK=false;
+			log.warn("Version mismatch: expected '"+expected+ "' found '"+actual+"' in "+clazz.getName());
+		}
+	}
+
+	private static void checkVersions()
+	{
+		versionsOK=true;
+		checkVersion(BooleanPropertyConverter.class,"1.3");
+		checkVersion(HashTreeConverter.class,"1.2");
+		checkVersion(IntegerPropertyConverter.class,"1.2");
+		checkVersion(LongPropertyConverter.class,"1.2");
+		checkVersion(MultiPropertyConverter.class,"1.2");
+		checkVersion(SampleResultConverter.class,"1.2");
+		checkVersion(StringPropertyConverter.class,"1.3");
+		checkVersion(TestElementConverter.class,"1.2");
+		checkVersion(TestElementPropertyConverter.class,"1.2");
+		checkVersion(ScriptWrapperConverter.class,"1.2");
+		if (versionsOK)
+		{
+			log.info("All converter versions present and correct");
+		}
+	}
+
+
    public static HashTree loadTree(InputStream reader) throws Exception
    {
       if(!reader.markSupported())
