@@ -70,13 +70,7 @@ public class JMeterVariables
 
     public void putAll(Map vars)
     {
-        Iterator iter = vars.keySet().iterator();
-        while (iter.hasNext())
-        {
-            String item = (String) iter.next();
-            put(item, (String) vars.get(item));
-
-        }
+       variables.putAll(vars);
     }
     
     public void putAll(JMeterVariables vars)

@@ -95,7 +95,6 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo
 	 * Construct a BeanInfo for the given class.
 	 */
 	protected BeanInfoSupport(Class beanClass) {
-		
 		this.beanClass= beanClass;
 
 		try {
@@ -114,7 +113,6 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo
 
 			// Store the resource bundle as an attribute of the BeanDescriptor:
 			getBeanDescriptor().setValue(RESOURCE_BUNDLE, resourceBundle);
-
 			// Localize the bean name
 			try
 			{
@@ -127,14 +125,11 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo
 					"Localized display name not available for bean "
 					+beanClass.getName());
 			}
-			
 			// Localize the property names and descriptions:
 			PropertyDescriptor[] properties= getPropertyDescriptors();
-
 			for (int i=0; i<properties.length; i++)
 			{
 				String name= properties[i].getName();
-			
 				try
 				{
 					properties[i].setDisplayName(
@@ -162,7 +157,11 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo
 		}
 		catch (MissingResourceException e)
 		{
-			log.warn("Localized strings not available for bean "+beanClass);
+			log.warn("Localized strings not available for bean "+beanClass,e);
+		}
+		catch(Exception e)
+		{
+		   log.warn("Something bad happened when loading bean info",e);
 		}
 	}
 	
@@ -252,6 +251,7 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo
 	}
 
 	public PropertyDescriptor[] getPropertyDescriptors() {
+	   log.debug("Shouldn't be here if in DataSourceElementBeanInfo");
 		return rootBeanInfo.getPropertyDescriptors();
 	}
 }

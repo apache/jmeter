@@ -23,20 +23,12 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.protocol.jdbc.util.ConnectionPoolException;
-import org.apache.jmeter.protocol.jdbc.util.DBConnectionManager;
-import org.apache.jmeter.protocol.jdbc.util.DBKey;
-import org.apache.jmeter.samplers.AbstractSampler;
+import org.apache.avalon.excalibur.datasource.DataSourceComponent;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.TestListener;
-import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jorphan.collections.Data;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -48,23 +40,13 @@ import org.apache.log.Logger;
  * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
  * @version $Revision$
  */
-public class JDBCSampler extends AbstractSampler implements TestListener
+public class JDBCSampler extends TestBean implements Sampler
 {
     private static Logger log = LoggingManager.getLoggerForClass();
+    public static final String QUERY = "query";
     
-    public static final String URL = "JDBCSampler.url";
-    public static final String DRIVER = "JDBCSampler.driver";
-    public static final String QUERY = "JDBCSampler.query";
-
-    public static final String JDBCSAMPLER_PROPERTY_PREFIX = "JDBCSampler.";
-    public static final String CONNECTION_POOL_IMPL =
-        JDBCSAMPLER_PROPERTY_PREFIX + "connPoolClass";
-
-    
-    /** Database connection pool manager. */
-    private transient DBConnectionManager manager =
-        DBConnectionManager.getManager();
-    private transient DBKey dbkey = null;
+    public String query = "";
+    public String dataSource = "";
 
     /**
      * Creates a JDBCSampler.
@@ -75,24 +57,24 @@ public class JDBCSampler extends AbstractSampler implements TestListener
 
     public SampleResult sample(Entry e)
     {
-        DBKey key = null;
-
-        SampleResult res = new SampleResult();
+       log.debug("sampling jdbc");
+       SampleResult res = new SampleResult();
         res.setSampleLabel(getName());
-        res.setSamplerData(this.toString());
+        res.setSamplerData(toString());
 
 
         res.sampleStart();
+        DataSourceComponent pool = (DataSourceComponent)getThreadContext().getVariables().getObject(getDataSource());
+        log.debug("DataSourceComponent: " + pool);
         Connection conn = null;
         Statement stmt = null;
 
         try
         {
-            key = getKey();
             
             // TODO: Consider creating a sub-result with the time to get the
             //       connection.
-            conn = manager.getConnection(key);
+            conn = pool.getConnection();
             stmt = conn.createStatement();
             
             // Based on query return value, get results
@@ -133,7 +115,7 @@ public class JDBCSampler extends AbstractSampler implements TestListener
         catch (Exception ex)
         {
             log.error("Error in JDBC sampling", ex);
-            res.setResponseData(new byte[0]);
+            res.setResponseData(ex.toString().getBytes());
             res.setSuccessful(false);
         }
         finally
@@ -146,56 +128,29 @@ public class JDBCSampler extends AbstractSampler implements TestListener
                 }
                 catch (SQLException err)
                 {
-                    stmt = null;
+                   log.error("Error in JDBC sampling", err);
+                   res.setResponseData(err.toString().getBytes());
+                   res.setSuccessful(false);
                 }
             }
 
             if (conn != null)
             {
-                manager.releaseConnection(key, conn);
+                try
+               {
+                  conn.close();
+               }
+               catch (SQLException e1)
+               {
+                  log.error("Error in JDBC sampling", e1);
+                  res.setResponseData(e1.toString().getBytes());
+                  res.setSuccessful(false);
+               }
             }
         }
 
         res.sampleEnd();
         return res;
-    }
-
-    private synchronized DBKey getKey() throws ConnectionPoolException
-    {
-		if (dbkey == null)
-        {
-            // With multiple threads, it is possible that more than one thread
-            // will enter this block at the same time, resulting in multiple
-            // calls to manager.getKey().  But this is okay, since DBKey has
-            // a proper implementation of equals and hashCode.  The original
-            // implementation of this method always returned a new instance --
-            // this cached dbkey is just a performance optimization.
-            dbkey =
-                manager.getKey(
-                    getUrl(),
-                    getUsername(),
-                    getPassword(),
-                    getDriver(),
-                    getJDBCProperties());
-        }
-        
-        return dbkey;
-    }
-
-    private Map getJDBCProperties()
-    {
-        Map props = new HashMap();
-        
-        PropertyIterator iter = propertyIterator();
-        while (iter.hasNext())
-        {
-            JMeterProperty prop = iter.next();
-            if (prop.getName().startsWith(JDBCSAMPLER_PROPERTY_PREFIX))
-            {
-                props.put(prop.getName(), prop);
-            }
-        }
-        return props;
     }
     
     /**
@@ -234,77 +189,35 @@ public class JDBCSampler extends AbstractSampler implements TestListener
         return data;
     }
 
-
-    public String getDriver()
-    {
-        return getPropertyAsString(DRIVER);
-    }
-
-    public String getUrl()
-    {
-        return getPropertyAsString(URL);
-    }
-
-    public String getUsername()
-    {
-        return getPropertyAsString(ConfigTestElement.USERNAME);
-    }
-
-    public String getPassword()
-    {
-        return getPropertyAsString(ConfigTestElement.PASSWORD);
-    }
-
     public String getQuery()
     {
-        return this.getPropertyAsString(QUERY);
+        return query;
     }
 
 
     public String toString()
     {
-        return getUrl() + ", user: " + getUsername() + "\n" + getQuery();
+        return getQuery();
     }
-
-
-    public void testStarted(String host)
-    {
-        testStarted();
-    }
-
-    public synchronized void testStarted()
-    {
-/*
- * Test started is called before the thread data has been set up, so cannot
- * rely on its values being available.
-*/
-//    	log.debug("testStarted(), thread: "+Thread.currentThread().getName());
-//        // The first call to getKey for a given key will set up the connection
-//        // pool.  This can take awhile, so do it while the test is starting
-//        // instead of waiting for the first sample.
-//        try
-//        {
-//            getKey();
-//        }
-//        catch (ConnectionPoolException e)
-//        {
-//            log.error("Error initializing database connection", e);
-//        }
-    }
-
-    public void testEnded(String host)
-    {
-        testEnded();
-    }
-
-    public synchronized void testEnded()
-    {
-    	log.debug("testEndded(), thread: "+Thread.currentThread().getName());
-        manager.shutdown();
-        dbkey = null;
-    }
-
-    public void testIterationStart(LoopIterationEvent event)
-    {
-    }
+   /**
+    * @param query The query to set.
+    */
+   public void setQuery(String query)
+   {
+      this.query = query;
+   }
+   /**
+    * @return Returns the dataSource.
+    */
+   public String getDataSource()
+   {
+      return dataSource;
+   }
+   /**
+    * @param dataSource The dataSource to set.
+    */
+   public void setDataSource(String dataSource)
+   {
+      this.dataSource = dataSource;
+   }
 }

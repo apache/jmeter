@@ -211,9 +211,8 @@ public class TestBeanGUI
         try
         {
             TestElement element= (TestElement)testBeanClass.newInstance();
-            configure(element);
-            super.clear(); // set name, enabled.
-            configureTestElement(element);
+            //configure(element);
+            //super.clear(); // set name, enabled.
             modifyTestElement(element); // put the default values back into the new element
             return element;
         }
