@@ -967,11 +967,17 @@ public class SaveService implements SaveServiceConstants
             }
             else if (items[i].getName().equals("testelement"))
             {
-                coll.add(new TestElementProperty(items[i].getAttribute("name",""),createTestElement(items[i])));
+                coll.add(
+                    new TestElementProperty(
+                        items[i].getAttribute("name", ""),
+                        createTestElement(items[i])));
             }
             else if (items[i].getName().equals("collection"))
             {
-                coll.add(new CollectionProperty(items[i].getAttribute("name",""),createCollection(items[i])));
+                coll.add(
+                    new CollectionProperty(
+                        items[i].getAttribute("name", ""),
+                        createCollection(items[i])));
             }
             else if (items[i].getName().equals("string"))
             {
@@ -979,7 +985,10 @@ public class SaveService implements SaveServiceConstants
             }
             else if (items[i].getName().equals("map"))
             {
-                coll.add(new MapProperty(items[i].getAttribute("name",""),createMap(items[i])));
+                coll.add(
+                    new MapProperty(
+                        items[i].getAttribute("name", ""),
+                        createMap(items[i])));
             }
         }
         return coll;
@@ -1027,17 +1036,25 @@ public class SaveService implements SaveServiceConstants
             {
                 map.put(
                     items[i].getAttribute("name",""),
-                    new TestElementProperty(items[i].getAttribute("name",""),createTestElement(items[i])));
+                    new TestElementProperty(
+                        items[i].getAttribute("name", ""),
+                        createTestElement(items[i])));
             }
             else if (items[i].getName().equals("collection"))
             {
                 map.put(
                     items[i].getAttribute("name"),
-                    new CollectionProperty(items[i].getAttribute("name",""),createCollection(items[i])));
+                    new CollectionProperty(
+                        items[i].getAttribute("name", ""),
+                        createCollection(items[i])));
             }
             else if (items[i].getName().equals("map"))
             {
-                map.put(items[i].getAttribute("name",""), new MapProperty(items[i].getAttribute("name",""),createMap(items[i])));
+                map.put(
+                    items[i].getAttribute("name", ""),
+                    new MapProperty(
+                        items[i].getAttribute("name", ""),
+                        createMap(items[i])));
             }
         }
         return map;
