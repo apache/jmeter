@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.engine.event.IterationDeliverEvent;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.processor.PreProcessor;
@@ -133,11 +132,6 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
             setValues();
         }
     }
-    
-	/**
-	 * @see org.apache.jmeter.engine.event.IterationListener#iteration(org.apache.jmeter.engine.event.IterationEvent)
-	 */
-	public void iteration(IterationDeliverEvent event) {}
 
     /**
      * @see org.apache.jmeter.testelement.ThreadListener#setJMeterVariables(org.apache.jmeter.threads.JMeterVariables)
