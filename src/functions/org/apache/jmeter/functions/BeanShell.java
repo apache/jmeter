@@ -223,7 +223,8 @@ public class BeanShell extends AbstractFunction implements Serializable
 
         if (values.length < 1 || values.length > 2)
         {
-            throw new InvalidVariableException("Wrong number of variables");
+            throw new InvalidVariableException(
+            		"Expecting 1 or 2 parameters, but found "+values.length);//$NON-NLS-1$
         }
         
         setupBeanShell();
