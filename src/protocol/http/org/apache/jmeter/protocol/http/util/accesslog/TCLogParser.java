@@ -18,8 +18,12 @@
 
 package org.apache.jmeter.protocol.http.util.accesslog;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 
@@ -65,7 +69,7 @@ import org.apache.jmeter.junit.JMeterTestCase;
  * work with this parser. Servers that are known
  * to use non standard formats are IIS and Netscape.
  * <p>
- * @author		Peter Lin<br>
+ * 
  * @version 	$Revision$ last updated $Date$
  * Created on:	June 23, 2003<br>
  */

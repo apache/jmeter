@@ -26,16 +26,27 @@ import java.util.Iterator;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-import org.htmlparser.*;
-import org.htmlparser.util.*;
-import org.htmlparser.scanners.*;
-import org.htmlparser.tags.*;
+import org.htmlparser.Node;
+import org.htmlparser.NodeReader;
+import org.htmlparser.Parser;
+import org.htmlparser.scanners.AppletScanner;
+import org.htmlparser.scanners.BaseHrefScanner;
+import org.htmlparser.scanners.BodyScanner;
+import org.htmlparser.scanners.InputTagScanner;
+import org.htmlparser.scanners.LinkScanner;
+import org.htmlparser.tags.AppletTag;
+import org.htmlparser.tags.BaseHrefTag;
+import org.htmlparser.tags.BodyTag;
+import org.htmlparser.tags.ImageTag;
+import org.htmlparser.tags.InputTag;
+import org.htmlparser.tags.LinkTag;
+import org.htmlparser.util.DefaultParserFeedback;
+import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.ParserException;
 
 /**
  * HtmlParser implementation using SourceForge's HtmlParser.
  *
- * @author TBA
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision$ updated on $Date$
  */
 class HtmlParserHTMLParser extends HTMLParser
