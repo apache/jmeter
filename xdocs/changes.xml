@@ -21,7 +21,7 @@
 <li>AllTests bug fix (neth6@atozasia.com)</li>
 <li>ClassFinder bug fix (neth6@atozasia.com)</li>
 <li>New Loop Controller</li>
-<li>Proxy Server records HTTP samples from browser</li>
+<li>Proxy Server records HTTP samples from browser (and documented in the user manual)</li>
 <li>Multipart Form support</li>
 <li>HTTP Header class for Header customization</li>
 <li>Extracting HTTP Header information from responses (Jamie Davidson)</li>
@@ -31,7 +31,8 @@
 <li>HTTPS and Authorization working together</li>
 <li>New Http sampling that automatically parses HTML response for images to download, and includes the downloading of
 these images in total time for request (Neth neth6@atozasia.com) </li>
-</ul>
+<li>HTTP responses from server can be parsed for links and forms, and dynamic data can be extracted and added to test
+samples at run-time</li> </ul>
 
 <h3>Version 1.6.1</h3>
 <ul>
