@@ -89,6 +89,7 @@ public class RandomController
 	 */
 	protected void incrementCurrent()
 	{
+		super.incrementCurrent();
 		current = rand.nextInt(this.getSubControllers().size());
 	}
 
