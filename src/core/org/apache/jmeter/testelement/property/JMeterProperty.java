@@ -30,8 +30,6 @@ public interface JMeterProperty extends Serializable, Cloneable, Comparable
      */
     public boolean isRunningVersion();
     
-    public boolean equals(Object o);
-    
     /**
      * The name of the property.  Typically this should match the name that keys
      * the property's location in the test elements Map.
