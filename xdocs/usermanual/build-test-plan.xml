@@ -58,7 +58,10 @@ The JMeter test tree contains elements that are both hierarchical and ordered.  
 <figure image="scoping1.png">Example test tree</figure>
 <p>The order of requests will be, One, Two, Three, Four.</p>
 <p>Some controllers affect the order of their subelements, and you can read about these specific controllers in <a href="component_reference.html">the component reference</a>.</p>
-<p>Other elements are hierarchical.  An Assertion, for instance, is hierarchical in the test tree.  This means it is applied to all requests that occur at it's level and below.  In the following test tree:</p>
+<p>Other elements are hierarchical.  An Assertion, for instance, is hierarchical in the test tree.  
+If its parent is a request, then it is applied to that request. If its
+parent is a Controller, then it affects all requests that are descendants of
+that Controller.  In the following test tree:</p>
 <figure image="scoping2.png">Hierarchy example</figure>
 <p>Assertion #1 is applied only to Request One, while Assertion #2 is applied to Requests Two and Three.</p>
 <p>Another example, this time using Timers:</p>
