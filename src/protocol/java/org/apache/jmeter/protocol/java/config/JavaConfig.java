@@ -73,17 +73,17 @@ import org.apache.log.Logger;
  * @created    $Date$
  * @version    $Revision$
  */
-public class JavaConfig extends ConfigTestElement implements Serializable {
-    /**
-     * Logging
-     */
-    transient private static Logger log =
+public class JavaConfig extends ConfigTestElement implements Serializable
+{
+    /** Logging */
+    private static transient Logger log =
         Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
 
     /**
      *  Constructor for the JavaConfig object
      */
-    public JavaConfig() {
+    public JavaConfig()
+    {
         setArguments(new Arguments());
     }
 
@@ -95,7 +95,8 @@ public class JavaConfig extends ConfigTestElement implements Serializable {
      *
      * @param classname  the new classname value
      */
-    public void setClassname(String classname) {
+    public void setClassname(String classname)
+    {
         setProperty(JavaSampler.CLASSNAME, classname);
     }
 
@@ -107,7 +108,8 @@ public class JavaConfig extends ConfigTestElement implements Serializable {
      *
      * @return           the classname value
      */
-    public String getClassname() {
+    public String getClassname()
+    {
         return getPropertyAsString(JavaSampler.CLASSNAME);
     }
 
@@ -120,7 +122,8 @@ public class JavaConfig extends ConfigTestElement implements Serializable {
      * @param name       the name of the argument to be added
      * @param value      the value of the argument to be added
      */
-    public void addArgument(String name, String value) {
+    public void addArgument(String name, String value)
+    {
         Arguments args = this.getArguments();
         args.addArgument(name, value);
     }
@@ -128,7 +131,8 @@ public class JavaConfig extends ConfigTestElement implements Serializable {
     /**
      * Removes all of the arguments associated with this JavaConfig object.
      */
-    public void removeArguments() {
+    public void removeArguments()
+    {
         setProperty(
             new TestElementProperty(JavaSampler.ARGUMENTS, new Arguments()));
     }
@@ -142,7 +146,8 @@ public class JavaConfig extends ConfigTestElement implements Serializable {
      * 
      * @param args       the new arguments
      */
-    public void setArguments(Arguments args) {
+    public void setArguments(Arguments args)
+    {
         setProperty(new TestElementProperty(JavaSampler.ARGUMENTS, args));
     }
 
@@ -154,7 +159,8 @@ public class JavaConfig extends ConfigTestElement implements Serializable {
      *
      * @return           the arguments
      */
-    public Arguments getArguments() {
+    public Arguments getArguments()
+    {
         return (Arguments) getProperty(JavaSampler.ARGUMENTS).getObjectValue();
     }
 }
