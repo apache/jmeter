@@ -48,11 +48,6 @@ public class Help implements Command
 		catch (IOException err)
 		{
 			log.error("Couldn't load " + helpPage, err);
-			JOptionPane.showMessageDialog(
-				GuiPackage.getInstance().getMainFrame(),
-				JMeterUtils.getResString("error_loading_help"),
-				"Error",
-				JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	/**
