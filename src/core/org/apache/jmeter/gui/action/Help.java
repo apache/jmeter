@@ -23,10 +23,16 @@ public class Help implements Command
     public final static String HELP = "help";
     private static Set commands = new HashSet();
 
-    public static final String HELP_PAGE =
+    public static final String HELP_DOCS =
         "file:///"
             + JMeterUtils.getJMeterHome()
-            + "/printable_docs/usermanual/component_reference.html";
+            + "/printable_docs/usermanual/";
+
+	public static final String HELP_PAGE =
+		HELP_DOCS + "component_reference.html";
+
+	public static final String HELP_FUNCTIONS =
+		HELP_DOCS + "functions.html";
 
     private static JDialog helpWindow;
     private static HtmlPane helpDoc;
