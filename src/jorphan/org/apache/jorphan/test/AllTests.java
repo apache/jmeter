@@ -68,7 +68,6 @@ import junit.textui.TestRunner;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
 /************************************************************
@@ -116,8 +115,7 @@ import org.apache.log.Logger;
  ***********************************************************/
 public class AllTests
 {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter.test");
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 	/************************************************************
 	 *  Constructor for the AllTests object
 	 ***********************************************************/

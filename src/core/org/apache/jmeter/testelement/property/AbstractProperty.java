@@ -6,13 +6,12 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public abstract class AbstractProperty implements JMeterProperty
 {
-    protected static Logger log = LoggingManager.getLoggerFor(JMeterUtils.PROPERTIES);
+    protected static Logger log = LoggingManager.getLoggerForClass();
     private String name;
     private boolean runningVersion = false;
     private Map ownerMap;

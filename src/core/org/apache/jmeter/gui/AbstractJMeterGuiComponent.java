@@ -69,7 +69,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -96,7 +95,7 @@ public abstract class AbstractJMeterGuiComponent
     implements JMeterGUIComponent
 {
     /** Logging */
-    private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
+    private static Logger log = LoggingManager.getLoggerForClass();
     
     /** Flag indicating whether or not this component is enabled. */
     private boolean enabled = true;
