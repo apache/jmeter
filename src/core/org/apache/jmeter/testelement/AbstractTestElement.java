@@ -220,6 +220,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable
         return getProperty(key).getBooleanValue();
     }
 
+	public boolean getPropertyAsBoolean(String key,boolean defaultVal)
+	{
+		JMeterProperty jmp = getProperty(key); 
+		return jmp instanceof NullProperty ? defaultVal: jmp.getBooleanValue();
+	}
+
     public float getPropertyAsFloat(String key)
     {
         return getProperty(key).getFloatValue();
