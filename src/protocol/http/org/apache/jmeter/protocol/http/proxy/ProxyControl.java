@@ -638,7 +638,7 @@ public class ProxyControl extends GenericController implements Serializable
 
     private boolean matchesPatterns(String url, CollectionProperty patterns)
     {
-        PropertyIterator iter = getExcludePatterns().iterator();
+        PropertyIterator iter = patterns.iterator();
         while (iter.hasNext())
         {
             String item = iter.next().getStringValue();
@@ -761,24 +761,37 @@ public class ProxyControl extends GenericController implements Serializable
 
     public static class Test extends TestCase
     {
+    	HTTPSampler sampler;
+    	ProxyControl control;
+    	
         public Test(String name)
         {
             super(name);
         }
-        public void testFiltering() throws Exception
+        public void setUp(){
+			control = new ProxyControl();
+			control.addIncludedPattern(".*\\.jsp");
+			control.addExcludedPattern(".*apache.org.*");
+			sampler = new HTTPSampler();
+        }
+        public void testFilter1() throws Exception
         {
-            ProxyControl control = new ProxyControl();
-            control.addIncludedPattern(".*\\.jsp");
-            control.addExcludedPattern(".*apache.org.*");
-            HTTPSampler sampler = new HTTPSampler();
             sampler.setDomain("jakarta.org");
             sampler.setPath("index.jsp");
-            assertTrue(control.filterUrl(sampler));
-            sampler.setDomain("www.apache.org");
-            assertTrue(!control.filterUrl(sampler));
-            sampler.setPath("header.gif");
-            sampler.setDomain("jakarta.org");
-            assertTrue(!control.filterUrl(sampler));
+            assertTrue("Should find jakarta.org/index.jsp",control.filterUrl(sampler));
         }
+		public void testFilter2() throws Exception
+		{
+			sampler.setPath("index.jsp");
+			sampler.setDomain("www.apache.org");
+			assertFalse("Should not match www.apache.org",control.filterUrl(sampler));
+		}
+
+		public void testFilter3() throws Exception
+		{
+			sampler.setPath("header.gif");
+			sampler.setDomain("jakarta.org");
+			assertFalse("Should not match header.gif",control.filterUrl(sampler));
+		}
     }
 }
