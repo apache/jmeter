@@ -86,7 +86,7 @@ import org.apache.log.Logger;
  * @author  Tom Schneider
  */
 public class FileReporter extends JPanel  {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.elements");
 	Hashtable data = new Hashtable();
 	/**  initalize a file reporter from a file */

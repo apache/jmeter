@@ -25,7 +25,7 @@ import org.apache.log.Logger;
  */
 public class ConvertListeners implements ListedHashTreeVisitor {
 
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.engine");
 	/**
 	 * @see ListedHashTreeVisitor#addNode(Object, ListedHashTree)

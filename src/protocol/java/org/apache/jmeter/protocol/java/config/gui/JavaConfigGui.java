@@ -87,7 +87,7 @@ import org.apache.log.Logger;
 
 public class JavaConfigGui extends AbstractConfigGui
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
 	private static String CLASSNAMECOMBO = "classnamecombo";
 
 	private JComboBox classnameCombo;

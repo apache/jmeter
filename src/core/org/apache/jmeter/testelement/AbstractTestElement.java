@@ -19,7 +19,7 @@ import org.apache.log.Logger;
 public abstract class AbstractTestElement implements TestElement,Serializable
 {
 	private Map testInfo = new HashMap();
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.elements");
 
 	/****************************************

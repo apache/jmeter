@@ -98,7 +98,7 @@ import org.xml.sax.XMLReader;
 
 public class JMeterUtils
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.util");
 	private static LoggingManager logManager;
 	private static String LOG_FILE = "log_file";

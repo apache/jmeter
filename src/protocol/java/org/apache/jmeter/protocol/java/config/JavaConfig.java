@@ -78,7 +78,7 @@ public class JavaConfig extends ConfigTestElement implements Serializable
 {
 
 	/** Logging  */
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
 	
 	private transient JavaSamplerClient javaClient = null;
 

@@ -93,7 +93,7 @@ public class HtmlParser implements Serializable
 	/****************************************
 	 * !ToDo (Field description)
 	 ***************************************/
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.protocol.http");
 
 	/****************************************
@@ -511,7 +511,7 @@ public class HtmlParser implements Serializable
 	 ***************************************/
 	public static class Test extends TestCase
 	{
-		private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.test");
+		transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.test");
 
 		/****************************************
 		 * !ToDo (Constructor description)

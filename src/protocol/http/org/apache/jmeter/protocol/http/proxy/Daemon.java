@@ -24,7 +24,7 @@ import org.apache.log.Logger;
  ***********************************************************/
 public class Daemon extends Thread
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.protocol.http");
 	//
 	// Member variables

@@ -72,7 +72,7 @@ import org.apache.log.Logger;
  *****************************************************************/
 public class ConnectionObject  implements Runnable
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.protocol.jdbc");
   Connection con;
   DBKey key;

@@ -18,7 +18,7 @@ import org.apache.log.Logger;
 
 public class FocusRequester implements Runnable
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.gui");
 	private Component comp;
 

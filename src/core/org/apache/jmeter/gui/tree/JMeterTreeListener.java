@@ -89,7 +89,7 @@ import org.apache.log.Logger;
 public class JMeterTreeListener implements TreeSelectionListener, MouseListener, 
 		KeyListener,MouseMotionListener
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.gui");
 	Container endWindow;
 	JPopupMenu pop;

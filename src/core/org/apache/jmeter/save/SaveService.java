@@ -36,7 +36,7 @@ import org.xml.sax.SAXException;
 
 public class SaveService
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.util");
 	private static final String ASSERTION_RESULT_TAG_NAME = "assertionResult";
 	private static final String SAMPLE_RESULT_TAG_NAME = "sampleResult";

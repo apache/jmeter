@@ -82,7 +82,7 @@ import org.apache.log.Logger;
  ***************************************/
 public class JMeterMenuBar extends JMenuBar
 {
-	private static Logger log =
+	transient private static Logger log =
 		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 	JMenu fileMenu;
 	JMenuItem file_save_all;

@@ -120,7 +120,7 @@ public class MailerVisualizer extends AbstractVisualizer
 
 	private MailerModel model;
 
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
 	/**
 	 * Constructs the MailerVisualizer and initializes its GUI.

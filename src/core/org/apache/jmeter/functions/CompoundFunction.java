@@ -27,7 +27,7 @@ import org.apache.oro.text.regex.Perl5Compiler;
  */
 public class CompoundFunction implements Function
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.elements");
 	private JMeterVariables threadVars;
 	

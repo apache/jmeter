@@ -87,7 +87,7 @@ import org.apache.log.Logger;
  *@created    June 8, 2001
  */
 public class Proxy extends Thread {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.protocol.http");
 	//
 	// Member variables

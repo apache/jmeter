@@ -1,5 +1,6 @@
 package org.apache.jmeter.functions;
 
+import java.io.Serializable;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -32,8 +33,8 @@ import org.apache.oro.text.regex.Util;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class RegexFunction extends AbstractFunction {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+public class RegexFunction extends AbstractFunction implements Serializable {
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.elements");
 	public static final String ALL = "ALL";
 	public static final String RAND = "RAND";
@@ -44,7 +45,7 @@ public class RegexFunction extends AbstractFunction {
 	Pattern searchPattern;
 	Object[] template;
 	String valueIndex,defaultValue,between;
-	PatternCompiler compiler = new Perl5Compiler();
+	transient PatternCompiler compiler = new Perl5Compiler();
 	Pattern templatePattern;
 	private String name;
 	

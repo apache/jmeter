@@ -88,7 +88,7 @@ import com.sun.net.ssl.X509TrustManager;
  */
 public class JsseSSLManager extends SSLManager
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.util");
 	/**
 	 *  Cache the SecureRandom instance because it takes a long time to create

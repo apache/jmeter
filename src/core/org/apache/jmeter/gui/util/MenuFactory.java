@@ -86,7 +86,7 @@ import org.apache.log.Logger;
 public class MenuFactory
 {
 
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.gui");
 	/****************************************
 	 * !ToDo (Field description)

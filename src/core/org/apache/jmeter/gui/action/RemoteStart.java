@@ -81,7 +81,7 @@ import org.apache.log.Logger;
 
 public class RemoteStart extends AbstractAction
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.gui");
 	private Map remoteEngines = new HashMap();
 

@@ -18,7 +18,7 @@ import org.apache.log.Logger;
  */
 public class PreCompiler implements ListedHashTreeVisitor
 {
-	private static Logger log =
+	transient private static Logger log =
 		Hierarchy.getDefaultHierarchy().getLoggerFor(LoggingManager.ENGINE);
 	private Map userDefinedVariables;
 	private boolean testValid = true;

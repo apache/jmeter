@@ -92,7 +92,7 @@ import org.apache.log.Logger;
 public class CookieManager extends ConfigTestElement implements
 		  Serializable,PerThreadClonable
 {
-	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.protocol.http");
 
 	 public static final String COOKIES = "CookieManager.cookies";
