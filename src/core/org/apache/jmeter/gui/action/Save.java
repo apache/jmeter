@@ -65,6 +65,7 @@ import java.util.Set;
 import javax.swing.JFileChooser;
 
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FileDialoger;
@@ -119,7 +120,7 @@ public class Save implements Command
         testPlanFile = f;
     }
 
-    public void doAction(ActionEvent e)
+    public void doAction(ActionEvent e) throws IllegalUserActionException
     {
         HashTree subTree = null;
         if (e.getActionCommand().equals(SAVE))
@@ -181,7 +182,9 @@ public class Save implements Command
         }
         catch (Throwable ex)
         {
+            testPlanFile = null;
             log.error("", ex);
+            throw new IllegalUserActionException("Couldn't save test plan to file: " + chosenFile);
         }
         finally
         {

@@ -57,6 +57,8 @@ package org.apache.jmeter.gui.action;
 import java.awt.event.ActionEvent;
 import java.util.Set;
 
+import org.apache.jmeter.exceptions.IllegalUserActionException;
+
 /**
  * @author Michael Stover
  * @version $Revision$
@@ -64,7 +66,7 @@ import java.util.Set;
 
 public interface Command
 {
-    public void doAction(ActionEvent e);
+    public void doAction(ActionEvent e) throws IllegalUserActionException;
 
     public Set getActionNames();
 }
