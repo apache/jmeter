@@ -1,4 +1,4 @@
-//$Header:
+// $Header$
 /*
  * Copyright 2004 The Apache Software Foundation.
  *
@@ -19,6 +19,10 @@ package org.apache.jmeter.monitor.model;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 
+ * @version $Revision$ on $Date$
+ */
 public class StatusImpl implements Status
 {
 	private Jvm jvm = null;
