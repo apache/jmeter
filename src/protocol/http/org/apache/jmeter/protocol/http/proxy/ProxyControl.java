@@ -40,7 +40,8 @@ import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.RecordingController;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
@@ -250,7 +251,7 @@ public class ProxyControl extends GenericController implements Serializable
      *                       while recording.  A future consideration.
      */
     public void deliverSampler(
-        HTTPSampler sampler,
+        HTTPSamplerBase sampler,
         TestElement[] subConfigs,
         SampleResult result)
     {
@@ -291,7 +292,7 @@ public class ProxyControl extends GenericController implements Serializable
         }
     }
 
-    private boolean filterUrl(HTTPSampler sampler)
+    private boolean filterUrl(HTTPSamplerBase sampler)
     {
 		String domain = sampler.getDomain();
 		if (domain == null || domain.length() == 0)
@@ -549,7 +550,7 @@ public class ProxyControl extends GenericController implements Serializable
     }
 
     private void placeSampler(
-        HTTPSampler sampler,
+        HTTPSamplerBase sampler,
         TestElement[] subConfigs,
         JMeterTreeNode myTarget)
     {
@@ -639,7 +640,7 @@ public class ProxyControl extends GenericController implements Serializable
      * @param configurations    ConfigTestElements in descending priority.
      */
     private void removeValuesFromSampler(
-        HTTPSampler sampler,
+        HTTPSamplerBase sampler,
         Collection configurations)
     {
         for (PropertyIterator props= sampler.propertyIterator();
@@ -679,7 +680,7 @@ public class ProxyControl extends GenericController implements Serializable
         }
     }
 
-	private String generateMatchUrl(HTTPSampler sampler)
+	private String generateMatchUrl(HTTPSamplerBase sampler)
 	{
 		StringBuffer buf = new StringBuffer(sampler.getDomain());
 		buf.append(':');
@@ -837,7 +838,7 @@ public class ProxyControl extends GenericController implements Serializable
 
     public static class Test extends TestCase
     {
-    	HTTPSampler sampler;
+    	HTTPSamplerBase sampler;
     	ProxyControl control;
     	
         public Test(String name)
@@ -848,7 +849,7 @@ public class ProxyControl extends GenericController implements Serializable
 			control = new ProxyControl();
 			control.addIncludedPattern(".*\\.jsp");
 			control.addExcludedPattern(".*apache.org.*");
-			sampler = new HTTPSampler();
+			sampler = new HTTPNullSampler();
         }
         public void testFilter1() throws Exception
         {
