@@ -1111,7 +1111,7 @@ public class HTTPSampler extends AbstractSampler
             // Request sent. Now get the response:
             byte[] responseData= readResponse(conn);
 
-             res.sampleEnd();
+            res.sampleEnd();
             // Done with the sampling proper.
 
             // Now collect the results into the HTTPSampleResult:
@@ -1258,8 +1258,6 @@ public class HTTPSampler extends AbstractSampler
 
         // Now populate the any totalRes fields that need to
         // come from lastRes:
-		totalRes.sampleEnd();
-
         totalRes.setSampleLabel(
             totalRes.getSampleLabel() + "->" + lastRes.getSampleLabel());
         // The following three can be discussed: should they be from the
@@ -1338,7 +1336,6 @@ public class HTTPSampler extends AbstractSampler
                             false,
                             frameDepth + 1);
                     res.addSubResult(binRes);
-                    res.sampleEnd();
                     res.setSuccessful(
                         res.isSuccessful() && binRes.isSuccessful());
                 }
