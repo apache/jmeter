@@ -66,6 +66,7 @@ import java.util.Set;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -116,6 +117,10 @@ public class ActionRouter implements ActionListener
                     preActionPerformed(c.getClass(), e);
                     c.doAction(e);
                     postActionPerformed(c.getClass(), e);
+                }
+                catch(IllegalUserActionException err)
+                {
+                    JMeterUtils.reportErrorToUser(err.toString());
                 }
                 catch (Exception err)
                 {
