@@ -31,6 +31,7 @@ public class TestPlan extends AbstractTestElement implements Serializable
     public final static String THREAD_GROUPS = "TestPlan.thread_groups";
     public final static String FUNCTIONAL_MODE = "TestPlan.functional_mode";
     public final static String USER_DEFINED_VARIABLES = "TestPlan.user_defined_variables";
+    public final static String SERIALIZE_THREADGROUPS = "TestPlan.serialize_threadgroups";
 
     private List threadGroups = new LinkedList();
     private List configs = new LinkedList();
@@ -52,6 +53,7 @@ public class TestPlan extends AbstractTestElement implements Serializable
     {
         this("Test Plan");
         setFunctionalMode(false);
+        setSerialized(false);
     }
 
     public boolean isFunctionalMode()
@@ -84,6 +86,16 @@ public class TestPlan extends AbstractTestElement implements Serializable
     public void setFunctionalMode(boolean funcMode)
     {
         setProperty(new BooleanProperty(FUNCTIONAL_MODE, funcMode));
+    }
+    
+    public void setSerialized(boolean serializeTGs)
+    {
+    	setProperty(new BooleanProperty(SERIALIZE_THREADGROUPS, serializeTGs));
+    }
+    
+    public boolean isSerialized()
+    {
+    	return getPropertyAsBoolean(SERIALIZE_THREADGROUPS);
     }
 
     /****************************************
