@@ -394,7 +394,7 @@ public abstract class HTMLParser
 		throws Exception
 		{
 			log.info("file   "+file);
-			File f= findFile(file);
+			File f= findTestFile(file);
 			byte[] buffer= new byte[(int)f.length()];
 			int len= new FileInputStream(f).read(buffer);
 			assertEquals(len, buffer.length);
@@ -420,7 +420,7 @@ public abstract class HTMLParser
 			if (file != null && file.length() > 0){
 			  BufferedReader br = 
 			    new BufferedReader(
-			        new FileReader(findFile(file)));
+			        new FileReader(findTestFile(file)));
 			  String line = br.readLine();
 			  while (line != null){
 				al.add(line);
@@ -429,18 +429,6 @@ public abstract class HTMLParser
 			  br.close();
 			}
 			return al;
-		}
-		// Helper method to find a file
-		private static File findFile(String file)
-		{
-			File f= new File(file);
-			if (!f.exists() && !f.isAbsolute()) // Try adding user.dir
-			{
-				//System.out.println(f.getPath()+" E="+f.exists()+" A="+f.isAbsolute());
-				f=f.getAbsoluteFile();
-				//System.out.println(f.getPath()+" E="+f.exists()+" A="+f.isAbsolute());
-			}
-			return f;
 		}
     }
 }
