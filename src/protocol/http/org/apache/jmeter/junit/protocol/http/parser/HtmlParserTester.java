@@ -6,6 +6,7 @@ import java.net.URL;
 import junit.framework.TestCase;
 
 import org.apache.jmeter.protocol.http.modifier.AnchorModifier;
+import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -37,12 +38,13 @@ public class HtmlParserTester extends TestCase
         String responseText =
             "<html><head><title>Test page</title></head><body>"
                 + "<a href=\"index.html\">Goto index page</a></body></html>";
-        SampleResult result = new SampleResult();
+        HTTPSampleResult result = new HTTPSampleResult();
         JMeterContextService.getContext().setCurrentSampler(context);
         JMeterContextService.getContext().setCurrentSampler(config);
         result.setResponseData(responseText.getBytes());
         result.setSampleLabel(context.toString());
         result.setSamplerData(context.toString());
+        result.setURL(context.getUrl());
         JMeterContextService.getContext().setPreviousResult(result);
         parser.process();
         assertEquals(
@@ -61,9 +63,10 @@ public class HtmlParserTester extends TestCase
                 + "hfdfjiudfjdfjkjfkdjf"
                 + "<b>bold text</b><a href=lowerdir/index.html>lower</a>"
                 + "</body></html>";
-        SampleResult result = new SampleResult();
+        HTTPSampleResult result = new HTTPSampleResult();
         result.setResponseData(responseText.getBytes());
         result.setSampleLabel(context.toString());
+        result.setURL(context.getUrl());
         JMeterContextService.getContext().setCurrentSampler(context);
         JMeterContextService.getContext().setCurrentSampler(config);
         JMeterContextService.getContext().setPreviousResult(result);
@@ -85,9 +88,10 @@ public class HtmlParserTester extends TestCase
             "<html><head><title>Test page</title></head><body>"
                 + "<a href=\"/home/index.html?param1=value1\">"
                 + "Goto index page</a></body></html>";
-        SampleResult result = new SampleResult();
+        HTTPSampleResult result = new HTTPSampleResult();
         result.setResponseData(responseText.getBytes());
         result.setSampleLabel(context.toString());
+        result.setURL(context.getUrl());
         JMeterContextService.getContext().setCurrentSampler(context);
         JMeterContextService.getContext().setCurrentSampler(config);
         JMeterContextService.getContext().setPreviousResult(result);
@@ -106,9 +110,10 @@ public class HtmlParserTester extends TestCase
         String responseText =
             "<html><head><title>Test page</title></head><body>"
                 + "<A HREF=\"index.html\">Goto index page</A></body></html>";
-        SampleResult result = new SampleResult();
+        HTTPSampleResult result = new HTTPSampleResult();
         result.setResponseData(responseText.getBytes());
         result.setSampleLabel(context.toString());
+        result.setURL(context.getUrl());
         JMeterContextService.getContext().setCurrentSampler(context);
         JMeterContextService.getContext().setCurrentSampler(config);
         JMeterContextService.getContext().setPreviousResult(result);
@@ -125,9 +130,10 @@ public class HtmlParserTester extends TestCase
         String responseText =
             "<html><head><title>Test page</title></head><body>"
                 + "<a href=\"../index.html\">Goto index page</a></body></html>";
-        SampleResult result = new SampleResult();
+        HTTPSampleResult result = new HTTPSampleResult();
         result.setResponseData(responseText.getBytes());
         result.setSampleLabel(context.toString());
+        result.setURL(context.getUrl());
         JMeterContextService.getContext().setCurrentSampler(context);
         JMeterContextService.getContext().setCurrentSampler(config);
         JMeterContextService.getContext().setPreviousResult(result);
@@ -145,10 +151,11 @@ public class HtmlParserTester extends TestCase
             "<html><head><title>Test page</title></head><body>"
                 + "<a href=\"/home/index.html?param1=value1\">"
                 + "Goto index page</a></body></html>";
-        SampleResult result = new SampleResult();
+        HTTPSampleResult result = new HTTPSampleResult();
         String newUrl = config.getUrl().toString();
         result.setResponseData(responseText.getBytes());
         result.setSampleLabel(context.toString());
+        result.setURL(context.getUrl());
         JMeterContextService.getContext().setCurrentSampler(context);
         JMeterContextService.getContext().setCurrentSampler(config);
         JMeterContextService.getContext().setPreviousResult(result);
@@ -165,10 +172,11 @@ public class HtmlParserTester extends TestCase
             "<html><head><title>Test page</title></head><body>"
                 + "<a href=\"/home/index.html?param1=value1\">"
                 + "Goto index page</a></body></html>";
-        SampleResult result = new SampleResult();
+        HTTPSampleResult result = new HTTPSampleResult();
         String newUrl = config.getUrl().toString();
         result.setResponseData(responseText.getBytes());
         result.setSampleLabel(context.toString());
+        result.setURL(context.getUrl());
         JMeterContextService.getContext().setCurrentSampler(context);
         JMeterContextService.getContext().setCurrentSampler(config);
         JMeterContextService.getContext().setPreviousResult(result);
@@ -185,9 +193,10 @@ public class HtmlParserTester extends TestCase
             "<html><head><title>Test page</title></head><body>"
                 + "<a href=\"/home/index.html?param1=value1\">"
                 + "Goto index page</a></body></html>";
-        SampleResult result = new SampleResult();
+        HTTPSampleResult result = new HTTPSampleResult();
         result.setResponseData(responseText.getBytes());
         result.setSampleLabel(context.toString());
+        result.setURL(context.getUrl());
         JMeterContextService.getContext().setCurrentSampler(context);
         JMeterContextService.getContext().setPreviousResult(result);
         parser.process();
@@ -213,9 +222,10 @@ public class HtmlParserTester extends TestCase
                 + "<form action=\"index.html\" method=\"POST\">"
                 + "<input type=\"checkbox\" name=\"test\""
                 + " value=\"goto\">Goto index page</form></body></html>";
-        SampleResult result = new SampleResult();
+        HTTPSampleResult result = new HTTPSampleResult();
         result.setResponseData(responseText.getBytes());
         result.setSampleLabel(context.toString());
+        result.setURL(context.getUrl());
         JMeterContextService.getContext().setCurrentSampler(context);
         JMeterContextService.getContext().setCurrentSampler(config);
         JMeterContextService.getContext().setPreviousResult(result);
@@ -241,9 +251,10 @@ public class HtmlParserTester extends TestCase
                 + "<form action=\"index.html\" method=\"POST\">"
                 + "<input type=\"checkbox\" name=\"te$st\""
                 + " value=\"goto\">Goto index page</form></body></html>";
-        SampleResult result = new SampleResult();
+        HTTPSampleResult result = new HTTPSampleResult();
         result.setResponseData(responseText.getBytes());
         result.setSampleLabel(context.toString());
+        result.setURL(context.getUrl());
         JMeterContextService.getContext().setCurrentSampler(context);
         JMeterContextService.getContext().setCurrentSampler(config);
         JMeterContextService.getContext().setPreviousResult(result);

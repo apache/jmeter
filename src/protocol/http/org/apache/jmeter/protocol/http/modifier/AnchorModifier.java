@@ -58,6 +58,7 @@ import java.io.FileInputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -71,6 +72,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.protocol.http.parser.HtmlParsingUtils;
+import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -106,17 +108,22 @@ public class AnchorModifier
      */
     public void process()
     {
-        SampleResult result =
-            JMeterContextService.getContext().getPreviousResult();
         Sampler sam = JMeterContextService.getContext().getCurrentSampler();
+        SampleResult res = JMeterContextService.getContext().getPreviousResult();
         HTTPSampler sampler = null;
-        if (result == null || !(sam instanceof HTTPSampler))
+        HTTPSampleResult result = null;
+        if (res == null 
+            || !(sam instanceof HTTPSampler)
+            || !(res instanceof HTTPSampleResult))
         {
+            log.info("Can't apply HTML Link Parser when the previous"
+                     +" sampler run is not an HTTP Request.");
             return;
         }
         else
         {
             sampler = (HTTPSampler) sam;
+            result = (HTTPSampleResult) res;
         }
         List potentialLinks = new ArrayList();
         String responseText = "";
@@ -212,7 +219,7 @@ public class AnchorModifier
 
     private void addFormUrls(
         Document html,
-        SampleResult result,
+        HTTPSampleResult result,
         HTTPSampler config,
         List potentialLinks)
     {
@@ -223,9 +230,7 @@ public class AnchorModifier
             urls.addAll(
                 HtmlParsingUtils.createURLFromForm(
                     rootList.item(x),
-                    (HTTPSampler) JMeterContextService
-                        .getContext()
-                        .getPreviousSampler()));
+                    result.getURL()));
         }
         Iterator iter = urls.iterator();
         while (iter.hasNext())
@@ -248,7 +253,7 @@ public class AnchorModifier
 
     private void addAnchorUrls(
         Document html,
-        SampleResult result,
+        HTTPSampleResult result,
         HTTPSampler config,
         List potentialLinks)
     {
@@ -267,10 +272,7 @@ public class AnchorModifier
             {
                 HTTPSampler newUrl =
                     HtmlParsingUtils.createUrlFromAnchor(
-                        hrefStr,
-                        (HTTPSampler) JMeterContextService
-                            .getContext()
-                            .getPreviousSampler());
+                        hrefStr, result.getURL());
                 newUrl.setMethod(HTTPSampler.GET);
                 log.debug("possible match: " + newUrl);
                 if (HtmlParsingUtils.isAnchorMatched(newUrl, config))
@@ -305,7 +307,7 @@ public class AnchorModifier
                                 + "/testfiles/load_bug_list.jmx"))
                     .getArray()[0];
             config.setRunningVersion(true);
-            SampleResult result = new SampleResult();
+            HTTPSampleResult result = new HTTPSampleResult();
             HTTPSampler context =
                 (HTTPSampler) SaveService
                     .loadSubTree(
@@ -321,6 +323,69 @@ public class AnchorModifier
                         + "/testfiles/jmeter_home_page.html")
                     .getText()
                     .getBytes());
+            result.setSampleLabel(context.toString());
+            result.setSamplerData(context.toString());
+            JMeterContextService.getContext().setPreviousResult(result);
+            AnchorModifier modifier = new AnchorModifier();
+            modifier.process();
+            assertEquals(
+                "http://nagoya.apache.org/bugzilla/buglist.cgi?"
+                    + "bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED"
+                    + "&email1=&emailtype1=substring&emailassigned_to1=1"
+                    + "&email2=&emailtype2=substring&emailreporter2=1"
+                    + "&bugidtype=include&bug_id=&changedin=&votes="
+                    + "&chfieldfrom=&chfieldto=Now&chfieldvalue="
+                    + "&product=JMeter&short_desc=&short_desc_type=substring"
+                    + "&long_desc=&long_desc_type=substring&bug_file_loc="
+                    + "&bug_file_loc_type=substring&keywords="
+                    + "&keywords_type=anywords"
+                    + "&field0-0-0=noop&type0-0-0=noop&value0-0-0="
+                    + "&cmdtype=doit&order=Reuse+same+sort+as+last+time",
+                config.toString());
+            config.recoverRunningVersion();
+            assertEquals(
+                "http://nagoya.apache.org/bugzilla/buglist.cgi?"
+                    + "bug_status=.*&bug_status=.*&bug_status=.*&email1="
+                    + "&emailtype1=substring&emailassigned_to1=1&email2="
+                    + "&emailtype2=substring&emailreporter2=1"
+                    + "&bugidtype=include&bug_id=&changedin=&votes="
+                    + "&chfieldfrom=&chfieldto=Now&chfieldvalue="
+                    + "&product=JMeter&short_desc=&short_desc_type=substring"
+                    + "&long_desc=&long_desc_type=substring&bug_file_loc="
+                    + "&bug_file_loc_type=substring&keywords="
+                    + "&keywords_type=anywords&field0-0-0=noop"
+                    + "&type0-0-0=noop&value0-0-0=&cmdtype=doit"
+                    + "&order=Reuse+same+sort+as+last+time",
+                config.toString());
+        }
+
+        public void testModifySamplerWithRelativeLink() throws Exception
+        {
+            HTTPSampler config =
+                (HTTPSampler) SaveService
+                    .loadSubTree(
+                        new FileInputStream(
+                            System.getProperty("user.dir")
+                                + "/testfiles/load_bug_list.jmx"))
+                    .getArray()[0];
+            config.setRunningVersion(true);
+            HTTPSampleResult result = new HTTPSampleResult();
+            HTTPSampler context =
+                (HTTPSampler) SaveService
+                    .loadSubTree(
+                        new FileInputStream(
+                            System.getProperty("user.dir")
+                                + "/testfiles/Load_JMeter_Page.jmx"))
+                    .getArray()[0];
+            JMeterContextService.getContext().setCurrentSampler(context);
+            JMeterContextService.getContext().setCurrentSampler(config);
+            result.setResponseData(
+                new TextFile(
+                    System.getProperty("user.dir")
+                        + "/testfiles/jmeter_home_page_with_relative_links.html")
+                    .getText()
+                    .getBytes());
+            result.setURL(new URL("http://nagoya.apache.org/fakepage.html"));
             result.setSampleLabel(context.toString());
             result.setSamplerData(context.toString());
             JMeterContextService.getContext().setPreviousResult(result);
