@@ -225,14 +225,40 @@ public abstract class HTMLParser
 	 * return the corresponding RL String. Overall problems parsing the html
 	 * should be reported by throwing an HTMLParseException. 
 	 * 
+	 * N.B.
+	 * The Iterator returns URLs, but the Collection will contain
+	 * objects of class URLString.
+	 * 
 	 * @param html HTML code
 	 * @param baseUrl Base URL from which the HTML code was obtained
-	 * @param coll Collection
+	 * @param coll URLCollection
 	 * @return an Iterator for the resource URLs 
 	 */
 	public abstract Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl,
 	                                                  URLCollection coll)
 		throws HTMLParseException;
+
+
+	/**
+	 * Get the URLs for all the resources that a browser would automatically
+	 * download following the download of the HTML content, that is: images,
+	 * stylesheets, javascript files, applets, etc...
+	 * 
+	 * N.B.
+	 * The Iterator returns URLs, but the Collection will contain
+	 * objects of class URLString.
+	 * 
+	 * @param html HTML code
+	 * @param baseUrl Base URL from which the HTML code was obtained
+	 * @param coll Collection - will contain URLString objects, not URLs
+	 * @return an Iterator for the resource URLs 
+	 */
+	public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl,
+													  Collection coll)
+		throws HTMLParseException
+		{
+			return getEmbeddedResourceURLs(html,baseUrl, new URLCollection(coll));
+		}
 
 
     /**
@@ -448,7 +474,7 @@ public abstract class HTMLParser
 			if (c == null) {
 				result = p.getEmbeddedResourceURLs(buffer,new URL(url));
 			} else {
-			    result = p.getEmbeddedResourceURLs(buffer,new URL(url),new URLCollection(c));
+			    result = p.getEmbeddedResourceURLs(buffer,new URL(url),c);
 			}
 			/* 
 			 * TODO:
