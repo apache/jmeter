@@ -21,7 +21,10 @@ fi
 
 for i in ./lib/*.jar
 do
-    CLASSPATH=$CLASSPATH:$i
+    if [ i != "./lib/jorphan.jar" ]
+	then
+		CLASSPATH=$CLASSPATH:$i
+	fi
 done
 
 for i in ../jakarta-site2/lib/*.jar

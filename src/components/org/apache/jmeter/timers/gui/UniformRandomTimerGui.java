@@ -83,7 +83,7 @@ public class UniformRandomTimerGui extends AbstractTimerGui
 	private final String DELAY_FIELD = "Delay Field";
 	private final String RANGE_FIELD = "Range Field";
 
-	public final String DEFAULT_DELAY = "300";
+	public final String DEFAULT_DELAY = "0";
 	public final String DEFAULT_RANGE = "100.0";
 
 	private JTextField delayField;

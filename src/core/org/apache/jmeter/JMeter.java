@@ -154,7 +154,7 @@ public class JMeter implements JMeterPlugin {
 				LOGFILE_OPT,
 				"the file to log samples to"),
 			new CLOptionDescriptor(
-				"logfile",
+				"nongui",
 				CLOptionDescriptor.ARGUMENT_DISALLOWED,
 				NONGUI_OPT,
 				"run JMeter in nongui mode"),

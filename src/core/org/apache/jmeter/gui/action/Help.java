@@ -64,6 +64,9 @@ public class Help implements Command
 			helpWindow.getContentPane().setLayout(new GridLayout(1, 1));
 			ComponentUtil.centerComponentInWindow(helpWindow, 60);
 		}
+        helpWindow.getContentPane().removeAll();
+        helpWindow.getContentPane().add(scroller);
+        helpWindow.show();
 		if(e.getSource() instanceof String[])
 		{
 			String[] source = (String[])e.getSource();
@@ -79,9 +82,6 @@ public class Help implements Command
 				.getCurrentNode()
 				.getStaticLabel().replace(' ','_'));
 		}		
-		helpWindow.getContentPane().removeAll();
-		helpWindow.getContentPane().add(scroller);
-		helpWindow.show();
 	}
 	private void resetPage(String source)
 	{
