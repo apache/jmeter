@@ -315,7 +315,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
 			ResponseAssertion ra = new ResponseAssertion();
 			ra.setProperty(TestElement.GUI_CLASS,
 				"org.apache.jmeter.assertions.gui.AssertionGui");
-			ra.setProperty(TestElement.NAME,"Check response");
+			ra.setName("Check response");
 			ra.setTestField(ResponseAssertion.RESPONSE_DATA);
 			model.addComponent(ra,node);
 		}
@@ -328,10 +328,10 @@ public class ProxyControl extends ConfigTestElement implements Serializable
 	    throws IllegalUserActionException
 	{
 		if (addSeparators){
-			TestElement sc = new GenericController();
+			GenericController sc = new GenericController();
 			sc.setProperty(TestElement.GUI_CLASS,
 			    "org.apache.jmeter.control.gui.LogicControllerGui");
-			sc.setProperty(TestElement.NAME,"-------------------");
+			sc.setName("-------------------");
 			model.addComponent(sc,node);
 	    }
 	}
