@@ -1,3 +1,5 @@
 #!/bin/sh
-
-java -classpath $CLASSPATH:ApacheJMeter.jar org.apache.jmeter.Driver
+case $# in
+    0) java -classpath $CLASSPATH:ApacheJMeter.jar org.apache.jmeter.Driver jmeter.properties;;
+    1) java -classpath $CLASSPATH:ApacheJMeter.jar org.apache.jmeter.Driver $1;;
+esac
