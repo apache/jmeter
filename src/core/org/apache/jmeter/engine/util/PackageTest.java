@@ -15,6 +15,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
 
 /**
  * @author ano ano
@@ -44,6 +45,7 @@ public class PackageTest extends TestCase
         result = new SampleResult();
         result.setResponseData("<html>hello world</html> costs: $3.47,$5.67".getBytes());
         transformer = new ReplaceStringWithFunctions(new CompoundVariable(), variables);
+        JMeterContextService.getContext().setVariables(new JMeterVariables());
         JMeterContextService.getContext().setSamplingStarted(true);
         JMeterContextService.getContext().setPreviousResult(result);
         JMeterContextService.getContext().getVariables().put("server", "jakarta.apache.org");
