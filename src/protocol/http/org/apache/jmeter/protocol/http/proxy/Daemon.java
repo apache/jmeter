@@ -171,10 +171,9 @@ public class Daemon extends Thread
 
         try
         {
-            log.info("Creating Daemon Socket...");
+            log.info("Creating Daemon Socket... on port " + daemonPort);
             mainSocket = new ServerSocket(daemonPort);
             mainSocket.setSoTimeout(ACCEPT_TIMEOUT);
-            log.info(" port " + daemonPort + " OK");
             log.info("Proxy up and running!");
 
             while (running)

@@ -327,6 +327,7 @@ public class ProxyControlGui
     private void startProxy()
     {
         ValueReplacer replacer = GuiPackage.getInstance().getReplacer();
+        modifyTestElement(model);
         try
         {
             replacer.replaceValues(model);
