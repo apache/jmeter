@@ -7,7 +7,7 @@
 
 <body>
 
-<section name="2. Getting Started">
+<section name="2. Getting Started" anchor="get_started">
 <p>The easiest way to begin using JMeter is to first 
 <a href="http://jakarta.apache.org/builds/jakarta-jmeter/release/">download the latest production release</a> and install it. 
 The release contains all of the files you need to build and run Web, FTP, JDBC, and JNDI tests.  If you want to perform JDBC testing, 
@@ -25,55 +25,104 @@ various configuration elements (timers, listeners, assertions, and others) which
 over your Test Plans.</p>
 </section>
 
-<section name="2.1 Requirements">
-<p>As you can see from the list below, JMeter has only one requirement.</p>
+<section name="2.1 Requirements" anchor="requirements">
 </section>
 
-<section name="2.1.1 Java Version">
+<section name="2.1.1 Java Version" anchor="java_ver">
 <p>JMeter requires a fully compliant JDK1.2 (or higher) environment. Because JMeter uses only 
 standard Java APIs (java.*), please do not file bug reports if your JRE fails to run 
 JMeter because of JRE implementation issues.</p>
 </section>
 
-<section name="2.2 Optional">
+<section name="2.1.2 Operating Systems" anchor="os">
+<p>JMeter has been tested and works under Unix (Solaris, Linux, etc) and Windows (98,
+NT, 2000).  JMeter is a 100% Java application and should run correctly on any system
+that has a compliant Java implementation.</p>
+</section>
+
+<section name="2.2 Optional" anchor="optional">
 <p>If you plan on doing JMeter development or want to use Sun's Java Standard Extension packages, then you will need one or more optional packages listed below.</p>
 </section>
 
-<section name="2.2.1 Java Compiler">
+<section name="2.2.1 Java Compiler" anchor="opt_compiler">
 <p>If you want to build the JMeter source or develop JMeter plugins, then you will need a fully compliant JDK1.2 or higher compiler.</p>
 </section>
 
-<section name="2.2.2 SAX 1.0 XML Parser">
+<section name="2.2.2 SAX XML Parser" anchor="opt_sax">
 <p>JMeter comes with Apache's <a href="http://xml.apache.org/">Xerces XML parser</a>. You have the option of telling JMeter 
-to use a different XML parser.</p> 
+to use a different XML parser. To do so, include the classes for the third-party parser in JMeter's <a href="#classpath">classpath</a>,
+and update the <a href="configuring_jmeter.html">jmeter.properties</a> file with the full classname of the parser
+implementation.</p> 
 </section>
 
-<section name="2.2.3 javax.mail and javax.activation">
-<p>You will need these packages if you want JMeter to send email notifications.</p>
+<section name="2.2.3 Email Support" anchor="opt_email">
+<p>JMeter has limited Email capabilities (it can send email based on test results).
+To enable Email support, add Sun's JavaMail packages to JMeter's <a href="#classpath">classpath</a>.</p>
 </section>
 
-<section name="2.2.4 Java Secure Socket Extension (JSSE)">
-<p>You will need <a href="http://java.sun.com/products/jsse/index.html">JSSE</a> if you want JMeter to send HTTPS requests for Web application testing. Note: if you are running JDK1.4, then you do not have to download JSSE because Sun integrated it into JDK1.4 as a standard library.</p>
+<section name="2.2.4 SSL Encryption" anchor="opt_ssl">
+<p>To test a web server using SSL encryption (HTTPS), JMeter requires that an
+implementation of SSL be provided (such as Sun's <a href="http://java.sun.com/products/jsse/index.html">Java Secure Sockets Extension -- JSSE</a>).  
+Include the necessary encryption packages in JMeter's <a href="#classpath">classpath</a>.  Also, update <a href="configuring_jmeter.html">jmeter.properties</a>
+by registering the SSL Provider.</p>
+<p>Note: if you are running JDK1.4, then you do not have to download JSSE because Sun integrated it into JDK1.4 as a standard library.</p>
 </section>
 
-<section name="2.2 Installation">
+<section name="2.2.5 JDBC Driver" anchor="opt_jdbc">
+<p>You will need to add your database vendor's JDBC driver to the <a href="#classpath">classpath</a> if you want to do JDBC testing.</p>
+</section>
+
+
+<section name="2.2 Installation" anchor="install">
 <p>Blah, blah, blah.</p>
 </section>
 
-<section name="2.2.1 Downloading the Latest Release">
+<section name="2.2.1 Downloading the Latest Release" anchor="download_release">
 <p>We recommend that most users run the <a href="http://jakarta.apache.org/builds/jakarta-jmeter/release/">latest release</a>.</p>
+<p>To install from a release build, simply unzip the zip/tar file into the directory
+where you want JMeter to be installed.  Provided you have a JDK correctly installed,
+and JAVA_HOME environment variable set, there is nothing more to do.</p>
 </section>
 
-<section name="2.2.2 Downloading Nightly Builds">
-<p>If you do not mind working with beta-quality software, then you can download and run the <a href="http://jakarta.apache.org/builds/jakarta-jmeter/nightly">latest nightly build</a>.  </p>
+<section name="2.2.2 Downloading Nightly Builds" anchor="download_nightly">
+<p>If you do not mind working with beta-quality software, then you can download and run the <a href="http://jakarta.apache.org/builds/jakarta-jmeter/nightly">latest nightly build</a>.</p>
+<p>To install from a nightly build, you must build JMeter.  To do so, unzip the zip/tar file into the directory where you want JMeter
+to be installed.  Then, open a shell or command prompt and change directory to JMeter's top
+level directory.  Next, type "build install" to install JMeter.  Provided your system has
+a JDK correctly installed and the JAVA_HOME environment variable set, JMeter should
+install correctly.</p>
 </section>
 
-<section name="2.2.3 UNIX Instructions">
-<p>Blah, blah, blah.</p>
+<section name="2.3 Running JMeter" anchor="running">
+<p>To run JMeter, run the jmeter.bat (for Windows) or jmeter (for Unix) file.</p>
+
+<p>If JMeter does not start correctly, it may be because your system does not support
+the commands contained in jmeter.bat/jmeter.  In this case,
+ you will need to rewrite the jmeter.bat/jmeter file to explicitly include all
+ jar files found in JMeter's lib/ directory in JMeter's classpath.</p>
 </section>
 
-<section name="2.2.4 MS-Windows Instructions">
-<p>Blah, blah, blah.</p>
+<section name="2.3.1 JMeter's Classpath" anchor="classpath">
+<p>The jmeter.bat/jmeter file automatically adds all jar files found in JMeter's lib/
+directory.  Because of this, if you need to add your own or third party jar files to
+JMeter's classpath, it is only required that you copy them into JMeter's lib/
+directory. </p>
+</section>
+
+<section name="2.3.2 Using a Proxy Server" anchor="proxy_server">
+<p>If you are testing a system behind a firewall, you may need to tell JMeter to
+use a proxy server.  To do so, use the jmeter.bat/jmeter file from a command line to start
+JMeter, and include two options:<br/>
+-h [proxy server hostname or ip address]<br/>
+-p [proxy server port]<br/>
+<b>eg.</b>: jmeter -h my.proxy.server -p 8000
+</p>
+</section>
+
+<section name="2.3.3 Non-GUI Mode" anchor="non_gui">
+<p>To run JMeter without the GUI, invoke the nongui.bat/nongui.sh files from the
+command line, with the -o option (-o [name of *.jmx file that describes entire test script]).<br/>
+<b>eg:</b> nongui -o my_test.jmx -h [proxy server] -p [proxy port]</p>
 </section>
 
 </body>
