@@ -64,8 +64,6 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
 
-import junit.framework.TestCase;
-
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.w3c.dom.Document;
@@ -290,22 +288,6 @@ class JTidyHTMLParser extends HTMLParser
         return node;
     }
     
-    public static class Test extends TestCase
-    {
-        public Test() {
-            super();
-        }
-        
-        public void testParser() throws Exception {
-        	log.info("testParser");
-            HTMLParserTest.testParser(getParserInstance());
-        }
-		public void testParserClass() throws Exception {
-			log.info("testParserClass");
-			HTMLParserTest.testParser("org.apache.jmeter.protocol.http.parser.JTidyHTMLParser");
-		}
-    }
-
     /* (non-Javadoc)
      * @see org.apache.jmeter.protocol.http.parser.HTMLParser#getParserInstance()
      */
