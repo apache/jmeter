@@ -356,11 +356,7 @@ public class HashTree implements Serializable, Map
      */
     public void set(Collection values)
     {
-        Iterator iter = this.list().iterator();
-        while (iter.hasNext())
-        {
-            this.remove(iter.next());
-        }
+        clear();
         this.add(values);
     }
     
@@ -388,11 +384,17 @@ public class HashTree implements Serializable, Map
      * 
      * @param key key to be added to HashTree
      */
-    public void add(Object key)
+    public HashTree add(Object key)
     {
         if (!data.containsKey(key))
         {
-            data.put(key, createNewTree());
+            HashTree newTree = createNewTree();
+            data.put(key, newTree);
+            return newTree;
+        }
+        else
+        {
+            return getTree(key);
         }
     }
     
@@ -928,32 +930,21 @@ public class HashTree implements Serializable, Map
      */
     public HashTree search(Object key)
     {
-        HashTree temp = null;
-        if (data.containsKey(key))
+        HashTree result = getTree(key);
+        if(result != null)
         {
-            temp = (HashTree) data.get(key);
+            return result;
         }
-        else
+        TreeSearcher searcher = new TreeSearcher(key);
+        try
         {
-			//TODO - what is supposed to be happening here?
-			//the loop will only happen once (if at all), and the if/else is redundant
-            Iterator it = list().iterator();
-            while (it.hasNext())
-            {
-                if (temp == null)
-                {
-                    temp = ((HashTree) it.next()).search(key);
-                    break;
-                }
-                else
-                {
-                    break;
-                }
-            }
+            traverse(searcher);
         }
-        return temp;
+        catch(Exception e){
+            //do nothing - means object is found
+        }
+        return searcher.getResult();
     }
-    
     /**
      * Method readObject.
      */
@@ -1001,16 +992,20 @@ public class HashTree implements Serializable, Map
      */
     private void traverseInto(HashTreeTraverser visitor)
     {
-        Iterator iter = list().iterator();
-        while (iter.hasNext())
-        {
-            Object item = iter.next();
-            visitor.addNode(item, getTree(item));
-            getTree(item).traverseInto(visitor);
-        }
+
         if (list().size() == 0)
         {
             visitor.processPath();
+        }
+        else
+        {
+            Iterator iter = list().iterator();
+	        while (iter.hasNext())
+	        {
+	            Object item = iter.next();
+	            visitor.addNode(item, getTree(item));
+	            getTree(item).traverseInto(visitor);
+	        }
         }
         visitor.subtractNode();
     }
@@ -1023,22 +1018,62 @@ public class HashTree implements Serializable, Map
     }
 
     protected Map data;
+    
+    private class TreeSearcher implements HashTreeTraverser
+    {
+        Object target;
+        HashTree result;
+        
+        public TreeSearcher(Object t)
+        {
+            target = t;
+        }
+        
+        public HashTree getResult()
+        {
+            return result;
+        }
+            /* (non-Javadoc)
+         * @see org.apache.jorphan.collections.HashTreeTraverser#addNode(java.lang.Object, org.apache.jorphan.collections.HashTree)
+         */
+        public void addNode(Object node, HashTree subTree) {
+            result = subTree.getTree(target);
+            if(result != null)
+            {
+                throw new RuntimeException("found"); //short circuit traversal when found
+            }
+        }
+        /* (non-Javadoc)
+         * @see org.apache.jorphan.collections.HashTreeTraverser#processPath()
+         */
+        public void processPath() {
+            // TODO Auto-generated method stub
+
+        }
+        /* (non-Javadoc)
+         * @see org.apache.jorphan.collections.HashTreeTraverser#subtractNode()
+         */
+        public void subtractNode() {
+            // TODO Auto-generated method stub
+
+        }
+}
 
     private class ConvertToString implements HashTreeTraverser
     {
-        StringBuffer string = new StringBuffer(getClass().getName());
+        StringBuffer string = new StringBuffer(getClass().getName() + "{");
         StringBuffer spaces = new StringBuffer();
         int depth = 0;
         public void addNode(Object key, HashTree subTree)
         {
             depth++;
-            string.append("\n" + getSpaces() + "{" + key);
+            string.append("\n" + getSpaces() + key + " {");
         }
 
         public void subtractNode()
         {
-            depth--;
             string.append("\n" + getSpaces() + "}");
+            depth--;
         }
 
         public void processPath()
@@ -1047,6 +1082,7 @@ public class HashTree implements Serializable, Map
 
         public String toString()
         {
+            string.append("\n}");
             return string.toString();
         }
 
