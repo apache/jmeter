@@ -77,6 +77,18 @@ import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.plugin.JMeterPlugin;
+import org.apache.jmeter.plugin.PluginManager;
+import org.apache.jmeter.control.gui.TestPlanGui;
+import org.apache.jmeter.control.gui.AbstractControllerGui;
+import org.apache.jmeter.control.gui.WorkBenchGui;
+import org.apache.jmeter.threads.gui.ThreadGroupGui;
+import org.apache.jmeter.timers.gui.AbstractTimerGui;
+import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.apache.jmeter.config.gui.AbstractModifierGui;
+import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.config.gui.AbstractResponseBasedModifierGui;
+import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 import org.apache.jorphan.collections.HashTree;
@@ -88,7 +100,7 @@ import org.apache.jorphan.gui.ComponentUtil;
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class JMeter {
+public class JMeter implements JMeterPlugin {
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter");
 
@@ -178,8 +190,9 @@ public class JMeter {
 	/**
 	 * Starts up JMeter in GUI mode
 	 */
-	public void startGui(CLOption testFile) throws IllegalUserActionException {
+	public void startGui(CLOption testFile) throws IllegalUserActionException, IllegalAccessException, ClassNotFoundException, InstantiationException {
 
+        PluginManager.install(this);
 		JMeterTreeModel treeModel = new JMeterTreeModel();
 		JMeterTreeListener treeLis = new JMeterTreeListener(treeModel);
 		treeLis.setActionHandler(ActionRouter.getInstance());
@@ -244,7 +257,11 @@ public class JMeter {
 			System.out.println(e.getMessage());
 			System.out.println("Incorrect Usage");
 			System.out.println(CLUtil.describeOptions(options).toString());
-		}
+		} catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("An error occurred: " + e.getMessage());
+            System.exit(-1);
+        }
 	}
 
 	/**
@@ -310,8 +327,10 @@ public class JMeter {
 	}
 
 	public void startNonGui(CLOption testFile, CLOption logFile)
-		throws IllegalUserActionException {
+		throws IllegalUserActionException, IllegalAccessException, ClassNotFoundException, InstantiationException {
 		JMeter driver = new JMeter();
+        PluginManager.install(this);
+
 		if (testFile == null) {
 			throw new IllegalUserActionException();
 		}
@@ -397,4 +416,27 @@ public class JMeter {
 	private static void println(String str) {
 		System.out.println(str);
 	}
+
+
+    public String[][] getIconMappings()
+    {
+        return new String[][] {
+            { TestPlanGui.class.getName(), "org/apache/jmeter/images/beaker.gif"},
+            { AbstractTimerGui.class.getName(), "org/apache/jmeter/images/timer.gif"},
+            { ThreadGroupGui.class.getName(), "org/apache/jmeter/images/thread.gif"},
+            { AbstractVisualizer.class.getName(), "org/apache/jmeter/images/meter.png"},
+            { AbstractConfigGui.class.getName(), "org/apache/jmeter/images/testtubes.png"},
+            { AbstractModifierGui.class.getName(), "org/apache/jmeter/images/testtubes.gif"},
+            { AbstractResponseBasedModifierGui.class.getName(), "org/apache/jmeter/images/testtubes.gif"},
+            { AbstractControllerGui.class.getName(), "org/apache/jmeter/images/knob.gif"},
+            { WorkBenchGui.class.getName(), "org/apache/jmeter/images/clipboard.gif"},
+            { AbstractSamplerGui.class.getName(), "org/apache/jmeter/images/pipet.png"}
+        };
+    }
+
+
+    public String[][] getResourceBundles()
+    {
+        return new String[0][];
+    }
 }

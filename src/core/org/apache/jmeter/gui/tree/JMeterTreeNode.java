@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,6 +59,8 @@ import javax.swing.tree.TreeNode;
 import javax.swing.JPopupMenu;
 import java.util.Collection;
 import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.GUIFactory;
+
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import org.apache.jmeter.testelement.TestElement;
@@ -74,30 +76,29 @@ import javax.swing.ImageIcon;
 
 public class JMeterTreeNode extends DefaultMutableTreeNode implements JMeterGUIComponent
 {
+    JMeterTreeModel treeModel;
 
-	public JMeterTreeNode()
-	{
-		this.setUserObject(new org.apache.jmeter.control.gui.WorkBenchGui());
-	}
 
-	public JMeterTreeNode(JMeterGUIComponent userObj)
+	public JMeterTreeNode(JMeterGUIComponent userObj, JMeterTreeModel treeModel)
 	{
 		super(userObj);
+		this.treeModel = treeModel;
+		userObj.setNode(this);
 	}
-	
+
 	public boolean isEnabled()
 	{
 		return ((JMeterGUIComponent)getUserObject()).isEnabled();
 	}
-	
+
 	public void setEnabled(boolean enabled)
 	{
 		((JMeterGUIComponent)getUserObject()).setEnabled(enabled);
 	}
-	
+
 	public ImageIcon getIcon()
 	{
-		return null;
+		return GUIFactory.getIcon(getUserObject().getClass());
 	}
 
 	public Collection getMenuCategories()
@@ -132,8 +133,7 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements JMeterGUIC
 	 ***********************************************************/
 	public void setName(String name)
 	{
-		Object userObj = getUserObject();
-		((JMeterGUIComponent)userObj).setName(name);
+		((JMeterGUIComponent)getUserObject()).setName(name);
 	}
 
 	/************************************************************
@@ -143,7 +143,18 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements JMeterGUIC
 	 ***********************************************************/
 	public String getName()
 	{
-		Object userObj = getUserObject();
-		return ((JMeterGUIComponent)userObj).getName();
+		return ((JMeterGUIComponent)getUserObject()).getName();
 	}
+
+
+    public void setNode(JMeterTreeNode node)
+    {
+        ((JMeterGUIComponent)getUserObject()).setNode(node);
+    }
+
+
+    public void nameChanged()
+    {
+        treeModel.nodeChanged(this);
+    }
 }

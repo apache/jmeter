@@ -1,3 +1,10 @@
 ext
-ext/*
 jorphan.jar
+activation.jar
+iaik_jce.jar
+imap.jar
+mail.jar
+mailapi.jar
+pop3.jar
+smtp.jar
+w3c_http.jar
