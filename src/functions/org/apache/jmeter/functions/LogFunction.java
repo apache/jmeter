@@ -128,7 +128,10 @@ public class LogFunction extends AbstractFunction implements Serializable
 		{
 			// N.B. if the string is not recognised, DEBUG is assumed
 			Priority p = Priority.getPriorityForName(prio);
-            log.log(p,s,t);
+			if (log.isPriorityEnabled(p)){//Thread method is potentially expensive
+				String tn = Thread.currentThread().getName();
+                log.log(p,tn+" "+s,t);
+			}
 		}
     	
     }
