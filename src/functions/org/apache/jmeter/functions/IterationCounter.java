@@ -81,7 +81,7 @@ public class IterationCounter extends AbstractFunction implements Serializable
 
         if (variables.length < 2)
         {
-            throw new InvalidVariableException();
+            throw new InvalidVariableException("Fewer than 2 parameters");
         }
     }
 
