@@ -962,7 +962,7 @@ any other thread</note></description>
 <p>Please read the <a href="functions.html">general description</a> of how functions work.  Here is given only the details of
 specific functions.</p>
 
-<component index="13.9.1" name="Regex Function">
+<component index="13.9.1" name="__regexFunction">
 <description><p>The Regex Function is used to parse the previous response using any regular 
 expression (provided by user).  The function returns the template string with variable values filled
 in.</p></description>
@@ -994,7 +994,7 @@ in.</p></description>
 </properties>
 </component>
 
-<component index="13.9.2" name="Counter Function">
+<component index="13.9.2" name="__counter">
 <description><p>The counter generates a new number each time it is called, starting with 1
 and incrementing by +1 each time.  The counter can be configured to keep each simulated user's values
 separate, or to use the same counter for all user.  If each user's values is incremented separately,
@@ -1007,7 +1007,7 @@ counting how many times that request was run.</p></description>
 </properties>
 </component>
 
-<component index="13.9.3" name="Thread Number Function">
+<component index="13.9.3" name="__threadNum">
 <description><p>The thread number function simply returns the number of the thread currently 
 being executed.  These numbers are independent of ThreadGroup, meaning thread #1 in one threadgroup
 is indistinguishable from thread #1 in another threadgroup, from the point of view of this function.</p>
