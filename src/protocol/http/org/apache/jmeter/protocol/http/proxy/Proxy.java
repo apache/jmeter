@@ -135,7 +135,7 @@ public class Proxy extends Thread
         HTTPSampler sampler = new HTTPSampler();
         try
         {
-            byte[] clientRequest =
+            byte[] clientRequest = //TODO: var not used, but call may be needed for side effects?
                 request.parse(
                     new BufferedInputStream(clientSocket.getInputStream()));
             headers = request.getHeaderManager();

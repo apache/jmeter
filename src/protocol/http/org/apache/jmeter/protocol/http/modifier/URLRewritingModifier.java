@@ -15,8 +15,6 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -30,7 +28,6 @@ public class URLRewritingModifier
     extends AbstractTestElement
     implements Serializable, PreProcessor
 {
-    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     private Pattern case1, case2, case3, case4;
     transient Perl5Compiler compiler = new Perl5Compiler();
@@ -244,7 +241,7 @@ public class URLRewritingModifier
             context.setCurrentSampler(sampler);
             context.setPreviousResult(response);
             mod.process();
-            Arguments args = sampler.getArguments();
+            Arguments args = sampler.getArguments();//NOTUSED - should it be?
             assertEquals(
                 "index.html;%24sid%24KQNq3AAADQZoEQAxlkX8uQV5bjqVBPbT",
                 sampler.getPath());

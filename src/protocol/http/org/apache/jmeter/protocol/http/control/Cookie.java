@@ -60,8 +60,6 @@ import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * This class is a Cookie encapsulator.
@@ -70,8 +68,6 @@ import org.apache.log.Logger;
  */
 public class Cookie extends AbstractTestElement implements Serializable
 {
-    transient private static Logger log = LoggingManager.getLoggerForClass();
-    private static String NAME = "Cookie.name";
     private static String VALUE = "Cookie.value";
     private static String DOMAIN = "Cookie.domain";
     private static String EXPIRES = "Cookie.expires";

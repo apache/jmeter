@@ -302,7 +302,7 @@ public class WSDLHelper
             NodeList slist = nd.getElementsByTagName("soap:binding");
             if (slist.getLength() > 0)
             {
-                Element soapbind = (Element) slist.item(0);
+                //NOTUSED Element soapbind = (Element) slist.item(0);
                 this.BINDNAME = nd.getAttribute("name");
                 list.add(nd);
             }

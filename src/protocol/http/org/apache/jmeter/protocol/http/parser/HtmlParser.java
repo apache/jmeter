@@ -91,11 +91,13 @@ public final class HtmlParser implements Serializable
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
     protected static String utfEncodingName;
+    /* NOTUSED 
     private int compilerOptions =
         Perl5Compiler.CASE_INSENSITIVE_MASK
             | Perl5Compiler.MULTILINE_MASK
             | Perl5Compiler.READ_ONLY_MASK;
-
+	*/
+	
     private static PatternCacheLRU patternCache =
         new PatternCacheLRU(1000, new Perl5Compiler());
 
@@ -129,7 +131,7 @@ public final class HtmlParser implements Serializable
         String query = null;
         try
         {
-            query = URLDecoder.decode(newLink.getQueryString());
+            query = URLDecoder.decode(newLink.getQueryString());// TODO use decode(String,"UTF-8") instead?
         }
         catch (Exception e)
         {

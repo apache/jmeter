@@ -71,7 +71,7 @@ import org.xml.sax.XMLReader;
  */
 public class UserParameterXMLParser
 {
-    private String vendorParseClass = "org.apache.xerces.parsers.SAXParser";
+    private String vendorParseClass = "org.apache.xerces.parsers.SAXParser";//NOTUSED
 
     /**
      * Parse all user parameter data defined in XML file.

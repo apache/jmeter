@@ -62,7 +62,6 @@ public class HttpRequestHdr
         boolean inHeaders = true;
         int readLength = 0;
         int dataLength = 0;
-        String CR = "\r\n";
         boolean first = true;
         ByteArrayOutputStream clientRequest = new ByteArrayOutputStream();
         ByteArrayOutputStream line = new ByteArrayOutputStream();
