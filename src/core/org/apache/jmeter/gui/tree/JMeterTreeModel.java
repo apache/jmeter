@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ import org.apache.jorphan.collections.ListedHashTree;
 
 /**
  *
- * @author    Michael Stover
+ * author    Michael Stover
  * @version   $Revision$
  */
 public class JMeterTreeModel extends DefaultTreeModel
@@ -179,10 +179,10 @@ public class JMeterTreeModel extends DefaultTreeModel
         {
             nodeList.add(node);
         }
-        Enumeration enum = node.children();
-        while (enum.hasMoreElements())
+        Enumeration enumNode = node.children();
+        while (enumNode.hasMoreElements())
         {
-            JMeterTreeNode child = (JMeterTreeNode) enum.nextElement();
+            JMeterTreeNode child = (JMeterTreeNode) enumNode.nextElement();
             traverseAndFind(type, child, nodeList);
         }
     }
@@ -195,10 +195,10 @@ public class JMeterTreeModel extends DefaultTreeModel
         {
             return node;
         }
-        Enumeration enum = node.children();
-        while (enum.hasMoreElements())
+        Enumeration enumNode = node.children();
+        while (enumNode.hasMoreElements())
         {
-            JMeterTreeNode child = (JMeterTreeNode) enum.nextElement();
+            JMeterTreeNode child = (JMeterTreeNode) enumNode.nextElement();
             JMeterTreeNode result= traverseAndFind(userObject, child);
             if (result != null) return result;
         }
@@ -208,10 +208,10 @@ public class JMeterTreeModel extends DefaultTreeModel
     public HashTree getCurrentSubTree(JMeterTreeNode node)
     {
         ListedHashTree hashTree = new ListedHashTree(node);
-        Enumeration enum = node.children();
-        while (enum.hasMoreElements())
+        Enumeration enumNode = node.children();
+        while (enumNode.hasMoreElements())
         {
-            JMeterTreeNode child = (JMeterTreeNode) enum.nextElement();
+            JMeterTreeNode child = (JMeterTreeNode) enumNode.nextElement();
             hashTree.add(node, getCurrentSubTree(child));
         }
         return hashTree;
