@@ -151,6 +151,24 @@ public class WebServiceSamplerGui
         new JCheckBox(JMeterUtils.getResString("read_soap_response"));
         
     /**
+     * checkbox for use proxy
+     */
+	JCheckBox useProxy =
+		new JCheckBox(JMeterUtils.getResString("webservice_use_proxy"));
+
+	/**
+	 * text field for the proxy host
+	 */
+	JLabeledTextField proxyHost =
+		new JLabeledTextField(
+			JMeterUtils.getResString("webservice_proxy_host"));
+	/**
+	 * text field for the proxy port
+	 */
+	JLabeledTextField proxyPort =
+		new JLabeledTextField(
+			JMeterUtils.getResString("webservice_proxy_port"));
+    /**
      * Text note about read response and it's usage.
      */
     JLabel readMessage =
@@ -201,6 +219,9 @@ public class WebServiceSamplerGui
             sampler.setXmlPathLoc(randomXmlFile.getText());
             sampler.setMemoryCache(memCache.isSelected());
             sampler.setReadResponse(readResponse.isSelected());
+            sampler.setUseProxy(useProxy.isSelected());
+            sampler.setProxyHost(proxyHost.getText());
+            sampler.setProxyPort(proxyPort.getText());
         }
         catch (MalformedURLException e)
         {
@@ -237,6 +258,9 @@ public class WebServiceSamplerGui
             sampler.setXmlPathLoc(randomXmlFile.getText());
             sampler.setMemoryCache(memCache.isSelected());
             sampler.setReadResponse(readResponse.isSelected());
+			sampler.setUseProxy(useProxy.isSelected());
+			sampler.setProxyHost(proxyHost.getText());
+			sampler.setProxyPort(proxyPort.getText());
         }
         catch (MalformedURLException e)
         {
@@ -311,6 +335,12 @@ public class WebServiceSamplerGui
         mainPanel.add(readMessage2);
         mainPanel.add(readMessage3);
 
+		// add the proxy elements
+		mainPanel.add(useProxy);
+		useProxy.addActionListener(this);
+		mainPanel.add(proxyHost);
+		mainPanel.add(proxyPort);
+
         this.add(mainPanel);
     }
 
@@ -348,6 +378,17 @@ public class WebServiceSamplerGui
         randomXmlFile.setText(sampler.getXmlPathLoc());
         memCache.setSelected(sampler.getMemoryCache());
         readResponse.setSelected(sampler.getReadResponse());
+        useProxy.setSelected(sampler.getUseProxy());
+        if (sampler.getProxyHost().length() == 0){
+        	proxyHost.setEnabled(false);
+        } else {
+	       	proxyHost.setText(sampler.getProxyHost());
+        }
+        if (sampler.getProxyPort() == 0){
+        	proxyPort.setEnabled(false);
+        } else {
+	       	proxyPort.setText(String.valueOf(sampler.getProxyPort()));
+        }
     }
 
     /**
@@ -421,6 +462,19 @@ public class WebServiceSamplerGui
         if (event.getSource() == selectButton)
         {
             this.configureFromWSDL();
+        }
+        else if (event.getSource() == useProxy)
+        {
+        	// if use proxy is checked, we enable
+        	// the text fields for the host and port
+        	boolean use = useProxy.isSelected();
+        	if (use){
+				proxyHost.setEnabled(true);
+				proxyPort.setEnabled(true);
+			} else {
+				proxyHost.setEnabled(false);
+				proxyPort.setEnabled(false);
+        	}
         }
         else
         {
