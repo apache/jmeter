@@ -75,6 +75,11 @@ public class BeanShell extends AbstractFunction implements Serializable
         throws InvalidVariableException
     {
 
+    	if (setObj == null) // did we find BeanShell?
+    	{
+    		throw new InvalidVariableException("BeanShell not found");
+    	}
+    	
         JMeterVariables vars = getVariables();
 
         String script  = ((CompoundVariable) values[0]).execute();
