@@ -165,9 +165,12 @@ public class ModuleControllerGui extends AbstractControllerGui /*implements Unsh
 	 */
 	public void modifyTestElement(TestElement element) {
 		configureTestElement(element);
-		selected = ((TreeNodeWrapper)nodesModel.getSelectedItem()).getTreeNode();
-		if ( selected != null ) {
-			((ModuleController)element).setSelectedNode( selected );
+		TreeNodeWrapper tnw = (TreeNodeWrapper)nodesModel.getSelectedItem();
+		if ( tnw != null ) {
+			selected = tnw.getTreeNode();
+			if ( selected != null ) {
+				((ModuleController)element).setSelectedNode( selected );
+			}
 		}
 	}
 
