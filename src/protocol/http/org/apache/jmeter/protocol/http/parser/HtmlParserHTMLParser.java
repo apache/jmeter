@@ -144,6 +144,18 @@ class HtmlParserHTMLParser extends HTMLParser
                     // body tag. Peter Lin 10-9-03
                     e= body.elements();
                 }
+                else if (node instanceof BaseHrefTag)
+                {
+                    BaseHrefTag baseHref= (BaseHrefTag)node;
+                    try
+                    {
+                        baseUrl= new URL(baseUrl, baseHref.getBaseUrl()+"/");
+                    }
+                    catch (MalformedURLException e1)
+                    {
+                        throw new HTMLParseException(e1);
+                    }
+                }
                 else if (node instanceof ImageTag)
                 {
                     ImageTag image= (ImageTag)node;
@@ -192,6 +204,7 @@ class HtmlParserHTMLParser extends HTMLParser
         }
         catch (ParserException e)
         {
+            throw new HTMLParseException(e);
         }
 
         return urls.iterator();
@@ -210,11 +223,16 @@ class HtmlParserHTMLParser extends HTMLParser
         log.debug("Start : addTagListeners");
         // add body tag scanner
         parser.addScanner(new BodyScanner());
-        // add ImageTag scanner
+        // add BaseHRefTag scanner
+        parser.addScanner(new BaseHrefScanner());
+        // add ImageTag and BaseHrefTag scanners
         LinkScanner linkScanner= new LinkScanner(LinkTag.LINK_TAG_FILTER);
         // parser.addScanner(linkScanner);
         parser.addScanner(
             linkScanner.createImageScanner(ImageTag.IMAGE_TAG_FILTER));
+        parser.addScanner(
+            linkScanner.createBaseHREFScanner("-b"));
+                            // Taken from org.htmlparser.Parser
         // add input tag scanner
         parser.addScanner(new InputTagScanner());
         // add applet tag scanner
