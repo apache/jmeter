@@ -69,7 +69,9 @@ public class MapProperty extends MultiProperty
     public MapProperty(String name, Map value)
     {
         super(name);
+        log.info("map = " + value);
         this.value = normalizeMap(value);
+        log.info("normalized map = "+this.value);
     }
 
     public MapProperty()

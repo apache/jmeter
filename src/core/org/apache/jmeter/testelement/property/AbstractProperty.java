@@ -433,7 +433,7 @@ public abstract class AbstractProperty implements JMeterProperty
                     log.error("Bad collection", e);
                 }
             }
-            newColl.put(item, convertObject(item));
+            newColl.put(item, convertObject(prop));
         }
         if (newColl != null)
         {
