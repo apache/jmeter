@@ -2,6 +2,7 @@ package org.apache.jmeter.testelement;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ import org.apache.log.Logger;
 
 public abstract class AbstractTestElement implements TestElement,Serializable
 {
-    private Map testInfo = new HashMap();
+    private Map testInfo = Collections.synchronizedMap(new HashMap());
     transient private static Logger log =
             Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
 
