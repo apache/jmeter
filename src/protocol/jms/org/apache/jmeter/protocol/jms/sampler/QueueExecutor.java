@@ -21,13 +21,21 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 
 /**
- * @author MBlankestijn
+ * Executor for (pseudo) synchronous communication.
+ * <br>
+ * Created on:  October 28, 2004
  *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * @author Martijn Blankestijn
+ * @version $Id$ 
  */
 public interface QueueExecutor {
-    public abstract Message sendAndReceive(Message request)
+    /**
+     * Sends and receives a message.
+	 * @param request the message to send
+	 * @return the received message or <code>null</code>
+	 * @throws JMSException in case of an exception from the messaging system
+	 */
+	public abstract Message sendAndReceive(Message request)
         throws JMSException;
 
 }
