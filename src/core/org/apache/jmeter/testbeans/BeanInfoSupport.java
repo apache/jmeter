@@ -83,7 +83,7 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo
             GenericTestBeanCustomizer.RESOURCE_BUNDLE;
 
 	/** The class for which we're providing the bean info. */
-	private Class beanClass;
+	//NOTREAD private Class beanClass;
 
 	/** The BeanInfo for our class as obtained by the introspector. */
 	private BeanInfo rootBeanInfo;
@@ -95,7 +95,7 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo
 	 * Construct a BeanInfo for the given class.
 	 */
 	protected BeanInfoSupport(Class beanClass) {
-		this.beanClass= beanClass;
+		//NOTREAD this.beanClass= beanClass;
 
 		try {
 			rootBeanInfo= Introspector.getBeanInfo(

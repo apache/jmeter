@@ -58,14 +58,13 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
     
-    //TODO - should these variables be made private?
-    LinkedList stack = new LinkedList();
-    Map samplerConfigMap = new HashMap();
+    private LinkedList stack = new LinkedList();
+    private Map samplerConfigMap = new HashMap();
     //Set objectsWithFunctions = new HashSet();
-    HashTree testTree;
-    SampleResult previousResult;//TODO is this needed?
-    Sampler currentSampler;//TODO is this needed?
-    JMeterVariables threadVars;//TODO is this needed?
+    private HashTree testTree;
+    //NOTREAD SampleResult previousResult;
+    //NOTREAD Sampler currentSampler;
+    //NOTREAD JMeterVariables threadVars;
     
     /*
      * This set keeps track of which ObjectPairs have been seen
@@ -78,7 +77,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
 
     public TestCompiler(HashTree testTree, JMeterVariables vars)
     {
-        threadVars = vars;
+        //NOTREAD threadVars = vars;
         this.testTree = testTree;
     }
     
@@ -96,7 +95,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
 
     public void sampleOccurred(SampleEvent e)
     {
-        previousResult = e.getResult();
+        //NOTREAD previousResult = e.getResult();
     }
 
     public void sampleStarted(SampleEvent e)
@@ -109,7 +108,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
 
     public SamplePackage configureSampler(Sampler sampler)
     {
-        currentSampler = sampler;
+        //NOTREAD currentSampler = sampler;
         SamplePackage pack = (SamplePackage) samplerConfigMap.get(sampler);
         pack.setSampler(sampler);
         runPreProcessors(pack.getPreProcessors());
@@ -315,7 +314,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         }
     }
 
-    private class ObjectPair
+    private class ObjectPair //TODO - should this be static?
     {
         TestElement child, parent;
 
