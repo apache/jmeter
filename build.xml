@@ -163,14 +163,13 @@
     <antcall target="findbugs-style"/>
   </target>
   
-  <!-- Convert findbugs XML output to HTML -->
+  <!-- Convert findbugs XML output to CSV -->
    <target name="findbugs-style">
-   <xslt style="fb-csv.xsl" 
-   force="true"
-   in="${findbugs.outName}.xml" 
-   out="${findbugs.outName}.csv">
-   <param name="messagefile" expression="${findbugs.home}/plugin/messages.xml"/>
-   </xslt>
+     <xslt style="fb-csv.xsl" 
+       force="true"
+       in="${findbugs.outName}.xml" 
+       out="${findbugs.outName}.csv">
+     </xslt>
    </target>
 
   <!-- Where the Sources live -->
