@@ -24,8 +24,8 @@ import junit.framework.TestCase;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.processor.PreProcessor;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -183,7 +183,7 @@ public class URLRewritingModifier
         return getPropertyAsBoolean(PATH_EXTENSION_NO_EQUALS);
     }
     
-    // TODO: add test cases for new jakarta commons http client
+   // TODO: add test cases for new jakarta commons http client
     public static class Test extends TestCase
     {
         private SampleResult response = null;
@@ -209,7 +209,7 @@ public class URLRewritingModifier
             response = new SampleResult();
             response.setResponseData(html.getBytes());
             mod.setArgumentName("session_id");
-            HTTPSampler sampler = createSampler();
+            HTTPSamplerBase sampler = createSampler();
             sampler.addArgument("session_id", "adfasdfdsafasdfasd");
             context.setCurrentSampler(sampler);
             context.setPreviousResult(response);
@@ -232,7 +232,7 @@ public class URLRewritingModifier
             response = new SampleResult();
             response.setResponseData(html.getBytes());
             mod.setArgumentName("session_id");
-            HTTPSampler sampler = createSampler();
+            HTTPSamplerBase sampler = createSampler();
             context.setCurrentSampler(sampler);
             context.setPreviousResult(response);
             mod.process();
@@ -242,12 +242,12 @@ public class URLRewritingModifier
                 ((Argument) args.getArguments().get(0).getObjectValue())
                     .getValue());
         }
-        private HTTPSampler createSampler()
+        private HTTPSamplerBase createSampler()
         {
-            HTTPSampler sampler = new HTTPSampler();
+            HTTPSamplerBase sampler = new HTTPNullSampler();
             sampler.setDomain("server.com");
             sampler.setPath("index.html");
-            sampler.setMethod(HTTPSampler.GET);
+            sampler.setMethod(HTTPSamplerBase.GET);
             sampler.setProtocol("http");
             return sampler;
         }
@@ -258,7 +258,7 @@ public class URLRewritingModifier
             response = new SampleResult();
             response.setResponseData(html.getBytes());
             mod.setArgumentName("session_id");
-            HTTPSampler sampler = createSampler();
+            HTTPSamplerBase sampler = createSampler();
             context.setCurrentSampler(sampler);
             context.setPreviousResult(response);
             mod.process();
@@ -275,7 +275,7 @@ public class URLRewritingModifier
             response = new SampleResult();
             response.setResponseData(html.getBytes());
             mod.setArgumentName("session_id");
-            HTTPSampler sampler = createSampler();
+            HTTPSamplerBase sampler = createSampler();
             context.setCurrentSampler(sampler);
             context.setPreviousResult(response);
             mod.process();
@@ -295,7 +295,7 @@ public class URLRewritingModifier
             mod.setArgumentName("%24sid%24");
             mod.setPathExtension(true);
             mod.setPathExtensionNoEquals(true);
-            HTTPSampler sampler = createSampler();
+            HTTPSamplerBase sampler = createSampler();
             context.setCurrentSampler(sampler);
             context.setPreviousResult(response);
             mod.process();
@@ -322,7 +322,7 @@ public class URLRewritingModifier
                 mod.setThreadContext(context);
                 mod.setArgumentName("sid");
                 mod.setPathExtension(false);
-                HTTPSampler sampler = createSampler();
+                HTTPSamplerBase sampler = createSampler();
                 context.setCurrentSampler(sampler);
                 context.setPreviousResult(response);
                 mod.process();
