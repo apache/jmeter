@@ -303,7 +303,7 @@ public class JNDISampler implements Sampler
           homeMethodRes.setTime(homeMethodTime);
           homeMethodRes.putValue(SampleResult.DISPLAY_NAME, "Home Method Execution - "
                 + method.getName());
-          homeMethodRes.putValue(SampleResult.SUCCESS, new Boolean(true));
+          homeMethodRes.putValue(SampleResult.SUCCESS, Boolean.TRUE);
         }
         else
         {
