@@ -249,8 +249,10 @@ public class ResultCollector
         	 {
         	 	trimmed = trimLastLine(filename);	
         	 }
-        	 File ofile = new File(filename);
-        	 ofile.mkdirs();
+        	 // Find the name of the directory containing the file
+        	 // and create it - if there is one
+        	 File pdir = new File(filename).getParentFile();
+        	 if (pdir != null) pdir.mkdirs();
             writer =
                 new PrintWriter(
                     new OutputStreamWriter(
