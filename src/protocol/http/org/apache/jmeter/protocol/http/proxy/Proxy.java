@@ -56,165 +56,119 @@ package org.apache.jmeter.protocol.http.proxy;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
-import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-//
-// Class:     Proxy
-// Abstract:  Thread to handle one client request. get the requested
-//            object from the web server or from the cache, and delivers
-//            the bits to client.
-//
+
 /**
- *  Description of the Class
+ * Thread to handle one client request.  Gets the request from the client and
+ * passes it on to the server, then sends the response back to the client.
+ * Information about the request and response is stored so it can be used in a
+ * JMeter test plan.
  *
- *@author     mike
- *@created    June 8, 2001
+ * @author     mike
+ * @version    $Revision$
+ * @created    June 8, 2001
  */
 public class Proxy extends Thread
 {
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-            "jmeter.protocol.http");
-    //
-    // Member variables
-    //
-    Socket ClientSocket = null;
-    // Socket to client
-    Socket SrvrSocket = null;
-    // Socket to web server
-    Cache cache = null;
-    // Static cache manager object
-    String localHostName = null;
-    // Local machine name
-    String localHostIP = null;
-    // Local machine IP address
-    String adminPath = null;
-    // Path of admin applet
-    Config config = null;
-    // UrlConfig object for saving test cases
-    ProxyControl target;
-    CookieManager cookieManager;
+    /** Logging. */
+    private static transient Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+
+    /** Socket to client. */
+    private Socket clientSocket = null;
+
+    /** Target to receive the generated sampler. */
+    private ProxyControl target;
+
 
     /**
-     * Constructor.  Configures Proxy at same time.
-     * @param clientSocket
-     * @param CacheManager
-     * @param configObject
-     * @param target
-     * @param cookieManager
+     * Default constructor.
      */
-    Proxy(Socket clientSocket,Cache CacheManager,Config configObject,
-        ProxyControl target,CookieManager cookieManager) 
-    {
-        configure(clientSocket,CacheManager,configObject,target,cookieManager);
-    }
-
     public Proxy()
     {
     }
 
-    public void configure(
-        Socket clientSocket,
-        Cache CacheManager,
-        Config configObject,
-        ProxyControl target,
-        CookieManager cookieManager)
+    /**
+     * Create and configure a new Proxy object.
+     *
+     * @param clientSocket the socket connection to the client
+     * @param target       the ProxyControl which will receive the generated
+     *                     sampler
+     */
+    Proxy(Socket clientSocket, ProxyControl target)
     {
-        this.cookieManager = cookieManager;
-        this.target = target;
-        config = configObject;
-        ClientSocket = clientSocket;
-        cache = CacheManager;
-        localHostName = config.getLocalHost();
-        localHostIP = config.getLocalIP();
-        adminPath = config.getAdminPath();
+        configure(clientSocket, target);
     }
 
-    //
-    // run - Main work is done here:
-    //
     /**
-     *  Main processing method for the Proxy object
+     * Configure the Proxy.
+     *
+     * @param clientSocket the socket connection to the client
+     * @param target       the ProxyControl which will receive the generated
+     *                     sampler
+     */
+    void configure(
+        Socket clientSocket,
+        ProxyControl target)
+    {
+        this.target = target;
+        this.clientSocket = clientSocket;
+    }
+
+    /**
+     * Main processing method for the Proxy object
      */
     public void run()
     {
-        String serverName = "";
-        HttpURLConnection url;
-        byte line[];
         HttpRequestHdr request = new HttpRequestHdr();
         HttpReplyHdr reply = new HttpReplyHdr();
-        FileInputStream fileInputStream = null;
-        FileOutputStream fileOutputStream = null;
-        boolean TakenFromCache = false;
-        boolean isCachable = false;
+
         try
         {
-            byte[] clientRequest = request.parse(new BufferedInputStream(
-                ClientSocket.getInputStream()));
-            HTTPSampler sampler = request.getSampler();
+            byte[] clientRequest =
+                request.parse(
+                    new BufferedInputStream(clientSocket.getInputStream()));
             HeaderManager headers = request.getHeaderManager();
+
+            HTTPSampler sampler = request.getSampler();
             sampler.setHeaderManager(headers);
+
             byte[] serverResponse = sampler.sample().getResponseData();
-            writeToClient(serverResponse,
-                new BufferedOutputStream(ClientSocket.getOutputStream()));
+            writeToClient(
+                serverResponse,
+                new BufferedOutputStream(clientSocket.getOutputStream()));
             headers.removeHeaderNamed("cookie");
-            target.deliverSampler(sampler,new TestElement[]{headers},serverResponse);
+
+            target.deliverSampler(
+                sampler,
+                new TestElement[] { headers },
+                serverResponse);
         }
         catch (UnknownHostException uhe)
         {
-            log.warn("Server Not Found.",uhe);
-            try
-            {
-                DataOutputStream out = new DataOutputStream(ClientSocket.getOutputStream());
-                out.writeBytes(reply.formServerNotFound());
-                out.flush();
-            }
-            catch (Exception uhe2)
-            {
-            }
+            log.warn("Server Not Found.", uhe);
+            writeErrorToClient(reply.formServerNotFound());
         }
         catch (Exception e)
         {
             log.error("",e);
-            try
-            {
-                if (TakenFromCache)
-                {
-                    fileInputStream.close();
-                }
-                else if (isCachable)
-                {
-                    fileOutputStream.close();
-                }
-                DataOutputStream out = new DataOutputStream(ClientSocket.getOutputStream());
-                out.writeBytes(reply.formTimeout());
-                out.flush();
-            }
-            catch (Exception uhe2)
-            {
-            }
+            writeErrorToClient(reply.formTimeout());
         }
         finally
         {
             try
             {
-                ClientSocket.close();
+                clientSocket.close();
             }
             catch (Exception e)
             {
@@ -222,78 +176,14 @@ public class Proxy extends Thread
             }
         }
     }
-    
-    public byte[] sampleServer(HTTPSampler sampler)
-        throws IllegalAccessException, InstantiationException
-    {
-        SampleResult result = sampler.sample();
-        return result.getResponseData();
-    }
-    //
-    // Private methods
-    //
-    //
-    // Send to administrator web page containing reference to applet
-    //
-    private void sendAppletWebPage()
-    {
-        log.info("Sending the applet...");
-        String page = "";
-        try
-        {
-            File appletHtmlPage =
-                new File(config.getAdminPath() + File.separator + "Admin.html");
-            BufferedReader in =
-                new BufferedReader(new InputStreamReader(new FileInputStream(appletHtmlPage)));
-            String s = null;
-            while ((s = in.readLine()) != null)
-            {
-                page += s;
-            }
-            page =
-                page.substring(0, page.indexOf("PORT"))
-                    + config.getAdminPort()
-                    + page.substring(page.indexOf("PORT") + 4);
-            in.close();
-            DataOutputStream out = new DataOutputStream(ClientSocket.getOutputStream());
-            out.writeBytes(page);
-            out.flush();
-            out.close();
-        }
-        catch (Exception e)
-        {
-            log.error("can't open applet html page",e);
-        }
-    }
-    
-    //
-    // Send the applet to administrator
-    //
-    private void sendAppletClass(String className)
-    {
-        try
-        {
-            byte data[] = new byte[2000];
-            int count;
-            HttpReplyHdr reply = new HttpReplyHdr();
-            File appletFile = new File(adminPath + File.separatorChar + className);
-            long length = appletFile.length();
-            FileInputStream in = new FileInputStream(appletFile);
-            DataOutputStream out = new DataOutputStream(ClientSocket.getOutputStream());
-            out.writeBytes(reply.formOk("application/octet-stream", length));
-            while (-1 < (count = in.read(data)))
-            {
-                out.write(data, 0, count);
-            }
-            out.flush();
-            in.close();
-            out.close();
-        } 
-        catch (Exception e)
-        {
-        }
-    }
-    
+
+    /**
+     * Write output to the output stream, then flush and close the stream.
+     *
+     * @param inBytes       the bytes to write
+     * @param out           the output stream to write to
+     * @throws IOException  if an IOException occurs while writing
+     */
     private void writeToClient(
         byte[] inBytes,
         OutputStream out)
@@ -308,6 +198,7 @@ public class Proxy extends Thread
         catch (IOException e)
         {
             log.error("",e);
+            throw e;
         }
         finally
         {
@@ -317,7 +208,29 @@ public class Proxy extends Thread
             }
             catch (Exception ex)
             {
+                log.warn("Error while closing socket", ex);
             }
+        }
+    }
+
+    /**
+     * Write an error message to the client.  The message should be the full
+     * HTTP response.
+     *
+     * @param message the message to write
+     */
+    private void writeErrorToClient(String message)
+    {
+        try
+        {
+            OutputStream sockOut = clientSocket.getOutputStream();
+            DataOutputStream out = new DataOutputStream(sockOut);
+            out.writeBytes(message);
+            out.flush();
+        }
+        catch (Exception e)
+        {
+            log.warn("Exception while writing error", e);
         }
     }
 }
