@@ -120,7 +120,7 @@ import org.xml.sax.SAXException;
  * @version	$Id$
  * @created	$Date$
  */
-public class HTTPSamplerFull extends HTTPSampler
+public class HTTPSamplerFull
 {
     /** Used to store the Logger (used for debug and error messages). */
     transient private static Logger log =
@@ -163,22 +163,27 @@ public class HTTPSamplerFull extends HTTPSampler
      * @param entry	an entry to be sampled
      * @return	results of the sampling
      */
-    public SampleResult sample(Entry e)
+    public SampleResult sample(HTTPSampler sampler)
     {
         // Sample the container page.
         log.debug("Start : HTTPSamplerFull sample");
-        SampleResult res = super.sample(e);
+        SampleResult res = sampler.sample(new Entry());
         if(log.isDebugEnabled())
         {
             log.debug("Main page loading time - " + res.getTime());
         }
 
         // Now parse the HTML page
+        return parseForImages(res,sampler);
+    }
+
+    protected SampleResult parseForImages(SampleResult res,HTTPSampler sampler)
+    {
         String displayName = res.getSampleLabel();
         Document html = null;
         try
         {
-            baseUrl = getUrl();
+            baseUrl = sampler.getUrl();
             if(log.isDebugEnabled())
             {
                 log.debug("baseUrl - " + baseUrl.toString());
@@ -189,8 +194,8 @@ public class HTTPSamplerFull extends HTTPSampler
         {
             log.error("Error parsing document - " + se);
             res.setResponseData(se.toString().getBytes());
-            res.setResponseCode(NON_HTTP_RESPONSE_CODE);
-            res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
+            res.setResponseCode(HTTPSampler.NON_HTTP_RESPONSE_CODE);
+            res.setResponseMessage(HTTPSampler.NON_HTTP_RESPONSE_MESSAGE);
             res.setSuccessful(false);
             return res;
         }
@@ -199,31 +204,31 @@ public class HTTPSamplerFull extends HTTPSampler
             log.error("Error creating URL '" + displayName + "'");
             log.error("MalformedURLException - " + mfue);
             res.setResponseData(mfue.toString().getBytes());
-            res.setResponseCode(NON_HTTP_RESPONSE_CODE);
-            res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
+            res.setResponseCode(HTTPSampler.NON_HTTP_RESPONSE_CODE);
+            res.setResponseMessage(HTTPSampler.NON_HTTP_RESPONSE_MESSAGE);
             res.setSuccessful(false);
             return res;
         }
-
+        
         // Now parse the DOM tree
-
+        
         // This is used to ignore duplicated binary files.
         Set uniqueURLs = new HashSet();
-
+        
         // look for images
-        parseNodes(html, "img", false, "src", uniqueURLs, res);
+        parseNodes(html, "img", false, "src", uniqueURLs, res,sampler);
         // look for applets
-
+        
         // This will only work with an Applet .class file.
         // Ideally, this should be upgraded to work with Objects (IE)
         //	and archives (.jar and .zip) files as well.
-
-        parseNodes(html, "applet", false, "code", uniqueURLs, res);
+        
+        parseNodes(html, "applet", false, "code", uniqueURLs, res,sampler);
         // look for input tags with image types
-        parseNodes(html, "input", true, "src", uniqueURLs, res);
+        parseNodes(html, "input", true, "src", uniqueURLs, res,sampler);
         // look for background images
-        parseNodes(html, "body", false, "background", uniqueURLs, res);
-
+        parseNodes(html, "body", false, "background", uniqueURLs, res,sampler);
+        
         // Okay, we're all done now
         if(log.isDebugEnabled())
         {
@@ -245,7 +250,7 @@ public class HTTPSamplerFull extends HTTPSampler
      * @param res		<code>SampleResult</code> to store sampling results
      */
     protected void parseNodes(Document html, String htmlTag, boolean type,
-            String srcTag, Set uniques, SampleResult res)
+            String srcTag, Set uniques, SampleResult res,HTTPSampler sampler)
     {
         log.debug("Start : HTTPSamplerFull parseNodes");
         NodeList nodeList = html.getElementsByTagName(htmlTag);
@@ -312,8 +317,8 @@ public class HTTPSamplerFull extends HTTPSampler
                           " , " + binUrlStr + "'");
                 log.error("MalformedURLException - " + mfue);
                 binRes.setResponseData(mfue.toString().getBytes());
-                binRes.setResponseCode(NON_HTTP_RESPONSE_CODE);
-                binRes.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
+                binRes.setResponseCode(HTTPSampler.NON_HTTP_RESPONSE_CODE);
+                binRes.setResponseMessage(HTTPSampler.NON_HTTP_RESPONSE_MESSAGE);
                 binRes.setSuccessful(false);
                 res.addSubResult(binRes);
                 break;
@@ -331,14 +336,14 @@ public class HTTPSamplerFull extends HTTPSampler
                 //   a binary file that it already has in its cache.
                 try
                 {
-                    loadBinary(binUrl, binRes);
+                    loadBinary(binUrl, binRes,sampler);
                 }
                 catch(IOException ioe)
                 {
                     log.error("Error reading from URL - " + ioe);
                     binRes.setResponseData(ioe.toString().getBytes());
-                    binRes.setResponseCode(NON_HTTP_RESPONSE_CODE);
-                    binRes.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
+                    binRes.setResponseCode(HTTPSampler.NON_HTTP_RESPONSE_CODE);
+                    binRes.setResponseMessage(HTTPSampler.NON_HTTP_RESPONSE_MESSAGE);
                     binRes.setSuccessful(false);
                 }
                 log.debug("Adding result");
@@ -365,15 +370,16 @@ public class HTTPSamplerFull extends HTTPSampler
      *
      * @throws IOException indicates a problem reading from the URL
      */
-    protected byte[] loadBinary(URL url, SampleResult res) throws IOException
+    protected byte[] loadBinary(URL url, SampleResult res,HTTPSampler sampler) throws IOException
     {
         log.debug("Start : loadBinary");
         byte[] ret = new byte[0];
         res.setSamplerData(new HTTPSampler(url).toString());
+        HttpURLConnection conn;
         try
         {
-            conn = setupConnection(url, GET);
-            connect();
+            conn = sampler.setupConnection(url, HTTPSampler.GET);
+            sampler.connect();
         }
         catch(IOException ioe)
         {
@@ -396,7 +402,7 @@ public class HTTPSamplerFull extends HTTPSampler
             int errorLevel = getErrorLevel(conn, res);
             if (errorLevel == 2)
             {
-                ret = readResponse(conn);
+                ret = sampler.readResponse(conn);
                 res.setSuccessful(true);
                 long endTime = System.currentTimeMillis();
                 if(log.isDebugEnabled())
@@ -482,8 +488,8 @@ public class HTTPSamplerFull extends HTTPSampler
             log.error("getErrorLevel : " +
                     "Error getting response code for HttpUrlConnection - ",e2);
             res.setResponseData(e2.toString().getBytes());
-            res.setResponseCode(NON_HTTP_RESPONSE_CODE);
-            res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
+            res.setResponseCode(HTTPSampler.NON_HTTP_RESPONSE_CODE);
+            res.setResponseMessage(HTTPSampler.NON_HTTP_RESPONSE_MESSAGE);
             res.setSuccessful(false);
         }
         log.debug("End   : getErrorLevel");
@@ -576,7 +582,7 @@ public class HTTPSamplerFull extends HTTPSampler
 
     public static class Test extends TestCase
     {
-        private HTTPSamplerFull hsf;
+        private HTTPSampler hsf;
 
         transient private static Logger log =
                 Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.test");
@@ -589,10 +595,11 @@ public class HTTPSamplerFull extends HTTPSampler
         protected void setUp()
         {
             log.debug("Start : setUp1");
-            hsf = new HTTPSamplerFull();
+            hsf = new HTTPSampler();
             hsf.setMethod(HTTPSampler.GET);
             hsf.setProtocol("file");
             hsf.setPath("HTTPSamplerFullTestFile.txt");
+            hsf.setImageParser(true);
             log.debug("End   : setUp1");
         }
 

@@ -74,6 +74,7 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.PerSampleClonable;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
@@ -99,7 +100,8 @@ import org.apache.oro.text.regex.Util;
  *@created   $Date$
  *@version   $Revision$
  ***************************************/
-public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
+public class HTTPSampler extends AbstractSampler implements PerSampleClonable
+{
     public final static String HEADERS = "headers";
     public final static String HEADER = "header";
     public final static String ARGUMENTS = "HTTPsampler.Arguments";
@@ -126,13 +128,15 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
     public final static String NORMAL_FORM = "normal_form";
     public final static String MULTIPART_FORM = "multipart_form";
     public final static String ENCODED_PATH = "HTTPSampler.encoded_path";
-    
+    public final static String IMAGE_PARSER = "HTTPSampler.image_parser";
+
     /** A number to indicate that the port has not been set.  **/
     public static final int UNSPECIFIED_PORT = 0;
     private static final int MAX_REDIRECTS = 10;
     protected static String encoding = "iso-8859-1";
     private static final PostWriter postWriter = new PostWriter();
     transient protected HttpURLConnection conn;
+    private HTTPSamplerFull imageSampler;
 
     private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
 
@@ -224,7 +228,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
     {
         return getPropertyAsString(ENCODED_PATH);
     }
-    
+
     public void setProperty(JMeterProperty prop)
     {
         super.setProperty(prop);
@@ -233,13 +237,13 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
             setEncodedPath(prop.getStringValue());
         }
     }
-    
+
     public void addProperty(JMeterProperty prop)
     {
         super.addProperty(prop);
-        if(PATH.equals(prop.getName()))
+        if (PATH.equals(prop.getName()))
         {
-            super.addProperty(new StringProperty(ENCODED_PATH,encodePath(prop.getStringValue())));
+            super.addProperty(new StringProperty(ENCODED_PATH, encodePath(prop.getStringValue())));
         }
     }
 
@@ -265,7 +269,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
     }
     public void setUseKeepAlive(boolean value)
     {
-        setProperty(new BooleanProperty(USE_KEEPALIVE,value));
+        setProperty(new BooleanProperty(USE_KEEPALIVE, value));
     }
     public boolean getUseKeepAlive()
     {
@@ -287,6 +291,27 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
         Arguments args = this.getArguments();
         args.addArgument(new HTTPArgument(name, value));
     }
+    
+    public void addTestElement(TestElement el)
+    {
+        if(el instanceof CookieManager)
+        {
+            setCookieManager((CookieManager)el);
+        }
+        else if(el instanceof HeaderManager)
+        {
+            setHeaderManager((HeaderManager)el);
+        }
+        else if(el instanceof AuthManager)
+        {
+            setAuthManager((AuthManager)el);
+        }
+        else
+        {
+            super.addTestElement(el);
+        }
+    }
+    
     public void addArgument(String name, String value, String metadata)
     {
         Arguments args = this.getArguments();
@@ -294,7 +319,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
     }
     public void setPort(int value)
     {
-        setProperty(new IntegerProperty(PORT,value));
+        setProperty(new IntegerProperty(PORT, value));
     }
     public int getPort()
     {
@@ -347,7 +372,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
     }
     public CookieManager getCookieManager()
     {
-        return (CookieManager) getProperty(COOKIE_MANAGER).getObjectValue();
+        return (CookieManager)getProperty(COOKIE_MANAGER).getObjectValue();
     }
     public void setMimetype(String value)
     {
@@ -356,6 +381,16 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
     public String getMimetype()
     {
         return getPropertyAsString(MIMETYPE);
+    }
+
+    public boolean isImageParser()
+    {
+        return getPropertyAsBoolean(IMAGE_PARSER);
+    }
+
+    public void setImageParser(boolean parseImages)
+    {
+        setProperty(new BooleanProperty(IMAGE_PARSER, parseImages));
     }
 
     /****************************************
@@ -682,7 +717,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
                 headerBuf.append(": ");
                 headerBuf.append(conn.getHeaderField(i));
                 headerBuf.append("\n");
-            }            
+            }
         }
         headerBuf.append("\n");
         return headerBuf.toString().getBytes("8859_1");
@@ -946,6 +981,14 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
             }
             res.setTime(time);
             log.debug("End : sample2");
+            if (isImageParser())
+            {
+                if (imageSampler == null)
+                {
+                    imageSampler = new HTTPSamplerFull();
+                }
+                res = imageSampler.parseForImages(res, this);
+            }
             return res;
         }
         catch (IOException ex)
@@ -1023,13 +1066,14 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
             return "";
         }
     }
+
     public static class Test extends junit.framework.TestCase
     {
         public Test(String name)
         {
             super(name);
         }
-        
+
         public void testArgumentWithoutEquals() throws Exception
         {
             HTTPSampler sampler = new HTTPSampler();
@@ -1037,9 +1081,9 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
             sampler.setMethod(HTTPSampler.GET);
             sampler.setPath("/index.html?pear");
             sampler.setDomain("www.apache.org");
-            assertEquals("http://www.apache.org:80/index.html?pear",sampler.getUrl().toString());
+            assertEquals("http://www.apache.org:80/index.html?pear", sampler.getUrl().toString());
         }
-        
+
         public void testMakingUrl() throws Exception
         {
             HTTPSampler config = new HTTPSampler();
