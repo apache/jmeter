@@ -358,17 +358,17 @@ public class SplineVisualizer
                 return;
             }
 
-            boolean resized = true;
+            boolean resized = true; //TODO: remove? not read
 
             if (width == lastWidth && height == lastHeight)
             {
                 // dimension of the SplineGraph is the same
-                resized = false;
+                resized = false; //TODO: remove? not used
             }
             else
             {
                 // dimension changed
-                resized = true;
+                resized = true; //TODO: remove? not used
                 lastWidth = width;
                 lastHeight = height;
             }

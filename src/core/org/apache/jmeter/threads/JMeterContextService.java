@@ -67,6 +67,8 @@ public final class JMeterContextService implements Serializable
     static private JMeterContextService _instance = null;
     static private Map contextMap = new HashMap();
 
+//TODO: consider using ThreadLocal instead?
+
     /**
      * Private constructor to prevent instantiation.
      */

@@ -458,7 +458,7 @@ public class HTTPSampler extends AbstractSampler
      * Holds a list of URLs sampled - so we're not flooding stdout with debug
      * information
      */
-    private ArrayList m_sampledURLs = new ArrayList();
+    //private ArrayList m_sampledURLs = new ArrayList();
     
     /**
      * Constructor for the HTTPSampler object.

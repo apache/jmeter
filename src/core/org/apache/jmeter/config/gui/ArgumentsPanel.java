@@ -79,8 +79,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * A GUI panel allowing the user to enter name-value argument pairs.  These
@@ -94,8 +92,6 @@ public class ArgumentsPanel
     extends AbstractConfigGui
     implements  ActionListener
 {
-    /** Logging. */
-    private static transient Logger log =LoggingManager.getLoggerForClass();
         
     /** The title label for this component. */    
     private JLabel tableLabel;

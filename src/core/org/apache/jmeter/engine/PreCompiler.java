@@ -1,7 +1,5 @@
 package org.apache.jmeter.engine;
 
-import java.util.Map;
-
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.TestElement;
@@ -20,7 +18,6 @@ import org.apache.log.Logger;
 public class PreCompiler implements HashTreeTraverser
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
-    private Map userDefinedVariables;
     private boolean testValid = true;
     private ValueReplacer replacer;
 

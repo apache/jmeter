@@ -68,12 +68,10 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.log.Logger;
-import org.apache.oro.text.regex.Perl5Compiler;
 
 
 /**
@@ -98,8 +96,6 @@ public class CompoundVariable implements Function
     private boolean hasFunction, isDynamic;
     private String staticSubstitution;
     //private Perl5Util util = new Perl5Util();
-    private Perl5Compiler compiler = new Perl5Compiler();
-    private static final String unescapePattern = "[\\\\]([${}\\\\,])";
     private String permanentResults = "";
     
     LinkedList compiledComponents = new LinkedList();
@@ -299,10 +295,12 @@ public class CompoundVariable implements Function
     {
         return "";
     }
-       
-    private JMeterVariables getVariables() //TODO: not used
+    /*
+     * NOT USED
+     *
+    private JMeterVariables getVariables()
     {
         return JMeterContextService.getContext().getVariables();
     }
-
+	*/
 }

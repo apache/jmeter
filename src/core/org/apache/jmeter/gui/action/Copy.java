@@ -39,8 +39,8 @@ public class Copy extends AbstractAction
 
     public void doAction(ActionEvent e)
     {
-        String action = e.getActionCommand();
-        JMeterTreeNode draggedNode =
+        //NOTUSED String action = e.getActionCommand();
+        JMeterTreeNode draggedNode = //NOTUSED - can it be deleted?
             GuiPackage.getInstance().getTreeListener().getDraggedNode();
         JMeterTreeListener treeListener =
             GuiPackage.getInstance().getTreeListener();

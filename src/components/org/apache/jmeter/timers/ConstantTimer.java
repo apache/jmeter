@@ -56,17 +56,11 @@
 package org.apache.jmeter.timers;
 
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.VariablesCollection;
-import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * This class implements a constant timer with its own panel and fields for
@@ -80,12 +74,8 @@ public class ConstantTimer
     extends AbstractTestElement
     implements Timer, Serializable, LoopIterationListener
 {
-    private static Logger log = LoggingManager.getLoggerForClass();
 
     public final static String DELAY = "ConstantTimer.delay";
-    private VariablesCollection vars = new VariablesCollection();
-    private JMeterVariables variables;
-    private static List addableList = new LinkedList();
     private long delay = 0;
 
     /**

@@ -1,8 +1,5 @@
 package org.apache.jmeter.engine.util;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -13,8 +10,6 @@ import org.apache.jmeter.threads.JMeterVariables;
 public class SimpleVariable
 {
 
-    private static final String KEY = "__unknownFunction";
-    private Map varMap = new HashMap();
     private String name;
 
     public SimpleVariable(String name)

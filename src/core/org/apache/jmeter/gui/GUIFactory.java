@@ -173,7 +173,6 @@ public final class GUIFactory
     {
         // TODO: This method doesn't appear to be used.
         JMeterGUIComponent gui = (JMeterGUIComponent) guiClass.newInstance();
-        JComponent component = (JComponent) gui;
         GUI_MAP.put(key, gui);
     }
 }

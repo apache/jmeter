@@ -26,7 +26,6 @@ public class UserParameters
     public static final String NAMES = "UserParameters.names";
     public static final String THREAD_VALUES = "UserParameters.thread_values";
     public static final String PER_ITERATION = "UserParameters.per_iteration";
-    private int counter = 0;
     private Integer lock = new Integer(0);
 
     public CollectionProperty getNames()

@@ -73,7 +73,6 @@ import org.apache.jmeter.control.gui.TestPlanGui;
 import org.apache.jmeter.control.gui.WorkBenchGui;
 import org.apache.jmeter.engine.ClientJMeterEngine;
 import org.apache.jmeter.engine.JMeterEngine;
-import org.apache.jmeter.engine.RemoteJMeterEngine;
 import org.apache.jmeter.engine.RemoteJMeterEngineImpl;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -238,7 +237,8 @@ public class JMeter implements JMeterPlugin
         JMeterTreeModel treeModel = new JMeterTreeModel();
         JMeterTreeListener treeLis = new JMeterTreeListener(treeModel);
         treeLis.setActionHandler(ActionRouter.getInstance());
-        GuiPackage guiPack = GuiPackage.getInstance(treeLis, treeModel);
+        //NOTUSED: GuiPackage guiPack = 
+        GuiPackage.getInstance(treeLis, treeModel);
         org.apache.jmeter.gui.MainFrame main =
             new org.apache.jmeter.gui.MainFrame(
                 ActionRouter.getInstance(),
@@ -456,7 +456,7 @@ public class JMeter implements JMeterPlugin
     {
         try
         {
-            RemoteJMeterEngine engine = new RemoteJMeterEngineImpl();
+            new RemoteJMeterEngineImpl();
             while (true)
             {
                 Thread.sleep(Long.MAX_VALUE);
