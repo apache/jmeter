@@ -346,7 +346,6 @@ public abstract class AbstractTestElement implements TestElement,Serializable
             }
             else if(value instanceof Collection)
             {
-                Iterator iter2 = ((Collection)value).iterator();
                 Collection localCollection = (Collection)getProperty(key);
                 if(localCollection == null)
                 {
@@ -354,13 +353,21 @@ public abstract class AbstractTestElement implements TestElement,Serializable
                 }
                 else
                 {
+                    // Remove any repeated elements:
+                    Iterator iter2 = ((Collection)value).iterator();
                     while(iter2.hasNext())
                     {
                         Object item = iter2.next();
                         if(!localCollection.contains(item))
                         {
-                            localCollection.add(item);
+                            localCollection.remove(item);
                         }
+                    }
+                    // Add all elements now:
+                    iter2 = ((Collection)value).iterator();
+                    while(iter2.hasNext())
+                    {
+                        localCollection.add(iter2.next());
                     }
                 }
             }
