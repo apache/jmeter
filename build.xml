@@ -251,7 +251,7 @@
   <property name="xerces.jar" value="${lib.dir}/xercesImpl.jar"/>
   <property name="xml-apis.jar" value="${lib.dir}/xml-apis.jar"/>
   
-  <property name="jdom.jar" value="${lib.dir}/jdom-b8.jar"/>
+  <property name="jdom.jar" value="${lib.dir}/jdom-b9.jar"/>
   <property name="js.jar" value="${lib.dir}/js.jar"/>
   <property name="soap.jar" value="${lib.dir}/soap.jar"/>
   <property name="tidy.jar" value="${lib.dir}/Tidy.jar"/>
