@@ -218,6 +218,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
     {
         try
         {
+            JMeterContextService.incrNumberOfThreads();
             threadContext = JMeterContextService.getContext();
             threadContext.setVariables(threadVars);
             threadContext.setThreadNum(getThreadNum());
@@ -330,7 +331,6 @@ public class JMeterThread implements Runnable, java.io.Serializable
 	private void threadStarted() {
 		Traverser startup = new Traverser(true);
         testTree.traverse(startup);
-        JMeterContextService.incrNumberOfThreads();
 	}
 
     /**
