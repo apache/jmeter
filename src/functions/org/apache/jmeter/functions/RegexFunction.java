@@ -67,7 +67,7 @@ public class RegexFunction extends AbstractFunction implements Serializable
         valueIndex = between = name = "";
         try
         {
-            templatePattern = compiler.compile("\\$(\\d+)\\$");
+            templatePattern = compiler.compile("\\$(\\d+)\\$", Perl5Compiler.READ_ONLY_MASK);
         }
         catch (MalformedPatternException e)
         {
