@@ -73,9 +73,10 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class IntSum extends AbstractFunction implements Serializable
 {
-	private static final List desc = new LinkedList();
-    private int sum = 0;
 
+	private static final List desc = new LinkedList();
+	private static final String KEY = "__intSum";
+	
 	static
 	{
 		desc.add(JMeterUtils.getResString("intsum_param_1"));
@@ -83,16 +84,13 @@ public class IntSum extends AbstractFunction implements Serializable
 		desc.add(JMeterUtils.getResString("function_name_param"));
 	}
 	
-	private static final String KEY = "__intSum";
-	private String varName;
+	private Object[] values;
+
 
     /**
      * No-arg constructor.
      */
-	public IntSum()
-	{
-		sum = 0;
-	}
+	public IntSum() {}
 
     /**
      * Clone this Add object.
@@ -113,10 +111,22 @@ public class IntSum extends AbstractFunction implements Serializable
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 			throws InvalidVariableException
 	{
+
 		JMeterVariables vars = getVariables();
+		
+		int sum = 0;
+		String varName = ((CompoundFunction)values[values.length - 1]).execute();
+
+		for (int i = 0; i < values.length - 1; i++)
+		{
+			sum += Integer.parseInt(((CompoundFunction)values[i]).execute());
+		}
+
 		String totalString = Integer.toString(sum);
 		vars.put(varName, totalString);
+
 		return totalString;
+
 	}
 
 	/**
@@ -127,14 +137,13 @@ public class IntSum extends AbstractFunction implements Serializable
 	public void setParameters(String parameters)
 			throws InvalidVariableException
 	{
-		Collection params = this.parseArguments(parameters);
-		String[] values = (String[])params.toArray(new String[0]);
-		varName = values[values.length - 1];
-		sum = 0;
-		for (int i = 0; i < values.length - 1; i++)
-		{
-			sum += Integer.parseInt(values[i]);
+		Collection params = this.parseArguments2(parameters);
+		values = params.toArray();
+		
+		if ( values.length < 3 ) {
+			throw new InvalidVariableException();
 		}
+
 	}
 
 	/**
