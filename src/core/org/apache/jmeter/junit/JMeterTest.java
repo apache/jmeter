@@ -347,9 +347,8 @@ public class JMeterTest extends JMeterTestCase
 			boolean ct =funcTitles.containsKey(title); 
 			if (ct) funcTitles.put(title,Boolean.TRUE);// For detecting extra entries
 			if (// Is this a work in progress ?
-				(title.indexOf("(ALPHA") == -1)
-				&&
-				(title.indexOf("(BETA")  == -1)
+				title.indexOf("(ALPHA") == -1
+                && title.indexOf("(EXPERIMENTAL") == -1
 			)
 			{// No, not a work in progress ...
 				assertTrue("function.xml needs '"+title+"' entry for "+funcItem.getClass().getName(),ct);
