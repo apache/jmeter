@@ -17,7 +17,7 @@ construct the Test Plan, you will use the following elements:
 <a href="test_plan.html#thread_group">Thread Group</a>,
 <complink name="HTTP Request"/>,
 <complink name="HTTP Request Defaults"/>, and
-<complink name="File Reporter"/>.</p>
+<complink name="Graph Results"/>.</p>
 
 <p>For a more advanced Test Plan, see
 <a href="build-adv-web-test-plan.html">Building an Advanced Web Test Plan</a>.</p>
