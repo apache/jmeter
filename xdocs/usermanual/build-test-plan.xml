@@ -37,7 +37,7 @@ you can save test tree fragments, individual elements, or the entire test plan.<
 controls allow you to configure the behavior of that particular test element.  What can be
 configured for an element depends on what type of element it is.</p>
 
-<p>The Test Tree itself can be manipulated by dragging and dropping components around the test tree.</p>
+<note>The Test Tree itself can be manipulated by dragging and dropping components around the test tree.</note>
 </subsection>
 
 <subsection name="3.4 Running a Test Plan" anchor="run">

@@ -6,6 +6,7 @@
 
 <body>
 <section name="User's Manual">
+<note>JMeter's documentation is being updated.  Some parts are out-of-date.  Sorry for any inconvenience.</note>
 
 <ul>
   <li><a href="intro.html">1. Introduction</a></li>
@@ -86,6 +87,7 @@
 	 <li><a href="best-practices.html#limit_threads">11.1 [ALL] Limit the Number of Threads</a></li>
 	 <li><a href="best-practices.html#put_cookie_manager">11.2 [HTTP] Where to Put the Cookie Manager</a></li>
 	 <li><a href="best-practices.html#put_auth_manager">11.3 [HTTP] Where to Put the Authorization Manager</a></li>
+	 <li><a href="best-practices.html#proxy_server">11.4 Using the Proxy Server to record test scripts</a></li>
   </ul>
   <li><a href="boss.html">12. Help! My boss wants me to load test our web app!</a></li>
 
