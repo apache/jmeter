@@ -54,104 +54,60 @@
  */
 package org.apache.jmeter.testelement.property;
 
-import org.apache.jmeter.testelement.TestElement;
+import junit.framework.TestCase;
+
+import org.apache.jmeter.config.LoginConfig;
 
 /**
- * For JMeterProperties that hold multiple properties within, provides a simple
- * interface for retrieving a property iterator for the sub values.
- * 
- * @version $Revision$
+ *Class for testing the property package.
  */
-public abstract class MultiProperty extends AbstractProperty
+public class PackageTest extends TestCase
 {
-    public MultiProperty()
-    {
-        super();
-    }
 
-    public MultiProperty(String name)
+    public PackageTest(String name)
     {
         super(name);
     }
     
-    /**
-     * Get the property iterator to iterate through the sub-values of this
-     * JMeterProperty.
-     * 
-     * @return an iterator for the sub-values of this property
-     */
-    public abstract PropertyIterator iterator();
+    public void testStringProperty() throws Exception
+    {
+        StringProperty prop = new StringProperty("name","value");
+        prop.setRunningVersion(true);
+        prop.setObjectValue("new Value");
+        assertEquals("new Value",prop.getStringValue());
+        prop.recoverRunningVersion(null);
+        assertEquals("value",prop.getStringValue());
+        prop.setObjectValue("new Value");
+        prop.setObjectValue("2nd Value");
+        assertEquals("2nd Value",prop.getStringValue());
+        prop.recoverRunningVersion(null);
+        assertEquals("value",prop.getStringValue());        
+    }
     
-    /**
-     * Add a property to the collection.
-     */
-    public abstract void addProperty(JMeterProperty prop);
-    
-    /**
-     * Clear away all values in the property.
-     */
-    public abstract void clear();
-
-    public void setTemporary(boolean temporary, TestElement owner)
-    {
-        super.setTemporary(temporary, owner);
-        PropertyIterator iter = iterator();
-        while (iter.hasNext())
+    public void testElementProperty() throws Exception
         {
-            iter.next().setTemporary(temporary, owner);
+            LoginConfig config = new LoginConfig();
+            config.setUsername("username");
+            config.setPassword("password");
+            TestElementProperty prop = new TestElementProperty("name",config);
+            prop.setRunningVersion(true);
+            config = new LoginConfig();
+            config.setUsername("user2");
+            config.setPassword("pass2");
+            prop.setObjectValue(config);
+            assertEquals("user2=pass2",prop.getStringValue());
+            prop.recoverRunningVersion(null);
+            assertEquals("username=password",prop.getStringValue());
+            config = new LoginConfig();
+            config.setUsername("user2");
+            config.setPassword("pass2");
+            prop.setObjectValue(config);
+            config = new LoginConfig();
+            config.setUsername("user3");
+            config.setPassword("pass3");
+            prop.setObjectValue(config);
+            assertEquals("user3=pass3",prop.getStringValue());
+            prop.recoverRunningVersion(null);
+            assertEquals("username=password",prop.getStringValue());        
         }
-    }
-
-    public void setRunningVersion(boolean running)
-    {
-        super.setRunningVersion(running);
-        PropertyIterator iter = iterator();
-        while (iter.hasNext())
-        {
-            iter.next().setRunningVersion(running);
-        }
-    }
-
-    protected void recoverRunningVersionOfSubElements(TestElement owner)
-    {
-        PropertyIterator iter = iterator();
-        while (iter.hasNext())
-        {
-            JMeterProperty prop = iter.next();
-            if (prop.isTemporary(owner) || prop.isTemporary(null))
-            {
-                iter.remove();
-            }
-            else
-            {
-                prop.recoverRunningVersion(owner);
-            }
-        }
-    }
-
-    public void mergeIn(JMeterProperty prop)
-    {
-        if (prop.getObjectValue() == getObjectValue())
-        {
-            return;
-        }
-
-        if (prop instanceof MultiProperty)
-        {
-            PropertyIterator iter = ((MultiProperty) prop).iterator();
-            while (iter.hasNext())
-            {
-                JMeterProperty item = iter.next();
-                if(isRunningVersion())
-                {
-                    item.setTemporary(true,null);
-                }
-                addProperty(item);
-            }
-        }
-        else
-        {
-            addProperty(prop);
-        }
-    }
 }
