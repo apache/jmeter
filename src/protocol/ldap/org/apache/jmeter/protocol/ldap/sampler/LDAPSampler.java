@@ -55,7 +55,6 @@
 package org.apache.jmeter.protocol.ldap.sampler;
 
 import javax.naming.NamingException;
-import javax.naming.NoPermissionException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
@@ -108,6 +107,8 @@ public class LDAPSampler extends AbstractSampler
     //For In build test case using this counter 
     //create the new entry in the server
     public static int counter=0;
+
+	private boolean searchFoundEntries;//TODO turn into parameter?
 
     public LDAPSampler()
     {
@@ -427,7 +428,7 @@ public class LDAPSampler extends AbstractSampler
      * @return    executed time for the give test case
      */
     public long addTest(LdapClient ldap)
-        throws NoPermissionException, NamingException
+        throws NamingException
     {
         long start = 0L;
         long end = 0L;
@@ -457,7 +458,7 @@ public class LDAPSampler extends AbstractSampler
      * @return    executed time for the give test case
      */
     public long deleteTest(LdapClient ldap)
-        throws NoPermissionException, NamingException
+        throws NamingException
     {
         long start = 0L;
         long end = 0L;
@@ -479,7 +480,7 @@ public class LDAPSampler extends AbstractSampler
      * @return    executed time for the give test case
      */
     public long searchTest(LdapClient ldap)
-        throws NoPermissionException, NamingException
+        throws NamingException
     {
         long start = 0L;
         long end = 0L;
@@ -493,7 +494,7 @@ public class LDAPSampler extends AbstractSampler
                 new StringProperty(SEARCHFILTER, getPropertyAsString(ADD)));
         }
         start = System.currentTimeMillis();
-        ldap.searchTest(
+        searchFoundEntries = ldap.searchTest(
             getPropertyAsString(SEARCHBASE),
             getPropertyAsString(SEARCHFILTER));
         end = System.currentTimeMillis();
@@ -511,7 +512,7 @@ public class LDAPSampler extends AbstractSampler
      * @return    executed time for the give test case
      */
     public long modifyTest(LdapClient ldap)
-        throws NoPermissionException, NamingException
+        throws NamingException
     {
         long start = 0L;
         long end = 0L;
@@ -539,7 +540,8 @@ public class LDAPSampler extends AbstractSampler
     {
         SampleResult res = new SampleResult();
         boolean isSuccessful = false;
-        res.setSampleLabel(getLabel()+": "+getPropertyAsString(TEST));
+        res.setSampleLabel(getLabel());
+		res.setSamplerData(getPropertyAsString(TEST));//TODO improve this
         long time=0L;
         LdapClient ldap = new LdapClient();
 
@@ -569,14 +571,27 @@ public class LDAPSampler extends AbstractSampler
                 time = searchTest(ldap);
             }
 
-            res.setResponseData("success full".getBytes());
+            //TODO - needs more work ...
+			if (getPropertyAsString(TEST).equals("search")
+			&& !searchFoundEntries )
+			{
+				res.setResponseCode("201");//TODO is this a sensible number?
+				res.setResponseMessage("OK - no results");
+				res.setResponseData("successful - no results".getBytes());
+			} else {
+				res.setResponseCode("200");
+				res.setResponseMessage("OK");
+				res.setResponseData("successful".getBytes());
+			}
+			res.setDataType(SampleResult.TEXT);
             isSuccessful = true;
             ldap.disconnect();
         }
         catch (Exception ex)
         {
-            res.setResponseData(ex.toString().getBytes());
-            log.error("Ldap client - ",ex);
+			log.error("Ldap client - ",ex);
+			res.setResponseCode("500");//TODO distinguish errors better
+            res.setResponseMessage(ex.toString());
             ldap.disconnect();
             isSuccessful = false;
             time = 0L;
