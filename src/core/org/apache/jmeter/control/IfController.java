@@ -19,14 +19,17 @@
 package org.apache.jmeter.control;
 
 import java.io.Serializable;
+
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.FunctionProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
-import org.apache.jmeter.junit.JMeterTestCase;
 
 /**
  * 
@@ -83,7 +86,10 @@ public class IfController extends GenericController implements Serializable
 	   * Condition Accessor - this is gonna be like     ${count}<10
 	   */
 	  public String getCondition() {
-			return getPropertyAsString(CONDITION);
+	  		JMeterProperty prop = getProperty(CONDITION);
+	  		if (prop instanceof FunctionProperty)
+				((FunctionProperty)prop).setUseCache(false);
+			return prop.getStringValue();
 	  }
 
 	  /**
@@ -138,7 +144,6 @@ public class IfController extends GenericController implements Serializable
 	   * I.e. if the condition evaluates to False - then isDone() returns TRUE
 	   */
 	  public boolean isDone() {
-
 			boolean result = true;
 			try {
 				  result = !evaluateCondition();
