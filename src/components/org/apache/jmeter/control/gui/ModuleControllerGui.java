@@ -138,7 +138,7 @@ public class ModuleControllerGui
     }
 
     /* (non-Javadoc)
-     * @see JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement element)
     {

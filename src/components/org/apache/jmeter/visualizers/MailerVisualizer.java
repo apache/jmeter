@@ -323,7 +323,7 @@ public class MailerVisualizer extends AbstractVisualizer
     }
 
     /* (non-Javadoc)
-     * @see JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement c)
     {
