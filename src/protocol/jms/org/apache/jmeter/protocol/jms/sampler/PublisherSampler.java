@@ -22,7 +22,6 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 
 import org.apache.jmeter.protocol.jms.client.ClientPool;
-import org.apache.jmeter.protocol.jms.client.InitialContextFactory;
 import org.apache.jmeter.protocol.jms.client.Publisher;
 
 import org.apache.jorphan.logging.LoggingManager;
@@ -94,6 +93,7 @@ public class PublisherSampler
     public synchronized void initClient() {
         this.PUB =
             new Publisher(
+                this.getUseJNDIPropertiesAsBoolean(),
                 this.getJNDIInitialContextFactory(),
                 this.getProviderUrl(),
                 this.getConnectionFactory(),
