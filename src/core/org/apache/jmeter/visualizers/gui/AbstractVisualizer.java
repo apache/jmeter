@@ -29,109 +29,136 @@ import org.apache.log.Logger;
  *@version   1.0
  ***************************************/
 
-public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent
-	implements Visualizer, ChangeListener,UnsharedComponent {
-		
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter.gui");
+public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent implements Visualizer, ChangeListener, UnsharedComponent
+{
 
-		private FilePanel filePanel;
-		private JCheckBox errorLogging;
-	ResultCollector collector;
+    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public AbstractVisualizer() {
-		super();
-		filePanel = new FilePanel(this,
-				JMeterUtils.getResString("file_visualizer_output_file"));
-		errorLogging = new JCheckBox(JMeterUtils.getResString("log_errors_only"));
-	}
-	
-	protected JCheckBox getErrorLoggingCheckbox()
-	{
-		return errorLogging;
-	}
+    private FilePanel filePanel;
+    private JCheckBox errorLogging;
+    ResultCollector collector;
 
+    /****************************************
+     * !ToDo (Constructor description)
+     ***************************************/
+    public AbstractVisualizer()
+    {
+        super();
+        filePanel = new FilePanel(this, JMeterUtils.getResString("file_visualizer_output_file"));
+        errorLogging = new JCheckBox(JMeterUtils.getResString("log_errors_only"));
+    }
 
-	protected ResultCollector getModel() {
-		return collector;
-	}
+    protected JCheckBox getErrorLoggingCheckbox()
+    {
+        return errorLogging;
+    }
 
-	protected FilePanel getFilePanel() {
-		return filePanel;
-	}
+    protected ResultCollector getModel()
+    {
+        return collector;
+    }
 
-	public void setFile(String filename) {
-		filePanel.setFilename(filename);
-	}
+    protected FilePanel getFilePanel()
+    {
+        return filePanel;
+    }
 
-	public String getFile() {
-		return filePanel.getFilename();
-	}
+    public void setFile(String filename)
+    {
+        filePanel.setFilename(filename);
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public JPopupMenu createPopupMenu() {
-		return MenuFactory.getDefaultVisualizerMenu();
-	}
+    public String getFile()
+    {
+        return filePanel.getFilename();
+    }
 
-	public void stateChanged(ChangeEvent e) {
-		log.info("getting new collector");
-		collector = (ResultCollector) createTestElement();
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public JPopupMenu createPopupMenu()
+    {
+        return MenuFactory.getDefaultVisualizerMenu();
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public Collection getMenuCategories() {
-		return Arrays.asList(new String[] { MenuFactory.LISTENERS });
-	}
+    public void stateChanged(ChangeEvent e)
+    {
+        log.info("getting new collector");
+        collector = (ResultCollector) createTestElement();
+    }
 
-	public TestElement createTestElement() {
-		if (collector == null) {
-			collector = new ResultCollector();
-		}
-		configureTestElement(collector);
-		collector.setErrorLogging(errorLogging.isSelected());
-		try {
-			if (!getFile().equals("")) {
-				try {
-					collector.setFilename(getFile());
-				}
-				catch (IllegalUserActionException e) {
-					JMeterUtils.reportErrorToUser(e.getMessage());
-					setFile("");
-				}
-			}
-		}
-		catch (IOException e) {
-			log.error("",e);
-		}
-		return (TestElement)collector.clone();
-	}
-	
-	public void configure(TestElement el)
-	{
-		super.configure(el);
-		setFile(el.getPropertyAsString(ResultCollector.FILENAME));
-		ResultCollector rc = (ResultCollector)el;
-		errorLogging.setSelected(rc.isErrorLogging());
-	}
+    /****************************************
+     * !ToDoo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public Collection getMenuCategories()
+    {
+        return Arrays.asList(new String[] { MenuFactory.LISTENERS });
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param mc  !ToDo (Parameter description)
-	 ***************************************/
-	protected void configureTestElement(AbstractListenerElement mc) {
-		super.configureTestElement(mc);
-		mc.setListener(this);
-	}
+    public TestElement createTestElement()
+    {
+        if (collector == null)
+        {
+            collector = new ResultCollector();
+        }
+        modifyTestElement(collector);
+        return (TestElement) collector.clone();
+    }
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement c)
+    {
+        configureTestElement((AbstractListenerElement)c);
+        if (c instanceof ResultCollector)
+        {
+            ResultCollector rc = (ResultCollector) c;
+            rc.setErrorLogging(errorLogging.isSelected());
+            try
+            {
+                if (!getFile().equals(""))
+                {
+                    try
+                    {
+                        rc.setFilename(getFile());
+                    }
+                    catch (IllegalUserActionException e)
+                    {
+                        JMeterUtils.reportErrorToUser(e.getMessage());
+                        setFile("");
+                    }
+                }
+            }
+            catch (IOException e)
+            {
+                log.error("", e);
+            }
+            collector = rc;
+        }
+    }
+
+    public void configure(TestElement el)
+    {
+        super.configure(el);
+        setFile(el.getPropertyAsString(ResultCollector.FILENAME));
+        ResultCollector rc = (ResultCollector) el;
+        errorLogging.setSelected(rc.isErrorLogging());
+    }
+
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@param mc  !ToDo (Parameter description)
+     ***************************************/
+    protected void configureTestElement(AbstractListenerElement mc)
+    {
+        super.configureTestElement(mc);
+        mc.setListener(this);
+    }
 }

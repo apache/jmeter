@@ -67,19 +67,22 @@ public class JMeterTest extends TestCase
 					el.getProperty(TestElement.NAME));
 			assertEquals("TEST-CLASS: Failed on " + item.getClass().getName(),
 					el.getClass().getName(), el.getProperty(TestElement.TEST_CLASS));
+            TestElement el2 = item.createTestElement();
 			el.setProperty(TestElement.NAME, "hey, new name!:");
 			el.setProperty("NOT","Shouldn't be here");
-			TestElement el2 = item.createTestElement();
 			if(!(item instanceof UnsharedComponent))
 			{
 				assertNull("GUI-CLASS: Failed on " + item.getClass().getName(),
 						el2.getProperty("NOT"));
 			}
+            
 			el = SaveService.createTestElement(SaveService.getConfigForTestElement(null,
 					el));
 			item.configure(el);
 			assertEquals("CONFIGURE-TEST: Failed on " + item.getClass().getName(),
 					el.getProperty(TestElement.NAME), item.getName());
+            item.modifyTestElement(el2);
+            assertEquals("Modify Test: Failed on " + item.getClass().getName(),"hey, new name!:",el2.getPropertyAsString(TestElement.NAME));
 		}
 	}
 	

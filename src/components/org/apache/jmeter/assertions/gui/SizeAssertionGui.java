@@ -122,18 +122,27 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 	{
 		//ResponseAssertion el = new ResponseAssertion();
 		SizeAssertion el = new SizeAssertion();
-		configureTestElement(el);
-		String sizeString = size.getText();
-		long assertionSize = 0;
-		try {
-			assertionSize = Long.parseLong(sizeString);
-		}
-		catch (NumberFormatException e) {
-			assertionSize = Long.MAX_VALUE;
-		}
-		el.setAllowedSize(assertionSize);
+		modifyTestElement(el);
 		return el;
 	}
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement el)
+    {
+        configureTestElement(el);
+        String sizeString = size.getText();
+        long assertionSize = 0;
+        try {
+        	assertionSize = Long.parseLong(sizeString);
+        }
+        catch (NumberFormatException e) {
+        	assertionSize = Long.MAX_VALUE;
+        }
+        ((SizeAssertion)el).setAllowedSize(assertionSize);
+    }
 
 	/****************************************
 	 * !ToDo (Method description)

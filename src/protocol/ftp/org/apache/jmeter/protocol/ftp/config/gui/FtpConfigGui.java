@@ -109,11 +109,20 @@ public class FtpConfigGui extends AbstractConfigGui
 	public TestElement createTestElement()
 	{
 		ConfigTestElement element = new ConfigTestElement();
-		configureTestElement(element);
-		element.setProperty(FTPSampler.SERVER,server.getText());
-		element.setProperty(FTPSampler.FILENAME,filename.getText());
+		modifyTestElement(element);
 		return element;
 	}
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement element)
+    {
+        configureTestElement(element);
+        element.setProperty(FTPSampler.SERVER,server.getText());
+        element.setProperty(FTPSampler.FILENAME,filename.getText());
+    }
 
 	/****************************************
 	 * !ToDo (Constructor description)

@@ -102,11 +102,20 @@ public class FtpTestSamplerGui extends AbstractSamplerGui
 	public TestElement createTestElement()
 	{
 		FTPSampler sampler = new FTPSampler();
-		sampler.addTestElement(ftpDefaultPanel.createTestElement());
-		sampler.addTestElement(loginPanel.createTestElement());
-		this.configureTestElement(sampler);
+		modifyTestElement(sampler);
 		return sampler;
 	}
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement sampler)
+    {
+        ((FTPSampler)sampler).addTestElement(ftpDefaultPanel.createTestElement());
+        ((FTPSampler)sampler).addTestElement(loginPanel.createTestElement());
+        this.configureTestElement(sampler);
+    }
 
 	public String getStaticLabel()
 	{

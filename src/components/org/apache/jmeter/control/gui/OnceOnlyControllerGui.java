@@ -116,9 +116,18 @@ public class OnceOnlyControllerGui extends AbstractControllerGui
 	public TestElement createTestElement()
 	{
 		OnceOnlyController oc = new OnceOnlyController();
-		configureTestElement(oc);
+		modifyTestElement(oc);
 		return oc;
 	}
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement oc)
+    {
+        configureTestElement(oc);
+    }
 
 	/****************************************
 	 * !ToDoo (Method description)

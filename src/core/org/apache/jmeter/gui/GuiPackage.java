@@ -151,6 +151,17 @@ public class GuiPackage
             return null;
         }
     }
+    
+    /**
+     *  Find the JMeterTreeNode for a certain TestElement object.
+     * @param userObject
+     * @return JMeterTreeNode
+     */
+    public JMeterTreeNode getNodeOf(TestElement userObject)
+    {
+        return treeModel.getNodeOf(userObject);
+    }
+    
     public TestElement createTestElement(String guiClass)
     {
         try
@@ -202,10 +213,7 @@ public class GuiPackage
                 log.debug("Updating current node " + currentNode.createTestElement());
                 JMeterGUIComponent comp = getGui(currentNode.createTestElement());
                 TestElement el = currentNode.createTestElement();
-                nodesToGui.remove(el);
-                currentNode.setUserObject(comp.createTestElement());
-                el = currentNode.createTestElement();
-                nodesToGui.put(el, comp);
+                comp.modifyTestElement(el);
             }
             currentNode = treeListener.getCurrentNode();
         }

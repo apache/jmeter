@@ -84,9 +84,9 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.functions.ValueReplacer;
+import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
-import org.apache.jmeter.gui.NamePanel;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.MenuFactory;
@@ -106,11 +106,10 @@ import org.apache.log.Logger;
  *@version   1.0
  ***************************************/
 
-public class ProxyControlGui extends JPanel implements JMeterGUIComponent, ActionListener, KeyListener, FocusListener, UnsharedComponent
+public class ProxyControlGui extends AbstractJMeterGuiComponent implements JMeterGUIComponent, ActionListener, KeyListener, FocusListener, UnsharedComponent
 {
     transient private static Logger log =
             Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
-    NamePanel namePanel;
     JTextField portField;
 
     ProxyControl model;
@@ -138,8 +137,7 @@ public class ProxyControlGui extends JPanel implements JMeterGUIComponent, Actio
      ***************************************/
     public ProxyControlGui()
     {
-        namePanel = new NamePanel();
-        setName(getStaticLabel());
+        super();
         init();
     }
 
@@ -155,19 +153,30 @@ public class ProxyControlGui extends JPanel implements JMeterGUIComponent, Actio
             model = makeProxyControl();
         }
         log.debug("creating/configuring model = " + model);
-        model.setProperty(TestElement.NAME, getName());
-        model.setPort(Integer.parseInt(portField.getText()));
-        setIncludeListInProxyControl(model);
-        setExcludeListInProxyControl(model);
+        modifyTestElement(model);
         return model;
     }
-
+    
     protected ProxyControl makeProxyControl()
-    {
-        ProxyControl local = new ProxyControl();
-        local.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
-        local.setProperty(TestElement.TEST_CLASS, local.getClass().getName());
-        return local;
+        {
+            ProxyControl local = new ProxyControl();
+            return local;
+        }
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement el)
+    {        
+        configureTestElement(el);
+        if(el instanceof ProxyControl)
+        {            
+            ((ProxyControl)el).setPort(Integer.parseInt(portField.getText()));
+            setIncludeListInProxyControl((ProxyControl)el);
+            setExcludeListInProxyControl((ProxyControl)el);
+            model = (ProxyControl)el;
+        }
     }
 
     protected void setIncludeListInProxyControl(ProxyControl element)
@@ -193,17 +202,6 @@ public class ProxyControlGui extends JPanel implements JMeterGUIComponent, Actio
         return list;
     }
 
-    public void setName(String name)
-    {
-        super.setName(name);
-        namePanel.setName(name);
-    }
-
-    public String getName()
-    {
-        return namePanel.getName();
-    }
-
     public String getStaticLabel()
     {
         return JMeterUtils.getResString("proxy_title");
@@ -217,15 +215,8 @@ public class ProxyControlGui extends JPanel implements JMeterGUIComponent, Actio
     public void configure(TestElement element)
     {
         log.debug("Configuring gui with " + element);
-        if (model != null && model != element)
-        {
-            model.addTestElement(element);
-        }
-        if(model == null)
-        {
-            model = (ProxyControl)element;
-        }
-        setName(model.getProperty(TestElement.NAME).toString());
+        super.configure(element);
+        model = (ProxyControl)element;
         portField.setText(model.getProperty(ProxyControl.PORT).toString());
         populateTable(includeModel, model.getIncludePatterns().iterator());
         populateTable(excludeModel, model.getExcludePatterns().iterator());

@@ -253,7 +253,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
 				File tmp = FileDialoger.promptToSaveFile(null).getSelectedFile();
 				if(tmp != null)
 				{
-					createCookieManager().save(tmp.getAbsolutePath());
+					((CookieManager)createTestElement()).save(tmp.getAbsolutePath());
 				}
 			}
 			catch(IOException ex)
@@ -270,17 +270,24 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
 				new Boolean(cookie.getSecure()),
 				new Long(cookie.getExpires())});
 	}
-	
-	private CookieManager createCookieManager()
-	{
-		CookieManager cookieManager = new CookieManager();
-		for(int i = 0;i < tableModel.getRowCount();i++)
-		{
-			Cookie cookie = createCookie(tableModel.getRowData(i));
-			cookieManager.add(cookie);
-		}
-		return cookieManager;
-	}
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement cm)
+    {
+        configureTestElement(cm);
+        if(cm instanceof CookieManager)
+        {
+            CookieManager cookieManager = (CookieManager)cm;
+            for(int i = 0;i < tableModel.getRowCount();i++)
+            {
+            	Cookie cookie = createCookie(tableModel.getRowData(i));
+            	cookieManager.add(cookie);
+            }
+        }
+    }
 	
 	private Cookie createCookie(Object[] rowData)
 	{
@@ -307,8 +314,8 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
 	 ***************************************/
 	public TestElement createTestElement()
 	{
-		CookieManager cookieManager = createCookieManager();
-		configureTestElement(cookieManager);
+        CookieManager cookieManager = new CookieManager();
+        modifyTestElement(cookieManager);
 		return cookieManager;
 	}
 

@@ -123,19 +123,31 @@ public class HttpTestSampleGui extends AbstractSamplerGui
 	public TestElement createTestElement()
 	{
 		HTTPSampler sampler;
-		TestElement el = urlConfigGui.createTestElement();
-		if(getImages.isSelected())
-		{
-			sampler = new HTTPSamplerFull();
-		}
-		else
-		{
-			sampler = new HTTPSampler();
-		}
-		sampler.addTestElement(el);
-		this.configureTestElement(sampler);
+        if(getImages.isSelected())
+        {
+            sampler = new HTTPSamplerFull();
+        }
+        else
+        {
+            sampler = new HTTPSampler();
+        }
+		modifyTestElement(sampler);
 		return sampler;
 	}
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement sampler)
+    {
+        TestElement el = urlConfigGui.createTestElement();	
+        sampler.clear();
+        sampler.addTestElement(el);
+        this.configureTestElement(sampler);
+    }
+    
+
 
 	/****************************************
 	 * Gets the ClassLabel attribute of the HttpTestSample object

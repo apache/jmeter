@@ -136,6 +136,17 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener,Foc
 		configureTestElement(headerManager);
 		return (TestElement)headerManager.clone();
 	}
+    
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement el)
+    {
+        el.clear();
+        el.addTestElement(tableModel.manager);
+        configureTestElement(el);
+    }
 
 	/****************************************
 	 * !ToDo (Method description)
@@ -144,8 +155,9 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener,Foc
 	 ***************************************/
 	public void configure(TestElement el)
 	{
+        tableModel.manager.clear();
 		super.configure(el);
-		tableModel.manager = (HeaderManager)el;
+        tableModel.manager.addTestElement((HeaderManager)el);
 	}
 
 	/****************************************
