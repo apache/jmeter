@@ -38,6 +38,7 @@ public final class FileDialoger
      */
     private static String lastJFCDirectory = null;
     private static JFileChooser jfc = new JFileChooser();
+    private static String[] extensions = null;
 
     /**
      * Prevent instantiation of utility class.
@@ -100,6 +101,18 @@ public final class FileDialoger
         return promptToOpenFile(new String[0]);
     }
 
+	/**
+	 * Get a JFileChooser with a new FileFilter.
+	 * @param filename
+	 * @param filters
+	 * @return
+	 */
+	public static JFileChooser promptToSaveFile(String filename, String[] filters){
+		extensions = filters;
+		JFileChooser chooser = promptToSaveFile(filename);
+		return chooser;
+	}
+	
     /**
      * Prompts the user to choose a file from their filesystems for our own
      * devious uses. This method maintains the last directory the user visited
@@ -134,7 +147,11 @@ public final class FileDialoger
             }
         }
         clearFileFilters();
-        jfc.addChoosableFileFilter(new JMeterFileFilter(new String[] { ext }));
+        if (extensions != null){
+			jfc.addChoosableFileFilter(new JMeterFileFilter(extensions));
+        } else {
+			jfc.addChoosableFileFilter(new JMeterFileFilter(new String[] { ext }));
+        }
 
         int retVal =
             jfc.showSaveDialog(GuiPackage.getInstance().getMainFrame());
