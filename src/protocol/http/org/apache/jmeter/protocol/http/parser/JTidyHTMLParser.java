@@ -61,7 +61,6 @@ package org.apache.jmeter.protocol.http.parser;
 import java.io.ByteArrayInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.jorphan.logging.LoggingManager;
@@ -94,7 +93,7 @@ class JTidyHTMLParser extends HTMLParser
     /* (non-Javadoc)
      * @see org.apache.jmeter.protocol.http.parser.HTMLParser#getEmbeddedResourceURLs(byte[], java.net.URL)
      */
-    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, Collection urls)
+    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls)
         throws HTMLParseException
     {
 		Document dom = null;
@@ -122,7 +121,7 @@ class JTidyHTMLParser extends HTMLParser
      * 
      * @return new base URL
 	 */
-	private URL scanNodes(Node node, Collection urls, URL baseUrl) throws HTMLParseException
+	private URL scanNodes(Node node, URLCollection urls, URL baseUrl) throws HTMLParseException
 	{
 		if ( node == null ) {
 		  return baseUrl;
@@ -157,13 +156,13 @@ class JTidyHTMLParser extends HTMLParser
 		  
 		  if (name.equalsIgnoreCase("img"))
 		  {
-		  	addURL(urls,getValue(attrs,"src"),baseUrl);
+		  	urls.addURL(getValue(attrs,"src"),baseUrl);
 			break;
           }
           
 		  if (name.equalsIgnoreCase("applet"))
 		  {
-		  	addURL(urls,getValue(attrs,"code"),baseUrl);
+		  	urls.addURL(getValue(attrs,"code"),baseUrl);
 			  break;
 			}
 			if (name.equalsIgnoreCase("input"))
@@ -171,18 +170,18 @@ class JTidyHTMLParser extends HTMLParser
 				String src=getValue(attrs,"src");
 				String typ=getValue(attrs,"type");
 				if ((src!=null) &&(typ.equalsIgnoreCase("image")) ){ 
-					addURL(urls,src,baseUrl);
+					urls.addURL(src,baseUrl);
 				}
 			  break;
 			}
 			if (name.equalsIgnoreCase("link"))
 			{
-				addURL(urls,getValue(attrs,"href"),baseUrl);
+				urls.addURL(getValue(attrs,"href"),baseUrl);
 			  break;
 			}
 			String back=getValue(attrs,"background");
 			if (back != null){
-				addURL(urls,back,baseUrl);
+				urls.addURL(back,baseUrl);
 				break;
 			}
 
@@ -218,32 +217,6 @@ class JTidyHTMLParser extends HTMLParser
         return v;
     }
 
-    /*
-     * Helper method to create and add a URL, if non-null
-     * @param urls - set
-     * @param url - may be null
-     * @param baseUrl
-     */
-    private void addURL(Collection urls, String url, URL baseUrl)
-    {
-    	if (url == null) return;
-    	boolean b=false;
-		try
-		{
-			b=urls.add(new URL(baseUrl, url));
-		}
-		catch(MalformedURLException mfue)
-		{
-			// Can't build the URL. May be a site error: return
-			// the string.
-			b=urls.add(url);
-		}
-		if (b) {
-			log.debug("Added   "+url);
-		} else { 
-			log.debug("Skipped "+url);
-		}
-    }
     /**
      * Returns <code>tidy</code> as HTML parser.
      *

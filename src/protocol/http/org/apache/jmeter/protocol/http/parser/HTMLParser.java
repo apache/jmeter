@@ -182,7 +182,7 @@ public abstract class HTMLParser
 				col = new java.util.HashSet(); //TODO: improve JDK1.3 solution 
 			}
         	
-			return getEmbeddedResourceURLs(html, baseUrl,col);
+			return getEmbeddedResourceURLs(html, baseUrl,new URLCollection(col));
             
             // An additional note on using HashSets to store URLs: I just
             // discovered that obtaining the hashCode of a java.net.URL implies
@@ -192,7 +192,9 @@ public abstract class HTMLParser
             // thought I'd keep a note just in case...
             // BTW, note that using a Vector and removing duplicates via scan
             // would not help, since URL.equals requires name resolution too.
-            // TODO: maybe change the API to return URL Strings instead of java.net.URLs?
+            // The above problem has now been addressed with the URLString and
+            // URLCollection classes.
+
         }
         
         // See whether we can use LinkedHashSet or not:
@@ -229,7 +231,7 @@ public abstract class HTMLParser
 	 * @return an Iterator for the resource URLs 
 	 */
 	public abstract Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl,
-	                                                  Collection coll)
+	                                                  URLCollection coll)
 		throws HTMLParseException;
 
 
@@ -446,7 +448,7 @@ public abstract class HTMLParser
 			if (c == null) {
 				result = p.getEmbeddedResourceURLs(buffer,new URL(url));
 			} else {
-			    result = p.getEmbeddedResourceURLs(buffer,new URL(url),c);
+			    result = p.getEmbeddedResourceURLs(buffer,new URL(url),new URLCollection(c));
 			}
 			/* 
 			 * TODO:

@@ -59,7 +59,6 @@ package org.apache.jmeter.protocol.http.parser;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.jorphan.logging.LoggingManager;
@@ -218,7 +217,7 @@ class RegexpHTMLParser extends HTMLParser
     /* (non-Javadoc)
      * @see org.apache.jmeter.protocol.http.parser.HtmlParser#getEmbeddedResourceURLs(byte[], java.net.URL)
      */
-    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, Collection urls)
+    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls)
     {
 
         Perl5Matcher matcher= (Perl5Matcher)localMatcher.get();
@@ -272,24 +271,7 @@ class RegexpHTMLParser extends HTMLParser
                 }
                 if (s != null)
                 {
-                    try
-                    {
-                        urls.add(new URL(baseUrl, s));
-                    }
-                    catch (MalformedURLException e)
-                    {
-                        // Doesn't even look like a URL? It may be a site
-                        // error: return the string.
-                        if (log.isDebugEnabled())
-                        {
-                            log.debug(
-                                "Can't build URL from RL "
-                                    + s
-                                    + " in page "
-                                    + baseUrl);
-                        }
-                        urls.add(s);
-                    }
+                        urls.addURL(s,baseUrl);
                 }
             }
         }
