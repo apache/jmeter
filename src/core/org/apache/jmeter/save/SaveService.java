@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.save.converters.BooleanPropertyConverter;
 import org.apache.jmeter.save.converters.HashTreeConverter;
 import org.apache.jmeter.save.converters.IntegerPropertyConverter;
@@ -62,6 +63,7 @@ public class SaveService
    // Version information for test plan header
    static String version="1.0";
    static String propertiesVersion="";//read from properties file
+   private static final String PROPVERSION="$Revision$";
    
    // Helper method to simplify alias creation from properties
    private static void makeAlias(String alias,String clazz)
@@ -73,10 +75,9 @@ public class SaveService
 	}
    }
    
-   static
+   private static void initProps()
    {
-   	
-      // Load the alias properties
+   // Load the alias properties
 	  Properties nameMap = new Properties();
 	  try
 	  {
@@ -112,8 +113,11 @@ public class SaveService
 	  {
 	     log.error("Bad saveservice properties file",e);
 	  }
-	
+   }
 	  
+   static
+   {
+	  initProps();
       saver.alias("stringProp",StringProperty.class);
       saver.alias("intProp",IntegerProperty.class);
       saver.alias("longProp",LongProperty.class);
@@ -173,6 +177,10 @@ public class SaveService
 		checkVersion(TestElementConverter.class,"1.2");
 		checkVersion(TestElementPropertyConverter.class,"1.2");
 		checkVersion(ScriptWrapperConverter.class,"1.2");
+		if (!PROPVERSION.equalsIgnoreCase(propertiesVersion))
+		{
+			log.warn("Property file - expected "+PROPVERSION+", found "+propertiesVersion);
+		}
 		if (versionsOK)
 		{
 			log.info("All converter versions present and correct");
@@ -199,5 +207,23 @@ public class SaveService
          reader.reset();
          return OldSaveService.loadSubTree(reader);
       }
+   }
+   public static class Test extends JMeterTestCase
+   {
+	public Test() {
+		super();
+	}
+
+    public Test(String name) {
+		super(name);
+	}
+
+   	public void testVersions() throws Exception
+   	{
+   		initProps();
+   		checkVersions();
+   		assertTrue("Unexpected version found",versionsOK);
+   		assertEquals(PROPVERSION,propertiesVersion);
+   	}
    }
 }
