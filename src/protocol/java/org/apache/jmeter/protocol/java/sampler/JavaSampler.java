@@ -55,12 +55,10 @@
 
 package org.apache.jmeter.protocol.java.sampler;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.config.JavaConfig;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -72,17 +70,19 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
-public class JavaSampler extends AbstractSampler implements JavaSamplerClient, PerThreadClonable, TestListener
-{
+
+public class JavaSampler extends AbstractSampler
+            implements PerThreadClonable, TestListener {
 
     /**
-     * Property key representing the classname of the JavaSamplerClient to use.
-     */
+     * Property key representing the classname of the JavaSamplerClient to
+     * user.
+     */			
     public final static String CLASSNAME = "classname";
-
-    /**
-     * Property key representing the arguments for the JavaSamplerClient.
-     */
+	
+	/**
+	 * Property key representing the arguments for the JavaSamplerClient.
+	 */
     public final static String ARGUMENTS = "arguments";
 
     /**
@@ -90,11 +90,19 @@ public class JavaSampler extends AbstractSampler implements JavaSamplerClient, P
      * the sample.
      */
     transient private JavaSamplerClient javaClient = null;
+	
+    /**
+     * The JavaSamplerContext instance used by this sampler to hold
+     * information related to the test run, such as the parameters
+     * specified for the sampler client.
+     */
+    transient private JavaSamplerContext context = null;
 
     /**
      * Logging
      */
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
 
     /**
      * Set used to register all active JavaSamplers.  This is used so that the
@@ -147,19 +155,19 @@ public class JavaSampler extends AbstractSampler implements JavaSamplerClient, P
     /**
      * Releases Java Client.
      */
-    public void releaseJavaClient()
-    {
+    private void releaseJavaClient () {
         if (javaClient != null)
         {
-            javaClient.teardownTest(createArgumentsHashMap(getArguments()));
+            javaClient.teardownTest(context);
         }
         javaClient = null;
+        context = null;
     }
 
     /**
-     *  Sets the Classname attribute of the JavaConfig object
+     * Sets the Classname attribute of the JavaConfig object
      *
-     *@param  classname  The new Classname value
+     * @param  classname  the new Classname value
      */
     public void setClassname(String classname)
     {
@@ -167,9 +175,9 @@ public class JavaSampler extends AbstractSampler implements JavaSamplerClient, P
     }
 
     /**
-     *  Gets the Classname attribute of the JavaConfig object
+     * Gets the Classname attribute of the JavaConfig object
      *
-     *@return    The Classname value
+     * @return  the Classname value
      */
     public String getClassname()
     {
@@ -181,8 +189,9 @@ public class JavaSampler extends AbstractSampler implements JavaSamplerClient, P
      * 
      * The <code>sample()</code> method retrieves the reference to the
      * Java client and calls its <code>runTest()</code> method.
-     * @see Sampler#sample()
-     * @see JavaSamplerClient#runTest()
+     *
+     * @see Sampler#sample(org.apache.jmeter.samplers.Entry)
+     * @see JavaSamplerClient#runTest(JavaSamplerContext)
      * 
      * @return test SampleResult
      */
@@ -192,32 +201,10 @@ public class JavaSampler extends AbstractSampler implements JavaSamplerClient, P
         {
             log.debug(whoAmI() + "Creating Java Client");
             createJavaClient();
-            javaClient.setupTest(createArgumentsHashMap(getArguments()));
-        }
-        return javaClient.runTest(createArgumentsHashMap(getArguments()));
-    }
-
-    /**
-     * Convert the arguments parameter into a HashMap which can be passed
-     * to the JavaSamplerClient.  The &quot;name&quot; of each Argument
-     * in args is added to the HashMap as a key, and the &quot;value&quot;
-     * is the value associated with that key.  The original Arguments are
-     * not modified.
-     *
-     * @param args the Arguments to convert to a HashMap
-     * @return     a HashMap representation of the Arguments
-     */
-    public HashMap createArgumentsHashMap(Arguments args)
-    {
-        HashMap newArgs = new HashMap();
-        Iterator iter = args.iterator();
-        while (iter.hasNext())
-        {
-            Argument item = (Argument) iter.next();
-            newArgs.put(item.getName(), item.getValue());
+            javaClient.setupTest(context);
         }
 
-        return newArgs;
+        return createJavaClient().runTest(context);
     }
 
     /**
@@ -230,24 +217,27 @@ public class JavaSampler extends AbstractSampler implements JavaSamplerClient, P
      * 
      * @return JavaSamplerClient reference.
      */
-    public JavaSamplerClient createJavaClient()
-    {
+    private JavaSamplerClient createJavaClient() {
         if (javaClient == null)
         {
             try
             {
-                Class javaClass = Class.forName(getClassname().trim(), false, Thread.currentThread().getContextClassLoader());
+                Class javaClass = Class.forName(getClassname().trim(),
+                        false,
+                        Thread.currentThread().getContextClassLoader());
                 javaClient = (JavaSamplerClient) javaClass.newInstance();
+                context = new JavaSamplerContext(getArguments());
 
-                if (log.isDebugEnabled())
-                {
-                    log.debug(whoAmI() + "\tCreated:\t" + getClassname() + "@" + Integer.toHexString(javaClient.hashCode()));
+                if (log.isDebugEnabled()) {
+                    log.debug(whoAmI() + "\tCreated:\t" + getClassname() +
+                            "@" + Integer.toHexString(javaClient.hashCode()));
                 }
             }
             catch (Exception e)
             {
-                log.error(whoAmI() + "\tException creating: " + getClassname(), e);
-                javaClient = this;
+                log.error(whoAmI() + "\tException creating: " +
+                        getClassname(), e);
+                javaClient = new ErrorSamplerClient();
             }
         }
         return javaClient;
@@ -261,46 +251,16 @@ public class JavaSampler extends AbstractSampler implements JavaSamplerClient, P
      * 
      * @return reference to JavaSamplerClient
      */
-    public JavaSamplerClient retrieveJavaClient()
-    {
+    private JavaSamplerClient retrieveJavaClient() {
         return javaClient;
     }
 
     /**
-     * Provide default setupTest() implementation for error conditions.
-     * @see JavaSamplerClient#setupTest()
+     * Generate a String identifier of this instance for debugging
+     * purposes.
+     * 
+     * @return  a String identifier for this sampler instance
      */
-    public void setupTest(HashMap arguments)
-    {
-        log.debug(whoAmI() + "\tsetupTest");
-    }
-
-    /**
-     * Provide default teardownTest() implementation for error conditions.
-     * @see JavaSamplerClient#teardownTest()
-     */
-    public void teardownTest(HashMap arguments)
-    {
-        log.debug(whoAmI() + "\tteardownTest");
-        javaClient = null;
-    }
-
-    /**
-     * Return SampleResult with data on error.
-     * @see JavaSamplerClient#runTest()
-     */
-    public SampleResult runTest(HashMap arguments)
-    {
-        log.debug(whoAmI() + "\trunTest");
-        Thread.yield();
-        SampleResult results = new SampleResult();
-        results.setTime(0);
-        results.setSuccessful(false);
-        results.setResponseData(new String("Class not found: " + getClassname()).getBytes());
-        results.setSampleLabel("ERROR: " + getClassname());
-        return results;
-    }
-
     private String whoAmI()
     {
         StringBuffer sb = new StringBuffer();
@@ -323,8 +283,8 @@ public class JavaSampler extends AbstractSampler implements JavaSamplerClient, P
     }
 
     /**
-    * Method called at the end of the test.  This is called only on one
-     * instance of JavaSampler.  This method will loop throuh all of the
+     * Method called at the end of the test.  This is called only on one
+     * instance of JavaSampler.  This method will loop through all of the
      * other JavaSamplers which have been registered (automatically in the
      * constructor) and notify them that the test has ended, allowing the
      * JavaSamplerClients to cleanup.
@@ -349,4 +309,21 @@ public class JavaSampler extends AbstractSampler implements JavaSamplerClient, P
         testEnded();
     }
 
+    class ErrorSamplerClient extends AbstractJavaSamplerClient {
+        /**
+         * Return SampleResult with data on error.
+         * @see JavaSamplerClient#runTest()
+         */
+        public SampleResult runTest(JavaSamplerContext context) {
+            log.debug(whoAmI() + "\trunTest");
+            Thread.yield();
+            SampleResult results = new SampleResult();
+            results.setTime(0);
+            results.setSuccessful(false);
+            results.setResponseData(new String("Class not found: " +
+                    getClassname()).getBytes());
+            results.setSampleLabel("ERROR: " + getClassname());
+            return results;
+        }
+    }
 }
