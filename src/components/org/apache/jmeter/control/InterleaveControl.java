@@ -133,20 +133,22 @@ public class InterleaveControl extends GenericController implements Serializable
 	
 	protected void removeCurrentController()
 	{
-		if(getStyle() == NEW_STYLE)
-		{
-			interleave = true;
-		}
+		setInterleave(NEW_STYLE);
 		super.removeCurrentController();
 	}
 
 	protected void incrementCurrent()
 	{
-		if(getStyle() == NEW_STYLE)
+		setInterleave(NEW_STYLE);
+		super.incrementCurrent();
+	}
+
+	protected void setInterleave(int style)
+	{
+		if(getStyle() == style)
 		{
 			interleave = true;
 		}
-		super.incrementCurrent();
 	}
 	
 	public void setStyle(int style)
@@ -161,10 +163,7 @@ public class InterleaveControl extends GenericController implements Serializable
 
 	public Sampler next()
 	{
-		if(getStyle() == DEFAULT_STYLE)
-		{
-			interleave = true;
-		}
+		setInterleave(DEFAULT_STYLE);
 		TestElement controller = getCurrentController();
 		if(controller == null)
 		{
