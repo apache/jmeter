@@ -98,6 +98,12 @@ public class ThreadGroup
     public final static String END_TIME= "ThreadGroup.end_time";
 
 
+    /* Action to be taken when a Sampler error occurs*/
+	public final static String ON_SAMPLE_ERROR= "ThreadGroup.on_sample_error"; //int
+    public final static String ON_SAMPLE_ERROR_CONTINUE = "continue";
+    public final static String ON_SAMPLE_ERROR_STOPTHREAD = "stopthread";
+    public final static String ON_SAMPLE_ERROR_STOPTEST = "stoptest";
+
     private final int DEFAULT_NUM_THREADS = 1;
     private final int DEFAULT_RAMP_UP = 0;
     private SampleQueue queue = null;
@@ -425,6 +431,26 @@ public class ThreadGroup
     public void initialize()
     {
         getSamplerController().initialize();
+    }
+
+    /**
+     * Check if a sampler error should cause thread to stop.
+     * 
+     * @return true if should stop
+     */
+    public boolean getOnErrorStopThread()
+    {
+        return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR) == ON_SAMPLE_ERROR_STOPTHREAD;
+    }
+
+    /**
+     * Check if a sampler error should cause test to stop.
+     * 
+     * @return true if should stop
+     */
+    public boolean getOnErrorStopTest()
+    {
+		return getPropertyAsString(ThreadGroup.ON_SAMPLE_ERROR) == ON_SAMPLE_ERROR_STOPTEST;
     }
 
 }
