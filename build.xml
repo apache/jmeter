@@ -35,11 +35,17 @@
   <property name="src.jorphan" value="src/jorphan"/>
 
   <!-- Where the API documentation lives -->
-  <property name="docs.api.dest.dir" value="docs/api"/>
-  <property name="docs.src" value="./xdocs"/>
-  <property name="docs.dest" value="./docs"/>
-  <property name="printable_docs.dest" value="./printable_docs"/>
+  <property name="docs.api.dest" value="docs/api"/>
+  <property name="docs.src" value="xdocs"/>
+  <property name="docs.dest" value="docs"/>
+  <property name="printable_docs.dest" value="printable_docs"/>
   <property name="optimize" value="on"/>
+
+  <!-- Where the distribution packages live -->
+  <property name="dist.dir" value="dist"/>
+
+  <!-- List of Unix executable files in the distribution -->
+  <property name="dist.executables" value="bin/jmeter bin/jmeter-server"/>
 
   <!-- Build classpath -->
   <path id="classpath">
@@ -234,8 +240,8 @@
   <target name="compile" depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi" description="Compile everything."/>
 
   <target name="api-docs" description="Generate the API documentation.">
-    <mkdir dir="${docs.api.dest.dir}"/>
-    <javadoc sourcepathref="srcpaths" destdir="${docs.api.dest.dir}" Protected="yes" author="yes" version="yes" doctitle="Apache JMeter APIs Specification" windowtitle="Apache JMeter API Specification" header="&lt;b&gt;Apache JMeter&lt;/b&gt;&lt;br&gt;&lt;font size='-1'&gt;1.7&lt;/font&gt;" bottom="Copyright &#xA9; 1998-2002 Apache Software Foundation. All Rights Reserved." packagenames="org.apache.jmeter.*">
+    <mkdir dir="${docs.api.dest}"/>
+    <javadoc sourcepathref="srcpaths" destdir="${docs.api.dest}" Protected="yes" author="yes" version="yes" doctitle="Apache JMeter APIs Specification" windowtitle="Apache JMeter API Specification" header="&lt;b&gt;Apache JMeter&lt;/b&gt;&lt;br&gt;&lt;font size='-1'&gt;1.7&lt;/font&gt;" bottom="Copyright &#xA9; 1998-2002 Apache Software Foundation. All Rights Reserved." packagenames="org.apache.jmeter.*">
       <classpath refid="classpath"/>
     </javadoc>
   </target>
@@ -275,46 +281,29 @@
     <property name="javamail.complete" value="assume"/>
   </target>
 
-  <patternset id="dist.sources">
-    <include name="**"/>
-    <exclude name="bin/ApacheJMeter.jar"/>
-    <exclude name="lib/jorphan.jar"/>
-    <exclude name="lib/ext/"/>
-    <exclude name="${build.dir}/"/>
-    <exclude name="${docs.api.dest.dir}"/>
-    <exclude name="**/CVS/**"/>
-  </patternset>
-
   <patternset id="dist.binaries">
-    <include name="**"/>
-    <exclude name="build/"/>
-    <exclude name="xdocs/"/>
-    <exclude name="src/"/>
+    <include name="bin/"/>
+    <include name="${docs.dest}/"/>
+    <exclude name="${docs.api.dest}/"/>
+    <include name="lib/"/>
+    <include name="README"/>
+    <include name="LICENSE"/>
   </patternset>
 
   <target name="dist" depends="assume-libs-present,clean,install,all-docs" description="Create the distribution packages.">
-    <zip zipfile="../ApacheJMeter_${version}.zip">
-      <zipfileset dir="." prefix="jakarta-jmeter-${version}">
+    <mkdir dir="${dist.dir}"/>
+    <tar destfile="${dist.dir}/jakarta-jmeter.tar" longfile="gnu">
+      <tarfileset dir="." prefix="jakarta-jmeter">
+        <patternset refid="dist.binaries"/>
+      </tarfileset>
+      <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="jakarta-jmeter"/>
+    </tar>
+    <zip zipfile="${dist.dir}/jakarta-jmeter.zip">
+      <zipfileset dir="." prefix="jakarta-jmeter">
         <patternset refid="dist.binaries"/>
       </zipfileset>
     </zip>
-    <zip zipfile="../ApacheJMeter_${version}.src.zip">
-      <zipfileset dir="." prefix="jakarta-jmeter-${version}">
-        <patternset refid="dist.sources"/>
-      </zipfileset>
-    </zip>
-    <tar destfile="../ApacheJMeter_${version}.tar" longfile="gnu">
-      <tarfileset dir="." prefix="jakarta-jmeter-${version}">
-        <patternset refid="dist.binaries"/>
-      </tarfileset>
-    </tar>
-    <tar destfile="../ApacheJMeter_${version}.src.tar" longfile="gnu">
-      <tarfileset dir="." prefix="jakarta-jmeter-${version}">
-        <patternset refid="dist.sources"/>
-      </tarfileset>
-    </tar>
-    <gzip zipfile="../ApacheJMeter_${version}.tgz" src="../ApacheJMeter_${version}.tar" />
-    <gzip zipfile="../ApacheJMeter_${version}.src.tgz" src="../ApacheJMeter_${version}.src.tar" />
+    <gzip zipfile="${dist.dir}/jakarta-jmeter.tgz" src="${dist.dir}/jakarta-jmeter.tar" />
   </target>
 
   <target name="clean" description="Clean up to force a build from source.">
@@ -322,7 +311,9 @@
     <delete file="lib/jorphan.jar"/>
     <delete dir="lib/ext"/>
     <delete dir="${build.dir}"/>
-    <delete dir="${docs.api.dest.dir}"/>
+    <delete dir="${docs.api.dest}"/>
+    <delete dir="${docs.dest}"/>
+    <delete dir="${dist.dir}"/>
   </target>
 
   <target name="docs" depends="init-docs" if="AnakiaTask.present" description="Generate browsable HTML documentation.">
