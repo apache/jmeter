@@ -12,7 +12,9 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author mike
@@ -104,6 +106,18 @@ public class ConfigurationTree implements Serializable, Cloneable {
         }
         return makeSubtree(tree);
     }
+    
+    public ConfigurationTree addRaw(String key,String value)
+    {
+        ListedHashTree tree = (ListedHashTree)propTree.add(key,value);
+        return makeSubtree(tree);
+    }
+    
+    public ConfigurationTree addRaw(String key)
+    {
+        ListedHashTree tree = (ListedHashTree)propTree.add(key);
+        return makeSubtree(tree);
+    }
 
     /**
      * @param key
@@ -129,6 +143,30 @@ public class ConfigurationTree implements Serializable, Cloneable {
     public ConfigurationTree add(String key, String value) {
         return makeSubtree((ListedHashTree) propTree.add(
                 getPath(key), value));
+    }
+    
+    public Properties getAsProperties(String key)
+    {
+        return getAsProperties(getTree(key));
+    }
+    
+    public Properties getAsProperties()
+    {
+        return getAsProperties(this);
+    }
+    
+    protected Properties getAsProperties(ConfigurationTree tree)
+    {
+       Properties props = new Properties();
+       if(tree == null) return props;
+       String[] propNames = tree.getPropertyNames();
+       if(propNames == null) return props;
+       for(int i = 0;i < propNames.length;i++)
+       {
+           if(tree.getProperty(propNames[i]) != null)
+               props.setProperty(propNames[i],tree.getProperty(propNames[i]));
+       }
+       return props;
     }
 
     /**
@@ -171,6 +209,16 @@ public class ConfigurationTree implements Serializable, Cloneable {
     public void add(String[] treePath, String[] values) {
         propTree.add(treePath, values);
     }
+    
+    public void add(Properties props)
+    {
+        Iterator iter = props.keySet().iterator();
+        while(iter.hasNext())
+        {
+            String key = (String)iter.next();
+            add(key,props.getProperty(key));
+        }
+    }
 
     /**
      * @param treePath
@@ -211,24 +259,39 @@ public class ConfigurationTree implements Serializable, Cloneable {
         }
         return new String[0];
     }
+    
+    public String getProperty(String key,String def)
+    {
+        return getProperty(getPath(key),def);
+    }
 
     /**
      * @param key
      * @return
      */
     public String getProperty(String key) {
-        HashTree subTree = propTree.getTree(getPath(key));
+        return getProperty(getPath(key),null);
+    }
+    
+    public String getProperty(String[] keys,String def)
+    {
+        HashTree subTree = propTree.getTree(keys);
         if (subTree != null) {
             if (subTree.list() == null || subTree.list().size() == 0) {
-                return null;
+                return def;
             } else if (subTree.list().size() == 1) {
                 return (String) subTree.getArray()[0];
             } else {
-                return null;
+                return def;
             }
         } else {
-            return null;
+            return def;
         }
+    }
+    
+    public String getProperty(String[] keys)
+    {
+        return getProperty(keys,null);
     }
 
     /**
@@ -586,14 +649,14 @@ public class ConfigurationTree implements Serializable, Cloneable {
                 } else if (equals > -1) {
                     String key = line[0].substring(0, equals);
                     if ((equals + 1) < line[0].length())
-                        tree.add(key, line[0].substring(equals + 1));
+                        tree.addRaw(key, line[0].substring(equals + 1));
                     else
-                        tree.add(key);
+                        tree.addRaw(key);
                 } else if (line[0].equals("}")) {
                     return false;
                 } else if(line[0].length() > 0)
                 {
-                    tree.add(line[0]);
+                    tree.addRaw(line[0]);
                 }
             }
         } catch (IOException e) {
@@ -735,6 +798,21 @@ public class ConfigurationTree implements Serializable, Cloneable {
         return getProperty(VALUE);
     }
     
+    /**
+     * Get the value or return the given default value if null
+     * @param def
+     * @return
+     */
+    public String getValueOr(String def)
+    {
+        String v = getValue();
+        if(v == null)
+        {
+            return def;
+        }
+        return v;
+    }
+    
     public String getValue(String name)
     {
         ConfigurationTree tree = getTree(getPath(name));
@@ -743,6 +821,16 @@ public class ConfigurationTree implements Serializable, Cloneable {
             return tree.getValue();
         }
         return null;
+    }
+    
+    public String getValue(String key,String def)
+    {
+        String v = getValue(key);
+        if(v == null)
+        {
+            return def;
+        }
+        return v;
     }
 
     /**
