@@ -48,7 +48,8 @@
       until JavaSoft settles this down.
       
       If you have JDK 1.2 you may look in the source code and uncomment
-      those import lines to meet your needs.
+      those import lines to meet your needs or simply put the JFC 1.1 
+      swingall.jar file in your classpath.
       
    o  Java Compiler [OPTIONAL]:
 
