@@ -26,7 +26,9 @@ jakarta-oro
 
 jdom-b9
 - Anakia
-- XMLAssertion, JMeterTest ONLY
+
+jdom (any release)
+- XMLAssertion, JMeterTest
 
 (jorphan)
 
@@ -46,9 +48,10 @@ soap
 Tidy
 - http: various modules for parsing html
 - org.xml.sax - various
+- XPathUtil (XPath assertion)
 
 velocity-1.4
-- Anakia (create documentation) Not used by JMeter runtime
+- Anakia (create documentation) Not used by JMeter runtime. Requires jdom-b9, 1.0 does not work
 
 xalan
 +org.apache.xalan|xml|xpath
@@ -62,4 +65,5 @@ xml-apis
 +org.w3c.dom
 +org.xml.sax
 
-The x* jars are used for XML handling (not needed for JDK1.4)
+The x* jars are used for XML handling
+JDK1.4+ includes most of the functionality (except perhaps xpath in xalan?)
