@@ -76,6 +76,13 @@ public abstract class HTMLParser
     static HTMLParser parser;
 
     /**
+     * Protected constructor to prevent instantiation except
+     * from within subclasses. 
+     */
+    protected HTMLParser() {
+    }
+    
+    /**
      * Create the single instance.
      */
     private static void initialize()
@@ -109,10 +116,11 @@ public abstract class HTMLParser
      * 
      * @return The single HtmlParser instance.
      */
-    public static HTMLParser getParser()
+    public static final synchronized HTMLParser getParser()
     {
-        if (parser == null)
+        if (parser == null) {
             initialize();
+        }
         return parser;
     }
 
