@@ -53,14 +53,16 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control.gui;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.table.*;
-import javax.swing.text.*;
+import java.awt.Font;
+
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+
 import org.apache.jmeter.control.InterleaveControl;
-import org.apache.jmeter.gui.*;
+import org.apache.jmeter.gui.NamePanel;
 import org.apache.jmeter.gui.util.VerticalLayout;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -76,6 +78,7 @@ import org.apache.jmeter.util.JMeterUtils;
 public class InterleaveControlGui extends AbstractControllerGui
 {
 	InterleaveControl model;
+	JCheckBox style;
 
 	/****************************************
 	 * !ToDo (Constructor description)
@@ -105,6 +108,19 @@ public class InterleaveControlGui extends AbstractControllerGui
 	{
 		return namePanel.getName();
 	}
+	
+	public void configure(TestElement el)
+	{
+		super.configure(el);
+		if(((InterleaveControl)el).getStyle() == InterleaveControl.DEFAULT_STYLE)
+		{
+			style.setSelected(true);
+		}
+		else
+		{
+			style.setSelected(false);
+		}
+	}
 
 	/****************************************
 	 * !ToDo (Method description)
@@ -115,6 +131,14 @@ public class InterleaveControlGui extends AbstractControllerGui
 	{
 		InterleaveControl ic = new InterleaveControl();
 		configureTestElement(ic);
+		if(style.isSelected())
+		{
+			ic.setStyle(ic.DEFAULT_STYLE);
+		}
+		else
+		{
+			ic.setStyle(ic.NEW_STYLE);
+		}
 		return ic;
 	}
 
@@ -151,5 +175,7 @@ public class InterleaveControlGui extends AbstractControllerGui
 		mainPanel.add(namePanel);
 
 		this.add(mainPanel);
+		style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers"));
+		this.add(style);
 	}
 }
