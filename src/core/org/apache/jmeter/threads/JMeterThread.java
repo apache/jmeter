@@ -161,8 +161,8 @@ public class JMeterThread implements Runnable, java.io.Serializable
                         result.setThreadName(threadName);
                         result.setTimeStamp(System.currentTimeMillis());
                         threadContext.setPreviousResult(result);
-                        checkAssertions(pack.getAssertions(), result);
                         runPostProcessors(pack.getPostProcessors());
+                        checkAssertions(pack.getAssertions(), result);
                         notifyListeners(pack.getSampleListeners(), result);
                         compiler.done(pack);
                     }

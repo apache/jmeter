@@ -203,6 +203,12 @@ public abstract class AbstractJMeterGuiComponent
             enabled = element.getPropertyAsBoolean(TestElement.ENABLED);
         }
     }
+    
+    public void clear()
+    {
+        setName(getStaticLabel());
+        enabled = true;
+    }
 
     /**
      * This provides a convenience for extenders when they implement the

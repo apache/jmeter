@@ -102,6 +102,10 @@ public class JMeterTreeNode extends DefaultMutableTreeNode
 	{
 		createTestElement().setProperty(new BooleanProperty(TestElement.ENABLED,enabled));
 	}
+    
+    public void clear()
+    {
+    }
 
 	public ImageIcon getIcon()
 	{
