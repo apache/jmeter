@@ -57,14 +57,12 @@ package org.apache.jmeter.config.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
@@ -78,72 +76,106 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.Data;
 
-/************************************************************
- *  Title: JMeter Description :Default config gui for Configuration Element
+/**
+ * Default config gui for Configuration Element.
  *
- *@author     T.Elanjchezhiyan (chezhiyan@siptech.co.in)
- *@created    March 21 2003
- *@version    Bug Enhancement Bug ID-9101
- ***********************************************************/
-
+ * @author     T.Elanjchezhiyan (chezhiyan@siptech.co.in)
+ * @version    $Revision$
+ */
 public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
 {
-    JTable table;
-    JButton add;
-    JButton delete;
-    protected PowerTableModel tableModel;
-    public static final String TVALUE="SimpleConfigGui.tvalue";
+    /* This class created for enhancement Bug ID 9101. */
+    
+    // TODO: This class looks a lot like ArgumentsPanel.  What exactly is the
+    // difference?  Could they be combined?
+    
+    /** The table of configuration parameters. */
+    private JTable table;
+    
+    /** The model for the parameter table. */
+    private PowerTableModel tableModel;
+
+    /** A button for adding new parameters to the table. */
+    private JButton add;
+    
+    /** A button for removing parameters from the table. */
+    private JButton delete;
+    
+    /** Command for adding a row to the table. */ 
+    private static final String ADD = "add";
+
+    /** Command for removing a row from the table. */ 
+    private static final String DELETE = "delete";
+
+    /**
+     * Boolean indicating whether or not this component should display its
+     * name. If true, this is a standalone component. If false, this component
+     * is intended to be used as a subpanel for another component.
+     */
     private boolean displayName = true;
-    private static String ADD = "add";
-    private static String DELETE = "delete";
 
-
-    public static String[] COLUMN_NAMES = {
+    /** The names of the columns in the table. */
+    public static final String[] COLUMN_NAMES = {
         JMeterUtils.getResString("name"),
         JMeterUtils.getResString("value"),
         JMeterUtils.getResString("metadata")
     };
 
-    /****************************************
-     * Constructor for the SimpleConfigGui object
-     ***************************************/
+    /**
+     * Create a new standalone SimpleConfigGui.
+     */
     public SimpleConfigGui()
     {
         this(true);
     }
 
-    /****************************************
-     * Constructor for the SimpleConfigGui object
+    /**
+     * Create a new SimpleConfigGui as either a standalone or an embedded
+     * component.
      *
-     *@param displayName  Description of Parameter
-     ***************************************/
+     * @param displayName  indicates whether or not this component should
+     *                     display its name.  If true, this is a standalone
+     *                     component.  If false, this component is intended
+     *                     to be used as a subpanel for another component.
+     */
     public SimpleConfigGui(boolean displayName)
     {
         this.displayName = displayName;
         init();
     }
 
+    /* Implements JMeterGUIComponent.getStaticLabel() */
     public String getStaticLabel()
     {
         return JMeterUtils.getResString("Simple Config Element");
     }
 
-    /**************************************************************
-     *Retrive all the key value pair from the TestElement object
-     *and set  back (all the value in)to the component in the GUI.
-     **************************************************************/
-    public  void configure(TestElement el){
+    /**
+     * A newly created component can be initialized with the contents of
+     * a Test Element object by calling this method.  The component is
+     * responsible for querying the Test Element object for the
+     * relevant information to display in its GUI.
+     * <p>
+     * This implementation retrieves all key/value pairs from the TestElement
+     * object and sets these values in the GUI.
+     * 
+     * @param el the TestElement to configure 
+     */
+    public  void configure(TestElement el)
+    {
         super.configure(el);
         tableModel.clearData();
-        PropertyIterator iter=el.propertyIterator();
-        while(iter.hasNext())
+        PropertyIterator iter = el.propertyIterator();
+        while (iter.hasNext())
         {
             JMeterProperty prop = iter.next();
-            tableModel.addRow(new Object[]{prop.getName(),prop.getStringValue()});
+            tableModel.addRow(
+                new Object[] { prop.getName(), prop.getStringValue()});
         }
         checkDeleteStatus();
     }
-    
+
+    /* Implements JMeterGUIComponent.createTestElement() */
     public TestElement createTestElement()
     {
         TestElement el = new ConfigTestElement();
@@ -151,28 +183,35 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
         return el;
     }
 
-    /*************************************************************
-     *Get all the value from the component in the GUI and
-     *configure with the TestElement object
-     ************************************************************/
-
-    public void modifyTestElement(TestElement el) {
+    /**
+     * Get all of the values from the GUI component and set them in the
+     * TestElement.
+     * 
+     * @param el the TestElement to modify
+     */
+    public void modifyTestElement(TestElement el)
+    {
         Data model = tableModel.getData();
         model.reset();
-        while(model.next())
+        while (model.next())
         {
-            el.setProperty(new StringProperty((String)model.getColumnValue(COLUMN_NAMES[0]),
-                                (String)model.getColumnValue(COLUMN_NAMES[1])));
+            el.setProperty(
+                new StringProperty(
+                    (String) model.getColumnValue(COLUMN_NAMES[0]),
+                    (String) model.getColumnValue(COLUMN_NAMES[1])));
         }
         super.configureTestElement(el);
     }
 
-
+    /**
+     * Initialize the components and layout of this component.
+     */
     private void init()
     {
         setLayout(new BorderLayout(0, 10));
         
-        if (displayName) {
+        if (displayName)
+        {
             setBorder(makeBorder());
             add(makeTitlePanel(), BorderLayout.NORTH);
         }
@@ -184,30 +223,49 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
     }
 
 
-
+    /**
+     * Invoked when an action occurs.  This implementation supports the add
+     * and delete buttons.
+     * 
+     * @param e the event that has occurred
+     */
     public void actionPerformed(ActionEvent e)
     {
         String action = e.getActionCommand();
-        if(action.equals(DELETE))
+        if (action.equals(DELETE))
         {
             deleteArgument();
         }
-        else if(action.equals(ADD))
+        else if (action.equals(ADD))
         {
             addArgument();
         }
     }
 
-    private Component createTablePanel() {
-        tableModel = new PowerTableModel(new String[]{COLUMN_NAMES[0],COLUMN_NAMES[1]},
-                                         new Class[]{String.class,String.class});
+    /**
+     * Create a GUI panel containing the table of configuration parameters.
+     *  
+     * @return a GUI panel containing the parameter table
+     */
+    private Component createTablePanel()
+    {
+        tableModel =
+            new PowerTableModel(
+                new String[] { COLUMN_NAMES[0], COLUMN_NAMES[1] },
+                new Class[] { String.class, String.class });
             
         table = new JTable(tableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        return new JScrollPane(table);
+        return makeScrollPane(table);
     }
 
-    private JPanel createButtonPanel() {
+    /**
+     * Create a panel containing the add and delete buttons.
+     * 
+     * @return a GUI panel containing the buttons
+     */
+    private JPanel createButtonPanel()
+    {
         add = new JButton(JMeterUtils.getResString("add"));
         add.setActionCommand(ADD);
         add.addActionListener(this);
@@ -224,9 +282,15 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
         buttonPanel.add(delete);
         return buttonPanel;
     }
-    protected void checkDeleteStatus() {
+
+    /**
+     * Enable or disable the delete button depending on whether or not there
+     * is a row to be deleted.
+     */
+    protected void checkDeleteStatus()
+    {
         // Disable DELETE if there are no rows in the table to delete.
-        if(tableModel.getRowCount() == 0)
+        if (tableModel.getRowCount() == 0)
         {
             delete.setEnabled(false);
         }
@@ -236,7 +300,11 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
         }
     }
 
-    protected void addArgument() {
+    /**
+     * Add a new argument row to the table.
+     */
+    protected void addArgument()
+    {
         // If a table cell is being edited, we should accept the current value
         // and stop the editing before adding a new row.
         stopTableEditing();
@@ -252,47 +320,61 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
         table.setRowSelectionInterval(rowToSelect, rowToSelect);
     }
 
+    /**
+     * Stop any editing that is currently being done on the table.  This will
+     * save any changes that have already been made.
+     */
     protected void stopTableEditing()
     {
-        if(table.isEditing())
+        if (table.isEditing())
         {
-            TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
+            TableCellEditor cellEditor =
+                table.getCellEditor(
+                    table.getEditingRow(),
+                    table.getEditingColumn());
             cellEditor.stopCellEditing();
         }
     }
 
-    protected void deleteArgument() {
+    /**
+     * Remove the currently selected argument from the table.
+     */
+    protected void deleteArgument()
+    {
         // If a table cell is being edited, we must cancel the editing before
         // deleting the row
-        if(table.isEditing())
+        if (table.isEditing())
         {
-            TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
+            TableCellEditor cellEditor =
+                table.getCellEditor(
+                    table.getEditingRow(),
+                    table.getEditingColumn());
             cellEditor.cancelCellEditing();
         }
                 
         int rowSelected = table.getSelectedRow();
 
 
-        if(rowSelected >= 0)
+        if (rowSelected >= 0)
         {
 
-            //removeProperty(tableModel.getValueAt(table.getSelectedRow(),0).toString());
+            //removeProperty(tableModel.getValueAt (
+            //    table.getSelectedRow(),0).toString());
             tableModel.removeRow(rowSelected);
             tableModel.fireTableDataChanged();
 
             // Disable DELETE if there are no rows in the table to delete.
-            if(tableModel.getRowCount() == 0)
+            if (tableModel.getRowCount() == 0)
             {
                 delete.setEnabled(false);
             }
-                
-            // Table still contains one or more rows, so highlight (select)
-            // the appropriate one.
             else
             {
+                // Table still contains one or more rows, so highlight (select)
+                // the appropriate one.
                 int rowToSelect = rowSelected;
                 
-                if(rowSelected >= tableModel.getRowCount())
+                if (rowSelected >= tableModel.getRowCount())
                 {
                     rowToSelect = rowSelected - 1;
                 }
@@ -301,8 +383,4 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
             }
         }
     }
-
-    public Dimension getPreferredSize() {
-        return getMinimumSize();
-    }  
 }
