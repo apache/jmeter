@@ -53,12 +53,21 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.visualizers;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import org.apache.jmeter.gui.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.TableModelEvent;
+
 import org.apache.jmeter.gui.util.VerticalLayout;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
@@ -104,7 +113,7 @@ public class TableVisualizer extends AbstractVisualizer
 	 ***************************************/
 	public String getStaticLabel()
 	{
-		return JMeterUtils.getResString("View Results in Table");
+		return JMeterUtils.getResString("view_results_in_table");
 	}
 
 	/****************************************
@@ -113,6 +122,7 @@ public class TableVisualizer extends AbstractVisualizer
 	public void updateGui()
 	{
 		// Not completely sure if this is the correct way of updating the table
+		table.tableChanged(new TableModelEvent(model));
 		tableScrollPanel.revalidate();
 		tableScrollPanel.repaint();
 		noSamplesField.setText(Long.toString(model.getSampleCount()));
@@ -140,6 +150,7 @@ public class TableVisualizer extends AbstractVisualizer
 	{
 		// We have received one more sample
 		// Not completely sure if this is the correct way of updating the table
+		table.tableChanged(new TableModelEvent(model));
 		tableScrollPanel.revalidate();
 		tableScrollPanel.repaint();
 		noSamplesField.setText(Long.toString(model.getSampleCount()));
@@ -185,7 +196,7 @@ public class TableVisualizer extends AbstractVisualizer
 		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
 		// TITLE
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("View Results in Table"));
+		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("view_results_in_table"));
 		Font curFont = panelTitleLabel.getFont();
 		int curFontSize = curFont.getSize();
 		curFontSize += 4;
