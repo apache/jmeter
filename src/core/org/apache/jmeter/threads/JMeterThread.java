@@ -94,12 +94,13 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 	String threadName;
 	JMeterVariables threadVars;
 	Collection threadListeners;
+	ListenerNotifier notifier;
 	
 	/****************************************
 	 * !ToDo (Constructor description)
 	 ***************************************/
 	public JMeterThread() {}
-	public JMeterThread(ListedHashTree test, JMeterThreadMonitor monitor) {
+	public JMeterThread(ListedHashTree test, JMeterThreadMonitor monitor,ListenerNotifier note) {
 		this.monitor = monitor;
 		threadVars = new JMeterVariables();
 		testTree = test;
@@ -108,6 +109,7 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 		SearchByClass threadListenerSearcher = new SearchByClass(ThreadListener.class);
 		test.traverse(threadListenerSearcher);
 		threadListeners = threadListenerSearcher.getSearchResults();
+		notifier = note;
 	}
 
 	public void setThreadName(String threadName)
@@ -209,12 +211,7 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 	private void notifyListeners(List listeners, SampleResult result) {
 		SampleEvent event =
 			new SampleEvent(result, (String) controller.getProperty(TestElement.NAME));
-		Iterator iter = listeners.iterator();
-		while (iter.hasNext()) {
-			SampleListener lis = (SampleListener)iter.next();
-			SampleListener item = lis;
-			item.sampleOccurred(event);
-		}
+		notifier.addLast(event,listeners);
 	}
 	public void setInitialDelay(int delay) {
 		initialDelay = delay;
