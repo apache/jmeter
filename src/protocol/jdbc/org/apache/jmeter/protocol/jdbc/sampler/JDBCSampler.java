@@ -73,6 +73,12 @@ public class JDBCSampler extends AbstractSampler implements TestListener
     {
     }
 
+    public Object clone(){
+    	Object o = super.clone();
+    	JDBCSampler s = (JDBCSampler) o;
+		s.manager=DBConnectionManager.getManager();
+    	return o;
+    }
     public SampleResult sample(Entry e)
     {
         DBKey key = null;
