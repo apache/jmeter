@@ -1,4 +1,5 @@
 ext
+htmlparser.jar
 jorphan.jar
 activation.jar
 iaik_jce.jar
@@ -9,3 +10,4 @@ pop3.jar
 smtp.jar
 w3c_http.jar
 bsh*.jar
+bsf*.jar
