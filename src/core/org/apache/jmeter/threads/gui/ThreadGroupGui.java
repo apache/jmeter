@@ -54,6 +54,7 @@
  */
 package org.apache.jmeter.threads.gui;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.util.Collection;
 
 import javax.swing.BorderFactory;
@@ -244,5 +245,9 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent
     public void setNode(JMeterTreeNode node)
     {
         namePanel.setNode(node);
+    }
+    
+    public Dimension getPreferredSize() {
+        return getMinimumSize();
     }
 }

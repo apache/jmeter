@@ -55,14 +55,13 @@
 package org.apache.jmeter.assertions.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.assertions.DurationAssertion;
@@ -147,13 +146,13 @@ public class DurationAssertionGui extends AbstractAssertionGui implements FocusL
 
 	private void init()
 	{
-		setLayout(new BorderLayout());
-        Box vertPanel = Box.createVerticalBox();
+		setLayout(new BorderLayout(0, 10));
 		setBorder(makeBorder());
 
-        vertPanel.add(makeTitlePanel());
-        vertPanel.add(Box.createVerticalStrut(10));
+        add(makeTitlePanel(), BorderLayout.NORTH);
 
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        
 		// USER_INPUT
 		HorizontalPanel durationPanel = new HorizontalPanel();
 		durationPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), getDurationAttributesTitle()));
@@ -163,11 +162,9 @@ public class DurationAssertionGui extends AbstractAssertionGui implements FocusL
 		duration = new JTextField(5);
 		duration.addFocusListener(this);
 		durationPanel.add(duration);
-        durationPanel.add(Box.createRigidArea(new Dimension(30,1)));
-        durationPanel.add(Box.createHorizontalGlue());
-		vertPanel.add(durationPanel);
-        vertPanel.add(Box.createVerticalGlue());
-        add(vertPanel,BorderLayout.NORTH);
+
+        mainPanel.add(durationPanel, BorderLayout.NORTH);
+        add(mainPanel, BorderLayout.CENTER);      
 	}
 
 	/****************************************
@@ -203,5 +200,4 @@ public class DurationAssertionGui extends AbstractAssertionGui implements FocusL
 	 ***************************************/
 	public void focusGained(FocusEvent e) {
 	}
-
 }
