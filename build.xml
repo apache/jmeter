@@ -60,6 +60,9 @@
 	- Creates the ApacheJMeter.jar file.
 	-->
 	<target name="package" depends="compile">
+		<copy toDir="${classes.dest.dir}/org/apache/jmeter/images">
+		  <fileset dir="${sources.src.dir}/org/apache/jmeter/images"/>
+		</copy>
 		<jar jarfile="ApacheJMeter.jar" manifest="src/MANIFEST" basedir="${classes.dest.dir}">
 		</jar>
 	</target>
@@ -69,8 +72,8 @@
 	- from bin/.
 	-->
 	<target name="install" depends="package">
-		<copyfile src="ApacheJMeter.jar" dest="bin/ApacheJMeter.jar"/>
-		<copyfile src="src/org/apache/jmeter/jmeter.properties" dest="bin/jmeter.properties"/>
+		<copy file="ApacheJMeter.jar" toFile="bin/ApacheJMeter.jar"/>
+		<copy file="src/org/apache/jmeter/jmeter.properties" toFile="bin/jmeter.properties"/>
 		<delete file="ApacheJMeter.jar"/>
 	</target>
 
