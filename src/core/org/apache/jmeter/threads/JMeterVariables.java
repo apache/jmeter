@@ -54,6 +54,10 @@ public class JMeterVariables
         variables.clear();
     }
 
+    public Object remove(String key)
+    {
+    	return variables.remove(key);
+    }
     public void put(String key, String value)
     {
         variables.put(key, value);
