@@ -845,6 +845,7 @@ public class HTTPSampler extends AbstractSampler
     {
         byte[] readBuffer= JMeterContextService.getContext().getReadBuffer();
         BufferedInputStream in;
+        boolean logError=false; // Should we log the error?
         try
         {
             if (conn.getContentEncoding() != null
@@ -867,14 +868,24 @@ public class HTTPSampler extends AbstractSampler
             }
             else
             {
-                log.error("Getting error message from server: "+e.toString());
+                log.error(e.toString());
+                Throwable cause = e.getCause();
+                if (cause != null){
+                	log.error("Cause: "+cause);
+                }
+                logError=true;
             }
             in= new BufferedInputStream(conn.getErrorStream());
         }
         catch (Exception e)
         {
-            log.error("Getting error message from server: "+e.toString());
+            log.error(e.toString());
+			Throwable cause = e.getCause();
+			if (cause != null){
+				log.error("Cause: "+cause);
+			}
             in= new BufferedInputStream(conn.getErrorStream());
+			logError=true;
         }
         java.io.ByteArrayOutputStream w= new ByteArrayOutputStream();
         int x= 0;
@@ -885,6 +896,16 @@ public class HTTPSampler extends AbstractSampler
         in.close();
         w.flush();
         w.close();
+        if (logError)
+        {
+        	String s;
+        	if (w.size() > 1000){
+				s="\n"+w.toString().substring(0,1000)+"\n\t...";
+        	} else {
+				s="\n"+w.toString();
+        	}
+        	log.error(s);
+        }
         return w.toByteArray();
     }
 
