@@ -11,6 +11,9 @@ Unit testing support is provided by JUnit
 under the Common Public License Version 1.0: http://www.opensource.org/licenses/cpl.php
 See http://www.junit.org/
 
+PNG and TIFF encoding is provided by Apache XML-Batik
+See http://xml.apache.org/
+
 ===========
 This project makes use of HTMLParser.
 For detailed information about HTMLParser, the project is
