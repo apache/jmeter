@@ -837,7 +837,9 @@ some of its classes - at present JMeter can only run from jar files.
 	<path refid="classpath"/>
 	<fileset dir="${dest.jar}" includes="*.jar"/>
       </classpath>
+      <!-- Gump already does this...
       <sysproperty key="java.awt.headless" value="${gump.run}"/>
+      -->
 
       <arg value="../lib/ext"/>
       <arg value="./jmetertest.properties"/>
