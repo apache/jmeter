@@ -33,6 +33,7 @@
 <li>XPath Assertion and XPath Function</li>
 <li>Allow CSVRead delimiter to be changed</li>
 <li>Bug 33796 - delete cookies with null/empty values</li>
+<li>All Beanshell access is now via a single class; only need BSH jar at run-time</li>
 </ul>
 <h4>Bug fixes:</h4>
 <ul>
@@ -47,6 +48,8 @@
 <li>Bug 29186,33299 - fix CLI parsing of "-" in second argument</li>
 <li>Fix CLI parse bug: -D arg1=arg2. Log more startup parameters.</li>
 <li>Fix JTidy and HTMLParser parsers to handle form src= and link rel=stylesheet</li>
+<li>Catch and log Errors in JMeterThread</li>
+<li>Ensure WhileController condition is dynamically checked</li>
 </ul>
 <h4>Other changes:</h4>
 <ul>
