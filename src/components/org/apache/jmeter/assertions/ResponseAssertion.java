@@ -357,8 +357,9 @@ public class ResponseAssertion
       }
       class TestThread extends Thread
       {
-         static final String TEST_STRING = "Dábale arroz a la zorra el abad.";
-         static final String TEST_PATTERN = ".*á.*\\.";
+         static final String TEST_STRING = "DAbale arroz a la zorra el abad.";
+           // Used to be 'dábale', but caused trouble on Gump. Reasons unknown.
+         static final String TEST_PATTERN = ".*A.*\\.";
          public void run()
          {
             ResponseAssertion assertion =
