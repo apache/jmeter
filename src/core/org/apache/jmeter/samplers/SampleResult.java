@@ -100,6 +100,13 @@ public class SampleResult implements Serializable
     private static final boolean startTimeStamp = 
         JMeterUtils.getPropDefault("sampleresult.timestamp.start",false);
 
+    static{
+    	if (startTimeStamp){
+        	log.info("Note: Sample TimeStamps are START times");
+    	} else {
+        	log.info("Note: Sample TimeStamps are END times");   		
+    	}
+    }
     public SampleResult()
     {
     	time = 0;
