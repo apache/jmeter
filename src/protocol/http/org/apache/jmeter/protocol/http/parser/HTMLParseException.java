@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2004 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,12 +57,10 @@
  */
 package org.apache.jmeter.protocol.http.parser;
 
-/**
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
- */
 public class HTMLParseException extends Exception
 {
+	private Throwable savedCause; //Support JDK1.4 getCause() on JDK1.3
+	
     /**
      * 
      */
@@ -84,7 +82,9 @@ public class HTMLParseException extends Exception
      */
     public HTMLParseException(Throwable cause)
     {
-        super(cause);
+        //JDK1.4: super(cause);
+        super();
+        savedCause = cause;
     }
 
     /**
@@ -93,6 +93,17 @@ public class HTMLParseException extends Exception
      */
     public HTMLParseException(String message, Throwable cause)
     {
-        super(message, cause);
+        //JDK1.4: super(message, cause);
+        super(message);
+		savedCause = cause;
+    }
+    
+    /**
+     * Local verstion of getCause() for JDK1.3 support
+     * 
+     */
+    public Throwable getCause()
+    {
+    	return savedCause;
     }
 }
