@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -74,20 +74,18 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/****************************************
- * Title: JMeter 
- * Description: Copyright: Copyright (c) 2000 
- * Company: Apache
- *
- *@author	Michael Stover
- *@author	Thad Smith
- *@created	$Date$
- *@version	1.0
- ***************************************/
-
-public class GenericController extends AbstractTestElement implements Controller, Serializable
+/**
+ * @author  Michael Stover
+ * @author  Thad Smith
+ * @version $Revision$
+ */
+public class GenericController
+    extends AbstractTestElement
+    implements Controller, Serializable
 {
-    protected static Logger log = LoggingManager.getLoggerFor(JMeterUtils.ELEMENTS);
+    protected static Logger log =
+        LoggingManager.getLoggerFor(JMeterUtils.ELEMENTS);
+
     protected LinkedList iterationListeners = new LinkedList();
     protected List subControllersAndSamplers = new ArrayList();
 
@@ -150,7 +148,8 @@ public class GenericController extends AbstractTestElement implements Controller
                 }
                 else
                 {
-                    returnValue = nextIsAController((Controller) currentElement);
+                    returnValue =
+                        nextIsAController((Controller) currentElement);
                 }
             }
         }
@@ -184,7 +183,8 @@ public class GenericController extends AbstractTestElement implements Controller
         first = b;
     }
 
-    protected Sampler nextIsAController(Controller controller) throws NextIsNullException
+    protected Sampler nextIsAController(Controller controller)
+        throws NextIsNullException
     {
         Sampler returnValue;
         Sampler sampler = controller.next();
@@ -228,7 +228,7 @@ public class GenericController extends AbstractTestElement implements Controller
      * Gets the SubControllers attribute of the 
      * GenericController object
      *
-     *	@return	The SubControllers value
+     * @return  the SubControllers value
      */
     protected List getSubControllers()
     {
@@ -240,8 +240,10 @@ public class GenericController extends AbstractTestElement implements Controller
         subControllersAndSamplers.add(child);
     }
 
-    protected void setCurrentElement(TestElement currentElement) throws NextIsNullException
-    {}
+    protected void setCurrentElement(TestElement currentElement)
+        throws NextIsNullException
+    {
+    }
 
     protected TestElement getCurrentElement() throws NextIsNullException
     {
@@ -275,9 +277,6 @@ public class GenericController extends AbstractTestElement implements Controller
         current = 0;
     }
 
-    /**
-     * @see org.apache.jmeter.testelement.TestElement#addTestElement(org.apache.jmeter.testelement.TestElement)
-     */
     public void addTestElement(TestElement child)
     {
         if (child instanceof Controller || child instanceof Sampler)
@@ -288,8 +287,9 @@ public class GenericController extends AbstractTestElement implements Controller
 
     public void addIterationListener(LoopIterationListener lis)
     {
-        /* A little hack - add each listener to the start of the list - this ensures that the thread running the show is the first listener and can
-         * modify certain values before other listeners are called.
+        /* A little hack - add each listener to the start of the list - this
+         * ensures that the thread running the show is the first listener and
+         * can modify certain values before other listeners are called.
          */
         iterationListeners.addFirst(lis);
     }
@@ -353,7 +353,15 @@ public class GenericController extends AbstractTestElement implements Controller
             sub_2.addTestElement(sub_3);
             sub_2.addTestElement(new TestSampler("seven"));
             controller.addTestElement(sub_2);
-            String[] order = new String[] { "one", "two", "three", "four", "five", "six", "seven" };
+            String[] order =
+                new String[] {
+                    "one",
+                    "two",
+                    "three",
+                    "four",
+                    "five",
+                    "six",
+                    "seven" };
             int counter = 7;
             controller.initialize();
             for (int i = 0; i < 2; i++)
@@ -363,7 +371,9 @@ public class GenericController extends AbstractTestElement implements Controller
                 TestElement sampler = null;
                 while ((sampler = controller.next()) != null)
                 {
-                    assertEquals(order[counter++], sampler.getPropertyAsString(TestElement.NAME));
+                    assertEquals(
+                        order[counter++],
+                        sampler.getPropertyAsString(TestElement.NAME));
                 }
             }
         }
