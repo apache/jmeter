@@ -84,10 +84,11 @@ public class Property extends AbstractFunction implements Serializable
 
     // Number of parameters expected - used to reject invalid calls
     private static final int MIN_PARAMETER_COUNT = 1;
-    private static final int MAX_PARAMETER_COUNT = 2;
+    private static final int MAX_PARAMETER_COUNT = 3;
     static {
         desc.add(JMeterUtils.getResString("property_name_param"));
         desc.add(JMeterUtils.getResString("function_name_param"));
+        desc.add(JMeterUtils.getResString("property_default_param"));
     }
 
     private Object[] values;
@@ -106,14 +107,19 @@ public class Property extends AbstractFunction implements Serializable
         Sampler currentSampler)
         throws InvalidVariableException
     {
-
         String propertyName = ((CompoundVariable) values[0]).execute();
+		String propertyDefault = propertyName;
+        if (values.length > 2){ // We have a 3rd parameter
+        	propertyDefault= ((CompoundVariable) values[2]).execute();
+        }
         String propertyValue =
-            JMeterUtils.getPropDefault(propertyName, propertyName);
+            JMeterUtils.getPropDefault(propertyName, propertyDefault);
         if (values.length > 1)
         {
             String variableName = ((CompoundVariable) values[1]).execute();
-            getVariables().put(variableName, propertyValue);
+            if (variableName.length() > 0){// Allow for empty name
+            	getVariables().put(variableName, propertyValue);
+            }
         }
         return propertyValue;
 
