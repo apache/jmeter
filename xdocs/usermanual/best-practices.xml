@@ -7,16 +7,16 @@
 
 <body>
 
-<section name="10. Best Practices">
+<section name="11. Best Practices" anchor="best_practices">
 </section>
 
-<section name="10.1 Limit the Number of Threads">
+<section name="11.1 Limit the Number of Threads" anchor="limit_threads">
 </section>
 
-<section name="10.2 Where to Put the Cookie Manager">
+<section name="11.2 Where to Put the Cookie Manager" anchor="put_cookie_manager">
 </section>
 
-<section name="10.3 Where to Put the Auth">
+<section name="11.3 Where to Put the Authorization Manager" anchor="put_auth_manager">
 </section>
 
 </body>
