@@ -169,9 +169,22 @@ public final class AllTests
 
         String e = "java.awt.headless";
 		String g="java.awt.graphicsenv";
+		System.out.println("+++++++++++");
         System.out.println(e+"="+System.getProperty(e));
-		System.out.println(g+"="+System.getProperty(g));
-// don't call any graphics routines here, as some have side effects
+        String n=System.getProperty(g);
+		System.out.println(g+"="+n);
+
+		try {//
+			Class c = Class.forName(n);
+			System.out.println("Found class:  "+n);
+//			c.newInstance();
+//			System.out.println("Instantiated: "+n);
+		} catch (Exception e1) {
+			System.out.println("Error finding class "+n+" "+e1);
+		}
+
+		System.out.println("------------");
+// don't call isHeadless() here, as it has a side effect.
 //--
         TestSuite suite = suite(args[0]);
         // Jeremy Arnold: This method used to attempt to write results to
@@ -183,19 +196,19 @@ public final class AllTests
         TestRunner.run(suite);
 //++
 //      Recheck settings:
+		System.out.println("+++++++++++");
 		System.out.println(e+"="+System.getProperty(e));
 		System.out.println(g+"="+System.getProperty(g));
 		System.out.println("Headless? "+java.awt.GraphicsEnvironment.isHeadless());
-		Class c;
 		try {
-			String n=System.getProperty(g);
-			c = Class.forName(n);
+			Class c = Class.forName(n);
 			System.out.println("Found class:  "+n);
 			c.newInstance();
 			System.out.println("Instantiated: "+n);
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			System.out.println("Error with class "+n+" "+e1);
 		}
+		System.out.println("------------");
 //--
         System.exit(0);
     }
