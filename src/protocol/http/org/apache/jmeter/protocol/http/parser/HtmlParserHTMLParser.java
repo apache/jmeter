@@ -82,6 +82,14 @@ class HtmlParserHTMLParser extends HTMLParser
     /** Used to store the Logger (used for debug and error messages). */
     transient private static Logger log= LoggingManager.getLoggerForClass();
 
+    /** Stores the singleton parser to be used */
+    private static HTMLParser myParser = new HtmlParserHTMLParser();
+    
+    // Not intended to be instantiated externally
+	//TODO make private? 
+	HtmlParserHTMLParser(){
+		super();
+	}
     /* (non-Javadoc)
      * @see org.apache.jmeter.protocol.http.parser.HtmlParser#getEmbeddedResourceURLs(byte[], java.net.URL)
      */
@@ -174,7 +182,7 @@ class HtmlParserHTMLParser extends HTMLParser
                     urls.add(binUrlStr);
                 }
             }
-            log.debug("End   : NewHTTPSamplerFull parseNodes");
+            log.debug("End   : parseNodes");
         }
         catch (ParserException e)
         {
@@ -214,8 +222,25 @@ class HtmlParserHTMLParser extends HTMLParser
             super();
         }
         public void testParser() throws Exception
-        {
-            HTMLParserTest.testParser(new HtmlParserHTMLParser());
+        {   
+        	log.info("testParser");
+			HTMLParserTest.testParser(getParserInstance());
         }
+		public void testParserClass() throws Exception {
+			log.info("testParserClass");
+			HTMLParserTest.testParser("org.apache.jmeter.protocol.http.parser.HtmlParserHTMLParser");
+		}
     }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.protocol.http.parser.HTMLParser#getParserInstance()
+     */
+    public static HTMLParser getParserInstance()
+    {
+        return myParser;
+    }
+
+	public static boolean isParserReusable(){
+		return true;
+	}
 }
