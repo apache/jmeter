@@ -168,6 +168,11 @@ public class ConstantTimer
         
     }
 
+	/**
+	 * @see org.apache.jmeter.engine.event.IterationListener#iteration(org.apache.jmeter.engine.event.IterationEvent)
+	 */
+	public void iteration(IterationEvent event) {}
+	
     /**
      * Make changes to variables available elsewhere.
      * 

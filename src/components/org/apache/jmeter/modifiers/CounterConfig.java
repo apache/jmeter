@@ -80,6 +80,11 @@ public class CounterConfig
 		}			
 	}
 	
+	/**
+	 * @see org.apache.jmeter.engine.event.IterationListener#iteration(org.apache.jmeter.engine.event.IterationEvent)
+	 */
+	public void iteration(IterationEvent event) {}
+	
 	public void setStart(int start)
 	{
 		setProperty(new IntegerProperty(START,start));
