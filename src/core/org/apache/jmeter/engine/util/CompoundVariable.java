@@ -75,6 +75,11 @@ import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 import org.apache.oro.text.perl.Perl5Util;
+import org.apache.oro.text.regex.MalformedPatternException;
+import org.apache.oro.text.regex.Perl5Compiler;
+import org.apache.oro.text.regex.Perl5Matcher;
+import org.apache.oro.text.regex.Perl5Substitution;
+import org.apache.oro.text.regex.Util;
 
 
 /**
@@ -97,6 +102,8 @@ public class CompoundVariable implements Function
     private boolean hasFunction, hasStatics, hasUnknowns;
     private String staticSubstitution;
     private Perl5Util util = new Perl5Util();
+    private Perl5Compiler compiler = new Perl5Compiler();
+    private static final String unescapePattern = "[\\\\]([${}\\,])";
     
     LinkedList compiledComponents = new LinkedList();
 
@@ -129,7 +136,6 @@ public class CompoundVariable implements Function
         hasFunction = false;
         hasStatics = false;
         hasUnknowns = false;
-//        definedValues = new HashMap();
         staticSubstitution = "";
     }
     
@@ -250,8 +256,7 @@ public class CompoundVariable implements Function
 		{
 			pre = current.substring(0, funcStartIndex);
 			if ( ! pre.equals("") ) {
-//				hasStatics = true;
-				components.addLast( pre );
+				components.addLast( unescape(pre) );
 			}
 			
 			funcEndIndex = findMatching( "${", "}", current );
@@ -270,8 +275,7 @@ public class CompoundVariable implements Function
 		} 
 
 		if ( ! current.equals("") ) {
-//			hasStatics = true;
-			components.addLast( current );
+			components.addLast( unescape(current) );
 		}
 
 		return components;
@@ -282,7 +286,7 @@ public class CompoundVariable implements Function
 	{		
 		Function returnFunction = null;
 		LinkedList parameterList;
-		String functionName, params, decodedParams;
+		String functionName, params;
 		int paramsStart = functionStr.indexOf("(");
 
 		if ( paramsStart > -1 ) 
@@ -401,7 +405,6 @@ public class CompoundVariable implements Function
     	return compiled;	
     }
 
-
 	private static int findMatching( String openStr, String closeStr, 
 		String searchString ) 
 	{
@@ -458,6 +461,22 @@ public class CompoundVariable implements Function
 		
 		return closeIndex;
 	}
+	
+	private String unescape(String input)
+	{
+		String result = input;
+		try 
+		{
+			result = Util.substitute(
+				new Perl5Matcher(), compiler.compile(unescapePattern), 
+				new Perl5Substitution("$1"), input, Util.SUBSTITUTE_ALL
+			);
+		}
+		catch (MalformedPatternException e)
+		{
+		}
+		return result;
+	}
 
     public boolean hasFunction()
     {
@@ -473,19 +492,6 @@ public class CompoundVariable implements Function
     public String getStaticSubstitution()
     {
         return staticSubstitution;
-    }
-
-
-    /**
-	 * Method setUserDefinedVariables.
-	 * @deprecated
-	 * @param userVariables
-	 */
-	public void setUserDefinedVariables(Map userVariables)
-    {
-//        definedValues.clear();
-//        definedValues.putAll(functions);
-//        definedValues.putAll(userVariables);
     }
 
     /**
