@@ -70,7 +70,7 @@ public class GraphAccum extends JComponent implements Scrollable,
      */
     protected boolean previousPtsAlloc = false;
 
-    protected static int width = 2000;
+    protected final static int width = 2000;
 
     protected final static int PLOT_X_WIDTH = 10;
     transient private static Logger log = LoggingManager.getLoggerForClass();
@@ -289,10 +289,7 @@ public class GraphAccum extends JComponent implements Scrollable,
         // Allocate previousPts only the first time
         if (!previousPtsAlloc)
         {
-            if (resultList != null)
-            {
-                resultListCount += resultList.length;
-            }
+            resultListCount += resultList.length;
             previousPts = new Point[resultListCount + 2];
         }
 

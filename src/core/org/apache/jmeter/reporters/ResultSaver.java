@@ -100,11 +100,8 @@ public class ResultSaver
 		SampleResult s = e.getResult();
 		saveSample(s);
 		SampleResult []sr = s.getSubResults();
-		if (sr != null){
-			for (int i = 0; i < sr.length; i++){
-				saveSample(sr[i]);
-			}
-
+		for (int i = 0; i < sr.length; i++){
+			saveSample(sr[i]);
 		}
     }
 

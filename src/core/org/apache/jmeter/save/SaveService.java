@@ -637,12 +637,9 @@ public final class SaveService implements SaveServiceConstants
 
         SampleResult[] subResults = result.getSubResults();
 
-        if (subResults != null)
+        for (int i = 0; i < subResults.length; i++)
         {
-            for (int i = 0; i < subResults.length; i++)
-            {
-                config.addChild(getConfiguration(subResults[i], funcTest));
-            }
+            config.addChild(getConfiguration(subResults[i], funcTest));
         }
 
         AssertionResult[] assResults = result.getAssertionResults();
@@ -650,13 +647,10 @@ public final class SaveService implements SaveServiceConstants
         if (funcTest)
         {
             config.addChild(
-                createConfigForString("samplerData", result.getSamplerData()));
-            if (assResults != null)
+            createConfigForString("samplerData", result.getSamplerData()));
+            for (int i = 0; i < assResults.length; i++)
             {
-                for (int i = 0; i < assResults.length; i++)
-                {
-                    config.addChild(getConfiguration(assResults[i]));
-                }
+                config.addChild(getConfiguration(assResults[i]));
             }
             config.addChild(getConfiguration(result.getResponseData()));
         }
@@ -779,7 +773,7 @@ public final class SaveService implements SaveServiceConstants
             String message = null;
             AssertionResult[] results = sample.getAssertionResults();
 
-            if ((results != null) && (results.length > 0))
+            if (results.length > 0)
             {
                 message = results[0].getFailureMessage();
             }
