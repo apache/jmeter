@@ -175,18 +175,6 @@ public final class LoggingManager
         return Hierarchy.getDefaultHierarchy().getLoggerFor(className);
     }
 
-    /**
-     * @param unused ignored
-     * @deprecated this version is temporary; use the no-argument version
-     *             instead.
-     * @return
-     */
-    public static Logger getLoggerForClass(String unused)
-    {
-        String className = getCallerClassName();
-        return Hierarchy.getDefaultHierarchy().getLoggerFor(className);
-    }
-    
     public static Logger getLoggerFor(String category)
     {
         return Hierarchy.getDefaultHierarchy().getLoggerFor(category);
