@@ -304,6 +304,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
         {
             ThreadGroup group = (ThreadGroup) iter.next();
             threads = new JMeterThread[group.getNumThreads()];
+            log.info("Starting " + threads.length + " test threads");
             for (int i = 0; running && i < threads.length; i++)
             {
                 ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);

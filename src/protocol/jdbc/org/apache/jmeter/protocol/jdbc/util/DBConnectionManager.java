@@ -77,229 +77,232 @@ import org.apache.log.Logger;
  *****************************************************************/
 public class DBConnectionManager
 {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter.protocol.jdbc");
-  int absoluteMaxConnections=100;
-  long accessInterval=1800000;
-  Hashtable connections;
-  Hashtable rentedConnections;
+    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.jdbc");
+    int absoluteMaxConnections = 100;
+    long accessInterval = 1800000;
+    Hashtable connections;
+    Hashtable rentedConnections;
 
-  static DBConnectionManager manager;
+    static DBConnectionManager manager;
 
-/******************************************************************
-Constructor.
-*****************************************************************/
-  private DBConnectionManager()
-  {
-	 if(connections==null)
-		connections=new Hashtable();
-	 if(rentedConnections == null)
-		rentedConnections=new Hashtable();
-  }
+    /******************************************************************
+    Constructor.
+    *****************************************************************/
+    private DBConnectionManager()
+    {
+        if (connections == null)
+            connections = new Hashtable();
+        if (rentedConnections == null)
+            rentedConnections = new Hashtable();
+    }
 
-  public static DBConnectionManager getManager()
-  {
-		if(manager == null)
-		{
-			manager = new DBConnectionManager();
-		}
-		return manager;
-  }
+    public static DBConnectionManager getManager()
+    {
+        if (manager == null)
+        {
+            manager = new DBConnectionManager();
+        }
+        return manager;
+    }
 
-/*********************************************************************
-  Starts the connection manager going for a given database connection, and
-  returns the DBKey object required to get a Connection object for this
-  database.
-@param url URL of database to be connected to.
-@param username Username to use to connect to database.
-@param password Password to use to connect to database.
-@param driver Driver to use for the database.
-@param maxUsage Sets the maxUsage parameter for connections to this database.
-@param maxConnections Tells the DBConnectionManager how many connections to keep active.
-@return DBKey object. Returns null if connection fails.
-**********************************************************************/
-  public DBKey getKey(String url,String username,String password,
-			 String driver,int maxUsage,int maxConnections)
-  {
-	 DBKey key=new DBKey();
-	 if(registerDriver(driver))
-	 {
-		key.setDriver(driver);
-		key.setMaxConnections(maxConnections);
-		key.setMaxUsage(maxUsage);
-		key.setPassword(password);
-		key.setUrl(url);
-		key.setUsername(username);
-		if(!connections.containsKey(key))
-		  setup(key);
-	 }
-	 else
-		key=null;
-	 return key;
-  }
+    /*********************************************************************
+      Starts the connection manager going for a given database connection, and
+      returns the DBKey object required to get a Connection object for this
+      database.
+    @param url URL of database to be connected to.
+    @param username Username to use to connect to database.
+    @param password Password to use to connect to database.
+    @param driver Driver to use for the database.
+    @param maxUsage Sets the maxUsage parameter for connections to this database.
+    @param maxConnections Tells the DBConnectionManager how many connections to keep active.
+    @return DBKey object. Returns null if connection fails.
+    **********************************************************************/
+    public DBKey getKey(String url, String username, String password, String driver, int maxUsage, int maxConnections)
+    {
+        DBKey key = new DBKey();
+        if (registerDriver(driver))
+        {
+            key.setDriver(driver);
+            key.setMaxConnections(maxConnections);
+            key.setMaxUsage(maxUsage);
+            key.setPassword(password);
+            key.setUrl(url);
+            key.setUsername(username);
+            if (!connections.containsKey(key))
+                setup(key);
+        }
+        else
+            key = null;
+        return key;
+    }
 
-  /******************************************************
- Constructor.
-@param key DBKey that holds all information needed to set up a set of
-		  connections.
-  ******************************************************/
-  public void setup(DBKey key)
-  {
-	 /* Code used to create a JDBC log for debuggin purposes
-	 try{
-	 java.io.PrintWriter jdbcLog=new java.io.PrintWriter(new java.io.FileWriter(jdbcLogFile));
-	 DriverManager.setLogWriter(jdbcLog);
-	 }catch(Exception e){}*/
-	 String url=key.getUrl();
-	 String username=key.getUsername();
-	 String password=key.getPassword();
-	 int maxConnections=key.getMaxConnections();
-	 int maxUsage=key.getMaxUsage();
-	 ConnectionObject[] connectionArray;
-	 int dbMax;
-	 try{
-		DriverManager.registerDriver((java.sql.Driver)Class.forName(key.getDriver()).newInstance());
-		DatabaseMetaData md=DriverManager.getConnection(url,username,password).getMetaData();
-		dbMax=md.getMaxConnections();
-		if(dbMax>0 && maxConnections>dbMax)
-		{
-		  maxConnections=dbMax;
-		  key.setMaxConnections(maxConnections);
-		}
-		else if(maxConnections>absoluteMaxConnections)
-		{
-		  maxConnections=absoluteMaxConnections;
-		  key.setMaxConnections(maxConnections);
-		}
-	 }catch(Exception e){log.error("Couldn't open connections to database",e);
-		maxConnections=0;}
-	 connectionArray=new ConnectionObject[maxConnections];
-	 int count=-1;
-	 while(++count<maxConnections)
-		connectionArray[count]=new ConnectionObject(this,key);
-	 connections.put(key,connectionArray);
-	 System.gc();
-  } // End Method
+    /******************************************************
+    Constructor.
+    @param key DBKey that holds all information needed to set up a set of
+    		  connections.
+    ******************************************************/
+    public void setup(DBKey key)
+    {
+        /* Code used to create a JDBC log for debuggin purposes
+        try{
+        java.io.PrintWriter jdbcLog=new java.io.PrintWriter(new java.io.FileWriter(jdbcLogFile));
+        DriverManager.setLogWriter(jdbcLog);
+        }catch(Exception e){}*/
+        String url = key.getUrl();
+        String username = key.getUsername();
+        String password = key.getPassword();
+        int maxConnections = key.getMaxConnections();
+        int maxUsage = key.getMaxUsage();
+        ConnectionObject[] connectionArray;
+        int dbMax;
+        try
+        {
+            DriverManager.registerDriver((java.sql.Driver) Class.forName(key.getDriver()).newInstance());
+            DatabaseMetaData md = DriverManager.getConnection(url, username, password).getMetaData();
+            dbMax = md.getMaxConnections();
+            if (dbMax > 0 && maxConnections > dbMax)
+            {
+                maxConnections = dbMax;
+                key.setMaxConnections(maxConnections);
+            }
+            else if (maxConnections > absoluteMaxConnections)
+            {
+                maxConnections = absoluteMaxConnections;
+                key.setMaxConnections(maxConnections);
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("Couldn't open connections to database", e);
+            maxConnections = 0;
+        }
+        connectionArray = new ConnectionObject[maxConnections];
+        int count = -1;
+        while (++count < maxConnections)
+            connectionArray[count] = new ConnectionObject(this, key);
+        connections.put(key, connectionArray);
+        System.gc();
+    } // End Method
 
-	public void shutdown()
-	{
-		Iterator iter = connections.keySet().iterator();
-		while (iter.hasNext()) {
-			close((DBKey)iter.next());
-		}
-	}
+    public void shutdown()
+    {
+        synchronized (connections)
+        {
+            Iterator iter = connections.keySet().iterator();
+            while (iter.hasNext())
+            {
+                close((DBKey) iter.next());
+            }
+        }
 
+    }
 
+    /******************************************************
+    Rents out a database connection object.
+    @return Connection object.
+    ******************************************************/
+    public Connection getConnection(DBKey key) throws NoConnectionsAvailableException //deleted synchronized
+    {
+        ConnectionObject[] connectionArray = (ConnectionObject[]) connections.get(key);
+        if (connectionArray == null || connectionArray.length == 0)
+        {
+            throw new NoConnectionsAvailableException();
+        }
+        int maxConnections = key.getMaxConnections();
+        Connection c = null;
+        int index = (int) (100 * Math.random());
+        int count = -1;
+        while (++count < maxConnections && c == null)
+        {
+            index++;
+            c = connectionArray[index % maxConnections].grab();
+        }
+        if (c != null)
+            rentedConnections.put(c, connectionArray[index % maxConnections]);
+        return c;
+    } // End Method
 
-  /******************************************************
-  Rents out a database connection object.
-@return Connection object.
-  ******************************************************/
-  public Connection getConnection(DBKey key) throws NoConnectionsAvailableException     //deleted synchronized
-  {
-	 ConnectionObject[] connectionArray=(ConnectionObject[])connections.get(key);
-     if(connectionArray == null || connectionArray.length == 0)
-     {
-         throw new NoConnectionsAvailableException();
-     }
-	 int maxConnections=key.getMaxConnections();
-	 Connection c=null;
-	 int index=(int)(100*Math.random());
-	 int count=-1;
-	 while(++count<maxConnections && c==null)
-	 {
-		index++;
-		c=connectionArray[index%maxConnections].grab();
-	 }
-	 if(c!=null)
-		rentedConnections.put(c,connectionArray[index%maxConnections]);
-	 return c;
-  } // End Method
+    /******************************************************
+    Releases a connection back to the pool
+    @param c Connection object being returned
+    ******************************************************/
+    public void releaseConnection(Connection c) // deleted synchronized
+    {
+        if (c == null)
+        {
+            return;
+        }
+        ConnectionObject connOb = (ConnectionObject) rentedConnections.get(c);
+        if (connOb != null)
+        {
+            rentedConnections.remove(c);
+            connOb.release();
+        }
+        else
+        {
+            log.warn("DBConnectionManager: Lost a connection connection='" + c);
+            c = null;
+        }
+    } // End Method
 
-  /******************************************************
-  Releases a connection back to the pool
-@param c Connection object being returned
-  ******************************************************/
-  public void releaseConnection(Connection c)         // deleted synchronized
-  {
-  	if(c == null)
-  	{
-  		return;
-  	}
-	 ConnectionObject connOb=(ConnectionObject)rentedConnections.get(c);
-	 if(connOb!=null)
-	 {
-		rentedConnections.remove(c);
-		connOb.release();
-	 }
-	 else
-	 {
-		log.warn("DBConnectionManager: Lost a connection connection='"+c);
-		c=null;
-	 }
-  } // End Method
+    /*********************************************************
+     Returns a new java.sql.Connection object.
+    @throws java.sql.SQLException
+    *********************************************************/
+    public Connection newConnection(DBKey key) throws SQLException //deleted synchronized
+    {
+        Connection c;
+        c = DriverManager.getConnection(key.getUrl(), key.getUsername(), key.getPassword());
+        return c;
+    }
 
+    /*************************************************************
+    Closes out this object and returns resources to the system.
+    *************************************************************/
+    public void close(DBKey key)
+    {
+        ConnectionObject[] connectionArray = (ConnectionObject[]) connections.get(key);
+        int count = -1;
+        while (++count < connectionArray.length)
+        {
+            connectionArray[count].close();
+            connectionArray[count] = null;
+        }
+        connections.remove(key);
+    }
 
- /*********************************************************
-  Returns a new java.sql.Connection object.
-@throws java.sql.SQLException
- *********************************************************/
-  public Connection newConnection(DBKey key) throws SQLException       //deleted synchronized
-  {
-	 Connection c;
-	 c=DriverManager.getConnection(key.getUrl(),key.getUsername(),key.getPassword());
-	 return c;
-  }
+    /*********************************************************************
+    Registers a driver for a database.
+    @param driver full classname for the driver.
+    @return True if successful, false otherwise.
+    ***********************************************************************/
+    public boolean registerDriver(String driver)
+    {
+        try
+        {
+            DriverManager.registerDriver((Driver) Class.forName(driver).newInstance());
+        }
+        catch (Exception e)
+        {
+            log.error("", e);
+            return false;
+        }
+        return true;
+    }
 
-/*************************************************************
-Closes out this object and returns resources to the system.
-*************************************************************/
-  public void close(DBKey key)
-  {
-	 ConnectionObject[] connectionArray=(ConnectionObject[])connections.get(key);
-	 int count=-1;
-	 while(++count<connectionArray.length)
-	 {
-		connectionArray[count].close();
-		connectionArray[count]=null;
-	 }
-	 connections.remove(key);
-  }
-
-
-
-/*********************************************************************
-Registers a driver for a database.
-@param driver full classname for the driver.
-@return True if successful, false otherwise.
-***********************************************************************/
-  public boolean registerDriver(String driver)
-  {
-	 try{
-		DriverManager.registerDriver((Driver)Class.forName(driver).newInstance());
-	 }catch(Exception e){log.error("",e); return false;}
-	 return true;
-  }
-
-
-/*******************************************************************
- Private method to check if database exists.
-@return True if database exists, false otherwise
- ******************************************************************
-  private synchronized boolean checkForDatabase()
-  {
-	 boolean connected=true;
-	 try
-	 {
-		DatabaseMetaData dmd=connection[counter].getCon().getMetaData();
-		int cons=dmd.getMaxConnections();
-	 }catch(SQLException e){connected=false;log.error("",e);}
-
-	 return connected;
-  }  //end of method      */
+    /*******************************************************************
+     Private method to check if database exists.
+    @return True if database exists, false otherwise
+     ******************************************************************
+      private synchronized boolean checkForDatabase()
+      {
+    	 boolean connected=true;
+    	 try
+    	 {
+    		DatabaseMetaData dmd=connection[counter].getCon().getMetaData();
+    		int cons=dmd.getMaxConnections();
+    	 }catch(SQLException e){connected=false;log.error("",e);}
+    
+    	 return connected;
+      }  //end of method      */
 }
-
-
-
-
-
