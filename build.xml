@@ -99,6 +99,8 @@
 				<exclude name="**/*.orig"/>
 				<exclude name="**/JsseSSLManager.java" unless="jsse.present"/>
 				<exclude name="**/IaikSSLManager.java" unless="isasilk.present"/>
+                <exclude name="**/PKCSKeyStore.java" unless="isasilk.present"/>
+                <exclude name="**/DefaultKeyStore.java" unless="jsse.present"/>
 				<exclude name="org/apache/jmeter/visualizers/MailerVisualizer.java" unless="javamail.complete"/>
 				<exclude name="org/apache/jmeter/reporters/MailerResultCollector.java" unless="javamail.complete"/>
 				<classpath refid="classpath"/>
