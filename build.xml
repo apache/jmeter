@@ -221,7 +221,7 @@
   </path>
 
   <!-- Temporary build directories: where the .class live -->
-  <property name="build.dir" value="build"/>
+  <property name="build.dir" location="build"/>
   <property name="build.core" value="build/core"/>
   <property name="build.http" value="build/protocol/http"/>
   <property name="build.ftp" value="build/protocol/ftp"/>
@@ -1203,14 +1203,16 @@ some of its classes - at present JMeter can only run from jar files.
    test.headless = ${test.headless}
    user.dir = ${user.dir}
    basedir = ${basedir}
+   test dir = ${build.dir}/test
    </echo>
    <java classname="org.apache.jorphan.test.AllTests" fork="yes" dir="${basedir}/bin">
       <classpath>
 	<path refid="classpath"/>
 	<fileset dir="${dest.jar}" includes="*.jar"/>
+	<pathelement location="${build.dir}/test"/>
       </classpath>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
-      <arg value="../lib/ext"/>
+      <arg value="${build.dir}/test,../lib/ext"/>
       <arg value="./jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>

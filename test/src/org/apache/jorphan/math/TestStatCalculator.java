@@ -38,7 +38,6 @@ public class TestStatCalculator extends TestCase {
     
     public void testPercentagePoint() throws Exception
     {
-        System.out.println("calc test going on");
         calc.addValue(10);
         calc.addValue(9);
         calc.addValue(5);

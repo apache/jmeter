@@ -74,7 +74,31 @@ public class StatCalculator implements Serializable
 
     public Number getMedian()
     {
-        return (Number) values.get(values.size() / 2);
+        return (Number) values.get((int)(values.size() * .5));
+    }
+    
+    /**
+     * Get the value which %percent% of the values are less than.  This works just like 
+     * median (where median represents the 50% point).  A typical desire is to see the 90%
+     * point - the value that 90% of the data points are below, the remaining 10% are above.
+     * @param percent
+     * @return
+     */
+    public Number getPercentPoint(float percent)
+    {
+        return (Number) values.get((int)(values.size() * percent));
+    }
+    
+    /**
+     * Get the value which %percent% of the values are less than.  This works just like 
+     * median (where median represents the 50% point).  A typical desire is to see the 90%
+     * point - the value that 90% of the data points are below, the remaining 10% are above.
+     * @param percent
+     * @return
+     */
+    public Number getPercentPoint(double percent)
+    {
+        return (Number) values.get((int)(values.size() * percent));
     }
     
     public double getMean()
@@ -114,7 +138,7 @@ public class StatCalculator implements Serializable
             values.add(val);
         }
         else
-        {;
+        {
             values.add((index * (-1)) - 1, val);
         }
         count++;
