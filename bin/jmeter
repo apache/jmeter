@@ -43,7 +43,7 @@ NEW="-XX:NewSize=128m -XX:MaxNewSize=128m"
 
 # This ratio and target have been proven OK in tests with a specially high
 # amount of per-sample objects (the HtmlParserHTMLParser tests):
-SURVIVOR="-XX:SurvivorRatio=8 -XX:TargetSurvivorRatio=50%"
+# SURVIVOR="-XX:SurvivorRatio=8 -XX:TargetSurvivorRatio=50%"
 
 # Think about it: trying to keep per-run objects in tenuring definitely
 # represents a cost, but where's the benefit? They won't disappear before
@@ -61,7 +61,7 @@ TENURING="-XX:MaxTenuringThreshold=2"
 # memory in a short period of time, such as loading tests or listener data files.
 # Increase it if you experience OutOfMemory problems during those operations
 # without having gone through a lot of Full GC-ing just before the OOM:
-EVACUATION="-XX:MaxLiveObjectEvacuationRatio=20%"
+# EVACUATION="-XX:MaxLiveObjectEvacuationRatio=20%"
 
 # Avoid the RMI-induced Full GCs to run too frequently -- once every ten minutes
 # should be more than enough:
@@ -73,6 +73,8 @@ PERM="-XX:PermSize=64m -XX:MaxPermSize=64m"
 # Finally, some tracing to help in case things go astray:
 DEBUG="-verbose:gc -XX:+PrintTenuringDistribution"
 
-ARGS="$HEAP $NEW $SURVIVOR $TENURING $EVACUATION $RMIGC $PERM $DEBUG"
+SERVER="-server"
 
-java $ARGS -jar `dirname $0`/ApacheJMeter.jar "$@"
+ARGS="$SERVER $HEAP $NEW $SURVIVOR $TENURING $EVACUATION $RMIGC $PERM $DEBUG"
+
+/usr/java/j2sdk1.4.2_05/jre/bin/java $ARGS -jar `dirname $0`/ApacheJMeter.jar "$@"

@@ -1,0 +1,46 @@
+Making a TestBean Plugin For JMeter
+
+This component will be a CSV file reading element that will let users easily vary their input 
+data using csv files.
+
+1. Pick a package and make three files:
+	- [ComponentName].java (CSVDataSet.java)
+	- [ComponentName]BeanInfo.java (CSVDataSetBeanInfo.java)
+	- [ComponentName]Resources.properties (CSVDataSetResources.properties)
+	
+2. CSVDataSet.java must implement the TestBean interface.  In addition, it will extend 
+AbstractTestElement, and implement PreProcessor, TestListener and LoopIterationListener.
+	- TestBean is a marker interface, so there are no methods to implement.
+
+3. CSVDataSetBeanInfo.java should extend org.apache.jmeter.testbeans.BeanInfoSupport
+	- create a zero-parameter constructor in which we call super(CSVDataSet.class);
+	- we'll come back to this.
+
+4. CSVDataSetResources.properties - blank for now
+
+5. Implement your special logic for you plugin class.  
+	- The CSVDataSet will read a single CSV file and will store the values it finds into
+	JMeter's running context.  The user will define the file, define the variable names for
+	each "column".  The CSVDataSet will open the file when the test starts, and close it
+	when the test ends (thus we implement TestListener).  The CSVDataSet will update the
+	contents of the variables for every test thread, and for each iteration through its
+	parent controller, by reading new lines in the file.  When we reach the end of the file,
+	we'll start again at the beginning.
+	
+	- When implementing a TestBean, pay careful attention to your properties.  These
+	properties will become the basis of a gui form by which users will configure the CSVDataSet
+	element.
+	
+	- Your element will be cloned by JMeter when the test starts.  Each thread will get it's own instance.  However, you will
+	have a chance to control how the cloning is done - we'll be taking advantage of this for CSVDataSet (since we don't want to open the file X number of times from X number of threads).
+	
+	a. Properties: filename, variableNames.  With public getters and setters.
+		- filename is self-explanatory, it will hold the name of the CSV file we'll read
+		- variableNames is a String which will allow a user to enter the names of 
+		the variables we'll assign values to.  Why a String?  Why not a Collection - surely
+		users will need to enter multiple (and unknown number) variable names?  True, but
+		if we used a List or Collection, we'd have to write a gui component to handle 
+		collections, and I just want to do this quickly.  Instead, we'll let users input
+		comma-delimited list of variable names.
+		
+	b. 
