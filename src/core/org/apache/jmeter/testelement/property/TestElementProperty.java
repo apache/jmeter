@@ -39,10 +39,17 @@ public class TestElementProperty extends MultiProperty
         super();
     }
 
+    /**
+     * Determines if two test elements are equal.
+     * 
+     * @return true if the value is not null and equals the other Objects value;
+     * false otherwise (even if both values are null)
+     */
     public boolean equals(Object o)
     {
         if (o instanceof TestElementProperty)
         {
+        	if (this == o) return true;
             if (value != null)
             {
                 return value.equals(((JMeterProperty) o).getObjectValue());
@@ -52,7 +59,7 @@ public class TestElementProperty extends MultiProperty
     }
     public int hashCode()
 	{
-    	return value == null ? 0 : hashCode();
+    	return value == null ? 0 : value.hashCode();
     }
 
     /* (non-Javadoc)
