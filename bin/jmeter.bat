@@ -11,4 +11,11 @@ IF "%3" EQU "-p" set PORT=-Dhttp.proxyPort=%4 -Dhttps.proxyPort=%4
 IF "%5" EQU "-f" set PROP=%6
 IF "%5" EQU "-h" set HOST=-Dhttp.proxyHost=%6 -Dhttps.proxyHost=%6
 IF "%5" EQU "-p" set PORT=-Dhttp.proxyPort=%6 -Dhttps.proxyPort=%6
-java -cp %CLASSPATH%;../lib/xerces.jar;ApacheJMeter.jar;../lib/Tidy.jar;../lib/log4j-core.jar %HOST% %PORT% org.apache.jmeter.NewDriver %PROP%
+
+set LOCALCLASSPATH=%CLASSPATH%
+
+for %%i in ("..\lib\*.jar") do CALL ..\lcp %%i
+for %%i in ("..\ext\*.jar") do CALL ..\lcp %%i
+
+
+java -cp %LOCALCLASSPATH%;ApacheJMeter.jar %HOST% %PORT% org.apache.jmeter.NewDriver %PROP%
