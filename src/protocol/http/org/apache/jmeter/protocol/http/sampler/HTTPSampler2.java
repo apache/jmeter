@@ -36,7 +36,6 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.jmeter.config.Argument;
-import org.apache.jmeter.config.Arguments;
 
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
@@ -488,8 +487,13 @@ public class HTTPSampler2 extends HTTPSamplerBase
 
             res.setResponseMessage(httpMethod.getStatusText());
 
-            String ct= httpMethod.getResponseHeader("Content-Type").getValue();
-            res.setContentType(ct);// e.g. text/html; charset=ISO-8859-1
+            String ct=null;
+            Header h = httpMethod.getResponseHeader("Content-Type");
+            if (h!=null)// Can be missing, e.g. on redirect
+            {
+                ct= h.getValue();
+                res.setContentType(ct);// e.g. text/html; charset=ISO-8859-1
+            }
             if (ct != null)
             {
             	// Extract charset and store as DataEncoding
