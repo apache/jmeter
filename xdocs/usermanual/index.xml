@@ -39,6 +39,7 @@
 		<li><a href="get-started.html#proxy_server">2.4.2 Using a Proxy Server</a></li>
 		<li><a href="get-started.html#non_gui">2.4.3 Non-GUI Mode</a></li>
 		<li><a href="get-started.html#server">2.4.4 Distributed Mode</a></li>
+		<li><a href="get-started.html#override">2.4.5 Overriding Properties Via The Command Line</a></li>
 	 </ul>
 	 <li><a href="get-started.html#configuring_jmeter">2.5 Configuring JMeter</a></li>
   </ul>
