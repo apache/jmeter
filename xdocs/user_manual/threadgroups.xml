@@ -65,6 +65,21 @@ directly to the ThreadGroup itself, with only the domain name field filled in.  
 multiple different servers with only a single change.  Additionally, its always best to put the CookieManager element at
 the ThreadGroup level so that all test samples will share the same cookies.
 </p>
+</section>
+<section name="Ramp-Up">
+<p>
+A ThreadGroup can have a <i>ramp-up</i> period associated with it, to provide a way to gradually increase
+the simulated load.  The default value of the ramp-up parameter is zero.  With this setting, the number of threads
+specified for the ThreadGroup are all started immediately when the test begins.
+</p>
+
+<p>
+If the ramp-up parameter is set to a value greater than zero, the threads are started one at a time, spaced evenly
+over the ramp-up period.  The first thread is started immediately, at time=zero.  After that, another thread is started
+every &lt;rampUp&gt; / &lt;numThreads&gt; seconds.  After &lt;rampUp&gt; seconds have elapsed, all threads will be running.
+</p>
+
+
 
 </section>
 </body>
