@@ -22,6 +22,18 @@ public class TestElementProperty extends AbstractProperty
     {
         super();
     }
+    
+    public boolean equals(Object o)
+    {
+        if(o instanceof TestElementProperty)
+        {
+            if(value != null)
+            {
+                return value.equals(((TestElementProperty)o).getObjectValue());
+            }
+        }
+        return false;
+    }
 
     /**
      * @see org.apache.jmeter.testelement.property.JMeterProperty#getStringValue()
