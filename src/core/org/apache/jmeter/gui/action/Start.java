@@ -62,6 +62,7 @@ import javax.swing.JOptionPane;
 import org.apache.jmeter.engine.JMeterEngineException;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.TreeCloner;
+import org.apache.jmeter.engine.util.DisabledComponentRemover;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -133,6 +134,8 @@ public class Start extends AbstractAction
 		engine = new StandardJMeterEngine();
 		HashTree testTree = gui.getTreeModel().getTestPlan();
 		convertSubTree(testTree);
+        DisabledComponentRemover remover = new DisabledComponentRemover(testTree);
+        testTree.traverse(remover);
 		testTree.add(testTree.getArray()[0],gui.getMainFrame());
         TreeCloner cloner = new TreeCloner(false);
         testTree.traverse(cloner);

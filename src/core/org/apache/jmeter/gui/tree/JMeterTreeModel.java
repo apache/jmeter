@@ -158,6 +158,17 @@ public class JMeterTreeModel extends DefaultTreeModel
             throw new IllegalUserActionException("This node cannot hold sub-elements");
         }
         JMeterTreeNode newNode = new JMeterTreeNode((TestElement) component, this);
+        
+        //This check the state of the TestElement and if returns false it disable the loaded node
+        try{
+            if(((String)component.getProperty(TestElement.ENABLED)).equals("false"))
+            {
+                newNode.setEnabled(false);           
+            }
+        }catch(Exception e){
+            newNode.setEnabled(true);
+        }
+
         this.insertNodeInto(newNode, node, node.getChildCount());
         return newNode;
     }

@@ -60,7 +60,7 @@ public class TestElementCloner implements TestElementTraverser
      */
     public void startProperty(Object key)
     {
-        stack.add(new TestElementProperty(key));
+        stack.add(new CloningProperty(key));
     }
 
     /**
@@ -68,11 +68,11 @@ public class TestElementCloner implements TestElementTraverser
      */
     public void endProperty(Object key)
     {
-        TestElementProperty prop = (TestElementProperty)stack.removeLast();
+        CloningProperty prop = (CloningProperty)stack.removeLast();
         addProperty(prop,stack.getLast());
     }
     
-    private void addProperty(TestElementProperty prop,Object parent)
+    private void addProperty(CloningProperty prop,Object parent)
     {
         if(parent instanceof TestElement)
         {
@@ -92,9 +92,9 @@ public class TestElementCloner implements TestElementTraverser
         try
         {
             Object parent = stack.getLast();
-            if(parent instanceof TestElementProperty)
+            if(parent instanceof CloningProperty)
             {
-                ((TestElementProperty)parent).setValue(value);
+                ((CloningProperty)parent).setValue(value);
             }
             else if(parent instanceof Collection)
             {
@@ -151,6 +151,69 @@ public class TestElementCloner implements TestElementTraverser
     {
         Collection cloned = (Collection)stack.removeLast();
         simplePropertyValue(cloned);
+    }
+    
+    /**
+     * Inner class to help deal with properties.
+     * @author Administrator
+     *
+     * To change this generated comment edit the template variable "typecomment":
+     * Window>Preferences>Java>Templates.
+     */
+    class CloningProperty
+    {
+        Object key;
+        Object value;
+    
+        public CloningProperty()
+        {
+        }
+    
+        public CloningProperty(Object key, Object value)
+        {
+            setKey(key);
+            setValue(value);
+        }
+    
+        public CloningProperty(Object key)
+        {
+            setKey(key);
+        }
+        /**
+         * Returns the key.
+         * @return Object
+         */
+        public Object getKey()
+        {
+            return key;
+        }
+
+        /**
+         * Returns the value.
+         * @return Object
+         */
+        public Object getValue()
+        {
+            return value;
+        }
+
+        /**
+         * Sets the key.
+         * @param key The key to set
+         */
+        public void setKey(Object key)
+        {
+            this.key = key;
+        }
+
+        /**
+         * Sets the value.
+         * @param value The value to set
+         */
+        public void setValue(Object value)
+        {
+            this.value = value;
+        }
     }
 
 }

@@ -88,6 +88,8 @@ public class CompoundVariable implements Function
 {
     transient private static Logger log =
         Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ENGINE);
+        
+    private String rawParameters;
     
     private JMeterVariables threadVars;
 	private Map varMap = new HashMap();
@@ -139,6 +141,15 @@ public class CompoundVariable implements Function
 		Sampler currentSampler = context.getCurrentSampler();
 		return execute( previousResult, currentSampler );
 	}
+    
+    /**
+     * Allows the retrieval of the original String prior to it being compiled.
+     * @return String
+     */
+    public String getRawParameters()
+    {
+        return rawParameters;
+    }
  
      /**
      * @see Function#execute(SampleResult, Sampler)
@@ -220,6 +231,7 @@ public class CompoundVariable implements Function
 	public void setParameters(String parameters)
 		throws InvalidVariableException
 	{
+        this.rawParameters = parameters;
 		if (parameters == null || parameters.length() == 0)
 			return;
 		

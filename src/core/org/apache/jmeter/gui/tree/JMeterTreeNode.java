@@ -63,6 +63,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import org.apache.jmeter.gui.GUIFactory;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
@@ -92,12 +93,12 @@ public class JMeterTreeNode extends DefaultMutableTreeNode
 
 	public boolean isEnabled()
 	{
-		return enabled;
+		return ((AbstractTestElement)createTestElement()).getPropertyAsBoolean(TestElement.ENABLED);
 	}
 
 	public void setEnabled(boolean enabled)
 	{
-		this.enabled = enabled;
+		createTestElement().setProperty(TestElement.ENABLED,new Boolean(enabled));
 	}
 
 	public ImageIcon getIcon()

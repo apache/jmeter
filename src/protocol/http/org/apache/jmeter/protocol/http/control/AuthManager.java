@@ -64,6 +64,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -130,7 +131,8 @@ public class AuthManager extends ConfigTestElement implements ConfigElement,
 				el.getProperty("username") != null &&
 				el.getProperty("url") != null)
 		{
-			addAuth(new Authorization(el.getPropertyAsString("url"),
+            
+            addAuth(new Authorization(el.getPropertyAsString("url"),
 					el.getPropertyAsString("username"),
 					el.getPropertyAsString("password")));
 		}
@@ -157,7 +159,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement,
 	 ***************************************/
 	public List getAuthObjects()
 	{
-		return (List)getProperty(AUTH_LIST);
+        return (List)getProperty(AUTH_LIST);
 	}
 
 

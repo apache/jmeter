@@ -67,8 +67,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.control.gui.LoopControlPanel;
-import org.apache.jmeter.gui.JMeterGUIComponent;
-import org.apache.jmeter.gui.NamePanel;
+import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.gui.util.MenuFactory;
@@ -86,7 +85,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *@version   1.0
  ***************************************/
 
-public class ThreadGroupGui extends JPanel implements JMeterGUIComponent
+public class ThreadGroupGui extends AbstractJMeterGuiComponent
 {
     LoopControlPanel loopPanel;
 
@@ -95,15 +94,14 @@ public class ThreadGroupGui extends JPanel implements JMeterGUIComponent
 
     private JTextField threadInput;
     private JTextField rampInput;
-    private NamePanel namePanel;
 
     /****************************************
      * !ToDo (Constructor description)
      ***************************************/
     public ThreadGroupGui()
     {
+        super();
         init();
-        setName(getStaticLabel());
     }
 
     /****************************************
@@ -114,27 +112,6 @@ public class ThreadGroupGui extends JPanel implements JMeterGUIComponent
     public Collection getMenuCategories()
     {
         return null;
-    }
-
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param name  !ToDo (Parameter description)
-     ***************************************/
-    public void setName(String name)
-    {
-        super.setName(name);
-        namePanel.setName(name);
-    }
-
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
-    public String getName()
-    {
-        return namePanel.getName();
     }
 
     /****************************************
@@ -155,13 +132,11 @@ public class ThreadGroupGui extends JPanel implements JMeterGUIComponent
          */
     public void modifyTestElement(TestElement tg)
     {
-        tg.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
-        tg.setProperty(TestElement.TEST_CLASS, ThreadGroup.class.getName());
+        super.configureTestElement(tg);
         if (tg instanceof ThreadGroup)
         {
             ((ThreadGroup) tg).setSamplerController((LoopController) loopPanel.createTestElement());
         }
-        tg.setProperty(TestElement.NAME, namePanel.getName());
         tg.setProperty(ThreadGroup.NUM_THREADS, threadInput.getText());
         tg.setProperty(ThreadGroup.RAMP_TIME, rampInput.getText());
     }
@@ -173,7 +148,7 @@ public class ThreadGroupGui extends JPanel implements JMeterGUIComponent
      ***************************************/
     public void configure(TestElement tg)
     {
-        setName((String) tg.getProperty(TestElement.NAME));
+        super.configure(tg);
         threadInput.setText(tg.getProperty(ThreadGroup.NUM_THREADS).toString());
         rampInput.setText(tg.getProperty(ThreadGroup.RAMP_TIME).toString());
         loopPanel.configure((TestElement) tg.getProperty(ThreadGroup.MAIN_CONTROLLER));
@@ -240,7 +215,7 @@ public class ThreadGroupGui extends JPanel implements JMeterGUIComponent
         mainPanel.add(panelTitleLabel);
 
         // NAME
-        namePanel = new NamePanel();
+        namePanel = getNamePanel();
         mainPanel.add(namePanel);
 
         // THREAD PROPERTIES

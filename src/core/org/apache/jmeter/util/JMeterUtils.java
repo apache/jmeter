@@ -967,6 +967,7 @@ public class JMeterUtils implements UnitTestManager
 	public static final String JDBC = "jmeter.protocol.jdbc";
 	public static final String FTP = "jmeter.protocol.ftp";
 	public static final String JAVA = "jmeter.protocol.java";
+    public static final String PROPERTIES = "jmeter.elements.properties";
 	/**
 	 * Gets the JMeter Version.
 	 * @returns the JMeter version.

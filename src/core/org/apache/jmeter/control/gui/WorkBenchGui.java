@@ -63,7 +63,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.NamePanel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.MenuFactory;
@@ -80,9 +80,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *@version   1.0
  ***************************************/
 
-public class WorkBenchGui extends JPanel implements JMeterGUIComponent
+public class WorkBenchGui extends AbstractJMeterGuiComponent
 {
-    NamePanel namePanel;
     private JMeterTreeNode node;
 
 
@@ -91,8 +90,7 @@ public class WorkBenchGui extends JPanel implements JMeterGUIComponent
 	 ***************************************/
 	public WorkBenchGui()
 	{
-		namePanel = new NamePanel();
-		setName(getStaticLabel());
+		super();
 		init();
 	}
 
@@ -104,26 +102,6 @@ public class WorkBenchGui extends JPanel implements JMeterGUIComponent
 	public Collection getMenuCategories()
 	{
 		return null;
-	}
-
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getName()
-	{
-		return namePanel.getName();
-	}
-
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param name  !ToDo (Parameter description)
-	 ***************************************/
-	public void setName(String name)
-	{
-		namePanel.setName(name);
 	}
 
 	/****************************************
@@ -144,9 +122,7 @@ public class WorkBenchGui extends JPanel implements JMeterGUIComponent
      */
     public void modifyTestElement(TestElement wb)
     {
-        wb.setProperty(TestElement.NAME, namePanel.getName());
-        wb.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
-        wb.setProperty(TestElement.TEST_CLASS, wb.getClass().getName());
+        super.configureTestElement(wb);
     }
 
 	/****************************************
@@ -207,7 +183,7 @@ public class WorkBenchGui extends JPanel implements JMeterGUIComponent
 		mainPanel.add(panelTitleLabel);
 
 		// NAME
-		mainPanel.add(namePanel);
+		mainPanel.add(getNamePanel());
 
 		this.add(mainPanel);
 	}
