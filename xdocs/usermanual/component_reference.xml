@@ -731,6 +731,59 @@ setting is reset when a parent Loop Controller restarts.
 	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
 </properties>
 </component>
+
+<component name="ForEach Controller" index="14.2.11" anchor="loop" screenshot="logic-controller/foreach-controller.png">
+<description><p>A ForEach controller loops through the values of a set of related variables. 
+When you add samplers (or controllers) to a ForEach controller, every sample sample (or controller)
+is executed one or more times, where during every loop the variable has a new value.
+The input should consist of several variables, each extended with an underscore and a number.
+Each such variable must have a value.
+So for example when the input variable has the name inputVar, the following variables should have been defined:
+		<ul>
+		<li>inputVar_1 = wendy</li>
+		<li>inputVar_2 = charles</li>
+		<li>inputVar_3 = peter</li>
+		<li>inputVar_4 = john</li>
+		</ul>
+When the return variable is given as "returnVar", the collection of samplers and controllers under the ForEach controller will be executed 4 consecutive times,
+with the return variable having the respective above values, which can then be used in the samplers.
+</p>
+<p>
+It is especially suited for running with the (slightly) modified regular expression post-processor. 
+This can "create" the necessary input variables out of the return page of a previous request.
+</p>
+<p>Known bugs/problems</p>
+<ul>
+<li>When the inputVar_1 does not exist, the loop will start anyway, which is not the correct behaviour.</li>
+<li>It will stop the foreach loop as soon as it encounters a null reference, so any empty variable in the list is not allowed.</li>
+</ul>
+</description>
+
+<properties>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Input variable prefix" required="Yes">Prefix for the variable names to be used as input.</property>
+        <property name="Output variable" required="Yes">
+                The name of the variable which can be used in the loop for replacement in the samplers</property>
+</properties>
+
+<example title="ForEach Example" anchor="foreach_example">
+
+<p><a href="../demos/forEachTestPlan.jmx">Download</a> this example (see Figure 11).
+In this example, we created a Test Plan that sends a particular HTTP Request
+only once and sends another HTTP Request to every link that can be found on the page.</p>
+
+<figure image="logic-controller/foreach-example.png">Figure 10 - ForEach Controller Example</figure>
+
+<p>We configured the Thread Group for a single thread and a loop count value of
+one. You can see that we added one HTTP Request to the Thread Group and
+another HTTP Request to the ForEach Controller.</p>
+<p>After the first HTTP request, a regular expression extractor is added, which extracts all the html links
+out of the return page and puts them in the inputVar variable</p>
+<p>In the ForEach loop, a HTTP sampler is added which requests all the links that were extracted from the first returned HTML page.
+</p></example>
+
+</component>
+
 </section>
 
 <section name="14.3 Listeners" anchor="listeners">
