@@ -94,7 +94,7 @@ public class PostWriter
 		((HttpURLConnection)connection).setRequestMethod("POST");
 
 		// If filename was specified then send the post using multipart syntax
-		String filename = sampler.getFilename();
+		String filename = sampler.getFileField();
 		if ((filename != null) && (filename.trim().length() > 0))
 		{
 			connection.setRequestProperty("Content-type", "multipart/form-data; boundary=" + BOUNDARY);
