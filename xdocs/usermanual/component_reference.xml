@@ -1431,7 +1431,7 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 </description>
 </component>
 
-<component index="13.10.4" name="__intsum">
+<component index="13.10.4" name="__intSum">
 <description><p>The intsum function can be used to compute the sum of two or more integer values.
 </p></description>
 
@@ -1504,7 +1504,7 @@ A reference name - refName - for reusing the value created by this function. Sto
 </properties>
 </component>
 
-<component index="13.10.8" name="__CSVFile">
+<component index="13.10.8" name="__CSVRead">
 <description><p>The CSVFile function returns a string from a CSV file (c.f. <a href="#_StringFromFile">StringFromFile</a>)</p>
 	<p>NOTE: A single instance of the file is opened and used for all threads.</p></description>
 

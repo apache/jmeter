@@ -297,6 +297,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable
      */
     public void setRunningVersion(boolean runningVersion)
     {
+        log.debug("Setting " + this.getClass() + " to running version: " + runningVersion);
         this.runningVersion = runningVersion;
         PropertyIterator iter = propertyIterator();
         while (iter.hasNext())
