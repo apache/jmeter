@@ -178,10 +178,16 @@
 	-->
 	<target name="all" depends="install"/>
 
+	<target name="assume_packages_present">
+		<property name="jsse.present" value="assume"/>
+		<property name="javamail.present" value="assume"/>
+		<property name="javamail.complete" value="assume"/>
+	</target>
+
 	<!--
 	- Creates the distribution packages
 	-->
-	<target name="dist" depends="clean,install">
+	<target name="dist" depends="assume_packages_present,clean,install">
 		<jar jarfile="../ApacheJMeter_${version}.jar" basedir="../" includes="jakarta-jmeter/**" excludes="**/classes/**,**/xdocs/**"/>
 		<zip zipfile="../ApacheJMeter_${version}.zip" basedir="../" includes="jakarta-jmeter/**" excludes="**/classes/**,**/xdocs/**"/>
 		<tar tarfile="../ApacheJMeter_${version}.tar" basedir="../" excludes="**/classes/**,**/xdocs/**" includes="jakarta-jmeter/**" />
