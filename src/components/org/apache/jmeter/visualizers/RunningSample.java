@@ -54,25 +54,18 @@
  */
 package org.apache.jmeter.visualizers;
 
-
-// java
 import java.text.DecimalFormat;
 
 import org.apache.jmeter.samplers.SampleResult;
 
 
 /**
- * Title:        RunningSample.java
- * Description:  Aggegate sample data container
+ * Aggegate sample data container. Just instantiate a new instance of this
+ * class, and then call {@link #addSample(SampleResult)} a few times, and pull
+ * the stats out with whatever methods you prefer.
  *
- * Class which is used to store aggregate sample data.
- * Just instantiate a new instance of this class, and then call addSample() a few times,
- * and pull the stats out with whatever methods you prefer.
- *
- * Copyright:    Copyright (c) 2001
- * Company:      Apache Foundation
  * @author James Boutcher
- * @version 1.0
+ * @version $Revision$
  */
 public class RunningSample
 {
@@ -90,7 +83,7 @@ public class RunningSample
     private int index;
 
     /**
-     * use this constructor.
+     * Use this constructor.
      */
     public RunningSample(String label, int index)
     {
@@ -137,14 +130,16 @@ public class RunningSample
      * Returns a String that represents the throughput associated for this
      * sampler, in units appropriate to its dimension:
      * <p>
-     * The number is represented in requests/second or requests/minute or requests/hour.
+     * The number is represented in requests/second or requests/minute or
+     * requests/hour.
      * <p>
      * Examples:
      *      "34.2/sec"
      *      "0.1/sec"
      *      "43.0/hour"
      *      "15.9/min"
-     * @return a String representation of the rate the samples are being taken at.
+     * @return a String representation of the rate the samples are being taken
+     *         at.
      */
     public String getRateString()
     {
@@ -242,8 +237,10 @@ public class RunningSample
     }
 
     /**
-     * Returns the number of samples that have been recorded by this instance of the RunningSample class.
-     * @return the number of samples that have been recorded by this instance of the RunningSample class.
+     * Returns the number of samples that have been recorded by this instance
+     * of the RunningSample class.
+     * @return the number of samples that have been recorded by this instance
+     *         of the RunningSample class.
      */
     public long getNumSamples()
     {
@@ -251,11 +248,13 @@ public class RunningSample
     }
 
     /**
-     * Returns the raw double value of the percentage of samples with errors that were recorded.
-     * (Between 0.0 and 1.0)
-     * If you want a nicer return format, see getErrorPercentageString()
+     * Returns the raw double value of the percentage of samples with errors
+     * that were recorded. (Between 0.0 and 1.0)
+     * If you want a nicer return format, see
+     * {@link #getErrorPercentageString()}.
      *
-     * @return the raw double value of the percentage of samples with errors that were recorded.
+     * @return the raw double value of the percentage of samples with errors
+     *         that were recorded.
      */
     public double getErrorPercentage()
     {
@@ -267,9 +266,11 @@ public class RunningSample
     }
 
     /**
-     * Returns a String which represents the percentage of sample errors that have occurred.
-     * "0.00%" through "100.00%"
-     * @return a String which represents the percentage of sample errors that have occurred.
+     * Returns a String which represents the percentage of sample errors that
+     * have occurred.  ("0.00%" through "100.00%")
+     * 
+     * @return a String which represents the percentage of sample errors that
+     *         have occurred.
      */
     public String getErrorPercentageString()
     {
