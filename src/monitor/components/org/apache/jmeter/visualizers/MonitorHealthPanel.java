@@ -56,7 +56,16 @@ public class MonitorHealthPanel extends JPanel
 		JMeterUtils.getResString("monitor_equation_dead");
 	public static final String INFO_LOAD =
 		JMeterUtils.getResString("monitor_equation_load");
-	
+
+    /**
+     * 
+     * @deprecated Only for use in unit testing
+     */
+    public MonitorHealthPanel()
+	{
+    	//log.warn("Only for use in unit testing");
+    }
+
     /**
      * 
      */
@@ -115,7 +124,7 @@ public class MonitorHealthPanel extends JPanel
 	
 	/**
 	 * 
-	 * @param stats
+	 * @param model
 	 */
 	public void addSample(MonitorModel model){
 		if (SERVERMAP.containsKey(model.getURL())){

@@ -92,7 +92,16 @@ public class ServerPanel extends JPanel
         init(model);
     }
 
-	/**
+    /**
+     * 
+     * @deprecated Only for use in unit testing
+     */
+    public ServerPanel()
+	{
+    	//log.warn("Only for use in unit testing");
+    }
+
+    /**
 	 * Init will create the JLabel widgets for the
 	 * host, health, load and timestamp.
 	 * @param model
@@ -115,7 +124,7 @@ public class ServerPanel extends JPanel
 	 * Static method for getting the right ImageIcon for
 	 * the health.
 	 * @param health
-	 * @return
+	 * @return image for the status
 	 */
 	public static ImageIcon getHealthyImageIcon(int health){
 		ImageIcon i = null;
@@ -140,7 +149,7 @@ public class ServerPanel extends JPanel
 	 * Static method looks up the right ImageIcon from
 	 * the load value.
 	 * @param load
-	 * @return
+	 * @return image for the load
 	 */
 	public static ImageIcon getLoadImageIcon(int load){
 		if (load <= 10){
