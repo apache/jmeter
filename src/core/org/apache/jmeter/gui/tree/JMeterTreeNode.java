@@ -54,6 +54,7 @@
  */
 package org.apache.jmeter.gui.tree;
 
+import java.awt.Image;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -121,9 +122,11 @@ public class JMeterTreeNode
             {
                 try
                 {
-                    return new ImageIcon(Introspector.getBeanInfo(
+                    Image img= Introspector.getBeanInfo(
                         createTestElement().getClass())
-                            .getIcon(BeanInfo.ICON_COLOR_16x16));
+                            .getIcon(BeanInfo.ICON_COLOR_16x16);
+                    if (img == null) return null;
+                    return new ImageIcon(img);
                 }
                 catch (IntrospectionException e1)
                 {
