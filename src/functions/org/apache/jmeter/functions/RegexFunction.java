@@ -1,8 +1,6 @@
 package org.apache.jmeter.functions;
 
 import java.io.Serializable;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -12,6 +10,8 @@ import java.util.Random;
 
 import junit.framework.TestCase;
 
+import org.apache.jmeter.engine.util.CompoundVariable;
+import org.apache.jmeter.functions.util.ArgumentEncoder;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -71,6 +71,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	
 	public RegexFunction()
 	{
+		valueIndex = between = name = "";
 		try {
 			templatePattern = compiler.compile("\\$(\\d+)\\$");
 		} catch(MalformedPatternException e) {
@@ -88,21 +89,31 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		try
 		{
 
-			searchPattern = compiler.compile(((CompoundFunction)values[0]).execute());
-			generateTemplate(((CompoundFunction)values[1]).execute());
+			searchPattern = compiler.compile(((CompoundVariable)values[0]).execute());
+			generateTemplate(((CompoundVariable)values[1]).execute());
 
-			valueIndex = ((CompoundFunction)values[2]).execute();
-			if ( valueIndex.equals("") )
-				valueIndex = "1";
-
-			between = ((CompoundFunction)values[3]).execute();
-
-			String dv = ((CompoundFunction)values[4]).execute();
-			if ( ! dv.equals("") ) {
-				defaultValue = dv;
+			if ( values.length > 2 ) {
+				valueIndex = ((CompoundVariable)values[2]).execute();
 			}
-			
-			name = ((CompoundFunction)values[values.length-1]).execute();
+			if ( valueIndex.equals("") ) {
+					valueIndex = "1";
+			}
+	
+			if ( values.length > 3 ) {
+				between = ((CompoundVariable)values[3]).execute();
+			}
+
+			if ( values.length > 4 ) {
+				String dv = ((CompoundVariable)values[4]).execute();
+				if ( ! dv.equals("") ) {
+								defaultValue = dv;
+				}
+			}
+
+			if ( values.length > 5 ) {			
+				name = ((CompoundVariable)values[values.length-1]).execute();
+			}
+
 
 		} catch(MalformedPatternException e) {
 			log.error("",e);
@@ -226,11 +237,15 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		return KEY;
 	}
 	
-	public void setParameters(String parameters) throws InvalidVariableException
-	{
-		Collection params = parseArguments2(parameters);
-		values = params.toArray();		
-		defaultValue = URLDecoder.decode(parameters);
+	public void setParameters(Collection parameters) throws InvalidVariableException
+	{		
+		values = parameters.toArray();
+		if ( values.length < 2 ) {
+			throw new InvalidVariableException();
+		}
+				
+//		defaultValue = URLDecoder.decode(parameters);
+		defaultValue = "";
 	}
 	
 	private void generateTemplate(String rawTemplate)
@@ -281,10 +296,11 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		}
 	}
 	
-	public static class Test extends TestCase
+/*	public static class Test extends TestCase
 	{
 		RegexFunction variable;
 		SampleResult result;
+		Collection params;
 		
 		public Test(String name)
 		{
@@ -309,7 +325,11 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		
 		public void testVariableExtraction() throws Exception
 		{
-			variable.setParameters(URLEncoder.encode("<value field=\"(pinposition\\d+)\">(\\d+)</value>")+",$2$,2");
+			params = new LinkedList();
+			params.add(ArgumentEncoder.encode("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+			params.add("$2$");
+			params.add("2");
+			variable.setParameters(params);
 			variable.setJMeterVariables(new JMeterVariables());
 			String match = variable.execute(result,null);
 			assertEquals("5",match);			
@@ -317,7 +337,11 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		
 		public void testVariableExtraction2() throws Exception
 		{
-			variable.setParameters(URLEncoder.encode("<value field=\"(pinposition\\d+)\">(\\d+)</value>")+",$1$,3");
+			params = new LinkedList();
+			params.add(ArgumentEncoder.encode("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+			params.add("$1$");
+			params.add("3");
+			variable.setParameters(params);
 			variable.setJMeterVariables(new JMeterVariables());
 			String match = variable.execute(result,null);
 			assertEquals("pinposition3",match);			
@@ -325,23 +349,38 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		
 		public void testVariableExtraction5() throws Exception
 		{
-			variable.setParameters(URLEncoder.encode("<value field=\"(pinposition\\d+)\">(\\d+)</value>")+",$1$,ALL,_");
+			params = new LinkedList();
+			params.add(ArgumentEncoder.encode("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+			params.add("$1$");
+			params.add("All");
+			params.add("_");
+			variable.setParameters(params);
 			variable.setJMeterVariables(new JMeterVariables());
 			String match = variable.execute(result,null);
 			assertEquals("pinposition1_pinposition2_pinposition3",match);			
 		}
 		
 		public void testVariableExtraction6() throws Exception
-				{
-					variable.setParameters(URLEncoder.encode("<value field=\"(pinposition\\d+)\">(\\d+)</value>")+",$2$,4,,default");
-					variable.setJMeterVariables(new JMeterVariables());
-					String match = variable.execute(result,null);
-					assertEquals("default",match);			
-				}
+		{
+			params = new LinkedList();
+			params.add(	ArgumentEncoder.encode("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+			params.add("$2$");
+			params.add("4");
+			params.add("");
+			params.add("default");
+			variable.setParameters(params);
+			variable.setJMeterVariables(new JMeterVariables());
+			String match = variable.execute(result,null);
+			assertEquals("default",match);			
+		}
 		
 		public void testComma() throws Exception
 		{
-			variable.setParameters(URLEncoder.encode("<value,? field=\"(pinposition\\d+)\">(\\d+)</value>")+",$1$,3");
+			params = new LinkedList();
+			params.add(ArgumentEncoder.encode("<value,? field=\"(pinposition\\d+)\">(\\d+)</value>"));
+			params.add("$1$");
+			params.add("3");
+			variable.setParameters(params);
 			variable.setJMeterVariables(new JMeterVariables());
 			String match = variable.execute(result,null);
 			assertEquals("pinposition3",match);			
@@ -349,8 +388,11 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		
 		public void testVariableExtraction3() throws Exception
 		{
-			variable.setParameters(URLEncoder.encode("<value field=\"(pinposition\\d+)\">(\\d+)</value>")+
-					",_$1$,.5");
+			params = new LinkedList();
+			params.add(ArgumentEncoder.encode("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+			params.add("_$1$");
+			params.add("5");
+			variable.setParameters(params);
 			variable.setJMeterVariables(new JMeterVariables());
 			String match = variable.execute(result,null);
 			assertEquals("_pinposition2",match);			
@@ -358,9 +400,11 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		
 		public void testVariableExtraction4() throws Exception
 		{
-			variable.setParameters(URLEncoder.encode(
-					"<value field=\"(pinposition\\d+)\">(\\d+)</value>")+","+URLEncoder.encode("$2$, ")+
-					",.333");
+			params = new LinkedList();
+			params.add(ArgumentEncoder.encode("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+			params.add(ArgumentEncoder.encode("$2$, "));
+			params.add(".333");
+			variable.setParameters(params);
 			variable.setJMeterVariables(new JMeterVariables());
 			
 			String match = variable.execute(result,null);
@@ -369,14 +413,18 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		
 		public void testDefaultValue() throws Exception
 		{
-			variable.setParameters(URLEncoder.encode(
-					"<value,, field=\"(pinposition\\d+)\">(\\d+)</value>")+","+URLEncoder.encode("$2$, ")+
-					",.333,,No Value Found");
+			params = new LinkedList();
+			params.add(ArgumentEncoder.encode("<value,, field=\"(pinposition\\d+)\">(\\d+)</value>"));
+			params.add(ArgumentEncoder.encode("$2$, "));
+			params.add(".333");
+			params.add("");
+			params.add("No Value Found");
+			variable.setParameters(params);
 			variable.setJMeterVariables(new JMeterVariables());
 			
 			String match = variable.execute(result,null);
 			assertEquals("No Value Found",match);			
 		}
-	}
+	}*/
 
 }

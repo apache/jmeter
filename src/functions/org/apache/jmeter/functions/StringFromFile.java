@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -75,8 +76,8 @@ public class StringFromFile extends AbstractFunction implements Serializable
 		
 		JMeterVariables vars = getVariables();
 
-		String fileName = ((CompoundFunction)values[0]).execute();
-		myName = ((CompoundFunction)values[1]).execute();
+		String fileName = ((CompoundVariable)values[0]).execute();
+		myName = ((CompoundVariable)values[1]).execute();
 
 		openFile(fileName);
 
@@ -103,15 +104,13 @@ public class StringFromFile extends AbstractFunction implements Serializable
 	/**
 	 * @see org.apache.jmeter.functions.Function#setParameters(String)
 	 */
-	public void setParameters(String parameters)
+	public void setParameters(Collection parameters)
 		throws InvalidVariableException {
 			
-		Collection params = this.parseArguments2(parameters);
-		values = params.toArray();
+		values = parameters.toArray();
 		
-		if ( values.length > 2 ) {
+		if ( values.length > 2 )
 			throw new InvalidVariableException();
-		}
 			
 	}
 
