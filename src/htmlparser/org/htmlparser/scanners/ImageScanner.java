@@ -124,29 +124,28 @@ public class ImageScanner extends TagScanner
                 relativeLink = ParserUtils.removeChars(relativeLink, '\n');
                 relativeLink = ParserUtils.removeChars(relativeLink, '\r');
             }
-            if (relativeLink == null || relativeLink.length() == 0)
-            {
-                // try fix
-                String tagText = tag.getText().toUpperCase();
-                int indexSrc = tagText.indexOf("SRC");
-                if (indexSrc != -1)
-                {
-                    // There is a missing equals.
-                    tag.setText(
-                        tag.getText().substring(0, indexSrc + 3)
-                            + "="
-                            + tag.getText().substring(
-                                indexSrc + 3,
-                                tag.getText().length()));
-                    table = tag.redoParseAttributes();
-                    relativeLink = (String) table.get("SRC");
-
-                }
-            }
-            if (relativeLink == null)
-                return "";
-            else
-                return processor.extract(relativeLink, url);
+			if (relativeLink==null || relativeLink.length()==0) {
+				// try fix
+				String tagText = tag.getText();
+				int indexSrc = tagText.indexOf("src");
+				if (indexSrc != -1) {
+					// There is a bug with AttributeParser when the
+					// alt tag value is zero length. To get around
+					// the bug, I strip out alt="" and then append
+					// it at the end. When the alt attribute has a
+					// value, the bug does not appear.
+					String newtext = tagText.replaceAll("alt=\"\" ","");
+					tag.setText(newtext + " alt=\"\"");
+					table = tag.redoParseAttributes();
+					relativeLink = (String)table.get("SRC");
+				} 
+			}
+			if (relativeLink == null){
+				return ""; 
+			}else{
+				tag.setAttributes(table);
+				return relativeLink;
+			}
         }
         catch (Exception e)
         {
