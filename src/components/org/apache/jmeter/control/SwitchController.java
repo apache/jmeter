@@ -38,7 +38,6 @@ public class SwitchController extends InterleaveControl implements Serializable
     }
 	public void reInitialize()
     {
-		int was = current;
 		super.reInitialize();
 		current=getSelectionAsInt();
     }
@@ -64,7 +63,6 @@ public class SwitchController extends InterleaveControl implements Serializable
      */
     protected void incrementCurrent()
     {
-		int was = current;
 		super.incrementCurrent();
         current = getSelectionAsInt();
     }
