@@ -324,35 +324,35 @@ is configured to store the results in a file named "simple-test.dat" in the curr
 <subsection name="13.3 Listeners" anchor="listeners">
 
 <component index="13.3.1" name="View Graph Tree" screenshot="">
-
+<description></description>
 </component>
 
-<component index="13.3.2" name="Graph Full Results" screenshot="">
-
+<component index="13.3.2" name="Graph Full Results" screenshot="../images/screenshots/graph_full_results.gif">
+<description></description>
 </component>
 
 <component index="13.3.3" name="Graph Results" screenshot="">
-
+<description></description>
 </component>
 
 <component index="13.3.4" name="Spline Visualizer" screenshot="">
-
+<description></description>
 </component>
 
-<component index="13.3.5" name="Assertion Results" screenshot="">
-
+<component index="13.3.5" name="Assertion Results" screenshot="../images/screenshots/assertion_results.gif">
+<description></description>
 </component>
 
-<component index="13.3.6" name="File Reporter" screenshot="">
-
+<component index="13.3.6" name="File Reporter" screenshot="../images/screenshots/file_reporter.gif">
+<description></description>
 </component>
 
-<component index="13.3.7" name="View Results" screenshot="">
-
+<component index="13.3.7" name="View Results" screenshot="../images/screenshots/view_results.gif">
+<description></description>
 </component>
 
-<component index="13.3.8" name="View Result Tree" screenshot="">
-
+<component index="13.3.8" name="View Result Tree" screenshot="../images/screenshots/view_result_tree.gif">
+<description></description>
 </component>
 
 </subsection>
