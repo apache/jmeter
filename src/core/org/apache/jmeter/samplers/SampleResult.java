@@ -384,7 +384,7 @@ public class SampleResult implements Serializable
     }
 
     /**
-     * @return
+     * @return the request headers
      */
     public String getRequestHeaders()
     {
@@ -392,7 +392,7 @@ public class SampleResult implements Serializable
     }
 
     /**
-     * @return
+     * @return the response headers
      */
     public String getResponseHeaders()
     {
@@ -400,7 +400,7 @@ public class SampleResult implements Serializable
     }
 
     /**
-     * @param string
+     * @param string - request headers
      */
     public void setRequestHeaders(String string)
     {
@@ -408,7 +408,7 @@ public class SampleResult implements Serializable
     }
 
     /**
-     * @param string
+     * @param string - response headers
      */
     public void setResponseHeaders(String string)
     {
@@ -416,7 +416,7 @@ public class SampleResult implements Serializable
     }
 
     /**
-     * @return
+     * @return the content type - text or bin
      */
     public String getContentType()
     {

@@ -98,7 +98,7 @@ public class FileDataContainer
 
     /**
      * Creation date: (20/03/2003 09:39:50)
-     * @param newRowPosition int
+     * @param newLine - line to be stored
      */
     public void addLine(String newLine)
     {
@@ -135,8 +135,11 @@ public class FileDataContainer
     }
 
     /**
-     * Creation date: (20/03/2003 09:39:50)
-     * @param newRowPosition int
+     * Moves the file pointer to the next row, wrapping
+     * round to the beginning if necessary.
+     * 
+     *  Creation date: (20/03/2003 09:39:50)
+     *
      */
     public void incrementRowPosition()
     {

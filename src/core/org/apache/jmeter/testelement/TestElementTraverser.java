@@ -28,7 +28,6 @@ public interface TestElementTraverser
      * Notification that a property is starting.  This could be a test element
      * property or a Map property - depends on the context.
      * @param key
-     * @param value
      */
     public void startProperty(JMeterProperty key);
     

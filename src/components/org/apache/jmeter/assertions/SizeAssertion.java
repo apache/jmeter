@@ -160,11 +160,11 @@ public class SizeAssertion
     /**
      * Set the size that shall be asserted.
      *
-     * @param duration a number of bytes. Is not allowed to be negative. Use
-     *                 Double.MAX_VALUE to indicate illegal or empty inputs.
-     *                 This will result to not checking the assertion.
+     * @param size - a number of bytes. Is not allowed to be negative. Use
+     *                 Long.MAX_VALUE to indicate illegal or empty inputs.
+     *                 This will result in not checking the assertion.
      *
-     * @throws IllegalArgumentException If <code>duration</code> is negative.
+     * @throws IllegalArgumentException If <code>size</code> is negative.
      */
     public void setAllowedSize(long size) throws IllegalArgumentException
     {

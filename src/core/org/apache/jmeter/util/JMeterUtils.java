@@ -208,7 +208,7 @@ public class JMeterUtils implements UnitTestManager
 
     /**
      * Provide random numbers
-     * @param loc
+     * @param r - the upper bound (exclusive)
      */
     public static int getRandomInt(int r)
     {
@@ -220,7 +220,7 @@ public class JMeterUtils implements UnitTestManager
      * listeners.
      *
      * author Oliver Rossmueller
-     * @param locale new locale
+     * @param loc - new locale
      */
     public static void setLocale(Locale loc)
     {
@@ -298,11 +298,11 @@ public class JMeterUtils implements UnitTestManager
      * If the resource is not found, a warning is logged
      * 
 	 * @param key the key in the resource file
-	 * @param default - the default value
+	 * @param defaultValue - the default value
 	 * 
 	 * @return    the resource string if the key is found;
 	 *             otherwise, return the default
-	 * @deprecated Only intended for us in development; use getResStrig(String) normally
+	 * @deprecated Only intended for use in development; use getResString(String) normally
 	 */
 	public static String getResString(String key, String defaultValue)
 	{
