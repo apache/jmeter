@@ -65,8 +65,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * @author     Brendan Burns
- * @created    October 5, 2001
- * @version    $Revision$
+ * Created      October 5, 2001
+ * @version    $Revision$ Last updated: $Date$
  */
 public class ExitCommand implements Command
 {

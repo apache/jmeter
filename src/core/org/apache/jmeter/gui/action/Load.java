@@ -210,8 +210,8 @@ public class Load implements Command
     }
 
     /**
-     * @author     $Author$
-     * @version    $Revision$
+     * 
+     * @version    $Revision$  Last updated: $Date$
      */
     public static class Test extends TestCase
     {
@@ -237,11 +237,11 @@ public class Load implements Command
 
         public void setUp()
         {
-            testFile1 =
+            testFile1 = //TODO: not used - why?
                 new File(
                     System.getProperty("user.dir") + "/testfiles",
                     "Test Plan.jmx");
-            testFile2 =
+            testFile2 = //TODO: not used - why?
                 new File(
                     System.getProperty("user.dir") + "/testfiles",
                     "Modification Manager.jmx");
@@ -285,7 +285,7 @@ public class Load implements Command
                 new File(
                     System.getProperty("user.dir") + "/testfiles",
                     "SimpleTestPlan.jmx");
-            testFile13 =
+            testFile13 = //TODO: not used - why?
                 new File(
                     System.getProperty("user.dir") + "/testfiles",
                     "URLRewritingExample.jmx");

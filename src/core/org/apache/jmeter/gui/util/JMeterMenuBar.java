@@ -91,7 +91,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
     JMenuItem file_new;
     JMenu editMenu;
     JMenu edit_add;
-    JMenu edit_add_submenu;
+    //JMenu edit_add_submenu;
     JMenuItem edit_remove;
     JMenu runMenu;
     JMenuItem run_start;
@@ -105,8 +105,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
     Collection remote_engine_stop;
     JMenuItem run_clear;
     JMenuItem run_clearAll;
-    JMenu reportMenu;
-    JMenuItem analyze;
+    //JMenu reportMenu;
+    //JMenuItem analyze;
     JMenu optionsMenu;
     JMenu lafMenu;
     JMenuItem sslManager;

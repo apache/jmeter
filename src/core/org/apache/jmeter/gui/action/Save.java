@@ -78,8 +78,8 @@ import org.apache.log.Logger;
 
 /**
  * @author    Michael Stover
- * @created   February 13, 2001
- * @version   $Revision$
+ * Created     February 13, 2001
+ * @version   $Revision$ Last updated: $Date$
  */
 public class Save implements Command
 {
