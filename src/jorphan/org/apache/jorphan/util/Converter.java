@@ -86,7 +86,7 @@ public class Converter {
             DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT);
             java.util.Date d = null;
             try {
-                d = formatter.parse((String) date.toString());
+                d = formatter.parse(date.toString());
             } catch (ParseException e) {
                 formatter = DateFormat.getDateInstance(DateFormat.MEDIUM);
                 try {
@@ -130,7 +130,7 @@ public class Converter {
             return (Date) date;
         } else if (date != null) {
             DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT);
-            java.util.Date d = null;
+            //java.util.Date d = null;
             try {
                 val = formatter.parse(date.toString());
             } catch (ParseException e) {
@@ -159,7 +159,7 @@ public class Converter {
 
     public String formatNumber(float num, String pattern) {
         NumberFormat format = new DecimalFormat(pattern);
-        return format.format((double) num);
+        return format.format(num);
     }
 
     public static float getFloat(Object o, float defaultValue) {
