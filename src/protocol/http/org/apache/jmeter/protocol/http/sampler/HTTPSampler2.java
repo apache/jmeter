@@ -45,6 +45,7 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.util.JMeterUtils;
 
 import org.apache.jorphan.logging.LoggingManager;
 
@@ -227,10 +228,11 @@ public class HTTPSampler2 extends HTTPSamplerBase
         	//httpMethod;
         	new DefaultMethodRetryHandler();
         }
-        
 
-        // TODO make this a JMeter property
-        httpMethod.setHttp11(!System.getProperty("http.version","1.1").equals("1.0"));
+        httpMethod.setHttp11(!JMeterUtils.getPropDefault("httpclient.version","1.1").equals("1.0"));
+
+        // Set the timeout (if non-zero)
+        httpConn.setSoTimeout(JMeterUtils.getPropDefault("httpclient.timeout",0));
 
         httpState = new HttpState();
         if (httpConn.isProxied() && httpConn.isSecure()) {
