@@ -100,6 +100,12 @@ public final class NewDriver
             jmDir = userDir.getAbsoluteFile().getParent();
         }
 
+        /*
+         * Does the system support UNC paths?
+         * If so, may need to fix them up later
+         */
+		boolean usesUNC = System.getProperty("os.name").startsWith("Windows");
+		
         StringBuffer classpath = new StringBuffer();
         File[] libDirs =
             new File[] {
@@ -119,9 +125,27 @@ public final class NewDriver
             {
                 try
                 {
-                    jars.add(new URL("file", "", libJars[i].getPath()));
+                	String s = libJars[i].getPath();
+                	
+                	// Fix path to allow the use of UNC URLs
+                	if (usesUNC){
+						if (s.startsWith("\\\\") &&
+						   !s.startsWith("\\\\\\")
+						   )
+						{
+							s = "\\\\" + s;
+						} 
+						else if (s.startsWith("//") &&
+						        !s.startsWith("///")
+						        )
+						 {
+						     s = "//" + s;
+						 }
+                	} // usesUNC
+
+                    jars.add(new URL("file", "", s));
                     classpath.append(System.getProperty("path.separator"));
-                    classpath.append(libJars[i].getPath());
+                    classpath.append(s);
                 }
                 catch (MalformedURLException e)
                 {
