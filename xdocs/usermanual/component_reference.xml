@@ -689,9 +689,24 @@ To add a new value to the series, click the 'Add User' button and fill in the de
 </description>
 </component>
 
-<component index="13.4.11" name="Counter">
+<component index="13.4.11" name="Counter" screenshot="../images/screenshots/counter.png">
 <description><p>Allows the user to create a counter that can be referenced anywhere
-in the Thread Group.</p></description>
+in the Thread Group.  The counter config lets the user configure a starting point, a maximum,
+and the increment.  The counter will loop from the start to the max, and then start over
+with the start, continuing on like that until the test is ended.  </p></description>
+<properties>
+	<property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+	<property name="Start" required="Yes">The starting number for the counter.  The counter will equal this
+	number during the first iteration.</property>
+	<property name="Increment" required="Yes">How much to increment the counter by after each
+	iteration.</property>
+	<property name="Maximum" required="Yes">If the counter exceeds the maximum, then it is reset to the Start value.</property>
+	<property name="Reference Name" required="Yes">This controls how you refer to this value in other elements.  Syntax is
+	as in <a href="functions.html">user-defined values</a>: <code>$(reference_name}</code>.</property>
+	<property name="Track Counter Independently for each User" required="No">In other words, is this a global counter, or does each user get their
+	own counter?  If unchecked, the counter is global (ie, user #1 will get value "1", and user #2 will get value "2" on 
+	the first iteration).  If checked, each user has an independent counter.</property>
+</properties>
 </component>
 
 </section>
@@ -863,7 +878,7 @@ Clever users will even determine that this modifier can be used to grab values t
 </properties>
 </component>
 
-<component index="13.7.3" name="HTML Parameter Mask" screenshot="../images/screenshots/parameter_mask.png">
+<component index="13.7.3" name="HTML Parameter Mask" useinstead="Counter" screenshot="../images/screenshots/parameter_mask.png">
 <description><p>The HTML Parameter Mask is used to generate unique values for HTML arguments.  By
 specifying the name of the parameter, a value prefix and suffix, and counter parameters, this
 modifier will generate values of the form "<code>name=prefixcountersuffix</code>".  Any HTTP
@@ -891,7 +906,7 @@ user_4, etc.</p></description>
 </properties>
 </component>
 
-<component index="13.7.4" name="HTTP User Parameter Modifier" screenshot="../images/screenshots/user_param_modifier.gif">
+<component index="13.7.4" name="HTTP User Parameter Modifier" useinstead="User Parameters" screenshot="../images/screenshots/user_param_modifier.gif">
 <description><p>The User Parameter Modifier uses an XML file get values for HTTP arguments.  Any
 HTTP Request that this modifier modifies will be checked for the existence of the specified
 arguments.  If found, the values for those arguments will be replaced by the values found in the
@@ -900,7 +915,8 @@ through these values in a round-robin style, thus each request will get a differ
 until the last set of values is reached, at which point it will begin again at the first set.</p>
 <note>If the number of value sets is equal to the number of threads in your test, then it will work
 out that each thread will get the same set of values each time, which will be a different set from
-any other thread</note></description>
+any other thread</note>
+</description>
 
 <properties>
 	<property name="Name" required="No">Descriptive name given to this element in the test tree.</property>
@@ -975,7 +991,11 @@ specific functions.</p>
 <component index="13.9.1" name="__regexFunction">
 <description><p>The Regex Function is used to parse the previous response using any regular 
 expression (provided by user).  The function returns the template string with variable values filled
-in.</p></description>
+in.</p>
+<p>The __regexFunction stores values for future use.  In the sixth parameter, you can specify
+a reference name.  After this function executes, the same values can be retrieved at later times
+using the syntax for user-defined values.  For instance, ${refName_g1} would refer to the first
+group parsed by this function.  ${refName_g0} always refers to the entire match.</p></description>
 
 <properties>
 	<property name="First arguement" required="Yes">The first argument is the regular expression
@@ -1001,6 +1021,8 @@ in.</p></description>
 	<property name="Fourth argument" required="No">If 'ALL' was selected for the above argument
 	value, then this argument will be inserted between each appended copy of the template value.</property>
 	<property name="Fifth argument" required="No">Default value returned if no match is found</property>
+	<property name="Sixth argument" required="No">A reference name for reusing the values parsed by this function.<br/>
+		Stored values are of the form ${refName_g#} where "#" is the group number from the regular expression.</property>
 </properties>
 </component>
 
@@ -1014,6 +1036,10 @@ counting how many times that request was run.</p></description>
 <properties>
 	<property name="First argument" required="Yes">TRUE if you wish each simulated user's counter 
 	to be kept independent and separate from the other users.  FALSE for a global counter.</property>
+
+<property name="Second argument" required="No">A reference name for reusing the value created by this function.<br/>
+		Stored values are of the form ${refName}.  This allows you to keep one counter and refer to its value in
+		multiple places.</property>
 </properties>
 </component>
 
