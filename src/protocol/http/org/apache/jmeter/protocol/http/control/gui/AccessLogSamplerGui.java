@@ -73,6 +73,8 @@ import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
+import junit.framework.TestCase;
+
 /**
  * Title:		JMeter Access Log utilities<br>
  * Copyright:	Apache.org<br>
@@ -349,4 +351,38 @@ public class AccessLogSamplerGui
 				JOptionPane.ERROR_MESSAGE);
 		}
 	}
+
+	/**
+	 * Added basic TestCase for AccessLogSamplerGui. It does
+	 * the same test at HttpTestSampleGui.java.
+	 * @author peter lin
+	 */
+	public static class Test extends TestCase
+	{
+		AccessLogSamplerGui gui;
+        
+		public Test(String name)
+		{
+			super(name);
+		}
+        
+		public void setUp()
+		{
+			gui = new AccessLogSamplerGui();
+		}
+        
+		public void testCloneSampler() throws Exception
+		{
+			AccessLogSampler sampler = (AccessLogSampler)gui.createTestElement();
+			sampler.addArgument("param","value");
+			AccessLogSampler clonedSampler = (AccessLogSampler)sampler.clone();
+			clonedSampler.setRunningVersion(true);
+			sampler.getArguments().getArgument(0).setValue("new value");
+			assertEquals(
+				"Sampler didn't clone correctly",
+				"new value",
+				sampler.getArguments().getArgument(0).getValue());
+		}
+	}
+
 }
