@@ -53,17 +53,39 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.gui;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.table.*;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.io.File;
+import java.io.IOException;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellEditor;
+
 import org.apache.jmeter.config.gui.AbstractConfigGui;
-import org.apache.jmeter.gui.*;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.VerticalLayout;
-import org.apache.jmeter.protocol.http.control.*;
+import org.apache.jmeter.protocol.http.control.Header;
+import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -75,7 +97,7 @@ import org.apache.jmeter.util.JMeterUtils;
  *@created   $Date$
  *@version   $Revision$
  ***************************************/
-public class HeaderPanel extends AbstractConfigGui implements ActionListener
+public class HeaderPanel extends AbstractConfigGui implements ActionListener,FocusListener
 {
 
 	InnerTableModel tableModel;
@@ -306,6 +328,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
 
 		// create the JTable that holds header per row
 		headerTable = new JTable(tableModel);
+		headerTable.addFocusListener(this);
 		headerTable.setCellSelectionEnabled(true);
 		headerTable.setRowSelectionAllowed(true);
 		headerTable.setColumnSelectionAllowed(false);
@@ -530,6 +553,18 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
 				updateDialog.getContentPane().add(getPanel());
 				updateDialog.show();
 			}
+		}
+	}
+	
+	public void focusGained(FocusEvent e)
+	{
+	}
+	
+	public void focusLost(FocusEvent e)
+	{
+		try {
+			headerTable.getCellEditor().stopCellEditing();
+		} catch (RuntimeException err) {
 		}
 	}
 
