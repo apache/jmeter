@@ -110,9 +110,7 @@ public class CompoundFunction implements Function
             while (iter.hasNext())
             {
                 Function tempFunc =
-                    (Function) Class
-                        .forName((String) iter.next())
-                        .newInstance();
+                    (Function) Class.forName((String) iter.next()).newInstance();
                 functions.put(tempFunc.getReferenceKey(), tempFunc.getClass());
             }
         }
