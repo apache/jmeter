@@ -106,6 +106,9 @@ public class Load implements Command
 
     public void doAction(ActionEvent e)
     {
+		ActionRouter.getInstance().doActionNow(
+		   new ActionEvent(e.getSource(),e.getID(),"close"));
+
         JFileChooser chooser =
             FileDialoger.promptToOpenFile(new String[] { ".jmx" });
         if (chooser == null)
