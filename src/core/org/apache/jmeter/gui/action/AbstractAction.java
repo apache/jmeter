@@ -18,7 +18,7 @@ import org.apache.log.Logger;
  */
 public abstract class AbstractAction implements Command
 {
-    protected static Logger log = LoggingManager.getLoggerForClass();
+    protected static final Logger log = LoggingManager.getLoggerForClass();
 
     /**
      * @see Command#doAction(ActionEvent)

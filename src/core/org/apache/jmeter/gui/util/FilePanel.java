@@ -73,8 +73,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * @author     Michael Stover
- * @created    April 18, 2002
- * @version    $Revision$
+ * Created    April 18, 2002
+ * @version    $Revision$ Last updated: $Date$
  */
 public class FilePanel extends HorizontalPanel implements ActionListener
 {

@@ -69,8 +69,8 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author     $Author$
- * @version    $Revision$
+ * @author     
+ * @version    $Revision$ Last updated: $Date$
  */
 public class AddToTree implements Command
 {

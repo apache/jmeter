@@ -84,18 +84,18 @@ import org.apache.log.Logger;
 
 /**
  * @author    Michael Stover
- * @created   March 11, 2001
- * @version   $Revision$
+ * Created   March 11, 2001
+ * @version   $Revision$ Last updated: $Date$
  */
 public class JMeterTreeListener
     implements TreeSelectionListener, MouseListener, KeyListener,
                MouseMotionListener
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
-    Container endWindow;
-    JPopupMenu pop;
-    TreePath currentPath;
-    ActionListener actionHandler;
+    //Container endWindow;
+    //JPopupMenu pop;
+    private TreePath currentPath;
+    private ActionListener actionHandler;
 
     private JMeterTreeModel model;
     private JTree tree;
@@ -151,7 +151,7 @@ public class JMeterTreeListener
      */
     public void setEndWindow(Container window)
     {
-        endWindow = window;
+        //endWindow = window;
     }
 
     /**

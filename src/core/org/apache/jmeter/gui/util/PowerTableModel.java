@@ -163,7 +163,7 @@ public class PowerTableModel extends DefaultTableModel
             {
                 Constructor constr =
                     colClass.getConstructor(new Class[] { Boolean.TYPE });
-                return constr.newInstance(new Object[] { new Boolean(false)});
+                return constr.newInstance(new Object[] { Boolean.FALSE});
             }
             catch (Exception err)
             {
