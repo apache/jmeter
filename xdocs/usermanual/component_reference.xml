@@ -287,7 +287,7 @@ Group to loop, here is the sequence in which JMeter sends the requests:
 we configured the Thread Group to have two threads and a loop count of five, for a total of ten
 requests. See the table below for the sequence JMeter sends the HTTP Requests.</p>
 
-<figure image="../images/screenshots/logic-controller/interleave.gif">Figure 1 - Interleave Controller Example 1</figure>
+<figure image="../images/screenshots/logic-controller/interleave.png">Figure 1 - Interleave Controller Example 1</figure>
 
 <table border="1" cellspacing="0" cellpadding="4">
 <tr valign="top"><td>Loop Iteration</td><td>Each JMeter Thread Sends These HTTP Requests</td></tr>
@@ -310,7 +310,7 @@ example, we configured the Thread Group
 to have a single thread and a loop count of eight.  Notice that the Test Plan has an outer Interleave Controller with
 two Interleave Controllers inside of it.</p>
 
-<figure image="../images/screenshots/logic-controller/interleave2.gif">
+<figure image="../images/screenshots/logic-controller/interleave2.png">
         Figure 2 - Interleave Controller Example 2
 </figure>
 
@@ -360,11 +360,13 @@ is configured to store the results in a file named "loop-test.dat" in the curren
 
 </component>
 
-<component index="13.2.4" name="Once Only Controller" anchor="once_only_controller"
+<component index="13.2.3" name="Once Only Controller" anchor="once_only_controller"
 screenshot="../images/screenshots/logic-controller/once-only-controller.gif">
 <description>
-<p>The Once Only Logic Controller tells JMeter to process the controller(s) inside it only once, regardless of the loop
-count value you specify in the Thread Group or Loop Controller.</p>
+<p>The Once Only Logic Controller tells JMeter to process the controller(s) inside it only once, and pass over any requests under it
+during further iterations through the test plan.</p>
+
+<p>The Once Only Controller will now execute always during the first iteration of any looping parent controller.  Thus, if the Once Only Controller is placed under a Loop Controller specified to loop 5 times, then the Once Only Controller will execute only on the first iteration through the Loop Controller (ie, every 5 times).  Note this means the Once Only Controller will still behave as previously expected if put under a Thread Group (runs only once per test), but now the user has more flexibility in the use of the Once Only Controller.</p>
 
 <p>For testing that requires a login, consider placing the login request in this controller since each thread only needs
 to login once to establish a session.</p>
@@ -379,14 +381,14 @@ In this example, we created a Test Plan that has two threads that send HTTP requ
 Each thread sends one request to the Home Page, followed by three requests to the Bug Page.
 Although we configured the Thread Group to iterate three times, each JMeter thread only
 sends one request to the Home Page because this request lives inside a Once Only Controller.</p>
-<figure image="../images/screenshots/logic-controller/once-only-example.gif">Figure 4. Once Only Controller Example</figure>
+<figure image="../images/screenshots/logic-controller/once-only-example.png">Figure 4. Once Only Controller Example</figure>
 <p>Each JMeter thread will send the requests in the following order: Home Page, Bug Page,
 Bug Page, Bug Page. Note, the File Reporter is configured to store the results in a file named "loop-test.dat" in the current directory.</p>
 
 </example>
 </component>
 
-<component index="13.2.5" name="Simple Controller" anchor="simple_controller" screenshot="../images/screenshots/logic-controller/simple-controller.gif">
+<component index="13.2.4" name="Simple Controller" anchor="simple_controller" screenshot="../images/screenshots/logic-controller/simple-controller.gif">
 <description>
 <p>The Simple Logic Controller lets  you organize your Samplers and other
 Logic Controllers.  Unlike other Logic Controllers, this controller provides no functionality beyond that of a
@@ -410,7 +412,7 @@ is configured to store the results in a file named "simple-test.dat" in the curr
 </example>
 </component>
 
-<component index="13.2.6" name="Random Controller" screenshot="../images/screenshots/logic-controller/random-controller.gif">
+<component index="13.2.5" name="Random Controller" screenshot="../images/screenshots/logic-controller/random-controller.gif">
 <description>
 <p>The Random Logic Controller acts similarly to the Interleave Controller, except that
 instead of going in order through its sub-controllers and samplers, it picks one
@@ -425,7 +427,7 @@ what results any given interaction will give</note>
 
 </component>
 
-<component index="13.2.7" name="Recording Controller" screenshot="../images/screenshots/logic-controller/recording-controller.gif">
+<component index="13.2.6" name="Recording Controller" screenshot="../images/screenshots/logic-controller/recording-controller.gif">
 <description>
 <p>The Recording Controller is a place holder indicating where the proxy server should
 record samples to.  During test run, it has no effect, similar to the Simple Controller.  But during
@@ -439,7 +441,7 @@ be saved under the Recording Controller.</p>
 
 </component>
 
-<component index="13.2.8" name="Module Controller" screenshot="../images/screenshots/module_controller.png">
+<component index="13.2.7" name="Module Controller" screenshot="../images/screenshots/module_controller.png">
 <description>
 <p>The Module Controller provides a mechanism for substituting test plan fragments into the current test plan at run-time.  To use this
 module effectively, one might have a number of Controllers under the <complink name="Workbench"/>, each with a different series of
@@ -453,6 +455,23 @@ the test run will fail.</note>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Module to Run" required="Yes">The module controller provides a list of all controllers loaded into the gui.  Select
         the one you want to substitute in at runtime.</property>
+</properties>
+
+</component>
+
+<component index="13.2.8" name="Throughput Controller" screenshot="../images/screenshots/throughput_controller.png">
+<description>
+<p>The Throughput Controller allows the user to control how often it is executed.  There are two modes - percent execution and total executions.  Percent executions causes the controller to execute a certain percentage of the iterations through the test plan.  Total
+executions causes the controller to stop executing after a certain number of executions have occurred.  Like the Once Only Controller, this
+setting is reset when a parent Loop Controller restarts.
+</p>
+</description>
+<note>The Throughput Controller can yield very complex behavior when combined with other controllers - in particular with interleave or random controllers as parents (also very useful).</note>
+<properties>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Execution Style" required="Yes">Whether the controller will run in percent executions or total executions mode.</property>
+        <property name="Throughput" required="Yes">A number.  for percent execution mode, a number from 0-100 that indicates the percentage of times the controller will execute.  "50" means the controller will execute during half the iterations throught the test plan.  for total execution mode, the number indicates the total number of times the controller will execute.</property>
+        <property name="Per User" required="No">If checked, per user will cause the controller to calculate whether it should execute on a per user (per thread) basis.  if unchecked, then the calculation will be global for all users.  for example, if using total execution mode, and uncheck "per user", then the number given for throughput will be the total number of executions made.  if "per user" is checked, then the total number of executions would be the number of users times the number given for throughput.</property>
 </properties>
 
 </component>
@@ -598,7 +617,7 @@ has 10 points, each representing 10% of the samples, and connected using spline
 logic to show a single continuous line.</p></description>
 </component>
 
-<component index="13.3.5" name="Assertion Results" screenshot="../images/screenshots/assertion_results.gif">
+<component index="13.3.5" name="Assertion Results" screenshot="../images/screenshots/assertion_results.png">
 <description><p>The Assertion Results visualizer shows the URL of each sample taken (no time information
 is shown).  It also reports failures of any <a href="test_plan.html#assertions">Assertions</a> that
 are part of the test plan.</p></description>

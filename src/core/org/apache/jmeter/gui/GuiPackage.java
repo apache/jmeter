@@ -69,7 +69,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jorphan.collections.HashTree;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -87,7 +87,7 @@ public class GuiPackage
 {
     /** Logging. */
     private static transient Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+        LoggingManager.getLoggerForClass();
 
     /** Singleton instance. */
     private static GuiPackage guiPack;

@@ -145,7 +145,10 @@ public class MailerVisualizer extends AbstractVisualizer
      */
     public synchronized void clear()
     {
-        ((MailerResultCollector)getModel()).getMailerModel().clear();
+        if(getModel() != null)
+        {
+            ((MailerResultCollector)getModel()).getMailerModel().clear();
+        }
     }
     
     public void add(SampleResult res)

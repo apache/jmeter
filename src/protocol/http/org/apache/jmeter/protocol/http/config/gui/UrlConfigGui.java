@@ -128,6 +128,19 @@ public class UrlConfigGui extends JPanel
         mc.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
         mc.setProperty(TestElement.TEST_CLASS, mc.getClass().getName());
     }
+    
+    public void clear()
+    {
+        domain.setText("");
+        followRedirects.setSelected(true);
+        get.setSelected(true);
+        path.setText("");
+        port.setText("");
+        protocol.setText("");
+        useKeepAlive.setSelected(true);
+        argsPanel.clear();
+       
+    }
 
     /****************************************
      * !ToDo (Method description)
