@@ -464,7 +464,8 @@ public class JMeter implements JMeterPlugin
         }
         catch (Exception ex)
         {
-            log.error("", ex);
+            log.error("Giving up, as server failed with:", ex);
+            System.exit(0);// Give up
         }
     }
 
