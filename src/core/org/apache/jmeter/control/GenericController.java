@@ -61,8 +61,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import junit.framework.TestSuite;
-
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -376,17 +374,5 @@ public class GenericController
                 }
             }
         }
-    }
-
-    public static void main(String args[])
-    {
-        junit.textui.TestRunner.run(suite());
-    }
-
-    public static TestSuite suite()
-    {
-        TestSuite suite = new TestSuite();
-        suite.addTest(new Test("testProcessing"));
-        return suite;
     }
 }

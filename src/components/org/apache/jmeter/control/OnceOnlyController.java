@@ -56,10 +56,9 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
-import junit.framework.TestSuite;
-
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
@@ -97,7 +96,9 @@ public class OnceOnlyController
         return null;
     }
 
-    public static class Test extends junit.framework.TestCase
+/////////////////////////// Start of Test Code ///////////////////////////
+
+    public static class Test extends JMeterTestCase
     {
         public Test(String name)
         {
@@ -230,18 +231,5 @@ public class OnceOnlyController
                 }
             }
         }
-    }
-
-    public static void main(String args[])
-    {
-        junit.textui.TestRunner.run(suite());
-    }
-
-    public static TestSuite suite()
-    {
-        TestSuite suite = new TestSuite();
-        suite.addTest(new Test("testProcessing"));
-        suite.addTest(new Test("testProcessing2"));
-        return suite;
     }
 }

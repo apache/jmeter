@@ -264,6 +264,5 @@ public class StandardGenerator implements Generator, Serializable {
 		generateRequest();
 	}
 	
-	public static void main(String[] args) {
-	}
+	//TODO write some tests
 }

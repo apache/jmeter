@@ -116,8 +116,4 @@ public class UrlConfigTest extends JMeterTestCase
             partialConfig.getPropertyAsString(HTTPSampler.PATH),
             "main.jsp");
     }
-
-    public static void main(String[] args)
-    {
-    }
 }
