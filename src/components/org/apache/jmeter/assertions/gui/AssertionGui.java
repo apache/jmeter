@@ -211,6 +211,14 @@ public class AssertionGui extends AbstractAssertionGui implements FocusListener
         {
             tableModel.addRow(new Object[] { tests.next()});
         }
+        if(model.getTestStrings().size() == 0)
+        {
+            deletePattern.setEnabled(false);
+        }
+        else
+        {
+            deletePattern.setEnabled(true);
+        }
         tableModel.fireTableDataChanged();
     }
 

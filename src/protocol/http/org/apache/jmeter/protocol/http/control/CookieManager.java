@@ -198,6 +198,12 @@ public class CookieManager extends ConfigTestElement implements
 	  public void add() {
 		  getCookies().add(new Cookie());
 	  }
+          /***Remove all the cookie*/
+	  public void clear() {
+              super.clear();
+          setProperty(COOKIES,new ArrayList());
+	  }
+
 
 	  /** remove a cookie */
 	  public void remove(int index) {
