@@ -185,31 +185,31 @@
 	</table></p>
 #end
 
-#macro (unknown $node)
-	#if($node.getName() == "note")
-		#note($node)
-	#elseif($node.getName() == "complink")
-		#complink($node)
-	#elseif($node.getName() == "figure")
-		#figure($node)
-	#elseif ($node.getName() == "links")
-		 #seeAlso ($node)
-	#elseif ($node.getName() == "properties")
-		 #properties ($node)
-	#elseif ($node.getName() == "example")
-		#example ($node)
-	#elseif ($node.getName().equals("source"))
-		 #source ($node)
-	#elseif ($node.getName().equals("table"))
-		 #table ($node)
-	#elseif ($node.getName().equals("component"))
-		#component($node)
-	#elseif ($node.getName().equals("subsection"))
-		 #subsection ($node)
+#macro (unknown $u_node)
+	#if($u_node.getName() == "note")
+		#note($u_node)
+	#elseif($u_node.getName() == "complink")
+		#complink($u_node)
+	#elseif($u_node.getName() == "figure")
+		#figure($u_node)
+	#elseif ($u_node.getName() == "links")
+		 #seeAlso ($u_node)
+	#elseif ($u_node.getName() == "properties")
+		 #properties ($u_node)
+	#elseif ($u_node.getName() == "example")
+		#example ($u_node)
+	#elseif ($u_node.getName().equals("source"))
+		 #source ($u_node)
+	#elseif ($u_node.getName().equals("table"))
+		 #table ($u_node)
+	#elseif ($u_node.getName().equals("component"))
+		#component($u_node)
+	#elseif ($u_node.getName().equals("subsection"))
+		 #subsection ($u_node)
 	#else
-		#outputTag($node)
-		#runloop($node)
-		#outputEndTag($node)
+		#outputTag($u_node)
+		#runloop($u_node)
+		#outputEndTag($u_node)
 	#end
 #end
 
@@ -230,11 +230,11 @@
 #end
 
 #macro (runloop $itemToLoop)
-	#foreach ($node in $itemToLoop.getMixedContent())
-		#if($node.getClass().getName().indexOf("Element") > -1)
-			#unknown($node)
+	#foreach ($rl_node in $itemToLoop.getContent())
+		#if($rl_node.getClass().getName().indexOf("Element") > -1)
+			#unknown($rl_node)
 		#else
-			$node
+			$rl_node.getText()
 		#end
 	#end
 #end
@@ -249,15 +249,15 @@
 		  </font>
 		</td></tr>
 		<tr><td>
-		  #foreach ( $items in $component.getChildren() )
-				#if ($items.getName().equals("description"))
-					#runloop($items)
+		  #foreach ( $c_items in $component.getChildren() )
+				#if ($c_items.getName().equals("description"))
+					#runloop($c_items)
 					<p><b>Control Panel</b></p>
 					#if ($screenshot != "")
 						<div align="center"><img src="$screenshot"></div>
 					#end
 				#else
-					 #unknown($items)
+					 #unknown($c_items)
 				#end
 		  #end
 		</td></tr>
@@ -275,11 +275,11 @@
 		</td></tr>
 		<tr><td>
 		  <blockquote>
-		  #foreach ( $items in $subsection.getChildren() )
-				#if ($items.getName().equals("img"))
-					 #image ($items)
+		  #foreach ( $su_items in $subsection.getChildren() )
+				#if ($su_items.getName().equals("img"))
+					 #image ($su_items)
 				#else
-					 #unknown($items)
+					 #unknown($su_items)
 				#end
 		  #end
 		  </blockquote>
@@ -297,11 +297,11 @@
 		</td></tr>
 		<tr><td>
 		  <blockquote>
-		  #foreach ( $items in $section.getChildren() )
-				#if ($items.getName().equals("img"))
-					 #image ($items)
+		  #foreach ( $s_items in $section.getChildren() )
+				#if ($s_items.getName().equals("img"))
+					 #image ($s_items)
 				#else
-					 #unknown($items)
+					 #unknown($s_items)
 				#end
 		  #end
 		  </blockquote>
