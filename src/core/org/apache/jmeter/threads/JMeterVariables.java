@@ -19,7 +19,6 @@
 package org.apache.jmeter.threads;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**

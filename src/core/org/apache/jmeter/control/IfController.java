@@ -23,8 +23,6 @@ import java.io.Serializable;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.FunctionProperty;
-import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
