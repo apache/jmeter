@@ -764,11 +764,8 @@ with the return variable having the respective above values, which can then be u
 It is especially suited for running with the regular expression post-processor. 
 This can "create" the necessary input variables out of the result data of a previous request.
 </p>
-<p>Known bugs/problems</p>
-<ul>
-<li>When the inputVar_1 does not exist, the loop will start anyway, which is not the correct behaviour.</li>
-<li>It will stop the foreach loop as soon as it encounters a null reference, so any empty variable in the list is not allowed.</li>
-</ul>
+<note>The ForEach Controller does not run any samples if inputVar_1 is null.
+This would be the case if the Regular Expression returned no matches.</note>
 </description>
 
 <properties>
@@ -793,7 +790,25 @@ another HTTP Request to the ForEach Controller.</p>
 out of the return page and puts them in the inputVar variable</p>
 <p>In the ForEach loop, a HTTP sampler is added which requests all the links that were extracted from the first returned HTML page.
 </p></example>
-
+<example title="ForEach Example" anchor="foreach_example2">
+<p>Here is <a href="../demos/ForEachTest2.jmx">another example</a> you can download. 
+This has two Regular Expressions and ForEach Controllers.
+The first RE matches, but the second does not match, 
+so no samples are run by the second ForEach Controller</p>
+<figure image="logic-controller/foreach-example2.png">Figure 11 - ForEach Controller Example 2</figure>
+<p>The Thread Group has a single thread and a loop count of two.
+</p><p>
+Sample 1 uses the JavaTest Sampler to return the string "a b c d".
+</p><p>The Regex Extractor uses the expression <b>(\w)\s</b> which matches a letter followed by a space,
+and returns the letter (not the space). Any matches are prefixed with the string "inputVar".
+</p><p>The ForEach Controller extracts all variables with the prefix "inputVar_", and executes its
+sample, passing the value in the variable "returnVar". In this case it will set the variable to the values "a" "b" and "c" in turn.
+</p><p>The For 1 Sampler is another Java Sampler which uses the return variable "returnVar" as part of the sample Label
+and as the sampler Data.
+</p><p>Sample 2, Regex 2 and For 2 are almost identical, except that the Regex has been changed to "(\w)\sx",
+which clearly won't match. Thus the For 2 Sampler will not be run.
+</p>
+</example>
 </component>
 
 <component name="Transaction Controller" index="15.2.12" screenshot="">

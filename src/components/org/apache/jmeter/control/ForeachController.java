@@ -97,7 +97,37 @@ public class ForeachController extends GenericController implements Serializable
     	}
     }
 
-    /* (non-Javadoc)
+    // Prevent entry if nothing to do
+    public Sampler next()
+    {
+        if(emptyList())
+        {
+            reInitialize();
+            return null;
+        }
+        return super.next();
+    }
+
+    /**
+     * Check if there are any matching entries
+     * 
+	 * @return whethere any entries in the list
+	 */
+	private boolean emptyList() {
+        JMeterContext context = getThreadContext();
+    	String inputVariable=getInputValString()+"_1";
+    	if (context.getVariables().get(inputVariable) != null) 
+    	{
+    	   return false;
+    	}
+    	else
+    	{
+    		log.debug("No entries found - null first entry: "+inputVariable);
+    		return true;
+    	}
+	}
+
+	/* (non-Javadoc)
      * @see org.apache.jmeter.control.GenericController#nextIsNull()
      */
     protected Sampler nextIsNull() throws NextIsNullException
