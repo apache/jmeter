@@ -8,15 +8,40 @@
 <body>
 
 <section name="1. Introduction">
-<p>In the User Manual, we describe in detail all of the JMeter elements with examples and 
-downloadable Test Plans which you can load and run in JMeter.</p>
-<p>If you find any problems in the text or have suggestions, 
-<a href="http://nagoya.apache.org/bugzilla/enter_bug.cgi?product=JMeter">enter a bug or enhancement request in Bugzilla</a>. 
-When filling out a request, remember to enter the URL of the page(s) you are referring to.</p>
+<p>
+<b>Apache JMeter</b> is a 100% pure Java desktop application designed
+	  to load test client/server software
+	  (such as a web application).  It may be used
+	  to test performance both on static and dynamic
+	  resources (files, Servlets, Perl scripts, Java Objects, Data Bases and
+	  Queries, FTP Servers and more). It can be used to simulate a heavy
+load on a server, network or object to test its strength or to analyze
+overall performance under different load types.
+</p>
+<p>
+Additionally, JMeter can help you regression test your application by using
+test scripts with assertions to validate that your application is returning the
+results you expect.  These assertions use regular expressions to give you maximum
+flexibility in designing these test.
+</p>
 </section>
 
+<section name="1.1 History">
+<p>JMeter was originally written by Stefano Mazzocchi of the Apache Software
+Foundation, primarily to test the performance of Apache JServ (a project that has
+since been replaced by the Apache Tomcat project).  It has since been redesigned
+and re-implemented to improve the UI and JMeter's functional testing capabilities.
+</p>
+</section>
+
+<section name="1.2 The Future">
+<p>JMeter's future will hopefully see it's capabilities rapidly expand as developers
+take advantage of JMeter's pluggable architecture.  The primary goal of further
+development is to make JMeter the most useful regression testing tool as possible,
+without compromising JMeter's load-testing capabilities.
+</p>
+</section>
 
 
 </body>
 </document>
-
