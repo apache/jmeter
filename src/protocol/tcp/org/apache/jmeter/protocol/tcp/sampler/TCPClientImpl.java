@@ -32,6 +32,7 @@ import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.io.OutputStream;
 
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -43,6 +44,7 @@ import org.apache.log.Logger;
 public class TCPClientImpl implements TCPClient
 {
 	private static Logger log = LoggingManager.getLoggerForClass();
+	private byte eolByte = (byte) JMeterUtils.getPropDefault("tcp.eolByte",0);
 
     public TCPClientImpl()
     {
@@ -69,12 +71,10 @@ public class TCPClientImpl implements TCPClient
         
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream)
-     */
-    public String write(OutputStream os)
-    {
-		String s = "GET /  HTTP/1.1\nHost: www.dummy.invalid\n\n"; //or get from file etc
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream, java.lang.String)
+	 */
+	public void write(OutputStream os, String s) {
 		try
         {
             os.write(s.getBytes());
@@ -85,8 +85,8 @@ public class TCPClientImpl implements TCPClient
             log.debug("Write error",e);
         }
         log.debug("Wrote: "+s);
-        return s;
-    }
+		return;
+	}
 
 
     /* (non-Javadoc)
@@ -101,6 +101,8 @@ public class TCPClientImpl implements TCPClient
 			while ((x = is.read(buffer)) > -1)
 			{
 				w.write(buffer, 0, x);
+				if ((eolByte != 0) && (buffer[x-1] == eolByte)) 
+					break;
 			}
 		/*
 		 * Timeout is reported as follows:
@@ -123,7 +125,29 @@ public class TCPClientImpl implements TCPClient
 		}
 		
 		// do we need to close byte array (or flush it?)
-		log.debug("Read:\n"+w.toString());
+		log.debug("Read: "+w.size()+ "\n"+w.toString());
 		return w.toString();
     }
+
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream, java.io.InputStream)
+	 */
+	public void write(OutputStream os, InputStream is) {
+		// TODO Auto-generated method stub
+		return;
+	}
+
+	/**
+	 * @return Returns the eolByte.
+	 */
+	public byte getEolByte() {
+		return eolByte;
+	}
+	/**
+	 * @param eolByte The eolByte to set.
+	 */
+	public void setEolByte(byte eolByte) {
+		this.eolByte = eolByte;
+	}
 }

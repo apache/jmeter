@@ -59,7 +59,7 @@ public final class HttpReplyHdr
 
         if (0 < contentType.length())
         {
-            out.append("Content-type: ").append(contentType).append(CR);
+            out.append("Content-Type: ").append(contentType).append(CR);
         }
         else
         {
@@ -106,15 +106,15 @@ public final class HttpReplyHdr
      */
     private static String formError(String error, String description)
     {
-        /* A HTTP RESPONCE HEADER LOOKS ALOT LIKE:
+        /* A HTTP RESPONSE HEADER LOOKS ALOT LIKE:
          *
          * HTTP/1.0 200 OK
          * Date: Wednesday, 02-Feb-94 23:04:12 GMT
          * Server: NCSA/1.1
          * MIME-version: 1.0
          * Last-modified: Monday, 15-Nov-93 23:33:16 GMT
-         * Content-type: text/html
-         * Content-length: 2345
+         * Content-Type: text/html
+         * Content-Length: 2345
          * \r\n
          */
 
@@ -124,7 +124,7 @@ public final class HttpReplyHdr
         header.append(HTTP_PROTOCOL).append(" ").append(error).append(CR);
         header.append("Server: ").append(HTTP_SERVER).append(CR);
         header.append("MIME-version: 1.0").append(CR);
-        header.append("Content-type: text/html").append(CR);
+        header.append("Content-Type: text/html").append(CR);
 
         header.append("Content-Length: ").append(body.length()).append(CR);
 

@@ -19,39 +19,37 @@
 		  href="http://jakarta.apache.org/jmeter/">
 
 	 <title>JMeter</title>
-	 <!--
-	 <logo href="/images/logo.gif">JMeter</logo>
-	 -->
+	 <!---->
+	 <logo href="/images/logo.jpg">JMeter</logo>
+	 <!---->
 	 <body>
 	 <menu name="About">
-		  <item name="Overview"               href="/index.html"/>
-		  <item name="Changes"                href="/changes.html"/>
-		  <item name="Known Bugs"             href="http://nagoya.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;email1=&amp;emailtype1=substring&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=substring&amp;emailreporter2=1&amp;bugidtype=include&amp;bug_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;product=JMeter&amp;short_desc=&amp;short_desc_type=substring&amp;long_desc=&amp;long_desc_type=substring&amp;bug_file_loc=&amp;bug_file_loc_type=substring&amp;keywords=&amp;keywords_type=anywords&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;cmdtype=doit&amp;order=Reuse+same+sort+as+last+time"/>
-		  <item name="License"                href="/license.html"/>
-		  <item name="Contributors"			  href="http://nagoya.apache.org/wiki/apachewiki.cgi?JMeterCommitters"/>
-		  <item name="FAQ"			href="http://nagoya.apache.org/wiki/apachewiki.cgi?JMeterFAQ"/>
+	   <item name="Overview"            href="/index.html"/>
+	   <item name="Changes"             href="/changes.html"/>
+	   <item name="Known Bugs"          href="http://nagoya.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;email1=&amp;emailtype1=substring&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=substring&amp;emailreporter2=1&amp;bugidtype=include&amp;bug_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;product=JMeter&amp;short_desc=&amp;short_desc_type=substring&amp;long_desc=&amp;long_desc_type=substring&amp;bug_file_loc=&amp;bug_file_loc_type=substring&amp;keywords=&amp;keywords_type=anywords&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;cmdtype=doit&amp;order=Reuse+same+sort+as+last+time"/>
+	   <item name="License"             href="/license.html"/>
+	   <item name="Contributors"		href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters"/>
+	   <item name="FAQ (Wiki)"			href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ"/>
 	 </menu>
 	 <menu name="Download">
-	 	<item name="Download Binary"                    href="http://jakarta.apache.org/site/binindex.cgi"/>
-        <item name="Download Source"                    href="http://jakarta.apache.org/site/sourceindex.cgi"/>
-		<item name="Download Nightly Builds"  			href="/nightly.html"/>
-	 	<item name="Download Latest Stable Release"     href="http://www.apache.org/dyn/closer.cgi/jakarta/jmeter/jakarta-jmeter-current-bin.zip"/>	 	
-	 	<!-- <item name="Download Latest Release Candidate" 	href="http://jakarta.apache.org/builds/jakarta-jmeter/unstable/v1.9/jakarta-jmeter-1.9.RC3.zip"/> -->
+	 	<item name="Download Binary"    href="http://jakarta.apache.org/site/binindex.cgi"/>
+        <item name="Download Source"    href="http://jakarta.apache.org/site/sourceindex.cgi"/>
+		<item name="Nightly Builds"  	href="/nightly.html"/>
 	 </menu>
 	 <menu name="Documentation">
-		<item name="User Manual"        href="/usermanual/index.html"/>
-		<item name="Developer Manual"       href="/extending/index.html"/>
-		<item name="JMeter Wiki"			href="http://nagoya.apache.org/wiki/apachewiki.cgi?JMeterProjectPages"/>
-		<item name="Javadocs"		href="/api/index.html"/>
+		<item name="User Manual"         href="/usermanual/index.html"/>
+		<item name="Javadocs"		     href="/api/index.html"/>
 	 </menu>
 	 <menu name="JMeter Resources">
-	 		<item name="JMeter Articles" href="http://nagoya.apache.org/wiki/apachewiki.cgi?JMeterLinks"/>
-	 		<item name="JMeter on IRC" href="/jmeter_irc.html"/>
+		<item name="JMeter Wiki"		 href="http://wiki.apache.org/jakarta-jmeter"/>
+	 	<item name="JMeter Articles"     href="http://wiki.apache.org/jakarta-jmeter/JMeterLinks"/>
+	 	<item name="JMeter on IRC"       href="/jmeter_irc.html"/>
+	 	<item name="Developer Notes"     href="http://wiki.apache.org/jakarta-jmeter/JMeterDevelopment"/>
 	 </menu>
 	 <menu name="Community">
-		  <item name="Get Involved"           href="/site/getinvolved.html"/>
-		  <item name="Mailing Lists"          href="/site/mail.html"/>
-		  <item name="CVS Repositories"       href="/site/cvsindex.html"/>
+		<item name="Get Involved"        href="/site/getinvolved.html"/>
+		<item name="Mailing Lists"       href="/site/mail.html"/>
+		<item name="CVS Repositories"    href="/site/cvsindex.html"/>
 	 </menu>
 	 </body>
 </project>
