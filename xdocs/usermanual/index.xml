@@ -96,6 +96,16 @@
 		<li><a href="build-ftp-test-plan.html#adding_listener">8.4 Adding a Listener to View/Store the Test Results</a></li>
 		<li><a href="build-ftp-test-plan.html#saving">8.5 Saving the Test Plan</a></li>
 		<li><a href="build-ftp-test-plan.html#running">8.6 Running the Test Plan</a></li>
+  <ul>
+    <li><a href="build-ldap-test-plan.html#adding_users">9.1 Adding Users</a></li>
+    <li><a href="build-ldap-test-plan.html#add_login">9.2 Adding Login Config Element</a></li>
+    <li><a href="build-ldap-test-plan.html#add_defaults">9.3 Adding LDAP Request Defaults</a></li>
+    <li><a href="build-ldap-test-plan.html#add_requests">9.4 Adding LDAP Requests</a></li>
+    <li><a href="build-ldap-test-plan.html#add_listener">9.5 Adding a Listener to View/Store the Test Results</a></li>
+    <li><a href="build-ldap-test-plan.html#saving">9.6 Saving the Test Plan</a></li>
+    <li><a href="build-ldap-test-plan.html#running">9.7 Running the Test Plan</a></li>
+  </ul>
+
 	 </ul>
   <li><a href="build-ldap-test-plan.html">9. Building an LDAP Test Plan</a></li>
   <li><a href="remote-test.html">10. Remote Testing</a></li>
