@@ -7,13 +7,23 @@
 
 <body>
 
-<section name="4.2 Controllers">
+<section name="4.2 Controllers" anchor="controllers">
 
 <p> JMeter has two types of Controllers: Generative and Logical.</p>
 
-<p>Generative Controllers tell JMeter to send requests to a server. For example, add an HTTP Request Generative Controller if you want JMeter to send an HTTP request.  You can also customize a request by adding one or more Configuration Elements to a Generative Controller.  For more information, see section <a href="gen-controller.html">4.2.1 Generative Controllers</a>.</p>
+<p>Generative Controllers tell JMeter to send requests to a server. For 
+example, add an HTTP Request Generative Controller if you want JMeter 
+to send an HTTP request.  You can also customize a request by adding one 
+or more Configuration Elements to a Generative Controller.  For more 
+information, see section 
+<a href="gen-controller.html">4.2.1 Generative Controllers</a>.</p>
 
-<p>Logical Controllers let you customize the logic that JMeter uses to decide when to send requests.  For example, you can add an Interleave Logic Controller to alternate between two HTTP Request Generative Controllers.  Also, one particular Logic Controller, the Modification Manager, lets you modify the results of a request.  For more information, see section <a href="logic-controller.html">4.2.2 Logical Controllers</a>.</p>
+<p>Logical Controllers let you customize the logic that JMeter uses to 
+decide when to send requests.  For example, you can add an Interleave 
+Logic Controller to alternate between two HTTP Request Generative 
+Controllers.  Also, one particular Logic Controller, the Modification 
+Manager, lets you modify the results of a request.  For more information, 
+see section <a href="logic-controller.html">4.2.2 Logical Controllers</a>.</p>
 
 </section>
 
