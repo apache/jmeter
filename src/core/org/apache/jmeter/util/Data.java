@@ -332,6 +332,10 @@ Returns the row number where a certain value is.
 		  size++;
 		  tempList.add(value);
 	 }
+	 else if(currentPos >= tempList.size())
+	 {
+	 	tempList.add(value);
+	 }
 	 else
 		tempList.set(currentPos,value);
   }// end method
@@ -413,7 +417,13 @@ Returns the row number where a certain value is.
   	setCurrentPos(row);
   	return getColumnValue(column);
   }
-
+  
+  public void removeColumn(int col)
+  {
+  	String columnName = (String)header.get(col);
+  	data.remove(columnName);
+  	header.remove(columnName);
+  }
 
 
   /*****************************************************************
@@ -454,16 +464,9 @@ Returns the row number where a certain value is.
 @param columnName String value, name of the column.
 @return Array of Objects representing the data.
   *****************************************************************/
-  public Object[] getColumnAsObjectArray(String columnName)
+  public List getColumnAsObjectArray(String columnName)
   {
-	 Object[] returnValue;
-	 Object o;
-	 List temp=(List)data.get(columnName);
-	 if(temp != null)
-		returnValue = temp.toArray();
-	 else
-		returnValue = new Object[0];
-	 return returnValue;
+	 return (List)data.get(columnName);
   }// end of Method
 
 
@@ -531,6 +534,27 @@ Returns the row number where a certain value is.
   {
 
   }*/
+  
+  public void setColumnData(String colName,Object value)
+  {
+  	List list = this.getColumnAsObjectArray(colName);
+  	for(int x = 0;x < list.size();x++)
+  	{
+  		list.set(x,value);
+  	}
+  }
+  
+  public void setColumnData(int col,List data)
+  {
+  	reset();
+  	Iterator iter = data.iterator();
+  	String columnName = (String)header.get(col);
+  	while(iter.hasNext())
+  	{
+  		next();
+  		setColumnValue(columnName,iter.next());
+  	}
+  }
 
 
   /***************************************************
@@ -540,7 +564,7 @@ Returns the row number where a certain value is.
   public void addHeader(String s)
   {
 	header.add(s);
-	data.put(s,new ArrayList());
+	data.put(s,new ArrayList(size()));
   }
 
   /************************************************************
