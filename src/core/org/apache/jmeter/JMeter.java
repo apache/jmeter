@@ -76,6 +76,7 @@ import org.apache.jmeter.engine.JMeterEngine;
 import org.apache.jmeter.engine.RemoteJMeterEngineImpl;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.engine.util.DisabledComponentRemover;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -515,6 +516,13 @@ public class JMeter implements JMeterPlugin
             log.info("Loading file: " + f);
 
             HashTree tree = SaveService.loadSubTree(reader);
+
+            // Remove the disabled items
+            // For GUI runs this is done in Start.java
+			DisabledComponentRemover remover =
+				new DisabledComponentRemover(tree);
+			tree.traverse(remover);
+
             if (logFile != null)
             {
                 ResultCollector logger = new ResultCollector();
@@ -541,14 +549,17 @@ public class JMeter implements JMeterPlugin
                 while (st.hasMoreElements())
                 {
                     String el = (String) st.nextElement();
+					println("Configuring remote engine for "+el);
                     engines.add(doRemoteInit(el.trim(), tree));
                 }
+                println("Starting remote engines");
                 Iterator iter = engines.iterator();
                 while (iter.hasNext())
                 {
                     engine = (JMeterEngine) iter.next();
                     engine.runTest();
                 }
+				println("Remote engines have been started");
             }
         }
         catch (Exception e)
@@ -617,6 +628,7 @@ public class JMeter implements JMeterPlugin
          */
         public void run()
         {
+			println("Tidying up ...");
             try
             {
                 Thread.sleep(5000);
@@ -624,6 +636,7 @@ public class JMeter implements JMeterPlugin
             catch (InterruptedException e)
             {
             }
+            println("... end of run");
             System.exit(0);
         }
         /**
