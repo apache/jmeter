@@ -122,8 +122,10 @@ public class HTTPSamplerFull
      */
     protected static String utfEncodingName;
 
-	private static boolean parseJTidy =
-		JMeterUtils.getPropDefault("parser.jtidy",false);
+    private static boolean parseJTidy =
+            JMeterUtils.getPropDefault("parser.jtidy",false);
+    private static boolean parseRegexp =
+            JMeterUtils.getPropDefault("parser.regexp",false);
 
     /**
      * This is the only Constructor.
@@ -168,12 +170,17 @@ public class HTTPSamplerFull
     protected SampleResult parseForImages(SampleResult res, HTTPSampler sampler)
     {
     	if (parseJTidy){
-    		log.info("Using JTidy");
-    		 return ParseJTidy.parseForImages(res,sampler); 
-   		} else {
-   			log.info("Using HtmlParser");
-			return ParseHtmlParser.parseForImages(res,sampler);
-   		}
+            log.info("Using JTidy");
+            return ParseJTidy.parseForImages(res,sampler); 
+        }
+        else if (parseRegexp) {
+            log.info("Using HtmlParser");
+            return ParseHtmlParser.parseForImages(res,sampler);
+        }
+        else {
+            log.info("Using Regexp-based HTML parsing");
+            return ParseRegexp.parseForImages(res, sampler);
+        }
     }
 
     /**
