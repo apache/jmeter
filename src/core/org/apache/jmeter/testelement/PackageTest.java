@@ -51,13 +51,16 @@ public class PackageTest extends TestCase
         LoginConfig loginConfig = new LoginConfig();
         loginConfig.setUsername("user1");
         loginConfig.setPassword("pass1");
-        assertEquals(new NullProperty(),config.getProperty("login"));
+        assertTrue(config.getProperty("login") instanceof NullProperty);
+        // This test should work whether or not all Nulls are equal
+        assertEquals(new NullProperty("login"),config.getProperty("login"));
         config.addProperty(new TestElementProperty("login",loginConfig));
         assertEquals(
             loginConfig.toString(),
             config.getPropertyAsString("login"));
         config.recoverRunningVersion();
-        assertEquals(new NullProperty(),config.getProperty("login"));
+        assertTrue(config.getProperty("login") instanceof NullProperty);
+        assertEquals(new NullProperty("login"),config.getProperty("login"));
     }
     
     public void testArguments() throws Exception
