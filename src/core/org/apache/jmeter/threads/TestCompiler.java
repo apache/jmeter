@@ -67,9 +67,12 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
      * Clears the pairing Set
      * Called by StandardJmeterEngine at the start of a test run.
      */
-    public static synchronized void initialize()
+    public static void initialize()
     {
-        pairing.clear();
+        // synch is probably not needed as only called before run starts
+    	synchronized(pairing){
+			pairing.clear();
+    	}
     }
 
     public void sampleOccurred(SampleEvent e)
@@ -135,7 +138,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
                 new ObjectPair(
                     (TestElement) child,
                     (TestElement) stack.getLast());
-			synchronized (this){
+			synchronized (pairing){//Called from multiple threads
                 if (!pairing.contains(pair))
                 {
                     pair.addTestElements();
