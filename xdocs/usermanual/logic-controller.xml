@@ -7,17 +7,76 @@
 
 <body>
 
-<section name="4.2.2 Logic Controllers">
-<p>Put description text here...</p>
+<section name="4.2.2 Logic Controllers" anchor="logic_controller">
+<p>Logic Controllers let you customize the logic that JMeter uses to 
+decide when to send requests.  JMeter currently has five such controllers:
+<ul>
+  <li><b>Interleave Controller</b> <br></br>Samples only one request instead of 
+all requests in a Thread Group for each loop iteration.</li> 
+
+  <li><b>Loop Controller</b> <br></br>Tell JMeter to loop a certain number of times, 
+in addition to the loop value you specified for the Thread Group.</li> 
+
+  <li><b>Modification Manager</b> <br></br>Lets you parse the results of previous
+requests, and use them to dynamically modify the next request.  </li> 
+
+  <li><b>Once Only Controller</b> <br></br>Tells JMeter to send only one request. This
+value overrides the loop value you specified for the Thread Group.</li> 
+
+  <li><b>Simple Controller</b> <br></br>This controller has not functionality except to
+help you organize your controllers.</li> 
+</ul>
+</p>
+
+<p>You can add Generative Controllers (requests), Configuration Elements, and even
+other Logic Controllers to a Logic Controller. </p>  
 </section>
 
 <section name="4.2.2.1 Interleave Controller">
-<p>Put description text here...</p>
+<p>If you add requests to this controller, JMeter will alternate among each of the 
+requests, sending only one request for each loop interation. For example, if you 
+add three HTTP Requests to an Interleave Controller and configure the Thread
+Group to loop, here is the sequence in which JMeter sends the requests:
+</p>
+<table border="1" cellspacing="0" cellpadding="4">
+<tr valign="top"><td>Loop Iteration</td><td>Description</td></tr>
+<tr valign="top"><td>1</td><td>JMeter sends the first HTTP Request.</td></tr>
+<tr valign="top"><td>2</td><td>JMeter sends the second HTTP Request.</td></tr>
+<tr valign="top"><td>3</td><td>JMeter sends the third HTTP Request.</td></tr>
+<tr valign="top"><td>4</td><td>Because there are no more requests in controller, JMeter start over and sends the first HTTP Request.</td></tr>
+<tr valign="top"><td>5</td><td>JMeter sends the second HTTP Request.</td></tr>
+<tr valign="top"><td>(and so on)</td><td>...</td></tr>
+</table>
+
+<p><a href="../demos/InterleaveTestPlan.jmx">Download</a> an example (see Figure 4.1).  In this example, 
+the Thread Group
+is configured for two threads with a loop count of five, for a total of ten iterations. JMeter sends the requests
+in the following order: News Page, FAQ Page, and Gump Page. Note, the File Reporter
+is configured to store the results in a file named "interleave-test.dat" in the current directory.</p>
+
+<p><img src="../images/screenshots/logic-controller/interleave.gif" width="368" height="210"></img>
+<br>Figure 4.1. Interleave Controller Example 1</br></p>
+
+<p><a href="../demos/InterleaveTestPlan2.jmx">Download</a> another example (see Figure 4.2).  In this 
+example, the Thread Group
+is configured for a single thread with a loop count of eight.  Notice that the Test Plan has an outer Interleave Controller with
+two Interleave Controllers inside of it.</p>
+
+<p>The outer Interleave Controller alternates between the
+two inner ones.  Then, of course, each inner Interleave Controller alternates between each of the HTTP Requests.  JMeter
+sends the requests in the following order: Home Page, Bug Page, CVS Page, and FAQ Page.
+Note, the File Reporter is configured to store the results in a file named "interleave-test2.dat" in the current directory.</p>
+
+<p><img src="../images/screenshots/logic-controller/interleave2.gif" width="368" height="262"></img>
+<br>Figure 4.2. Interleave Controller Example 2</br></p>
+
 </section>
 
 <section name="4.2.2.2 Loop Controller">
 <p>Put description text here...</p>
 <p><img src="../images/screenshots/logic-controller/loop-controller.gif" width="397" height="111"></img></p>
+
+
 </section>
 
 <section name="4.2.2.3 Modification Manager">
