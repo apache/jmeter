@@ -271,6 +271,7 @@
   <property name="optimize" value="on"/>
   <property name="deprecation" value="off"/>
   <property name="target.java.version" value="1.3"/>
+  <property name="src.java.version" value="1.3"/>
   <property name="encoding" value="UTF-8"/>
 
   <!-- 3rd party libraries to be included in the binary distribution -->
@@ -443,7 +444,7 @@
 
   <target name="compile-core" depends="compile-jorphan,update-version" description="Compile JMeter core classes.">
     <mkdir dir="${build.core}"/>
-    <javac srcdir="${src.core}" destdir="${build.core}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.core}" destdir="${build.core}" optimize="${optimize}" source="${src.java.version}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <exclude name="org/apache/jmeter/util/JsseSSLManager.java" unless="jsse.present"/>
       <exclude name="org/apache/jmeter/util/keystore/PKCS12KeyStore.java" unless="isasilk.present"/>
@@ -464,7 +465,7 @@
 
   <target name="compile-components" depends="compile-jorphan,compile-core" description="Compile generic (protocol-independent) components.">
     <mkdir dir="${build.components}"/>
-    <javac srcdir="${src.components}" destdir="${build.components}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.components}" destdir="${build.components}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <exclude name="org/apache/jmeter/visualizers/MailerVisualizer.java" unless="javamail.complete"/>
       <exclude name="org/apache/jmeter/reporters/MailerModel.java" unless="javamail.complete"/>
@@ -480,7 +481,7 @@
 
   <target name="compile-functions" depends="compile-jorphan,compile-core" description="Compile functions.">
     <mkdir dir="${build.functions}"/>
-    <javac srcdir="${src.functions}" destdir="${build.functions}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.functions}" destdir="${build.functions}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -492,7 +493,7 @@
 
   <target name="compile-http" depends="compile-jorphan,compile-core,compile-htmlparser" description="Compile components specific to HTTP sampling.">
     <mkdir dir="${build.http}"/>
-    <javac srcdir="${src.http}" destdir="${build.http}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.http}" destdir="${build.http}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <exclude name="org/apache/jmeter/protocol/http/sampler/WebServiceSampler.java" unless="javamail.complete"/>
       <exclude name="org/apache/jmeter/protocol/http/control/gui/WebServiceSamplerGui.java" unless="javamail.complete"/>
@@ -508,7 +509,7 @@
 
   <target name="compile-ftp" depends="compile-jorphan,compile-core" description="Compile components specific to FTP sampling.">
     <mkdir dir="${build.ftp}"/>
-    <javac srcdir="${src.ftp}" destdir="${build.ftp}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.ftp}" destdir="${build.ftp}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -520,7 +521,7 @@
 
   <target name="compile-jdbc" depends="compile-jorphan,compile-core" description="Compile components specific to JDBC sampling.">
     <mkdir dir="${build.jdbc}"/>
-    <javac srcdir="${src.jdbc}" destdir="${build.jdbc}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.jdbc}" destdir="${build.jdbc}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -533,7 +534,7 @@
   <target name="compile-ldap" depends="compile-jorphan,compile-core" 
     description="Compile components specific to LDAP sampling.">
     <mkdir dir="${build.ldap}"/>
-    <javac srcdir="${src.ldap}" destdir="${build.ldap}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.ldap}" destdir="${build.ldap}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -545,7 +546,7 @@
 
   <target name="compile-java" depends="compile-jorphan,compile-core" description="Compile components specific to Java sampling.">
     <mkdir dir="${build.java}"/>
-    <javac srcdir="${src.java}" destdir="${build.java}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.java}" destdir="${build.java}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <exclude name="org/apache/jmeter/protocol/java/**/BeanShell*.java" unless="beanshell.present"/>
       <exclude name="org/apache/jmeter/protocol/java/**/BSF*.java" unless="bsf.present"/>
@@ -559,7 +560,7 @@
 
   <target name="compile-tcp" depends="compile-jorphan,compile-core" description="Compile components specific to TCP sampling.">
     <mkdir dir="${build.tcp}"/>
-    <javac srcdir="${src.tcp}" destdir="${build.tcp}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.tcp}" destdir="${build.tcp}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -573,7 +574,7 @@
 
   <target name="compile-examples" depends="compile-jorphan,compile-core" description="Compile example components.">
     <mkdir dir="${build.examples}"/>
-    <javac srcdir="${src.examples}" destdir="${build.examples}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.examples}" destdir="${build.examples}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -588,7 +589,7 @@
   <target name="compile-monitor-components"
     depends="compile-jorphan,compile-core,compile-components,compile-monitor-model">
     <mkdir dir="${build.monitor.components}"/>
-    <javac srcdir="${src.monitor.components}" destdir="${build.monitor.components}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.monitor.components}" source="${src.java.version}" destdir="${build.monitor.components}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -603,7 +604,7 @@
 
   <target name="compile-monitor-model" depends="compile-jorphan,compile-core">
     <mkdir dir="${build.monitor.model}"/>
-    <javac srcdir="${src.monitor.model}" destdir="${build.monitor.model}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.monitor.model}" destdir="${build.monitor.model}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -615,7 +616,7 @@
 
   <target name="compile-jorphan" depends="init" description="Compile JOrphan utility classes.">
     <mkdir dir="${build.jorphan}"/>
-    <javac srcdir="${src.jorphan}" destdir="${build.jorphan}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.jorphan}" destdir="${build.jorphan}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -641,7 +642,7 @@
 
   <target name="compile-htmlparser" depends="" description="Compile htmlparser.">
     <mkdir dir="${build.htmlparser}"/>
-    <javac srcdir="${src.htmlparser}" destdir="${build.htmlparser}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+    <javac srcdir="${src.htmlparser}" destdir="${build.htmlparser}" optimize="${optimize}" debug="on" source="${src.java.version}" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -971,6 +972,7 @@ some of its classes - at present JMeter can only run from jar files.
   version.projectfile = ${version.projectfile}
   Java properties:
   target.java.version = ${target.java.version}
+  src.java.version    = ${src.java.version}
   deprecation         = ${deprecation}
   encoding            = ${encoding}
   optimize            = ${optimize}
