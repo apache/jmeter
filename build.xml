@@ -132,6 +132,7 @@
       <class location="${lib.dir}/jorphan.jar" />
       <sourcePath path="${src.jorphan}" />
       <sourcePath path="${src.tcp}" />
+      <sourcePath path="${src.jms}" />
 
 	<!--
       Uncomment the following 2 lines to include htmlparser in the analysis
@@ -182,6 +183,7 @@
   <property name="src.mail" value="src/protocol/mail"/>
   <property name="src.monitor.components" value="src/monitor/components"/>
   <property name="src.monitor.model" value="src/monitor/model"/>
+  <property name="src.jms" value="src/protocol/jms"/>
 
   <!-- Where the documentation sources live -->
   <property name="src.docs" value="xdocs"/>
@@ -205,6 +207,7 @@
     <pathelement location="${src.mail}"/>
     <pathelement location="${src.monitor.components}"/>
     <pathelement location="${src.monitor.model}"/>
+    <pathelement location="${src.jms}"/>
   </path>
 
   <!-- Temporary build directories: where the .class live -->
@@ -224,6 +227,7 @@
   <property name="build.examples" location="build/examples"/>
   <property name="build.monitor.components" location="build/monitor/components"/>
   <property name="build.monitor.model" location="build/monitor/model"/>
+  <property name="build.jms" location="build/protocol/jms"/>
   <property name="build.test" location="build/test"/>
   
   <!-- Path prefix to allow Anakia to find stylesheets if running under Eclipse -->
@@ -707,7 +711,19 @@
     </javac>
   </target>
 
-  <target name="compile" depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-htmlparser,compile-monitor"
+  <target name="compile-jms" depends="compile-jorphan,compile-core,compile-components">
+    <mkdir dir="${build.jms}"/>
+    <javac srcdir="${src.jms}" destdir="${build.jms}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+      <include name="**/*.java"/>
+      <classpath>
+        <path refid="classpath"/>
+        <pathelement location="${build.jorphan}"/>
+        <pathelement location="${build.core}"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="compile" depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-htmlparser,compile-monitor,compile-jms"
   description="Compile everything."/>
 
   <target name="package" depends="compile, package-only"
@@ -810,6 +826,12 @@ some of its classes - at present JMeter can only run from jar files.
     <jar jarfile="${dest.jar}/ApacheJMeter_monitors.jar">
       <fileset dir="${build.monitor.model}" includes="**/*.class" />
       <fileset dir="${build.monitor.components}" includes="**/*.class" />
+    </jar>
+
+    <!-- jms -->
+    <jar jarfile="${dest.jar}/ApacheJMeter_jms.jar">
+      <fileset dir="${build.jms}" includes="**/*.class" />
+      <fileset dir="${src.jms}" includes="**/*.properties" />
     </jar>
     
     <jar jarfile="${lib.dir}/htmlparser.jar" basedir="${build.htmlparser}"/>
