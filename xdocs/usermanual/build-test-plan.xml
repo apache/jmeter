@@ -14,7 +14,7 @@ controllers, listeners, timers, assertions, and configuration elements.
 </p>
 
 <subsection name="3.1 Adding and Removing Elements" anchor="add_remove">
-<p>Adding elements to a test plan can be done by right-clicking on an element in the
+<p>Adding <a href="test_plan.html">elements to a test plan</a> can be done by right-clicking on an element in the
 tree, and choosing a new element from the "add" list.  Alternatively, elements can
 be loaded from file and added by choosing the "open" option.  </p>
 

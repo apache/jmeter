@@ -8,25 +8,51 @@
 <body>
 
 <section name="6. Building an Advanced Web Test Plan" anchor="building">
-<p>In this section, you will learn how to create advanced 
-<a href="build-test-plan.html">Test Plans</a> to test a Web site.</p> 
+<p>In this section, you will learn how to create advanced
+<a href="build-test-plan.html">Test Plans</a> to test a Web site.</p>
 <p>
 <ul>
-<li><a href="#multi_user_logins">6.1 Creating Multiple User Logins</a></li>
-<li><a href="#session_cookies">6.2 Handling User Sessions With Cookies</a></li>
-<li><a href="#session_url_rewriting">6.3 Handling User Sessions With URL Rewriting</a></li>
+<li><a href="#session_url_rewriting">6.1 Handling User Sessions With URL Rewriting</a></li>
 </ul>
 </p>
-<p>For an example of a basic Test Plan, see  
+<p>For an example of a basic Test Plan, see
 <a href="build-web-test-plan.html">Building a Web Test Plan</a>.</p></section>
 
-<section name="6.1 Creating Multiple User Logins" anchor="multi_user_logins">
+<section name="6.1 Handling User Sessions With URL Rewriting" anchor="session_url_rewriting">
+<p>If your web application uses URL rewriting rather than cookies to save session information,
+then you'll need to do a bit of extra work to test your site.</p>
+<p>To respond correctly to URL rewriting, JMeter needs to parse the HTML
+received from the server and retrieve the unique session ID.  To do this, put
+all your requests inside a <complink name="Modification Manager"/>, with an <complink
+name="HTML Link Parser"/> attached.  Then, include the session ID as an additional parameter
+with each <complink name="HTTP Request"/>, with ".*" as the value.</p>
+
+<example title="URL Rewriting Example">
+<p>Download <a href="../demos/URLRewritingExample.jmx">this example</a>. In Figure 1 is shown a test plan using URL rewriting.  Note that all HTTP Requests are
+contained within the <complink name="Modification Manager"/>. The <complink name="Modification Manager"/>
+also has an <complink name="HTML Link Parser"/> attached to it.</p>
+<note>It would be possible to use other <a href="component_reference.html#logic_controllers">Logic
+Controllers</a> within the
+<complink name="Modification Manager"/> without affecting the Modification Manager.</note>
+<figure image="../images/screenshots/url_rewrite_example_a.gif">Figure 1 - Test Tree</figure>
+<p>In Figure 2, we see the "Send Parameters with Request" section of one of the
+<complink name="HTTP Request"/> objects.  It shows, in addition to the login
+information, the SESSION_ID parameter, with a value of ".*", which is a regular expression
+that will match any string.  Your application will have its own unique name for
+this parameter, which you will have to put in place of "SESSION_ID".</p>
+<figure image="../images/screenshots/url_rewrite_example_b.gif">Figure 2 - Request parameters</figure>
+</example>
 </section>
 
-<section name="6.2 Handling User Sessions With Cookies" anchor="session_cookies">
-</section>
+<section name="6.2 Using a Header Manager" anchor="header_manager">
+<p>The <complink name="HTTP Header Manager"/> lets you customize what information
+JMeter sends in the HTTP request header.  This header includes properties like "User-Agent",
+"Pragma", "Referer", etc.</p>
+<p>The <complink name="HTTP Header Manager"/>, like the <complink name="HTTP Cookie Manager"/>,
+should probably be added at the Thread Group level, unless for some reason you wish to
+specify different headers for the different <complink name="HTTP Request"/> objects in
+your test.</p>
 
-<section name="6.3 Handling User Sessions With URL Rewriting" anchor="session_url_rewriting">
 </section>
 
 </body>

@@ -39,6 +39,7 @@
 		<li><a href="get-started.html#proxy_server">2.4.2 Using a Proxy Server</a></li>
 		<li><a href="get-started.html#non_gui">2.4.3 Non-GUI Mode</a></li>
 	 </ul>
+	 <li><a href="get-started.html#configuring_jmeter">2.5 Configuring JMeter</a></li>
   </ul>
   <li><a href="build-test-plan.html">3. Building a Test Plan</a></li>
   <ul>
@@ -72,9 +73,8 @@
 	 </ul>
   <li><a href="build-adv-web-test-plan.html">6. Building an Advanced Web Test Plan</a></li>
 	 <ul>
-		<li><a href="build-adv-web-test-plan.html#multi_user_logins">6.1 Creating Multiple User Logins</a></li>
-		<li><a href="build-adv-web-test-plan.html#session_cookies">6.2 Handling User Sessions With Cookies</a></li>
-		<li><a href="build-adv-web-test-plan.html#session_url_rewriting">6.3 Handling User Sessions With URL Rewriting</a></li>
+		<li><a href="build-adv-web-test-plan.html#session_url_rewriting">6.1 Handling User Sessions With URL Rewriting</a></li>
+		<li><a href="build-adv-web-test-plan.html#header_manager">6.2 Using a Header Manager</a></li>
 	 </ul>
   <li><a href="build-db-test-plan.html">7. Building a Database Test Plan</a></li>
   <li><a href="build-ftp-test-plan.html">8. Building a FTP Test Plan</a></li>
