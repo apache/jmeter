@@ -82,7 +82,7 @@ class RegexpHTMLParser extends HTMLParser
      * in the web and all browsers seem to understand them.
      */
     private static final String VALUE=
-        "\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\"'\\s>][^\\s>]*)(?=[\\s>]))";
+        "\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\"'\\s>\\\\][^\\s>]*)(?=[\\s>]))";
             // Note there's 3 capturing groups per value
 
     /**
