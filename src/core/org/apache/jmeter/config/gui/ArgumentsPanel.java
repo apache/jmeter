@@ -302,13 +302,14 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 		table = new JTable(tableModel);
 		table.setEnabled(true);
 		table.addFocusListener(this);
-		TextAreaTableCellEditor editor = new TextAreaTableCellEditor();
-		table.setDefaultEditor(String.class,
-				editor);
-		editor.addCellEditorListener(this);
-		TextAreaCellRenderer renderer = new TextAreaCellRenderer();
-		table.setRowHeight(renderer.getPreferredHeight());
-		table.setDefaultRenderer(String.class,renderer);
+        // use default editor/renderer to fix bug #16058
+//		TextAreaTableCellEditor editor = new TextAreaTableCellEditor();
+//		table.setDefaultEditor(String.class,
+//				editor);
+//		editor.addCellEditorListener(this);
+//		TextAreaCellRenderer renderer = new TextAreaCellRenderer();
+//		table.setRowHeight(renderer.getPreferredHeight());
+//		table.setDefaultRenderer(String.class,renderer);
 		table.setCellSelectionEnabled(true);
 		table.setRowSelectionAllowed(true);
 		table.setColumnSelectionAllowed(false);
