@@ -71,50 +71,44 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
-
-/****************************************
- * Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:
- * Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   $Revision$
- ***************************************/
-
-public class DurationAssertionGui extends AbstractAssertionGui implements FocusListener
+/**
+ * @author    Michael Stover
+ * @created   $Date$
+ * @version   $Revision$
+ */
+public class DurationAssertionGui
+    extends AbstractAssertionGui
+    implements FocusListener
 {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter.elements");
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
 
-	private JTextField duration;
+    private JTextField duration;
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public DurationAssertionGui()
-	{
-		init();
-	}
+    public DurationAssertionGui()
+    {
+        init();
+    }
 
-	/**
-	 * Returns the label to be shown within the JTree-Component.
-	 */
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("duration_assertion_title");
-	}
+    /**
+     * Returns the label to be shown within the JTree-Component.
+     */
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("duration_assertion_title");
+    }
 
-	public String getDurationAttributesTitle()
-	{
-		return JMeterUtils.getResString("duration_assertion_duration_test");
-	}
+    public String getDurationAttributesTitle()
+    {
+        return JMeterUtils.getResString("duration_assertion_duration_test");
+    }
 
-	public TestElement createTestElement()
-	{
-		DurationAssertion el = new DurationAssertion();
-		modifyTestElement(el);
-		return el;
-	}
+    public TestElement createTestElement()
+    {
+        DurationAssertion el = new DurationAssertion();
+        modifyTestElement(el);
+        return el;
+    }
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
@@ -125,79 +119,82 @@ public class DurationAssertionGui extends AbstractAssertionGui implements FocusL
         configureTestElement(el);
         String durationString = duration.getText();
         long assertionDuration = 0;
-        try {
-        	assertionDuration = Long.parseLong(durationString);
+        try
+        {
+            assertionDuration = Long.parseLong(durationString);
         }
-        catch (NumberFormatException e) {
-        	assertionDuration = Long.MAX_VALUE;
+        catch (NumberFormatException e)
+        {
+            assertionDuration = Long.MAX_VALUE;
         }
-        ((DurationAssertion)el).setAllowedDuration(assertionDuration);
+        ((DurationAssertion) el).setAllowedDuration(assertionDuration);
     }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 ***************************************/
-	public void configure(TestElement el)
-	{
-		super.configure(el);
-		DurationAssertion assertion = (DurationAssertion)el;
-		duration.setText(String.valueOf(assertion.getAllowedDuration()));
-	}
+    public void configure(TestElement el)
+    {
+        super.configure(el);
+        DurationAssertion assertion = (DurationAssertion) el;
+        duration.setText(String.valueOf(assertion.getAllowedDuration()));
+    }
 
-	private void init()
-	{
-		setLayout(new BorderLayout(0, 10));
-		setBorder(makeBorder());
+    private void init()
+    {
+        setLayout(new BorderLayout(0, 10));
+        setBorder(makeBorder());
 
         add(makeTitlePanel(), BorderLayout.NORTH);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
-        
-		// USER_INPUT
-		HorizontalPanel durationPanel = new HorizontalPanel();
-		durationPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), getDurationAttributesTitle()));
 
-		durationPanel.add(new JLabel(JMeterUtils.getResString("duration_assertion_label")));
+        // USER_INPUT
+        HorizontalPanel durationPanel = new HorizontalPanel();
+        durationPanel.setBorder(
+            BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(),
+                getDurationAttributesTitle()));
 
-		duration = new JTextField(5);
-		duration.addFocusListener(this);
-		durationPanel.add(duration);
+        durationPanel.add(
+            new JLabel(JMeterUtils.getResString("duration_assertion_label")));
+
+        duration = new JTextField(5);
+        duration.addFocusListener(this);
+        durationPanel.add(duration);
 
         mainPanel.add(durationPanel, BorderLayout.NORTH);
-        add(mainPanel, BorderLayout.CENTER);      
-	}
+        add(mainPanel, BorderLayout.CENTER);
+    }
 
-	/****************************************
-	 * Description of the Method
-	 *
-	 *@param e  Description of Parameter
-	 ***************************************/
-	public void focusLost(FocusEvent e)
-	{
-		boolean isInvalid = false;
-		String durationString = duration.getText();
-		if (durationString != null) {
-			try {
-				long assertionDuration = Long.parseLong(durationString);
-				if (assertionDuration < 0) {
-					isInvalid = true;
-				}
-			}
-			catch (NumberFormatException ex) {
-				isInvalid = true;
-			}
-			if (isInvalid) {
-				log.warn("DurationAssertionGui: Not a valid number!");
-				JOptionPane.showMessageDialog(null, JMeterUtils.getResString("duration_assertion_input_error"), "Error", JOptionPane.ERROR_MESSAGE);
-			}
-		}
-	}
+    public void focusLost(FocusEvent e)
+    {
+        boolean isInvalid = false;
+        String durationString = duration.getText();
+        if (durationString != null)
+        {
+            try
+            {
+                long assertionDuration = Long.parseLong(durationString);
+                if (assertionDuration < 0)
+                {
+                    isInvalid = true;
+                }
+            }
+            catch (NumberFormatException ex)
+            {
+                isInvalid = true;
+            }
+            if (isInvalid)
+            {
+                log.warn("DurationAssertionGui: Not a valid number!");
+                JOptionPane.showMessageDialog(
+                    null,
+                    JMeterUtils.getResString("duration_assertion_input_error"),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
 
-	/****************************************
-	 * Description of the Method
-	 *
-	 *@param e  Description of Parameter
-	 ***************************************/
-	public void focusGained(FocusEvent e) {
-	}
+    public void focusGained(FocusEvent e)
+    {
+    }
 }
