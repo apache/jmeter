@@ -72,7 +72,9 @@
     <available classname="javax.mail.Transport" property="javamail.present">
       <classpath refid="classpath"/>
     </available>
-    <available classname="javax.activation.DataHandler" property="javamail.complete"/>
+    <available classname="javax.activation.DataHandler" property="javamail.complete">
+      <classpath refid="classpath"/>
+    </available>
     <available classname="iaik.protocol.https.Handler" property="isasilk.present">
       <classpath refid="classpath"/>
     </available>
@@ -106,20 +108,6 @@
       AnakiaTask is not present, documentation will not be generated.
     </echo>
   </target>
-
-  <!--
-  <target name="copy-data">
-    <copy toDir="${build.core}/org/apache/jmeter/images">
-      <fileset dir="${src.core}/org/apache/jmeter/images"/>
-    </copy>
-    <copy toDir="${build.core}/org/apache/jmeter/resources">
-      <fileset dir="${src.core}/org/apache/jmeter/resources">
-        <exclude name="*eucJP*"/>
-      </fileset>
-    </copy>
-    <copy toFile="${build.core}/org/apache/jmeter/help.txt" file="${src.core}/org/apache/jmeter/help.txt"/>
-  </target>
-  -->
 
   <target name="compile-core" depends="compile-jorphan" description="Compile JMeter core classes.">
     <mkdir dir="${build.core}"/>
@@ -288,6 +276,7 @@
     <exclude name="lib/ext/"/>
     <exclude name="${build.dir}/"/>
     <exclude name="${docs.api.dest.dir}"/>
+    <exclude name="**/CVS/**"/>
   </patternset>
 
   <patternset id="dist.binaries">

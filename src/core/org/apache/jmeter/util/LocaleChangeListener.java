@@ -53,46 +53,17 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.jmeter.gui.action;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
+package org.apache.jmeter.util;
 
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Logger;
-import org.apache.jorphan.logging.LoggingManager;
+
+import org.apache.jmeter.util.LocaleChangeEvent;
+
+
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @author Oliver Rossmueller <oliver@oross.net>
  */
-public class ChangeLanguage implements Command
-{
-	private static final Set commands = new HashSet();
-	public final static String CHANGE_LANGUAGE = "change_language";
-	private Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
-	
-	static
-	{
-		commands.add(CHANGE_LANGUAGE);
-	}
-	/**
-	 * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
-	 */
-	public void doAction(ActionEvent e)
-	{
-		Locale loc =new Locale(((Component)e.getSource()).getName(),"");
-		log.debug("Changing language to "+loc.getLanguage());
-		JMeterUtils.setLocale(loc);
-	}
-	/**
-	 * @see org.apache.jmeter.gui.action.Command#getActionNames()
-	 */
-	public Set getActionNames()
-	{
-		return commands;
-	}
+public interface LocaleChangeListener {
+
+    public void localeChanged(LocaleChangeEvent event);
+
 }

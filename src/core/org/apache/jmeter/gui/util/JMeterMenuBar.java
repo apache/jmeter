@@ -60,6 +60,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.swing.JMenu;
+import javax.swing.MenuElement;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -69,6 +70,8 @@ import javax.swing.UIManager;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.ChangeLanguage;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.LocaleChangeEvent;
+import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
@@ -82,7 +85,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  *@created   $Date$
  *@version   1.0
  ***************************************/
-public class JMeterMenuBar extends JMenuBar
+public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
 {
 	transient private static Logger log =
 		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
@@ -324,25 +327,25 @@ public class JMeterMenuBar extends JMenuBar
 		JMenu languageMenu = new JMenu(JMeterUtils.getResString("choose_language"));
 		languageMenu.setMnemonic('C');
 		//add english
-		JMenuItem english = new JMenuItem(JMeterUtils.getResString("english"),'E');
+		JMenuItem english = new JMenuItem(JMeterUtils.getResString("en"),'E');
 		english.addActionListener(ActionRouter.getInstance());
 		english.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
 		english.setName("en");
 		languageMenu.add(english);
 		//add Japanese
-		JMenuItem japanese = new JMenuItem(JMeterUtils.getResString("japanese"),'J');
+		JMenuItem japanese = new JMenuItem(JMeterUtils.getResString("jp"),'J');
 		japanese.addActionListener(ActionRouter.getInstance());
 		japanese.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
 		japanese.setName("ja");
 		languageMenu.add(japanese);
 		//add Norwegian
-		JMenuItem norway = new JMenuItem(JMeterUtils.getResString("norwegian"),'N');
+		JMenuItem norway = new JMenuItem(JMeterUtils.getResString("no"),'N');
 		norway.addActionListener(ActionRouter.getInstance());
 		norway.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
 		norway.setName("no");
 		languageMenu.add(norway);
 		//add German
-		JMenuItem german = new JMenuItem(JMeterUtils.getResString("german"),'G');
+		JMenuItem german = new JMenuItem(JMeterUtils.getResString("de"),'G');
 		german.addActionListener(ActionRouter.getInstance());
 		german.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
 		german.setName("de");
@@ -496,4 +499,44 @@ public class JMeterMenuBar extends JMenuBar
 			}
 		}
 	}
+
+	/**
+	 * Processes a locale change notification. Changes the texts in all
+	 * menus to the new language.
+	 */
+        public void localeChanged(LocaleChangeEvent event) {
+            updateMenuElement(fileMenu);
+            updateMenuElement(editMenu);
+            updateMenuElement(runMenu);
+            updateMenuElement(optionsMenu);
+            updateMenuElement(helpMenu);
+        }
+   
+   
+	/**
+	 * Refreshes all texts in the menu and all submenus to a new locale.
+	 */
+        private void updateMenuElement(MenuElement menu)
+	{
+            Component component = menu.getComponent();
+   
+            if (component.getName() != null)
+	    {
+                if (component instanceof JMenu)
+		{
+                    ((JMenu)component).setText(JMeterUtils.getResString(component.getName()));
+                }
+		else
+		{
+                    ((JMenuItem)component).setText(JMeterUtils.getResString(component.getName()));
+                }
+            }
+   
+            MenuElement[] subelements = menu.getSubElements();
+   
+            for (int i = 0; i < subelements.length; i++)
+	    {
+                updateMenuElement(subelements[i]);
+            }
+        }
 }

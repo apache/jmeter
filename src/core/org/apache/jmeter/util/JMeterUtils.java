@@ -68,6 +68,9 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.HashSet;
+import java.util.Collection;
+import java.util.Iterator;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -110,8 +113,10 @@ public class JMeterUtils implements UnitTestManager
 		xmlFactory = temp;
 	}
 	private static Properties appProperties;
-	public static ResourceBundle RESOURCES =
-		ResourceBundle.getBundle("org.apache.jmeter.resources.messages");
+	private static Collection localeChangeListeners = new HashSet();
+	private static Locale locale;
+	private static ResourceBundle resources;
+
 	/**
 	 *  This method is used by the init method to load the property file that may
 	 *  even reside in the user space, or in the classpath under
@@ -144,6 +149,9 @@ public class JMeterUtils implements UnitTestManager
 		appProperties = p;
 		LoggingManager.initializeLogging(appProperties);
 		log = LoggingManager.getLoggerFor(UTIL);
+		String loc= appProperties.getProperty("language");
+		if (loc!=null) setLocale(new Locale(loc, ""));
+		else setLocale(Locale.getDefault());
 		return p;
 	}
 	public void initializeProperties(String file)
@@ -159,11 +167,69 @@ public class JMeterUtils implements UnitTestManager
 	{
 		return new String[] { getJMeterHome() + "/lib/ext" };
 	}
-	public static void reinitializeLocale(Locale loc)
+
+	/**
+	 * Changes the current locale: re-reads resource strings and notifies
+	 * listeners.
+	 *
+	 * @author Oliver Rossmueller
+	 * @param locale new locale
+	 */
+	public static void setLocale(Locale loc)
 	{
-		RESOURCES =
-			ResourceBundle.getBundle("org.apache.jmeter.resources.messages", loc);
+	    locale= loc;
+	    resources = ResourceBundle.getBundle(
+		    "org.apache.jmeter.resources.messages", locale);
+	    notifyLocaleChangeListeners();
 	}
+
+	/**
+	 * Gets the current locale.
+	 *
+	 * @author Oliver Rossmueller
+	 * @return current locale
+	 */
+	public static Locale getLocale()
+	{
+	    return locale;
+	}
+
+	/**
+	 * @author Oliver Rossmueller
+	 */
+	public static void addLocaleChangeListener(
+		LocaleChangeListener listener)
+	{
+	    localeChangeListeners.add(listener);
+	}
+
+	/**
+	 * @author Oliver Rossmueller
+	 */
+	public static void removeLocaleChangeListener(
+		LocaleChangeListener listener)
+	{
+	    localeChangeListeners.remove(listener);
+	}
+
+	/**
+	 * Notify all listeners interested in locale changes.
+	 *
+	 * @author Oliver Rossmueller
+	 */
+	private static void notifyLocaleChangeListeners()
+	{
+	    LocaleChangeEvent event =
+		new LocaleChangeEvent(JMeterUtils.class, locale);
+	    Iterator iterator = localeChangeListeners.iterator();
+
+	    while (iterator.hasNext()) {
+		LocaleChangeListener listener =
+			(LocaleChangeListener)iterator.next();
+		listener.localeChanged(event);
+	    }
+	}
+
 	/**
 	 *  Gets the resource string for this key.
 	 *  @param key the key in the resource file
@@ -180,7 +246,7 @@ public class JMeterUtils implements UnitTestManager
 		String resString = null;
 		try
 		{
-			resString = RESOURCES.getString(key);
+			resString = resources.getString(key);
 		}
 		catch (MissingResourceException mre)
 		{
