@@ -57,9 +57,6 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;

@@ -4,8 +4,6 @@ package org.apache.jmeter.protocol.http.proxy;
 ***
 ***/
 
-import java.net.*;
-import java.io.*;
 
 //
 // Class:     HttpReplyHdr
