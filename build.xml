@@ -207,6 +207,9 @@
 				 includes="**/*.xml"
 				 lastModifiedCheck="false"
 				 velocityPropertiesFile="${docs.src}/velocity.properties"/>
+		<copy todir="${docs.dest}/images">
+			<fileset dir="${docs.src}/images"/>
+		</copy>
 	</target>
 
 	<target name="printable_docs" depends="no.anakia" if="AnakiaTask.present">
@@ -218,6 +221,7 @@
 				 includes="**/*.xml"
 				 lastModifiedCheck="false"
 				 velocityPropertiesFile="${docs.src}/velocity.properties"/>
+
 	</target>
 
 	<target name="test" depends="install">
