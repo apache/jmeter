@@ -1020,7 +1020,7 @@ some of its classes - at present JMeter can only run from jar files.
   -->
   <!-- Used by project jakarta-jmeter-cvs -->
   <target name="gump-build" 
-      depends="_gump_properties,assume-libs-present,clean,install,docs-printable" 
+      depends="_gump_properties,assume-libs-present,clean,install" 
       description="Build JMeter">
     <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
     <antcall target="_pack-binaries"/>
