@@ -24,13 +24,19 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.List;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 import org.apache.jmeter.extractor.RegexExtractor;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * @version $Revision$ on $Date$
@@ -42,6 +48,10 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
     private JLabeledTextField defaultField;
     private JLabeledTextField matchNumberField;
     private JLabeledTextField refNameField;
+    
+    private JCheckBox scanHeader;
+	private JRadioButton useBody;
+	private JRadioButton useHeaders;
     
     public RegexExtractorGui()
     {
@@ -57,6 +67,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
     public void configure(TestElement el)
     {
         super.configure(el);
+        useBody.setSelected(el.getPropertyAsBoolean(RegexExtractor.USEHEADERS));
         regexField.setText(el.getPropertyAsString(RegexExtractor.REGEX));
         templateField.setText(el.getPropertyAsString(RegexExtractor.TEMPLATE));
         defaultField.setText(el.getPropertyAsString(RegexExtractor.DEFAULT));
@@ -83,6 +94,9 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
     {
         super.configureTestElement(extractor);
         extractor.setProperty(
+                RegexExtractor.USEHEADERS,
+                JOrphanUtils.booleanToSTRING(useHeaders.isSelected()));
+        extractor.setProperty(
             RegexExtractor.MATCH_NUMBER,
             matchNumberField.getText());
         if(extractor instanceof RegexExtractor)
@@ -100,10 +114,36 @@ public class RegexExtractorGui extends AbstractPostProcessorGui
         setLayout(new BorderLayout());
         setBorder(makeBorder());
         
-        add(makeTitlePanel(),BorderLayout.NORTH);
+        Box box = Box.createVerticalBox();
+        box.add(makeTitlePanel());
+        box.add(makeSourcePanel());
+        add(box,BorderLayout.NORTH);
         add(makeParameterPanel(),BorderLayout.CENTER);
     }
     
+    private JPanel makeSourcePanel()
+    {
+        JPanel panel = new JPanel();
+        panel.setBorder(
+            BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("regex_source")));
+
+        useBody =
+            new JRadioButton(JMeterUtils.getResString("regex_src_body"));
+        useHeaders =
+            new JRadioButton(JMeterUtils.getResString("regex_src_hdrs"));
+		
+        ButtonGroup group = new ButtonGroup();
+        group.add(useBody);
+        group.add(useHeaders);
+		
+        panel.add(useBody);
+        panel.add(useHeaders);
+		
+        useBody.setSelected(true);
+        return panel;
+    }
+
     private JPanel makeParameterPanel()
     {
         regexField =

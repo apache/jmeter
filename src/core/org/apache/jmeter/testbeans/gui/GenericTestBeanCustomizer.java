@@ -324,18 +324,7 @@ public class GenericTestBeanCustomizer extends JPanel
 	private void setEditorValue(int i, Object value)
 		throws IllegalArgumentException
 	{
-		try
-		{
-			editors[i].setValue(value);
-		}
-		catch (IllegalArgumentException e)
-		{
-            log.error("Could not set value "
-                + ( value == null ? "NULL" : value.getClass().getName() )
-                + ":" + value
-                +" for property "+descriptors[i].getName());
-			//throw e;
-		}
+		editors[i].setValue(value);
 	}
 
     /* (non-Javadoc)
@@ -378,9 +367,11 @@ public class GenericTestBeanCustomizer extends JPanel
                 // But for the time being, I just prefer to be aware of any
                 // problems occuring here, most likely programming errors,
                 // so I'll bail out.
-                throw new Error("Bad property value."+e);
+               // (MS Note) Can't bail out - newly create elements have blank values and must get the defaults.
+               // Also, when loading previous versions of jmeter test scripts, some values
+               // may not be right, and should get default values - MS
                 // TODO: review this and possibly change to:
-                // setEditorValue(i, descriptors[i].getValue(DEFAULT); 
+                setEditorValue(i, descriptors[i].getValue(DEFAULT)); 
             }
         }
     }

@@ -76,7 +76,7 @@ public class PackageTest extends TestCase
        	String s;
         while((s=fileReader.readLine())!=null)
         {
-           	if (s.length() > 0)  {
+           	if (s.length() > 0 && !s.startsWith("#"))  {
            		l.add(s.substring(0,s.indexOf('=')));
            	}
        	} 

@@ -190,9 +190,10 @@ public class AccessLogSampler extends HTTPSampler
         try
         {
             samp = (HTTPSampler) GENERATOR.generateRequest();
-            samp.setDomain(this.getDomain());
+            
+            /*samp.setDomain(this.getDomain());
             samp.setPort(this.getPort());
-            samp.setImageParser(this.isImageParser());
+            samp.setImageParser(this.isImageParser());*/
             // we call parse with 1 to get only one.
             // this also means if we change the implementation
             // to use 2, it would use every other entry and
@@ -201,8 +202,9 @@ public class AccessLogSampler extends HTTPSampler
             // huge gigabyte log file and they only want to
             // use a quarter of the entries.
 			PARSER.parse(1);
-            res = samp.sample();
-            res.setSampleLabel(samp.toString());
+			this.addTestElement(samp);
+            res = sample();
+            res.setSampleLabel(toString());
         }
         catch (Exception e)
         {
