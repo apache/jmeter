@@ -98,6 +98,7 @@ public class GenericController extends AbstractTestElement implements Controller
 	 ***************************************/
 	public GenericController()
 	{
+		
 	}
 	
 	public boolean isNextFirst()
