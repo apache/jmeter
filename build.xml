@@ -12,17 +12,6 @@
   <!-- JMeter version -->
   <property name="version" value="1.8+"/>
 
-  <!-- Where the class files should live -->
-  <property name="build.dir" value="build"/>
-  <property name="build.core" value="build/core"/>
-  <property name="build.http" value="build/protocol/http"/>
-  <property name="build.ftp" value="build/protocol/ftp"/>
-  <property name="build.jdbc" value="build/protocol/jdbc"/>
-  <property name="build.java" value="build/protocol/java"/>
-  <property name="build.components" value="build/components"/>
-  <property name="build.functions" value="build/functions"/>
-  <property name="build.jorphan" value="build/jorphan"/>
-
   <!-- Where the Sources live -->
   <property name="src.dir" value="src"/>
   <property name="src.core" value="src/core"/>
@@ -34,26 +23,6 @@
   <property name="src.functions" value="src/functions"/>
   <property name="src.jorphan" value="src/jorphan"/>
 
-  <!-- Where the API documentation lives -->
-  <property name="docs.api.dest" value="docs/api"/>
-  <property name="docs.src" value="xdocs"/>
-  <property name="docs.dest" value="docs"/>
-  <property name="printable_docs.dest" value="printable_docs"/>
-  <property name="optimize" value="on"/>
-
-  <!-- Where the distribution packages live -->
-  <property name="dist.dir" value="dist"/>
-
-  <!-- List of Unix executable files in the distribution -->
-  <property name="dist.executables" value="bin/jmeter bin/jmeter-server"/>
-
-  <!-- Build classpath -->
-  <path id="classpath">
-    <fileset dir="lib">
-      <include name="*.jar"/>
-    </fileset>
-  </path>
-
   <path id="srcpaths">
     <pathelement location="${src.core}"/>
     <pathelement location="${src.components}"/>
@@ -63,6 +32,67 @@
     <pathelement location="${src.jdbc}"/>
     <pathelement location="${src.java}"/>
     <pathelement location="${src.jorphan}"/>
+  </path>
+
+  <!-- Temporary build directories: where the .class live -->
+  <property name="build.dir" value="build"/>
+  <property name="build.core" value="build/core"/>
+  <property name="build.http" value="build/protocol/http"/>
+  <property name="build.ftp" value="build/protocol/ftp"/>
+  <property name="build.jdbc" value="build/protocol/jdbc"/>
+  <property name="build.java" value="build/protocol/java"/>
+  <property name="build.components" value="build/components"/>
+  <property name="build.functions" value="build/functions"/>
+  <property name="build.jorphan" value="build/jorphan"/>
+
+  <!-- Where the build result .jars will be placed -->
+  <property name="jar.dest" value="lib/ext"/>
+  <property name="jorphan.jar.dest" value="lib"/>
+
+  <!-- Where the API documentation lives -->
+  <property name="docs.api.dest" value="docs/api"/>
+
+  <!-- Where the doc sources and results live -->
+  <property name="docs.src" value="xdocs"/>
+  <property name="docs.dest" value="docs"/>
+  <property name="printable_docs.dest" value="printable_docs"/>
+
+  <!-- Where the distribution packages will be created -->
+  <property name="dist.dir" value="dist"/>
+
+  <!-- Compilation parameters -->
+  <property name="optimize" value="on"/>
+
+  <!-- List of Unix executable files in the binary distribution -->
+  <property name="dist.executables" value="bin/jmeter bin/jmeter-server"/>
+
+  <!-- 3rd party libraries to be included in the binary distribution -->
+  <property name="avalon-excalibur.jar" value="lib/avalon-excalibur-4.1.jar"/>
+  <property name="avalon-framework.jar" value="lib/avalon-framework.jar"/>
+  <property name="jakarta-oro.jar" value="lib/jakarta-oro.jar"/>
+  <property name="junit.jar" value="lib/junit.jar"/>
+  <property name="logkit.jar" value="lib/logkit-1.0.1.jar"/>
+  <property name="xalan.jar" value="lib/xalan.jar"/>
+  <property name="xerces.jar" value="lib/xerces.jar"/>
+  <property name="xml-apis.jar" value="lib/xml-apis.jar"/>
+
+  <fileset dir="." id="external.jars">
+    <include name="${avalon-excalibur.jar}"/>
+    <include name="${avalon-framework.jar}"/>
+    <include name="${jakarta-oro.jar}"/>
+    <include name="${junit.jar}"/>
+    <include name="${logkit.jar}"/>
+    <include name="${xalan.jar}"/>
+    <include name="${xerces.jar}"/>
+    <include name="${xml-apis.jar}"/>
+  </fileset>
+
+  <!-- Directory where these 3rd party libraries will live -->
+  <property name="lib.dir" value="lib"/>
+
+  <!-- Build classpath -->
+  <path id="classpath">
+    <fileset dir="${lib.dir}" includes="*.jar"/>
   </path>
 
   <target name="init" depends="check-libs,report-missing-libs"/>
@@ -241,14 +271,14 @@
 
   <target name="api-docs" description="Generate the API documentation.">
     <mkdir dir="${docs.api.dest}"/>
-    <javadoc sourcepathref="srcpaths" destdir="${docs.api.dest}" Protected="yes" author="yes" version="yes" doctitle="Apache JMeter APIs Specification" windowtitle="Apache JMeter API Specification" header="&lt;b&gt;Apache JMeter&lt;/b&gt;&lt;br&gt;&lt;font size='-1'&gt;1.7&lt;/font&gt;" bottom="Copyright &#xA9; 1998-2002 Apache Software Foundation. All Rights Reserved." packagenames="org.apache.jmeter.*">
+    <javadoc sourcepathref="srcpaths" destdir="${docs.api.dest}" Protected="yes" author="yes" version="yes" doctitle="Apache JMeter APIs Specification" windowtitle="Apache JMeter API Specification" header="&lt;b&gt;Apache JMeter&lt;/b&gt;&lt;br&gt;&lt;font size='-1'&gt;1.7&lt;/font&gt;" bottom="Copyright &#xA9; 1998-2003 Apache Software Foundation. All Rights Reserved." packagenames="org.apache.jmeter.*">
       <classpath refid="classpath"/>
     </javadoc>
   </target>
 
   <target name="package" depends="compile">
-    <mkdir dir="lib/ext"/>
-    <jar jarfile="./lib/ext/ApacheJMeter_core.jar" excludes="**/NewDriver*" manifest="${src.core}/MANIFEST">
+    <mkdir dir="${jar.dest}"/>
+    <jar jarfile="${jar.dest}/ApacheJMeter_core.jar" excludes="**/NewDriver*" manifest="${src.core}/MANIFEST">
       <fileset dir="${build.core}"/>
       <fileset dir="${src.core}" includes="org/apache/jmeter/images/"/>
       <fileset dir="${src.core}" includes="org/apache/jmeter/resources/">
@@ -257,13 +287,13 @@
       <fileset dir="${src.core}" includes="org/apache/jmeter/help.txt"/>
     </jar>
     <jar jarfile="bin/ApacheJMeter.jar" includes="**/NewDriver*" manifest="${src.core}/MANIFEST" basedir="${build.core}"/>
-    <jar jarfile="./lib/ext/ApacheJMeter_components.jar" basedir="${build.components}"/>
-    <jar jarfile="./lib/ext/ApacheJMeter_functions.jar" basedir="${build.functions}"/>
-    <jar jarfile="./lib/ext/ApacheJMeter_http.jar" basedir="${build.http}"/>
-    <jar jarfile="./lib/ext/ApacheJMeter_ftp.jar" basedir="${build.ftp}"/>
-    <jar jarfile="./lib/ext/ApacheJMeter_jdbc.jar" basedir="${build.jdbc}"/>
-    <jar jarfile="./lib/ext/ApacheJMeter_java.jar" basedir="${build.java}"/>
-    <jar jarfile="./lib/jorphan.jar" basedir="${build.jorphan}"/>
+    <jar jarfile="${jar.dest}/ApacheJMeter_components.jar" basedir="${build.components}"/>
+    <jar jarfile="${jar.dest}/ApacheJMeter_functions.jar" basedir="${build.functions}"/>
+    <jar jarfile="${jar.dest}/ApacheJMeter_http.jar" basedir="${build.http}"/>
+    <jar jarfile="${jar.dest}/ApacheJMeter_ftp.jar" basedir="${build.ftp}"/>
+    <jar jarfile="${jar.dest}/ApacheJMeter_jdbc.jar" basedir="${build.jdbc}"/>
+    <jar jarfile="${jar.dest}/ApacheJMeter_java.jar" basedir="${build.java}"/>
+    <jar jarfile="${jorphan.jar.dest}/jorphan.jar" basedir="${build.jorphan}"/>
   </target>
 
   <target name="install" depends="package" description="Install JMeter.">
@@ -282,35 +312,47 @@
 
   <patternset id="dist.binaries">
     <include name="bin/"/>
-    <include name="${docs.dest}/"/>
-    <exclude name="${docs.api.dest}/"/>
-    <include name="lib/"/>
+    <include name="${lib.dir}/"/>
+    <include name="${jar.dest}/"/> <!-- redundant but future-proof -->
+    <include name="${docs.dest}/"/> <exclude name="${docs.api.dest}/"/>
     <include name="README"/>
     <include name="LICENSE"/>
   </patternset>
 
-  <target name="dist" depends="assume-libs-present,clean,install,all-docs" description="Create the distribution packages.">
+  <target name="dist" depends="assume-libs-present,clean,install,all-docs,test" description="Create the distribution packages.">
+    <property name="dist.name" value="jakarta-jmeter-${version}"/>
     <mkdir dir="${dist.dir}"/>
-    <tar destfile="${dist.dir}/jakarta-jmeter.tar" longfile="gnu">
-      <tarfileset dir="." prefix="jakarta-jmeter">
+    <!-- copy 3rd party libraries if not already there -->
+    <copy todir="${lib.dir}" flatten="true">
+      <fileset refid="external.jars"/>
+    </copy>
+    <tar destfile="${dist.dir}/${dist.name}.tar" longfile="gnu">
+      <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}">
         <patternset refid="dist.binaries"/>
       </tarfileset>
-      <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="jakarta-jmeter"/>
+      <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}"/>
     </tar>
-    <zip zipfile="${dist.dir}/jakarta-jmeter.zip">
-      <zipfileset dir="." prefix="jakarta-jmeter">
+    <gzip zipfile="${dist.dir}/${dist.name}.tgz" src="${dist.dir}/${dist.name}.tar" />
+    <zip zipfile="${dist.dir}/${dist.name}.zip">
+      <zipfileset dir="." prefix="${dist.name}">
         <patternset refid="dist.binaries"/>
       </zipfileset>
     </zip>
-    <gzip zipfile="${dist.dir}/jakarta-jmeter.tgz" src="${dist.dir}/jakarta-jmeter.tar" />
+    <tar destfile="${dist.dir}/${dist.name}-javadoc.tar" longfile="gnu">
+      <tarfileset includes="${docs.api.dest}/" dir="." prefix="${dist.name}"/>
+    </tar>
+    <gzip zipfile="${dist.dir}/${dist.name}-javadoc.tgz" src="${dist.dir}/${dist.name}-javadoc.tar" />
+    <zip zipfile="${dist.dir}/${dist.name}-javadoc.zip">
+      <zipfileset includes="${docs.api.dest}/" dir="." prefix="${dist.name}"/>
+    </zip>
   </target>
 
   <target name="clean" description="Clean up to force a build from source.">
     <delete file="bin/ApacheJMeter.jar"/>
     <delete file="lib/jorphan.jar"/>
-    <delete dir="lib/ext"/>
+    <delete dir="${jar.dest}"/>
     <delete dir="${build.dir}"/>
-    <delete dir="${docs.api.dest}"/>
+    <delete dir="${docs.api.dest}"/> <!-- redundant but future-proof -->
     <delete dir="${docs.dest}"/>
     <delete dir="${dist.dir}"/>
   </target>
@@ -337,9 +379,7 @@
     <java classname="org.apache.jorphan.test.AllTests" fork="yes" dir="${basedir}/bin">
       <classpath>
 	<path refid="classpath"/>
-	<fileset dir="./lib/ext">
-	  <include name="*.jar"/>
-	</fileset>
+	<fileset dir="${jar.dest}" includes="*.jar"/>
       </classpath>
 
       <arg value="../lib/ext"/>
