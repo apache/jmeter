@@ -421,7 +421,7 @@
     <available classname="org.apache.bsf.BSFManager" property="bsf.present">
       <classpath refid="classpath"/>
     </available>
-    <available classname="javax.jms.TopicConnection" property="jms.present">
+    <available classname="javax.jms.Message" property="jms.present">
       <classpath refid="classpath"/>
     </available>
   </target>
