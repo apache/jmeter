@@ -340,16 +340,7 @@ public class WebServiceSampler extends HTTPSampler
 	 * @return
 	 */	
 	public String getProxyHost(){
-		// we check to see the host is set
-		String host = this.getPropertyAsString(PROXY_HOST);
-		if (host == null || host.length() == 0){
-			// it's not set, lets check if the user passed
-			// proxy host and port from command line
-			if (System.getProperty("http.proxyHost") != null){
-				host = System.getProperty("http.proxyHost");
-				this.setProxyHost(host);
-			}
-		}
+		this.checkProxy();
 		return this.getPropertyAsString(PROXY_HOST);
 	}
 
@@ -366,16 +357,40 @@ public class WebServiceSampler extends HTTPSampler
 	 * @return
 	 */	
 	public int getProxyPort(){
-		String port = this.getPropertyAsString(PROXY_PORT);
-		if (port == null || port.length() == 0){
-			// it's not set, lets check if the user passed
-			// proxy host and port from command line
-			if (System.getProperty("http.proxyPort") != null){
-				port = System.getProperty("http.proxyPort");
-				this.setProxyPort(port);
-			}
-		}
+		this.checkProxy();
 		return this.getPropertyAsInt(PROXY_PORT);
+	}
+	
+	/**
+	 * The method will check to see if JMeter was started
+	 * in NonGui mode. If it was, it will try to pick up
+	 * the proxy host and port values if they were passed
+	 * to JMeter.java.
+	 */
+	public void checkProxy(){
+		if (System.getProperty("JMeter.NonGui") != null &&
+			System.getProperty("JMeter.NonGui").equals("true")){
+				this.setUseProxy(true);
+				// we check to see if the proxy host and port are set
+				String port = this.getPropertyAsString(PROXY_PORT);
+				String host = this.getPropertyAsString(PROXY_HOST);
+				if (host == null || host.length() == 0){
+					// it's not set, lets check if the user passed
+					// proxy host and port from command line
+					if (System.getProperty("http.proxyHost") != null){
+						host = System.getProperty("http.proxyHost");
+						this.setProxyHost(host);
+					}
+				}
+				if (port == null || port.length() == 0){
+					// it's not set, lets check if the user passed
+					// proxy host and port from command line
+					if (System.getProperty("http.proxyPort") != null){
+						port = System.getProperty("http.proxyPort");
+						this.setProxyPort(port);
+					}
+				}
+			}
 	}
 	
     /**
