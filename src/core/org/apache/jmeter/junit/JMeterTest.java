@@ -46,7 +46,7 @@ public class JMeterTest extends JMeterTestCase
  * 
  * Each test type has its own constructor, which saves the item to be tested
  * 
- * Note that the makeSuite() and suite() methods must be static, and the methods
+ * Note that the suite() method must be static, and the methods
  * to run the tests must be instance methods so that they can pick up the item value
  * which was saved by the constructor.
  * 
@@ -75,13 +75,6 @@ public class JMeterTest extends JMeterTestCase
 		guiItem=gc;
 	}
     
-	/*
-	 * Add makeSuite to allow test to be run from AllTests.java
-	 */
-	public static Test makeSuite() throws Exception{
-		return suite();
-	}
-	
 	/*
 	 * Use a suite to allow the tests to be generated at run-time
 	 */
@@ -276,7 +269,7 @@ public class JMeterTest extends JMeterTestCase
                     catch (NoSuchMethodException f)
                     {
                         // no luck. Ignore this class
-						System.out.println(exName+": can't create "+n);
+						System.out.println(exName+": could not construct "+n);
                     }
                 }
             }
