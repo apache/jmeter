@@ -207,7 +207,7 @@ public class GraphModel implements Clearable, Serializable
     /**
      * Adds a feature to the ModelListener attribute of the GraphModel object.
      *
-     * @param  modelListener  the feature to be added to the ModelListener
+     * @param  listener  the feature to be added to the ModelListener
      *           attribute
      */
     public void addGraphListener(GraphListener listener)

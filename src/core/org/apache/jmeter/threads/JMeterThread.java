@@ -161,7 +161,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
     /**
      * Set the StartTime for this Thread.
      *
-     * @param StartTime the StartTime value.
+     * @param stime the StartTime value.
      * author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
     public void setStartTime(long stime)
@@ -183,7 +183,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
     /**
      * Set the EndTime for this Thread.
      *
-     * @param EndTime the EndTime value.
+     * @param etime the EndTime value.
      * author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
      */
     public void setEndTime(long etime)
@@ -479,7 +479,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
     /**
      * Should Test stop on sampler error?
      * 
-     * @param boolean
+     * @param b - true or false
      */
     public void setOnErrorStopTest(boolean b)
     {
@@ -489,7 +489,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
     /**
      * Should Thread stop on Sampler error?
      * 
-     * @param boolean
+     * @param b - true or false
      */
     public void setOnErrorStopThread(boolean b)
     {
