@@ -139,7 +139,6 @@ public class GenericController extends AbstractTestElement implements Controller
         try
         {
             currentElement = getCurrentElement();
-            log.debug("next element = " + currentElement);
             setCurrentElement(currentElement);
             if (currentElement == null)
             {
