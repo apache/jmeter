@@ -299,8 +299,8 @@ POST content.</p>
 
 </component>
 
-<component name="Access Log Sampler (Alpha Code" index="13.1.8" screenshot="">
-
+<component name="Tomcat Access Log Sampler" index="13.1.8" screenshot="">
+<center><h2>(Alpha Code)</h2></center>
 <description><p>AccessLogSampler was designed to read access logs and generate http requests.
 For those not familiar with the access log, it is the log the webserver maintains of every
 request it accepted. This means the every image and html file. The current implementation
@@ -353,6 +353,59 @@ StandardGenerator and TCLogParser.
 
 </component>
 
+<component name="BeanShell Sampler" index="13.1.9" screenshot="">
+<center><h2>(Beta Code)</h2></center>
+	<description><p>This sampler allows you to write a sampler using the BeanShell scripting language.<br></br>
+		
+		<br></br>
+		Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
+		For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.
+		
+		</p>
+	</description>
+<properties>
+	<property name="Name" required="no">Descriptive name for this controller that is shown in the tree.</property>
+	<property name="Parameters" required="no">List of parameters to be passed to the script file or the script.</property>
+	<property name="Script File" required="no">Name of a file to be used as a BeanShell script</property>
+	<property name="Script" required="no">Script to be passed to BeanShell</property>
+</properties>
+<p>If a script file is supplied, that will be used, otherwise the script will be used.</p>
+		<p>Before invoking the script, some variable are set up in the BeanShell interpreter:
+			</p>
+				<p>The contents of the Parameters field is put into the variable "Parameters".
+			The string is also split into separate tokens using a single space as the separator, and the resulting list
+			is stored in the String array bsh.args.</p>
+			<p>The full list of variables that is set up is as follows:</p>
+		<ul>
+		<li>Label - the Sampler label</li>
+		<li>FileName - the file name, if any</li>
+		<li>Parameters - text from the Parameters field</li>
+		<li>bsh.args - the parameters, split as described above</li>
+		<li>SampleResult - pointer to the current SampleResult</li>
+			<li>ResponseCode = 200</li>
+			<li>ResponseMessage = "OK"</li>
+			<li>IsSuccess = true</li>
+		</ul>
+		<p>When the script completes, control is returned to the Sampler, and it copies the contents
+			of the following script variables into the corresponding variables in the SampleResult:</p>
+			<ul>
+			<li>ResponseCode - for example 200</li>
+			<li>ResponseMessage - for example "OK"</li>
+			<li>IsSuccess - true/false</li>
+			</ul>
+			<p>The Sampler ResponseData is set from the return value of the script.</p>
+			<p>The SampleResult variable gives the script full access to all the fields and
+				methods in the SampleResult. For example, the script has access to the methods
+				setStopThread(boolean) and setStopTest(boolean).
+				
+				Here is a simple example script:</p>
+				
+<pre>
+	if (bsh.args[0].equalsIgnoreCase("StopThread")) {
+	    SampleResult.StopThread(bsh.args[1]);
+	}
+</pre>
+</component>
 </section>
 
 <section name="13.2 Logic Controllers" anchor="logic_controllers">
@@ -581,6 +634,15 @@ setting is reset when a parent Loop Controller restarts.
         <property name="Per User" required="No">If checked, per user will cause the controller to calculate whether it should execute on a per user (per thread) basis.  if unchecked, then the calculation will be global for all users.  for example, if using total execution mode, and uncheck "per user", then the number given for throughput will be the total number of executions made.  if "per user" is checked, then the total number of executions would be the number of users times the number given for throughput.</property>
 </properties>
 
+</component>
+<component name="If Controller" index="13.2.9" screenshot="">
+	<description>
+		<p>The If Controller allows the user to control whether the test elements below it (its children) are run or not.</p>
+	</description>
+<properties>
+    <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+	<property name="Condition" required="yes">Javascript code that returns "true" or "false"</property>
+</properties>
 </component>
 </section>
 
