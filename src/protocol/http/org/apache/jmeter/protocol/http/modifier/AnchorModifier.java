@@ -301,13 +301,13 @@ public class AnchorModifier
                     .getBytes());
             result.setSampleLabel(context.toString());
             result.setSamplerData(context.toString());
-            result.setURL(new URL("http://nagoya.apache.org/fakepage.html"));
+            result.setURL(new URL("http://issues.apache.org/fakepage.html"));
             jmctx.setPreviousResult(result);
             AnchorModifier modifier = new AnchorModifier();
             modifier.setThreadContext(jmctx);
             modifier.process();
             assertEquals(
-                "http://nagoya.apache.org/bugzilla/buglist.cgi?"
+                "http://issues.apache.org/bugzilla/buglist.cgi?"
                     + "bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED"
                     + "&email1=&emailtype1=substring&emailassigned_to1=1"
                     + "&email2=&emailtype2=substring&emailreporter2=1"
@@ -322,7 +322,7 @@ public class AnchorModifier
                 config.toString());
             config.recoverRunningVersion();
             assertEquals(
-                "http://nagoya.apache.org/bugzilla/buglist.cgi?"
+                "http://issues.apache.org/bugzilla/buglist.cgi?"
                     + "bug_status=.*&bug_status=.*&bug_status=.*&email1="
                     + "&emailtype1=substring&emailassigned_to1=1&email2="
                     + "&emailtype2=substring&emailreporter2=1"

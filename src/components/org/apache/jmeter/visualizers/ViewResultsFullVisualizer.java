@@ -491,7 +491,7 @@ public class ViewResultsFullVisualizer
 
         /* Get round problems parsing
          *  <META http-equiv='content-type' content='text/html; charset=utf-8'>
-         * See http://nagoya.apache.org/bugzilla/show_bug.cgi?id=23315
+         * See http://issues.apache.org/bugzilla/show_bug.cgi?id=23315
          *
          * Is this due to a bug in Java?
          */
