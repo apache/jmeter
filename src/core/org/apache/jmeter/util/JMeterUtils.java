@@ -932,6 +932,6 @@ public class JMeterUtils implements UnitTestManager
 	 */
 	public static String getJMeterVersion()
 	{
-		return "@VERSION@";
+		return VERSION;
 	}
 }
