@@ -1,7 +1,5 @@
 
                          A P A C H E   J M E T E R
-                         
-                                Version 1.5Beta
 
 
   What is it?
@@ -16,7 +14,7 @@
   ------------------
 
   Details of the latest version can be found on the Java Apache 
-  Project web site (http://java.apache.org).
+  Project web site (http://jakarta.apache.org).
 
   Requirements
   ------------
@@ -24,8 +22,7 @@
   The following requirements exist for installing Apache JMeter:
 
    o  Java Interpreter:
-   ***Currently in this Beta release a 1.2 runtime is required, 
-	this requirement will be eliminated in the final release.***
+   ***Currently in this Beta release a 1.2 runtime is required,
 
       A fully compliant Java 1.1 Runtime Environment is required for 
       Apache JMeter to execute. Since Apache JMeter uses _only_ standard
@@ -61,6 +58,11 @@
   also included, in HTML format, in the docs/ directory, and it may
   be browsed starting from the file called index.html.
 
+  If you have downloaded a nightly build, please cd to the jakarta-jmeter directory and type
+  "build install" (Unix/Linux only).  This should compile the application and enable you to run jmeter from the /bin
+directory.
+
+
 
   Licensing and legal issues
   --------------------------
@@ -70,7 +72,4 @@
 
 
   Thanks for using Apache JMeter.
-
-                                           The Java Apache Project
-                                           http://java.apache.org/
 
