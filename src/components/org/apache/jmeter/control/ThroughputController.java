@@ -60,6 +60,7 @@ import java.io.Serializable;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.FloatProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
@@ -74,7 +75,8 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
  */
 public class ThroughputController
 	extends GenericController
-	implements Serializable,LoopIterationListener {
+	implements Serializable, LoopIterationListener, TestListener 
+{
 
 	public static final int BYNUMBER = 0;
 	public static final int BYPERCENT = 1;
@@ -89,13 +91,13 @@ public class ThroughputController
 	private transient Object numExecutionsLock;
 	private transient Object iterationLock;
 	
-	private int numExecutions, iteration;
-	private boolean returnTrue;
+	private int numExecutions = 0, iteration = -1;
+	private boolean returnTrue, cloned = false;
 
 	public ThroughputController() 
 	{
-		globalNumExecutions = new IntegerWrapper();
-		globalIteration = new IntegerWrapper();
+		globalNumExecutions = new IntegerWrapper(new Integer(0));
+		globalIteration = new IntegerWrapper(new Integer(-1));
 		numExecutionsLock = new Object();
 		iterationLock = new Object();
 		setStyle(BYNUMBER);
@@ -103,13 +105,6 @@ public class ThroughputController
 		setMaxThroughput(1);
 		setPercentThroughput(100);
 		returnTrue = false;
-	}
-
-	public void initialize() 
-	{
-		setExecutions(0);
-		setIteration(-1);
-		super.initialize();
 	}
 	
 	public void reInitialize()
@@ -316,6 +311,40 @@ public class ThroughputController
     	}
         reInitialize();
     }
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.apache.jmeter.testelement.TestListener#testStarted()
+	 */
+	public void testStarted() 
+	{
+		setExecutions(0);
+		setIteration(-1);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.apache.jmeter.testelement.TestListener#testEnded()
+	 */
+	public void testEnded() {}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
+	 */
+	public void testStarted(String host) {}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
+	 */
+	public void testEnded(String host) {}
+    
+    /*
+     * (non-Javadoc)
+     * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+     */
+	public void testIterationStart(LoopIterationEvent event) {}
     
 	protected class IntegerWrapper
 		implements Serializable
@@ -331,7 +360,6 @@ public class ThroughputController
 	
 		public void setInteger(Integer i)
 		{
-			System.out.println(((Object)this).toString());
 			this.i = i;
 		}
 	
