@@ -24,7 +24,7 @@
 	<p></p>
 	<h2>Where are the nightly builds?</h2>
 	<p>There are at present two sources of nightly builds:</p>
-	<ul>asdasd
+	<ul>
 		<li>Zips: <a href="http://gump.covalent.net/jars/latest/jakarta-jmeter/">
 			http://gump.covalent.net/jars/latest/jakarta-jmeter/</a>
 			Log: <a href="http://gump.covalent.net/log/jakarta-jmeter-test.html">Test log</a>
