@@ -8,7 +8,21 @@
 <body>
 
 <section name="4.7 HTTP Configuration Elements">
-<p>Put description text here...</p>
+<p>A configuration element works closely with a Generative Controller.  Although it does not send requests 
+(except for Proxy Server), it can add to or modify requests and handle responses.</p>
+<p>A configuration element is accessible from only inside the tree branch where you place the element.  
+For example, if you place an HTTP Cookie Manager inside a Simple Logic Controller, the Cookie Manager will
+only be accessible to HTTP Request Controllers you place inside the Simple Logic Controller (see figure 1).  
+The Cookie Manager is accessible to the HTTP requests "Web Page 1" and "Web Page 2", but not "Web Page 3".  </p>
+<p>Also, a configuration element inside a tree branch has higher precedence than the same element in a "parent" 
+branch.  For example, we defined two HTTP Request Defaults elements, "Web Defaults 1" and "Web Defaults 2".
+Since we placed "Web Defaults 1" inside a Loop Controller, only "Web Page 2" can access it.  The other HTTP 
+requests will use "Web Defaults 2", since we placed it in the Thread Group (the "parent" of all other branches).</p>
+
+<p><img src="../images/screenshots/http-config/http-config-example.gif" width="240" height="240"></img>
+<br>Figure 1 - Test Plan Showing Accessability of Configuration Elements</br></p>
+
+
 </section>
 
 <section name="4.7.1 HTTP Authorization Manager">
@@ -28,7 +42,7 @@ Test Plan, with each Thread Group having its own Authorization Manager.</td></tr
 
 <p><b>Control Panel</b></p>
 <p><img src="../images/screenshots/http-config/http-auth-manager.gif" width="575" height="340"></img>
-<br>Figure 1 - Authorization Manager Control Panel</br></p>
+<br>Figure 2 - Authorization Manager Control Panel</br></p>
 <p>Properties:
 <ul>
   <li>Name - Descriptive name for this element that is shown in the tree. </li>
@@ -57,10 +71,10 @@ table entries.</td></tr>
 <p><b>Example</b></p>
 
 <p><a href="../demos/AuthManagerTestPlan.jmx">Download</a> this example.  In this example, we created a Test Plan on a local server that sends three HTTP requests, two requiring a login and the 
-other is open to everyone.  See figure 2 to see the makeup of our Test Plan.  On our server, we have a restricted 
+other is open to everyone.  See figure 3 to see the makeup of our Test Plan.  On our server, we have a restricted 
 directory named, "secret", which contains two files, "index.html" and "index2.html".  We created a login id named, "kevin", 
 which has a password of "spot".  So, in our Authorization Manager, we created an entry for the restricted directory and 
-a username and password (see figure 3).  The two HTTP requests named "SecretPage1" and "SecretPage2" make requests 
+a username and password (see figure 4).  The two HTTP requests named "SecretPage1" and "SecretPage2" make requests 
 to "/secret/index1.html" and "/secret/index2.html".  The other HTTP request, named "NoSecretPage" makes a request to 
 "/index.html".</p>
 
@@ -75,18 +89,24 @@ be able to run it.  However, you can use it as a reference in constructing your 
 </p>
 
 <p><img src="../images/screenshots/http-config/auth-manager-example1a.gif" width="292" height="205"></img>
-<br>Figure 2 - Test Plan</br></p>
+<br>Figure 3 - Test Plan</br></p>
 
 <p><img src="../images/screenshots/http-config/auth-manager-example1b.gif" width="572" height="341"></img>
-<br>Figure 3 - Authorization Manager Control Panel</br></p>
+<br>Figure 4 - Authorization Manager Control Panel</br></p>
 
 </section>
 
 <section name="4.7.2 HTTP Cookie Manager">
-<p>Put description text here...</p>
+<p>The Cookie Manager element has two functions.</p>
+<p>First, it stores and sends cookies just like a web browser. If you 
+have an HTTP Request and the response contains a cookie, the Cookie Manager automatically stores that cookie and will use 
+if, for all future request that particular request.  Each JMeter thread has its own "cookie storage area".  So, if you  
+are testing a web site that uses a cookie for storing session information, each JMeter thread will have its own session.</p>
+<p>Second, you can manually add a cookie to the Cookie Manager.  However, if you do this, the cookie will be 
+exposed to all JMeter threads.</p>
 <p><b>Control Panel</b></p>
 <p><img src="../images/screenshots/http-config/http-cookie-manager.gif" width="573" height="340"></img>
-<br>Figure 3 - Cookie Manager Control Panel</br></p>
+<br>Figure 5 - Cookie Manager Control Panel</br></p>
 <p>Properties:
 <ul>
   <li>Name - Descriptive name for this element that is shown in the tree. </li>
@@ -196,8 +216,43 @@ that tells JMeter to create a proxy server (see figure 10).</p>
 </section>
 
 <section name="4.7.5 HTTP Request Defaults">
-<p>Put description text here...</p>
-<p><img src="../images/screenshots/http-config/http-request-defaults.gif" width="569" height="448"></img></p>
+<p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are 
+creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server, 
+you could add a single HTTP Request Defaults element with the "Server Name or IP" field filled in.  Then, when 
+you add the 25 HTTP Request controllers, leave the "Server Name or IP" field empty.  The controllers will inherit 
+this field value from the HTTP Request Defaults element.</p>
+<p><b>Control Panel</b></p>
+<p><img src="../images/screenshots/http-config/http-request-defaults.gif" width="569" height="448"></img>
+<br>Figure 11 - Request Defaults Control Panel</br></p>
+
+<p><b>Property Descriptions:</b>
+<ul>
+  <li><b>Name</b> - Descriptive name for this controller that is shown in the tree. </li>
+  <li><i>Web Server</i></li>
+  <ul>
+     <li><b>Server Name or IP</b> - Domain name or IP address of the web server.</li>
+     <li><b>Port</b> - (optional) Port the web server is listening.  If you leave this field 
+empty, JMeter assumes the default port.</li>
+  </ul>
+  <li><i>HTTP Request</i></li>
+  <ul>
+    <li><b>Protocol</b> - HTTP or HTTPS.</li>
+    <li><b>Method</b> - HTTP GET or HTTP POST.</li>
+    <li><b>Path</b> - The path to resource (for example, /servlets/myServlet). If the 
+resource requires query string parameters, add them below in the 
+"Send Parameters With the Request" section.</li>
+    <li><i>Send Parameters With the Request</i></li>
+    <ul>
+      <li><b>Name</b> - Parameter name</li>
+      <li><b>Value</b> - Parameter value. You do not have to enter the value in 
+URL-Encoded format. JMeter will URL-Encode it for you when it sends
+the HTTP request.</li>
+      <li><b>Add</b> Button - Add a parameter.</li>
+      <li><b>Delete</b> Button - Delete the currently selected parameter.</li>
+    </ul>
+  </ul>
+</ul>
+</p>
 </section>
 
 </body>
