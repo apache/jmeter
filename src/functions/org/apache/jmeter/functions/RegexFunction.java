@@ -48,6 +48,14 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	transient PatternCompiler compiler = new Perl5Compiler();
 	Pattern templatePattern;
 	private String name;
+	private static ThreadLocal localMatcher =
+				 new ThreadLocal()
+				 {
+					protected Object initialValue()
+					{
+						 return new Perl5Matcher();
+					}
+				 };
 	
 	static
 	{
@@ -81,7 +89,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		}
 		List collectAllMatches = new ArrayList();
 		try {
-			PatternMatcher matcher = new Perl5Matcher();
+			PatternMatcher matcher = (PatternMatcher)localMatcher.get();
 			String responseText = new String(previousResult.getResponseData());
 			PatternMatcherInput input = new PatternMatcherInput(responseText);
 			while(matcher.contains(input,searchPattern))

@@ -69,6 +69,7 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
@@ -103,9 +104,18 @@ public class HtmlParser implements Serializable
 	private int compilerOptions = Perl5Compiler.CASE_INSENSITIVE_MASK |
 			Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK;
 
-	private static transient Perl5Compiler compiler = new Perl5Compiler();
+	private static PatternCacheLRU patternCache =
+		new PatternCacheLRU(1000, new Perl5Compiler());
+	
+	private static ThreadLocal localMatcher =
+			 new ThreadLocal()
+			 {
+				protected Object initialValue()
+				{
+					 return new Perl5Matcher();
+				}
+			 };
 
-	private static transient Perl5Matcher matcher = new Perl5Matcher();
 
 	/****************************************
 	 * Constructor for the HtmlParser object
@@ -127,7 +137,7 @@ public class HtmlParser implements Serializable
 			HTTPSampler config) throws MalformedPatternException
 	{
 		boolean ok = true;
-
+		Perl5Matcher matcher = (Perl5Matcher)localMatcher.get();
 		Iterator iter = config.getArguments().iterator();
 
 		// In JDK1.2, URLDecoder.decode has Exception in its throws clause. However, it
@@ -151,7 +161,8 @@ public class HtmlParser implements Serializable
 			Argument item = (Argument)iter.next();
 			if(query.indexOf(item.getName()+"=") == -1)
 			{
-				if(!(ok = ok && matcher.contains(query, compiler.compile(item.getName()))))
+				if(!(ok = ok && matcher.contains(query, 
+						patternCache.getPattern(item.getName(), Perl5Compiler.READ_ONLY_MASK))))
 				{
 					return false;
 				}
@@ -162,15 +173,16 @@ public class HtmlParser implements Serializable
 				!newLink.getDomain().equals(config.getDomain()))
 		{
 			if(!(ok = ok && matcher.matches(newLink.getDomain(),
-					compiler.compile(config.getDomain()))))
+					patternCache.getPattern(config.getDomain(), Perl5Compiler.READ_ONLY_MASK))))
 				return false;
 		}
 
 		if(!newLink.getPath().equals(config.getPath()) && !matcher.matches(newLink.getPath(), 
-				compiler.compile("[/]*" + config.getPath())))
+				patternCache.getPattern("[/]*" + config.getPath(), Perl5Compiler.READ_ONLY_MASK)))
 			return false;
 
-		if(!(ok = ok && matcher.matches(newLink.getProtocol(), compiler.compile(config.getProtocol()))))
+		if(!(ok = ok && matcher.matches(newLink.getProtocol(), 
+				patternCache.getPattern(config.getProtocol(), Perl5Compiler.READ_ONLY_MASK))))
 			return false;
 
 		return ok;
@@ -186,10 +198,13 @@ public class HtmlParser implements Serializable
 	 ***************************************/
 	public static synchronized boolean isArgumentMatched(Argument arg, Argument patternArg) throws MalformedPatternException
 	{
+		Perl5Matcher matcher = (Perl5Matcher)localMatcher.get();
 		return (arg.getName().equals(patternArg.getName()) || 
-				matcher.matches(arg.getName(), compiler.compile(patternArg.getName()))) &&
+				matcher.matches(arg.getName(), patternCache.getPattern(patternArg.getName(), 
+						Perl5Compiler.READ_ONLY_MASK))) &&
 				(arg.getValue().equals(patternArg.getValue()) || 
-				matcher.matches((String)arg.getValue(), compiler.compile((String)patternArg.getValue())));
+				matcher.matches((String)arg.getValue(), patternCache.getPattern((String)patternArg.getValue(), 
+						Perl5Compiler.READ_ONLY_MASK)));
 	}
 
 	/****************************************
