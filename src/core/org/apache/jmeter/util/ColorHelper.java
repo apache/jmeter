@@ -61,7 +61,7 @@ import java.awt.Color;
  * This class contains the static utility methods to manipulate colors.
  *
  * @author     Khor Soon Hin
- * @created    2001/08/13
+ * Created    2001/08/13
  * @version    $Revision$ $Date$
  */
 public final class ColorHelper
