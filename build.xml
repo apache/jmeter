@@ -126,6 +126,10 @@
 		  <copy toDir="${classes.dest.dir}/org/apache/jmeter/images">
 			 <fileset dir="${sources.src.dir}/org/apache/jmeter/images"/>
 		  </copy>
+		  <copy toDir="${classes.dest.dir}/org/apache/jmeter/resources">
+			 <fileset dir="${sources.src.dir}/org/apache/jmeter/resources"/>
+		  </copy>
+
 		  <jar jarfile="ApacheJMeter.jar" manifest="src/MANIFEST" basedir="${classes.dest.dir}">
 		  </jar>
 	 </target>
