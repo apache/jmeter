@@ -19,7 +19,7 @@ public abstract class AbstractAssertionGui extends AbstractJMeterGuiComponent
 {
     /**
      * When a user right-clicks on the component in the test tree, or
-     * selects the edit menu when the component is selected, the 
+     * selects the edit menu when the component is selected, the
      * component will be asked to return a JPopupMenu that provides
      * all the options available to the user from this component.
      * <p>
