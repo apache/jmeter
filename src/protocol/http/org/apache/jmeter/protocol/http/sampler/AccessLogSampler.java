@@ -75,6 +75,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean
    private String logFile, parserClassName, filterClassName;
    transient private Filter filter;
    private int count = 0;
+   private boolean started = false;
 
    /**
     * Set the path where XML messages are stored for random selection.
@@ -140,12 +141,13 @@ public class AccessLogSampler extends HTTPSampler implements TestBean
          int thisCount = PARSER.parseAndConfigure(1, this);
          if (thisCount == 0)
          {
-            if (count == 0)
+            if (count == 0 || filter == null)
             {
                JMeterContextService.getContext().getThread().stop();
             }
-            log.info("parser returned 0 paths");
-            filter.reset();
+            if(filter != null)
+               filter.reset();
+            getCookieManager().clear();
             count = 0;
             return null;
          }
@@ -282,11 +284,11 @@ public class AccessLogSampler extends HTTPSampler implements TestBean
 
    protected void initFilter()
    {
-      if (filter == null && filterClassName != null)
+      if (filter == null && filterClassName != null && filterClassName.length() > 0)
       {
          try
          {
-            filter = (LogFilter) Class.forName(filterClassName).newInstance();
+            filter = (Filter) Class.forName(filterClassName).newInstance();
          }
          catch (Exception e)
          {
@@ -306,27 +308,46 @@ public class AccessLogSampler extends HTTPSampler implements TestBean
    public Object clone()
    {
       AccessLogSampler s = (AccessLogSampler) super.clone();
-      if (filterClassName != null)
+      if(started)
       {
-
-         try
-         {
-            if (TestCloneable.class.isAssignableFrom(Class
-                  .forName(filterClassName)))
-            {
-               if (filter == null)
-               {
-                  filter = (Filter) Class.forName(filterClassName)
-                        .newInstance();
-               }
-               s.filter = (Filter) ((TestCloneable) filter).clone();
-            }
-         }
-         catch (Exception e)
-         {
-            log.warn("Could not clone cloneable filter", e);
-         }
+	      if (filterClassName != null && filterClassName.length() > 0)
+	      {
+	
+	         try
+	         {
+	            if (TestCloneable.class.isAssignableFrom(Class
+	                  .forName(filterClassName)))
+	            {
+	               initFilter();
+	               s.filter = (Filter) ((TestCloneable) filter).clone();
+	            }
+	         }
+	         catch (Exception e)
+	         {
+	            log.warn("Could not clone cloneable filter", e);
+	         }
+	      }
       }
       return s;
+   }
+   /* (non-Javadoc)
+    * @see org.apache.jmeter.testelement.TestListener#testEnded()
+    */
+   public void testEnded()
+   {
+      if(PARSER != null)
+      {
+         PARSER.close();
+      }
+      started = false;
+      super.testEnded();
+   }
+   /* (non-Javadoc)
+    * @see org.apache.jmeter.testelement.TestListener#testStarted()
+    */
+   public void testStarted()
+   {
+      started = true;
+      super.testStarted();
    }
 }

@@ -21,6 +21,8 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.net.URL;
 
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * This is a specialisation of the SampleResult class for the HTTP protocol.
@@ -30,6 +32,7 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 public class HTTPSampleResult extends SampleResult
 {
+   private static Logger log = LoggingManager.getLoggerForClass();
     public HTTPSampleResult()
     {
         super();
@@ -49,7 +52,6 @@ public class HTTPSampleResult extends SampleResult
     public HTTPSampleResult(HTTPSampleResult res)
     {
     	super(res);
-
         setHTTPMethod(res.getHTTPMethod());
         setURL(res.getURL());
         setCookies(res.getCookies());
@@ -115,12 +117,13 @@ public class HTTPSampleResult extends SampleResult
         {
             sb.append(' ');
             sb.append(u.toString());
-        }
-        String s= super.getSamplerData();
-        if (s != null)
-        {
-            sb.append('\n');
-            sb.append(s);
+            if("POST".equals(getHTTPMethod()))
+            {
+               sb.append(getQueryString());
+            }
+            sb.append("\n");
+            sb.append(getRequestHeaders());
+            sb.append(getCookies());
         }
         return sb.toString();
     }

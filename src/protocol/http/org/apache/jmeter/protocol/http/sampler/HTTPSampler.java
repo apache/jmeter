@@ -171,17 +171,17 @@ public class HTTPSampler extends HTTPSamplerBase
             if (method.equals(POST))
             {
             	String q = this.getQueryString();
-				res.setQueryString(q);
-                sb.append("Query data:\n");
+                sb.append("\nQuery data:\n");
                 sb.append(q);
-                sb.append('\n');
+				res.setQueryString(sb.toString());
             }
             if (cookies != null)
             { 
-            	res.setCookies(cookies);
-                sb.append("\nCookie Data:\n");
-                sb.append(cookies);
-                sb.append('\n');
+               StringBuffer temp = new StringBuffer("\nCookie Data:\n");
+               temp.append(cookies);
+               temp.append('\n');
+            	res.setCookies(temp.toString());
+            	sb.append(temp);
             }
             res.setSamplerData(sb.toString());
             //TODO rather than stuff all the information in here,
@@ -567,8 +567,7 @@ public class HTTPSampler extends HTTPSamplerBase
                         res.addSubResult(
                             errorResult(
                                 new Exception("Maximum frame/iframe nesting depth exceeded."),
-                                null,
-                                0));
+                                res));
                     }
                     else
                     {
@@ -590,7 +589,7 @@ public class HTTPSampler extends HTTPSamplerBase
         catch (IOException e)
         {
         	res.sampleEnd();
-            return errorResult(e, url.toString(), res.getTime());
+            return errorResult(e, res);
         }
         finally
         {
@@ -639,7 +638,7 @@ public class HTTPSampler extends HTTPSamplerBase
             }
             catch (MalformedURLException e)
             {
-                lastRes= errorResult(e, location, 0);
+                lastRes= errorResult(e, lastRes);
             }
             totalRes.addSubResult(lastRes);
 
@@ -653,8 +652,7 @@ public class HTTPSampler extends HTTPSamplerBase
             lastRes=
                 errorResult(
                     new IOException("Exceeeded maximum number of redirects: "+MAX_REDIRECTS),
-                    null,
-                    0);
+                    lastRes);
             totalRes.addSubResult(lastRes);
         }
 
@@ -668,6 +666,7 @@ public class HTTPSampler extends HTTPSamplerBase
         // redirect chain in the location field. 
         totalRes.setURL(lastRes.getURL());
         totalRes.setHTTPMethod(lastRes.getHTTPMethod());
+        totalRes.setQueryString(lastRes.getQueryString());
         totalRes.setRequestHeaders(lastRes.getRequestHeaders());
 
         totalRes.setResponseData(lastRes.getResponseData());

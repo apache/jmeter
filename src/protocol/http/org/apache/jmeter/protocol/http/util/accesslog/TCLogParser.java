@@ -92,17 +92,6 @@ public class TCLogParser implements LogParser
      * The path to the access log file
      */
     protected String URL_PATH = null;
-    /**
-     * A counter used by the parser.
-     * it is the real count of lines
-     * parsed
-     */
-    protected int COUNT = 0;
-    /**
-     * the number of lines the user
-     * wishes to parse
-     */
-    protected int PARSECOUNT = -1;
     protected boolean useFILE = true;
 
     protected File SOURCE = null;
@@ -179,7 +168,7 @@ public class TCLogParser implements LogParser
      * parse the entire file.
      * @return boolean success/failure
      */
-    public boolean parse(TestElement el)
+    public int parse(TestElement el,int parseCount)
     {
         if (this.SOURCE == null)
         {
@@ -191,13 +180,13 @@ public class TCLogParser implements LogParser
             {
                 this.READER = new BufferedReader(new FileReader(this.SOURCE));
             }
-            parse(this.READER,el);
+            return parse(this.READER,el,parseCount);
         }
         catch (Exception exception)
         {
             log.error("Problem creating samples",exception);
         }
-        return true;
+        return 0;
     }
 
     /**
@@ -212,13 +201,7 @@ public class TCLogParser implements LogParser
      */
     public int parseAndConfigure(int count,TestElement el)
     {
-       COUNT = 0;
-        if (count > 0)
-        {
-            this.PARSECOUNT = count;
-        }
-        this.parse(el);
-        return COUNT;
+       return this.parse(el,count);
     }
 
     /**
@@ -227,8 +210,9 @@ public class TCLogParser implements LogParser
      * if a set number of lines is given.
      * @param breader
      */
-    protected void parse(BufferedReader breader,TestElement el)
+    protected int parse(BufferedReader breader,TestElement el,int parseCount)
     {
+       int actualCount = 0;
         String line = null;
         try
         {
@@ -239,14 +223,14 @@ public class TCLogParser implements LogParser
             {
 				if (line.length() > 0)
 				{
-					this.parseLine(line,el);
+					actualCount += this.parseLine(line,el);
 				}
                 // we check the count to see if we have exceeded
                 // the number of lines to parse. There's no way
                 // to know where to stop in the file. Therefore
                 // we use break to escape the while loop when
                 // we've reached the count.
-                if (this.PARSECOUNT != -1 && COUNT >= this.PARSECOUNT)
+                if (parseCount != -1 && actualCount >= parseCount)
                 {
                     break;
                 }
@@ -265,6 +249,7 @@ public class TCLogParser implements LogParser
         {
            log.error("Error reading log file",ioe);
         }
+        return actualCount;
     }
 
     /**
@@ -272,8 +257,9 @@ public class TCLogParser implements LogParser
      * to parse the given text.
      * @param line
      */
-    protected void parseLine(String line,TestElement el)
+    protected int parseLine(String line,TestElement el)
     {
+       int count = 0;
         // we clean the line to get
         // rid of extra stuff
         String cleanedLine = this.cleanURL(line);
@@ -287,7 +273,7 @@ public class TCLogParser implements LogParser
             {
                log.debug("line was not filtered");
                 // increment the current count
-                COUNT++;
+                count++;
                 // we filter the line first, before we try
                 // to separate the URL into file and 
                 // parameters.
@@ -306,11 +292,12 @@ public class TCLogParser implements LogParser
         {
            log.debug("filter was null");
             // increment the current count
-            COUNT++;
+            count++;
             // in the case when the filter is not set, we
             // parse all the lines
             createUrl(cleanedLine,el);
         }
+        return count;
     }
 
     /**

@@ -378,15 +378,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
      * during sampling, and how long it took to detect the error.
      * 
      * @param e Exception representing the error.
-     * @param data a piece of data associated to the error (e.g. URL)
-     * @param time time spent detecting the error (0 for client-only issues)
+     * @param current SampleResult
      * @return a sampling result useful to inform the user about the exception.
      */
-    protected HTTPSampleResult errorResult(Throwable e, String data, long time)
+    protected HTTPSampleResult errorResult(Throwable e, HTTPSampleResult res)
     {
-        HTTPSampleResult res= new HTTPSampleResult(time);
         res.setSampleLabel("Error");
-        res.setSamplerData(data);
         res.setDataType(HTTPSampleResult.TEXT);
         ByteArrayOutputStream text= new ByteArrayOutputStream(200);
         e.printStackTrace(new PrintStream(text));
@@ -394,10 +391,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
         res.setResponseCode(NON_HTTP_RESPONSE_CODE);
         res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
         res.setSuccessful(false);
-        try {
-			res.setURL(getUrl());
-        } catch (MalformedURLException ex){
-        }
         res.setMonitor(this.isMonitor());
         return res;
     }
@@ -583,15 +576,16 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
      */
     public SampleResult sample()
     {
+       HTTPSampleResult res = new HTTPSampleResult();
         try
         {
-            SampleResult res= sample(getUrl(), getMethod(), false, 0);
+            res= sample(getUrl(), getMethod(), false, 0);
             res.setSampleLabel(getName());
             return res;
         }
         catch (MalformedURLException e)
         {
-            return errorResult(e, getName(), 0);
+            return errorResult(e, res);
         }
     }
 
@@ -644,7 +638,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
         catch (HTMLParseException e)
         {
             // Don't break the world just because this failed:
-            res.addSubResult(errorResult(e, null, 0));
+            res.addSubResult(errorResult(e, res));
             res.setSuccessful(false);
         }
 
@@ -676,8 +670,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
                     res.addSubResult(
                         errorResult(
                             new Exception(binURL + " is not a correct URI"),
-                            null,
-                            0));
+                            res));
                     res.setSuccessful(false);
                     continue;
                 }
