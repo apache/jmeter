@@ -13,7 +13,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.MatchResult;
@@ -30,8 +30,7 @@ import org.apache.oro.text.regex.Util;
  */
 public class RegexFunction extends AbstractFunction implements Serializable
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     public static final String ALL = "ALL";
     public static final String RAND = "RAND";
     public static final String KEY = "__regexFunction";

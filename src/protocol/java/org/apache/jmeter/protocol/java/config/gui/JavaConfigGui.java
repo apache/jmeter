@@ -76,7 +76,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.reflect.ClassFinder;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 
@@ -91,8 +91,7 @@ import org.apache.log.Logger;
 public class JavaConfigGui extends AbstractConfigGui implements ActionListener
 {
     /** Logging */
-    private static transient Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
+    private static transient Logger log = LoggingManager.getLoggerForClass();
 
     /** The name of the classnameCombo JComboBox */
     private static final String CLASSNAMECOMBO = "classnamecombo";

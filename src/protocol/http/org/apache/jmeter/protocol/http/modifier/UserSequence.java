@@ -60,7 +60,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -72,8 +72,7 @@ import org.apache.log.Logger;
  */
 public class UserSequence implements Serializable
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     //-------------------------------------------
     // Constants and Data Members

@@ -15,7 +15,7 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
@@ -30,8 +30,7 @@ public class URLRewritingModifier
     extends AbstractTestElement
     implements Serializable, PreProcessor
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     private Pattern case1, case2, case3, case4;
     transient Perl5Compiler compiler = new Perl5Compiler();

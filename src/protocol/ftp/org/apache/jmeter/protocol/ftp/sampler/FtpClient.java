@@ -66,7 +66,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -79,8 +79,7 @@ import org.apache.log.Logger;
  */
 public class FtpClient
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.ftp");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     File f = new File("e:\\");
     BufferedWriter out;
     BufferedReader in;

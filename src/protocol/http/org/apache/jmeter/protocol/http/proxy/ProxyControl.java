@@ -82,7 +82,7 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Pattern;
@@ -95,8 +95,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
  */
 public class ProxyControl extends ConfigTestElement implements Serializable
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     Daemon server;
     private final int DEFAULT_PORT = 8080;
     private static PatternCacheLRU patternCache =
