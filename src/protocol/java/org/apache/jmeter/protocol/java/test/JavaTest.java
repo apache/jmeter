@@ -318,42 +318,42 @@ public class JavaTest
 
         SampleResult results = new SampleResult();
 
+		results.setResponseCode(responseCode);
+		results.setResponseMessage(responseMessage);
+		results.setSampleLabel(label);
+
+		if (samplerData != null && samplerData.length() > 0)
+		{
+			results.setSamplerData(samplerData);
+		}
+
+		if (resultData != null && resultData.length() > 0)
+		{
+			results.setResponseData(resultData.getBytes());
+			results.setDataType(SampleResult.TEXT);
+		}
+
+		// Record sample start time.
+		long start = System.currentTimeMillis();
+
+		// Generate a random value using the current time.
+		long ct = start % getSleepMask();
+
         try
         {
-            // Record sample start time.
-            long start = System.currentTimeMillis();
-
-            results.setResponseCode(responseCode);
-            results.setResponseMessage(responseMessage);
-            if (samplerData != null && samplerData.length() > 0)
-            {
-                results.setSamplerData(samplerData);
-            }
-
-            if (resultData != null && resultData.length() > 0)
-            {
-                results.setResponseData(resultData.getBytes());
-                results.setDataType(SampleResult.TEXT);
-            }
-
-            // Generate a random value using the current time.
-            long ct = start % getSleepMask();
-
             // Execute the sample.  In this case sleep for the
             // specified time.
             Thread.sleep(getSleepTime() + ct);
-
-            // Record end time and populate the results.
-            long end = System.currentTimeMillis();
-
-            results.setTime(end - start);
             results.setSuccessful(success);
-            results.setSampleLabel(label);
         }
         catch (Exception e)
         {
             getLogger().error("JavaTest: error during sample", e);
             results.setSuccessful(false);
+        } finally{
+			// Record end time and populate the results.
+			long end = System.currentTimeMillis();
+			results.setTime(end - start);
         }
 
         if (getLogger().isDebugEnabled())
