@@ -19,6 +19,7 @@
 package org.apache.jmeter.junit;
 
 import java.io.File;
+import java.util.MissingResourceException;
 
 import junit.framework.TestCase;
 import org.apache.jmeter.util.JMeterUtils;
@@ -68,7 +69,11 @@ public abstract class JMeterTestCase extends TestCase
 				filePrefix="";
 			}
     		JMeterUtils jmu = new JMeterUtils();
-    		jmu.initializeProperties(file);
+            try {
+    		    jmu.initializeProperties(file);
+            } catch (MissingResourceException e){
+            	System.out.println("** Can't find resources - continuing anyway **");
+            }
 			logprop("java.version");
 			logprop("java.vendor");
 			logprop("java.home");
