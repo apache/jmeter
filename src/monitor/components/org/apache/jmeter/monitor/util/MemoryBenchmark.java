@@ -1,4 +1,4 @@
-// $Header: 
+// $Header$ 
 /*
  * Copyright 2004 The Apache Software Foundation.
  *
@@ -20,7 +20,10 @@ import java.util.List;
 import java.util.LinkedList;
 import org.apache.jmeter.monitor.model.*;
 import org.apache.jmeter.visualizers.*;
-
+/**
+ * 
+ * @version $Revision$ $Date$
+ */
 public class MemoryBenchmark
 {
 
@@ -36,12 +39,12 @@ public class MemoryBenchmark
 			
 			long bfree = Runtime.getRuntime().freeMemory();
 			long btotal = Runtime.getRuntime().totalMemory();
-			long bmax = Runtime.getRuntime().maxMemory();
+			//long bmax = Runtime.getRuntime().maxMemory();//JDK1.4 only
 			System.out.println("Before we create objects:");
 			System.out.println("------------------------------");
 			System.out.println("free: " + bfree);
 			System.out.println("total: " + btotal);
-			System.out.println("max: " + bmax);
+			//System.out.println("max: " + bmax);
 			
     		for (int idx=0; idx < objects; idx++){
 				Connector cnn = of.createConnector();
@@ -104,13 +107,13 @@ public class MemoryBenchmark
     		}
 			long afree = Runtime.getRuntime().freeMemory();
 			long atotal = Runtime.getRuntime().totalMemory();
-			long amax = Runtime.getRuntime().maxMemory();
+			//long amax = Runtime.getRuntime().maxMemory();//JDK1.4 only
 			long delta = ((atotal - afree) - (btotal - bfree)); 
 			System.out.println("After we create objects:");
 			System.out.println("------------------------------");
 			System.out.println("free: " + afree);
 			System.out.println("total: " + atotal);
-			System.out.println("max: " + amax);
+			//System.out.println("max: " + amax);
 			System.out.println("------------------------------");
 			System.out.println("delta: "+ (delta/1024) + " kilobytes");
 			System.out.println("delta: "+ (delta/1024/1024) + " megabytes");
