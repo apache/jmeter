@@ -78,6 +78,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
@@ -387,7 +388,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
         Iterator iter = getIncludePatterns().iterator();
         while (iter.hasNext())
         {
-            String item = (String) iter.next();
+            String item = ((StringProperty) iter.next()).getStringValue();
             Pattern pattern = patternCache.getPattern(item, Perl5Compiler.READ_ONLY_MASK & Perl5Compiler.SINGLELINE_MASK);
             StringBuffer url = new StringBuffer(sampler.getDomain());
             url.append(":");
@@ -412,7 +413,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
         Iterator iter = getExcludePatterns().iterator();
         while (iter.hasNext())
         {
-            String item = (String) iter.next();
+            String item = ((StringProperty) iter.next()).getStringValue();
             Pattern pattern = patternCache.getPattern(item, Perl5Compiler.READ_ONLY_MASK & Perl5Compiler.SINGLELINE_MASK);
             StringBuffer url = new StringBuffer(sampler.getDomain());
             url.append(":");
