@@ -1,0 +1,641 @@
+/*
+ * ====================================================================
+ * The Apache Software License, Version 1.1
+ *
+ * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ * notice, this list of conditions and the following disclaimer in
+ * the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3. The end-user documentation included with the redistribution,
+ * if any, must include the following acknowledgment:
+ * "This product includes software developed by the
+ * Apache Software Foundation (http://www.apache.org/)."
+ * Alternately, this acknowledgment may appear in the software itself,
+ * if and wherever such third-party acknowledgments normally appear.
+ *
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ * "Apache JMeter" must not be used to endorse or promote products
+ * derived from this software without prior written permission. For
+ * written permission, please contact apache@apache.org.
+ *
+ * 5. Products derived from this software may not be called "Apache",
+ * "Apache JMeter", nor may "Apache" appear in their name, without
+ * prior written permission of the Apache Software Foundation.
+ *
+ * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
+ * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+ * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ * ====================================================================
+ *
+ * This software consists of voluntary contributions made by many
+ * individuals on behalf of the Apache Software Foundation.  For more
+ * information on the Apache Software Foundation, please see
+ * <http://www.apache.org/>.
+ */
+
+package org.apache.jmeter.protocol.http.util.accesslog;
+
+import java.util.ArrayList;
+import org.apache.oro.text.regex.*;
+
+/**
+ * Title:		JMeter Access Log utilities<br>
+ * Copyright:	Apache.org<br>
+ * Company:		nobody<br>
+ * License:<br>
+ * <br>
+ * Look at the apache license at the top.<br>
+ * <br>
+ * Description:<br>
+ * <br>
+ * LogFilter is a basic implementation of Filter
+ * interface. This implementation will keep a
+ * record of the filtered strings to avoid
+ * repeating the process unnecessarily.<p>
+ * The current implementation supports
+ * replacing the file extension. The reason for
+ * supporting this is from first hand experience
+ * porting an existing website to Tomcat + JSP.
+ * Later on we may want to provide the ability
+ * to replace the whole filename. If the need
+ * materializes, we can add it later.<p>
+ * Example of how to use it is provided in the
+ * main method. An example is provided below.
+ * <p>
+ * <pre>
+ * testf = new LogFilter();
+ * String[] incl = {"hello.html",
+ *         "index.html",
+ *         "/index.jsp"};
+ * String[] thefiles = {"/test/hello.jsp",
+ *         "/test/one/hello.html",
+ *         "hello.jsp",
+ *         "hello.htm",
+ *         "/test/open.jsp",
+ *         "/test/open.html",
+ *         "/index.jsp",
+ *         "/index.jhtml",
+ *         "newindex.jsp",
+ *         "oldindex.jsp",
+ *         "oldindex1.jsp",
+ *         "oldindex2.jsp",
+ *         "oldindex3.jsp",
+ *         "oldindex4.jsp",
+ *         "oldindex5.jsp",
+ *         "oldindex6.jsp",
+ *         "/test/index.htm"};
+ * testf.excludeFiles(incl);
+ * System.out.println(" ------------ exclude test -------------");
+ * for (int idx=0; idx &lt; thefiles.length; idx++){
+ * 	boolean fl = testf.isFiltered(thefiles[idx]);
+ * 	String line = testf.filter(thefiles[idx]);
+ * 	if (line != null){
+ *         System.out.println("the file: "+ line);
+ * 	}
+ * }
+ * </pre>
+ * As a general note. Both isFiltered and filter()
+ * have to be called. Calling either one will not
+ * produce the desired result. isFiltered(string)
+ * will tell you if a string should be filtered.
+ * The second step is to filter the string, which
+ * will return null if it is filtered and replace
+ * any part of the string that should be replaced.
+ * <p>
+ * Author:	Peter Lin<br>
+ * Version: 	0.1<br>
+ * Created on:	Jun 26, 2003<br>
+ * Last Modified:	6:28:04 AM<br>
+ */
+
+public class LogFilter implements Filter
+{
+
+    /** protected members used by class to filter **/
+    protected boolean CHANGEEXT = false;
+    protected String OLDEXT = null;
+    protected String NEWEXT = null;
+
+    protected String[] INCFILE = null;
+    protected String[] EXCFILE = null;
+    protected boolean FILEFILTER = false;
+    protected boolean USEFILE = true;
+
+    protected String[] INCPTRN = null;
+    protected String[] EXCPTRN = null;
+    protected boolean PTRNFILTER = false;
+
+    protected ArrayList EXCPATTERNS = new ArrayList();
+    protected ArrayList INCPATTERNS = new ArrayList();
+
+    protected String NEWFILE = null;
+
+    protected Perl5Matcher MATCHER = null;
+
+    /**
+     * The default constructor is empty
+     */
+    public LogFilter()
+    {
+        super();
+    }
+
+    /**
+     * The method will replace the file extension
+     * with the new one. You can either provide
+     * the extension without the period ".", or
+     * with. The method will check for period
+     * and add it if it isn't present.
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#setReplaceExtension(java.lang.String, java.lang.String)
+     */
+    public void setReplaceExtension(String oldext, String newext)
+    {
+        if (oldext != null && newext != null)
+        {
+            this.CHANGEEXT = true;
+            if (oldext.indexOf(".") < 0 && newext.indexOf(".") < 0)
+            {
+                this.OLDEXT = "." + oldext;
+                this.NEWEXT = "." + newext;
+            }
+            else
+            {
+                this.OLDEXT = oldext;
+                this.NEWEXT = newext;
+            }
+        }
+    }
+
+    /**
+     * Give the filter a list of files to include
+     * @param String[] file names
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#includeFiles(java.lang.String[])
+     */
+    public void includeFiles(String[] filenames)
+    {
+        if (filenames != null && filenames.length > 0)
+        {
+            INCFILE = filenames;
+            this.FILEFILTER = true;
+        }
+    }
+
+    /**
+     * Give the filter a list of files to exclude
+     * @param String[] file names
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#excludeFiles(java.lang.String[])
+     */
+    public void excludeFiles(String[] filenames)
+    {
+        if (filenames != null && filenames.length > 0)
+        {
+            EXCFILE = filenames;
+            this.FILEFILTER = true;
+        }
+    }
+
+    /**
+     * Give the filter a set of regular expressions
+     * to filter with for inclusion. This method hasn't
+     * been fully implemented and test yet. The
+     * implementation is not complete.
+     * @param String[]
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#includePattern(java.lang.String)
+     */
+    public void includePattern(String[] regexp)
+    {
+        if (regexp != null && regexp.length > 0)
+        {
+            INCPTRN = regexp;
+            this.PTRNFILTER = true;
+            // now we create the compiled pattern and
+            // add it to the arraylist
+            for (int idx = 0; idx < INCPTRN.length; idx++)
+            {
+                this.INCPATTERNS.add(this.createPattern(INCPTRN[idx]));
+            }
+        }
+    }
+
+    /**
+     * Give the filter a set of regular expressions
+     * to filter with for exclusion. This method hasn't
+     * been fully implemented and test yet. The
+     * implementation is not complete.
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#excludePattern(java.lang.String)
+     */
+    public void excludePattern(String[] regexp)
+    {
+        if (regexp != null && regexp.length > 0)
+        {
+            EXCPTRN = regexp;
+            this.PTRNFILTER = true;
+            // now we create the compiled pattern and
+            // add it to the arraylist
+            for (int idx = 0; idx < EXCPTRN.length; idx++)
+            {
+                this.EXCPATTERNS.add(this.createPattern(EXCPTRN[idx]));
+            }
+        }
+    }
+
+    /**
+     * In the case of log filtering the important
+     * thing is whether the log entry should be
+     * used. Therefore, the method will only
+     * return true if the entry should be used.
+     * Since the interface defines both inclusion
+     * and exclusion, that means by default
+     * inclusion filtering assumes all entries
+     * are excluded unless it matches. In the
+     * case of exlusion filtering, it assumes
+     * all entries are included unless it
+     * matches, which means it should be
+     * excluded.
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#isFiltered(java.lang.String)
+     * @return boolean 
+     */
+    public boolean isFiltered(String path)
+    {
+        // we do a quick check to see if any
+        // filters are set. If not we just
+        // return false to be efficient.
+        if (this.FILEFILTER || this.PTRNFILTER || this.CHANGEEXT)
+        {
+            if (this.FILEFILTER)
+            {
+                return filterFile(path);
+            }
+            else if (this.PTRNFILTER)
+            {
+                return filterPattern(path);
+            }
+            else if (this.CHANGEEXT)
+            {
+                return replaceExtension(path);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Filter the file. The implementation performs
+     * the exclusion first before the inclusion.
+     * This means if a file name is in both string
+     * arrays, the exclusion will take priority.
+     * Depending on how users expect this to work,
+     * we may want to change the priority so that
+     * inclusion is performed first and exclusion
+     * second. Another possible alternative is to
+     * perform both inclusion and exclusion.
+     * Doing so would make the most sense if the
+     * method throws an exception and tells the
+     * user the same filename is in both the
+     * include and exclude array.
+     * @param String file
+     * @return boolean
+     */
+    protected boolean filterFile(String file)
+    {
+        // double check this logic make sure it
+        // makes sense
+        if (this.EXCFILE != null)
+        {
+            return excFile(file);
+        }
+        else if (this.INCFILE != null)
+        {
+            return incFile(file);
+        }
+        return false;
+    }
+
+    /**
+     * Method implements the logic for filtering
+     * file name inclusion. The method iterates
+     * through the array and uses indexOf. Once
+     * it finds a match, it won't bother with
+     * the rest of the filenames in the array.
+     * @param String text
+     * @return boolean include
+     */
+    public boolean incFile(String text)
+    {
+        // inclusion filter assumes most of
+        // the files are not wanted, therefore
+        // usefile is set to false unless it
+        // matches.
+        this.USEFILE = false;
+        for (int idx = 0; idx < this.INCFILE.length; idx++)
+        {
+            if (text.indexOf(this.INCFILE[idx]) > -1)
+            {
+                this.USEFILE = true;
+                break;
+            }
+        }
+        return this.USEFILE;
+    }
+
+    /**
+     * Method implements the logic for filtering
+     * file name exclusion. The method iterates
+     * through the array and uses indexOf. Once it
+     * finds a match, it won't bother with the
+     * rest of the filenames in the array.
+     * @param String text
+     * @return boolean exclude
+     */
+    public boolean excFile(String text)
+    {
+        // exclusion filter assumes most of
+        // the files are used, therefore
+        // usefile is set to true, unless
+        // it matches.
+        this.USEFILE = true;
+        boolean exc = false;
+        for (int idx = 0; idx < this.EXCFILE.length; idx++)
+        {
+            if (text.indexOf(this.EXCFILE[idx]) > -1)
+            {
+                exc = true;
+                this.USEFILE = false;
+                break;
+            }
+        }
+        return exc;
+    }
+
+    /**
+     * The current implemenation assumes
+     * the user has checked the regular
+     * expressions so that they don't cancel
+     * each other. The basic assumption is
+     * the method will return true if the
+     * text should be filtered. If not, it
+     * will return false, which means it
+     * should not be filtered.
+     * @param text
+     * @return boolean
+     */
+    protected boolean filterPattern(String text)
+    {
+        boolean match = false;
+        if (MATCHER == null)
+        {
+            MATCHER = new Perl5Matcher();
+        }
+        if (this.INCPTRN != null)
+        {
+            return incPattern(text);
+        }
+        else if (this.EXCPTRN != null)
+        {
+            return excPattern(text);
+        }
+        return false;
+    }
+
+    /**
+     * By default, the method assumes the entry is
+     * not included, unless it matches. In that case,
+     * it will return true.
+     * @param text
+     * @return
+     */
+    protected boolean incPattern(String text)
+    {
+        this.USEFILE = false;
+        for (int idx = 0; idx < this.INCPATTERNS.size(); idx++)
+        {
+            if (MATCHER.contains(text, (Pattern) this.INCPATTERNS.get(idx)))
+            {
+                this.USEFILE = true;
+                break;
+            }
+        }
+        return this.USEFILE;
+    }
+
+    /**
+     * The method assumes by default the text is
+     * not excluded. If the text matches the
+     * pattern, it will then return true.
+     * @param text
+     * @return
+     */
+    protected boolean excPattern(String text)
+    {
+        this.USEFILE = true;
+        boolean exc = false;
+        for (int idx = 0; idx < this.EXCPATTERNS.size(); idx++)
+        {
+            if (MATCHER.contains(text, (Pattern) this.EXCPATTERNS.get(idx)))
+            {
+                exc = true;
+                this.USEFILE = false;
+                break;
+            }
+        }
+        return exc;
+    }
+
+    /**
+     * Method uses indexOf to replace the old
+     * extension with the new extesion. It
+     * might be good to use regular expression,
+     * but for now this is a simple method.
+     * The method isn't designed to replace
+     * multiple instances of the text, since
+     * that isn't how file extensions work.
+     * If the string contains more than one
+     * instance of the old extension, only
+     * the first instance will be replaced.
+     * @param text
+     * @return boolean
+     */
+    public boolean replaceExtension(String text)
+    {
+        int pt = text.indexOf(this.OLDEXT);
+        if (pt > -1)
+        {
+            int extsize = this.OLDEXT.length();
+            this.NEWFILE =
+                text.substring(0, pt)
+                    + this.NEWEXT
+                    + text.substring(pt + extsize);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * The current implementation checks the boolean
+     * if the text should be used or not. isFilter(
+     * string) has to be called first.
+     * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#filter(java.lang.String)
+     */
+    public String filter(String text)
+    {
+        if (this.CHANGEEXT)
+        {
+            return this.NEWFILE;
+        }
+        else if (this.USEFILE)
+        {
+            return text;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /**
+     * create a new pattern object from
+     * the string.
+     * @param String pattern
+     * @return Pattern
+     */
+    public Pattern createPattern(String pattern)
+    {
+        try
+        {
+            Perl5Compiler comp = new Perl5Compiler();
+            return comp.compile(pattern);
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * This is a quick unit test using the
+     * main method. It tests replace and
+     * file filters. Pattern filters have
+     * not been implemented yet, so the
+     * the main method doesn't test it.
+     * @param args
+     */
+    public static void main(String[] args)
+    {
+        LogFilter testf = new LogFilter();
+        String teststr = "/test/helloworld.html";
+        if (args != null && args[0] != null)
+        {
+            teststr = args[0];
+        }
+
+        testf.setReplaceExtension("html", "jsp");
+        System.out.println("isfilter: " + testf.isFiltered(teststr));
+        System.out.println("original string: " + teststr);
+        System.out.println("new string: " + testf.filter(teststr));
+        System.out.println(" ------------ end of first test -------------");
+        testf = new LogFilter();
+        String[] incl = { "hello.html", "index.html", "/index.jsp" };
+        String[] thefiles =
+            {
+                "/test/hello.jsp",
+                "/test/one/hello.html",
+                "hello.jsp",
+                "hello.htm",
+                "/test/open.jsp",
+                "/test/open.html",
+                "/index.jsp",
+                "/index.jhtml",
+                "newindex.jsp",
+                "oldindex.jsp",
+                "oldindex1.jsp",
+                "oldindex2.jsp",
+                "oldindex3.jsp",
+                "oldindex4.jsp",
+                "oldindex5.jsp",
+                "oldindex6.jsp",
+                "/test/index.htm" };
+        testf.excludeFiles(incl);
+        System.out.println(" ------------ exclude test -------------");
+        for (int idx = 0; idx < thefiles.length; idx++)
+        {
+            boolean fl = testf.isFiltered(thefiles[idx]);
+            String line = testf.filter(thefiles[idx]);
+            if (line != null)
+            {
+                System.out.println("the file: " + line);
+            }
+        }
+        testf = new LogFilter();
+        testf.includeFiles(incl);
+        System.out.println(" ------------ include test -------------");
+        for (int idx = 0; idx < thefiles.length; idx++)
+        {
+            boolean fl = testf.isFiltered(thefiles[idx]);
+            String line = testf.filter(thefiles[idx]);
+            if (line != null)
+            {
+                System.out.println("the file: " + line);
+            }
+        }
+
+        // start pattern tests
+        // start the exclude pattern test
+        testf = new LogFilter();
+        String[] ptrns = { "index", ".jtml" };
+        testf.excludePattern(ptrns);
+        System.out.println(" ------------ exclude Pattern test -------------");
+        for (int idx = 0; idx < thefiles.length; idx++)
+        {
+            boolean fl = testf.isFiltered(thefiles[idx]);
+            String line = testf.filter(thefiles[idx]);
+            if (line != null)
+            {
+                System.out.println("the file: " + line);
+            }
+        }
+
+        // start the include pattern test
+        testf = new LogFilter();
+        testf.includePattern(ptrns);
+        System.out.println(" ------------ include Pattern test -------------");
+        for (int idx = 0; idx < thefiles.length; idx++)
+        {
+            boolean fl = testf.isFiltered(thefiles[idx]);
+            String line = testf.filter(thefiles[idx]);
+            if (line != null)
+            {
+                System.out.println("the file: " + line);
+            }
+        }
+    }
+}
