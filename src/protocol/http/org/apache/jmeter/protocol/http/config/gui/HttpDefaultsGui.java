@@ -23,6 +23,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  */
 public class HttpDefaultsGui extends AbstractConfigGui
 {
+	JLabeledTextField protocol;
 	JLabeledTextField domain;
 	JLabeledTextField path;
 	JLabeledTextField port;
@@ -51,6 +52,7 @@ public class HttpDefaultsGui extends AbstractConfigGui
 	{
 		ConfigTestElement config = new ConfigTestElement();
 		super.configureTestElement(config);
+		config.setProperty(HTTPSampler.PROTOCOL,protocol.getText());
 		config.setProperty(HTTPSampler.DOMAIN,domain.getText());
 		config.setProperty(HTTPSampler.PATH,path.getText());
 		config.setProperty(HTTPSampler.ARGUMENTS,argPanel.createTestElement());
@@ -61,6 +63,7 @@ public class HttpDefaultsGui extends AbstractConfigGui
 	public void configure(TestElement el)
 	{
 		super.configure(el);
+		protocol.setText(el.getPropertyAsString(HTTPSampler.PROTOCOL));
 		domain.setText(el.getPropertyAsString(HTTPSampler.DOMAIN));
 		path.setText(el.getPropertyAsString(HTTPSampler.PATH));
 		port.setText(el.getPropertyAsString(HTTPSampler.PORT));
@@ -74,6 +77,7 @@ public class HttpDefaultsGui extends AbstractConfigGui
 		this.setLayout(new BorderLayout());
 		argPanel = new HTTPArgumentsPanel();
 		this.add(argPanel,BorderLayout.CENTER);
+		protocol = new JLabeledTextField(JMeterUtils.getResString("url_config_protocol"));
 		domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain"));
 		path = new JLabeledTextField(JMeterUtils.getResString("path"));
 		port = new JLabeledTextField(JMeterUtils.getResString("web_server_port"));
@@ -86,6 +90,7 @@ public class HttpDefaultsGui extends AbstractConfigGui
 		
 		topPanel.add(title);
 		topPanel.add(getNamePanel());
+		topPanel.add(protocol);
 		topPanel.add(domain);
 		topPanel.add(path);
 		topPanel.add(port);
