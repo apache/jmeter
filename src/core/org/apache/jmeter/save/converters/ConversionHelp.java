@@ -6,7 +6,6 @@
  */
 package org.apache.jmeter.save.converters;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
