@@ -15,10 +15,9 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-import org.apache.oro.text.regex.MalformedPatternException;
+import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
-import org.apache.oro.text.regex.PatternCompiler;
 import org.apache.oro.text.regex.PatternMatcher;
 import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -41,7 +40,8 @@ public class RegexFunction extends AbstractFunction implements Serializable
     Pattern searchPattern;
     Object[] template;
     String valueIndex, defaultValue, between;
-    transient PatternCompiler compiler = new Perl5Compiler();
+    private static PatternCacheLRU patternCache =
+        new PatternCacheLRU(1000, new Perl5Compiler());
     Pattern templatePattern;
     private String name;
 
@@ -65,14 +65,7 @@ public class RegexFunction extends AbstractFunction implements Serializable
     public RegexFunction()
     {
         valueIndex = between = name = "";
-        try
-        {
-            templatePattern = compiler.compile("\\$(\\d+)\\$", Perl5Compiler.READ_ONLY_MASK);
-        }
-        catch (MalformedPatternException e)
-        {
-            log.error("", e);
-        }
+        templatePattern = patternCache.getPattern("\\$(\\d+)\\$", Perl5Compiler.READ_ONLY_MASK);
     }
 
     public String execute(SampleResult previousResult, Sampler currentSampler)
@@ -81,7 +74,7 @@ public class RegexFunction extends AbstractFunction implements Serializable
         try
         {
             searchPattern =
-                compiler.compile(((CompoundVariable) values[0]).execute());
+                patternCache.getPattern(((CompoundVariable) values[0]).execute(), Perl5Compiler.READ_ONLY_MASK);
             generateTemplate(((CompoundVariable) values[1]).execute());
 
             if (values.length > 2)
@@ -111,11 +104,6 @@ public class RegexFunction extends AbstractFunction implements Serializable
             {
                 name = ((CompoundVariable) values[values.length - 1]).execute();
             }
-        }
-        catch (MalformedPatternException e)
-        {
-            log.error("", e);
-            throw new InvalidVariableException("Bad regex pattern");
         }
         catch (Exception e)
         {
@@ -298,16 +286,8 @@ public class RegexFunction extends AbstractFunction implements Serializable
 
     private boolean isFirstElementGroup(String rawData)
     {
-        try
-        {
-            Pattern pattern = compiler.compile("^\\$\\d+\\$");
-            return new Perl5Matcher().contains(rawData, pattern);
-        }
-        catch (MalformedPatternException e)
-        {
-            log.error("", e);
-            return false;
-        }
+        Pattern pattern = patternCache.getPattern("^\\$\\d+\\$", Perl5Compiler.READ_ONLY_MASK);
+        return new Perl5Matcher().contains(rawData, pattern);
     }
 
 /*
