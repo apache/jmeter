@@ -14,6 +14,7 @@ public class JMeterContext
     Sampler previousSampler;
     boolean samplingStarted;
     private int threadNum;
+    private byte[] readBuffer = null;
 
     JMeterContext()
     {
@@ -31,11 +32,21 @@ public class JMeterContext
         previousSampler = null;
         samplingStarted = false;
         threadNum = 0;
+        readBuffer = null;
     }
 
     public JMeterVariables getVariables()
     {
         return variables;
+    }
+    
+    public byte[] getReadBuffer()
+    {
+        if(readBuffer == null)
+        {
+            readBuffer = new byte[8192];
+        }
+        return  readBuffer;
     }
 
     public void setVariables(JMeterVariables vars)

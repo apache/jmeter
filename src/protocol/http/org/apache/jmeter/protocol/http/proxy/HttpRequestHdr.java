@@ -142,8 +142,7 @@ public class HttpRequestHdr
         {
             String key = (String) keys.next();
             if (!key.equals("proxy-connection")
-                && !key.equals("content-length")
-                && !key.equals("accept-encoding"))
+                && !key.equals("content-length"))
             {
                 manager.add((Header) headers.get(key));
             }
