@@ -52,7 +52,7 @@
   <property name="gump.run" value="false"/>
   
   <!-- The version of this file -->
-  <property name="version.build" value="$revision$"/>
+  <property name="version.build" value="$Revision$"/>
   
   <!-- Renamed targets -->
   <target name="all-docs">
