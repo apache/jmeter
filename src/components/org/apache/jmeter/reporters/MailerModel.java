@@ -206,7 +206,7 @@ public class MailerModel extends AbstractTestElement implements Serializable
             }
         }
 
-        if (siteDown && (sample.getTime() != -1) & !successMsgSent)
+        if (siteDown && (sample.getTime() != -1) && !successMsgSent)
         {
             // Send the mail ...
             if (successCount > getSuccessLimit())

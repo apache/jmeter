@@ -103,7 +103,7 @@ public class ObjectFactory
 	 * @param args
 	 */	
 	public static void main(String[] args){
-		if (args != null & args.length == 2){
+		if (args != null && args.length == 2){
 			String file = null;
 			//int count = 1;
 			if (args[0] != null){
