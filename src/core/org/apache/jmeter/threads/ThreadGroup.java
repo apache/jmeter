@@ -97,6 +97,7 @@ public class ThreadGroup
     public final static String START_TIME= "ThreadGroup.start_time";
     public final static String END_TIME= "ThreadGroup.end_time";
 	public final static String DURATION = "ThreadGroup.duration";
+	public final static String DELAY = "ThreadGroup.delay";
 
 
     /* Action to be taken when a Sampler error occurs*/
@@ -199,6 +200,28 @@ public class ThreadGroup
 	{
 		setProperty(new LongProperty(DURATION,duration));
 	}
+
+	/**
+	 * Get the delay
+	 *
+	 * @return the delay (in secs)
+	 */
+	public long getDelay()
+	{
+		return getPropertyAsLong(DELAY);
+	}
+
+	/**
+	 * Set the delay
+	 *
+	 * @param delay in seconds
+	 */
+	public void setDelay(long delay)
+	{
+		setProperty(new LongProperty(DELAY,delay));
+	}
+
+
 
     /**
      * Set the EndTime value.
