@@ -92,7 +92,6 @@ import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
-import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.MenuFactory;
@@ -550,7 +549,18 @@ public class ProxyControlGui
         panel.add(label);
         panel.add(targetNodes);
 
-        try
+		/* This listener subscription prevents freeing up the GUI when it's no longer in use
+		 * (e.g. on locale change)... plus causes some anoying NPEs in the GUI instance
+		 * created by the menu manager just to find out our name and which menus we
+		 * want to be in...
+		 * ... plus I don't think it's really necessary: configure(TestElement) already takes
+		 * care of reinitializing the target combo when we come back to it. And I can't see how
+		 * the tree can change in a relevant way without we leaving this GUI (since it is very
+		 * unlikely that we will want to record into one of the controllers created by the proxy).
+		 * I'll comment it out for the time being:
+		 * TODO: remove once we're convinced it's really unnecessary.
+		 */
+        /*try
         {
             Class addToTree =
                 Class.forName("org.apache.jmeter.gui.action.AddToTree");
@@ -570,7 +580,7 @@ public class ProxyControlGui
         {
             // This should never happen -- throw an Error:
             throw new Error(e.toString());//JDK1.4: remove .toString()
-        }
+        }*/
         
         return panel;        
     }

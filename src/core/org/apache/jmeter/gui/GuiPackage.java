@@ -70,6 +70,9 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.LocaleChangeEvent;
+import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
@@ -86,7 +89,7 @@ import org.apache.log.Logger;
  * @author Michael Stover
  * @version $Revision$
  */
-public final class GuiPackage
+public final class GuiPackage implements LocaleChangeListener
 {
     /** Logging. */
     private static transient Logger log =
@@ -138,6 +141,7 @@ public final class GuiPackage
      */
     private GuiPackage()
     {
+    	JMeterUtils.addLocaleChangeListener(this);
     }
     
     /**
@@ -610,5 +614,16 @@ public final class GuiPackage
             popup.setVisible(true);
             popup.requestFocus();
         }
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.util.LocaleChangeListener#localeChanged(org.apache.jmeter.util.LocaleChangeEvent)
+     */
+    public void localeChanged(LocaleChangeEvent event)
+    {
+        // Forget about all GUIs we've created so far: we'll need to re-created them all!
+        guis= new HashMap();
+        nodesToGui= new HashMap();
+        testBeanGUIs= new HashMap();
     }
 }
