@@ -350,7 +350,19 @@ public class JMeterTest extends JMeterTestCase
             }
         }
         caughtError=false;
-    } finally {
+    } 
+    catch (Exception t)
+    {
+    	caught = t;
+    	throw t;
+	}
+	catch (Error t)
+	{
+		caught = t;
+		throw t;
+    } 
+    finally 
+    {
     	if (caughtError)
     	{
 			System.out.println("Last class="+n);
