@@ -59,7 +59,6 @@ import java.io.Serializable;
 
 import junit.framework.TestSuite;
 
-import org.apache.jmeter.engine.event.IterationDeliverEvent;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.junit.stubs.TestSampler;
@@ -214,14 +213,6 @@ public class OnceOnlyController
         suite.addTest(new Test("testProcessing2"));
 		return suite;
 	}
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.engine.event.LoopIterationListener#iteration(org.apache.jmeter.engine.event.IterationDeliverEvent)
-     */
-    public void iteration(IterationDeliverEvent iterEvent)
-    {
-        // TODO Auto-generated method stub
-
-    }
 
 }
 

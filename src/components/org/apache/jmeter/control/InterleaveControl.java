@@ -110,18 +110,18 @@ public class InterleaveControl extends GenericController implements Serializable
         return getPropertyAsInt(STYLE);
     }
     
-    /**
-        * @see org.apache.jmeter.control.Controller#next()
-        */
-       public Sampler next()
-       {
-           if(isSkipNext())
-           {
-               reInitialize();
-               return null;
-           }
-           return super.next();
-       }
+	/**
+	 * @see org.apache.jmeter.control.Controller#next()
+	 */
+	public Sampler next()
+	{
+		if(isSkipNext())
+		{
+			reInitialize();
+			return null;
+		}
+		return super.next();
+	}
 
     /**
      * @see org.apache.jmeter.control.GenericController#nextIsAController(org.apache.jmeter.testelement.TestElement)

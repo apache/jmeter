@@ -59,7 +59,6 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.jmeter.engine.event.IterationDeliverEvent;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -168,11 +167,6 @@ public class ConstantTimer
         delay = getPropertyAsLong(DELAY);
         
     }
-
-	/**
-	 * @see org.apache.jmeter.engine.event.IterationListener#iteration(org.apache.jmeter.engine.event.IterationEvent)
-	 */
-	public void iteration(IterationDeliverEvent event) {}
 	
     /**
      * Make changes to variables available elsewhere.
