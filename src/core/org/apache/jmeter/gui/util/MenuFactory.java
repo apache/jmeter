@@ -52,12 +52,27 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */package org.apache.jmeter.gui.util;
-import java.util.*;
-import javax.swing.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.MenuElement;
+
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.action.ActionRouter;
-import org.apache.jmeter.util.*;
-import org.apache.log4j.*;
+import org.apache.jmeter.util.ClassFinder;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.log4j.Category;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -190,6 +205,21 @@ public class MenuFactory
 		addSeparator(menu);
 		menu.add(makeMenuItem(JMeterUtils.getResString("open"), "Open", JMeterUtils.getResString("open")));
 		menu.add(makeMenuItem(JMeterUtils.getResString("save"), "Save", "save"));
+		JMenuItem disabled = makeMenuItem(JMeterUtils.getResString("disable"),"Disable","disable");
+		JMenuItem enabled = makeMenuItem(JMeterUtils.getResString("enable"),"Enable","enable");
+		boolean isEnabled = GuiPackage.getInstance().getTreeListener().getCurrentNode().isEnabled();
+		if(isEnabled)
+		{
+			disabled.setEnabled(true);
+			enabled.setEnabled(false);
+		}
+		else
+		{
+			disabled.setEnabled(false);
+			enabled.setEnabled(true);
+		}
+		menu.add(enabled);
+		menu.add(disabled);
 	}
 
 	/****************************************

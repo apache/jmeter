@@ -85,6 +85,16 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements JMeterGUIC
 		super(userObj);
 	}
 	
+	public boolean isEnabled()
+	{
+		return ((JMeterGUIComponent)getUserObject()).isEnabled();
+	}
+	
+	public void setEnabled(boolean enabled)
+	{
+		((JMeterGUIComponent)getUserObject()).setEnabled(enabled);
+	}
+	
 	public ImageIcon getIcon()
 	{
 		return null;

@@ -299,7 +299,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 											icon = new ImageIcon(responseBytes);
 										  }
 				if(response != null)
-				{
+				{	
 					JTextArea textArea = new JTextArea();
 					textArea.setText(response);
 					gbc.gridx = 0;
