@@ -6,3 +6,5 @@ docs
 site
 printable_docs
 jmeter-fb.*
+.classpath
+.project
