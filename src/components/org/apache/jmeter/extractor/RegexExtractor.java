@@ -16,7 +16,7 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.MatchResult;
@@ -34,8 +34,7 @@ public class RegexExtractor
     extends AbstractTestElement
     implements PostProcessor, Serializable
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ELEMENTS);
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     public static final String REGEX = "RegexExtractor.regex";
     public static final String REFNAME = "RegexExtractor.refname";
     public static final String MATCH_NUMBER = "RegexExtractor.match_number";
