@@ -81,8 +81,8 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author     $Author$
- * @version    $Revision$
+ * @author     ?
+ * @version    $Revision$ Updated on: $Date$
  */
 public class StandardJMeterEngine
     implements JMeterEngine, JMeterThreadMonitor, Runnable, Serializable
@@ -204,6 +204,7 @@ public class StandardJMeterEngine
                 ((TestListener) iter.next()).testEnded(host);
             }
         }
+        log.info("Test has ended");
     }
 
     private ListedHashTree cloneTree(ListedHashTree tree)
@@ -404,7 +405,6 @@ public class StandardJMeterEngine
                     log.info("Thread won't die: " + t.getName());
                 }
             }
-            log.debug("finished thread");
         }
     }
 
@@ -436,6 +436,7 @@ public class StandardJMeterEngine
 			JMeterThread item = (JMeterThread) iter.next();
 			item.stop();
 		}
+		verifyThreadsStopped();
 	}
 
 
