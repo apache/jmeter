@@ -58,6 +58,9 @@
 <li>(28230) Fix NPE in HTTP Sampler retrieving embedded resources</li>
 <li>Improve handling of StopTest; catch and log some more errors</li>
 <li>ForEach Controller no longer runs any samples if first variable is not defined</li>
+<li>(28663) NPE in remote JDBC execution</li>
+<li>(30110) Deadlock in stopTest processing</li>
+<li>(31696) Duration not working correctly when using Scheduler</li>
 </ul>
 <h3>Version 2.0.1</h3>
 <p>Bug fix release. TBA.</p>
