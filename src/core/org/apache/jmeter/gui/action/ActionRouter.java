@@ -85,8 +85,6 @@ public class ActionRouter implements ActionListener
 	private static AddToTree add = new AddToTree();
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.gui");
-//	private static EventListenerList preActionListeners = new EventListenerList();
-//	private static EventListenerList postActionListeners = new EventListenerList();
 	private Map preActionListeners = new HashMap();
 	private Map postActionListeners = new HashMap();
 
@@ -170,7 +168,15 @@ public class ActionRouter implements ActionListener
 		}
 		return null;
 	}
-	
+
+	/**
+	 * Allows an ActionListener to receive notification of a command
+	 * being executed prior to the actual execution of the command.
+	 * 
+	 * @param action	The Class of the command for which the listener will
+	 * notifications for. Class must extend org.apache.jmeter.gui.action.Command
+	 * @param listener	The ActionListener to receive the notifications
+	 */	
 	public void addPreActionListener(Class action, ActionListener listener) 
 	{
 		if ( action != null ) {
@@ -184,6 +190,14 @@ public class ActionRouter implements ActionListener
 		}
 	}
 	
+	/**
+	 * Allows an ActionListener to receive notification of a command
+	 * being executed after the command has executed.
+	 * 
+	 * @param action	The Class of the command for which the listener will
+	 * notifications for. Class must extend org.apache.jmeter.gui.action.Command
+	 * @param listener
+	 */
 	public void addPostActionListener(Class action, ActionListener listener) 
 	{
 		if ( action != null ) {
