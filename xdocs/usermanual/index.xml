@@ -57,6 +57,7 @@
 		<li><a href="get-started.html#non_gui">2.4.3 Non-GUI Mode</a></li>
 		<li><a href="get-started.html#server">2.4.4 Distributed Mode</a></li>
 		<li><a href="get-started.html#override">2.4.5 Overriding Properties Via The Command Line</a></li>
+		<li><a href="get-started.html#logging">2.4.6 Logging and Error Messages</a></li>
 	 </ul>
 	 <li><a href="get-started.html#configuring_jmeter">2.5 Configuring JMeter</a></li>
   </ul>
@@ -65,7 +66,8 @@
 	 <li><a href="build-test-plan.html#add_remove">3.1 Adding and Removing Elements</a></li>
 	 <li><a href="build-test-plan.html#load_save">3.2 Loading and Saving Elements</a></li>
 	 <li><a href="build-test-plan.html#config_element">3.3 Configuring Tree Elements</a></li>
-	 <li><a href="build-test-plan.html#run">3.3 Running a Test Plan</a></li>
+	 <li><a href="build-test-plan.html#run">3.4 Running a Test Plan</a></li>
+	 <li><a href="build-test-plan.html#scoping_rules">3.5 Scoping Rules</a></li>
   </ul>
   <li><a href="test_plan.html">4. Elements of a Test Plan</a></li>
   <ul>
@@ -113,6 +115,8 @@
 		<li><a href="build-ftp-test-plan.html#adding_listener">8.4 Adding a Listener to View/Store the Test Results</a></li>
 		<li><a href="build-ftp-test-plan.html#saving">8.5 Saving the Test Plan</a></li>
 		<li><a href="build-ftp-test-plan.html#running">8.6 Running the Test Plan</a></li>
+	 </ul>
+  <li><a href="build-ldap-test-plan.html">9. Building an LDAP Test Plan</a></li>
   <ul>
     <li><a href="build-ldap-test-plan.html#adding_users">9.1 Adding Users</a></li>
     <li><a href="build-ldap-test-plan.html#add_login">9.2 Adding Login Config Element</a></li>
@@ -122,9 +126,6 @@
     <li><a href="build-ldap-test-plan.html#saving">9.6 Saving the Test Plan</a></li>
     <li><a href="build-ldap-test-plan.html#running">9.7 Running the Test Plan</a></li>
   </ul>
-
-	 </ul>
-  <li><a href="build-ldap-test-plan.html">9. Building an LDAP Test Plan</a></li>
   <li><a href="build-ws-test-plan.html">10. Building a Webservice Test Plan</a></li>
   <li><a href="build-monitor-test-plan.html">11. Building a Monitor Test Plan</a></li>
   <li><a href="remote-test.html">12. Remote Testing</a></li>
