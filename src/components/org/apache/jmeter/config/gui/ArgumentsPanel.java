@@ -69,6 +69,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
@@ -223,7 +224,6 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 	 *@param e  Description of Parameter
 	 ***************************************/
 	public void actionPerformed(ActionEvent e)
-	{
 		String action = e.getActionCommand();
 		if(action.equals(DELETE))
 		{
@@ -308,10 +308,10 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 		TextAreaCellRenderer renderer = new TextAreaCellRenderer();
 		table.setRowHeight(renderer.getPreferredHeight());
 		table.setDefaultRenderer(String.class,renderer);
-		//table.setCellSelectionEnabled(true);
+		table.setCellSelectionEnabled(true);
 		table.setRowSelectionAllowed(true);
-		//table.setColumnSelectionAllowed(false);
-		//table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setColumnSelectionAllowed(false);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		JScrollPane scroller = new JScrollPane(table);
 		Dimension tableDim = scroller.getPreferredSize();

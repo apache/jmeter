@@ -85,7 +85,6 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 			{
 				HTTPArgument arg = (HTTPArgument)iter.next();
 				tableModel.addRow(new Object[]{arg.getName(),arg.getValue(),
-						arg.getEncodedName()+arg.getMetaData()+arg.getEncodedValue(),
 						new Boolean(arg.getAlwaysEncode())});
 			}
 		}
