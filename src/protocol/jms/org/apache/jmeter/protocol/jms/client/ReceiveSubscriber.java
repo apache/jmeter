@@ -18,6 +18,8 @@
 package org.apache.jmeter.protocol.jms.client;
 
 import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
@@ -60,18 +62,28 @@ public class ReceiveSubscriber implements Runnable {
         super();
     }
     
-    public ReceiveSubscriber(String jndi, String url, String connfactory,
+    public ReceiveSubscriber(boolean useProps, String jndi, String url, String connfactory,
     String topic, String useAuth, String user, String pwd){
-    	Context ctx = initJNDI(jndi,url,useAuth,user,pwd);
+    	Context ctx = initJNDI(useProps,jndi,url,useAuth,user,pwd);
     	if (ctx != null) {
     		initConnection(ctx,connfactory,topic);
 		} else {
-			log.equals("Could not initialize JNDI Initial Context Factory");
+			log.error("Could not initialize JNDI Initial Context Factory");
     	}
     }
     
-    public Context initJNDI(String jndi, String url, String useAuth, String user, String pwd){
-    	return InitialContextFactory.lookupContext(jndi,url,useAuth,user,pwd);
+    public Context initJNDI(boolean useProps, String jndi,
+      String url, String useAuth, String user, String pwd){
+		if (useProps){
+			try {
+				return new InitialContext();
+			} catch (NamingException e){
+				log.error(e.getMessage());
+				return null;
+			}
+		} else {
+			return InitialContextFactory.lookupContext(jndi,url,useAuth,user,pwd);
+		}
     }
     
     public void initConnection(Context ctx, String connfactory, String topic){
@@ -90,14 +102,6 @@ public class ReceiveSubscriber implements Runnable {
 
 	public void setLoop(int loop){
 		this.loop = loop;
-	}
-	
-	public void pause(){
-		try {
-			this.CONN.stop();
-		} catch (JMSException e){
-			log.error("failed to stop recieving");
-		}
 	}
 	
 	public void resume(){
@@ -149,9 +153,6 @@ public class ReceiveSubscriber implements Runnable {
 
 	public synchronized int count(int count) {
 		counter += count;
-		if (counter >= loop){
-			this.pause();
-		}
 		return counter;
 	}
 
@@ -170,20 +171,20 @@ public class ReceiveSubscriber implements Runnable {
     }
 
     protected void listen() {
-		log.info("Subscriber2.listen() called");
-        try {
-            while (RUN) {
+        log.info("Subscriber2.listen() called");
+        while (RUN) {
+            try {
                 Message message = this.SUBSCRIBER.receive();
-                if (message instanceof TextMessage) {
-                	TextMessage msg = (TextMessage)message;
-                	if (msg.getText().trim().length() > 0){
-						this.buffer.append(msg.getText());
-						count(1);
-                	}
+                if (message != null && message instanceof TextMessage) {
+                    TextMessage msg = (TextMessage)message;
+                    if (msg.getText().trim().length() > 0) {
+                        this.buffer.append(msg.getText());
+                        count(1);
+                    }
                 }
+            } catch (JMSException e) {
+                log.info("Communication error: " + e.getMessage());
             }
-        } catch (JMSException e) {
-            log.info("Communication error: " + e.getMessage());
         }
     }
 }
