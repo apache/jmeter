@@ -127,14 +127,14 @@ public class ThroughputControllerGui
 			try {
 				((ThroughputController)tc).setMaxThroughput(Integer.parseInt(throughput.getText().trim()));
 			} catch (NumberFormatException e) {
-				((ThroughputController)tc).setMaxThroughput(1);
+				((ThroughputController)tc).setMaxThroughput(throughput.getText());
 			}
         }
         else {
         	try {
         		((ThroughputController)tc).setPercentThroughput(Float.parseFloat(throughput.getText().trim()));
         	} catch (NumberFormatException e) {
-        		((ThroughputController)tc).setPercentThroughput(100);
+        		((ThroughputController)tc).setPercentThroughput(throughput.getText());
            	}
         }
     }

@@ -64,6 +64,8 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.FloatProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.StringProperty;
 
 /**
  * @author Thad Smith
@@ -138,19 +140,71 @@ public class ThroughputController
 		setProperty(new IntegerProperty(MAXTHROUGHPUT,maxThroughput));
 	}
 	
-	public int getMaxThroughput() 
+	public void setMaxThroughput(String maxThroughput)
 	{
-		return getPropertyAsInt(MAXTHROUGHPUT);
+		setProperty(new StringProperty(MAXTHROUGHPUT,maxThroughput));
+	}
+	
+	public String getMaxThroughput()
+	{
+		return getPropertyAsString(MAXTHROUGHPUT);
+	}
+	
+	protected int getMaxThroughputAsInt() 
+	{
+		JMeterProperty prop = getProperty(MAXTHROUGHPUT);
+		int retVal = 1;
+		if (prop instanceof IntegerProperty)
+		{
+			retVal = (((IntegerProperty)prop).getIntValue());
+		}
+		else
+		{
+			try
+			{
+				retVal = Integer.parseInt(prop.getStringValue());
+			}
+			catch (NumberFormatException e)
+			{
+			}
+		}
+		return retVal;
 	}
 	
 	public void setPercentThroughput(float percentThroughput)
 	{
 		setProperty(new FloatProperty(PERCENTTHROUGHPUT,percentThroughput));
 	}
-	
-	public float getPercentThroughput()
+
+	public void setPercentThroughput(String percentThroughput)
 	{
-		return getPropertyAsFloat(PERCENTTHROUGHPUT);
+		setProperty(new StringProperty(PERCENTTHROUGHPUT,percentThroughput));
+	}
+	
+	public String getPercentThroughput()
+	{
+		return getPropertyAsString(PERCENTTHROUGHPUT);
+	}
+
+	protected float getPercentThroughputAsFloat()
+	{
+		JMeterProperty prop = getProperty(PERCENTTHROUGHPUT);
+		float retVal = 100;
+		if (prop instanceof FloatProperty)
+		{
+			retVal = (((FloatProperty)prop).getFloatValue());
+		}
+		else
+		{
+			try 
+			{
+				retVal = Float.parseFloat(prop.getStringValue());
+			}
+			catch (NumberFormatException e)
+			{
+			}
+		}
+		return retVal;
 	}
 	
 	protected void setExecutions(int executions)
@@ -226,7 +280,7 @@ public class ThroughputController
 		return retVal;
 	}
 
-	public boolean canExecute() 
+	protected boolean canExecute() 
 	{
 		if (returnTrue)
 			return true;
@@ -238,16 +292,16 @@ public class ThroughputController
 		iterations = getIteration();
 		if ( getStyle() == BYNUMBER )
 		{ 
-			if ( executions < getMaxThroughput() )
+			if ( executions < getMaxThroughputAsInt() )
 			{
 				retval = true;
 			}
 		}
 		else 
 		{
-			if (iteration==0 && getPercentThroughput()>0)
+			if (iteration==0 && getPercentThroughputAsFloat()>0)
 				retval = true;
-			else if ( (executions/iteration)*100 <= getPercentThroughput() )
+			else if ( ((float)executions/iteration)*100 <= getPercentThroughputAsFloat() )
 				retval = true;
 		}
 		if (retval)
@@ -265,7 +319,7 @@ public class ThroughputController
 	{
 		if ( subControllersAndSamplers.size()==0 )
 			return true;
-		else if ( getStyle()==BYNUMBER && getExecutions()>=getMaxThroughput() ) 
+		else if ( getStyle()==BYNUMBER && getExecutions()>=getMaxThroughputAsInt() ) 
 			return true;
 		else
 			return false;
