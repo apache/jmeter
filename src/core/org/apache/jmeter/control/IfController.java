@@ -143,16 +143,18 @@ public class IfController extends GenericController implements Serializable
 	   * IsDone indicates whether the termination condition is reached.
 	   * I.e. if the condition evaluates to False - then isDone() returns TRUE
 	   */
-	  public boolean isDone() {
-			boolean result = true;
-			try {
-				  result = !evaluateCondition();
-			} catch (Exception e) {
-				  logger.error(e.getMessage(), e);
-			}
-			setDone(true);
-			return result;
-	  }
+	public boolean isDone() {
+//		boolean result = true;
+//		try {
+//			  result = !evaluateCondition();
+//		} catch (Exception e) {
+//			  logger.error(e.getMessage(), e);
+//		}
+//		setDone(true);
+//		return result;
+//		setDone(false);
+		return false;
+	}
 
 	  /**
 	   * @see org.apache.jmeter.control.Controller#next()
@@ -166,13 +168,19 @@ public class IfController extends GenericController implements Serializable
 	   *       cause it is called prior the iteration even starts !
 	   */
 	  public Sampler next() {
-			Sampler currentElement = super.next();
-
-			if (!isDone()) {
-				  return currentElement;
-			} else {
-				  return null;
+			boolean result = false;
+			try {
+				result = evaluateCondition();
 			}
+			catch (Exception e)
+			{
+				logger.error(e.getMessage(),e);
+			}
+			if (result)
+				return super.next();
+			else
+				return null;
+				
 	  }
 
 ////////////////////////////// Start of Test Code ///////////////////////////
