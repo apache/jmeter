@@ -54,7 +54,7 @@ import org.apache.log.Logger;
  */
 public abstract class TestBean extends AbstractTestElement
 {
-	protected static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
     /**
      * Property name to property descriptor method map.
