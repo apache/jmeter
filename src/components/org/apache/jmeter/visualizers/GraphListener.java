@@ -52,7 +52,8 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.visualizers;
+package org.apache.jmeter.visualizers;
+
 
 /**
  * Title:        JMeter
@@ -65,6 +66,6 @@
 
 public interface GraphListener
 {
-	public void updateGui(Sample s);
-	public void updateGui();
+    public void updateGui(Sample s);
+    public void updateGui();
 }

@@ -54,7 +54,10 @@
  */
 package org.apache.jmeter.visualizers;
 
+
 import org.apache.jmeter.samplers.SampleResult;
+
+
 /**
  * Title:        JMeter
  * Description:
@@ -68,6 +71,6 @@ import org.apache.jmeter.samplers.SampleResult;
 
 public interface GraphAccumListener
 {
-	public void updateGui(SampleResult s);
-	public void updateGui();
+    public void updateGui(SampleResult s);
+    public void updateGui();
 }

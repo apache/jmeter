@@ -55,6 +55,7 @@
 
 package org.apache.jmeter.visualizers;
 
+
 import java.awt.*;
 import java.util.*;
 import java.awt.event.*;
@@ -62,6 +63,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import org.apache.jmeter.samplers.SampleResult;
+
 
 /**
  * This class implements a scrolling bar visualizer with
@@ -73,121 +75,143 @@ import org.apache.jmeter.samplers.SampleResult;
  * @version $Revision$ $Date$
  */
 public class BarVisualizer extends JPanel
-	 implements ImageVisualizer, ChangeListener
+        implements ImageVisualizer, ChangeListener
 {
 
-	 private static final int MAX_SCALE = 2000;
+    private static final int MAX_SCALE = 2000;
 
-	 private Graph graph;
-	 private JSlider slider;
+    private Graph graph;
+    private JSlider slider;
 
-	 class Graph extends JComponent {
+    class Graph extends JComponent
+    {
 
-		  private final int GRIDS = 10;
+        private final int GRIDS = 10;
 
-		  private int limit;
-		  private int scale;
-		  private int counter;
-		  private Vector samples;
-		  private Color barColor;
+        private int limit;
+        private int scale;
+        private int counter;
+        private Vector samples;
+        private Color barColor;
 
-		  public Graph() {
-				super();
+        public Graph()
+        {
+            super();
 
-				this.samples = new Vector();
-				this.barColor = Color.lightGray;
-				this.counter = 0;
-				this.limit = 1000;
-				this.scale = limit / GRIDS;
-		  }
+            this.samples = new Vector();
+            this.barColor = Color.lightGray;
+            this.counter = 0;
+            this.limit = 1000;
+            this.scale = limit / GRIDS;
+        }
 
-		  public synchronized void setLimit(int limit) {
-				this.limit = limit;
-				this.scale = limit / GRIDS;
-		  }
+        public synchronized void setLimit(int limit)
+        {
+            this.limit = limit;
+            this.scale = limit / GRIDS;
+        }
 
-		  public void add(int sample) {
-				this.samples.addElement(new Integer(sample));
-				this.counter++;
-		  }
+        public void add(int sample)
+        {
+            this.samples.addElement(new Integer(sample));
+            this.counter++;
+        }
 
-		  public void clear() {
-				this.samples.removeAllElements();
-				this.counter = 0;
-		  }
+        public void clear()
+        {
+            this.samples.removeAllElements();
+            this.counter = 0;
+        }
 
-		  public void paintComponent(Graphics g) {
-				super.paintComponent(g);
+        public void paintComponent(Graphics g)
+        {
+            super.paintComponent(g);
 
-				Dimension d = this.getSize();
+            Dimension d = this.getSize();
 
-				for (int i = 1, y; i < GRIDS; i++) {
-					 y = d.height - (i * d.height / GRIDS);
-					 g.setColor(Color.black);
-					 g.drawLine(5, y, d.width - 35, y);
-					 g.setColor(Color.blue);
-					 g.drawString(Integer.toString(i * scale), d.width - 30, y + this.getFont().getSize() / 2);
-				}
+            for (int i = 1, y; i < GRIDS; i++)
+            {
+                y = d.height - (i * d.height / GRIDS);
+                g.setColor(Color.black);
+                g.drawLine(5, y, d.width - 35, y);
+                g.setColor(Color.blue);
+                g.drawString(Integer.toString(i * scale), d.width - 30, y + this.getFont().getSize() / 2);
+            }
 
-				int bars = (d.width - 40) / 8;
-				if (counter < bars) bars = counter;
+            int bars = (d.width - 40) / 8;
 
-				if (this.limit == 0) {
-					 this.limit = 1;
-				}
+            if (counter < bars) bars = counter;
 
-				for (int i = bars; i > 0; i--) {
-					 int sample = ((Integer) this.samples.elementAt(this.counter - i)).intValue() * d.height / this.limit;
-					 g.setColor(this.barColor);
-					 g.fill3DRect(d.width - 36 - 8 * i, d.height - sample, 5, sample, true);
-				}
-		  }
-	 }
+            if (this.limit == 0)
+            {
+                this.limit = 1;
+            }
 
-	 public BarVisualizer() {
-		  super();
+            for (int i = bars; i > 0; i--)
+            {
+                int sample = ((Integer) this.samples.elementAt(this.counter - i)).intValue()
+                        * d.height / this.limit;
 
-		  this.graph = new Graph();
-		  this.slider = new JSlider(JSlider.VERTICAL, 0, MAX_SCALE, 1000);
-		  this.slider.addChangeListener(this);
-		  this.slider.setPaintLabels(false);
-		  this.slider.setPaintTicks(false);
+                g.setColor(this.barColor);
+                g.fill3DRect(d.width - 36 - 8 * i, d.height - sample, 5, sample, true);
+            }
+        }
+    }
 
-		  this.setLayout(new BorderLayout());
-		  this.add(slider, BorderLayout.WEST);
-		  this.add(graph, BorderLayout.CENTER);
-		  this.setPreferredSize(new Dimension(500, 100));
-	 }
+    public BarVisualizer()
+    {
+        super();
 
-	 public void stateChanged(ChangeEvent e) {
-		  int limit = this.slider.getValue();
-		  this.graph.setLimit(limit);
-		  repaint();
-	 }
+        this.graph = new Graph();
+        this.slider = new JSlider(JSlider.VERTICAL, 0, MAX_SCALE, 1000);
+        this.slider.addChangeListener(this);
+        this.slider.setPaintLabels(false);
+        this.slider.setPaintTicks(false);
 
-	 public synchronized void add(SampleResult sampleResult) {
-		long s = sampleResult.getTime();
-		  this.graph.add((int) s);
-		  repaint();
-	 }
+        this.setLayout(new BorderLayout());
+        this.add(slider, BorderLayout.WEST);
+        this.add(graph, BorderLayout.CENTER);
+        this.setPreferredSize(new Dimension(500, 100));
+    }
 
-	 public synchronized void clear() {
-		  this.graph.clear();
-		  repaint();
-	 }
+    public void stateChanged(ChangeEvent e)
+    {
+        int limit = this.slider.getValue();
 
-	 public String toString() {
-		  return "Show the samples as scrolling bars";
-	 }
+        this.graph.setLimit(limit);
+        repaint();
+    }
 
-	 public JPanel getControlPanel() {
-	return this;
-	 }
+    public synchronized void add(SampleResult sampleResult)
+    {
+        long s = sampleResult.getTime();
 
-	 public Image getImage() {
-	Image result = graph.createImage(graph.getWidth(), graph.getHeight());
-	graph.paintComponent(result.getGraphics());
+        this.graph.add((int) s);
+        repaint();
+    }
 
-	return result;
-	 }
+    public synchronized void clear()
+    {
+        this.graph.clear();
+        repaint();
+    }
+
+    public String toString()
+    {
+        return "Show the samples as scrolling bars";
+    }
+
+    public JPanel getControlPanel()
+    {
+        return this;
+    }
+
+    public Image getImage()
+    {
+        Image result = graph.createImage(graph.getWidth(), graph.getHeight());
+
+        graph.paintComponent(result.getGraphics());
+
+        return result;
+    }
 }

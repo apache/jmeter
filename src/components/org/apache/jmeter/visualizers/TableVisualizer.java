@@ -53,6 +53,8 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.visualizers;
+
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -74,6 +76,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
+
 /****************************************
  * This class implements a statistical analyser that calculates both the average
  * and the standard deviation of the sampling process. The samples are displayed
@@ -84,194 +87,201 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *@version   $Revision$
  ***************************************/
 public class TableVisualizer extends AbstractVisualizer
-		 implements GraphListener, Clearable
+        implements GraphListener, Clearable
 {
-	private TableDataModel model = null;
-	private JTable table = null;
-	private JTextField dataField = null;
-	private JTextField averageField = null;
-	private JTextField deviationField = null;
-	private JTextField noSamplesField = null;
-	private JScrollPane tableScrollPanel = null;
+    private TableDataModel model = null;
+    private JTable table = null;
+    private JTextField dataField = null;
+    private JTextField averageField = null;
+    private JTextField deviationField = null;
+    private JTextField noSamplesField = null;
+    private JScrollPane tableScrollPanel = null;
 
+    /****************************************
+     * Constructor for the TableVisualizer object
+     ***************************************/
+    public TableVisualizer()
+    {
+        super();
+        model = new TableDataModel();
+        model.addGraphListener(this);
+        init();
+    }
 
-	/****************************************
-	 * Constructor for the TableVisualizer object
-	 ***************************************/
-	public TableVisualizer()
-	{
-		super();
-		model = new TableDataModel();
-		model.addGraphListener(this);
-		init();
-	}
+    /****************************************
+     * !ToDoo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("view_results_in_table");
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("view_results_in_table");
-	}
+    /****************************************
+     * !ToDo (Method description)
+     ***************************************/
+    public void updateGui()
+    {
+        // Not completely sure if this is the correct way of updating the table
+        table.tableChanged(new TableModelEvent(model));
+        tableScrollPanel.revalidate();
+        tableScrollPanel.repaint();
+        noSamplesField.setText(Long.toString(model.getSampleCount()));
+        dataField.setText(Long.toString(model.getCurrentData()));
+        averageField.setText(Long.toString(model.getCurrentAverage()));
+        deviationField.setText(Long.toString(model.getCurrentDeviation()));
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 ***************************************/
-	public void updateGui()
-	{
-		// Not completely sure if this is the correct way of updating the table
-		table.tableChanged(new TableModelEvent(model));
-		tableScrollPanel.revalidate();
-		tableScrollPanel.repaint();
-		noSamplesField.setText(Long.toString(model.getSampleCount()));
-		dataField.setText(Long.toString(model.getCurrentData()));
-		averageField.setText(Long.toString(model.getCurrentAverage()));
-		deviationField.setText(Long.toString(model.getCurrentDeviation()));
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@param res  !ToDo (Parameter description)
+     ***************************************/
+    public void add(SampleResult res)
+    {
+        model.addSample(res);
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param res  !ToDo (Parameter description)
-	 ***************************************/
-	public void add(SampleResult res)
-	{
-		model.addSample(res);
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@param s  !ToDo (Parameter description)
+     ***************************************/
+    public void updateGui(Sample s)
+    {
+        // We have received one more sample
+        // Not completely sure if this is the correct way of updating the table
+        table.tableChanged(new TableModelEvent(model));
+        tableScrollPanel.revalidate();
+        tableScrollPanel.repaint();
+        noSamplesField.setText(Long.toString(model.getSampleCount()));
+        dataField.setText(Long.toString(model.getCurrentData()));
+        averageField.setText(Long.toString(model.getCurrentAverage()));
+        deviationField.setText(Long.toString(model.getCurrentDeviation()));
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param s  !ToDo (Parameter description)
-	 ***************************************/
-	public void updateGui(Sample s)
-	{
-		// We have received one more sample
-		// Not completely sure if this is the correct way of updating the table
-		table.tableChanged(new TableModelEvent(model));
-		tableScrollPanel.revalidate();
-		tableScrollPanel.repaint();
-		noSamplesField.setText(Long.toString(model.getSampleCount()));
-		dataField.setText(Long.toString(model.getCurrentData()));
-		averageField.setText(Long.toString(model.getCurrentAverage()));
-		deviationField.setText(Long.toString(model.getCurrentDeviation()));
-	}
+    /****************************************
+     * Description of the Method
+     ***************************************/
+    public synchronized void clear()
+    {
+        // this.graph.clear();
+        model.clear();
+        dataField.setText("0000");
+        averageField.setText("0000");
+        deviationField.setText("0000");
+        repaint();
+    }
 
-	/****************************************
-	 * Description of the Method
-	 ***************************************/
-	public synchronized void clear()
-	{
-		//this.graph.clear();
-		model.clear();
-		dataField.setText("0000");
-		averageField.setText("0000");
-		deviationField.setText("0000");
-		repaint();
-	}
+    /****************************************
+     * Description of the Method
+     *
+     *@return   Description of the Returned Value
+     ***************************************/
+    public String toString()
+    {
+        return "Show the samples in a table";
+    }
 
-	/****************************************
-	 * Description of the Method
-	 *
-	 *@return   Description of the Returned Value
-	 ***************************************/
-	public String toString()
-	{
-		return "Show the samples in a table";
-	}
+    /****************************************
+     * Description of the Method
+     ***************************************/
+    private void init()
+    {
+        this.setLayout(new BorderLayout());
 
-	/****************************************
-	 * Description of the Method
-	 ***************************************/
-	private void init()
-	{
-		this.setLayout(new BorderLayout());
+        // MAIN PANEL
+        JPanel mainPanel = new JPanel();
+        Border margin = new EmptyBorder(10, 10, 5, 10);
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+        mainPanel.setBorder(margin);
+        mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("view_results_in_table"));
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
+        // TITLE
+        JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("view_results_in_table"));
+        Font curFont = panelTitleLabel.getFont();
+        int curFontSize = curFont.getSize();
 
-		// NAME
-		mainPanel.add(getNamePanel());
-		mainPanel.add(getFilePanel());
+        curFontSize += 4;
+        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
+        mainPanel.add(panelTitleLabel);
 
-		// Set up the table itself
-		table = new JTable(model);
-		//table.getTableHeader().setReorderingAllowed(false);
-		tableScrollPanel = new JScrollPane(table);
-		tableScrollPanel.setViewportBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+        // NAME
+        mainPanel.add(getNamePanel());
+        mainPanel.add(getFilePanel());
 
-		// Set up footer of table which displays numerics of the graphs
-		JPanel dataPanel = new JPanel();
-		JLabel dataLabel = new JLabel(JMeterUtils.getResString("graph_results_latest_sample"));
-		dataLabel.setForeground(Color.black);
-		dataField = new JTextField(5);
-		dataField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-		dataField.setEditable(false);
-		dataField.setForeground(Color.black);
-		dataField.setBackground(getBackground());
-		dataPanel.add(dataLabel);
-		dataPanel.add(dataField);
-		JPanel averagePanel = new JPanel();
-		JLabel averageLabel = new JLabel(JMeterUtils.getResString("graph_results_average"));
-		averageLabel.setForeground(Color.blue);
-		averageField = new JTextField(5);
-		averageField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-		averageField.setEditable(false);
-		averageField.setForeground(Color.blue);
-		averageField.setBackground(getBackground());
-		averagePanel.add(averageLabel);
-		averagePanel.add(averageField);
-		JPanel deviationPanel = new JPanel();
-		JLabel deviationLabel = new JLabel(JMeterUtils.getResString("graph_results_deviation"));
-		deviationLabel.setForeground(Color.red);
-		deviationField = new JTextField(5);
-		deviationField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-		deviationField.setEditable(false);
-		deviationField.setForeground(Color.red);
-		deviationField.setBackground(getBackground());
-		deviationPanel.add(deviationLabel);
-		deviationPanel.add(deviationField);
-		JPanel noSamplesPanel = new JPanel();
-		JLabel noSamplesLabel = new JLabel(JMeterUtils.getResString("graph_results_no_samples"));
-		noSamplesField = new JTextField(10);
-		noSamplesField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-		noSamplesField.setEditable(false);
-		noSamplesField.setForeground(Color.black);
-		noSamplesField.setBackground(getBackground());
-		noSamplesPanel.add(noSamplesLabel);
-		noSamplesPanel.add(noSamplesField);
+        // Set up the table itself
+        table = new JTable(model);
+        // table.getTableHeader().setReorderingAllowed(false);
+        tableScrollPanel = new JScrollPane(table);
+        tableScrollPanel.setViewportBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
-		JPanel tableInfoPanel = new JPanel();
-		tableInfoPanel.setLayout(new FlowLayout());
-		tableInfoPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        // Set up footer of table which displays numerics of the graphs
+        JPanel dataPanel = new JPanel();
+        JLabel dataLabel = new JLabel(JMeterUtils.getResString("graph_results_latest_sample"));
 
-		tableInfoPanel.add(noSamplesPanel);
-		tableInfoPanel.add(dataPanel);
-		tableInfoPanel.add(averagePanel);
-		tableInfoPanel.add(deviationPanel);
+        dataLabel.setForeground(Color.black);
+        dataField = new JTextField(5);
+        dataField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        dataField.setEditable(false);
+        dataField.setForeground(Color.black);
+        dataField.setBackground(getBackground());
+        dataPanel.add(dataLabel);
+        dataPanel.add(dataField);
+        JPanel averagePanel = new JPanel();
+        JLabel averageLabel = new JLabel(JMeterUtils.getResString("graph_results_average"));
 
-		// Set up the table with footer
-		JPanel tablePanel = new JPanel();
-		tablePanel.setLayout(new BorderLayout());
-		tablePanel.add(tableScrollPanel, BorderLayout.CENTER);
-		tablePanel.add(tableInfoPanel, BorderLayout.SOUTH);
+        averageLabel.setForeground(Color.blue);
+        averageField = new JTextField(5);
+        averageField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        averageField.setEditable(false);
+        averageField.setForeground(Color.blue);
+        averageField.setBackground(getBackground());
+        averagePanel.add(averageLabel);
+        averagePanel.add(averageField);
+        JPanel deviationPanel = new JPanel();
+        JLabel deviationLabel = new JLabel(JMeterUtils.getResString("graph_results_deviation"));
 
-		// Add the main panel and the graph
-		this.add(mainPanel, BorderLayout.NORTH);
-		this.add(tablePanel, BorderLayout.CENTER);
-	}
+        deviationLabel.setForeground(Color.red);
+        deviationField = new JTextField(5);
+        deviationField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        deviationField.setEditable(false);
+        deviationField.setForeground(Color.red);
+        deviationField.setBackground(getBackground());
+        deviationPanel.add(deviationLabel);
+        deviationPanel.add(deviationField);
+        JPanel noSamplesPanel = new JPanel();
+        JLabel noSamplesLabel = new JLabel(JMeterUtils.getResString("graph_results_no_samples"));
+
+        noSamplesField = new JTextField(10);
+        noSamplesField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        noSamplesField.setEditable(false);
+        noSamplesField.setForeground(Color.black);
+        noSamplesField.setBackground(getBackground());
+        noSamplesPanel.add(noSamplesLabel);
+        noSamplesPanel.add(noSamplesField);
+
+        JPanel tableInfoPanel = new JPanel();
+
+        tableInfoPanel.setLayout(new FlowLayout());
+        tableInfoPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+        tableInfoPanel.add(noSamplesPanel);
+        tableInfoPanel.add(dataPanel);
+        tableInfoPanel.add(averagePanel);
+        tableInfoPanel.add(deviationPanel);
+
+        // Set up the table with footer
+        JPanel tablePanel = new JPanel();
+
+        tablePanel.setLayout(new BorderLayout());
+        tablePanel.add(tableScrollPanel, BorderLayout.CENTER);
+        tablePanel.add(tableInfoPanel, BorderLayout.SOUTH);
+
+        // Add the main panel and the graph
+        this.add(mainPanel, BorderLayout.NORTH);
+        this.add(tablePanel, BorderLayout.CENTER);
+    }
 
 }

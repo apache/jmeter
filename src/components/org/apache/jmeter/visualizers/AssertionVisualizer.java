@@ -53,6 +53,8 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.visualizers;
+
+
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.util.Arrays;
@@ -73,6 +75,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
+
 /****************************************
  * Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:
  * Apache
@@ -85,108 +88,114 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 {
 
-	private JTextArea textArea;
+    private JTextArea textArea;
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public AssertionVisualizer()
-	{
-		init();
-		setName(getStaticLabel());
-	}
+    /****************************************
+     * !ToDo (Constructor description)
+     ***************************************/
+    public AssertionVisualizer()
+    {
+        init();
+        setName(getStaticLabel());
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@return   !ToDo (Return description)
-	 ***************************************/
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("assertion_visualizer_title");
-	}
+    /****************************************
+     * !ToDoo (Method description)
+     *
+     *@return   !ToDo (Return description)
+     ***************************************/
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("assertion_visualizer_title");
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 *
-	 *@param sample  !ToDo (Parameter description)
-	 ***************************************/
-	public void add(SampleResult sample)
-	{
-		textArea.append(sample.getSamplerData().toString());
-		textArea.append(getAssertionResult(sample));
-		textArea.append("\n");
-	}
+    /****************************************
+     * !ToDo (Method description)
+     *
+     *@param sample  !ToDo (Parameter description)
+     ***************************************/
+    public void add(SampleResult sample)
+    {
+        textArea.append(sample.getSamplerData().toString());
+        textArea.append(getAssertionResult(sample));
+        textArea.append("\n");
+    }
 
+    /****************************************
+     * !ToDo (Method description)
+     ***************************************/
+    public void clear()
+    {
+        textArea.setText("");
+    }
 
-	/****************************************
-	 * !ToDo (Method description)
-	 ***************************************/
-	public void clear()
-	{
-		textArea.setText("");
-	}
+    private String getAssertionResult(SampleResult res)
+    {
+        if (res != null)
+        {
+            StringBuffer display = new StringBuffer();
+            List assertionResults = Arrays.asList(res.getAssertionResults());
 
-	private String getAssertionResult(SampleResult res)
-	{
-		if(res != null)
-		{
-			StringBuffer display = new StringBuffer();
-			List assertionResults = Arrays.asList(res.getAssertionResults());
-			if(assertionResults != null)
-			{
-				Iterator iter = assertionResults.iterator();
-				while(iter.hasNext())
-				{
-					AssertionResult item = (AssertionResult)iter.next();
-					if(item.isFailure() || item.isError())
-					{
-						display.append("\n\t\t");
-						display.append(item.getFailureMessage());
-					}
-				}
-			}
-			return display.toString();
-		}
-		return "";
-	}
+            if (assertionResults != null)
+            {
+                Iterator iter = assertionResults.iterator();
 
-	private void init()
-	{
-		this.setLayout(new BorderLayout());
+                while (iter.hasNext())
+                {
+                    AssertionResult item = (AssertionResult) iter.next();
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+                    if (item.isFailure() || item.isError())
+                    {
+                        display.append("\n\t\t");
+                        display.append(item.getFailureMessage());
+                    }
+                }
+            }
+            return display.toString();
+        }
+        return "";
+    }
 
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("assertion_visualizer_title"));
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
+    private void init()
+    {
+        this.setLayout(new BorderLayout());
 
-		// NAME
-		mainPanel.add(getNamePanel());
-		mainPanel.add(getFilePanel());
+        // MAIN PANEL
+        JPanel mainPanel = new JPanel();
+        Border margin = new EmptyBorder(10, 10, 5, 10);
 
-		// TEXTAREA LABEL
-		JLabel textAreaLabel = new JLabel(JMeterUtils.getResString("assertion_textarea_label"));
-		mainPanel.add(textAreaLabel);
+        mainPanel.setBorder(margin);
+        mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-		// TEXTAREA
-		textArea = new JTextArea(10, 40);
-		textArea.setEditable(false);
-		textArea.setLineWrap(false);
-		JScrollPane areaScrollPane = new JScrollPane(textArea);
-		areaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		//areaScrollPane.setPreferredSize(new Dimension(250, 250));
+        // TITLE
+        JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("assertion_visualizer_title"));
+        Font curFont = panelTitleLabel.getFont();
+        int curFontSize = curFont.getSize();
 
-		this.add(mainPanel,BorderLayout.NORTH);
-		this.add(areaScrollPane,BorderLayout.CENTER);
-	}
+        curFontSize += 4;
+        panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
+        mainPanel.add(panelTitleLabel);
+
+        // NAME
+        mainPanel.add(getNamePanel());
+        mainPanel.add(getFilePanel());
+
+        // TEXTAREA LABEL
+        JLabel textAreaLabel = new JLabel(JMeterUtils.getResString("assertion_textarea_label"));
+
+        mainPanel.add(textAreaLabel);
+
+        // TEXTAREA
+        textArea = new JTextArea(10, 40);
+        textArea.setEditable(false);
+        textArea.setLineWrap(false);
+        JScrollPane areaScrollPane = new JScrollPane(textArea);
+
+        areaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        // areaScrollPane.setPreferredSize(new Dimension(250, 250));
+
+        this.add(mainPanel, BorderLayout.NORTH);
+        this.add(areaScrollPane, BorderLayout.CENTER);
+    }
 }
