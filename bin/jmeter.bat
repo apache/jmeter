@@ -1,7 +1,3 @@
 @echo off
 
-set java=javaw
-
-%java% -classpath %classpath%;Apache-JMeter.jar org.apache.jmeter.JMeter
-
-set java=
+javaw -classpath %classpath%;ApacheJMeter.jar org.apache.jmeter.JMeter
