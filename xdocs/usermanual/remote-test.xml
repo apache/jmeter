@@ -38,7 +38,7 @@ directory.  Before running rmiregistry, make sure that the following jars are in
 <ul>
 	<li>JMETER_HOME/lib/ext/ApacheJMeter_core.jar</li>
 	<li>JMETER_HOME/lib/jorphan.jar</li>
-	<li>JMETER_HOME/lib/logkit-1.0.1</li>
+	<li>JMETER_HOME/lib/logkit-1.0.1.jar</li>
 </ul>
 The 
 rmiregistry application needs access to certain JMeter classes.  Run rmiregistry with no parameters.  By default the 
