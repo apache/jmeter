@@ -6,7 +6,6 @@
  */
 package org.apache.jmeter.save.converters;
 
-import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 
 import com.thoughtworks.xstream.converters.Converter;
