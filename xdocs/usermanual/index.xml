@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<document>
+<properties>
+<title>User's Manual</title>
+</properties>
+
+<body>
+<section name="User's Manual">
+
+<ul>
+  <li><a href="intro.html">1. Introduction</a></li>
+  <ul>
+    <li><a href="intro.html#1.1">1.1 History</a></li>
+    <li><a href="intro.html#1.2">1.2 The Future</a></li>
+  </ul>
+  <li><a href="get-started.html">2. Getting Started</a></li>
+  <ul>
+    <li><a href="get-started.html#2.1">2.1 Requirements</a></li>
+    <ul>
+      <li><a href="get-started.html#2.1.1">2.1.1 Java Versions<!--: JDK1.2 and higher (has not been tested w/JDK 1.4)--></a></li>
+      <li><a href="get-started.html#2.1.2">2.1.2 Operating Systems<!--: any (has been tested on Windows 98, ...)--></a></li>
+      <li><a href="get-started.html#2.1.3">2.1.3 JDBC Driver (for testing databases)</a></li>
+      <li><a href="get-started.html#2.1.4">2.1.4 SAX XML Parser</a></li>
+    </ul>
+    <li><a href="get-started.html#2.2">2.2 Installation<!--(includes configuration)--></a></li>
+    <ul>
+      <li><a href="get-started.html#2.2.1">2.2.1 Downloading the Latest Release</a></li>
+      <li><a href="get-started.html#2.2.2">2.2.2 Downloading Nightly Builds<!-- (include build instructions)--></a></li>
+      <li><a href="get-started.html#2.2.3">2.2.3 UNIX Instructions</a></li>
+      <li><a href="get-started.html#2.2.4">2.2.4 MS-Windows Instructions</a></li>
+    </ul>
+  </ul>
+  <li><a href="build-test-plan.html">3. Building a Test Plan</a></li>
+  <ul>
+    <li><a href="build-test-plan.html#3.1">3.1 Adding and Removing Elements</a></li>
+    <li><a href="build-test-plan.html#3.2">3.2 Loading and Saving Elements</a></li>
+    <li><a href="build-test-plan.html#3.3">3.3 Running a Test Plan</a></li>
+  </ul>
+  <li><a href="elements-test-plan.html">4. Elements of a Test Plan</a></li>
+  <ul>
+    <li><a href="elements-test-plan.html#4.1">4.1 ThreadGroup</a></li>
+    <li><a href="elements-test-plan.html#4.2">4.2 Controllers</a></li>
+    <ul>
+      <li><a href="elements-test-plan.html#4.2.1">4.2.1 Generative Controllers</a></li>
+      <ul>
+        <li><a href="elements-test-plan.html#4.2.1.1">4.2.1.1 Database Testing</a></li>
+        <li><a href="elements-test-plan.html#4.2.1.2">4.2.1.2 FTP Testing</a></li>
+        <li><a href="elements-test-plan.html#4.2.1.3">4.2.1.3 Web Testing</a></li>
+      </ul>
+      <li><a href="elements-test-plan.html#4.2.2">4.2.2 Logic Controllers</a></li>
+      <ul>
+        <li><a href="elements-test-plan.html#4.2.2.1">4.2.2.1 Interleave Logic</a></li>
+        <li><a href="elements-test-plan.html#4.2.2.2">4.2.2.2 Simple Controller</a></li>
+        <li><a href="elements-test-plan.html#4.2.2.3">4.2.2.3 Loop Controller</a></li>
+        <li><a href="elements-test-plan.html#4.2.2.4">4.2.2.4 Modification Manager</a></li>
+        <li><a href="elements-test-plan.html#4.2.2.5">4.2.2.5 Once Only Logic</a></li>
+      </ul>
+    </ul>
+    <li><a href="elements-test-plan.html#4.3">4.3 Listeners</a></li>
+    <ul>
+      <li><a href="elements-test-plan.html#4.3.1">4.3.1 Graphs</a></li>
+      <ul>
+        <li><a href="elements-test-plan.html#4.3.1.1">4.3.1.1 View Graph Tree</a></li>
+        <li><a href="elements-test-plan.html#4.3.1.2">4.3.1.2 Graph Full Results</a></li>
+        <li><a href="elements-test-plan.html#4.3.1.3">4.3.1.3 Graph Results</a></li>
+        <li><a href="elements-test-plan.html#4.3.1.4">4.3.1.4 Spline Visualizer</a></li>
+      </ul>
+      <li><a href="elements-test-plan.html#4.3.2">4.3.2 Managers</a></li>
+      <ul>
+        <li><a href="elements-test-plan.html#4.3.2.1">4.3.2.1 Modification Manager</a></li>
+      </ul>
+      <li><a href="elements-test-plan.html#4.3.3">4.3.3 Miscellaneous</a></li>
+      <ul>
+        <li><a href="elements-test-plan.html#4.3.3.1">4.3.3.1 Assertion Results</a></li>
+        <li><a href="elements-test-plan.html#4.3.3.2">4.3.3.2 File Reporter</a></li>
+        <li><a href="elements-test-plan.html#4.3.3.3">4.3.3.3 View Results</a></li>
+        <li><a href="elements-test-plan.html#4.3.3.4">4.3.3.4 View Result Tree</a></li>
+      </ul>
+    </ul>
+    <li><a href="elements-test-plan.html#4.4">4.4 Timers</a></li>
+    <ul>
+      <li><a href="elements-test-plan.html#4.4.1">4.4.1 Constant Timer</a></li>
+      <li><a href="elements-test-plan.html#4.4.2">4.4.2 Gaussian Random Timer</a></li>
+      <li><a href="elements-test-plan.html#4.4.3">4.4.3 Uniform Random Timer</a></li>
+    </ul>
+    <li><a href="elements-test-plan.html#4.5">4.5 Assertions</a></li>
+    <li><a href="elements-test-plan.html#4.6">4.6 Configuration Elements</a></li>
+    <ul>
+      <li><a href="elements-test-plan.html#4.6.1">4.6.1 FTP Sample</a></li>
+      <li><a href="elements-test-plan.html#4.6.2">4.6.2 Multipart-Form Sample</a></li>
+      <li><a href="elements-test-plan.html#4.6.3">4.6.3 Url Sample</a></li>
+      <li><a href="elements-test-plan.html#4.6.4">4.6.4 HTTP Authorization Manager Sample</a></li>
+      <li><a href="elements-test-plan.html#4.6.5">4.6.5 Cookie Manager</a></li>
+      <li><a href="elements-test-plan.html#4.6.6">4.6.6 Header Manager</a></li>
+      <li><a href="elements-test-plan.html#4.6.7">4.6.7 Proxy Server</a></li>
+      <li><a href="elements-test-plan.html#4.6.8">4.6.8 Database Login</a></li>
+      <li><a href="elements-test-plan.html#4.6.9">4.6.9 Database Connection Pool</a></li>
+      <li><a href="elements-test-plan.html#4.6.10">4.6.10 SQL Query</a></li>
+    </ul>
+  </ul>
+  <li><a href="build-web-test-plan.html">5. Building a Web Test Plan</a></li>
+  <li><a href="build-adv-web-test-plan.html">6. Building an Advanced Web Test Plan</a></li><!-- (uses most web elements: cookies,auth, etc.)-->
+  <li><a href="build-db-test-plan.html">7. Building a Database Test Plan</a></li>
+  <li><a href="build-ftp-test-plan.html">8. Building a FTP Test Plan</a></li>
+  <li><a href="remote-test.html">9. Remote Testing</a></li>
+  <li><a href="best-practices.html">10. Best Practices</a></li>
+  <ul>
+    <li><a href="best-practices.html#10.1">10.1 Limit the Number of Threads</a></li>
+    <li><a href="best-practices.html#10.2">10.2 Where to Put the Cookie Manager</a></li>
+    <li><a href="best-practices.html#10.3">10.3 Where to Put the Auth</a></li>
+  </ul>
+  <li><a href="boss.html">11. Help! My boss wants me to load test our web app!</a></li>
+  <li><a href="glossary.html">12. Glossary</a></li>
+</ul>
+
+</section>
+</body>
+</document>
+
