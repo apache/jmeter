@@ -61,6 +61,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -188,35 +189,62 @@ public class AuthManager
 
     public String getAuthHeaderForURL(URL url)
     {
-        if (isUnsupportedProtocol(url))
+        if (! isSupportedProtocol(url))
         {
             return null;
         }
 
-        StringBuffer header = new StringBuffer();
+		// TODO: replace all this url2 mess with a proper method "areEquivalent(url1, url2)" that
+		// would also ignore case in protocol and host names, etc. -- use that method in the CookieManager too.
+
+		URL url2= null;
+		
+		try
+        {
+            if (url.getPort() == -1)
+            {
+                // Obtain another URL with an explicit port:
+                int port= url.getProtocol().equalsIgnoreCase("http") ? 80 : 443;
+                // only http and https are supported
+                url2=
+                    new URL(
+                        url.getProtocol(),
+                        url.getHost(),
+                        port,
+                        url.getPath());
+            }
+            else if (
+                (url.getPort() == 80
+                    && url.getProtocol().equalsIgnoreCase("http"))
+                    || (url.getPort() == 443
+                        && url.getProtocol().equalsIgnoreCase("https")))
+            {
+                url2= new URL(url.getProtocol(), url.getHost(), url.getPath());
+            }
+        }
+        catch (MalformedURLException e)
+        {
+        	log.error("Internal error!", e); // this should never happen
+        	// anyway, we'll continue with url2 set to null.
+        }
+        
+        String s1= url.toString();
+        String s2= null;
+        if (url2 != null) s2= url2.toString();
+        
         for (PropertyIterator enum = getAuthObjects().iterator();
             enum.hasNext();
             )
         {
             Authorization auth = (Authorization) enum.next().getObjectValue();
-            if (url.toString().startsWith(auth.getURL()))
+            
+            if (s1.startsWith(auth.getURL()) || s2 != null && s2.startsWith(auth.getURL()))
             {
-                header.append(
-                    "Basic "
-                        + Base64Encoder.encode(
-                            auth.getUser() + ":" + auth.getPass()));
-                break;
+                return "Basic "
+                	+ Base64Encoder.encode(auth.getUser() + ":" + auth.getPass());
             }
         }
-
-        if (header.length() != 0)
-        {
-            return header.toString();
-        }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 
     public String getName()
@@ -333,9 +361,9 @@ public class AuthManager
         return getAuthObjects().size();
     }
 
-    private boolean isUnsupportedProtocol(URL url)
+    private boolean isSupportedProtocol(URL url)
     {
-        return !url.getProtocol().toUpperCase().equals("HTTP")
-            && !url.getProtocol().toUpperCase().equals("HTTPS");
+        return url.getProtocol().toUpperCase().equals("HTTP")
+            || url.getProtocol().toUpperCase().equals("HTTPS");
     }
 }
