@@ -9,15 +9,12 @@ import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
 
 /**
- * @author Administrator
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
+ * @version $Revision$
  */
-public abstract class AbstractPostProcessorGui extends AbstractJMeterGuiComponent
+public abstract class AbstractPostProcessorGui
+    extends AbstractJMeterGuiComponent
 {
-
-    public JPopupMenu createPopupMenu()
+   public JPopupMenu createPopupMenu()
    {
       return MenuFactory.getDefaultExtractorMenu();
    }
@@ -26,5 +23,4 @@ public abstract class AbstractPostProcessorGui extends AbstractJMeterGuiComponen
    {
       return Arrays.asList(new String[]{MenuFactory.POST_PROCESSORS});
    }
-
 }

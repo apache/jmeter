@@ -23,186 +23,187 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.log.Logger;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
+/**
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 public class JMeterTest extends TestCase
 {
-	private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.TEST);
+    private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.TEST);
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 *
-	 *@param name  !ToDo (Parameter description)
-	 ***************************************/
-	public JMeterTest(String name)
-	{
-		super(name);
-	}
+    public JMeterTest(String name)
+    {
+        super(name);
+    }
 
-	/****************************************
-	 * !ToDo
-	 *
-	 *@exception Exception  !ToDo (Exception description)
-	 ***************************************/
-	public void testGUIComponents() throws Exception
-	{
-		Iterator iter = getObjects(JMeterGUIComponent.class).iterator();
-		while(iter.hasNext())
-		{
-			JMeterGUIComponent item = (JMeterGUIComponent)iter.next();
-			if(item instanceof JMeterTreeNode)
-			{
-				continue;
-			}
-			assertEquals("Failed on " + item.getClass().getName(), 
-					item.getStaticLabel(), item.getName());
-			TestElement el = item.createTestElement();
-			assertEquals("GUI-CLASS: Failed on " + item.getClass().getName(), item.getClass().getName(),
-					el.getPropertyAsString(TestElement.GUI_CLASS));
-			assertEquals("NAME: Failed on " + item.getClass().getName(), item.getName(),
-					el.getPropertyAsString(TestElement.NAME));
-			assertEquals("TEST-CLASS: Failed on " + item.getClass().getName(),
-					el.getClass().getName(), el.getPropertyAsString(TestElement.TEST_CLASS));
+    public void testGUIComponents() throws Exception
+    {
+        Iterator iter = getObjects(JMeterGUIComponent.class).iterator();
+        while (iter.hasNext())
+        {
+            JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
+            if (item instanceof JMeterTreeNode)
+            {
+                continue;
+            }
+            assertEquals(
+                "Failed on " + item.getClass().getName(),
+                item.getStaticLabel(),
+                item.getName());
+            TestElement el = item.createTestElement();
+            assertEquals(
+                "GUI-CLASS: Failed on " + item.getClass().getName(),
+                item.getClass().getName(),
+                el.getPropertyAsString(TestElement.GUI_CLASS));
+            assertEquals(
+                "NAME: Failed on " + item.getClass().getName(),
+                item.getName(),
+                el.getPropertyAsString(TestElement.NAME));
+            assertEquals(
+                "TEST-CLASS: Failed on " + item.getClass().getName(),
+                el.getClass().getName(),
+                el.getPropertyAsString(TestElement.TEST_CLASS));
             TestElement el2 = item.createTestElement();
-			el.setProperty(TestElement.NAME, "hey, new name!:");
-			el.setProperty("NOT","Shouldn't be here");
-			if(!(item instanceof UnsharedComponent))
-			{
-				assertEquals("GUI-CLASS: Failed on " + item.getClass().getName(),"",
-						el2.getPropertyAsString("NOT"));
-			}
+            el.setProperty(TestElement.NAME, "hey, new name!:");
+            el.setProperty("NOT", "Shouldn't be here");
+            if (!(item instanceof UnsharedComponent))
+            {
+                assertEquals(
+                    "GUI-CLASS: Failed on " + item.getClass().getName(),
+                    "",
+                    el2.getPropertyAsString("NOT"));
+            }
             log.debug("Saving element: " + el.getClass());
-			el = SaveService.createTestElement(SaveService.getConfigForTestElement(null,
-					el));
+            el =
+                SaveService.createTestElement(
+                    SaveService.getConfigForTestElement(null, el));
             log.debug("Successfully saved");
-			item.configure(el);
-			assertEquals("CONFIGURE-TEST: Failed on " + item.getClass().getName(),
-					el.getPropertyAsString(TestElement.NAME), item.getName());
+            item.configure(el);
+            assertEquals(
+                "CONFIGURE-TEST: Failed on " + item.getClass().getName(),
+                el.getPropertyAsString(TestElement.NAME),
+                item.getName());
             item.modifyTestElement(el2);
-            assertEquals("Modify Test: Failed on " + item.getClass().getName(),"hey, new name!:",el2.getPropertyAsString(TestElement.NAME));
-		}
-	}
-	
-	public void testSerializableElements() throws Exception
-	{
-		Iterator iter = getObjects(Serializable.class).iterator();
-		while(iter.hasNext())
-		{
-			Serializable serObj = (Serializable)iter.next();
-			if(serObj.getClass().getName().endsWith("_Stub"))
-			{
-				continue;
-			}
-			try
-			{
-				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-				ObjectOutputStream out = new ObjectOutputStream(bytes);
-				out.writeObject(serObj);
-				out.close();
-				ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bytes.toByteArray()));
-				Object readObject = in.readObject();
-				in.close();
-				assertEquals("deserializing class: "+serObj.getClass().getName(),
-						serObj.getClass(),readObject.getClass());
-			}
-			catch (Exception e)
-			{
-				log.error("Trying to serialize object: "+serObj.getClass().getName(),
-						e);
-				throw e;
-			}
-		}
-	}
+            assertEquals(
+                "Modify Test: Failed on " + item.getClass().getName(),
+                "hey, new name!:",
+                el2.getPropertyAsString(TestElement.NAME));
+        }
+    }
 
-	/****************************************
-	 * !ToDo
-	 *
-	 *@exception Exception  !ToDo (Exception description)
-	 ***************************************/
-	public void testTestElements() throws Exception
-	{
-		Iterator iter = getObjects(TestElement.class).iterator();
-		while(iter.hasNext())
-		{
-			TestElement item = (TestElement)iter.next();
-			checkElementCloning(item);
-			assertTrue(item.getClass().getName()+" must implement Serializable",
-					item instanceof Serializable);
-		}
-	}
+    public void testSerializableElements() throws Exception
+    {
+        Iterator iter = getObjects(Serializable.class).iterator();
+        while (iter.hasNext())
+        {
+            Serializable serObj = (Serializable) iter.next();
+            if (serObj.getClass().getName().endsWith("_Stub"))
+            {
+                continue;
+            }
+            try
+            {
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                ObjectOutputStream out = new ObjectOutputStream(bytes);
+                out.writeObject(serObj);
+                out.close();
+                ObjectInputStream in =
+                    new ObjectInputStream(
+                        new ByteArrayInputStream(bytes.toByteArray()));
+                Object readObject = in.readObject();
+                in.close();
+                assertEquals(
+                    "deserializing class: " + serObj.getClass().getName(),
+                    serObj.getClass(),
+                    readObject.getClass());
+            }
+            catch (Exception e)
+            {
+                log.error(
+                    "Trying to serialize object: "
+                        + serObj.getClass().getName(),
+                    e);
+                throw e;
+            }
+        }
+    }
 
+    public void testTestElements() throws Exception
+    {
+        Iterator iter = getObjects(TestElement.class).iterator();
+        while (iter.hasNext())
+        {
+            TestElement item = (TestElement) iter.next();
+            checkElementCloning(item);
+            assertTrue(
+                item.getClass().getName() + " must implement Serializable",
+                item instanceof Serializable);
+        }
+    }
 
-	/****************************************
-	 * !ToDoo (Method description)
-	 *
-	 *@param extendsClass   !ToDo (Parameter description)
-	 *@return               !ToDo (Return description)
-	 *@exception Exception  !ToDo (Exception description)
-	 ***************************************/
-	protected Collection getObjects(Class extendsClass) throws Exception
-	{
-		Iterator classes = ClassFinder.findClassesThatExtend(
-				JMeterUtils.getSearchPaths(),
-				new Class[]{extendsClass}).iterator();
-		List objects = new LinkedList();
-		while(classes.hasNext())
-		{
-		    Class c= Class.forName((String)classes.next());
-		    try
-		    {
-			try
-			{
-			    // Try with a parameter-less constructor first
-			    objects.add(c.newInstance());
-			}
-			catch (InstantiationException e)
-			{
-			    try
-			    {
-			        // Events often have this constructor
-			        objects.add(c.getConstructor(
-				      new Class[] {Object.class}).newInstance(
-				      new Object[] {this} ));
-			    }
-			    catch (NoSuchMethodException f)
-			    {
-			        // no luck. Ignore this class
-			    }
-			}
-		    }
-		    catch (IllegalAccessException e)
-		    {
-		      // We won't test serialization of restricted-access
-		      // classes.
-		    }
-		}
-		return objects;
-	}
+    protected Collection getObjects(Class extendsClass) throws Exception
+    {
+        Iterator classes =
+            ClassFinder
+                .findClassesThatExtend(
+                    JMeterUtils.getSearchPaths(),
+                    new Class[] { extendsClass })
+                .iterator();
+        List objects = new LinkedList();
+        while (classes.hasNext())
+        {
+            Class c = Class.forName((String) classes.next());
+            try
+            {
+                try
+                {
+                    // Try with a parameter-less constructor first
+                    objects.add(c.newInstance());
+                }
+                catch (InstantiationException e)
+                {
+                    try
+                    {
+                        // Events often have this constructor
+                        objects.add(
+                            c.getConstructor(
+                                new Class[] { Object.class }).newInstance(
+                                new Object[] { this }));
+                    }
+                    catch (NoSuchMethodException f)
+                    {
+                        // no luck. Ignore this class
+                    }
+                }
+            }
+            catch (IllegalAccessException e)
+            {
+                // We won't test serialization of restricted-access
+                // classes.
+            }
+        }
+        return objects;
+    }
 
-	private void cloneTesting(TestElement item, TestElement clonedItem)
-	{
-		assertTrue(item != clonedItem);
-		assertEquals("CLONE-SAME-CLASS: testing " + item.getClass().getName(),
-				item.getClass().getName(), clonedItem.getClass().getName());
-	}
+    private void cloneTesting(TestElement item, TestElement clonedItem)
+    {
+        assertTrue(item != clonedItem);
+        assertEquals(
+            "CLONE-SAME-CLASS: testing " + item.getClass().getName(),
+            item.getClass().getName(),
+            clonedItem.getClass().getName());
+    }
 
-	private void checkElementCloning(TestElement item)
-	{
-		TestElement clonedItem = (TestElement)item.clone();
-		cloneTesting(item, clonedItem);
-		PropertyIterator iter2 = item.propertyIterator();
-		while(iter2.hasNext())
-		{
-			JMeterProperty item2 = iter2.next();
-			assertEquals(item2,clonedItem.getProperty(item2.getName()));
+    private void checkElementCloning(TestElement item)
+    {
+        TestElement clonedItem = (TestElement) item.clone();
+        cloneTesting(item, clonedItem);
+        PropertyIterator iter2 = item.propertyIterator();
+        while (iter2.hasNext())
+        {
+            JMeterProperty item2 = iter2.next();
+            assertEquals(item2, clonedItem.getProperty(item2.getName()));
             assertTrue(item2 != clonedItem.getProperty(item2.getName()));
-		}
-	}
-
+        }
+    }
 }
