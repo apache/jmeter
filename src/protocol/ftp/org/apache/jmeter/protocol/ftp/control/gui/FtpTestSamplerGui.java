@@ -112,6 +112,7 @@ public class FtpTestSamplerGui extends AbstractSamplerGui
      */
     public void modifyTestElement(TestElement sampler)
     {
+        sampler.clear();
         ((FTPSampler)sampler).addTestElement(ftpDefaultPanel.createTestElement());
         ((FTPSampler)sampler).addTestElement(loginPanel.createTestElement());
         this.configureTestElement(sampler);
