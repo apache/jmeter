@@ -42,7 +42,7 @@ public class PackageTest extends TestCase
         variables.put("my_regex", ".*");
         variables.put("server", "jakarta.apache.org");
         result = new SampleResult();
-        result.setResponseData("<html>hello world</html>".getBytes());
+        result.setResponseData("<html>hello world</html> costs: $3.47,$5.67".getBytes());
         transformer = new ReplaceStringWithFunctions(new CompoundVariable(), variables);
         JMeterContextService.getContext().setSamplingStarted(true);
         JMeterContextService.getContext().setPreviousResult(result);
@@ -125,6 +125,33 @@ public class PackageTest extends TestCase
         assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
         assertEquals("html", newProp.getStringValue());
     }
+    
+    public void testParseExample8() throws Exception
+        {
+            StringProperty prop = new StringProperty("html", "${__regexFunction((\\\\$\\d+\\.\\d+),$1$)}");
+            JMeterProperty newProp = transformer.transformValue(prop);
+            newProp.setRunningVersion(true);
+            assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
+            assertEquals("$3.47", newProp.getStringValue());
+        }
+        
+    public void testParseExample9() throws Exception
+            {
+                StringProperty prop = new StringProperty("html", "${__regexFunction(([$]\\d+\\.\\d+),$1$)}");
+                JMeterProperty newProp = transformer.transformValue(prop);
+                newProp.setRunningVersion(true);
+                assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
+                assertEquals("$3.47", newProp.getStringValue());
+            }
+            
+    public void testParseExample10() throws Exception
+                {
+                    StringProperty prop = new StringProperty("html", "${__regexFunction(\\ (\\\\\\$\\d+\\.\\d+\\,\\\\$\\d+\\.\\d+),$1$)}");
+                    JMeterProperty newProp = transformer.transformValue(prop);
+                    newProp.setRunningVersion(true);
+                    assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", newProp.getClass().getName());
+                    assertEquals("$3.47,$5.67", newProp.getStringValue());
+                }
 
     public void testNestedExample1() throws Exception
     {
