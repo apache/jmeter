@@ -313,7 +313,6 @@ public abstract class AbstractProperty implements JMeterProperty
 
     public boolean equals(Object o)
     {
-        log.debug("Testing whether " + this + " is equal to " + o);
         return compareTo(o) == 0;
     }
 
