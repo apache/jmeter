@@ -129,10 +129,13 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 			rampUpDelay();
 			log.info("Thread "+Thread.currentThread().getName()+" started");
 			while (running) {
-				notifyThreadListeners();
 				while (controller.hasNext() && running) {
 					try
 					{
+						if(controller.isNextFirst())
+						{
+							notifyThreadListeners();
+						}
 						SamplePackage pack = compiler.configureSampler(controller.next());
 						delay(pack.getTimers());
 						SampleResult result = pack.getSampler().sample(null);

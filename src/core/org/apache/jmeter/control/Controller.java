@@ -92,4 +92,11 @@ public interface Controller extends TestElement
 	 * of the test.
 	 */
 	public boolean isDone();
+	
+	/**
+	 * By using this method, one can ask the controller if the next Sampler is the
+	 * first in the Controller's list.
+	 * @return boolean
+	 */
+	public boolean isNextFirst();
 }

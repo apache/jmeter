@@ -145,6 +145,11 @@ public class ThreadGroup extends AbstractTestElement implements SampleListener,
 	{
 		setProperty(RAMP_TIME,new Integer(rampUp));
 	}
+	
+	public boolean isNextFirst()
+	{
+		return getSamplerController().isNextFirst();
+	}
 
 	/****************************************
 	 * !ToDoo (Method description)
