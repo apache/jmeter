@@ -109,8 +109,11 @@ public class FileRowColContainer
         {
         	fileData = null;
 			log.warn(e.toString());
-			myBread.close();
             throw e;
+        }
+        finally
+        {
+			if (myBread != null) myBread.close();
         }
 	}
 
