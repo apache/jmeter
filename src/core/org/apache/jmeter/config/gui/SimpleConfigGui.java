@@ -77,11 +77,9 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
     private boolean displayName = true;
 
     /** The names of the columns in the table. */
-    public static final String[] COLUMN_NAMES = {
-        JMeterUtils.getResString("name"),
-        JMeterUtils.getResString("value"),
-        JMeterUtils.getResString("metadata")
-    };
+    private static final String COLUMN_NAMES_0 = JMeterUtils.getResString("name");
+    private static final String COLUMN_NAMES_1 = JMeterUtils.getResString("value");
+    //NOTUSED private static final String COLUMN_NAMES_2 = JMeterUtils.getResString("metadata");
 
     /**
      * Create a new standalone SimpleConfigGui.
@@ -158,8 +156,8 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
         {
             el.setProperty(
                 new StringProperty(
-                    (String) model.getColumnValue(COLUMN_NAMES[0]),
-                    (String) model.getColumnValue(COLUMN_NAMES[1])));
+                    (String) model.getColumnValue(COLUMN_NAMES_0),
+                    (String) model.getColumnValue(COLUMN_NAMES_1)));
         }
         super.configureTestElement(el);
     }
@@ -212,7 +210,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
     {
         tableModel =
             new PowerTableModel(
-                new String[] { COLUMN_NAMES[0], COLUMN_NAMES[1] },
+                new String[] { COLUMN_NAMES_0, COLUMN_NAMES_1 },
                 new Class[] { String.class, String.class });
             
         table = new JTable(tableModel);
