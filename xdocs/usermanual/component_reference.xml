@@ -324,35 +324,85 @@ is configured to store the results in a file named "simple-test.dat" in the curr
 <subsection name="13.3 Listeners" anchor="listeners">
 
 <component index="13.3.1" name="View Graph Tree" screenshot="">
-<description></description>
+<description>No Description</description>
 </component>
 
-<component index="13.3.2" name="Graph Full Results" screenshot="../images/screenshots/graph_full_results.gif">
-<description></description>
+<component index="13.3.2" name="Graph Full Results" screenshot="">
+<description>No Description</description>
 </component>
 
-<component index="13.3.3" name="Graph Results" screenshot="">
-<description></description>
+<component index="13.3.3" name="Graph Results" screenshot="../images/screenshots/graph_results.gif">
+<description><p>The Graph Results listener generates a simple graph that plots all sample times.  Along
+the right side of the graph, the current sample (black), the current average of all samples(blue), and the
+current standard deviation (red) are displayed in milliseconds.</p></description>
 </component>
 
-<component index="13.3.4" name="Spline Visualizer" screenshot="">
-<description></description>
+<component index="13.3.4" name="Spline Visualizer" screenshot="../images/screenshots/spline_visualizer.gif">
+<description><p>The Spline Visualizer provides a view of all sample times from the start
+of the test till the end, regardless of how many samples have been taken.  The spline
+has 10 points, each representing 10% of the samples, and connected using spline
+logic to show a single continuous line.</p></description>
 </component>
 
 <component index="13.3.5" name="Assertion Results" screenshot="../images/screenshots/assertion_results.gif">
-<description></description>
+<description><p>The Assertion Results visualizer shows the URL of each sample taken (no time information
+is shown).  It also reports failures of any <a href="test_plan.html#assertions">Assertions</a> that
+are part of the test plan.</p></description>
+
+<links>
+	<complink name="Basic Assertion"/>
+</links>
 </component>
 
 <component index="13.3.6" name="File Reporter" screenshot="../images/screenshots/file_reporter.gif">
-<description></description>
+<description>The File Reporter records sample data to a file.</description>
+
+<properties>
+	<property name="Filename" required="Yes">Name of file to save samples to.</property>
+	<property name="Append to Existing Data File" required="No">If yes, then data is appended to the
+	end of the file.  If no, then JMeter erases the previous contents of the file when you hit "Open".</property>
+	<property name="Automatically Flush Data After Each Sample" required="No">Normally, the file is
+	not written continuously.  If selected, each sample will be written to the file as it comes in.</property>
+	<property name="Verbose Output" required="No">Sample Verbose Output:
+	<blockquote><pre>
+# Sample data created by null
+
+#       URL                    Milliseconds
+
+http://jakarta.apache.org/ 1650,
+http://jakarta.apache.org/ 1920,
+http://jakarta.apache.org/ 1200,
+http://jakarta.apache.org/ 1650,
+http://jakarta.apache.org/ 1700,
+http://jakarta.apache.org/ 1980,</pre></blockquote>
+Sample Non-Verbose Output:
+<blockquote><pre>4440
+4830
+6540
+5550
+3080
+3350</pre></blockquote></property>
+	<property name="Include Submitted Data" required="No">This will include all data JMeter sent
+	with the request, beyond the URL (ie POSTed data for web testing, SQL statements for
+	database testing).</property>
+	<property name="Open" required="Yes (in a sense)">Until you hit "Open", no sample data will be
+	recorded.  Normally, you would do this before starting the test.</property>
+	<property name="Flush" required="No">Sends all data collected to the file.  If "Automatically Flush Data After Each Sample"
+	was selected, this is unnecessary.</property>
+	<property name="Close" required="No">Closes the file, flushing all collected data at the same time.</property>
+</properties>
 </component>
 
 <component index="13.3.7" name="View Results" screenshot="../images/screenshots/view_results.gif">
-<description></description>
+<description>The View Results visualizer displays the response from the server.  No time information
+is given.  Hit the "Next" button to view the next sample response.  Consider using the
+<complink name="View Result_Tree"/> instead.</description>
 </component>
 
 <component index="13.3.8" name="View Result Tree" screenshot="../images/screenshots/view_result_tree.gif">
-<description></description>
+<description>The View Results Tree shows a tree of all sample responses, allowing you to view the
+response for any sample.  In addition to showing the response, you can see the time it took to get
+this response, and some response codes.</description>
 </component>
 
 </subsection>
