@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,14 +52,13 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- 
 package org.apache.jmeter.control;
 
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 
-/****************************************
+/**
  * This interface will typically be used in the following manner:
  *
  * Controller controller;  //gets initialized
@@ -69,36 +68,34 @@ import org.apache.jmeter.testelement.TestElement;
  *    return sampler;
  * }
  *
- *@author    Michael Stover
- *@author    Thad Smith
- *@created   $Date$
- *@version   1.0
- ***************************************/
+ * @author    Michael Stover
+ * @author    Thad Smith
+ * @version   $Revision$
+ */
 public interface Controller extends TestElement
-{
-   
-	/**
-	 * Delivers the next Sampler.
-	 * @return org.apache.jmeter.samplers.Sampler
-	 */
-	public Sampler next();
+{ 
+    /**
+     * Delivers the next Sampler.
+     * @return org.apache.jmeter.samplers.Sampler
+     */
+    public Sampler next();
 
-	/**
-	 * Indicates whether the Controller is done delivering Samplers for 
-	 * the rest of the test.
-	 * @return boolean
-	 */
-	public boolean isDone();
+    /**
+     * Indicates whether the Controller is done delivering Samplers for 
+     * the rest of the test.
+     * @return boolean
+     */
+    public boolean isDone();
 
-	/**
-	 * Controllers have to notify listeners of when they begin an iteration
-	 * through their sub-elements.
-	 */
-	public void addIterationListener(LoopIterationListener listener);
+    /**
+     * Controllers have to notify listeners of when they begin an iteration
+     * through their sub-elements.
+     */
+    public void addIterationListener(LoopIterationListener listener);
 
-	/**
-	 * Called to initialize a controller at the beginning of a test
-	 * iteration.
-	 */
-	public void initialize();
+    /**
+     * Called to initialize a controller at the beginning of a test
+     * iteration.
+     */
+    public void initialize();
 }
