@@ -55,6 +55,7 @@
 package org.apache.jmeter.visualizers;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -70,6 +71,7 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -330,9 +332,11 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 		log.debug("Start : init1");
 		SampleResult rootSampleResult = new SampleResult();
 		rootSampleResult.setSampleLabel("Root");
+		rootSampleResult.setSuccessful(true);
 		root = new DefaultMutableTreeNode(rootSampleResult);
 		treeModel = new DefaultTreeModel(root);
 		jTree = new JTree(treeModel);
+		jTree.setCellRenderer(new ResultsNodeRenderer());
 		jTree.getSelectionModel().setSelectionMode(
 				TreeSelectionModel.SINGLE_TREE_SELECTION);
 		jTree.addTreeSelectionListener(this);
@@ -346,6 +350,26 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements
 		add(getFilePanel(),BorderLayout.NORTH);
 		add(treeSplitPane,BorderLayout.CENTER);
 		log.debug("End : init1");
+	}
+	
+	private class ResultsNodeRenderer extends DefaultTreeCellRenderer
+	{
+		public Component getTreeCellRendererComponent(JTree tree,
+															 Object value,
+															 boolean sel,
+															 boolean expanded,
+															 boolean leaf,
+															 int row,
+															 boolean hasFocus)
+		{
+			super.getTreeCellRendererComponent(tree,value,
+					sel,expanded,leaf,row,hasFocus);
+			if(!((SampleResult)((DefaultMutableTreeNode)value).getUserObject()).isSuccessful())
+			{
+				this.setForeground(Color.RED);
+			}
+			return this;
+		}
 	}
 }
 
