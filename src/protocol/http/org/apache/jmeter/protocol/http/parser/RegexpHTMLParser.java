@@ -141,7 +141,7 @@ class RegexpHTMLParser extends HTMLParser
             + "|BASE"+SEP+"HREF"+VALUE
             + "|(?:IMG|SCRIPT|FRAME|IFRAME)"+SEP+"SRC"+VALUE
             + "|APPLET"+SEP+"CODE(?:BASE)?"+VALUE
-            + "|(?:EMBED|OBJECT)"+SEP+"(?:SRC|xxxxxxCODEBASE)"+VALUE//URGENT:UNDO THIS!!
+            + "|(?:EMBED|OBJECT)"+SEP+"(?:SRC|CODEBASE)"+VALUE
             + "|(?:BODY|TABLE|TR|TD)"+SEP+"BACKGROUND"+VALUE
             + "|INPUT(?:"+SEP+"(?:SRC"+VALUE+"|TYPE\\s*=\\s*(?:\"image\"|'image'|image(?=[\\s>])))){2,}"
             + "|LINK(?:"+SEP+"(?:HREF"+VALUE+"|REL\\s*=\\s*(?:\"stylesheet\"|'stylesheet'|stylesheet(?=[\\s>])))){2,}"
@@ -274,7 +274,6 @@ class RegexpHTMLParser extends HTMLParser
                 {
                     try
                     {
-                        if (s.endsWith("/p.gif")) continue;//URGENT:UNDO THIS!
                         urls.add(new URL(baseUrl, s));
                     }
                     catch (MalformedURLException e)
