@@ -127,7 +127,13 @@
 	</target>
 
 	<target name="rmi" depends="compile">
-	  <rmic classpath="bin/classes" base="bin/classes" classname="org.apache.jmeter.engine.RemoteJMeterEngineImpl"/>
+	  <rmic base="bin/classes" classname="org.apache.jmeter.engine.RemoteJMeterEngineImpl">
+	  	<classpath>
+	  		<path refid="classpath"/>      
+	  		<pathelement path="bin/classes"/>
+	  	</classpath>
+	  </rmic>
+	  	
 	  <rmic classpath="bin/classes" base="bin/classes" classname="org.apache.jmeter.samplers.RemoteSampleListenerImpl"/>
 	</target>
 
@@ -161,7 +167,7 @@
 		</fileset>
 	  </copy>
 
-	  <jar jarfile="ApacheJMeter.jar" manifest="src/MANIFEST" basedir="${classes.dest.dir}"/>
+	  <jar jarfile="ApacheJMeter.jar" manifest="${sources.src.dir}/MANIFEST" basedir="${classes.dest.dir}"/>
 	</target>
 
 	<!--
