@@ -25,8 +25,10 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.LinkedList;
 
+import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.functions.InvalidVariableException;
+import org.apache.jmeter.testelement.TestListener;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -137,6 +139,9 @@ class FunctionParser
                         if(reader.read(current) == 0 || current[0] != '}')
                         {
                             throw new InvalidVariableException();
+                        }
+                        if (function instanceof TestListener){
+                        	StandardJMeterEngine.register((TestListener)function);
                         }
                         return function;
                     }
