@@ -42,19 +42,19 @@ JMeter assumes the FTP server is listening on the default port.</property>
 	also lets you control whether or not JMeter parses HTML files for images and
 	Java applets and sends HTTP requests to retrieve them.</p>
 	<p>If you are going to send multiple requests to the same web server, consider
-	using an <a href="http-config.html#request_defaults">HTTP Request Defaults</a>
+	using an <complink name="HTTP Request Defaults"/>
 	Configuration Element so you do not have to enter the same information for each
 	HTTP Request controller.</p>
 
 	<p>Or, instead of manually adding HTTP Request controllers, you may want to use
-	JMeter's <a href="http-config.html#proxy_server">HTTP Proxy Server</a> to create
+	JMeter's <complink name="HTTP Proxy Server"/> to create
 	them.  This can save you time if you have a lot of HTTP requests or requests with many
 	parameters.</p>
 
 	<p>If the request requires a login authorization, you will also have to add an
-	<a href="http-config.html#auth_manager">HTTP Authorization Manager</a>
+	<complink name="HTTP Authorization Manager"/>
 	Configuration Element. And, if the request uses cookies, then you will also need an
-	<a href="http-config.html#cookie_manager">HTTP Cookie Manager</a>.  You can
+	<complink name="HTTP Cookie Manager"/>.  You can
 	add either of these elements to the Thread Group or the HTTP Request.  If you have
 	more than one HTTP Request that needs authorizations or cookies, then add the
 	elements to the Thread Group.  That way, all HTTP Request controllers will share the
@@ -92,15 +92,15 @@ and send HTTP/HTTPS requests for all images and Java applets referenced in the f
 </properties>
 
 <links>
-	<link href="assertion.html">Assertion</link>
+	<link href="test_plan.html#assertions">Assertion</link>
 	<link href="build-web-test-plan.html">Building a Web Test Plan</link>
 	<link href="build-adv-web-test-plan.html">Building an Advanced Web Test Plan</link>
-	<link href="http-config.html#auth_manager">HTTP Authorization Manager</link>
-	<link href="http-config.html#cookie_manager">HTTP Cookie Manager</link>
-	<link href="http-config.html#header_manager">HTTP Header Manager</link>
-	<link href="http-config.html#html_link_parser">HTTP HTML Link Parser</link>
-	<link href="http-config.html#proxy_server">HTTP Proxy Server</link>
-	<link href="http-config.html#request_defaults">HTTP Request Defaults</link>
+	<complink name="HTTP Authorization Manager"/>
+	<complink name="HTTP Cookie Manager"/>
+	<complink name="HTTP Header Manager"/>
+	<complink name="HTML Link Parser"/>
+	<complink name="HTTP Proxy Server"/>
+	<complink name="HTTP Request Defaults"/>
 	<link href="build-adv-web-test-plan.html#url_rewriting">HTTP Requests and Session ID's: URL Rewriting</link>
 </links>
 
@@ -111,9 +111,9 @@ and send HTTP/HTTPS requests for all images and Java applets referenced in the f
 <description><p>This controller lets you send an JDBC Request (an SQL query) to a database.</p>
 <p>If you are going to send multiple requests to the same database, consider
 using one or more of the Defaults Configuration Elements:
-<a href="jdbc-config.html#login">Login</a>,
-<a href="jdbc-config.html#conn_pool">Connection Pool</a>,
-<a href="jdbc-config.html#sql_query">SQL Query</a>.
+<complink name="JDBC Database Login Defaults"/>,
+<complink name="JDBC Database Connection Pool Defaults"/>,
+<complink name="JDBC SQL Query Defaults"/>.
 This way, you do not have to enter the same information for each JDBC Request
 controller.</p></description>
 
@@ -137,11 +137,11 @@ a new instance).</property>
 </properties>
 
 <links>
-	<link href="assertion.html">Assertion</link>
+	<link href="test_plan.html#assertions">Assertion</link>
 	<link href="build-db-test-plan.html">Building a Database Test Plan</link>
-	<link href="jdbc-config.html#login">JDBC Database Login Defaults</link>
-	<link href="jdbc-config.html#conn_pool">JDBC Database Connection Pool Defaults</link>
-	<link href="jdbc-config.html#sql_query">JDBC SQL Query Defaults</link>
+	<complink name="JDBC Database Login Defaults"/>
+	<complink name="JDBC Database Connection Pool Defaults"/>
+	<complink name="JDBC SQL Query Defaults"/>
 </links>
 
 </component>
@@ -266,7 +266,7 @@ based Modifiers (there is one HTML response based Modifier).</p>
 </description>
 
 <links>
-	<link href="#html_link_parser">HTML Link Parser</link>
+	<complink name="HTML Link Parser"/>
 </links>
 </component>
 
@@ -698,9 +698,9 @@ is the sum of the random value and the offset value.</p></description>
 
 <properties>
 	<property name="Name" required="No">Descriptive name for this timer that is shown in the tree. </property>
-  <property name="Random Delay Maximum" required="No">Maxium random number of milliseconds to
+  <property name="Random Delay Maximum" required="Yes">Maxium random number of milliseconds to
 pause.</property>
-  <property name="Constant Delay Offset" required="No">Numer of milliseconds to pause in addition
+  <property name="Constant Delay Offset" required="Yes">Numer of milliseconds to pause in addition
 to the random delay.</property>
 </properties>
 
