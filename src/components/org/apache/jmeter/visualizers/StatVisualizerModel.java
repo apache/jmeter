@@ -52,14 +52,12 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-package org.apache.jmeter.visualizers;// java
-import java.util.*;// apache
+package org.apache.jmeter.visualizers; // java
+import java.util.*; // apache
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
-
-
 /****************************************
  * Title: StatVisualizerModel.java Description: Aggregrate Table-Based Reporting
  * Model for JMeter Props to the people who've done the other visualizers ahead
@@ -71,88 +69,71 @@ import org.apache.jmeter.util.JMeterUtils;
  *@created   March 21, 2002
  *@version   1.0
  ***************************************/
-
 public class StatVisualizerModel implements Clearable
 {
-
 	private String name;
-
 	private List listeners;
 	private Map labelMap;
-
 	/****************************************
 	 * Default Constuctor
 	 ***************************************/
-
 	public StatVisualizerModel()
 	{
 		listeners = new LinkedList();
 		labelMap = Collections.synchronizedMap(new HashMap(10));
 	}
-
 	/****************************************
 	 * Sets the Name attribute of the StatVisualizerModel object
 	 *
 	 *@param name  The new Name value
 	 ***************************************/
-
 	public void setName(String name)
 	{
-
 		this.name = name;
-
 	}
-
 	/****************************************
 	 * Returns the Map containing the Samples we've collected and their
 	 * corresponding RunningSample instance.
 	 *
 	 *@return   The URLStats value
 	 ***************************************/
-
 	public Map getURLStats()
 	{
-
 		return (labelMap);
 	}
-
 	/****************************************
 	 * Gets the GuiClass attribute of the StatVisualizerModel object
 	 *
 	 *@return   The GuiClass value
 	 ***************************************/
-
 	public Class getGuiClass()
 	{
-
 		return StatVisualizer.class;
 	}
-
-
-
 	/****************************************
 	 * Gets the Name attribute of the StatVisualizerModel object
 	 *
 	 *@return   The Name value
 	 ***************************************/
-
 	public String getName()
 	{
 		return name;
 	}
-
 	/****************************************
 	 * Registers a listener (a visualizer, graph, etc) to this model. This will
 	 * allow the model to fire GUI updates to anyone when data changes, etc.
 	 *
 	 *@param listener       !ToDo
 	 ***************************************/
-
 	public void addGraphListener(GraphListener listener)
 	{
 		listeners.add(listener);
 	}
-
+	
+	public void addAccumListener(AccumListener listener)
+	{
+		listeners.add(listener);
+	}
 	/****************************************
 	 * !ToDo
 	 *
@@ -163,10 +144,9 @@ public class StatVisualizerModel implements Clearable
 		String aLabel = res.getSampleLabel();
 		String responseCode = res.getResponseCode();
 		RunningSample myRS;
-
 		if (labelMap.containsKey(aLabel))
 		{
-			myRS = (RunningSample)labelMap.get(aLabel);
+			myRS = (RunningSample) labelMap.get(aLabel);
 		}
 		else
 		{
@@ -174,22 +154,18 @@ public class StatVisualizerModel implements Clearable
 			myRS = new RunningSample();
 			labelMap.put(aLabel, myRS);
 		}
-
 		myRS.addSample(res);
-		this.fireDataChanged();
+		this.fireDataChanged(myRS);
 	}
-
 	/****************************************
 	 * Reset everything we can in the model.
 	 ***************************************/
-
 	public void clear()
 	{
 		// clear the data structures
 		labelMap.clear();
 		this.fireDataChanged();
 	}
-
 	/****************************************
 	 * Called when the model changes - then we call out to all registered listeners
 	 * and tell them to update themselves.
@@ -197,16 +173,28 @@ public class StatVisualizerModel implements Clearable
 	protected void fireDataChanged()
 	{
 		Iterator iter = listeners.iterator();
-		while(iter.hasNext())
+		while (iter.hasNext())
 		{
 			Object myObj = iter.next();
-			if(!(myObj instanceof GraphListener))
+			if (!(myObj instanceof GraphListener))
 			{
 				continue;
 			}
-			((GraphListener)myObj).updateGui();
+			((GraphListener) myObj).updateGui();
 		}
 	}
-
+	
+	protected void fireDataChanged(RunningSample s)
+	{
+		Iterator iter = listeners.iterator();
+		while (iter.hasNext())
+		{
+			Object myObj = iter.next();
+			if (!(myObj instanceof AccumListener))
+			{
+				continue;
+			}
+			((AccumListener) myObj).updateGui(s);
+		}
+	}
 }
-
