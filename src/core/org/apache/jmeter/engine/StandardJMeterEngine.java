@@ -266,6 +266,11 @@ public class StandardJMeterEngine
         SearchByClass testPlan = new SearchByClass(TestPlan.class);
         getTestTree().traverse(testPlan);
         Object[] plan = testPlan.getSearchResults().toArray();
+        if (plan.length == 0){
+			System.err.println("Could not find the TestPlan!");
+        	log.error("Could not find the TestPlan!");
+        	System.exit(1);
+        }
         if (((TestPlan) plan[0]).isSerialized())
         {
             serialized = true;
