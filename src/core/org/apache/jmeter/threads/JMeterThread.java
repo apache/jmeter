@@ -280,8 +280,10 @@ public class JMeterThread implements Runnable, java.io.Serializable
                         //Hack: save the package for any transaction controllers
                         threadContext.getVariables().putObject(PACKAGE_OBJECT,pack);
                         
-                        delay(pack.getTimers());                        
-                        SampleResult result = pack.getSampler().sample(null);
+                        delay(pack.getTimers());
+                        Sampler sampler= pack.getSampler();
+                        if (sampler instanceof TestBean) ((TestBean)sampler).prepare();               
+                        SampleResult result = sampler.sample(null); // TODO: remove this useless Entry parameter
                         result.setThreadName(threadName);
                         threadContext.setPreviousResult(result);
                         runPostProcessors(pack.getPostProcessors());
@@ -349,12 +351,13 @@ public class JMeterThread implements Runnable, java.io.Serializable
         Iterator iter = assertions.iterator();
         while (iter.hasNext())
         {
-            AssertionResult assertion =
-                ((Assertion) iter.next()).getResult(result);
+        	Assertion assertion= (Assertion)iter.next();
+        	if (assertion instanceof TestBean) ((TestBean)assertion).prepare();
+            AssertionResult assertionResult = assertion.getResult(result);
             result.setSuccessful(
                 result.isSuccessful()
-                    && !(assertion.isError() || assertion.isFailure()));
-            result.addAssertionResult(assertion);
+                    && !(assertionResult.isError() || assertionResult.isFailure()));
+            result.addAssertionResult(assertionResult);
         }
     }
 
@@ -364,6 +367,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
         while (iter.hasPrevious())
         {
             PostProcessor ex = (PostProcessor) iter.previous();
+            if (ex instanceof TestBean) ((TestBean)ex).prepare();
             ex.process();
         }
     }
