@@ -42,12 +42,11 @@ import org.apache.log.Logger;
  * because JMeter is now too dumb to handle File objects (there's no
  * FileProperty).
  * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision$ updated on $Date$
  */
 public class FileEditor implements PropertyEditor, ActionListener
 {
-	protected static Logger log= LoggingManager.getLoggerForClass();
+	private static final Logger log= LoggingManager.getLoggerForClass();
 
     /**
 	 * The editor's panel.
@@ -57,7 +56,7 @@ public class FileEditor implements PropertyEditor, ActionListener
 	/**
 	 * The editor handling the text field inside:
 	 */
-	PropertyEditor editor;
+	private PropertyEditor editor;
 
     public FileEditor()
     {
