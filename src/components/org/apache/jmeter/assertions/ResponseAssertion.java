@@ -22,7 +22,6 @@ import java.util.ArrayList;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -59,9 +58,9 @@ public class ResponseAssertion
     * Mask values for TEST_TYPE
     * TODO: remove either MATCH or CONTAINS - they are mutually exckusive 
     */
-   public final static int MATCH = 1 << 0;
-   public final static int CONTAINS = 1 << 1;
-   public final static int NOT = 1 << 2;
+   private final static int MATCH = 1 << 0;
+   private final static int CONTAINS = 1 << 1;
+   private final static int NOT = 1 << 2;
 
    private static ThreadLocal matcher = new ThreadLocal()
    {
