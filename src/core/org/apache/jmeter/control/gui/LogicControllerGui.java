@@ -53,12 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control.gui;
-import java.awt.Font;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
+import javax.swing.BorderFactory;
 
 import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.testelement.TestElement;
@@ -114,25 +109,10 @@ public class LogicControllerGui extends AbstractControllerGui
 
 	private void init()
 	{
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("logic_controller_title"));
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
-
-		// NAME
-		mainPanel.add(getNamePanel());
-
-		this.add(mainPanel);
+		add(createTitleLabel());
+		add(getNamePanel());
 	}
 }
