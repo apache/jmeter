@@ -452,7 +452,7 @@ misnomer in this case.</p>
 </pre>
 </code></p>
 <p>
-The date format to be used for the timestamp is described in <A
+The date format to be used for the timestamp_format is described in <A
 HREF="http://java.sun.com/j2se/1.4/docs/api/java/text/SimpleDateFormat.html">
 <B>SimpleDateFormat</B></A>.
 Bear in mind that choosing a date format other than "ms" is likely to
@@ -543,10 +543,16 @@ request, it totals the response information and provides request count, min, max
 idealized throughput calculation.</description>
 </component>
 
-<component index="13.3.7" name="View Results in Table" screenshot="../images/screenshots/table_results.gif">
+<component index="13.3.8" name="View Results in Table" screenshot="../images/screenshots/table_results.gif">
 <description>This visualizer creates a row for every sample result.  Each sample result's URL,
 time in milliseconds, success/failure is displayed.  Like the <complink name="View Results Tree"/>,
 this visualizer uses a lot of memory.</description>
+</component>
+
+<component index="13.3.9" name="Simple Data Writer" screenshot="">
+<description>This listener can record results to a file
+but not to the UI.  It is meant to provide an efficient means of
+recording data by eliminating GUI overhead.</description>
 </component>
 
 </section>
