@@ -111,7 +111,7 @@ public class FileDialoger
 		int retVal = jfc.showOpenDialog(GuiPackage.getInstance().getMainFrame());
 		lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
 
-		if(retVal == jfc.APPROVE_OPTION)
+		if(retVal == JFileChooser.APPROVE_OPTION)
 		{
 			return jfc;
 		}
@@ -175,7 +175,7 @@ public class FileDialoger
 
 		int retVal = jfc.showSaveDialog(GuiPackage.getInstance().getMainFrame());
 		lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
-		if(retVal == jfc.APPROVE_OPTION)
+		if(retVal == JFileChooser.APPROVE_OPTION)
 		{
 			return jfc;
 		}

@@ -448,7 +448,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener,Foc
 
 			main.setLayout(g);
 			GridBagConstraints c = new GridBagConstraints();
-			c.fill = c.BOTH;
+			c.fill = GridBagConstraints.BOTH;
 			c.gridwidth = 1;
 			c.gridheight = 1;
 			JLabel nameLabel = new JLabel(JMeterUtils.getResString("name") + ":");

@@ -265,7 +265,7 @@ class graphPanel extends JPanel
         GridBagConstraints c = new GridBagConstraints();
 
         c.insets = new Insets(3, 3, 3, 3);
-        c.fill = c.BOTH;
+        c.fill = GridBagConstraints.BOTH;
         c.gridwidth = 1;
         c.gridheight = 1;
         for (int t = 0; t < keys.size(); t++)
@@ -321,7 +321,7 @@ class graphPanel extends JPanel
         GridBagConstraints c = new GridBagConstraints();
 
         c.insets = new Insets(3, 6, 3, 6);
-        c.fill = c.BOTH;
+        c.fill = GridBagConstraints.BOTH;
         c.gridwidth = 1;
         c.gridheight = 1;
         JLabel count = new JLabel("Count: " + total);
