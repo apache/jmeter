@@ -301,4 +301,8 @@ public class GraphModel implements Clearable, Serializable
         samples.add(s);
         return s;
     }
+    
+    public StatCalculator getStatCalc(){
+    	return this.statCalc;
+    }
 }
