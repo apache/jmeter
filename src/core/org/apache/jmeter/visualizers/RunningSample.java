@@ -38,11 +38,11 @@ public class RunningSample
     private static DecimalFormat errorFormatter = new DecimalFormat("#0.00%");
 
     private long counter;
-    private long runningSum;
-    private long max, min;
-    private long errorCount;
-    private long firstTime;
-    private long lastTime;
+    private volatile long runningSum;
+    private volatile long max, min;
+    private volatile long errorCount;
+    private volatile long firstTime;
+    private volatile long lastTime;
     private String label;
     private int index;
 

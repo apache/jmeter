@@ -45,8 +45,8 @@ public class ConnectionObject implements Runnable
     private int useCount;
     private int maxUsage;
     private long lastAccessed;
-    private boolean inUse;
-    private boolean inMaintenance;
+    private volatile boolean inUse;
+    private volatile boolean inMaintenance;
 
     private Thread reset;
     
