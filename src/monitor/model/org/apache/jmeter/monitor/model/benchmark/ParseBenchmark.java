@@ -95,7 +95,7 @@ public class ParseBenchmark
 					org.apache.jmeter.monitor.model.ObjectFactory.getInstance();
 				start = System.currentTimeMillis();
 				for (int idx=0; idx < loops; idx++){
-					org.apache.jmeter.monitor.model.Status st =
+					//NOTUSED org.apache.jmeter.monitor.model.Status st =
 						of.parseBytes(contents.getBytes());
 				}
 				end = System.currentTimeMillis();

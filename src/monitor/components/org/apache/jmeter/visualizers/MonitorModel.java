@@ -28,7 +28,7 @@ import java.util.List;
 public class MonitorModel implements Clearable, Serializable, Cloneable
 {
 
-	private String name;
+	//private String name;
 	private List listeners;
 	private MonitorStats current =
 		new MonitorStats(0,0,0,0,0,"","","",System.currentTimeMillis());
@@ -46,7 +46,7 @@ public class MonitorModel implements Clearable, Serializable, Cloneable
 		this.current = stat;
 	}
 	public void setName(String name){
-		this.name = name;
+		//this.name = name;
 	}
 	
 	public String getName(){

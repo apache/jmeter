@@ -105,12 +105,12 @@ public class ObjectFactory
 	public static void main(String[] args){
 		if (args != null & args.length == 2){
 			String file = null;
-			int count = 1;
+			//int count = 1;
 			if (args[0] != null){
 				file = args[0];
 			}
 			if (args[1] != null){
-				count = Integer.parseInt(args[1]);
+				//count = Integer.parseInt(args[1]);
 			}
 			try {
 				ObjectFactory of = ObjectFactory.getInstance();
