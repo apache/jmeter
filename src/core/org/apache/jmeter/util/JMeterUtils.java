@@ -203,14 +203,18 @@ public class JMeterUtils implements UnitTestManager
     }
     public static String[] getSearchPaths()
     {
-        String[] paths= 
-            JMeterUtils.getPropDefault("search_paths", null).split(";");
-        String[] result= new String[paths.length+1];
-        result[0]= getJMeterHome() + "/lib/ext";
-        for (int i=1; i<result.length; i++)
-        {
-            result[i]= paths[i-1];
+        String p= JMeterUtils.getPropDefault("search_paths", null);
+        String[] result= new String[1];
+        
+        if (p!=null) {
+            String[] paths= p.split(";");
+            result= new String[paths.length+1];
+            for (int i=1; i<result.length; i++)
+            {
+                result[i]= paths[i-1];
+            }
         }
+        result[0]= getJMeterHome() + "/lib/ext";
         return result;
     }
 
