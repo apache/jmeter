@@ -96,7 +96,7 @@ public class JDBCSampler extends AbstractSampler implements TestListener
     /** Database connection pool manager. */
     private transient DBConnectionManager manager =
         DBConnectionManager.getManager();
-
+    private transient DBKey dbkey = null;
 
     /**
      * Creates a JDBCSampler.
@@ -107,8 +107,8 @@ public class JDBCSampler extends AbstractSampler implements TestListener
 
     public SampleResult sample(Entry e)
     {
-        // FIXME: Should only call getKey once per test
         DBKey key = getKey();
+        
         SampleResult res = new SampleResult();
 
         Connection conn = null;
@@ -192,12 +192,24 @@ public class JDBCSampler extends AbstractSampler implements TestListener
 
     private DBKey getKey()
     {
-        return manager.getKey(
+        if (dbkey == null)
+        {
+            // With multiple threads, it is possible that more than one thread
+            // will enter this block at the same time, resulting in multiple
+            // calls to manager.getKey().  But this is okay, since DBKey has
+            // a proper implementation of equals and hashCode.  The original
+            // implementation of this method always returned a new instance --
+            // this cached dbkey is just a performance optimization.
+            dbkey =
+                manager.getKey(
                     getUrl(),
                     getUsername(),
                     getPassword(),
                     getDriver(),
                     getJDBCProperties());
+        }
+        
+        return dbkey;
     }
 
     private Map getJDBCProperties()
@@ -291,6 +303,7 @@ public class JDBCSampler extends AbstractSampler implements TestListener
 
     public void testEnded(String host)
     {
+        testEnded();
     }
 
     public synchronized void testStarted()
@@ -300,6 +313,7 @@ public class JDBCSampler extends AbstractSampler implements TestListener
     public synchronized void testEnded()
     {
         manager.shutdown();
+        dbkey = null;
     }
 
     public void testIterationStart(LoopIterationEvent event)
