@@ -35,6 +35,7 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -179,13 +180,13 @@ public class HttpRequestHdr
         return manager;
     }
     
-    public HTTPSampler getSampler()
+    public HTTPSamplerBase getSampler()
         throws MalformedURLException, IOException, ProtocolException
     {
     	// Damn! A whole new GUI just to instantiate a test element?
     	// Isn't there a beter way? 
         HttpTestSampleGui tempGui = new HttpTestSampleGui();
-        HTTPSampler result = createSampler();
+        HTTPSamplerBase result = createSampler();
         tempGui.configure(result);
         tempGui.modifyTestElement(result);
         result.setFollowRedirects(false);
@@ -218,10 +219,10 @@ public class HttpRequestHdr
         }
     }
     
-    private HTTPSampler createSampler()
+    private HTTPSamplerBase createSampler()
     {
         MultipartUrlConfig urlConfig = null;
-        HTTPSampler sampler = new HTTPSampler();
+        HTTPSamplerBase sampler = new HTTPSampler();
         sampler.setDomain(serverName());
         log.debug("Proxy: setting server: " + sampler.getDomain());
         sampler.setMethod(method);
@@ -406,7 +407,7 @@ public class HttpRequestHdr
                         "&d= HTTP/1.0\n\n";
             HttpRequestHdr req = new HttpRequestHdr();
             req.parse(new java.io.ByteArrayInputStream(TEST_REQ.getBytes()));
-            HTTPSampler s = req.getSampler();
+            HTTPSamplerBase s = req.getSampler();
             assertEquals(s.getArguments().getArguments().size(), 13);
         }
     }

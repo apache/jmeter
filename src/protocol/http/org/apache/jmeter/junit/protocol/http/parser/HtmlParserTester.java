@@ -24,7 +24,8 @@ import java.net.URL;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.modifier.AnchorModifier;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 
@@ -57,8 +58,8 @@ public class HtmlParserTester extends JMeterTestCase
      */
     public void testSimpleParse() throws Exception
     {
-        HTTPSampler config = makeUrlConfig(".*/index\\.html");
-        HTTPSampler context =
+        HTTPSamplerBase config = makeUrlConfig(".*/index\\.html");
+        HTTPSamplerBase context =
             makeContext("http://www.apache.org/subdir/previous.html");
         String responseText =
             "<html><head><title>Test page</title></head><body>"
@@ -79,8 +80,8 @@ public class HtmlParserTester extends JMeterTestCase
 
     public void testSimpleParse2() throws Exception
     {
-        HTTPSampler config = makeUrlConfig("/index\\.html");
-        HTTPSampler context =
+        HTTPSamplerBase config = makeUrlConfig("/index\\.html");
+        HTTPSamplerBase context =
             makeContext("http://www.apache.org/subdir/previous.html");
         String responseText =
             "<html><head><title>Test page</title></head><body>"
@@ -105,9 +106,9 @@ public class HtmlParserTester extends JMeterTestCase
 
     public void testSimpleParse3() throws Exception
     {
-        HTTPSampler config = makeUrlConfig(".*index.*");
+        HTTPSamplerBase config = makeUrlConfig(".*index.*");
         config.getArguments().addArgument("param1", "value1");
-        HTTPSampler context =
+        HTTPSamplerBase context =
             makeContext("http://www.apache.org/subdir/previous.html");
         String responseText =
             "<html><head><title>Test page</title></head><body>"
@@ -129,8 +130,8 @@ public class HtmlParserTester extends JMeterTestCase
 
     public void testSimpleParse4() throws Exception
     {
-        HTTPSampler config = makeUrlConfig("/subdir/index\\..*");
-        HTTPSampler context =
+        HTTPSamplerBase config = makeUrlConfig("/subdir/index\\..*");
+        HTTPSamplerBase context =
             makeContext("http://www.apache.org/subdir/previous.html");
         String responseText =
             "<html><head><title>Test page</title></head><body>"
@@ -149,8 +150,8 @@ public class HtmlParserTester extends JMeterTestCase
 
     public void testSimpleParse5() throws Exception
     {
-        HTTPSampler config = makeUrlConfig("/subdir/index\\.h.*");
-        HTTPSampler context =
+        HTTPSamplerBase config = makeUrlConfig("/subdir/index\\.h.*");
+        HTTPSamplerBase context =
             makeContext("http://www.apache.org/subdir/one/previous.html");
         String responseText =
             "<html><head><title>Test page</title></head><body>"
@@ -169,8 +170,8 @@ public class HtmlParserTester extends JMeterTestCase
 
     public void testFailSimpleParse1() throws Exception
     {
-        HTTPSampler config = makeUrlConfig(".*index.*?param2=.+1");
-        HTTPSampler context =
+        HTTPSamplerBase config = makeUrlConfig(".*index.*?param2=.+1");
+        HTTPSamplerBase context =
             makeContext("http://www.apache.org/subdir/previous.html");
         String responseText =
             "<html><head><title>Test page</title></head><body>"
@@ -190,8 +191,8 @@ public class HtmlParserTester extends JMeterTestCase
 
     public void testFailSimpleParse3() throws Exception
     {
-        HTTPSampler config = makeUrlConfig("/home/index.html");
-        HTTPSampler context =
+        HTTPSamplerBase config = makeUrlConfig("/home/index.html");
+        HTTPSamplerBase context =
             makeContext("http://www.apache.org/subdir/previous.html");
         String responseText =
             "<html><head><title>Test page</title></head><body>"
@@ -211,8 +212,8 @@ public class HtmlParserTester extends JMeterTestCase
 
     public void testFailSimpleParse2() throws Exception
     {
-        HTTPSampler config = makeUrlConfig(".*login\\.html");
-        HTTPSampler context =
+        HTTPSamplerBase config = makeUrlConfig(".*login\\.html");
+        HTTPSamplerBase context =
             makeContext("http://www.apache.org/subdir/previous.html");
         String responseText =
             "<html><head><title>Test page</title></head><body>"
@@ -237,10 +238,10 @@ public class HtmlParserTester extends JMeterTestCase
      */
     public void testSimpleFormParse() throws Exception
     {
-        HTTPSampler config = makeUrlConfig(".*index.html");
+        HTTPSamplerBase config = makeUrlConfig(".*index.html");
         config.addArgument("test", "g.*");
-        config.setMethod(HTTPSampler.POST);
-        HTTPSampler context =
+        config.setMethod(HTTPSamplerBase.POST);
+        HTTPSamplerBase context =
             makeContext("http://www.apache.org/subdir/previous.html");
         String responseText =
             "<html><head><title>Test page</title></head><body>"
@@ -266,10 +267,10 @@ public class HtmlParserTester extends JMeterTestCase
      */
     public void testBadCharParse() throws Exception
     {
-        HTTPSampler config = makeUrlConfig(".*index.html");
+        HTTPSamplerBase config = makeUrlConfig(".*index.html");
         config.addArgument("te$st", "g.*");
-        config.setMethod(HTTPSampler.POST);
-        HTTPSampler context =
+        config.setMethod(HTTPSamplerBase.POST);
+        HTTPSamplerBase context =
             makeContext("http://www.apache.org/subdir/previous.html");
         String responseText =
             "<html><head><title>Test page</title></head><body>"
@@ -290,10 +291,10 @@ public class HtmlParserTester extends JMeterTestCase
         assertEquals("te%24st=goto", config.getQueryString());
     }
 
-    private HTTPSampler makeContext(String url) throws MalformedURLException
+    private HTTPSamplerBase makeContext(String url) throws MalformedURLException
     {
         URL u = new URL(url);
-        HTTPSampler context = new HTTPSampler();
+        HTTPSamplerBase context = new HTTPNullSampler();
         context.setDomain(u.getHost());
         context.setPath(u.getPath());
         context.setPort(u.getPort());
@@ -302,11 +303,11 @@ public class HtmlParserTester extends JMeterTestCase
         return context;
     }
 
-    private HTTPSampler makeUrlConfig(String path)
+    private HTTPSamplerBase makeUrlConfig(String path)
     {
-        HTTPSampler config = new HTTPSampler();
+        HTTPSamplerBase config = new HTTPNullSampler();
         config.setDomain("www.apache.org");
-        config.setMethod(HTTPSampler.GET);
+        config.setMethod(HTTPSamplerBase.GET);
         config.setPath(path);
         config.setPort(80);
         config.setProtocol("http");

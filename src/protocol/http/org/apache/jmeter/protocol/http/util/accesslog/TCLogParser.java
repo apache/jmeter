@@ -26,7 +26,8 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -277,7 +278,7 @@ public class TCLogParser implements LogParser
         String cleanedLine = this.cleanURL(line);
         log.debug("parsing line: "  + line);
         // now we set request method
-        el.setProperty(HTTPSampler.METHOD,RMETHOD);
+        el.setProperty(HTTPSamplerBase.METHOD,RMETHOD);
         if (FILTER != null)
         {
            log.debug("filter is not null");
@@ -437,12 +438,12 @@ public class TCLogParser implements LogParser
         {
             StringTokenizer tokens = this.tokenize(url, "?");
             this.URL_PATH = tokens.nextToken();
-            el.setProperty(HTTPSampler.PATH,URL_PATH);
+            el.setProperty(HTTPSamplerBase.PATH,URL_PATH);
             return tokens.nextToken();
         }
         else
         {
-           el.setProperty(HTTPSampler.PATH,url);
+           el.setProperty(HTTPSamplerBase.PATH,url);
             return null;
         }
     }
@@ -489,7 +490,7 @@ public class TCLogParser implements LogParser
      */
     public void convertStringToJMRequest(String text,TestElement el)
     {
-        ((HTTPSampler)el).parseArguments(text);
+        ((HTTPSamplerBase)el).parseArguments(text);
     }
 
     /**
@@ -621,7 +622,7 @@ public class TCLogParser implements LogParser
 		{
 			String res = tclp.cleanURL(URL1);
 			assertEquals("/addrbook/",res);
-			assertNull(tclp.stripFile(res,new HTTPSampler()));
+			assertNull(tclp.stripFile(res,new HTTPNullSampler()));
 		}
 		public void testcheckURL() throws Exception
 		{
