@@ -61,7 +61,6 @@ package org.apache.jmeter.protocol.http.parser;
 import java.io.ByteArrayInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -84,10 +83,14 @@ class JTidyHTMLParser extends HTMLParser
     /** Used to store the Logger (used for debug and error messages). */
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
+	/** Stores the singleton parser to be used */
+	private static HTMLParser myParser = new JTidyHTMLParser();
+
     /**
      * This is a singleton class
      */
-    protected JTidyHTMLParser()
+    //TODO make private 
+    JTidyHTMLParser()
     {
         super();
     }
@@ -291,48 +294,23 @@ class JTidyHTMLParser extends HTMLParser
         
         public void testParser() throws Exception {
         	log.info("testParser");
-            HTMLParserTest.testParser(new JTidyHTMLParser());
+            HTMLParserTest.testParser(getParserInstance());
         }
-        
-		public void testfiles() throws Exception{
-			log.info("testfiles");
-			final String[] EXPECTED_RESULT= new String[] {
-				"http://myhost/mydir/images/image-a.gif",
-				"http://myhost/mydir/images/image-b.gif",
-				"http://myhost/mydir/images/image-c.gif",
-				"http://myhost/mydir/images/image-d.gif",
-				"http://myhost/mydir/images/image-e.gif",
-				"http://myhost/mydir/images/image-f.gif",
-				"http://myhost/mydir/images/image-a2.gif",
-				"http://myhost/mydir/images/image-b2.gif",
-				"http://myhost/mydir/images/image-c2.gif",
-				"http://myhost/mydir/images/image-d2.gif",
-				"http://myhost/mydir/images/image-e2.gif",
-				"http://myhost/mydir/images/image-f2.gif",
-			};
-
-			Iterator expected= Arrays.asList(EXPECTED_RESULT).iterator();
-
-			JTidyHTMLParser p = new JTidyHTMLParser();
-			byte [] ba;
-			URL u;
-			Iterator result;
-			ba=getFile("testfiles/HTMLParserTestCase.html");
-			u= new URL("http://myhost/mydir/myfile.html");
-			result=p.getEmbeddedResourceURLs(ba,u);
-			while (expected.hasNext()) {
-				assertTrue(result.hasNext());
-				assertEquals(expected.next(), result.next().toString());
-			}
-			assertFalse(result.hasNext());
+		public void testParserClass() throws Exception {
+			log.info("testParserClass");
+			HTMLParserTest.testParser("org.apache.jmeter.protocol.http.parser.JTidyHTMLParser");
 		}
     }
 
-    private static byte []getFile(String s) throws Exception
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.protocol.http.parser.HTMLParser#getParserInstance()
+     */
+    public static HTMLParser getParserInstance()
     {
-		java.io.File f= new java.io.File(s);
-		byte[] buffer= new byte[(int)f.length()];
-		new java.io.FileInputStream(f).read(buffer);
-		return buffer;
+		return myParser;
     }
+    
+	public static boolean isParserReusable(){
+		return true;
+	}
 }
