@@ -383,6 +383,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
 			runMenu.add(remote_start);
 		}
 		remote_start_all = new JMenuItem(JMeterUtils.getResString("remote_start_all"), 'Z');
+        remote_start_all.setName("remote_start_all");
 		remote_start_all.setAccelerator(
 			KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_MASK));
 		remote_start_all.addActionListener(ActionRouter.getInstance());
