@@ -102,12 +102,9 @@ public class UserParameterModifier
 	public UserParameterModifier()
 	{
 	} //end constructor
-	//-------------------------------------------
-	// Methods
-	//-------------------------------------------
-	/*----------------------------------------------------------------------------------------------
-	 * Methods overriden/implemented from org.apache.jmeter.config.AbstractConfigElement
-	 *--------------------------------------------------------------------------------------------*/
+
+    
+
 	/**
 	 * Runs before the start of every test. Reload the Sequencer with the
 	 * latest parameter data for each user
@@ -197,5 +194,15 @@ public class UserParameterModifier
      */
     public void testIterationStart(LoopIterationEvent event)
     {}
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#clone()
+     */
+    public Object clone()
+    {
+        UserParameterModifier clone = (UserParameterModifier) super.clone();
+        clone.allAvailableUsers = allAvailableUsers;
+        return clone;
+    }
 
 }

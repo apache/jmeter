@@ -103,33 +103,48 @@ public class ActionRouter implements ActionListener
         {
             public void run()
             {
+                performAction(e);
+            }
+
+        });
+    }
+
+    private void performAction(final ActionEvent e)
+    {
+        try
+        {
+            GuiPackage.getInstance().updateCurrentNode();
+            Set commandObjects = (Set) commands.get(e.getActionCommand());
+            Iterator iter = commandObjects.iterator();
+            while (iter.hasNext())
+            {
                 try
                 {
-                    GuiPackage.getInstance().updateCurrentNode();
-                    Set commandObjects = (Set) commands.get(e.getActionCommand());
-                    Iterator iter = commandObjects.iterator();
-                    while (iter.hasNext())
-                    {
-                        try
-                        {
-                            Command c = (Command) iter.next();
-                            preActionPerformed(c.getClass(), e);
-                            c.doAction(e);
-                            postActionPerformed(c.getClass(), e);
-                        }
-                        catch (Exception err)
-                        {
-                            log.error("", err);
-                        }
-                    }
+                    Command c = (Command) iter.next();
+                    preActionPerformed(c.getClass(), e);
+                    c.doAction(e);
+                    postActionPerformed(c.getClass(), e);
                 }
-                catch (NullPointerException er)
+                catch (Exception err)
                 {
-                    log.error("", er);
-                    JMeterUtils.reportErrorToUser("Sorry, this feature (" + e.getActionCommand() + ") not yet implemented");
+                    log.error("", err);
                 }
             }
-        });
+        }
+        catch (NullPointerException er)
+        {
+            log.error("", er);
+            JMeterUtils.reportErrorToUser("Sorry, this feature (" + e.getActionCommand() + ") not yet implemented");
+        }
+    }
+
+    /**
+     * To execute an action immediately in the current thread.
+     * @param e
+     */
+    public void doActionNow(ActionEvent e)
+    {
+        performAction(e);
     }
 
     public Set getAction(String actionName)
@@ -149,6 +164,28 @@ public class ActionRouter implements ActionListener
             }
         }
         return set;
+    }
+
+    public Command getAction(String actionName, Class actionClass)
+    {
+        Set commandObjects = (Set) commands.get(actionName);
+        Iterator iter = commandObjects.iterator();
+        while (iter.hasNext())
+        {
+            try
+            {
+                Command com = (Command) iter.next();
+                if (com.getClass().equals(actionClass))
+                {
+                    return com;
+                }
+            }
+            catch (Exception err)
+            {
+                log.error("", err);
+            }
+        }
+        return null;
     }
 
     public Command getAction(String actionName, String className)
