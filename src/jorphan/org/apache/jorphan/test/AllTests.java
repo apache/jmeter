@@ -300,43 +300,22 @@ public final class AllTests
                 	/*
                 	 * TestSuite only finds testXXX() methods, and does not look for
                 	 * suite() methods.
-                	 * 
-                	 * If no testXXX methods were found, JUnit currently adds a dummy test
-                	 * which prints out a warning - so the test count will always be >= 1
-                	 * 
-                	 * So we check to see if there is a single test case called "warning"
-                	 * If so, we look for the method makeSuite() and invoke that to get
-                	 * the suite.
-                	 * 
-                	 * We don't look for the standard suite() method in case that clashes
-                	 * with an existing use of the suite() method. This may be changed in
-                	 * future.
+                	 *
+                	 * To provide more compatibilty with stand-alone tests, where JUnit
+                	 * does look for a suite() method, check for it first here.
+                	 *  
                 	 */
 
                 	Class clazz = Class.forName(name);
-                	TestSuite ts = new TestSuite(clazz);
-
-                	if (// Perhaps no tests were found?
-                	    (ts.testCount() == 1) 
-                	  &&  
-                	    (ts.testAt(0).toString().startsWith("warning"))
-                	   )
-                	{
-						Method m;
-                        try
-                        {
-                            m = clazz.getMethod("makeSuite", new Class[0]);
-							TestSuite t = (TestSuite) m.invoke(clazz,null);
-							suite.addTest(t);
-                        }
-                        catch (Exception e)
-                        {// Add the original suite on failure, so we generate a warning
-                        	//System.out.println("Error on makeSuite"+e);
-							suite.addTest(ts);
-                        }
-                	}
-                	else
-                	{
+					try
+					{
+						Method m = clazz.getMethod("suite", new Class[0]);
+						TestSuite t = (TestSuite) m.invoke(clazz,null);
+						suite.addTest(t);
+					}
+					catch (Exception e)
+					{
+						TestSuite ts = new TestSuite(clazz);
 						suite.addTest(ts);
                 	}
                 }
