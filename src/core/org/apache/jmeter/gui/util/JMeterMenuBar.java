@@ -79,7 +79,7 @@ import org.apache.log.Logger;
 
 /**
  * @author    Michael Stover
- * @version   $Revision$
+ * @version   $Revision$ Updated on $Date$
  */
 public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
 {
@@ -470,19 +470,22 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
 
     public void setRunning(boolean running, String host)
     {
+		log.info("setRunning("+ running +","+ host + ")");
+
         Iterator iter = remote_engine_start.iterator();
         Iterator iter2 = remote_engine_stop.iterator();
         while (iter.hasNext() && iter2.hasNext())
         {
             JMenuItem start = (JMenuItem) iter.next();
             JMenuItem stop = (JMenuItem) iter2.next();
-            log.info("host = " + host + " start = " + start.getText());
             if (start.getText().equals(host))
             {
+				log.info("Found start host: " + start.getText());
                 start.setEnabled(!running);
             }
             if (stop.getText().equals(host))
             {
+				log.info("Found stop  host: " + stop.getText());
                 stop.setEnabled(running);
             }
         }
