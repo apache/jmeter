@@ -70,6 +70,7 @@ import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /************************************************************
  *  Provides a quick and easy way to run all <a href="http://junit.sourceforge.net">junit</a> unit tests in your java project.  It will 
@@ -219,7 +220,8 @@ public class AllTests
 		TestSuite suite = new TestSuite();
 		try
 		{
-			Iterator classes = ClassFinder.findClassesThatExtend(searchPaths.split(","),
+			Iterator classes = ClassFinder.findClassesThatExtend(
+			    		JOrphanUtils.split(searchPaths, ","),
 					new Class[]{TestCase.class},true).iterator();
 			while (classes.hasNext())
 			{

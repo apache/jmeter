@@ -74,6 +74,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 import org.apache.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -144,7 +145,7 @@ public class MenuFactory
 	{
 		try
 		{
-		String[] classesToSkip = JMeterUtils.split(
+		String[] classesToSkip = JOrphanUtils.split(
 				JMeterUtils.getPropDefault("not_in_menu", ""), ",");
 		for(int i = 0; i < classesToSkip.length; i++)
 		{
