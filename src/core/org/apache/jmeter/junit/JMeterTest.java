@@ -288,6 +288,7 @@ public class JMeterTest extends JMeterTestCase
         List objects = new LinkedList();
         String n="";
         boolean caughtError=true;
+        Throwable caught=null;
     try {
         while (classes.hasNext())
         {
@@ -307,6 +308,7 @@ public class JMeterTest extends JMeterTestCase
                 }
                 catch (InstantiationException e)
                 {
+                	caught=e;
 					//System.out.println(e.toString());
                     try
                     {
@@ -325,6 +327,7 @@ public class JMeterTest extends JMeterTestCase
             }
             catch (IllegalAccessException e)
             {
+				caught=e;
                 // We won't test restricted-access classes.
             }
 			//JDK1.4: catch (java.awt.HeadlessException e)
@@ -333,6 +336,7 @@ public class JMeterTest extends JMeterTestCase
 			//JDK1.4: }
             catch (Exception e)
             {
+				caught=e;
             	if ((e instanceof RemoteException)
             	   ||e.getClass().getName().equals("java.awt.HeadlessException")//for JDK1.3
             	   )
@@ -351,6 +355,7 @@ public class JMeterTest extends JMeterTestCase
     	{
 			System.out.println("Last class="+n);
 			System.out.println("objects.size="+objects.size());
+			System.out.println("Last error="+caught);
     	}
     }
     if (objects.size() == 0){
