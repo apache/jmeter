@@ -438,7 +438,7 @@ public final class MenuFactory
                 }
                 catch (Throwable e)
                 {
-                    log.info("Could not instantiate "+name, e);
+                    log.debug("Could not instantiate "+name, e);
                     continue;
                 }
                 if (elementsToSkip.contains(name)
