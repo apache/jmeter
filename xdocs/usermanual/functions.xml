@@ -41,7 +41,7 @@ request throughout the course of the test. </p>
 because they are expecting numbers, and thus will not accept a function.  However, most fields will allow
 functions.</p>
 <p>Built-in functions can be written into any field of non-controller test components. This includes
-Samplers, Timers, Listeners, Modifiers, Assertions, and Config Elements.</p>
+Samplers, Timers, Listeners, Modifiers, Assertions, Pre-Processors, Post-Processors and Config Elements.</p>
 </subsection>
 
 <subsection name="14.3 Writing the function string" anchor="how">
@@ -227,7 +227,7 @@ A reference name - refName - for reusing the value created by this function. Sto
 
 <component index="14.5.8" name="__CSVRead">
 <description><p>The CSVFile function returns a string from a CSV file (c.f. <a href="#_StringFromFile">StringFromFile</a>)</p>
-	<p>NOTE: A single instance of the file is opened and used for all threads.</p></description>
+	<p>NOTE: Only the first filename encountered is opened. Subsequent filenames are silently ignored. [This may change in future.]</p></description>
 
 <properties>
         <property name="File Name" required="Yes">The file to read from</property>
