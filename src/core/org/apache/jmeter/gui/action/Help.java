@@ -1,0 +1,87 @@
+package org.apache.jmeter.gui.action;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.HashSet;
+import java.util.Set;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.util.ComponentUtil;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.LoggingManager;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
+/**
+ * @author Administrator
+ *
+ * To change this generated comment edit the template variable "typecomment":
+ * Window>Preferences>Java>Templates.
+ */
+public class Help implements Command
+{
+	private static Logger log =
+		Hierarchy.getDefaultHierarchy().getLoggerFor(LoggingManager.GUI);
+	private static Set commands = new HashSet();
+	public final static String HELP = "help";
+	private static String helpPage =
+		"file://"
+			+ JMeterUtils.getJMeterHome()
+			+ "/docs/usermanual/component_reference.html";
+	private static JDialog helpWindow;
+	private static JTextPane helpDoc;
+	private static JScrollPane scroller;
+	static {
+		commands.add(HELP);
+		helpDoc = new JTextPane();
+		scroller = new JScrollPane(helpDoc);
+		helpDoc.setEditable(false);
+		try
+		{
+			helpDoc.setPage(helpPage);
+		}
+		catch (IOException err)
+		{
+			log.error("Couldn't load " + helpPage, err);
+			JOptionPane.showMessageDialog(
+				GuiPackage.getInstance().getMainFrame(),
+				JMeterUtils.getResString("error_loading_help"),
+				"Error",
+				JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	/**
+	 * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
+	 */
+	public void doAction(ActionEvent e)
+	{
+		if (helpWindow == null)
+		{
+			helpWindow =
+				new JDialog(
+					GuiPackage.getInstance().getMainFrame(),
+					JMeterUtils.getResString("help"),
+					false);
+			helpWindow.getContentPane().setLayout(new GridLayout(1, 1));
+			ComponentUtil.centerComponentInWindow(helpWindow, 60);
+		}
+		helpDoc.scrollToReference(GuiPackage
+				.getInstance()
+				.getTreeListener()
+				.getCurrentNode()
+				.getStaticLabel().replace(' ','_'));
+		helpWindow.getContentPane().removeAll();
+		helpWindow.getContentPane().add(scroller);
+		helpWindow.show();
+	}
+	/**
+	 * @see org.apache.jmeter.gui.action.Command#getActionNames()
+	 */
+	public Set getActionNames()
+	{
+		return commands;
+	}
+}
