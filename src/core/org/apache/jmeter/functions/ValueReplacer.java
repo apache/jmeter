@@ -27,14 +27,16 @@ public class ValueReplacer
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ELEMENTS);
 	CompoundFunction masterFunction = new CompoundFunction();
 	Map variables = new HashMap();
+    TestPlan tp;
 	
 	public ValueReplacer()
 	{
 	}
 
-	public ValueReplacer(Map variables)
+	public ValueReplacer(TestPlan tp)
 	{
-		setUserDefinedVariables(variables);
+		this.tp = tp;
+        setUserDefinedVariables(tp.getUserDefinedVariables());
 	}
 	
 	public void setUserDefinedVariables(Map variables)
@@ -81,6 +83,12 @@ public class ValueReplacer
 				}
 				return newValue;
 	}
+    
+    public void addVariable(String name,String value)
+    {
+        tp.addParameter(name,value);
+        setUserDefinedVariables(tp.getUserDefinedVariables());
+    }
 	
 	public Collection replaceValues(Collection values) throws InvalidVariableException
 	{
@@ -187,7 +195,7 @@ public class ValueReplacer
 	
 	public static class Test extends TestCase
 	{
-		Map variables;
+		TestPlan variables;
 		
 		public Test(String name)
 		{
@@ -196,16 +204,18 @@ public class ValueReplacer
 		
 		public void setUp()
 		{
-			variables = new HashMap();
-			variables.put("server","jakarta.apache.org");
-			variables.put("username","jack");
-			variables.put("password","jacks_password");
-			variables.put("regex",".*");
+			variables = new TestPlan();
+			variables.addParameter("server","jakarta.apache.org");
+			variables.addParameter("username","jack");
+			variables.addParameter("password","jacks_password");
+			variables.addParameter("regex",".*");
 		}
 		
 		public void testReverseReplacement() throws Exception
 		{
 			ValueReplacer replacer = new ValueReplacer(variables);
+            assertTrue(variables.getUserDefinedVariables().containsKey("server"));
+            assertTrue(replacer.variables.containsKey("server"));
 			TestElement element = new TestPlan();
 			element.setProperty("domain","jakarta.apache.org");
 			List args = new LinkedList();

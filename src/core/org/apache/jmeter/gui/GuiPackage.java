@@ -53,8 +53,12 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.gui;
+import java.awt.Component;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.functions.ValueReplacer;
@@ -82,220 +86,227 @@ import org.apache.log.Logger;
  */
 public class GuiPackage
 {
-	transient private static Logger log =
-		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
-	private static GuiPackage guiPack;
-	private boolean dirty = false;
-	private Map nodesToGui = new HashMap();
-	private Map guis = new HashMap();
-	private JMeterTreeNode currentNode = null;
-	/**
-	 * GuiPackage is a Singleton class.
-	 * @see java.lang.Object#Object()
-	 */
-	private GuiPackage()
-	{}
-	private JMeterTreeModel treeModel;
-	private org.apache.jmeter.gui.MainFrame mainFrame;
-	private org.apache.jmeter.gui.tree.JMeterTreeListener treeListener;
-	public JMeterGUIComponent getGui(TestElement node, String guiClass)
-	{
-		log.debug("Getting gui for "+ node);
-		try
-		{
-			JMeterGUIComponent comp = (JMeterGUIComponent) nodesToGui.get(node);
-			log.debug("Gui retrieved = " + comp);
-			if (comp == null)
-			{
-				comp = (JMeterGUIComponent) guis.get(guiClass);
-				if (comp == null || comp instanceof UnsharedComponent)
-				{
-					comp = (JMeterGUIComponent) Class.forName(guiClass).newInstance();
-					if(!(comp instanceof UnsharedComponent))
-					{
-						guis.put(guiClass, comp);
-					}
-				}
-				nodesToGui.put(node, comp);
-			}
-			return comp;
-		}
-		catch (Exception e)
-		{
-			log.error("Problem retrieving gui", e);
-			return null;
-		}
-	}
-	
-	public void removeNode(TestElement node)
-	{
-		nodesToGui.remove(node);
-	}
-	/**
-	 * Convenience method for grabbing the gui for the current node
-	 */
-	public JMeterGUIComponent getCurrentGui()
-	{
-		try
-		{
-			JMeterGUIComponent comp = getGui(treeListener.getCurrentNode().createTestElement());
-			comp.configure(treeListener.getCurrentNode().createTestElement());
-			return comp;
-		}
-		catch (Exception e)
-		{
-			log.error("Problem retrieving gui", e);
-			return null;
-		}
-	}
-	public TestElement createTestElement(String guiClass)
-	{
-		try
-		{
-			JMeterGUIComponent comp = (JMeterGUIComponent) guis.get(guiClass);
-			if (comp == null || comp instanceof UnsharedComponent)
-			{
-				comp = (JMeterGUIComponent) Class.forName(guiClass).newInstance();
-				guis.put(guiClass, comp);
-			}
-			TestElement node = ((JMeterGUIComponent) Class.forName(guiClass).newInstance()).createTestElement();
-			nodesToGui.put(node, comp);
-			return node;
-		}
-		catch (Exception e)
-		{
-			log.error("Problem retrieving gui", e);
-			return null;
-		}
-	}
-	public JMeterGUIComponent getGui(TestElement node)
-	{
-		try
-		{
-			return getGui(node, node.getPropertyAsString(TestElement.GUI_CLASS));
-		}
-		catch (Exception e)
-		{
-			log.error("Problem retrieving gui", e);
-			return null;
-		}
-	}
-    
+    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    private static GuiPackage guiPack;
+    private boolean dirty = false;
+    private Map nodesToGui = new HashMap();
+    private Map guis = new HashMap();
+    private JMeterTreeNode currentNode = null;
+    /**
+     * GuiPackage is a Singleton class.
+     * @see java.lang.Object#Object()
+     */
+    private GuiPackage()
+    {}
+    private JMeterTreeModel treeModel;
+    private org.apache.jmeter.gui.MainFrame mainFrame;
+    private org.apache.jmeter.gui.tree.JMeterTreeListener treeListener;
+    public JMeterGUIComponent getGui(TestElement node, String guiClass)
+    {
+        log.debug("Getting gui for " + node);
+        try
+        {
+            JMeterGUIComponent comp = (JMeterGUIComponent) nodesToGui.get(node);
+            log.debug("Gui retrieved = " + comp);
+            if (comp == null)
+            {
+                comp = (JMeterGUIComponent) guis.get(guiClass);
+                if (comp == null || comp instanceof UnsharedComponent)
+                {
+                    comp = (JMeterGUIComponent) Class.forName(guiClass).newInstance();
+                    if (!(comp instanceof UnsharedComponent))
+                    {
+                        guis.put(guiClass, comp);
+                    }
+                }
+                nodesToGui.put(node, comp);
+            }
+            return comp;
+        }
+        catch (Exception e)
+        {
+            log.error("Problem retrieving gui", e);
+            return null;
+        }
+    }
+
+    public void removeNode(TestElement node)
+    {
+        nodesToGui.remove(node);
+    }
+    /**
+     * Convenience method for grabbing the gui for the current node
+     */
+    public JMeterGUIComponent getCurrentGui()
+    {
+        try
+        {
+            JMeterGUIComponent comp = getGui(treeListener.getCurrentNode().createTestElement());
+            comp.configure(treeListener.getCurrentNode().createTestElement());
+            return comp;
+        }
+        catch (Exception e)
+        {
+            log.error("Problem retrieving gui", e);
+            return null;
+        }
+    }
+    public TestElement createTestElement(String guiClass)
+    {
+        try
+        {
+            JMeterGUIComponent comp = (JMeterGUIComponent) guis.get(guiClass);
+            if (comp == null || comp instanceof UnsharedComponent)
+            {
+                comp = (JMeterGUIComponent) Class.forName(guiClass).newInstance();
+                guis.put(guiClass, comp);
+            }
+            TestElement node = ((JMeterGUIComponent) Class.forName(guiClass).newInstance()).createTestElement();
+            nodesToGui.put(node, comp);
+            return node;
+        }
+        catch (Exception e)
+        {
+            log.error("Problem retrieving gui", e);
+            return null;
+        }
+    }
+    public JMeterGUIComponent getGui(TestElement node)
+    {
+        try
+        {
+            return getGui(node, node.getPropertyAsString(TestElement.GUI_CLASS));
+        }
+        catch (Exception e)
+        {
+            log.error("Problem retrieving gui", e);
+            return null;
+        }
+    }
+
     public void updateCurrentGui()
     {
-        if(currentNode != null)
+        if (currentNode != null)
         {
             JMeterGUIComponent comp = getGui(currentNode.createTestElement());
             comp.configure(currentNode.createTestElement());
         }
     }
+
+    public void updateCurrentNode()
+    {
+        try
+        {
+            if (currentNode != null)
+            {
+                log.debug("Updating current node " + currentNode.createTestElement());
+                JMeterGUIComponent comp = getGui(currentNode.createTestElement());
+                TestElement el = currentNode.createTestElement();
+                nodesToGui.remove(el);
+                currentNode.setUserObject(comp.createTestElement());
+                el = currentNode.createTestElement();
+                nodesToGui.put(el, comp);
+            }
+            currentNode = treeListener.getCurrentNode();
+        }
+        catch (Exception e)
+        {
+            log.error("Problem retrieving gui", e);
+        }
+    }
+    /**
+     * When GuiPackage is requested for the first time, it should be given handles to
+     * JMeter's Tree Listener and TreeModel.  
+     * @param listener The TreeListener for JMeter's test tree.
+     * @param treeModel The model for JMeter's test tree.
+     * @return GuiPackage
+     */
+    public static GuiPackage getInstance(JMeterTreeListener listener, JMeterTreeModel treeModel)
+    {
+        if (guiPack == null)
+        {
+            guiPack = new GuiPackage();
+            guiPack.setTreeListener(listener);
+            guiPack.setTreeModel(treeModel);
+        }
+        return guiPack;
+    }
+    /**
+     * The dirty property is a flag that indicates whether there are parts of JMeter's test tree
+     * that the user has not saved since last modification.  Various (@link Command actions) set
+     * this property when components are modified/created/saved.
+     * @param d
+     */
+    public void setDirty(boolean d)
+    {
+        dirty = d;
+    }
+    /**
+     * Retrieves the state of the 'dirty' property, a flag that indicates if there are test
+     * tree components that have been modified since they were last saved.
+     * @return boolean
+     */
+    public boolean isDirty()
+    {
+        return dirty;
+    }
+    public boolean addSubTree(HashTree subTree) throws IllegalUserActionException
+    {
+        return treeModel.addSubTree(subTree, treeListener.getCurrentNode());
+    }
+    public HashTree getCurrentSubTree()
+    {
+        return treeModel.getCurrentSubTree(treeListener.getCurrentNode());
+    }
+    public static GuiPackage getInstance()
+    {
+        return guiPack;
+    }
+    public JMeterTreeModel getTreeModel()
+    {
+        return treeModel;
+    }
+    public ValueReplacer getReplacer()
+    {
+        ValueReplacer replacer =
+            new ValueReplacer((TestPlan) ((JMeterGUIComponent) getTreeModel().getTestPlan().getArray()[0]).createTestElement());
+        return replacer;
+    }
+    public void setTreeModel(JMeterTreeModel newTreeModel)
+    {
+        treeModel = newTreeModel;
+    }
+    public void setMainFrame(org.apache.jmeter.gui.MainFrame newMainFrame)
+    {
+        mainFrame = newMainFrame;
+    }
+    public org.apache.jmeter.gui.MainFrame getMainFrame()
+    {
+        return mainFrame;
+    }
+    public void setTreeListener(org.apache.jmeter.gui.tree.JMeterTreeListener newTreeListener)
+    {
+        treeListener = newTreeListener;
+    }
+    public org.apache.jmeter.gui.tree.JMeterTreeListener getTreeListener()
+    {
+        return treeListener;
+    }
     
-	public void updateCurrentNode()
-	{
-		try
-		{
-			if(currentNode != null)
-			{
-				log.debug("Updating current node " + currentNode.createTestElement());
-				JMeterGUIComponent comp = getGui(currentNode.createTestElement());
-				TestElement el = currentNode.createTestElement();
-				nodesToGui.remove(el);
-				currentNode.setUserObject(comp.createTestElement());
-				el = currentNode.createTestElement();
-				nodesToGui.put(el,comp);
-			}
-			currentNode = treeListener.getCurrentNode();
-		}
-		catch (Exception e)
-		{
-			log.error("Problem retrieving gui", e);
-		}
-	}
-	/**
-	 * When GuiPackage is requested for the first time, it should be given handles to
-	 * JMeter's Tree Listener and TreeModel.  
-	 * @param listener The TreeListener for JMeter's test tree.
-	 * @param treeModel The model for JMeter's test tree.
-	 * @return GuiPackage
-	 */
-	public static GuiPackage getInstance(
-		JMeterTreeListener listener,
-		JMeterTreeModel treeModel)
-	{
-		if (guiPack == null)
-		{
-			guiPack = new GuiPackage();
-			guiPack.setTreeListener(listener);
-			guiPack.setTreeModel(treeModel);
-		}
-		return guiPack;
-	}
-	/**
-	 * The dirty property is a flag that indicates whether there are parts of JMeter's test tree
-	 * that the user has not saved since last modification.  Various (@link Command actions) set
-	 * this property when components are modified/created/saved.
-	 * @param d
-	 */
-	public void setDirty(boolean d)
-	{
-		dirty = d;
-	}
-	/**
-	 * Retrieves the state of the 'dirty' property, a flag that indicates if there are test
-	 * tree components that have been modified since they were last saved.
-	 * @return boolean
-	 */
-	public boolean isDirty()
-	{
-		return dirty;
-	}
-	public boolean addSubTree(HashTree subTree)
-		throws IllegalUserActionException
-	{
-		return treeModel.addSubTree(subTree, treeListener.getCurrentNode());
-	}
-	public HashTree getCurrentSubTree()
-	{
-		return treeModel.getCurrentSubTree(treeListener.getCurrentNode());
-	}
-	public static GuiPackage getInstance()
-	{
-		return guiPack;
-	}
-	public JMeterTreeModel getTreeModel()
-	{
-		return treeModel;
-	}
-	public ValueReplacer getReplacer()
-	{
-		ValueReplacer replacer =
-			new ValueReplacer(
-				((TestPlan) ((JMeterGUIComponent) getTreeModel()
-					.getTestPlan()
-					.getArray()[0])
-					.createTestElement())
-					.getUserDefinedVariables());
-		return replacer;
-	}
-	public void setTreeModel(JMeterTreeModel newTreeModel)
-	{
-		treeModel = newTreeModel;
-	}
-	public void setMainFrame(org.apache.jmeter.gui.MainFrame newMainFrame)
-	{
-		mainFrame = newMainFrame;
-	}
-	public org.apache.jmeter.gui.MainFrame getMainFrame()
-	{
-		return mainFrame;
-	}
-	public void setTreeListener(
-		org.apache.jmeter.gui.tree.JMeterTreeListener newTreeListener)
-	{
-		treeListener = newTreeListener;
-	}
-	public org.apache.jmeter.gui.tree.JMeterTreeListener getTreeListener()
-	{
-		return treeListener;
-	}
+    public void displayPopUp(MouseEvent e,JPopupMenu popup)
+    {
+        displayPopUp((Component) e.getSource(),e,popup);
+    }
+
+    public void displayPopUp(Component invoker,MouseEvent e, JPopupMenu popup)
+    {
+        if (popup != null)
+        {
+            log.debug("Showing pop up for " + invoker + " at x,y = "+ e.getX()+","+e.getY());
+            popup.pack();
+            popup.show(invoker, e.getX(), e.getY());
+            popup.setVisible(true);
+            popup.requestFocus();
+        }
+    }
 }
