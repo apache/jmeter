@@ -67,6 +67,7 @@
   <property name="optimize" value="on"/>
   <property name="deprecation" value="off"/>
   <property name="target.java.version" value="1.2"/>
+  <property name="encoding" value="UTF-8"/>
 
   <!-- List of Unix executable files in the binary distribution -->
   <property name="dist.executables" value="bin/jmeter bin/jmeter-server"/>
@@ -155,7 +156,7 @@
     <replaceregexp file="${src.core}/org/apache/jmeter/util/JMeterUtils.java"
     	match="VERSION=&quot;.*?&quot;"
 	replace="VERSION=&quot;${version}&quot;"/>
-    <javac srcdir="${src.core}" destdir="${build.core}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}">
+    <javac srcdir="${src.core}" destdir="${build.core}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <exclude name="org/apache/jmeter/util/JsseSSLManager.java" unless="jsse.present"/>
       <exclude name="org/apache/jmeter/util/IaikSSLManager.java" unless="isasilk.present"/>
@@ -171,7 +172,7 @@
 
   <target name="compile-components" depends="compile-jorphan,compile-core" description="Compile generic (protocol-independent) components.">
     <mkdir dir="${build.components}"/>
-    <javac srcdir="${src.components}" destdir="${build.components}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}">
+    <javac srcdir="${src.components}" destdir="${build.components}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <exclude name="org/apache/jmeter/visualizers/MailerVisualizer.java" unless="javamail.complete"/>
       <exclude name="org/apache/jmeter/visualizers/MailerModel.java" unless="javamail.complete"/>
@@ -186,7 +187,7 @@
 
   <target name="compile-functions" depends="compile-jorphan,compile-core" description="Compile functions.">
     <mkdir dir="${build.functions}"/>
-    <javac srcdir="${src.functions}" destdir="${build.functions}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}">
+    <javac srcdir="${src.functions}" destdir="${build.functions}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -198,7 +199,7 @@
 
   <target name="compile-http" depends="compile-jorphan,compile-core" description="Compile components specific to HTTP sampling.">
     <mkdir dir="${build.http}"/>
-    <javac srcdir="${src.http}" destdir="${build.http}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}">
+    <javac srcdir="${src.http}" destdir="${build.http}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -210,7 +211,7 @@
 
   <target name="compile-ftp" depends="compile-jorphan,compile-core" description="Compile components specific to FTP sampling.">
     <mkdir dir="${build.ftp}"/>
-    <javac srcdir="${src.ftp}" destdir="${build.ftp}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}">
+    <javac srcdir="${src.ftp}" destdir="${build.ftp}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -222,7 +223,7 @@
 
   <target name="compile-jdbc" depends="compile-jorphan,compile-core" description="Compile components specific to JDBC sampling.">
     <mkdir dir="${build.jdbc}"/>
-    <javac srcdir="${src.jdbc}" destdir="${build.jdbc}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}">
+    <javac srcdir="${src.jdbc}" destdir="${build.jdbc}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -234,7 +235,7 @@
 
   <target name="compile-java" depends="compile-jorphan,compile-core" description="Compile components specific to Java sampling.">
     <mkdir dir="${build.java}"/>
-    <javac srcdir="${src.java}" destdir="${build.java}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}">
+    <javac srcdir="${src.java}" destdir="${build.java}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
@@ -248,7 +249,7 @@
 
   <target name="compile-jorphan" depends="init" description="Compile JOrphan utility classes.">
     <mkdir dir="${build.jorphan}"/>
-    <javac srcdir="${src.jorphan}" destdir="${build.jorphan}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}">
+    <javac srcdir="${src.jorphan}" destdir="${build.jorphan}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
