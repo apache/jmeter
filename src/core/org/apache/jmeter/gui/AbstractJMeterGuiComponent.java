@@ -160,7 +160,14 @@ public abstract class AbstractJMeterGuiComponent
 	public void configure(TestElement element)
 	{
 		setName((String) element.getProperty(TestElement.NAME));
-        enabled = element.getPropertyAsBoolean(TestElement.ENABLED);
+        if(element.getProperty(TestElement.ENABLED) == null)
+        {
+            enabled = true;
+        }
+        else
+        {
+            enabled = element.getPropertyAsBoolean(TestElement.ENABLED);
+        }
 	}
 	
 	/**
