@@ -122,7 +122,7 @@ public class TCPSampler extends AbstractSampler implements TestListener
 		Socket con = (Socket) cp.get(TCPKEY);
 		if (con != null) {
 			log.debug(this+" Reusing connection "+con); //$NON-NLS-1$
-			return (Socket) con; 
+			return con; 
 		}
 	
 		// Not in cache, so create new one and cache it
@@ -419,8 +419,6 @@ public class TCPSampler extends AbstractSampler implements TestListener
     public void testStarted(String host)
     {
 		log.debug(this+" test started on "+host);
-        // TODO Auto-generated method stub
-        
     }
 
     /* (non-Javadoc)
@@ -439,7 +437,5 @@ public class TCPSampler extends AbstractSampler implements TestListener
     public void testIterationStart(LoopIterationEvent event)
     {
 		log.debug(this+" test iteration start on "+event.getIteration());
-        // TODO Auto-generated method stub
-        
     }
 }
