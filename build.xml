@@ -25,6 +25,9 @@
 <delete file="ApacheJMeter.jar"/>
 </target>
 <target name="all" depends="install"/>
+<target name="dist" depends="install">
+<jar jarfile="../ApacheJMeter${version}.jar" basedir="../" items="jmeter"/>
+</target> 
 <target name="clean">
 <delete file="ApacheJMeter.jar"/>
 <deltree dir="bin/classes"/>
