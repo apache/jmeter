@@ -862,17 +862,20 @@ public class HTTPSampler extends AbstractSampler
         }
         catch (IOException e)
         {
-            if (e.getCause() instanceof FileNotFoundException)
-            {
-                log.warn(e.getCause().toString());
-            }
-            else
+        	//TODO: try to improve error discrimination when using JDK1.3
+        	// and/or conditionally call .getCause()
+        	
+			//JDK1.4: if (e.getCause() instanceof FileNotFoundException)
+			//JDK1.4: {
+			//JDK1.4:     log.warn(e.getCause().toString());
+			//JDK1.4: }
+			//JDK1.4: else
             {
                 log.error(e.toString());
-                Throwable cause = e.getCause();
-                if (cause != null){
-                	log.error("Cause: "+cause);
-                }
+				//JDK1.4: Throwable cause = e.getCause();
+				//JDK1.4: if (cause != null){
+				//JDK1.4: 	log.error("Cause: "+cause);
+				//JDK1.4: }
                 logError=true;
             }
             in= new BufferedInputStream(conn.getErrorStream());
@@ -880,10 +883,10 @@ public class HTTPSampler extends AbstractSampler
         catch (Exception e)
         {
             log.error(e.toString());
-			Throwable cause = e.getCause();
-			if (cause != null){
-				log.error("Cause: "+cause);
-			}
+			//JDK1.4: Throwable cause = e.getCause();
+			//JDK1.4: if (cause != null){
+			//JDK1.4: 	log.error("Cause: "+cause);
+			//JDK1.4: }
             in= new BufferedInputStream(conn.getErrorStream());
 			logError=true;
         }
