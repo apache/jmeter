@@ -26,17 +26,15 @@
 (least recent)</b></p>  
 
 <b>Changes: for more info, contact <a href="mailto:mstover1@apache.org">Michael Stover</a></b>
+
 <h3>Version 2.0.3</h3>
 <h4>New functionality:</h4>
 <ul>
-<li>Better checking of parameter count in JavaScript function</li>
 <li>XPath Assertion and XPath Function</li>
-<li>Allow CSVRead delimiter to be changed</li>
-<li>Bug 33796 - delete cookies with null/empty values</li>
-<li>All Beanshell access is now via a single class; only need BSH jar at run-time</li>
-<li>Bug 33920 - additional prop files</li>
+<li>Switch Controller</li>
+<li>Allow CSVRead delimiter to be changed (see jmeter.properties)</li>
+<li>Bug 33920 - allow additional property files</li>
 <li>Bug 33845 - allow direct override of Home dir</li>
-<li>Bug 33919 - increase Counter field sizes</li>
 </ul>
 <h4>Bug fixes:</h4>
 <ul>
@@ -51,15 +49,22 @@
 <li>Bug 29186,33299 - fix CLI parsing of "-" in second argument</li>
 <li>Fix CLI parse bug: -D arg1=arg2. Log more startup parameters.</li>
 <li>Fix JTidy and HTMLParser parsers to handle form src= and link rel=stylesheet</li>
-<li>Catch and log Errors in JMeterThread</li>
+<li>JMeterThread now logs Errors to jmeter.log which were appearing on console</li>
 <li>Ensure WhileController condition is dynamically checked</li>
 <li>Bug 32790 ensure If Controller condition is re-evaluated each time</li>
 <li>Bug 30266 - document how to display proxy recording responses</li>
 <li>Bug 33921 - merge should not change file name</li>
+<li>Close file now gives chance to save changes</li>
 </ul>
 <h4>Other changes:</h4>
 <ul>
+<li>To help with variable evaluation, JMeterThread sets "sampling started" a bit earlier (see jmeter.properties)</li>
+<li>Bug 33796 - delete cookies with null/empty values</li>
+<li>Better checking of parameter count in JavaScript function</li>
 <li>Thread Group now defaults to 1 loop instead of forever</li>
+<li>All Beanshell access is now via a single class; only need BSH jar at run-time</li>
+<li>Bug 32464 - document Direct Draw settings in jmeter.bat</li>
+<li>Bug 33919 - increase Counter field sizes</li>
 </ul>
 
 <h3>Version 2.0.2</h3>
