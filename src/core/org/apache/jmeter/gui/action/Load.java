@@ -93,6 +93,7 @@ public class Load implements Command
     private static Set commands = new HashSet();
     static {
         commands.add("open");
+		commands.add("merge");
     }
 
     public Load()
@@ -106,8 +107,13 @@ public class Load implements Command
 
     public void doAction(ActionEvent e)
     {
-		ActionRouter.getInstance().doActionNow(
-		   new ActionEvent(e.getSource(),e.getID(),"close"));
+    	boolean merging = e.getActionCommand().equals("merge");
+    	
+		if (!merging)
+		{
+			ActionRouter.getInstance().doActionNow(
+		        new ActionEvent(e.getSource(),e.getID(),"close"));
+		}
 
         JFileChooser chooser =
             FileDialoger.promptToOpenFile(new String[] { ".jmx" });
@@ -123,7 +129,11 @@ public class Load implements Command
             f = chooser.getSelectedFile();
             if (f != null)
             {
-                log.info("Loading file: " + f);
+            	if (merging){
+					log.info("Merging file: " + f);
+            	} else {
+					log.info("Loading file: " + f);
+            	}
                 reader = new FileInputStream(f);
                 HashTree tree = SaveService.loadSubTree(reader);
                 isTestPlan = insertLoadedTree(e.getID(), tree);
