@@ -26,19 +26,24 @@ import java.io.FileOutputStream;
 
 import javax.swing.JComponent;
 
-import com.sun.media.jai.codec.BMPEncodeParam;
-import com.sun.media.jai.codec.ImageCodec;
-import com.sun.media.jai.codec.ImageEncoder;
-import com.sun.media.jai.codec.PNGEncodeParam;
-import com.sun.media.jai.codec.TIFFEncodeParam;
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGEncodeParam;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
+//import com.sun.media.jai.codec.BMPEncodeParam;
+//import com.sun.media.jai.codec.ImageCodec;
+//import com.sun.media.jai.codec.ImageEncoder;
+//import com.sun.media.jai.codec.PNGEncodeParam;
+//import com.sun.media.jai.codec.TIFFEncodeParam;
 
 /**
  * Class is responsible for taking a component and saving it
- * as a JPEG. The class is very simple. It provides one
- * method saveJComponent(filename,Component). This means any
- * GUI component can be passed to the save service. Logic
- * governing which panels can be saved is completely 
+ * as a JPEG, GIF, PNG or TIFF. The class is very simple.
+ * It provides several methods saveJComponent(filename,Component).
+ * This means any GUI component can be passed to the save service.
+ * Logic governing which panels can be saved is completely 
  * external to the save service.
+ * On a related note, it may make more sense to save the graphs
+ * as SVG, so that users can scale the graphs.
  */
 public class SaveGraphicsService implements SaveServiceConstants {
 
@@ -48,6 +53,7 @@ public class SaveGraphicsService implements SaveServiceConstants {
 	public static final String PNG_EXTENSION = ".png";
 	public static final String BMP_EXTENSION = ".bmp";
 	public static final String TIFF_EXTENSION = ".tif";
+	public static final String JPEG_EXTENSION = ".jpg";
 	
 	/**
 	 * 
@@ -56,6 +62,36 @@ public class SaveGraphicsService implements SaveServiceConstants {
 		super();
 	}
 
+	public void saveUsingJPEGEncoder(String filename, JComponent component){
+		Dimension size = component.getSize();
+		// We use Gray scale, since color produces poor quality
+		// this is an unfortunate result of the default codec
+		// implementation.
+		BufferedImage image = new BufferedImage(size.width, size.height,
+			BufferedImage.TYPE_USHORT_GRAY);
+		Graphics2D grp = image.createGraphics();
+		component.paint(grp);
+		
+		File outfile = new File(filename + JPEG_EXTENSION);
+		FileOutputStream fos = createFile(outfile);
+		JPEGEncodeParam param = JPEGCodec.getDefaultJPEGEncodeParam(image);
+		Float q = new Float(1.0);
+		param.setQuality(q.floatValue(),true);
+		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(fos,param);
+
+		try {
+			encoder.encode(image);
+			fos.close();
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			try {
+				fos.close();
+			} catch (Exception e){
+			}
+		}
+	}
+	
 	/**
 	 * Method uses JAI to save the graph instead of the
 	 * stock com.sun.image.codec.jpeg API. The stock
@@ -63,6 +99,7 @@ public class SaveGraphicsService implements SaveServiceConstants {
 	 * @param filename
 	 * @param component
 	 */
+	/**
 	public void saveJComponentWithJAI(String filename, JComponent component){
 		Dimension size = component.getSize();
 		BufferedImage image = new BufferedImage(size.width, size.height,
@@ -80,9 +117,15 @@ public class SaveGraphicsService implements SaveServiceConstants {
 			fos.close();
 		} catch (Exception e){
 			e.printStackTrace();
+		} finally {
+			try {
+				fos.close();
+			} catch (Exception e){
+			}
 		}
 	}
-
+	**/
+	
 	/**
 	 * Method will save the JComponent as an image. The
 	 * formats are PNG, BMP, and TIFF.
@@ -90,6 +133,7 @@ public class SaveGraphicsService implements SaveServiceConstants {
 	 * @param type
 	 * @param component
 	 */
+	/**
 	public void saveJComponent(String filename, int type, JComponent component){	
 		Dimension size = component.getSize();
 		BufferedImage image = new BufferedImage(size.width, size.height,
@@ -108,6 +152,7 @@ public class SaveGraphicsService implements SaveServiceConstants {
 			this.saveTIFF(filename,image);
 		}
 	}
+	**/
 
 	/**
 	 * Method takes a filename and BufferedImage. It will save
@@ -115,6 +160,7 @@ public class SaveGraphicsService implements SaveServiceConstants {
 	 * @param filename
 	 * @param image
 	 */	
+	/**
 	public void savePNG(String filename, BufferedImage image){
 		File outfile = new File(filename);
 		FileOutputStream fos = createFile(outfile);
@@ -126,8 +172,14 @@ public class SaveGraphicsService implements SaveServiceConstants {
 			fos.close();
 		} catch (Exception e){
 			e.printStackTrace();
+		} finally {
+			try {
+				fos.close();
+			} catch (Exception e){
+			}
 		}
 	}
+	**/
 
 	/**
 	 * Method takes filename and BufferedImage. It will save
@@ -136,6 +188,7 @@ public class SaveGraphicsService implements SaveServiceConstants {
 	 * @param filename
 	 * @param image
 	 */	
+	/**
 	public void saveBMP(String filename, BufferedImage image){
 		File outfile = new File(filename);
 		FileOutputStream fos = createFile(outfile);
@@ -147,8 +200,14 @@ public class SaveGraphicsService implements SaveServiceConstants {
 			fos.close();
 		} catch (Exception e){
 			e.printStackTrace();
+		} finally {
+			try {
+				fos.close();
+			} catch (Exception e){
+			}
 		}
 	}
+	**/
 
 	/**
 	 * Method takes a filename and BufferedImage. It will save
@@ -156,6 +215,7 @@ public class SaveGraphicsService implements SaveServiceConstants {
 	 * @param filename
 	 * @param image
 	 */	
+	/**
 	public void saveTIFF(String filename, BufferedImage image){
 		File outfile = new File(filename);
 		FileOutputStream fos = createFile(outfile);
@@ -167,8 +227,14 @@ public class SaveGraphicsService implements SaveServiceConstants {
 			fos.close();
 		} catch (Exception e){
 			e.printStackTrace();
+		} finally {
+			try {
+				fos.close();
+			} catch (Exception e){
+			}
 		}
 	}
+	**/
 	
 	/**
 	 * Create a new file for the graphics. Since the method
