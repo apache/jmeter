@@ -1,54 +1,29 @@
+::
+:: Win32 build script for ApacheJMeter.jar
+::
+:: @author Stefano Mazzocchi <stefano@apache.org>
+:: @version $Revision$ $Date$
+::
+
 @echo off
 
-rem ######################################
-rem # Apache JMeter Makefile for Windows #
-rem ######################################
+echo  * Compiling Java source...
+md .\temp
+javac -O -d .\temp .\org\apache\jmeter\*.java .\org\apache\jmeter\timers\*.java .\org\apache\jmeter\visualisers\*.java
 
-rem ########### Set your favorite java compiler and javadoc engine here ###############
+echo  * Copying image files...
+md temp\org\apache\jmeter\images
+copy .\org\apache\jmeter\images\*.* .\temp\org\apache\jmeter\images\*.* >nul
 
-set javac=jikes -O
-set javadoc=javadoc -author -version
+echo  * Copying property files...
+copy .\org\apache\jmeter\*.properties .\temp\org\apache\jmeter\*.properties >nul
 
-rem ########### Do not touch below here #################
+echo  * Creating ApacheJMeter.jar file...
+cd .\temp
+jar cmf0 ..\MANIFEST ..\..\bin\ApacheJMeter.jar *.* >nul
+cd ..
 
-set cp=xcopy /Q
-set rmdir=deltree /y
-set noecho=> nul
-set jar=jar cf0M
+echo  * Removing temp directory...
+deltree /y temp >nul
 
-echo Creating temp directory for classfiles...
-%rmdir% temp %noecho%
-mkdir temp
-
-echo Building classes...
-%javac% -d .\temp .\org\apache\jmeter\timers\*.java .\org\apache\jmeter\visualisers\*.java .\org\apache\jmeter\*.java %noecho%
-
-echo Copying image files...
-mkdir temp\org\apache\jmeter\images
-%cp% org\apache\jmeter\images\*.* temp\org\apache\jmeter\images\*.* %noecho%
-
-echo Copying property files...
-%cp% org\apache\jmeter\*.properties temp\org\apache\jmeter\images\*.properties %noecho%
-
-echo Creating Apache-JMeter.jar file...
-%jar% ..\bin\Apache-JMeter.jar .\temp\. %noecho%
-
-echo Cleaning javadoc directory...
-%rmdir% ..\docs\api %noecho%
-mkdir ..\docs\api
-
-echo Building javadoc files...
-%javadoc% -d ..\docs\api org.apache.jmeter org.apache.jmeter.timers org.apache.jmeter.visualisers %noecho%
-
-echo Removing temp directory...
-%rmdir% temp %noecho%
-
-echo ...done
-
-rem ######### Cleanup variables ###########
-set javac=
-set javadoc=
-set cp=
-set rmdir=
-set noecho=
-set jar=
+echo Done.
