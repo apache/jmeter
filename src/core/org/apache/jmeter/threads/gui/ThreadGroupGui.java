@@ -369,7 +369,7 @@ public class ThreadGroupGui
         threadPropsPanel.setBorder(
             BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(),
-                JMeterUtils.getResString("thread_delay_properties")));
+                JMeterUtils.getResString("thread_properties")));
 
         // NUMBER OF THREADS
         JPanel threadPanel = new JPanel(new BorderLayout(5, 0));
