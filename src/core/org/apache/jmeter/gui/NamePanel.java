@@ -53,11 +53,10 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.gui;
-import java.awt.Dimension;
+import java.awt.BorderLayout;
 import java.util.Collection;
 
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -182,14 +181,13 @@ public class NamePanel extends JPanel implements JMeterGUIComponent
 	}
 
     private void init() {
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-
+        setLayout(new BorderLayout());
+        Box subPanel = Box.createHorizontalBox();
         nameLabel = new JLabel(JMeterUtils.getResString("name"));
         nameLabel.setName("name");
-        add(nameLabel);
-        add(Box.createHorizontalStrut(2));
-        add(nameField);
-        
+        subPanel.add(nameLabel);
+        subPanel.add(nameField);
+        subPanel.add(Box.createHorizontalGlue());
         nameLabel.setLabelFor(nameField);
         nameField.setName("name");
         nameField.getDocument().addDocumentListener(new DocumentListener() {
@@ -207,10 +205,11 @@ public class NamePanel extends JPanel implements JMeterGUIComponent
                 // not for text fields
             }
         });
+        add(subPanel,BorderLayout.WEST);
         
-        // Allow this component to expand horizontally but not vertically
+        /* Allow this component to expand horizontally but not vertically
         setMaximumSize(
-            new Dimension(getMaximumSize().width, getPreferredSize().height));
+            new Dimension(getMaximumSize().width, getPreferredSize().height));*/
     }
 
 
