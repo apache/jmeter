@@ -132,10 +132,9 @@ public abstract class TestBean extends AbstractTestElement
      * Prepare the bean for work by populating the bean's properties from the
      * property value map.
      * <p>
-     * This is package-scoped to limit its usage to this package in expectation
-     * of this functionality being moved somewhere else later on.
+     * @deprecated to limit it's usage in expectation of moving it elsewhere.
      */
-    protected void prepare()
+    public void prepare()
     {
         Object[] param= new Object[1];
         

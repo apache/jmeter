@@ -122,8 +122,6 @@ public class ConstantThroughputTimer
      */
     public synchronized long delay()
     {
-    	prepare();
-
         long currentTime = System.currentTimeMillis();
         long currentTarget = targetTime == 0 ? currentTime : targetTime;
         targetTime = currentTarget + (long)( 60000.0 / getThroughput() );
