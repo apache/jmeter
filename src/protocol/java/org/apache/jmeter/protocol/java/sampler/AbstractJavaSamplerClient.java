@@ -65,6 +65,9 @@ import org.apache.log.Logger;
  * methods, in order to simplify development of JavaSamplerClient
  * implementations.
  * <p>
+ * See {@link org.apache.jmeter.protocol.java.test.SleepTest} for an
+ * example of how to extend this class.
+ * <p>
  * While it may be necessary to make changes to the JavaSamplerClient
  * interface from time to time (therefore requiring changes to any
  * implementations of this interface), we intend to make this abstract
@@ -84,38 +87,47 @@ import org.apache.log.Logger;
  * 
  * @see JavaSamplerClient#runTest(JavaSamplerContext)
  * 
- * @author Jeremy Arnold
- * @version $Revision$
+ * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
+ * @version $Id$
  */
-public abstract class AbstractJavaSamplerClient implements JavaSamplerClient {
-	/**
-	 * The Logger to be used by the Java protocol.  This can be used
-	 * by subclasses through the getLogger() method.
-	 * 
-	 * @see #getLogger()
-	 */
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
-	
-    public void setupTest(JavaSamplerContext context) {
-    	log.debug(getClass().getName() + ": setupTest");
+public abstract class AbstractJavaSamplerClient implements JavaSamplerClient
+{
+    /**
+     * The Logger to be used by the Java protocol.  This can be used
+     * by subclasses through the getLogger() method.
+     * 
+     * @see #getLogger()
+     */
+    private static transient Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
+
+    /* Implements JavaSamplerClient.setupTest(JavaSamplerContext) */
+    public void setupTest(JavaSamplerContext context)
+    {
+        log.debug(getClass().getName() + ": setupTest");
     }
 
-    public void teardownTest(JavaSamplerContext context) {
-    	log.debug(getClass().getName() + ": teardownTest");
+    /* Implements JavaSamplerClient.teardownTest(JavaSamplerContext) */
+    public void teardownTest(JavaSamplerContext context)
+    {
+        log.debug(getClass().getName() + ": teardownTest");
     }
 
-    public Arguments getDefaultParameters() {
+    /* Implements JavaSamplerClient.getDefaultParameters() */
+    public Arguments getDefaultParameters()
+    {
         return null;
     }
 
-	/**
-	 * Get a Logger instance which can be used by subclasses to log
-	 * information.  This is the same Logger which is used by the base
-	 * JavaSampler classes (jmeter.protocol.java).
-	 * 
-	 * @return a Logger instance which can be used for logging
-	 */
-	protected Logger getLogger() {
-		return log;
-	}
+    /**
+     * Get a Logger instance which can be used by subclasses to log
+     * information.  This is the same Logger which is used by the base
+     * JavaSampler classes (jmeter.protocol.java).
+     * 
+     * @return a Logger instance which can be used for logging
+     */
+    protected Logger getLogger()
+    {
+        return log;
+    }
 }

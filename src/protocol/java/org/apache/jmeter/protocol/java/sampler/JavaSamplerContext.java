@@ -56,7 +56,6 @@ package org.apache.jmeter.protocol.java.sampler;
 
 import java.lang.Long; // Import needed for some versions of JavaDoc to
                        // properly handle @see tag below.
-
 import java.util.Iterator;
 import java.util.Map;
 
@@ -71,214 +70,246 @@ import org.apache.log.Logger;
  * Additional data may be accessible through JavaSamplerContext
  * in the future.
  * 
- * @author Jeremy Arnold
- * @version $Revision$
+ * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
+ * @version $Id$
  */
-public class JavaSamplerContext {
-	/*
-	 * Implementation notes:
-	 * 
-	 * All of the methods in this class are currently read-only.
-	 * If update methods are included in the future, they should
-	 * be defined so that a single instance of JavaSamplerContext
-	 * can be associated with each thread.  Therefore, no
-	 * synchronization should be needed.  The same instance should
-	 * be used for the call to setupTest, all calls to runTest,
-	 * and the call to teardownTest.
-	 */
-	 
-	/**
-	 * Logging.
-	 */
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
+public class JavaSamplerContext
+{
+    /*
+     * Implementation notes:
+     * 
+     * All of the methods in this class are currently read-only.
+     * If update methods are included in the future, they should
+     * be defined so that a single instance of JavaSamplerContext
+     * can be associated with each thread.  Therefore, no
+     * synchronization should be needed.  The same instance should
+     * be used for the call to setupTest, all calls to runTest,
+     * and the call to teardownTest.
+     */
 
-	/**
-	 * Map containing the initialization parameters for the
-	 * JavaSamplerClient.
-	 */
-	private Map params = null;
-	
+    /** Logging */
+    private static transient Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.java");
 
-	/**
-	 * Create a new JavaSampler	with the specified initialization
-	 * parameters.
-	 * 
-	 * @param params  the initialization parameters.
-	 */
-	public JavaSamplerContext (Arguments args) {
-		this.params = args.getArgumentsAsMap();
-	}
-	
-	/**
-	 * Determine whether or not a value has been specified for the
-	 * parameter with this name.
-	 * 
-	 * @param name  the name of the parameter to test
-	 * @return      true if the parameter value has been specified,
-	 *               false otherwise.
-	 */
-	public boolean containsParameter (String name) {
-		return params.containsKey(name);
-	}
+    /**
+     * Map containing the initialization parameters for the
+     * JavaSamplerClient.
+     */
+    private Map params = null;
 
-	/**
-	 * Get an iterator of the parameter names.  Each entry in the
-	 * Iterator is a String.
-	 * 
-	 * @return  an Iterator of Strings listing the names of the
-	 *           parameters which have been specified for this
-	 *           test.
-	 */
-	public Iterator getParameterNamesIterator() {
-		return params.keySet().iterator();
-	}
+    /**
+     * Create a new JavaSampler with the specified initialization
+     * parameters.
+     * 
+     * @param args  the initialization parameters.
+     */
+    public JavaSamplerContext(Arguments args)
+    {
+        this.params = args.getArgumentsAsMap();
+    }
 
-	
-	/**
-	 * Get the value of a specific parameter as a String, or null
-	 * if the value was not specified.
-	 * 
-	 * @param name  the name of the parameter whose value should
-	 *               be retrieved
-	 * @return      the value of the parameter, or null if the
-	 *               value was not specified
-	 */
-	public String getParameter (String name) {
-		return getParameter (name, null);
-	}
-	
-	/**
-	 * Get the value of a specified parameter as a String, or return
-	 * the specified default value if the value was not specified.
-	 * 
-	 * @param name          the name of the parameter whose value
-	 *                       should be retrieved
-	 * @param defaultValue  the default value to return if the
-	 *                       value of this parameter was not
-	 *                       specified
-	 * @return              the value of the parameter, or the
-	 *                       default value if the parameter was
-	 *                       not specified
-	 */
-	public String getParameter (String name, String defaultValue) {
-		if (params == null || !params.containsKey(name)) {
-			return defaultValue;
-		}
-		return (String)params.get(name);
-	}
+    /**
+     * Determine whether or not a value has been specified for the
+     * parameter with this name.
+     * 
+     * @param name  the name of the parameter to test
+     * @return      true if the parameter value has been specified,
+     *               false otherwise.
+     */
+    public boolean containsParameter(String name)
+    {
+        return params.containsKey(name);
+    }
 
+    /**
+     * Get an iterator of the parameter names.  Each entry in the
+     * Iterator is a String.
+     * 
+     * @return  an Iterator of Strings listing the names of the
+     *           parameters which have been specified for this
+     *           test.
+     */
+    public Iterator getParameterNamesIterator()
+    {
+        return params.keySet().iterator();
+    }
 
-	/**
-	 * Get the value of a specified parameter as an integer. An
-	 * exception will be thrown if the parameter is not specified
-	 * or if it is not an integer. The value may be specified in
-	 * decimal, hexadecimal, or octal, as defined by
-	 * Integer.decode().
-	 * 
-	 * @param name          the name of the parameter whose value
-	 *                       should be retrieved
-	 * @return              the value of the parameter
-	 * 
-	 * @throws NumberFormatException if the parameter is not
-	 *                                specified or is not an integer
-	 * 
-	 * @see java.lang.Integer#decode(java.lang.String)
-	 */
-	public int getIntParameter (String name) throws NumberFormatException {
-		if (params == null || !params.containsKey(name)) {
-			throw new NumberFormatException ("No value for parameter named '" + name + "'.");
-		}
-		
-		return Integer.decode((String)params.get(name)).intValue();
-	}
-	
-	/**
-	 * Get the value of a specified parameter as an integer, or
-	 * return the specified default value if the value was not
-	 * specified or is not an integer.  A warning will be
-	 * logged if the value is not an integer.  The value may
-	 * be specified in decimal, hexadecimal, or octal, as defined
-	 * by Integer.decode().
-	 * 
-	 * @param name          the name of the parameter whose value
-	 *                       should be retrieved
-	 * @param defaultValue  the default value to return if the
-	 *                       value of this parameter was not
-	 *                       specified
-	 * @return              the value of the parameter, or the
-	 *                       default value if the parameter was
-	 *                       not specified
-	 * 
-	 * @see java.lang.Integer#decode(java.lang.String)
-	 */
-	public int getIntParameter (String name, int defaultValue) {
-		if (params == null || !params.containsKey(name)) {
-			return defaultValue;
-		}
-		
-		try {
-			return Integer.decode((String)params.get(name)).intValue();
-		} catch (NumberFormatException e) {
-			log.warn ("Value for parameter '" + name + "' not an integer: '" +
-					params.get(name) + "'.  Using default: '" + defaultValue + "'.", e);
-			return defaultValue;
-		}
-	}
+    /**
+     * Get the value of a specific parameter as a String, or null
+     * if the value was not specified.
+     * 
+     * @param name  the name of the parameter whose value should
+     *               be retrieved
+     * @return      the value of the parameter, or null if the
+     *               value was not specified
+     */
+    public String getParameter(String name)
+    {
+        return getParameter(name, null);
+    }
 
+    /**
+     * Get the value of a specified parameter as a String, or return
+     * the specified default value if the value was not specified.
+     * 
+     * @param name          the name of the parameter whose value
+     *                       should be retrieved
+     * @param defaultValue  the default value to return if the
+     *                       value of this parameter was not
+     *                       specified
+     * @return              the value of the parameter, or the
+     *                       default value if the parameter was
+     *                       not specified
+     */
+    public String getParameter(String name, String defaultValue)
+    {
+        if (params == null || !params.containsKey(name))
+        {
+            return defaultValue;
+        }
+        return (String) params.get(name);
+    }
 
-	/**
-	 * Get the value of a specified parameter as a long. An
-	 * exception will be thrown if the parameter is not specified
-	 * or if it is not a long. The value may be specified in
-	 * decimal, hexadecimal, or octal, as defined by
-	 * Long.decode().
-	 * 
-	 * @param name          the name of the parameter whose value
-	 *                       should be retrieved
-	 * @return              the value of the parameter
-	 * 
-	 * @throws NumberFormatException if the parameter is not
-	 *                                specified or is not a long
-	 * 
-	 * @see Long#decode(String)
-	 */
-	public long getLongParameter (String name) throws NumberFormatException {
-		if (params == null || !params.containsKey(name)) {
-			throw new NumberFormatException ("No value for parameter named '" + name + "'.");
-		}
-		
-		return Long.decode((String)params.get(name)).longValue();
-	}
-	
-	/**
-	 * Get the value of a specified parameter as along, or
-	 * return the specified default value if the value was not
-	 * specified or is not a long.  A warning will be
-	 * logged if the value is not a long.  The value may
-	 * be specified in decimal, hexadecimal, or octal, as defined
-	 * by Long.decode().
-	 * 
-	 * @param name          the name of the parameter whose value
-	 *                       should be retrieved
-	 * @param defaultValue  the default value to return if the
-	 *                       value of this parameter was not
-	 *                       specified
-	 * @return              the value of the parameter, or the
-	 *                       default value if the parameter was
-	 *                       not specified
-	 * 
-	 * @see Long#decode(String)
-	 */
-	public long getLongParameter (String name, long defaultValue) {
-		if (params == null || !params.containsKey(name)) {
-			return defaultValue;
-		}
-		try {
-			return Long.decode((String)params.get(name)).longValue();
-		} catch (NumberFormatException e) {
-			log.warn ("Value for parameter '" + name + "' not a long: '" +
-					params.get(name) + "'.  Using default: '" + defaultValue + "'.", e);
-			return defaultValue;
-		}			
-	}
+    /**
+     * Get the value of a specified parameter as an integer. An
+     * exception will be thrown if the parameter is not specified
+     * or if it is not an integer. The value may be specified in
+     * decimal, hexadecimal, or octal, as defined by
+     * Integer.decode().
+     * 
+     * @param name          the name of the parameter whose value
+     *                       should be retrieved
+     * @return              the value of the parameter
+     * 
+     * @throws NumberFormatException if the parameter is not
+     *                                specified or is not an integer
+     * 
+     * @see java.lang.Integer#decode(java.lang.String)
+     */
+    public int getIntParameter(String name) throws NumberFormatException
+    {
+        if (params == null || !params.containsKey(name))
+        {
+            throw new NumberFormatException(
+                "No value for parameter named '" + name + "'.");
+        }
+
+        return Integer.decode((String) params.get(name)).intValue();
+    }
+
+    /**
+     * Get the value of a specified parameter as an integer, or
+     * return the specified default value if the value was not
+     * specified or is not an integer.  A warning will be
+     * logged if the value is not an integer.  The value may
+     * be specified in decimal, hexadecimal, or octal, as defined
+     * by Integer.decode().
+     * 
+     * @param name          the name of the parameter whose value
+     *                       should be retrieved
+     * @param defaultValue  the default value to return if the
+     *                       value of this parameter was not
+     *                       specified
+     * @return              the value of the parameter, or the
+     *                       default value if the parameter was
+     *                       not specified
+     * 
+     * @see java.lang.Integer#decode(java.lang.String)
+     */
+    public int getIntParameter(String name, int defaultValue)
+    {
+        if (params == null || !params.containsKey(name))
+        {
+            return defaultValue;
+        }
+
+        try
+        {
+            return Integer.decode((String) params.get(name)).intValue();
+        }
+        catch (NumberFormatException e)
+        {
+            log.warn(
+                "Value for parameter '"
+                    + name
+                    + "' not an integer: '"
+                    + params.get(name)
+                    + "'.  Using default: '"
+                    + defaultValue
+                    + "'.",
+                e);
+            return defaultValue;
+        }
+    }
+
+    /**
+     * Get the value of a specified parameter as a long. An
+     * exception will be thrown if the parameter is not specified
+     * or if it is not a long. The value may be specified in
+     * decimal, hexadecimal, or octal, as defined by
+     * Long.decode().
+     * 
+     * @param name          the name of the parameter whose value
+     *                       should be retrieved
+     * @return              the value of the parameter
+     * 
+     * @throws NumberFormatException if the parameter is not
+     *                                specified or is not a long
+     * 
+     * @see Long#decode(String)
+     */
+    public long getLongParameter(String name) throws NumberFormatException
+    {
+        if (params == null || !params.containsKey(name))
+        {
+            throw new NumberFormatException(
+                "No value for parameter named '" + name + "'.");
+        }
+
+        return Long.decode((String) params.get(name)).longValue();
+    }
+
+    /**
+     * Get the value of a specified parameter as along, or
+     * return the specified default value if the value was not
+     * specified or is not a long.  A warning will be
+     * logged if the value is not a long.  The value may
+     * be specified in decimal, hexadecimal, or octal, as defined
+     * by Long.decode().
+     * 
+     * @param name          the name of the parameter whose value
+     *                       should be retrieved
+     * @param defaultValue  the default value to return if the
+     *                       value of this parameter was not
+     *                       specified
+     * @return              the value of the parameter, or the
+     *                       default value if the parameter was
+     *                       not specified
+     * 
+     * @see Long#decode(String)
+     */
+    public long getLongParameter(String name, long defaultValue)
+    {
+        if (params == null || !params.containsKey(name))
+        {
+            return defaultValue;
+        }
+        try
+        {
+            return Long.decode((String) params.get(name)).longValue();
+        }
+        catch (NumberFormatException e)
+        {
+            log.warn(
+                "Value for parameter '"
+                    + name
+                    + "' not a long: '"
+                    + params.get(name)
+                    + "'.  Using default: '"
+                    + defaultValue
+                    + "'.",
+                e);
+            return defaultValue;
+        }
+    }
 }
