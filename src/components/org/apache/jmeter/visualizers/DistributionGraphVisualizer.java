@@ -57,15 +57,15 @@ public class DistributionGraphVisualizer extends AbstractVisualizer
 {
     SamplingStatCalculator model;
     private JPanel graphPanel = null;
-    private JTextField noSamplesField = null;
-    String minute = JMeterUtils.getResString("minute");
+    //NOTREAD private JTextField noSamplesField = null;
+    //NOTREAD String minute = JMeterUtils.getResString("minute");
 
     private DistributionGraph graph;
     private JTextField noteField;
     private int delay = 10;
     private int counter = 0;
-    private int cwidth = 0;
-    private int cheight = 0;
+    //NOTREAD private int cwidth = 0;
+    //NOTREAD private int cheight = 0;
     
     /**
      * Constructor for the GraphVisualizer object.
