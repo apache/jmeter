@@ -55,6 +55,8 @@
 package org.apache.jorphan.util;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Vector;
@@ -195,8 +197,29 @@ public final class JOrphanUtils
 	    return value ? Boolean.TRUE : Boolean.FALSE;	
 	}
 	
+	private static Method decodeMethod = null;
+	private static Method encodeMethod = null;
+	
+	static {
+		Class URLEncoder = URLEncoder.class;
+		Class URLDecoder = URLDecoder.class;
+		Class [] argTypes = { String.class, String.class };
+		try
+        {
+            decodeMethod = URLDecoder.getMethod("decode",argTypes);
+			encodeMethod = URLEncoder.getMethod("encode",argTypes);
+			//System.out.println("Using JDK1.4 xxcode() calls");
+		}
+		catch (Exception e)
+		{
+			//e.printStackTrace();
+		}
+		//System.out.println("java.version="+System.getProperty("java.version"));
+	}
+	
 	/**
 	 * Version of URLEncoder().encode(string,encoding) for JDK1.3
+	 * Also supports JDK1.4 (but will be a bit slower)
 	 * 
 	 * @param string to be encoded
 	 * @param encoding (ignored for JDK1.3)
@@ -205,12 +228,27 @@ public final class JOrphanUtils
 	public static String encode(String string, String encoding)
 	throws UnsupportedEncodingException
 	{
-		//TODO FIX FOR JDK1.4
-		return URLEncoder.encode(string);
+		if (encodeMethod != null) {
+			//JDK1.4: return URLEncoder.encode(string, encoding);
+			Object args [] = {string,encoding};
+			try
+            {
+                return (String) encodeMethod.invoke(null, args );
+            }
+            catch (Exception e)
+            {
+				e.printStackTrace();
+            	return string;
+            }
+		} else {
+			return URLEncoder.encode(string);
+		}
+		
 	}  
 
 	/**
 	 * Version of URLDecoder().decode(string,encoding) for JDK1.3
+	 * Also supports JDK1.4 (but will be a bit slower)
 	 * 
 	 * @param string to be decoded
 	 * @param encoding (ignored for JDK1.3)
@@ -219,8 +257,20 @@ public final class JOrphanUtils
 	public static String decode(String string, String encoding)
 	throws UnsupportedEncodingException
 	{
-		//TODO FIX FOR JDK1.4
-		return URLDecoder.decode(string);
+		if (decodeMethod != null) {
+			//JDK1.4: return URLDecoder.decode(string, encoding);
+			Object args [] = {string,encoding};
+			try {
+				return (String) decodeMethod.invoke(null, args );
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				return string;
+			}
+		} else {
+			return URLDecoder.decode(string);
+		}
 	}  
 
     /**
