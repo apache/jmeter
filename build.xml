@@ -245,9 +245,12 @@
   <property name="commons-collections.jar" value="${lib.dir}/commons-collections.jar"/>
   <property name="junit.jar" value="${lib.dir}/junit.jar"/>
   <property name="logkit.jar" value="${lib.dir}/logkit-1.2.jar"/>
+  
+  <!-- The following 3 jars are probably optional for JDK1.4 -->
   <property name="xalan.jar" value="${lib.dir}/xalan.jar"/>
   <property name="xerces.jar" value="${lib.dir}/xercesImpl.jar"/>
   <property name="xml-apis.jar" value="${lib.dir}/xml-apis.jar"/>
+  
   <property name="jdom.jar" value="${lib.dir}/jdom-b8.jar"/>
   <property name="js.jar" value="${lib.dir}/js.jar"/>
   <property name="soap.jar" value="${lib.dir}/soap.jar"/>
@@ -697,6 +700,10 @@ some of its classes - at present JMeter can only run from jar files.
   </target>
 
   <target name="gump-test" depends="_test" description="Test JMeter">
+    <!-- Show the log file -->
+    <concat>
+      <filelist dir="bin" files="jmeter-test.log" />
+    </concat>
   </target>
   
   <target name="gump-javadoc" depends="docs-api" description="Create JMeter javadocs">
