@@ -127,6 +127,7 @@ public class GenericController
     {
         fireIterEvents();
         log.debug("Calling next on: " + this.getClass().getName());
+        if (isDone()) return null;
         Sampler returnValue = null;
         TestElement currentElement = null;
         try
