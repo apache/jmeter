@@ -104,8 +104,8 @@ public class ThreadGroup
     public final static String ON_SAMPLE_ERROR_STOPTHREAD = "stopthread";
     public final static String ON_SAMPLE_ERROR_STOPTEST = "stoptest";
 
-    private final int DEFAULT_NUM_THREADS = 1;
-    private final int DEFAULT_RAMP_UP = 0;
+    private final static int DEFAULT_NUM_THREADS = 1;
+    private final static int DEFAULT_RAMP_UP = 0;
     private SampleQueue queue = null;
     private LinkedList listeners = new LinkedList();
     private LinkedList remoteListeners = new LinkedList();
@@ -257,7 +257,7 @@ public class ThreadGroup
      */
     public int getDefaultNumThreads()
     {
-        return this.DEFAULT_NUM_THREADS;
+        return DEFAULT_NUM_THREADS;
     }
 
     /**
@@ -267,7 +267,7 @@ public class ThreadGroup
      */
     public int getDefaultRampUp()
     {
-        return this.DEFAULT_RAMP_UP;
+        return DEFAULT_RAMP_UP;
     }
 
     /**
