@@ -263,7 +263,7 @@ public abstract class HTMLParser
      * should be reported by throwing an HTMLParseException. 
      * 
      * @param html HTML code
-     * @param url  Base URL from which the HTML code was obtained
+     * @param baseUrl Base URL from which the HTML code was obtained
      * @return an Iterator for the resource URLs 
      */
     public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl)
@@ -290,7 +290,7 @@ public abstract class HTMLParser
 	 * should be reported by throwing an HTMLParseException. 
 	 * 
 	 * @param html HTML code
-	 * @param url  Base URL from which the HTML code was obtained
+	 * @param baseUrl Base URL from which the HTML code was obtained
 	 * @param coll Collection
 	 * @return an Iterator for the resource URLs 
 	 */
