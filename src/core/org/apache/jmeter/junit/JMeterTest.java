@@ -284,6 +284,7 @@ public class JMeterTest extends JMeterTestCase
 			}
 			TestSuite ts = new TestSuite(item.getClass().getName());
 			ts.addTest(new JMeterTest("runFunction",(Function) item));
+			ts.addTest(new JMeterTest("runFunction2",(Function) item));
 			suite.addTest(ts);
 		}
 		return suite;
@@ -353,6 +354,21 @@ public class JMeterTest extends JMeterTestCase
 			{// No, not a work in progress ...
 				assertTrue("function.xml needs '"+title+"' entry for "+funcItem.getClass().getName(),ct);
 			}
+		}
+	}
+	
+	/*
+	 * Check that function descriptions are OK
+	 */
+	public void runFunction2() throws Exception
+	{
+		Iterator i = funcItem.getArgumentDesc().iterator();
+		while (i.hasNext())
+		{
+			Object o = i.next();
+			assertTrue("Description must be a String",o instanceof String);
+			assertFalse("Description must not start with [refkey"
+			  ,((String)o).startsWith("[refkey"));
 		}
 	}
 	
