@@ -69,7 +69,6 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.PerThreadClonable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -84,7 +83,7 @@ import org.apache.log.Logger;
  */
 public class ThreadGroup
     extends AbstractTestElement
-    implements SampleListener, Serializable, Controller, PerThreadClonable
+    implements SampleListener, Serializable, Controller
 {
     private static Logger log =
         Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");

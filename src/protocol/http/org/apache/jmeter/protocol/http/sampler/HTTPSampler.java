@@ -73,7 +73,6 @@ import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.PerSampleClonable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -101,7 +100,7 @@ import org.apache.oro.text.regex.Util;
  *@created   $Date$
  *@version   $Revision$
  ***************************************/
-public class HTTPSampler extends AbstractSampler implements PerSampleClonable
+public class HTTPSampler extends AbstractSampler
 {
     public final static String HEADERS = "headers";
     public final static String HEADER = "header";
