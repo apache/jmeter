@@ -44,6 +44,11 @@ public class JMeterVariables
     {
         variables.put(key, value);
     }
+    
+    public void putObject(String key, Object value)
+    {
+    	variables.put(key,value);
+    }
 
     public void putAll(Map vars)
     {
@@ -69,6 +74,11 @@ public class JMeterVariables
             return "";
         }
         return val;
+    }
+    
+    public Object getObject(String key)
+    {
+    	return variables.get(key);
     }
 
 }
