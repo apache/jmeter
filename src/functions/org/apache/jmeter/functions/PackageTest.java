@@ -85,6 +85,8 @@ public class PackageTest extends JMeterTestCase
 
 	public static Test suite() throws Exception
 	{
+		   TestSuite allsuites = new TestSuite();
+		   
 		   TestSuite suite = new TestSuite("SingleThreaded");
   		   suite.addTest(new PackageTest("CSVParams"));
 		   suite.addTest(new PackageTest("CSVNoFile"));
@@ -93,18 +95,24 @@ public class PackageTest extends JMeterTestCase
 
            suite.addTest(new PackageTest("CSValias"));
            suite.addTest(new PackageTest("CSVBlankLine"));
+           allsuites.addTest(suite);
 
            //Reset files
            suite.addTest(new PackageTest("CSVSetup"));
 		   TestSuite par = new ActiveTestSuite("Parallel");
 		   par.addTest(new PackageTest("CSVThread1"));
 		   par.addTest(new PackageTest("CSVThread2"));
-		   suite.addTest(par);
+		   allsuites.addTest(par);
 		   
 		   TestSuite sff = new TestSuite("StringFromFile");
 		   sff.addTest(new PackageTest("SFFTest1"));
-		   suite.addTest(sff);
-		   return suite;
+		   sff.addTest(new PackageTest("SFFTest2"));
+		   sff.addTest(new PackageTest("SFFTest3"));
+		   sff.addTest(new PackageTest("SFFTest4"));
+		   sff.addTest(new PackageTest("SFFTest5"));
+		   allsuites.addTest(sff);
+		   
+		   return allsuites;
     }
     
     public void SFFTest1() throws Exception
@@ -136,6 +144,68 @@ public class PackageTest extends JMeterTestCase
 		}
     }
     
+    public void SFFTest2() throws Exception
+    {
+		StringFromFile sff = SFFParams("testfiles/SFFTest1.txt","",null,null);
+		assertEquals("uno",sff.execute());
+		assertEquals("dos",sff.execute());
+		assertEquals("tres",sff.execute());
+		assertEquals("cuatro",sff.execute());
+		assertEquals("cinco",sff.execute());
+		assertEquals("uno",sff.execute()); // Restarts
+		assertEquals("dos",sff.execute());
+		assertEquals("tres",sff.execute());
+		assertEquals("cuatro",sff.execute());
+		assertEquals("cinco",sff.execute());
+    }
+    
+    public void SFFTest3() throws Exception
+    {
+		StringFromFile sff = SFFParams("testfiles/SFFTest1.txt","","","");
+		assertEquals("uno",sff.execute());
+		assertEquals("dos",sff.execute());
+		assertEquals("tres",sff.execute());
+		assertEquals("cuatro",sff.execute());
+		assertEquals("cinco",sff.execute());
+		assertEquals("uno",sff.execute()); // Restarts
+		assertEquals("dos",sff.execute());
+		assertEquals("tres",sff.execute());
+		assertEquals("cuatro",sff.execute());
+		assertEquals("cinco",sff.execute());
+    }
+    
+    public void SFFTest4() throws Exception
+    {
+		StringFromFile sff = SFFParams("xxtestfiles/SFFTest1.txt","","","");
+		assertEquals(StringFromFile.ERR_IND,sff.execute());
+		assertEquals(StringFromFile.ERR_IND,sff.execute());
+    }
+    
+    // Test that only loops twice
+    public void SFFTest5() throws Exception
+    {
+		StringFromFile sff = SFFParams("testfiles/SFFTest1.txt","","","2");
+		assertEquals("uno",sff.execute());
+		assertEquals("dos",sff.execute());
+		assertEquals("tres",sff.execute());
+		assertEquals("cuatro",sff.execute());
+		assertEquals("cinco",sff.execute());
+		assertEquals("uno",sff.execute());
+		assertEquals("dos",sff.execute());
+		assertEquals("tres",sff.execute());
+		assertEquals("cuatro",sff.execute());
+		assertEquals("cinco",sff.execute());
+		try
+		{
+			sff.execute();
+			fail("Should have thrown JMeterStopThreadException");
+		}
+		catch (JMeterStopThreadException e)
+		{
+			// expected
+		}
+    }
+   
     // Function objects to be tested
     private static CSVRead cr1, cr2, cr3, cr4, cr5, cr6;
     
