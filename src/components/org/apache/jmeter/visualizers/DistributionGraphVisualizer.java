@@ -33,6 +33,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -57,7 +58,8 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * @version   $Revision: 
  */
 public class DistributionGraphVisualizer extends AbstractVisualizer
-        implements ImageVisualizer, ItemListener, GraphListener, ActionListener, Clearable
+        implements ImageVisualizer, ItemListener, GraphListener, ActionListener,
+        Clearable, Printable
 {
     SamplingStatCalculator model;
     private JPanel graphPanel = null;
@@ -274,12 +276,27 @@ public class DistributionGraphVisualizer extends AbstractVisualizer
 		return graphInfoPanel;
     }
     
+    /**
+     * Create the save button. This is temporary until
+     * I finish the Action based approach.
+     * @return
+     */
     private JButton createSaveButton(){
 		saveButton = new JButton("Save Graph");
 		saveButton.addActionListener(this);
     	return saveButton;
     }
 
+	/**
+	 * Method implements Printable, which is suppose to
+	 * return the correct internal component. The Action
+	 * class can then print or save the graphics to a
+	 * file.
+	 */
+	public JComponent getPrintableComponent(){
+		return this.graphPanel;
+	}
+	
 	/**
 	 * Handle the action
 	 */    
