@@ -187,7 +187,7 @@ public class ModuleController extends GenericController implements ReplaceableCo
 		if (selectedNode == null)
 		{
 			Vector nodePath = getNodePath();
-			if (nodePath != null)
+			if (nodePath != null && nodePath.size()>0)
 			{
 				GuiPackage gp = GuiPackage.getInstance();
 				if ( gp != null ) 
