@@ -42,6 +42,7 @@ import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.jmeter.protocol.http.util.WSDLHelper;
+import org.apache.jmeter.protocol.http.control.AuthManager;
 
 /**
  * This is the GUI for the webservice samplers. It extends
@@ -418,7 +419,13 @@ public class WebServiceSamplerGui
     {
         try
         {
-            HELPER = new WSDLHelper(url);
+        	// We get the AuthManager and pass it to the WSDLHelper
+        	// once the sampler is updated to Axis, all of this stuff
+        	// should not be necessary. Now I just need to find the
+        	// time and motivation to do it.
+			WebServiceSampler sampler = (WebServiceSampler)this.createTestElement();
+        	AuthManager manager = sampler.getAuthManager();
+            HELPER = new WSDLHelper(url,manager);
             HELPER.parse();
             return HELPER.getWebMethods();
         }
