@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,13 +53,8 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.control.gui;
-import java.awt.Font;
-
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.control.InterleaveControl;
 import org.apache.jmeter.control.RandomController;
@@ -72,13 +67,14 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *
  *@author    Kevin Hammond
  *@created   $Date$
- *@version   1.0
+ *@version   $Revision$
  ***************************************/
 
 public class RandomControlGui extends AbstractControllerGui
 {
 
-	JCheckBox style;
+	private JCheckBox style;
+    
 	/****************************************
 	 * !ToDo (Constructor description)
 	 ***************************************/
@@ -141,27 +137,12 @@ public class RandomControlGui extends AbstractControllerGui
 
 	private void init()
 	{
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+		add(createTitleLabel());
+		add(getNamePanel());
 
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("random_control_title"));
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
-
-		// NAME
-		mainPanel.add(getNamePanel());
-
-		this.add(mainPanel);
 		style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers"));
-		this.add(style);
+		add(style);
 	}
 }
