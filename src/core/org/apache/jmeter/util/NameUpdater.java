@@ -35,15 +35,41 @@ public final class NameUpdater
         }
     }
     
-    public static String getCurrentName(String guiName)
+    public static String getCurrentName(String className)
     {
-        if(nameMap.containsKey(guiName))
-        {
-            return nameMap.getProperty(guiName);
-        }
-        return guiName;
+    	if (nameMap.containsKey(className))
+    	{
+			String newName= nameMap.getProperty(className);
+    		log.info("Upgrading class "+className+" to "+newName);
+    		return newName; 
+    	}
+        return className;
     }
-    
+
+	public static String getCurrentName(String propertyName, String className)
+	{
+		String key= className+"/"+propertyName;
+		if (nameMap.containsKey(key))
+		{
+			String newName= nameMap.getProperty(key);
+			log.info("Upgrading property "+propertyName+" to "+newName);
+			return newName;
+		}
+		return propertyName;
+	}
+
+	public static String getCurrentName(String value, String propertyName, String className)
+	{
+		String key= className+"."+propertyName+"/"+value;
+		if (nameMap.containsKey(key))
+		{
+			String newValue= nameMap.getProperty(key);
+			log.info("Upgrading value "+value+" to "+newValue);
+			return newValue;
+		}
+		return value;
+	}
+
     /**
      * Private constructor to prevent instantiation.
      */
