@@ -119,28 +119,28 @@ public class ListDialog extends JPanel implements ActionListener, KeyListener
 		setLayout(gridBag);
 		c.gridx = 0;
 		c.gridy = 0;
-		c.anchor = c.EAST;
+		c.anchor = GridBagConstraints.EAST;
 		c.weightx = 0;
 		add(name, c.clone());
 		c.weightx = 1;
-		c.fill = c.HORIZONTAL;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx++;
-		c.anchor = c.WEST;
+		c.anchor = GridBagConstraints.WEST;
 		add(nameField, c.clone());
 		c.weightx = 0;
-		c.fill = c.NONE;
+		c.fill = GridBagConstraints.NONE;
 		c.gridy++;
 		c.gridx--;
-		c.anchor = c.EAST;
+		c.anchor = GridBagConstraints.EAST;
 		add(value, c.clone());
 		c.weightx = 1;
-		c.fill = c.HORIZONTAL;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx++;
-		c.anchor = c.WEST;
+		c.anchor = GridBagConstraints.WEST;
 		add(valueField, c.clone());
 		input = new JList();
 		int x = 0;
-		c.fill = c.BOTH;
+		c.fill = GridBagConstraints.BOTH;
 		c.weightx = c.weighty = 1;
 		c.gridy++;
 		c.gridx--;
@@ -150,8 +150,8 @@ public class ListDialog extends JPanel implements ActionListener, KeyListener
 		c.weightx = .5;
 		c.gridy++;
 		c.weighty = 0;
-		c.fill = c.NONE;
-		c.anchor = c.EAST;
+		c.fill = GridBagConstraints.NONE;
+		c.anchor = GridBagConstraints.EAST;
 		ok = new JButton("OK");
 		cancel = new JButton("Cancel");
 		ok.setPreferredSize(cancel.getPreferredSize());
@@ -160,7 +160,7 @@ public class ListDialog extends JPanel implements ActionListener, KeyListener
 		cancel.addActionListener(listener);
 		add(ok, c.clone());
 		c.gridx = 1;
-		c.anchor = c.WEST;
+		c.anchor = GridBagConstraints.WEST;
 		add(cancel, c);
 	}
 	//end of Method

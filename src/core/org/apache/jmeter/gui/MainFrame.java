@@ -372,7 +372,7 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 			gbc.gridy = 0;
 			gbc.gridheight = 1;
 			gbc.gridwidth = 1;
-			gbc.fill = gbc.BOTH;
+			gbc.fill = GridBagConstraints.BOTH;
 			gbc.weightx = 1;
 			gbc.weighty = 0;
 			all.add(toolPanel, gbc.clone());

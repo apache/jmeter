@@ -156,7 +156,7 @@ public class ButtonPanel extends JPanel
 		GridBagLayout g = new GridBagLayout();
 		this.setLayout(g);
 		GridBagConstraints c = new GridBagConstraints();
-		c.fill = c.NONE;
+		c.fill = GridBagConstraints.NONE;
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.gridx = 1;

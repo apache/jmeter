@@ -248,7 +248,7 @@ public class HtmlParserTester extends TestCase
 	{
 		HTTPSampler config = new HTTPSampler();
 		config.setDomain("www.apache.org");
-		config.setMethod(config.GET);
+		config.setMethod(HTTPSampler.GET);
 		config.setPath(path);
 		config.setPort(80);
 		config.setProtocol("http");
