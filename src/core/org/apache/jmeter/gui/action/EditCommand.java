@@ -18,7 +18,7 @@ public class EditCommand implements Command
 	private static Set commands = new HashSet();
 	static
 	{
-		commands.add(JMeterUtils.getResString("edit"));
+		commands.add("edit");
 	}
 
 	/****************************************

@@ -15,7 +15,7 @@ import org.apache.log.output.io.WriterTarget;
  */
 public class LoggingManager
 {
-	private static PatternFormatter format = new PatternFormatter("%{time:MM/dd/yyyy h:mm:ss a} %{priority} - %{category}: %{message}\n%{throwable}\n");
+	private static PatternFormatter format = new PatternFormatter("%{time:MM/dd/yyyy h:mm:ss a} %{priority} - %{category}: %{message} %{throwable}\n");
 	private static WriterTarget target;
 	
 	public static final String JMETER = "jmeter";

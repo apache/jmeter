@@ -2,9 +2,11 @@ package org.apache.jmeter.threads;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
+import org.apache.jmeter.util.LoggingManager;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 /**
  * @author Administrator
  *
@@ -13,33 +15,33 @@ import org.apache.jmeter.samplers.SampleListener;
  */
 public class ListenerNotifier extends LinkedList implements Runnable
 {
+	Logger log =
+		Hierarchy.getDefaultHierarchy().getLoggerFor(LoggingManager.ENGINE);
 	/**
 	 * @see java.lang.Runnable#run()
 	 */
 	boolean running;
 	boolean isStopped;
 	int sleepTime = 2000;
-	
 	public ListenerNotifier()
 	{
 		super();
 		running = true;
 		isStopped = true;
 	}
-	
 	public void run()
 	{
 		Iterator iter;
-		while(running || this.size() > 0)
+		while (running || this.size() > 1)
 		{
-			SampleEvent res = (SampleEvent)this.removeFirst();
-			if(res != null)
+			SampleEvent res = (SampleEvent) this.removeFirst();
+			if (res != null)
 			{
-				List listeners = (List)this.removeFirst();
+				List listeners = (List) this.removeFirst();
 				iter = listeners.iterator();
-				while(iter.hasNext())
+				while (iter.hasNext())
 				{
-					((SampleListener)iter.next()).sampleOccurred(res);
+					((SampleListener) iter.next()).sampleOccurred(res);
 				}
 			}
 			try
@@ -50,21 +52,19 @@ public class ListenerNotifier extends LinkedList implements Runnable
 			{
 			}
 		}
+		log.debug("Listener Notifier stopped");
 		isStopped = true;
 	}
-	
 	public boolean isStopped()
 	{
 		return isStopped;
 	}
-	
-	public synchronized void addLast(SampleEvent item,List listeners)
+	public synchronized void addLast(SampleEvent item, List listeners)
 	{
 		super.addLast(item);
 		super.addLast(listeners);
 		sleepTime = 0;
 	}
-	
 	public synchronized Object removeFirst()
 	{
 		try
@@ -77,12 +77,10 @@ public class ListenerNotifier extends LinkedList implements Runnable
 			return null;
 		}
 	}
-	
 	public void stop()
 	{
 		running = false;
 	}
-	
 	public void start()
 	{
 		Thread noteThread = new Thread(this);

@@ -68,6 +68,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -177,6 +178,11 @@ public class JMeterUtils
 					 		getPropDefault(prop,"WARN")),name);
 				}
 		  }
+	 }
+	 
+	 public static void reinitializeLocale(Locale loc)
+	 {
+	 	RESOURCES = ResourceBundle.getBundle("org.apache.jmeter.resources.messages",loc);
 	 }
 
 	 /**

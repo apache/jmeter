@@ -231,7 +231,7 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 	public void valueChanged(TreeSelectionEvent e)
 	{
 		currentPath = e.getNewLeadSelectionPath();
-		actionHandler.actionPerformed(new ActionEvent(this, 3333, JMeterUtils.getResString("edit")));
+		actionHandler.actionPerformed(new ActionEvent(this, 3333, "edit"));
 	}
 
 
