@@ -1,0 +1,25 @@
+// Sample BeanShell Assertion initialisation file
+
+//print("Initialisation started");
+
+import org.apache.jmeter.util.JMeterUtils;
+
+i = j = k = 0; // for counters
+
+getprop(p){// get a JMeter property
+	return JMeterUtils.getPropDefault(p,"");
+}
+
+getprop(p,d){// get a JMeter property with default
+	return JMeterUtils.getPropDefault(p,d);
+}
+
+setprop(p,v){// set a JMeter property
+	JMeterUtils.getJMeterProperties().setProperty(p, v);
+}
+
+// Assertions can use the following methods on the Response object:
+// SampleResult.setStopThread(true)
+// SampleResult.setStopTest(true)
+
+//print("Initialisation complete");
