@@ -69,11 +69,14 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
+
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.MainFrame;
 import org.apache.jmeter.gui.action.DragNDrop;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -86,6 +89,8 @@ import org.apache.jmeter.util.JMeterUtils;
 public class JMeterTreeListener implements TreeSelectionListener, MouseListener, 
 		KeyListener,MouseMotionListener
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.gui");
 	Container endWindow;
 	JPopupMenu pop;
 	TreePath currentPath;
@@ -408,8 +413,8 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 		}
 		catch(NullPointerException e)
 		{
-			System.out.println("Null pointer: JMeterTreeListener.updateMenuItem()");
-			e.printStackTrace();
+			log.error("Null pointer: JMeterTreeListener.updateMenuItem()",e);
+			log.error("",e);
 		}
 	}
 

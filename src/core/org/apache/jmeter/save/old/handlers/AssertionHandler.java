@@ -8,6 +8,8 @@ import org.apache.jmeter.save.old.SaveHandler;
 import org.apache.jmeter.save.old.Saveable;
 import org.apache.jmeter.save.old.xml.TagHandler;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 import org.xml.sax.Attributes;
 
 /**
@@ -21,7 +23,8 @@ import org.xml.sax.Attributes;
 
 public class AssertionHandler extends TagHandler implements SaveHandler
 {
-
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.util");
 	ResponseAssertion model;
 
 	public AssertionHandler() {
@@ -65,7 +68,7 @@ public class AssertionHandler extends TagHandler implements SaveHandler
 			model.setTestField(JMeterHandler.convertProperty(atts.getValue("testField")));
 			model.setProperty(TestElement.GUI_CLASS,JMeterHandler.getGuiClass(atts.getValue("class")));
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("",e);
 		} 
 	}
 

@@ -71,6 +71,8 @@ import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.ListedHashTree;
 import org.apache.jmeter.util.SearchByClass;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 /****************************************
  * The JMeter interface to the sampling process, allowing JMeter to see the
  * timing, add listeners for sampling events and to stop the sampling process.
@@ -80,6 +82,8 @@ import org.apache.jmeter.util.SearchByClass;
  *@version   $Revision$
  ***************************************/
 public class JMeterThread implements Runnable, java.io.Serializable {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.engine");
 	static Map samplers = new HashMap();
 	int initialDelay = 0;
 	Controller controller;
@@ -122,7 +126,7 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 			//listeners = controller.getListeners();
 			Sampler entry = null;
 			rampUpDelay();
-			System.out.println("Thread "+Thread.currentThread().getName()+" started");
+			log.info("Thread "+Thread.currentThread().getName()+" started");
 			while (running) {
 				while (controller.hasNext() && running) {
 					notifyThreadListeners();
@@ -138,7 +142,7 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 					}
 					catch(Exception e)
 					{
-						e.printStackTrace();
+						log.error("",e);
 					}
 				}
 				if (controller.isDone()) {
@@ -178,7 +182,7 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 				Thread.sleep(sum);
 			}
 			catch (InterruptedException e) {
-				e.printStackTrace();
+				log.error("",e);
 			}
 		}
 	}
@@ -224,7 +228,7 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 				Thread.sleep(initialDelay);
 			}
 			catch (InterruptedException e) {
-				e.printStackTrace();
+				log.error("",e);
 			}
 		}
 	}

@@ -3,17 +3,19 @@ package org.apache.jmeter.engine;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 
+import org.apache.jmeter.samplers.RemoteListenerWrapper;
 import org.apache.jmeter.samplers.RemoteSampleListener;
 import org.apache.jmeter.samplers.RemoteSampleListenerImpl;
-import org.apache.jmeter.samplers.Remoteable;
-import org.apache.jmeter.samplers.SampleListener;
-import org.apache.jmeter.samplers.RemoteListenerWrapper;
 import org.apache.jmeter.samplers.RemoteSampleListenerWrapper;
 import org.apache.jmeter.samplers.RemoteTestListenerWrapper;
+import org.apache.jmeter.samplers.Remoteable;
+import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.ListedHashTree;
 import org.apache.jmeter.util.ListedHashTreeVisitor;
-import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /**
  * @author mstover
@@ -23,13 +25,15 @@ import org.apache.jmeter.threads.ThreadGroup;
  */
 public class ConvertListeners implements ListedHashTreeVisitor {
 
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.engine");
 	/**
 	 * @see ListedHashTreeVisitor#addNode(Object, ListedHashTree)
 	 */
 	public void addNode(Object node, ListedHashTree subTree) {
 		if(node instanceof ThreadGroup)
 			{
-				System.out.println("num threads = "+((ThreadGroup)node).getNumThreads());
+				log.info("num threads = "+((ThreadGroup)node).getNumThreads());
 			}
 		Iterator iter = subTree.list().iterator();
 		while(iter.hasNext())
@@ -37,7 +41,7 @@ public class ConvertListeners implements ListedHashTreeVisitor {
 			Object item = iter.next();
 			if(item instanceof ThreadGroup)
 			{
-				System.out.println("num threads = "+((ThreadGroup)item).getNumThreads());
+				log.info("num threads = "+((ThreadGroup)item).getNumThreads());
 			}
 			if(item instanceof Remoteable && (item instanceof TestListener || item instanceof SampleListener))
 			{
@@ -59,7 +63,7 @@ public class ConvertListeners implements ListedHashTreeVisitor {
 						subTree.replace(item,wrap);
 					}
 				} catch(RemoteException e) {
-					e.printStackTrace();
+					log.error("",e);
 				}
 			}
 		}

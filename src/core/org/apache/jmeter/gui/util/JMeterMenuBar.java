@@ -63,11 +63,13 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
-import javax.swing.MenuElement;
 import javax.swing.UIManager;
+
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /****************************************
  * Title: Apache JMeter Description: Copyright: Copyright (c) 2000 Company:
@@ -80,6 +82,8 @@ import org.apache.jmeter.util.SSLManager;
 
 public class JMeterMenuBar extends JMenuBar
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.gui");
 	JMenu fileMenu;
 	JMenuItem file_save_all;
 	JMenuItem file_load;
@@ -402,7 +406,7 @@ public class JMeterMenuBar extends JMenuBar
 		{
 			JMenuItem start = (JMenuItem)iter.next();
 			JMenuItem stop = (JMenuItem)iter2.next();
-			System.out.println("host = "+host+" start = "+start.getText());
+			log.info("host = "+host+" start = "+start.getText());
 			if(start.getText().equals(host))
 			{
 				start.setEnabled(!running);

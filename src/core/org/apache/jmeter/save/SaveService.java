@@ -1,11 +1,9 @@
 package org.apache.jmeter.save;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.Iterator;
@@ -13,16 +11,19 @@ import java.util.LinkedList;
 import java.util.List;
 
 import junit.framework.TestCase;
+
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
-import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.assertions.AssertionResult;
+import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.ListedHashTree;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 import org.xml.sax.SAXException;
 /**
  * <p>Title: </p>
@@ -35,6 +36,8 @@ import org.xml.sax.SAXException;
 
 public class SaveService
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.util");
 	private static final String ASSERTION_RESULT_TAG_NAME = "assertionResult";
 	private static final String SAMPLE_RESULT_TAG_NAME = "sampleResult";
 	private static final String TIME = "time";
@@ -127,7 +130,7 @@ public class SaveService
 		try {
 			config.setValue(new String(bin,"utf-8"));
 		} catch(UnsupportedEncodingException e) {
-			e.printStackTrace();
+			log.error("",e);
 		}
 		return config;
 	}
@@ -375,12 +378,7 @@ public class SaveService
 		}
 		catch(Exception e)
 		{
-			try{
-				PrintWriter logger = new PrintWriter(new FileWriter("c:\\log.txt"));
-			e.printStackTrace(logger);
-			logger.close();
-			System.out.println("Problem loading part of file");
-			}catch(Exception err){}
+			log.error("Problem loading part of file",e);
 			return null;
 		}
 		ListedHashTree subTree = new ListedHashTree(element);

@@ -61,11 +61,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.save.old.SaveHandler;
 import org.apache.jmeter.save.old.Saveable;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.assertions.ResponseAssertion;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 
 /**
@@ -78,6 +80,8 @@ import org.apache.jmeter.assertions.ResponseAssertion;
 
 public class JMeterHandler
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.util");
 	private static String TOKENS = "&'\"<>\n\r\t\f\b\\";
 	private static Map guiClassMap = new HashMap();
 	private static Map propertyConversion = new HashMap();
@@ -267,7 +271,7 @@ public class JMeterHandler
 			}
 			catch (Exception ex)
 			{
-				ex.printStackTrace();
+				log.error("",ex);
 			}
 		}
 		else

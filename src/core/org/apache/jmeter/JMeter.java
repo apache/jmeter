@@ -78,6 +78,8 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.ListedHashTree;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /**
  * @author mstover
@@ -86,6 +88,8 @@ import org.apache.jmeter.util.ListedHashTree;
  * Window>Preferences>Java>Templates.
  */
 public class JMeter {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter");
 
 	private final static int PROPFILE_OPT = 'p';
 	private final static int TESTFILE_OPT = 't';
@@ -286,7 +290,7 @@ public class JMeter {
 				Thread.sleep(Long.MAX_VALUE);
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("",ex);
 		}
 	}
 
@@ -330,7 +334,7 @@ public class JMeter {
 
 		} catch (Exception e) {
 			System.out.println("Error in NonGUIDriver" + e.getMessage());
-			e.printStackTrace();
+			log.error("",e);
 		}
 	}
 	
@@ -356,7 +360,7 @@ public class JMeter {
 		
 		public void testStarted()
 		{
-			System.out.println(JMeterUtils.getResString("running_test"));
+			log.info(JMeterUtils.getResString("running_test"));
 		}
 		
 		/**

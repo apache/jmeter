@@ -55,10 +55,8 @@
 
 package org.apache.jmeter.visualizers;
 
-import java.awt.*;
-import java.io.*;
-import java.lang.*;
-import javax.swing.*;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 //import Acme.JPM.Encoders.*;
 
 /*
@@ -134,8 +132,9 @@ import javax.swing.*;
  *  @version 1.0 - 199903202000
  */
 public class Spline3 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.gui");
 
-	 private final boolean DEBUG = false;
 	 protected float[][] _coefficients;
 	 protected float[][] _A;
 	 protected float[] _B;
@@ -172,17 +171,15 @@ public class Spline3 {
 		  try {
 				long startTime = System.currentTimeMillis();
 				this.interpolation();
-				if (DEBUG) {
+				if (log.isDebugEnabled()) {
 					 long endTime = System.currentTimeMillis();
 					 long elapsedTime = endTime - startTime;
-					 System.out.print("New Spline curve interpolated in ");
-					 System.out.println(elapsedTime + " ms");
+					 log.debug("New Spline curve interpolated in ");
+					 log.debug(elapsedTime + " ms");
 				}
 		  }
 		  catch (Exception e) {
-				System.err.print("Error when interpolating : ");
-				System.err.println(e);
-				e.printStackTrace();
+				log.error("Error when interpolating : ",e);
 		  }
 
 	 }
@@ -253,8 +250,8 @@ public class Spline3 {
 		  float[] oldX = new float[_n];
 		  // Jacobi convergence test
 		  if (!converge()) {
-				if (DEBUG) {
-					 System.err.println("Warning : "
+				if (log.isDebugEnabled()) {
+					 log.debug("Warning : "
 											  + "equation system resolving is unstable");
 				}
 		  }
@@ -282,19 +279,19 @@ public class Spline3 {
 				iterations++;
 		  }
 		  if (this.precision(oldX, newX) < this._minPrecision) {
-				if (DEBUG) {
-					 System.out.print("Minimal precision (");
-					 System.out.print(this._minPrecision + ") reached after ");
-					 System.out.println(iterations + " iterations");
+				if (log.isDebugEnabled()) {
+					 log.debug("Minimal precision (");
+					 log.debug(this._minPrecision + ") reached after ");
+					 log.debug(iterations + " iterations");
 				}
 		  }
 		  else if (iterations > this._maxIterations) {
-				if (DEBUG) {
-					 System.out.print("Maximal number of iterations (");
-					 System.out.println(this._maxIterations + ") reached");
-					 System.out.print("Warning : precision is only ");
-					 System.out.print(this.precision(oldX, newX));
-					 System.out.println(", divergence is possible");
+				if (log.isDebugEnabled()) {
+					 log.debug("Maximal number of iterations (");
+					 log.debug(this._maxIterations + ") reached");
+					log.debug("Warning : precision is only ");
+					 log.debug(""+this.precision(oldX, newX));
+					 log.debug(", divergence is possible");
 				}
 		  }
 		  for (i = 0; i < _n; i++) {
@@ -354,8 +351,8 @@ public class Spline3 {
 		  float abscissa = 0F, result = 0F;
 		  // verify t belongs to the curve (range [0, _m-1])
 		  if ((t < 0) || (t > (_m - 1))) {
-				if (DEBUG) {
-					 System.err.println("Warning : abscissa " + t
+				if (log.isDebugEnabled()) {
+					 log.debug("Warning : abscissa " + t
 											  + " out of bounds [0, " + (_m - 1) + "]");
 				}
 				// silent error, consider the curve is constant outside its range
@@ -390,8 +387,8 @@ public class Spline3 {
 	 public void debugCheck() {
 		  int i = 0;
 		  for (i = 0; i < _m; i++) {
-				System.out.print("Point " + i + " : ");
-				System.out.println(_r[i] + " =? " + value(i));
+				log.info("Point " + i + " : ");
+				log.info(_r[i] + " =? " + value(i));
 		  }
 	 }
 
@@ -455,27 +452,6 @@ public class Spline3 {
 
 	 public int getDefaultMaxIterations() {
 		  return DEFAULT_MAX_ITERATIONS;
-	 }
-
-	 public static void main(String[] args) {
-		  /* test
-			  OutputStream output = null;
-			  float[] echantillons = {1, 3, 4, 0, 2};
-			  Spline3 essai = new Spline3 (echantillons);
-			  essai.check();
-
-			  try {
-			  output = new FileOutputStream("/tmp/essai.gif");
-			  ImageEncoder encoder = new GifEncoder(essai.draw(300, 200), output);
-			  encoder.encode();
-			  output.close();
-			  }
-			  catch (IOException e) {
-			  System.err.println(e);
-			  e.printStackTrace();
-			  }
-			  //System.exit(0);
-		  */
 	 }
 
 }

@@ -54,24 +54,31 @@
  */
 package org.apache.jmeter.protocol.http.modifier;
 
-import org.apache.jmeter.config.ResponseBasedModifier;
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
+import org.apache.jmeter.config.Argument;
+import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigElement;
-import org.apache.jmeter.samplers.Entry;
+import org.apache.jmeter.config.ResponseBasedModifier;
 import org.apache.jmeter.protocol.http.parser.HtmlParser;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.config.Argument;
-import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.gui.NamePanel;
-import org.apache.jmeter.util.JMeterUtils;
-
-import java.util.*;
-import java.io.*;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
-import java.net.*;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /************************************************************
  *  Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:
@@ -85,7 +92,8 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 public class AnchorModifier extends AbstractTestElement implements ResponseBasedModifier,
 		Serializable
 {
-
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.protocol.http");
 	private static Random rand = new Random();
 
 	/************************************************************
@@ -176,7 +184,7 @@ public class AnchorModifier extends AbstractTestElement implements ResponseBased
 				}
 			}
 			catch (Exception ex) {
-				ex.printStackTrace();
+				log.error("",ex);
 			}
 		}
 		if(possibleReplacements.size() > 0)
@@ -221,7 +229,7 @@ public class AnchorModifier extends AbstractTestElement implements ResponseBased
 			}
 			catch (org.apache.oro.text.regex.MalformedPatternException e)
 			{
-				System.out.println("Bad pattern");
+				log.error("Bad pattern",e);
 			}
 		}
 	}
@@ -253,7 +261,7 @@ public class AnchorModifier extends AbstractTestElement implements ResponseBased
 			}
 			catch (org.apache.oro.text.regex.MalformedPatternException e)
 			{
-				System.out.println("Bad pattern");
+				log.error("Bad pattern",e);
 			}
 		}
 	}

@@ -157,7 +157,6 @@ public class FTPSampler extends AbstractSampler
 				// set the response code here somewhere
 			ftp.disconnect();
 				isSuccessful = true;
-			//System.out.println(s);
 		}
 		catch (java.net.ConnectException cex)
 		{

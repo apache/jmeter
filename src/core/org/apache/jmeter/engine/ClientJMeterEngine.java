@@ -58,10 +58,11 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
-import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.ListedHashTree;
 import org.apache.jmeter.util.SearchByClass;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 
 /************************************************************
@@ -73,6 +74,8 @@ import org.apache.jmeter.util.SearchByClass;
  ***********************************************************/
 public class ClientJMeterEngine implements JMeterEngine
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.engine");
 	RemoteJMeterEngine remote;
 	ListedHashTree test;
 	SearchByClass testListeners;
@@ -136,7 +139,7 @@ public class ClientJMeterEngine implements JMeterEngine
 		}
 		catch(Exception ex)
 		{
-			ex.printStackTrace();
+			log.error("",ex);
 		}
 	}
 
@@ -151,7 +154,7 @@ public class ClientJMeterEngine implements JMeterEngine
 		}
 		catch(Exception ex)
 		{
-			ex.printStackTrace();
+			log.error("",ex);
 		}
 	}
 
@@ -166,7 +169,7 @@ public class ClientJMeterEngine implements JMeterEngine
 		}
 		catch(Exception ex)
 		{
-			ex.printStackTrace();
+			log.error("",ex);
 		}
 	}
 

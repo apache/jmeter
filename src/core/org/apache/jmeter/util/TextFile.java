@@ -1,6 +1,14 @@
 package org.apache.jmeter.util;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /************************************************************
  *  !ToDo (Class description)
@@ -11,6 +19,9 @@ import java.io.*;
  ***********************************************************/
 public class TextFile extends File
 {
+	
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.util");
 	/************************************************************
 	 *  !ToDo (Constructor description)
 	 *
@@ -47,7 +58,7 @@ public class TextFile extends File
 		}
 		catch (IOException ioe)
 		{
-			System.err.println(ioe.getMessage());
+			log.error("",ioe);
 		}
 	}
 
@@ -75,7 +86,7 @@ public class TextFile extends File
 		}
 		catch (IOException ioe)
 		{
-			System.err.println(ioe.getMessage());
+			log.error("",ioe);
 		}
 		return sb.toString();
 	}

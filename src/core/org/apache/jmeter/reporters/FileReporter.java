@@ -55,13 +55,28 @@
 
 package org.apache.jmeter.reporters;
 
-import java.awt.*;
-import java.util.*;
-import java.awt.event.*;
-import java.io.*;
-import java.text.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /**
  * This class loads data from a saved file and displays
@@ -71,6 +86,8 @@ import javax.swing.event.*;
  * @author  Tom Schneider
  */
 public class FileReporter extends JPanel  {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.elements");
 	Hashtable data = new Hashtable();
 	/**  initalize a file reporter from a file */
 	public void init(String file) throws IOException {
@@ -108,11 +125,10 @@ public class FileReporter extends JPanel  {
 				}
 				v.addElement(value);
 			} catch (NumberFormatException nfe) {
-				System.out.println(nfe.toString());
-				System.out.println("This line could not be parsed: "
-					+ line);
+				log.error("This line could not be parsed: "
+					+ line,nfe);
 			} catch (Exception e) {
-				System.out.println(e.toString());
+				log.error("This line caused a problem: "+line,e);
 			}
 		}
 		reader.close();

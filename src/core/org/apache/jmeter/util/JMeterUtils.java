@@ -81,6 +81,8 @@ import javax.swing.JOptionPane;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 import org.apache.log.Priority;
 import org.xml.sax.XMLReader;
 
@@ -95,6 +97,8 @@ import org.xml.sax.XMLReader;
 
 public class JMeterUtils
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.util");
 	private static LoggingManager logManager;
 	private static String LOG_FILE = "log_file";
 	private static String LOG_PRIORITY = "log_level";
@@ -105,7 +109,7 @@ public class JMeterUtils
 		  try {
 				temp = SAXParserFactory.newInstance();
 		  } catch(Exception e) {
-		  e.printStackTrace();
+		  log.error("",e);
 				temp = null;
 		  }
 
@@ -195,7 +199,7 @@ public class JMeterUtils
 		  }
 		  catch (MissingResourceException mre)
 		  {
-				System.out.println("ERROR! Resource string not found: [" + key + "]");
+				log.warn("ERROR! Resource string not found: [" + key + "]");
 				resString = "";
 		  }
 		  return resString;
@@ -228,7 +232,7 @@ public class JMeterUtils
 		  }
 		  catch(NullPointerException e)
 		  {
-				System.out.println(name);
+				log.warn("no icon for "+name);
 				return null;
 		  }
 	 }
@@ -572,7 +576,7 @@ public class JMeterUtils
 				catch (ClassNotFoundException e)
 				{
 
-					 System.err.println("Error loading class " +
+					 log.error("Error loading class " +
 								className + ": class is not found");
 
 				}
@@ -580,7 +584,7 @@ public class JMeterUtils
 				catch (IllegalAccessException e)
 				{
 
-					 System.err.println("Error loading class " + className +
+					 log.error("Error loading class " + className +
 								": does not have access");
 
 				}
@@ -588,7 +592,7 @@ public class JMeterUtils
 				catch (InstantiationException e)
 				{
 
-					 System.err.println("Error loading class " + className +
+					 log.error("Error loading class " + className +
 								": could not instantiate");
 
 				}
@@ -596,7 +600,7 @@ public class JMeterUtils
 				catch (NoClassDefFoundError e)
 				{
 
-					 System.err.println("Error loading class " + className +
+					 log.error("Error loading class " + className +
 								": couldn't find class " + e.getMessage());
 
 				}
@@ -606,7 +610,7 @@ public class JMeterUtils
 		  catch (ClassNotFoundException e)
 		  {
 
-				System.err.println("Error loading class " + impls +
+				log.error("Error loading class " + impls +
 						  ": was not found.");
 
 		  }
@@ -658,7 +662,7 @@ public class JMeterUtils
 					 catch (ClassNotFoundException e)
 					 {
 
-						  System.err.println("Error loading class " +
+						  log.error("Error loading class " +
 									 name + ": class is not found");
 
 					 }
@@ -666,21 +670,21 @@ public class JMeterUtils
 					 catch (IllegalAccessException e)
 					 {
 
-						  System.err.println("Error loading class " + name + ": does not have access");
+						  log.error("Error loading class " + name + ": does not have access");
 
 					 }
 
 					 catch (InstantiationException e)
 					 {
 
-						  System.err.println("Error loading class " + name + ": could not instantiate");
+						  log.error("Error loading class " + name + ": could not instantiate");
 
 					 }
 
 					 catch (NoClassDefFoundError e)
 					 {
 
-						  System.err.println("Error loading class " + name + ": couldn't find class " + e.getMessage());
+						  log.error("Error loading class " + name + ": couldn't find class " + e.getMessage());
 
 					 }
 
@@ -691,7 +695,7 @@ public class JMeterUtils
 		  catch (ClassNotFoundException e)
 		  {
 
-				System.err.println("Error loading class " + className + ": class is not found");
+				log.error("Error loading class " + className + ": class is not found");
 
 		  }
 

@@ -62,11 +62,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -84,6 +81,8 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.TextFile;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 import org.xml.sax.SAXException;
 
 /**
@@ -97,6 +96,8 @@ import org.xml.sax.SAXException;
 public class ResultCollector extends AbstractListenerElement implements SampleListener, Clearable,
 		Serializable,TestListener,Remoteable
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.elements");
 	private final static String COLLECTED = "collected";
 	public final static String FILENAME = "filename";
 	private static boolean functionalMode = false;
@@ -151,7 +152,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		}
 		catch(SAXException e)
 		{
-			e.printStackTrace();
+			log.error("",e);
 			throw new IOException("File "+f+" was improperly formatted");
 		}
 		catch(ConfigurationException e)
@@ -176,7 +177,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		try {
 			initializeFileOutput();
 		} catch(Exception e) {
-			e.printStackTrace();
+			log.error("",e);
 		} 
 		inTest = true;
 	}
@@ -201,7 +202,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 				Configuration savedSamples = getConfiguration(getFilename());
 				readSamples(savedSamples);
 			} catch(Exception e) {
-				e.printStackTrace();
+				log.error("",e);
 			}
 		}
 		inLoading = false;
@@ -359,7 +360,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		}
 		catch(Exception err)
 		{
-			err.printStackTrace(); //should throw exception back to caller
+			log.error("",err); //should throw exception back to caller
 		}
 	}
 

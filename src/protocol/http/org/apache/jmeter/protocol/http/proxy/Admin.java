@@ -4,8 +4,16 @@ package org.apache.jmeter.protocol.http.proxy;
 ***
 ***/
 
-import java.net.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 //
 // Class:     Admin
@@ -15,6 +23,9 @@ import java.io.*;
 
 public class Admin extends Thread
 {
+	
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.protocol.http");
     //
     // Member variables
     //
@@ -46,7 +57,7 @@ public class Admin extends Thread
         }
         catch (IOException e)
         {
-            System.out.println("Error opening admin socket");
+            log.error("Error opening admin socket",e);
         }
     }
 
@@ -93,7 +104,7 @@ public class Admin extends Thread
                     out.flush();
 
                     config.parse(in.readLine());
-                    System.out.println("Configuration changed by administrator.");
+                    log.info("Configuration changed by administrator.");
 
                     // Administrator wants to clean the cache
                     if (config.getCleanCache())
@@ -110,7 +121,7 @@ public class Admin extends Thread
                 // the connection with the proxy. That's fine, we are now
                 // available for another administrator to log in.
                 //
-                System.out.println("Connection with administrator closed.");
+                log.error("Connection with administrator closed.",e);
             }
             finally
             {

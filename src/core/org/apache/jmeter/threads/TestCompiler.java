@@ -27,6 +27,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.ListedHashTree;
 import org.apache.jmeter.util.ListedHashTreeVisitor;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /****************************************
  * <p>
@@ -46,6 +48,8 @@ import org.apache.jmeter.util.ListedHashTreeVisitor;
 
 public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.engine");
 	LinkedList stack = new LinkedList();
 	Map samplerConfigMap = new HashMap();
 	Set objectsWithFunctions = new HashSet();
@@ -573,7 +577,7 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 		try {
 			newColl = (Collection)values.getClass().newInstance();
 		} catch(Exception e) {
-			e.printStackTrace();
+			log.error("",e);
 			return values;
 		} 
 		Iterator iter = values.iterator();

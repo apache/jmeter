@@ -476,10 +476,10 @@ public class HTTPSamplerFull extends HTTPSampler
 		}
 		catch (Exception e2)
 		{
-			System.out.println("getErrorLevel : " + conn.getHeaderField(0));
-			System.out.println("getErrorLevel : " + conn.getHeaderFieldKey(0));
+			log.error("getErrorLevel : " + conn.getHeaderField(0));
+			log.error("getErrorLevel : " + conn.getHeaderFieldKey(0));
 			log.error("getErrorLevel : " +
-				"Error getting response code for HttpUrlConnection - " + e2);
+				"Error getting response code for HttpUrlConnection - ",e2);
 			res.setResponseData(e2.toString().getBytes());
 			res.setResponseCode(NON_HTTP_RESPONSE_CODE);
 			res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
