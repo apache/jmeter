@@ -63,62 +63,68 @@ public class FileReporter extends JPanel
         File datafile = new File(file);
         BufferedReader reader = null;
 
-        if (datafile.canRead())
+        try
         {
-            reader = new BufferedReader(new FileReader(datafile));
+            if (datafile.canRead())
+            {
+                reader = new BufferedReader(new FileReader(datafile));
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(
+                        null, "The file you specified cannot be read.",
+                        "Information", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+            String line;
+            
+            while ((line = reader.readLine()) != null)
+            {
+                try
+                {
+                    line = line.trim();
+                    if (line.startsWith("#") || line.length() == 0)
+                    {
+                        continue;
+                    }
+                    int splitter = line.lastIndexOf(' ');
+                    String key = line.substring(0, splitter);
+                    int len = line.length() - 1;
+                    Integer value = null;
+            
+                    if (line.charAt(len) == ',')
+                    {
+                        value = new Integer(
+                                line.substring(splitter + 1, len));
+                    }
+                    else
+                    {
+                        value = new Integer(
+                                line.substring(splitter + 1));
+                    }
+                    Vector v = getData(key);
+            
+                    if (v == null)
+                    {
+                        v = new Vector();
+                        this.data.put(key, v);
+                    }
+                    v.addElement(value);
+                }
+                catch (NumberFormatException nfe)
+                {
+                    log.error("This line could not be parsed: " + line, nfe);
+                }
+                catch (Exception e)
+                {
+                    log.error("This line caused a problem: " + line, e);
+                }
+            }
         }
-        else
+        finally
         {
-            JOptionPane.showMessageDialog(
-                    null, "The file you specified cannot be read.",
-                    "Information", JOptionPane.INFORMATION_MESSAGE);
-            return;
+			reader.close();
         }
-        String line;
-
-        while ((line = reader.readLine()) != null)
-        {
-            try
-            {
-                line = line.trim();
-                if (line.startsWith("#") || line.length() == 0)
-                {
-                    continue;
-                }
-                int splitter = line.lastIndexOf(' ');
-                String key = line.substring(0, splitter);
-                int len = line.length() - 1;
-                Integer value = null;
-
-                if (line.charAt(len) == ',')
-                {
-                    value = new Integer(
-                            line.substring(splitter + 1, len));
-                }
-                else
-                {
-                    value = new Integer(
-                            line.substring(splitter + 1));
-                }
-                Vector v = getData(key);
-
-                if (v == null)
-                {
-                    v = new Vector();
-                    this.data.put(key, v);
-                }
-                v.addElement(value);
-            }
-            catch (NumberFormatException nfe)
-            {
-                log.error("This line could not be parsed: " + line, nfe);
-            }
-            catch (Exception e)
-            {
-                log.error("This line caused a problem: " + line, e);
-            }
-        }
-        reader.close();
         showPanel();
     }
 
