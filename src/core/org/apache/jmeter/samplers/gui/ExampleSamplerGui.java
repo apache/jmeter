@@ -80,7 +80,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * perform any additional setup that a test would need at run-time
  * 
  * @author sebb AT apache DOT org
- * @version $revision$ $date$
+ * @version $Revision$ $Date$
  */
 public class ExampleSamplerGui extends AbstractSamplerGui
 {
