@@ -17,7 +17,13 @@
 
 package org.apache.jmeter.save.converters;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -33,6 +39,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  */
 public class StringPropertyConverter implements Converter
 {
+   transient private static final Logger log = LoggingManager.getLoggerForClass();
 
     /** Returns the converter version; used to check for possible incompatibilities */
 	public static String getVersion(){	return "$Revision$";}
@@ -52,7 +59,14 @@ public class StringPropertyConverter implements Converter
          MarshallingContext arg2)
    {
       StringProperty prop = (StringProperty)obj;
-      writer.addAttribute("name",prop.getName());
+      try
+      {
+         writer.addAttribute("name",URLEncoder.encode(prop.getName(),"UTF-8"));
+      }
+      catch (UnsupportedEncodingException e)
+      {
+         log.warn("System doesn't support utf-8",e);
+      }
       writer.setValue(prop.getStringValue());
    }
 
@@ -62,7 +76,15 @@ public class StringPropertyConverter implements Converter
    public Object unmarshal(HierarchicalStreamReader reader,
          UnmarshallingContext arg1)
    {
-      StringProperty prop = new StringProperty(reader.getAttribute("name"),reader.getValue());
-      return prop;
+      try
+      {
+         StringProperty prop = new StringProperty(URLDecoder.decode(reader.getAttribute("name"),"UTF-8"),reader.getValue());
+         return prop;
+      }
+      catch (UnsupportedEncodingException e)
+      {
+         log.warn("System doesn't support utf-8",e);
+         return null;
+      }
    }
 }
