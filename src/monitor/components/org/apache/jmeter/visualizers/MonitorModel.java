@@ -54,39 +54,39 @@ public class MonitorModel implements Clearable, Serializable, Cloneable
 	}
 	
 	public int getHealth(){
-		return this.current.health;
+		return this.current.getHealth();
 	}
 	
 	public int getLoad(){
-		return this.current.load;
+		return this.current.getLoad();
 	}
 
 	public int getCpuload(){
-		return this.current.cpuload;	
+		return this.current.getCpuLoad();	
 	}
 	
 	public int getMemload(){
-		return this.current.memload;
+		return this.current.getMemLoad();
 	}
 	
 	public int getThreadload(){
-		return this.current.threadload;
+		return this.current.getThreadLoad();
 	}
 	
 	public String getHost(){
-		return this.current.host;
+		return this.current.getHost();
 	}
 	
 	public String getPort(){
-		return this.current.port;
+		return this.current.getPort();
 	}
 	
 	public String getProtocol(){
-		return this.current.protocol;
+		return this.current.getProtocol();
 	}
 	
 	public long getTimestamp(){
-		return this.current.timestamp;
+		return this.current.getTimeStamp();
 	}
 	
 	public String getURL(){
@@ -99,7 +99,7 @@ public class MonitorModel implements Clearable, Serializable, Cloneable
 	 * @return String 
 	 */
 	public String getTimestampString(){
-		Date date = new Date(this.current.timestamp);
+		Date date = new Date(this.current.getTimeStamp());
 		SimpleDateFormat ft = new SimpleDateFormat();
 		return ft.format(date);
 	}
@@ -142,16 +142,22 @@ public class MonitorModel implements Clearable, Serializable, Cloneable
 	 * cases, it may be desirable to clone the object.
 	 */
 	public Object clone(){
-		MonitorStats newstats =
-			new MonitorStats(current.health,
-				current.load,
-				current.cpuload,
-				current.memload,
-				current.threadload,
-				current.host,
-				current.port,
-				current.protocol,
-				current.timestamp);
-		return new MonitorModel(newstats);
+		return new MonitorModel(cloneMonitorStats());
+	}
+	
+	/**
+	 * a clone method to clone the stats
+	 * @return
+	 */
+	public MonitorStats cloneMonitorStats(){
+		return new MonitorStats(current.getHealth(),
+			current.getLoad(),
+			current.getCpuLoad(),
+			current.getMemLoad(),
+			current.getThreadLoad(),
+			current.getHost(),
+			current.getPort(),
+			current.getProtocol(),
+			current.getTimeStamp());
 	}
 }
