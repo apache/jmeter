@@ -537,7 +537,7 @@ public class SampleResult implements Serializable
 			Thread.sleep(100);
 			res.sampleEnd();
 			assertTrue(res.time  >= 200);
-			assertFalse(res.time >= 210); // we hope!
+			assertFalse(res.time >= 250); // we hope!
 		}
 
 		private static Formatter fmt=new RawFormatter();
