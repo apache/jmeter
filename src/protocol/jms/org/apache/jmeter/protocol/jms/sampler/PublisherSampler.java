@@ -16,11 +16,14 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
+import org.apache.jorphan.io.TextFile;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 
+import org.apache.jmeter.protocol.jms.control.gui.JMSPublisherGui;
 import org.apache.jmeter.protocol.jms.client.ClientPool;
 import org.apache.jmeter.protocol.jms.client.Publisher;
 
@@ -45,15 +48,25 @@ public class PublisherSampler
 	
 	private Publisher PUB = null;
 	private StringBuffer BUFFER = new StringBuffer();
+	private FileServer FSERVER = FileServer.getFileServer();
+	private String file_contents = null;
 	static Logger log = LoggingManager.getLoggerForClass();
 	
 	public PublisherSampler(){
 	}
 	
+	/**
+	 * the implementation calls testStarted() without
+	 * any parameters.
+	 */
 	public void testStarted(String test){
 		testStarted();
 	}
 	
+	/**
+	 * the implementation calls testEnded() without
+	 * any parameters.
+	 */
 	public void testEnded(String test){
 		testEnded();
 	}
@@ -77,19 +90,23 @@ public class PublisherSampler
     }
 
     /**
-     * startTest sets up the client and gets it ready for the
-     * test. Since async messaging is different than request/
-     * response applications, the connection is created at the
-     * beginning of the test and closed at the end of the test.
+     * the implementation creates a new StringBuffer
      */
     public void testStarted() {
 		this.BUFFER = new StringBuffer();
     }
 
+	/**
+	 * NO implementation provided for the sampler. It is
+	 * necessary in this case.
+	 */
 	public void testIterationStart(LoopIterationEvent event){
-		
 	}
 
+	/**
+	 * initialize the Publisher client.
+	 *
+	 */
     public synchronized void initClient() {
         this.PUB =
             new Publisher(
@@ -105,13 +122,19 @@ public class PublisherSampler
         log.info("PublisherSampler.initClient called");
     }
 	
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
+    /**
+     * The implementation calls sample() without any parameters
      */
     public SampleResult sample(Entry e) {
         return this.sample();
     }
-    
+
+	/**
+	 * The implementation will publish n messages within a for
+	 * loop. Once n messages are published, it sets the attributes
+	 * of SampleResult.
+	 * @return
+	 */    
     public SampleResult sample(){
     	SampleResult result = new SampleResult();
     	result.setSampleLabel("PublisherSampler:" + this.getTopic());
@@ -122,15 +145,11 @@ public class PublisherSampler
         if (this.PUB != null){
 			result.sampleStart();
 			for (int idx = 0; idx < loop; idx++) {
-				this.PUB.publish(this.getTextMessage());
+				String tmsg = this.getMessageContent();
+				this.PUB.publish(tmsg);
+				this.BUFFER.append(tmsg);
 			}
 			result.sampleEnd();
-			// since each call to sampler.sample() uses the same message
-			// it's better to append the messages after the messages are
-			// sent to get a more accurate measurement
-			for (int idx = 0; idx < loop; idx++) {
-				this.BUFFER.append(this.getTextMessage());
-			}
 			String content = this.BUFFER.toString();
 			result.setBytes(content.getBytes().length);
 			result.setResponseCode("message published successfully");
@@ -143,6 +162,42 @@ public class PublisherSampler
     	return result;
     }
 
+	/**
+	 * Method will check the setting and get the contents
+	 * for the message.
+	 * @return
+	 */
+	public String getMessageContent(){
+		if (this.getConfigChoice().equals(JMSPublisherGui.use_file)){
+			// in the case the test uses a file, we set it locally and
+			// prevent loading the file repeatedly
+			if (this.file_contents == null){
+				this.file_contents = this.getFileContent(this.getInputFile());
+			}
+			return this.file_contents;
+		} else if (this.getConfigChoice().equals(JMSPublisherGui.use_random)){
+			// Maybe we should consider creating a global cache for the
+			// random files to make JMeter more efficient.
+			String fname = 
+			  FSERVER.getRandomFile(this.getRandomPath(),new String[]{".txt",".obj"}).
+			  getAbsolutePath();
+			return this.getFileContent(fname);
+		} else {
+			return this.getTextMessage();
+		}
+	}
+	
+	/**
+	 * The implementation uses TextFile to load the contents
+	 * of the file and returns a string.
+	 * @param path
+	 * @return
+	 */
+	public String getFileContent(String path){
+		TextFile tf = new TextFile(path);
+		return tf.getText();
+	}
+	
 	//-------------  get/set properties ----------------------//
 	/**
 	 * set the config choice
@@ -160,34 +215,66 @@ public class PublisherSampler
 		return getPropertyAsString(CONFIG_CHOICE);
 	}
 
+	/**
+	 * set the source of the message
+	 * @param choice
+	 */
 	public void setMessageChoice(String choice){
 		setProperty(MESSAGE_CHOICE,choice);
 	}
-	
+
+	/**
+	 * return the source of the message
+	 * @return
+	 */	
 	public String getMessageChoice(){
 		return getPropertyAsString(MESSAGE_CHOICE);
 	}
-	
+
+	/**
+	 * set the input file for the publisher
+	 * @param file
+	 */	
 	public void setInputFile(String file){
 		setProperty(INPUT_FILE,file);	
 	}
-	
+
+	/**
+	 * return the path of the input file
+	 * @return
+	 */	
 	public String getInputFile(){
 		return getPropertyAsString(INPUT_FILE);
 	}
-	
+
+	/**
+	 * set the random path for the messages
+	 * @param path
+	 */	
 	public void setRandomPath(String path){
 		setProperty(RANDOM_PATH,path);
 	}
-	
+
+	/**
+	 * return the random path for messages
+	 * @return
+	 */	
 	public String getRandomPath(){
 		return getPropertyAsString(RANDOM_PATH);
 	}
-	
+
+	/**
+	 * set the text for the message
+	 * @param message
+	 */	
 	public void setTextMessage(String message){
 		setProperty(TEXT_MSG,message);
 	}
-	
+
+	/**
+	 * return the text for the message
+	 * @return
+	 */	
 	public String getTextMessage(){
 		return getPropertyAsString(TEXT_MSG);
 	}
