@@ -98,6 +98,8 @@ import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
  *
@@ -108,6 +110,8 @@ import org.apache.jorphan.gui.ComponentUtil;
 
 public class MainFrame extends JFrame implements TestListener,Remoteable
 {
+	transient private static Logger log =
+			Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 	JPanel all, mainPanel;
 	Box toolPanel;
 	JScrollPane treePanel;
@@ -143,7 +147,7 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 		this.treeModel = treeModel;
 		GuiPackage.getInstance().setMainFrame(this);
 		init();
-		this.setDefaultCloseOperation(this.DO_NOTHING_ON_CLOSE);
+		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 	}
 
 	public MainFrame()
@@ -455,4 +459,5 @@ public class MainFrame extends JFrame implements TestListener,Remoteable
 					this, event.getID(), "exit"));
 		}
 	}
+	
 }
