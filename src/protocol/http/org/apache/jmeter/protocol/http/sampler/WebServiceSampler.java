@@ -34,12 +34,14 @@ import javax.xml.parsers.DocumentBuilder;
 import org.xml.sax.InputSource;
 
 import org.apache.jorphan.io.TextFile;
+import org.apache.jorphan.logging.LoggingManager;
 
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.protocol.http.util.DOMPool;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.log.Logger;
 import org.apache.soap.Envelope;
 import org.apache.soap.messaging.Message;
 import org.apache.soap.transport.SOAPTransport;
@@ -58,6 +60,8 @@ import org.w3c.dom.Document;
  */
 public class WebServiceSampler extends HTTPSampler
 {
+    private static Logger log = LoggingManager.getLoggerForClass();
+
     public static final String XML_DATA = "HTTPSamper.xml_data";
     public static final String SOAP_ACTION = "Soap.Action";
     public static final String XML_DATA_FILE =
@@ -434,7 +438,7 @@ public class WebServiceSampler extends HTTPSampler
 				}
 				catch (Exception ex)
 				{
-					// ex.printStackTrace();
+					log.debug(ex.getMessage());
 				}
 			}
     	}
@@ -591,7 +595,7 @@ public class WebServiceSampler extends HTTPSampler
         }
         catch (Exception exception)
         {
-            // exception.printStackTrace();
+            log.debug(exception.getMessage());
             RESULT.setSuccessful(false);
         }
     }
