@@ -64,6 +64,7 @@ import java.io.FileReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -459,16 +460,27 @@ public abstract class HTMLParser
 			} else {
 				// Convert both to Sets
 				expected = new TreeSet(getFile(resultFile)).iterator();
-				TreeSet temp = new TreeSet();
+				TreeSet temp = new TreeSet(new Comparator(){
+                    public int compare(Object o1, Object o2)
+                    {
+                    	return (o1.toString().compareTo(o2.toString()));
+                    }});
 				while (result.hasNext()){
-					temp.add(result.next().toString());
+					temp.add(result.next());
 				}
 				result=temp.iterator();
 			}
 			
 			while (expected.hasNext()) {
 				assertTrue("Expecting another result",result.hasNext());
-				assertEquals(expected.next(), result.next().toString());
+                try
+                {
+                    assertEquals(expected.next(),((URL) result.next()).toString());
+                }
+                catch (ClassCastException e)
+                {
+                	fail("Expected URL, but got "+e.toString());
+                }
 			}
 			assertFalse("Should have reached the end of the results",result.hasNext());
 		}
