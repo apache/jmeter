@@ -1,14 +1,11 @@
 package org.apache.jmeter.engine.util;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.jmeter.functions.InvalidVariableException;
-import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.threads.*;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
 
 /**
  * @author Administrator
