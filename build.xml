@@ -159,6 +159,9 @@
       <auxClasspath path="${commons-collections.jar}" />
       <auxClasspath path="${commons-logging.jar}" />
       <auxClasspath path="${commons-httpclient.jar}" />
+      <auxClasspath path="${jai_codec.jar}" />
+      <auxClasspath path="${jai_core.jar}" />
+      <auxClasspath path="${mlibwrapper_jai.jar}" />
       <auxClasspath path="${lib.dir}/${bsf.jar}" />
       <auxClasspath path="${lib.dir}/${bsh.jar}" />
       <auxClasspath path="${lib.opt}/${bsf.jar}" />
@@ -303,6 +306,9 @@
   <property name="excalibur-logger.jar" value="${lib.dir}/excalibur-logger-1.1.jar"/>
   <property name="excalibur-i18n.jar" value="${lib.dir}/excalibur-i18n-1.1.jar"/>
   <property name="excalibur-compatibility.jar" value="${lib.dir}/excalibur-compatibility-1.1.jar"/>
+  <property name="jai_codec.jar" value="${lib.dir}/jai_codec.jar"/>
+  <property name="jai_core.jar" value="${lib.dir}/jai_core.jar"/>
+  <property name="mlibwrapper_jai.jar" value="${lib.dir}/mlibwrapper_jai.jar"/>
   <property name="junit.jar" value="${lib.dir}/junit.jar"/>
   <property name="logkit.jar" value="${lib.dir}/logkit-1.2.jar"/>
   <property name="excalibur-datasource.jar" value="${lib.dir}/excalibur-datasource-1.1.1.jar"/>
@@ -347,6 +353,9 @@
     <include name="${excalibur-datasource.jar}"/>
     <include name="${excalibur-pool.jar}"/>
     <include name="${excalibur-instrument.jar}"/>
+    <include name="${jai_codec.jar}"/>
+    <include name="${jai_core.jar}"/>
+    <include name="${mlibwrapper_jai.jar}"/>
   </patternset>
 
   <!--
