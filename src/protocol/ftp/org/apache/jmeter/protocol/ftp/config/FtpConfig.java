@@ -52,7 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.protocol.ftp.config;
+package org.apache.jmeter.protocol.ftp.config;
 
 import java.io.Serializable;
 
@@ -60,58 +60,55 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.ftp.sampler.FTPSampler;
 
 /**
- * Title:        JMeter
- * Description:
- * Copyright:    Copyright (c) 2000
- * Company:      Apache
  * @author Michael Stover
- * @version 1.0
+ * @version $Revision$
  */
-
 public class FtpConfig extends ConfigTestElement implements Serializable
 {
 
-	public FtpConfig()
-	{
-	}
+    public FtpConfig()
+    {
+    }
 
-	public boolean isComplete()
-	{
-		if ((getServer()   != null)   &&
-			 (getFilename() != null)   &&
-			 (!getServer().equals("")) &&
-			 (!getFilename().equals("")))
-		{
-			return true;
-		}
-		else return false;
-	}
+    public boolean isComplete()
+    {
+        if ((getServer() != null)
+            && (getFilename() != null)
+            && (!getServer().equals(""))
+            && (!getFilename().equals("")))
+        {
+            return true;
+        }
+        else
+            return false;
+    }
 
-	public void setServer(String newServer)
-	{
-		this.setProperty(FTPSampler.SERVER,newServer);
-	}
-	public String getServer()
-	{
-		return getPropertyAsString(FTPSampler.SERVER);
-	}
-	public void setFilename(String newFilename)
-	{
-		this.setProperty(FTPSampler.FILENAME,newFilename);
-	}
-	public String getFilename()
-	{
-		return getPropertyAsString(FTPSampler.FILENAME);
-	}
+    public void setServer(String newServer)
+    {
+        this.setProperty(FTPSampler.SERVER, newServer);
+    }
+    public String getServer()
+    {
+        return getPropertyAsString(FTPSampler.SERVER);
+    }
+    public void setFilename(String newFilename)
+    {
+        this.setProperty(FTPSampler.FILENAME, newFilename);
+    }
+    public String getFilename()
+    {
+        return getPropertyAsString(FTPSampler.FILENAME);
+    }
 
-	 /**
-	  * Returns a formatted string label describing this sampler
-	  * Example output:
-	  *      ftp://ftp.nowhere.com/pub/README.txt
-	  *
-	  * @return a formatted string label describing this sampler
-	  */
-	 public String getLabel() {
-		  return ("ftp://" + this.getServer() + "/" + this.getFilename());
-	 }
+    /**
+     * Returns a formatted string label describing this sampler
+     * Example output:
+     *      ftp://ftp.nowhere.com/pub/README.txt
+     *
+     * @return a formatted string label describing this sampler
+     */
+    public String getLabel()
+    {
+        return ("ftp://" + this.getServer() + "/" + this.getFilename());
+    }
 }

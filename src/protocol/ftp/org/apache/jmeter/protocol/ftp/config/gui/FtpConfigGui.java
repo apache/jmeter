@@ -66,118 +66,106 @@ import org.apache.jmeter.protocol.ftp.sampler.FTPSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
+/**
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 public class FtpConfigGui extends AbstractConfigGui
 {
-	private final static String SERVER = "server";
-	private final static String FILENAME = "filename";
+    private final static String SERVER = "server";
+    private final static String FILENAME = "filename";
 
-	private JTextField server;
-	private JTextField filename;
+    private JTextField server;
+    private JTextField filename;
 
-	private boolean displayName = true;
+    private boolean displayName = true;
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public FtpConfigGui()
-	{
-		this(true);
-	}
+    public FtpConfigGui()
+    {
+        this(true);
+    }
 
-    /****************************************
-     * !ToDo (Constructor description)
-     *
-     *@param displayName  !ToDo (Parameter description)
-     ***************************************/
     public FtpConfigGui(boolean displayName)
     {
         this.displayName = displayName;
         init();
     }
 
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("ftp_sample_title");
-	}
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("ftp_sample_title");
+    }
 
-	public void configure(TestElement element)
-	{
-		super.configure(element);
-		server.setText(element.getPropertyAsString(FTPSampler.SERVER));
-		filename.setText(element.getPropertyAsString(FTPSampler.FILENAME));
-	}
+    public void configure(TestElement element)
+    {
+        super.configure(element);
+        server.setText(element.getPropertyAsString(FTPSampler.SERVER));
+        filename.setText(element.getPropertyAsString(FTPSampler.FILENAME));
+    }
 
-	public TestElement createTestElement()
-	{
-		ConfigTestElement element = new ConfigTestElement();
-		modifyTestElement(element);
-		return element;
-	}
+    public TestElement createTestElement()
+    {
+        ConfigTestElement element = new ConfigTestElement();
+        modifyTestElement(element);
+        return element;
+    }
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement element)
     {
         configureTestElement(element);
-        element.setProperty(FTPSampler.SERVER,server.getText());
-        element.setProperty(FTPSampler.FILENAME,filename.getText());
+        element.setProperty(FTPSampler.SERVER, server.getText());
+        element.setProperty(FTPSampler.FILENAME, filename.getText());
     }
 
-	private JPanel createServerPanel()
-	{
+    private JPanel createServerPanel()
+    {
         JLabel label = new JLabel(JMeterUtils.getResString("server"));
-        
+
         server = new JTextField(10);
-		server.setName(SERVER);
+        server.setName(SERVER);
         label.setLabelFor(server);
 
         JPanel serverPanel = new JPanel(new BorderLayout(5, 0));
         serverPanel.add(label, BorderLayout.WEST);
-		serverPanel.add(server, BorderLayout.CENTER);
-		return serverPanel;
-	}
+        serverPanel.add(server, BorderLayout.CENTER);
+        return serverPanel;
+    }
 
-	private JPanel createFilenamePanel()
-	{
-		JLabel label = new JLabel(JMeterUtils.getResString("file_to_retrieve"));
-        
+    private JPanel createFilenamePanel()
+    {
+        JLabel label = new JLabel(JMeterUtils.getResString("file_to_retrieve"));
+
         filename = new JTextField(10);
-		filename.setName(FILENAME);
+        filename.setName(FILENAME);
         label.setLabelFor(filename);
-        
+
         JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
         filenamePanel.add(label, BorderLayout.WEST);
-		filenamePanel.add(filename, BorderLayout.CENTER);
-		return filenamePanel;
-	}
+        filenamePanel.add(filename, BorderLayout.CENTER);
+        return filenamePanel;
+    }
 
-	private void init()
-	{
+    private void init()
+    {
         setLayout(new BorderLayout(0, 5));
-        
-		if(displayName)
-		{
+
+        if (displayName)
+        {
             setBorder(makeBorder());
             add(makeTitlePanel(), BorderLayout.NORTH);
         }
-        
-		// MAIN PANEL
-		VerticalPanel mainPanel = new VerticalPanel();
 
-		// LOOP
-		mainPanel.add(createServerPanel());
-		mainPanel.add(createFilenamePanel());
+        // MAIN PANEL
+        VerticalPanel mainPanel = new VerticalPanel();
 
-		add(mainPanel, BorderLayout.CENTER);
-	}
+        // LOOP
+        mainPanel.add(createServerPanel());
+        mainPanel.add(createFilenamePanel());
+
+        add(mainPanel, BorderLayout.CENTER);
+    }
 }

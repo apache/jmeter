@@ -53,6 +53,7 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.ftp.control.gui;
+
 import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
@@ -65,76 +66,70 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
- * Title: Apache JMeter Description: Copyright: Copyright (c) 2000 Company:
- * Apache Foundation
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
+/**
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 public class FtpTestSamplerGui extends AbstractSamplerGui
 {
-	private LoginConfigGui loginPanel;
-	private FtpConfigGui ftpDefaultPanel;
+    private LoginConfigGui loginPanel;
+    private FtpConfigGui ftpDefaultPanel;
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 ***************************************/
-	public FtpTestSamplerGui()
-	{
-		init();
-	}
+    public FtpTestSamplerGui()
+    {
+        init();
+    }
 
-	public void configure(TestElement element)
-	{
-		super.configure(element);
-		loginPanel.configure(element);
-		ftpDefaultPanel.configure(element);
-	}
+    public void configure(TestElement element)
+    {
+        super.configure(element);
+        loginPanel.configure(element);
+        ftpDefaultPanel.configure(element);
+    }
 
-
-	public TestElement createTestElement()
-	{
-		FTPSampler sampler = new FTPSampler();
-		modifyTestElement(sampler);
-		return sampler;
-	}
+    public TestElement createTestElement()
+    {
+        FTPSampler sampler = new FTPSampler();
+        modifyTestElement(sampler);
+        return sampler;
+    }
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement sampler)
     {
         sampler.clear();
-        ((FTPSampler)sampler).addTestElement(ftpDefaultPanel.createTestElement());
-        ((FTPSampler)sampler).addTestElement(loginPanel.createTestElement());
+        ((FTPSampler) sampler).addTestElement(
+            ftpDefaultPanel.createTestElement());
+        ((FTPSampler) sampler).addTestElement(loginPanel.createTestElement());
         this.configureTestElement(sampler);
     }
 
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("ftp_testing_title");
-	}
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("ftp_testing_title");
+    }
 
-	private void init()
-	{
+    private void init()
+    {
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
 
-        add (makeTitlePanel(), BorderLayout.NORTH);
+        add(makeTitlePanel(), BorderLayout.NORTH);
 
         VerticalPanel mainPanel = new VerticalPanel();
-        
+
         ftpDefaultPanel = new FtpConfigGui(false);
         mainPanel.add(ftpDefaultPanel);
-        
-		loginPanel = new LoginConfigGui(false);
-        loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config")));
+
+        loginPanel = new LoginConfigGui(false);
+        loginPanel.setBorder(
+            BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("login_config")));
         mainPanel.add(loginPanel);
 
-		add(mainPanel, BorderLayout.CENTER);
-	}
+        add(mainPanel, BorderLayout.CENTER);
+    }
 }
