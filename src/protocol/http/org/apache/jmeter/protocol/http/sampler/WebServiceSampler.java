@@ -73,6 +73,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.soap.*;
 import org.apache.soap.messaging.*;
 import org.apache.soap.transport.*;
+import org.apache.soap.transport.http.SOAPHTTPConnection;
 import javax.xml.parsers.*;
 import org.w3c.dom.Document;
 import org.xml.sax.*;
@@ -97,6 +98,9 @@ public class WebServiceSampler extends HTTPSampler
     public static final String MEMORY_CACHE = "WebServiceSampler.memory_cache";
     public static final String READ_RESPONSE =
         "WebServiceSampler.read_response";
+    public static final String USE_PROXY = "WebServiceSampler.use_proxy";
+    public static final String PROXY_HOST = "WebServiceSampler.proxy_host";
+    public static final String PROXY_PORT = "WebServiceSampler.proxy_port";
 
     /**
      * The SOAPAction is required by MS
@@ -307,6 +311,54 @@ public class WebServiceSampler extends HTTPSampler
         return this.getPropertyAsBoolean(READ_RESPONSE);
     }
 
+	/**
+	 * Set whether or not to use a proxy
+	 * @param proxy
+	 */
+	public void setUseProxy(boolean proxy){
+		setProperty(USE_PROXY, String.valueOf(proxy));
+	}
+
+	/**
+	 * Return whether or not to use proxy
+	 * @return
+	 */	
+	public boolean getUseProxy(){
+		return this.getPropertyAsBoolean(USE_PROXY);
+	}
+
+	/**
+	 * Set the proxy hostname
+	 * @param host
+	 */	
+	public void setProxyHost(String host){
+		setProperty(PROXY_HOST, host);
+	}
+
+	/**
+	 * Return the proxy hostname
+	 * @return
+	 */	
+	public String getProxyHost(){
+		return this.getPropertyAsString(PROXY_HOST);
+	}
+
+	/**
+	 * Set the proxy port
+	 * @param port
+	 */	
+	public void setProxyPort(String port){
+		setProperty(PROXY_PORT, port);
+	}
+
+	/**
+	 * Return the proxy port
+	 * @return
+	 */	
+	public int getProxyPort(){
+		return this.getPropertyAsInt(PROXY_PORT);
+	}
+	
     /**
      * This method uses Apache soap util to create the proper DOM elements.
      * @return Element
@@ -406,6 +458,14 @@ public class WebServiceSampler extends HTTPSampler
             // send the message
             Message msg = new Message();
             RESULT.sampleStart();
+            // if use proxy is set, we create the soaphttpconnection
+            // and set the host and port
+			if (this.getUseProxy()){
+				SOAPHTTPConnection spconn = new SOAPHTTPConnection();
+				spconn.setProxyHost(this.getProxyHost());
+				spconn.setProxyPort(this.getProxyPort());
+				msg.setSOAPTransport(spconn);
+			}
             msg.send(this.getUrl(), this.getSoapAction(), msgEnv);
 
             SOAPTransport st = msg.getSOAPTransport();
