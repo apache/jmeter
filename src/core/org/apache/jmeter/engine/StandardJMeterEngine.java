@@ -316,7 +316,8 @@ public class StandardJMeterEngine
                     group.getName() + (groupCount++) + "-" + (i + 1));
 
                 scheduleThread(threads[i], group);
-
+                
+                threads[i].setEngine(this);
                 Thread newThread = new Thread(threads[i]);
                 newThread.setName(threads[i].getThreadName());
                 allThreads.put(threads[i], newThread);
@@ -408,5 +409,16 @@ public class StandardJMeterEngine
             }
         }
     }
+    
+	public void askThreadsToStop()
+	{
+		Iterator iter = new HashSet(allThreads.keySet()).iterator();
+		while (iter.hasNext())
+		{
+			JMeterThread item = (JMeterThread) iter.next();
+			item.stop();
+		}
+	}
+
 
 }
