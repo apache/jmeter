@@ -50,6 +50,7 @@ is wrapped in ${}.</p>
         <li><a href="#__logn">log - log a message</a></li>
         <li><a href="#__BeanShell">BeanShell - run BeanShell</a></li>
         <li><a href="#__split">split - Split a string into variables</a></li>
+        <li><a href="#__XPath">XPath - XPath use an xpath expression</a></li>
 </ul>
 
 <subsection name="16.1 What can functions do" anchor="what_can_do">
@@ -520,7 +521,29 @@ If omitted, "," is used. Note that "," would need to be specified as "\,".
         
 </properties>
 </component>
+<component index="16.5.15" name="__XPath">
+<description>
+	<p>
+	The XPath function reads an XML file and matches the XPath, each
+	of the node match's are iterated through similar to the CVSReader.
+	</p>
+	<p/>
+	Example:
+	<code>
+	<br/>
+		
+	<br/>
+	${__XPath(/path/to/build.xml, //target/@name)}
+	<br/>
+	This will match all targets in build.xml and return the name variable
+	</code>
+</description>
 
+<properties>
+        <property name="XML file to parse" required="Yes"> a XML file to parse</property>
+        <property name="XPath" required="Yes"> a XPath expression to match nodes in the XML file</property>        
+</properties>
+</component>
 </subsection>
 
 </section>
