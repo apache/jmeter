@@ -761,6 +761,12 @@ public class LDAPExtSampler extends AbstractSampler  {
                 responseData=responseData + "<comparedn>" +getPropertyAsString(COMPAREDN) +"</comparedn>";
                 responseData=responseData + "<comparefilter>" +getPropertyAsString(COMPAREFILT) +"</comparefilter></operation>";
                 compareOp(temp_client, dirContext, res);
+			    if(temp_client.compareAnswer.hasMore()) {
+			    } else {
+           				res.setResponseCode("49")	;
+           				res.setResponseMessage("compareFalse");
+            			isSuccessful = false;
+                }
             }else if (getPropertyAsString(TEST).equals("add")) {
                 res.setSamplerData("Add object "+getPropertyAsString(BASE_ENTRY_DN));
                 responseData=responseData + "<operation><opertype>add</opertype>";
