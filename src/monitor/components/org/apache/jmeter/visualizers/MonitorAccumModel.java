@@ -21,6 +21,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -170,6 +171,13 @@ public class MonitorAccumModel implements Clearable, Serializable
 		notifyListeners(createNewMonitorModel(url));
 	}
 	
+	/**
+	 * Method will return a new MonitorModel object
+	 * with the given URL. This is used when the server
+	 * fails to respond fully, or is dead.
+	 * @param url
+	 * @return
+	 */
 	public MonitorModel createNewMonitorModel(URL url){
 		MonitorStats stat = new MonitorStats(Stats.DEAD,
 			0,
@@ -185,10 +193,17 @@ public class MonitorAccumModel implements Clearable, Serializable
 	}
 	
 	/**
-	 * Clears everything.
+	 * Clears everything except the listener. Do not
+	 * clear the listeners. If we clear listeners,
+	 * subsequent "run" will not notify the gui of
+	 * data changes.
 	 */
 	public void clear(){
-		listeners.clear();
+		Iterator itr = this.MAP.keySet().iterator();
+		while (itr.hasNext()){
+			List lt = (List)this.MAP.get(itr.next());
+			lt.clear();
+		}
 		this.MAP.clear();
 	}
 	

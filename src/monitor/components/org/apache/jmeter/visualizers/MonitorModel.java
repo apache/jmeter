@@ -93,6 +93,11 @@ public class MonitorModel implements Clearable, Serializable, Cloneable
 		return this.current.getURL();
 	}
 	
+	/**
+	 * Method will return a formatted date using
+	 * SimpleDateFormat.
+	 * @return String 
+	 */
 	public String getTimestampString(){
 		Date date = new Date(this.current.timestamp);
 		SimpleDateFormat ft = new SimpleDateFormat();
@@ -106,10 +111,10 @@ public class MonitorModel implements Clearable, Serializable, Cloneable
 	public String toString(){
 		return getURL();
 	}
-	
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.samplers.Clearable#clear()
-     */
+
+	/**
+	 * clear will create a new MonitorStats object.
+	 */	
     public void clear()
     {
 		current = 
@@ -132,6 +137,10 @@ public class MonitorModel implements Clearable, Serializable, Cloneable
 		listeners.add(listener);
 	}
 	
+	/**
+	 * a clone method is provided for convienance. In some
+	 * cases, it may be desirable to clone the object.
+	 */
 	public Object clone(){
 		MonitorStats newstats =
 			new MonitorStats(current.health,
