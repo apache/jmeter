@@ -123,6 +123,10 @@ public class SaveService implements SaveServiceConstants
      be saved to the test results.  **/
     protected static boolean saveDataType = true;
 
+    /** A flag to indicate whether the assertion result's failure message
+     should be saved to the test results.  **/
+    protected static boolean saveAssertionResultsFailureMessage = false;
+
     /** A flag to indicate whether the label should
      be saved to the test results.  **/
     protected static boolean saveLabel = true;
@@ -241,6 +245,9 @@ public class SaveService implements SaveServiceConstants
 
         whichAssertionResults = props.getProperty(ASSERTION_RESULTS_PROP,
                                                   NONE);
+        saveAssertionResultsFailureMessage =
+            TRUE.equalsIgnoreCase(props.getProperty(ASSERTION_RESULTS_FAILURE_MESSAGE_PROP,
+                                                    FALSE));
 
         if (NONE.equals(whichAssertionResults))
         {
@@ -350,8 +357,12 @@ public class SaveService implements SaveServiceConstants
             text.append(SaveServiceConstants.SUCCESSFUL);
             text.append(defaultDelimiter);
         }
-        // text.append(sample.getSamplerData().toString());
-        // text.append(getAssertionResult(sample));
+
+        if (saveAssertionResultsFailureMessage)
+        {
+            text.append(SaveServiceConstants.FAILURE_MESSAGE);
+            text.append(defaultDelimiter);
+        }
 
         String resultString = null;
         int size = text.length();
@@ -627,6 +638,7 @@ public class SaveService implements SaveServiceConstants
         {
             String stamp = formatter.format(new Date(sample.getTimeStamp()));
             text.append(stamp);
+            text.append(delimiter);
         }
 
         if (saveTime)
@@ -668,6 +680,24 @@ public class SaveService implements SaveServiceConstants
         if (saveSuccessful)
         {
             text.append("" + sample.isSuccessful());
+            text.append(delimiter);
+        }
+
+        if (saveAssertionResultsFailureMessage)
+        {
+            String message = null;
+            AssertionResult[] results = sample.getAssertionResults();
+
+            if (results.length > 0)
+            {
+                message = results[0].getFailureMessage();
+            }
+
+            if (message == null)
+            {
+                message = "";
+            }
+            text.append(message);
             text.append(delimiter);
         }
         // text.append(sample.getSamplerData().toString());
