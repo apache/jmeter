@@ -330,98 +330,31 @@ public final class HtmlParsingUtils implements Serializable
      * Create a new URL based on an HREF string plus a contextual URL object.
      * Given that an HREF string might be of three possible forms, some
      * processing is required.
-     * 
-     * TODO: review how is this any different from
-     *   <code>new URL(context.getURL(), parsedUrlString)</code>
-     * and possibly eliminate this method.
      */
     public static HTTPSampler createUrlFromAnchor(
         String parsedUrlString,
-        HTTPSampler context)
+        URL context)
         throws MalformedURLException
     {
-        HTTPSampler url = new HTTPSampler();
-        url.setDomain(context.getDomain());
-        url.setProtocol(context.getProtocol());
-        url.setPort(context.getPort());
-
-        // In JDK1.3, we can get the path using getPath(). However, in JDK1.2,
-        // we have to parse the file to obtain the path. In the source for
-        // JDK1.3.1, they determine the path to be from the start of the file
-        // up to the LAST question mark (if any).
-        String contextPath = null;
-        String contextFile = context.getPath();
-        int indexContextQuery = contextFile.lastIndexOf('?');
-        if (indexContextQuery != -1)
+        if (log.isDebugEnabled())
         {
-            contextPath = contextFile.substring(0, indexContextQuery);
+            log.debug("Creating URL from Anchor: "+parsedUrlString
+                +", base: "+context);
         }
-        else
-        {
-            contextPath = contextFile;
-        }
+        URL url= new URL(context, parsedUrlString);
+        HTTPSampler sampler = new HTTPSampler();
+        sampler.setDomain(url.getHost());
+        sampler.setProtocol(url.getProtocol());
+        sampler.setPort(url.getPort());
+        sampler.setPath(url.getPath());
+        sampler.parseArguments(url.getQuery());
 
-        int queryStarts = parsedUrlString.indexOf("?");
-
-        if (queryStarts == -1)
-        {
-            queryStarts = parsedUrlString.length();
-        }
-
-        if (parsedUrlString.startsWith("/"))
-        {
-            url.setPath(parsedUrlString.substring(0, queryStarts));
-        }
-        else if (parsedUrlString.startsWith(".."))
-        {
-            url.setPath(
-                contextPath.substring(
-                    0,
-                    contextPath.substring(
-                        0,
-                        contextPath.lastIndexOf("/")).lastIndexOf(
-                        "/"))
-                    + parsedUrlString.substring(2, queryStarts));
-        }
-        else if (!parsedUrlString.toLowerCase().startsWith("http"))
-        {
-            url.setPath(
-                contextPath.substring(0, contextPath.lastIndexOf("/"))
-                    + "/"
-                    + parsedUrlString.substring(0, queryStarts));
-        }
-        else
-        {
-            URL u = new URL(parsedUrlString);
-
-            // Determine the path. (See JDK1.2/1.3 comment above.)
-            String uPath = null;
-            String uFile = u.getFile();
-            int indexUQuery = uFile.lastIndexOf('?');
-            if (indexUQuery != -1)
-            {
-                uPath = uFile.substring(0, indexUQuery);
-            }
-            else
-            {
-                uPath = uFile;
-            }
-
-            url.setPath(uPath);
-            url.setDomain(u.getHost());
-            url.setProtocol(u.getProtocol());
-            url.setPort(u.getPort());
-        }
-
-        if (queryStarts < parsedUrlString.length())
-        {
-            url.parseArguments(parsedUrlString.substring(queryStarts + 1));
-        }
-
-        return url;
+        return sampler;
     }
 
-    public static List createURLFromForm(Node doc, HTTPSampler context)
+    public static List createURLFromForm(
+            Node doc, 
+            URL context)
     {
         String selectName = null;
         LinkedList urlConfigs = new LinkedList();
@@ -442,7 +375,7 @@ public final class HtmlParsingUtils implements Serializable
     private static boolean recurseForm(
         Node tempNode,
         LinkedList urlConfigs,
-        HTTPSampler context,
+        URL context,
         String selectName,
         boolean inForm)
     {
@@ -611,7 +544,7 @@ public final class HtmlParsingUtils implements Serializable
 
     private static HTTPSampler createFormUrlConfig(
         Node tempNode,
-        HTTPSampler context)
+        URL context)
         throws MalformedURLException
     {
         NamedNodeMap atts = tempNode.getAttributes();
