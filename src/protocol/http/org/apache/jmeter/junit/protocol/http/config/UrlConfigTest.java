@@ -20,7 +20,8 @@ package org.apache.jmeter.junit.protocol.http.config;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -31,9 +32,9 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
  */
 public class UrlConfigTest extends JMeterTestCase
 {
-    HTTPSampler config;
-    HTTPSampler defaultConfig;
-    HTTPSampler partialConfig;
+    HTTPSamplerBase config;
+    HTTPSamplerBase defaultConfig;
+    HTTPSamplerBase partialConfig;
 
     public UrlConfigTest(String name)
     {
@@ -46,20 +47,20 @@ public class UrlConfigTest extends JMeterTestCase
         args.addArgument("username", "mstover");
         args.addArgument("password", "pass");
         args.addArgument("action", "login");
-        config = new HTTPSampler();
+        config = new HTTPNullSampler();
         config.setName("Full Config");
-        config.setProperty(HTTPSampler.DOMAIN, "www.lazer.com");
-        config.setProperty(HTTPSampler.PATH, "login.jsp");
-        config.setProperty(HTTPSampler.METHOD, HTTPSampler.POST);
+        config.setProperty(HTTPSamplerBase.DOMAIN, "www.lazer.com");
+        config.setProperty(HTTPSamplerBase.PATH, "login.jsp");
+        config.setProperty(HTTPSamplerBase.METHOD, HTTPSamplerBase.POST);
         config.setProperty(
-            new TestElementProperty(HTTPSampler.ARGUMENTS, args));
-        defaultConfig = new HTTPSampler();
+            new TestElementProperty(HTTPSamplerBase.ARGUMENTS, args));
+        defaultConfig = new HTTPNullSampler();
         defaultConfig.setName("default");
-        defaultConfig.setProperty(HTTPSampler.DOMAIN, "www.xerox.com");
-        defaultConfig.setProperty(HTTPSampler.PATH, "default.html");
-        partialConfig = new HTTPSampler();
-        partialConfig.setProperty(HTTPSampler.PATH, "main.jsp");
-        partialConfig.setProperty(HTTPSampler.METHOD, HTTPSampler.GET);
+        defaultConfig.setProperty(HTTPSamplerBase.DOMAIN, "www.xerox.com");
+        defaultConfig.setProperty(HTTPSamplerBase.PATH, "default.html");
+        partialConfig = new HTTPNullSampler();
+        partialConfig.setProperty(HTTPSamplerBase.PATH, "main.jsp");
+        partialConfig.setProperty(HTTPSamplerBase.METHOD, HTTPSamplerBase.GET);
     }
 
     public void testSimpleConfig()
@@ -70,15 +71,15 @@ public class UrlConfigTest extends JMeterTestCase
 
     public void testOverRide()
     {
-    	JMeterProperty jmp =partialConfig.getProperty(HTTPSampler.DOMAIN);
+    	JMeterProperty jmp =partialConfig.getProperty(HTTPSamplerBase.DOMAIN);
         assertTrue(jmp instanceof NullProperty);
-        assertTrue(new NullProperty(HTTPSampler.DOMAIN).equals(jmp));
+        assertTrue(new NullProperty(HTTPSamplerBase.DOMAIN).equals(jmp));
         partialConfig.addTestElement(defaultConfig);
         assertEquals(
-            partialConfig.getPropertyAsString(HTTPSampler.DOMAIN),
+            partialConfig.getPropertyAsString(HTTPSamplerBase.DOMAIN),
             "www.xerox.com");
         assertEquals(
-            partialConfig.getPropertyAsString(HTTPSampler.PATH),
+            partialConfig.getPropertyAsString(HTTPSamplerBase.PATH),
             "main.jsp");
     }
 }

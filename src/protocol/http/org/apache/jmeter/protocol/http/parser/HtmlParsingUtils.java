@@ -245,11 +245,11 @@ public final class HtmlParsingUtils
     }
 
     /**
-     * Create a new URL based on an HREF string plus a contextual URL object.
+     * Create a new Sampler based on an HREF string plus a contextual URL object.
      * Given that an HREF string might be of three possible forms, some
      * processing is required.
      */
-    public static HTTPSampler createUrlFromAnchor(
+    public static HTTPSamplerBase createUrlFromAnchor(
         String parsedUrlString,
         URL context)
         throws MalformedURLException
@@ -260,7 +260,7 @@ public final class HtmlParsingUtils
                 +", base: "+context);
         }
         URL url= new URL(context, parsedUrlString);
-        HTTPSampler sampler = new HTTPSampler();
+        HTTPSamplerBase sampler = new HTTPSampler();//TODO create appropriate sampler
         sampler.setDomain(url.getHost());
         sampler.setProtocol(url.getProtocol());
         sampler.setPort(url.getPort());
@@ -303,7 +303,7 @@ public final class HtmlParsingUtils
         {
             if (inForm)
             {
-                HTTPSampler url = (HTTPSampler) urlConfigs.getLast();
+                HTTPSamplerBase url = (HTTPSamplerBase) urlConfigs.getLast();
                 if (tag.equalsIgnoreCase("form"))
                 {
                     try
@@ -430,7 +430,7 @@ public final class HtmlParsingUtils
 
         return buf.toString();
     }
-    private static HTTPSampler createFormUrlConfig(
+    private static HTTPSamplerBase createFormUrlConfig(
         Node tempNode,
         URL context)
         throws MalformedURLException
@@ -441,7 +441,7 @@ public final class HtmlParsingUtils
             throw new MalformedURLException();
         }
         String action = atts.getNamedItem("action").getNodeValue();
-        HTTPSampler url = createUrlFromAnchor(action, context);
+        HTTPSamplerBase url = createUrlFromAnchor(action, context);
         return url;
     }
     
