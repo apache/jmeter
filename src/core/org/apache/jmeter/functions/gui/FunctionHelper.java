@@ -1,0 +1,152 @@
+package org.apache.jmeter.functions.gui;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import org.apache.jmeter.config.Argument;
+import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.config.gui.ArgumentsPanel;
+import org.apache.jmeter.functions.Function;
+import org.apache.jmeter.gui.util.ComponentUtil;
+import org.apache.jmeter.gui.util.JLabeledChoice;
+import org.apache.jmeter.gui.util.JLabeledTextField;
+import org.apache.jmeter.util.ClassFinder;
+import org.apache.jmeter.util.JMeterUtils;
+
+/**
+ * @author Administrator
+ *
+ * To change this generated comment edit the template variable "typecomment":
+ * Window>Preferences>Java>Templates.
+ */
+public class FunctionHelper extends JDialog implements 
+		ActionListener,ChangeListener
+{
+	JLabeledChoice functionList;
+	ArgumentsPanel parameterPanel;
+	JLabeledTextField cutPasteFunction;	
+	private Map functionMap = new HashMap();
+	JButton generateButton;
+	
+	public FunctionHelper()
+	{
+		super((JFrame)null,JMeterUtils.getResString("function_helper_title"),
+				false);
+		init();
+	}
+	
+	private void init()
+	{
+		parameterPanel = new ArgumentsPanel(JMeterUtils.getResString("function_params"));
+		initializeFunctionList();
+		this.getContentPane().setLayout(new BorderLayout(10,10));
+		JPanel comboPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		comboPanel.add(functionList);
+		this.getContentPane().add(comboPanel,BorderLayout.NORTH);
+		this.getContentPane().add(parameterPanel,BorderLayout.CENTER);
+		JPanel resultsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		cutPasteFunction = new JLabeledTextField(
+				JMeterUtils.getResString("cut_paste_function"),35);
+		resultsPanel.add(cutPasteFunction);
+		generateButton = new JButton(JMeterUtils.getResString("generate"));
+		generateButton.addActionListener(this);
+		resultsPanel.add(generateButton);
+		this.getContentPane().add(resultsPanel,BorderLayout.SOUTH);
+		this.pack();
+		ComponentUtil.centerComponentInWindow(this);
+	}
+	
+	private void initializeFunctionList()
+	{
+		try {
+			List functionClasses = ClassFinder.findClassesThatExtend(
+					new Class[]{Function.class},true);
+			Iterator iter = functionClasses.iterator();
+			String[] functionNames = new String[functionClasses.size()];
+			int count = 0;
+			while(iter.hasNext())
+			{
+				Class cl = Class.forName((String)iter.next());
+				functionNames[count] = ((Function)cl.newInstance()).getReferenceKey();
+				functionMap.put(functionNames[count],cl);
+				count++;
+			}
+			functionList = new JLabeledChoice(
+					JMeterUtils.getResString("choose_function"),
+					functionNames);
+			functionList.addChangeListener(this);
+		} catch(IOException e) {
+		} catch(ClassNotFoundException e) {
+		} catch(InstantiationException e) {
+		} catch(IllegalAccessException e) {
+		}	
+	}
+	
+	public void stateChanged(ChangeEvent event)
+	{
+		try {
+			Arguments args = new Arguments();
+			Function function = (Function)((Class)functionMap.get(
+					functionList.getText())).newInstance();
+			List argumentDesc = function.getArgumentDesc();
+			Iterator iter = argumentDesc.iterator();
+			while(iter.hasNext())
+			{
+				String help = (String)iter.next();
+				args.addArgument(help,"");
+			}
+			parameterPanel.configure(args);
+			parameterPanel.revalidate();
+			getContentPane().remove(parameterPanel);
+			this.pack();
+			getContentPane().add(parameterPanel,BorderLayout.CENTER);
+			this.pack();
+			this.validate();
+			this.repaint();
+		} catch(InstantiationException e) {
+		} catch(IllegalAccessException e) {
+		}
+	}
+	
+	public void actionPerformed(ActionEvent e)
+	{
+		StringBuffer functionCall = new StringBuffer("${");
+		functionCall.append(functionList.getText());
+		Arguments args = (Arguments)parameterPanel.createTestElement();
+		if(args.getArguments().size() > 0)
+		{
+			functionCall.append("(");
+			Iterator iter = args.getArguments().iterator();
+			boolean first = true;
+			while(iter.hasNext())
+			{
+				Argument arg = (Argument)iter.next();
+				if(!first)
+				{
+					functionCall.append(",");
+				}
+				functionCall.append(URLEncoder.encode((String)arg.getValue()));
+				first = false;
+			}
+			functionCall.append(")");
+		}
+		functionCall.append("}");
+		cutPasteFunction.setText(functionCall.toString());
+	}
+	
+
+}
