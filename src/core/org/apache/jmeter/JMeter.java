@@ -208,11 +208,6 @@ public class JMeter implements JMeterPlugin
      * Starts up JMeter in GUI mode
      */
     public void startGui(CLOption testFile)
-        throws
-            IllegalUserActionException,
-            IllegalAccessException,
-            ClassNotFoundException,
-            InstantiationException
     {
 
         PluginManager.install(this, true);
@@ -501,10 +496,7 @@ public class JMeter implements JMeterPlugin
         CLOption logFile,
         CLOption remoteStart)
         throws
-            IllegalUserActionException,
-            IllegalAccessException,
-            ClassNotFoundException,
-            InstantiationException
+            IllegalUserActionException
     {
     	// add a system property so samplers can check to see if JMeter
     	// is running in NonGui mode
@@ -603,13 +595,6 @@ public class JMeter implements JMeterPlugin
             log.error("", e);
         }
     }
-
-    private boolean isEnabled(TestElement te){//TODO - belongs in TestElement ...
-    	return 
-    	te.getProperty(TestElement.ENABLED) instanceof NullProperty
-    	||
-    	te.getPropertyAsBoolean(TestElement.ENABLED);
-    }
     
     /**
      * Code copied from AbstractAction.java and modified to suit TestElements
@@ -620,7 +605,7 @@ public class JMeter implements JMeterPlugin
 			while (iter.hasNext())
 			{
 				TestElement item = (TestElement) iter.next();
-				if (isEnabled(item))
+				if (item.isEnabled())
 				{//TODO handle ReplaceableControllers
 //					if (item instanceof ReplaceableController)
 //					{
@@ -718,15 +703,17 @@ public class JMeter implements JMeterPlugin
             }
             catch (InterruptedException e)
             {
+				// ignored
             }
             println("... end of run");
             System.exit(0);
         }
         /**
-         * @see TestListener#iterationStart(IterationEvent)
+         * @see TestListener#testIterationStart(LoopIterationEvent)
          */
         public void testIterationStart(LoopIterationEvent event)
         {
+			// ignored
         }
     }
 
