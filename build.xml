@@ -106,12 +106,18 @@
         <exclude name="**/Makefile"/>
         <exclude name="**/Changelog*"/>
         <exclude name="**/*.orig"/>
-        <exclude name="**/JsseSSLManager.java" unless="jsse.present"/>
-        <exclude name="**/IaikSSLManager.java" unless="isasilk.present"/>
-        <exclude name="**/PKCSKeyStore.java" unless="isasilk.present"/>
-        <exclude name="**/DefaultKeyStore.java" unless="jsse.present"/>
-        <exclude name="org/apache/jmeter/visualizers/MailerVisualizer.java" unless="javamail.complete"/>
-        <exclude name="org/apache/jmeter/reporters/MailerResultCollector.java" unless="javamail.complete"/>
+        <exclude name="org/apache/jmeter/util/JsseSSLManager.java"
+                 unless="jsse.present"/>
+        <exclude name="org/apache/jmeter/util/IaikSSLManager.java"
+                 unless="isasilk.present"/>
+        <exclude name="org/apache/jmeter/util/keystore/PKCS12KeyStore.java"
+                 unless="isasilk.present"/>
+        <exclude name="org/apache/jmeter/util/keystore/DefaultKeyStore.java"
+                 unless="jsse.present"/>
+        <exclude name="org/apache/jmeter/visualizers/MailerVisualizer.java"
+                 unless="javamail.complete"/>
+        <exclude name="org/apache/jmeter/reporters/MailerResultCollector.java"
+                 unless="javamail.complete"/>
         <classpath refid="classpath"/>
       </javac>
       <copy tofile="${sources.src.dir}/org/apache/jmeter/util/JMeterUtils.java"
@@ -127,7 +133,8 @@
    <!--
    - Generates java-docs
    -->
-   <target name="api-docs">
+   <target name="api-docs" depends="compile">
+     <mkdir dir="${docs.api.dest.dir}"/>
      <javadoc sourcepath="${sources.src.dir}"
               destdir="${docs.api.dest.dir}"
               private="yes" author="yes" version="yes"
