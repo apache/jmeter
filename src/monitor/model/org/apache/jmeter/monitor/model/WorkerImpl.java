@@ -1,4 +1,4 @@
-//$Header:
+// $Header$
 /*
  * Copyright 2004 The Apache Software Foundation.
  *
@@ -16,6 +16,9 @@
  */
 package org.apache.jmeter.monitor.model;
 
+/**
+ * 
+ */
 public class WorkerImpl implements Worker
 {
 	private int requestProcessingTime = 0;

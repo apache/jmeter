@@ -1,4 +1,4 @@
-// $Header:
+// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -16,7 +16,10 @@
  */
 package org.apache.jmeter.monitor.model.benchmark;
 
-
+/**
+ * 
+ * @version $Revision$ on $Date$
+ */
 public class ParseBenchmark
 {
 
