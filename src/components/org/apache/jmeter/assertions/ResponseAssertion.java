@@ -201,8 +201,7 @@ public class ResponseAssertion
       {
          result = new AssertionResult();
          result.setError(true);
-         result.setFailureMessage(
-            new String((byte[]) response.getResponseData()));
+         result.setFailureMessage(response.responseDatatoString());
          return result;
       }
       result = evaluateResponse(response);
