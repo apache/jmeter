@@ -49,7 +49,7 @@ public abstract class AbstractTestElement implements TestElement,Serializable
         PropertyIterator iter = propertyIterator();
         while(iter.hasNext())
         {
-            clonedElement.addProperty((JMeterProperty)iter.next().clone());
+            clonedElement.setProperty((JMeterProperty)iter.next().clone());
         }
         return clonedElement;
     }
