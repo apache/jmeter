@@ -26,6 +26,8 @@ import javax.swing.tree.TreePath;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.protocol.http.proxy.ProxyControl;
+import org.apache.jmeter.testelement.TestElement;
 
 /**
  * @author     Michael Stover
@@ -75,6 +77,11 @@ public class Remove implements Command
     public static void removeNode(JMeterTreeNode node)
     {
         GuiPackage.getInstance().getTreeModel().removeNodeFromParent(node);
-        GuiPackage.getInstance().removeNode(node.getTestElement());
+        TestElement testElement = node.getTestElement(); 
+		if(testElement instanceof ProxyControl)
+		{
+		    ((ProxyControl)testElement).stopProxy();
+		}
+		GuiPackage.getInstance().removeNode(testElement);
     }
 }
