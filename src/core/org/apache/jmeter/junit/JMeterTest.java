@@ -283,19 +283,21 @@ public class JMeterTest extends JMeterTestCase
             {
                 // We won't test restricted-access classes.
             }
-			catch (java.awt.HeadlessException e)
-			{
-				System.out.println("Error creating "+n+" "+e.toString());
-			}
+			//JDK1.4: catch (java.awt.HeadlessException e)
+			//JDK1.4: {
+			//JDK1.4: 	System.out.println("Error creating "+n+" "+e.toString());
+			//JDK1.4: }
             catch (Exception e)
             {
-            	if (e instanceof RemoteException)
+            	if ((e instanceof RemoteException)
+            	   ||e.getClass().getName().equals("java.awt.HeadlessException")//for JDK1.3
+            	   )
 				{
 					System.out.println("Error creating "+n+" "+e.toString());
 				}
 				else
 				{
-					throw new Exception("Error creating "+n,e);
+					throw new Exception("Error creating "+n+" "+e.toString());
 				}
             }
         }
