@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -69,43 +69,43 @@ import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    T.Elanjchezhiyan(chezhiyan@siptech.co.in)
- *@created   Apr 29 2003 11:00 AM
- *@company   Sip Technologies and Exports Ltd.
- *@version   1.0
- ***************************************/
-
-
-/*****************************************************
- *Ldap Client class is main class to create ,modify,
- *search and delete all the LDAP functionality available
- *****************************************************/
+/**
+ * Ldap Client class is main class to create, modify, search and delete all the
+ * LDAP functionality available.
+ * 
+ * @author    T.Elanjchezhiyan(chezhiyan@siptech.co.in) - Sip Technologies and
+ *            Exports Ltd.
+ * @created   Apr 29 2003 11:00 AM
+ * @version   $Revision$
+ */
 public class LdapClient
 {
-    transient private static Logger log = Hierarchy.getDefaultHierarchy()
-    .getLoggerFor("jmeter.protocol.ldap");
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.ldap");
     DirContext dirContext;
+
     /**
-     *  Constructor for the LdapClient object
+     *  Constructor for the LdapClient object.
      */
-    public LdapClient() {
+    public LdapClient()
+    {
     }
 
     /**
-     *  connect to server
-     *
-     *@param  host           Description of Parameter
-     *@param  username       Description of Parameter
-     *@param  password       Description of Parameter
-     *@exception  Exception  Description of Exception
+     * Connect to server.
      */
-    public void connect(String host,String port,String rootdn,String username,
-                        String password) throws Exception{
+    public void connect(
+        String host,
+        String port,
+        String rootdn,
+        String username,
+        String password)
+        throws Exception
+    {
         Hashtable env = new Hashtable();
-        env.put(Context.INITIAL_CONTEXT_FACTORY,"com.sun.jndi.ldap.LdapCtxFactory");
+        env.put(
+            Context.INITIAL_CONTEXT_FACTORY,
+            "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.PROVIDER_URL,"ldap://"+host +":"+port+"/"+rootdn);
         env.put(Context.REFERRAL,"throw");
         env.put(Context.SECURITY_CREDENTIALS,password);
@@ -114,59 +114,66 @@ public class LdapClient
     }
 
     /**
-     *  disconnect from the server
+     * Disconnect from the server.
      */
-    public void disconnect() {
-        try {
+    public void disconnect()
+    {
+        try
+        {
             dirContext=null;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error("Ldap client - ",e);
         }
     }
 
-    /************************************************************
-     * Filter  the data in the ldap directory for the given
-     * search base 
-     *@param  search base  where the search should start
-     *@param  search filter filter this value from the base  
-     ***********************************************************/
+    /**
+     * Filter  the data in the ldap directory for the given search base.
+     *  
+     * @param  searchBase   where the search should start
+     * @param  searchFilter filter this value from the base  
+     */
     public void searchTest(String searchBase, String searchFilter)
-        throws NoPermissionException,NamingException {
-        SearchControls searchcontrols = new SearchControls(2, 1L, 0, null, 
-                                                           false, false);
+        throws NoPermissionException, NamingException
+    {
+        SearchControls searchcontrols =
+            new SearchControls(2, 1L, 0, null, false, false);
         dirContext.search(searchBase, searchFilter, searchcontrols);
     }
 
-    /************************************************************
-     * Modify  the attribute in the ldap directory for the given
-     * string
-     *@param  ModificationItem  add all the entry in to the 
-     *                          ModificationItem
-     *@param  string  The  string (dn) value 
-     ***********************************************************/
+    /**
+     * Modify the attribute in the ldap directory for the given string.
+     * 
+     * @param mods    add all the entry in to the ModificationItem
+     * @param string  the  string (dn) value 
+     */
     public void modifyTest(ModificationItem[] mods, String string)
-        throws NoPermissionException,NamingException {
+        throws NoPermissionException, NamingException
+    {
         dirContext.modifyAttributes(string, mods);
     }
 
-    /************************************************************
-     * Create the attribute in the ldap directory for the given
-     * string
-     *@param  basicattributes  add all the entry in to the 
-     *                          basicattribute
-     *@param  string  The  string (dn) value 
-     ***********************************************************/
-    public void createTest(BasicAttributes basicattributes, String string) 
-        throws NoPermissionException,NamingException {
+    /**
+     * Create the attribute in the ldap directory for the given string.
+     * 
+     * @param  basicattributes  add all the entry in to the basicattribute
+     * @param  string           the  string (dn) value 
+     */
+    public void createTest(BasicAttributes basicattributes, String string)
+        throws NoPermissionException, NamingException
+    {
         dirContext.createSubcontext(string, basicattributes);
     }
         
-    /************************************************************
-     * Delete the attribute from the ldap directory
-     *@param  value  The  string (dn) value 
-     ***********************************************************/
-    public void deleteTest(String string) throws 
-    NoPermissionException,NamingException {
+    /**
+     * Delete the attribute from the ldap directory.
+     * 
+     * @param  string  the string (dn) value 
+     */
+    public void deleteTest(String string)
+        throws NoPermissionException, NamingException
+    {
         dirContext.destroySubcontext(string);
     }
 }

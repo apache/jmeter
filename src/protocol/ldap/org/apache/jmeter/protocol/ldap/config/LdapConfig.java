@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -62,115 +62,115 @@ import org.apache.jmeter.protocol.ldap.sampler.LDAPSampler;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    T.Elanjchezhiyan(chezhiyan@siptech.co.in)
- *@created   Apr 29 2003 11:45 AM
- *@company   Sip Technologies and Exports Ltd.
- *@version   1.0
- ***************************************/
-
-/****************************************
- * This is model class for the LdapConfigGui
- * this will hold all the LDAP config value
- ***************************************/
+/**
+ * This is model class for the LdapConfigGui.  This will hold all the LDAP
+ * config value.
+ * 
+ * @author    T.Elanjchezhiyan(chezhiyan@siptech.co.in) - Sip Technologies and
+ *            Exports Ltd.
+ * @created   Apr 29 2003 11:45 AM
+ * @version   $Revision$
+ */
 public class LdapConfig extends ConfigTestElement implements Serializable
 {
-
-    /****************************************
-     * Constructor for the LdapConfig object
-     ***************************************/
-
-    public LdapConfig() {
+    /**
+     * Constructor for the LdapConfig object.
+     */
+    public LdapConfig()
+    {
     }
 
-    /************************************************************
-     *  Sets the Rootdn attribute of the LdapConfig object
+    /**
+     * Sets the Rootdn attribute of the LdapConfig object.
      *
-     *@param  rootdn  The new rootdn value
-     ***********************************************************/
-    public void setRootdn(String newRootdn)	{
+     * @param  newRootdn  the new rootdn value
+     */
+    public void setRootdn(String newRootdn)
+    {
         this.setProperty(LDAPSampler.ROOTDN,newRootdn);
     }
-	
-    /************************************************************
-     *  Gets the Rootdn attribute of the LdapConfig object
+
+    /**
+     * Gets the Rootdn attribute of the LdapConfig object.
      *
-     *@return    The Rootdn value
-     ***********************************************************/
-    public String getRootdn() {
+     * @return    the Rootdn value
+     */
+    public String getRootdn()
+    {
         return getPropertyAsString(LDAPSampler.ROOTDN);
     }
 
-    /************************************************************
-     *  Sets the Test attribute of the LdapConfig object
+    /**
+     * Sets the Test attribute of the LdapConfig object.
      *
-     *@param  Test  The new test value(Add,Modify,Delete  and search)
-     ***********************************************************/
-    public void setTest(String newTest) {
+     * @param  newTest  the new test value(Add,Modify,Delete  and search)
+     */
+    public void setTest(String newTest)
+    {
         this.setProperty(LDAPSampler.TEST,newTest);
     }
 
-    /************************************************************
-     *  Gets the test attribute of the LdapConfig object
+    /**
+     * Gets the test attribute of the LdapConfig object.
      *
-     *@return    The test value (Add,Modify,Delete  and search)
-     ***********************************************************/
-    public String getTest()	{
+     * @return    the test value (Add,Modify,Delete  and search)
+     */
+    public String getTest()
+    {
         return getPropertyAsString(LDAPSampler.TEST);
     }
 
-    /************************************************************
-     *  Sets the UserDefinedTest attribute of the LdapConfig object
+    /**
+     * Sets the UserDefinedTest attribute of the LdapConfig object.
      *
-     *@param  value  The  new UserDefinedTest value 
-     ***********************************************************/
-    public void setUserDefinedTest(boolean value) {
+     * @param  value  the new UserDefinedTest value 
+     */
+    public void setUserDefinedTest(boolean value)
+    {
         setProperty(new BooleanProperty(LDAPSampler.USER_DEFINED, value));
     }
 
-    /************************************************************
-     *  Gets the UserDefinedTest attribute of the LdapConfig object
+    /**
+     * Gets the UserDefinedTest attribute of the LdapConfig object.
      *
-     *@return    The test value true or false
-     *           if true it will do the UserDefinedTest else our own  
-     *           inbuilt test case
-     ***********************************************************/
-    public boolean getUserDefinedTest() {
+     * @return    the test value true or false.  If true it will do the
+     *            UserDefinedTest else our own inbuilt test case.
+     */
+    public boolean getUserDefinedTest()
+    {
         return getPropertyAsBoolean(LDAPSampler.USER_DEFINED);
     }
 
 
-    /************************************************************
-     *  Sets the Arguments attribute of the LdapConfig object
+    /**
+     *  Sets the Arguments attribute of the LdapConfig object.
      *  This will collect values from the table for user defined test
-     *  case 
-     *@param  value  The  arguments 
-     ***********************************************************/
+     *  case.
+     * 
+     * @param  value  the arguments 
+     */
     public void setArguments(Arguments value)
     {
         setProperty(new TestElementProperty(LDAPSampler.ARGUMENTS, value));
     }
 
-    /************************************************************
-     *  Gets the Arguments attribute of the LdapConfig object
+    /**
+     * Gets the Arguments attribute of the LdapConfig object.
      *
-     *@return    The  arguments
-     *           user defined test  case
-     ***********************************************************/
+     * @return    the arguments.  User defined test case.
+     */
     public Arguments getArguments()
     {
         return (Arguments) getProperty(LDAPSampler.ARGUMENTS).getObjectValue();
     }
-	
+
     /**
-     * Returns a formatted string label describing this sampler
-     * Example output:
+     * Returns a formatted string label describing this sampler.
      *
      * @return a formatted string label describing this sampler
      */
-    public String getLabel() {
+    public String getLabel()
+    {
         return ("ldap://" + "this.getServername()" + "/" + this.getRootdn());
     }
 }
