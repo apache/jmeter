@@ -6,10 +6,10 @@
  */
 package org.apache.jmeter.save.converters;
 
-import java.net.URLDecoder;
-import java.net.URLEncoder;
+import java.io.UnsupportedEncodingException;
 
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -27,12 +27,12 @@ public class ConversionHelp
    {
       try
       {
-         String p1 = URLEncoder.encode(p,CHAR_SET);
+         String p1 = JOrphanUtils.encode(p,CHAR_SET);
          return p1;
       }
-      catch (Exception e)
+      catch (UnsupportedEncodingException e)
       {
-         log.warn("System doesn't support utf-8",e);
+         log.warn("System doesn't support " + CHAR_SET,e);
          return p;
       }
    }
@@ -41,11 +41,11 @@ public class ConversionHelp
    {
       try
       {
-         return URLDecoder.decode(p,CHAR_SET);
+         return JOrphanUtils.decode(p,CHAR_SET);
       }
-      catch (Exception e)
+      catch (UnsupportedEncodingException e)
       {
-         log.warn("System doesn't support utf-8",e);
+         log.warn("System doesn't support " + CHAR_SET,e);
          return p;
       }
    }
