@@ -87,7 +87,7 @@ import org.apache.oro.text.perl.Perl5Util;
 public class CompoundVariable implements Function
 {
     transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+        Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ENGINE);
     
     private JMeterVariables threadVars;
 	private Map varMap = new HashMap();
@@ -154,6 +154,7 @@ public class CompoundVariable implements Function
         while (iter.hasNext())
         {
             Object item = iter.next();
+            log.debug("executing object: " + item);
             if (item instanceof Function)
             {
                 try

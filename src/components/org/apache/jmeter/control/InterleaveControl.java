@@ -57,6 +57,7 @@ import java.io.Serializable;
 
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testelement.PerSampleClonable;
 import org.apache.jmeter.testelement.TestElement;
 
 /****************************************
@@ -377,7 +378,8 @@ public class InterleaveControl extends GenericController implements Serializable
 			s.setName(name);
 			return s;
 		}
-		public class TestSampler extends AbstractSampler {
+		public class TestSampler extends AbstractSampler
+						implements PerSampleClonable {
 		  public void addCustomTestElement(TestElement t) { }
 		  public org.apache.jmeter.samplers.SampleResult sample(org.apache.jmeter.samplers.Entry e) { return null; }
 		}

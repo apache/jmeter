@@ -68,6 +68,7 @@ import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.TestPlan;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.JMeterThreadMonitor;
 import org.apache.jmeter.threads.ListenerNotifier;
@@ -172,6 +173,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor,
 					ListedHashTree threadGroupTree = (ListedHashTree)searcher.getSubTree(group);
 					threadGroupTree.add(group,testLevelElements);
 					threads[i] = new JMeterThread(cloneTree(threadGroupTree),this,notifier);
+                    threads[i].setInitialContext(JMeterContextService.getContext());
 					threads[i].setInitialDelay((int)(((float)(group.getRampUp() * 1000) /
 							(float)group.getNumThreads()) * (float)i));
 					threads[i].setThreadName(group.getName()+"-"+(i+1));

@@ -57,6 +57,7 @@ package org.apache.jmeter.control;
 import java.io.Serializable;
 
 import org.apache.jmeter.samplers.AbstractSampler;
+import org.apache.jmeter.testelement.PerSampleClonable;
 import org.apache.jmeter.testelement.TestElement;
 
 /************************************************************
@@ -147,7 +148,8 @@ public class OnceOnlyController extends GenericController implements Serializabl
 			s.setName(name);
 			return s;
 		}
-		public class TestSampler extends AbstractSampler {
+		public class TestSampler extends AbstractSampler
+						implements PerSampleClonable {
 		  public void addCustomTestElement(TestElement t) { }
 		  public org.apache.jmeter.samplers.SampleResult sample(org.apache.jmeter.samplers.Entry e) { return null; }
 		}

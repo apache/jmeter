@@ -99,6 +99,12 @@ public class Arguments extends ConfigTestElement implements Serializable
 	{
 		return (List)getProperty(ARGUMENTS);
 	}
+    
+    public void clear()
+    {
+        super.clear();
+        setProperty(ARGUMENTS,new ArrayList());
+    }
 	
 	public void setArguments(List arguments)
 	{

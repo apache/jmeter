@@ -70,6 +70,7 @@ import org.apache.jmeter.protocol.jdbc.util.DBKey;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.PerSampleClonable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.log.Hierarchy;
@@ -82,8 +83,8 @@ import org.apache.jorphan.collections.Data;
  *@created    $Date$
  *@version    $Revision$
  ***********************************************************/
-public class JDBCSampler extends AbstractSampler implements TestListener
-{
+public class JDBCSampler extends AbstractSampler
+	implements TestListener, PerSampleClonable {
     transient private static Logger log =
             Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.jdbc");
     public final static String URL = "JDBCSampler.url";

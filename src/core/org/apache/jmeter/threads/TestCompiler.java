@@ -340,8 +340,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
             assertEquals("A test value", sampler.getProperty("test.property"));
         }
 
-        class TestSampler extends AbstractSampler
-        {
+        class TestSampler extends AbstractSampler implements PerSampleClonable {
             public void addCustomTestElement(TestElement t)
             {}
             public org.apache.jmeter.samplers.SampleResult sample(org.apache.jmeter.samplers.Entry e)
