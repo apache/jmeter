@@ -160,9 +160,9 @@ public class JDBCSampler extends AbstractSampler implements TestListener
         return res;
     }
 
-    private DBKey getKey() throws ConnectionPoolException
+    private synchronized DBKey getKey() throws ConnectionPoolException
     {
-        if (dbkey == null)
+		if (dbkey == null)
         {
             // With multiple threads, it is possible that more than one thread
             // will enter this block at the same time, resulting in multiple
@@ -274,18 +274,22 @@ public class JDBCSampler extends AbstractSampler implements TestListener
 
     public synchronized void testStarted()
     {
-    	log.debug("testStarted(), thread: "+Thread.currentThread().getName());
-        // The first call to getKey for a given key will set up the connection
-        // pool.  This can take awhile, so do it while the test is starting
-        // instead of waiting for the first sample.
-        try
-        {
-            getKey();
-        }
-        catch (ConnectionPoolException e)
-        {
-            log.error("Error initializing database connection", e);
-        }
+/*
+ * Test started is called before the thread data has been set up, so cannot
+ * rely on its values being available.
+*/
+//    	log.debug("testStarted(), thread: "+Thread.currentThread().getName());
+//        // The first call to getKey for a given key will set up the connection
+//        // pool.  This can take awhile, so do it while the test is starting
+//        // instead of waiting for the first sample.
+//        try
+//        {
+//            getKey();
+//        }
+//        catch (ConnectionPoolException e)
+//        {
+//            log.error("Error initializing database connection", e);
+//        }
     }
 
     public void testEnded(String host)
