@@ -55,7 +55,6 @@ import org.apache.log.Logger;
  * Sampler. It also understands how to get AuthManagers for the files that the
  * user selects.
  *
- * @author    unattributed
  * @version   $Revision$  Last updated: $Date$
  */
 public class AuthPanel extends AbstractConfigGui implements ActionListener
@@ -113,9 +112,9 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener
         tableModel.manager.addTestElement((AuthManager) el.clone());
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("auth_manager_title");
+        return "auth_manager_title";
     }
 
     /**

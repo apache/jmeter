@@ -49,8 +49,7 @@ import org.apache.jorphan.gui.ObjectTableModel;
  * arguments (or parameters) are usually used to provide configuration values
  * for some other component.
  * 
- * @author    Michael Stover
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class ArgumentsPanel
     extends AbstractConfigGui
@@ -133,10 +132,9 @@ public class ArgumentsPanel
         } 
     }    
     
-    /* Implements JMeterGUIComponent.getStaticLabel() */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("user_defined_variables");
+        return "user_defined_variables";
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */

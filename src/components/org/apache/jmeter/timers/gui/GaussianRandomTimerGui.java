@@ -38,8 +38,6 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 /**
  * Implementation of a gaussian random timer.
  *
- * @author    Michael Stover
- * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Revision$ last updated $Date$
  */
 public class GaussianRandomTimerGui extends AbstractTimerGui
@@ -108,14 +106,9 @@ public class GaussianRandomTimerGui extends AbstractTimerGui
         rangeField.setText(el.getPropertyAsString(RandomTimer.RANGE));
     }
 
-    /**
-     * Get the title to display for this component.
-     * 
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-     */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("gaussian_timer_title");
+        return "gaussian_timer_title";
     }
 
     /**

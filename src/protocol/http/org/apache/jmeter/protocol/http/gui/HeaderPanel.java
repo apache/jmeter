@@ -113,9 +113,9 @@ public class HeaderPanel
         tableModel.manager.addTestElement((HeaderManager) el);
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("header_manager_title");
+        return "header_manager_title";
     }
 
     /**

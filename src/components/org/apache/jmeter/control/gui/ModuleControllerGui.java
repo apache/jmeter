@@ -42,8 +42,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 /**
  * ModuleController Gui.
  *
- * @author    Thad Smith
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class ModuleControllerGui
     extends AbstractControllerGui /*implements UnsharedComponent*/
@@ -65,12 +64,9 @@ public class ModuleControllerGui
         init();
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-     */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("module_controller_title");
+        return "module_controller_title";
     }
 
     /* (non-Javadoc)

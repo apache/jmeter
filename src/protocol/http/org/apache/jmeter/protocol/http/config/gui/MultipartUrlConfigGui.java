@@ -89,9 +89,9 @@ public class MultipartUrlConfigGui
         paramNameField.setText(el.getPropertyAsString(HTTPSampler.FILE_FIELD));
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("url_multipart_config_title");
+        return "url_multipart_config_title";
     }
 
     public void updateGui()

@@ -50,8 +50,7 @@ import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author    Michael Stover
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class ThreadGroupGui
     extends AbstractJMeterGuiComponent
@@ -281,9 +280,9 @@ public class ThreadGroupGui
 		return panel;
 	}
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("threadgroup");
+        return "threadgroup";
     }
 
     private JPanel createOnErrorPanel()

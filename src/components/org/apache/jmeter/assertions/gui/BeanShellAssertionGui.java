@@ -32,7 +32,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author sebb AT apache DOT org
  * @version   $Revision$ $Date$
  */
 public class BeanShellAssertionGui extends AbstractAssertionGui
@@ -76,9 +75,9 @@ public class BeanShellAssertionGui extends AbstractAssertionGui
 		te.setProperty(BeanShellAssertion.PARAMETERS, parameters.getText());
     }
 
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("bsh_assertion_title");
+        return "bsh_assertion_title";
     }
 
 	private JPanel createFilenamePanel()//TODO ought to be a FileChooser ...

@@ -27,8 +27,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
- * @author    Kevin Hammond
- * @version   $Revision$
+ * @version   $Revision$ on $Date$
  */
 public class RandomControlGui extends AbstractControllerGui
 {
@@ -79,14 +78,9 @@ public class RandomControlGui extends AbstractControllerGui
         }
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("random_control_title");
+        return "random_control_title";
     }
 
     private void init()

@@ -22,8 +22,6 @@
  * 
  * @version $Revision$ updated on $Date$
  * 
- * @author	<a href="mailto:jh@domek.be">Jorg Heymans</a>
- * 
  */
 package org.apache.jmeter.assertions.gui;
 
@@ -81,11 +79,8 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
         this.md5HexInput.setText(String.valueOf(assertion.getAllowedMD5Hex()));
     }
 
-    /* 
-     * @return
-     */
-    public String getStaticLabel() {
-        return JMeterUtils.getResString("md5hex_assertion_title");
+    public String getLabelResource() {
+        return "md5hex_assertion_title";
     }
 
     /* 

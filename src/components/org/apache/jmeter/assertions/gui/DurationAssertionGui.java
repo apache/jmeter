@@ -36,7 +36,6 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author    Michael Stover
  * @version   $Revision$ Last updated: $Date$
  */
 public class DurationAssertionGui
@@ -52,12 +51,9 @@ public class DurationAssertionGui
         init();
     }
 
-    /**
-     * Returns the label to be shown within the JTree-Component.
-     */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("duration_assertion_title");
+        return "duration_assertion_title";
     }
 
     public String getDurationAttributesTitle()

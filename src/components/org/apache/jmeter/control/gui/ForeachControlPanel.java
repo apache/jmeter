@@ -34,9 +34,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * used standalone or embedded into some other component.
  * Copyright: 2000
  *
- * @author    Dolf Smits
- * @author    Michael Stover
- * @version   $Revision$
+ * @version   $Revision$ on $Date
  */
 
 public class ForeachControlPanel
@@ -141,10 +139,9 @@ public class ForeachControlPanel
     }
 
 
-    /* Implements JMeterGUIComponent.getStaticLabel() */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("foreach_controller_title");
+        return "foreach_controller_title";
     }
 
     /**

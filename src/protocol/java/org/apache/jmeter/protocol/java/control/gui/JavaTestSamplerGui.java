@@ -25,16 +25,12 @@ import org.apache.jmeter.protocol.java.config.gui.JavaConfigGui;
 import org.apache.jmeter.protocol.java.sampler.JavaSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
-
 
 /**
  * The <code>JavaTestSamplerGui</code> class provides the user interface
  * for the {@link JavaSampler}.
  * 
- * @author Brad Kiewel
- * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
- * @version $Revision$
+ * @version $Revision$ on $Date$
  */
 public class JavaTestSamplerGui extends AbstractSamplerGui
 {
@@ -50,10 +46,9 @@ public class JavaTestSamplerGui extends AbstractSamplerGui
         init();
     }
 
-    /* Implements JMeterGuiComponent.getStaticLabel() */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("java_request");
+        return "java_request";
     }
 
     /**

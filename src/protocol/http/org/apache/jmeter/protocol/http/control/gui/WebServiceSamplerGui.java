@@ -60,8 +60,6 @@ public class WebServiceSamplerGui
     implements java.awt.event.ActionListener
 {
 
-    private static final String label =
-        JMeterUtils.getResString("webservice_sampler_title");
     JLabeledTextField urlField =
         new JLabeledTextField(JMeterUtils.getResString("url"));
     JLabeledTextField soapAction =
@@ -158,12 +156,9 @@ public class WebServiceSamplerGui
         init();
     }
 
-    /**
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-     */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return label;
+        return "webservice_sampler_title";
     }
 
     /**
@@ -266,7 +261,7 @@ public class WebServiceSamplerGui
         mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
         // TITLE
-        JLabel panelTitleLabel = new JLabel(label);
+        JLabel panelTitleLabel = new JLabel(getStaticLabel());
         Font curFont = panelTitleLabel.getFont();
         int curFontSize = curFont.getSize();
         curFontSize += 4;

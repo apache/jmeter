@@ -36,8 +36,6 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 /**
  * Implementation of a uniform random timer.
  *
- * @author    Michael Stover
- * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
  */
 public class UniformRandomTimerGui extends AbstractTimerGui
@@ -71,14 +69,9 @@ public class UniformRandomTimerGui extends AbstractTimerGui
         JOptionPane.showMessageDialog(thrower, e, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    /**
-     * Get the title to display for this component.
-     * 
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-     */
-    public String getStaticLabel()
+    public String getLabelResource()
     {
-        return JMeterUtils.getResString("uniform_timer_title");
+        return "uniform_timer_title";
     }
 
     /**
