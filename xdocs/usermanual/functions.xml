@@ -182,7 +182,8 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 	</p>
 	<p>
 	Each time it is called it reads the next line from the file.
-	When the end of the file is reached, it will start reading again from the beginning.
+	When the end of the file is reached, it will start reading again from the beginning,
+	unless the maximum loop count has been reached.
 	If there are multiple references to the function in a test script, each will open the file independently,
 	even if the file names are the same.
 	[If the value is to be used again elsewhere, use different variable names for each function call.]
@@ -207,7 +208,7 @@ A reference name - refName - for reusing the value created by this function. Sto
 <p><b>Using sequence numbers:</b></p>
 <p>When using the optional sequence numbers, the path name is used as the format string for java.text.DecimalFormat.
 	The current sequence number is passed in as the only parameter.
-    If the optional sequence numbers are not used, the path name is used as is.
+    If the optional start number is not specified, the path name is used as is.
 	Useful formatting sequences are:
 	</p>
 	<p>
@@ -234,6 +235,12 @@ Examples:<br/>
 	the number will be inserted aaccording to the fomatting instructions.<br/>
 	If the start sequence number is omitted, and the end sequence number is specified,
 	the sequence number is interpreted as a loop count, and the file will be used at most "end" times.
+	In this case the filename is not formatted.
+	<code>
+	
+	${_StringFromFile(PIN#.DAT,,1,2)} - reads PIN1.DAT, PIN2.DAT
+	${_StringFromFile(PIN.DAT,,,2)} - reads PIN.DAT twice
+	</code>
 	</p>
 </component>
 
