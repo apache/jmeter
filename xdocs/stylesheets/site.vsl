@@ -324,6 +324,19 @@
 	 #end
 #end
 
+#macro (makeIndex $subsections)
+	<ul>
+	#foreach ($sect in $subsections)
+		<li><a href="#$sect.getAttributeValue("anchor")">$sect.getAttributeValue("name")</a></li>
+		<ul>
+		#foreach ($comp in $sect.getChildren("component"))
+			<li><a href="#$comp.getAttributeValue("name").replace($space,$udsc)">$comp.getAttributeValue("name")</a></li>
+		#end
+		</ul>
+	#end
+	</ul>
+#end
+
 #macro (getProjectImage)
 #if ($project.getChild("logo"))
 <td align="left">
@@ -378,6 +391,9 @@
 						  #makeProject()
 						  </td>
 						  <td width="80%" align="left" valign="top">
+						  #if ($root.getAttributeValue("index") == "yes")
+							#makeIndex($root.getChild("body").getChildren("section"))
+						  #end
 						  #set ($allSections = $root.getChild("body").getChildren("section"))
 						  #foreach ( $section in $allSections )
 								#section ($section)
