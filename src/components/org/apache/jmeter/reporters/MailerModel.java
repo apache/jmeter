@@ -51,7 +51,8 @@ import org.apache.log.Logger;
  */
 public class MailerModel extends AbstractTestElement implements Serializable
 {
-    private long failureCount = 0;
+    private static final String MAIL_SMTP_HOST = "mail.smtp.host";
+	private long failureCount = 0;
     private long successCount = 0;
     private boolean failureMsgSent = false;
     private boolean siteDown = false;
@@ -300,8 +301,15 @@ public class MailerModel extends AbstractTestElement implements Serializable
         // create some properties and get the default Session
         Properties props = new Properties();
 
-        props.put("mail.smtp.host", host);
+        props.put(MAIL_SMTP_HOST, host);
         Session session = Session.getDefaultInstance(props, null);
+        //N.B. properties are only used when the default session is first created
+        //so check if the mail host needs to be reset...
+        props = session.getProperties();
+        if (!host.equalsIgnoreCase(props.getProperty(MAIL_SMTP_HOST)))
+        {
+        	props.setProperty(MAIL_SMTP_HOST,host);
+        }
 
         session.setDebug(debug);
 
