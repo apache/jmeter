@@ -118,6 +118,13 @@ public class ArgumentsPanel
     /** Command for removing a row from the table. */
     private static final String DELETE = "delete";
 
+    public static final String[] COLUMN_NAMES =
+        {
+            JMeterUtils.getResString("name"),
+            JMeterUtils.getResString("value"),
+            JMeterUtils.getResString("metadata")
+        };
+
     /**
      * Create a new ArgumentsPanel, using the default title. 
      */
@@ -390,8 +397,8 @@ public class ArgumentsPanel
         tableModel =
             new ObjectTableModel(
                 new String[] {
-                    Arguments.COLUMN_NAMES[0],
-                    Arguments.COLUMN_NAMES[1] },
+                    COLUMN_NAMES[0],
+                    COLUMN_NAMES[1] },
                 new String[] { "name", "value" },
                 new Class[] { String.class, String.class },
                 new Class[] { String.class, String.class },
