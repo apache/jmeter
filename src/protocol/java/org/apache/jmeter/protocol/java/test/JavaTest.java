@@ -204,37 +204,37 @@ public class JavaTest
     }
 
 
-	/*
-	 * Utility method to set up all the values 
-	 */
-	private void setupValues(JavaSamplerContext context){
-		
-		sleepTime = context.getLongParameter(MASK_NAME, DEFAULT_SLEEP_TIME);
-		sleepMask = context.getLongParameter(SLEEP_NAME, DEFAULT_SLEEP_MASK);
+    /*
+     * Utility method to set up all the values 
+     */
+    private void setupValues(JavaSamplerContext context)
+    {
 
-		responseMessage = context.getParameter(
-					RESPONSE_MESSAGE_NAME,
-					RESPONSE_MESSAGE_DEFAULT);
-                    
-		responseCode =
-			context.getParameter(RESPONSE_CODE_NAME, RESPONSE_CODE_DEFAULT);
+        sleepTime = context.getLongParameter(MASK_NAME, DEFAULT_SLEEP_TIME);
+        sleepMask = context.getLongParameter(SLEEP_NAME, DEFAULT_SLEEP_MASK);
 
-		success =
-			context.getParameter(
-				SUCCESS_NAME,
-				SUCCESS_DEFAULT).equalsIgnoreCase(
-				"OK");
+        responseMessage =
+            context.getParameter(
+                RESPONSE_MESSAGE_NAME,
+                RESPONSE_MESSAGE_DEFAULT);
 
-		label = context.getParameter(LABEL_NAME, LABEL_DEFAULT);
+        responseCode =
+            context.getParameter(RESPONSE_CODE_NAME, RESPONSE_CODE_DEFAULT);
 
-		samplerData =
-			context.getParameter(SAMPLER_DATA_NAME, SAMPLER_DATA_DEFAULT);
+        success =
+            context.getParameter(
+                SUCCESS_NAME,
+                SUCCESS_DEFAULT).equalsIgnoreCase(
+                "OK");
 
-		resultData = context.getParameter(
-				RESULT_DATA_NAME,
-				RESULT_DATA_DEFAULT);
-	}
-	
+        label = context.getParameter(LABEL_NAME, LABEL_DEFAULT);
+
+        samplerData =
+            context.getParameter(SAMPLER_DATA_NAME, SAMPLER_DATA_DEFAULT);
+
+        resultData =
+            context.getParameter(RESULT_DATA_NAME, RESULT_DATA_DEFAULT);
+    }
     /**
      * Do any initialization required by this client.
      * 
@@ -314,8 +314,8 @@ public class JavaTest
      */
     public SampleResult runTest(JavaSamplerContext context)
     {
-		setupValues(context);
-		
+        setupValues(context);
+
         SampleResult results = new SampleResult();
 
         try
