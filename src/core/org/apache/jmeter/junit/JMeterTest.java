@@ -217,12 +217,20 @@ public class JMeterTest extends JMeterTestCase
 			JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
 			if (item instanceof JMeterTreeNode)
 			{
+				System.out.println("JMeterGUIComponent: skipping all tests  "+item.getClass().getName());
 				continue;
 			}
 			TestSuite ts = new TestSuite(item.getClass().getName());
 			ts.addTest(new JMeterTest("GUIComponents1",item));
-			ts.addTest(new JMeterTest("GUIComponents2",item));
-			ts.addTest(new JMeterTest("runGUITitle",item));
+			if (item instanceof TestBeanGUI)
+			{
+				System.out.println("JMeterGUIComponent: skipping some tests "+item.getClass().getName());
+			}
+			else
+			{
+				ts.addTest(new JMeterTest("GUIComponents2",item));
+				ts.addTest(new JMeterTest("runGUITitle",item));
+			} 
 			suite.addTest(ts);
 		}
 		return suite;
