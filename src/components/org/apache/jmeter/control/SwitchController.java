@@ -41,7 +41,6 @@ public class SwitchController extends InterleaveControl implements Serializable
 		int was = current;
 		super.reInitialize();
 		current=getSelectionAsInt();
-		System.out.println("Reinit current "+current+" was "+was);
     }
 
     /**
@@ -58,7 +57,6 @@ public class SwitchController extends InterleaveControl implements Serializable
         {
             current = 0;
         }
-		System.out.println("Reset Current Size "+c+ " current "+current);
     }
 
     /**
@@ -69,7 +67,6 @@ public class SwitchController extends InterleaveControl implements Serializable
 		int was = current;
 		super.incrementCurrent();
         current = getSelectionAsInt();
-		System.out.println("Inc current "+current+" was "+was);
     }
 
 	public void setSelection(String inputValue)
@@ -90,7 +87,6 @@ public class SwitchController extends InterleaveControl implements Serializable
 		if (ret < 0 || ret >= getSubControllers().size()){
 			ret = 0;
 		}
-		System.out.println("Sel "+sel+" => "+ret);
 		return ret;
 	}
 	public String getSelection()
@@ -118,7 +114,6 @@ public class SwitchController extends InterleaveControl implements Serializable
 				return null;
 			} else {
 			    n=s.getPropertyAsString(TestElement.NAME);
-				System.out.println(n);
 				return n;
 			}
 		}
@@ -245,7 +240,6 @@ public class SwitchController extends InterleaveControl implements Serializable
         public void runTest2(String cond, String exp[]) throws Exception
         {
 			int loops = 3;
-			System.out.println("==============RunTest2 "+cond);
             LoopController controller = new LoopController();
 			controller.setLoops(loops);
 			controller.setContinueForever(false);
