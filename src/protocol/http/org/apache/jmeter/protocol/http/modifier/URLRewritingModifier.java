@@ -25,6 +25,7 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -97,9 +98,9 @@ public class URLRewritingModifier
             }
         }
 
-        modify((HTTPSampler) sampler, value);
+        modify((HTTPSamplerBase) sampler, value);
     }
-    private void modify(HTTPSampler sampler, String value)
+    private void modify(HTTPSamplerBase sampler, String value)
     {
         if (isPathExtension())
         {
@@ -181,6 +182,8 @@ public class URLRewritingModifier
     {
         return getPropertyAsBoolean(PATH_EXTENSION_NO_EQUALS);
     }
+    
+    // TODO: add test cases for new jakarta commons http client
     public static class Test extends TestCase
     {
         private SampleResult response = null;
