@@ -48,8 +48,8 @@ public class HTTPArgumentsPanel extends ArgumentsPanel
         tableModel =
             new ObjectTableModel(
                 new String[] {
-                    ArgumentsPanel.COLUMN_NAMES[0],
-                    ArgumentsPanel.COLUMN_NAMES[1],
+                    ArgumentsPanel.COLUMN_NAMES_0,
+                    ArgumentsPanel.COLUMN_NAMES_1,
                     ENCODE_OR_NOT,
                     INCLUDE_EQUALS },
                 new Functor[] { new Functor("getName"), 
