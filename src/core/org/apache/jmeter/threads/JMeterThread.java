@@ -246,6 +246,8 @@ public class JMeterThread implements Runnable, java.io.Serializable
                         
                         delay(pack.getTimers());
                         Sampler sampler= pack.getSampler();
+                        sampler.setThreadContext(threadContext);
+                        sampler.setThreadName(threadName);
                         if (sampler instanceof TestBean) ((TestBean)sampler).prepare();               
                         SampleResult result = sampler.sample(null); // TODO: remove this useless Entry parameter
                         result.setThreadName(threadName);
