@@ -249,7 +249,7 @@
 
 #macro ( component $component)
 	#set ($screenshot = "")
-	#set ($screenshot = "$sshotdir/$component.getAttributeValue('screenshot')" )
+	#set ($screenshot = $component.getAttributeValue('screenshot') )
 	<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
@@ -265,7 +265,7 @@
 					#runloop($c_items)
 					#if ($screenshot != "")						
 						<p><b>Control Panel</b></p>
-						<div align="center"><img src="$screenshot"></div>
+						<div align="center"><img src="$sshotdir/$screenshot"></div>
 					#end
 				#else
 					 #unknown($c_items)

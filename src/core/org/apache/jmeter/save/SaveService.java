@@ -86,6 +86,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MapProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.log.Hierarchy;
@@ -823,7 +824,7 @@ public class SaveService implements SaveServiceConstants
     {
         TestElement element = null;
 
-        element = (TestElement) Class.forName((String) config.getAttribute("class")).newInstance();
+        element = (TestElement) Class.forName(NameUpdater.getCurrentName((String) config.getAttribute("class"))).newInstance();
         Configuration[] children = config.getChildren();
 
         for (int i = 0; i < children.length; i++)

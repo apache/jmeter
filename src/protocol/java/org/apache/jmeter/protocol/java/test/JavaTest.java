@@ -53,6 +53,10 @@
  * <http://www.apache.org/>.
  */
 
+/*
+ * CVS Info: $Header$
+ */
+ 
 package org.apache.jmeter.protocol.java.test;
 
 import java.io.Serializable;
@@ -64,31 +68,38 @@ import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
 
 /**
- * The <code>JavaTest</code> class is a simple example class for a
- * JMeter Java protocol client.  The class implements the
- * <code>JavaSamplerClient</code> interface.
+ * The <code>JavaTest</code> class is a simple sampler which
+ * is intended for use when developing test plans. 
+ * The sampler generates results internally, 
+ * so does not need access to any external
+ * resources such as web, ftp or LDAP servers.
+ * In addition, because the exact values of most of the SampleResult
+ * can be directly set, it is possible to easily test most Assertions that use
+ * the sample results. 
+ * 
  * <p>
  * During each sample, this client will sleep for some amount of
  * time.  The amount of time to sleep is determined from the
- * two parameters SleepTime and SleepMask using the formula:
+ * two parameters Sleep_Time and Sleep_Mask using the formula:
  * <pre>
- *     totalSleepTime = SleepTime + (System.currentTimeMillis() % SleepMask)
+ *     totalSleepTime = Sleep_Time + (System.currentTimeMillis() % Sleep_Mask)
  * </pre>
- * Thus, the SleepMask provides a way to add a random component
+ * Thus, the Sleep_Mask provides a way to add a random component
  * to the sleep time.
- * 
- * This class was derived from SleepTest.
- * 
- * The additional functionality is the ability to define the precise values of
+ * <p>
+ * The sampler is able to define the precise values of:
+ * <pre>
  * - responseCode
  * - responseMessage
  * - Label
- * - success/fail status
- * 
+ * - success/fail status 
+ * </pre>
  * The elapsed time and end-time cannot be directly controlled.
+ *<p>
+ * Note: this class was derived from {@link SleepTest}.
  * 
  * @author ANO
- * @version $Id$
+ * @version $Version: 1.3 $ $Date$
  */
 public class JavaTest
     extends AbstractJavaSamplerClient
@@ -192,13 +203,43 @@ public class JavaTest
         getLogger().debug(whoAmI() + "\tConstruct");
     }
 
+
+	/*
+	 * Utility method to set up all the values 
+	 */
+	private void setupValues(JavaSamplerContext context){
+		
+		sleepTime = context.getLongParameter(MASK_NAME, DEFAULT_SLEEP_TIME);
+		sleepMask = context.getLongParameter(SLEEP_NAME, DEFAULT_SLEEP_MASK);
+
+		responseMessage = context.getParameter(
+					RESPONSE_MESSAGE_NAME,
+					RESPONSE_MESSAGE_DEFAULT);
+                    
+		responseCode =
+			context.getParameter(RESPONSE_CODE_NAME, RESPONSE_CODE_DEFAULT);
+
+		success =
+			context.getParameter(
+				SUCCESS_NAME,
+				SUCCESS_DEFAULT).equalsIgnoreCase(
+				"OK");
+
+		label = context.getParameter(LABEL_NAME, LABEL_DEFAULT);
+
+		samplerData =
+			context.getParameter(SAMPLER_DATA_NAME, SAMPLER_DATA_DEFAULT);
+
+		resultData = context.getParameter(
+				RESULT_DATA_NAME,
+				RESULT_DATA_DEFAULT);
+	}
+	
     /**
-     * Do any initialization required by this client.  In this case,
-     * initialization consists of getting the values of the SleepTime
-     * and SleepMask parameters.  It is generally recommended to do
-     * any initialization such as getting parameter values in the
-     * setupTest method rather than the runTest method in order to
-     * add as little overhead as possible to the test.
+     * Do any initialization required by this client.
+     * 
+     * There is none, as it is done in runTest() in order to be able
+     * to vary the data for each sample.
      * 
      * @param context  the context to run with. This provides access
      *                  to initialization parameters.
@@ -207,31 +248,6 @@ public class JavaTest
     {
         getLogger().debug(whoAmI() + "\tsetupTest()");
         listParameters(context);
-
-        sleepTime = context.getLongParameter(MASK_NAME, DEFAULT_SLEEP_TIME);
-        sleepMask = context.getLongParameter(SLEEP_NAME, DEFAULT_SLEEP_MASK);
-
-        responseMessage = context.getParameter(
-                    RESPONSE_MESSAGE_NAME,
-                    RESPONSE_MESSAGE_DEFAULT);
-                    
-        responseCode =
-            context.getParameter(RESPONSE_CODE_NAME, RESPONSE_CODE_DEFAULT);
-
-        success =
-            context.getParameter(
-                SUCCESS_NAME,
-                SUCCESS_DEFAULT).equalsIgnoreCase(
-                "OK");
-
-        label = context.getParameter(LABEL_NAME, LABEL_DEFAULT);
-
-        samplerData =
-            context.getParameter(SAMPLER_DATA_NAME, SAMPLER_DATA_DEFAULT);
-
-        resultData = context.getParameter(
-                RESULT_DATA_NAME,
-                RESULT_DATA_DEFAULT);
     }
 
 
@@ -264,19 +280,31 @@ public class JavaTest
     }
 
     /**
-     * Perform a single sample.  In this case, this method will
-     * simply sleep for some amount of time.
-     * <p>
+     * Perform a single sample.<br>
+     * In this case, this method will simply sleep for some amount of time.
+     * 
      * This method returns a <code>SampleResult</code> object.
-     * <code>SampleResult</code> has many fields which can be
-     * used.  At a minimum, the test should use
-     * <code>SampleResult.setTime</code> to set the time that
-     * the test required to execute.  It is also a good idea to
-     * set the sampleLabel and the successful flag.
+     * <pre>
+     * The following fields are always set:
+     * - responseCode (default "")
+     * - responseMessage (default "")
+     * - label (default "JavaTest")
+     * - success (default true)
+     * </pre>
+     * The following fields are set from the user-defined
+     * parameters, if supplied:
+     * <pre>
+     * - samplerData
+     * - responseData
+     * </pre>
      * 
      * @see org.apache.jmeter.samplers.SampleResult#setTime(long)
      * @see org.apache.jmeter.samplers.SampleResult#setSuccessful(boolean)
      * @see org.apache.jmeter.samplers.SampleResult#setSampleLabel(String)
+     * @see org.apache.jmeter.samplers.SampleResult#setResponsCode(String)
+     * @see org.apache.jmeter.samplers.SampleResult#setResponseMessage(String)
+     * @see org.apache.jmeter.samplers.SampleResult#setResponseData(byte [])
+     * @see org.apache.jmeter.samplers.SampleResult#setDataType(String)
      * 
      * @param context  the context to run with. This provides access
      *                 to initialization parameters.
@@ -286,6 +314,8 @@ public class JavaTest
      */
     public SampleResult runTest(JavaSamplerContext context)
     {
+		setupValues(context);
+		
         SampleResult results = new SampleResult();
 
         try
