@@ -68,11 +68,19 @@ public class Stats
 			double memdiv = (double)usedMem/(double)totMem;
 			double memWeight = DEFAULT_MEMORY_FACTOR * memdiv;
 
-			Connector cntr = (Connector)stat.getConnector().get(0);
-			int maxThread = cntr.getThreadInfo().getMaxThreads();
-			int curThread = cntr.getThreadInfo().getCurrentThreadsBusy();
-			double thdiv = (double)curThread/(double)maxThread;
-			double threadWeight = DEFAULT_THREAD_FACTOR * thdiv;
+			// changed the logic for BEA Weblogic in the case a
+			// user uses Tomcat's status servlet without any
+			// modifications. Weblogic will return nothing for
+			// the connector, therefore we need to check the size
+			// of the list. Peter 12.22.04
+			double threadWeight = 0;
+			if (stat.getConnector().size() > 0){
+				Connector cntr = (Connector)stat.getConnector().get(0);
+				int maxThread = cntr.getThreadInfo().getMaxThreads();
+				int curThread = cntr.getThreadInfo().getCurrentThreadsBusy();
+				double thdiv = (double)curThread/(double)maxThread;
+				threadWeight = DEFAULT_THREAD_FACTOR * thdiv;
+			}
 			return (int)(memWeight + threadWeight);
 		} else {
 			return 0;
@@ -93,7 +101,7 @@ public class Stats
 	 * @return integer representing the status
 	 */
 	public static int calculateStatus(Status stat){
-		if (stat != null){
+		if (stat != null && stat.getConnector().size() > 0){
 			Connector cntr = (Connector)stat.getConnector().get(0);
 			int max = cntr.getThreadInfo().getMaxThreads();
 			int current = cntr.getThreadInfo().getCurrentThreadsBusy();
@@ -141,7 +149,7 @@ public class Stats
 	 */	
 	public static int calculateThreadLoad(Status stat){
 		int load = 0;
-		if (stat != null){
+		if (stat != null && stat.getConnector().size() > 0){
 			Connector cntr = (Connector)stat.getConnector().get(0);
 			double max = (double)cntr.getThreadInfo().getMaxThreads();
 			double current =
