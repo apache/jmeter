@@ -42,7 +42,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.save.SaveGraphicsService;
+//import org.apache.jmeter.save.SaveGraphicsService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
@@ -293,9 +293,12 @@ public class DistributionGraphVisualizer extends AbstractVisualizer
     	if (src == saveButton){
     		// this is temporary until I get familiar with the
     		// action stuff in JMeter.
+    		/**
     		SaveGraphicsService service = new SaveGraphicsService();
 			service.saveJComponent("distributionGraph",
 				SaveGraphicsService.PNG,this.graphPanel);
+			service.saveUsingJPEGEncoder("graph",this.graphPanel);
+			**/
     	}
     }
 }
