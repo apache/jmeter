@@ -67,7 +67,6 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -115,15 +114,11 @@ class HtmlParserHTMLParser extends HTMLParser
         // Ideally, this should be upgraded to work with Objects (IE)
         //	and archives (.jar and .zip) files as well.
 
-        boolean uniqueBinary;
-        SampleResult binRes= null;
-
         try
         {
             // we start to iterate through the elements
             for (NodeIterator e= htmlParser.elements(); e.hasMoreNodes();)
             {
-                uniqueBinary= true;
                 Node node= e.nextNode();
                 String binUrlStr= null;
 
