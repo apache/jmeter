@@ -113,8 +113,6 @@ import org.apache.oro.text.regex.MalformedPatternException;
  */
 class RegexpHTMLParser extends HTMLParser
 {
-    /** Stores the singleton parser to be used */
-    private static HTMLParser myParser = new RegexpHTMLParser();
 
     /**
      * Regexp fragment matching a tag attribute's value (including
@@ -181,11 +179,15 @@ class RegexpHTMLParser extends HTMLParser
     /** Used to store the Logger (used for debug and error messages). */
     transient private static Logger log;
 
+	protected boolean isReusable()
+	{
+		return true;
+	}
+
     /**
      * Make sure to compile the regular expression upon instantiation:
      */
-    //TODO make private? 
-    RegexpHTMLParser() {
+    protected RegexpHTMLParser() {
         super();
 
         // Define this here to ensure it's ready to report any trouble
@@ -292,17 +294,4 @@ class RegexpHTMLParser extends HTMLParser
         }
         return urls.iterator();
     }
-    
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.http.parser.HTMLParser#getParserInstance()
-     */
-    public static HTMLParser getParserInstance()
-    {
-        return myParser;
-    }
-
-    public static boolean isParserReusable(){
-        return true;
-    }
-
 }
