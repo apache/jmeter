@@ -57,7 +57,7 @@ public class Functor
       }
       catch (Exception e)
       {
-         throw new RuntimeException(e);
+         throw new org.apache.jorphan.util.JMeterError(e); //JDK1.4
       }
    }
 
