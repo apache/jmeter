@@ -269,7 +269,7 @@ public abstract class AbstractVisualizer
 
     /**
      * This provides a convenience for extenders when they implement the
-     * {@link JMeterGUIComponent#createTestElement()} method.  This method
+     * {@link org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()} method.  This method
      * will set the name, gui class, and test class for the created Test
      * Element.  It should be called by every extending class when creating
      * Test Elements, as that will best assure consistent behavior.

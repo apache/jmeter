@@ -121,7 +121,7 @@ public class AccessLogSampler extends HTTPSampler
 	/** private members used by class **/
 	private Generator GENERATOR = null;
 	private LogParser PARSER = null;
-	private LogFilter FILTER = null;
+	private LogFilter FILTER = null; //TODO not used
 	private Class GENERATORCLASS = null;
 	private Class PARSERCLASS = null;
 
@@ -177,7 +177,7 @@ public class AccessLogSampler extends HTTPSampler
 
 	/**
 	 * Return the name of the generator class to use.
-	 * @return
+	 * @return generator class name
 	 */	
 	public String getGeneratorClassName(){
 		return getPropertyAsString(GENERATOR_CLASS_NAME);
@@ -196,7 +196,7 @@ public class AccessLogSampler extends HTTPSampler
 
 	/**
 	 * Return the generator
-	 * @return
+	 * @return generator
 	 */
 	public Generator getGenerator(){
 		return GENERATOR;
@@ -212,7 +212,7 @@ public class AccessLogSampler extends HTTPSampler
 
 	/**
 	 * Return the parser
-	 * @return
+	 * @return parser
 	 */
 	public LogParser getParser(){
 		return PARSER;	
@@ -336,7 +336,6 @@ public class AccessLogSampler extends HTTPSampler
 	 * the class in the text field. This was done to
 	 * make it easier for people to plugin their own log parser
 	 * and use different log parser.
-	 * @return
 	 */
 	public void instantiateParser()
 	{
@@ -374,7 +373,7 @@ public class AccessLogSampler extends HTTPSampler
 	 * the class in the text field. This was done to
 	 * make it easier for people to plugin their own log parser
 	 * and use different log parser.
-	 * @return
+	 * @return true if parser exists or was created
 	 */
 	public boolean checkParser()
 	{

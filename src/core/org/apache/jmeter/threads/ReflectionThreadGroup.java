@@ -56,11 +56,11 @@ package org.apache.jmeter.threads;
 
 /**
  * ThreadGroup used for reflection purposes. {@link ThreadGroup} has a
- * {@link LoopController} which loops as many times as specified on the
+ * {@link org.apache.jmeter.control.LoopController} which loops as many times as specified on the
  * ThreadGroup gui. During reflection, we don't need the
  * <code>LoopController</code> because we need to run the Sampler (for example,
  * <code>JNDISampler</code>) only once. Thus we create this
- * <code>ReflectionThreadGroup</code> which has a {@link #nextEntry()}
+ * <code>ReflectionThreadGroup</code> which has a {link #nextEntry()}
  * which doesn't make use of the <code>LoopController</code>.
  *
  * @author    Khor Soon Hin

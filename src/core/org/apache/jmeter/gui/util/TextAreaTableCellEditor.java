@@ -101,7 +101,7 @@ public class TextAreaTableCellEditor
 
     /**
      * Returns the number of clicks needed to start editing.
-     * @returns the number of clicks needed to start editing
+     * @return the number of clicks needed to start editing
      */
     public int getClickCountToStart()
     {
