@@ -62,7 +62,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.jmeter.engine.util.CompoundVariable;
+//import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -98,7 +98,7 @@ public class MachineName extends AbstractFunction implements Serializable {
 //		if ( ((CompoundFunction)values[0]).execute().toLowerCase().equals("true") )
 //					fullHostName = true;
 					
-		String varName = ((CompoundVariable)values[values.length - 1]).execute();
+		String varName = ((CompoundFunction)values[values.length - 1]).execute();
 		String machineName = "";
 
 		try {
@@ -121,13 +121,12 @@ public class MachineName extends AbstractFunction implements Serializable {
 
 	}
 
-	public void setParameters(String parameters)
+	public void setParameters(Collection parameters)
 			throws InvalidVariableException {
+
+		values = parameters.toArray();
 		
-		Collection params = this.parseArguments2(parameters);
-		values = params.toArray();
-		
-		if ( values.length < 1 ) {
+		if ( values.length < 2 ) {
 			throw new InvalidVariableException();
 		}
 
