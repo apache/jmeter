@@ -332,22 +332,29 @@ public final class AllTests
                 	 */
 
                 	Class clazz = Class.forName(name);
+                	TestSuite t= null;
 					try
 					{
 						Method m = clazz.getMethod("suite", new Class[0]);
-						TestSuite t = (TestSuite) m.invoke(clazz,null);
-						suite.addTest(t);
-					}
-					catch (Exception e)
-					{
-						TestSuite ts = new TestSuite(clazz);
-						suite.addTest(ts);
-                	}
+						t = (TestSuite) m.invoke(clazz,null);
+	                }
+	                catch (NoSuchMethodException e) {} // this is not an error, the others are
+	                //catch (SecurityException e) {}
+					//catch (IllegalAccessException e) {}
+					//catch (IllegalArgumentException e) {}
+					//catch (InvocationTargetException e) {}
+	                
+	                if (t == null)
+	                {
+						t= new TestSuite(clazz);
+	                }
+
+					suite.addTest(t);
                 }
                 catch (Exception ex)
                 {
                 	System.out.println("Error adding test for class "+name+" "+ex.toString());
-                    log.error("error adding test :" + ex);
+                    log.error("error adding test :", ex);
                 }
             }
         }
