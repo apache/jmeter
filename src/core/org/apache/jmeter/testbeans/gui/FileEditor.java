@@ -47,7 +47,7 @@ import org.apache.log.Logger;
  */
 public class FileEditor implements PropertyEditor, ActionListener
 {
-	protected static Logger log= LoggingManager.getLoggerForClass();
+	private static final Logger log= LoggingManager.getLoggerForClass();
 
     /**
 	 * The editor's panel.

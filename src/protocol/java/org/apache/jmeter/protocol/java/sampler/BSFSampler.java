@@ -34,7 +34,7 @@ import org.apache.log.Logger;
 public class BSFSampler extends AbstractSampler
 {
 
-    protected static Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static final String FILENAME   = "BSFSampler.filename"; //$NON-NLS-1$
 	public static final String SCRIPT     = "BSFSampler.query"; //$NON-NLS-1$
