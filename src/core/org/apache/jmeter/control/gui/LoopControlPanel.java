@@ -3,6 +3,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -177,6 +178,8 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
         infinite.setActionCommand(INFINITE);
         infinite.addActionListener(this);
         loopPanel.add(infinite, BorderLayout.EAST);
+
+        loopPanel.add(Box.createHorizontalStrut(loopsLabel.getPreferredSize().width + loops.getPreferredSize().width + infinite.getPreferredSize().width), BorderLayout.NORTH);
 
         return loopPanel;
     }
