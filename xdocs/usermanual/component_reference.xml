@@ -1401,9 +1401,11 @@ The variables in User Defined Variables components will take precedence over tho
 	The pattern strings are Perl5-style regular expressions. You can also choose whether the strings will be expected
 to <b>match</b> the entire response, or if the response is only expected to <b>contain</b> the
 pattern. You can attach multiple assertions to any controller for additional flexibility.</p>
-<p>Note that the pattern string should not include the enclosing brackets, 
+<p>Note that the pattern string should not include the enclosing delimiters, 
 	i.e. use <b>Price: (\d+)</b> not <b>/Price: (\d+)/</b>.
 	By default, the pattern is in multi-line mode, which means that the "." meta-character does not match newline.
+    In multi-line mode, "^" and "$" match the start or end of any line anywhere within the string 
+    - not just the start and end of the entire string.
 	Case is also significant. To override these settings, one can use the extended regular expression syntax.
 	For example:
 </p>
@@ -1411,7 +1413,10 @@ pattern. You can attach multiple assertions to any controller for additional fle
 	(?i) - ignore case
 	(?s) - treat target as single line, i.e. "." matches new-line
 	(?is) - both the above
+    These can be used anywhere within the expression, e.g.
+    (?i)apple(?-i) Pie - matches "ApPLe Pie", but not "ApPLe pIe"
 </pre>
+
 </description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
