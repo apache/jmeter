@@ -60,7 +60,6 @@ public class MailReaderSamplerGui
 	private JCheckBox deleteBox;
 	
 	// Labels
-	private final static String title = JMeterUtils.getResString("mail_reader_title"); 
 	private final static String POP3Label = JMeterUtils.getResString("mail_reader_pop3");
 	private final static String IMAPLabel = JMeterUtils.getResString("mail_reader_imap");
 	private final static String ServerTypeLabel = JMeterUtils.getResString("mail_reader_server_type");
@@ -83,13 +82,11 @@ public class MailReaderSamplerGui
 		init();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-	 */
-	public String getStaticLabel()
-	{
-		return title;
-	}
+	public String getLabelResource()
+    {
+        return  "mail_reader_title";
+    }
+
 
 	/* (non-Javadoc)
 	 * Copy the data from the test element to the GUI
