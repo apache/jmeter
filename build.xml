@@ -1,0 +1,32 @@
+<project name="JMeter" default="all" basedir=".">
+<target name="init">
+<property name="build.compiler" value="classic"/>
+</target>
+<target name="compile" depends="init">
+<mkdir dir="bin/classes"/>
+<javac srcdir="src" 
+       destdir="bin/classes"
+       optimize="on">
+       <exclude name="**/*.df*"/>
+       <exclude name="**/*.html"/>
+       <exclude name="**/*.tpr"/>
+       <exclude name="**/*.tws"/>
+       <exclude name="**/make*"/>
+       <exclude name="**/Makefile"/>
+       <exclude name="**/Changelog*"/>
+       <exclude name="**/*.orig"/>
+</javac>
+</target>
+<target name="package" depends="compile">
+<jar jarfile="ApacheJMeter.jar" basedir="bin/classes" manifest="src/Manifest"/>
+</target>
+<target name="install" depends="package">
+<copyfile src="ApacheJMeter.jar" dest="bin/ApacheJMeter.jar"/>
+<delete file="ApacheJMeter.jar"/>
+</target>
+<target name="all" depends="install"/>
+<target name="clean">
+<delete file="ApacheJMeter.jar"/>
+<deltree dir="bin/classes"/>
+</target>
+</project>
