@@ -28,8 +28,8 @@ package org.apache.jmeter.protocol.http.util.accesslog;
 
 public class NVPair {
 
-	protected String NAME = new String();
-	protected String VALUE = new String();
+	protected String NAME = "";
+	protected String VALUE = "";
 	
 	public NVPair() {
 	}

@@ -518,7 +518,7 @@ public class JMeterTest extends JMeterTestCase
     private static Collection getObjects(Class extendsClass) throws Exception
     {
     	String exName = extendsClass.getName();
-    	Object myThis = new String();
+    	Object myThis = "";
         Iterator classes =
             ClassFinder
                 .findClassesThatExtend(
