@@ -61,7 +61,6 @@ package org.apache.jmeter.protocol.http.parser;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.jorphan.logging.LoggingManager;
@@ -92,7 +91,7 @@ class HtmlParserHTMLParser extends HTMLParser
     /* (non-Javadoc)
      * @see org.apache.jmeter.protocol.http.parser.HtmlParser#getEmbeddedResourceURLs(byte[], java.net.URL)
      */
-    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, Collection urls)
+    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls)
         throws HTMLParseException
     {
         Parser htmlParser= null;
@@ -188,16 +187,7 @@ class HtmlParserHTMLParser extends HTMLParser
                     continue;
                 }
 
-                try
-                {
-                    urls.add(new URL(baseUrl, binUrlStr));
-                }
-                catch (MalformedURLException mfue)
-                {
-                    // Can't build the URL? May be a site error: return the
-                    // string.
-                    urls.add(binUrlStr);
-                }
+                urls.addURL(binUrlStr,baseUrl);
             }
             log.debug("End   : parseNodes");
         }
