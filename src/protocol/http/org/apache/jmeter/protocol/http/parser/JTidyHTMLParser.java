@@ -35,8 +35,6 @@ import org.xml.sax.SAXException;
 /**
  * HtmlParser implementation using JTidy.
  * 
- * @author TBA
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision$ updated on $Date$
  */
 class JTidyHTMLParser extends HTMLParser
@@ -141,6 +139,11 @@ class JTidyHTMLParser extends HTMLParser
 			if (name.equalsIgnoreCase("link"))
 			{
 				urls.addURL(getValue(attrs,"href"),baseUrl);
+			  break;
+			}
+			if (name.equalsIgnoreCase("script"))
+			{
+				urls.addURL(getValue(attrs,"src"),baseUrl);
 			  break;
 			}
 			String back=getValue(attrs,"background");
