@@ -68,6 +68,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import junit.framework.TestSuite;
@@ -166,13 +167,40 @@ public abstract class HTMLParser
 			// the elements in the set later on. As a side-effect, this will keep
 			// them roughly in order, which should be a better model of browser
 			// behaviour.
+			
+			Collection col;
+			
 			// N.B. LinkedHashSet is Java 1.4
-        	//JDK1.4:
-        	return getEmbeddedResourceURLs(html, baseUrl,new java.util.LinkedHashSet());
-        	//TODO better fix for JDK1.3:
-			//return getEmbeddedResourceURLs(html, baseUrl,new java.util.HashSet());
+			if (hasLinkedHashSet){
+				try {
+					col = (Collection) Class.forName("java.util.LinkedHashSet").newInstance();
+				} catch (Exception e) {
+					throw new Error("Should not happen:"+e.toString());
+				}
+			} else {
+				col = new java.util.HashSet(); //TODO: improve JDK1.3 solution 
+			}
+        	
+			return getEmbeddedResourceURLs(html, baseUrl,col);
         }
-
+        
+        // See whether we can use LinkedHashSet or not:
+        private static final boolean hasLinkedHashSet;
+        static {
+        	boolean b;
+			try
+            {
+                Class.forName("java.util.LinkedHashSet");
+                b = true;
+            }
+            catch (ClassNotFoundException e)
+            {
+            	b = false;
+            }
+            hasLinkedHashSet = b;
+        }
+        
+        
 	/**
 	 * Get the URLs for all the resources that a browser would automatically
 	 * download following the download of the HTML content, that is: images,
@@ -379,20 +407,23 @@ public abstract class HTMLParser
         public void testParserSet() throws Exception
         {
 			HTMLParser p = getParser(parserName);
-        	filetest(p,TESTS[testNumber].fileName,TESTS[testNumber].baseURL,TESTS[testNumber].expectedSet,null);
+        	filetest(p,TESTS[testNumber].fileName,TESTS[testNumber].baseURL,TESTS[testNumber].expectedSet
+        	        ,null,false);
         }
 
 		public void testParserList() throws Exception
 		{
 			HTMLParser p = getParser(parserName);
-			filetest(p,TESTS[testNumber].fileName,TESTS[testNumber].baseURL,TESTS[testNumber].expectedList,new Vector());
+			filetest(p,TESTS[testNumber].fileName,TESTS[testNumber].baseURL,TESTS[testNumber].expectedList
+			        ,new Vector(),true);
 		}
 
 		private static void filetest(HTMLParser p,
 		                               String file,
 		                               String url,
 		                               String resultFile,
-		                               Collection c)
+		                               Collection c,
+		                               boolean orderMatters) //Does the order matter?
 		throws Exception
 		{
 			log.info("file   "+file);
@@ -412,12 +443,24 @@ public abstract class HTMLParser
 			 * change the comparison to do a set compare where
 			 * necessary.
 			 */
-			Iterator expected= getFile(resultFile).iterator();
+			Iterator expected;
+			if (orderMatters) {
+			 	expected= getFile(resultFile).iterator();
+			} else {
+				// Convert both to Sets
+				expected = new TreeSet(getFile(resultFile)).iterator();
+				TreeSet temp = new TreeSet();
+				while (result.hasNext()){
+					temp.add(result.next().toString());
+				}
+				result=temp.iterator();
+			}
+			
 			while (expected.hasNext()) {
-				assertTrue(result.hasNext());
+				assertTrue("Expecting another result",result.hasNext());
 				assertEquals(expected.next(), result.next().toString());
 			}
-			assertFalse(result.hasNext());
+			assertFalse("Should have reached the end of the results",result.hasNext());
 		}
 
         // Get expected results as a List
