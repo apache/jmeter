@@ -1,6 +1,3 @@
-package org.apache.jmeter.visualizers;
-
-
 /*
  * ====================================================================
  * The Apache Software License, Version 1.1
@@ -55,6 +52,8 @@ package org.apache.jmeter.visualizers;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+package org.apache.jmeter.visualizers;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,12 +68,12 @@ import org.apache.log.Logger;
 
 
 /**
- *  This class implements the TableModel for the information kept
- *  by the GraphModel.
+ * This class implements the TableModel for the information kept by the
+ * GraphModel.
  *
  * @author     <a href="mailto:alf@i100.no">Alf Hogemark</a>Hogemark
  * @created    March 10, 2002
- * @version    1.0
+ * @version    $Revision$
  */
 public class TableDataModel extends GraphModel implements TableModel
 {
@@ -83,7 +82,7 @@ public class TableDataModel extends GraphModel implements TableModel
     List urlList = new ArrayList();
 
     /**
-     *  Constructor for the TableDataModel object
+     * Constructor for the TableDataModel object.
      */
     public TableDataModel()
     {
@@ -91,9 +90,9 @@ public class TableDataModel extends GraphModel implements TableModel
     }
 
     /**
-     * Gets the GuiClass attribute of the TableModel object
+     * Gets the GuiClass attribute of the TableModel object.
      *
-     * @return    The GuiClass value
+     * @return    the GuiClass value
      */
     public Class getGuiClass()
     {
@@ -107,16 +106,20 @@ public class TableDataModel extends GraphModel implements TableModel
     }
 
     /**
-     * Gets the ClassLabel attribute of the GraphModel object
+     * Gets the ClassLabel attribute of the GraphModel object.
      *
-     * @return    The ClassLabel value
+     * @return    the ClassLabel value
      */
     public String getClassLabel()
     {
         return JMeterUtils.getResString("view_results_in_table");
     }
 
-    public Sample addNewSample(long time, long timeStamp, boolean success, String url)
+    public Sample addNewSample(
+        long time,
+        long timeStamp,
+        boolean success,
+        String url)
     {
         Sample s = super.addNewSample(time, timeStamp, success);
 
@@ -225,29 +228,29 @@ public class TableDataModel extends GraphModel implements TableModel
         {
             if ((rowIndex >= 0) && (rowIndex < urlList.size()))
             {
-                return new Boolean(!((Sample) getSamples().get(rowIndex)).error);
+                return new Boolean(
+                    !((Sample) getSamples().get(rowIndex)).error);
             }
         }
         return null;
     }
 
     /**
-     * Dummy implementation
+     * Dummy implementation.
      */
     public void setValueAt(Object aValue, int rowIndex, int columnIndex)
     {}
 
     /**
-     * Dummy implementation
+     * Dummy implementation.
      */
     public void addTableModelListener(TableModelListener l)
     {}
 
     /**
-     * Dummy implementation
+     * Dummy implementation.
      */
     public void removeTableModelListener(TableModelListener l)
     {}
-
 }
 

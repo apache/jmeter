@@ -67,17 +67,16 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 
 
-/****************************************
- * Title: StatVisualizerModel.java Description: Aggregrate Table-Based Reporting
- * Model for JMeter Props to the people who've done the other visualizers ahead
- * of me (Stefano Mazzocchi), who I borrowed code from to start me off (and much
- * code may still exist).. Thank you! Copyright: Copyright (c) 2001 Company:
- * Apache Foundation
- *
- *@author    James Boutcher
- *@created   March 21, 2002
- *@version   1.0
- ***************************************/
+/**
+ * Aggregrate Table-Based Reporting Model for JMeter.  Props to the people
+ * who've done the other visualizers ahead of me (Stefano Mazzocchi), who I
+ * borrowed code from to start me off (and much code may still exist). Thank
+ * you!
+ * 
+ * @author    James Boutcher
+ * @created   March 21, 2002
+ * @version   $Revision$
+ */
 public class StatVisualizerModel implements Clearable
 {
     private String name;
@@ -86,9 +85,9 @@ public class StatVisualizerModel implements Clearable
     private Map labelMap;
     private RunningSample total;
 
-    /****************************************
-     * Default Constuctor
-     ***************************************/
+    /**
+     * Default Constuctor.
+     */
     public StatVisualizerModel()
     {
         listeners = new LinkedList();
@@ -97,42 +96,40 @@ public class StatVisualizerModel implements Clearable
         total = new RunningSample("__TOTAL__", -1);
     }
 
-    /****************************************
-     * Sets the Name attribute of the StatVisualizerModel object
+    /**
+     * Sets the Name attribute of the StatVisualizerModel object.
      *
-     *@param name  The new Name value
-     ***************************************/
+     * @param name  the new Name value
+     */
     public void setName(String name)
     {
         this.name = name;
     }
 
-    /****************************************
-     * Gets the GuiClass attribute of the StatVisualizerModel object
+    /**
+     * Gets the GuiClass attribute of the StatVisualizerModel object.
      *
-     *@return   The GuiClass value
-     ***************************************/
+     * @return  the GuiClass value
+     */
     public Class getGuiClass()
     {
         return StatVisualizer.class;
     }
 
-    /****************************************
-     * Gets the Name attribute of the StatVisualizerModel object
+    /**
+     * Gets the Name attribute of the StatVisualizerModel object.
      *
-     *@return   The Name value
-     ***************************************/
+     * @return  the Name value
+     */
     public String getName()
     {
         return name;
     }
 
-    /****************************************
+    /**
      * Registers a listener (a visualizer, graph, etc) to this model. This will
      * allow the model to fire GUI updates to anyone when data changes, etc.
-     *
-     *@param listener       !ToDo
-     ***************************************/
+     */
     public void addGraphListener(GraphListener listener)
     {
         listeners.add(listener);
@@ -163,11 +160,6 @@ public class StatVisualizerModel implements Clearable
         return total;
     }
 
-    /****************************************
-     * !ToDo
-     *
-     *@param res  !ToDo
-     ***************************************/
     public void addNewSample(SampleResult res)
     {
         String aLabel = res.getSampleLabel();
@@ -189,9 +181,9 @@ public class StatVisualizerModel implements Clearable
         this.fireDataChanged(s);
     }
 
-    /****************************************
+    /**
      * Reset everything we can in the model.
-     ***************************************/
+     */
     public void clear()
     {
         // clear the data structures
@@ -201,10 +193,10 @@ public class StatVisualizerModel implements Clearable
         this.fireDataChanged();
     }
 
-    /****************************************
-     * Called when the model changes - then we call out to all registered listeners
-     * and tell them to update themselves.
-     ***************************************/
+    /**
+     * Called when the model changes - then we call out to all registered
+     * listeners and tell them to update themselves.
+     */
     protected void fireDataChanged()
     {
         Iterator iter = listeners.iterator();

@@ -69,25 +69,11 @@ import java.io.Serializable;
 
 public class Sample implements Serializable
 {
-
-    /**
-     *  Description of the Field
-     */
     public long data;
-
-    /**
-     *  Description of the Field
-     */
     public long average;
     public long median;
-
-    /**
-     *  Description of the Field
-     */
     public long deviation;
-
     public float throughput;
-
     public boolean error = false;
 
     /**
@@ -97,7 +83,13 @@ public class Sample implements Serializable
      *@param  average    Description of Parameter
      *@param  deviation  Description of Parameter
      */
-    public Sample(long data, long average, long deviation, float throughput, long median,boolean error)
+    public Sample(
+        long data,
+        long average,
+        long deviation,
+        float throughput,
+        long median,
+        boolean error)
     {
         this.data = data;
         this.average = average;

@@ -55,12 +55,9 @@
 
 package org.apache.jmeter.visualizers;
 
-
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
-
-// import Acme.JPM.Encoders.*;
 
 /*
  * TODO :
@@ -136,8 +133,8 @@ import org.apache.log.Logger;
  */
 public class Spline3
 {
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-                    "jmeter.gui");
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
     protected float[][] _coefficients;
     protected float[][] _A;
@@ -277,7 +274,8 @@ public class Spline3
         {
             if (log.isDebugEnabled())
             {
-                log.debug("Warning : " + "equation system resolving is unstable");
+                log.debug(
+                    "Warning : equation system resolving is unstable");
             }
         }
         // init newX and oldX arrays to 0
@@ -403,7 +401,12 @@ public class Spline3
         {
             if (log.isDebugEnabled())
             {
-                log.debug("Warning : abscissa " + t + " out of bounds [0, " + (_m - 1) + "]");
+                log.debug(
+                    "Warning : abscissa "
+                        + t
+                        + " out of bounds [0, "
+                        + (_m - 1)
+                        + "]");
             }
             // silent error, consider the curve is constant outside its range
             if (t < 0)
@@ -479,7 +482,8 @@ public class Spline3
         // computes relative auto-scaled plots to fit in the specified area
         for (int i = 0; i < width; i++)
         {
-            plot[i] = (int) Math.round(((y[i] - min) * (height - 1)) / (max - min));
+            plot[i] =
+                (int) Math.round(((y[i] - min) * (height - 1)) / (max - min));
         }
         return plot;
     }
