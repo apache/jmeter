@@ -249,14 +249,14 @@ public class JMeterTest extends JMeterTestCase
 			JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
 			if (item instanceof JMeterTreeNode)
 			{
-				System.out.println("JMeterGUIComponent: skipping all tests  "+item.getClass().getName());
+				System.out.println("INFO: JMeterGUIComponent: skipping all tests  "+item.getClass().getName());
 				continue;
 			}
 			TestSuite ts = new TestSuite(item.getClass().getName());
 			ts.addTest(new JMeterTest("GUIComponents1",item));
 			if (item instanceof TestBeanGUI)
 			{
-				System.out.println("JMeterGUIComponent: skipping some tests "+item.getClass().getName());
+				System.out.println("INFO: JMeterGUIComponent: skipping some tests "+item.getClass().getName());
 			}
 			else
 			{
@@ -561,19 +561,19 @@ public class JMeterTest extends JMeterTestCase
                     catch (NoSuchMethodException f)
                     {
                         // no luck. Ignore this class
-						System.out.println(exName+": NoSuchMethodException  "+n);
+						System.out.println("WARN: "+exName+": NoSuchMethodException  "+n);
                     }
                 }
             }
             catch (NoClassDefFoundError e)
             {
 				// no luck. Ignore this class
-				System.out.println(exName+": NoClassDefFoundError "+n);
+				System.out.println("WARN: "+exName+": NoClassDefFoundError "+n);
             }
             catch (IllegalAccessException e)
             {
 				caught=e;
-				System.out.println(exName+": IllegalAccessException "+n);
+				System.out.println("WARN: "+exName+": IllegalAccessException "+n);
                 // We won't test restricted-access classes.
             }
 			//JDK1.4: catch (java.awt.HeadlessException e)
@@ -587,7 +587,7 @@ public class JMeterTest extends JMeterTestCase
             	   ||e.getClass().getName().equals("java.awt.HeadlessException")//for JDK1.3
             	   )
 				{
-					System.out.println("Error creating "+n+" "+e.toString());
+					System.out.println("WARN: "+"Error creating "+n+" "+e.toString());
 				}
 				else
 				{
