@@ -122,7 +122,8 @@ import org.apache.log.Logger;
  * <dl>
  * <dt>group: String</dt>
  * <dd>Group under which the property should be shown in the GUI. The string is
- * also used as a group title. The default group is "".</dd>
+ * also used as a group title (but see comment on resourceBundle below). The
+ * default group is "".</dd>
  * <dt>order: Integer</dt>
  * <dd>Order in which the property will be shown in its group. A smaller
  * integer means higher up in the GUI. The default order is 0. Properties
@@ -130,16 +131,19 @@ import org.apache.log.Logger;
  * <dt>tags: String[]</dt>
  * <dd>List of values to be offered for the property in addition to those
  * offered by its property editor.</dd>
- * <dt>noUndefined: Boolean</dt>
+ * <dt>notUndefined: Boolean</dt>
  * <dd>If true, the property should not be left undefined. A <b>default</b>
  * attribute must be provided if this is set.</dd>
- * <dd>noEdit: Boolean</dd>
- * <dd>If true, the property content should not be edited manually, that is: it
- * should always be one of the tags values.</dt>
+ * <dd>notExpression: Boolean</dd>
+ * <dd>If true, the property content should always be constant: JMeter
+ * 'expressions' (strings using ${var}, etc...) can't be used.</dt>
+ * <dd>notOther: Boolean</dd>
+ * <dd>If true, the property content must always be one of the tags values or
+ * null.</dt>
  * <dt>default: Object</dt>
  * <dd>Initial value for the property's GUI. Must be provided and be non-null
- * if <b>noUndefined</b> is set. Must be one of the provided tags (or null) if
- * <b>noEdit</b> is set.
+ * if <b>notUndefined</b> is set. Must be one of the provided tags (or null) if
+ * <b>notOther</b> is set.
  * </dl>
  * <p>
  * The following BeanDescriptor attributes are also understood:
@@ -151,14 +155,28 @@ import org.apache.log.Logger;
  * in the GUI. The default order is 0. Groups of equal order are sorted
  * alphabetically.</dd>
  * <dt>resourceBundle: ResourceBundle</dt>
- * <dd>A resource bundle to be used for GUI localization. Group display names,
- * for example, will be obtained from property "<i>group</i>.displayName" if
+ * <dd>A resource bundle to be used for GUI localization: group display names
+ * will be obtained from property "<b><i>group</i>.displayName</b>" if
  * available (where <b><i>group</i></b> is the group name).
  * </dl>
  */
 public class TestBeanGUI extends AbstractJMeterGuiComponent
 {
     private static Logger log = LoggingManager.getLoggerForClass();
+
+	public static final String GROUP= "group";
+	public static final String ORDER= "order";
+	public static final String TAGS= "tags";
+	public static final String NOT_UNDEFINED= "notUndefined";
+	public static final String NOT_EXPRESSION= "notExpression";
+	public static final String NOT_OTHER= "notOther";
+	public static final String DEFAULT= "default";
+	public static final String RESOURCE_BUNDLE= "resourceBundle";
+	public static final String ORDER(String group) {
+		return "group."+group+".order";
+	}
+
+	public static final String DEFAULT_GROUP= "";
 
     /**
      * Class of the objects being edited.
@@ -315,7 +333,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
 			editors[i]= propertyEditor;
 
 			// Initialize the editor with the provided default value or null:
-            setEditorValue(i, descriptors[i].getValue("default"));
+            setEditorValue(i, descriptors[i].getValue(DEFAULT));
         }
 
 		// Obtain message formats:
@@ -340,7 +358,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
 			PropertyEditor typeEditor, PropertyDescriptor descriptor)
 	{
 		String[] editorTags= typeEditor.getTags();
-		String[] additionalTags= (String[])descriptor.getValue("tags");
+		String[] additionalTags= (String[])descriptor.getValue(TAGS);
 		String[] tags= null;
 		if (editorTags == null) tags= additionalTags;
 		else if (additionalTags == null) tags= editorTags;
@@ -350,22 +368,24 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
 			for (int i=0; i<editorTags.length; i++) tags[j++]= editorTags[i];
 			for (int i=0; i<additionalTags.length; i++) tags[j++]= additionalTags[i];
 		}
-		
-		boolean noUndefined=
-			Boolean.TRUE.equals(descriptor.getValue("noUndefined"));
-		boolean noEdit=
-			Boolean.TRUE.equals(descriptor.getValue("noEdit"));
+
+		boolean notNull=
+			Boolean.TRUE.equals(descriptor.getValue(NOT_UNDEFINED));
+		boolean notExpression=
+			Boolean.TRUE.equals(descriptor.getValue(NOT_EXPRESSION));
+		boolean notOther=
+			Boolean.TRUE.equals(descriptor.getValue(NOT_OTHER));
 
 		PropertyEditor guiEditor;
-		if (noUndefined && tags==null)
+		if (notNull && tags==null)
 		{
 			guiEditor= new FieldStringEditor();
 		}
 		else
 		{
 			ComboStringEditor e= new ComboStringEditor();
-			e.setNoUndefined(noUndefined);
-			e.setNoEdit(noEdit);
+			e.setNoUndefined(notNull);
+			e.setNoEdit(notExpression && notOther);
 			e.setTags(tags);
 			
 			guiEditor= e;
@@ -373,34 +393,55 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
 
 		WrapperEditor wrapper= new WrapperEditor(
 			typeEditor, guiEditor,
-			!noUndefined, // acceptsNull
-			!noEdit // acceptsExpressions TODO: can be finer
+			!notNull, // acceptsNull
+			!notExpression, // acceptsExpressions
+			!notOther // acceptsOther
 			);
 
-		Object defaultValue= descriptor.getValue("default");
+		Object defaultValue= descriptor.getValue(DEFAULT);
 		
-		if (guiEditor instanceof ComboStringEditor && !noEdit)
+		try
 		{
-			// Provide an initial edit value:
-			if (tags != null)
-			{
-				((ComboStringEditor)guiEditor).setInitialEditValue(tags[0]);
-			}
-			else
-			{
-				// 'expressions' are currently always valid on
-				// editable fields: TODO: could be finer
-				((ComboStringEditor)guiEditor).setInitialEditValue("${}");
-			}
-			// TODO: I don't like this solution. We could make a
-			// more convenient approach if we knew whether the property
-			// accepts expressions or not, whether it accepts any 
-			// values beyond the provided tags or not, etc... 
-			// ... plus we could define a "initialEditValue" property descriptor
-			// attribute to explicitly specify which value should be used. 
+			wrapper.setValue(defaultValue);
+		}
+		catch (IllegalArgumentException e)
+		{
+			log.error("The default value for property " + descriptor.getName()
+				+" is not valid. Or a default value was not provided and "
+				+" property attribute notUndefined is set to true.");
+			throw new Error(e.toString()); // programming error, so bail out.
 		}
 
-		wrapper.setValue(defaultValue);
+		if (guiEditor instanceof ComboStringEditor)
+		{
+			// Provide an initial edit value if necessary:
+		
+			/*
+				What follows encodes this correspondence:
+
+				 ot  ex  nl -- default or 1st tag or ${}
+				 ot  ex !nl -- "": use "" or last valid value
+				 ot !ex  nl -- default or 1st tag or "" or last valid value :-(
+				 ot !ex !nl -- "": use "" or last valid value
+				!ot  ex  nl -- ${}
+				!ot  ex !nl -- ${}
+				!ot !ex  nl -- not necessary (not editable)
+				!ot !ex !nl -- not necessary (not editable)
+
+				[ot=other, ex=expressions, nl=null]
+
+			*/ 
+
+			String v;
+			if (notOther) v="${}";
+			else if (notNull) v= "";
+			else if (defaultValue != null) v= wrapper.getAsText();
+			else if (tags != null) v= tags[1];
+			else if (notExpression) v= "";
+			else v="${}";
+
+			((ComboStringEditor)guiEditor).setInitialEditValue(v);
+		}
 
 		return wrapper;
 	}
@@ -461,7 +502,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
 				// so I'll bail out.
 				throw new Error("Bad property value."+e);
 				// TODO: review this and possibly change to:
-				// setEditorValue(i, descriptors[i].getValue("default"); 
+				// setEditorValue(i, descriptors[i].getValue(DEFAULT); 
 			}
 		}
     }
@@ -672,7 +713,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
 		cp.weightx= 1.0;
 
 		JPanel currentPanel= mainPanel;
-		String currentGroup= "";
+		String currentGroup= DEFAULT_GROUP;
 		int y=0;
 		
         for (int i=0; i<editors.length; i++)
@@ -780,8 +821,8 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
 	 */
 	private String group(PropertyDescriptor d)
 	{
-		String group= (String)d.getValue("group");
-		if (group == null) group= "";
+		String group= (String)d.getValue(GROUP);
+		if (group == null) group= DEFAULT_GROUP;
 		return group;
 	}
 
@@ -792,8 +833,9 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
 	{
 		try {
 			ResourceBundle b= (ResourceBundle)
-				beanInfo.getBeanDescriptor().getValue("resourceBundle");
-			return b.getString(group+".displayName");
+				beanInfo.getBeanDescriptor().getValue(RESOURCE_BUNDLE);
+			if (b == null) return group;
+			else return b.getString(group+".displayName");
 		}
 		catch (MissingResourceException e)
 		{
@@ -840,7 +882,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
 		private Integer groupOrder(String group)
 		{
 			Integer order= (Integer)beanInfo.getBeanDescriptor()
-					.getValue("group."+group+".order");
+					.getValue(ORDER(group));
 			if (order == null) order= new Integer(0);
 			return order;
 		}
@@ -853,7 +895,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent
 		 */
 		private Integer propertyOrder(PropertyDescriptor d)
 		{
-			Integer order= (Integer)d.getValue("order");
+			Integer order= (Integer)d.getValue(ORDER);
 			if (order == null) order= new Integer(0);
 			return order;
 		}

@@ -111,6 +111,11 @@ class WrapperEditor extends PropertyEditorSupport
 	 */
 	boolean acceptsExpressions;
 
+	/**
+	 * Whether to allow any constant values different from the provided tags. 
+	 */
+	boolean acceptsOther;
+
     /**
    	 * Keep track of the last valid value in the editor, so that we can
    	 * revert to it if the user enters an invalid value.
@@ -148,13 +153,17 @@ I said above is true (so I won't need to reinstate this code).
     }
 */
 	public WrapperEditor(
-			PropertyEditor typeEditor, PropertyEditor guiEditor,
-			boolean acceptsNull, boolean acceptsExpressions) {
+			PropertyEditor typeEditor, 
+			PropertyEditor guiEditor,
+			boolean acceptsNull, 
+			boolean acceptsExpressions, 
+			boolean acceptsOther) {
 		super();
 		this.typeEditor= typeEditor;
 		this.guiEditor= guiEditor;
 		this.acceptsNull= acceptsNull;
 		this.acceptsExpressions= acceptsExpressions;
+		this.acceptsOther= acceptsOther;
 		
 		guiEditor.addPropertyChangeListener(this);
 	}
@@ -169,6 +178,28 @@ I said above is true (so I won't need to reinstate this code).
 		return guiEditor.getCustomEditor();
 	}
 
+	public String[] getTags()
+	{
+		return guiEditor.getTags();
+	}
+
+	/**
+	 * Determine wheter a string is one of the known tags.
+	 * 
+	 * @param text
+	 * @return true iif text equals one of the getTags()
+	 */
+	private boolean isATag(String text)
+	{
+		String[] tags= getTags();
+		if (tags == null) return false;
+		for (int i=0; i<tags.length; i++)
+		{
+			if (tags[i].equals(text)) return true;
+		}
+		return false;
+	}
+	
     /**
  	 * Determine whether a string is a valid value for the property.
    	 * 
@@ -182,6 +213,14 @@ I said above is true (so I won't need to reinstate this code).
     	if (acceptsExpressions && isExpression(text)) return true;
 
     	// Not an expression (isn't or can't be), not null.
+    	
+		// The known tags are assumed to be valid:
+		if (isATag(text)) return true;
+		
+		// Was not a tag, so if we can't accept other values...
+		if (! acceptsOther) return false;
+		
+		// Delegate the final check to the typeEditor:
     	try
     	{
     		typeEditor.setAsText(text);
@@ -223,7 +262,8 @@ I said above is true (so I won't need to reinstate this code).
 	 * Check if a string is a valid JMeter 'expression'.
 	 * <p>
 	 * The current implementation is very basic: it just accepts any
-	 * string containing "${" as a valid expression. TODO: improve.
+	 * string containing "${" as a valid expression.
+	 * TODO: improve, but keep returning true for "${}". 
 	 */
 	private final boolean isExpression(String text)
 	{
@@ -265,6 +305,10 @@ I said above is true (so I won't need to reinstate this code).
     		else
     		{
     			// not an expression (isn't or can't be), not null.
+				
+				// a check, just in case:
+				if (! acceptsOther && ! isATag(text)) shouldNeverHappen();
+
     			try
     			{
     				typeEditor.setAsText(text);
@@ -300,7 +344,7 @@ I said above is true (so I won't need to reinstate this code).
     				+ ":"
     				+ value);
     	}
-    
+
     	if (value == null)
     	{
     		if (!acceptsNull) throw new IllegalArgumentException();
@@ -315,6 +359,8 @@ I said above is true (so I won't need to reinstate this code).
 			// Not an expression (isn't or can't be), not null.
     		typeEditor.setValue(value); // may throw IllegalArgumentExc.
     		text= typeEditor.getAsText();
+    		
+    		if (! acceptsOther && ! isATag(text)) throw new IllegalArgumentException();
     	}
 
     	guiEditor.setValue(text);
@@ -342,6 +388,9 @@ I said above is true (so I won't need to reinstate this code).
 				shouldNeverHappen(e);
 			}
 			text= typeEditor.getAsText();
+
+			// a check, just in case:
+			if (! acceptsOther && ! isATag(text)) shouldNeverHappen();
     	}
     
     	if (log.isDebugEnabled())
@@ -359,10 +408,10 @@ I said above is true (so I won't need to reinstate this code).
 		}
     		
 		String value;
-    		
+
 		if (text == null)
 		{
-			if (!acceptsNull) shouldNeverHappen();
+			if (! acceptsNull) throw new IllegalArgumentException();
 			value= null;
 		}
 		else 
@@ -373,13 +422,14 @@ I said above is true (so I won't need to reinstate this code).
 			}
 			else
 			{
+				// Some editors do tiny transformations (e.g. "true" to "True",...):
 				typeEditor.setAsText(text); // may throw IllegalArgumentException
 				value= typeEditor.getAsText();
+				
+				if (! acceptsOther && ! isATag(text)) throw new IllegalArgumentException();
 			}
 		}
 
-		// TODO: if (NOT A TAG: && noEdit) shouldNeverHappen();
-    
 		guiEditor.setValue(value);
 
 		firePropertyChange();
