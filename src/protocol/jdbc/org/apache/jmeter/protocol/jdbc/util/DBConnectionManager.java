@@ -22,6 +22,7 @@ import java.lang.reflect.Constructor;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -147,6 +148,7 @@ public final class DBConnectionManager
 
     public void shutdown()
     {
+    	log.debug("Running shutdown from "+Thread.currentThread().getName());
         synchronized (poolMap)
         {
             Iterator iter = poolMap.keySet().iterator();
@@ -222,11 +224,20 @@ public final class DBConnectionManager
             DriverManager.registerDriver(
                 (Driver) Class.forName(driver).newInstance());
         }
-        catch (Exception e)
+        catch (SQLException e)
         {
             log.error("Error registering database driver '" + driver + "'", e);
             return false;
-        }
+        } catch (InstantiationException e) {
+            log.error("Error registering database driver '" + driver + "'", e);
+            return false;
+		} catch (IllegalAccessException e) {
+            log.error("Error registering database driver '" + driver + "'", e);
+            return false;
+		} catch (ClassNotFoundException e) {
+            log.error("Error registering database driver '" + driver + "'", e);
+            return false;
+		}
         return true;
     }
 }
