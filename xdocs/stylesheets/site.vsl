@@ -169,8 +169,8 @@
 #end
 
 #macro (figure $figure)
-	<table border="0" cellspacing="0" cellpadding="0"><tr><td><img src="$figure.getAttributeValue("image")"><br/>
-	<font size="-1">#runloop($figure)</font></td></tr></table><br/>
+	<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img src="$figure.getAttributeValue("image")"><br/>
+	<font size="-1">#runloop($figure)</font></td></tr></table></p>
 #end
 
 #macro (example $example)

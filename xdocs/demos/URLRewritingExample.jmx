@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+
+<ThreadGroup name="URL Re-writing Example" numThreads="1" rampUp="0">
+<controllers>
+<LoopController type="org.apache.jmeter.control.LoopController" name="Loop Controller" iterations="-1">
+<configElements>
+</configElements>
+<controllers>
+<Controller type="org.apache.jmeter.control.ModifyController" name="Modification Controller">
+<configElements>
+<ConfigElement type="org.apache.jmeter.protocol.http.modifier.AnchorModifier">
+</ConfigElement>
+</configElements>
+<controllers>
+<HttpTestSample type="org.apache.jmeter.protocol.http.control.HttpTestSample" name="Login" getImages="false">
+<defaultUrl>
+<ConfigElement type="org.apache.jmeter.protocol.http.config.MultipartUrlConfig">
+<property name="port">80</property>
+<property name="PROTOCOL">http</property>
+<property name="domain">my.server.com</property>
+<property name="arguments"><Arguments>
+<argument name="SESSION_ID"> .*</argument>
+<argument name="username"> user</argument>
+<argument name="password"> password</argument>
+</Arguments>
+</property>
+<property name="path">/main.jsp</property>
+<property name="method">POST</property>
+</ConfigElement></defaultUrl>
+<configElements>
+</configElements>
+<controllers>
+</controllers>
+</HttpTestSample>
+
+<HttpTestSample type="org.apache.jmeter.protocol.http.control.HttpTestSample" name="Do Something interesting" getImages="false">
+<defaultUrl>
+<ConfigElement type="org.apache.jmeter.protocol.http.config.MultipartUrlConfig">
+<property name="PROTOCOL">http</property>
+<property name="domain">my.server.com</property>
+<property name="arguments"><Arguments>
+<argument name="SESSION_ID"> .*</argument>
+</Arguments>
+</property>
+<property name="path">/something_interesting.jsp</property>
+<property name="method">GET</property>
+</ConfigElement></defaultUrl>
+<configElements>
+</configElements>
+<controllers>
+</controllers>
+</HttpTestSample>
+
+<HttpTestSample type="org.apache.jmeter.protocol.http.control.HttpTestSample" name="Another Interesting Request" getImages="false">
+<defaultUrl>
+<ConfigElement type="org.apache.jmeter.protocol.http.config.MultipartUrlConfig">
+<property name="PROTOCOL">http</property>
+<property name="domain">my.server.com</property>
+<property name="arguments"><Arguments>
+<argument name="SESSION_ID"> .*</argument>
+</Arguments>
+</property>
+<property name="path">/another.jsp</property>
+<property name="method">POST</property>
+</ConfigElement></defaultUrl>
+<configElements>
+</configElements>
+<controllers>
+</controllers>
+</HttpTestSample>
+
+</controllers>
+</Controller>
+</controllers>
+</LoopController>
+</controllers>
+<timers>
+</timers>
+<listeners>
+</listeners>
+</ThreadGroup>
