@@ -65,8 +65,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     public static final int DEFAULT_HTTPS_PORT = 443;
     public static final int DEFAULT_HTTP_PORT = 80;
 
-    public final static String HEADERS= "headers";
-    public final static String HEADER= "header";
     public final static String ARGUMENTS= "HTTPsampler.Arguments";
     public final static String AUTH_MANAGER= "HTTPSampler.auth_manager";
     public final static String COOKIE_MANAGER= "HTTPSampler.cookie_manager";

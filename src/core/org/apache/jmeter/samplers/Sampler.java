@@ -29,8 +29,6 @@ import org.apache.jmeter.testelement.TestElement;
  */
 public interface Sampler extends java.io.Serializable, TestElement
 {
-    public final static String HEADER = "sampler.HEADER";
-
     /**
      * Obtains statistics about the given Entry, and packages the information
      * into a SampleResult.
