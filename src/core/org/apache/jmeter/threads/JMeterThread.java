@@ -146,6 +146,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
             log.info("Thread " + Thread.currentThread().getName() + " started");
             controller.initialize();
             controller.addIterationListener(new IterationListener());
+            threadContext.setSamplingStarted(true);
             while (running)
             {
             	Sampler sam;
@@ -155,10 +156,8 @@ public class JMeterThread implements Runnable, java.io.Serializable
                     {
                         threadContext.setCurrentSampler(sam);
                         SamplePackage pack = compiler.configureSampler(sam);
-                        delay(pack.getTimers());
-                        threadContext.setSamplingStarted(true);                        
+                        delay(pack.getTimers());                        
                         SampleResult result = pack.getSampler().sample(null);
-                        threadContext.setSamplingStarted(false);
                         result.setThreadName(threadName);
                         result.setTimeStamp(System.currentTimeMillis());
                         threadContext.setPreviousResult(result);
@@ -180,6 +179,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
         }
         finally
         {
+            threadContext.setSamplingStarted(false);
             log.info("Thread " + threadName + " is done");
             monitor.threadFinished(this);
         }

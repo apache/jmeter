@@ -47,7 +47,7 @@ public class SimpleVariable {
 		
 		if ( vars != null )
 			ret = vars.get(name);
-		if( ret == null  || ret.length() == 0 )
+		if( ret == null)
 			return "${"+name+"}";
 
 		return ret;

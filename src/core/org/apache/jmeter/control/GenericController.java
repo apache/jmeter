@@ -88,7 +88,7 @@ import org.apache.log.Logger;
 public class GenericController extends AbstractTestElement implements Controller, Serializable
 {
     protected static Logger log = LoggingManager.getLoggerFor(JMeterUtils.ELEMENTS);
-    protected List iterationListeners = new LinkedList();
+    protected LinkedList iterationListeners = new LinkedList();
     protected List subControllersAndSamplers = new ArrayList();
 
     protected int current;
@@ -288,7 +288,10 @@ public class GenericController extends AbstractTestElement implements Controller
 
     public void addIterationListener(LoopIterationListener lis)
     {
-        iterationListeners.add(lis);
+        /* A little hack - add each listener to the start of the list - this ensures that the thread running the show is the first listener and can
+         * modify certain values before other listeners are called.
+         */
+        iterationListeners.addFirst(lis);
     }
 
     protected void fireIterEvents()
