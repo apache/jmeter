@@ -54,11 +54,9 @@
  */
 package org.apache.jmeter.protocol.java.sampler;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;

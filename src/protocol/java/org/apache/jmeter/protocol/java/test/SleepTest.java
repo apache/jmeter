@@ -125,8 +125,8 @@ public class SleepTest extends AbstractJavaSamplerClient
         getLogger().debug(whoAmI() + "\tsetupTest()");
         listParameters(context);
 
-        sleepTime = context.getLongParameter("SleepTime", 1000);
-        sleepMask = context.getLongParameter("SleepMask", 0x3ff);
+        sleepTime = context.getLongParameter("SleepTime", DEFAULT_SLEEP_TIME);
+        sleepMask = context.getLongParameter("SleepMask", DEFAULT_SLEEP_MASK);
     }
 
     /**
@@ -140,9 +140,9 @@ public class SleepTest extends AbstractJavaSamplerClient
      * the test required to execute.  It is also a good idea to
      * set the sampleLabel and the successful flag.
      * 
-     * @see org.apache.jmeter.samplers.SampleResult.setTime(long)
-     * @see org.apache.jmeter.samplers.SampleResult.setSuccessful(boolean)
-     * @see org.apache.jmeter.samplers.SampleResult.setSampleLabel(java.lang.String)
+     * @see org.apache.jmeter.samplers.SampleResult#setTime(long)
+     * @see org.apache.jmeter.samplers.SampleResult#setSuccessful(boolean)
+     * @see org.apache.jmeter.samplers.SampleResult#setSampleLabel(java.lang.String)
      * 
      * @param context  the context to run with. This provides access
      *                 to initialization parameters.

@@ -55,7 +55,6 @@
 package org.apache.jmeter.protocol.java.sampler;
 
 import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.samplers.SampleResult;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 

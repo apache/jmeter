@@ -192,10 +192,11 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
 
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() == classnameCombo) {
-            String className = (String)classnameCombo.getSelectedItem();
+            String className =
+                    ((String)classnameCombo.getSelectedItem()).trim();
             try {
                 JavaSamplerClient client = (JavaSamplerClient)Class.forName(
-                            className.trim(),
+                            className,
                             true,
                             Thread.currentThread().getContextClassLoader()
                         ).newInstance();
@@ -205,7 +206,16 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
                 Map currArgsMap = currArgs.getArgumentsAsMap();
 
                 Arguments newArgs = new Arguments();
-                Arguments testParams = client.getDefaultParameters();
+                Arguments testParams = null;
+                try {
+                    testParams = client.getDefaultParameters();
+                } catch (AbstractMethodError e) {
+                    log.warn ("JavaSamplerClient doesn't implement " +
+                            "getDefaultParameters.  Default parameters won't " +
+                            "be shown.  Please update your client class: " +
+                            className);
+                }
+                
                 if (testParams != null) {
                     PropertyIterator i = testParams.getArguments().iterator();
                     while (i.hasNext()) {
