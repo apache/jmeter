@@ -57,6 +57,7 @@ package org.apache.jmeter.config.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -169,7 +170,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
 
     private void init()
     {
-        setLayout(new BorderLayout(0, 5));
+        setLayout(new BorderLayout(0, 10));
         
         if (displayName) {
             setBorder(makeBorder());
@@ -301,5 +302,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
         }
     }
 
-    
+    public Dimension getPreferredSize() {
+        return getMinimumSize();
+    }  
 }
