@@ -152,7 +152,10 @@ public abstract class AbstractJMeterGuiComponent
      */
     public String getName()
     {
-        return getNamePanel().getName();
+    	if (getNamePanel() != null) {
+			return getNamePanel().getName();
+    	}
+    	else return "";
     }
 
     /**

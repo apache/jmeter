@@ -142,7 +142,8 @@ public class NamePanel extends JPanel implements JMeterGUIComponent
      */
     public String getName()
     {
-        return nameField.getText();
+    	if (nameField != null) return nameField.getText();
+    	else return "";
     }
 
     /**
