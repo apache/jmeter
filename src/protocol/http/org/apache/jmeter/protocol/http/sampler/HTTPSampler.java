@@ -106,42 +106,41 @@ import org.apache.oro.text.regex.Util;
  */
 public class HTTPSampler extends AbstractSampler
 {
-    public final static String HEADERS = "headers";
-    public final static String HEADER = "header";
-    public final static String ARGUMENTS = "HTTPsampler.Arguments";
-    public final static String AUTH_MANAGER = "HTTPSampler.auth_manager";
-    public final static String COOKIE_MANAGER = "HTTPSampler.cookie_manager";
-    public final static String HEADER_MANAGER = "HTTPSampler.header_manager";
-    public final static String MIMETYPE = "HTTPSampler.mimetype";
-    public final static String DOMAIN = "HTTPSampler.domain";
-    public final static String PORT = "HTTPSampler.port";
-    public final static String METHOD = "HTTPSampler.method";
-    public final static String PATH = "HTTPSampler.path";
-    public final static String FOLLOW_REDIRECTS =
-        "HTTPSampler.follow_redirects";
-    public final static String PROTOCOL = "HTTPSampler.protocol";
-    public final static String DEFAULT_PROTOCOL = "http";
-    public final static String URL = "HTTPSampler.URL";
-    public final static String POST = "POST";
-    public final static String GET = "GET";
-    public final static String USE_KEEPALIVE = "HTTPSampler.use_keepalive";
-    public final static String FILE_NAME = "HTTPSampler.FILE_NAME";
-    public final static String FILE_FIELD = "HTTPSampler.FILE_FIELD";
-    public final static String FILE_DATA = "HTTPSampler.FILE_DATA";
-    public final static String FILE_MIMETYPE = "HTTPSampler.FILE_MIMETYPE";
-    public final static String CONTENT_TYPE = "HTTPSampler.CONTENT_TYPE";
-    public final static String NORMAL_FORM = "normal_form";
-    public final static String MULTIPART_FORM = "multipart_form";
-    public final static String ENCODED_PATH = "HTTPSampler.encoded_path";
-    public final static String IMAGE_PARSER = "HTTPSampler.image_parser";
+    public final static String HEADERS= "headers";
+    public final static String HEADER= "header";
+    public final static String ARGUMENTS= "HTTPsampler.Arguments";
+    public final static String AUTH_MANAGER= "HTTPSampler.auth_manager";
+    public final static String COOKIE_MANAGER= "HTTPSampler.cookie_manager";
+    public final static String HEADER_MANAGER= "HTTPSampler.header_manager";
+    public final static String MIMETYPE= "HTTPSampler.mimetype";
+    public final static String DOMAIN= "HTTPSampler.domain";
+    public final static String PORT= "HTTPSampler.port";
+    public final static String METHOD= "HTTPSampler.method";
+    public final static String PATH= "HTTPSampler.path";
+    public final static String FOLLOW_REDIRECTS= "HTTPSampler.follow_redirects";
+    public final static String PROTOCOL= "HTTPSampler.protocol";
+    public final static String DEFAULT_PROTOCOL= "http";
+    public final static String URL= "HTTPSampler.URL";
+    public final static String POST= "POST";
+    public final static String GET= "GET";
+    public final static String USE_KEEPALIVE= "HTTPSampler.use_keepalive";
+    public final static String FILE_NAME= "HTTPSampler.FILE_NAME";
+    public final static String FILE_FIELD= "HTTPSampler.FILE_FIELD";
+    public final static String FILE_DATA= "HTTPSampler.FILE_DATA";
+    public final static String FILE_MIMETYPE= "HTTPSampler.FILE_MIMETYPE";
+    public final static String CONTENT_TYPE= "HTTPSampler.CONTENT_TYPE";
+    public final static String NORMAL_FORM= "normal_form";
+    public final static String MULTIPART_FORM= "multipart_form";
+    public final static String ENCODED_PATH= "HTTPSampler.encoded_path";
+    public final static String IMAGE_PARSER= "HTTPSampler.image_parser";
 
     /** A number to indicate that the port has not been set.  **/
-    public static final int UNSPECIFIED_PORT = 0;
-    private static final int MAX_REDIRECTS = 10;
-    protected static String encoding = "iso-8859-1";
-    private static final PostWriter postWriter = new PostWriter();
+    public static final int UNSPECIFIED_PORT= 0;
+    private static final int MAX_REDIRECTS= 10;
+    protected static String encoding= "iso-8859-1";
+    private static final PostWriter postWriter= new PostWriter();
     transient protected HttpURLConnection conn;
-	private HTTPSamplerFull imageSampler;
+    private HTTPSamplerFull imageSampler;
 
     static {
         System.setProperty(
@@ -152,10 +151,10 @@ public class HTTPSampler extends AbstractSampler
         System.setProperty("javax.net.ssl.debug", "all");
     }
 
-    private static PatternCacheLRU patternCache =
+    private static PatternCacheLRU patternCache=
         new PatternCacheLRU(1000, new Perl5Compiler());
 
-    private static ThreadLocal localMatcher = new ThreadLocal()
+    private static ThreadLocal localMatcher= new ThreadLocal()
     {
         protected synchronized Object initialValue()
         {
@@ -163,20 +162,19 @@ public class HTTPSampler extends AbstractSampler
         }
     };
 
-    private static Substitution spaceSub = new StringSubstitution("%20");
+    private static Substitution spaceSub= new StringSubstitution("%20");
 
-    private int connectionTries = 0;
-    
     /* Delegate redirects to the URLConnection implementation - this can be useful
      * with alternate URLConnection implementations.
      * 
      * Defaults to false, to maintain backward compatibility. 
      */
-    private static boolean delegateRedirects =
-    	JMeterUtils.getJMeterProperties().
-    	getProperty("HTTPSampler.delegateRedirects","false").equalsIgnoreCase("true") ;
+    private static boolean delegateRedirects=
+        JMeterUtils
+            .getJMeterProperties()
+            .getProperty("HTTPSampler.delegateRedirects", "false")
+            .equalsIgnoreCase("true");
 
-    
     public void setFileField(String value)
     {
         setProperty(FILE_FIELD, value);
@@ -199,7 +197,7 @@ public class HTTPSampler extends AbstractSampler
     }
     public String getProtocol()
     {
-        String protocol = getPropertyAsString(PROTOCOL);
+        String protocol= getPropertyAsString(PROTOCOL);
         if (protocol == null || protocol.equals(""))
         {
             return DEFAULT_PROTOCOL;
@@ -219,7 +217,7 @@ public class HTTPSampler extends AbstractSampler
     {
         if (GET.equals(getMethod()))
         {
-            int index = path.indexOf("?");
+            int index= path.indexOf("?");
             if (index > -1)
             {
                 setProperty(PATH, path.substring(0, index));
@@ -238,15 +236,15 @@ public class HTTPSampler extends AbstractSampler
 
     public void setEncodedPath(String path)
     {
-        path = encodePath(path);
+        path= encodePath(path);
         setProperty(ENCODED_PATH, path);
     }
 
     private String encodePath(String path)
     {
-        path =
+        path=
             Util.substitute(
-                (Perl5Matcher) localMatcher.get(),
+                (Perl5Matcher)localMatcher.get(),
                 patternCache.getPattern(
                     " ",
                     Perl5Compiler.READ_ONLY_MASK
@@ -327,8 +325,8 @@ public class HTTPSampler extends AbstractSampler
                 + value
                 + " metaData: "
                 + metaData);
-        Arguments args = getArguments();
-        HTTPArgument arg = new HTTPArgument(name, value, metaData, true);
+        Arguments args= getArguments();
+        HTTPArgument arg= new HTTPArgument(name, value, metaData, true);
 
         if (arg.getName().equals(arg.getEncodedName())
             && arg.getValue().equals(arg.getEncodedValue()))
@@ -340,7 +338,7 @@ public class HTTPSampler extends AbstractSampler
 
     public void addArgument(String name, String value)
     {
-        Arguments args = this.getArguments();
+        Arguments args= this.getArguments();
         args.addArgument(new HTTPArgument(name, value));
     }
 
@@ -348,15 +346,15 @@ public class HTTPSampler extends AbstractSampler
     {
         if (el instanceof CookieManager)
         {
-            setCookieManager((CookieManager) el);
+            setCookieManager((CookieManager)el);
         }
         else if (el instanceof HeaderManager)
         {
-            setHeaderManager((HeaderManager) el);
+            setHeaderManager((HeaderManager)el);
         }
         else if (el instanceof AuthManager)
         {
-            setAuthManager((AuthManager) el);
+            setAuthManager((AuthManager)el);
         }
         else
         {
@@ -366,7 +364,7 @@ public class HTTPSampler extends AbstractSampler
 
     public void addArgument(String name, String value, String metadata)
     {
-        Arguments args = this.getArguments();
+        Arguments args= this.getArguments();
         args.addArgument(new HTTPArgument(name, value, metadata));
     }
 
@@ -377,7 +375,7 @@ public class HTTPSampler extends AbstractSampler
 
     public int getPort()
     {
-        int port = getPropertyAsInt(PORT);
+        int port= getPropertyAsInt(PORT);
         if (port == UNSPECIFIED_PORT)
         {
             if ("https".equalsIgnoreCase(getProtocol()))
@@ -406,7 +404,7 @@ public class HTTPSampler extends AbstractSampler
 
     public Arguments getArguments()
     {
-        return (Arguments) getProperty(ARGUMENTS).getObjectValue();
+        return (Arguments)getProperty(ARGUMENTS).getObjectValue();
     }
 
     public void setAuthManager(AuthManager value)
@@ -416,7 +414,7 @@ public class HTTPSampler extends AbstractSampler
 
     public AuthManager getAuthManager()
     {
-        return (AuthManager) getProperty(AUTH_MANAGER).getObjectValue();
+        return (AuthManager)getProperty(AUTH_MANAGER).getObjectValue();
     }
 
     public void setHeaderManager(HeaderManager value)
@@ -426,7 +424,7 @@ public class HTTPSampler extends AbstractSampler
 
     public HeaderManager getHeaderManager()
     {
-        return (HeaderManager) getProperty(HEADER_MANAGER).getObjectValue();
+        return (HeaderManager)getProperty(HEADER_MANAGER).getObjectValue();
     }
 
     public void setCookieManager(CookieManager value)
@@ -436,7 +434,7 @@ public class HTTPSampler extends AbstractSampler
 
     public CookieManager getCookieManager()
     {
-        return (CookieManager) getProperty(COOKIE_MANAGER).getObjectValue();
+        return (CookieManager)getProperty(COOKIE_MANAGER).getObjectValue();
     }
 
     public void setMimetype(String value)
@@ -459,18 +457,18 @@ public class HTTPSampler extends AbstractSampler
         setProperty(new BooleanProperty(IMAGE_PARSER, parseImages));
     }
 
-    protected final static String NON_HTTP_RESPONSE_CODE =
+    protected final static String NON_HTTP_RESPONSE_CODE=
         "Non HTTP response code";
-    protected final static String NON_HTTP_RESPONSE_MESSAGE =
+    protected final static String NON_HTTP_RESPONSE_MESSAGE=
         "Non HTTP response message";
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+    transient private static Logger log= LoggingManager.getLoggerForClass();
 
     /**
      * Holds a list of URLs sampled - so we're not flooding stdout with debug
      * information
      */
     //private ArrayList m_sampledURLs = new ArrayList();
-    
+
     /**
      * Constructor for the HTTPSampler object.
      */
@@ -478,7 +476,7 @@ public class HTTPSampler extends AbstractSampler
     {
         setArguments(new Arguments());
     }
-    
+
     public HTTPSampler(URL u)
     {
         setMethod(GET);
@@ -491,7 +489,7 @@ public class HTTPSampler extends AbstractSampler
         setUseKeepAlive(true);
         setArguments(new Arguments());
     }
-    
+
     /**
      * Do a sampling and return its results.
      *
@@ -502,7 +500,7 @@ public class HTTPSampler extends AbstractSampler
     {
         return sample(0);
     }
-    
+
     public SampleResult sample()
     {
         return sample(0);
@@ -510,26 +508,26 @@ public class HTTPSampler extends AbstractSampler
 
     public URL getUrl() throws MalformedURLException
     {
-        String pathAndQuery = null;
+        String pathAndQuery= null;
         if (this.getMethod().equals(HTTPSampler.GET)
             && getQueryString().length() > 0)
         {
             if (this.getEncodedPath().indexOf("?") > -1)
             {
-                pathAndQuery = this.getEncodedPath() + "&" + getQueryString();
+                pathAndQuery= this.getEncodedPath() + "&" + getQueryString();
             }
             else
             {
-                pathAndQuery = this.getEncodedPath() + "?" + getQueryString();
+                pathAndQuery= this.getEncodedPath() + "?" + getQueryString();
             }
         }
         else
         {
-            pathAndQuery = this.getEncodedPath();
+            pathAndQuery= this.getEncodedPath();
         }
         if (!pathAndQuery.startsWith("/"))
         {
-            pathAndQuery = "/" + pathAndQuery;
+            pathAndQuery= "/" + pathAndQuery;
         }
         if (getPort() == UNSPECIFIED_PORT || getPort() == 80)
         {
@@ -552,20 +550,19 @@ public class HTTPSampler extends AbstractSampler
      */
     public String getQueryString()
     {
-        StringBuffer buf = new StringBuffer();
-        PropertyIterator iter = getArguments().iterator();
-        boolean first = true;
+        StringBuffer buf= new StringBuffer();
+        PropertyIterator iter= getArguments().iterator();
+        boolean first= true;
         while (iter.hasNext())
         {
-            HTTPArgument item = null;
+            HTTPArgument item= null;
             try
             {
-                item = (HTTPArgument) iter.next().getObjectValue();
+                item= (HTTPArgument)iter.next().getObjectValue();
             }
             catch (ClassCastException e)
             {
-                item =
-                    new HTTPArgument((Argument) iter.next().getObjectValue());
+                item= new HTTPArgument((Argument)iter.next().getObjectValue());
             }
             if (!first)
             {
@@ -573,7 +570,7 @@ public class HTTPSampler extends AbstractSampler
             }
             else
             {
-                first = false;
+                first= false;
             }
             buf.append(item.getEncodedName());
             if (item.getMetaData() == null)
@@ -639,12 +636,12 @@ public class HTTPSampler extends AbstractSampler
         // My longer term plan is to use Apache's home grown HTTP Client, or
         // maybe even HTTPUnit's classes.  I'm sure both would be better than
         // Sun's.
-        
+
         // [sebb] Make redirect following configurable (see bug 19004)
         // They do seem to work on JVM 1.4.1_03 (Sun/WinXP)
         HttpURLConnection.setFollowRedirects(delegateRedirects);
-        
-        conn = (HttpURLConnection) u.openConnection();
+
+        conn= (HttpURLConnection)u.openConnection();
         // Delegate SSL specific stuff to SSLManager so that compilation still
         // works otherwise.
         if ("https".equals(u.getProtocol()))
@@ -677,19 +674,24 @@ public class HTTPSampler extends AbstractSampler
 
         conn.setRequestMethod(method);
         setConnectionHeaders(conn, u, getHeaderManager());
-        String cookies = setConnectionCookie(conn, u, getCookieManager());
+        String cookies= setConnectionCookie(conn, u, getCookieManager());
         if (res != null)
         {
-            StringBuffer sb = new StringBuffer();
+            StringBuffer sb= new StringBuffer();
             sb.append(this.toString());
-            if (cookies != null){ //TODO put these in requestHeaders.
-				sb.append("\nCookie Data:\n");
-				sb.append(cookies);
+            if (cookies != null)
+            { //TODO put these in requestHeaders.
+                sb.append("\nCookie Data:\n");
+                sb.append(cookies);
             }
             res.setSamplerData(sb.toString());
-            res.setRequestHeaders("TODO");//TODO
+            res.setRequestHeaders("TODO"); //TODO
         }
         setConnectionAuthorization(conn, u, getAuthManager());
+        if (getMethod().equals(HTTPSampler.POST))
+        {
+            setPostHeaders(conn);
+        }
         return conn;
     }
 
@@ -702,46 +704,46 @@ public class HTTPSampler extends AbstractSampler
      */
     public void parseArguments(String queryString)
     {
-        String[] args = JOrphanUtils.split(queryString, "&");
-        for (int i = 0; i < args.length; i++)
+        String[] args= JOrphanUtils.split(queryString, "&");
+        for (int i= 0; i < args.length; i++)
         {
             // need to handle four cases:   string contains name=value
             //                              string contains name=
             //                              string contains name
             //                              empty string
             // find end of parameter name
-            int endOfNameIndex = 0;
-            String metaData = ""; // records the existance of an equal sign
+            int endOfNameIndex= 0;
+            String metaData= ""; // records the existance of an equal sign
             if (args[i].indexOf("=") != -1)
             {
                 // case of name=value, name=
-                endOfNameIndex = args[i].indexOf("=");
-                metaData = "=";
+                endOfNameIndex= args[i].indexOf("=");
+                metaData= "=";
             }
             else
             {
-                metaData = "";
+                metaData= "";
                 if (args[i].length() > 0)
                 {
-                    endOfNameIndex = args[i].length(); // case name
+                    endOfNameIndex= args[i].length(); // case name
                 }
                 else
                 {
-                    endOfNameIndex = 0; //case where name value string is empty
+                    endOfNameIndex= 0; //case where name value string is empty
                 }
             }
             // parse name
-            String name = ""; // for empty string
+            String name= ""; // for empty string
             if (args[i].length() > 0)
             {
                 //for non empty string
-                name = args[i].substring(0, endOfNameIndex);
+                name= args[i].substring(0, endOfNameIndex);
             }
             // parse value
-            String value = "";
+            String value= "";
             if ((endOfNameIndex + 1) < args[i].length())
             {
-                value = args[i].substring(endOfNameIndex + 1, args[i].length());
+                value= args[i].substring(endOfNameIndex + 1, args[i].length());
             }
             if (name.length() > 0)
             {
@@ -778,38 +780,42 @@ public class HTTPSampler extends AbstractSampler
      */
     protected byte[] readResponse(HttpURLConnection conn) throws IOException
     {
-        byte[] readBuffer = JMeterContextService.getContext().getReadBuffer();
+        byte[] readBuffer= JMeterContextService.getContext().getReadBuffer();
         BufferedInputStream in;
         try
         {
             if (conn.getContentEncoding() != null
                 && conn.getContentEncoding().equals("gzip"))
             {
-                in =
+                in=
                     new BufferedInputStream(
                         new GZIPInputStream(conn.getInputStream()));
             }
             else
             {
-                in = new BufferedInputStream(conn.getInputStream());
+                in= new BufferedInputStream(conn.getInputStream());
             }
         }
-        catch(IOException e){
-        	if (e.getCause() instanceof FileNotFoundException){
-				log.warn(e.getCause().toString());
-        	} else {
-				log.error("Getting error message from server",e);
-        	}
-			in = new BufferedInputStream(conn.getErrorStream());
+        catch (IOException e)
+        {
+            if (e.getCause() instanceof FileNotFoundException)
+            {
+                log.warn(e.getCause().toString());
+            }
+            else
+            {
+                log.error("Getting error message from server", e);
+            }
+            in= new BufferedInputStream(conn.getErrorStream());
         }
         catch (Exception e)
         {
-            log.warn("Getting error message from server",e);
-            in = new BufferedInputStream(conn.getErrorStream());
+            log.warn("Getting error message from server", e);
+            in= new BufferedInputStream(conn.getErrorStream());
         }
-        java.io.ByteArrayOutputStream w = new ByteArrayOutputStream();
-        int x = 0;
-        while ((x = in.read(readBuffer)) > -1)
+        java.io.ByteArrayOutputStream w= new ByteArrayOutputStream();
+        int x= 0;
+        while ((x= in.read(readBuffer)) > -1)
         {
             w.write(readBuffer, 0, x);
         }
@@ -818,39 +824,38 @@ public class HTTPSampler extends AbstractSampler
         w.close();
         return w.toByteArray();
     }
-	/**
-	 * Gets the ResponseHeaders from the URLConnection
-	 *
-	 * @param conn  connection from which the headers are read
-	 * 
-	 * @return string containing the headers, one per line
-	 */
-	protected String getResponseHeaders(
-		HttpURLConnection conn)
-		throws IOException
-	{
-		StringBuffer headerBuf = new StringBuffer();
-		headerBuf.append(conn.getHeaderField(0).substring(0, 8));
-		headerBuf.append(" ");
-		headerBuf.append(conn.getResponseCode());
-		headerBuf.append(" ");
-		headerBuf.append(conn.getResponseMessage());
-		headerBuf.append("\n");
+    /**
+     * Gets the ResponseHeaders from the URLConnection
+     *
+     * @param conn  connection from which the headers are read
+     * 
+     * @return string containing the headers, one per line
+     */
+    protected String getResponseHeaders(HttpURLConnection conn)
+        throws IOException
+    {
+        StringBuffer headerBuf= new StringBuffer();
+        headerBuf.append(conn.getHeaderField(0).substring(0, 8));
+        headerBuf.append(" ");
+        headerBuf.append(conn.getResponseCode());
+        headerBuf.append(" ");
+        headerBuf.append(conn.getResponseMessage());
+        headerBuf.append("\n");
 
-		for (int i = 1; conn.getHeaderFieldKey(i) != null; i++)
-		{
-			if (!conn //TODO - why is this not saved?
-				.getHeaderFieldKey(i)
-				.equalsIgnoreCase("transfer-encoding"))
-			{
-				headerBuf.append(conn.getHeaderFieldKey(i));
-				headerBuf.append(": ");
-				headerBuf.append(conn.getHeaderField(i));
-				headerBuf.append("\n");
-			}
-		}
-		return headerBuf.toString();
-	}
+        for (int i= 1; conn.getHeaderFieldKey(i) != null; i++)
+        {
+            if (!conn //TODO - why is this not saved?
+                .getHeaderFieldKey(i)
+                .equalsIgnoreCase("transfer-encoding"))
+            {
+                headerBuf.append(conn.getHeaderFieldKey(i));
+                headerBuf.append(": ");
+                headerBuf.append(conn.getHeaderField(i));
+                headerBuf.append("\n");
+            }
+        }
+        return headerBuf.toString();
+    }
 
     /**
      * Extracts all the required cookies for that particular URL request and set
@@ -867,10 +872,10 @@ public class HTTPSampler extends AbstractSampler
         URL u,
         CookieManager cookieManager)
     {
-        String cookieHeader = null;
+        String cookieHeader= null;
         if (cookieManager != null)
         {
-            cookieHeader = cookieManager.getCookieHeaderForURL(u);
+            cookieHeader= cookieManager.getCookieHeaderForURL(u);
             if (cookieHeader != null)
             {
                 conn.setRequestProperty("Cookie", cookieHeader);
@@ -896,13 +901,13 @@ public class HTTPSampler extends AbstractSampler
     {
         if (headerManager != null)
         {
-            CollectionProperty headers = headerManager.getHeaders();
+            CollectionProperty headers= headerManager.getHeaders();
             if (headers != null)
             {
-                PropertyIterator i = headers.iterator();
+                PropertyIterator i= headers.iterator();
                 while (i.hasNext())
                 {
-                    Header header = (Header) i.next().getObjectValue();
+                    Header header= (Header)i.next().getObjectValue();
                     conn.setRequestProperty(
                         header.getName(),
                         header.getValue());
@@ -928,7 +933,7 @@ public class HTTPSampler extends AbstractSampler
     {
         if (authManager != null)
         {
-            String authHeader = authManager.getAuthHeaderForURL(u);
+            String authHeader= authManager.getAuthHeaderForURL(u);
             if (authHeader != null)
             {
                 conn.setRequestProperty("Authorization", authHeader);
@@ -942,30 +947,26 @@ public class HTTPSampler extends AbstractSampler
      *
      * @param conn  <code>HttpURLConnection</code> of URL request
      * @param res   where all results of sampling will be stored
-     * @param time  time when the URL request was first started
      * @return      HTTP response code divided by 100
      */
-    private int getErrorLevel(
-        HttpURLConnection conn,
-        SampleResult res,
-        long time)
+    private int getResponseCode(HttpURLConnection conn, SampleResult res)
         throws IOException
     {
-        int errorLevel = 200;
-        String message = null;
-        errorLevel = ((HttpURLConnection) conn).getResponseCode();
-        message = ((HttpURLConnection) conn).getResponseMessage();
+        int errorLevel= 200;
+        String message= null;
+        errorLevel= ((HttpURLConnection)conn).getResponseCode();
+        message= ((HttpURLConnection)conn).getResponseMessage();
         res.setResponseCode(Integer.toString(errorLevel));
         res.setResponseMessage(message);
         return errorLevel;
     }
-    
+
     public void removeArguments()
     {
         setProperty(
             new TestElementProperty(HTTPSampler.ARGUMENTS, new Arguments()));
     }
-    
+
     /**
      * Follow redirection manually. Normally if the web server does a
      * redirection the intermediate page is not returned. Only the resultant
@@ -981,22 +982,22 @@ public class HTTPSampler extends AbstractSampler
     private void redirectUrl(HttpURLConnection conn, URL u)
         throws MalformedURLException
     {
-        String loc = conn.getHeaderField("Location");
+        String loc= conn.getHeaderField("Location");
         if (loc != null)
         {
             if (loc.indexOf("http") == -1)
             {
-                String tempURL = u.toString();
+                String tempURL= u.toString();
                 if (loc.startsWith("/"))
                 {
-                    int ind = tempURL.indexOf("//") + 2;
-                    loc =
+                    int ind= tempURL.indexOf("//") + 2;
+                    loc=
                         tempURL.substring(0, tempURL.indexOf("/", ind) + 1)
                             + loc.substring(1);
                 }
                 else
                 {
-                    loc =
+                    loc=
                         u.toString().substring(
                             0,
                             u.toString().lastIndexOf('/') + 1)
@@ -1005,7 +1006,7 @@ public class HTTPSampler extends AbstractSampler
             }
         }
 
-        URL newUrl = new URL(loc);
+        URL newUrl= new URL(loc);
         setMethod(GET);
         setProtocol(newUrl.getProtocol());
         setDomain(newUrl.getHost());
@@ -1015,44 +1016,50 @@ public class HTTPSampler extends AbstractSampler
         parseArguments(newUrl.getQuery());
     }
 
+    /**
+     * Establish the HTTP connection.
+     * <p>
+     * May need to try several times if it hits a busy port. The time returned
+     * is the time at which the last attempt (the one that succeeded) started.
+     * 
+     * @return time at which connection establishment began
+     * @throws IOException
+     */
     protected long connect() throws IOException
     {
-        long time = System.currentTimeMillis();
-        try
+        // Repeatedly try to connect:
+        for (int retry= 1; retry<=10; retry++)
         {
-            conn.connect();
-            connectionTries = 0;
-        }
-        catch (BindException e)
-        {
-            log.debug("Bind exception, try again");
-            if (connectionTries++ == 10)
+            try
             {
-                log.error("Can't connect", e);
+                conn= setupConnection(getUrl(), getMethod(), null);
+                long time= System.currentTimeMillis();
+                conn.connect();
+                return time;
+            }
+            catch (BindException e)
+            {
+                log.debug("Bind exception, try again");
+                if (retry == 10)
+                {
+                    log.error("Can't connect", e);
+                    throw e;
+                }
+                conn.disconnect();
+                conn= null;
+                this.setUseKeepAlive(false);
+                continue; // try again
+            }
+            catch (IOException e)
+            {
+                log.debug("Connection failed, giving up");
+                conn.disconnect();
+                conn= null;
                 throw e;
             }
-            conn.disconnect();
-            conn = null;
-            System.gc();
-            Runtime.getRuntime().runFinalization();
-            this.setUseKeepAlive(false);
-            conn = setupConnection(getUrl(), getMethod(), null);
-            if (getMethod().equals(HTTPSampler.POST))
-            {
-                setPostHeaders(conn);
-            }
-            time = connect();
         }
-        catch (IOException e)
-        {
-            log.debug("Connection failed, giving up");
-            conn.disconnect();
-            conn = null;
-            System.gc();
-            Runtime.getRuntime().runFinalization();
-            throw e;
-        }
-        return time;
+        // We should never get here, but in case...
+        throw new BindException();
     }
 
     /**
@@ -1067,90 +1074,78 @@ public class HTTPSampler extends AbstractSampler
      */
     private SampleResult sample(int redirects)
     {
-        log.debug("Start : sample, redirects ="+redirects);
-        long time = System.currentTimeMillis();
-        SampleResult res = new SampleResult();
-        URL u = null;
+        log.debug("Start : sample, redirects =" + redirects);
+        long t0= System.currentTimeMillis(); // connection start time
+        SampleResult res= new SampleResult();
+        URL url= null;
+
         try
         {
-            u = getUrl();
+            url= getUrl();
             res.setSampleLabel(getName());
-            // specify the data to the result.
-            //            res.setSamplerData(this.toString());
-            /****************************************
-             * END - cached logging hack
-             ***************************************/
             if (log.isDebugEnabled())
             {
-                log.debug("sample2 : sampling url - " + u);
+                log.debug("sample2 : sampling url - " + url);
             }
-            conn = setupConnection(u, getMethod(), res);
-            if (getMethod().equals(HTTPSampler.POST))
+            conn= setupConnection(url, getMethod(), res);
+
+            // Sampling proper - establish the connection and read the response:
+            t0= connect();
+            if (getMethod().equals(HTTPSampler.POST)) sendPostData(conn);
+            byte[] responseData= readResponse(conn);
+            long t1= System.currentTimeMillis(); // response read finish time
+            // Done with the sampling proper.
+
+            // Now collect the results into the SampleResult:
+
+            res.setResponseData(responseData);
+
+            int errorLevel= conn.getResponseCode();
+            res.setResponseCode(Integer.toString(errorLevel));
+            res.setSuccessful(200 <= errorLevel && errorLevel <= 399);
+
+            res.setResponseMessage(conn.getResponseMessage());
+
+            String ct= conn.getHeaderField("Content-type");
+            res.setContentType(ct);
+            if (ct.startsWith("image/"))
             {
-                setPostHeaders(conn);
-                time = connect();
-                sendPostData(conn);
+                res.setDataType(SampleResult.BINARY);
             }
             else
             {
-                time = connect();
+                res.setDataType(SampleResult.TEXT);
             }
-            saveConnectionCookies(conn, u, getCookieManager());
-            int errorLevel = 0;
-            try
-            {
-                errorLevel = getErrorLevel(conn, res, time);
-            }
-            catch (IOException e)
-            {
-                time = bundleResponseInResult(time, res, conn);
-                res.setSuccessful(false);
-                res.setTime(time);
-                return res;
-            }
-            if (errorLevel / 100 == 2 || errorLevel == 304)
-            {
-                time = bundleResponseInResult(time, res, conn);
-            }
-            else if (errorLevel / 100 == 3)
+
+            res.setResponseHeaders(getResponseHeaders(conn));
+
+            res.setTime(t1 - t0);
+
+            // Store any cookies received in the cookie manager:
+            saveConnectionCookies(conn, url, getCookieManager());
+
+            // Process redirects:
+            if (getFollowRedirects() && 301 <= errorLevel && errorLevel <= 303)
             {
                 if (redirects >= MAX_REDIRECTS)
                 {
-                    throw new IOException(
-                        "Maximum number of redirects exceeded");
+                    throw new IOException("Maximum number of redirects exceeded");
                 }
 
-                if (!getFollowRedirects())
-                {
-                    time = bundleResponseInResult(time, res, conn);
-                }
-                else
-                {
-                    time = bundleResponseInResult(time, res, conn);
-                    //System.currentTimeMillis() - time;
-                    redirectUrl(conn, u);
-                    SampleResult redirectResult = sample(redirects + 1);
-                    res.addSubResult(redirectResult);
-                    //res.setResponseData(redirectResult.getResponseData());
-                    res.setSuccessful(redirectResult.isSuccessful());
-                    time += redirectResult.getTime();
-                }
+                redirectUrl(conn, url);
+                SampleResult redirectResult= sample(redirects + 1);
+                res.addSubResult(redirectResult);
+                res.setSuccessful(redirectResult.isSuccessful());
+                res.setTime(res.getTime() + redirectResult.getTime());
             }
-            else
-            {
-                // Could not sample the URL
-                time = bundleResponseInResult(time, res, conn);
-                res.setSuccessful(false);
-            }
-            res.setTime(time);
-            log.debug("End : sample, redirects="+redirects);
+            log.debug("End : sample, redirects=" + redirects);
             if (isImageParser())
             {
                 if (imageSampler == null)
                 {
-                    imageSampler = new HTTPSamplerFull();
+                    imageSampler= new HTTPSamplerFull();
                 }
-                res = imageSampler.downloadEmbeddedResources(res, this);
+                res= imageSampler.downloadEmbeddedResources(res, this);
             }
             return res;
         }
@@ -1161,7 +1156,7 @@ public class HTTPSampler extends AbstractSampler
             res.setResponseData(ex.toString().getBytes());
             res.setResponseCode(NON_HTTP_RESPONSE_CODE);
             res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
-            res.setTime(System.currentTimeMillis() - time);
+            res.setTime(System.currentTimeMillis() - t0);
             res.setSuccessful(false);
         }
         finally
@@ -1174,42 +1169,23 @@ public class HTTPSampler extends AbstractSampler
                 disconnect(conn);
             }
             catch (Exception e)
-            {}
+            {
+            }
 
         }
-        log.debug("End : sample, redirects="+redirects);
+        log.debug("End : sample, redirects=" + redirects);
         return res;
     }
+
     protected void disconnect(HttpURLConnection conn)
     {
-        String connection = conn.getHeaderField("Connection");
-        boolean http11 = conn.getHeaderField(0).startsWith("HTTP/1.1");
+        String connection= conn.getHeaderField("Connection");
+        boolean http11= conn.getHeaderField(0).startsWith("HTTP/1.1");
         if ((connection == null && !http11)
             || (connection != null && connection.equalsIgnoreCase("close")))
         {
             conn.disconnect();
         }
-    }
-
-    private long bundleResponseInResult(
-        long time,
-        SampleResult res,
-        HttpURLConnection conn)
-        throws IOException, FileNotFoundException
-    {
-        byte[] ret = readResponse(conn);
-        time = System.currentTimeMillis() - time;
-        String ct = conn.getHeaderField("Content-type");
-        res.setContentType(ct);
-        res.setResponseHeaders(getResponseHeaders(conn)); 
-		res.setResponseData(ret);
-		if (ct.startsWith("image/")){
-			res.setDataType(SampleResult.BINARY);
-		} else {
-			res.setDataType(SampleResult.TEXT);
-		}
-        res.setSuccessful(true);
-        return time;
     }
 
     /**
@@ -1229,7 +1205,7 @@ public class HTTPSampler extends AbstractSampler
     {
         if (cookieManager != null)
         {
-            for (int i = 1; conn.getHeaderFieldKey(i) != null; i++)
+            for (int i= 1; conn.getHeaderFieldKey(i) != null; i++)
             {
                 if (conn.getHeaderFieldKey(i).equalsIgnoreCase("set-cookie"))
                 {
@@ -1265,7 +1241,7 @@ public class HTTPSampler extends AbstractSampler
 
         public void testArgumentWithoutEquals() throws Exception
         {
-            HTTPSampler sampler = new HTTPSampler();
+            HTTPSampler sampler= new HTTPSampler();
             sampler.setProtocol("http");
             sampler.setMethod(HTTPSampler.GET);
             sampler.setPath("/index.html?pear");
@@ -1277,7 +1253,7 @@ public class HTTPSampler extends AbstractSampler
 
         public void testMakingUrl() throws Exception
         {
-            HTTPSampler config = new HTTPSampler();
+            HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
             config.setMethod(HTTPSampler.GET);
             config.addArgument("param1", "value1");
@@ -1289,7 +1265,7 @@ public class HTTPSampler extends AbstractSampler
         }
         public void testMakingUrl2() throws Exception
         {
-            HTTPSampler config = new HTTPSampler();
+            HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
             config.setMethod(HTTPSampler.GET);
             config.addArgument("param1", "value1");
@@ -1301,7 +1277,7 @@ public class HTTPSampler extends AbstractSampler
         }
         public void testMakingUrl3() throws Exception
         {
-            HTTPSampler config = new HTTPSampler();
+            HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
             config.setMethod(HTTPSampler.POST);
             config.addArgument("param1", "value1");
@@ -1311,13 +1287,13 @@ public class HTTPSampler extends AbstractSampler
                 "http://www.apache.org/index.html?p1=p2",
                 config.getUrl().toString());
         }
-        
+
         // test cases for making Url, and exercise method
         // addArgument(String name,String value,String metadata)
 
         public void testMakingUrl4() throws Exception
         {
-            HTTPSampler config = new HTTPSampler();
+            HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
             config.setMethod(HTTPSampler.GET);
             config.addArgument("param1", "value1", "=");
@@ -1329,7 +1305,7 @@ public class HTTPSampler extends AbstractSampler
         }
         public void testMakingUrl5() throws Exception
         {
-            HTTPSampler config = new HTTPSampler();
+            HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
             config.setMethod(HTTPSampler.GET);
             config.addArgument("param1", "", "=");
@@ -1341,7 +1317,7 @@ public class HTTPSampler extends AbstractSampler
         }
         public void testMakingUrl6() throws Exception
         {
-            HTTPSampler config = new HTTPSampler();
+            HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
             config.setMethod(HTTPSampler.GET);
             config.addArgument("param1", "", "");
@@ -1354,10 +1330,10 @@ public class HTTPSampler extends AbstractSampler
 
         // test cases for making Url, and exercise method
         // parseArguments(String queryString)
-        
+
         public void testMakingUrl7() throws Exception
         {
-            HTTPSampler config = new HTTPSampler();
+            HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
             config.setMethod(HTTPSampler.GET);
             config.parseArguments("param1=value1");
@@ -1370,7 +1346,7 @@ public class HTTPSampler extends AbstractSampler
 
         public void testMakingUrl8() throws Exception
         {
-            HTTPSampler config = new HTTPSampler();
+            HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
             config.setMethod(HTTPSampler.GET);
             config.parseArguments("param1=");
@@ -1383,7 +1359,7 @@ public class HTTPSampler extends AbstractSampler
 
         public void testMakingUrl9() throws Exception
         {
-            HTTPSampler config = new HTTPSampler();
+            HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
             config.setMethod(HTTPSampler.GET);
             config.parseArguments("param1");
@@ -1396,7 +1372,7 @@ public class HTTPSampler extends AbstractSampler
 
         public void testMakingUrl10() throws Exception
         {
-            HTTPSampler config = new HTTPSampler();
+            HTTPSampler config= new HTTPSampler();
             config.setProtocol("http");
             config.setMethod(HTTPSampler.GET);
             config.parseArguments("");
