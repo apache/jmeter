@@ -90,6 +90,9 @@ public class SampleResult implements Serializable
      */
     public final static String BINARY = "bin";
 
+	/* empty array which can be returned instead of null */
+	private static final byte [] EMPTY_BA = new byte [0];
+
     private byte[] responseData;
     private String responseCode;
     private String label;
@@ -256,14 +259,15 @@ public class SampleResult implements Serializable
     }
 
 	/**
-	 * Convenience method to return responseData as a String
+	 * Convenience method to get responseData as a non-null byte array
 	 * 
-	 * @return the responseData as a string. If responseData is null
-	 * then the empty string is returned, rather than null.
+	 * @return the responseData. If responseData is null
+	 * then an empty byte array is returned rather than null.
+	 * 
 	 */
-	public String responseDatatoString()
+	public byte [] responseDataAsBA()
 	{
-		return (responseData == null) ? "" : new String(responseData);
+		return responseData == null ? EMPTY_BA : responseData;
 	}
 
     public void setSamplerData(String s)
