@@ -1265,9 +1265,9 @@ your browser's proxy settings.  Now, you may want to sort and re-order the test 
 cookie manager, etc.</p>
 
 <b>How can I record the server's responses too?</b>
-<p>The HTTP Proxy Server actually performs a sampling to obtain the server's response, and will notify any
-listeners directly inside the controller where the samples are being stored. So you just need to place a 
-<complink name="View Results Tree"/> listener there to get the responses recorded.</p>
+<p>Just place a <complink name="View Results Tree"/> listener as a child of the Proxy Server and the responses will be displayed. 
+You can also add a <complink name="Save Responses to a file"/> Post-Processor which will save the responses to files.
+</p>
 
 </component>
 
