@@ -11,6 +11,8 @@
 		<!-- Where the API documentation lives -->
 		<property name="docs.api.dest.dir" value="docs/api"/>
 		<property name="version" value="_1.6.0Beta"/>
+		<property name="docs.src" value="./xdocs"/>
+		<property name="docs.dest" value="./docs"/>
 	</target>
 
 	<!--
@@ -30,6 +32,19 @@
 			  <available classname="javax.activation.DataHandler" property="javamail.complete"/>
 
 
+	</target>
+	
+	<!-- 
+	- Check for anakia task
+	-->
+	<target name="check.anakia">
+	                  <available classname="org.apache.velocity.anakia.AnakiaTask" property="AnakiaTask.present"/>
+	</target>
+
+	<target name="no.anakia" depends="check.anakia" unless="AnakiaTask.present">
+	         <echo>
+		    AnakiaTask is not present, documentation will not be generated.
+		 </echo>
 	</target>
 
 	<target name="ssl.message" depends="check.optional.libs1" unless="jsse.present">
@@ -135,4 +150,17 @@
 		<delete dir="${classes.dest.dir}"/>
 		<delete dir="${docs.api.dest.dir}"/>
 	</target>
+
+
+	<target name="docs" depends="no.anakia,init" if="AnakiaTask.present">
+	        <taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask"/>
+		<anakia basedir="${docs.src}" destdir="${docs.dest}/"
+		        extension=".html" style="./site.vsl"
+			projectFile="./stylesheets/project.xml"
+			excludes="**/stylesheets/**"
+			includes="**/*.xml"
+			lastModifiedCheck="false"
+			velocityPropertiesFile="${docs.src}/velocity.properties"></anakia>
+	</target>
+	
 </project>
