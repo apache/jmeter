@@ -29,6 +29,6 @@
     <classpathentry kind="lib" path="lib/Tidy.jar"/>
     <classpathentry kind="lib" path="lib/commons-collections.jar"/>
     <classpathentry kind="lib" path="lib/soap.jar"/>
-    <classpathentry kind="lib" path="lib/jdom-b8.jar"/>
+    <classpathentry kind="lib" path="lib/jdom-b9.jar"/>
     <classpathentry kind="output" path="build"/>
 </classpath>
