@@ -1,12 +1,11 @@
 package org.apache.jmeter.gui.util;
 
 import java.lang.reflect.Constructor;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 
-import org.apache.jmeter.util.Data;
+import org.jorphan.collections.Data;
 /**
  * @author mstover
  *

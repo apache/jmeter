@@ -56,7 +56,6 @@ package org.apache.jmeter.gui.action;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -80,9 +79,10 @@ import org.apache.jmeter.save.old.JMeterNameSpaceHandler;
 import org.apache.jmeter.save.old.xml.XmlHandler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.util.ListedHashTree;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.collections.HashTree;
+import org.jorphan.collections.ListedHashTree;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
@@ -140,7 +140,7 @@ public class Load implements Command
 			if(f != null)
 			{
 				reader = new FileInputStream(f);
-				ListedHashTree tree = SaveService.loadSubTree(reader);
+				HashTree tree = SaveService.loadSubTree(reader);
 				isTestPlan = insertLoadedTree(e.getID(), tree);
 			}
 		}
@@ -175,7 +175,7 @@ public class Load implements Command
 	/**
 	 * Returns a boolean indicating whether the loaded tree was a full test plan
 	 * */
-	public boolean insertLoadedTree(int id, ListedHashTree tree) throws Exception, IllegalUserActionException {
+	public boolean insertLoadedTree(int id, HashTree tree) throws Exception, IllegalUserActionException {
 		convertTree(tree);
 		boolean isTestPlan = GuiPackage.getInstance().addSubTree(tree);
 		tree = GuiPackage.getInstance().getCurrentSubTree();				
@@ -184,13 +184,13 @@ public class Load implements Command
 		return isTestPlan;
 	}
 
-	private void convertTree(ListedHashTree tree) throws Exception
+	private void convertTree(HashTree tree) throws Exception
 	{
 		Iterator iter = new LinkedList(tree.list()).iterator();
 		while (iter.hasNext())
 		{
 			TestElement item = (TestElement)iter.next();
-			convertTree(tree.get(item));
+			convertTree(tree.getTree(item));
 			JMeterGUIComponent comp = generateGUIComponent(item);
 			tree.replace(item,comp);
 		}
@@ -237,7 +237,7 @@ public class Load implements Command
 	/**
 	 * For loading a 1.6 version test tree
 	 * */
-	private void updateTree(ListedHashTree tree) {
+	private void updateTree(HashTree tree) {
 			List items = new LinkedList(tree.list());
 			Iterator iter = items.iterator();
 
@@ -257,7 +257,7 @@ public class Load implements Command
 							newControl.addTestElement( config);	
 							newControl.setProperty(TestElement.GUI_CLASS,
 									"org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui");
-							tree.get(item).replace(config, newControl);
+							tree.getTree(item).replace(config, newControl);
 						}
 					}
 
@@ -273,7 +273,7 @@ public class Load implements Command
 						tree.add(newControl, item);
 					}
 				} else {
-					updateTree(tree.get(item));
+					updateTree(tree.getTree(item));
 				}
 			}
 		}
@@ -334,102 +334,103 @@ public class Load implements Command
 		 *@exception  Exception  !ToDo (Exception description)
 		 ***********************************************************/
 		public void testUpdateTree() throws Exception {
-			ListedHashTree tree = getTree(testFile2);
+			HashTree tree = getTree(testFile2);
 			loader.updateTree(tree);
-			assertTrue(tree.list(tree.list().get(0)).get(0) instanceof GenericController);
+			assertTrue(tree.getArray(tree.getArray()[0])[0] instanceof GenericController);
 			loader.convertTree(tree);
 			assertEquals(new LogicControllerGui().getStaticLabel(),
-					((JMeterGUIComponent)tree.list(tree.list().get(0)).get(0)).getStaticLabel());
+					((JMeterGUIComponent)tree.getArray(tree.getArray()[0])[0]).getStaticLabel());
 		}
 
 		public void testFile3() throws Exception {
-			ListedHashTree tree = getTree(testFile3);
+			HashTree tree = getTree(testFile3);
 			//loader.updateTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.threads.ThreadGroup);
+			log.debug("tree contents: "+tree.list());
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.threads.ThreadGroup);
 			loader.convertTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.threads.gui.ThreadGroupGui);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.threads.gui.ThreadGroupGui);
 		}
 		
 		public void testFile4() throws Exception {
-			ListedHashTree tree = getTree(testFile4);
+			HashTree tree = getTree(testFile4);
 			//loader.updateTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.testelement.TestPlan);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.testelement.TestPlan);
 			loader.convertTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.control.gui.TestPlanGui);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.control.gui.TestPlanGui);
 		}
 		
 		public void testFile5() throws Exception {
-			ListedHashTree tree = getTree(testFile5);
+			HashTree tree = getTree(testFile5);
 			//loader.updateTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.testelement.TestPlan);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.testelement.TestPlan);
 			loader.convertTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.control.gui.TestPlanGui);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.control.gui.TestPlanGui);
 		}
 		
 		public void testFile6() throws Exception {
-			ListedHashTree tree = getTree(testFile6);
+			HashTree tree = getTree(testFile6);
 			//loader.updateTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.testelement.TestPlan);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.testelement.TestPlan);
 			loader.convertTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.control.gui.TestPlanGui);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.control.gui.TestPlanGui);
 		}
 		
 		public void testFile7() throws Exception {
-			ListedHashTree tree = getTree(testFile7);
+			HashTree tree = getTree(testFile7);
 			//loader.updateTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.testelement.TestPlan);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.testelement.TestPlan);
 			loader.convertTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.control.gui.TestPlanGui);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.control.gui.TestPlanGui);
 		}
 		
 		public void testFile8() throws Exception {
-			ListedHashTree tree = getTree(testFile8);
+			HashTree tree = getTree(testFile8);
 			//loader.updateTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.testelement.TestPlan);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.testelement.TestPlan);
 			loader.convertTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.control.gui.TestPlanGui);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.control.gui.TestPlanGui);
 		}
 		
 		public void testFile9() throws Exception {
-			ListedHashTree tree = getTree(testFile9);
+			HashTree tree = getTree(testFile9);
 			//loader.updateTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.testelement.TestPlan);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.testelement.TestPlan);
 			loader.convertTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.control.gui.TestPlanGui);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.control.gui.TestPlanGui);
 		}
 		
 		public void testFile10() throws Exception {
-			ListedHashTree tree = getTree(testFile10);
+			HashTree tree = getTree(testFile10);
 			//loader.updateTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.testelement.TestPlan);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.testelement.TestPlan);
 			loader.convertTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.control.gui.TestPlanGui);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.control.gui.TestPlanGui);
 		}
 		
 		public void testFile11() throws Exception {
-			ListedHashTree tree = getTree(testFile11);
+			HashTree tree = getTree(testFile11);
 			//loader.updateTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.testelement.TestPlan);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.testelement.TestPlan);
 			loader.convertTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.control.gui.TestPlanGui);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.control.gui.TestPlanGui);
 		}
 		
 		public void testFile12() throws Exception {
-			ListedHashTree tree = getTree(testFile12);
+			HashTree tree = getTree(testFile12);
 			//loader.updateTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.testelement.TestPlan);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.testelement.TestPlan);
 			loader.convertTree(tree);
-			assertTrue(tree.list().get(0) instanceof org.apache.jmeter.control.gui.TestPlanGui);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.control.gui.TestPlanGui);
 		}
 
-		private ListedHashTree getTree(File f) throws Exception {
+		private HashTree getTree(File f) throws Exception {
 				FileInputStream reader = new FileInputStream(f);
 				XmlHandler handler = new XmlHandler(new JMeterNameSpaceHandler());
 				XMLReader parser = JMeterUtils.getXMLParser();
 				parser.setContentHandler(handler);
 				parser.setErrorHandler(handler);
 				parser.parse(new InputSource(reader));
-				ListedHashTree tree = handler.getDataTree();
+				HashTree tree = handler.getDataTree();
 				return tree;
 		}
 	}

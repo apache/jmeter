@@ -54,8 +54,7 @@
  */
 package org.apache.jmeter.engine;
 
-import org.apache.jmeter.threads.ThreadGroup;
-import org.apache.jmeter.util.ListedHashTree;
+import org.jorphan.collections.HashTree;
 
 /************************************************************
  *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -68,7 +67,7 @@ import org.apache.jmeter.util.ListedHashTree;
 public interface JMeterEngine
 {
 
-	void configure(ListedHashTree testPlan);
+	void configure(HashTree testPlan);
 
 	void runTest() throws JMeterEngineException;
 

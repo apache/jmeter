@@ -57,9 +57,9 @@ import java.net.InetAddress;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 
-import org.apache.jmeter.util.ListedHashTree;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.collections.HashTree;
 
 
 /************************************************************
@@ -107,7 +107,7 @@ public class RemoteJMeterEngineImpl
 	 *      attribute
 	 *@exception  RemoteException  Description of Exception
 	 ***********************************************************/
-	public void configure(ListedHashTree testTree) throws RemoteException
+	public void configure(HashTree testTree) throws RemoteException
 	{
 		backingEngine.configure(testTree);
 	}

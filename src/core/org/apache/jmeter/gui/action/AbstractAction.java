@@ -5,11 +5,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 
-import org.apache.jmeter.engine.StandardJMeterEngine;
-import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.ListedHashTree;
+import org.jorphan.collections.HashTree;
 
 /**
  * @author mstover
@@ -30,7 +28,7 @@ public abstract class AbstractAction implements Command {
 	 */
 	abstract public Set getActionNames();
 
-	protected void convertSubTree(ListedHashTree tree)
+	protected void convertSubTree(HashTree tree)
 	{
 		Iterator iter = new LinkedList(tree.list()).iterator();
 		while (iter.hasNext())
@@ -38,7 +36,7 @@ public abstract class AbstractAction implements Command {
 			JMeterGUIComponent item = (JMeterGUIComponent)iter.next();
 			if(item.isEnabled())
 			{
-				convertSubTree(tree.get(item));
+				convertSubTree(tree.getTree(item));
 				TestElement testElement = item.createTestElement();
 				tree.replace(item,testElement);
 			}

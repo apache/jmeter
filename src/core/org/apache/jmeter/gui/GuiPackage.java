@@ -59,7 +59,7 @@ import org.apache.jmeter.functions.ValueReplacer;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.util.ListedHashTree;
+import org.jorphan.collections.HashTree;
 
 /**
  * Title:        JMeter
@@ -106,12 +106,12 @@ public class GuiPackage
 		return dirty;
 	}
 
-	public boolean addSubTree(ListedHashTree subTree) throws IllegalUserActionException
+	public boolean addSubTree(HashTree subTree) throws IllegalUserActionException
 	{
 		return treeModel.addSubTree(subTree,treeListener.getCurrentNode());
 	}
 
-	public ListedHashTree getCurrentSubTree()
+	public HashTree getCurrentSubTree()
 	{
 		return treeModel.getCurrentSubTree(treeListener.getCurrentNode());
 	}

@@ -53,17 +53,21 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.jdbc.control.gui;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import org.apache.jmeter.gui.*;
-import org.apache.jmeter.gui.util.VerticalLayout;
-import org.apache.jmeter.protocol.jdbc.config.*;
-import org.apache.jmeter.protocol.jdbc.config.gui.*;
-import org.apache.jmeter.util.JMeterUtils;
+import java.awt.Font;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+
+import org.apache.jmeter.protocol.jdbc.config.gui.DbConfigGui;
+import org.apache.jmeter.protocol.jdbc.config.gui.PoolConfigGui;
+import org.apache.jmeter.protocol.jdbc.config.gui.SqlConfigGui;
+import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
+import org.apache.jmeter.util.JMeterUtils;
+import org.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Title: Description: Copyright: Copyright (c) 2001 Company:

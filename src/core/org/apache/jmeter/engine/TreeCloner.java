@@ -2,11 +2,12 @@ package org.apache.jmeter.engine;
 
 import java.util.LinkedList;
 
-import org.apache.jmeter.testelement.PerThreadClonable;
-import org.apache.jmeter.util.ListedHashTree;
-import org.apache.jmeter.util.ListedHashTreeVisitor;
-import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.control.GenericController;
+import org.apache.jmeter.testelement.PerThreadClonable;
+import org.jorphan.collections.HashTree;
+import org.jorphan.collections.HashTreeTraverser;
+import org.jorphan.collections.ListedHashTree;
 
 /**
  * <p>Title: </p>
@@ -17,7 +18,7 @@ import org.apache.jmeter.config.Arguments;
  * @version 1.0
  */
 
-public class TreeCloner implements ListedHashTreeVisitor
+public class TreeCloner implements HashTreeTraverser
 {
 	ListedHashTree newTree;
 	LinkedList objects = new LinkedList();
@@ -26,7 +27,7 @@ public class TreeCloner implements ListedHashTreeVisitor
 	{
 		newTree = new ListedHashTree();
 	}
-	public void addNode(Object node,ListedHashTree subTree)
+	public void addNode(Object node,HashTree subTree)
 	{
 		if(node instanceof PerThreadClonable)
 		{
@@ -73,13 +74,13 @@ public class TreeCloner implements ListedHashTreeVisitor
 			ListedHashTree newTree = cloner.getClonedTree();
 			this.assertTrue(original != newTree);
 			assertEquals(original.size(),newTree.size());
-			assertEquals(original.get(original.getArray()[0]).size(),
-					newTree.get(newTree.getArray()[0]).size());
+			assertEquals(original.getTree(original.getArray()[0]).size(),
+					newTree.getTree(newTree.getArray()[0]).size());
 			assertTrue(original.getArray()[0] != newTree.getArray()[0]);
 			assertEquals(((GenericController)original.getArray()[0]).getName(),
 					((GenericController)newTree.getArray()[0]).getName());
-			assertSame(original.get(original.getArray()[0]).getArray()[0],
-							newTree.get(newTree.getArray()[0]).getArray()[0]);
+			assertSame(original.getTree(original.getArray()[0]).getArray()[0],
+							newTree.getTree(newTree.getArray()[0]).getArray()[0]);
 		}
 
 	}

@@ -60,6 +60,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.jdbc.config.DbConfig;
 import org.apache.jmeter.protocol.jdbc.config.PoolConfig;
@@ -71,9 +72,9 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
-import org.apache.jmeter.util.Data;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.collections.Data;
 /************************************************************
  *  A sampler which understands JDBC database requests
  *

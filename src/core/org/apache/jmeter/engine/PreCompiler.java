@@ -5,21 +5,21 @@ import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.functions.ValueReplacer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.util.ListedHashTree;
-import org.apache.jmeter.util.ListedHashTreeVisitor;
-import org.apache.jmeter.util.LoggingManager;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.collections.HashTree;
+import org.jorphan.collections.HashTreeTraverser;
 /**
  * @author mstover
  *
  * To change this generated comment edit the template variable "typecomment":
  * Window>Preferences>Java>Templates.
  */
-public class PreCompiler implements ListedHashTreeVisitor
+public class PreCompiler implements HashTreeTraverser
 {
 	transient private static Logger log =
-		Hierarchy.getDefaultHierarchy().getLoggerFor(LoggingManager.ENGINE);
+		Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ENGINE);
 	private Map userDefinedVariables;
 	private boolean testValid = true;
 	private ValueReplacer replacer;
@@ -30,7 +30,7 @@ public class PreCompiler implements ListedHashTreeVisitor
 	/**
 	 * @see ListedHashTreeVisitor#addNode(Object, ListedHashTree)
 	 */
-	public void addNode(Object node, ListedHashTree subTree)
+	public void addNode(Object node, HashTree subTree)
 	{
 		if (node instanceof TestPlan)
 		{

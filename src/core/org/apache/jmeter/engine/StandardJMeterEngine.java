@@ -73,10 +73,11 @@ import org.apache.jmeter.threads.JMeterThreadMonitor;
 import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.threads.TestCompiler;
 import org.apache.jmeter.threads.ThreadGroup;
-import org.apache.jmeter.util.ListedHashTree;
-import org.apache.jmeter.util.SearchByClass;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.collections.HashTree;
+import org.jorphan.collections.ListedHashTree;
+import org.jorphan.collections.SearchByClass;
 
 /************************************************************
  *  !ToDo (Class description)
@@ -93,7 +94,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor,
 	private static long WAIT_TO_DIE = 5 * 1000; //5 seconds
 	Map allThreads;
 	boolean running = false;
-	ListedHashTree test;
+	HashTree test;
 	SearchByClass testListeners;
 	String host = null;
 	ListenerNotifier notifier;
@@ -112,7 +113,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor,
 		this.host = host;
 	}
 
-	public void configure(ListedHashTree testTree)
+	public void configure(HashTree testTree)
 	{
 		test = testTree;
 	}
@@ -122,7 +123,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor,
 		this.host = host;
 	}
 
-	protected ListedHashTree getTestTree()
+	protected HashTree getTestTree()
 	{
 		return test;
 	}
@@ -168,7 +169,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor,
 				threads = new JMeterThread[group.getNumThreads()];
 				for(int i = 0;running && i < threads.length; i++)
 				{
-					ListedHashTree threadGroupTree = searcher.getSubTree(group);
+					ListedHashTree threadGroupTree = (ListedHashTree)searcher.getSubTree(group);
 					threadGroupTree.add(group,testLevelElements);
 					threads[i] = new JMeterThread(cloneTree(threadGroupTree),this,notifier);
 					threads[i].setInitialDelay((int)(((float)(group.getRampUp() * 1000) /

@@ -67,9 +67,9 @@ import org.apache.jmeter.engine.JMeterEngine;
 import org.apache.jmeter.engine.JMeterEngineException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.util.ListedHashTree;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.collections.HashTree;
 
 /****************************************
  * Title: Description: Copyright: Copyright (c) 2001 Company:
@@ -156,7 +156,7 @@ public class RemoteStart extends AbstractAction
 	private void startEngine(JMeterEngine engine, String host)
 	{
 		GuiPackage gui = GuiPackage.getInstance();
-		ListedHashTree testTree = gui.getTreeModel().getTestPlan();
+		HashTree testTree = gui.getTreeModel().getTestPlan();
 		convertSubTree(testTree);
 		testTree.add(testTree.getArray()[0],gui.getMainFrame());
 		engine.configure(testTree);

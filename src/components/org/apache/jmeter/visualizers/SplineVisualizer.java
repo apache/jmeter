@@ -53,16 +53,26 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.visualizers;
-import java.awt.*;
-import java.util.Vector;
-import javax.swing.*;
-import javax.swing.border.*;
-import org.apache.jmeter.gui.*;
-import org.apache.jmeter.gui.util.VerticalLayout;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Image;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+
+import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
-import org.apache.jmeter.samplers.Clearable;
+import org.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * This class implements a statistical analyser that takes samples to process a

@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.util.LoggingManager;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.StringUtilities;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
@@ -24,7 +24,7 @@ import org.apache.log.Logger;
  */
 public class ValueReplacer
 {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(LoggingManager.ELEMENTS);
+	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ELEMENTS);
 	CompoundFunction masterFunction = new CompoundFunction();
 	Map variables = new HashMap();
 	

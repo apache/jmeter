@@ -2,9 +2,9 @@ package org.apache.jmeter.gui.action;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import org.apache.jmeter.util.LoggingManager;
-import org.apache.log.Hierarchy;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Logger;
+import org.jorphan.logging.LoggingManager;
 /**
  * @author Administrator
  *
@@ -13,7 +13,7 @@ import org.apache.log.Logger;
  */
 public class GlobalMouseListener extends MouseAdapter
 {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(LoggingManager.GUI);
+	transient private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.GUI);
 	
 	public void mousePressed(MouseEvent e)
 	{

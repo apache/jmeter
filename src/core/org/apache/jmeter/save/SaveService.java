@@ -21,9 +21,10 @@ import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.ListedHashTree;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.collections.HashTree;
+import org.jorphan.collections.ListedHashTree;
 import org.xml.sax.SAXException;
 /**
  * <p>Title: </p>
@@ -61,7 +62,7 @@ public class SaveService
 	{
 	}
 
-	public static void saveSubTree(ListedHashTree subTree,OutputStream writer) throws
+	public static void saveSubTree(HashTree subTree,OutputStream writer) throws
 			IOException
 	{
 		Configuration config = (Configuration)getConfigsFromTree(subTree).get(0);
@@ -106,7 +107,7 @@ public class SaveService
 		return result;
 	}
 
-	private static List getConfigsFromTree(ListedHashTree subTree)
+	private static List getConfigsFromTree(HashTree subTree)
 	{
 		Iterator iter = subTree.list().iterator();
 		List configs = new LinkedList();
@@ -115,7 +116,7 @@ public class SaveService
 			TestElement item = (TestElement)iter.next();
 			DefaultConfiguration config = new DefaultConfiguration("node","node");
 			config.addChild(getConfigForTestElement(null,item));
-			List configList = getConfigsFromTree(subTree.get(item));
+			List configList = getConfigsFromTree(subTree.getTree(item));
 			Iterator iter2 = configList.iterator();
 			while(iter2.hasNext())
 			{
@@ -283,12 +284,12 @@ public class SaveService
 		return config;
 	}
 
-	public synchronized static ListedHashTree loadSubTree(InputStream in) throws IOException
+	public synchronized static HashTree loadSubTree(InputStream in) throws IOException
 	{
 		try
 		{
 			Configuration config = builder.build(in);
-			ListedHashTree loadedTree = generateNode(config);
+			HashTree loadedTree = generateNode(config);
 			return loadedTree;
 		}
 		catch(ConfigurationException e)
@@ -374,7 +375,7 @@ public class SaveService
 		return coll;
 	}
 
-	private static ListedHashTree generateNode(Configuration config)
+	private static HashTree generateNode(Configuration config)
 	{
 		TestElement element = null;
 		try
@@ -386,11 +387,11 @@ public class SaveService
 			log.error("Problem loading part of file",e);
 			return null;
 		}
-		ListedHashTree subTree = new ListedHashTree(element);
+		HashTree subTree = new ListedHashTree(element);
 		Configuration[] subNodes = config.getChildren("node");
 		for (int i = 0; i < subNodes.length; i++)
 		{
-			ListedHashTree t = generateNode(subNodes[i]);
+			HashTree t = generateNode(subNodes[i]);
 			if(t != null)
 			{
 				subTree.add(element,t);

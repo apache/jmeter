@@ -25,10 +25,11 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.PerSampleClonable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.Timer;
-import org.apache.jmeter.util.ListedHashTree;
-import org.apache.jmeter.util.ListedHashTreeVisitor;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
+import org.jorphan.collections.HashTree;
+import org.jorphan.collections.HashTreeTraverser;
+import org.jorphan.collections.ListedHashTree;
 
 /****************************************
  * <p>
@@ -46,14 +47,14 @@ import org.apache.log.Logger;
  *@version   1.0
  ***************************************/
 
-public class TestCompiler implements ListedHashTreeVisitor, SampleListener
+public class TestCompiler implements HashTreeTraverser, SampleListener
 {
 	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
 			"jmeter.engine");
 	LinkedList stack = new LinkedList();
 	Map samplerConfigMap = new HashMap();
 	Set objectsWithFunctions = new HashSet();
-	ListedHashTree testTree;
+	HashTree testTree;
 	SampleResult previousResult;
 	Sampler currentSampler;
 	JMeterVariables threadVars;
@@ -64,7 +65,7 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 	 *
 	 *@param testTree  !ToDo (Parameter description)
 	 ***************************************/
-	public TestCompiler(ListedHashTree testTree,
+	public TestCompiler(HashTree testTree,
 			JMeterVariables vars)
 	{
 		threadVars = vars;
@@ -138,9 +139,10 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 	 *@param node     !ToDo
 	 *@param subTree  !ToDo
 	 ***************************************/
-	public void addNode(Object node, ListedHashTree subTree)
+	public void addNode(Object node, HashTree subTree)
 	{
 		stack.addLast(node);
+		log.debug("Added "+node+" to stack.  Stack size = "+stack.size());
 	}
 
 	/****************************************
@@ -148,9 +150,11 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 	 ***************************************/
 	public void subtractNode()
 	{
+		log.debug("Subtracting node, stack size = "+stack.size());
 		TestElement child = (TestElement)stack.getLast();
 		if(child instanceof Sampler)
 		{
+			log.debug("Saving configs for sampler: "+child);
 			saveSamplerConfigs((Sampler)child);
 		}
 		stack.removeLast();
@@ -178,8 +182,11 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 		List listeners = new LinkedList();
 		List timers = new LinkedList();
 		List assertions = new LinkedList();
+		log.debug("Full stack = " + stack);
 		for(int i = stack.size(); i > 0; i--)
 		{
+			log.debug("looping, i = "+i);
+			log.debug("sub-stack = "+stack.subList(0,i));
 			Iterator iter = testTree.list(stack.subList(0, i)).iterator();
 			while(iter.hasNext())
 			{
@@ -323,7 +330,7 @@ public class TestCompiler implements ListedHashTreeVisitor, SampleListener
 			testing.add(controller, config1);
 			testing.add(controller, sampler);
 			testing.add(controller,sampler2);
-			testing.get(controller).add(sampler, args);
+			testing.getTree(controller).add(sampler, args);
 			TestCompiler.initialize();
 
 			TestCompiler compiler = new TestCompiler(testing,new JMeterVariables());
