@@ -576,17 +576,35 @@
     </javac>
   </target>
 
-  <target name="compile-monitor" depends="compile-monitor-components,compile-monitor-model" description="Compile Monitor components.">
+	<!--
+		Monitor currently requires the following JAXB jars:
+		
+		jaxb-api (run-time)
+		jaxb-impl (run-time)
+		jaxb-libs (compile)
+		namespace (compile)
+		relaxngDatatype (compile)
+		
+		jaxb-xjc is not required	
+	-->
+  <target name="install-monitor" depends="compile-monitor-model,compile-monitor-components" description="Compile Monitor components.">
+    <jar jarfile="${dest.jar}/ApacheJMeter_monitors.jar">
+      <fileset dir="${build.monitor.model}" includes="**/*.class" />
+      <fileset dir="${build.monitor.components}" includes="**/*.class" />
+    </jar>
   </target>
-  
-  <target name="compile-monitor-components" depends="compile-jorphan,compile-core">
+    
+  <target name="compile-monitor-components" depends="compile-jorphan,compile-core,compile-components">
     <mkdir dir="${build.monitor.components}"/>
     <javac srcdir="${src.monitor.components}" destdir="${build.monitor.components}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
         <path refid="classpath"/>
+        <pathelement location="${build.monitor.model}"/>
+        <pathelement location="${build.http}"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
+        <pathelement location="${build.components}"/>
       </classpath>
     </javac>
   </target>
