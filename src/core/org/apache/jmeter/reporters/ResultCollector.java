@@ -56,10 +56,12 @@ package org.apache.jmeter.reporters;
 
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -202,11 +204,20 @@ public class ResultCollector
         inLoading = true;
         if (new File(getFilename()).exists())
         {
+            clearVisualizer();
             try
             {
                 Configuration savedSamples = getConfiguration(getFilename());
-                clearVisualizer();
                 readSamples(savedSamples);
+            }
+            catch(SAXException e)
+            {
+                BufferedReader dataReader = new BufferedReader(new FileReader(getFilename()));
+                String line;
+                while((line = dataReader.readLine()) != null)
+                {
+                    sendToVisualizer(SaveService.makeResultFromDelimitedString(line));
+                }
             }
             catch (Exception e)
             {

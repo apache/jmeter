@@ -62,6 +62,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -70,6 +71,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import junit.framework.TestCase;
 
@@ -306,6 +308,84 @@ public final class SaveService implements SaveServiceConstants
     public static boolean getPrintFieldNames()
     {
         return printFieldNames;
+    }
+    
+    /**
+     * Make a SampleResult given a delimited string.
+     * @param delim
+     * @return
+     * SampleResult
+     */
+    public static SampleResult makeResultFromDelimitedString(String delim)
+    {
+        SampleResult result = new SampleResult();
+        StringTokenizer splitter = new StringTokenizer(delim,defaultDelimiter);
+        String text = null;
+        if (printMilliseconds)
+        {
+            text = splitter.nextToken();
+            result.setTimeStamp(Long.parseLong(text));
+        }
+           else if (formatter != null)
+           {
+               text = splitter.nextToken();
+               try
+            {
+                Date stamp = formatter.parse(text);
+                   result.setTimeStamp(stamp.getTime());
+            }
+            catch (ParseException e)
+            {
+                e.printStackTrace();
+            }
+           }
+        
+           if (saveTime)
+           {
+               text = splitter.nextToken();
+               result.setTime(Long.parseLong(text));
+           }
+        
+           if (saveLabel)
+           {
+               text = splitter.nextToken();
+               result.setSampleLabel(text);  
+           }
+           if (saveResponseCode)
+           {
+               text = splitter.nextToken();
+               result.setResponseCode(text);
+           }
+        
+           if (saveResponseMessage)
+           {
+               text = splitter.nextToken();
+               result.setResponseMessage(text);
+           }
+        
+           if (saveThreadName)
+           {
+               text = splitter.nextToken();
+               result.setThreadName(text);
+           }
+        
+           if (saveDataType)
+           {
+               text = splitter.nextToken();
+               result.setDataType(text);
+           }
+        
+           if (saveSuccessful)
+           {
+               text = splitter.nextToken();
+               result.setSuccessful(new Boolean(text).booleanValue());
+           }
+        
+           if (saveAssertionResultsFailureMessage)
+           {
+               text = splitter.nextToken();
+           }
+        return result;
     }
 
     /**
