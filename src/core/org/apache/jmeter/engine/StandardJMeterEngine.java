@@ -75,12 +75,12 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
     public static void stopEngineNow()
     {
     	  if (engine != null) // May be null if called from Unit test
-    	  engine.stopTest();
+    	  engine.stopTest(true);
     }
     public static void stopEngine()
     {
     	  if (engine != null)  // May be null if called from Unit test
-    	  engine.askThreadsToStop();
+    	  	engine.stopTest(false);
     }
     
     /*
@@ -277,36 +277,45 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
       Thread stopThread = new Thread(new StopTest());
       stopThread.start();
    }
+   
+   public synchronized void stopTest(boolean b)
+    {
+        Thread stopThread = new Thread(new StopTest(b));
+        stopThread.start();
+    }
 
    private class StopTest implements Runnable
-   {
-      public void run()
-      {
-         try
-         {
-	         log.debug("Stopping test");
-	         if (running)
-	         {
-	            running = false;
-	            tellThreadsToStop();
-	            try
-	            {
-	               Thread.sleep(10 * allThreads.size());
-	            }
-	            catch (InterruptedException e)
-	            {
-	            }
-	            verifyThreadsStopped();
-	            notifyTestListenersOfEnd();
-	         }
-	         JMeterContextService.endTest();
-         }
-         catch(Exception e)
-         {
-            log.error("Bad!",e);
-         }
-      }
-   }
+    {
+    	boolean now;
+    	private StopTest(){
+    		now=true;
+    	}
+    	private StopTest(boolean b){
+    		now=b;
+    	}
+        public void run()
+        {
+            if (running)
+            {
+                running = false;
+                if (now){
+                	tellThreadsToStop();
+                } else {
+                	stopAllThreads();
+                }
+                try
+                {
+                    Thread.sleep(10 * allThreads.size());
+                }
+                catch (InterruptedException e)
+                {}
+                boolean stopped=verifyThreadsStopped();
+                if (stopped || now){
+                    notifyTestListenersOfEnd();
+                }
+            }
+        }
+    }
 
    public void run()
    {
@@ -497,28 +506,30 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
       }
    }
 
-   private void verifyThreadsStopped()
-   {
-      Iterator iter = new HashSet(allThreads.keySet()).iterator();
-      while (iter.hasNext())
-      {
-         Thread t = (Thread) allThreads.get(iter.next());
-         if (t != null && t.isAlive())
-         {
-            try
+   private boolean verifyThreadsStopped()
+    {
+    	boolean stoppedAll=true;
+        Iterator iter = new HashSet(allThreads.keySet()).iterator();
+        while (iter.hasNext())
+        {
+            Thread t = (Thread) allThreads.get(iter.next());
+            if (t != null && t.isAlive())
             {
-               t.join(WAIT_TO_DIE);
+                try
+                {
+                    t.join(WAIT_TO_DIE);
+                }
+                catch (InterruptedException e)
+                {}
+                if (t.isAlive())
+                {
+                	stoppedAll=false;
+                    log.info("Thread won't die: " + t.getName());
+                }
             }
-            catch (InterruptedException e)
-            {
-            }
-            if (t.isAlive())
-            {
-               log.info("Thread won't die: " + t.getName());
-            }
-         }
-      }
-   }
+        }
+        return stoppedAll;
+    }
 
    private void tellThreadsToStop()
    {
@@ -541,15 +552,19 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
    }
 
    public void askThreadsToStop()
-   {
-      Iterator iter = new HashSet(allThreads.keySet()).iterator();
-      while (iter.hasNext())
-      {
-         JMeterThread item = (JMeterThread) iter.next();
-         item.stop();
-      }
-      verifyThreadsStopped();
-   }
+    {
+    	engine.stopTest(false);
+    }
+    
+    private void stopAllThreads()
+	{
+		Iterator iter = new HashSet(allThreads.keySet()).iterator();
+		while (iter.hasNext())
+		{
+			JMeterThread item = (JMeterThread) iter.next();
+			item.stop();
+		}
+	}
 
    // Remote exit
    public void exit()

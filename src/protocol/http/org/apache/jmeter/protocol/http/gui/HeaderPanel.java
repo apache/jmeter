@@ -111,6 +111,10 @@ public class HeaderPanel
         tableModel.manager.clear();
         super.configure(el);
         tableModel.manager.addTestElement((HeaderManager) el);
+        boolean hasRows = tableModel.getRowCount() > 0;
+        deleteButton.setEnabled(hasRows);
+        saveButton.setEnabled(hasRows);
+        
     }
 
     public String getLabelResource()

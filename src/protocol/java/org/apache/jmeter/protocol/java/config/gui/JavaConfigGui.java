@@ -220,7 +220,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener
                         {
                             String newVal = (String) currArgsMap.get(name);
                             if (newVal != null
-                                    && newVal.toString().length() > 0)
+                                    && newVal.length() > 0)
                             {
                                 value = newVal;
                             }

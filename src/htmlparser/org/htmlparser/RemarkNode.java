@@ -92,7 +92,7 @@ public class RemarkNode extends Node
 
     public void collectInto(NodeList collectionList, String filter)
     {
-        if (filter == REMARK_NODE_FILTER)
+        if (filter.equals(REMARK_NODE_FILTER))
             collectionList.add(this);
     }
 

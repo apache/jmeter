@@ -58,8 +58,7 @@ public class BeanShellSampler extends AbstractSampler
 			{
 				try
 				{
-					 bshInterpreter.source(null);
-					 bshInterpreter.set("log",log);  //$NON-NLS-1$
+					 bshInterpreter.source(init);
 				} catch (IOException e){
 					log.warn("Error processing init file "+init+" "+e);
 				} catch (Exception e){
@@ -113,12 +112,13 @@ public class BeanShellSampler extends AbstractSampler
         	} else {
 				res.setSamplerData(fileName);
         	}
+        	// Has to be done after construction, otherwise fails serialisation check
+        	bshInterpreter.set("log",log);  //$NON-NLS-1$
 
-			//TODO - set some more variables?
 			bshInterpreter.set("Label",getLabel());  //$NON-NLS-1$
 			bshInterpreter.set("FileName",getFilename()); //$NON-NLS-1$
 			bshInterpreter.set("SampleResult",res); //$NON-NLS-1$
-			bshInterpreter.set("Parameters",getParameters());// as a single line
+			bshInterpreter.set("Parameters",getParameters());// as a single line//$NON-NLS-1$
 			bshInterpreter.set("bsh.args",JOrphanUtils.split(getParameters()," "));
 
             // Set default values

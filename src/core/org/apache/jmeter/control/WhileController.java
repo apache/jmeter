@@ -34,7 +34,7 @@ import org.apache.log.Logger;
 public class WhileController extends GenericController implements Serializable
 {
     private static Logger log = LoggingManager.getLoggerForClass();
-	private final static String CONDITION = "WhenController.condition"; // $NON-NLS-1$
+	private final static String CONDITION = "WhileController.condition"; // $NON-NLS-1$
 
     public WhileController()
     {
@@ -46,31 +46,33 @@ public class WhileController extends GenericController implements Serializable
      */
     public boolean isDone()
     {
-        return false;//conditionTrue() ? super.isDone() : false;
+        return false;// Never want to remove the controller from the tree
     }
 
     /*
      * Evaluate the condition, which can be:
      * blank or LAST = was the last sampler OK?
-     * ALL = were all samplers OK?
-     * otherwise, evaluate the JavaScript condition
+     * otherwise, evaluate the condition
+     * @param inLoop - called by nextIsNull (within loop)
      */
-    private boolean conditionTrue()
+    private boolean conditionTrue(boolean inLoop)
     {
-    	String cnd = getCondition();//
-    	if (cnd.length() == 0 || "LAST".equalsIgnoreCase(cnd)) {
+    	String cnd = getCondition();
+    	log.debug("Condition string:"+cnd);
+    	boolean res;
+    	// If blank, only check previous sample when in loop
+    	if ((inLoop && cnd.length() == 0) 
+    			|| "LAST".equalsIgnoreCase(cnd)) {// $NON-NLS-1$
         	JMeterVariables threadVars = 
         		JMeterContextService.getContext().getVariables();
         	// Use !false rather than true, so that null is treated as true 
-       	    return !"false".equalsIgnoreCase(threadVars.get(JMeterThread.LAST_SAMPLE_OK));
+       	    res = !"false".equalsIgnoreCase(threadVars.get(JMeterThread.LAST_SAMPLE_OK));// $NON-NLS-1$
+    	} else {
+    		// cnd may be blank if next() called us
+    		res = !"false".equalsIgnoreCase(cnd);// $NON-NLS-1$
     	}
-    	if ("ALL".equalsIgnoreCase(cnd)) {
-        	JMeterVariables threadVars = 
-        		JMeterContextService.getContext().getVariables();
-        	// Use !false rather than true, so that null is treated as true 
-       	    return !"false".equalsIgnoreCase(threadVars.get(JMeterThread.ALL_SAMPLES_OK));
-    	}
-        return IfController.evaluateCondition(cnd);
+    	log.debug("Condition value: "+res);
+        return res;
     }
 
 	/* (non-Javadoc)
@@ -79,7 +81,7 @@ public class WhileController extends GenericController implements Serializable
     protected Sampler nextIsNull() throws NextIsNullException
     {
         reInitialize();
-        if (conditionTrue())
+        if (conditionTrue(true))
         {
             return next();
         }
@@ -90,18 +92,41 @@ public class WhileController extends GenericController implements Serializable
         }
     }
 
+    /*
+     * This skips controller entirely if the condition is false
+     * 
+     * TODO consider checking for previous sampler failure here -
+     * would need to distinguish this from previous failure *inside* loop 
+     * 
+     */
+    public Sampler next()
+    {
+        if(conditionTrue(false))// $NON-NLS-1$
+        {
+            return super.next(); // OK to continue
+        }
+        else
+        {
+            reInitialize(); // Don't even start the loop
+            return null;
+        }
+    }
+
 	/**
-	 * @param string the condition
+	 * @param string the condition to save
 	 */
 	public void setCondition(String string) {
+		log.debug("setCondition("+ string+")");
 		setProperty(new StringProperty(CONDITION, string));
 	}
-
 
 	/**
 	 * @return the condition
 	 */
 	public String getCondition() {
-		return getPropertyAsString(CONDITION);
+		String cnd;
+		cnd=getPropertyAsString(CONDITION);
+		log.debug("getCondition() => "+cnd);
+		return cnd;
 	}
 }

@@ -37,8 +37,10 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.math.StatCalculator;
 import org.apache.jorphan.reflect.Functor;
+import org.apache.log.Logger;
 
 /**
  * This class implements a statistical analyser that calculates both the average
@@ -52,6 +54,7 @@ public class TableVisualizer
     extends AbstractVisualizer
     implements Clearable
 {
+   private static Logger log = LoggingManager.getLoggerForClass();
    private final String[] COLUMNS = new String[]{
          JMeterUtils.getResString("table_visualizer_sample_num"),
          JMeterUtils.getResString("url"),

@@ -97,6 +97,12 @@ JMeter assumes the FTP server is listening on the default port.</property>
         <property name="Port" required="No (defaults to 80)">Port the web server is listening to.</property>
         <property name="Protocol" required="Yes">HTTP or HTTPS.</property>
         <property name="Method" required="Yes">HTTP GET or HTTP POST.</property>
+		<property name="Redirect Automatically" required="No">Set the http connection to automatically follow redirects. 
+                  If set, the redirects will not appear as samples, as JMeter never sees them.
+        </property>
+		<property name="Follow Redirects" required="No">If set, the JMeter sampler will follow redirects, which will thus appear as samples.</property>
+		<property name="Use KeepAlive" required="No">JMeter sets the Connection: keep-alive header. This does not work properly with the default HTTP implementation, as connection re-use is not under user-control. 
+                  It does work with the Jakarta httpClient implementation.</property>
         <property name="Path" required="Yes">The path to resource (for example, /servlets/myServlet). If the
 resource requires query string parameters, add them below in the
 "Send Parameters With the Request" section.</property>
@@ -119,6 +125,7 @@ resource requires query string parameters, add them below in the
         <property name="MIME Type" required="No (Yes if Filename filled in)">MIME type (for example, text/plain).</property>
         <property name="Retrieve All Embedded Resources from HTML Files" required="No">Tell JMeter to parse the HTML file
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.</property>
+        <property name="Use as monitor" required="No">For use with the <complink name="Monitor Results"/> listener.</property>
 </properties>
 
 <links>
@@ -899,11 +906,8 @@ with the return variable having the respective above values, which can then be u
 It is especially suited for running with the regular expression post-processor. 
 This can "create" the necessary input variables out of the result data of a previous request.
 </p>
-<p>Known bugs/problems</p>
-<ul>
-<li>When the inputVar_1 does not exist, the loop will start anyway, which is not the correct behaviour.</li>
-<li>It will stop the foreach loop as soon as it encounters a null reference, so any empty variable in the list is not allowed.</li>
-</ul>
+<note>The ForEach Controller does not run any samples if inputVar_1 is null.
+This would be the case if the Regular Expression returned no matches.</note>
 </description>
 
 <properties>
@@ -928,7 +932,25 @@ another HTTP Request to the ForEach Controller.</p>
 out of the return page and puts them in the inputVar variable</p>
 <p>In the ForEach loop, a HTTP sampler is added which requests all the links that were extracted from the first returned HTML page.
 </p></example>
-
+<example title="ForEach Example" anchor="foreach_example2">
+<p>Here is <a href="../demos/ForEachTest2.jmx">another example</a> you can download. 
+This has two Regular Expressions and ForEach Controllers.
+The first RE matches, but the second does not match, 
+so no samples are run by the second ForEach Controller</p>
+<figure image="logic-controller/foreach-example2.png">Figure 11 - ForEach Controller Example 2</figure>
+<p>The Thread Group has a single thread and a loop count of two.
+</p><p>
+Sample 1 uses the JavaTest Sampler to return the string "a b c d".
+</p><p>The Regex Extractor uses the expression <b>(\w)\s</b> which matches a letter followed by a space,
+and returns the letter (not the space). Any matches are prefixed with the string "inputVar".
+</p><p>The ForEach Controller extracts all variables with the prefix "inputVar_", and executes its
+sample, passing the value in the variable "returnVar". In this case it will set the variable to the values "a" "b" and "c" in turn.
+</p><p>The For 1 Sampler is another Java Sampler which uses the return variable "returnVar" as part of the sample Label
+and as the sampler Data.
+</p><p>Sample 2, Regex 2 and For 2 are almost identical, except that the Regex has been changed to "(\w)\sx",
+which clearly won't match. Thus the For 2 Sampler will not be run.
+</p>
+</example>
 </component>
 
 <component name="Transaction Controller" index="16.2.12" screenshot="">
@@ -951,6 +973,26 @@ out of the return page and puts them in the inputVar variable</p>
 <properties>
 	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
 	<property name="Runtime (seconds)" required="Yes">Desired runtime in seconds</property>
+</properties>
+</component>
+<component name="While Controller" index="15.2.13" screenshot="">
+	<description>
+<note>ALPHA CODE</note>
+<p>
+The While Controller runs its children until the condition is "false".
+</p>
+
+<p>Possible condition values:</p>
+<ul>
+<li>blank - exit loop when last sample in loop fails</li>
+<li>LAST - exit loop when last sample in loop fails. 
+If the last sample just before the loop failed, don't enter loop.</li>
+<li>Otherwise - exit (or don't enter) the loop when the condition is "false"</li>
+</ul>
+	</description>
+<properties>
+	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+	<property name="Condition" required="No">blank, LAST, or variable/function</property>
 </properties>
 </component>
 
@@ -1193,6 +1235,8 @@ know for sure is to use a profiling tool.</p>
 	<br></br>
 </description>
 <component index="16.4.1" name="HTTP Authorization Manager" screenshot="http-config/http-auth-manager.gif">
+<note>If there is more than one Authorization Manager in the scope of a Sampler,
+there is currently no way to sepcify which one is to be used.</note>
 
 <description>
 <p>The Authorization Manager lets you specify one or more user logins for web pages that are
@@ -1253,6 +1297,9 @@ be able to run it.  However, you can use it as a reference in constructing your 
 
 <component index="16.4.2" name="HTTP Cookie Manager" screenshot="http-config/http-cookie-manager.gif">
 
+<note>If there is more than one Cookie Manager in the scope of a Sampler,
+there is currently no way to sepcify which one is to be used.</note>
+
 <description><p>The Cookie Manager element has two functions:<br></br>
 First, it stores and sends cookies just like a web browser. If you have an HTTP Request and
 the response contains a cookie, the Cookie Manager automatically stores that cookie and will
@@ -1278,7 +1325,8 @@ cookie table entries.</property>
 </component>
 
 <component index="16.4.3" name="HTTP Proxy Server" screenshot="proxy_control.png">
-
+<note>The Proxy Server can only record HTTP traffic. 
+There is currently no support for recording HTTPS (SSL) sessions.</note>
 <description><p>The Proxy Server allows JMeter to watch and record your actions while you browse your web application
 with your normal browser (such as Internet Explorer).  JMeter will create test sample objects and store them
 directly into your test plan as you go (so you can view samples interactively while you make them).</p>
@@ -1428,6 +1476,9 @@ resource requires query string parameters, add them below in the
 
 
 <component index="16.4.9" name="HTTP Header Manager" screenshot="http-config/http-header-manager.gif">
+<note>If there is more than one Header Manager in the scope of a Sampler,
+there is currently no way to sepcify which one is to be used.</note>
+
 <description><p>The Header Manager lets you add or override HTTP request headers.</p>
 </description>
 
@@ -1538,9 +1589,11 @@ The variables in User Defined Variables components will take precedence over tho
 	The pattern strings are Perl5-style regular expressions. You can also choose whether the strings will be expected
 to <b>match</b> the entire response, or if the response is only expected to <b>contain</b> the
 pattern. You can attach multiple assertions to any controller for additional flexibility.</p>
-<p>Note that the pattern string should not include the enclosing brackets, 
-	i.e. use <b>Price: (\d+)</b> not <b>/Price: (\d+)/</b>.
+<p>Note that the pattern string should not include the enclosing delimiters, 
+	i.e. use <b>Price: \d+</b> not <b>/Price: \d+/</b>.
 	By default, the pattern is in multi-line mode, which means that the "." meta-character does not match newline.
+    In multi-line mode, "^" and "$" match the start or end of any line anywhere within the string 
+    - not just the start and end of the entire string.
 	Case is also significant. To override these settings, one can use the extended regular expression syntax.
 	For example:
 </p>
@@ -1548,7 +1601,10 @@ pattern. You can attach multiple assertions to any controller for additional fle
 	(?i) - ignore case
 	(?s) - treat target as single line, i.e. "." matches new-line
 	(?is) - both the above
+    These can be used anywhere within the expression, e.g.
+    (?i)apple(?-i) Pie - matches "ApPLe Pie", but not "ApPLe pIe"
 </pre>
+
 </description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -1563,7 +1619,7 @@ pattern. You can attach multiple assertions to any controller for additional fle
                 </p>
                 HTTP Responses with statuses in the 4xx and 5xx ranges are normally
                 regarded as unsuccessful. 
-                The checkbox can be used to regard a 404 status as successful.
+                The "Ignore status" checkbox can be used to set the status successful before performing further checks.
                 </property>
         <property name="Pattern Matching Rules" required="Yes">Indicates whether the text being tested
         must CONTAIN or MATCH the test patterns.  NOT may also be selected to indicate the text
@@ -1636,18 +1692,21 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 <property name="Script file" required="No">A file containing the BeanShell script to run</property>
 <property name="Script" required="No">The BeanShell script to run</property>
 </properties>
-<p>The following variables are defined to the script:
+<p>There's a <a href="../demos/BeanShellAssertion.bsh">sample script</a> you can try.</p>
+<p>The following variables are defined to the script. 
+These are strings unless otherwise noted:
 <ul>
+<li>log - the Logger Object. (e.g.) log.warn("Message"[,Throwable])</li>
 	<li>Response - the response Object; read-write</li>
 	<li>Failure - boolean; read-write; used to set the Assertion status</li>
 	<li>FailureMessage - String; read-write; used to set the Assertion message</li>
-	<li>ResponseData - the response body</li>
+	<li>ResponseData - the response body (byte [])</li>
 	<li>ResponseCode - e.g. 200</li>
 	<li>ResponseMessage - e.g. OK</li>
 	<li>ResponseHeaders - contains the HTTP headers</li>
-	<li>RequestHeaders - containse the HTTP headers sent to the server</li>
+	<li>RequestHeaders - contains the HTTP headers sent to the server</li>
 	<li>SampleLabel</li>
-	<li>SamplerData</li>
+	<li>SamplerData - data that was sent to the server</li>
 </ul>
 </p>
 </component>
@@ -1936,10 +1995,12 @@ generate the template string, and store the result into the given variable name.
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
         <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as [refname]_g#, where [refname] is the string you entered as the reference name, and # is the group number, where group 0 is the entire match, group 1 is the match from the first set of parentheses, etc.</property>
-        <property name="Regular Expression" required="Yes">The regular expression used to parse the response data.</property>
+        <property name="Regular Expression" required="Yes">The regular expression used to parse the response data. 
+        This must contain at least one set of parentheses "()" to capture a portion of the string, unless using the group $0$.
+        </property>
         <property name="Template" required="Yes">The template used to create a string from the matches found.  This is an arbitrary string
         with special elements to refer to groups within the regular expression.  The syntax to refer to a group is: '$1$' to refer to
-        group 1, '$2$' to refer to group 2, etc.</property>
+        group 1, '$2$' to refer to group 2, etc. $0$ refers to whatever the entire expression matches.</property>
         <property name="Match No." required="Yes">Indicates which match to use.  The regular expression may match multiple times.  
         	<ul>
         		<li>Use a value of zero to indicate JMeter should choose a match at random.</li>

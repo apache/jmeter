@@ -30,6 +30,8 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * @author Thad Smith
@@ -37,6 +39,7 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
 public class MailReaderSampler 
 	extends AbstractSampler 
 {
+   private static Logger log = LoggingManager.getLoggerForClass();
 	// Where we keep all of the mail connection information
 	//NOTUSED private Properties props = new Properties();
 	
