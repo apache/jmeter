@@ -70,7 +70,6 @@
   <property name="avalon-excalibur.jar" value="lib/avalon-excalibur-4.1.jar"/>
   <property name="avalon-framework.jar" value="lib/avalon-framework.jar"/>
   <property name="jakarta-oro.jar" value="lib/jakarta-oro.jar"/>
-  <property name="junit.jar" value="lib/junit.jar"/>
   <property name="logkit.jar" value="lib/logkit-1.0.1.jar"/>
   <property name="xalan.jar" value="lib/xalan.jar"/>
   <property name="xerces.jar" value="lib/xerces.jar"/>
@@ -80,7 +79,6 @@
     <include name="${avalon-excalibur.jar}"/>
     <include name="${avalon-framework.jar}"/>
     <include name="${jakarta-oro.jar}"/>
-    <include name="${junit.jar}"/>
     <include name="${logkit.jar}"/>
     <include name="${xalan.jar}"/>
     <include name="${xerces.jar}"/>
