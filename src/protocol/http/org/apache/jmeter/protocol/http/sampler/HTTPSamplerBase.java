@@ -732,19 +732,19 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
    public void testStarted()
    {
       JMeterProperty pathP = getProperty(PATH);
-      log.info("path property is a " + pathP.getClass().getName());
-      log.info("path beginning value = " + pathP.getStringValue());
+      log.debug("path property is a " + pathP.getClass().getName());
+      log.debug("path beginning value = " + pathP.getStringValue());
       if(pathP instanceof StringProperty && !"".equals(pathP.getStringValue()))
       {
-         log.info("Encoding spaces in path");
+         log.debug("Encoding spaces in path");
          pathP.setObjectValue(encodeSpaces(pathP.getStringValue()));
       }
       else
       {
-         log.info("setting dynamic path to true");
+         log.debug("setting dynamic path to true");
          dynamicPath = true;
       }
-      log.info("path ending value = " + pathP.getStringValue());
+      log.debug("path ending value = " + pathP.getStringValue());
    }
    /* (non-Javadoc)
     * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
