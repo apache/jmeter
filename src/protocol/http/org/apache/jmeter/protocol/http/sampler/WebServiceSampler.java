@@ -112,7 +112,7 @@ public class WebServiceSampler extends HTTPSampler
      * consider using Apache commons pool to create a pool of document builders
      * or make sure XMLParserUtils creates builders efficiently.
      */
-    private static DocumentBuilder XDB = null;
+    private DocumentBuilder XDB = null;
 
 	private String FILE_CONTENTS = null;
 	
@@ -413,10 +413,7 @@ public class WebServiceSampler extends HTTPSampler
      */
     protected Document openDocument(String key)
     {
-		if (XDB == null)
-		{
-			XDB = XMLParserUtils.getXMLDocBuilder();
-		}
+		XDB = XMLParserUtils.getXMLDocBuilder();
 		Document doc = null;
     	// if either a file or path location is given,
     	// get the file object.
