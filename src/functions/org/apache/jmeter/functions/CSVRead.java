@@ -90,6 +90,7 @@ import org.apache.log.Logger;
  * Use CSVRead to isolate the file usage between different threads.
  *
  * @author Cyrus M.
+ * @version $Revision$ Last Updated: $Date$
  */
 
 /*
@@ -98,21 +99,20 @@ import org.apache.log.Logger;
  */
 public class CSVRead extends AbstractFunction implements Serializable
 {
-    transient protected static Logger log = LoggingManager.getLoggerForClass();
+    transient private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final String KEY = "__CSVRead"; // Function name (only 1 _)
+    private static final String KEY = "__CSVRead"; // Function name
 
-    protected static final List desc = new LinkedList();
+    private static final List desc = new LinkedList();
 
-    protected static FileDataContainer fileData;
+    private static FileDataContainer fileData;
 
-    protected String myValue = "<please supply a file>"; // Default value
-    protected String myName = "CSVRead_"; // Name to store value in
-    protected Object[] values;
-    protected BufferedReader myBread; // Buffered reader
-    protected boolean reopenFile = true; // Set from parameter list one day...
+    private String myValue = "<please supply a file>"; // Default value
+    private String myName = "CSVRead_"; // Name to store value in
+    private Object[] values;
+    private BufferedReader myBread; // Buffered reader
 
-    protected static Hashtable threadData = null;
+    private static Hashtable threadData = null;
 
     static {
         desc.add(JMeterUtils.getResString("csvread_file_file_name"));
