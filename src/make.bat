@@ -1,3 +1,5 @@
+@echo off
+
 ::
 :: Win32 build script for ApacheJMeter.jar
 ::
@@ -5,8 +7,7 @@
 :: @version $Revision$ $Date$
 ::
 
-@echo off
-
+echo Creating ApacheJMeter.jar...
 echo  * Compiling Java source...
 md .\temp
 javac -O -d .\temp .\org\apache\jmeter\*.java .\org\apache\jmeter\timers\*.java .\org\apache\jmeter\visualisers\*.java
@@ -18,7 +19,7 @@ copy .\org\apache\jmeter\images\*.* .\temp\org\apache\jmeter\images\*.* >nul
 echo  * Copying property files...
 copy .\org\apache\jmeter\*.properties .\temp\org\apache\jmeter\*.properties >nul
 
-echo  * Creating ApacheJMeter.jar file...
+echo  * Creating ApacheJMeter.jar file in ..\bin ...
 cd .\temp
 jar cmf0 ..\MANIFEST ..\..\bin\ApacheJMeter.jar *.* >nul
 cd ..
