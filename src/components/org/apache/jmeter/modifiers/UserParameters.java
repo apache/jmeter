@@ -28,13 +28,6 @@ public class UserParameters extends ConfigTestElement implements Serializable, P
     public static final String THREAD_VALUES = "UserParameters.thread_values";
     public static final String PER_ITERATION = "UserParameters.per_iteration";
     private int counter = 0;
-    /**
-     * @see org.apache.jmeter.config.Modifier#modifyEntry(Sampler)
-     */
-    public boolean modifyEntry(Sampler Sampler)
-    {
-        return false;
-    }
 
     public CollectionProperty getNames()
     {

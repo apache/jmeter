@@ -442,6 +442,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable
     {
         return sample(0);
     }
+    
     /**
      *  !ToDoo (Method description)
      *
