@@ -64,10 +64,11 @@
 	 <ul>
 		<li><a href="build-web-test-plan.htm#adding_users">5.1 Adding Users</a></li>
 		<li><a href="build-web-test-plan.html#adding_defaults">5.2 Adding Default HTTP Request Properties</a></li>
-		<li><a href="build-web-test-plan.html#adding_requests">5.3 Adding HTTP Requests</a></li>
-		<li><a href="build-web-test-plan.html#adding_file_reporter">5.4 Adding a File Reporter to Store the Test Results</a></li>
-		<li><a href="build-web-test-plan.html#saving">5.5 Saving the Test Plan</a></li>
-		<li><a href="build-web-test-plan.html#running">5.6 Running the Test Plan</a></li>
+		<li><a href="build-web-test-plan.html#adding_cookie_support">5.3 Adding Cookie Support</a></li>
+		<li><a href="build-web-test-plan.html#adding_requests">5.4 Adding HTTP Requests</a></li>
+		<li><a href="build-web-test-plan.html#adding_file_reporter">5.5 Adding a File Reporter to Store the Test Results</a></li>
+		<li><a href="build-web-test-plan.html#saving">5.6 Saving the Test Plan</a></li>
+		<li><a href="build-web-test-plan.html#running">5.7 Running the Test Plan</a></li>
 	 </ul>
   <li><a href="build-adv-web-test-plan.html">6. Building an Advanced Web Test Plan</a></li>
 	 <ul>
