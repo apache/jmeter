@@ -74,7 +74,7 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -87,8 +87,7 @@ public class ThreadGroup
     extends AbstractTestElement
     implements SampleListener, Serializable, Controller
 {
-    private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+    private static Logger log = LoggingManager.getLoggerForClass();
 
     public final static String NUM_THREADS = "ThreadGroup.num_threads";
     public final static String RAMP_TIME = "ThreadGroup.ramp_time";

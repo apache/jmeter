@@ -3,7 +3,7 @@ import java.awt.Component;
 
 import javax.swing.SwingUtilities;
 
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -15,8 +15,7 @@ import org.apache.log.Logger;
  */
 public class FocusRequester implements Runnable
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     private Component comp;
 
     public FocusRequester(Component comp)

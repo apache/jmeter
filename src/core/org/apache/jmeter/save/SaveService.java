@@ -89,7 +89,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.xml.sax.SAXException;
 
@@ -104,8 +104,7 @@ import org.xml.sax.SAXException;
  */
 public final class SaveService implements SaveServiceConstants
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.util");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     protected static final int SAVE_NO_ASSERTIONS = 0;
     protected static final int SAVE_FIRST_ASSERTION = SAVE_NO_ASSERTIONS + 1;

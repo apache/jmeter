@@ -73,7 +73,7 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -83,8 +83,7 @@ import org.apache.log.Logger;
  */
 public class Save implements Command
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     public final static String SAVE_ALL = "save_all";
     public final static String SAVE = "save_as";
     public final static String SAVE_TO_PREVIOUS = "save";

@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -17,8 +17,7 @@ public class RemoteSampleListenerWrapper
     extends AbstractTestElement
     implements SampleListener, Serializable, NoThreadClone
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     RemoteSampleListener listener;
 
     public RemoteSampleListenerWrapper(RemoteSampleListener l)

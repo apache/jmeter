@@ -76,7 +76,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 
@@ -91,7 +91,7 @@ import org.apache.log.Logger;
 public class FileReporter extends JPanel
 {
     transient private static Logger log
-        = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+        = LoggingManager.getLoggerForClass();
     Hashtable data = new Hashtable();
 
     /** initalize a file reporter from a file */

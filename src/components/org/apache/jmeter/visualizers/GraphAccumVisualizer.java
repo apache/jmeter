@@ -72,7 +72,7 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 
@@ -88,8 +88,7 @@ import org.apache.log.Logger;
 public class GraphAccumVisualizer extends AbstractVisualizer
         implements ImageVisualizer, GraphAccumListener, Clearable
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 
     protected transient GraphAccumModel model;
     protected transient GraphAccum graph;

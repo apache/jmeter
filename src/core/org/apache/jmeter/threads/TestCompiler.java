@@ -28,7 +28,7 @@ import org.apache.jmeter.timers.Timer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -37,8 +37,7 @@ import org.apache.log.Logger;
  */
 public class TestCompiler implements HashTreeTraverser, SampleListener
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
+    transient private static Logger log = LoggingManager.getLoggerForClass();
     LinkedList stack = new LinkedList();
     Map samplerConfigMap = new HashMap();
     Set objectsWithFunctions = new HashSet();
