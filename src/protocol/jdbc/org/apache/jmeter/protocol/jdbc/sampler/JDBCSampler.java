@@ -118,8 +118,7 @@ public class JDBCSampler extends AbstractSampler implements TestListener
         res.setSamplerData(this.toString());
 
 
-        long startTime = System.currentTimeMillis();
-        
+        res.sampleStart();
         Connection conn = null;
         Statement stmt = null;
 
@@ -193,7 +192,7 @@ public class JDBCSampler extends AbstractSampler implements TestListener
             }
         }
 
-        res.setTime(System.currentTimeMillis() - startTime);
+        res.sampleEnd();
         return res;
     }
 

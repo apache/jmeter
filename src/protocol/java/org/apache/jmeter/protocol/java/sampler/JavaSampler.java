@@ -341,7 +341,6 @@ public class JavaSampler extends AbstractSampler implements TestListener
             log.debug(whoAmI() + "\trunTest");
             Thread.yield();
             SampleResult results = new SampleResult();
-            results.setTime(0);
             results.setSuccessful(false);
             results.setResponseData(
                 ("Class not found: " + getClassname()).getBytes());

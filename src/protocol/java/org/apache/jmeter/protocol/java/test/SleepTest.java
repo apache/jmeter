@@ -164,19 +164,19 @@ public class SleepTest
         try
         {
             // Record sample start time.
+            results.sampleStart();
+            
+			// Generate a random value using the current time.
             long start = System.currentTimeMillis();
-
-            // Generate a random value using the current time.
             long ct = start % getSleepMask();
 
             // Execute the sample.  In this case sleep for the
             // specified time.
             Thread.sleep(getSleepTime() + ct);
 
-            // Record end time and populate the results.
-            long end = System.currentTimeMillis();
+            // Populate the results.
 
-            results.setTime(end - start);
+            results.sampleEnd();
             results.setSuccessful(true);
             results.setSampleLabel(
                 "Sleep Test: time = " + (getSleepTime() + ct));
