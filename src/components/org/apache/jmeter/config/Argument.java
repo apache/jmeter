@@ -170,6 +170,11 @@ public class Argument extends AbstractTestElement implements Serializable
 	 ***************************************/
 	public Object getMetaData()
 	{
-	    return (String)getProperty(METADATA);
+		String meta = (String)getProperty(METADATA);
+		if(meta == null)
+		{
+			meta = "=";
+		}
+	    return meta;
 	}
 }
