@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,11 +56,11 @@
 package org.apache.jmeter.config.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -76,7 +76,6 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.Data;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /************************************************************
  *  Title: JMeter Description :Default config gui for Configuration Element
@@ -170,14 +169,17 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
 
     private void init()
     {
-        this.setLayout(new BorderLayout(0, 0));
-        this.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-        if(displayName)
-        {
-            this.add(makeTitlePanel(),BorderLayout.NORTH);
-            
+        setLayout(new BorderLayout(0, 5));
+        
+        if (displayName) {
+            setBorder(makeBorder());
+            add(makeTitlePanel(), BorderLayout.NORTH);
         }
-        this.createTablePanel();
+
+        add(createTablePanel(), BorderLayout.CENTER);
+        // Force the table to be at least 70 pixels high
+        add(Box.createVerticalStrut(70), BorderLayout.WEST);
+        add(createButtonPanel(), BorderLayout.SOUTH);
     }
 
 
@@ -195,46 +197,31 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
         }
     }
 
-    protected void createTablePanel()
-    {
+    private Component createTablePanel() {
         tableModel = new PowerTableModel(new String[]{COLUMN_NAMES[0],COLUMN_NAMES[1]},
                                          new Class[]{String.class,String.class});
             
-        JPanel tPanel=new JPanel();
-        tPanel.setLayout(new VerticalLayout (1, VerticalLayout.CENTER));
         table = new JTable(tableModel);
-        table.setEnabled(true);
-        // table.addFocusListener(this);
-        table.setCellSelectionEnabled(true);
-        table.setRowSelectionAllowed(true);
-        table.setColumnSelectionAllowed(false);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        return new JScrollPane(table);
+    }
 
-        JScrollPane scroller = new JScrollPane(table);
-        Dimension tableDim = scroller.getPreferredSize();
-        tableDim.height = 300;
-        scroller.setPreferredSize(tableDim);
-        scroller.setColumnHeaderView(table.getTableHeader());
-
+    private JPanel createButtonPanel() {
         add = new JButton(JMeterUtils.getResString("add"));
         add.setActionCommand(ADD);
+        add.addActionListener(this);
         add.setEnabled(true);
-
+        
         delete = new JButton(JMeterUtils.getResString("delete"));
         delete.setActionCommand(DELETE);
-
-        checkDeleteStatus();
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-        add.addActionListener(this);
         delete.addActionListener(this);
+        
+        checkDeleteStatus();
+        
+        JPanel buttonPanel = new JPanel();
         buttonPanel.add(add);
         buttonPanel.add(delete);
-
-        this.add(scroller, BorderLayout.CENTER);
-        this.add(buttonPanel, BorderLayout.SOUTH);
-
+        return buttonPanel;
     }
     protected void checkDeleteStatus() {
         // Disable DELETE if there are no rows in the table to delete.
