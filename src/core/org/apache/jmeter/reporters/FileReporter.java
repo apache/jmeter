@@ -119,7 +119,9 @@ public class FileReporter extends JPanel
             {
                 line.trim();
                 if (line.startsWith("#") || line.length() == 0)
+                {
                     continue;
+                }
                 int splitter = line.lastIndexOf(' ');
                 String key = line.substring(0, splitter);
                 int len = line.length() - 1;

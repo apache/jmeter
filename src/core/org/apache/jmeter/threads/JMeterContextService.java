@@ -62,11 +62,14 @@ import java.util.Map;
  * @author Thad Smith
  * @version $Revision$
  */
-public class JMeterContextService implements Serializable
+public final class JMeterContextService implements Serializable
 {
     static private JMeterContextService _instance = null;
     static private Map contextMap = new HashMap();
 
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private JMeterContextService()
     {
     }

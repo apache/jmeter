@@ -68,10 +68,13 @@ package org.apache.jorphan.util;
  * @author
  * @version $Id$
  */
-public class ClassContext extends SecurityManager
+public final class ClassContext extends SecurityManager
 {
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private ClassContext()
-    { // don't allow others to instantiate this
+    {
     }
 
     private static ClassContext _instance = new ClassContext();

@@ -65,7 +65,7 @@ import org.apache.jmeter.gui.GUIFactory;
  * @author Oliver Rossmueller
  * @version $Revision$
  */
-public class PluginManager
+public final class PluginManager
 {
     private static final PluginManager instance = new PluginManager();
 

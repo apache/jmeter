@@ -68,7 +68,7 @@ import javax.swing.JComponent;
  * @author Oliver Rossmueller
  * @version $Revision$
  */
-public class GUIFactory
+public final class GUIFactory
 {
     /** A Map from String to JComponent of registered GUI classes. */
     private static final Map GUI_MAP = new HashMap();

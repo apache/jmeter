@@ -5,9 +5,8 @@ import junit.framework.TestCase;
 /**
  * @version $Revision$
  */
-public class StringUtilities
+public final class StringUtilities
 {
-
     public static String substitute(String input, String pattern, String sub)
     {
         StringBuffer ret = new StringBuffer();
@@ -23,6 +22,13 @@ public class StringUtilities
         return ret.toString();
     }
 
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private StringUtilities()
+    {
+    }
+    
     public static class Test extends TestCase
     {
         public Test(String name)

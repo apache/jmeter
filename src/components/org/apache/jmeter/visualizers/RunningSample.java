@@ -108,7 +108,11 @@ public class RunningSample
     {
         long howLongRunning = lastTime - firstTime;
 
-        if (howLongRunning == 0) return Double.MAX_VALUE;
+        if (howLongRunning == 0)
+        {
+            return Double.MAX_VALUE;
+        }
+             
         return (double) counter / howLongRunning * 1000.0;
     }
 
@@ -122,7 +126,10 @@ public class RunningSample
     {
         long howLongRunning = lastTime - firstTime;
 
-        if (howLongRunning == 0) return Double.MAX_VALUE;
+        if (howLongRunning == 0)
+        {
+            return Double.MAX_VALUE;
+        }
         return (double) counter / howLongRunning * 60000.0;
     }
 
@@ -145,7 +152,10 @@ public class RunningSample
     {
         double rate = getRate();
 
-        if (rate == Double.MAX_VALUE) return "N/A";
+        if (rate == Double.MAX_VALUE)
+        {
+            return "N/A";
+        }
 
         String unit = "sec";
 
@@ -197,9 +207,21 @@ public class RunningSample
             lastTime = res.getTimeStamp();
         }
         runningSum += aTimeInMillis;
-        if (aTimeInMillis > max) max = aTimeInMillis;
-        if (aTimeInMillis < min) min = aTimeInMillis;
-        if (!aSuccessFlag) errorCount++;
+        
+        if (aTimeInMillis > max)
+        {
+            max = aTimeInMillis;
+        }
+         
+        if (aTimeInMillis < min)
+        {
+            min = aTimeInMillis;
+        }
+         
+        if (!aSuccessFlag)
+        {
+            errorCount++;
+        } 
     }
 
     /**
@@ -210,7 +232,10 @@ public class RunningSample
     {
         long rval = 0;
 
-        if (min != Long.MAX_VALUE) rval = min;
+        if (min != Long.MAX_VALUE)
+        {
+            rval = min;
+        } 
         return (rval);
     }
 
@@ -222,7 +247,10 @@ public class RunningSample
     {
         long rval = 0;
 
-        if (max != Long.MIN_VALUE) rval = max;
+        if (max != Long.MIN_VALUE)
+        {
+            rval = max;
+        } 
         return (rval);
     }
 
@@ -232,7 +260,10 @@ public class RunningSample
      */
     public long getAverage()
     {
-        if (counter == 0) return (0);
+        if (counter == 0)
+        {
+            return (0);
+        } 
         return (runningSum / counter);
     }
 
@@ -260,7 +291,10 @@ public class RunningSample
     {
         double rval = 0.0;
 
-        if (counter == 0) return (rval);
+        if (counter == 0)
+        {
+            return (rval);
+        } 
         rval = (double) errorCount / (double) counter;
         return (rval);
     }

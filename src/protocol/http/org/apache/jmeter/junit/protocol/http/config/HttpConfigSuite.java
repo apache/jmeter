@@ -60,8 +60,15 @@ import junit.framework.TestSuite;
  * @author Michael Stover
  * @version $Revision$
  */
-public class HttpConfigSuite
+public final class HttpConfigSuite
 {
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private HttpConfigSuite()
+    {
+    }
+    
     public static TestSuite suite()
     {
        TestSuite test = new TestSuite(UrlConfigTest.class);

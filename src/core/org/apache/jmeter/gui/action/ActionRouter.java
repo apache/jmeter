@@ -77,7 +77,7 @@ import org.apache.log.Logger;
  * @author     Michael Stover
  * @version    $Revision$
  */
-public class ActionRouter implements ActionListener
+public final class ActionRouter implements ActionListener
 {
     private Map commands = new HashMap();
     private static ActionRouter router;

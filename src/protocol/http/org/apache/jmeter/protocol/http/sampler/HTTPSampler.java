@@ -194,7 +194,9 @@ public class HTTPSampler extends AbstractSampler
             return DEFAULT_PROTOCOL;
         }
         else
+        {
             return protocol;
+        }
     }
 
     /**
@@ -1067,7 +1069,9 @@ public class HTTPSampler extends AbstractSampler
                 sendPostData(conn);
             }
             else
+            {
                 time = connect();
+            }
             saveConnectionCookies(conn, u, getCookieManager());
             int errorLevel = 0;
             try

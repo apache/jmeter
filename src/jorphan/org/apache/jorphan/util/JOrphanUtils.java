@@ -64,8 +64,15 @@ import java.util.Vector;
  * @created    27th December 2002
  * @version    $Revision$
  */
-public class JOrphanUtils
+public final class JOrphanUtils
 {
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private JOrphanUtils()
+    {
+    }
+    
     /**
      * This is equivalent to the String.split method in JDK 1.4. It is
      * here to enable us to support earlier JDKs.
@@ -115,5 +122,4 @@ public class JOrphanUtils
         returns.copyInto(values);
         return values;
     }
-    // End Method split(String, String)
 }

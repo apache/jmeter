@@ -369,7 +369,9 @@ protected AssertionResult setResultForNull(AssertionResult result)
          synchronized (this)
          {
             while (threadsRunning > 0)
+            {
                wait();
+            }
          }
          assertEquals(failed, 0);
       }

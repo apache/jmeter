@@ -116,11 +116,13 @@ public class New implements Command
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE)
                 == JOptionPane.YES_OPTION)
+            {
                 ActionRouter.getInstance().doActionNow(
                     new ActionEvent(
                         e.getSource(),
                         e.getID(),
                         CheckDirty.SAVE_ALL));
+            }
         }
         guiPackage.getTreeModel().clearTestPlan();
         guiPackage.getTreeListener().getJTree().setSelectionRow(1);
