@@ -32,8 +32,8 @@
 	   <item name="FAQ (Wiki)"			href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ"/>
 	 </menu>
 	 <menu name="Download">
-	 	<item name="Download Binary"    href="http://jakarta.apache.org/site/binindex.cgi"/>
-        <item name="Download Source"    href="http://jakarta.apache.org/site/sourceindex.cgi"/>
+	 	<item name="Download Binary"    href="http://jakarta.apache.org/site/binindex.cgi#jmeter_binaries"/>
+        <item name="Download Source"    href="http://jakarta.apache.org/site/sourceindex.cgi#jmeter_sources"/>
 		<item name="Nightly Builds"  	href="/nightly.html"/>
 	 </menu>
 	 <menu name="Documentation">

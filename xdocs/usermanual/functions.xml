@@ -209,14 +209,16 @@ A reference name - refName - for reusing the value created by this function. Sto
 	The current sequence number is passed in as the only parameter.
     If the optional sequence numbers are not used, the path name is used as is.
 	Useful formatting sequences are:
-<pre>
-# - insert the number, with no leading zeros or spaces
-000 - insert the number packed out to 3 digits with leading zeros if necessary
-
-Examples:
- pin#.dat -> pin1.dat, ... pin9.dat, pin10.dat, ... pin9999.dat
+	</p>
+	<p>
+<code>
+# - insert the number, with no leading zeros or spaces<br/>
+000 - insert the number packed out to 3 digits with leading zeros if necessary<br/>
+<p/>
+Examples:<br/>
+ pin#.dat -> pin1.dat, ... pin9.dat, pin10.dat, ... pin9999.dat<br/>
  pin000.dat -> pin001.dat ... pin099.dat ... pin999.dat ... pin9999.dat
-</pre>
+</code><p/>
 	If more digits are required than there are formatting characters, the number will be
 	expanded as necessary. To prevent a formatting character from being interpreted,
 	enclose it in single quotes. See the documentation for DecimalFormat for full details.
@@ -312,12 +314,10 @@ Examples:
 	When supplying a default value, there is no need to provide a function name - the parameter can be set to null, and it will be ignored.
 	</p>For example:<p>
 <code>
-<pre>
-${__property(user.dir)} - return value of user.dir
-${__property(user.dir,UDIR)} - return value of user.dir and save in UDIR
-${__property(abcd,ABCD,atod)} - return value of property abcd (or "atod" if not defined) and save in ABCD
-${__property(abcd,,atod)} - return value of property abcd (or "atod" if not defined) but don't save it
-</pre>
+${__property(user.dir)} - return value of user.dir<br/>
+${__property(user.dir,UDIR)} - return value of user.dir and save in UDIR<br/>
+${__property(abcd,ABCD,atod)} - return value of property abcd (or "atod" if not defined) and save in ABCD<br/>
+${__property(abcd,,atod)} - return value of property abcd (or "atod" if not defined) but don't save it<br/>
 </code></p>
 	</description>
 
@@ -336,16 +336,15 @@ ${__property(abcd,,atod)} - return value of property abcd (or "atod" if not defi
 	If no default was provided, then returns 1.
 	</p>For example:<p>
 <code>
-<pre>
-Define the property value:
-
-jmeter -Jgroup1.threads=7 -Jhostname1=www.realhost.edu
-
-Fetch the values:
-${__P(group1.threads)} - return the value of group1.threads
-${__P(group1.loops)} - return the value of group1.loops
-${__P(hostname,www.dummy.org)} - return value of property hostname or www.dummy.org if not defined
-</pre>
+Define the property value:<br/>
+<br/>
+jmeter -Jgroup1.threads=7 -Jhostname1=www.realhost.edu<br/>
+<br/>
+Fetch the values:<br/>
+${__P(group1.threads)} - return the value of group1.threads<br/>
+${__P(group1.loops)} - return the value of group1.loops<br/>
+${__P(hostname,www.dummy.org)} - return value of property hostname or www.dummy.org if not defined<br/>
+<br/>
 In the examples above, the first function call would return 7, 
 the second would return 1 and the last would return www.dummy.org
 (unless those properties were defined elsewhere!)

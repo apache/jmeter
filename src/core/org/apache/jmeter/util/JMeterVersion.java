@@ -41,7 +41,7 @@ public class JMeterVersion
 	 * pattern: VERSION = <quote>.*<quote>
 	 * 
 	 */
-	static final String VERSION = "2.0.0";
+	static final String VERSION = "2.0.1";
 
     private JMeterVersion() // Not instantiable
     {
