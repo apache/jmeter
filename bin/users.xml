@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE allthreads SYSTEM "users.dtd">
+
+	<!-- all users, uses round robin selection -->
+	<allthreads>
+	        <!-- unique parameters for each individual thread (ie user) -->
+
+		<thread>
+			<parameter>
+                             <paramname>user_id</paramname>
+                             <paramvalue>dduck</paramvalue>
+                        </parameter>
+			<parameter>
+                             <paramname>password</paramname>
+                             <paramvalue>quack</paramvalue>
+                        </parameter>
+		</thread>
+		<thread>
+			<parameter>
+                             <paramname>user_id</paramname>
+                             <paramvalue>mmouse</paramvalue>
+                        </parameter>
+			<parameter>
+                             <paramname>password</paramname>
+                             <paramvalue>squeak</paramvalue>
+                        </parameter>
+		</thread>
+		<thread>
+			<parameter>
+                             <paramname>user_id</paramname>
+                             <paramvalue>bbunney</paramvalue>
+                        </parameter>
+			<parameter>
+                             <paramname>password</paramname>
+                             <paramvalue>carrot</paramvalue>
+                        </parameter>
+			<parameter>
+                             <paramname>manager</paramname>
+                             <paramvalue>yes</paramvalue>
+                        </parameter>
+		</thread>
+	</allthreads>
+
+
+
