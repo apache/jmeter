@@ -47,7 +47,7 @@ import org.apache.log.Logger;
  */
 public abstract class AbstractTestElement implements TestElement, Serializable
 {
-    protected static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private Map propMap = Collections.synchronizedMap(new HashMap());
     private Set temporaryProperties;

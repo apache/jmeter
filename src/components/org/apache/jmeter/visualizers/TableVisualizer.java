@@ -37,6 +37,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * This class implements a statistical analyser that calculates both the average
@@ -50,6 +52,8 @@ public class TableVisualizer
     extends AbstractVisualizer
     implements GraphListener, Clearable
 {
+    private static transient Logger log =LoggingManager.getLoggerForClass();
+
     private TableDataModel model = null;
     private JTable table = null;
     private JTextField dataField = null;

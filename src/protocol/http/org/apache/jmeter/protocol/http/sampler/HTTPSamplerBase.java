@@ -42,7 +42,9 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.log.Logger;
 import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -58,7 +60,8 @@ import org.apache.oro.text.regex.Util;
  */
 public abstract class HTTPSamplerBase extends AbstractSampler implements TestListener
 {
-
+	private static final Logger log = LoggingManager.getLoggerForClass();
+	
     public static final int DEFAULT_HTTPS_PORT = 443;
     public static final int DEFAULT_HTTP_PORT = 80;
 

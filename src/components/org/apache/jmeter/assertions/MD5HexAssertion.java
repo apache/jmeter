@@ -38,11 +38,15 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 public class MD5HexAssertion
     extends AbstractTestElement
     implements Serializable, Assertion {
 
+	private static final Logger log = LoggingManager.getLoggerForClass();
+	
     /** Key for storing assertion-informations in the jmx-file. */
     private static final String MD5HEX_KEY = "MD5HexAssertion.size";
 

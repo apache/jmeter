@@ -30,7 +30,9 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.log.Logger;
 
 /*
  * 
@@ -39,6 +41,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  */
 public class HTTPArgument extends Argument implements Serializable
 {
+	private static final Logger log = LoggingManager.getLoggerForClass();
     private static final String ALWAYS_ENCODE = "HTTPArgument.always_encode";
     private static final String USE_EQUALS = "HTTPArgument.use_equals";
 

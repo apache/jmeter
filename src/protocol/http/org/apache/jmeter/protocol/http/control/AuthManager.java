@@ -39,6 +39,8 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * This class provides a way to provide Authorization in jmeter requests. The
@@ -52,6 +54,8 @@ public class AuthManager
     extends ConfigTestElement
     implements ConfigElement, Serializable
 {
+	private static final Logger log = LoggingManager.getLoggerForClass();
+	
     private final static String AUTH_LIST = "AuthManager.auth_list";
 
     private final static int columnCount = 3;

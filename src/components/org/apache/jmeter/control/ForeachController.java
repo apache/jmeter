@@ -23,6 +23,8 @@ import java.io.Serializable;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * @author    Dolf Smits
@@ -32,6 +34,7 @@ import org.apache.jmeter.testelement.property.StringProperty;
  */
 public class ForeachController extends GenericController implements Serializable
 {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private final static String INPUTVAL = "ForeachController.inputVal";
     private final static String RETURNVAL ="ForeachController.returnVal";

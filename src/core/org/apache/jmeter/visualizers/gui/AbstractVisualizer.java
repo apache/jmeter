@@ -101,7 +101,7 @@ public abstract class AbstractVisualizer
     implements Visualizer, ChangeListener, UnsharedComponent
 {
     /** Logging. */
-    protected static transient Logger log =LoggingManager.getLoggerForClass();
+    private static transient Logger log =LoggingManager.getLoggerForClass();
 
     /** A panel allowing results to be saved. */
     private FilePanel filePanel;

@@ -43,7 +43,7 @@ public class GenericController
     extends AbstractTestElement
     implements Controller, Serializable
 {
-    protected static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     protected LinkedList iterationListeners = new LinkedList();
     protected List subControllersAndSamplers = new ArrayList();
