@@ -44,22 +44,17 @@ public class ListenerNotifier extends LinkedList implements Runnable
 					((SampleListener) iter.next()).sampleOccurred(res);
 				}
 			}
-			if(sleepTime > 0)
+			try
 			{
-				try
-				{
-					Thread.sleep(sleepTime);
-				}
-				catch (InterruptedException e)
-				{
-				}
+				Thread.sleep(sleepTime);
 			}
-			else
+			catch (InterruptedException e)
 			{
-				if(size() > 200)
-				{
-					Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-				}
+			}
+			if (size() > 200 && Thread.currentThread().getPriority() == Thread.NORM_PRIORITY)
+			{
+				log.debug("Notifier thread priority going from normal to max, size = "+size());
+				Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			}
 		}
 		log.debug("Listener Notifier stopped");
@@ -84,6 +79,7 @@ public class ListenerNotifier extends LinkedList implements Runnable
 		catch (RuntimeException e)
 		{
 			sleepTime = 2000;
+			log.debug("Setting notifier thread priority to normal");
 			Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
 			return null;
 		}
