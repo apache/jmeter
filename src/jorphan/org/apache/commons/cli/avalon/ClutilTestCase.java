@@ -772,7 +772,7 @@ public final class ClutilTestCase
         assertEquals( option.getArgument( 1 ), "" );
     }
 
-    public void fail_testIncomplete2ArgsMixedNoEq()
+    public void testIncomplete2ArgsMixedNoEq()
     {
         //"-Dstupid","-c"
         final CLOptionDescriptor[] options = new CLOptionDescriptor[]
