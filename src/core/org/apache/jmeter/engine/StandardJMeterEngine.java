@@ -55,14 +55,14 @@ public class StandardJMeterEngine
     transient private static Logger log = LoggingManager.getLoggerForClass();
     private transient Thread runningThread;
     private static long WAIT_TO_DIE = 5 * 1000; //5 seconds
-    transient Map allThreads;
-    boolean running = false;
-    boolean serialized = false;
-    boolean schcdule_run = false;
-    HashTree test;
-    transient SearchByClass testListeners;
-    String host = null;
-    transient ListenerNotifier notifier;
+    private transient Map allThreads;
+    private boolean running = false;
+    private boolean serialized = false;
+    private volatile boolean schcdule_run = false;
+    private HashTree test;
+    private transient SearchByClass testListeners;
+    private String host = null;
+    private transient ListenerNotifier notifier;
 
     public StandardJMeterEngine()
     {
