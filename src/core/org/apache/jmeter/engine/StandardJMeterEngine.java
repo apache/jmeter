@@ -95,6 +95,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     Map allThreads;
     boolean running = false;
     boolean serialized = false;
+    boolean schcdule_run = false;
     HashTree test;
     SearchByClass testListeners;
     String host = null;
@@ -233,7 +234,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
     public synchronized void threadFinished(JMeterThread thread)
     {
         allThreads.remove(thread);
-        if (!serialized && allThreads.size() == 0)
+        if (!serialized && allThreads.size() == 0 && !schcdule_run )
         {
             stopTest();
         }
@@ -297,6 +298,8 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
             notifyTestListenersOfStart();
         }
         notifier = new ListenerNotifier();
+        schcdule_run = true;
+
         while (iter.hasNext())
         {
             ThreadGroup group = (ThreadGroup) iter.next();
@@ -310,6 +313,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 threads[i].setInitialContext(JMeterContextService.getContext());
                 threads[i].setInitialDelay((int) (((float) (group.getRampUp() * 1000) / (float) group.getNumThreads()) * (float) i));
                 threads[i].setThreadName(group.getName() + "-" + (i + 1));
+
+                scheduleThread(threads[i], group);
+
                 Thread newThread = new Thread(threads[i]);
                 newThread.setName(group.getName() + "-" + (i + 1));
                 allThreads.put(threads[i], newThread);
@@ -319,6 +325,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                 }
                 newThread.start();
             }
+            schcdule_run = false;
             if (serialized)
             {
                 while (running && allThreads.size() > 0)
@@ -331,6 +338,20 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
                     {}
                 }
             }
+        }
+    }
+
+    /**
+     * This will  schedule the time for the JMeterThread
+     * @param thread
+     * @param group
+     */
+    private void scheduleThread(JMeterThread thread, ThreadGroup group)
+    {            
+        if (group.getScheduler()) { //if true the Scheduler is enabled
+            thread.setStartTime(group.getStartTime());//set the starttime for the Thread
+            thread.setEndTime(group.getEndTime()); //set the endtime for the Thread
+            thread.setScheduled(true); //Enables the scheduler
         }
     }
 

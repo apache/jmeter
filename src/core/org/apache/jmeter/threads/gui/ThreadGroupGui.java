@@ -63,6 +63,16 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import java.util.Calendar;
+import java.util.Date;
+import javax.swing.JCheckBox;
+import javax.swing.JSpinner.DateEditor;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerDateModel;
+
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.control.gui.LoopControlPanel;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
@@ -72,6 +82,8 @@ import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
 /****************************************
@@ -82,15 +94,27 @@ import org.apache.jmeter.util.JMeterUtils;
  *@version   1.0
  ***************************************/
 
-public class ThreadGroupGui extends AbstractJMeterGuiComponent
+public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemListener
 {
     LoopControlPanel loopPanel;
+    private VerticalPanel mainPanel;
+
 
     private final static String THREAD_NAME = "Thread Field";
     private final static String RAMP_NAME = "Ramp Up Field";
 
     private JTextField threadInput;
     private JTextField rampInput;
+
+    private final static String SCHEDULER = "scheduler";
+    private final static String START_TIME= "start_time";
+    private final static String END_TIME= "end_time";
+
+    private DateEditor starttime;
+    private DateEditor endtime;
+    private JSpinner start;
+    private JSpinner end;
+    private JCheckBox scheduler;
 
     /****************************************
      * !ToDo (Constructor description)
@@ -136,6 +160,9 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent
         }
         tg.setProperty(ThreadGroup.NUM_THREADS, threadInput.getText());
         tg.setProperty(ThreadGroup.RAMP_TIME, rampInput.getText());
+        tg.setProperty(new LongProperty(ThreadGroup.START_TIME,((Date)start.getValue()).getTime()));
+        tg.setProperty(new LongProperty(ThreadGroup.END_TIME,((Date)end.getValue()).getTime()));
+        tg.setProperty(new BooleanProperty(ThreadGroup.SCHEDULER,scheduler.isSelected()));
     }
 
     /****************************************
@@ -149,6 +176,24 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent
         threadInput.setText(tg.getPropertyAsString(ThreadGroup.NUM_THREADS));
         rampInput.setText(tg.getPropertyAsString(ThreadGroup.RAMP_TIME));
         loopPanel.configure((TestElement) tg.getProperty(ThreadGroup.MAIN_CONTROLLER).getObjectValue());
+        scheduler.setSelected(tg.getPropertyAsBoolean(ThreadGroup.SCHEDULER));
+        if (scheduler.isSelected()) {
+            mainPanel.setVisible(true);
+        }else {
+            mainPanel.setVisible(false);
+        }
+        start.setValue(new Date(tg.getPropertyAsLong(ThreadGroup.START_TIME)));
+        end.setValue(new Date(tg.getPropertyAsLong(ThreadGroup.END_TIME)));
+    }
+
+    public void itemStateChanged(ItemEvent ie){
+        if (ie.getItem().equals(scheduler)){
+            if(scheduler.isSelected()) {
+                mainPanel.setVisible(true);
+            } else {
+                mainPanel.setVisible(false);
+            }
+        }
     }
 
     /****************************************
@@ -185,6 +230,54 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent
         return loopPanel;
     }
 
+
+    /**
+     * Create a panel containing the StartTime field and corresponding label.
+     * 
+     * @return a GUI panel containing the StartTime field
+     */
+    private JPanel createStartTimePanel()
+    {
+        JPanel panel = new JPanel(new BorderLayout(5, 0));
+        JLabel label = new JLabel("starttime"); //JMeterUtils.getResString("starttime"));
+        label.setLabelFor(starttime);
+        panel.add(label, BorderLayout.WEST);
+
+        Date today = new Date();
+        // Start the spinner today, but don't set a min or max date
+        // The increment should be a month
+        start = new JSpinner(new SpinnerDateModel(today, 
+                                                  null, null, Calendar.MONTH));
+        starttime = new DateEditor(start, "dd/MM/yy HH:mm:ss");
+        start.setEditor(starttime);
+        panel.add(start, BorderLayout.CENTER);
+        return panel;
+    }
+
+    /**
+     * Create a panel containing the EndTime field and corresponding label.
+     * 
+     * @return a GUI panel containing the EndTime field
+     */
+    private JPanel createEndTimePanel()
+    {
+        JPanel panel = new JPanel(new BorderLayout(5, 0));
+        JLabel label = new JLabel("endtime");//JMeterUtils.getResString("endtime"));
+        label.setLabelFor(endtime);
+        panel.add(label, BorderLayout.WEST);
+
+        Date today = new Date();
+        // Start the spinner today, but don't set a min or max date
+        // The increment should be a month
+        end = new JSpinner(new SpinnerDateModel(today, 
+                                                null, null, Calendar.MONTH));
+        endtime = new DateEditor(end, "dd/MM/yy HH:mm:ss");
+        end.setEditor(endtime);
+
+        panel.add(end, BorderLayout.CENTER);
+        return panel;
+    }
+
     /****************************************
      * !ToDoo (Method description)
      *
@@ -202,7 +295,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent
                 
         add(makeTitlePanel(), BorderLayout.NORTH);
         
-        JPanel mainPanel = new JPanel(new BorderLayout());
+        //JPanel mainPanel = new JPanel(new BorderLayout());
         
         // THREAD PROPERTIES
         VerticalPanel threadPropsPanel = new VerticalPanel();
@@ -240,8 +333,24 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent
         // LOOP COUNT
         threadPropsPanel.add(createControllerPanel());
 
-        mainPanel.add(threadPropsPanel, BorderLayout.NORTH);
-        add(mainPanel, BorderLayout.CENTER);        
+       // mainPanel.add(threadPropsPanel, BorderLayout.NORTH);
+        //add(mainPanel, BorderLayout.CENTER);        
+
+        scheduler = new JCheckBox("Scheduler");
+        scheduler.addItemListener(this); 
+        threadPropsPanel.add(scheduler);
+        mainPanel = new VerticalPanel();
+        mainPanel.setBorder(
+            BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(),"Scheduler Cofiguration"));
+        mainPanel.add(createStartTimePanel());
+        mainPanel.add(createEndTimePanel());
+        mainPanel.setVisible(false);
+        VerticalPanel intgrationPanel = new VerticalPanel();
+        intgrationPanel.add(threadPropsPanel);        
+        intgrationPanel.add(mainPanel);        
+        add(intgrationPanel, BorderLayout.CENTER);
+
     }
 
     public void setNode(JMeterTreeNode node)
