@@ -33,8 +33,9 @@ import org.apache.jmeter.protocol.jms.sampler.BaseJMSSampler;
 /**
  * @author pete
  *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * InitialContextFactory is responsible for getting and instance
+ * of the initial context. It is also responsible for looking
+ * up JMS topics and queues.
  */
 public class InitialContextFactory {
 

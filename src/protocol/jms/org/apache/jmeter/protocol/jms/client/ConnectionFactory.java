@@ -35,8 +35,11 @@ import org.apache.log.Logger;
 /**
  * @author pete
  *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * ConnectionFactory is responsible for creating new connections.
+ * Eventually, the connection factory should read an external
+ * configuration file and create a pool of connections. The current
+ * implementation just does the basics. Once the tires get kicked
+ * a bit, we can add connection pooling support.
  */
 public class ConnectionFactory implements TestListener {
 
