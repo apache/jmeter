@@ -7,6 +7,7 @@
 package org.apache.jorphan.collections;
 
 import java.io.FileReader;
+import java.util.Properties;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jorphan.io.TextFile;
@@ -105,5 +106,25 @@ public class TestConfigurationTree extends JMeterTestCase {
                         + "If the problem persists, report it to the system administrators.",
                 tree.getProperty(
                         "services/org.apache.service.webaction.error.Redirector/exceptions/NoSuchObjectException/msg"));
+    }
+    
+    public void testAsProperties() throws Exception
+    {
+        Properties props = config.getAsProperties();
+        assertEquals("value4",props.getProperty("param4"));
+    }
+    
+    public void testAddProps() throws Exception
+    {
+        Properties props = new Properties();
+        props.setProperty("name","Mike");
+        props.setProperty("pets","dog");
+        config.add(props);
+        assertEquals("dog",config.getProperty("pets"));
+    }
+    
+    public void testDefault() throws Exception
+    {
+        assertEquals("default",config.getProperty("notThere","default"));
     }
 }
