@@ -83,6 +83,14 @@ that Controller.  In the following test tree:</p>
 <figure image="scoping3.png">complex example</figure>
 <p>In this example, the requests are named to reflect the order in which they will be executed.  Timer #1 will apply to Requests Two, Three, and Four (notice how order is irrelevant for hierarchical elements).  Assertion #1 will apply only to Request Three.  Timer #2 will affect all the requests.</p>
 <p>Hopefully these examples make it clear how configuration (hierarchical) elements are applied.  If you imagine each Request being passed up the tree branches, to its parent, then to its parent's parent, etc, and each time collecting all the configuration elements of that parent, then you will see how it works.  </p>
+<b>
+The Configuration elements Header Manager, Cookie Manager and Authorization manager are
+treated differently from the Configuration Default elements.
+The settings from the Configuration Default elements are merged into a set of values that the Sampler has access to.
+However, the settings from the Managers are not merged.
+If more than one Manager is in the scope of a Sampler, 
+only one Manager is used, but there is currently no way to specify <b>which</b> is used.
+</b>
 </subsection>
 
 </section>

@@ -30,7 +30,9 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.log.Logger;
 
 /*
  * 
@@ -39,6 +41,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  */
 public class HTTPArgument extends Argument implements Serializable
 {
+	private static final Logger log = LoggingManager.getLoggerForClass();
     private static final String ALWAYS_ENCODE = "HTTPArgument.always_encode";
     private static final String USE_EQUALS = "HTTPArgument.use_equals";
 
@@ -70,7 +73,7 @@ public class HTTPArgument extends Argument implements Serializable
     {
         boolean eq = getPropertyAsBoolean(USE_EQUALS);
         if (getMetaData().equals("=")
-            || (getValue() != null && getValue().toString().length() > 0))
+            || (getValue() != null && getValue().length() > 0))
         {
             setUseEquals(true);
             return true;
@@ -105,7 +108,7 @@ public class HTTPArgument extends Argument implements Serializable
             try
             {
                 name = JOrphanUtils.decode(name, "UTF-8");
-                value = JOrphanUtils.decode(value.toString(), "UTF-8");
+                value = JOrphanUtils.decode(value, "UTF-8");
             }
             catch (UnsupportedEncodingException e)
             {

@@ -38,7 +38,7 @@ import org.apache.jmeter.testelement.property.StringProperty;
 public class Argument extends AbstractTestElement implements Serializable
 {
     /** Name used to store the argument's name. */
-    public static final String NAME = "Argument.name";
+    public static final String ARG_NAME = "Argument.name";
 
     /** Name used to store the argument's value. */
     public static final String VALUE = "Argument.value";
@@ -62,7 +62,7 @@ public class Argument extends AbstractTestElement implements Serializable
      */
     public Argument(String name, String value)
     {
-        setProperty(new StringProperty(NAME, name));
+        setProperty(new StringProperty(ARG_NAME, name));
         setProperty(new StringProperty(VALUE, value));
     }
 
@@ -75,7 +75,7 @@ public class Argument extends AbstractTestElement implements Serializable
      */
     public Argument(String name, String value, String metadata)
     {
-        setProperty(new StringProperty(NAME, name));
+        setProperty(new StringProperty(ARG_NAME, name));
         setProperty(new StringProperty(VALUE, value));
         setProperty(new StringProperty(METADATA, metadata));
     }
@@ -87,7 +87,7 @@ public class Argument extends AbstractTestElement implements Serializable
      */
     public void setName(String newName)
     {
-        setProperty(new StringProperty(NAME, newName));
+        setProperty(new StringProperty(ARG_NAME, newName));
     }
 
     /**
@@ -97,7 +97,7 @@ public class Argument extends AbstractTestElement implements Serializable
      */
     public String getName()
     {
-        return getPropertyAsString(NAME);
+        return getPropertyAsString(ARG_NAME);
     }
 
     /**

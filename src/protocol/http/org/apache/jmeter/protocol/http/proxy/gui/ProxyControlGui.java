@@ -688,6 +688,10 @@ public class ProxyControlGui
                 StringBuffer name = new StringBuffer();
                 JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
                 TestElement te = cur.getTestElement();
+/*
+ * Will never be true. 
+ * Probably intended to use org.apache.jmeter.threads.ThreadGroup rather than java.lang.ThreadGroup
+ * However, that does not work correctly; whereas treating it as a Controller does.
                 if (te instanceof ThreadGroup)
                 {
                     name.append(parent_name);
@@ -695,7 +699,9 @@ public class ProxyControlGui
                     name.append(seperator);
                     buildNodesModel(cur, name.toString(), level);
                 }
-                else if (te instanceof Controller)
+                else
+*/ 
+               	if (te instanceof Controller)
                 {
                     name.append(spaces(level));
                     name.append(parent_name);
@@ -713,6 +719,9 @@ public class ProxyControlGui
                     name.append(cur.getName());
                     name.append(seperator);
                     buildNodesModel(cur, name.toString(), 0);
+                }
+                else {
+                	log.error("Cannot process "+te);
                 }
             }
         }

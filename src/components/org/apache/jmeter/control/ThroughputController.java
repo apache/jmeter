@@ -58,8 +58,8 @@ public class ThroughputController
     private static final String PERCENTTHROUGHPUT =
         "ThroughputController.percentThroughput";
 
-    private IntegerWrapper globalNumExecutions;
-    private IntegerWrapper globalIteration;
+    private int globalNumExecutions;
+    private int globalIteration;
     private transient Object counterLock;
 
     /**
@@ -79,8 +79,8 @@ public class ThroughputController
 
     public ThroughputController()
     {
-        globalNumExecutions = new IntegerWrapper(new Integer(0));
-        globalIteration = new IntegerWrapper(new Integer(-1));
+        globalNumExecutions = 0;
+        globalIteration = -1;
         counterLock = new Object();
         setStyle(BYNUMBER);
         setPerThread(true);
@@ -185,7 +185,7 @@ public class ThroughputController
     {
         if (!isPerThread())
         {
-            globalNumExecutions.setInteger(new Integer(executions));
+            globalNumExecutions=executions;
         }
         this.numExecutions = executions;
     }
@@ -194,7 +194,7 @@ public class ThroughputController
     {
         if (!isPerThread())
         {
-            return globalNumExecutions.getInteger().intValue();
+            return globalNumExecutions;
         }
         else
         {
@@ -211,7 +211,7 @@ public class ThroughputController
     {
         if (!isPerThread())
         {
-            globalIteration.setInteger(new Integer(iteration));
+            globalIteration=iteration;
         }
         this.iteration = iteration;
     }
@@ -220,7 +220,7 @@ public class ThroughputController
     {
         if (!isPerThread())
         {
-            return globalIteration.getInteger().intValue();
+            return globalIteration;
         }
         else
         {
@@ -370,29 +370,6 @@ public class ThroughputController
     {
     }
 
-    protected class IntegerWrapper implements Serializable
-    {
-        Integer i;
-
-        public IntegerWrapper()
-        {
-        }
-
-        public IntegerWrapper(Integer i)
-        {
-            this.i = i;
-        }
-
-        public void setInteger(Integer i)
-        {
-            this.i = i;
-        }
-
-        public Integer getInteger()
-        {
-            return i;
-        }
-    }
     /////////////////////////// Start of Test Code ///////////////////////////
 
     public static class Test extends JMeterTestCase

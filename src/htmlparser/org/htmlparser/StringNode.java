@@ -94,7 +94,7 @@ public class StringNode extends Node
     }
     public void collectInto(NodeList collectionList, String filter)
     {
-        if (filter == STRING_FILTER)
+        if (filter.equals(STRING_FILTER))
             collectionList.add(this);
     }
 

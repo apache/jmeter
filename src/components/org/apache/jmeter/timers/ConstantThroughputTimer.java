@@ -35,7 +35,7 @@ public class ConstantThroughputTimer
         extends AbstractTestElement
         implements Timer, TestListener,TestBean
 {
-	protected static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
     /**
      * Target time for the start of the next request. The delay provided by

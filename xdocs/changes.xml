@@ -27,7 +27,7 @@
 
 <b>Changes: for more info, contact <a href="mailto:mstover1@apache.org">Michael Stover</a></b>
 <h3>Version 2.0.2</h3>
-New functionality:
+<h4>New functionality:</h4>
 <ul>
 <li>While Controller</li>
 <li>BeanShell intilisation scripts</li>
@@ -35,10 +35,12 @@ New functionality:
 <li>Display as HTML has option not to download frames and images etc</li>
 <li>Multiple Tree elements can now be enabled/disabled/copied/pasted at once</li>
 <li>__split() function added</li>
-<li></li>
-<li></li>
+<li>(28699) allow Assertion to regard unsuccessful responses - e.g. 404 - as successful</li>
+<li>(29075) Regex Extractor can now extract data out of http response header as well as the body</li>
+<li>__log() functions can now write to stdout and stderr</li>
+<li>URL Modifier can now optionally ignore query parameters</li>
 </ul>
-Bug fixes:
+<h4>Bug fixes:</h4>
 <ul>
 <li>If controller now works after the first false condition (31390)</li>
 <li>Regex GUI was losing track of Header/Body checkbox (29853)</li>
@@ -52,11 +54,17 @@ Bug fixes:
 <li>Proxy must now be stopped before it can be removed (25145)</li>
 <li>Link Parser now supports BASE href (25490)</li>
 <li>(30917) Classfinder ignores duplicate names</li>
-<li></li>
-<li></li>
+<li>(22820) Allow Counter value to be cleared</li>
+<li>(28230) Fix NPE in HTTP Sampler retrieving embedded resources</li>
+<li>Improve handling of StopTest; catch and log some more errors</li>
+<li>ForEach Controller no longer runs any samples if first variable is not defined</li>
+<li>(28663) NPE in remote JDBC execution</li>
+<li>(30110) Deadlock in stopTest processing</li>
+<li>(31696) Duration not working correctly when using Scheduler</li>
+<li>JMeterContext now uses ThreadLocal - should fix some potential NPE errors</li>
 </ul>
 <h3>Version 2.0.1</h3>
-Bug fix release.
+<p>Bug fix release. TBA.</p>
 <h3>Version 2.0</h3>
 <ul>
 	<li>HTML parsing improved; now has choice of 3 parsers, and most embedded elements can now be detected and downloaded.</li>

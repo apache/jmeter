@@ -23,6 +23,8 @@ import java.io.StringReader;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 import org.jdom.input.SAXBuilder;
 
 /**
@@ -35,6 +37,8 @@ public class XMLAssertion
     extends AbstractTestElement
     implements Serializable, Assertion
 {
+	private static final Logger log = LoggingManager.getLoggerForClass();
+	
     // one builder for all requests
     private static SAXBuilder  builder = null;
 

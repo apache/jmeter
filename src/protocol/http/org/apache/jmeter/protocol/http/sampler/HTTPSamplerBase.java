@@ -41,7 +41,9 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.log.Logger;
 import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -56,12 +58,11 @@ import org.apache.oro.text.regex.Util;
  */
 public abstract class HTTPSamplerBase extends AbstractSampler implements TestListener
 {
-
+	private static final Logger log = LoggingManager.getLoggerForClass();
+	
     public static final int DEFAULT_HTTPS_PORT = 443;
     public static final int DEFAULT_HTTP_PORT = 80;
 
-    public final static String HEADERS= "headers";
-    public final static String HEADER= "header";
     public final static String ARGUMENTS= "HTTPsampler.Arguments";
     public final static String AUTH_MANAGER= "HTTPSampler.auth_manager";
     public final static String COOKIE_MANAGER= "HTTPSampler.cookie_manager";
@@ -87,7 +88,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     public final static String CONTENT_TYPE= "HTTPSampler.CONTENT_TYPE";
     public final static String NORMAL_FORM= "normal_form";
     public final static String MULTIPART_FORM= "multipart_form";
-    public final static String ENCODED_PATH= "HTTPSampler.encoded_path";
+    //public final static String ENCODED_PATH= "HTTPSampler.encoded_path";
     public final static String IMAGE_PARSER= "HTTPSampler.image_parser";
 	public final static String MONITOR = "HTTPSampler.monitor";
 
