@@ -791,9 +791,17 @@ public class HTTPSampler extends AbstractSampler
                 in = new BufferedInputStream(conn.getInputStream());
             }
         }
+        catch(IOException e){
+        	if (e.getCause() instanceof FileNotFoundException){
+				log.warn(e.getCause().toString());
+        	} else {
+				log.error("Getting error message from server",e);
+        	}
+			in = new BufferedInputStream(conn.getErrorStream());
+        }
         catch (Exception e)
         {
-            log.info("Getting error message from server",e);
+            log.warn("Getting error message from server",e);
             in = new BufferedInputStream(conn.getErrorStream());
         }
         java.io.ByteArrayOutputStream w = new ByteArrayOutputStream();
@@ -1059,7 +1067,7 @@ public class HTTPSampler extends AbstractSampler
      */
     private SampleResult sample(int redirects)
     {
-        log.debug("Start : sample2");
+        log.debug("Start : sample, redirects ="+redirects);
         long time = System.currentTimeMillis();
         SampleResult res = new SampleResult();
         URL u = null;
@@ -1135,7 +1143,7 @@ public class HTTPSampler extends AbstractSampler
                 res.setSuccessful(false);
             }
             res.setTime(time);
-            log.debug("End : sample2");
+            log.debug("End : sample, redirects="+redirects);
             if (isImageParser())
             {
                 if (imageSampler == null)
@@ -1172,7 +1180,7 @@ public class HTTPSampler extends AbstractSampler
             {}
 
         }
-        log.debug("End : sample2");
+        log.debug("End : sample, redirects="+redirects);
         return res;
     }
     protected void disconnect(HttpURLConnection conn)
