@@ -69,6 +69,8 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.LocaleChangeEvent;
+import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -99,7 +101,9 @@ import org.apache.log.Logger;
  * example, uses it to obtain the group's display names from properties
  * <b><i>groupName</i>.displayName</b>.
  */
-public abstract class BeanInfoSupport implements BeanInfo {
+public abstract class BeanInfoSupport 
+        implements BeanInfo, LocaleChangeListener
+{
 
 	private static transient Logger log = LoggingManager.getLoggerForClass();
 
@@ -133,7 +137,7 @@ public abstract class BeanInfoSupport implements BeanInfo {
 	protected BeanInfoSupport(Class beanClass) {
 		
 		this.beanClass= beanClass;
-		
+
 		try {
 			rootBeanInfo= Introspector.getBeanInfo(
 				beanClass,
@@ -170,7 +174,6 @@ public abstract class BeanInfoSupport implements BeanInfo {
 			for (int i=0; i<properties.length; i++)
 			{
 				String name= properties[i].getName();
-				//String s;
 			
 				try
 				{
@@ -201,6 +204,8 @@ public abstract class BeanInfoSupport implements BeanInfo {
 		{
 			log.warn("Localized strings not available for bean "+beanClass);
 		}
+
+        JMeterUtils.addLocaleChangeListener(this);
 	}
 	
 	/**
@@ -279,4 +284,23 @@ public abstract class BeanInfoSupport implements BeanInfo {
 	public PropertyDescriptor[] getPropertyDescriptors() {
 		return rootBeanInfo.getPropertyDescriptors();
 	}
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.util.LocaleChangeListener#localeChanged(org.apache.jmeter.util.LocaleChangeEvent)
+     */
+    public void localeChanged(LocaleChangeEvent event)
+    {
+        // This object is locale-dependent, so if the locale changes, we need
+        // to remove it from the Introspector's BeanInfo cache:
+        Introspector.flushFromCaches(beanClass);
+        
+        // Now this instance is no longer useful -- no more need to listen to
+        // this events (and prevent being GCd):
+        JMeterUtils.removeLocaleChangeListener(this);
+
+        // Note: another option --just as easy to implement-- would be to
+        // regenerate the locale-dependent information. But this would require
+        // any subclasses grabbing additional locale-dependent information to
+        // override this method, while this solution will work without that.
+    }
 }

@@ -63,6 +63,8 @@ import java.beans.PropertyEditorSupport;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * Helper class to support using a TestElement GUI as a PropertyEditor when an
@@ -70,6 +72,7 @@ import org.apache.jmeter.testelement.TestElement;
  * on HTTPSampler).
  */
 public abstract class TestElementEditor extends PropertyEditorSupport {
+    private static Logger log = LoggingManager.getLoggerForClass();
 
 	private Class guiClass;
     private JMeterGUIComponent guiComponent;
@@ -100,8 +103,10 @@ public abstract class TestElementEditor extends PropertyEditorSupport {
 	 * @see java.beans.PropertyEditor#getValue()
 	 */
 	public Object getValue() {
-		guiComponent.modifyTestElement(element);
-        return element;
+        TestElement newElement= guiComponent.createTestElement();
+		guiComponent.modifyTestElement(newElement);
+        log.debug("Got "+newElement);
+        return newElement;
 	}
 
 	/**
@@ -109,6 +114,7 @@ public abstract class TestElementEditor extends PropertyEditorSupport {
 	 * @see java.beans.PropertyEditor#setValue(java.lang.Object)
 	 */
 	public void setValue(Object value) {
+        log.debug("Set to "+value);
 		if (value != null)
 		{
             element= (TestElement)value;

@@ -111,8 +111,7 @@ public abstract class TestBean extends AbstractTestElement
 		try
 		{
 			// Obtain the property descriptors:
-			BeanInfo beanInfo= Introspector.getBeanInfo(this.getClass(),
-				TestBean.class);
+			BeanInfo beanInfo= Introspector.getBeanInfo(this.getClass());
 			PropertyDescriptor[] desc= beanInfo.getPropertyDescriptors();
 			descriptors= new HashMap();
 			for (int i=0; i<desc.length; i++)

@@ -113,7 +113,7 @@ public class PackageTest extends JMeterTestCase
 		JMeterUtils.setLocale(new Locale(language,""));
 		try
 		{
-			beanInfo= Introspector.getBeanInfo(testBeanClass, TestBean.class);
+			beanInfo= Introspector.getBeanInfo(testBeanClass);
 			bundle= (ResourceBundle) beanInfo
 				.getBeanDescriptor()
 				.getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE);
@@ -210,7 +210,7 @@ public class PackageTest extends JMeterTestCase
             try
             {
                 defaultBundle= (ResourceBundle)
-                    Introspector.getBeanInfo(testBeanClass, TestBean.class)
+                    Introspector.getBeanInfo(testBeanClass)
                     .getBeanDescriptor()
                     .getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE);
             }
