@@ -154,7 +154,7 @@ public class MultipartUrlConfig implements Serializable
 		{
 			arg.setAlwaysEncoded(false);
 		}
-		args.addArgument(new HTTPArgument(name,value,true));
+		args.addArgument(arg);
 	}
 
 		/**
