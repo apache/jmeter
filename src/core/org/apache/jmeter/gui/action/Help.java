@@ -19,7 +19,7 @@ import org.apache.log.Logger;
 /**
  * 
  * @author unattributed
- * @version $revision$ $date$
+ * @version $Revision$ $Date$
  */
 public class Help implements Command
 {
