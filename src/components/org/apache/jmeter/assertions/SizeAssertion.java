@@ -74,8 +74,7 @@ public class SizeAssertion
     implements Serializable, Assertion
 {
 
-    int comparator = 1;
-    String comparatorErrorMessage = "ERROR!";
+    private String comparatorErrorMessage = "ERROR!";
     //* Static int to signify the type of logical comparitor to assert
     public final static int EQUAL = 1;
     public final static int NOTEQUAL = 2;
@@ -111,7 +110,7 @@ public class SizeAssertion
             Object[] arguments =
                 {
                     new Long(resultSize),
-                    new String(comparatorErrorMessage),
+                    comparatorErrorMessage,
                     new Long(getAllowedSize())};
             String message =
                 MessageFormat.format(
