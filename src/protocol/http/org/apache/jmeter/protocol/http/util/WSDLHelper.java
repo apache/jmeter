@@ -127,6 +127,7 @@ public class WSDLHelper
                 {
                     NodeList servlist =
                         pnode.getElementsByTagName("soap:address");
+                    // check wsdlsoap
                     if (servlist.getLength() == 0){
 						servlist =
 						pnode.getElementsByTagName("wsdlsoap:address");
@@ -253,6 +254,11 @@ public class WSDLHelper
             	opers =
             		((Element) act).getElementsByTagName("wsdlsoap:operation");
             }
+			if (opers.getLength() == 0){
+				opers =
+					((Element) act).getElementsByTagName("wsdl:operation");
+			}
+            
             // there should only be one soap:operation node per operation
             Element op = (Element) opers.item(0);
             String value = op.getAttribute("soapAction");
@@ -294,6 +300,8 @@ public class WSDLHelper
         String soapBind = "soap:binding";
         if (bindings.getLength() == 0){
         	bindings = WSDLDOC.getElementsByTagName("wsdl:binding");
+        }
+        if (WSDLDOC.getElementsByTagName(soapBind).getLength() == 0){
 			soapBind = "wsdlsoap:binding";
         }
         for (int idx = 0; idx < bindings.getLength(); idx++)
@@ -345,7 +353,9 @@ public class WSDLHelper
             String soapOp = "soap:operation";
             if (opnodes.getLength() == 0){
             	opnodes = one.getElementsByTagName("wsdl:operation");
-            	soapOp = "wsdlsoap:operation";
+            }
+            if (one.getElementsByTagName(soapOp).getLength() == 0){
+				soapOp = "wsdlsoap:operation";
             }
             // now we iterate through the operations
             for (int idz = 0; idz < opnodes.getLength(); idz++)
@@ -375,7 +385,8 @@ public class WSDLHelper
         {
 			WSDLHelper help =
 			// 	new WSDLHelper("http://localhost/WSTest/WSTest.asmx?WSDL");
-				new WSDLHelper("http://localhost/AxisWSDL.xml");
+			//	new WSDLHelper("http://localhost/AxisWSDL.xml");
+				new WSDLHelper("http://localhost/test-setup.xml");
             long start = System.currentTimeMillis();
             help.parse();
             String[] methods = help.getWebMethods();
