@@ -25,7 +25,7 @@
 		<item name="User Manual"        href="/usermanual/index.html"/>
 		<item name="Developer Manual"       href="/extending/index.html"/>
 		<item name="JMeter Wiki"			href="http://nagoya.apache.org/wiki/apachewiki.cgi?JMeterProjectPages"/>
-		<item name="Javadocs"		href="api"/>
+		<item name="Javadocs"		href="/api"/>
 	 </menu>
 	 <menu name="JMeter Resources">
 	 		<item name="JMeter Articles" href="http://nagoya.apache.org/wiki/apachewiki.cgi?JMeterLinks"/>
