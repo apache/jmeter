@@ -1,9 +1,7 @@
 package org.apache.jmeter.reporters;
 
 import java.io.Serializable;
-import java.text.ChoiceFormat;
 import java.text.DecimalFormat;
-import java.text.MessageFormat;
 import java.util.Hashtable;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -73,6 +71,16 @@ public class Summariser
 		//System.out.println(">> "+me+"        "+this.getName()+" "+Thread.currentThread().getName());		
 	}
 
+    /*
+     * Constructor for use during startup
+     * (intended for non-GUI use)
+     * @param name of summariser
+     */
+    public Summariser(String name){
+    	this();
+    	setName(name);
+    }
+    
     /*
      * This is called once for each occurrence in the test plan, before the start of the test.
      * The super.clear() method clears the name (and all other properties),
