@@ -992,6 +992,11 @@ some of its classes - at present JMeter can only run from jar files.
   gump.run            = ${gump.run}
   date.projectfile    = ${date.projectfile}
   version.projectfile = ${version.projectfile}
+  target.java.version = ${target.java.version}
+  src.java.version    = ${src.java.version}
+  optimize            = ${optimize}
+  deprecation         = ${deprecation}
+  encoding            = ${encoding}
   </echo>
   </target>
   <target name="dist-src" depends="init-version" description="Create the source distribution packages.">
