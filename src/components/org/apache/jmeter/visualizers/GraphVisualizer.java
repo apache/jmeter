@@ -413,12 +413,12 @@ public class GraphVisualizer extends AbstractVisualizer
      * @return a scroll pane containing the graph
      */
     private Component createGraphPanel() {
-        JScrollPane graphScrollPanel =
-            new JScrollPane(graph, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+        JScrollPane graphScrollPanel = makeScrollPane(graph, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
                     JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         graphScrollPanel.setViewportBorder(
                 BorderFactory.createEmptyBorder(2, 2, 2, 2));
+        graphScrollPanel.setPreferredSize(graphScrollPanel.getMinimumSize());
 
         return graphScrollPanel;
     }
@@ -559,10 +559,10 @@ public class GraphVisualizer extends AbstractVisualizer
     }
     /* (non-Javadoc)
      * @see java.awt.Component#getPreferredSize()
-     */
+    
     public Dimension getPreferredSize()
     {
         return getMinimumSize();
-    }
+    } */
 
 }
