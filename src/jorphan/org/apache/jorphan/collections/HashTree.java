@@ -114,7 +114,7 @@ public class HashTree implements Serializable, Map
      * Implemented as required by the Map interface, but is not very useful
      * here. All 'values' in a HashTree are HashTree's themselves.
      *  
-     * @param obj Object to be tested as a value.
+     * @param value Object to be tested as a value.
      * @return True if the HashTree contains the value, false otherwise.
      * @see java.util.Map#containsValue(Object)
      */
@@ -125,6 +125,8 @@ public class HashTree implements Serializable, Map
 
     /**
      * This is the same as calling HashTree.add(key,value).
+     * @param key to use
+     * @param value to store against key
      * @see java.util.Map#put(Object, Object)
      */
     public Object put(Object key, Object value)
@@ -215,9 +217,9 @@ public class HashTree implements Serializable, Map
      * If the HashTree contains the given object as a key at the top level,
      * then a true result is returned, otherwise false.
      * 
-     * @param obj Object to be tested as a key.
+     * @param o Object to be tested as a key.
      * @return True if the HashTree contains the key, false otherwise.
-     * @see java.util.Map#containsKey()
+     * @see java.util.Map#containsKey(Object)
      */
     public boolean containsKey(Object o)
     {
@@ -251,7 +253,7 @@ public class HashTree implements Serializable, Map
      * subtree.  Any previous entries under the given key are removed.
      * 
      * @param key  key to be set up
-     * @param tree HashTree that the key maps to
+     * @param t HashTree that the key maps to
      */
     public void set(Object key, HashTree t)
     {
@@ -316,7 +318,7 @@ public class HashTree implements Serializable, Map
      * set as keys to the bottom-most node.  Any keys previously held by the
      * bottom-most node are lost.
      * 
-     * @param key    array of keys to put into HashTree
+     * @param treePath    array of keys to put into HashTree
      * @param values Collection of values to be added as keys to bottom-most
      *               node
      */
@@ -371,7 +373,7 @@ public class HashTree implements Serializable, Map
      * set as keys to the bottom-most node.  Any previously existing keys of
      * that bottom node are lost.
      * 
-     * @param key    list of keys to put into HashTree
+     * @param treePath   list of keys to put into HashTree
      * @param values collection of values to be added as keys to bottom-most
      *               node
      */
@@ -522,7 +524,7 @@ public class HashTree implements Serializable, Map
      * are added along the way).  At the path, the object in the second
      * argument is added as a node.
      *
-     * @param key    a list of objects representing a path
+     * @param treePath   a list of objects representing a path
      * @param value  Object to add as a node to bottom-most node
      */
     public void add(Collection treePath, Object value)
@@ -805,7 +807,7 @@ public class HashTree implements Serializable, Map
      * this would be like getting a list of all the files in a directory
      * specified by the treePath, relative from the current directory.
      * 
-     * @param keys array of keys used to recurse into HashTree structure
+     * @param treePath array of keys used to recurse into HashTree structure
      * @return     array of all keys found in end HashTree
      */
     public Object[] getArray(Object[] treePath)
