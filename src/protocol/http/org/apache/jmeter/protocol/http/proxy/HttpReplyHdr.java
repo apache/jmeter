@@ -1,40 +1,25 @@
 package org.apache.jmeter.protocol.http.proxy;
 
 /**
- * The headers of the server HTTP reply.
+ * Utility class to generate HTTP responses of various types.
  */
-public class HttpReplyHdr
+public final class HttpReplyHdr
 {
+    /** String representing a carriage-return/line-feed pair. */
     private static final String CR = "\r\n";
+
+    /** A HTTP protocol version string. */
     private static final String HTTP_PROTOCOL = "HTTP/1.0";
+
+    /** The HTTP server name. */
     private static final String HTTP_SERVER = "Java Proxy Server";
 
-    private String lastModified = "";
-    private String extraErrorString = "";
 
     /**
-     * Sets the last modified date for a header;
-     *
-     * @param date  A string holding an interner date
-     * @return      true
+     * Don't allow instantiation of this utility class.
      */
-    public boolean setModifiedDate(String date)
+    private HttpReplyHdr()
     {
-        lastModified = date;
-        return true;
-    }
-
-    /**
-     * Adds an extra explanation. This extra information is
-     * added to the http headers failure explanation.
-     *
-     * @param str  Description to add.
-     * @return     true.
-     */
-    public boolean addErrorDescription(String str)
-    {
-        extraErrorString = str;
-        return true;
     }
 
     /**
@@ -44,36 +29,31 @@ public class HttpReplyHdr
      * @param contentLength the length of the content
      * @return              a string with the header in it
      */
-    public String formOk(String contentType, long contentLength)
+    public static String formOk(String contentType, long contentLength)
     {
-        String out = new String();
+        StringBuffer out = new StringBuffer();
 
-        out += HTTP_PROTOCOL + " 200 Ok" + CR;
-        out += "Server: " + HTTP_SERVER + CR;
-        out += "MIME-version: 1.0" + CR;
+        out.append(HTTP_PROTOCOL).append(" 200 Ok").append(CR);
+        out.append("Server: ").append(HTTP_SERVER).append(CR);
+        out.append("MIME-version: 1.0").append(CR);
 
         if (0 < contentType.length())
         {
-            out += "Content-type: " + contentType + CR;
+            out.append("Content-type: ").append(contentType).append(CR);
         }
         else
         {
-            out += "Content-Type: text/html" + CR;
+            out.append("Content-Type: text/html").append(CR);
         }
 
         if (0 != contentLength)
         {
-            out += "Content-Length: " + Long.toString(contentLength) + CR;
+            out.append("Content-Length: ").append(contentLength).append(CR);
         }
 
-        if (0 < lastModified.length())
-        {
-            out += "Last-Modified: " + lastModified + CR;
-        }
+        out.append(CR);
 
-        out += CR;
-
-        return out;
+        return out.toString();
     }
 
     /**
@@ -83,18 +63,18 @@ public class HttpReplyHdr
      * @param description  Errors description.
      * @return             A string with the HTML description body
      */
-    private String formErrorBody(String error, String description)
+    private static String formErrorBody(String error, String description)
     {
-        String out;
+        StringBuffer out = new StringBuffer();
         //Generate Error Body
-        out = "<HTML><HEAD><TITLE>";
-        out += error;
-        out += "</TITLE></HEAD>";
-        out += "<BODY><H2>" + error + "</H2>\n";
-        out += "</P></H3>";
-        out += description;
-        out += "</BODY></HTML>";
-        return out;
+        out.append("<HTML><HEAD><TITLE>");
+        out.append(error);
+        out.append("</TITLE></HEAD>");
+        out.append("<BODY><H2>").append(error).append("</H2>\n");
+        out.append("</P></H3>");
+        out.append(description);
+        out.append("</BODY></HTML>");
+        return out.toString();
     }
 
     /**
@@ -104,7 +84,7 @@ public class HttpReplyHdr
      * @param description  Errors description.
      * @return             A string with the HTML description body
      */
-    private String formError(String error, String description)
+    private static String formError(String error, String description)
     {
         /* A HTTP RESPONCE HEADER LOOKS ALOT LIKE:
          *
@@ -119,24 +99,19 @@ public class HttpReplyHdr
          */
 
         String body = formErrorBody(error, description);
-        String header = new String();
+        StringBuffer header = new StringBuffer();
 
-        header += HTTP_PROTOCOL + " " + error + CR;
-        header += "Server: " + HTTP_SERVER + CR;
-        header += "MIME-version: 1.0" + CR;
-        header += "Content-type: text/html" + CR;
+        header.append(HTTP_PROTOCOL).append(" ").append(error).append(CR);
+        header.append("Server: ").append(HTTP_SERVER).append(CR);
+        header.append("MIME-version: 1.0").append(CR);
+        header.append("Content-type: text/html").append(CR);
 
-        if (0 < lastModified.length())
-        {
-            header += "Last-Modified: " + lastModified + CR;
-        }
+        header.append("Content-Length: ").append(body.length()).append(CR);
 
-        header += "Content-Length: " + String.valueOf(body.length()) + CR;
+        header.append(CR);
+        header.append(body);
 
-        header += CR;
-        header += body;
-
-        return header;
+        return header.toString();
     }
 
     /**
@@ -144,7 +119,7 @@ public class HttpReplyHdr
      *
      * @return    The header in a string;
      */
-    public String formCreated()
+    public static String formCreated()
     {
         return formError("201 Created", "Object was created");
     }
@@ -154,7 +129,7 @@ public class HttpReplyHdr
      *
      * @return    The header in a string;
      */
-    public String formAccepted()
+    public static String formAccepted()
     {
         return formError("202 Accepted", "Object checked in");
     }
@@ -164,7 +139,7 @@ public class HttpReplyHdr
      *
      * @return    The header in a string;
      */
-    public String formPartial()
+    public static String formPartial()
     {
         return formError("203 Partial", "Only partail document available");
     }
@@ -174,7 +149,7 @@ public class HttpReplyHdr
      *
      * @return    The header in a string;
      */
-    public String formMoved()
+    public static String formMoved()
     {
         //300 codes tell client to do actions
         return formError("301 Moved", "File has moved");
@@ -185,7 +160,7 @@ public class HttpReplyHdr
      *
      * @return    The header in a string;
      */
-    public String formFound()
+    public static String formFound()
     {
         return formError("302 Found", "Object was found");
     }
@@ -195,7 +170,7 @@ public class HttpReplyHdr
      *
      * @return    The header in a string;
      */
-    public String formMethod()
+    public static String formMethod()
     {
         return formError("303 Method unseported", "Method unseported");
     }
@@ -205,7 +180,7 @@ public class HttpReplyHdr
      *
      * @return    The header in a string;
      */
-    public String formNotModified()
+    public static String formNotModified()
     {
         return formError("304 Not modified", "Use local copy");
     }
@@ -215,7 +190,7 @@ public class HttpReplyHdr
      *
      * @return    The header in a string;
      */
-    public String formUnautorized()
+    public static String formUnautorized()
     {
         return formError("401 Unathorized", "Unathorized use of this service");
     }
@@ -225,7 +200,7 @@ public class HttpReplyHdr
      *
      * @return    The header in a string;
      */
-    public String formPaymentNeeded()
+    public static String formPaymentNeeded()
     {
         return formError("402 Payment required", "Payment is required");
     }
@@ -235,7 +210,7 @@ public class HttpReplyHdr
      *
      * @return    The header in a string;
      */
-    public String formForbidden()
+    public static String formForbidden()
     {
         return formError(
             "403 Forbidden",
@@ -247,7 +222,7 @@ public class HttpReplyHdr
      *
      * @return    The header in a string;
      */
-    public String formNotFound()
+    public static String formNotFound()
     {
         return formError("404 Not_found", "Requested object was not found");
     }
@@ -257,7 +232,7 @@ public class HttpReplyHdr
      *
      * @return    The header in a string;
      */
-    public String formInternalError()
+    public static String formInternalError()
     {
         return formError("500 Internal server error", "Server broke");
     }
@@ -267,7 +242,7 @@ public class HttpReplyHdr
      *
      * @return    The header in a string;
      */
-    public String formNotImplemented()
+    public static String formNotImplemented()
     {
         return formError(
             "501 Method not implemented",
@@ -279,7 +254,7 @@ public class HttpReplyHdr
      *
      * @return    The header in a string;
      */
-    public String formOverloaded()
+    public static String formOverloaded()
     {
         return formError("502 Server overloaded", "Try again latter");
     }
@@ -289,7 +264,7 @@ public class HttpReplyHdr
      *
      * @return    The header in a string;
      */
-    public String formTimeout()
+    public static String formTimeout()
     {
         return formError("503 Gateway timeout", "The connection timed out");
     }
@@ -299,7 +274,7 @@ public class HttpReplyHdr
      *
      * @return    The header in a string;
      */
-    public String formServerNotFound()
+    public static String formServerNotFound()
     {
         return formError(
             "503 Gateway timeout",
@@ -311,7 +286,7 @@ public class HttpReplyHdr
      *
      * @return    The header in a string;
      */
-    public String formNotAllowed()
+    public static String formNotAllowed()
     {
         return formError("403 Access Denied", "Access is not allowed");
     }

@@ -131,7 +131,6 @@ public class Proxy extends Thread
     public void run()
     {
         HttpRequestHdr request = new HttpRequestHdr();
-        HttpReplyHdr reply = new HttpReplyHdr();
 
         try
         {
@@ -157,12 +156,12 @@ public class Proxy extends Thread
         catch (UnknownHostException uhe)
         {
             log.warn("Server Not Found.", uhe);
-            writeErrorToClient(reply.formServerNotFound());
+            writeErrorToClient(HttpReplyHdr.formServerNotFound());
         }
         catch (Exception e)
         {
             log.error("",e);
-            writeErrorToClient(reply.formTimeout());
+            writeErrorToClient(HttpReplyHdr.formTimeout());
         }
         finally
         {
