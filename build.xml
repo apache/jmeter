@@ -157,6 +157,8 @@
       <auxClasspath path="${commons-logging.jar}" />
       <auxClasspath path="${commons-httpclient.jar}" />
       <auxClasspath path="${batik-awt-util.jar}" />
+      <auxClasspath path="${xstream.jar}" />
+      <auxClasspath path="${xpp3.jar}" />
       <auxClasspath path="${lib.dir}/${bsf.jar}" />
       <auxClasspath path="${lib.dir}/${bsh.jar}" />
       <auxClasspath path="${lib.opt}/${bsf.jar}" />
@@ -309,7 +311,9 @@
   <property name="excalibur-datasource.jar" value="${lib.dir}/excalibur-datasource-1.1.1.jar"/>
   <property name="excalibur-pool.jar" value="${lib.dir}/excalibur-pool-1.2.jar"/>
   <property name="excalibur-instrument.jar" value="${lib.dir}/excalibur-instrument-1.0.jar"/>
-  
+  <property name="xstream.jar" value="${lib.dir}/xstream-1.0.1.jar"/>
+  <property name="xpp3.jar" value="${lib.dir}/xpp3-1.1.3.4.D.jar"/>
+	  
   <!-- The following 3 jars are probably optional for JDK1.4 -->
   <property name="xalan.jar" value="${lib.dir}/xalan.jar"/>
   <property name="xerces.jar" value="${lib.dir}/xercesImpl.jar"/>
@@ -349,6 +353,8 @@
     <include name="${excalibur-pool.jar}"/>
     <include name="${excalibur-instrument.jar}"/>
     <include name="${batik-awt-util.jar}"/>
+    <include name="${xstream.jar}"/>
+    <include name="${xpp3.jar}"/>
   </patternset>
 
   <!--
@@ -371,10 +377,7 @@
   
   <!-- Build classpath (includes the optional jar directory) -->
   <path id="classpath">
-    <!--
-     Temporary hack because avalon-excalibur includes an old version of excalibur-logger
-     -->
-    <fileset dir="${lib.dir}" includes="*.jar" excludes="avalon-excalibur*.jar"/>
+    <fileset dir="${lib.dir}" includes="*.jar"/>
     <fileset dir="${lib.opt}" includes="*.jar"/>
   </path>
 
