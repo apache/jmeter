@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,43 +52,20 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.gui.util;
+package org.apache.jmeter.gui.util;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
-/****************************************
- * !ToDo (Class description)
- *
- *@author    $Author$
- *@created   $Date$
- *@version   $Revision$
- ***************************************/
+/**
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
 public class MenuInfo
 {
-	/****************************************
-	 * !ToDo (Field description)
-	 ***************************************/
-	public String label;
-	/****************************************
-	 * !ToDo (Field description)
-	 ***************************************/
-	public String className;
+    public String label;
+    public String className;
 
-	/****************************************
-	 * !ToDo (Constructor description)
-	 *
-	 *@param l   !ToDo (Parameter description)
-	 *@param cn  !ToDo (Parameter description)
-	 ***************************************/
-	public MenuInfo(String l, String cn)
-	{
-		label = l;
-		className = cn;
-	}
+    public MenuInfo(String l, String cn)
+    {
+        label = l;
+        className = cn;
+    }
 }

@@ -66,246 +66,314 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.swing.JTextField;
-/****************************************
-* Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
-*
-*@author    T.Elanjchezhiyan
-*@created   $Date$
-*@version   1.0
-***************************************/
 
-/***********************************************
- * This is Date mask control. Using this control we can pop up
- *our date in the text field. And this control is Devloped basically
- *for  JDK1.3 and lower version support. This control is similer to
- *JSpinner control this is availble in JDk1.4 and above only.
- *This will set the date "MM/d/yyyy HH:mm:ss"
- *in this format only
- ***********************************************/
-public class JDateField extends JTextField  {
-    private final static DateFormat dateFormat = new SimpleDateFormat( "MM/d/yyyy HH:mm:ss" );
+/**
+ * This is Date mask control. Using this control we can pop up our date in the
+ * text field. And this control is Devloped basically for  JDK1.3 and lower
+ * version support. This control is similer to JSpinner control this is
+ * available in JDK1.4 and above only.
+ * <p>
+ * This will set the date "MM/d/yyyy HH:mm:ss" in this format only.
+ * </p>
+ *
+ * @author    T.Elanjchezhiyan
+ * @version   $Revision$
+ */
+public class JDateField extends JTextField
+{
+    private final static DateFormat dateFormat =
+        new SimpleDateFormat("MM/d/yyyy HH:mm:ss");
 
-    /***************************
-     *This is single argumet constractor
-     *This will set the Date to the TextField
+    /**
+     * Create a DateField with the specified date.
      */
-    public JDateField(Date date) {
+    public JDateField(Date date)
+    {
         super(20);
-        this.addKeyListener(new KeyFocus()); 
+        this.addKeyListener(new KeyFocus());
         this.addFocusListener(new FocusClass());
-        String  myString = dateFormat.format(date);
+        String myString = dateFormat.format(date);
         setText(myString);
     }
 
-    /**************************************************
-    * Set the date to the Date mask control
-    *
-    *@param java.util.Date 
-    ****************************************************/
-    public void setDate(Date date){
+    /**
+     * Set the date to the Date mask control.
+     */
+    public void setDate(Date date)
+    {
         setText(dateFormat.format(date));
     }
 
-    /**************************************************
-    * get the date from the Date mask control
-    *
-    *@return java.util.Date 
-    ****************************************************/
-    public Date getDate(){
-        try {
-        return dateFormat.parse(getText());
-        }catch(Exception e){ 
+    /**
+     * Get the date from the Date mask control.
+     */
+    public Date getDate()
+    {
+        try
+        {
+            return dateFormat.parse(getText());
+        }
+        catch (Exception e)
+        {
             return new Date();
         }
     }
 
+    /**
+     * @author    T.Elanjchezhiyan
+     * @version   $Revision$
+     */
+    class KeyFocus extends KeyAdapter
+    {
 
-    /****************************************
-    * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
-    *
-    *@author    T.Elanjchezhiyan
-    *@created   $Date$
-    *@version   1.0
-    ***************************************/
-    class KeyFocus extends KeyAdapter {
-        
         int mon = 0;
         int day = 0;
-        int year = 0; 
-        int hour = 0; 
-        int minute = 0; 
-        int second = 0; 
+        int year = 0;
+        int hour = 0;
+        int minute = 0;
+        int second = 0;
 
-        KeyFocus(){
+        KeyFocus()
+        {
         }
 
-        /*************************************
-         *This method will increment year 
-         *by each "KEY UP" operation
-         ************************************/
-        public void incrementYear(){
+        /**
+         * This method will increment year by each "KEY UP" operation.
+         */
+        public void incrementYear()
+        {
             year = year + 1;
         }
 
-        /*************************************
-        *This method will increment month 
-        *by each "KEY UP" operation
-        ************************************/
-        public void incrementMonth(){
-            if (mon < 12){
-                mon =mon+1;
-            } else {
-                mon=1;
-                incrementYear();            
+        /**
+         * This method will increment month by each "KEY UP" operation.
+         */
+        public void incrementMonth()
+        {
+            if (mon < 12)
+            {
+                mon = mon + 1;
+            }
+            else
+            {
+                mon = 1;
+                incrementYear();
             }
         }
 
-
-        /*************************************
-        *This method will increment day 
-        *by each "KEY UP" operation
-        ************************************/
-        public void incrementDay(){
-            Calendar calendar=new GregorianCalendar();
-            calendar.set(year,mon-1,day);
+        /**
+         * This method will increment day by each "KEY UP" operation.
+         */
+        public void incrementDay()
+        {
+            Calendar calendar = new GregorianCalendar();
+            calendar.set(year, mon - 1, day);
             int noofdays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            if  (day < noofdays) {
+            if (day < noofdays)
+            {
                 day = day + 1;
-            } else {
+            }
+            else
+            {
                 day = 1;
                 incrementMonth();
             }
         }
-        /*************************************
-        *This method will increment Hour 
-        *by each "KEY UP" operation
-        ************************************/
-        public void incrementHour(){
-            if (hour < 23) {
-                hour = hour + 1 ;
-            }else {
+        
+        /**
+         * This method will increment Hour by each "KEY UP" operation.
+         */
+        public void incrementHour()
+        {
+            if (hour < 23)
+            {
+                hour = hour + 1;
+            }
+            else
+            {
                 hour = 0;
                 incrementDay();
             }
         }
 
-        /*************************************
-        *This method will increment Minute 
-        *by each "KEY UP" operation
-        ************************************/
-        public void incrementMinute(){
-            if (minute  < 59) {
+        /**
+         * This method will increment Minute by each "KEY UP" operation.
+         */
+        public void incrementMinute()
+        {
+            if (minute < 59)
+            {
                 minute = minute + 1;
-            } else {
+            }
+            else
+            {
                 minute = 0;
                 incrementHour();
             }
         }
 
-        /*************************************
-        *This method will increment Second
-        *by each "KEY UP" operation
-        ************************************/
-        public void incrementSecond(){
-            if (second < 59) {
+        /**
+         * This method will increment Second by each "KEY UP" operation.
+         */
+        public void incrementSecond()
+        {
+            if (second < 59)
+            {
                 second = second + 1;
-            } else {
+            }
+            else
+            {
                 second = 0;
                 incrementMinute();
             }
         }
 
-        /*************************************
-        *Datetime string will be splited and stored
-        *into mon,year,day like
-        ************************************/
-        public void parseDate(String datetime) {
-            mon = Integer.parseInt(datetime.substring(0,2)); 
-            day = Integer.parseInt(datetime.substring(3,5)); 
-            year = Integer.parseInt(datetime.substring(6,10)); 
-            hour = Integer.parseInt(datetime.substring(11,13)); 
-            minute = Integer.parseInt(datetime.substring(14,16)); 
-            second = Integer.parseInt(datetime.substring(17,19)); 
+        /**
+         * Datetime string will be splited and stored into mon,year,day like.
+         */
+        public void parseDate(String datetime)
+        {
+            mon = Integer.parseInt(datetime.substring(0, 2));
+            day = Integer.parseInt(datetime.substring(3, 5));
+            year = Integer.parseInt(datetime.substring(6, 10));
+            hour = Integer.parseInt(datetime.substring(11, 13));
+            minute = Integer.parseInt(datetime.substring(14, 16));
+            second = Integer.parseInt(datetime.substring(17, 19));
         }
-        
-        public void keyPressed(KeyEvent e){             
-            if (e.getKeyCode() == KeyEvent.VK_UP){
+
+        public void keyPressed(KeyEvent e)
+        {
+            if (e.getKeyCode() == KeyEvent.VK_UP)
+            {
                 String datetime = getText();
                 parseDate(datetime);
                 int pos = getCaretPosition();
-                if (pos <3){     //first three character will increment the month
+                if (pos < 3)
+                { //first three character will increment the month
                     incrementMonth();
-                }else if (pos <6){//3-6 character will increment the day
+                }
+                else if (pos < 6)
+                { //3-6 character will increment the day
                     incrementDay();
-                }else if (pos <11){ //7-11 character will increment the year
+                }
+                else if (pos < 11)
+                { //7-11 character will increment the year
                     incrementYear();
-                }else if (pos <14){  //12-14 character will increment the hour
+                }
+                else if (pos < 14)
+                { //12-14 character will increment the hour
                     incrementHour();
-                }else if (pos <17){  //15-17 character will increment the minute
+                }
+                else if (pos < 17)
+                { //15-17 character will increment the minute
                     incrementMinute();
-                }else if (pos <20){ //18-20 character will increment the second
+                }
+                else if (pos < 20)
+                { //18-20 character will increment the second
                     incrementSecond();
                 }
-                setText( concate(mon) +"/"+ concate(day) +"/"+ concate(year) + " "+ concate(hour) +":"+ concate(minute) +":"+ concate(second));
+                setText(
+                    concate(mon)
+                        + "/"
+                        + concate(day)
+                        + "/"
+                        + concate(year)
+                        + " "
+                        + concate(hour)
+                        + ":"
+                        + concate(minute)
+                        + ":"
+                        + concate(second));
                 setCaretPosition(pos);
             }
-            else if (e.getKeyCode() ==KeyEvent.VK_DOWN){
+            else if (e.getKeyCode() == KeyEvent.VK_DOWN)
+            {
                 String datetime = getText();
                 parseDate(datetime);
                 int pos = getCaretPosition();
-                if (pos < 3) {      //first 3 character will decrease the month
-                    decrementMonth(); 
-                }else if (pos < 6) {  //3-6 character will decrease the day
-                    decrementDay(); 
-                }else if (pos < 11) {//7-11 character will decrease the year
+                if (pos < 3)
+                { //first 3 character will decrease the month
+                    decrementMonth();
+                }
+                else if (pos < 6)
+                { //3-6 character will decrease the day
+                    decrementDay();
+                }
+                else if (pos < 11)
+                { //7-11 character will decrease the year
                     decrementYear();
-                }else if (pos < 14) {  //12-14 character will decrease the hour
+                }
+                else if (pos < 14)
+                { //12-14 character will decrease the hour
                     decrementHour();
-                }else if (pos < 17){   //15-17 character will decrease the minute
+                }
+                else if (pos < 17)
+                { //15-17 character will decrease the minute
                     decrementMinute();
-                }else if (pos < 20){ //18-20 character will decrease the second
+                }
+                else if (pos < 20)
+                { //18-20 character will decrease the second
                     decrementSecond();
-                }    
-                setText( concate(mon) +"/"+ concate(day) +"/"+ concate(year) + " "+ concate(hour) +":"+ concate(minute) +":"+ concate(second));
+                }
+                setText(
+                    concate(mon)
+                        + "/"
+                        + concate(day)
+                        + "/"
+                        + concate(year)
+                        + " "
+                        + concate(hour)
+                        + ":"
+                        + concate(minute)
+                        + ":"
+                        + concate(second));
                 setCaretPosition(pos);
             }
         }
 
-
-        /*************************************
-        *This method will decrease year
-        *by each "KEY DOWN" operation
-        ************************************/
-        public void decrementYear(){
-            year=year - 1;
+        /**
+         * This method will decrease year by each "KEY DOWN" operation.
+         */
+        public void decrementYear()
+        {
+            year = year - 1;
         }
-        /*************************************
-        *This method will decrease month
-        *by each "KEY DOWN" operation
-        ************************************/
-        public void decrementMonth(){
-            if (mon > 1){
-                mon =mon-1;
-            } else {
-                mon=12;
+        
+        /**
+         * This method will decrease month by each "KEY DOWN" operation.
+         */
+        public void decrementMonth()
+        {
+            if (mon > 1)
+            {
+                mon = mon - 1;
+            }
+            else
+            {
+                mon = 12;
                 decrementYear();
             }
         }
 
-        /*************************************
-        *This method will decrease day
-        *by each "KEY DOWN" operation
-        ************************************/
-        public void decrementDay(){
-            Calendar calendar=new GregorianCalendar();
-            if  (day > 1) {
+        /**
+         * This method will decrease day by each "KEY DOWN" operation.
+         */
+        public void decrementDay()
+        {
+            Calendar calendar = new GregorianCalendar();
+            if (day > 1)
+            {
                 day = day - 1;
-            } else {
-                if (mon == 1){
-                    calendar.set(year,11,day);
+            }
+            else
+            {
+                if (mon == 1)
+                {
+                    calendar.set(year, 11, day);
                 }
-                else{
-                    calendar.set(year,mon-2,day);
+                else
+                {
+                    calendar.set(year, mon - 2, day);
                 }
                 int noofdays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
                 day = noofdays;
@@ -313,82 +381,97 @@ public class JDateField extends JTextField  {
             }
         }
 
-        /*************************************
-        *This method will decrease hour
-        *by each "KEY DOWN" operation
-        ************************************/
-        public void decrementHour(){
-            if (hour > 0) {
-                hour = hour - 1 ;
-            }else {
+        /**
+         * This method will decrease hour by each "KEY DOWN" operation.
+         */
+        public void decrementHour()
+        {
+            if (hour > 0)
+            {
+                hour = hour - 1;
+            }
+            else
+            {
                 hour = 23;
                 decrementDay();
             }
         }
 
-        /*************************************
-        *This method will decrease minute
-        *by each "KEY DOWN" operation
-        ************************************/
-        public void decrementMinute(){
-            if (minute  > 0) {
+        /**
+         * This method will decrease minute by each "KEY DOWN" operation.
+         */
+        public void decrementMinute()
+        {
+            if (minute > 0)
+            {
                 minute = minute - 1;
-            } else {
+            }
+            else
+            {
                 minute = 59;
                 decrementHour();
-            }   
+            }
         }
-        /*************************************
-        *This method will decrease second
-        *by each "KEY DOWN" operation
-        ************************************/
-        public void decrementSecond(){
-            if (second > 0) {
+        
+        /**
+         * This method will decrease second by each "KEY DOWN" operation.
+         */
+        public void decrementSecond()
+        {
+            if (second > 0)
+            {
                 second = second - 1;
-            } else {
+            }
+            else
+            {
                 second = 59;
                 decrementMinute();
             }
         }
 
-        /**************************************************
-        * Before the Single digit number it will Appends 
-        *  '0' 
-        * example 1=> '01'
-        ****************************************************/
-        public String concate(int number){
+        /**
+         * Before the Single digit number it will Appends '0'.  For example,
+         * 1 => '01'.
+         */
+        public String concate(int number)
+        {
             String value;
-            if (String.valueOf(number).length()==1){
-                value = "0"+number;
-            }else {
+            if (String.valueOf(number).length() == 1)
+            {
+                value = "0" + number;
+            }
+            else
+            {
                 value = String.valueOf(number);
             }
             return value;
         }
     }
 
-    /****************************************
-     * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
-     *
-     *@author    T.Elanjchezhiyan
-     *@created   $Date$
-     *@version   1.0
-     ***************************************/
-    class FocusClass implements FocusListener{
-        FocusClass(){
+    /**
+     * @author    T.Elanjchezhiyan
+     * @version   $Revision$
+     */
+    class FocusClass implements FocusListener
+    {
+        FocusClass()
+        {
         }
-        public void focusGained(FocusEvent e){
+        public void focusGained(FocusEvent e)
+        {
         }
-        public void focusLost(FocusEvent e){
-            try {
-                if (new Date(getText()) instanceof Date) { //this will check the date formate
+        public void focusLost(FocusEvent e)
+        {
+            try
+            {
+                if (new Date(getText()) instanceof Date)
+                { //this will check the date formate
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 requestFocus();
             }
         }
     }
 }
-
