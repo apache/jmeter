@@ -110,7 +110,7 @@ public abstract class AbstractVisualizer
     /** A checkbox choosing whether or not only errors should be logged. */
     private JCheckBox errorLogging;
     
-    ResultCollector collector;
+    protected ResultCollector collector;
 
     public AbstractVisualizer()
     {
