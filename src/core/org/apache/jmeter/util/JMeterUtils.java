@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -88,6 +88,8 @@ import org.xml.sax.XMLReader;
  */
 public class JMeterUtils implements UnitTestManager
 {
+        private static final String VERSION="1.8+";
+
 	transient private static Logger log =
 		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.util");
 	private static LoggingManager logManager;
