@@ -166,12 +166,12 @@ public class URLRewritingModifier
         pathExtensionEqualsRegexp =
             JMeterUtils.getPatternCache().getPattern(
                 ";"+argName + "=([^\"'>&\\s;]*)[&\\s\"'>;]?$?",
-                Perl5Compiler.MULTILINE_MASK);
+                Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
 
         pathExtensionNoEqualsRegexp =
             JMeterUtils.getPatternCache().getPattern(
                 ";"+argName + "([^\"'>&\\s;]*)[&\\s\"'>;]?$?",
-                Perl5Compiler.MULTILINE_MASK);
+                Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
 
         parameterRegexp =
             JMeterUtils.getPatternCache().getPattern(
@@ -190,7 +190,7 @@ public class URLRewritingModifier
                     + "\\s[Nn][Aa][Mm][Ee]\\s*=\\s*[\"']"
                     + argName
                     + "[\"']",
-                Perl5Compiler.MULTILINE_MASK);
+                Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
             // NOTE: the handling of simple- vs. double-quotes could be formally
             // more accurate, but I can't imagine a session id containing
             // either, so we should be OK. The whole set of expressions is a
