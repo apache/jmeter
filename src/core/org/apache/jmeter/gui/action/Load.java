@@ -165,7 +165,7 @@ public class Load implements Command
 		}
 	}
 
-	private void insertLoadedTree(int id, ListedHashTree tree) throws Exception, IllegalUserActionException {
+	public void insertLoadedTree(int id, ListedHashTree tree) throws Exception, IllegalUserActionException {
 		convertTree(tree);
 		GuiPackage.getInstance().addSubTree(tree);
 		tree = GuiPackage.getInstance().getCurrentSubTree();				
