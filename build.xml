@@ -378,7 +378,7 @@
   <target name="init-version">
   	<tstamp/>
   	<!-- JMeter version -->
-  <property name="jmeter.version" value="1.9.${DSTAMP}"/>
+  <property name="jmeter.version" value="2.0.0"/>
   </target>
 
   <target name="init" depends="check-libs,report-missing-libs,init-version">
@@ -842,10 +842,54 @@ some of its classes - at present JMeter can only run from jar files.
     <include name="build.*"/>
     <include name="lcp.bat"/>
     <include name="${dest.jar.jmeter}/jmeter*.bat"/>
-    <include name="${dest.jar.jmeter}/jmeter.properties"/>
+    <include name="${dest.jar.jmeter}/jmeter*.properties"/>
     <include name="${dest.jar.jmeter}/log4j.conf"/>
+    <include name="${dest.jar.jmeter}/testfiles/**"/>
     <include name="eclipse.classpath*"/>
   </patternset>
+  
+  <target name="distribution" depends="assume-libs-present,clean,install,docs-all,test" 
+  		description="Build JMeter for end-user distribution">
+  	<property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
+  	<property name="pack.name" value="${dist.name}"/>
+  	<patternset id="dist_bin_files">
+  		<patternset refid="dist.binaries"/>
+  		<patternset refid="external.jars"/>
+  		<include name="docs/**"/>
+  		<include name="${dest.printable_docs}/**"/>
+  		<exclude name="docs/api/**"/>
+  	</patternset>
+  	<patternset id="dist_src_files">
+  		<patternset refid="external.jars"/>
+  		<patternset refid="dist.sources"/>
+  	</patternset>
+    <mkdir dir="${dist.dir}"/>
+    <tar destfile="${dist.dir}/${pack.name}_bin.tar" longfile="gnu">
+      <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
+        <patternset refid="dist_bin_files"/>
+      </tarfileset>
+      <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
+    </tar>
+    <gzip zipfile="${dist.dir}/${pack.name}_bin.tgz" src="${dist.dir}/${pack.name}_bin.tar" />
+    <zip  zipfile="${dist.dir}/${pack.name}_bin.zip">
+      <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
+        <patternset refid="dist_bin_files"/>
+      </zipfileset>
+    </zip>
+    
+    <tar destfile="${dist.dir}/${pack.name}_src.tar" longfile="gnu">
+      <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
+        <patternset refid="dist_src_files"/>
+      </tarfileset>
+      <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
+    </tar>
+    <gzip zipfile="${dist.dir}/${pack.name}_src.tgz" src="${dist.dir}/${pack.name}_src.tar" />
+    <zip  zipfile="${dist.dir}/${pack.name}_src.zip">
+      <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
+        <patternset refid="dist_src_files"/>
+      </zipfileset>
+    </zip>
+  </target>
 
   <!-- N.B. this target is the one currently used by Gump -->
   <target name="dist" depends="assume-libs-present,clean,install,docs-all,test" description="Rebuild all and create the distribution packages.">
