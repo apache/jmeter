@@ -211,7 +211,7 @@ public class ResultCollector
     {
         if (SaveService.getOutputFormat() == SaveService.SAVE_AS_XML)
         {
-            out.print("</testResults>");
+            out.print("\n</testResults>");
         }
     }
 
