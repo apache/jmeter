@@ -334,7 +334,6 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, 
     {
         initializeTableModel();
         table = new JTable(tableModel);
-        table.setEnabled(true);
         table.addFocusListener(this);
         // use default editor/renderer to fix bug #16058
         //		TextAreaTableCellEditor editor = new TextAreaTableCellEditor();
@@ -344,9 +343,6 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, 
         //		TextAreaCellRenderer renderer = new TextAreaCellRenderer();
         //		table.setRowHeight(renderer.getPreferredHeight());
         //		table.setDefaultRenderer(String.class,renderer);
-        table.setCellSelectionEnabled(true);
-        table.setRowSelectionAllowed(true);
-        table.setColumnSelectionAllowed(false);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         return new JScrollPane(table);
@@ -408,14 +404,13 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener, 
 
     private void init()
     {
-        this.setLayout(new BorderLayout());
-//        this.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        setLayout(new BorderLayout());
 
-        this.add(makeLabelPanel(), BorderLayout.NORTH);
-        this.add(makeMainPanel(), BorderLayout.CENTER);
+        add(makeLabelPanel(), BorderLayout.NORTH);
+        add(makeMainPanel(), BorderLayout.CENTER);
         // Force a minimum table height of 70 pixels
-        this.add(Box.createVerticalStrut(70), BorderLayout.WEST);
-        this.add(makeButtonPanel(), BorderLayout.SOUTH);
+        add(Box.createVerticalStrut(70), BorderLayout.WEST);
+        add(makeButtonPanel(), BorderLayout.SOUTH);
 
         table.revalidate();
         sizeColumns(table);

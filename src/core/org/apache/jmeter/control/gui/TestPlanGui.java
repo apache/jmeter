@@ -1,5 +1,6 @@
 package org.apache.jmeter.control.gui;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.util.Collection;
 
 import javax.swing.JCheckBox;
@@ -152,5 +153,9 @@ public class TestPlanGui extends AbstractJMeterGuiComponent
         southPanel.add(explain, BorderLayout.CENTER);
 
         add(southPanel, BorderLayout.SOUTH);
+    }
+    
+    public Dimension getPreferredSize() {
+        return getMinimumSize();
     }
 }
