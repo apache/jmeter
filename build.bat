@@ -15,7 +15,7 @@ for %%i in (..\jakarta-site2\lib\*.jar) do CALL lcp %%i
 
 SET BUILDFILE=build.xml
 echo %LOCALCLASSPATH%
-java -classpath %LOCALCLASSPATH% org.apache.tools.ant.Main -buildfile %BUILDFILE% %1
+java -classpath %LOCALCLASSPATH% org.apache.tools.ant.Main -buildfile %BUILDFILE% %1 %2 %3 %4 %5 %6
 set PATH=%OLDPATH%
 
 :eof
