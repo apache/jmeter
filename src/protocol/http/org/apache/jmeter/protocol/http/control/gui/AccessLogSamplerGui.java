@@ -162,7 +162,6 @@ public class AccessLogSamplerGui
     public TestElement createTestElement()
     {
     	if (SAMPLER == null){
-    		System.out.println("the sampler was null, therefore we create a new one");
 			SAMPLER = new AccessLogSampler();
 			SAMPLER.setSamplerGUI(this);
 			this.configureTestElement(SAMPLER);
