@@ -8,3 +8,4 @@ mailapi.jar
 pop3.jar
 smtp.jar
 w3c_http.jar
+bsh*.jar
