@@ -411,6 +411,7 @@
         <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
+        <pathelement location="${build.components}"/>
         <pathelement location="${build.htmlparser}"/>
       </classpath>
     </javac>
