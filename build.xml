@@ -146,12 +146,12 @@
       <auxClasspath path="${jdom.jar}" />
       <auxClasspath path="${tidy.jar}" />
       <auxClasspath path="${logkit.jar}" />
+      <auxClasspath path="${excalibur-logger.jar}" />
       <auxClasspath path="${avalon-excalibur.jar}" />
       <auxClasspath path="${avalon-framework.jar}" />
       <auxClasspath path="${commons-collections.jar}" />
       <auxClasspath path="${commons-logging.jar}" />
       <auxClasspath path="${commons-httpclient.jar}" />
-      <auxClasspath path="${excalibur-logger.jar}" />
       <auxClasspath path="${lib.dir}/${bsf.jar}" />
       <auxClasspath path="${lib.dir}/${bsh.jar}" />
       <auxClasspath path="${lib.opt}/${bsf.jar}" />
@@ -349,7 +349,11 @@
   
   <!-- Build classpath (includes the optional jar directory) -->
   <path id="classpath">
-    <fileset dir="${lib.dir}" includes="*.jar"/>
+    <!--
+     Temporary hack because avalon-excalibur includes an old version of excalibur-logger
+     -->
+    <fileset dir="${lib.dir}" includes="excalibur-logger*.jar"/>
+    <fileset dir="${lib.dir}" includes="*.jar" excludes="excalibur-logger*.jar"/>
     <fileset dir="${lib.opt}" includes="*.jar"/>
   </path>
 
