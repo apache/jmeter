@@ -161,6 +161,8 @@ public class IfController extends GenericController implements Serializable
 	   */
 	public Sampler next() 
 	{
+//		clear cached condition
+		getProperty(CONDITION).recoverRunningVersion(null);
 		boolean result = evaluateCondition(getCondition());
 		if (result)
 		   return super.next();
