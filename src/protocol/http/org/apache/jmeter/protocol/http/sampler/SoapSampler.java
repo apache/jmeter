@@ -11,6 +11,8 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.control.Header;
 
 /**
  * Sampler to handle SOAP Requests.
@@ -57,16 +59,20 @@ public class SoapSampler extends HTTPSampler
         connection.setRequestProperty(
             "Content-length",
             "" + getXmlData().length());
-        // if the user provides a different content type, we use it
-        // added 1-15-04 peter lin
-        if (getHeaderManager() != null &&
-        getHeaderManager().getPropertyAsString(
-        HTTPSampler.CONTENT_TYPE).length() > 0){
+        // my first attempt at fixing the bug failed, due to user
+        // error on my part. HeaderManager does not use the normal
+        // setProperty, and getPropertyAsString methods. Instead,
+        // it uses it's own String array and Header object.
+        if (getHeaderManager() != null){
         		// headerManager was set, so let's set the connection
         		// to use it.
-        		connection.setRequestProperty("Content-type",
-        		getHeaderManager().getPropertyAsString(
-        			HTTPSampler.CONTENT_TYPE));
+        		HeaderManager mngr = getHeaderManager();
+        		int headerSize = mngr.size();
+        		// we set all the header properties
+        		for (int idx=0; idx < headerSize; idx++){
+        			Header hd = mngr.getHeader(idx);
+					connection.setRequestProperty(hd.getName(),hd.getValue());
+        		}
         } else {
         	// otherwise we use "text/xml" as the default
 			connection.setRequestProperty("Content-type", "text/xml");
@@ -108,10 +114,16 @@ public class SoapSampler extends HTTPSampler
             {
                 setPath(url.getPath());
             }
+            // make sure the Post header is set
+            URLConnection conn = url.openConnection();
+            setPostHeaders(conn);
         }
         catch (MalformedURLException e1)
         {
             log.error("Bad url: " + getURLData(), e1);
+        }
+        catch (IOException e1){
+			log.error("Bad url: " + getURLData(), e1);
         }
         return super.sample(e);
     }
