@@ -188,7 +188,6 @@ public class CompoundVariable implements Function
         while (iter.hasNext())
         {
             Object item = iter.next();
-            log.debug("executing object: " + item);
             if (item instanceof Function)
             {
                 testDynamic = true;

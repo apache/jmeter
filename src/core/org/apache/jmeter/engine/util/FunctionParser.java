@@ -33,7 +33,6 @@ class FunctionParser
      */
     LinkedList compileString(String value) throws InvalidVariableException
     {
-        log.debug("parsing string: " + value);
         StringReader reader = new StringReader(value);
         LinkedList result = new LinkedList();
         StringBuffer buffer = new StringBuffer();
@@ -121,7 +120,6 @@ class FunctionParser
                 }
                 else if(current[0] == '(' && previous != ' ')
                 {
-                    log.debug("making function from: " + buffer.toString());
                     function = CompoundVariable.getNamedFunction(buffer.toString());
                     buffer.setLength(0);
                     if(function instanceof Function)
@@ -191,7 +189,6 @@ class FunctionParser
                 }
                 else if(current[0] == ',' && functionRecursion == 0)
                 {
-                    log.debug("Making new compoundvariable with a param of " + buffer.toString());
                     CompoundVariable param = new CompoundVariable();
                     param.setParameters(buffer.toString());
                     buffer.setLength(0);
@@ -199,12 +196,10 @@ class FunctionParser
                 }
                 else if(current[0] == ')' && functionRecursion == 0 && parenRecursion == 0)
                 {
-                    log.debug("Making new compoundvariable with a param of " + buffer.toString());
                     CompoundVariable param = new CompoundVariable();
                     param.setParameters(buffer.toString());
                     buffer.setLength(0);
                     result.add(param);
-                    log.debug("parsed params = " + result);
                     return result;
                 }
                 else if(current[0] == '{' && previous == '$')
