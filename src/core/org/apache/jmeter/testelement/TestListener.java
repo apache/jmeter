@@ -21,13 +21,26 @@ package org.apache.jmeter.testelement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 
 /**
- * @author unascribed
- * @version $Revision$
+ * @version $Revision$ on $Date$
  */
 public interface TestListener
 {
+	/**
+	 * Called just before the start of the test
+	 * Note that not all the test variables will have been set up
+	 * at this point.
+	 * 
+	 * @see org.apache.jmeter.engine.StandardJMeterEngine#run()
+	 *
+	 */
     public void testStarted();
 
+	/**
+	 * Called once for all threads after the end of a test
+	 * 
+	 * @see org.apache.jmeter.engine.StandardJMeterEngine#stopTest()
+	 *
+	 */
     public void testEnded();
 
     public void testStarted(String host);
