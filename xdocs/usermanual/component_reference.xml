@@ -1638,6 +1638,7 @@ Clever users will even determine that this modifier can be used to grab values t
         <property name="Path Extension" required="No">Some web apps rewrite URLs by appending
         a semi-colon plus the session id parameter.  Check this box if that is so.</property>
         <property name="Do not use equals in path extension" required="No">Some web apps rewrite URLs without using an &quot;=&quot; sign between the parameter name and value (such as Intershop Enfinity).</property>
+        <property name="Do not use questionmark in path extension" required="No">Prevents the query string to end up in the path extension (such as Intershop Enfinity).</property>
 </properties>
 </component>
 

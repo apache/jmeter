@@ -37,6 +37,7 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui
     JLabeledTextField argumentName;
     JCheckBox pathExt;
     JCheckBox pathExtNoEquals;
+    JCheckBox pathExtNoQuestionmark;
 
     public String getLabelResource()
     {
@@ -72,6 +73,11 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui
                 JMeterUtils.getResString("path_extension_dont_use_equals"));
         mainPanel.add(pathExtNoEquals);
 
+        pathExtNoQuestionmark =
+            new JCheckBox(
+                JMeterUtils.getResString("path_extension_dont_use_questionmark"));
+        mainPanel.add(pathExtNoQuestionmark);
+
         add(mainPanel, BorderLayout.CENTER);
     }
 
@@ -98,6 +104,8 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui
             pathExt.isSelected());
         ((URLRewritingModifier) modifier).setPathExtensionNoEquals(
             pathExtNoEquals.isSelected());
+        ((URLRewritingModifier) modifier).setPathExtensionNoQuestionmark(
+                pathExtNoQuestionmark.isSelected());
     }
 
     public void configure(TestElement el)
@@ -106,6 +114,8 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui
         pathExt.setSelected(((URLRewritingModifier) el).isPathExtension());
         pathExtNoEquals.setSelected(
             ((URLRewritingModifier) el).isPathExtensionNoEquals());
+        pathExtNoQuestionmark.setSelected(
+                ((URLRewritingModifier) el).isPathExtensionNoQuestionmark());
 
         super.configure(el);
     }
