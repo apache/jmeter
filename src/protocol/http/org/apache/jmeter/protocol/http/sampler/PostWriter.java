@@ -39,7 +39,7 @@ public class PostWriter
 {
     protected final static String BOUNDARY =
         "---------------------------7d159c1302d0y0";
-    protected final static byte[] CRLF = { 0x0d, 0x0A };//TODO: make private?
+    private final static byte[] CRLF = { 0x0d, 0x0A };
     //protected static int fudge = -20;
     protected static final String encoding = "iso-8859-1";
 
