@@ -1,33 +1,42 @@
-<?xml version="1.0"?>
-
-<TestPlan>
-<threadgroups>
-<ThreadGroup name="Thread Group" numThreads="1" rampUp="0">
-<controllers>
-<LoopController type="org.apache.jmeter.control.LoopController" name="Loop Controller" iterations="1">
-<configElements>
-<ProxyControl type="org.apache.jmeter.protocol.http.proxy.ProxyControl">
-<property name="port">8080</property>
-<property name="name">HTTP Proxy Server</property>
-<property name="includes"><Arguments>
-</Arguments>
-</property>
-<property name="excludes"><Arguments>
-</Arguments>
-</property>
-</ProxyControl>
-</configElements>
-<controllers>
-</controllers>
-</LoopController>
-</controllers>
-<timers>
-</timers>
-<listeners>
-</listeners>
-</ThreadGroup>
-
-</threadgroups>
-<configElements>
-</configElements>
-</TestPlan>
+<?xml version="1.0" encoding="UTF-8"?>
+<node>
+<testelement class="org.apache.jmeter.testelement.TestPlan">
+<testelement class="org.apache.jmeter.config.Arguments" name="TestPlan.user_defined_variables">
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.config.Arguments</property>
+<collection class="java.util.ArrayList" name="Arguments.arguments"/>
+<property xml:space="preserve" name="TestElement.name">Argument List</property>
+</testelement>
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.control.gui.TestPlanGui</property>
+<collection class="java.util.LinkedList" name="TestPlan.thread_groups"/>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.testelement.TestPlan</property>
+<property xml:space="preserve" name="TestElement.name">Test Plan</property>
+<property xml:space="preserve" name="TestPlan.functional_mode">false</property>
+</testelement>
+<node>
+<testelement class="org.apache.jmeter.threads.ThreadGroup">
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.threads.gui.ThreadGroupGui</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.threads.ThreadGroup</property>
+<testelement class="org.apache.jmeter.control.LoopController" name="ThreadGroup.main_controller">
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</property>
+<property xml:space="preserve" name="LoopController.loops">1</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.control.LoopController</property>
+<property xml:space="preserve" name="TestElement.name">Loop Controller</property>
+<property xml:space="preserve" name="LoopController.continue_forever">false</property>
+</testelement>
+<property xml:space="preserve" name="TestElement.name">Thread Group</property>
+<property xml:space="preserve" name="ThreadGroup.num_threads">1</property>
+<property xml:space="preserve" name="ThreadGroup.ramp_time">0</property>
+</testelement>
+<node>
+<testelement class="org.apache.jmeter.protocol.http.proxy.ProxyControl">
+<property xml:space="preserve" name="TestElement.gui_class">org.apache.jmeter.protocol.http.proxy.gui.ProxyControlGui</property>
+<property xml:space="preserve" name="TestElement.test_class">org.apache.jmeter.protocol.http.proxy.ProxyControl</property>
+<property xml:space="preserve" name="TestElement.name">HTTP Proxy Server</property>
+<collection class="java.util.LinkedList" name="ProxyControlGui.include_list"/>
+<collection class="java.util.LinkedList" name="ProxyControlGui.exclude_list"/>
+<property xml:space="preserve" name="ProxyControlGui.port">8080</property>
+</testelement>
+</node>
+</node>
+</node>

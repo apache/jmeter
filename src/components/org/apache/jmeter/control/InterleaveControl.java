@@ -372,10 +372,13 @@ public class InterleaveControl extends GenericController implements Serializable
 
 		private TestElement makeSampler(String name)
 		{
-			org.apache.jmeter.protocol.http.sampler.HTTPSampler s = new
-					org.apache.jmeter.protocol.http.sampler.HTTPSampler();
+		  	TestSampler s= new TestSampler();
 			s.setName(name);
 			return s;
+		}
+		public class TestSampler extends AbstractSampler {
+		  public void addCustomTestElement(TestElement t) { }
+		  public org.apache.jmeter.samplers.SampleResult sample(org.apache.jmeter.samplers.Entry e) { return null; }
 		}
 	}
 }

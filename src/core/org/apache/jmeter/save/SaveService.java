@@ -1,10 +1,6 @@
 package org.apache.jmeter.save;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -18,7 +14,6 @@ import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
 import org.apache.jmeter.assertions.AssertionResult;
-import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.log.Hierarchy;
@@ -306,18 +301,7 @@ public class SaveService
 			ClassNotFoundException, IllegalAccessException,InstantiationException
 	{
 		TestElement element = null;
-		try
-		{
-			element = (TestElement)Class.forName((String)config.getAttribute("class")).newInstance();
-		}
-		catch(InstantiationException e)
-		{
-			//Assertion is now an interface, replaced with ResponseAssertion
-			if(config.getAttribute("class").equals("org.apache.jmeter.assertions.Assertion"))
-			{
-				element = new ResponseAssertion();
-			}
-		}
+		element = (TestElement)Class.forName((String)config.getAttribute("class")).newInstance();
 		Configuration[] children = config.getChildren();
 		for (int i = 0; i < children.length; i++)
 		{
@@ -402,23 +386,60 @@ public class SaveService
 	
 	public static class Test extends TestCase
 	{
-		private File assertionFile;
+		private static final String[] FILES= new String[]
+		{
+		  "AssertionTestPlan.jmx",
+		  "AuthManagerTestPlan.jmx",
+		  "HeaderManagerTestPlan.jmx",
+		  "InterleaveTestPlan2.jmx",
+		  "InterleaveTestPlan.jmx",
+		  "LoopTestPlan.jmx",
+		  "Modification Manager.jmx",
+		  "OnceOnlyTestPlan.jmx",
+		  "proxy.jmx",
+		  "ProxyServerTestPlan.jmx",
+		  "SimpleTestPlan.jmx",
+		};
+
 		public Test(String name)
 		{
 			super(name);
 		}
 		
 		public void setUp() {
-			assertionFile =
-				new File(System.getProperty("user.dir") + "/testfiles", "assertion.jmx");
-			
 		}
-		
-		public void testLoadAssertion() throws Exception
-		{
-			Configuration config = new DefaultConfigurationBuilder().buildFromFile(assertionFile);
-			ResponseAssertion testEl = (ResponseAssertion)createTestElement(config.getChild("testelement"));
-			assertEquals("save this string \\d+",testEl.getTestStrings().get(0));
+
+		public void testLoadAndSave() throws java.io.IOException {
+		  byte[] original= new byte[1000000];
+
+		  for (int i=0; i<FILES.length; i++) {
+		    InputStream in= new FileInputStream(new File("testfiles/"+FILES[i]));
+		    int len= in.read(original);
+		    in.close();
+
+		    in= new ByteArrayInputStream(original, 0, len);
+		    HashTree tree= loadSubTree(in);
+		    in.close();
+
+		    ByteArrayOutputStream out= new ByteArrayOutputStream(1000000);
+		    saveSubTree(tree, out);
+		    out.close();
+
+		    // We only check the length of the result. Comparing the
+		    // actual result (out.toByteArray==original) will usually
+		    // fail, because the order of the properties within each
+		    // test element may change. Comparing the lengths should be
+		    // enough to detect most problem cases...
+		    if (len!=out.size()) {
+		      fail("Loading file bin/testfiles/"+FILES[i]+" and "+
+			  "saving it back changes its contents.");
+		    }
+
+		    // Note this test will fail if a property is added or
+		    // removed to any of the components used in the test
+		    // files. The way to solve this is to appropriately change
+		    // the test file.
+		  }
 		}
 	}
 }

@@ -66,17 +66,12 @@ import java.util.Set;
 import javax.swing.JFileChooser;
 import junit.framework.TestCase;
 
-import org.apache.jmeter.control.GenericController;
-import org.apache.jmeter.control.gui.LogicControllerGui;
 import org.apache.jmeter.control.gui.WorkBenchGui;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.util.FileDialoger;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.save.SaveService;
-import org.apache.jmeter.save.old.JMeterNameSpaceHandler;
-import org.apache.jmeter.save.old.xml.XmlHandler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Hierarchy;
@@ -144,22 +139,9 @@ public class Load implements Command
 				isTestPlan = insertLoadedTree(e.getID(), tree);
 			}
 		}
-		catch(IllegalUserActionException ex)
+		catch(Exception ex)
 		{
 			JMeterUtils.reportErrorToUser(ex.getMessage());
-		}
-		catch(Throwable ex)
-		{
-			try
-			{
-				isTestPlan = legacyLoad(f);
-			}
-			catch(Throwable err)
-			{
-				//log.error("",ex);
-				log.error("",err);
-				JMeterUtils.reportErrorToUser("Couldn't load JMX file.  May have been corrupted");
-			}
 		}
 		finally
 		{
@@ -199,7 +181,6 @@ public class Load implements Command
 	private JMeterGUIComponent generateGUIComponent(TestElement item) throws Exception
 	{
 			JMeterGUIComponent gui = null;
-			fixTestElement(item);
 			try {
 				gui = (JMeterGUIComponent)Class.forName((String)item.getProperty(TestElement.GUI_CLASS)).newInstance();
 			} catch(Exception e) {
@@ -210,74 +191,7 @@ public class Load implements Command
 			return gui;
 	}
 	
-	private boolean legacyLoad(File f) throws Exception
-	{
-		FileInputStream reader = new FileInputStream(f);
-				XmlHandler handler = new XmlHandler(new JMeterNameSpaceHandler());
-				XMLReader parser = JMeterUtils.getXMLParser();
-				parser.setContentHandler(handler);
-				parser.setErrorHandler(handler);
-				parser.parse(new InputSource(reader));
-				ListedHashTree tree = handler.getDataTree();
-				updateTree(tree);
-				return insertLoadedTree(443,tree);
-	}
 	
-	private void fixTestElement(TestElement item)
-	{
-		if(item.getProperty(TestElement.GUI_CLASS).equals(
-				"org.apache.jmeter.protocol.http.config.gui.UrlConfigGui"))
-		{
-			item.setProperty(TestElement.GUI_CLASS,
-					"org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui");
-		}
-	}
-
-	
-	/**
-	 * For loading a 1.6 version test tree
-	 * */
-	private void updateTree(HashTree tree) {
-			List items = new LinkedList(tree.list());
-			Iterator iter = items.iterator();
-
-			while (iter.hasNext()) {
-				Object item = iter.next();
-				if (item instanceof HTTPSampler) {
-					List subItems = new LinkedList(tree.list(item));
-					boolean replaced = false;
-					Iterator iter2 = subItems.iterator();
-					while (iter2.hasNext()) {
-						TestElement config = (TestElement)iter2.next();
-						if (config.getPropertyAsString(TestElement.TEST_CLASS).equals(
-								"org.apache.jmeter.protocol.http.config.UrlConfig")) {
-							replaced = true;
-							HTTPSampler newControl = new HTTPSampler();
-							newControl.setName((String)((TestElement)item).getProperty(TestElement.NAME));
-							newControl.addTestElement( config);	
-							newControl.setProperty(TestElement.GUI_CLASS,
-									"org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui");
-							tree.getTree(item).replace(config, newControl);
-						}
-					}
-
-					if (replaced) {
-						((TestElement)item).setProperty(TestElement.GUI_CLASS,
-								"org.apache.jmeter.protocol.http.config.gui.UrlConfigGui");
-						((TestElement)item).setProperty(TestElement.NAME,"HTTP Request Defaults");
-						GenericController newControl = new GenericController();
-						newControl.setProperty(TestElement.GUI_CLASS,
-								"org.apache.jmeter.control.gui.LogicControllerGui");
-						newControl.setName("Simple Controller");
-						tree.replace(item, newControl);
-						tree.add(newControl, item);
-					}
-				} else {
-					updateTree(tree.getTree(item));
-				}
-			}
-		}
-		
 	/************************************************************
 	 *  !ToDo (Class description)
 	 *
@@ -333,22 +247,14 @@ public class Load implements Command
 		 *
 		 *@exception  Exception  !ToDo (Exception description)
 		 ***********************************************************/
-		public void testUpdateTree() throws Exception {
-			HashTree tree = getTree(testFile2);
-			loader.updateTree(tree);
-			assertTrue(tree.getArray(tree.getArray()[0])[0] instanceof GenericController);
-			loader.convertTree(tree);
-			assertEquals(new LogicControllerGui().getStaticLabel(),
-					((JMeterGUIComponent)tree.getArray(tree.getArray()[0])[0]).getStaticLabel());
-		}
 
 		public void testFile3() throws Exception {
 			HashTree tree = getTree(testFile3);
 			//loader.updateTree(tree);
 			log.debug("tree contents: "+tree.list());
-			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.threads.ThreadGroup);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.testelement.TestPlan);
 			loader.convertTree(tree);
-			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.threads.gui.ThreadGroupGui);
+			assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.control.gui.TestPlanGui);
 		}
 		
 		public void testFile4() throws Exception {
@@ -425,12 +331,7 @@ public class Load implements Command
 
 		private HashTree getTree(File f) throws Exception {
 				FileInputStream reader = new FileInputStream(f);
-				XmlHandler handler = new XmlHandler(new JMeterNameSpaceHandler());
-				XMLReader parser = JMeterUtils.getXMLParser();
-				parser.setContentHandler(handler);
-				parser.setErrorHandler(handler);
-				parser.parse(new InputSource(reader));
-				HashTree tree = handler.getDataTree();
+				HashTree tree = SaveService.loadSubTree(reader);
 				return tree;
 		}
 	}
