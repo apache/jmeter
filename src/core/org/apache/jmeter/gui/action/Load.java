@@ -56,6 +56,7 @@ package org.apache.jmeter.gui.action;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -130,6 +131,7 @@ public class Load implements Command
 		{
 			return;
 		}
+		boolean isTestPlan = false;
 		InputStream reader = null;
 		File f = null;
 		try
@@ -139,7 +141,7 @@ public class Load implements Command
 			{
 				reader = new FileInputStream(f);
 				ListedHashTree tree = SaveService.loadSubTree(reader);
-				insertLoadedTree(e.getID(), tree);
+				isTestPlan = insertLoadedTree(e.getID(), tree);
 			}
 		}
 		catch(IllegalUserActionException ex)
@@ -150,7 +152,7 @@ public class Load implements Command
 		{
 			try
 			{
-				legacyLoad(f);
+				isTestPlan = legacyLoad(f);
 			}
 			catch(Throwable err)
 			{
@@ -163,14 +165,23 @@ public class Load implements Command
 		{
 			GuiPackage.getInstance().getMainFrame().repaint();
 		}
+		if(isTestPlan && f != null)
+		{
+			((Save)ActionRouter.getInstance().getAction("save",
+					"org.apache.jmeter.gui.action.Save")).setTestPlanFile(f.getAbsolutePath());
+		}
 	}
 
-	public void insertLoadedTree(int id, ListedHashTree tree) throws Exception, IllegalUserActionException {
+	/**
+	 * Returns a boolean indicating whether the loaded tree was a full test plan
+	 * */
+	public boolean insertLoadedTree(int id, ListedHashTree tree) throws Exception, IllegalUserActionException {
 		convertTree(tree);
-		GuiPackage.getInstance().addSubTree(tree);
+		boolean isTestPlan = GuiPackage.getInstance().addSubTree(tree);
 		tree = GuiPackage.getInstance().getCurrentSubTree();				
 		ActionRouter.getInstance().actionPerformed(new ActionEvent(
 			tree.get(tree.getArray()[tree.size()-1]),id,CheckDirty.SUB_TREE_LOADED));
+		return isTestPlan;
 	}
 
 	private void convertTree(ListedHashTree tree) throws Exception
@@ -199,7 +210,7 @@ public class Load implements Command
 			return gui;
 	}
 	
-	private void legacyLoad(File f) throws Exception
+	private boolean legacyLoad(File f) throws Exception
 	{
 		FileInputStream reader = new FileInputStream(f);
 				XmlHandler handler = new XmlHandler(new JMeterNameSpaceHandler());
@@ -209,7 +220,7 @@ public class Load implements Command
 				parser.parse(new InputSource(reader));
 				ListedHashTree tree = handler.getDataTree();
 				updateTree(tree);
-				insertLoadedTree(443,tree);
+				return insertLoadedTree(443,tree);
 	}
 	
 	private void fixTestElement(TestElement item)
