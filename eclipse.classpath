@@ -8,6 +8,7 @@
         excluding="org/apache/jmeter/reporters/MailerModel.java|org/apache/jmeter/visualizers/MailerVisualizer.java|org/apache/jmeter/reporters/MailerResultCollector.java"
         kind="src" output="build/components" path="src/components"/>
     <classpathentry kind="src" output="build/functions" path="src/functions"/>
+    <classpathentry kind="src" output="build/htmlparser" path="src/htmlparser"/>
     <classpathentry
         excluding="xorg/apache/jmeter/protocol/http/sampler/WebServiceSampler.java|xorg/apache/jmeter/protocol/http/control/gui/WebServiceSamplerGui.java"
         kind="src" output="build/protocol/http" path="src/protocol/http"/>
@@ -28,5 +29,5 @@
     <classpathentry kind="lib" path="lib/commons-collections.jar"/>
     <classpathentry kind="lib" path="lib/soap.jar"/>
     <classpathentry kind="lib" path="lib/jdom-b8.jar"/>
-    <classpathentry kind="output" path="build/htmlparser"/>
+    <classpathentry kind="output" path="build"/>
 </classpath>
