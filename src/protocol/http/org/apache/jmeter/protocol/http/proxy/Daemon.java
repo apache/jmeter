@@ -1,162 +1,195 @@
 package org.apache.jmeter.protocol.http.proxy;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
+import java.io.InterruptedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
-//
-// Class:     Daemon
-// Abstract:  Web daemon thread. creates main socket on port 8080
-//            and listens on it forever. For each client request,
-//            creates proxy thread to handle the request.
-//
-/************************************************************
- *  Description of the Class
+/**
+ * Web daemon thread.  Creates main socket on port 8080 and listens on it
+ * forever.  For each client request, creates a proxy thread to handle the
+ * request.
  *
- *@author     default
- *@created    June 29, 2001
- ***********************************************************/
+ * @author     default
+ * @created    June 29, 2001
+ */
 public class Daemon extends Thread
 {
-    transient private static Logger log =
+    /** Logging */
+    private static transient Logger log =
         Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
-    //
-    // Member variables
-    //
-    static ServerSocket MainSocket = null;
-    //	static Cache cache = null;
-    static Config config;
-    static String adminPath;
-    final static int defaultDaemonPort = 8080;
-    final static int maxDaemonPort = 65536;
-    private int daemonPort;
-    private boolean running;
-    ProxyControl target;
-    private Socket ClientSocket;
-    static private Class proxyClass = Proxy.class;
 
+    /** The default port to listen on. */
+    private static final int DEFAULT_DAEMON_PORT = 8080;
+
+    /** The maximum allowed port to listen on. */
+    private static final int MAX_DAEMON_PORT = 65535;
+
+    /**
+     * The time (in milliseconds) to wait when accepting a client connection.
+     * The accept will be retried until the Daemon is told to stop.  So this
+     * interval is the longest time that the Daemon will have to wait after
+     * being told to stop.
+     */
+    private static final int ACCEPT_TIMEOUT = 1000;
+
+    /** The port to listen on. */
+    private int daemonPort;
+
+    /** True if the Daemon is currently running. */
+    private boolean running;
+
+    /** The target which will receive the generated JMeter test components. */
+    private ProxyControl target;
+
+    /**
+     * The proxy class which will be used to handle individual requests.  This
+     * class must be the {@link Proxy} class or a subclass.
+     */
+    private Class proxyClass = Proxy.class;
+
+
+    /**
+     * Default constructor.
+     */
     public Daemon()
     {
+        super("HTTP Proxy Daemon");
     }
 
-    public Daemon(int port, ProxyControl target) throws UnknownHostException
+    /**
+     * Create a new Daemon with the specified port and target.
+     *
+     * @param port   the port to listen on.
+     * @param target the target which will receive the generated JMeter test
+     *               components.
+     */
+    public Daemon(int port, ProxyControl target)
     {
+        this();
         this.target = target;
         configureProxy(port);
     }
 
+    /**
+     * Create a new Daemon with the specified port and target, using the
+     * specified class to handle individual requests.
+     *
+     * @param port   the port to listen on.
+     * @param target the target which will receive the generated JMeter test
+     *               components.
+     * @param proxyClass the proxy class to use to handle individual requests.
+     *                   This class must be the {@link Proxy} class or a
+     *                   subclass.
+     */
     public Daemon(int port, ProxyControl target, Class proxyClass)
-        throws UnknownHostException
     {
         this(port, target);
-        Daemon.proxyClass = proxyClass;
+        this.proxyClass = proxyClass;
     }
 
-    /************************************************************
-     *  Description of the Method
-     *
-     *@param  daemonPort  Description of Parameter
-     ***********************************************************/
-    public void configureProxy(int daemonPort) throws UnknownHostException
+    /**
+     * Configure the Daemon to listen on the specified port.
+     * @param daemonPort the port to listen on
+     */
+    public void configureProxy(int daemonPort)
     {
         this.daemonPort = daemonPort;
-        // Create the Cache Manager and Configuration objects
-        log.info("Initializing...");
-        log.info("Creating Config Object...");
-        config = new Config();
-        config.setIsAppletContext(false);
-        config.setLocalHost(InetAddress.getLocalHost().getHostName());
-        String tmp = InetAddress.getLocalHost().toString();
-        config.setLocalIP(tmp.substring(tmp.indexOf('/') + 1));
-        config.setProxyMachineNameAndPort(
-            InetAddress.getLocalHost().getHostName() + ":" + daemonPort);
-        config.setJmxScriptDir("proxy_script");
-        File adminDir = new File("Applet");
-        config.setAdminPath(adminDir.getAbsolutePath());
-        log.info("Proxy: OK");
-        //		log.info("Creating Cache Manager...");
-        //		cache = new Cache(config);
         log.info("Proxy: OK");
     }
 
-    //
-    // Member methods
-    //
-
-    // Application starts here
-    /************************************************************
-     *  Description of the Method
+    /**
+     * Main method which will start the Proxy daemon on the specified port (or
+     * the default port if no port is specified).
      *
-     *@param  args  Description of Parameter
-     ***********************************************************/
+     * @param args the command-line arguments
+     */
     public static void main(String args[])
     {
-        int daemonPort;
-        // Parse command line
-        switch (args.length)
+        if (args.length > 1)
         {
-            case 0 :
-                daemonPort = defaultDaemonPort;
-                break;
-            case 1 :
-                try
-                {
-                    daemonPort = Integer.parseInt(args[0]);
-                }
-                catch (NumberFormatException e)
-                {
-                    log.error("Invalid daemon port", e);
-                    return;
-                }
-                if (daemonPort > maxDaemonPort)
-                {
-                    log.error("Invalid daemon port");
-                    return;
-                }
-                break;
-            default :
-                log.info("Usage: Proxy [daemon port]");
+            System.err.println ("Usage: Daemon [daemon port]");
+            log.info("Usage: Daemon [daemon port]");
+            return;
+        }
+
+        int daemonPort = DEFAULT_DAEMON_PORT;
+        if (args.length > 0)
+        {
+            try
+            {
+                daemonPort = Integer.parseInt(args[0]);
+            }
+            catch (NumberFormatException e)
+            {
+                System.err.println ("Invalid daemon port: " + e);
+                log.error("Invalid daemon port", e);
                 return;
+            }
+            if (daemonPort <= 0 || daemonPort > MAX_DAEMON_PORT)
+            {
+                System.err.println ("Invalid daemon port");
+                log.error("Invalid daemon port");
+                return;
+            }
         }
+
         Daemon demon = new Daemon();
-        try
-        {
-            demon.configureProxy(daemonPort);
-        }
-        catch (UnknownHostException e)
-        {
-            log.fatalError("Unknown host", e);
-            System.exit(-1);
-        }
+        demon.configureProxy(daemonPort);
         demon.start();
     }
 
-    /************************************************************
-     *  Main processing method for the Daemon object
-     ***********************************************************/
+    /**
+     * Listen on the daemon port and handle incoming requests.  This method will
+     * not exit until {@link #stopServer()} is called or an error occurs.
+     */
     public void run()
     {
         running = true;
+        ServerSocket mainSocket = null;
+
         try
         {
             log.info("Creating Daemon Socket...");
-            MainSocket = new ServerSocket(daemonPort);
+            mainSocket = new ServerSocket(daemonPort);
+            mainSocket.setSoTimeout(ACCEPT_TIMEOUT);
             log.info(" port " + daemonPort + " OK");
             log.info("Proxy up and running!");
+
             while (running)
             {
-                // Listen on main socket
-                Socket ClientSocket = MainSocket.accept();
-                // Pass request to new proxy thread
-                Proxy thd = (Proxy) proxyClass.newInstance();
-                thd.configure(ClientSocket, target);
-                thd.start();
+                try
+                {
+                    // Listen on main socket
+                    Socket clientSocket = mainSocket.accept();
+                    if (running)
+                    {
+                        // Pass request to new proxy thread
+                        Proxy thd = (Proxy) proxyClass.newInstance();
+                        thd.configure(clientSocket, target);
+                        thd.start();
+                    }
+                    else
+                    {
+                        // The socket was accepted after we were told to stop.
+                        try
+                        {
+                            clientSocket.close();
+                        }
+                        catch (IOException e)
+                        {
+                            // Ignore
+                        }
+                    }
+                }
+                catch (InterruptedIOException e)
+                {
+                    // Timeout occurred.  Ignore, and keep looping until we're
+                    // told to stop running.
+                }
             }
             log.info("Proxy Server stopped");
         }
@@ -168,37 +201,21 @@ public class Daemon extends Thread
         {
             try
             {
-                MainSocket.close();
+                mainSocket.close();
             }
             catch (Exception exc)
             {
             }
         }
     }
+
+    /**
+     * Stop the proxy daemon.  The daemon may not stop immediately.
+     *
+     * @see #ACCEPT_TIMEOUT
+     */
     public void stopServer()
     {
-        this.running = false;
-        Socket endIt = null;
-        try
-        {
-            endIt =
-                new Socket(
-                    InetAddress.getLocalHost().getHostName(),
-                    daemonPort);
-            endIt.getOutputStream().write(5);
-        }
-        catch (IOException e)
-        {
-        }
-        finally
-        {
-            try
-            {
-                endIt.close();
-            }
-            catch (Exception e)
-            {
-            }
-        }
+        running = false;
     }
 }
