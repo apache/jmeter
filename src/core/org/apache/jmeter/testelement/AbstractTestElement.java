@@ -251,12 +251,10 @@ public abstract class AbstractTestElement implements TestElement, Serializable
             || (prop instanceof StringProperty
                 && prop.getStringValue().equals("")))
         {
-            log.debug("setting property " + property);
             propMap.put(property.getName(), property);
         }
         else
         {
-            log.debug("merging in property: " + property.getClass());
             prop.mergeIn(property);
         }
     }

@@ -317,7 +317,6 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         {
             ConfigTestElement config = (ConfigTestElement)iter.next();
             sam.addTestElement(config);
-            log.info("adding: " + config);
         }
     }
 }
