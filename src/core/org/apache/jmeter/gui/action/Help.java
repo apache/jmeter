@@ -34,6 +34,7 @@ public class Help implements Command
 	private static JDialog helpWindow;
 	private static JTextPane helpDoc;
 	private static JScrollPane scroller;
+	private static String currentPage;
 	static {
 		commands.add(HELP);
 		helpDoc = new JTextPane();
@@ -42,6 +43,7 @@ public class Help implements Command
 		try
 		{
 			helpDoc.setPage(helpPage);
+			currentPage = helpPage;
 		}
 		catch (IOException err)
 		{
@@ -68,14 +70,39 @@ public class Help implements Command
 			helpWindow.getContentPane().setLayout(new GridLayout(1, 1));
 			ComponentUtil.centerComponentInWindow(helpWindow, 60);
 		}
-		helpDoc.scrollToReference(GuiPackage
+		if(e.getSource() instanceof String[])
+		{
+			String[] source = (String[])e.getSource();
+			resetPage(source[0]);
+			helpDoc.scrollToReference(source[1]);
+		}
+		else
+		{
+			resetPage(helpPage);
+			helpDoc.scrollToReference(GuiPackage
 				.getInstance()
 				.getTreeListener()
 				.getCurrentNode()
 				.getStaticLabel().replace(' ','_'));
+		}		
 		helpWindow.getContentPane().removeAll();
 		helpWindow.getContentPane().add(scroller);
 		helpWindow.show();
+	}
+	private void resetPage(String source)
+	{
+		if(!currentPage.equals(source))
+		{
+			try
+			{
+				helpDoc.setPage(source);
+				currentPage = source;
+			}
+			catch (IOException err)
+			{
+				log.error("Couldn't load page: "+source,err);
+			}				
+		}
 	}
 	/**
 	 * @see org.apache.jmeter.gui.action.Command#getActionNames()
