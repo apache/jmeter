@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -123,6 +123,9 @@ public class HTTPSampler extends AbstractSampler
     public final static String NORMAL_FORM = "normal_form";
     public final static String MULTIPART_FORM = "multipart_form";
     public final static String ENCODED_PATH = "HTTPSampler.encoded_path";
+    
+    /** A number to indicate that the port has not been set.  **/
+    public static final int UNSPECIFIED_PORT = 0;
     private static final int MAX_REDIRECTS = 10;
     protected static String encoding = "iso-8859-1";
     private static final PostWriter postWriter = new PostWriter();
@@ -279,7 +282,7 @@ public class HTTPSampler extends AbstractSampler
     public int getPort()
     {
         int port = getPropertyAsInt(PORT);
-        if (port == 0)
+        if (port == UNSPECIFIED_PORT)
         {
             if ("https".equalsIgnoreCase(getProtocol()))
             {
@@ -465,7 +468,7 @@ public class HTTPSampler extends AbstractSampler
         {
             pathAndQuery = "/" + pathAndQuery;
         }
-        if (getPort() == 0)
+        if (getPort() == UNSPECIFIED_PORT)
         {
             return new URL(getProtocol(), getDomain(), pathAndQuery);
         }
@@ -891,8 +894,8 @@ public class HTTPSampler extends AbstractSampler
      *
      *@param e           <code>Entry</code> to be sampled
      *@param redirects   the level of redirection we're processing (0 means
-     *			original request) -- just used to prevent
-     *			an infinite loop.
+     *                  original request) -- just used to prevent
+     *                  an infinite loop.
      *@return            results of the sampling
      ***************************************/
     private SampleResult sample(int redirects)
@@ -976,7 +979,7 @@ public class HTTPSampler extends AbstractSampler
         catch (IOException ex)
         {
             log.warn(ex.getMessage(), ex);
-            res.setDataType(res.TEXT);
+            res.setDataType(SampleResult.TEXT);
             res.setResponseData(ex.toString().getBytes());
             res.setResponseCode(NON_HTTP_RESPONSE_CODE);
             res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
@@ -1003,7 +1006,7 @@ public class HTTPSampler extends AbstractSampler
     }
     private long bundleResponseInResult(long time, SampleResult res, HttpURLConnection conn) throws IOException, FileNotFoundException
     {
-        res.setDataType(res.TEXT);
+        res.setDataType(SampleResult.TEXT);
         byte[] ret = readResponse(conn);
         byte[] head = getResponseHeaders(conn, res);
         time = System.currentTimeMillis() - time;
