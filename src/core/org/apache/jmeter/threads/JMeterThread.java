@@ -213,6 +213,21 @@ public class JMeterThread implements Runnable, java.io.Serializable
         this.threadName = threadName;
     }
 
+	/*
+	 * See below for reason for this change.
+	 * Just in case this causes problems, allow the change to be backed out
+	*/
+	private static final boolean startEarlier =
+		org.apache.jmeter.util.JMeterUtils.getPropDefault("jmeterthread.startearlier",true);
+	
+	static{
+		if (startEarlier){
+			log.warn("jmeterthread.startearlier=true (see jmeter.properties)");
+		} else {
+			log.info("jmeterthread.startearlier=false (see jmeter.properties)");			
+		}
+	}
+	
     public void run()
     {
         try
@@ -235,9 +250,15 @@ public class JMeterThread implements Runnable, java.io.Serializable
 			rampUpDelay();
             
             log.info("Thread " + Thread.currentThread().getName() + " started");
+			/*
+			 *  Setting SamplingStarted before the contollers are initialised
+			 *  allows them to access the running values of functions and variables
+			 *  (however it does not seem to help with the listeners)
+			 */
+            if (startEarlier) threadContext.setSamplingStarted(true);
             controller.initialize();
             controller.addIterationListener(new IterationListener());
-            threadContext.setSamplingStarted(true);
+			if (!startEarlier) threadContext.setSamplingStarted(true);
             threadStarted();
             while (running)
             {
