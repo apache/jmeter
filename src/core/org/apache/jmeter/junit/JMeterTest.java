@@ -149,13 +149,22 @@ public class JMeterTest extends TestCase
 		    {
 			try
 			{
+			    // Try with a parameter-less constructor first
 			    objects.add(c.newInstance());
 			}
 			catch (InstantiationException e)
 			{
-			    objects.add(c.getConstructor(
-				  new Class[] {Object.class}).newInstance(
+			    try
+			    {
+			        // Events often have this constructor
+			        objects.add(c.getConstructor(
+				      new Class[] {Object.class}).newInstance(
 				      new Object[] {this} ));
+			    }
+			    catch (NoSuchMethodException f)
+			    {
+			        // no luck. Ignore this class
+			    }
 			}
 		    }
 		    catch (IllegalAccessException e)
