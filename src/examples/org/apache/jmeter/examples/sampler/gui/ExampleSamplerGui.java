@@ -21,7 +21,7 @@
  * Example Sampler GUI (non-beans version)
  */
  
-package org.apache.jmeter.samplers.gui;
+package org.apache.jmeter.examples.sampler.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -30,7 +30,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.apache.jmeter.samplers.ExampleSampler;
+import org.apache.jmeter.examples.sampler.ExampleSampler;
+import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
