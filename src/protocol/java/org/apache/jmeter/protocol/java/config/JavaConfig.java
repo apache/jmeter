@@ -60,8 +60,6 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.java.sampler.JavaSampler;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * The <code>JavaConfig</code> class contains the configuration data
@@ -75,9 +73,7 @@ import org.apache.log.Logger;
  */
 public class JavaConfig extends ConfigTestElement implements Serializable
 {
-    /** Logging */
-    private static transient Logger log = LoggingManager.getLoggerForClass();
-
+    
     /**
      *  Constructor for the JavaConfig object
      */
