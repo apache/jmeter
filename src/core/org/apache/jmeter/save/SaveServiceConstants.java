@@ -64,7 +64,6 @@ package org.apache.jmeter.save;
  *  
  *
  *@author     <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell</a>
- *@created    $Date$
  *@version    $Revision$ $Date$
  ***********************************************************/
 
