@@ -38,16 +38,6 @@ public class JMeterTest extends TestCase
         super(name);
     }
 
-    public void testGUIEnv() throws Exception // Try to find why Gump tests fail
-    {
-    	//java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment(GraphicsEnvironment.java:62)
-		String nm = (String) java.security.AccessController.doPrivileged
-			   (new sun.security.action.GetPropertyAction
-				("java.awt.graphicsenv", null));
-        System.out.println("\njava.awt.graphicsenv="+nm);
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		System.out.println("ge="+ge);
-    }
     public void testGUIComponents() throws Exception
     {
         Iterator iter = getObjects(JMeterGUIComponent.class).iterator();
@@ -202,6 +192,10 @@ public class JMeterTest extends TestCase
                 // We won't test serialization of restricted-access
                 // classes.
             }
+			catch (java.awt.HeadlessException e)
+			{
+				System.out.println("\nError creating "+n+" "+e.toString());
+			}
             catch (Exception e)
             {
             	if (e instanceof RemoteException)
@@ -210,7 +204,7 @@ public class JMeterTest extends TestCase
 				}
 				else
 				{
-					throw new Exception(e);
+					throw new Exception("Error creating "+n,e);
 				}
             }
         }
