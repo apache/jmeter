@@ -18,6 +18,9 @@
 
 package org.apache.jmeter.protocol.jdbc.sampler;
 
+import java.io.IOException;
+import java.io.NotActiveException;
+import java.io.ObjectInputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -73,12 +76,14 @@ public class JDBCSampler extends AbstractSampler implements TestListener
     {
     }
 
-    public Object clone(){
-    	Object o = super.clone();
-    	JDBCSampler s = (JDBCSampler) o;
-		s.manager=DBConnectionManager.getManager();
-    	return o;
+    // Resolve the transient manager object
+    private void readObject(ObjectInputStream is) 
+    throws NotActiveException, IOException, ClassNotFoundException
+    {
+    	is.defaultReadObject();
+    	manager = DBConnectionManager.getManager();
     }
+    
     public SampleResult sample(Entry e)
     {
         DBKey key = null;
@@ -139,6 +144,7 @@ public class JDBCSampler extends AbstractSampler implements TestListener
         catch (Exception ex)
         {
             log.error("Error in JDBC sampling", ex);
+            res.setResponseMessage(ex.toString());
             res.setResponseData(new byte[0]);
             res.setSuccessful(false);
         }
