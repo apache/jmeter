@@ -377,7 +377,7 @@ public class ArgumentsPanel
      * Stop any editing that is currently being done on the table.  This will
      * save any changes that have already been made.
      */
-    private void stopTableEditing()
+    protected void stopTableEditing()
     {
         if (table.isEditing())
         {

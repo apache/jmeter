@@ -63,6 +63,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
@@ -82,6 +83,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.logging.LoggingManager;
@@ -138,11 +140,10 @@ public class HTTPSampler extends AbstractSampler
     private static final PostWriter postWriter = new PostWriter();
     transient protected HttpURLConnection conn;
     private HTTPSamplerFull imageSampler;
-    
-    static
-    {
-        System.setProperty("java.protocol.handler.pkgs", JMeterUtils.getPropDefault("ssl.pkgs","com.sun.net.ssl.internal.www.protocol"));
-                System.setProperty("javax.net.ssl.debug", "all");
+
+    static {
+        System.setProperty("java.protocol.handler.pkgs", JMeterUtils.getPropDefault("ssl.pkgs", "com.sun.net.ssl.internal.www.protocol"));
+        System.setProperty("javax.net.ssl.debug", "all");
     }
 
     private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
@@ -476,7 +477,7 @@ public class HTTPSampler extends AbstractSampler
         {
             pathAndQuery = "/" + pathAndQuery;
         }
-        if (getPort() == UNSPECIFIED_PORT || getPort() == 80 )
+        if (getPort() == UNSPECIFIED_PORT || getPort() == 80)
         {
             return new URL(getProtocol(), getDomain(), pathAndQuery);
         }
@@ -502,9 +503,9 @@ public class HTTPSampler extends AbstractSampler
             {
                 item = (HTTPArgument) iter.next().getObjectValue();
             }
-            catch(ClassCastException e)
+            catch (ClassCastException e)
             {
-                item = new HTTPArgument((Argument)iter.next().getObjectValue());
+                item = new HTTPArgument((Argument) iter.next().getObjectValue());
             }
             if (!first)
             {
@@ -602,14 +603,14 @@ public class HTTPSampler extends AbstractSampler
         conn.setRequestMethod(method);
         setConnectionHeaders(conn, u, getHeaderManager());
         String cookies = setConnectionCookie(conn, u, getCookieManager());
-		if (res!=null)
-		{
-			StringBuffer sb = new StringBuffer();
-			sb.append(this.toString());
-			sb.append("\nCookie Data:\n");
-			sb.append(cookies);
-			res.setSamplerData(sb.toString());
-		}
+        if (res != null)
+        {
+            StringBuffer sb = new StringBuffer();
+            sb.append(this.toString());
+            sb.append("\nCookie Data:\n");
+            sb.append(cookies);
+            res.setSamplerData(sb.toString());
+        }
         setConnectionAuthorization(conn, u, getAuthManager());
         return conn;
     }
@@ -687,11 +688,18 @@ public class HTTPSampler extends AbstractSampler
      ***************************************/
     protected byte[] readResponse(HttpURLConnection conn) throws IOException
     {
-        byte[] buffer = new byte[4096];
+        byte[] readBuffer = JMeterContextService.getContext().getReadBuffer();
         BufferedInputStream in;
         try
         {
-            in = new BufferedInputStream(conn.getInputStream());
+            if (conn.getContentEncoding() != null && conn.getContentEncoding().equals("gzip"))
+            {
+                in = new BufferedInputStream(new GZIPInputStream(conn.getInputStream()));
+            }
+            else
+            {
+                in = new BufferedInputStream(conn.getInputStream());
+            }
         }
         catch (Exception e)
         {
@@ -699,9 +707,9 @@ public class HTTPSampler extends AbstractSampler
         }
         java.io.ByteArrayOutputStream w = new ByteArrayOutputStream();
         int x = 0;
-        while ((x = in.read(buffer)) > -1)
+        while ((x = in.read(readBuffer)) > -1)
         {
-            w.write(buffer, 0, x);
+            w.write(readBuffer, 0, x);
         }
         in.close();
         w.flush();
@@ -749,7 +757,7 @@ public class HTTPSampler extends AbstractSampler
      ***************************************/
     private String setConnectionCookie(HttpURLConnection conn, URL u, CookieManager cookieManager)
     {
-    	String cookieHeader=null;
+        String cookieHeader = null;
         if (cookieManager != null)
         {
             cookieHeader = cookieManager.getCookieHeaderForURL(u);
@@ -933,7 +941,7 @@ public class HTTPSampler extends AbstractSampler
             u = getUrl();
             res.setSampleLabel(getName());
             // specify the data to the result.
-//            res.setSamplerData(this.toString());
+            //            res.setSamplerData(this.toString());
             /****************************************
              * END - cached logging hack
              ***************************************/
@@ -980,7 +988,7 @@ public class HTTPSampler extends AbstractSampler
                 }
                 else
                 {
-                    time = bundleResponseInResult(time,res,conn);//System.currentTimeMillis() - time;
+                    time = bundleResponseInResult(time, res, conn); //System.currentTimeMillis() - time;
                     redirectUrl(conn, u);
                     SampleResult redirectResult = sample(redirects + 1);
                     res.addSubResult(redirectResult);

@@ -91,7 +91,14 @@ public class SoapSampler extends HTTPSampler
             setPort(url.getPort());
             setProtocol(url.getProtocol());
             setMethod(POST);
-            setPath(url.getPath());
+            if(url.getQuery() != null && url.getQuery().compareTo("") != 0)
+            {
+                setPath(url.getPath() + "?" + url.getQuery());
+            }
+            else
+            {
+                setPath(url.getPath());
+            }
         }
         catch (MalformedURLException e1)
         {
@@ -99,6 +106,23 @@ public class SoapSampler extends HTTPSampler
         }
         return super.sample(e);
     }
+    
+    public String toString()
+        {
+            try
+            {
+                String xml = getXmlData();
+                if(xml.length() > 100)
+                {
+                    xml = xml.substring(0,100);
+                }
+                return this.getUrl().toString() + "\nXML Data: " + xml;
+            }
+            catch (MalformedURLException e)
+            {
+                return "";
+            }
+        }
 
 }
 
