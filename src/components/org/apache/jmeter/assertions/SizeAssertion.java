@@ -179,7 +179,7 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
     /**
      * Return the body of the http return.
      */
-    private byte[] getResultBody(byte[] resultData)
+    public byte[] getResultBody(byte[] resultData)
     {
         for (int i = 0; i < (resultData.length - 1); i++)
         {
@@ -204,22 +204,6 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
             count++;
         }
         return slice;
-    }
-
-    /**
-     * Set the type of logical comparator to assert.
-     *
-     * Possible values are:
-     * equal, not equal, 
-     * greater than, less than, 
-     * greater than eqaul, less than equal, .
-     * 
-     *@param comparator is an int value indicating logical comparator type
-     *
-     */
-    public void setLogicalComparator(int comparator)
-    {
-        this.comparator = comparator;
     }
 
     /**
