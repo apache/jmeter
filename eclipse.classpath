@@ -15,11 +15,11 @@
     <classpathentry kind="src" output="build/protocol/ldap" path="src/protocol/ldap"/>
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
     <classpathentry kind="lib" path="lib/avalon-excalibur-4.1.jar"/>
-    <classpathentry kind="lib" path="lib/avalon-framework.jar"/>
-    <classpathentry kind="lib" path="lib/jakarta-oro-2.0.1.jar"/>
+    <classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
+    <classpathentry kind="lib" path="lib/jakarta-oro-2.0.7.jar"/>
     <classpathentry kind="lib" path="lib/js.jar"/>
     <classpathentry kind="lib" path="lib/junit.jar"/>
-    <classpathentry kind="lib" path="lib/logkit-1.0.1.jar"/>
+    <classpathentry kind="lib" path="lib/logkit-1.2.jar"/>
     <classpathentry kind="lib" path="lib/Tidy.jar"/>
     <classpathentry kind="lib" path="lib/commons-collections.jar"/>
     <classpathentry kind="lib" path="lib/soap.jar"/>
