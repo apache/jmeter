@@ -51,7 +51,8 @@ public class ResultSaver
     // File name sequence number 
     private static long sequenceNumber = 0;    
     
-	public static final String FILENAME = "FileSaver.filename";
+	public static final String FILENAME = "FileSaver.filename"; // $NON-NLS-1$
+	public static final String ERRORS_ONLY = "FileSaver.errorsonly"; // $NON-NLS-1$
 
     private static synchronized long nextNumber(){
     	return ++sequenceNumber;
@@ -109,6 +110,9 @@ public class ResultSaver
 	 * @param s SampleResult to save
 	 */
 	private void saveSample(SampleResult s) {
+		// Should we save successful samples?
+		if (s.isSuccessful() && getErrorsOnly()) return;
+		
 		nextNumber();
 		String fileName=makeFileName(s.getContentType());
 		log.debug("Saving "+s.getSampleLabel()+" in "+fileName);
@@ -171,5 +175,9 @@ public class ResultSaver
 	private String getFilename()
 	{
 		return getPropertyAsString(FILENAME);
+	}
+	private boolean getErrorsOnly()
+	{
+		return getPropertyAsBoolean(ERRORS_ONLY);
 	}
 }
