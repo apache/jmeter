@@ -94,7 +94,6 @@ public class ParamModifierGui extends AbstractModifierGui implements FocusListen
 		mask.setIncrement(Long.parseLong(_increment.getText()));
 		mask.setUpperBound(Long.parseLong(_upperBound.getText()));
 		mask.setSuffix(_suffix.getText());
-		mask.resetValue();
 		return modifier;
 	}
 

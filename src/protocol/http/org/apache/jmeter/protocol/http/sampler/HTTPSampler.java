@@ -226,8 +226,11 @@ public class HTTPSampler extends AbstractSampler
 		int port = getPropertyAsInt(PORT);
 		if (port == 0)
 		{
-			port = 80;
-			setPort(port);
+			if("https".equalsIgnoreCase(getProtocol()))
+			{
+				return 443;
+			}
+			return 80;
 		}
 		return port;
 	}
