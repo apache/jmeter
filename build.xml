@@ -26,6 +26,7 @@
   <property name="src.jorphan" value="src/jorphan"/>
   <property name="src.ldap" value="src/protocol/ldap"/>
 
+  <!-- Javadoc sources -->
   <path id="srcpaths">
     <pathelement location="${src.core}"/>
     <pathelement location="${src.components}"/>
@@ -86,7 +87,8 @@
   <!-- 3rd party libraries to be included in the binary distribution -->
   <property name="avalon-excalibur.jar" value="lib/avalon-excalibur-4.1.jar"/>
   <property name="avalon-framework.jar" value="lib/avalon-framework.jar"/>
-  <property name="jakarta-oro.jar" value="lib/jakarta-oro.jar"/>
+  <property name="jakarta-oro.jar" value="lib/jakarta-oro-2.0.1.jar"/>
+  <property name="commons-collections.jar" value="lib/commons-collections.jar"/>
   <property name="junit.jar" value="lib/junit.jar"/>
   <property name="logkit.jar" value="lib/logkit-1.0.1.jar"/>
   <property name="xalan.jar" value="lib/xalan.jar"/>
@@ -95,8 +97,9 @@
   <property name="jdom.jar" value="lib/jdom-b8.jar"/>
   <property name="js.jar" value="lib/js.jar"/>
   <property name="soap.jar" value="lib/soap.jar"/>
+  <property name="tidy.jar" value="lib/Tidy.jar"/>
 
-  <fileset dir="." id="external.jars">
+  <patternset id="external.jars">
     <include name="${avalon-excalibur.jar}"/>
     <include name="${avalon-framework.jar}"/>
     <include name="${jakarta-oro.jar}"/>
@@ -105,10 +108,12 @@
     <include name="${xalan.jar}"/>
     <include name="${xerces.jar}"/>
     <include name="${xml-apis.jar}"/>
-    <include name="${jdom.jar}"/>
     <include name="${js.jar}"/>
     <include name="${soap.jar}"/>
-  </fileset>
+    <include name="${tidy.jar}"/>
+    <include name="${commons-collections.jar}"/>
+    <include name="lib/*.html"/>
+  </patternset>
 
   <!-- Directory where these 3rd party libraries will live -->
   <property name="lib.dir" value="lib"/>
@@ -123,6 +128,9 @@
   	<!-- JMeter version -->
   <property name="version" value="1.9.RC${DSTAMP}"/>
   </target>
+
+  	<!-- JMeter Javadoc version (keep in line with above) -->
+  <property name="docversion" value="1.9"/>
   
   <target name="init-docs" depends="check-anakia,report-anakia-missing"/>
 
@@ -310,9 +318,16 @@
 
   <target name="api-docs" description="Generate the API documentation.">
     <mkdir dir="${docs.api.dest}"/>
-    <javadoc sourcepathref="srcpaths" destdir="${docs.api.dest}" Protected="yes" author="yes" version="yes" doctitle="Apache JMeter APIs Specification" windowtitle="Apache JMeter API Specification" header="&lt;b&gt;Apache JMeter&lt;/b&gt;&lt;br&gt;&lt;font size='-1'&gt;1.7&lt;/font&gt;" bottom="Copyright &#xA9; 1998-2003 Apache Software Foundation. All Rights Reserved." packagenames="org.apache.jmeter.*">
+    <javadoc sourcepathref="srcpaths" 
+    additionalparam="-breakiterator" 
+    destdir="${docs.api.dest}" 
+    Protected="yes" author="yes" version="yes" 
+       doctitle="Apache JMeter API Specification" 
+    windowtitle="Apache JMeter API Specification" 
+    header="&lt;b&gt;Apache JMeter&lt;/b&gt;&lt;br&gt;&lt;font size='-1'&gt;${docversion}&lt;/font&gt;" bottom="Copyright &#xA9; 1998-2003 Apache Software Foundation. All Rights Reserved."
+    packagenames="org.apache.jmeter.*">
       <classpath refid="classpath"/>
-      <link href="http://java.sun.com/products/jdk/1.2/docs/api/"/>
+      <link href="http://java.sun.com/products/jdk/1.3/docs/api/"/>
     </javadoc>
   </target>
 
@@ -352,19 +367,16 @@
   </target>
 
   <patternset id="dist.binaries">
-    <include name="bin/"/>
-    <include name="${lib.dir}/"/>
+    <include name="bin/*.jar"/>
+    <include name="bin/jmeter*"/>
+    <include name="bin/upgrade.properties"/>
+    <include name="bin/users.*"/>
     <include name="${jar.dest}/"/> <!-- redundant but future-proof -->
     <include name="${docs.dest}/"/>
     <include name="${printable_docs.dest}/**"/>
     <include name="${extras.dir}/**"/>
+    <include name="${lib.dir}/jorphan.jar"/>
       <exclude name="${docs.api.dest}/"/>
-    <exclude name="**/mail.jar"/>
-    <exclude name="**/activation.jar"/>
-    <exclude name="**/mailapi.jar"/>
-    <exclude name="**/pop3.jar"/>
-    <exclude name="**/smtp.jar"/>
-    <exclude name="**/imap.jar"/>
     <include name="README"/>
     <include name="LICENSE"/>
   </patternset>
@@ -378,13 +390,11 @@
   <target name="dist" depends="assume-libs-present,clean,install,all-docs,test" description="Create the distribution packages.">
     <property name="dist.name" value="jakarta-jmeter-${version}"/>
     <mkdir dir="${dist.dir}"/>
-    <!-- copy 3rd party libraries if not already there -->
-    <copy todir="${lib.dir}" flatten="true">
-      <fileset refid="external.jars"/>
-    </copy>
+
     <tar destfile="${dist.dir}/${dist.name}.tar" longfile="gnu">
       <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
         <patternset refid="dist.binaries"/>
+        <patternset refid="external.jars"/>
       </tarfileset>
       <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </tar>
@@ -392,6 +402,7 @@
     <zip zipfile="${dist.dir}/${dist.name}.zip">
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist.binaries"/>
+        <patternset refid="external.jars"/>
       </zipfileset>
     </zip>
     <tar destfile="${dist.dir}/${dist.name}-javadoc.tar" longfile="gnu">
@@ -406,10 +417,7 @@
   <target name="src_dist" depends="assume-libs-present,clean,install,all-docs,test" description="Create the distribution packages.">
     <property name="dist.name" value="jakarta-jmeter-${version}"/>
     <mkdir dir="${dist.dir}"/>
-    <!-- copy 3rd party libraries if not already there -->
-    <copy todir="${lib.dir}" flatten="true">
-      <fileset refid="external.jars"/>
-    </copy>
+
     <tar destfile="${dist.dir}/${dist.name}.src.tar" longfile="gnu">
       <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
         <patternset refid="dist.binaries"/>
