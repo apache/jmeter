@@ -146,7 +146,7 @@ public class JMeter implements JMeterPlugin
                 "help",
                 CLOptionDescriptor.ARGUMENT_DISALLOWED,
                 HELP_OPT,
-                "print this message and exit"),
+                "print usage information and exit"),
             new CLOptionDescriptor(
                 "version",
                 CLOptionDescriptor.ARGUMENT_DISALLOWED,
@@ -282,6 +282,8 @@ public class JMeter implements JMeterPlugin
         if (null != parser.getErrorString())
         {
             System.err.println("Error: " + parser.getErrorString());
+			System.out.println("Usage");
+			System.out.println(CLUtil.describeOptions(options).toString());
             return;
         }
         try
