@@ -10,12 +10,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Random;
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -31,6 +33,7 @@ public class FileServer
     File base;
     Map files = new HashMap();
     private static FileServer server = new FileServer();
+	private Random random = new Random();
     
     private FileServer()
     {
@@ -134,5 +137,27 @@ public class FileServer
             }
         }
         return false;
+    }
+    
+    /**
+     * Method will get a random file in a base directory
+     * @param basedir
+     * @return
+     */
+    public File getRandomFile(String basedir){
+    	File input = null;
+		if (basedir != null)
+		{
+			File src = new File(basedir);
+			if (src.isDirectory() && src.list() != null)
+			{
+				File[] files =
+					src.listFiles(
+						new JMeterFileFilter(new String[] { ".txt,.obj" }));
+				int count = files.length;
+				input = files[random.nextInt(count)];
+			}
+		}
+		return input;
     }
 }
