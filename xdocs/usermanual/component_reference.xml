@@ -7,190 +7,156 @@
 
 <body>
 
-<section name="12. Component Reference">
+<section name="13. Component Reference">
 
-</section>
 
-<section name="12.1 Generative Controllers" anchor="generative_controllers">
 
-<subsection name="4.2.1.1 FTP Request" anchor="ftp_request">
-<p>This controller lets you send an FTP "retrieve file" request to an FTP server.
+<subsection name="13.1 Generative Controllers" anchor="generative_controllers">
+
+<component name="13.1.1 FTP Request" anchor="ftp_request" screenshot="../images/screenshots/gen-controller/ftp-request.gif">
+<description>This controller lets you send an FTP "retrieve file" request to an FTP server.
 If you are going to send multiple requests to the same FTP server, consider
 using a <a href="ftp-config.html#request_defaults">FTP Request Defaults</a> Configuration
 Element so you do not have to enter the same information for each FTP Request Generative
-Controller. </p>
-<p><img src="../images/screenshots/gen-controller/ftp-request.gif" width="407" height="238"></img></p>
-<p><b>Property Descriptions:</b>
-<ul>
-  <li><b>Name</b> - Descriptive name for this controller that is shown in the tree. </li>
-  <li><b>Server Name or IP</b> - Domain name or IP address of the FTP server.
-JMeter assumes the FTP server is listening on the default port.</li>
-  <li><b>File to Retrieve From Server</b> - Path and name of the file to retrieve.</li>
-  <li><i>Login Configuration</i></li>
-  <ul>
-	 <li><b>Username</b> - FTP account username.</li>
-	 <li><b>Password</b> - FTP account password.</li>
-  </ul>
-</ul>
-</p>
+Controller. </description>
+<properties>
+	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+	<property name="Server Name or IP" required="Yes">Domain name or IP address of the FTP server.
+JMeter assumes the FTP server is listening on the default port.</property>
+	<property name="File to Retrieve From Server" required="Yes">Path and name of the file to retrieve.</property>
+	<property name="Username" required="Usually">FTP account username.</property>
+	<property name="Password" required="Usually">FTP account password.</property>
+</properties>
+<links>
+	<link href="assertion.html">Assertion</link>
+	<link href="#ftp_request_defaults">FTP Request Defaults</link>
+	<link href="build-ftp-test-plan.html">Building an FTP Test Plan</link>
+</links>
 
-<p><b>See Also:</b>
-<br></br><a href="assertion.html">Assertion</a>,
-<a href="ftp-config.html#request_defaults">FTP Request Defaults</a>,
-<a href="build-ftp-test-plan.html">Building an FTP Test Plan</a></p>
+</component>
 
-</subsection>
+<component name="13.1.2 HTTP Request" anchor="http_request" screenshot="../images/screenshots/gen-controller/http-request.gif">
 
-<subsection name="4.2.1.2 HTTP Request" anchor="http_request">
-<p>This controller lets you send an HTTP/HTTPS request to a web server.  It
-also lets you control whether or not JMeter parses HTML files for images and
-Java applets and sends HTTP requests to retrieve them.</p>
-<p>If you are going to send multiple requests to the same web server, consider
-using an <a href="http-config.html#request_defaults">HTTP Request Defaults</a>
-Configuration Element so you do not have to enter the same information for each
-HTTP Request controller.</p>
-<p>Or, instead of manually adding HTTP Request controllers, you may want to use
-JMeter's <a href="http-config.html#proxy_server">HTTP Proxy Server</a> to create
-them.  This can save you time if you have a lot of HTTP requests or requests with many
-parameters.</p>
-<p>If the request requires a login authorization, you will also have to add an
-<a href="http-config.html#auth_manager">HTTP Authorization Manager</a>
-Configuration Element. And, if the request uses cookies, then you will also need an
-<a href="http-config.html#cookie_manager">HTTP Cookie Manager</a>.  You can
-add either of these elements to the Thread Group or the HTTP Request.  If you have
-more than one HTTP Request that needs authorizations or cookies, then add the
-elements to the Thread Group.  That way, all HTTP Request controllers will share the
-same Authorization Manager and Cookie Manager elements.</p>
-<p>If the request uses a technique called "URL Rewriting" to maintain sessions,
-then see section
-<a href="build-adv-web-test-plan.html#url_rewriting">6.x HTTP Requests and Session ID's: URL Rewriting</a>
-for additional configuration steps.</p>
-<p><img src="../images/screenshots/gen-controller/http-request.gif" width="562" height="635"></img></p>
-<p><b>Property Descriptions:</b>
-<ul>
-  <li><b>Name</b> - Descriptive name for this controller that is shown in the tree. </li>
-  <li><i>Web Server</i></li>
-  <ul>
-	  <li><b>Server</b> - Domain name or IP address of the web server.</li>
-	  <li><b>Port</b> - (optional) Port the web server is listening.  If you leave this field
-empty, JMeter assumes the default port.</li>
-  </ul>
-  <li><i>HTTP Request</i></li>
-  <ul>
-	 <li><b>Protocol</b> - HTTP or HTTPS.</li>
-	 <li><b>Method</b> - HTTP GET or HTTP POST.</li>
-	 <li><b>Path</b> - The path to resource (for example, /servlets/myServlet). If the
+<description>
+	<p>This controller lets you send an HTTP/HTTPS request to a web server.  It
+	also lets you control whether or not JMeter parses HTML files for images and
+	Java applets and sends HTTP requests to retrieve them.</p>
+	<p>If you are going to send multiple requests to the same web server, consider
+	using an <a href="http-config.html#request_defaults">HTTP Request Defaults</a>
+	Configuration Element so you do not have to enter the same information for each
+	HTTP Request controller.</p>
+
+	<p>Or, instead of manually adding HTTP Request controllers, you may want to use
+	JMeter's <a href="http-config.html#proxy_server">HTTP Proxy Server</a> to create
+	them.  This can save you time if you have a lot of HTTP requests or requests with many
+	parameters.</p>
+
+	<p>If the request requires a login authorization, you will also have to add an
+	<a href="http-config.html#auth_manager">HTTP Authorization Manager</a>
+	Configuration Element. And, if the request uses cookies, then you will also need an
+	<a href="http-config.html#cookie_manager">HTTP Cookie Manager</a>.  You can
+	add either of these elements to the Thread Group or the HTTP Request.  If you have
+	more than one HTTP Request that needs authorizations or cookies, then add the
+	elements to the Thread Group.  That way, all HTTP Request controllers will share the
+	same Authorization Manager and Cookie Manager elements.</p>
+
+	<p>If the request uses a technique called "URL Rewriting" to maintain sessions,
+	then see section
+	<a href="build-adv-web-test-plan.html#url_rewriting">6.x HTTP Requests and Session ID's: URL Rewriting</a>
+	for additional configuration steps.</p>
+</description>
+
+<properties>
+	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+	<property name="Server" required="Yes">Domain name or IP address of the web server.</property>
+	<property name="Port" required="No (defaults to 80)">Port the web server is listening to.</property>
+	<property name="Protocol" required="Yes">HTTP or HTTPS.</property>
+	<property name="Method" required="Yes">HTTP GET or HTTP POST.</property>
+	<property name="Path" required="Yes">The path to resource (for example, /servlets/myServlet). If the
 resource requires query string parameters, add them below in the
-"Send Parameters With the Request" section.</li>
-	 <li><i>Send Parameters With the Request</i></li>
-	 <ul>
-		<li><b>Name</b> - Parameter name</li>
-		<li><b>Value</b> - Parameter value. You do not have to enter the value in
-URL-Encoded format. JMeter will URL-Encode it for you when it sends
-the HTTP request.</li>
-		<li><b>Add</b> Button - Add a parameter.</li>
-		<li><b>Delete</b> Button - Delete the currently selected parameter.</li>
-	 </ul>
-	 <li><i>Send a File With the Request</i></li>
-	 <ul>
-		<li><b>Filename</b> - Name of the file to send.</li>
-		<li><b>Browse</b> Button - Select this button to browse the file system for a
-filename.</li>
-		<li><b>Parameter Name</b> - Name of the parameter.</li>
-		<li><b>MIME Type</b> - MIME type (for example, text/plain).</li>
-	 </ul>
-  </ul>
-  <li><i>Optional Tasks</i></li>
-  <ul>
-	 <li><b>Retrieve All Images and Java Applets</b> - Tell JMeter to parse the HTML file
-and send HTTP/HTTPS requests for all images and Java applets referenced in the file.</li>
-  </ul>
-</ul>
-</p>
+"Send Parameters With the Request" section.</property>
+	<property name="Send Parameters With the Request" required="No">The query string will
+	be generated from the list of parameters you provide.  Each parameter has a <i>name</i> and
+	<i>value</i>.  The query string will be generated in the correct fashion, depending on
+	the choice of "Method" you made (ie if you chose GET, the query string will be
+	appended to the URL, if POST, then it will be sent separately).  Also, if you are
+	sending a file using a multipart form, the query string will be created using the
+	multipart form specifications.</property>
+	<property name="Filename" required="No">Name of the file to send.  If left blank, JMeter
+	does not send a file, if filled in, JMeter automatically sends the request as
+	a multipart form request.</property>
+	<property name="Parameter Name" required="No (Yes if Filename filled in)">Name of the web request parameter.</property>
+	<property name="MIME Type" required="No (Yes if Filename filled in)">MIME type (for example, text/plain).</property>
+	<property name="Retrieve All Images and Java Applets" required="No">Tell JMeter to parse the HTML file
+and send HTTP/HTTPS requests for all images and Java applets referenced in the file.</property>
+</properties>
 
-<p><b>See Also:</b>
-<br></br>
-<a href="assertion.html">Assertion</a>,
-<a href="build-web-test-plan.html">Building a Web Test Plan</a>,
-<a href="build-adv-web-test-plan.html">Building an Advanced Web Test Plan</a>,
-<a href="http-config.html#auth_manager">HTTP Authorization Manager</a>,
-<a href="http-config.html#cookie_manager">HTTP Cookie Manager</a>,
-<a href="http-config.html#header_manager">HTTP Header Manager</a>,
-<a href="http-config.html#html_link_parser">HTTP HTML Link Parser</a>,
-<a href="http-config.html#proxy_server">HTTP Proxy Server</a>,
-<a href="http-config.html#request_defaults">HTTP Request Defaults</a>,
-<a href="build-adv-web-test-plan.html#url_rewriting">HTTP Requests and Session ID's: URL Rewriting</a>
-</p>
+<links>
+	<link href="assertion.html">Assertion</link>
+	<link href="build-web-test-plan.html">Building a Web Test Plan</link>
+	<link href="build-adv-web-test-plan.html">Building an Advanced Web Test Plan</link>
+	<link href="http-config.html#auth_manager">HTTP Authorization Manager</link>
+	<link href="http-config.html#cookie_manager">HTTP Cookie Manager</link>
+	<link href="http-config.html#header_manager">HTTP Header Manager</link>
+	<link href="http-config.html#html_link_parser">HTTP HTML Link Parser</link>
+	<link href="http-config.html#proxy_server">HTTP Proxy Server</link>
+	<link href="http-config.html#request_defaults">HTTP Request Defaults</link>
+	<link href="build-adv-web-test-plan.html#url_rewriting">HTTP Requests and Session ID's: URL Rewriting</link>
+</links>
 
-</subsection>
+</component>
 
-<subsection name="4.2.1.3 JDBC Request" anchor="jdbc_request">
-<p>This controller lets you send an JDBC Request (an SQL query) to a database.</p>
+<component name="13.1.3 JDBC Request" anchor="jdbc_request" screenshot="../images/screenshots/gen-controller/jdbc-request.gif">
+
+<description><p>This controller lets you send an JDBC Request (an SQL query) to a database.</p>
 <p>If you are going to send multiple requests to the same database, consider
 using one or more of the Defaults Configuration Elements:
 <a href="jdbc-config.html#login">Login</a>,
 <a href="jdbc-config.html#conn_pool">Connection Pool</a>,
 <a href="jdbc-config.html#sql_query">SQL Query</a>.
 This way, you do not have to enter the same information for each JDBC Request
-controller.</p>
-<p><img src="../images/screenshots/gen-controller/jdbc-request.gif" width="466" height="454"></img></p>
+controller.</p></description>
 
-<p><b>Property Descriptions:</b>
-<ul>
-  <li><b>Name</b> - Descriptive name for this controller that is shown in the tree. </li>
-  <li><i>Database URL and JDBC Driver</i></li>
-  <ul>
-	  <li><b>JDBC URL</b> - URL of the database (for example,
+<properties>
+	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+	<property name="JDBC URL" required="Yes">URL of the database (for example,
 "jdbc:weblogic:oracle"). Refer to your database's JDBC documentation for the
-URL you should use.</li>
-	  <li><b>Driver Class</b> - The database driver Java class (for example,
+URL you should use.</property>
+	<property name="Driver Class" required="Yes">The database driver Java class (for example,
 "weblogic.jdbc.oci.Driver"). Refer to your database's JDBC documentation for
-the name of the JDBC driver class you should use.</li>
-  </ul>
-  <li><i>Login Configuration</i></li>
-  <ul>
-	 <li><b>Username</b> - FTP account username.</li>
-	 <li><b>Password</b> - FTP account password.</li>
-  </ul>
-  <li><i>Database Connection Pool</i></li>
-  <ul>
-	 <li><b>Number of Connections in Pool</b> - Number of database connection
+the name of the JDBC driver class you should use.</property>
+	<property name="Username" required="Usually (database dependent)">FTP account username.</property>
+	<property name="Password" required="Usually (database dependent)">FTP account password.</property>
+	<property name="Number of Connections in Pool" required="Yes">Number of database connection
 instances to create and keep active. The maximum value depends on your database.
-Also, JMeter imposes a maximum of 100 connections.</li>
-	 <li><b>Max Usage For Each Connection</b> - Maximum number of times JMeter
+Also, JMeter imposes a maximum of 100 connections.</property>
+	<property name="Max Usage For Each Connection" required="Yes">Maximum number of times JMeter
 uses a database connection instance before recycling it (destroying and creating
-a new instance).</li>
-  </ul>
-  <li><b>SQL Query String</b> - SQL query (for example, "select * from t_customers").</li>
-</ul>
-</p>
+a new instance).</property>
+	<property name="SQL Query String" required="Yes">SQL query (for example, "select * from t_customers").</property>
+</properties>
 
-<p><b>See Also:</b>
-<br></br>
-<a href="assertion.html">Assertion</a>,
-<a href="build-db-test-plan.html">Building a Database Test Plan</a>,
-<a href="jdbc-config.html#login">JDBC Database Login Defaults</a>,
-<a href="jdbc-config.html#conn_pool">JDBC Database Connection Pool Defaults</a>,
-<a href="jdbc-config.html#sql_query">JDBC SQL Query Defaults</a>
-</p>
+<links>
+	<link href="assertion.html">Assertion</link>
+	<link href="build-db-test-plan.html">Building a Database Test Plan</link>
+	<link href="jdbc-config.html#login">JDBC Database Login Defaults</link>
+	<link href="jdbc-config.html#conn_pool">JDBC Database Connection Pool Defaults</link>
+	<link href="jdbc-config.html#sql_query">JDBC SQL Query Defaults</link>
+</links>
 
+</component>
 </subsection>
-</section>
 
-<section name="12.2 Logic Controllers" anchor="logic_controllers">
+<subsection name="13.2 Logic Controllers" anchor="logic_controllers">
 
-<subsection name="4.2.2.1 Interleave Controller" anchor="interleave">
-<p>If you add Generative or Logic Controllers to an Interleave Controller, JMeter will alternate among each of the
+<component name="13.2.1 Interleave Controller" anchor="interleave" screenshot="../images/screenshots/logic-controller/interleave-controller.gif">
+<description><p>If you add Generative or Logic Controllers to an Interleave Controller, JMeter will alternate among each of the
 other controllers for each loop iteration. </p>
+</description>
+<properties>
+	<property name="name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+</properties>
 
-<p><b>Control Panel</b></p>
-<p><img src="../images/screenshots/logic-controller/interleave-controller.gif" width="390" height="62"></img>
-<br>Figure 1- Interleave Controller Control Panel</br></p>
-<p>Properties:
-<ul>
-  <li>Name - Descriptive name for this controller that is shown in the tree. </li>
-</ul>
-</p>
 <!--
 For example, if you
 add three HTTP Requests to an Interleave Controller and configure the Thread
@@ -206,12 +172,14 @@ Group to loop, here is the sequence in which JMeter sends the requests:
 <tr valign="top"><td>(and so on)</td><td>...</td></tr>
 </table>
 -->
-<p><b>Example</b></p>
+<example title="Simple Interleave Example" anchor="simple_interleave_example">
 
-<p><a href="../demos/InterleaveTestPlan.jmx">Download</a> this example (see Figure 2).  In this example,
+<p><a href="../demos/InterleaveTestPlan.jmx">Download</a> this example (see Figure 1).  In this example,
 we configured the Thread Group to have two threads and a loop count of five, for a total of ten
 requests. See the table below for the sequence JMeter sends the HTTP Requests.</p>
 
+<figure image="../images/screenshots/logic-controller/interleave.gif">Figure 1 - Interleave Controller Example 1</figure>
+<br/>
 <table border="1" cellspacing="0" cellpadding="4">
 <tr valign="top"><td>Loop Iteration</td><td>Each JMeter Thread Sends These HTTP Requests</td></tr>
 <tr valign="top"><td>1</td><td>News Page</td></tr>
@@ -224,60 +192,83 @@ requests. See the table below for the sequence JMeter sends the HTTP Requests.</
 <p>Note, the File Reporter is configured to store the results in a file named
 "interleave-test.dat" in the current directory.</p>
 
-<p><img src="../images/screenshots/logic-controller/interleave.gif" width="368" height="210"></img>
-<br>Figure 2 - Interleave Controller Example 1</br></p>
+</example>
 
-<p><b>Example</b></p>
+<example title="Useful Interleave Example" anchor="useful_interleave_example">
 
-<p><a href="../demos/InterleaveTestPlan2.jmx">Download</a> another example (see Figure 3).  In this
+<p><a href="../demos/InterleaveTestPlan2.jmx">Download</a> another example (see Figure 2).  In this
 example, we configured the Thread Group
 to have a single thread and a loop count of eight.  Notice that the Test Plan has an outer Interleave Controller with
 two Interleave Controllers inside of it.</p>
+
+<figure image="../images/screenshots/logic-controller/interleave2.gif">
+	Figure 2 - Interleave Controller Example 2
+</figure>
 
 <p>The outer Interleave Controller alternates between the
 two inner ones.  Then, each inner Interleave Controller alternates between each of the HTTP Requests.  Each JMeter
 thread will send the requests in the following order: Home Page, Bug Page, CVS Page, and FAQ Page.
 Note, the File Reporter is configured to store the results in a file named "interleave-test2.dat" in the current directory.</p>
+</example>
+</component>
 
-<p><img src="../images/screenshots/logic-controller/interleave2.gif" width="368" height="262"></img>
-<br>Figure 3 - Interleave Controller Example 2</br></p>
-
-</subsection>
-
-<subsection name="4.2.2.2 Loop Controller" anchor="loop">
-<p>If you add Generative or Logic Controllers to a Loop Controller, JMeter will
+<component name="13.2.2 Loop Controller" anchor="loop" screenshot="../images/screenshots/logic-controller/loop-controller.gif">
+<description><p>If you add Generative or Logic Controllers to a Loop Controller, JMeter will
 loop through them a certain number of times, in addition to the loop value you
 specified for the Thread Group.  For example, if you add one HTTP Request to a
 Loop Controller with a loop count of two, and configure the Thread Group loop
 count to three, JMeter will send a total of 2 * 3 = 6 HTTP Requests.
-</p>
-<p><b>Control Panel</b></p>
-<p><img src="../images/screenshots/logic-controller/loop-controller.gif" width="397" height="111"></img>
-<br>Figure 4 - Loop Controller Control Panel</br></p>
+</p></description>
 
-<p><b>Example</b></p>
-<p><a href="../demos/LoopTestPlan.jmx">Download</a> this example (see Figure 5).
+<properties>
+	<property name="Name" required="No"></property>
+	<property name="Loop Count" required="Yes, unless &quot;Forever&quot; is checked">
+		The number of times the subelements of this controller will be iterated each time
+		through a test run.
+		<p><b>Special Case:</b> The Loop Controller embedded in the <a href="test_plan.html#thread_group">Thread Group</a>
+		element behaves slightly differently.  Unless set to forever, it stops the test after
+		the given number of iterations have been done.</p></property>
+</properties>
+
+<example title="Looping Example" anchor="loop_example">
+
+<p><a href="../demos/LoopTestPlan.jmx">Download</a> this example (see Figure 3).
 In this example, we created a Test Plan that sends a particular HTTP Request
 only once and sends another HTTP Request five times.</p>
+
+<figure image="../images/screenshots/logic-controller/loop-example.gif">Figure 3 - Loop Controller Example</figure>
+
 <p>We configured the Thread Group for a single thread and a loop count value of
 one. Instead of letting the Thread Group control the looping, we used a Loop
 Controller.  You can see that we added one HTTP Request to the Thread Group and
 another HTTP Request to a Loop Controller.  We configured the Loop Controller
 with a loop count value of five.</p>
-
 <p>JMeter will send the requests in the following order: Home Page, News Page,
 News Page, News Page, News Page, and News Page. Note, the File Reporter
 is configured to store the results in a file named "loop-test.dat" in the current directory.</p>
 
-<p><img src="../images/screenshots/logic-controller/loop-example.gif" width="368" height="185"></img>
-<br>Figure 5 - Loop Controller Example</br></p>
+</example>
 
-</subsection>
+</component>
 
-<subsection name="4.2.2.3 Modification Manager" anchor="mod_manager">
-<p>Put description text here...</p>
-<p>This element has no visual elements.</p>
-</subsection>
+<component name="13.2.3 Modification Manager" anchor="mod_manager">
+<description>
+<p>This element has no visual elements, and needs no configuration.
+The Modification Manager acts as a container for Modifier elements (which
+are special kinds of Configuration Elements).</p>
+
+<p>The Modification Manager can be used to introduce dynamic data into a test script.  As test samples pass through the
+Modification Manager, it has the opportunity to modify them.  The Modification Manager holds Modifier elements which it
+ uses to control how it modifies test samples.  If no Modifier elements are added, the Modification Manager has no effect.</p>
+
+<p>There are two types of Modifiers.  Regular Modifiers (currently there aren't any implemented Modifiers), and response
+based Modifiers (there is one HTML response based Modifier).</p>
+</description>
+
+<links>
+	<link href="#html_link_parser">HTML Link Parser</link>
+</links>
+</component>
 
 <subsection name="4.2.2.4 Once Only Controller" anchor="once_only_controller">
 <p>The Once Only Logic Controller tells JMeter to process the controller(s) inside it only once, regardless of the loop
@@ -327,11 +318,64 @@ is configured to store the results in a file named "simple-test.dat" in the curr
 <p><img src="../images/screenshots/logic-controller/simple-example.gif" width="368" height="245"></img>
 <br>Figure x Simple Controller Example</br></p>
 </subsection>
-</section>
+</subsection>
 
-<section name="12.5 Assertions" anchor="assertions">
+<subsection name="13.4 Configuration Elements" anchor="config_elements">
 
-<subsection name="12.5.1  Basic Assertion" anchor="basic_assertion">
+<component name="13.4.1 HTML Link Parser" anchor="html_link_parser">
+<description>
+<p>This modifier parses HTML response from the server and extracts
+links and forms.  A URL test sample that passes through this modifier will be examined to
+see if it &quot;matches&quot; any of the links or forms extracted
+from the immediately previous response.  It would then replace the values in the URL
+test sample with appropriate values from the matching link or form.  Perl-type regular
+expressions are used to find matches.</p>
+</description>
+
+<example title="Spidering Example" anchor="spider_example">
+<p>Consider a simple example: let's say you wanted JMeter to &quot;spider&quot; through your site,
+hitting link after link parsed from the HTML returned from your server (this is not
+actually the most useful thing to do, but it serves as a good example).  You would create
+a Modification Manager, and add the &quot;HTML Link Parser&quot; to it.  Then, create a
+Web Test controller, and set the domain to &quot;.*&quot;, and the path likewise. This will
+cause your test sample to match with any link found on the returned pages.  If you wanted to
+restrict the spidering to a particular domain, then change the domain value
+to the one you want.  Then, only links to that domain will be followed.
+</p>
+</example>
+
+<example title="Poll Example" anchor="poll_example">
+<p>A more useful example: given a web polling application, you might have a page with
+several poll options as radio buttons for the user to select.  Let's say the values
+of the poll options are very dynamic - maybe user generated.  If you wanted JMeter to
+test the poll, you could either create test samples with hardcoded values chosen, or you
+could let the HTML Link Parser parse the form, and insert a random poll option into
+your URL test sample.  To do this, follow the above example, except, when configuring
+your Web Test controller's URL options, be sure to choose &quot;POST&quot; as the
+method.  Put in hard-coded values for the domain, path, and any additional form parameters.
+Then, for the actual radio button parameter, put in the name (let's say it's called &quot;poll_choice&quot;),
+and then &quot;.*&quot; for the value of that parameter.  When the modifier examines
+this URL test sample, it will find that it &quot;matches&quot; the poll form (and
+it shouldn't match any other form, given that you've specified all the other aspects of
+the URL test sample), and it will replace your form parameters with the matching
+parameters from the form.  Since the regular expression &quot;.*&quot; will match with
+anything, the modifier will probably have a list of radio buttons to choose from.  It
+will choose at random, and replace the value in your URL test sample.  Each time through
+the test, a new random value will be chosen.</p>
+
+<figure image="../images/screenshots/modification.gif">Figure # - Online Poll Example</figure>
+
+<p>One important thing to remember is that you must create a test sample immediately
+prior that will return an HTML page with the links and forms that are relevant to
+your dynamic test sample.</p>
+</example>
+
+</component>
+</subsection>
+
+<section name="13.5 Assertions" anchor="assertions">
+
+<subsection name="13.5.1  Basic Assertion" anchor="basic_assertion">
 <p><b>Control Panel</b></p>
 <p><img src="../images/screenshots/assertion/assertion.gif" width="446" height="296"></img>
 <br>Figure 1 - Assertion Control Panel</br></p>
@@ -379,9 +423,9 @@ strings. You can attach multiple assertions to any controller for additionaly fl
 </subsection>
 </section>
 
-<section name="12.6 Timers" anchor="timers">
+<section name="13.6 Timers" anchor="timers">
 
-<subsection name="12.6.1 Constant Timer" anchor="constant">
+<subsection name="13.6.1 Constant Timer" anchor="constant">
 <p>If you want to have each thread pause for the same amount of time between
 requests, use this timer.</p>
 
@@ -397,7 +441,7 @@ requests, use this timer.</p>
 
 </subsection>
 
-<subsection name="12.6.2 Gaussian Random Timer" anchor="gaussian">
+<subsection name="13.6.2 Gaussian Random Timer" anchor="gaussian">
 <p>This timer pauses each thread request for a random amount of time, with most
 of the time intervals ocurring near a particular value.  The total delay is the
 sum of the Gaussian distributed value (with mean 0.0 and standard deviation 1.0) times
@@ -415,7 +459,7 @@ to the random delay.</li>
 
 </subsection>
 
-<subsection name="12.6.3 Uniform Random Timer" anchor="uniform">
+<subsection name="13.6.3 Uniform Random Timer" anchor="uniform">
 <p>This timer pauses each thread request for a random amount of time, with
 each time interval having the same probability of occurring. The total delay
 is the sum of the random value and the offset value.</p>
@@ -433,6 +477,6 @@ to the random delay.</li>
 
 </subsection>
 </section>
-
+</section>
 </body>
 </document>
