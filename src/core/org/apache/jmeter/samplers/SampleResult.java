@@ -136,7 +136,30 @@ public class SampleResult implements Serializable
     {
     	time = 0;
     }
-    
+
+	/**
+	 * Construct a 'parent' result for an already-existing result, essentially
+	 * cloning it
+	 * 
+	 * @param res existing sample result
+	 */
+	public SampleResult(SampleResult res)
+	{
+		setStartTime(res.getStartTime());
+		setTime(0);
+
+		setSampleLabel(res.getSampleLabel());
+		setRequestHeaders(res.getRequestHeaders());
+		setResponseData(res.getResponseData());
+		setResponseCode(res.getResponseCode());
+		setSuccessful(res.isSuccessful());
+		setResponseMessage(res.getResponseMessage());
+		setDataType(res.getDataType());
+		setResponseHeaders(res.getResponseHeaders());
+
+		addSubResult(res); // this will add res.getTime() to getTime().
+	}
+
     /**
      * Create a sample with a specific elapsed time
      * but don't allow the times to be changed later
@@ -310,6 +333,7 @@ public class SampleResult implements Serializable
             subResults = new ArrayList();
         }
         subResults.add(subResult);
+        setTime(getTime()+subResult.getTime());
     }
 
     /**
