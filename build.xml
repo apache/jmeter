@@ -60,8 +60,12 @@
 	- Creates the ApacheJMeter.jar file.
 	-->
 	<target name="package" depends="compile">
-		<jar jarfile="ApacheJMeter.jar" 
-			basedir="${classes.dest.dir}" manifest="src/MANIFEST"/>
+		<jar jarfile="ApacheJMeter.jar" manifest="src/MANIFEST">
+		       <fileset dir="${classes.dest.dir}"/>
+		       <fileset dir="${sources.src.dir}"
+		                includes="**/*.gif"
+				excludes="**/*.java" />
+		</jar>
 	</target>
 
 	<!--
