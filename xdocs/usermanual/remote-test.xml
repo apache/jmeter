@@ -47,7 +47,7 @@ Use the "-s" option with the jmeter startup script ("jmeter -s").</p>
 add the value of your running JMeter server's IP address.  Multiple such servers can be added, comma-delimited.</p>
 
 <p><b>Step 4: Start the JMeter Client</b></p>
-<p>Now you are ready to start the JMeter client. For MS-Windows, start the client with the script "bin/jmeter.bat".  For UNIX, 
+<p>Now you are ready to start the controlling JMeter client. For MS-Windows, start the client with the script "bin/jmeter.bat".  For UNIX, 
 use the script "bin/jmeter".  You will notice that the Run menu contains two new sub-menus: "Remote Start" and "Remote Stop" 
 (see figure 1). These menus contain the client that you set in the properties file.  Use the remote start and stop instead of the 
 normal JMeter start and stop menu items.</p>

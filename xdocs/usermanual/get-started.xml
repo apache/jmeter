@@ -154,6 +154,8 @@ Then, run JMeter, using the -s option:</p>
 	<property name="ssl.provider">You must specify the class for your SSL
 	implementation.  If you are using the JSSE from sun, then it is:<br/>
 	com.sun.net.ssl.internal.ssl.Provider.</property>
+	<property name="xml.parser">You can specify an implementation as your XML
+	parser.  The default value is: org.apache.xerces.parsers.SAXParser</property>
   <property name="user.dir">The directory JMeter will first go to for saving and
 	loading test scripts.</property>
   <property name="remote_hosts">Comma-delimited list of remote JMeter hosts.
