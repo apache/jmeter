@@ -59,7 +59,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
