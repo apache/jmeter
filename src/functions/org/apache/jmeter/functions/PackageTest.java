@@ -36,6 +36,7 @@ import junit.framework.TestSuite;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.log.Logger;
 
 /**
@@ -124,7 +125,15 @@ public class PackageTest extends JMeterTestCase
 		sff1.execute();
 		sff1.execute();
 		assertEquals("fuenf",sff1.execute());
-		assertEquals("**ERR**",sff1.execute());
+		try
+		{
+			sff1.execute();
+			fail("Should have thrown JMeterStopThreadException");
+		}
+		catch (JMeterStopThreadException e)
+		{
+			// expected
+		}
     }
     
     // Function objects to be tested
