@@ -41,7 +41,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import javax.xml.parsers.SAXParserFactory;
+//import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jorphan.logging.LoggingManager;
@@ -69,20 +69,21 @@ public class JMeterUtils implements UnitTestManager
     
     private static final String EXPERT_MODE_PROPERTY="jmeter.expertMode";
 
-    private static final SAXParserFactory xmlFactory;
-    static {
-        SAXParserFactory temp = null;
-        try
-        {
-            temp = SAXParserFactory.newInstance();
-        }
-        catch (Exception e)
-        {
-            log.error("", e);
-            temp = null;
-        }
-        xmlFactory = temp;
-    }
+    // Not used currently
+//    private static final SAXParserFactory xmlFactory;
+//    static {
+//        SAXParserFactory temp = null;
+//        try
+//        {
+//            temp = SAXParserFactory.newInstance();
+//        }
+//        catch (Exception e)
+//        {
+//            log.error("", e);
+//            temp = null;
+//        }
+//        xmlFactory = temp;
+//    }
     private static Properties appProperties;
     private static Vector localeChangeListeners = new Vector();
     private static Locale locale;
