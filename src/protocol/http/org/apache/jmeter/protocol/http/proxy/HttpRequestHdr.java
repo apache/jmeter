@@ -91,6 +91,7 @@ public class HttpRequestHdr
                     dataLength =
                         Math.max(parseLine(line.toString()), dataLength);
                 }
+                //log.debug("Client Request Line: " + line.toString());
                 line.reset();
             }
             else if (!inHeaders)
@@ -98,6 +99,7 @@ public class HttpRequestHdr
                 readLength++;
             }
         }
+        log.debug("Client Request Line: " + line.toString());
         postData = line.toString().trim();
         return clientRequest.toByteArray();
     }

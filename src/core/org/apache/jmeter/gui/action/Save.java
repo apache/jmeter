@@ -163,7 +163,7 @@ public class Save implements Command
 			chosenFile = testPlanFile;
 		}
 
-        ActionRouter.getInstance().actionPerformed(new ActionEvent(subTree,e.getID(),CheckDirty.SUB_TREE_SAVED));
+        ActionRouter.getInstance().actionPerformed(new ActionEvent(subTree.clone(),e.getID(),CheckDirty.SUB_TREE_SAVED));
         try
                 {
                     convertSubTree(subTree);
