@@ -60,7 +60,7 @@ public class SaveService
    // Version information for test plan header
    static String version = "1.0";
    static String propertiesVersion = "";//read from properties file
-   private static final String PROPVERSION = "1.3";
+   private static final String PROPVERSION = "1.4";
 
    // Helper method to simplify alias creation from properties
    private static void makeAlias(String alias, String clazz)
@@ -249,11 +249,11 @@ public class SaveService
       checkVersion(IntegerPropertyConverter.class, "1.3");
       checkVersion(LongPropertyConverter.class, "1.3");
       checkVersion(MultiPropertyConverter.class, "1.3");
-      checkVersion(SampleResultConverter.class, "1.2");
+      checkVersion(SampleResultConverter.class, "1.4");
       checkVersion(StringPropertyConverter.class, "1.6");
       checkVersion(TestElementConverter.class, "1.2");
       checkVersion(TestElementPropertyConverter.class, "1.3");
-      checkVersion(ScriptWrapperConverter.class, "1.2");
+      checkVersion(ScriptWrapperConverter.class, "1.3");
       if (!PROPVERSION.equalsIgnoreCase(propertiesVersion))
       {
          log.warn("Property file - expected " + PROPVERSION + ", found "
