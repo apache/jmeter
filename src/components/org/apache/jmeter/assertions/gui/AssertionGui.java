@@ -417,8 +417,8 @@ public class AssertionGui extends AbstractAssertionGui
     /**
      * An ActionListener for deleting a pattern.
      *
-     * @author    $Author$
-     * @version   $Revision$
+     * @author    
+     * @version   $Revision$ Last updated: $Date$
      */
     private class ClearPatternsListener implements ActionListener
     {
@@ -443,8 +443,7 @@ public class AssertionGui extends AbstractAssertionGui
     /**
      * An ActionListener for adding a pattern.
      *
-     * @author    $Author$
-     * @version   $Revision$
+     * @version   $Revision$  Last updated: $Date$
      */
     private class AddPatternListener implements ActionListener
     {
