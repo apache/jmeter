@@ -258,7 +258,7 @@
 
   <patternset id="external.jars">
     <include name="${lib.dir}/*.html"/>
-    <include name="${lib.dir}/LICENCE*.*"/>
+    <include name="${lib.dir}/LICENSE*.*"/>
     <include name="${avalon-excalibur.jar}"/>
     <include name="${avalon-framework.jar}"/>
     <include name="${jakarta-oro.jar}"/>
