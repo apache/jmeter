@@ -18,7 +18,6 @@ import org.apache.log.Logger;
 public class PreCompiler implements HashTreeTraverser
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
-    private boolean testValid = true;
     private ValueReplacer replacer;
 
     public PreCompiler()
@@ -49,7 +48,6 @@ public class PreCompiler implements HashTreeTraverser
             catch (InvalidVariableException e)
             {
                 log.error("invalid variables", e);
-                testValid = false;
             }
         }
     }

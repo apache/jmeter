@@ -66,7 +66,7 @@ import org.apache.log.Logger;
 
 
 /**
- * @author     $Author$
+ * @author     
  * @version    $Revision$ Updated on: $Date$
  */
 public class ClientJMeterEngine implements JMeterEngine,Runnable

@@ -87,15 +87,11 @@ public class CompoundVariable implements Function
         
     private String rawParameters;
     
-    //private JMeterVariables threadVars;
-    //private Map varMap = new HashMap();
-    
     static FunctionParser functionParser = new FunctionParser();
 
     static Map functions = new HashMap();
     private boolean hasFunction, isDynamic;
-    private String staticSubstitution;
-    //private Perl5Util util = new Perl5Util();
+
     private String permanentResults = "";
     
     LinkedList compiledComponents = new LinkedList();
@@ -130,7 +126,6 @@ public class CompoundVariable implements Function
         super();
         isDynamic = true;
         hasFunction = false;
-        staticSubstitution = "";
     }
     
     public CompoundVariable(String parameters)
@@ -233,7 +228,6 @@ public class CompoundVariable implements Function
     {
         hasFunction = false;
         compiledComponents.clear();
-        staticSubstitution = "";
     }
 
     public void setParameters(String parameters)
