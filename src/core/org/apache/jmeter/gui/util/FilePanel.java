@@ -53,7 +53,6 @@
  * <http://www.apache.org/>.
  */package org.apache.jmeter.gui.util;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
@@ -61,6 +60,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -124,12 +125,15 @@ public class FilePanel extends JPanel implements ActionListener
 	 */
 	private void init()
 	{
-		setLayout(new FlowLayout(FlowLayout.LEFT));
+		setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
 		setBorder(BorderFactory.createTitledBorder(title));
 		add(label);
+        add(Box.createHorizontalStrut(5));
 		add(filename);
+        add(Box.createHorizontalStrut(5));
 		filename.addActionListener(this);
 		add(browse);
+        add(Box.createHorizontalGlue());
 		browse.setActionCommand("browse");
 		browse.addActionListener(this);
         

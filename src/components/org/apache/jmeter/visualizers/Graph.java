@@ -166,7 +166,7 @@ public class Graph extends JComponent implements Scrollable, GraphListener, Clea
      */
     public boolean getScrollableTracksViewportWidth()
     {
-        return true;
+        return false;
     }
 
     /**
