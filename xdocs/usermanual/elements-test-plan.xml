@@ -8,129 +8,204 @@
 <body>
 
 <section name="4. Elements of a Test Plan">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.1 ThreadGroup">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.2 Controllers">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.2.1 Generative Controllers">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.2.1.1 Database Testing">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.2.1.1 FTP Testing">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.2.1.1 Web Testing">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.2.2 Logic Controllers">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.2.2.1 Interleave Logic">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.2.2.1 Simple Controller">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.2.2.1 Loop Controller">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.2.2.1 Modification Manager">
+<p>Put description text here...</p>
+<p>This element has no visual elements.</p>
 </section>
 
 <section name="4.2.2.1 Once Only Logic">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.3 Listeners">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.3.1 Graphs">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.3.1.1 View Graph Tree">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.3.1.1 Graph Full Results">
+<p>Put description text here...</p>
+<p>
+<img src="../images/screenshots/graph_full_results.gif" width="453" height="237" alt="Graph Full Results"></img>
+</p>
 </section>
 
 <section name="4.3.1.1 Graph Results">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.3.1.1 Spline Visualizer">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.3.2 Managers">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.3.2.1 Modification Manager">
+<p>Put description text here...</p>
+<p>This element has no visual elements.</p>
 </section>
 
 <section name="4.3.3 Miscellaneous">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.3.3.1 Assertion Results">
+<p>Put description text here...</p>
+<p>
+<img src="../images/screenshots/assertion_results.gif" width="475" height="273" alt="Assertion Results"></img>
+</p>
 </section>
 
 <section name="4.3.3.1 File Reporter">
+<p>Put description text here...</p>
+<p>
+<img src="../images/screenshots/file_reporter.gif" width="390" height="317" alt="File Reporter"></img>
+</p>
 </section>
 
 <section name="4.3.3.1 View Results">
+<p>Put description text here...</p>
+<p>
+<img src="../images/screenshots/view_results.gif" width="446" height="352" alt="View Results"></img>
+</p>
 </section>
 
 <section name="4.3.3.1 View Result Tree">
+<p>Put description text here...</p>
+<p>
+<img src="../images/screenshots/view_result_tree.gif" width="490" height="210" alt="View Result Tree"></img>
+</p>
 </section>
 
 <section name="4.4 Timers">
+<p>
+Timers help program flow by controlling how long JMeter's engine delays between each sample attempt. 
+Each sampling thread that runs will pause between every sample, depending on which timers have been chosen. 
+</p>
+<p>
+Timers are added to ThreadGroups. Multiple timers can be added to a ThreadGroup. 
+In this case, the sampling thread will sum results from each timer, and delay for that period of time. 
+</p>
 </section>
 
 <section name="4.4.1 Constant Timer">
+<p>Put description text here...</p>
+<p>
+<img src="../images/screenshots/constant_timer.gif" width="390" height="100" alt="Constant Timer"></img>
+</p>
 </section>
 
 <section name="4.4.2 Gaussian Random Timer">
+<p>Put description text here...</p>
+<p>
+<img src="../images/screenshots/gauss_random_timer.gif" width="390" height="182" alt="Gaussian Random Timer"></img>
+</p>
 </section>
 
 <section name="4.4.3 Uniform Random Timer">
+<p>Put description text here...</p>
+<p>
+<img src="../images/screenshots/uniform_random_timer.gif" width="390" height="182" alt="Uniform Random Timer"></img>
+</p>
 </section>
 
 <section name="4.5 Assertions">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.6 Configuration Elements">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.6.1 FTP Sample">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.6.1 Multipart-Form Sample">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.6.1 Url Sample">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.6.1 HTTP Authorization Manager Sample">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.6.1 Cookie Manager">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.6.1 Header Manager">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.6.1 Proxy Server">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.6.1 Database Login">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.6.1 Database Connection Pool">
+<p>Put description text here...</p>
 </section>
 
 <section name="4.6.1 SQL Query">
+<p>Put description text here...</p>
 </section>
 
 </body>
