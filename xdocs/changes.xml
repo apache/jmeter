@@ -11,6 +11,44 @@
 
 <b>Changes: for more info, contact <a href="mailto:mstover1@apache.org">Michael Stover</a></b>
 
+<h3>Version 1.9</h3>
+<ul>
+<li>Sample result log files can now be in CSV or XML format</li>
+<li>New Event model for notification of iteration events during test plan run</li>
+<li>New Javascript function for executing arbitrary javascript statements</li>
+<li>Many GUI improvements</li>
+<li>New Pre-processors and Post-processors replace Modifiers and Response-Based Modifiers. </li>
+<li>Compatible with jdk1.3</li>
+<li>JMeter functions are now fully recursive and universal (can use functions as parameters to functions)</li>
+<li>Integrated help window now supports hypertext links</li>
+<li>New Random Function</li>
+<li>New XML Assertion</li>
+<li>New LDAP Sampler (alpha code)</li>
+<li>New Ant Task to run JMeter (in extras folder)</li>
+<li>New Java Sampler test implementation (to assist developers)</li>
+<li>More efficient use of memory, faster loading of .jmx files</li>
+<li>New SOAP Sampler (alpha code)</li>
+<li>New Median calculation in Graph Results visualizer</li>
+<li>Default config element added for developer benefit</li>
+<li>Various performance enhancements during test run</li>
+<li>New Simple File recorder for minimal GUI overhead during test run</li>
+<li>New Function: StringFromFile - grabs values from a file</li>
+<li>New Function: CSVRead - grabs multiple values from a file</li>
+<li>Functions now longer need to be encoded - special values should be escaped 
+with "\" if they are literal values</li>
+<li>New cut/copy/paste functionality</li>
+<li>SSL testing should work with less user-fudging, and in non-gui mode</li>
+<li>Mailer Model works in non-gui mode</li>
+<li>New Througput Controller</li>
+<li>New Module Controller</li>
+<li>Tests can now be scheduled to run from a certain time till a certain time</li>
+<li>Remote JMeter servers can be started from a non-gui client.  Also, in gui mode, all remote servers can be started with a single click</li>
+<li>ThreadGroups can now be run either serially or in parallel (default)</li>
+<li>New command line options to override properties</li>
+<li>New Size Assertion</li>
+
+</ul>
+
 <h3>Version 1.8.1</h3>
 <ul>
 <li>Bug Fix Release.  Many bugs were fixed.</li>
