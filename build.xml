@@ -1,4 +1,4 @@
-<project name="JMeter" default="all" basedir=".">
+<project name="JDict" default="all" basedir=".">
 	<!--
 	- Initializes properties for other targets
 	-->
@@ -7,7 +7,7 @@
 		<!-- Where the class files should live -->
 		<property name="classes.dest.dir" value="bin/classes"/>
 		<!-- Where the Sources live -->
-		<property name="sources.src.dir" value="src"/>
+		<property name="sources.src.dir" value="./"/>
 		<!-- Where the API documentation lives -->
 		<property name="docs.api.dest.dir" value="docs/api"/>
 		<property name="version" value="_1.5b1"/>
