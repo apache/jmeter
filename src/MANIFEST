@@ -1,2 +1,2 @@
 Manifest-Version: 1.0
-Main-Class: org.apache.jmeter.JMeter
+Main-Class: org.apache.jmeter.Driver
