@@ -100,7 +100,9 @@ public class JMeterTest extends JMeterTestCase
 			{
 				continue;
 			}
-			suite.addTest(new JMeterTest("runGUIComponents",item));
+			TestSuite ts = new TestSuite(item.getClass().getName());
+			ts.addTest(new JMeterTest("runGUIComponents",item));
+			suite.addTest(ts);
 		}
 		return suite;
 	}
@@ -174,7 +176,9 @@ public class JMeterTest extends JMeterTestCase
 			{
 				continue;
 			}
-			suite.addTest(new JMeterTest("runSerialTest",serObj));
+			TestSuite ts = new TestSuite(serObj.getClass().getName());
+			ts.addTest(new JMeterTest("runSerialTest",serObj));
+			suite.addTest(ts);
 		}
 		return suite;
 	}
@@ -209,7 +213,9 @@ public class JMeterTest extends JMeterTestCase
 		while (iter.hasNext())
 		{
 			TestElement item = (TestElement) iter.next();
-			suite.addTest(new JMeterTest("runTestElement",item));
+			TestSuite ts = new TestSuite(item.getClass().getName());
+			ts.addTest(new JMeterTest("runTestElement",item));
+			suite.addTest(ts);
 		}
 		return suite;
 	}
