@@ -54,31 +54,30 @@
  */
 package org.apache.jorphan.timer;
 
-// ----------------------------------------------------------------------------
 /**
  * A simple interface for measuring time intervals. An instance of this goes
  * through the following lifecycle states:
- * <DL>
- *  <DT> <EM>ready</EM>
- *      <DD> timer is ready to start a new measurement
- *  <DT> <EM>started</EM>
- *      <DD> timer has recorded the starting time interval point
- *  <DT> <EM>stopped</EM>
- *      <DD> timer has recorded the ending time interval point
- * </DL>
- * See individual methods for details.<P>
+ * <dl>
+ *  <dt><em>ready</em></dt>
+ *      <dd>timer is ready to start a new measurement</dd>
+ *  <dt><em>started</em></dt>
+ *      <dd>timer has recorded the starting time interval point</dd>
+ *  <dt><em>stopped</em></dt>
+ *      <dd>timer has recorded the ending time interval point</dd>
+ * </dl>
+ * See individual methods for details.
+ * <p>
+ * If this library has been compiled with
+ * {@link ITimerConstants#DO_STATE_CHECKS} set to 'true' the implementation
+ * will enforce this lifecycle model and throw IllegalStateException when it
+ * is violated.
  * 
- * If this library has been compiled with {@link ITimerConstants#DO_STATE_CHECKS}
- * set to 'true' the implementation will enforce this lifecycle model and throw
- * IllegalStateException when it is violated.
- * 
- * @author (C) <a href="mailto:vroubtsov@illinoisalumni.org">Vlad Roubtsov</a>, 2002
+ * @author <a href="mailto:vroubtsov@illinoisalumni.org">Vlad Roubtsov</a>
  * @author Originally published in <a href="http://www.javaworld.com/javaworld/javaqa/2003-01/01-qa-0110-timing.html">JavaWorld</a>
+ * @version $Revision$
  */
 public interface ITimer
 {
-    // public: ................................................................
-    
     /**
      * Starts a new time interval and advances this timer instance to 'started'
      * state. This method can be called from 'ready' state only.
@@ -97,7 +96,7 @@ public interface ITimer
      * Returns the duration of the time interval that elapsed between the last
      * calls to {@link #start()} and {@link #stop()}. This method can be called
      * any number of times from 'stopped' state and will return the same value
-     * each time.<P>
+     * each time.
      * 
      * @return interval duration in milliseconds 
      */
@@ -109,5 +108,4 @@ public interface ITimer
      */
     void reset ();
 
-} // end of interface
-// ----------------------------------------------------------------------------
+}
