@@ -10,7 +10,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import junit.framework.TestCase;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
@@ -26,9 +27,10 @@ import org.apache.log.Logger;
 
 /**
  * @author    Michael Stover
- * @version   $Revision$
+ * @author    sebb at apache dot org (refactor into suites)
+ * @version   $Revision$ Last update $Date$
  */
-public class JMeterTest extends TestCase
+public class JMeterTest extends JMeterTestCase
 {
     private static Logger log = LoggingManager.getLoggerForClass();
 
@@ -37,116 +39,203 @@ public class JMeterTest extends TestCase
         super(name);
     }
 
-    public void testGUIComponents() throws Exception
+/*
+ * The suite() method creates separate test suites for each of the types of test.
+ * The suitexxx() methods create a list of items to be tested, and create a new test
+ * instance for each.
+ * 
+ * Each test type has its own constructor, which saves the item to be tested
+ * 
+ * Note that the makeSuite() and suite() methods must be static, and the methods
+ * to run the tests must be instance methods so that they can pick up the item value
+ * which was saved by the constructor.
+ * 
+ */
+    // Constructor for TestElement tests
+    private TestElement testItem;
+	public JMeterTest(String testName, TestElement te)
+	{
+		super(testName);// Save the method name
+		testItem=te;
+	}
+
+    // Constructor for Serializable tests
+    private Serializable serObj;
+	public JMeterTest(String testName, Serializable ser)
+	{
+		super(testName);// Save the method name
+		serObj=ser;
+	}
+
+	// Constructor for GUI tests
+    private JMeterGUIComponent guiItem;
+	public JMeterTest(String testName, JMeterGUIComponent gc)
+	{
+		super(testName);// Save the method name
+		guiItem=gc;
+	}
+    
+	/*
+	 * Add makeSuite to allow test to be run from AllTests.java
+	 */
+	public static Test makeSuite() throws Exception{
+		return suite();
+	}
+	
+	/*
+	 * Use a suite to allow the tests to be generated at run-time
+	 */
+    public static Test suite() throws Exception{
+    	TestSuite suite = new TestSuite();
+    	suite.addTest(suiteGUIComponents());
+		suite.addTest(suiteSerializableElements());
+		suite.addTest(suiteTestElements());
+        return suite;
+    }
+    
+	/*
+	 * Test GUI elements - create the suite of tests
+	 */
+	public static Test suiteGUIComponents() throws Exception
+	{
+		TestSuite suite = new TestSuite("GuiComponents");
+		Iterator iter = getObjects(JMeterGUIComponent.class).iterator();
+		while (iter.hasNext())
+		{
+			JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
+			if (item instanceof JMeterTreeNode)
+			{
+				continue;
+			}
+			suite.addTest(new JMeterTest("runGUIComponents",item));
+		}
+		return suite;
+	}
+	
+	/*
+	 * Test GUI elements - run the test
+	 */
+    public void runGUIComponents() throws Exception
     {
-        Iterator iter = getObjects(JMeterGUIComponent.class).iterator();
-        while (iter.hasNext())
+    	String name = guiItem.getClass().getName();
+    	
+    	//TODO these assertions could be separate tests
+    	
+        assertEquals(
+            "Name should be same as static label for " + name,
+            guiItem.getStaticLabel(),
+            guiItem.getName());
+        TestElement el = guiItem.createTestElement();
+        assertNotNull(
+		name+".createTestElement should be non-null ", el);
+        assertEquals(
+            "GUI-CLASS: Failed on " + name,
+            name,
+            el.getPropertyAsString(TestElement.GUI_CLASS));
+        assertEquals(
+            "NAME: Failed on " + name,
+            guiItem.getName(),
+            el.getPropertyAsString(TestElement.NAME));
+        assertEquals(
+            "TEST-CLASS: Failed on " + name,
+            el.getClass().getName(),
+            el.getPropertyAsString(TestElement.TEST_CLASS));
+        TestElement el2 = guiItem.createTestElement();
+        el.setProperty(TestElement.NAME, "hey, new name!:");
+        el.setProperty("NOT", "Shouldn't be here");
+        if (!(guiItem instanceof UnsharedComponent))
         {
-            JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
-            if (item instanceof JMeterTreeNode)
-            {
-                continue;
-            }
             assertEquals(
-                "Failed on " + item.getClass().getName(),
-                item.getStaticLabel(),
-                item.getName());
-            TestElement el = item.createTestElement();
-            assertNotNull(
-			"createTestElement failed on " + item.getClass().getName(),
-            el);
-            assertEquals(
-                "GUI-CLASS: Failed on " + item.getClass().getName(),
-                item.getClass().getName(),
-                el.getPropertyAsString(TestElement.GUI_CLASS));
-            assertEquals(
-                "NAME: Failed on " + item.getClass().getName(),
-                item.getName(),
-                el.getPropertyAsString(TestElement.NAME));
-            assertEquals(
-                "TEST-CLASS: Failed on " + item.getClass().getName(),
-                el.getClass().getName(),
-                el.getPropertyAsString(TestElement.TEST_CLASS));
-            TestElement el2 = item.createTestElement();
-            el.setProperty(TestElement.NAME, "hey, new name!:");
-            el.setProperty("NOT", "Shouldn't be here");
-            if (!(item instanceof UnsharedComponent))
-            {
-                assertEquals(
-                    "GUI-CLASS: Failed on " + item.getClass().getName(),
-                    "",
-                    el2.getPropertyAsString("NOT"));
-            }
-            log.debug("Saving element: " + el.getClass());
-            el =
-                SaveService.createTestElement(
-                    SaveService.getConfigForTestElement(null, el));
-            log.debug("Successfully saved");
-            item.configure(el);
-            assertEquals(
-                "CONFIGURE-TEST: Failed on " + item.getClass().getName(),
-                el.getPropertyAsString(TestElement.NAME),
-                item.getName());
-            item.modifyTestElement(el2);
-            assertEquals(
-                "Modify Test: Failed on " + item.getClass().getName(),
-                "hey, new name!:",
-                el2.getPropertyAsString(TestElement.NAME));
+                "GUI-CLASS: Failed on " + name,
+                "",
+                el2.getPropertyAsString("NOT"));
         }
+        log.debug("Saving element: " + el.getClass());
+        el =
+            SaveService.createTestElement(
+                SaveService.getConfigForTestElement(null, el));
+        log.debug("Successfully saved");
+        guiItem.configure(el);
+        assertEquals(
+            "CONFIGURE-TEST: Failed on " + name,
+            el.getPropertyAsString(TestElement.NAME),
+            guiItem.getName());
+        guiItem.modifyTestElement(el2);
+        assertEquals(
+            "Modify Test: Failed on " + name,
+            "hey, new name!:",
+            el2.getPropertyAsString(TestElement.NAME));
     }
 
-    public void testSerializableElements() throws Exception
+    /*
+     * Test serializable elements - create the suite of tests
+     */
+	public static Test suiteSerializableElements() throws Exception
+	{
+		TestSuite suite = new TestSuite("SerializableElements");
+		Iterator iter = getObjects(Serializable.class).iterator();
+		while (iter.hasNext())
+		{
+			Serializable serObj = (Serializable) iter.next();
+			if (serObj.getClass().getName().endsWith("_Stub"))
+			{
+				continue;
+			}
+			suite.addTest(new JMeterTest("runSerialTest",serObj));
+		}
+		return suite;
+	}
+
+    /*
+     * Test serializable elements - test the object
+     */
+    public void runSerialTest() throws Exception
     {
-        Iterator iter = getObjects(Serializable.class).iterator();
-        while (iter.hasNext())
-        {
-            Serializable serObj = (Serializable) iter.next();
-            if (serObj.getClass().getName().endsWith("_Stub"))
-            {
-                continue;
-            }
-            try
-            {
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                ObjectOutputStream out = new ObjectOutputStream(bytes);
-                out.writeObject(serObj);
-                out.close();
-                ObjectInputStream in =
-                    new ObjectInputStream(
-                        new ByteArrayInputStream(bytes.toByteArray()));
-                Object readObject = in.readObject();
-                in.close();
-                assertEquals(
-                    "deserializing class: " + serObj.getClass().getName(),
-                    serObj.getClass(),
-                    readObject.getClass());
-            }
-            catch (Exception e)
-            {
-                log.error(
-                    "Trying to serialize object: "
-                        + serObj.getClass().getName(),
-                    e);
-                throw e;
-            }
-        }
+		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		ObjectOutputStream out = new ObjectOutputStream(bytes);
+		out.writeObject(serObj);
+		out.close();
+		ObjectInputStream in =
+			new ObjectInputStream(
+				new ByteArrayInputStream(bytes.toByteArray()));
+		Object readObject = in.readObject();
+		in.close();
+		assertEquals(
+			"deserializing class: " + serObj.getClass().getName(),
+			serObj.getClass(),
+			readObject.getClass());
     }
 
-    public void testTestElements() throws Exception
-    {
-        Iterator iter = getObjects(TestElement.class).iterator();
-        while (iter.hasNext())
-        {
-            TestElement item = (TestElement) iter.next();
-            checkElementCloning(item);
-            assertTrue(
-                item.getClass().getName() + " must implement Serializable",
-                item instanceof Serializable);
-        }
-    }
+    /*
+     * Test TestElements - create the suite
+     */	
+	public static Test suiteTestElements() throws Exception
+	{
+		TestSuite suite = new TestSuite("TestElements");
+		Iterator iter = getObjects(TestElement.class).iterator();
+		while (iter.hasNext())
+		{
+			TestElement item = (TestElement) iter.next();
+			suite.addTest(new JMeterTest("runTestElement",item));
+		}
+		return suite;
+	}
+	
+	/*
+	 * Test TestElements - implement the test case
+	 */	
+	public void runTestElement() throws Exception
+	{
+		checkElementCloning(testItem);
+		assertTrue(
+		    testItem.getClass().getName() + " must implement Serializable",
+			testItem instanceof Serializable);
+	}
 
-    private Collection getObjects(Class extendsClass) throws Exception
+    private static Collection getObjects(Class extendsClass) throws Exception
     {
+    	String exName = extendsClass.getName();
+    	Object myThis = new String();
         Iterator classes =
             ClassFinder
                 .findClassesThatExtend(
@@ -175,34 +264,35 @@ public class JMeterTest extends TestCase
                 }
                 catch (InstantiationException e)
                 {
+					//System.out.println(e.toString());
                     try
                     {
                         // Events often have this constructor
                         objects.add(
                             c.getConstructor(
                                 new Class[] { Object.class }).newInstance(
-                                new Object[] { this }));
+                                new Object[] { myThis }));
                     }
                     catch (NoSuchMethodException f)
                     {
                         // no luck. Ignore this class
+						System.out.println(exName+": can't create "+n);
                     }
                 }
             }
             catch (IllegalAccessException e)
             {
-                // We won't test serialization of restricted-access
-                // classes.
+                // We won't test restricted-access classes.
             }
 			catch (java.awt.HeadlessException e)
 			{
-				System.out.println("\nError creating "+n+" "+e.toString());
+				System.out.println("Error creating "+n+" "+e.toString());
 			}
             catch (Exception e)
             {
             	if (e instanceof RemoteException)
 				{
-					System.out.println("\nError creating "+n+" "+e.toString());
+					System.out.println("Error creating "+n+" "+e.toString());
 				}
 				else
 				{
@@ -212,15 +302,17 @@ public class JMeterTest extends TestCase
         }
         caughtError=false;
     } finally {
-    	if (caughtError){
-			System.out.println("\nLast class="+n);
+    	if (caughtError)
+    	{
+			System.out.println("Last class="+n);
 			System.out.println("objects.size="+objects.size());
     	}
     }
+        assertTrue("Expected to find some classes that extend "+exName,objects.size() > 0);
         return objects;
     }
 
-    private void cloneTesting(TestElement item, TestElement clonedItem)
+    private static void cloneTesting(TestElement item, TestElement clonedItem)
     {
         assertTrue(item != clonedItem);
         assertEquals(
@@ -229,7 +321,7 @@ public class JMeterTest extends TestCase
             clonedItem.getClass().getName());
     }
 
-    private void checkElementCloning(TestElement item)
+    private static void checkElementCloning(TestElement item)
     {
         TestElement clonedItem = (TestElement) item.clone();
         cloneTesting(item, clonedItem);
