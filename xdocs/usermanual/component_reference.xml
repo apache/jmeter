@@ -1335,9 +1335,21 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 
 <properties>
 <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+<property name="Script" required="Yes">The BeanShell script to run</property>
 
 </properties>
 </component>
+
+<component index="14.5.6" name="MD5Hex Assertion">
+<description><p>The MD5Hex Assertion allows the user to check the MD5 hash of the response data.</p></description>
+
+<properties>
+<property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+<property name="MD5 sum" required="Yes">32 hex digits representing the MD5 hash (case not significant)</property>
+
+</properties>
+</component>
+
 
 </section>
 
