@@ -55,15 +55,14 @@
 package org.apache.jmeter.protocol.jdbc.util;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.Driver;
 import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -73,34 +72,30 @@ import org.apache.log.Logger;
  * DBConnect object and its subclasses.  This class is not directly accessed
  * by the end-user objects.  It is accessed by the DBConnect object and its
  * subclasses.
+ * 
  * @author Michael Stover
+ * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
  * @version $Revision$
  */
-public class DBConnectionManager
+
+public final class DBConnectionManager
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.jdbc");
-    int absoluteMaxConnections = 100;
-    long accessInterval = 1800000;
-    Hashtable connections;
-    Hashtable rentedConnections;
+    private static Logger log = LoggingManager.getLoggerForClass();
 
-    static DBConnectionManager manager;
-
+    private static DBConnectionManager manager = new DBConnectionManager();
+    
+    /** Map of DBKey to ConnectionPool. */
+    private Map poolMap = new HashMap();
+    
+    /**
+     * Private constructor to prevent instantiation from outside this class.
+     */
     private DBConnectionManager()
     {
-        if (connections == null)
-            connections = new Hashtable();
-        if (rentedConnections == null)
-            rentedConnections = new Hashtable();
     }
 
     public static DBConnectionManager getManager()
     {
-        if (manager == null)
-        {
-            manager = new DBConnectionManager();
-        }
         return manager;
     }
 
@@ -108,6 +103,7 @@ public class DBConnectionManager
      * Starts the connection manager going for a given database connection, and
      * returns the DBKey object required to get a Connection object for this
      * database.
+     * 
      * @param url       URL of database to be connected to.
      * @param username  username to use to connect to database.
      * @param password  password to use to connect to database.
@@ -126,166 +122,104 @@ public class DBConnectionManager
         int maxUsage,
         int maxConnections)
     {
-        DBKey key = new DBKey();
-        if (registerDriver(driver))
+        DBKey key =
+            new DBKey(
+                driver,
+                url,
+                username,
+                password);
+
+        synchronized (poolMap)
         {
-            key.setDriver(driver);
-            key.setMaxConnections(maxConnections);
-            key.setMaxUsage(maxUsage);
-            key.setPassword(password);
-            key.setUrl(url);
-            key.setUsername(username);
-            if (!connections.containsKey(key))
-                setup(key);
+            if (!poolMap.containsKey(key))
+            {
+                if (registerDriver(driver))
+                {
+                    poolMap.put(
+                        key,
+                        createConnectionPool(key, maxUsage, maxConnections));
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
-        else
-            key = null;
+        
         return key;
     }
 
-    /**
-     * Constructor.
-     * @param key DBKey that holds all information needed to set up a set of
-     * connections.
-     */
-    public void setup(DBKey key)
+    private ConnectionPool createConnectionPool(
+        DBKey key,
+        int maxUsage,
+        int maxConnections)
     {
-        /* Code used to create a JDBC log for debuggin purposes
-        try{
-        java.io.PrintWriter jdbcLog=
-                new java.io.PrintWriter(new java.io.FileWriter(jdbcLogFile));
-        DriverManager.setLogWriter(jdbcLog);
-        }catch(Exception e){}*/
-        String url = key.getUrl();
-        String username = key.getUsername();
-        String password = key.getPassword();
-        int maxConnections = key.getMaxConnections();
-        int maxUsage = key.getMaxUsage();
-        ConnectionObject[] connectionArray;
-        int dbMax;
-        try
-        {
-            DriverManager.registerDriver(
-                (java.sql.Driver) Class.forName(key.getDriver()).newInstance());
-            DatabaseMetaData md =
-                DriverManager
-                    .getConnection(url, username, password)
-                    .getMetaData();
-            dbMax = md.getMaxConnections();
-            if (dbMax > 0 && maxConnections > dbMax)
-            {
-                maxConnections = dbMax;
-                key.setMaxConnections(maxConnections);
-            }
-            else if (maxConnections > absoluteMaxConnections)
-            {
-                maxConnections = absoluteMaxConnections;
-                key.setMaxConnections(maxConnections);
-            }
-        }
-        catch (Exception e)
-        {
-            log.error("Couldn't open connections to database", e);
-            maxConnections = 0;
-        }
-        connectionArray = new ConnectionObject[maxConnections];
-        int count = -1;
-        while (++count < maxConnections)
-            connectionArray[count] = new ConnectionObject(this, key);
-        connections.put(key, connectionArray);
-        System.gc();
+        return new JMeter19ConnectionPool(key, maxUsage, maxConnections);
     }
 
     public void shutdown()
     {
-        Iterator iter = new HashSet(connections.keySet()).iterator();
-        while (iter.hasNext())
+        synchronized (poolMap)
         {
-            close((DBKey) iter.next());
+            Iterator iter = poolMap.keySet().iterator();
+            while (iter.hasNext())
+            {
+                DBKey key = (DBKey)iter.next();
+                ConnectionPool pool = (ConnectionPool) poolMap.remove(key);
+                pool.close();
+            }
         }
-
     }
 
+    private ConnectionPool getPool(DBKey key)
+    {
+        synchronized (poolMap)
+        {
+            return (ConnectionPool)poolMap.get(key);
+        }
+    }
+    
     /**
      * Rents out a database connection object.
      * @return Connection object.
      */
     public Connection getConnection(DBKey key)
-        throws NoConnectionsAvailableException //deleted synchronized
+        throws NoConnectionsAvailableException
     {
-        ConnectionObject[] connectionArray =
-            (ConnectionObject[]) connections.get(key);
-        if (connectionArray == null || connectionArray.length == 0)
+        ConnectionPool pool = getPool(key);
+        
+        if (pool == null)
         {
             throw new NoConnectionsAvailableException();
         }
-        int maxConnections = key.getMaxConnections();
-        Connection c = null;
-        int index = (int) (100 * Math.random());
-        int count = -1;
-        while (++count < maxConnections && c == null)
+        else
         {
-            index++;
-            c = connectionArray[index % maxConnections].grab();
+            try
+            {
+                return pool.getConnection();
+            }
+            catch (NoSuchElementException e)
+            {
+                log.warn(
+                    "NoSuchElementException getting database connection",
+                    e);
+                return null;
+            }
+            catch (Exception e)
+            {
+                log.warn("Exception getting database connection from pool", e);
+                throw new NoConnectionsAvailableException();
+            }
         }
-        if (c != null)
-            rentedConnections.put(c, connectionArray[index % maxConnections]);
-        return c;
     }
 
     /**
      * Releases a connection back to the pool.
      * @param c Connection object being returned
      */
-    public void releaseConnection(Connection c) // deleted synchronized
+    public void releaseConnection(DBKey key, Connection c)
     {
-        if (c == null)
-        {
-            return;
-        }
-        ConnectionObject connOb = (ConnectionObject) rentedConnections.get(c);
-        if (connOb != null)
-        {
-            rentedConnections.remove(c);
-            connOb.release();
-        }
-        else
-        {
-            log.warn("DBConnectionManager: Lost a connection connection='" + c);
-            c = null;
-        }
-    }
-
-    /**
-     * Returns a new java.sql.Connection object.
-     * @throws java.sql.SQLException
-     */
-    public Connection newConnection(DBKey key)
-        throws SQLException //deleted synchronized
-    {
-        Connection c;
-        c =
-            DriverManager.getConnection(
-                key.getUrl(),
-                key.getUsername(),
-                key.getPassword());
-        return c;
-    }
-
-    /**
-     * Closes out this object and returns resources to the system.
-     */
-    public void close(DBKey key)
-    {
-        ConnectionObject[] connectionArray =
-            (ConnectionObject[]) connections.get(key);
-        int count = -1;
-        while (++count < connectionArray.length)
-        {
-            connectionArray[count].close();
-            connectionArray[count] = null;
-        }
-        connections.remove(key);
+        getPool(key).returnConnection(c);
     }
 
     /**
@@ -293,7 +227,7 @@ public class DBConnectionManager
      * @param driver full classname for the driver.
      * @return True if successful, false otherwise.
      */
-    public boolean registerDriver(String driver)
+    private boolean registerDriver(String driver)
     {
         try
         {
@@ -302,26 +236,9 @@ public class DBConnectionManager
         }
         catch (Exception e)
         {
-            log.error("", e);
+            log.error("Error registering database driver '" + driver + "'", e);
             return false;
         }
         return true;
     }
-
-    /**
-     * Private method to check if database exists.
-     * @return True if database exists, false otherwise
-     
-      private synchronized boolean checkForDatabase()
-      {
-         boolean connected=true;
-         try
-         {
-            DatabaseMetaData dmd=connection[counter].getCon().getMetaData();
-            int cons=dmd.getMaxConnections();
-         }catch(SQLException e){connected=false;log.error("",e);}
-    
-         return connected;
-      }
-      */
 }

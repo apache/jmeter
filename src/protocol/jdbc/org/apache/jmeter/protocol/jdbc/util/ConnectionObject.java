@@ -55,9 +55,10 @@
 package org.apache.jmeter.protocol.jdbc.util;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
@@ -71,34 +72,36 @@ import org.apache.log.Logger;
  */
 public class ConnectionObject implements Runnable
 {
-    transient private static Logger log =
-        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.jdbc");
-    Connection con;
-    DBKey key;
-    int useCount, maxUsage;
-    long lastAccessed;
-    boolean inUse, inMaintenance;
-    DBConnectionManager manager;
-    Thread reset;
     static long accessInterval = 180000;
 
+    private static Logger log = LoggingManager.getLoggerForClass();
+
+    private final DBKey key;
+    private Connection con;
+    private int useCount;
+    private int maxUsage;
+    private long lastAccessed;
+    private boolean inUse;
+    private boolean inMaintenance;
+
+    private Thread reset;
+    
     /**
      * Constructor - takes a connection object.
      * @param man DBConnectionManager object.
      * @param k DBKey object.
      */
-    public ConnectionObject(DBConnectionManager man, DBKey k)
+    public ConnectionObject(DBKey k, int maxUsage) throws SQLException
     {
         key = k;
-        manager = man;
         reset = new Thread(this);
         useCount = 0;
         lastAccessed = System.currentTimeMillis();
         inMaintenance = true;
         inUse = false;
         con = null;
-        maxUsage = key.getMaxUsage();
-        reset.start();
+        this.maxUsage = maxUsage;
+        reset();
     }
 
     /**
@@ -172,7 +175,13 @@ public class ConnectionObject implements Runnable
     public synchronized Connection grab()
     {
         Connection c = null;
-        if (!inUse && !inMaintenance)
+        if (inUse || inMaintenance)
+        {
+            log.debug(
+                "Connection not available because it is "
+                    + (inUse ? "in use" : "in maintenance"));
+        }
+        else
         {
             if (con != null)
             {
@@ -180,6 +189,9 @@ public class ConnectionObject implements Runnable
                 {
                     if (con.isClosed())
                     {
+                        log.debug(
+                            "Connection is closed.  "
+                                + "Putting it in maintenance.");
                         inMaintenance = true;
                         //   reset=new Thread(this);
                         reset.start();
@@ -188,24 +200,31 @@ public class ConnectionObject implements Runnable
                         System.currentTimeMillis() - lastAccessed
                             > accessInterval)
                     {
+                        log.debug(
+                            "Connection is timed out.  "
+                                + "Putting it in maintenance.");
                         inMaintenance = true;
                         //   reset=new Thread(this);
                         reset.start();
                     }
                     else
                     {
+                        log.debug(
+                            "Connection is available."
+                                + "Marking it as in use.");
                         inUse = true;
                         c = con;
                     }
                 }
                 catch (SQLException e)
                 {
+                    log.warn("Exception checking if connection is closed", e);
                 }
             }
             else
             {
+                log.debug("connection is null.  Putting it in maintenance.");
                 inMaintenance = true;
-                // reset=new Thread(this);
                 reset.start();
             }
         }
@@ -226,7 +245,6 @@ public class ConnectionObject implements Runnable
      */
     public void run()
     {
-        // Functions.javaLog("ConnectionObject: Got to here - 1");
         boolean set = true;
         while (set)
         {
@@ -234,14 +252,12 @@ public class ConnectionObject implements Runnable
             {
                 reset();
                 set = false;
-                // Functions.javaLog("ConnectionObject: Got to here - 2");
             }
             catch (SQLException e)
             {
                 log.error("ConnectionObject: url = " + key.getUrl(), e);
             }
         }
-        // Functions.javaLog("ConnectionObject: Got to here - 3");
         reset = new Thread(this);
     }
 
@@ -263,7 +279,11 @@ public class ConnectionObject implements Runnable
             }
             con = null;
         }
-        con = manager.newConnection(key);
+        con = DriverManager.getConnection(
+            key.getUrl(),
+            key.getUsername(),
+            key.getPassword());
+
         useCount = 0;
         lastAccessed = System.currentTimeMillis();
         inUse = false;
