@@ -56,7 +56,8 @@ public class UserParametersGui extends AbstractConfigGui {
 	
 	public void configure(TestElement el)
 	{
-		tableModel.clearData();
+        initTableModel();
+        paramTable.setModel(tableModel);
 		UserParameters params = (UserParameters)el;
 		List names = params.getNames();
 		List threadValues = params.getThreadLists();
@@ -102,12 +103,7 @@ public class UserParametersGui extends AbstractConfigGui {
 		JPanel paramPanel = new JPanel(new BorderLayout());
 		JLabel tableLabel =
 			new JLabel(JMeterUtils.getResString("user_parameters_table"));
-		tableModel =
-			new PowerTableModel(
-				new String[] {
-					JMeterUtils.getResString("name"),
-					THREAD_COLUMNS + "_" + numUserColumns },
-				new Class[] { String.class, String.class });
+		initTableModel();
 		paramTable = new JTable(tableModel);
 		paramTable.setRowSelectionAllowed(true);
 		paramTable.setColumnSelectionAllowed(true);
@@ -123,6 +119,16 @@ public class UserParametersGui extends AbstractConfigGui {
 		paramPanel.add(makeButtonPanel(), BorderLayout.SOUTH);
 		return paramPanel;
 	}
+
+    protected void initTableModel()
+    {
+        tableModel =
+        	new PowerTableModel(
+        		new String[] {
+        			JMeterUtils.getResString("name"),
+        			THREAD_COLUMNS + "_" + numUserColumns },
+        		new Class[] { String.class, String.class });
+    }
 
 	private JPanel makeButtonPanel() {
 		JPanel buttonPanel = new JPanel();

@@ -168,13 +168,11 @@ public class AssertionGui extends AbstractAssertionGui implements FocusListener
 			containsBox.setSelected(true);
 			matchesBox.setSelected(false);
 		}
-
 		else
 		{
 			containsBox.setSelected(false);
 			matchesBox.setSelected(true);
 		}
-
 		if(model.isNotType())
 		{
 			notBox.setSelected(true);
@@ -194,6 +192,7 @@ public class AssertionGui extends AbstractAssertionGui implements FocusListener
 			responseStringButton.setSelected(false);
 			labelButton.setSelected(true);
 		}
+        tableModel.clearData();
 		Iterator tests = model.getTestStrings().iterator();
 		while(tests.hasNext())
 		{

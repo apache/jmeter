@@ -323,10 +323,8 @@ public class ProxyControl extends ConfigTestElement implements Serializable
                 if (areMatched(sampler, urlConfig))
                 {
                     removeValuesFromSampler(sampler, urlConfig);
-                    replacer.reverseReplace(sampler);
-                    HttpTestSampleGui test = new HttpTestSampleGui();
-                    test.configure(sampler);
-                    sampler = (HTTPSampler) test.createTestElement();
+                    replaceValues(sampler,subConfigs);
+                    sampler.setProperty(TestElement.GUI_CLASS,"org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui");
                     try
                     {
                         JMeterTreeNode newNode = treeModel.addComponent(sampler, node);
@@ -334,10 +332,8 @@ public class ProxyControl extends ConfigTestElement implements Serializable
                         {
                             if (subConfigs[i] instanceof HeaderManager)
                             {
-                                HeaderPanel comp = new HeaderPanel();
-                                replacer.reverseReplace(subConfigs[i]);
-                                comp.configure(subConfigs[i]);
-                                treeModel.addComponent(comp.createTestElement(), newNode);
+                                subConfigs[i].setProperty(TestElement.GUI_CLASS,"org.apache.jmeter.protocol.http.gui.HeaderPanel");
+                                treeModel.addComponent(subConfigs[i], newNode);
                             }
                         }
                     }
@@ -421,6 +417,15 @@ public class ProxyControl extends ConfigTestElement implements Serializable
         }
         return ok;
     }
+
+    protected void replaceValues(TestElement sampler, TestElement[] configs)
+        {
+            GuiPackage.getInstance().getReplacer().reverseReplace(sampler);
+            for (int i = 0; i < configs.length; i++)
+            {
+                GuiPackage.getInstance().getReplacer().reverseReplace(configs[i]);
+            }
+        }
     public static class Test extends TestCase
     {
         public Test(String name)
