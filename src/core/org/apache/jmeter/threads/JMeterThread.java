@@ -161,7 +161,8 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 	 * !ToDo (Method description)
 	 ***************************************/
 	public void stop() {
-		running = false;
+		running = false;		
+		log.info("stopping "+threadName);
 	}
 	private void checkAssertions(List assertions, SampleResult result) {
 		Iterator iter = assertions.iterator();
@@ -225,7 +226,6 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 				Thread.sleep(initialDelay);
 			}
 			catch (InterruptedException e) {
-				log.error("",e);
 			}
 		}
 	}
