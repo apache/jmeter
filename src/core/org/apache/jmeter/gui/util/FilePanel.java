@@ -100,6 +100,16 @@ public class FilePanel extends HorizontalPanel implements ActionListener
 
     }
 
+	/**
+	 * If the gui needs to enable/disable the FilePanel, call the
+	 * method.
+	 * @param enable
+	 */
+	public void enableFile(boolean enable){
+		browse.setEnabled(enable);
+		filename.setEnabled(enable);
+	}
+	
     /**
      * Gets the filename attribute of the FilePanel object.
      *
