@@ -47,8 +47,6 @@ combination of includes and excludes, you should be able to record what you are 
 not.</p>
 <p>
 When you are ready to begin, hit &quot;start&quot;.</p>
-<p>
-Currently, the Proxy Server does not save these settings when saved to file.</p>
 </section>
 <section name="Where do the samples get recorded to?">
 <p>
@@ -57,8 +55,7 @@ Simple Controller, they will all have duplicate Web Test controllers created for
 Url Sample element with domain or path settings, then your Web Test controllers will be created with blank domain and/or path settings (provided
 they match, of course).  This allows you to simply create test plans with a single top level config element to control which server name is
 being tested.<br/>
-If there are no Simple Controllers in your test plan, then the Web Test controllers will be generated directly under the ThreadGroup
-object in your tree.
+If there are no Simple Controllers in your test plan, then no samples will be recorded.
 </p>
 </section>
 <section name="All Done">

@@ -1,6 +1,5 @@
 <project name="JMeter" default="all" basedir=".">
 
-  <property name="build.compiler" value="classic"/>
   <!-- Where the class files should live -->
   <property name="classes.dest.dir" value="bin/classes"/>
   <!-- Where the Sources live -->
@@ -10,6 +9,8 @@
   <property name="version" value="_1.6.1"/>
   <property name="docs.src" value="./xdocs"/>
   <property name="docs.dest" value="./docs"/>
+  <property name="printable_docs.dest" value="./printable_docs"/>
+  <property name="optimize" value="on"/>
 
   <!-- Build classpath -->
   <path id="classpath">
@@ -75,7 +76,7 @@
 		  <mkdir dir="${classes.dest.dir}"/>
 		  <javac srcdir="${sources.src.dir}"
 				destdir="${classes.dest.dir}"
-				optimize="on">
+				optimize="${optimize}">
 				<exclude name="**/*.df*"/>
 				<exclude name="**/*.html"/>
 				<exclude name="**/*.tpr"/>
@@ -172,7 +173,18 @@
 	 <target name="docs" depends="no.anakia" if="AnakiaTask.present">
 		  <taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask"/>
 		  <anakia basedir="${docs.src}" destdir="${docs.dest}/"
-				extension=".html" style="./site.vsl"
+				extension=".html" style="./xdocs/stylesheets/site.vsl"
+				projectFile="./stylesheets/project.xml"
+				excludes="**/stylesheets/**"
+				includes="**/*.xml"
+				lastModifiedCheck="false"
+				velocityPropertiesFile="${docs.src}/velocity.properties"></anakia>
+	 </target>
+	 
+	 <target name="printable_docs" depends="no.anakia" if="AnakiaTask.present">
+		  <taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask"/>
+		  <anakia basedir="${docs.src}" destdir="${docs.dest}/"
+				extension=".html" style="./xdocs/stylesheets/site_printable.vsl"
 				projectFile="./stylesheets/project.xml"
 				excludes="**/stylesheets/**"
 				includes="**/*.xml"
