@@ -396,7 +396,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements FocusListener,
 			gui.tableModel.addNewRow();
 			gui.tableModel.setValueAt("howdy",0,0);
 			gui.tableModel.setValueAt("doody",0,1);
-			assertNull(((Argument)((Arguments)gui.createTestElement()).getArguments().get(0)).getMetaData());
+			assertEquals("=",((Argument)((Arguments)gui.createTestElement()).getArguments().get(0)).getMetaData());
 		}
 	}
 }
