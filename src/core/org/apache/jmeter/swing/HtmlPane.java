@@ -13,7 +13,7 @@ import org.apache.log.Logger;
  */
 public class HtmlPane extends JTextPane
 {
-    Logger log = LoggingManager.getLoggerForClass();
+    private static Logger log = LoggingManager.getLoggerForClass();
     
 	public HtmlPane(){	
 		this.addHyperlinkListener(
