@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -48,18 +49,29 @@ public class EnableComponent implements Command
      */
     public void doAction(ActionEvent e)
     {
+    	JMeterTreeNode[] nodes =
+    		GuiPackage.getInstance().getTreeListener().getSelectedNodes();
+    	
         if (e.getActionCommand().equals(ENABLE))
         {
-            log.debug("enabling current gui object");
-            GuiPackage.getInstance().getCurrentNode().setEnabled(true);
-            GuiPackage.getInstance().getCurrentGui().setEnabled(true);
+            log.debug("enabling currently selected gui objects");
+            enableComponents(nodes,true);
         }
         else if (e.getActionCommand().equals(DISABLE))
         {
-            log.debug("disabling current gui object");
-            GuiPackage.getInstance().getCurrentNode().setEnabled(false);
-            GuiPackage.getInstance().getCurrentGui().setEnabled(false);
+            log.debug("disabling currently selected gui objects");
+            enableComponents(nodes,false);
         }
+    }
+
+    private void enableComponents(JMeterTreeNode[] nodes, boolean enable)
+    {
+    	GuiPackage pack = GuiPackage.getInstance();
+    	for(int i=0;i<nodes.length;i++)
+    	{
+    		nodes[i].setEnabled(enable);
+    		pack.getGui(nodes[i].getTestElement()).setEnabled(enable);
+    	}
     }
 
     /**
