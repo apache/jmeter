@@ -308,6 +308,12 @@ public abstract class HTMLParser
 						  "testfiles/HTMLParserTestCase.all"
 						 ),
 			new TestData(
+		             "testfiles/HTMLParserTestCaseWithMissingBaseHRef.html",
+					 "http://localhost/mydir/images/myfile.html",
+					 "testfiles/HTMLParserTestCase.set",
+					  "testfiles/HTMLParserTestCase.all"
+					 ),
+			new TestData(
 						 "testfiles/HTMLParserTestCase2.html",
 						 "http:", //Dummy, as the file has no entries
 						 "",
@@ -435,6 +441,8 @@ public abstract class HTMLParser
 		                               boolean orderMatters) //Does the order matter?
 		throws Exception
 		{
+			String parserName=p.getClass().getName()
+				.substring("org.apache.jmeter.protocol.http.parser".length());
 			log.debug("file   "+file);
 			File f= findTestFile(file);
 			byte[] buffer= new byte[(int)f.length()];
@@ -470,17 +478,17 @@ public abstract class HTMLParser
 			}
 			
 			while (expected.hasNext()) {
-				assertTrue("Expecting another result",result.hasNext());
+				assertTrue(parserName+"::Expecting another result",result.hasNext());
                 try
                 {
-                    assertEquals(expected.next(),((URL) result.next()).toString());
+                    assertEquals(parserName+"("+file+")",expected.next(),((URL) result.next()).toString());
                 }
                 catch (ClassCastException e)
                 {
-                	fail("Expected URL, but got "+e.toString());
+                	fail(parserName+"::Expected URL, but got "+e.toString());
                 }
 			}
-			assertFalse("Should have reached the end of the results",result.hasNext());
+			assertFalse(parserName+"::Should have reached the end of the results",result.hasNext());
 		}
 
         // Get expected results as a List
