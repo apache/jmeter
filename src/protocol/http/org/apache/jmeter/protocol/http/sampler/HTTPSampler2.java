@@ -35,6 +35,7 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.HttpState;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.NTCredentials;
 import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -43,6 +44,7 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 
 import org.apache.jmeter.protocol.http.control.AuthManager;
+import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
@@ -1039,15 +1041,22 @@ public class HTTPSampler2 extends AbstractSampler
     {
         if (authManager != null)
         {
-            String authHeader= authManager.getAuthHeaderForURL(u);
+            Authorization authHeader= authManager.getAuthForURL(u);
             if (authHeader != null)
             {
-                method.setRequestHeader("Authorization", authHeader);
+            	//authHeader.get
+                httpState.setCredentials(
+                	"realm",
+					authHeader.getURL(),
+                	new NTCredentials(// Includes other types of Credentials
+                			authHeader.getUser(),
+							authHeader.getPass(),
+                			"thishost",
+							"targetdomain"
+							)
+					);
+
             }
-
-// Should probably use something like this: 
-//      httpState.setProxyCredentials(null, null, new UsernamePasswordCredentials(user,pass)));
-
         }
     }
 

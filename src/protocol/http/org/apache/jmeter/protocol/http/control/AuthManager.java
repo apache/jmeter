@@ -153,6 +153,13 @@ public class AuthManager
 
     public String getAuthHeaderForURL(URL url)
     {
+    	Authorization auth = getAuthForURL(url);
+    	if (auth == null) return null;
+    	return  "Basic " + Base64Encoder.encode(auth.getUser() + ":" + auth.getPass());
+    }
+
+    public Authorization getAuthForURL(URL url)
+    {
         if (! isSupportedProtocol(url))
         {
             return null;
@@ -196,16 +203,17 @@ public class AuthManager
         String s2= null;
         if (url2 != null) s2= url2.toString();
         
+        // TODO should really return most specific (i.e. longest) match.
         for (PropertyIterator enum = getAuthObjects().iterator();
             enum.hasNext();
             )
         {
             Authorization auth = (Authorization) enum.next().getObjectValue();
             
-            if (s1.startsWith(auth.getURL()) || s2 != null && s2.startsWith(auth.getURL()))
+            String uRL = auth.getURL();
+			if (s1.startsWith(uRL) || s2 != null && s2.startsWith(uRL))
             {
-                return "Basic "
-                	+ Base64Encoder.encode(auth.getUser() + ":" + auth.getPass());
+                return auth;
             }
         }
         return null;
