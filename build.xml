@@ -838,6 +838,8 @@ some of its classes - at present JMeter can only run from jar files.
     </jar>
 
     <!-- jms -->
+    <!-- Ensure that build dir exists, even if JMS has not been built -->
+    <mkdir dir="${build.jms}"/>
     <jar jarfile="${dest.jar}/ApacheJMeter_jms.jar">
       <fileset dir="${build.jms}" includes="**/*.class" />
       <fileset dir="${src.jms}" includes="**/*.properties" />
