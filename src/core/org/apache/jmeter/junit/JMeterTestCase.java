@@ -25,6 +25,6 @@ public abstract class JMeterTestCase extends TestCase
         super(name);
     }
     
-    protected static Logger testLog = LoggingManager.getLoggerForClass();
+    protected static final Logger testLog = LoggingManager.getLoggerForClass();
 }
 
