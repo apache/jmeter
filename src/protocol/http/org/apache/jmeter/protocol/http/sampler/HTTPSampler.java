@@ -112,6 +112,7 @@ public class HTTPSampler extends AbstractSampler
     public final static String MULTIPART_FORM= "multipart_form";
     public final static String ENCODED_PATH= "HTTPSampler.encoded_path";
     public final static String IMAGE_PARSER= "HTTPSampler.image_parser";
+	public final static String MONITOR = "HTTPSampler.monitor";
 
     /** A number to indicate that the port has not been set.  **/
     public static final int UNSPECIFIED_PORT= 0;
@@ -326,6 +327,18 @@ public class HTTPSampler extends AbstractSampler
         return getPropertyAsBoolean(USE_KEEPALIVE);
     }
 
+	public void setMonitor(String value){
+	    this.setProperty(MONITOR,value);
+	}
+	
+	public String getMonitor(){
+		return this.getPropertyAsString(MONITOR);
+	}
+	
+	public boolean isMonitor(){
+		return this.getPropertyAsBoolean(MONITOR);
+	}
+
     public void addEncodedArgument(String name, String value, String metaData)
     {
         log.debug(
@@ -516,6 +529,11 @@ public class HTTPSampler extends AbstractSampler
         res.setResponseCode(NON_HTTP_RESPONSE_CODE);
         res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
         res.setSuccessful(false);
+        try {
+			res.setURL(getUrl());
+        } catch (MalformedURLException ex){
+        }
+        res.setMonitor(this.isMonitor());
         return res;
     }
 
@@ -1021,7 +1039,11 @@ public class HTTPSampler extends AbstractSampler
 		log.debug("Start : sample" + urlStr);
 
         HTTPSampleResult res= new HTTPSampleResult();
-
+        if(this.getPropertyAsBoolean(MONITOR)){
+            res.setMonitor(true);
+        } else {
+			res.setMonitor(false);
+        }
 		res.setSampleLabel(urlStr);
 		res.sampleStart(); // Count the retries as well in the time
 
@@ -1164,7 +1186,6 @@ public class HTTPSampler extends AbstractSampler
         catch (IOException e)
         {
         	res.sampleEnd();
-        	res.setURL(url);
             return errorResult(e, url.toString(), res.getTime());
         }
         finally
