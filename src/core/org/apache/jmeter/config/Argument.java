@@ -161,7 +161,7 @@ public class Argument extends AbstractTestElement implements Serializable
 	 ***************************************/
 	public Object getValue()
 	{
-		return (String)getProperty(VALUE);
+		return getProperty(VALUE);
 	}
 
 	/****************************************
@@ -171,11 +171,6 @@ public class Argument extends AbstractTestElement implements Serializable
 	 ***************************************/
 	public Object getMetaData()
 	{
-		String meta = (String)getProperty(METADATA);
-		if(meta == null)
-		{
-			meta = "=";
-		}
-	    return meta;
+		return getProperty(METADATA);
 	}
 }
