@@ -1035,14 +1035,31 @@ appropriate server and port, where the server is the machine JMeter is running o
 the port # is from the Proxy Control Panel shown above.</note>
 
 <b>Where Do Samples Get Recorded?</b>
-<p>JMeter places the recorded samples in the Target Controller you choose. If you choose the default option "Use Recording Controller", they will be stored in a Recording Controller found under a Thread Group (so be sure to add a ThreadGroup and then a Recording Controller before you start recording).  Also, if you have an HTTP Request Defaults element directly within the controller where samples are being stored, then the recorded samples will have empty fields for the default values you specified.  Additionally, you can specify user-defined values that will replaced in your samples as they are recorded.  See <a href="best-practices.html#proxy_server">Best Practices with the Proxy Server</a> for more info.</p>
+<p>JMeter places the recorded samples in the Target Controller you choose. If you choose the default option
+"Use Recording Controller", they will be stored in the first Recording Controller found in the test object tree (so be
+sure to add a Recording Controller before you start recording).</p>
+
+<p>If the HTTP Proxy Server finds enabled <complink name="HTTP Request Defaults"/> directly within the
+controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
+will have empty fields for the default values you specified. You may further control this behaviour by placing an
+HTTP Request Defaults element directly within the HTTP Proxy Server, whose non-blank values will override
+those in the other HTTP Request Defaults. See <a href="best-practices.html#proxy_server"> Best
+Practices with the Proxy Server</a> for more info.</p>
+
+<p>Similarly, if the HTTP Proxy Server finds <complink name="User Defined Variables"/> directly within the
+controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
+will have any occurences of the values of those variables replaced by the corresponding variable. Again, you can
+place User Defined Variables directly within the HTTP Proxy Server to override the values to be replaced. See
+<a href="best-practices.html#proxy_server"> Best Practices with the Proxy Server</a> for more info.</p>
 
 <p>When you are done recording your test samples, stop the proxy server (hit the &quot;stop&quot; button).  Remember to reset
 your browser's proxy settings.  Now, you may want to sort and re-order the test script, add timers, listeners, a
 cookie manager, etc.</p>
 
 <b>How can I record the server's responses too?</b>
-<p>The HTTP Proxy Server actually performs a sampling to obtain the server's response, and will notify any listeners directly inside the controller where the samples are being stored. So you just need to place a View Results Tree listener there to get the responses recorded.</p>
+<p>The HTTP Proxy Server actually performs a sampling to obtain the server's response, and will notify any
+listeners directly inside the controller where the samples are being stored. So you just need to place a 
+<complink name="View Results Tree"/> listener there to get the responses recorded.</p>
 
 </component>
 
