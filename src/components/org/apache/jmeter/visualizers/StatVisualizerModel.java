@@ -78,8 +78,6 @@ public class StatVisualizerModel implements Clearable
 	private String name;
 
 	private List listeners;
-
-	private Map responseCodeMap;
 	private Map labelMap;
 
 	/****************************************
@@ -89,7 +87,6 @@ public class StatVisualizerModel implements Clearable
 	public StatVisualizerModel()
 	{
 		listeners = new LinkedList();
-		responseCodeMap = Collections.synchronizedMap(new HashMap(10));
 		labelMap = Collections.synchronizedMap(new HashMap(10));
 	}
 
@@ -105,23 +102,6 @@ public class StatVisualizerModel implements Clearable
 		this.name = name;
 
 	}
-
-
-
-	/****************************************
-	 * Returns the Map containing a list of HTTP/FTP Response Codes and their
-	 * corresponding counts.
-	 *
-	 *@return   The ResponseCodeMap value
-	 ***************************************/
-
-	public Map getResponseCodeMap()
-	{
-
-		return (responseCodeMap);
-	}
-
-
 
 	/****************************************
 	 * Returns the Map containing the Samples we've collected and their
@@ -184,17 +164,6 @@ public class StatVisualizerModel implements Clearable
 		String responseCode = res.getResponseCode();
 		RunningSample myRS;
 
-		if (responseCodeMap.containsKey(responseCode))
-		{
-			long tempLong =
-				((Long)responseCodeMap.get(responseCode)).longValue();
-			responseCodeMap.put(responseCode, new Long(++tempLong));
-		}
-		else
-		{
-			responseCodeMap.put(responseCode, new Long(1));
-		}
-
 		if (labelMap.containsKey(aLabel))
 		{
 			myRS = (RunningSample)labelMap.get(aLabel);
@@ -218,7 +187,6 @@ public class StatVisualizerModel implements Clearable
 	{
 //        System.out.println("StatVisualizerModel.clear() called");
 		// clear the data structures
-		responseCodeMap.clear();
 		labelMap.clear();
 		this.fireDataChanged();
 	}
