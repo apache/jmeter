@@ -310,7 +310,7 @@ public class ValueReplacer
         Collection newColl = null;
         try
         {
-            newColl = (Collection) prop.getClass().newInstance();
+            newColl = (Collection) prop.getObjectValue().getClass().newInstance();
         }
         catch (Exception e)
         {
