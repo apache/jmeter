@@ -53,26 +53,19 @@
  * <http://www.apache.org/>.
  */
 package org.apache.jmeter.protocol.http.modifier;
-import org.apache.jmeter.config.Modifier;
-import org.apache.jmeter.config.ConfigElement;
-import org.apache.jmeter.samplers.Entry;
-import org.apache.jmeter.protocol.http.parser.HtmlParser;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
-import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.samplers.Sampler;
+import java.io.Serializable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import org.apache.jmeter.config.Argument;
-import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.gui.NamePanel;
-import org.apache.jmeter.util.JMeterUtils;
-import java.util.*;
-import java.io.*;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
-import java.net.*;
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.testelement.TestListener;
-import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.config.Modifier;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testelement.TestListener;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 /************************************************************
  *  Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:
  *  Apache
@@ -88,7 +81,10 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
  ***********************************************************/
 public class UserParameterModifier
 	extends ConfigTestElement
-	implements Modifier, Serializable, TestListener {
+	implements Modifier, Serializable, TestListener
+{
+	private static Logger log =
+		Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.protocol.http");
 	private static final String XMLURI = "UserParameterModifier.xmluri";
 	//-------------------------------------------
 	// Constants and Data Members
@@ -100,7 +96,9 @@ public class UserParameterModifier
 	/**
 	 * Default constructor
 	 */
-	public UserParameterModifier() {} //end constructor
+	public UserParameterModifier()
+	{
+	} //end constructor
 	//-------------------------------------------
 	// Methods
 	//-------------------------------------------
@@ -111,36 +109,35 @@ public class UserParameterModifier
 	 * Runs before the start of every test. Reload the Sequencer with the
 	 * latest parameter data for each user
 	 */
-	public void testStarted() {
+	public void testStarted()
+	{
 		// try to populate allUsers, if fail, leave as any empty set
 		List allUsers = new LinkedList();
-		try {
+		try
+		{
 			UserParameterXMLParser readXMLParameters = new UserParameterXMLParser();
 			allUsers = readXMLParameters.getXMLParameters(getXmlUri());
 		}
-		catch (Exception e) {
-			e.printStackTrace();
+		catch (Exception e)
+		{
 			// do nothing, now object allUsers contains an empty set
-			System.err.println("Unable to read parameters from xml file " + getXmlUri());
-			System.err.println(
-				"No unique values for http requests will be substituted for each thread");
+			log.error("Unable to read parameters from xml file " + getXmlUri());
+			log.error(
+				"No unique values for http requests will be substituted for each thread",
+				e);
 		}
 		allAvailableUsers = new UserSequence(allUsers);
 	}
-	
 	public void testEnded()
 	{
 	}
-	
 	public void testStarted(String host)
 	{
 		testStarted();
 	}
-	
 	public void testEnded(String host)
 	{
 	}
-	
 	/*----------------------------------------------------------------------------------------------
 	 * Methods implemented from interface org.apache.jmeter.config.Modifier
 	 *--------------------------------------------------------------------------------------------*/
@@ -151,21 +148,24 @@ public class UserParameterModifier
 	 * @param entry Entry object containing information about the current test
 	 * @return <code>True</code> if modified, else <code>false</code>
 	 */
-	public boolean modifyEntry(Sampler entry) {
-		if(!(entry instanceof HTTPSampler))
+	public boolean modifyEntry(Sampler entry)
+	{
+		if (!(entry instanceof HTTPSampler))
 		{
 			return false;
 		}
-		HTTPSampler config = (HTTPSampler)entry;
+		HTTPSampler config = (HTTPSampler) entry;
 		Map currentUser = allAvailableUsers.getNextUserMods();
 		boolean changeValue = false;
 		Iterator iter = config.getArguments().iterator();
-		while (iter.hasNext()) {
+		while (iter.hasNext())
+		{
 			Argument arg = (Argument) iter.next();
 			// if parameter name exists in http request
 			// then change its value
 			// (Note: each jmeter thread (ie user) gets to have unique values)			
-			if (currentUser.containsKey(arg.getName())) {
+			if (currentUser.containsKey(arg.getName()))
+			{
 				arg.setValue(currentUser.get(arg.getName()));
 			}
 		}
@@ -178,14 +178,16 @@ public class UserParameterModifier
 	 * return the current XML file name to be read to obtain the parameter data for all users
 	 * @return the name of the XML file containing parameter data for each user
 	 */
-	public String getXmlUri() {
+	public String getXmlUri()
+	{
 		return this.getPropertyAsString(XMLURI);
 	}
 	/**
 	 * From the GUI screen, set file name of XML to read
 	 * @param the name of the XML file containing the HTTP name value pair parameters per user
 	 */
-	public void setXmlUri(String xmlURI) {
-		setProperty(XMLURI,xmlURI);
+	public void setXmlUri(String xmlURI)
+	{
+		setProperty(XMLURI, xmlURI);
 	}
 }

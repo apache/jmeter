@@ -616,8 +616,8 @@ public class HTTPSampler extends AbstractSampler
 				}
 				catch (Exception e)
 				{
-					System.out.println("UrlConfig:parseArguments(): Unable to parse argument=[" + value + "]");
-					System.out.println("UrlConfig:parseArguments(): queryString=[" + queryString + "]");
+					log.error("UrlConfig:parseArguments(): Unable to parse argument=[" + value + "]");
+					log.error("UrlConfig:parseArguments(): queryString=[" + queryString + "]",e);
 				}
 			}
 		}
@@ -929,7 +929,7 @@ public class HTTPSampler extends AbstractSampler
 		}
 		catch(IOException ex)
 		{
-			ex.printStackTrace();
+			log.error("",ex);
 			res.setDataType(res.TEXT);
 			try {
 				res.setResponseData(readResponse(conn));

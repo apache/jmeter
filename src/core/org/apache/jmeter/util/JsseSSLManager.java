@@ -54,19 +54,25 @@
  */
 package org.apache.jmeter.util;
 
-import com.sun.net.ssl.*;
-
-import java.io.File;
-import java.io.FileInputStream;
 import java.net.HttpURLConnection;
-import java.security.SecureRandom;
-import java.security.Provider;
+import java.security.KeyStore;
 import java.security.Principal;
 import java.security.PrivateKey;
-import java.security.KeyStore;
+import java.security.Provider;
+import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 
 import org.apache.jmeter.util.keystore.JmeterKeyStore;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
+
+import com.sun.net.ssl.HttpsURLConnection;
+import com.sun.net.ssl.KeyManager;
+import com.sun.net.ssl.KeyManagerFactory;
+import com.sun.net.ssl.SSLContext;
+import com.sun.net.ssl.TrustManager;
+import com.sun.net.ssl.X509KeyManager;
+import com.sun.net.ssl.X509TrustManager;
 
 /**
  *  The SSLManager handles the KeyStore information for JMeter. Basically, it
@@ -82,6 +88,8 @@ import org.apache.jmeter.util.keystore.JmeterKeyStore;
  */
 public class JsseSSLManager extends SSLManager
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.util");
 	/**
 	 *  Cache the SecureRandom instance because it takes a long time to create
 	 */
@@ -129,7 +137,7 @@ public class JsseSSLManager extends SSLManager
 		}
 
 		this.getContext();
-		System.out.println("JsseSSLManager installed");
+		log.info("JsseSSLManager installed");
 	}
 
 
@@ -190,7 +198,7 @@ public class JsseSSLManager extends SSLManager
 				JmeterKeyStore keys = this.getKeyStore();
 				managerFactory.init(null, this.defaultpw.toCharArray());
 				KeyManager[] managers = managerFactory.getKeyManagers();
-				System.out.println(keys.getClass().toString());
+				log.info(keys.getClass().toString());
 
 				for (int i = 0; i < managers.length; i++)
 				{
@@ -216,11 +224,11 @@ public class JsseSSLManager extends SSLManager
 			{
 				if (i < dCiphers.length)
 				{
-					System.out.println("Default Cipher: " + dCiphers[i]);
+					log.info("Default Cipher: " + dCiphers[i]);
 				}
 				if (i < sCiphers.length)
 				{
-					System.out.println("Supported Cipher: " + sCiphers[i]);
+					log.info("Supported Cipher: " + sCiphers[i]);
 				}
 			}
 		}
@@ -257,15 +265,15 @@ public class JsseSSLManager extends SSLManager
 				while (enum.hasMoreElements())
 				{
 					String alias = (String) enum.nextElement();
-					System.out.print("AlwaysTrustManager alias: " + alias);
+					log.info("AlwaysTrustManager alias: " + alias);
 
 					if (store.isCertificateEntry(alias))
 					{
 						list.add(store.getCertificate(alias));
-						System.out.println(" INSTALLED");
+						log.info(" INSTALLED");
 					} else
 					{
-						System.out.println(" SKIPPED");
+						log.info(" SKIPPED");
 					}
 				}
 				this.certs = (X509Certificate[]) list.toArray(new X509Certificate[]{});
@@ -284,7 +292,7 @@ public class JsseSSLManager extends SSLManager
 		 */
 		public X509Certificate[] getAcceptedIssuers()
 		{
-			System.out.println("Get accepted Issuers");
+			log.info("Get accepted Issuers");
 			return certs;
 		}
 
@@ -297,7 +305,7 @@ public class JsseSSLManager extends SSLManager
 		 */
 		public boolean isClientTrusted(X509Certificate[] chain)
 		{
-			System.out.println("Is client trusted ???");
+			log.info("Is client trusted ???");
 			return true;
 		}
 
@@ -310,7 +318,7 @@ public class JsseSSLManager extends SSLManager
 		 */
 		public boolean isServerTrusted(X509Certificate[] chain)
 		{
-			System.out.println("Is server trusted ???");
+			log.info("Is server trusted ???");
 			return true;
 		}
 	}
@@ -358,8 +366,8 @@ public class JsseSSLManager extends SSLManager
 		 */
 		public String[] getClientAliases(String keyType, Principal[] issuers)
 		{
-			System.out.println("WrappedX509Manager: getClientAliases: ");
-			System.out.println(new String[]{this.store.getAlias()});
+			log.info("WrappedX509Manager: getClientAliases: ");
+			log.info(this.store.getAlias());
 			return new String[]{this.store.getAlias()};
 		}
 
@@ -374,8 +382,8 @@ public class JsseSSLManager extends SSLManager
 		 */
 		public String[] getServerAliases(String keyType, Principal[] issuers)
 		{
-			System.out.println("WrappedX509Manager: getServerAliases: ");
-			System.out.println(this.manager.getServerAliases(keyType, issuers));
+			log.info("WrappedX509Manager: getServerAliases: ");
+			log.info(this.manager.getServerAliases(keyType, issuers).toString());
 			return this.manager.getServerAliases(keyType, issuers);
 		}
 
@@ -388,8 +396,8 @@ public class JsseSSLManager extends SSLManager
 		 */
 		public X509Certificate[] getCertificateChain(String alias)
 		{
-			System.out.println("WrappedX509Manager: getCertificateChain(" + alias + ")");
-			System.out.println(this.store.getCertificateChain());
+			log.info("WrappedX509Manager: getCertificateChain(" + alias + ")");
+			log.info(this.store.getCertificateChain().toString());
 			return this.store.getCertificateChain();
 		}
 
@@ -402,7 +410,7 @@ public class JsseSSLManager extends SSLManager
 		 */
 		public PrivateKey getPrivateKey(String alias)
 		{
-			System.out.println("WrappedX509Manager: getPrivateKey: " + this.store.getPrivateKey());
+			log.info("WrappedX509Manager: getPrivateKey: " + this.store.getPrivateKey());
 			return this.store.getPrivateKey();
 		}
 
@@ -422,7 +430,7 @@ public class JsseSSLManager extends SSLManager
 		 */
 		public String chooseClientAlias(String keyType, Principal[] issuers)
 		{
-			System.out.println("Alias: " + this.store.getAlias());
+			log.info("Alias: " + this.store.getAlias());
 			return this.store.getAlias();
 		}
 
@@ -437,7 +445,7 @@ public class JsseSSLManager extends SSLManager
 		 */
 		public String chooseServerAlias(String keyType, Principal[] issuers)
 		{
-			System.out.println("WrappedX509Manager: chooseServerAlias: " +
+			log.info("WrappedX509Manager: chooseServerAlias: " +
 					this.manager.chooseServerAlias(keyType, issuers));
 			return this.manager.chooseServerAlias(keyType, issuers);
 		}

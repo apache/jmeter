@@ -55,20 +55,12 @@
 
 package org.apache.jmeter.protocol.http.control;
 
-import java.io.*;
-import java.net.URL;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Properties;
-import java.util.StringTokenizer;
-import java.util.Vector;
+import java.io.Serializable;
 
-import org.apache.jmeter.config.*;
+import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /**
  * This class is a Cookie encapsulator.
@@ -77,7 +69,8 @@ import org.apache.jmeter.testelement.AbstractTestElement;
  */
 public class Cookie extends AbstractTestElement implements Serializable
 {
-
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.protocol.http");
 	 private static String NAME = "Cookie.name";
 	 private static String VALUE = "Cookie.value";
 	 private static String DOMAIN = "Cookie.domain";
@@ -188,7 +181,7 @@ public class Cookie extends AbstractTestElement implements Serializable
 	  * get the secure for this object.
 	  */
 	 public boolean getSecure() {
-	 	System.out.println("Secure = "+getProperty(SECURE));
+	 	log.info("Secure = "+getProperty(SECURE));
 		return this.getPropertyAsBoolean(SECURE);
 	 }
 

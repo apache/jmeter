@@ -54,11 +54,20 @@
  */
 package org.apache.jmeter.junit;
 
-import java.io.*;
-import java.util.*;
-import junit.framework.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.Iterator;
+
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 import org.apache.jmeter.util.ClassFinder;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /************************************************************
  *  Title: Apache JMeter Description: Copyright: Copyright (c) 2000 Company:
@@ -70,6 +79,8 @@ import org.apache.jmeter.util.JMeterUtils;
  ***********************************************************/
 public class AllTests
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.test");
 	/************************************************************
 	 *  Constructor for the AllTests object
 	 ***********************************************************/
@@ -107,7 +118,7 @@ public class AllTests
 		}
 		catch (FileNotFoundException e)
 		{
-			e.printStackTrace();
+			log.error("",e);
 		}
 		System.exit(0);
 	}
@@ -132,17 +143,17 @@ public class AllTests
 				}
 				catch (Exception ex)
 				{
-					System.out.println("error adding test :"+ex);
+					log.error("error adding test :"+ex);
 				}
 			}
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			log.error("",e);
 		}
 		catch (ClassNotFoundException e)
 		{
-			e.printStackTrace();
+			log.error("",e);
 		}
 		return suite;
 	}

@@ -10,6 +10,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.ListedHashTree;
 import org.apache.jmeter.util.ListedHashTreeVisitor;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /**
  * @author mstover
@@ -18,6 +20,8 @@ import org.apache.jmeter.util.ListedHashTreeVisitor;
  * Window>Preferences>Java>Templates.
  */
 public class PreCompiler implements ListedHashTreeVisitor {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.engine");
 	
 	private Map userDefinedVariables;
 	private CompoundFunction masterFunction = new CompoundFunction();
@@ -102,7 +106,7 @@ public class PreCompiler implements ListedHashTreeVisitor {
 		try {
 			newColl = (Collection)values.getClass().newInstance();
 		} catch(Exception e) {
-			e.printStackTrace();
+			log.error("",e);
 			return values;
 		} 
 		Iterator iter = values.iterator();

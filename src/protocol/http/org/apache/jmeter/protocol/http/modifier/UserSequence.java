@@ -54,8 +54,14 @@
  */
 package org.apache.jmeter.protocol.http.modifier;
  
-import java.util.*;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /************************************************************
  *  Title: Jakarta-JMeter Description: Copyright: Copyright (c) 2001 Company:
@@ -69,7 +75,8 @@ import java.io.Serializable;
  ***********************************************************/
 
 public class UserSequence implements Serializable {
-
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.protocol.http");
 
     //-------------------------------------------
     // Constants and Data Members
@@ -116,8 +123,7 @@ public class UserSequence implements Serializable {
 	Map user;
 	if (indexOfUsers.hasNext() ) {
 	    user = (Map)indexOfUsers.next();
-	    //debug
-	    //System.out.println("current parameters will be changed to: " + user);
+	    log.debug("UserSequence.getNextuserMods(): current parameters will be changed to: " + user);
 	} else {
 	    // no entries in all users, therefore create an empty Map object
 	    user = new HashMap();

@@ -72,6 +72,8 @@ import org.apache.jmeter.threads.TestCompiler;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.ListedHashTree;
 import org.apache.jmeter.util.SearchByClass;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /************************************************************
  *  !ToDo (Class description)
@@ -82,6 +84,8 @@ import org.apache.jmeter.util.SearchByClass;
  ***********************************************************/
 public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.engine");
 	Set allThreads;
 	boolean running = false;
 	ListedHashTree test;
@@ -130,7 +134,7 @@ public class StandardJMeterEngine implements JMeterEngine,JMeterThreadMonitor
 	{
 		try
 		{
-			System.out.println("Running the test!");
+			log.info("Running the test!");
 			running = true;
 			compileTree();
 			List testLevelElements = new LinkedList(getTestTree().list(getTestTree().getArray()[0]));

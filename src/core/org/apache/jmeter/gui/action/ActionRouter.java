@@ -54,14 +54,20 @@
  */
  package org.apache.jmeter.gui.action;
 
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.util.*;
+import java.awt.event.ActionListener;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import org.apache.jmeter.gui.*;
 import org.apache.jmeter.util.ClassFinder;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /**
  *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -76,6 +82,8 @@ public class ActionRouter implements ActionListener
 	private Map commands = new HashMap();
 	private static ActionRouter router;
 	private static AddToTree add = new AddToTree();
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.gui");
 
 
 	private ActionRouter()
@@ -101,13 +109,13 @@ public class ActionRouter implements ActionListener
 				}
 				catch(Exception err)
 				{
-					err.printStackTrace();
+					log.error("",err);
 				}
 			}
 		}
 		catch (NullPointerException er)
 		{
-			er.printStackTrace();
+			log.error("",er);
 			JMeterUtils.reportErrorToUser("Sorry, this feature (" + e.getActionCommand() +
 					") not yet implemented");
 		}
@@ -126,7 +134,7 @@ public class ActionRouter implements ActionListener
 			commands = new HashMap(listClasses.size());
 			if (listClasses.size() == 0)
 			{
-				System.out.println("!!!!!Uh-oh, didn't find any action handlers!!!!!");
+				log.warn("!!!!!Uh-oh, didn't find any action handlers!!!!!");
 			}
 			iterClasses = listClasses.iterator();
 			while (iterClasses.hasNext())
@@ -153,8 +161,7 @@ public class ActionRouter implements ActionListener
 		}
 		catch (Exception e)
 		{
-			System.out.println("exception finding action handlers");
-			e.printStackTrace();
+			log.error("exception finding action handlers",e);
 		}
 	}
 

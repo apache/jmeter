@@ -72,6 +72,8 @@ import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.util.ClassFinder;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
@@ -84,7 +86,8 @@ import org.apache.jmeter.util.JMeterUtils;
 public class MenuFactory
 {
 
-
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.gui");
 	/****************************************
 	 * !ToDo (Field description)
 	 ***************************************/
@@ -152,7 +155,7 @@ public class MenuFactory
 		}
 		catch(Throwable e)
 		{
-			e.printStackTrace();
+			log.error("",e);
 		}
 	}
 
@@ -520,7 +523,7 @@ public class MenuFactory
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			log.error("",e);
 		}
 	}
 

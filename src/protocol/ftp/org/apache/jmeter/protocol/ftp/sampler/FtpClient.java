@@ -54,8 +54,20 @@
  */
 package org.apache.jmeter.protocol.ftp.sampler;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import org.apache.log.Hierarchy;
+import org.apache.log.Logger;
 
 /*
  * Simple FTP client (non-passive transfers don't work yet)
@@ -70,6 +82,8 @@ import java.net.*;
  */
 public class FtpClient
 {
+	private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
+			"jmeter.protocol.ftp");
 	File f = new File("e:\\");
 	BufferedWriter out;
 	BufferedReader in;
@@ -106,15 +120,15 @@ public class FtpClient
 		StringBuffer response = new StringBuffer();
 		String line = in.readLine();
 		response.append(line);
-		//System.out.println("#" + line + "#");
+		log.info("FtpClient.getResponse(): #" + line + "#");
 		while (line.charAt(3) == '-')
 		{
 			line = in.readLine();
 			response.append("\n");
 			response.append(line);
-			//System.out.println("#" + line + "#");
+			log.info("FtpClient.getResponse(): #" + line + "#");
 		}
-		//System.out.println("return response");
+		log.info("return response");
 		return response.toString();
 	}
 
@@ -141,7 +155,7 @@ public class FtpClient
 			int lower = getLower(dataPort);
 			String ip = InetAddress.getLocalHost().getHostAddress().replace('.', ',');
 			String port = ip + "," + upper + "," + lower;
-			System.out.println("port:" + port);
+			log.info("port:" + port);
 			send("PORT " + port);
 			getResponse();
 			dataGrabber grab = new dataGrabber(ip, dataPort);
@@ -150,8 +164,8 @@ public class FtpClient
 			}
 			send("RETR " + file);
 			String response = in.readLine();
-			System.out.println(response);
-			System.out.println(dataPort);
+			log.info(response);
+			log.info(""+dataPort);
 			data = "FTP client - File Not Found";
 			if (!response.startsWith("5"))
 			{
@@ -208,12 +222,8 @@ public class FtpClient
 		
 		InputStreamReader isr = new InputStreamReader(s.getInputStream());
 		in = new BufferedReader(isr);
-		//System.out.println(in.readLine());
 		send("USER " + username);
-		//System.out.println(getResponse());
 		send("PASS " + password);
-		//System.out.println(getResponse());
-		//System.out.println("Done connecting");
 	}
 
 	/**
@@ -228,7 +238,7 @@ public class FtpClient
 		}
 		catch (Exception e)
 		{
-			System.out.println("FTP client - " + e.toString());
+			log.error("FTP client - ",e);
 		}
 		try
 		{
@@ -238,7 +248,7 @@ public class FtpClient
 		}
 		catch (Exception e)
 		{
-			System.out.println("FTP client - " + e.toString());
+			log.error("FTP client - ",e);
 		}
 	}
 
@@ -250,7 +260,6 @@ public class FtpClient
 	 */
 	public void send(String command) throws IOException
 	{
-		//System.out.println("#" + command + "#");
 		for (int i = 0; i < command.length(); i++)
 		{
 			out.write(command.charAt(i));
@@ -366,12 +375,12 @@ public class FtpClient
 				}
 				else
 				{
-					System.out.println("creating socket on " + port);
+					log.info("creating socket on " + port);
 					ServerSocket server = new ServerSocket(port);
-					System.out.println("accepting...");
+					log.info("accepting...");
 					portCreated = true;
 					s = server.accept();
-					System.out.println("accepted");
+					log.info("accepted");
 				}
 			}
 			catch (Exception e)
@@ -393,7 +402,7 @@ public class FtpClient
 			}
 			catch (Exception e)
 			{
-				System.out.println("FTP client: dataGrabber - " + e.toString());
+				log.error("FTP client: dataGrabber",e);
 			}
 			done = true;
 		}
