@@ -350,10 +350,11 @@ public class JMeterUtils implements UnitTestManager
     }
     public static String getResourceFileAsText(String name)
     {
+    	BufferedReader fileReader = null;
         try
         {
             String lineEnd = System.getProperty("line.separator");
-            BufferedReader fileReader =
+            fileReader =
                 new BufferedReader(
                     new InputStreamReader(
                         JMeterUtils.class.getClassLoader().getResourceAsStream(
@@ -369,7 +370,7 @@ public class JMeterUtils implements UnitTestManager
                     text.append(lineEnd);
                 }
             }
-            fileReader.close();
+            //Done by finally block: fileReader.close();
             return text.toString();
         }
 		catch (NullPointerException e) // Cannot find file
@@ -380,6 +381,13 @@ public class JMeterUtils implements UnitTestManager
         {
             return "";
         }
+        finally
+		{
+        	if (fileReader != null)
+				try {
+					fileReader.close();
+				} catch (IOException e1) {	}
+		}
     }
     /**
      *  Creates the vector of Timers plugins.
