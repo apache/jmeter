@@ -63,7 +63,9 @@ import java.util.Map;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.control.Controller;
+import org.apache.jmeter.engine.event.IterationDeliverEvent;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
@@ -144,7 +146,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
             rampUpDelay();
             log.info("Thread " + Thread.currentThread().getName() + " started");
             controller.initialize();
-            int i=0;
+            controller.addIterationListener(new IterationListener());
             while (running)
             {
             	Sampler sam;
@@ -152,10 +154,6 @@ public class JMeterThread implements Runnable, java.io.Serializable
                 {
                     try
                     {
-                        if (i==0)
-                        {
-                            notifyTestListeners();
-                        }
                         threadContext.setCurrentSampler(sam);
                         SamplePackage pack = compiler.configureSampler(sam);
                         delay(pack.getTimers());
@@ -167,7 +165,6 @@ public class JMeterThread implements Runnable, java.io.Serializable
                         runPostProcessors(pack.getPostProcessors());
                         notifyListeners(pack.getSampleListeners(), result);
                         compiler.done(pack);
-                        i++;
                     }
                     catch (Exception e)
                     {
@@ -177,11 +174,6 @@ public class JMeterThread implements Runnable, java.io.Serializable
                 if (controller.isDone())
                 {
                     running = false;
-                }
-                else
-                {
-                	i=0;
-                	controller.initialize();
                 }
             }
         }
@@ -310,5 +302,27 @@ public class JMeterThread implements Runnable, java.io.Serializable
     {
         this.threadNum = threadNum;
     }
+    
+    private class IterationListener implements LoopIterationListener
+    {
+        
+            /* (non-Javadoc)
+         * @see org.apache.jmeter.engine.event.LoopIterationListener#iteration(org.apache.jmeter.engine.event.IterationDeliverEvent)
+         */
+        public void iteration(IterationDeliverEvent iterEvent)
+        {
+            // TODO Auto-generated method stub
+
+        }
+
+        /* (non-Javadoc)
+         * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+         */
+        public void iterationStart(LoopIterationEvent iterEvent)
+        {
+            notifyTestListeners();
+        }
+
+}
 
 }
