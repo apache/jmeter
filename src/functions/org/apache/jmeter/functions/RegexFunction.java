@@ -126,7 +126,8 @@ public class RegexFunction extends AbstractFunction implements Serializable
             throw new InvalidVariableException(e.getMessage());
         }
 
-        getVariables().put(name, defaultValue);
+        JMeterVariables vars = getVariables();//Relatively expensive operation, so do it once
+        vars.put(name, defaultValue);
         if (previousResult == null || previousResult.getResponseData() == null)
         {
             return defaultValue;
@@ -155,7 +156,6 @@ public class RegexFunction extends AbstractFunction implements Serializable
         }
         finally
 		{
-            JMeterVariables vars = getVariables();
 			vars.put(name+"_matchNr", ""+collectAllMatches.size());
         }
 
@@ -179,7 +179,7 @@ public class RegexFunction extends AbstractFunction implements Serializable
                 {
                     first = false;
                 }
-                value.append(generateResult((MatchResult) it.next(),name, tmplt));
+                value.append(generateResult((MatchResult) it.next(),name, tmplt, vars));
             }
             return value.toString();
         }
@@ -188,7 +188,7 @@ public class RegexFunction extends AbstractFunction implements Serializable
             MatchResult result =
                 (MatchResult) collectAllMatches.get(
                     rand.nextInt(collectAllMatches.size()));
-            return generateResult(result,name, tmplt);
+            return generateResult(result,name, tmplt, vars);
         }
         else
         {
@@ -196,7 +196,7 @@ public class RegexFunction extends AbstractFunction implements Serializable
             {
                 int index = Integer.parseInt(valueIndex) - 1;
                 MatchResult result = (MatchResult) collectAllMatches.get(index);
-                return generateResult(result,name, tmplt);
+                return generateResult(result,name, tmplt, vars);
             }
             catch (NumberFormatException e)
             {
@@ -204,7 +204,7 @@ public class RegexFunction extends AbstractFunction implements Serializable
                 MatchResult result =
                     (MatchResult) collectAllMatches.get(
                         (int) (collectAllMatches.size() * ratio + .5) - 1);
-                return generateResult(result,name, tmplt);
+                return generateResult(result,name, tmplt, vars);
             }
             catch (IndexOutOfBoundsException e)
             {
@@ -214,11 +214,10 @@ public class RegexFunction extends AbstractFunction implements Serializable
 
     }
 
-    private void saveGroups(MatchResult result, String namep)
+    private void saveGroups(MatchResult result, String namep, JMeterVariables vars)
     {
         if (result != null)
         {
-            JMeterVariables vars = getVariables();
             for (int x = 0; x < result.groups(); x++)
             {
                 vars.put(namep + "_g" + x, result.group(x));
@@ -231,9 +230,10 @@ public class RegexFunction extends AbstractFunction implements Serializable
         return desc;
     }
 
-    private String generateResult(MatchResult match, String namep, Object[] template)
+    private String generateResult(MatchResult match, String namep, Object[] template
+    		,JMeterVariables vars)
     {
-        saveGroups(match, namep);
+        saveGroups(match, namep, vars);
         StringBuffer result = new StringBuffer();
         for (int a = 0; a < template.length; a++)
         {
@@ -246,7 +246,6 @@ public class RegexFunction extends AbstractFunction implements Serializable
                 result.append(match.group(((Integer) template[a]).intValue()));
             }
         }
-        JMeterVariables vars = getVariables();
         vars.put(namep, result.toString());
         return result.toString();
     }
