@@ -116,7 +116,7 @@ public class New implements Command
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE)
                 == JOptionPane.YES_OPTION)
-                ActionRouter.getInstance().actionPerformed(
+                ActionRouter.getInstance().doActionNow(
                     new ActionEvent(
                         e.getSource(),
                         e.getID(),
