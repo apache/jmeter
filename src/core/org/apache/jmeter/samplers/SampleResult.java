@@ -46,7 +46,13 @@ import org.apache.log.output.io.WriterTarget;
  */
 public class SampleResult implements Serializable
 {
-    /**
+	// Bug 33196 - encoding ISO-8859-1 is only suitable for Western countries
+	// However the suggested System.getProperty("file.encoding") is Cp1252 on Windows
+	// So use a new property with the original value as default
+    private static final String DEFAULT_ENCODING =
+		JMeterUtils.getPropDefault("sampleresult.default.encoding","ISO-8859-1");
+	
+	/**
      * Data type value indicating that the response data is text.
      *
      * @see #getDataType
@@ -106,6 +112,7 @@ public class SampleResult implements Serializable
     	} else {
         	log.info("Note: Sample TimeStamps are END times");   		
     	}
+		log.info("sampleresult.default.encoding is set to "+DEFAULT_ENCODING);
     }
     public SampleResult()
     {
@@ -429,7 +436,7 @@ public class SampleResult implements Serializable
         }
         else
         {
-            return "ISO-8859-1";// 8859-1 is not a valid Java data encoding ..
+            return DEFAULT_ENCODING;
         }
     }
 
