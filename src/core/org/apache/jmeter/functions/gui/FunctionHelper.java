@@ -24,10 +24,10 @@ import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.util.JMeterUtils;
-import org.jorphan.gui.ComponentUtil;
-import org.jorphan.gui.JLabeledChoice;
-import org.jorphan.gui.JLabeledTextField;
-import org.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.gui.ComponentUtil;
+import org.apache.jorphan.gui.JLabeledChoice;
+import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jorphan.reflect.ClassFinder;
 
 /**
  * @author Administrator

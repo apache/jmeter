@@ -23,8 +23,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.jorphan.collections.HashTree;
-import org.jorphan.collections.ListedHashTree;
+import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.ListedHashTree;
 import org.xml.sax.SAXException;
 /**
  * <p>Title: </p>

@@ -70,8 +70,8 @@ import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.timers.Timer;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.jorphan.collections.HashTree;
-import org.jorphan.collections.SearchByClass;
+import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.SearchByClass;
 /****************************************
  * The JMeter interface to the sampling process, allowing JMeter to see the
  * timing, add listeners for sampling events and to stop the sampling process.

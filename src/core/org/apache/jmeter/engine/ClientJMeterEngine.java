@@ -61,9 +61,9 @@ import java.rmi.RemoteException;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
-import org.jorphan.collections.HashTree;
-import org.jorphan.collections.ListedHashTree;
-import org.jorphan.collections.SearchByClass;
+import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.ListedHashTree;
+import org.apache.jorphan.collections.SearchByClass;
 
 
 /************************************************************

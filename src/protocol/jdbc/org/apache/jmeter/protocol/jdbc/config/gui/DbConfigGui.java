@@ -68,7 +68,7 @@ import org.apache.jmeter.config.gui.LoginConfigGui;
 import org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.jorphan.gui.layout.VerticalLayout;
+import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /****************************************
  * Title: Description: Copyright: Copyright (c) 2001 Company:

@@ -97,7 +97,7 @@ import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
-import org.jorphan.gui.ComponentUtil;
+import org.apache.jorphan.gui.ComponentUtil;
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
  *

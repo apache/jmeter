@@ -63,7 +63,7 @@ import org.apache.jmeter.engine.JMeterEngineException;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
-import org.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.HashTree;
 
 /****************************************
  * Title: Apache JMeter Description: Copyright: Copyright (c) 2000 Company:

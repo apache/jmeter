@@ -54,7 +54,7 @@
  */
 package org.apache.jmeter.engine;
 
-import org.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.HashTree;
 
 /************************************************************
  *  Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache

@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.testelement.TestElement;
-import org.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.HashTree;
 
 /**
  * @author mstover

@@ -9,9 +9,9 @@ import java.util.Set;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.jorphan.collections.HashTree;
-import org.jorphan.collections.HashTreeTraverser;
-import org.jorphan.collections.ListedHashTree;
+import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.HashTreeTraverser;
+import org.apache.jorphan.collections.ListedHashTree;
 
 /**
  * @author mstover
