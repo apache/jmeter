@@ -57,12 +57,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.processor.PostProcessor;
+import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -92,7 +94,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
     TestCompiler compiler;
     JMeterThreadMonitor monitor;
     String threadName;
-	JMeterContext threadContext;
+    JMeterContext threadContext;
     JMeterVariables threadVars;
     Collection threadListeners;
     ListenerNotifier notifier;
@@ -114,7 +116,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
         threadListeners = threadListenerSearcher.getSearchResults();
         notifier = note;
     }
-    
+
     public void setInitialContext(JMeterContext context)
     {
         threadVars.putAll(context.getVariables());
@@ -131,8 +133,8 @@ public class JMeterThread implements Runnable, java.io.Serializable
     {
         try
         {
-        	threadContext = JMeterContextService.getContext();
-        	threadContext.setVariables(threadVars);
+            threadContext = JMeterContextService.getContext();
+            threadContext.setVariables(threadVars);
             initializeThreadListeners();
             testTree.traverse(compiler);
             running = true;
@@ -151,14 +153,15 @@ public class JMeterThread implements Runnable, java.io.Serializable
                             notifyThreadListeners();
                         }
                         SamplePackage pack = compiler.configureSampler(controller.next());
+                        runPreProcessors(pack.getPreProcessors());
                         delay(pack.getTimers());
                         SampleResult result = pack.getSampler().sample(null);
                         result.setThreadName(threadName);
                         result.setTimeStamp(System.currentTimeMillis());
-						threadContext.setPreviousResult(result);
-						threadContext.setCurrentSampler(pack.getSampler());
+                        threadContext.setPreviousResult(result);
+                        threadContext.setCurrentSampler(pack.getSampler());
                         checkAssertions(pack.getAssertions(), result);
-                        runExtractors(pack.getExtractors(), result);
+                        runPostProcessors(pack.getPostProcessors());
                         notifyListeners(pack.getSampleListeners(), result);
                     }
                     catch (Exception e)
@@ -203,13 +206,23 @@ public class JMeterThread implements Runnable, java.io.Serializable
         }
     }
 
-    private void runExtractors(List extractors, SampleResult result)
+    private void runPostProcessors(List extractors)
     {
-        Iterator iter = extractors.iterator();
-        while (iter.hasNext())
+        ListIterator iter = extractors.listIterator(extractors.size());
+        while (iter.hasPrevious())
         {
-			PostProcessor ex = (PostProcessor) iter.next();
-			ex.process(result);
+            PostProcessor ex = (PostProcessor) iter.previous();
+            ex.process();
+        }
+    }
+
+    private void runPreProcessors(List preProcessors)
+    {
+        ListIterator iter = preProcessors.listIterator(preProcessors.size());
+        while (iter.hasPrevious())
+        {
+            PreProcessor ex = (PreProcessor) iter.previous();
+            ex.process();
         }
     }
 

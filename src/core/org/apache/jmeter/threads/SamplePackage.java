@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.processor.PostProcessor;
+import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.timers.Timer;
@@ -23,7 +24,8 @@ public class SamplePackage
 	List sampleListeners = new LinkedList();
 	List timers = new LinkedList();
 	List assertions = new LinkedList();
-    List extractors = new LinkedList();
+    List postProcessors = new LinkedList();
+    List preProcessors = new LinkedList();
 	Sampler sampler;
 
 	public SamplePackage()
@@ -45,9 +47,14 @@ public class SamplePackage
 		return timers;
 	}
     
-    public void addExtractor(PostProcessor ex)
+    public void addPostProcessor(PostProcessor ex)
     {
-        extractors.add(ex);
+        postProcessors.add(ex);
+    }
+    
+    public void addPreProcessor(PreProcessor pre)
+    {
+        preProcessors.add(pre);
     }
 
 	public void addTimer(Timer timer)
@@ -65,9 +72,9 @@ public class SamplePackage
 		return assertions;
 	}
     
-    public List getExtractors()
+    public List getPostProcessors()
     {
-        return extractors;
+        return postProcessors;
     }
 
 	public Sampler getSampler()
@@ -79,4 +86,22 @@ public class SamplePackage
 	{
 		sampler = s;
 	}
+    /**
+     * Returns the preProcessors.
+     * @return List
+     */
+    public List getPreProcessors()
+    {
+        return preProcessors;
+    }
+
+    /**
+     * Sets the preProcessors.
+     * @param preProcessors The preProcessors to set
+     */
+    public void setPreProcessors(List preProcessors)
+    {
+        this.preProcessors = preProcessors;
+    }
+
 }
