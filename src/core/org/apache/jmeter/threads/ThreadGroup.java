@@ -131,6 +131,11 @@ public class ThreadGroup
     {
         return getSamplerController().next();
     }
+    
+    public int samplersReturned()
+    {
+    	return getSamplerController().samplersReturned();
+    }
 
     /**
      * Set the ramp-up value.

@@ -248,12 +248,12 @@ public class JMeterThread implements Runnable, java.io.Serializable
             TestListener listener = (TestListener)iter.next();
             if(listener instanceof TestElement)
             {
-                listener.testIterationStart(new IterationEvent(controller,threadVars.getIteration()));
+                listener.testIterationStart(new IterationEvent(controller,null,threadVars.getIteration()));
                 ((TestElement)listener).recoverRunningVersion();
             }
             else
             {
-                listener.testIterationStart(new IterationEvent(controller,threadVars.getIteration()));
+                listener.testIterationStart(new IterationEvent(controller,null,threadVars.getIteration()));
             }
             
         }
