@@ -76,9 +76,9 @@ public class AccessLogSampler extends HTTPSampler
 	public static final String GENERATOR_CLASS_NAME = "AccessLogSampler.generator_class_name";
 
 	/** private members used by class **/
-	private Generator GENERATOR = null;
-	private LogParser PARSER = null;
-	private LogFilter FILTER = null; //TODO not used
+	transient private Generator GENERATOR = null;
+	transient private LogParser PARSER = null;
+	//transient private LogFilter FILTER = null; //TODO not used
 	private Class GENERATORCLASS = null;
 	private Class PARSERCLASS = null;
 
