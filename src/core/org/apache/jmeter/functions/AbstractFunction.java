@@ -1,7 +1,6 @@
 package org.apache.jmeter.functions;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +11,7 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * @author mstover
@@ -73,12 +73,12 @@ public abstract class AbstractFunction implements Function
             {
                 try
                 {
-                    arguments.add(URLDecoder.decode(arg, "UTF-8"));
+                    arguments.add(JOrphanUtils.decode(arg, "UTF-8"));
                 }
                 catch (UnsupportedEncodingException e)
                 {
                     // UTF-8 unsupported? You must be joking!
-                    throw new Error(e);
+                    throw new Error("Should not happen: "+e.toString());
                 }
             }
             previous = arg;

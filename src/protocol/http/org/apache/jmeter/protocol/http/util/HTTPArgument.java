@@ -56,7 +56,6 @@ package org.apache.jmeter.protocol.http.util;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -67,6 +66,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jorphan.util.JOrphanUtils;
 
 public class HTTPArgument extends Argument implements Serializable
 {
@@ -135,14 +135,14 @@ public class HTTPArgument extends Argument implements Serializable
         {
             try
             {
-                name = URLDecoder.decode(name, "UTF-8");
-                value = URLDecoder.decode(value.toString(), "UTF-8");
+                name = JOrphanUtils.decode(name, "UTF-8");
+                value = JOrphanUtils.decode(value.toString(), "UTF-8");
             }
             catch (UnsupportedEncodingException e)
             {
                 // UTF-8 unsupported? You must be joking!
                 log.error("UTF-8 encoding not supported!");
-                throw new Error(e);
+                throw new Error(e.toString());
             }
         }
         setName(name);

@@ -1,6 +1,7 @@
 package org.apache.jmeter.testelement.property;
 
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * @version $Revision$
@@ -38,7 +39,7 @@ public class BooleanProperty extends AbstractProperty
      */
     public String getStringValue()
     {
-        return value ? "true" : "false";
+        return JOrphanUtils.booleanToString(value);
     }
 
     /**
@@ -46,7 +47,7 @@ public class BooleanProperty extends AbstractProperty
      */
     public Object getObjectValue()
     {
-        return Boolean.valueOf(value);
+        return JOrphanUtils.valueOf(value);
     }
 
     /**

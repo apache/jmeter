@@ -137,8 +137,8 @@ public class BeanShellServer implements Runnable {
 					source.invoke(instance, new Object[]{serverfile});
 				} catch (InvocationTargetException e1) {
 					log.warn("Could not source "+serverfile);
-					Throwable t= e1.getCause();
-					if (t != null) log.warn(t.toString());
+					//JDK1.4: Throwable t= e1.getCause();
+					//JDK1.4: if (t != null) log.warn(t.toString());
 				}
 			}
 			eval.invoke(instance, new Object[]{"setAccessibility(true);"});

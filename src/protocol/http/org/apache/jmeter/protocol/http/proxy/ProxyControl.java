@@ -443,13 +443,13 @@ public class ProxyControl extends GenericController implements Serializable
                         // Not 100% sure, but I believe this can't happen, so
                         // I'll log and throw an error:
                         log.error("Program error",e);
-                        throw new Error(e);
+                        throw new Error(e.toString());//JDK1.4: remove .toString()
                     } catch (IllegalUserActionException e)
                     {
                         // Not 100% sure, but I believe this can't happen, so
                         // I'll log and throw an error:
                         log.error("Program error",e);
-                        throw new Error(e);
+                        throw new Error(e.toString());//JDK1.4: remove .toString()
                     }
                 }
             }

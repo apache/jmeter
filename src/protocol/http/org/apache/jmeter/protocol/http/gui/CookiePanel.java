@@ -80,6 +80,7 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -287,7 +288,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
                 cookie.getValue(),
                 cookie.getDomain(),
                 cookie.getPath(),
-                Boolean.valueOf(cookie.getSecure()),
+                JOrphanUtils.valueOf(cookie.getSecure()),
                 new Long(cookie.getExpires())});
     }
 

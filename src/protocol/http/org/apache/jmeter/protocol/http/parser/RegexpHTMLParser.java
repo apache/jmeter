@@ -210,8 +210,8 @@ class RegexpHTMLParser extends HTMLParser
         {
             log.error(
                 "Internal error compiling regular expression in ParseRegexp.");
-            log.error("MalformedPatterException - " + mpe);
-            throw new Error(mpe);
+            log.error("MalformedPatternException - " + mpe);
+            throw new Error(mpe.toString());//JDK1.4: remove .toString()
         }
     }
 

@@ -92,6 +92,7 @@ import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.xml.sax.SAXException;
 
@@ -665,7 +666,7 @@ public final class SaveService implements SaveServiceConstants
         {
             config.setAttribute(
                 SUCCESSFUL,
-                Boolean.valueOf(result.isSuccessful()).toString());
+                JOrphanUtils.booleanToString(result.isSuccessful()));
         }
 
         SampleResult[] subResults = result.getSubResults();
