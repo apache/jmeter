@@ -105,12 +105,17 @@ public class Remove implements Command
 		guiPackage.getTreeListener().removedSelectedNode();
 		for (int i = nodes.length - 1; i >= 0; i--)
 		{
-				guiPackage.getTreeModel().removeNodeFromParent(nodes[i]);
-				guiPackage.removeNode(nodes[i].createTestElement());
+				removeNode(nodes[i]);
 		}
 		guiPackage.getTreeListener().getJTree().setSelectionRow(1);
 
 	}
+
+    public static void removeNode(JMeterTreeNode node)
+    {
+        GuiPackage.getInstance().getTreeModel().removeNodeFromParent(node);
+        GuiPackage.getInstance().removeNode(node.createTestElement());
+    }
 	static
 	{
 		commands.add("remove");
