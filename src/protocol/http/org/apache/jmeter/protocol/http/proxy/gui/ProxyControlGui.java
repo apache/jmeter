@@ -288,7 +288,7 @@ public class ProxyControlGui extends JPanel implements JMeterGUIComponent, Actio
 
 	private void startProxy()
 	{
-		ValueReplacer replacer = getReplacer();
+		ValueReplacer replacer = GuiPackage.getInstance().getReplacer();
 		try
 		{
 			replacer.replaceValues(model);
@@ -302,15 +302,6 @@ public class ProxyControlGui extends JPanel implements JMeterGUIComponent, Actio
 			JOptionPane.showMessageDialog(this,JMeterUtils.getResString(
 					"invalid_variables"),"Error",JOptionPane.ERROR_MESSAGE);
 		}
-	}
-
-	private ValueReplacer getReplacer()
-	{
-		ValueReplacer replacer = new ValueReplacer(
-				((TestPlan)((JMeterGUIComponent)
-				GuiPackage.getInstance().getTreeModel().getTestPlan().getArray()
-				[0]).createTestElement()).getUserDefinedVariables());
-		return replacer;
 	}
 	
 	private void enableRestart()

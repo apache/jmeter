@@ -66,6 +66,7 @@ import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.control.gui.RecordController;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
+import org.apache.jmeter.functions.ValueReplacer;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
@@ -302,6 +303,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
 		HTTPSampler sampler,
 		TestElement[] subConfigs)
 	{
+		ValueReplacer replacer = GuiPackage.getInstance().getReplacer();
 		TestElement urlConfig = null;
 		JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
 		List nodes = treeModel.getNodesOfType(RecordController.class);
@@ -328,6 +330,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
 			if (areMatched(sampler, urlConfig))
 			{
 				removeValuesFromSampler(sampler, urlConfig);
+				replacer.reverseReplace(sampler);
 				HttpTestSampleGui test = new HttpTestSampleGui();
 				test.configure(sampler);
 				try
@@ -338,6 +341,7 @@ public class ProxyControl extends ConfigTestElement implements Serializable
 						if (subConfigs[i] instanceof HeaderManager)
 						{
 							HeaderPanel comp = new HeaderPanel();
+							replacer.reverseReplace(subConfigs[i]);
 							comp.configure(subConfigs[i]);
 							treeModel.addComponent(comp, newNode);
 						}
