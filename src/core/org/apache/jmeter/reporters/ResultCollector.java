@@ -487,41 +487,4 @@ public class ResultCollector
     public void testIterationStart(LoopIterationEvent event)
     {
     }
-    public static class Test extends JMeterTestCase
-	{
-    	public Test(String x)
-		{
-    		super(x);
-    	}
-    	public void testSave() throws Exception
-		{
-//    		String msg="abcd Sammelanträge Jörg Höhle \374 \373 \372 \371";
-    		String msg="xabcde \u0410 \043e 0xCD0x91 \315\221  u3c00 \u3c00 u0391 \u0391 u00f1 \u00f1 P 373 \373 372 \372 371 \371";
-    		System.out.println(msg);
-    		
-    		//String msg2 = new String(msg,"");
-    		//JMeterProperties;  "jmeter.save.saveservice.response_data=true";
-    		enableFunctionalMode(true);
-    		ResultCollector rc = new ResultCollector();
-    		SampleResult sample = new SampleResult();
-    		sample.setSamplerData(msg);
-    		sample.setDataType(SampleResult.BINARY);
-    		sample.setResponseData(msg.getBytes());
-    		sample.setSampleLabel(msg);
-    		String s = rc.getSerializedSampleResult(sample);
-    		System.out.println("no enc"+s);
-    		sample.setResponseData(msg.getBytes("Cp1252"));
-    		sample.setSampleLabel(msg);
-    		s = rc.getSerializedSampleResult(sample);
-    		System.out.println("1252"+s);
-    		sample.setResponseData(msg.getBytes("ISO-8859-1"));
-    		sample.setSampleLabel(msg);
-    		s = rc.getSerializedSampleResult(sample);
-    		System.out.println("8859"+s);
-    		sample.setResponseData(msg.getBytes("UTF-8"));
-    		sample.setSampleLabel(msg);
-    		s = rc.getSerializedSampleResult(sample);
-    		System.out.println("UTF8"+s);
-    	}
-	}
 }
