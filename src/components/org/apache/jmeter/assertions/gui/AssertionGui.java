@@ -362,9 +362,9 @@ public class AssertionGui extends AbstractAssertionGui implements FocusListener
         public void actionPerformed(ActionEvent e)
         {
             int index = stringTable.getSelectedRow();
-            stringTable.getCellEditor(index, stringTable.getSelectedColumn()).cancelCellEditing();
             if (index > -1)
             {
+                stringTable.getCellEditor(index, stringTable.getSelectedColumn()).cancelCellEditing();
                 tableModel.removeRow(index);
                 tableModel.fireTableDataChanged();
             }
