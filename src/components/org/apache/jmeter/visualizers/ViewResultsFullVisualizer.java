@@ -465,6 +465,15 @@ public class ViewResultsFullVisualizer
 
         String html = response.substring(htmlIndex);
         results.setContentType("text/html");
+
+        /* Get round problems parsing
+         *  <META http-equiv='content-type' content='text/html; charset=utf-8'>
+         * See http://nagoya.apache.org/bugzilla/show_bug.cgi?id=23315
+         *
+         * Is this due to a bug in Java?
+         */
+		results.getDocument().putProperty("IgnoreCharsetDirective", Boolean.TRUE);
+
         results.setText(html);
         results.setCaretPosition(0);
         resultsScrollPane.setViewportView(results);
