@@ -30,6 +30,7 @@
 		<item name="Distributed JMeter"             href="/user_manual/rmi.html"/>
 		<item name="Recording Browser Activity"     href="/user_manual/proxy_server.html"/>
 		<item name="Built-in Components"     		href="/user_manual/ready_components.html"/>
+        <item name="Using the SSL Manager"          href="/user_manual/sslmanager.html"/>
 	 </menu>
 	 <menu name="Community">
 		  <item name="Get Involved"           href="/site/getinvolved.html"/>
