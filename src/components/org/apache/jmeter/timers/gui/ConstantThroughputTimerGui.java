@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,16 +55,13 @@
  
 package org.apache.jmeter.timers.gui;
 
-import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.ConstantThroughputTimer;
@@ -195,42 +192,24 @@ public class ConstantThroughputTimerGui
      */
     private void init()
     {
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT,
+		setLayout(new VerticalLayout(5, VerticalLayout.LEFT,
 			    			  VerticalLayout.TOP));
 	
-		// MAIN PANEL
-		JPanel mainPanel = new JPanel();
-		Border margin = new EmptyBorder(10, 10, 5, 10);
-		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-	
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(
-			JMeterUtils.getResString("constant_throughput_timer_title"));
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(),
-			    curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
-	
-		// NAME
-		mainPanel.add(getNamePanel());
-	
-		// throughput
-		JPanel throughputPanel = new JPanel();
-		JLabel throughputLabel = new JLabel(
-		      JMeterUtils.getResString("constant_throughput_timer_throughput"));
-		throughputPanel.add(throughputLabel);
+		setBorder(makeBorder());
+		setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+        
+        add(makeTitlePanel());
+
+        Box throughputPanel = Box.createHorizontalBox();
+        throughputPanel.add (new JLabel(
+		      JMeterUtils.getResString("constant_throughput_timer_throughput")));
+
 		throughputField = new JTextField(6);
 		throughputField.setText(DEFAULT_THROUGHPUT);
+        throughputField.addKeyListener(this);
+        throughputField.setName(THROUGHPUT_FIELD);
 		throughputPanel.add(throughputField);
-		mainPanel.add(throughputPanel);
-	
-		throughputField.addKeyListener(this);
-		throughputField.setName(THROUGHPUT_FIELD);
-	
-		this.add(mainPanel);
-    }
-    
+        
+		add(throughputPanel);
+    }    
 }
