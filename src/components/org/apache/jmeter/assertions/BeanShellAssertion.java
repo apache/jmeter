@@ -68,6 +68,8 @@ public class BeanShellAssertion extends AbstractTestElement
 					log.warn("Error processing init file "+init+" "+e);
 				}
 			}
+		} catch (Exception e){
+			log.warn("Error setting log object "+e);
 		} catch (NoClassDefFoundError e){
 			bshInterpreter=null;
 		}
