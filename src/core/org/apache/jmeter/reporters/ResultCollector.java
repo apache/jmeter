@@ -227,6 +227,10 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	
 	private static synchronized PrintWriter getFileWriter(String filename) throws IOException
 	{
+		if(filename == null || filename.length() == 0)
+		{
+			return null;
+		}
 		PrintWriter writer = (PrintWriter)files.get(filename);
 		boolean trimmed = true;
 		if(writer == null)
