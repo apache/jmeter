@@ -78,7 +78,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /****************************************
@@ -90,8 +90,7 @@ import org.apache.log.Logger;
  ***************************************/
 public class Load implements Command
 {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter.gui");
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 	private static Set commands = new HashSet();
 
 	static
@@ -134,6 +133,7 @@ public class Load implements Command
 			f = chooser.getSelectedFile();
 			if(f != null)
 			{
+				log.info("Loading file: "+f);
 				reader = new FileInputStream(f);
 				HashTree tree = SaveService.loadSubTree(reader);
 				isTestPlan = insertLoadedTree(e.getID(), tree);
@@ -141,7 +141,12 @@ public class Load implements Command
 		}
 		catch(Exception ex)
 		{
-			JMeterUtils.reportErrorToUser(ex.getMessage());
+			String msg = ex.getMessage(); 
+			if (msg  == null) {
+				msg="Unexpected error - see log for details";
+				log.warn("Unexpected error",ex);
+			}
+			JMeterUtils.reportErrorToUser(msg);
 		}
 		finally
 		{
@@ -160,6 +165,9 @@ public class Load implements Command
 	 * */
 	public boolean insertLoadedTree(int id, HashTree tree) throws Exception, IllegalUserActionException {
 		//convertTree(tree);
+		if (tree == null){
+			throw new Exception("Error in TestPlan - see log file");
+		}
         boolean isTestPlan = tree.getArray()[0] instanceof TestPlan;
 		HashTree newTree = GuiPackage.getInstance().addSubTree(tree);
         GuiPackage.getInstance().updateCurrentGui();
