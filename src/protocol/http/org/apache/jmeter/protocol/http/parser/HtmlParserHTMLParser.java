@@ -124,9 +124,10 @@ class HtmlParserHTMLParser extends HTMLParser
                 else if (node instanceof BaseHrefTag)
                 {
                     BaseHrefTag baseHref= (BaseHrefTag)node;
+                    String baseref = baseHref.getBaseUrl().toString();
                     try
                     {
-                    	if(!baseHref.equals(""))// Bugzilla 30713
+                    	if(!baseref.equals(""))// Bugzilla 30713
                     	{
                     		baseUrl= new URL(baseUrl, baseHref.getBaseUrl()+"/");
                     	}
