@@ -1,4 +1,5 @@
 package org.apache.jmeter.threads;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,25 +31,14 @@ import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.log.Hierarchy;
 import org.apache.log.Logger;
 
-/****************************************
- * <p>
- *
- * Title: </p> <p>
- *
- * Description: </p> <p>
- *
- * Copyright: Copyright (c) 2001</p> <p>
- *
- * Company: </p>
- *
- *@author    unascribed
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
+/**
+ * @author    unascribed
+ * @version   $Revision$
+ */
 public class TestCompiler implements HashTreeTraverser, SampleListener
 {
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.engine");
     LinkedList stack = new LinkedList();
     Map samplerConfigMap = new HashMap();
     Set objectsWithFunctions = new HashSet();
@@ -60,57 +50,30 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
 
     List loopIterListeners = new ArrayList();
 
-    /****************************************
-     * !ToDo (Constructor description)
-     *
-     *@param testTree  !ToDo (Parameter description)
-     ***************************************/
     public TestCompiler(HashTree testTree, JMeterVariables vars)
     {
         threadVars = vars;
         this.testTree = testTree;
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     ***************************************/
     public static void initialize()
     {
         pairing.clear();
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param e  !ToDo (Parameter description)
-     ***************************************/
     public void sampleOccurred(SampleEvent e)
     {
         previousResult = e.getResult();
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param e  !ToDo (Parameter description)
-     ***************************************/
     public void sampleStarted(SampleEvent e)
-    {}
+    {
+    }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param e  !ToDo (Parameter description)
-     ***************************************/
     public void sampleStopped(SampleEvent e)
-    {}
+    {
+    }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param sampler  !ToDo (Parameter description)
-     *@return         !ToDo (Return description)
-     ***************************************/
     public SamplePackage configureSampler(Sampler sampler)
     {
         currentSampler = sampler;
@@ -128,7 +91,9 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         while (iter.hasNext())
         {
             PreProcessor ex = (PreProcessor) iter.next();
-            log.debug("Running preprocessor: " + ((AbstractTestElement)ex).getName());
+            log.debug(
+                "Running preprocessor: "
+                    + ((AbstractTestElement) ex).getName());
             ex.process();
         }
     }
@@ -138,20 +103,11 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         pack.recoverRunningVersion();
     }
 
-    /****************************************
-     * !ToDo
-     *
-     *@param node     !ToDo
-     *@param subTree  !ToDo
-     ***************************************/
     public void addNode(Object node, HashTree subTree)
     {
         stack.addLast(node);
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     ***************************************/
     public void subtractNode()
     {
         log.debug("Subtracting node, stack size = " + stack.size());
@@ -164,7 +120,10 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         stack.removeLast();
         if (stack.size() > 0)
         {
-            ObjectPair pair = new ObjectPair((TestElement) child, (TestElement) stack.getLast());
+            ObjectPair pair =
+                new ObjectPair(
+                    (TestElement) child,
+                    (TestElement) stack.getLast());
             if (!pairing.contains(pair))
             {
                 pair.addTestElements();
@@ -190,7 +149,8 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
                 {
                     if (item instanceof Controller)
                     {
-                        ((Controller) item).addIterationListener((LoopIterationListener) child);
+                        ((Controller) item).addIterationListener(
+                            (LoopIterationListener) child);
                         break;
                     }
                 }
@@ -198,11 +158,9 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         }
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     ***************************************/
     public void processPath()
-    {}
+    {
+    }
 
     private void saveSamplerConfigs(Sampler sam)
     {
@@ -250,36 +208,33 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
             pres.addAll(0,tempPre);
             posts.addAll(0,tempPost);
         }
-        SamplePackage pack = new SamplePackage(configs, modifiers, responseModifiers, listeners, timers, assertions, posts, pres);
+
+        SamplePackage pack =
+            new SamplePackage(
+                configs,
+                modifiers,
+                responseModifiers,
+                listeners,
+                timers,
+                assertions,
+                posts,
+                pres);
         pack.setSampler(sam);
         pack.setRunningVersion(true);
         samplerConfigMap.put(sam, pack);
     }
 
-    /****************************************
-     * !ToDo (Class description)
-     *
-     *@author    $Author$
-     *@created   $Date$
-     *@version   $Revision$
-     ***************************************/
+    /**
+     * @author    $Author$
+     * @version   $Revision$
+     */
     public static class Test extends junit.framework.TestCase
     {
-        /****************************************
-         * !ToDo (Constructor description)
-         *
-         *@param name  !ToDo (Parameter description)
-         ***************************************/
         public Test(String name)
         {
             super(name);
         }
 
-        /****************************************
-         * !ToDo
-         *
-         *@exception Exception  !ToDo (Exception description)
-         ***************************************/
         public void testConfigGathering() throws Exception
         {
             ListedHashTree testing = new ListedHashTree();
@@ -293,10 +248,14 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
             testing.add(controller, sampler);
             TestCompiler.initialize();
 
-            TestCompiler compiler = new TestCompiler(testing, new JMeterVariables());
+            TestCompiler compiler =
+                new TestCompiler(testing, new JMeterVariables());
             testing.traverse(compiler);
-            sampler = (TestSampler) compiler.configureSampler(sampler).getSampler();
-            assertEquals("A test value", sampler.getPropertyAsString("test.property"));
+            sampler =
+                (TestSampler) compiler.configureSampler(sampler).getSampler();
+            assertEquals(
+                "A test value",
+                sampler.getPropertyAsString("test.property"));
         }
 
         class TestSampler extends AbstractSampler
@@ -312,23 +271,14 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         }
     }
 
-    /****************************************
-     * !ToDo (Class description)
-     *
-     *@author    $Author$
-     *@created   $Date$
-     *@version   $Revision$
-     ***************************************/
+    /**
+     * @author    $Author$
+     * @version   $Revision$
+     */
     private class ObjectPair
     {
         TestElement child, parent;
 
-        /****************************************
-         * !ToDo (Constructor description)
-         *
-         *@param one  !ToDo (Parameter description)
-         *@param two  !ToDo (Parameter description)
-         ***************************************/
         public ObjectPair(TestElement one, TestElement two)
         {
             this.child = one;
@@ -337,33 +287,24 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
 
         public void addTestElements()
         {
-            if (parent instanceof Controller && (child instanceof Sampler || child instanceof Controller))
+            if (parent instanceof Controller
+                && (child instanceof Sampler || child instanceof Controller))
             {
                 parent.addTestElement(child);
             }
         }
 
-        /****************************************
-         * !ToDo (Method description)
-         *
-         *@return   !ToDo (Return description)
-         ***************************************/
         public int hashCode()
         {
             return child.hashCode() + parent.hashCode();
         }
 
-        /****************************************
-         * !ToDo (Method description)
-         *
-         *@param o  !ToDo (Parameter description)
-         *@return   !ToDo (Return description)
-         ***************************************/
         public boolean equals(Object o)
         {
             if (o instanceof ObjectPair)
             {
-                return child == ((ObjectPair) o).child && parent == ((ObjectPair) o).parent;
+                return child == ((ObjectPair) o).child
+                    && parent == ((ObjectPair) o).parent;
             }
             return false;
         }

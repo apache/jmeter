@@ -81,15 +81,13 @@ import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 
-/****************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- *
- *@author    Michael Stover
- *@created   $Date$
- *@version   1.0
- ***************************************/
-
-public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemListener
+/**
+ * @author    Michael Stover
+ * @version   $Revision$
+ */
+public class ThreadGroupGui
+    extends AbstractJMeterGuiComponent
+    implements ItemListener
 {
     LoopControlPanel loopPanel;
     private VerticalPanel mainPanel;
@@ -109,30 +107,17 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
     private JDateField end;
     private JCheckBox scheduler;
 
-    /****************************************
-     * !ToDo (Constructor description)
-     ***************************************/
     public ThreadGroupGui()
     {
         super();
         init();
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public Collection getMenuCategories()
     {
         return null;
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public TestElement createTestElement()
     {
         ThreadGroup tg = new ThreadGroup();
@@ -141,66 +126,83 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
     }
 
     /**
-         * Modifies a given TestElement to mirror the data in the gui components.
-         * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-         */
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see JMeterGUIComponent#modifyTestElement(TestElement)
+     */
     public void modifyTestElement(TestElement tg)
     {
         super.configureTestElement(tg);
         if (tg instanceof ThreadGroup)
         {
-            ((ThreadGroup) tg).setSamplerController((LoopController) loopPanel.createTestElement());
+            ((ThreadGroup) tg).setSamplerController(
+                (LoopController) loopPanel.createTestElement());
         }
+
         tg.setProperty(ThreadGroup.NUM_THREADS, threadInput.getText());
         tg.setProperty(ThreadGroup.RAMP_TIME, rampInput.getText());
-        tg.setProperty(new LongProperty(ThreadGroup.START_TIME,((Date)start.getDate()).getTime()));
-        tg.setProperty(new LongProperty(ThreadGroup.END_TIME,((Date)end.getDate()).getTime()));
-        tg.setProperty(new BooleanProperty(ThreadGroup.SCHEDULER,scheduler.isSelected()));
+        tg.setProperty(
+            new LongProperty(
+                ThreadGroup.START_TIME,
+                ((Date) start.getDate()).getTime()));
+        tg.setProperty(
+            new LongProperty(
+                ThreadGroup.END_TIME,
+                ((Date) end.getDate()).getTime()));
+        tg.setProperty(
+            new BooleanProperty(ThreadGroup.SCHEDULER, scheduler.isSelected()));
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@param tg  !ToDo (Parameter description)
-     ***************************************/
     public void configure(TestElement tg)
     {
         super.configure(tg);
         threadInput.setText(tg.getPropertyAsString(ThreadGroup.NUM_THREADS));
         rampInput.setText(tg.getPropertyAsString(ThreadGroup.RAMP_TIME));
-        loopPanel.configure((TestElement) tg.getProperty(ThreadGroup.MAIN_CONTROLLER).getObjectValue());
+        loopPanel.configure(
+            (TestElement) tg
+                .getProperty(ThreadGroup.MAIN_CONTROLLER)
+                .getObjectValue());
         scheduler.setSelected(tg.getPropertyAsBoolean(ThreadGroup.SCHEDULER));
-        if (scheduler.isSelected()) {
+
+        if (scheduler.isSelected())
+        {
             mainPanel.setVisible(true);
-        }else {
+        }
+        else
+        {
             mainPanel.setVisible(false);
         }
+
         start.setDate(new Date(tg.getPropertyAsLong(ThreadGroup.START_TIME)));
         end.setDate(new Date(tg.getPropertyAsLong(ThreadGroup.END_TIME)));
     }
 
-    public void itemStateChanged(ItemEvent ie){
-        if (ie.getItem().equals(scheduler)){
-            if(scheduler.isSelected()) {
+    public void itemStateChanged(ItemEvent ie)
+    {
+        if (ie.getItem().equals(scheduler))
+        {
+            if (scheduler.isSelected())
+            {
                 mainPanel.setVisible(true);
-            } else {
+            }
+            else
+            {
                 mainPanel.setVisible(false);
             }
         }
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public JPopupMenu createPopupMenu()
     {
         JPopupMenu pop = new JPopupMenu();
         pop.add(
             MenuFactory.makeMenus(
-                new String[] { MenuFactory.CONTROLLERS, MenuFactory.LISTENERS, MenuFactory.SAMPLERS, 
-                    MenuFactory.TIMERS, MenuFactory.CONFIG_ELEMENTS,MenuFactory.PRE_PROCESSORS,
+                new String[] {
+                    MenuFactory.CONTROLLERS,
+                    MenuFactory.LISTENERS,
+                    MenuFactory.SAMPLERS,
+                    MenuFactory.TIMERS,
+                    MenuFactory.CONFIG_ELEMENTS,
+                    MenuFactory.PRE_PROCESSORS,
                     MenuFactory.POST_PROCESSORS },
                 JMeterUtils.getResString("Add"),
                 "Add"));
@@ -209,11 +211,6 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         return pop;
     }
 
-    /****************************************
-     * !ToDo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public JPanel createControllerPanel()
     {
         loopPanel = new LoopControlPanel(false);
@@ -256,11 +253,6 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         return panel;
     }
 
-    /****************************************
-     * !ToDoo (Method description)
-     *
-     *@return   !ToDo (Return description)
-     ***************************************/
     public String getStaticLabel()
     {
         return JMeterUtils.getResString("threadgroup");
@@ -285,7 +277,8 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         // NUMBER OF THREADS
         JPanel threadPanel = new JPanel(new BorderLayout(5, 0));
 
-        JLabel threadLabel = new JLabel(JMeterUtils.getResString("number_of_threads"));
+        JLabel threadLabel =
+            new JLabel(JMeterUtils.getResString("number_of_threads"));
         threadPanel.add(threadLabel, BorderLayout.WEST);
 
         threadInput = new JTextField("1", 5);
@@ -311,7 +304,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         // LOOP COUNT
         threadPropsPanel.add(createControllerPanel());
 
-       // mainPanel.add(threadPropsPanel, BorderLayout.NORTH);
+        // mainPanel.add(threadPropsPanel, BorderLayout.NORTH);
         //add(mainPanel, BorderLayout.CENTER);        
 
         scheduler = new JCheckBox( JMeterUtils.getResString("scheduler"));
@@ -320,7 +313,8 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         mainPanel = new VerticalPanel();
         mainPanel.setBorder(
             BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), JMeterUtils.getResString("scheduler_configuration")));
+                BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("scheduler_configuration")));
         mainPanel.add(createStartTimePanel());
         mainPanel.add(createEndTimePanel());
         mainPanel.setVisible(false);
@@ -328,7 +322,6 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         intgrationPanel.add(threadPropsPanel);        
         intgrationPanel.add(mainPanel);        
         add(intgrationPanel, BorderLayout.CENTER);
-
     }
 
     public void setNode(JMeterTreeNode node)
@@ -336,7 +329,8 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
         getNamePanel().setNode(node);
     }
     
-    public Dimension getPreferredSize() {
+    public Dimension getPreferredSize()
+    {
         return getMinimumSize();
     }
 }
