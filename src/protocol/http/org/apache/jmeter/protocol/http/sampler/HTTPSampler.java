@@ -889,7 +889,7 @@ public class HTTPSampler extends AbstractSampler implements PerSampleClonable {
                 log.debug("sample2 : sampling url - " + u);
             }
             conn = setupConnection(u, getMethod());
-            if (getProperty(HTTPSampler.METHOD).equals(HTTPSampler.POST))
+            if (getMethod().equals(HTTPSampler.POST))
             {
                 setPostHeaders(conn);
                 time = connect();
