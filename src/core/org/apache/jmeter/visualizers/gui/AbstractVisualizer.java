@@ -56,9 +56,8 @@ public abstract class AbstractVisualizer
             new JCheckBox(JMeterUtils.getResString("log_errors_only"));
 
         filePanel = new FilePanel(
-                this,
-                JMeterUtils.getResString("file_visualizer_output_file"));
-
+                JMeterUtils.getResString("file_visualizer_output_file"),".jtl");
+        filePanel.addChangeListener(this);
         filePanel.add(errorLogging);
                 
     }
