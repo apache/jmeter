@@ -56,15 +56,15 @@ public final class MenuFactory
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    public final static String TIMERS = "menu_timer";
-    public final static String CONTROLLERS = "menu_logic_controller";
-	public final static String SAMPLERS = "menu_generative_controller";
-    public final static String CONFIG_ELEMENTS = "menu_config_element";
-    public final static String POST_PROCESSORS = "menu_post_processors";
-    public final static String PRE_PROCESSORS = "menu_pre_processors";
-    public final static String ASSERTIONS = "menu_assertions";
-    public final static String NON_TEST_ELEMENTS = "menu_non_test_elements";
-    public final static String LISTENERS = "menu_listener";
+    public final static String TIMERS = "menu_timer";// $NON-NLS-1$
+    public final static String CONTROLLERS = "menu_logic_controller";// $NON-NLS-1$
+	public final static String SAMPLERS = "menu_generative_controller";// $NON-NLS-1$
+    public final static String CONFIG_ELEMENTS = "menu_config_element";// $NON-NLS-1$
+    public final static String POST_PROCESSORS = "menu_post_processors";// $NON-NLS-1$
+    public final static String PRE_PROCESSORS = "menu_pre_processors";// $NON-NLS-1$
+    public final static String ASSERTIONS = "menu_assertions";// $NON-NLS-1$
+    public final static String NON_TEST_ELEMENTS = "menu_non_test_elements";// $NON-NLS-1$
+    public final static String LISTENERS = "menu_listener";// $NON-NLS-1$
     private static Map menuMap = new HashMap();
     private static Set elementsToSkip = new HashSet();
 
@@ -117,8 +117,8 @@ public final class MenuFactory
         {
             String[] classesToSkip =
                 JOrphanUtils.split(
-                    JMeterUtils.getPropDefault("not_in_menu", ""),
-                    ",");
+                    JMeterUtils.getPropDefault("not_in_menu", ""),// $NON-NLS-1$
+                    ",");// $NON-NLS-1$
             for (int i = 0; i < classesToSkip.length; i++)
             {
                 elementsToSkip.add(classesToSkip[i].trim());
@@ -151,32 +151,32 @@ public final class MenuFactory
         {
             menu.add(
                 makeMenuItem(
-                    JMeterUtils.getResString("remove"),
-                    "Remove",
-                    "remove",
+                    JMeterUtils.getResString("remove"),// $NON-NLS-1$
+                    "Remove", // TODO are these other params language dependent?
+                    "remove", // Indeed, should they be made into constants?
                     KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0)));
+            menu.add(
+                makeMenuItem(
+                    JMeterUtils.getResString("cut"),// $NON-NLS-1$
+                    "Cut",
+                    "Cut",
+                    KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_MASK)));
         }
         menu.add(
             makeMenuItem(
-                JMeterUtils.getResString("cut"),
-                "Cut",
-                "Cut",
-                KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_MASK)));
-        menu.add(
-            makeMenuItem(
-                JMeterUtils.getResString("copy"),
+                JMeterUtils.getResString("copy"),// $NON-NLS-1$
                 "Copy",
                 "Copy",
                 KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_MASK)));
         menu.add(
             makeMenuItem(
-                JMeterUtils.getResString("paste"),
+                JMeterUtils.getResString("paste"),// $NON-NLS-1$
                 "Paste",
                 "Paste",
                 KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_MASK)));
         menu.add(
             makeMenuItem(
-                JMeterUtils.getResString("paste_insert"),
+                JMeterUtils.getResString("paste_insert"),// $NON-NLS-1$
                 "Paste Insert",
                 "Paste Insert"));
     }
@@ -185,17 +185,23 @@ public final class MenuFactory
     {
         addSeparator(menu);
         menu.add(
-            makeMenuItem(JMeterUtils.getResString("menu_merge"), "Merge", "merge"));
+            makeMenuItem(
+            	JMeterUtils.getResString("menu_merge"),// $NON-NLS-1$
+				"Merge",
+				"merge"));
         menu.add(
-            makeMenuItem(JMeterUtils.getResString("save_as"), "Save As", "save_as"));
+            makeMenuItem(
+            	JMeterUtils.getResString("save_as"),// $NON-NLS-1$
+				"Save As",
+				"save_as"));
         JMenuItem disabled =
             makeMenuItem(
-                JMeterUtils.getResString("disable"),
+                JMeterUtils.getResString("disable"),// $NON-NLS-1$
                 "Disable",
                 "disable");
         JMenuItem enabled =
             makeMenuItem(
-                JMeterUtils.getResString("enable"),
+                JMeterUtils.getResString("enable"),// $NON-NLS-1$
                 "Enable",
                 "enable");
         boolean isEnabled =
@@ -218,7 +224,10 @@ public final class MenuFactory
         menu.add(disabled);
         addSeparator(menu);
         menu.add(
-            makeMenuItem(JMeterUtils.getResString("help"), "Help", "help"));
+            makeMenuItem(
+            	JMeterUtils.getResString("help"),// $NON-NLS-1$
+				"Help",
+				"help"));
     }
 
     public static JMenu makeMenus(
@@ -240,12 +249,12 @@ public final class MenuFactory
         pop.add(
             MenuFactory.makeMenus(
                 MENU_ADD_CONTROLLER,
-                JMeterUtils.getResString("Add"),
+                JMeterUtils.getResString("Add"),// $NON-NLS-1$
                 "Add"));
         pop.add(
             makeMenus(
                 MENU_PARENT_CONTROLLER,
-                JMeterUtils.getResString("insert_parent"),
+                JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
                 "Add Parent"));
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
@@ -258,12 +267,12 @@ public final class MenuFactory
         pop.add(
             MenuFactory.makeMenus(
                 MENU_ADD_SAMPLER,
-                JMeterUtils.getResString("Add"),
+                JMeterUtils.getResString("Add"),// $NON-NLS-1$
                 "Add"));
         pop.add(
             makeMenus(
                 MENU_PARENT_SAMPLER,
-                JMeterUtils.getResString("insert_parent"),
+                JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
                 "Add Parent"));
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
@@ -406,7 +415,8 @@ public final class MenuFactory
                  * 
                  * TODO: find a better way of checking this
                  */
-                if (name.endsWith("JMeterTreeNode") || name.endsWith("TestBeanGUI"))
+                if (name.endsWith("JMeterTreeNode")// $NON-NLS-1$
+                		|| name.endsWith("TestBeanGUI"))// $NON-NLS-1$
                 {
                 	continue;// Don't try to instantiate these
                 }
