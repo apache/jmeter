@@ -77,8 +77,9 @@ public final class LoggingManager
 {
     private static PatternFormatter format =
         new PatternFormatter(
-            "%{time:yyyy/MM/dd h:mm:ss a} %5.5{priority} - "
+            "%{time:yyyy/MM/dd HH:mm:ss} %5.5{priority} - "
                 + "%{category}: %{message} %{throwable}\n");
+           // time pattern is passed to java.text.SimpleDateFormat
 
     /** Used to hold the default logging target. */
     private static LogTarget target;
