@@ -25,7 +25,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Enumeration;
 import java.util.Random;
+import java.util.Hashtable;
 
 import javax.xml.parsers.DocumentBuilder;
 
@@ -67,6 +69,7 @@ public class WebServiceSampler extends HTTPSampler
     public static final String USE_PROXY = "WebServiceSampler.use_proxy";
     public static final String PROXY_HOST = "WebServiceSampler.proxy_host";
     public static final String PROXY_PORT = "WebServiceSampler.proxy_port";
+    public static final String WSDL_URL = "WebserviceSampler.wsdl_url";
 
     /**
      * The SOAPAction is required by MS
@@ -331,6 +334,22 @@ public class WebServiceSampler extends HTTPSampler
 	}
 	
 	/**
+	 * 
+	 * @param url
+	 */
+	public void setWsdlURL(String url){
+		this.setProperty(WSDL_URL,url);
+	}
+	
+	/**
+	 * method returns the WSDL URL
+	 * @return
+	 */
+	public String getWsdlURL(){
+		return getPropertyAsString(WSDL_URL);
+	}
+	
+	/**
 	 * The method will check to see if JMeter was started
 	 * in NonGui mode. If it was, it will try to pick up
 	 * the proxy host and port values if they were passed
@@ -466,6 +485,7 @@ public class WebServiceSampler extends HTTPSampler
             Envelope msgEnv = Envelope.unmarshall(rdoc);
             // create a new message
             Message msg = new Message();
+            RESULT.setURL(this.getUrl());
             RESULT.sampleStart();
 			SOAPHTTPConnection spconn = null;
 			// if a blank HeaderManager exists, try to
@@ -563,6 +583,8 @@ public class WebServiceSampler extends HTTPSampler
             // message, soap errors within the response
             // are preferred.
             RESULT.setResponseCode("200");
+			RESULT.setResponseHeaders(this.convertSoapHeaders(st.getHeaders()));
+			RESULT.setSampleLabel(this.getUrl().toString());
             br.close();
             msg = null;
             st = null;
@@ -605,5 +627,16 @@ public class WebServiceSampler extends HTTPSampler
     protected long connect() throws IOException
     {
         return -1;
+    }
+    
+    public String convertSoapHeaders(Hashtable ht){
+    	Enumeration en = ht.keys();
+    	StringBuffer buf = new StringBuffer();
+    	while (en.hasMoreElements()){
+    		Object key = en.nextElement();
+    		buf.append((String)key + "=" +
+    		(String)ht.get(key) + "\n");
+    	}
+    	return buf.toString();
     }
 }
