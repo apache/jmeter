@@ -287,12 +287,13 @@ POST content.</p>
 
 <section name="13.2 Logic Controllers" anchor="logic_controllers">
 
-<component index="13.2.1" name="Interleave Controller" screenshot="logic-controller/interleave-controller.gif">
+<component index="13.2.1" name="Interleave Controller" screenshot="logic-controller/interleave-controller.png">
 <description><p>If you add Generative or Logic Controllers to an Interleave Controller, JMeter will alternate among each of the
 other controllers for each loop iteration. </p>
 </description>
 <properties>
         <property name="name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="ignore sub-controller blocks" required="No">If checked, the interleave controller will treat sub-controllers like single request elements and only allow one request per controller at a time.  </property>
 </properties>
 
 <!--
@@ -348,8 +349,13 @@ two Interleave Controllers inside of it.</p>
 
 <p>The outer Interleave Controller alternates between the
 two inner ones.  Then, each inner Interleave Controller alternates between each of the HTTP Requests.  Each JMeter
-thread will send the requests in the following order: Home Page, Bug Page, CVS Page, and FAQ Page.
+thread will send the requests in the following order: Home Page, Interleaved, Bug Page, Interleaved, CVS Page, Interleaved, and FAQ Page, Interleaved.
 Note, the File Reporter is configured to store the results in a file named "interleave-test2.dat" in the current directory.</p>
+
+<figure image="logic-controller/interleave3.png">
+        Figure 3 - Interleave Controller Example 3
+</figure>
+<p>If the two interleave controllers under the main interleave controller were instead simple controllers, then the order would be: Home Page, CVS Page, Interleaved, Bug Page, FAQ Page, Interleaved.  However, if "ignore sub-controller blocks" was checked on the main interleave controller, then the order would be: Home Page, Interleaved, Bug Page, Interleaved, CVS Page, Interleaved, and FAQ Page, Interleaved.</p>
 </example>
 </component>
 

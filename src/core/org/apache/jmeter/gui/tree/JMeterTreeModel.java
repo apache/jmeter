@@ -70,8 +70,11 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.NullProperty;
+import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 /****************************************
  * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
  *
@@ -82,6 +85,7 @@ import org.apache.jorphan.collections.ListedHashTree;
 
 public class JMeterTreeModel extends DefaultTreeModel
 {
+    private static Logger log = LoggingManager.getLoggerForClass();
 
     /****************************************
      * !ToDo (Constructor description)
@@ -168,6 +172,7 @@ public class JMeterTreeModel extends DefaultTreeModel
         {
             throw new IllegalUserActionException("This node cannot hold sub-elements");
         }
+        component.setProperty(TestElement.GUI_CLASS,NameUpdater.getCurrentName(component.getPropertyAsString(TestElement.GUI_CLASS)));
         JMeterGUIComponent guicomp = GuiPackage.getInstance().getGui(component);
         guicomp.configure(component);
         guicomp.modifyTestElement(component);

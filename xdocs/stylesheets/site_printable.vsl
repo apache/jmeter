@@ -243,7 +243,7 @@
 
 #macro ( component $component)
 	#set ($screenshot = "")
-	#set ($screenshot = "$sshotdir/$component.getAttributeValue('screenshot')" )
+	#set ($screenshot = $component.getAttributeValue('screenshot') )
 	<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
@@ -254,9 +254,9 @@
 		  #foreach ( $items in $component.getChildren() )
 				#if ($items.getName().equals("description"))
 					#runloop($items)
-					<p><b>Control Panel</b></p>
 					#if ($screenshot != "")
-						<div align="center"><img src="$screenshot"></div>
+					<p><b>Control Panel</b></p>
+						<div align="center"><img src="$sshotdir/$screenshot"></div>
 					#end
 				#else
 					 #unknown($items)

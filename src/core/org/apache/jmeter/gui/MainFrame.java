@@ -424,9 +424,8 @@ public class MainFrame extends JFrame implements TestListener, Remoteable
         mainPanel = createMainPanel();
         treeAndMain.setRightComponent(mainPanel);
 
-        // The setResizeWeight() method was added to JDK1.3. For now, JMeter
-        // should remain compatible with JDK1.2.
-        //treeAndMain.setResizeWeight(.2);
+
+        treeAndMain.setResizeWeight(.2);
         treeAndMain.setContinuousLayout(true);
         all.add(treeAndMain, BorderLayout.CENTER);
 

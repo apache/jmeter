@@ -64,6 +64,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
+import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
@@ -499,7 +500,15 @@ public class HTTPSampler extends AbstractSampler
         boolean first = true;
         while (iter.hasNext())
         {
-            HTTPArgument item = (HTTPArgument) iter.next().getObjectValue();
+            HTTPArgument item = null;
+            try
+            {
+                item = (HTTPArgument) iter.next().getObjectValue();
+            }
+            catch(ClassCastException e)
+            {
+                item = new HTTPArgument((Argument)iter.next().getObjectValue());
+            }
             if (!first)
             {
                 buf.append("&");
