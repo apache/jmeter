@@ -3,7 +3,14 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLConnection;
+
+import org.apache.jmeter.samplers.Entry;
+import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 
 /**
@@ -15,7 +22,9 @@ import java.net.URLConnection;
  */
 public class SoapSampler extends HTTPSampler
 {
+    private static Logger log = LoggingManager.getLoggerForClass();
 	public static final String XML_DATA = "HTTPSamper.xml_data";
+    public static final String URL_DATA = "SoapSampler.URL_DATA";
 
 	public void setXmlData(String data)
 	{
@@ -26,6 +35,18 @@ public class SoapSampler extends HTTPSampler
 	{
 		return getPropertyAsString(XML_DATA);
 	}
+    
+    public String getURLData()
+    {
+        return getPropertyAsString(URL_DATA);
+    }
+    
+    public void setURLData(String url)
+    {
+        setProperty(URL_DATA,url);
+    }
+    
+  
 
 	/****************************************
 	 * Set the HTTP request headers in preparation to open the connection
@@ -58,5 +79,26 @@ public class SoapSampler extends HTTPSampler
 		out.print(getXmlData());
 		out.close();
 	}
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
+     */
+    public SampleResult sample(Entry e)
+    {
+        try
+        {
+            URL url = new URL(getURLData());
+            setDomain(url.getHost());
+            setPort(url.getPort());
+            setProtocol(url.getProtocol());
+            setMethod(POST);
+            setPath(url.getPath());
+        }
+        catch (MalformedURLException e1)
+        {
+            log.error("Bad url: " + getURLData(),e1);
+        }
+        return super.sample(e);
+    }
+
 }
 
