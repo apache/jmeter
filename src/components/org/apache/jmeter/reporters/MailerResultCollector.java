@@ -13,21 +13,23 @@ import org.apache.log.Logger;
  * Copyright:    Copyright (c) 2000
  * Company:      Apache Foundation
  * @author Michael Stover
- * @version 1.0
+ * @version $Revision$
  */
-
-public class MailerResultCollector extends ResultCollector implements Serializable
+public class MailerResultCollector
+    extends ResultCollector
+    implements Serializable
 {
-	transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(
-			"jmeter.elements");
-    public static final String MAILER_MODEL = "MailerResultCollector.mailer_model";
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.elements");
+    public static final String MAILER_MODEL =
+        "MailerResultCollector.mailer_model";
 
 
-	public MailerResultCollector()
-	{
-		super();
-        setProperty(new TestElementProperty(MAILER_MODEL,new MailerModel()));
-	}
+    public MailerResultCollector()
+    {
+        super();
+        setProperty(new TestElementProperty(MAILER_MODEL, new MailerModel()));
+    }
     
     public void clear()
     {
@@ -37,7 +39,7 @@ public class MailerResultCollector extends ResultCollector implements Serializab
     
 
     /* (non-Javadoc)
-     * @see org.apache.jmeter.samplers.SampleListener#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)
+     * @see SampleListener#sampleOccurred(SampleEvent)
      */
     public void sampleOccurred(SampleEvent e)
     {
@@ -50,5 +52,4 @@ public class MailerResultCollector extends ResultCollector implements Serializab
     {
         return (MailerModel)getProperty(MAILER_MODEL).getObjectValue();
     }
-
 }

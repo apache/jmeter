@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -101,7 +101,8 @@ public class MailerModel extends AbstractTestElement implements Serializable
     private static final String FAILURE_LIMIT_KEY = "MailerModel.failureLimit";
     private static final String SUCCESS_LIMIT_KEY = "MailerModel.successLimit";
 
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ELEMENTS);
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor(JMeterUtils.ELEMENTS);
 
     /** The listener for changes. */
     ChangeListener changeListener;
@@ -113,8 +114,12 @@ public class MailerModel extends AbstractTestElement implements Serializable
     {
         super();
 
-        setProperty(SUCCESS_LIMIT_KEY,JMeterUtils.getPropDefault("mailer.successlimit","2"));
-        setProperty(FAILURE_LIMIT_KEY,JMeterUtils.getPropDefault("mailer.failurelimit","2"));
+        setProperty(
+            SUCCESS_LIMIT_KEY,
+            JMeterUtils.getPropDefault("mailer.successlimit", "2"));
+        setProperty(
+            FAILURE_LIMIT_KEY,
+            JMeterUtils.getPropDefault("mailer.failurelimit", "2"));
     }
     
     public void addChangeListener(ChangeListener list)
@@ -132,7 +137,8 @@ public class MailerModel extends AbstractTestElement implements Serializable
     /**
      * Returns wether there had been more failures than acceptable.
      *
-     * @return A boolean value indicating wether the limit of acceptable failures has been reached.
+     * @return a boolean value indicating whether the limit of acceptable
+     *         failures has been reached.
      */
     public synchronized boolean isFailing()
     {
@@ -153,7 +159,8 @@ public class MailerModel extends AbstractTestElement implements Serializable
      * The addresses must be seperated by commas. Only String-objects
      * containing a "@" are added to the returned Vector.
      *
-     * @return A Vector of String-objects wherein each String represents a mail-address.
+     * @return a Vector of String-objects wherein each String represents a
+     *         mail-address.
      */
     public synchronized Vector getAddressVector()
     {
@@ -164,7 +171,8 @@ public class MailerModel extends AbstractTestElement implements Serializable
         {
             String addressSep = ",";
 
-            StringTokenizer next = new StringTokenizer(theAddressie, addressSep);
+            StringTokenizer next =
+                new StringTokenizer(theAddressie, addressSep);
 
             while (next.hasMoreTokens())
             {
@@ -190,7 +198,8 @@ public class MailerModel extends AbstractTestElement implements Serializable
      * addressies according to the settings of <code>successCount</code>
      * and <code>failureCount</code>.
      *
-     * @param sample The SampleResult encapsulating informations about the last sample.
+     * @param sample the SampleResult encapsulating informations about the last
+     *               sample.
      */
     public synchronized void add(SampleResult sample)
     {
@@ -216,7 +225,12 @@ public class MailerModel extends AbstractTestElement implements Serializable
             {
                 try
                 {
-                    sendMail(getFromAddress(), addressVector, getFailureSubject(), "URL Failed: " + sample.getSampleLabel(), getSmtpHost());
+                    sendMail(
+                        getFromAddress(),
+                        addressVector,
+                        getFailureSubject(),
+                        "URL Failed: " + sample.getSampleLabel(),
+                        getSmtpHost());
                 }
                 catch (Exception e)
                 {
@@ -238,7 +252,12 @@ public class MailerModel extends AbstractTestElement implements Serializable
 
                 try
                 {
-                    sendMail(getFromAddress(), addressVector, getSuccessSubject(), "URL Restarted: " + sample.getSampleLabel(), getSmtpHost());
+                    sendMail(
+                        getFromAddress(),
+                        addressVector,
+                        getSuccessSubject(),
+                        "URL Restarted: " + sample.getSampleLabel(),
+                        getSmtpHost());
                 }
                 catch (Exception e)
                 {
@@ -289,17 +308,20 @@ public class MailerModel extends AbstractTestElement implements Serializable
     /**
      * Sends a mail with the given parameters using SMTP.
      *
-     * @param  from The sender of the mail as shown in the mail-client.
-     * @param  vEmails All receivers of the mail. The receivers are seperated by commas.
-     * @param  subject The subject of the mail.
-     * @param  attText The message-body.
-     * @param  smtpHost The smtp-server used to send the mail.
+     * @param  from     the sender of the mail as shown in the mail-client.
+     * @param  vEmails  all receivers of the mail. The receivers are seperated
+     *                  by commas.
+     * @param  subject  the subject of the mail.
+     * @param  attText  the message-body.
+     * @param  smtpHost the smtp-server used to send the mail.
      */
-    public synchronized void sendMail(String from,
-            Vector vEmails,
-            String subject,
-            String attText,
-            String smtpHost) throws UnknownHostException, AddressException, MessagingException
+    public synchronized void sendMail(
+        String from,
+        Vector vEmails,
+        String subject,
+        String attText,
+        String smtpHost)
+        throws UnknownHostException, AddressException, MessagingException
     {
         String host = smtpHost;
         boolean debug = Boolean.valueOf(host).booleanValue();

@@ -160,7 +160,7 @@ public class ConstantTimer
     /**
      * Gain access to any variables that have been defined.
      * 
-     * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationStart(LoopIterationEvent)
+     * @see LoopIterationListener#iterationStart(LoopIterationEvent)
      */
     public void iterationStart(LoopIterationEvent event)
     {
@@ -173,7 +173,7 @@ public class ConstantTimer
      * 
      * Make changes to variables available elsewhere.
      * 
-     * @see org.apache.jmeter.testelement.ThreadListener#setJMeterVariables(JMeterVariables)
+     * @see ThreadListener#setJMeterVariables(JMeterVariables)
     public void setJMeterVariables(JMeterVariables jmVars)
     {
         //vars.addJMeterVariables(jmVars);

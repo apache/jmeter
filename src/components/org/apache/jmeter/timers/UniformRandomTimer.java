@@ -69,14 +69,15 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class UniformRandomTimer extends RandomTimer implements Serializable
 {
-	public long delay()
-	{
-		return (long) Math.abs((this.random.nextDouble() * getRange()) + super.delay());
-	}
+    public long delay()
+    {
+        return (long) Math.abs(
+            (this.random.nextDouble() * getRange()) + super.delay());
+    }
 
-	public String toString()
-	{
-		return JMeterUtils.getResString("uniform_timer_memo");
-	}
-	
+    public String toString()
+    {
+        return JMeterUtils.getResString("uniform_timer_memo");
+    }
+
 }

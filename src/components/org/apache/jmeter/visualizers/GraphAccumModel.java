@@ -53,7 +53,6 @@
  */
 package org.apache.jmeter.visualizers;
 
-
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Iterator;
@@ -67,69 +66,32 @@ import org.apache.log.Logger;
 
 
 /**
- *  The model that collects the average of the set of pages to be sampled
+ * The model that collects the average of the set of pages to be sampled.
  *
- *@author     Khor Soon Hin
- *@created    2001/08/11
- *@version    1.0
+ * @author     Khor Soon Hin
+ * @created    2001/08/11
+ * @version    $Revision$
  */
 
 public class GraphAccumModel implements Clearable, Serializable
 {
+    transient private static Logger log =
+        Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
-    /**
-     *  Description of the Field
-     */
     protected String name;
-
-    /**
-     *  Description of the Field
-     */
     protected List samples;
-
-    /**
-     *  Description of the Field
-     */
     protected List listeners;
 
-    /**
-     *  Description of the Field
-     */
     protected long averageSum = 0;
-
-    /**
-     *  Description of the Field
-     */
     protected long variationSum = 0;
-
-    /**
-     *  Description of the Field
-     */
     protected long counter = 0;
-
-    /**
-     *  Description of the Field
-     */
     protected long previous = 0;
-
-    /**
-     *  Description of the Field
-     */
     protected long max = 1;
-
-    /**
-     *  Description of the Field
-     */
     protected boolean bigChange = false;
-
-    /**
-     *  Description of the Field
-     */
     protected SampleResult current;
-    transient private static Logger log = Hierarchy.getDefaultHierarchy().getLoggerFor("jmeter.gui");
 
     /**
-     *  Constructor
+     * Constructor.
      */
     public GraphAccumModel()
     {
@@ -140,9 +102,9 @@ public class GraphAccumModel implements Clearable, Serializable
     }
 
     /**
-     *  Sets the Name attribute of the GraphModel object
+     * Sets the Name attribute of the GraphModel object.
      *
-     *@param  name  The new Name value
+     * @param  name  the new Name value
      */
     public void setName(String name)
     {
@@ -150,9 +112,9 @@ public class GraphAccumModel implements Clearable, Serializable
     }
 
     /**
-     *  Gets the SampleCount attribute of the GraphAccumModel object
+     * Gets the SampleCount attribute of the GraphAccumModel object.
      *
-     *@return    The SampleCount value
+     * @return    the SampleCount value
      */
     public int getSampleCount()
     {
@@ -160,9 +122,9 @@ public class GraphAccumModel implements Clearable, Serializable
     }
 
     /**
-     *  Gets the List attribute of the GraphAccumModel object
+     * Gets the List attribute of the GraphAccumModel object.
      *
-     *@return    The List value
+     * @return    the List value
      */
     public List getList()
     {
@@ -170,9 +132,9 @@ public class GraphAccumModel implements Clearable, Serializable
     }
 
     /**
-     *  Gets the Name attribute of the GraphModel object
+     * Gets the Name attribute of the GraphModel object.
      *
-     *@return    The Name value
+     * @return    the Name value
      */
     public String getName()
     {
@@ -180,9 +142,9 @@ public class GraphAccumModel implements Clearable, Serializable
     }
 
     /**
-     *  Gets the Max attribute of the GraphAccumModel object
+     * Gets the Max attribute of the GraphAccumModel object.
      *
-     *@return    The Max value
+     * @return    the Max value
      */
     public long getMax()
     {
@@ -191,10 +153,11 @@ public class GraphAccumModel implements Clearable, Serializable
     }
 
     /**
-     *  Adds a feature to the ModelListener attribute of the GraphAccumModel object
+     * Adds a feature to the ModelListener attribute of the GraphAccumModel
+     * object.
      *
-     *@param  listener       The feature to be added to the GraphAccumListener
-     *      attribute
+     * @param  listener   the feature to be added to the GraphAccumListener
+     *                    attribute.
      */
     public void addGraphAccumListener(GraphAccumListener listener)
     {
@@ -202,7 +165,7 @@ public class GraphAccumModel implements Clearable, Serializable
     }
 
     /**
-     *  Clear the results
+     * Clear the results.
      */
     public void clear()
     {
@@ -215,14 +178,15 @@ public class GraphAccumModel implements Clearable, Serializable
     }
 
     /**
-     *  Add the new sample to the results
+     * Add the new sample to the results.
      *
-     *@param  res  sample containing the results
+     * @param  res  sample containing the results
      */
     public void addNewSample(SampleResult res)
     {
         log.debug("Start : addNewSample1");
-        // set time to time taken to load this url without components (e.g. images etc)
+        // Set time to time taken to load this url without components (e.g.
+        // images etc)
         long totalTime = res.getTime();
 
         if (log.isDebugEnabled())
@@ -243,7 +207,7 @@ public class GraphAccumModel implements Clearable, Serializable
 
     /**
      *  Depending on whether the graph needs to be rescale call the appropriate
-     *  methods
+     *  methods.
      */
     protected void fireDataChanged()
     {
@@ -266,10 +230,8 @@ public class GraphAccumModel implements Clearable, Serializable
     }
 
     /**
-     *  The sample to be added did not exceed the current set of samples so do not
-     *  need to rescale graph
-     *
-     *@param  s  Description of Parameter
+     * The sample to be added did not exceed the current set of samples so do
+     * not need to rescale graph.
      */
     protected void quickUpdate(SampleResult s)
     {

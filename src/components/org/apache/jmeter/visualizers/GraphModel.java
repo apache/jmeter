@@ -65,14 +65,10 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.math.StatCalculator;
 
 /**
- *  Title: Apache JMeter Description: Copyright: Copyright (c) 2000 Company:
- *  Apache Foundation
- *
- *@author     Michael Stover
- *@created    February 8, 2001
- *@version    1.0
+ * @author     Michael Stover
+ * @created    February 8, 2001
+ * @version    $Revision$
  */
-
 public class GraphModel implements Clearable, Serializable
 {
 
@@ -89,9 +85,8 @@ public class GraphModel implements Clearable, Serializable
     private StatCalculator statCalc = new StatCalculator();
 
     /**
-     *  Constructor for the GraphModel object
+     * Constructor for the GraphModel object.
      */
-
     public GraphModel()
     {
         listeners = new LinkedList();
@@ -99,9 +94,9 @@ public class GraphModel implements Clearable, Serializable
     }
 
     /**
-     *  Sets the Name attribute of the GraphModel object
+     * Sets the Name attribute of the GraphModel object.
      *
-     *@param  name  The new Name value
+     * @param  name  the new Name value
      */
 
     public void setName(String name)
@@ -110,24 +105,22 @@ public class GraphModel implements Clearable, Serializable
     }
 
     /**
-     *  Gets the CurrentData attribute of the GraphModel object
+     * Gets the CurrentData attribute of the GraphModel object.
      *
-     *@return    The CurrentData value
+     * @return    the CurrentData value
      */
     public long getCurrentData()
     {
-
         return current.data;
     }
 
     /**
-     *  Gets the CurrentAverage attribute of the GraphModel object
+     * Gets the CurrentAverage attribute of the GraphModel object.
      *
-     *@return    The CurrentAverage value
+     * @return    the CurrentAverage value
      */
     public long getCurrentAverage()
     {
-
         return current.average;
     }
     
@@ -137,13 +130,12 @@ public class GraphModel implements Clearable, Serializable
     }
 
     /**
-     *  Gets the CurrentDeviation attribute of the GraphModel object
+     * Gets the CurrentDeviation attribute of the GraphModel object.
      *
-     *@return    The CurrentDeviation value
+     * @return    the CurrentDeviation value
      */
     public long getCurrentDeviation()
     {
-
         return current.deviation;
     }
 
@@ -153,55 +145,49 @@ public class GraphModel implements Clearable, Serializable
     }
 
     /**
-     *  Gets the SampleCount attribute of the GraphModel object
+     * Gets the SampleCount attribute of the GraphModel object.
      *
-     *@return    The SampleCount value
+     * @return    the SampleCount value
      */
     public int getSampleCount()
     {
-
         return samples.size();
     }
 
     /**
-     *  Gets the Samples attribute of the GraphModel object
+     * Gets the Samples attribute of the GraphModel object.
      *
-     *@return    The Samples value
+     * @return    the Samples value
      */
     public List getSamples()
     {
-
         return samples;
     }
 
     /**
-     *  Gets the GuiClass attribute of the GraphModel object
+     * Gets the GuiClass attribute of the GraphModel object.
      *
-     *@return    The GuiClass value
+     * @return    the GuiClass value
      */
-
     public Class getGuiClass()
     {
-
         return GraphVisualizer.class;
     }
 
     /**
-     *  Gets the Name attribute of the GraphModel object
+     * Gets the Name attribute of the GraphModel object.
      *
-     *@return    The Name value
+     * @return    the Name value
      */
-
     public String getName()
     {
-
         return name;
     }
 
     /**
-     *  Gets the Max attribute of the GraphModel object
+     * Gets the Max attribute of the GraphModel object.
      *
-     *@return    The Max value
+     * @return    the Max value
      */
     public long getMaxSample()
     {
@@ -219,9 +205,10 @@ public class GraphModel implements Clearable, Serializable
     }
 
     /**
-     *  Adds a feature to the ModelListener attribute of the GraphModel object
+     * Adds a feature to the ModelListener attribute of the GraphModel object.
      *
-     *@param  modelListener  The feature to be added to the ModelListener attribute
+     * @param  modelListener  the feature to be added to the ModelListener
+     *           attribute
      */
     public void addGraphListener(GraphListener listener)
     {
@@ -229,22 +216,19 @@ public class GraphModel implements Clearable, Serializable
     }
 
     /**
-     *  Adds a feature to the Sample attribute of the GraphModel object
+     * Adds a feature to the Sample attribute of the GraphModel object.
      *
-     *@param  e  The feature to be added to the Sample attribute
-     *@return    Description of the Returned Value
+     * @param  e  the feature to be added to the Sample attribute
      */
     public Sample addSample(SampleResult e)
     {
-        Sample s = addNewSample(e.getTime(), e.getTimeStamp(), e.isSuccessful());
+        Sample s =
+            addNewSample(e.getTime(), e.getTimeStamp(), e.isSuccessful());
 
         fireDataChanged();
         return s;
     }
 
-    /**
-     *  Description of the Method
-     */
     public void clear()
     {
         samples.clear();
@@ -258,9 +242,6 @@ public class GraphModel implements Clearable, Serializable
         this.fireDataChanged();
     }
 
-    /**
-     *  Description of the Method
-     */
     protected void fireDataChanged()
     {
         Iterator iter = listeners.iterator();
@@ -279,11 +260,6 @@ public class GraphModel implements Clearable, Serializable
         }
     }
 
-    /**
-     *  Description of the Method
-     *
-     *@param  s  Description of Parameter
-     */
     protected void quickUpdate(Sample s)
     {
         Iterator iter = listeners.iterator();
@@ -296,9 +272,9 @@ public class GraphModel implements Clearable, Serializable
     }
 
     /**
-     *  Adds a feature to the NewSample attribute of the GraphModel object
+     * Adds a feature to the NewSample attribute of the GraphModel object.
      *
-     *@param  sample  The feature to be added to the NewSample attribute
+     * @param  sample  the feature to be added to the NewSample attribute
      */
     protected Sample addNewSample(long sample, long timeStamp, boolean success)
     {
@@ -327,7 +303,10 @@ public class GraphModel implements Clearable, Serializable
 
         if (endTime - startTime > 0)
         {
-            throughput = (float) (((float) (samples.size() + 1)) / ((float) (timeStamp - startTime)) * 60000);
+            throughput =
+                (float) (((float) (samples.size() + 1))
+                    / ((float) (timeStamp - startTime))
+                    * 60000);
         }
         if (throughput > throughputMax)
         {
@@ -344,7 +323,14 @@ public class GraphModel implements Clearable, Serializable
             bigChange = true;
             graphMax = deviation * 3;
         }
-        Sample s = new Sample(sample, (long) average, deviation, throughput, median,!success);
+        Sample s =
+            new Sample(
+                sample,
+                (long) average,
+                deviation,
+                throughput,
+                median,
+                !success);
 
         previous = sample;
         current = s;

@@ -52,7 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- 
+
 package org.apache.jmeter.timers.gui;
 
 import java.awt.Dimension;
@@ -82,121 +82,133 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 public class GaussianRandomTimerGui extends AbstractTimerGui
 {
 
-	private final String DELAY_FIELD = "Delay Field";
-	private final String RANGE_FIELD = "Range Field";
+    private final String DELAY_FIELD = "Delay Field";
+    private final String RANGE_FIELD = "Range Field";
 
-	public final String DEFAULT_DELAY = "300";
-	public final String DEFAULT_RANGE = "100.0";
+    public final String DEFAULT_DELAY = "300";
+    public final String DEFAULT_RANGE = "100.0";
 
-	private JTextField delayField;
-	private JTextField rangeField;
+    private JTextField delayField;
+    private JTextField rangeField;
 
-	/**
-	 * No-arg constructor.
-	 */
-	public GaussianRandomTimerGui()
-	{
-		init();
-	}
+    /**
+     * No-arg constructor.
+     */
+    public GaussianRandomTimerGui()
+    {
+        init();
+    }
 
-	/**
-	 * Handle an error.
-	 *
-	 * @param e the Exception that was thrown.
-	 * @param thrower the JComponent that threw the Exception.
-	 */
-	public static void error(Exception e, JComponent thrower)
-	{
-		JOptionPane.showMessageDialog(thrower, e, "Error", JOptionPane.ERROR_MESSAGE);
-	}
+    /**
+     * Handle an error.
+     *
+     * @param e the Exception that was thrown.
+     * @param thrower the JComponent that threw the Exception.
+     */
+    public static void error(Exception e, JComponent thrower)
+    {
+        JOptionPane.showMessageDialog(
+            thrower,
+            e,
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+    }
 
-	/**
-	 * Create the test element underlying this GUI component.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-	 */
-	public TestElement createTestElement()
-	{
-		RandomTimer timer = new GaussianRandomTimer();
-		modifyTestElement(timer);
-		return timer;
-	}
+    /**
+     * Create the test element underlying this GUI component.
+     * 
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+     */
+    public TestElement createTestElement()
+    {
+        RandomTimer timer = new GaussianRandomTimer();
+        modifyTestElement(timer);
+        return timer;
+    }
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement timer)
     {
         this.configureTestElement(timer);
-        ((RandomTimer)timer).setDelay(delayField.getText());
-        ((RandomTimer)timer).setRange(rangeField.getText());
+        ((RandomTimer) timer).setDelay(delayField.getText());
+        ((RandomTimer) timer).setRange(rangeField.getText());
     }
 
-	/**
-	 * Configure this GUI component from the underlying TestElement.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
-	 */
-	public void configure(TestElement el)
-	{
-		super.configure(el);
-		delayField.setText(el.getPropertyAsString(RandomTimer.DELAY));
-		rangeField.setText(el.getPropertyAsString(RandomTimer.RANGE));
-	}
+    /**
+     * Configure this GUI component from the underlying TestElement.
+     * 
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
+     */
+    public void configure(TestElement el)
+    {
+        super.configure(el);
+        delayField.setText(el.getPropertyAsString(RandomTimer.DELAY));
+        rangeField.setText(el.getPropertyAsString(RandomTimer.RANGE));
+    }
 
-	/**
-	 * Get the title to display for this component.
-	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-	 */
-	public String getStaticLabel()
-	{
-		return JMeterUtils.getResString("gaussian_timer_title");
-	}
+    /**
+     * Get the title to display for this component.
+     * 
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
+     */
+    public String getStaticLabel()
+    {
+        return JMeterUtils.getResString("gaussian_timer_title");
+    }
 
-	/**
-	 * Initialize this component.
-	 */
-	private void init()
-	{
+    /**
+     * Initialize this component.
+     */
+    private void init()
+    {
         setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
         setBorder(makeBorder());
 
         add(makeTitlePanel());
 
-		JPanel threadDelayPropsPanel = new JPanel();
-        threadDelayPropsPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-        threadDelayPropsPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("thread_delay_properties")));
+        JPanel threadDelayPropsPanel = new JPanel();
+        threadDelayPropsPanel.setLayout(
+            new VerticalLayout(5, VerticalLayout.LEFT));
+        threadDelayPropsPanel.setBorder(
+            BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("thread_delay_properties")));
 
-		// DELAY DEVIATION
-		Box delayDevPanel = Box.createHorizontalBox();
-        delayDevPanel.add (new JLabel(JMeterUtils.getResString("gaussian_timer_range")));
-        delayDevPanel.add (Box.createHorizontalStrut(5));
-        
-		rangeField = new JTextField(6);
-		rangeField.setText(DEFAULT_RANGE);
-		rangeField.setName(RANGE_FIELD);
-		delayDevPanel.add(rangeField);
+        // DELAY DEVIATION
+        Box delayDevPanel = Box.createHorizontalBox();
+        delayDevPanel.add(
+            new JLabel(JMeterUtils.getResString("gaussian_timer_range")));
+        delayDevPanel.add(Box.createHorizontalStrut(5));
 
-		threadDelayPropsPanel.add(delayDevPanel);
+        rangeField = new JTextField(6);
+        rangeField.setText(DEFAULT_RANGE);
+        rangeField.setName(RANGE_FIELD);
+        delayDevPanel.add(rangeField);
 
-		// AVG DELAY
-		Box avgDelayPanel = Box.createHorizontalBox();
-        avgDelayPanel.add (new JLabel(JMeterUtils.getResString("gaussian_timer_delay")));
-        avgDelayPanel.add (Box.createHorizontalStrut(5));
+        threadDelayPropsPanel.add(delayDevPanel);
 
-		delayField = new JTextField(6);
-		delayField.setText(DEFAULT_DELAY);
-		delayField.setName(DELAY_FIELD);
-		avgDelayPanel.add(delayField);
+        // AVG DELAY
+        Box avgDelayPanel = Box.createHorizontalBox();
+        avgDelayPanel.add(
+            new JLabel(JMeterUtils.getResString("gaussian_timer_delay")));
+        avgDelayPanel.add(Box.createHorizontalStrut(5));
 
-		threadDelayPropsPanel.add(avgDelayPanel);
-        threadDelayPropsPanel.setMaximumSize(new Dimension(threadDelayPropsPanel.getMaximumSize().width, threadDelayPropsPanel.getPreferredSize().height));
+        delayField = new JTextField(6);
+        delayField.setText(DEFAULT_DELAY);
+        delayField.setName(DELAY_FIELD);
+        avgDelayPanel.add(delayField);
+
+        threadDelayPropsPanel.add(avgDelayPanel);
+        threadDelayPropsPanel.setMaximumSize(
+            new Dimension(
+                threadDelayPropsPanel.getMaximumSize().width,
+                threadDelayPropsPanel.getPreferredSize().height));
         add(threadDelayPropsPanel);
 
-		// Set the initial focus to the delay field
-		new FocusRequester(rangeField);
-	}
-	
+        // Set the initial focus to the delay field
+        new FocusRequester(rangeField);
+    }
+
 }

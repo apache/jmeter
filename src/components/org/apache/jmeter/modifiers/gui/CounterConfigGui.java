@@ -1,4 +1,5 @@
 package org.apache.jmeter.modifiers.gui;
+
 import javax.swing.JCheckBox;
 
 import org.apache.jmeter.modifiers.CounterConfig;
@@ -8,6 +9,9 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
+/**
+ * @version $Revision$
+ */
 public class CounterConfigGui extends AbstractPreProcessorGui
 {
     private JLabeledTextField startField, incrField, endField, varNameField;
@@ -38,7 +42,7 @@ public class CounterConfigGui extends AbstractPreProcessorGui
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     * @see JMeterGUIComponent#modifyTestElement(TestElement)
      */
     public void modifyTestElement(TestElement c)
     {
@@ -73,11 +77,15 @@ public class CounterConfigGui extends AbstractPreProcessorGui
         setBorder (makeBorder());
         setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
         
-        startField = new JLabeledTextField(JMeterUtils.getResString("start"), 5);
-        incrField = new JLabeledTextField(JMeterUtils.getResString("increment"), 5);
+        startField =
+            new JLabeledTextField(JMeterUtils.getResString("start"), 5);
+        incrField =
+            new JLabeledTextField(JMeterUtils.getResString("increment"), 5);
         endField = new JLabeledTextField(JMeterUtils.getResString("max"), 5);
-        varNameField = new JLabeledTextField(JMeterUtils.getResString("var_name"));
-        perUserField = new JCheckBox(JMeterUtils.getResString("counter_per_user"));
+        varNameField =
+            new JLabeledTextField(JMeterUtils.getResString("var_name"));
+        perUserField =
+            new JCheckBox(JMeterUtils.getResString("counter_per_user"));
 
         add(makeTitlePanel());
         add(startField);
