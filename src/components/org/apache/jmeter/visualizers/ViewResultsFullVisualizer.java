@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -158,6 +158,12 @@ public class ViewResultsFullVisualizer
                         log.debug("updateGui1 : sample result - " + res);
                 DefaultMutableTreeNode currNode = new DefaultMutableTreeNode(res);
                 treeModel.insertNodeInto(currNode, root, root.getChildCount());
+                addSubResults(currNode, res);
+                log.debug("End : updateGui1");
+       }
+
+       private void addSubResults(DefaultMutableTreeNode currNode,
+	   			  SampleResult res) {
                 SampleResult[] subResults = res.getSubResults();
                 if (subResults != null)
                 {
@@ -169,9 +175,9 @@ public class ViewResultsFullVisualizer
                                         log.debug("updateGui1 : child sample result - " + child);
                                 DefaultMutableTreeNode leafNode = new DefaultMutableTreeNode(child);
                                 treeModel.insertNodeInto(leafNode, currNode, leafIndex++);
+				addSubResults(leafNode, child);
                         }
                 }
-                log.debug("End : updateGui1");
         }
         /****************************************
          * Clears the visualizer
