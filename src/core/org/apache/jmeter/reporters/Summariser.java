@@ -252,7 +252,7 @@ public class Summariser
 		sb.append(" ");
         sb.append(longToSb(tmp,s.getNumSamples(),5));
         sb.append(" in ");
-		sb.append(longToSb(tmp,s.getElapsed()/1000,5));
+		sb.append(doubleToSb(tmp,(double)s.getElapsed()/1000.0,5,1));
 		sb.append("s = ");
 		sb.append(doubleToSb(tmp,s.getRate(),6,1));
 		sb.append("/s Avg: ");
