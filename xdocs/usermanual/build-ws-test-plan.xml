@@ -107,10 +107,10 @@ Then, select the webservice Request element in the tree and edit the following p
 <figure image="webservice_sampler.png">
 Figure 10.3. Webservice Request</figure>
 
-<p>If the WSDL file was loaded correctly, the "Web Methods" drop down should now 
+<p>If the WSDL file was loaded correctly, the "Web Methods" drop down should 
 be populated. If the drop down remains blank, it means there was a problem
-getting the WSDL. You can test the WSDL file using a browser that reads XML.
-For example, if you're testing an IIS webservice it will look like this:
+getting the WSDL. You can test the WSDL using a browser that reads XML.
+For example, if you're testing an IIS webservice the URL will look like this:
 http://localhost/myWebService/Service.asmx?WSDL.</p>
 
 <p>Next, select the web method and click "Configure". The sampler should
@@ -123,6 +123,10 @@ text area. You can optionally save the soap message to a file and browse
 to the location. For convienance, there is a third option of using a
 message folder. The sampler will randomly select files from a given
 folder and use the text for the soap message.</p>
+
+<p>If you are behind a HTTP Proxy, check use proxy and enter the host
+and port. If "Use Proxy" is check, but no host or port, the sampler will
+fail silently.</p>
 
 </section>
 
