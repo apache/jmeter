@@ -264,8 +264,8 @@ public class Summariser
 		sb.append(" Err: ");
 		sb.append(longToSb(tmp,s.getErrorCount(),5));
 		sb.append(" (");
-		sb.append(doubleToSb(tmp,s.getErrorPercentage(),3,1));
-		sb.append("%)");
+		sb.append(s.getErrorPercentageString());
+		sb.append(")");
         return sb.toString();
     }
 
