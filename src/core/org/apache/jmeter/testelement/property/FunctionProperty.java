@@ -110,6 +110,8 @@ public class FunctionProperty extends AbstractProperty
      */
     public String getStringValue()
     {
+        log.debug("Calling getStringValue from FunctionProperty");
+        log.debug("boogedy boogedy");
         if (!isRunningVersion()
             || !JMeterContextService.getContext().isSamplingStarted())
         {
