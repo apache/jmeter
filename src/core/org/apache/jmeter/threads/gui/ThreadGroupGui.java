@@ -67,7 +67,6 @@ import org.apache.jmeter.control.gui.LoopControlPanel;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FocusRequester;
-import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
@@ -238,12 +237,8 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent
         // LOOP COUNT
         threadPropsPanel.add(createControllerPanel());
 
-        // Put the vertical panel inside a horizontal panel to prevent it from
-        // growing, because it looks bad for this component.
-        HorizontalPanel horizPanel = new HorizontalPanel();
-        horizPanel.add(threadPropsPanel);
-        mainPanel.add(horizPanel, BorderLayout.NORTH);
-        add(mainPanel, BorderLayout.CENTER);
+        mainPanel.add(threadPropsPanel, BorderLayout.NORTH);
+        add(mainPanel, BorderLayout.CENTER);        
     }
 
     public void setNode(JMeterTreeNode node)
