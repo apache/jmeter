@@ -57,11 +57,11 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 public class StandardGenerator implements Generator, Serializable {
 
 	protected HTTPSampler SAMPLE = null;
-	protected FileWriter WRITER = null;
-	protected OutputStream OUTPUT = null;
+	transient protected FileWriter WRITER = null;
+	transient protected OutputStream OUTPUT = null;
 	protected String FILENAME = null;
 	protected File FILE = null;
-	protected ThreadGroup THREADGROUP = null;
+	transient protected ThreadGroup THREADGROUP = null;
 	
 	/**
 	 * The constructor is used by GUI and samplers
