@@ -355,7 +355,7 @@
 #macro (getProjectImage)
 #if ($project.getChild("logo"))
 <td align="left">
-<a href="http://jakarta.apache.org"><img src="http://jakarta.apache.org/images/jakarta-logo.gif" border="0"/></a>
+<a href="http://jakarta.apache.org"><img src="$relativePath/../docs/images/jakarta-logo.gif" border="0"/></a>
 </td>
 <td align="right">
 #set ( $logoString = $project.getChild("logo").getAttributeValue("href") )
@@ -367,7 +367,7 @@
 </td>
 #else
 <td colspan="2">
-<a href="http://jakarta.apache.org"><img src="http://jakarta.apache.org/images/jakarta-logo.gif" align="left" border="0"/></a>
+<a href="http://jakarta.apache.org"><img src="$relativePath/../docs/images/jakarta-logo.gif" align="left" border="0"/></a>
 </td>
 #end
 #end
@@ -421,7 +421,7 @@
 					 </td></tr>
 					 <tr><td colspan="2">
 						  <div align="center"><font color="$bodylink" size="-1"><em>
-						  Copyright &#169; 1999-2001, Apache Software Foundation
+						  Copyright &#169; 1999-2003, Apache Software Foundation
 						  </em></font></div>
 					 </td></tr>
 				</table>
