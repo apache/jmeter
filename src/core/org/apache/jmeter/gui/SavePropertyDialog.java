@@ -9,7 +9,7 @@ package org.apache.jmeter.gui;
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
+//import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Method;
@@ -48,7 +48,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener
     * @throws java.awt.HeadlessException
     */
    public SavePropertyDialog(Frame owner, String title, boolean modal,SampleSaveConfiguration s)
-         throws HeadlessException
+         //throws HeadlessException
    {
       super(owner, title, modal);
       saveConfig = s;
