@@ -658,7 +658,7 @@ public class Data implements Serializable
     public void addHeader(String s)
     {
         header.add(s);
-        data.put(s, new ArrayList(size()));
+        data.put(s, new ArrayList(Math.max(size(),100)));
     }
 
     /**
