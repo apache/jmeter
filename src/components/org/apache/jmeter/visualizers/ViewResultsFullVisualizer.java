@@ -335,6 +335,11 @@ public class ViewResultsFullVisualizer
                         "HTTP response message: " + responseMsgStr + "\n",
                         null);
 
+					statsDoc.insertString(
+						statsDoc.getLength(),
+						"\nHTTP response headers:\n" + res.getResponseHeaders() + "\n",
+						null);
+
                     // get the text response and image icon
                     // to determine which is NOT null
                     byte[] responseBytes = (byte[]) res.getResponseData();
