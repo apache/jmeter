@@ -19,11 +19,19 @@
 package org.apache.jorphan.logging;
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Iterator;
 import java.util.Properties;
 
+import org.apache.avalon.excalibur.logger.LogKitLoggerManager;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
+import org.apache.avalon.framework.context.Context;
+import org.apache.avalon.framework.context.ContextException;
+import org.apache.avalon.framework.context.DefaultContext;
 import org.apache.jorphan.util.ClassContext;
 import org.apache.log.Hierarchy;
 import org.apache.log.LogTarget;
@@ -32,6 +40,7 @@ import org.apache.log.Priority;
 import org.apache.log.format.PatternFormatter;
 import org.apache.log.output.NullOutputLogTarget;
 import org.apache.log.output.io.WriterTarget;
+import org.xml.sax.SAXException;
 
 /**
  * @version $Revision$ on $Date$
@@ -108,6 +117,8 @@ public final class LoggingManager
 
         setLoggingLevels(properties);
         // now set the individual categories (if any)
+        
+        setConfig(properties);// Further configuration
     }
 
 	private static void setFormat(Properties properties)
@@ -138,6 +149,45 @@ public final class LoggingManager
 	}
 
 
+	private static void setConfig(Properties p)
+	{
+		String cfg = p.getProperty("log_config");
+		if (cfg==null) return;
+		
+		//Make sure same hierarchy is used
+		Hierarchy hier = Hierarchy.getDefaultHierarchy();
+		LogKitLoggerManager manager = new LogKitLoggerManager(
+				null,hier,null,null
+				);
+		
+		DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
+		try {
+			Configuration c = builder.buildFromFile(cfg);
+			Context ctx = new DefaultContext();
+			manager.contextualize(ctx);
+	    	manager.configure(c);
+		} catch (IllegalArgumentException e) {
+			// This happens if the default log-target id-ref specifies a non-existent target 
+			System.out.println("Error processing logging config "+cfg);
+			System.out.println(e.toString());
+		} catch (NullPointerException e) {
+			// This can happen if a log-target id-ref specifies a non-existent target 
+			System.out.println("Error processing logging config "+cfg);
+			System.out.println("Perhaps a log target is missing?");
+		} catch (ConfigurationException e) {
+			System.out.println("Error processing logging config "+cfg);
+			System.out.println(e.toString());
+		} catch (SAXException e) {
+			System.out.println("Error processing logging config "+cfg);
+			System.out.println(e.toString());
+		} catch (IOException e) {
+			System.out.println("Error processing logging config "+cfg);
+			System.out.println(e.toString());
+		} catch (ContextException e) {
+			System.out.println("Error processing logging config "+cfg);
+			System.out.println(e.toString());
+		}
+	}
 	/*
 	 * Helper method to ensure that format is initialised if initializeLogging()
 	 * has not yet been called.
