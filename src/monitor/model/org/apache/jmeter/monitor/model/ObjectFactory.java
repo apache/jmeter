@@ -48,7 +48,7 @@ public class ObjectFactory
 		return FACTORY;
 	}
 	
-	public Status parseBytes(byte[] bytes){
+	public synchronized Status parseBytes(byte[] bytes){
 		return PARSER.parseBytes(bytes);
 	}
 	
