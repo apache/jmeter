@@ -44,7 +44,7 @@ public class TextAreaTableCellEditor implements TableCellEditor,FocusListener {
     			JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     	pane.validate();
     	this.row = row;
-    	this.col = col;
+    	this.col = column;
     	return pane;
     }
     
