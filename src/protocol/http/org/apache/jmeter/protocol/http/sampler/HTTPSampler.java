@@ -140,6 +140,7 @@ public class HTTPSampler extends AbstractSampler
     /** A number to indicate that the port has not been set.  **/
     public static final int UNSPECIFIED_PORT= 0;
     private static final int MAX_REDIRECTS= 5; // As recommended by RFC 2068
+    private static final int MAX_FRAME_DEPTH= 5;
     protected static String encoding= "iso-8859-1";
     private static final PostWriter postWriter= new PostWriter();
 
@@ -500,7 +501,7 @@ public class HTTPSampler extends AbstractSampler
     {
         try
         {
-            SampleResult res= sample(getUrl(), getMethod(), false);
+            SampleResult res= sample(getUrl(), getMethod(), false, 0);
             res.setSampleLabel(getName());
             return res;
         }
@@ -990,15 +991,18 @@ public class HTTPSampler extends AbstractSampler
      * When getting a redirect target, redirects are not followed and 
      * resources are not downloaded. The caller will take care of this.
      *
-     * @param url               URL to sample
-     * @param method            HTTP method: GET, POST,...
+     * @param url           URL to sample
+     * @param method        HTTP method: GET, POST,...
      * @param areFollowingRedirect whether we're getting a redirect target
-     * @return                  results of the sampling
+     * @param frameDepth    Depth of this target in the frame structure.
+     *                      Used only to prevent infinite recursion.
+     * @return              results of the sampling
      */
     private HTTPSampleResult sample(
         URL url,
         String method,
-        boolean areFollowingRedirect)
+        boolean areFollowingRedirect,
+        int frameDepth)
     {
         HttpURLConnection conn= null;
         long t0= System.currentTimeMillis(); // connection start time
@@ -1108,7 +1112,7 @@ public class HTTPSampler extends AbstractSampler
                     }
                     if (getFollowRedirects())
                     {
-                        res= followRedirects(res);
+                        res= followRedirects(res, frameDepth);
                         didFollowRedirects= true;
                     }
                 }
@@ -1116,10 +1120,24 @@ public class HTTPSampler extends AbstractSampler
                 if (isImageParser()
                     && res.getDataType().equals(HTTPSampleResult.TEXT))
                 {
-                    // If we followed redirects, we already have a container:
-                    boolean createContainerResults= ! didFollowRedirects;
-                    
-                    res= downloadPageResources(res, createContainerResults);
+                    if (frameDepth > MAX_FRAME_DEPTH)
+                    {
+                        res.addSubResult(
+                            errorResult(
+                                new Exception("Maximum frame/iframe nesting depth exceeded."),
+                                0));
+                    }
+                    else
+                    {
+                        // If we followed redirects, we already have a container:
+                        boolean createContainerResults= !didFollowRedirects;
+
+                        res=
+                            downloadPageResources(
+                                res,
+                                createContainerResults,
+                                frameDepth);
+                    }
                 }
             }
 
@@ -1152,9 +1170,13 @@ public class HTTPSampler extends AbstractSampler
      * of the redirect chain had been obtained in a single shot.
      * 
      * @param res result of the initial request - must be a redirect response
+     * @param frameDepth    Depth of this target in the frame structure.
+     *                      Used only to prevent infinite recursion.
      * @return "Container" result with one subsample per request issued
      */
-    private HTTPSampleResult followRedirects(HTTPSampleResult res)
+    private HTTPSampleResult followRedirects(
+        HTTPSampleResult res,
+        int frameDepth)
     {
         HTTPSampleResult totalRes= new HTTPSampleResult(res);
         HTTPSampleResult lastRes= res;
@@ -1169,7 +1191,8 @@ public class HTTPSampler extends AbstractSampler
                     sample(
                         new URL(lastRes.getURL(), location),
                         HTTPSampler.GET,
-                        true);
+                        true,
+                        frameDepth);
             }
             catch (MalformedURLException e)
             {
@@ -1224,14 +1247,19 @@ public class HTTPSampler extends AbstractSampler
      * If createContainerResult is false, one subsample will be added to the
      * provided result for each requests issued.
      * 
-     * @param res result of the initial request - must contain an HTML response
+     * @param res           result of the initial request - must contain an HTML
+     *                      response
      * @param createContainerResult whether to create a "container" or just
-     *        use the provided <code>res</code> for that purpose
-     * @return "Container" result with one subsample per request issued
+     *                      use the provided <code>res</code> for that purpose
+     * @param frameDepth    Depth of this target in the frame structure.
+     *                      Used only to prevent infinite recursion.
+     * @return              "Container" result with one subsample per request
+     *                      issued
      */
     private HTTPSampleResult downloadPageResources(
         HTTPSampleResult res,
-        boolean createContainerResult)
+        boolean createContainerResult,
+        int frameDepth)
     {
         Iterator urls= null;
         try
@@ -1251,7 +1279,8 @@ public class HTTPSampler extends AbstractSampler
         // Iterate through the URLs and download each image:
         if (urls != null && urls.hasNext())
         {
-            if (createContainerResult) {
+            if (createContainerResult)
+            {
                 res= new HTTPSampleResult(res);
             }
 
@@ -1261,7 +1290,11 @@ public class HTTPSampler extends AbstractSampler
                 try
                 {
                     HTTPSampleResult binRes=
-                        sample((URL)binURL, HTTPSampler.GET, false);
+                        sample(
+                            (URL)binURL,
+                            HTTPSampler.GET,
+                            false,
+                            frameDepth + 1);
                     res.addSubResult(binRes);
                     res.setTime(res.getTime() + binRes.getTime());
                     res.setSuccessful(
