@@ -54,14 +54,18 @@
  */
 
 package org.apache.jmeter.gui.action;
-import org.apache.jmeter.gui.*;
-import org.apache.jmeter.threads.ThreadGroup;
-import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.util.ClassFinder;
+import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.tree.TreePath;
+
+import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
 
 /**
  *  !ToDo (Class description)
@@ -116,9 +120,12 @@ public class AddToTree implements Command
 	protected void addObjectToTree(JMeterGUIComponent guiObject)
 	{
 		GuiPackage guiPackage = GuiPackage.getInstance();
-		guiPackage.getTreeModel().insertNodeInto(new JMeterTreeNode(guiObject),
+		JMeterTreeNode node = new JMeterTreeNode(guiObject);
+		guiPackage.getTreeModel().insertNodeInto(node,
 				guiPackage.getTreeListener().getCurrentNode(),
 				guiPackage.getTreeListener().getCurrentNode().getChildCount());
+		guiPackage.getMainFrame().getTree().setSelectionPath(
+				new TreePath(node.getPath()));
 	}
 
 
