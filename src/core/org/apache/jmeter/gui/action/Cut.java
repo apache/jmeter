@@ -34,12 +34,12 @@ public class Cut extends AbstractAction
     public void doAction(ActionEvent e)
     {
         Copy.setCopiedNode(
-            GuiPackage.getInstance().getTreeListener().getDraggedNode());
+            GuiPackage.getInstance().getTreeListener().getCurrentNode());
         JMeterTreeListener treeListener =
             GuiPackage.getInstance().getTreeListener();
         JMeterTreeNode currentNode = treeListener.getCurrentNode();//NOTUSED
         GuiPackage.getInstance().getTreeModel().removeNodeFromParent(
-            GuiPackage.getInstance().getTreeListener().getDraggedNode());
+            GuiPackage.getInstance().getTreeListener().getCurrentNode());
         GuiPackage.getInstance().getMainFrame().repaint();
     }
 }
