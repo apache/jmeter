@@ -57,6 +57,11 @@ public class CollectionProperty extends MultiProperty
         return false;
     }
 
+    public int hashCode()
+	{
+    	return (value == null ? 0 : value.hashCode());
+    }
+    
     public void remove(String prop)
     {
         PropertyIterator iter = iterator();
