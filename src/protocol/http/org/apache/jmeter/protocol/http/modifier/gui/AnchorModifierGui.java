@@ -93,9 +93,18 @@ public class AnchorModifierGui extends AbstractResponseBasedModifierGui
 	public TestElement createTestElement()
 	{
 		AnchorModifier modifier = new AnchorModifier();
-		configureTestElement(modifier);
+		modifyTestElement(modifier);
 		return modifier;
 	}
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement modifier)
+    {
+        configureTestElement(modifier);
+    }
 
 	private void init()
 	{

@@ -135,6 +135,17 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener
 		configureTestElement(authMan);
 		return (TestElement)authMan.clone();
 	}
+    
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement el)
+    {
+        el.clear();
+        el.addTestElement(tableModel.manager);
+        configureTestElement(el);
+    }
 
 	/****************************************
 	 * !ToDo (Method description)
@@ -144,7 +155,8 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener
 	public void configure(TestElement el)
 	{
 		super.configure(el);
-		tableModel.manager = (AuthManager)el;
+        tableModel.manager.clear();
+		tableModel.manager.addTestElement((AuthManager)el);
 	}
 
 	/****************************************

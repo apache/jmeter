@@ -83,15 +83,24 @@ public class UserParametersGui extends AbstractConfigGui {
 	 */
 	public TestElement createTestElement() {
 		UserParameters params = new UserParameters();
-		params.setNames(tableModel.getColumnData(JMeterUtils.getResString("name")));
-		List threadLists = new LinkedList();
-		for (int x = 1; x < tableModel.getColumnCount(); x++) {
-			threadLists.add(tableModel.getColumnData(THREAD_COLUMNS + "_" + x));
-		}
-		params.setThreadLists(threadLists);
-		super.configureTestElement(params);
+		modifyTestElement(params);
 		return params;
 	}
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement params)
+    {
+        ((UserParameters)params).setNames(tableModel.getColumnData(JMeterUtils.getResString("name")));
+        List threadLists = new LinkedList();
+        for (int x = 1; x < tableModel.getColumnCount(); x++) {
+        	threadLists.add(tableModel.getColumnData(THREAD_COLUMNS + "_" + x));
+        }
+        ((UserParameters)params).setThreadLists(threadLists);
+        super.configureTestElement(params);
+    }
 
 	private void init() {
 		this.setLayout(new BorderLayout());

@@ -92,10 +92,19 @@ public class UserParameterModifierGui extends AbstractModifierGui {
 	}
 	public TestElement createTestElement() {
 		UserParameterModifier mod = new UserParameterModifier();
-		this.configureTestElement(mod);
-		mod.setXmlUri(fileNameField.getText());
+		modifyTestElement(mod);
 		return mod;
 	}
+    
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement mod)
+    {
+        this.configureTestElement(mod);
+        ((UserParameterModifier)mod).setXmlUri(fileNameField.getText());
+    }
 	/************************************************************
 	 *  !ToDo (Method description)
 	 ***********************************************************/

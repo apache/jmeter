@@ -37,6 +37,11 @@ public abstract class AbstractTestElement implements TestElement,Serializable
         this.traverse(cloner);
         return cloner.getClonedElement();
     }
+    
+    public void clear()
+    {
+        testInfo.clear();
+    }
 
     public void removeProperty(String key)
     {

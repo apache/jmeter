@@ -130,17 +130,26 @@ public class InterleaveControlGui extends AbstractControllerGui
 	public TestElement createTestElement()
 	{
 		InterleaveControl ic = new InterleaveControl();
-		configureTestElement(ic);
-		if(style.isSelected())
-		{
-			ic.setStyle(InterleaveControl.DEFAULT_STYLE);
-		}
-		else
-		{
-			ic.setStyle(InterleaveControl.NEW_STYLE);
-		}
+		modifyTestElement(ic);
 		return ic;
 	}
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement ic)
+    {
+        configureTestElement(ic);
+        if(style.isSelected())
+        {
+        	((InterleaveControl)ic).setStyle(InterleaveControl.DEFAULT_STYLE);
+        }
+        else
+        {
+        	((InterleaveControl)ic).setStyle(InterleaveControl.NEW_STYLE);
+        }
+    }
 
 	/****************************************
 	 * !ToDoo (Method description)

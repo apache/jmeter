@@ -200,10 +200,19 @@ public class JavaConfigGui extends AbstractConfigGui
 	public TestElement createTestElement()
 	{
 		JavaConfig config = new JavaConfig();
-		this.configureTestElement(config);
-		config.setArguments((Arguments)argsPanel.createTestElement());
-		config.setClassname(classnameCombo.getSelectedItem().toString());
+		modifyTestElement(config);
 		return config;
-	}		
+	}
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement config)
+    {
+        this.configureTestElement(config);
+        ((JavaConfig)config).setArguments((Arguments)argsPanel.createTestElement());
+        ((JavaConfig)config).setClassname(classnameCombo.getSelectedItem().toString());
+    }		
 
 }

@@ -46,6 +46,11 @@ public interface TestElement extends Cloneable
 	 *@return   !ToDo (Return description)
 	 ***************************************/
 	public Collection getPropertyNames();
+    
+    /**
+     * Clear the TestElement of all data.
+     */
+    public void clear();
 
 	/****************************************
 	 * !ToDoo (Method description)

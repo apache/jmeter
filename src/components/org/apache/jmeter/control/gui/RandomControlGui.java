@@ -95,17 +95,26 @@ public class RandomControlGui extends AbstractControllerGui
 	public TestElement createTestElement()
 	{
 		RandomController ic = new RandomController();
-		configureTestElement(ic);
-		if(style.isSelected())
-		{
-			ic.setStyle(InterleaveControl.DEFAULT_STYLE);
-		}
-		else
-		{
-			ic.setStyle(InterleaveControl.NEW_STYLE);
-		}
+		modifyTestElement(ic);
 		return ic;
 	}
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement ic)
+    {
+        configureTestElement(ic);
+        if(style.isSelected())
+        {
+        	((RandomController)ic).setStyle(InterleaveControl.DEFAULT_STYLE);
+        }
+        else
+        {
+        	((RandomController)ic).setStyle(InterleaveControl.NEW_STYLE);
+        }
+    }
 	
 	public void configure(TestElement el)
 	{

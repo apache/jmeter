@@ -109,12 +109,22 @@ public class JdbcTestSampleGui extends AbstractSamplerGui
 	public TestElement createTestElement()
 	{
 		JDBCSampler sampler = new JDBCSampler();
-		sampler.addTestElement(dbGui.createTestElement());
-		sampler.addTestElement(poolGui.createTestElement());
-		sampler.addTestElement(sqlGui.createTestElement());
-		configureTestElement(sampler);
+		modifyTestElement(sampler);
 		return sampler;
 	}
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement sampler)
+    {
+        sampler.clear();
+        sampler.addTestElement(dbGui.createTestElement());
+        sampler.addTestElement(poolGui.createTestElement());
+        sampler.addTestElement(sqlGui.createTestElement());
+        configureTestElement(sampler);
+    }
 
 	private void init()
 	{

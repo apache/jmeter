@@ -145,12 +145,24 @@ public class JavaTestSamplerGui extends AbstractSamplerGui {
 	
 	public TestElement createTestElement()
 	{
-		JavaConfig config = (JavaConfig)javaPanel.createTestElement();
 		JavaSampler sampler = new JavaSampler();
-		this.configureTestElement(sampler);
-		sampler.addTestElement(config);
+        modifyTestElement(sampler);
 		return sampler;
 	}
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement sampler)
+    {
+        sampler.clear();
+        JavaConfig config = (JavaConfig)javaPanel.createTestElement();
+        this.configureTestElement(sampler);
+        sampler.addTestElement(config);
+    }
+    
+
 	
 	public void configure(TestElement el)
 	{

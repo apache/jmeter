@@ -144,6 +144,15 @@ public class JMeterTreeNode extends DefaultMutableTreeNode
 	{
 		
 	}
+    
+    /**
+         * Modifies a given TestElement to mirror the data in the gui components.
+         * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+         */
+    public void modifyTestElement(TestElement el)
+    {
+        
+    }
 
 	public TestElement createTestElement()
 	{

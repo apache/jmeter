@@ -117,6 +117,15 @@ public class LogicControllerGui extends AbstractControllerGui
 		configureTestElement(lc);
 		return lc;
 	}
+    
+    /**
+         * Modifies a given TestElement to mirror the data in the gui components.
+         * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+         */
+    public void modifyTestElement(TestElement el)
+    {
+        configureTestElement(el);
+    }
 
 	/****************************************
 	 * !ToDoo (Method description)

@@ -117,12 +117,22 @@ public class DbConfigGui extends AbstractConfigGui
 	public TestElement createTestElement()
 	{
 		ConfigTestElement element = new ConfigTestElement();
-		configureTestElement(element);
-		element.setProperty(JDBCSampler.URL,urlField.getText());
-		element.setProperty(JDBCSampler.DRIVER,driverField.getText());
-		element.addTestElement(loginGui.createTestElement());
+		modifyTestElement(element);
 		return element;
 	}
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement element)
+    {
+        element.clear();
+        configureTestElement(element);
+        element.setProperty(JDBCSampler.URL,urlField.getText());
+        element.setProperty(JDBCSampler.DRIVER,driverField.getText());
+        element.addTestElement(loginGui.createTestElement());
+    }
 
 	public void configure(TestElement element)
 	{

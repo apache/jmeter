@@ -73,11 +73,20 @@ public class URLRewritingModifierGui extends AbstractResponseBasedModifierGui {
 	 */
 	public TestElement createTestElement() {
 		URLRewritingModifier modifier = new URLRewritingModifier();
-		this.configureTestElement(modifier);
-		modifier.setArgumentName(argumentName.getText());
-		modifier.setPathExtension(pathExt.isSelected());
+		modifyTestElement(modifier);
 		return modifier;
 	}
+
+    /**
+     * Modifies a given TestElement to mirror the data in the gui components.
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+     */
+    public void modifyTestElement(TestElement modifier)
+    {
+        this.configureTestElement(modifier);
+        ((URLRewritingModifier)modifier).setArgumentName(argumentName.getText());
+        ((URLRewritingModifier)modifier).setPathExtension(pathExt.isSelected());
+    }
 	
 	public void configure(TestElement el)
 	{
