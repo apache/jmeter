@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,36 +52,24 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- package org.apache.jmeter.samplers;
+package org.apache.jmeter.samplers;
 
- import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestElement;
 
-/************************************************************
- *  Classes which are able to generate information about an entry should
- *  implement this interface.
+/**
+ * Classes which are able to generate information about an entry should
+ * implement this interface.
  *
- *@author     $Author$
- *@created    $Date$
- *@version    $Revision$
- ***********************************************************/
+ * @author     $Author$
+ * @version    $Revision$
+ */
 public interface Sampler extends java.io.Serializable, TestElement
 {
-	public final static String HEADER = "sampler.HEADER";
+    public final static String HEADER = "sampler.HEADER";
 
-	/************************************************************
-	 *@param  e  !ToDo (Parameter description)
-	 *@return    !ToDo (Return description)
-	 *@link      dependency
-	 ***********************************************************/
-	/*
-	 * #Entry e;
-	 */
-	/************************************************************
-	 *  Obtains statistics about the given Entry, and packages the information into
-	 *  a SampleResult.
-	 *
-	 *@param  e  !ToDo (Parameter description)
-	 *@return    !ToDo (Return description)
-	 ***********************************************************/
-	public SampleResult sample(Entry e);
+    /**
+     * Obtains statistics about the given Entry, and packages the information
+     * into a SampleResult.
+     */
+    public SampleResult sample(Entry e);
 }

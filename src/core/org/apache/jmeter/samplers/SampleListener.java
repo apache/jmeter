@@ -2,7 +2,7 @@
  * ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001,2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,20 +59,23 @@ package org.apache.jmeter.samplers;
  * Specifically, when sampling is started,
  * when a specific sample is obtained,
  * and when sampling is stopped.
+ * 
+ * @version $Revision$
  */
-public interface SampleListener {
-	 /**
-	  * A sample has started and stopped.
-	  **/
-	 public void sampleOccurred(SampleEvent e);
+public interface SampleListener
+{
+    /**
+     * A sample has started and stopped.
+     */
+    public void sampleOccurred(SampleEvent e);
 
-	 /**
-	  * A sample has started.
-	  **/
-	 public void sampleStarted(SampleEvent e);
+    /**
+     * A sample has started.
+     */
+    public void sampleStarted(SampleEvent e);
 
-	 /**
-	  * A sample has stopped.
-	  **/
-	 public void sampleStopped(SampleEvent e);
+    /**
+     * A sample has stopped.
+     */
+    public void sampleStopped(SampleEvent e);
 }
