@@ -82,12 +82,6 @@ public class ConstantThroughputTimer
     private long targetTime= 0;
 
     /**
-     * Inverse of the configured throughput, in milliseconds. It's the interval
-     * at which sampling should ideally occur to get that throughput.
-     */
-    //TODO: remove? notused private long delay;
-
-    /**
      * Constructor for a non-configured ConstantThroughputTimer.
      */
     public ConstantThroughputTimer()
