@@ -40,6 +40,7 @@ public class Sample implements Serializable,Comparable
     public String label = null;
     public long count;
     public long endTime;
+    public int bytes = 0;
 
     /**
      *  Constructor for the Sample object
@@ -83,6 +84,17 @@ public class Sample implements Serializable,Comparable
 
     public Sample()
     {}
+    
+   public int getBytes()
+   {
+      return bytes;
+   }
+   
+   public void setBytes(int size)
+   {
+   	  bytes = size;
+   }
+   
    /**
     * @return Returns the average.
     */
