@@ -107,11 +107,7 @@ public class GaussianRandomTimerGui extends AbstractTimerGui
      */
     public static void error(Exception e, JComponent thrower)
     {
-        JOptionPane.showMessageDialog(
-            thrower,
-            e,
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(thrower, e, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -170,16 +166,12 @@ public class GaussianRandomTimerGui extends AbstractTimerGui
         add(makeTitlePanel());
 
         JPanel threadDelayPropsPanel = new JPanel();
-        threadDelayPropsPanel.setLayout(
-            new VerticalLayout(5, VerticalLayout.LEFT));
-        threadDelayPropsPanel.setBorder(
-            BorderFactory.createTitledBorder(
-                JMeterUtils.getResString("thread_delay_properties")));
+        threadDelayPropsPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+        threadDelayPropsPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("thread_delay_properties")));
 
         // DELAY DEVIATION
         Box delayDevPanel = Box.createHorizontalBox();
-        delayDevPanel.add(
-            new JLabel(JMeterUtils.getResString("gaussian_timer_range")));
+        delayDevPanel.add(new JLabel(JMeterUtils.getResString("gaussian_timer_range")));
         delayDevPanel.add(Box.createHorizontalStrut(5));
 
         rangeField = new JTextField(6);
@@ -191,8 +183,7 @@ public class GaussianRandomTimerGui extends AbstractTimerGui
 
         // AVG DELAY
         Box avgDelayPanel = Box.createHorizontalBox();
-        avgDelayPanel.add(
-            new JLabel(JMeterUtils.getResString("gaussian_timer_delay")));
+        avgDelayPanel.add(new JLabel(JMeterUtils.getResString("gaussian_timer_delay")));
         avgDelayPanel.add(Box.createHorizontalStrut(5));
 
         delayField = new JTextField(6);
@@ -201,14 +192,20 @@ public class GaussianRandomTimerGui extends AbstractTimerGui
         avgDelayPanel.add(delayField);
 
         threadDelayPropsPanel.add(avgDelayPanel);
-        threadDelayPropsPanel.setMaximumSize(
-            new Dimension(
-                threadDelayPropsPanel.getMaximumSize().width,
-                threadDelayPropsPanel.getPreferredSize().height));
+        threadDelayPropsPanel.setMaximumSize(new Dimension(threadDelayPropsPanel.getMaximumSize().width, threadDelayPropsPanel.getPreferredSize().height));
         add(threadDelayPropsPanel);
 
         // Set the initial focus to the delay field
         new FocusRequester(rangeField);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+     */
+    public void clear()
+    {
+        rangeField.setText(DEFAULT_RANGE);
+        delayField.setText(DEFAULT_DELAY);
+        super.clear();
+    }
 }

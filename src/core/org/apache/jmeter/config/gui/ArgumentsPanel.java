@@ -280,6 +280,7 @@ public class ArgumentsPanel
      */
     public void clear()
     {
+        stopTableEditing();
         tableModel.clearData();
     }
 
