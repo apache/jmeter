@@ -174,6 +174,7 @@
   <property name="src.ldap" value="src/protocol/ldap"/>
   <property name="src.htmlparser" value="src/htmlparser"/>
   <property name="src.tcp" value="src/protocol/tcp"/>
+  <property name="src.examples" value="src/examples"/>
 
   <!-- Where the documentation sources live -->
   <property name="src.docs" value="xdocs"/>
@@ -193,6 +194,7 @@
     <pathelement location="${src.ldap}"/>
     <pathelement location="${src.htmlparser}"/>
     <pathelement location="${src.tcp}"/>
+    <pathelement location="${src.examples}"/>
   </path>
 
   <!-- Temporary build directories: where the .class live -->
@@ -208,6 +210,7 @@
   <property name="build.ldap" location="build/protocol/ldap"/>
   <property name="build.htmlparser" location="build/htmlparser"/>
   <property name="build.tcp" location="build/protocol/tcp"/>
+  <property name="build.examples" location="build/examples"/>
   
   <!-- Path prefix to allow Anakia to find stylesheets if running under Eclipse -->
   <!--
@@ -530,7 +533,7 @@
     </javac>
   </target>
 
-  <target name="compile-tcp" depends="compile-jorphan,compile-core" description="Compile components specific to Java sampling.">
+  <target name="compile-tcp" depends="compile-jorphan,compile-core" description="Compile components specific to TCP sampling.">
     <mkdir dir="${build.tcp}"/>
     <javac srcdir="${src.tcp}" destdir="${build.tcp}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
@@ -543,6 +546,18 @@
   </target>
 
   <target name="compile-protocols" depends="compile-http,compile-ftp,compile-jdbc,compile-java,compile-ldap,compile-tcp" description="Compile all protocol-specific components."/>
+
+  <target name="compile-examples" depends="compile-jorphan,compile-core" description="Compile example components.">
+    <mkdir dir="${build.examples}"/>
+    <javac srcdir="${src.examples}" destdir="${build.examples}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+      <include name="**/*.java"/>
+      <classpath>
+        <path refid="classpath"/>
+        <pathelement location="${build.jorphan}"/>
+        <pathelement location="${build.core}"/>
+      </classpath>
+    </javac>
+  </target>
 
   <target name="compile-jorphan" depends="init" description="Compile JOrphan utility classes.">
     <mkdir dir="${build.jorphan}"/>
@@ -684,6 +699,13 @@ some of its classes - at present JMeter can only run from jar files.
   <target name="all" depends="clean,install" 
     description="Default: build from source and install. Does not create docs."
   />
+
+  <target name="install-examples" depends="compile-examples" description="Build and installs the example components.">
+    <jar jarfile="${dest.jar}/ApacheJMeter_examples.jar">
+      <fileset dir="${build.examples}" includes="**/*.class" />
+      <fileset dir="${src.examples}" includes="**/*.properties" />
+    </jar>
+  </target>
 
   <!--
   N.B. This target is used by the "dist" target, which is set up as the Gump target. 
