@@ -12,4 +12,4 @@ while getopts h:p:f: x; do
     esac;
 done
 
-java -classpath $CLASSPATH:`dirname $0`/ApacheJMeter.jar org.apache.jmeter.Driver $JAVA_PROPS $PROPERTIES
+java -classpath $CLASSPATH:`dirname $0`/../lib/xerces.jar:`dirname $0`/ApacheJMeter.jar org.apache.jmeter.Driver $JAVA_PROPS $PROPERTIES

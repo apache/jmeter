@@ -88,11 +88,11 @@
 	- Creates the distribution packages
 	-->
 	<target name="dist" depends="install">
-		<jar jarfile="../ApacheJMeter${version}.jar" basedir="../" includes="jmeter/**"/>
-		<zip zipfile="../ApacheJMeter${version}.zip" basedir="../" includes="jmeter/**"/>
-		<tar tarfile="../ApacheJMeter${version}.tar" basedir="../" includes="jmeter/**" /> 
-		<gzip zipfile="$../ApacheJMeter${version}.tar.gz" src="../ApacheJMeter${version}.tar" />
-	</target> 
+		<jar jarfile="../ApacheJMeter${version}.jar" basedir="../" includes="jmeter/**" excludes="**/classes/**"/>
+		<zip zipfile="../ApacheJMeter${version}.zip" basedir="../" includes="jmeter/**" excludes="**/classes/**"/>
+  		<tar tarfile="../ApacheJMeter${version}.tar" basedir="../" excludes="**/classes/**" includes="jmeter/**" />
+        <gzip zipfile="$../ApacheJMeter${version}.tar.gz" src="../ApacheJMeter${version}.tar" /> 	
+    </target> 
 
 	<!--
 	- Deletes old build files.
