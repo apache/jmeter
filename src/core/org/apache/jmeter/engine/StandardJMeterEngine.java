@@ -20,6 +20,8 @@ package org.apache.jmeter.engine;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -72,12 +74,24 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
 	private static Map allThreadsSave;
     public static void stopEngineNow()
     {
+    	  if (engine != null) // May be null if called from Unit test
     	  engine.stopTest();
     }
     public static void stopEngine()
     {
+    	  if (engine != null)  // May be null if called from Unit test
     	  engine.askThreadsToStop();
     }
+    
+    /*
+     * Allow functions etc to register for testStopped notification
+     */
+    private static List testList = null;
+    public static synchronized void register(TestListener tl)
+    {
+    	testList.add(tl);
+    }
+    
     public static boolean stopThread(String threadName)
     {
     	return stopThread(threadName,false);
@@ -298,6 +312,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
    {
       log.info("Running the test!");
       running = true;
+      testList = new ArrayList();
 
       SearchByClass testPlan = new SearchByClass(TestPlan.class);
       getTestTree().traverse(testPlan);
@@ -320,6 +335,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
        */
       testListeners = new SearchByClass(TestListener.class);
       getTestTree().traverse(testListeners);
+      Collection col = testListeners.getSearchResults();
+      col.addAll(testList);
+      testList=null;
       notifyTestListenersOfStart();
       getTestTree().traverse(new TurnElementsOn());
       

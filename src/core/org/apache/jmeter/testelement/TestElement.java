@@ -152,4 +152,13 @@ public interface TestElement extends Cloneable
 	 * TODO - should it hava a parameter?
 	 */
 	public void threadFinished();
+	
+	/**
+	 * Called by Remove to determine if it is
+	 * safe to remove the element.
+	 * The element can either clean itself up, and return true,
+	 * or the element can return false.
+	 * @return true if safe to remove the element
+	 */
+	public boolean canRemove();
 }

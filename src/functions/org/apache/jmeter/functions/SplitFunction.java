@@ -26,9 +26,10 @@ import java.util.List;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-import org.apache.log.Priority;
 
 /**
  * Function to log a message
@@ -43,32 +44,31 @@ import org.apache.log.Priority;
  * 
  * @version $Revision$ Updated: $Date$
  */
-public class LogFunction extends AbstractFunction implements Serializable
+public class SplitFunction extends AbstractFunction implements Serializable
 {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
     private static final List desc = new LinkedList();
-    private static final String KEY = "__log";
+    private static final String KEY = "__split";
 
     // Number of parameters expected - used to reject invalid calls
-    private static final int MIN_PARAMETER_COUNT = 1;
+    private static final int MIN_PARAMETER_COUNT = 2;
     private static final int MAX_PARAMETER_COUNT = 3;
     static {
-        desc.add("String to be logged");
-        desc.add("Log level (default INFO)");
-		desc.add("Throwable text (optional)");
+        desc.add("String to split");
+        desc.add("Variable name");
+		desc.add("Split character (omit for ',')");
     }
-    private static final String DEFAULT_PRIORITY = "INFO"; //$NON-NLS-1$
 
     private Object[] values;
 
-    public LogFunction()
+    public SplitFunction()
     {
     }
 
     public Object clone()
     {
-        return new LogFunction();
+        return new SplitFunction();
     }
 
     public synchronized String execute(
@@ -76,66 +76,26 @@ public class LogFunction extends AbstractFunction implements Serializable
         Sampler currentSampler)
         throws InvalidVariableException
     {
-        String stringToLog = ((CompoundVariable) values[0]).execute();
+    	JMeterVariables vars = getVariables();
+    	
+        String stringToSplit  = ((CompoundVariable) values[0]).execute();
+        String varNamePrefix  = ((CompoundVariable) values[1]).execute();
+        String splitString = ",";
         
-		String priorityString;
-        if (values.length > 1){ // We have a default
-        	priorityString= ((CompoundVariable) values[1]).execute();
-        	if (priorityString.length()==0) priorityString= DEFAULT_PRIORITY;
-        } else {
-        	priorityString = DEFAULT_PRIORITY;
-        }
-        
-        Throwable t=null;
-		if (values.length > 2){ // Throwable wanted
-			t = new Throwable(((CompoundVariable) values[2]).execute());
+		if (values.length > 2){ // Split string provided
+			splitString = ((CompoundVariable) values[2]).execute();
 		}
+		String parts[] = JMeterUtils.split(stringToSplit,splitString,"?");
 		
-		logDetails(log,stringToLog,priorityString,t);
-		
-        return stringToLog;
-
-    }
-
-    // Common output function
-    private static void printDetails(java.io.PrintStream ps,String s, Throwable t)
-    {
-		String tn = Thread.currentThread().getName();
-		if (t != null)
-		{
-			ps.print("Log: "+ tn + " : " + s + " ");
-			t.printStackTrace(ps);
+		vars.put(varNamePrefix, stringToSplit);
+		vars.put(varNamePrefix+"_n", ""+parts.length);
+		for (int i = 1; i <= parts.length ;i++){
+			vars.put(varNamePrefix+"_"+i,parts[i-1]);
 		}
-		else
-		{
-			ps.println("Log: "+ tn + " : " + s);
-		}
+        return stringToSplit;
+
     }
     
-    // Routine to perform the output (also used by __logn() function)
-    static void logDetails(Logger l,String s,String prio,Throwable t)
-    {
-		if (prio.equalsIgnoreCase("OUT")) //$NON-NLS-1
-		{
-			printDetails(System.out,s,t);
-		}
-		else 
-		if (prio.equalsIgnoreCase("ERR")) //$NON-NLS-1
-		{
-			printDetails(System.err,s,t);
-		}
-		else
-		{
-			// N.B. if the string is not recognised, DEBUG is assumed
-			Priority p = Priority.getPriorityForName(prio);
-			if (log.isPriorityEnabled(p)){//Thread method is potentially expensive
-				String tn = Thread.currentThread().getName();
-                log.log(p,tn+" "+s,t);
-			}
-		}
-    	
-    }
-
     public void setParameters(Collection parameters)
         throws InvalidVariableException
     {

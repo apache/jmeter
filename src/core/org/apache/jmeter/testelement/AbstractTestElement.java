@@ -480,4 +480,9 @@ public abstract class AbstractTestElement implements TestElement, Serializable
       super();
       // TODO Auto-generated constructor stub
    }
+   
+   // Default implementation
+	public boolean canRemove(){
+		return true;
+	}
 }

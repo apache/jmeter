@@ -21,6 +21,7 @@ package org.apache.jmeter.reporters.gui;
 import java.awt.BorderLayout;
 
 import javax.swing.Box;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -29,6 +30,7 @@ import org.apache.jmeter.reporters.ResultSaver;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Create a ResultSaver test element, which saves the sample information
@@ -40,6 +42,7 @@ public class ResultSaverGui extends AbstractPostProcessorGui
 {
    
     private JTextField filename;
+    private JCheckBox errorsOnly;
 
 	public ResultSaverGui()
     {
@@ -52,7 +55,7 @@ public class ResultSaverGui extends AbstractPostProcessorGui
      */
     public String getLabelResource()
     {
-        return "resultsaver_title";
+        return "resultsaver_title"; // $NON-NLS-1$
     }
     
 	/**
@@ -62,6 +65,7 @@ public class ResultSaverGui extends AbstractPostProcessorGui
     {
         super.configure(el);
         filename.setText(el.getPropertyAsString(ResultSaver.FILENAME));
+        errorsOnly.setSelected(el.getPropertyAsBoolean(ResultSaver.ERRORS_ONLY));
     }
 
     /**
@@ -82,6 +86,8 @@ public class ResultSaverGui extends AbstractPostProcessorGui
     {
         super.configureTestElement(te);
 		te.setProperty(ResultSaver.FILENAME, filename.getText());
+		te.setProperty(ResultSaver.ERRORS_ONLY, 
+				JOrphanUtils.booleanToString(errorsOnly.isSelected()));
     }
     
     private void init()
@@ -91,13 +97,17 @@ public class ResultSaverGui extends AbstractPostProcessorGui
 		Box box = Box.createVerticalBox();
 		box.add(makeTitlePanel());
 		box.add(createFilenamePanel());
+		errorsOnly = 
+			new JCheckBox(JMeterUtils.getResString("resultsaver_errors")); // $NON-NLS-1$
+		box.add(errorsOnly);
 		add(box,BorderLayout.NORTH);
         
 //        add(makeTitlePanel(),BorderLayout.NORTH);
     }
 	private JPanel createFilenamePanel()//TODO ought to be a FileChooser ...
 	{
-		JLabel label = new JLabel(JMeterUtils.getResString("resultsaver_prefix"));
+		JLabel label = 
+			new JLabel(JMeterUtils.getResString("resultsaver_prefix")); // $NON-NLS-1$
 		
 		filename = new JTextField(10);
 		filename.setName(ResultSaver.FILENAME);

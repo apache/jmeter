@@ -54,16 +54,21 @@ public class Paste extends AbstractAction
      */
     public void doAction(ActionEvent e)
     {
-        JMeterTreeNode draggedNode = Copy.getCopiedNode();
-        if (draggedNode != null)
+    	JMeterTreeNode draggedNodes[] = Copy.getCopiedNodes();
+ 		JMeterTreeListener treeListener =
+ 					GuiPackage.getInstance().getTreeListener();
+ 		JMeterTreeNode currentNode = treeListener.getCurrentNode();
+        if (DragNDrop.canAddTo(currentNode))
         {
-            JMeterTreeListener treeListener =
-                GuiPackage.getInstance().getTreeListener();
-            JMeterTreeNode currentNode = treeListener.getCurrentNode();
-            GuiPackage.getInstance().getTreeModel().insertNodeInto(
-                draggedNode,
-                currentNode,
-                currentNode.getChildCount());
+	 		for(int i=0;i<draggedNodes.length;i++) { 
+	 			if (draggedNodes[i] != null)
+	 			{
+	 				GuiPackage.getInstance().getTreeModel().insertNodeInto(
+	 					draggedNodes[i], 
+						currentNode,
+	 					currentNode.getChildCount());
+				}
+	 		}
         }
         GuiPackage.getInstance().getMainFrame().repaint();
     }

@@ -40,6 +40,7 @@ import org.apache.jmeter.testelement.TestElement;
 public class Copy extends AbstractAction
 {
     private static JMeterTreeNode copiedNode = null;
+    private static JMeterTreeNode copiedNodes[] = null;
 
     private static String COPY = "Copy";
     private static HashSet commands = new HashSet();
@@ -59,7 +60,19 @@ public class Copy extends AbstractAction
     {
         JMeterTreeListener treeListener =
             GuiPackage.getInstance().getTreeListener();
-        setCopiedNode((JMeterTreeNode) treeListener.getCurrentNode());
+        JMeterTreeNode[] nodes = treeListener.getSelectedNodes();
+ 		setCopiedNodes(nodes);
+    }
+
+    public static JMeterTreeNode[] getCopiedNodes()
+    {
+ 		for(int i=0;i<copiedNodes.length;i++) {
+ 	        if (copiedNodes[i] == null)
+ 	        {
+ 	        	return null;
+		    }
+ 		}
+        return cloneTreeNodes(copiedNodes);
     }
 
     public static JMeterTreeNode getCopiedNode()
@@ -82,6 +95,23 @@ public class Copy extends AbstractAction
         treeNode.setUserObject(((TestElement) node.getUserObject()).clone());
         cloneChildren(treeNode, node);
         return treeNode;
+    }
+    public static void setCopiedNodes(JMeterTreeNode nodes[])
+    {
+		copiedNodes = new JMeterTreeNode[nodes.length];
+		for(int i=0;i<nodes.length;i++)
+ 		{
+			copiedNodes[i] = cloneTreeNode(nodes[i]);
+		}
+    }
+
+    public static JMeterTreeNode[] cloneTreeNodes(JMeterTreeNode nodes[])
+   {
+		JMeterTreeNode treeNodes[] = new JMeterTreeNode[nodes.length];
+		for(int i=0;i<nodes.length;i++) {
+			treeNodes[i] = cloneTreeNode(nodes[i]);
+		}
+        return treeNodes;
     }
 
     private static void cloneChildren(JMeterTreeNode to, JMeterTreeNode from)

@@ -89,14 +89,10 @@ public class IfController extends GenericController implements Serializable
 
 	  /**
 	   * evaluate the condition clause
-	   * Throw Exception If bad condition -
+	   * log error if bad condition
 	   */
-	  private boolean evaluateCondition() throws Exception {
-
-			// condition string is going to be of the form :  ${counter}<10
-			// the following replaces the ${xxx} with actual valuess
-
-			logger.debug("    getCondition() : [" + getCondition() + "]");
+	  static boolean evaluateCondition(String cond) {
+			logger.debug("    getCondition() : [" + cond + "]");
 
 			String resultStr = "";
 			boolean result = false;
@@ -106,7 +102,7 @@ public class IfController extends GenericController implements Serializable
 			try {
 				  Scriptable scope = cx.initStandardObjects(null);
 				  Object cxResultObject =
-						cx.evaluateString(scope, getCondition()
+						cx.evaluateString(scope, cond
 				  /*** conditionString ***/
 				  , "<cmd>", 1, null);
 				  resultStr = Context.toString(cxResultObject);
@@ -116,16 +112,17 @@ public class IfController extends GenericController implements Serializable
 				  } else if (resultStr.equals("true")) {
 						result = true;
 				  } else {
-						throw new Exception(" BAD CONDITION :: " + getCondition());
+						throw new Exception(" BAD CONDITION :: " + cond);
 				  }
 
 				  logger.debug(
 						"    >> evaluate Condition -  [ "
-							  + getCondition()
+							  + cond
 							  + "] results is  ["
 							  + result
 							  + "]");
-
+			} catch (Exception e) {
+					logger.error(e.getMessage(),e);
 			} finally {
 				  Context.exit();
 			}
@@ -164,14 +161,7 @@ public class IfController extends GenericController implements Serializable
 	   */
 	public Sampler next() 
 	{
-		boolean result = false;
-		try {
-			result = evaluateCondition();
-		}
-		catch (Exception e)
-		{
-			logger.error(e.getMessage(),e);
-		}
+		boolean result = evaluateCondition(getCondition());
 		if (result)
 		   return super.next();
 		else try

@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.java.sampler;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 //import bsh.EvalError;
@@ -26,6 +27,7 @@ import bsh.Interpreter;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -42,13 +44,28 @@ public class BeanShellSampler extends AbstractSampler
     public static final String FILENAME   = "BeanShellSampler.filename"; //$NON-NLS-1$
 	public static final String SCRIPT     = "BeanShellSampler.query"; //$NON-NLS-1$
 	public static final String PARAMETERS = "BeanShellSampler.parameters"; //$NON-NLS-1$
+	public static final String INIT_FILE = "beanshell.sampler.init"; //$NON-NLS-1$
 
     private transient Interpreter bshInterpreter;
 	
 	public BeanShellSampler()
 	{
+		String init="";
 		try{
 			bshInterpreter = new Interpreter();
+			init = JMeterUtils.getPropDefault(INIT_FILE,null);
+			if (init != null)
+			{
+				try
+				{
+					 bshInterpreter.source(null);
+					 bshInterpreter.set("log",log);  //$NON-NLS-1$
+				} catch (IOException e){
+					log.warn("Error processing init file "+init+" "+e);
+				} catch (Exception e){
+					log.warn("Error processing init file "+init+" "+e);
+				}
+			}
 		} catch (NoClassDefFoundError e){
 			bshInterpreter=null;
 		}
@@ -98,9 +115,9 @@ public class BeanShellSampler extends AbstractSampler
         	}
 
 			//TODO - set some more variables?
-			bshInterpreter.set("Label",getLabel());
-			bshInterpreter.set("FileName",getFilename());
-			bshInterpreter.set("SampleResult",res);
+			bshInterpreter.set("Label",getLabel());  //$NON-NLS-1$
+			bshInterpreter.set("FileName",getFilename()); //$NON-NLS-1$
+			bshInterpreter.set("SampleResult",res); //$NON-NLS-1$
 			bshInterpreter.set("Parameters",getParameters());// as a single line
 			bshInterpreter.set("bsh.args",JOrphanUtils.split(getParameters()," "));
 

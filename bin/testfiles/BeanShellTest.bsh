@@ -1,0 +1,20 @@
+// BeanShell Test initialisation file
+// Used in unit tests
+
+i=j=0;
+
+import org.apache.jmeter.util.JMeterUtils;
+
+getprop(p){// get a JMeter property
+	return JMeterUtils.getPropDefault(p,"");
+}
+
+getprop(p,d){// get a JMeter property with default
+	return JMeterUtils.getPropDefault(p,d);
+}
+
+setprop(p,v){// set a JMeter property
+	JMeterUtils.getJMeterProperties().setProperty(p, v);
+}
+
+return 9876; // used by source test

@@ -28,15 +28,20 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.EcmaError;
 import org.mozilla.javascript.JavaScriptException;
 import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.WrappedException;
 
 public class JavaScript extends AbstractFunction implements Serializable
 {
 
     private static final List desc = new LinkedList();
     private static final String KEY = "__javaScript";
+	private static Logger log = LoggingManager.getLoggerForClass();
 
     static {
         desc.add("JavaScript expression to evaluate");
@@ -82,8 +87,19 @@ public class JavaScript extends AbstractFunction implements Serializable
             vars.put(varName, resultStr);
 
         }
+        catch (WrappedException e)
+		{
+        	log.error("Error processing Javascript",e);
+        	throw new InvalidVariableException();        	
+		}
+        catch (EcmaError e)
+		{
+        	log.error("Error processing Javascript",e);
+        	throw new InvalidVariableException();
+		}
         catch (JavaScriptException e)
         {
+        	log.error("Error processing Javascript",e);
             throw new InvalidVariableException();
         }
         finally
