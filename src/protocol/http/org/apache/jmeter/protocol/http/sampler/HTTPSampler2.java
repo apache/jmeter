@@ -606,10 +606,19 @@ public class HTTPSampler2 extends HTTPSamplerBase
             if (httpMethod != null) httpMethod.releaseConnection();
             return res;
         }
+        catch (IllegalArgumentException e)// e.g. some kinds of invalid URL
+        {
+        	res.sampleEnd();
+            HTTPSampleResult err = errorResult(e, url.toString(), res.getTime());
+            err.setSampleLabel("Error: "+url.toString());
+            return err;
+        }
         catch (IOException e)
         {
         	res.sampleEnd();
-            return errorResult(e, url.toString(), res.getTime());
+            HTTPSampleResult err = errorResult(e, url.toString(), res.getTime());
+            err.setSampleLabel("Error: "+url.toString());
+            return err;
         }
         finally
         {
