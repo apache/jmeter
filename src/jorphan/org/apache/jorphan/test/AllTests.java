@@ -65,6 +65,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -165,8 +166,23 @@ public final class AllTests
 
         logprop("java.version");
 		logprop("java.vendor");
+		logprop("java.home");
+		logprop("user.home");
+		logprop("user.dir");
+		logprop("os.name");
+		logprop("os.version");
+		logprop("os.arch");
 		logprop("java.class.version");
-		logprop("java.class.path");
+		//logprop("java.class.path");
+		String cp = System.getProperty("java.class.path");
+		String cpe[]= JMeterUtils.split(cp,";","");
+		StringBuffer sb = new StringBuffer(3000);
+		for (int i=0;i<cpe.length;i++){
+			sb.append(cpe[i]);
+			sb.append("\n");
+		}
+		log.info(sb.toString());
+
 //++
 // GUI tests throw the error 
 // testArgumentCreation(org.apache.jmeter.config.gui.ArgumentsPanel$Test)java.lang.NoClassDefFoundError
