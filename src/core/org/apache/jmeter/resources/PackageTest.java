@@ -140,13 +140,6 @@ public class PackageTest extends TestCase
 	}
 	
 	/*
-	 * Add makeSuite to allow test to be run from AllTests.java
-	 */
-	public static Test makeSuite(){
-		return suite();
-	}
-	
-	/*
 	 * Use a suite to ensure that the default is done first
 	 */
 	public static Test suite(){
