@@ -23,11 +23,11 @@ public class CounterConfig
 	implements Serializable, LoopIterationListener,NoThreadClone
 {
 	private static Logger log = LoggingManager.getLoggerFor(JMeterUtils.ELEMENTS);
-	private final static String START = "CounterConfig.start";
-	private final static String END = "CounterConfig.end";
-	private final static String INCREMENT = "CounterConfig.incr";
-	private final static String PER_USER = "CounterConfig.per_user";
-	private final static String VAR_NAME = "CounterConfig.name";
+	public final static String START = "CounterConfig.start";
+    public final static String END = "CounterConfig.end";
+    public final static String INCREMENT = "CounterConfig.incr";
+    public final static String PER_USER = "CounterConfig.per_user";
+    public final static String VAR_NAME = "CounterConfig.name";
 	
 	private boolean perUser = false;
 	private int globalCounter = -1;

@@ -61,9 +61,9 @@ public class CounterConfigGui extends AbstractPreProcessorGui
     {
         super.configure(element);
         CounterConfig config = (CounterConfig) element;
-        startField.setText(Integer.toString(config.getStart()));
-        endField.setText(Integer.toString(config.getEnd()));
-        incrField.setText(Integer.toString(config.getIncrement()));
+        startField.setText(config.getPropertyAsString(CounterConfig.START));
+        endField.setText(config.getPropertyAsString(CounterConfig.END));
+        incrField.setText(config.getPropertyAsString(CounterConfig.INCREMENT));
         varNameField.setText(config.getVarName());
         perUserField.setSelected(config.isPerUser());
     }

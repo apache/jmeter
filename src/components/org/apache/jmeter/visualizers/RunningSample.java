@@ -101,7 +101,7 @@ public class RunningSample
         max = Long.MIN_VALUE;
         min = Long.MAX_VALUE;
         errorCount = 0L;
-        firstTime = 0L;
+        firstTime = Long.MAX_VALUE;
         lastTime = 0L;
     }
 
@@ -190,12 +190,16 @@ public class RunningSample
         long aTimeInMillis = res.getTime();
         boolean aSuccessFlag = res.isSuccessful();
 
-        lastTime = res.getTimeStamp();
         counter++;
-        if (firstTime == 0L)
+        long startTime = res.getTimeStamp() - aTimeInMillis;
+        if (firstTime > startTime)
         {
             // this is our first sample, set the start time to current timestamp
-            firstTime = lastTime;
+            firstTime = startTime;
+        }
+        if(lastTime < res.getTimeStamp())
+        {
+            lastTime = res.getTimeStamp();
         }
         runningSum += aTimeInMillis;
         if (aTimeInMillis > max) max = aTimeInMillis;
