@@ -19,7 +19,7 @@ load on a server, network or object to test its strength or to analyze
 overall performance under different load types.</p>
 <p>
 Additionally, JMeter can help you regression test your application by letting you create
-test scripts with <a href="assertion.html">assertions</a> to validate that your application is returning the
+test scripts with <a href="test_plan.html#assertions">assertions</a> to validate that your application is returning the
 results you expect.  For maximum flexibility, JMeter lets you create these assertions using
 regular expressions.</p>
 
