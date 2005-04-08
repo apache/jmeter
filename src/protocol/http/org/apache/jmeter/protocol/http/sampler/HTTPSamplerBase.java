@@ -577,7 +577,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
      */
     public SampleResult sample()
     {
-       HTTPSampleResult res = new HTTPSampleResult();
+       SampleResult res = null;
         try
         {
             res= sample(getUrl(), getMethod(), false, 0);
@@ -586,7 +586,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
         }
         catch (MalformedURLException e)
         {
-            return errorResult(e, res);
+            return errorResult(e, new HTTPSampleResult());
         }
     }
 
