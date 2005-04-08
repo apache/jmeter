@@ -41,7 +41,9 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
     
     transient String filename;
     transient String variableNames;
-    transient private String[] vars;
+	transient String delimiter;
+
+	transient private String[] vars;
     
 
     /* (non-Javadoc)
@@ -57,7 +59,9 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
         }
         try
         {
-            String[] lineValues = JOrphanUtils.split(server.readLine(getFilename()),",");
+			String delim=getDelimiter();
+			if (delim.equals("\\t")) delim="\t";// Make it easier to enter a Tab
+            String[] lineValues = JOrphanUtils.split(server.readLine(getFilename()),delim);
 	        for(int a = 0;a < vars.length && a < lineValues.length;a++)
 	        {
 	            this.getThreadContext().getVariables().put(vars[a],lineValues[a]);
@@ -97,4 +101,14 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
     {
         this.variableNames = variableNames;
     }
+
+	public String getDelimiter() {
+		return delimiter;
+	}
+	
+
+	public void setDelimiter(String delimiter) {
+		this.delimiter = delimiter;
+	}
+	
 }
