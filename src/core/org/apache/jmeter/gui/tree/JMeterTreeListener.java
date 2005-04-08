@@ -177,6 +177,7 @@ public class JMeterTreeListener
 
     public void valueChanged(TreeSelectionEvent e)
     {
+        log.debug("value changed, updating currentPath");
         currentPath = e.getNewLeadSelectionPath();
         actionHandler.actionPerformed(new ActionEvent(this, 3333, "edit"));
     }
@@ -280,12 +281,12 @@ public class JMeterTreeListener
     {
         // Get the Main Frame.
         MainFrame mainFrame = GuiPackage.getInstance().getMainFrame();
-
         // Close any Main Menu that is open
         mainFrame.closeMenu();
         int selRow = tree.getRowForLocation(e.getX(), e.getY());
         if (tree.getPathForLocation(e.getX(), e.getY()) != null)
         {
+            log.debug("mouse pressed, updating currentPath");
             currentPath = tree.getPathForLocation(e.getX(), e.getY());
         }
         if (selRow != -1)

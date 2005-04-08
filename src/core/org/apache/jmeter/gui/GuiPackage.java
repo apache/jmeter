@@ -90,6 +90,7 @@ public final class GuiPackage implements LocaleChangeListener
 
     /** The currently selected node in the tree. */
     private JMeterTreeNode currentNode = null;
+    private boolean currentNodeUpdated = false;
     
     /** The model for JMeter's test tree. */
     private JMeterTreeModel treeModel;
@@ -242,6 +243,7 @@ public final class GuiPackage implements LocaleChangeListener
     {
         try
         {
+            updateCurrentNode();
             TestElement currentNode =
                 treeListener.getCurrentNode().getTestElement();
             JMeterGUIComponent comp = getGui(currentNode);
@@ -249,7 +251,9 @@ public final class GuiPackage implements LocaleChangeListener
             {
                 comp.clear();
             }
+            log.debug("Updating gui to new node");
             comp.configure(currentNode);
+            currentNodeUpdated = false;
             return comp;
         }
         catch (Exception e)
@@ -402,10 +406,12 @@ public final class GuiPackage implements LocaleChangeListener
      */
     public void updateCurrentGui()
     {
+        updateCurrentNode();
         currentNode= treeListener.getCurrentNode();
 		TestElement element = currentNode.getTestElement();
 		JMeterGUIComponent comp = getGui(element);
 		comp.configure(element);
+        currentNodeUpdated = false;
     }
 
     /**
@@ -417,7 +423,7 @@ public final class GuiPackage implements LocaleChangeListener
     {
         try
         {
-            if (currentNode != null)
+            if (currentNode != null && !currentNodeUpdated)
             {
                 log.debug(
                     "Updating current node " + currentNode.getName());
@@ -425,6 +431,10 @@ public final class GuiPackage implements LocaleChangeListener
                     getGui(currentNode.getTestElement());
                 TestElement el = currentNode.getTestElement();
                 comp.modifyTestElement(el);
+            }
+            if(currentNode != treeListener.getCurrentNode())
+            {
+                currentNodeUpdated = true;
             }
             currentNode = treeListener.getCurrentNode();
         }
