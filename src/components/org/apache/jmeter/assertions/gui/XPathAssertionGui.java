@@ -27,8 +27,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+//import org.apache.jorphan.logging.LoggingManager;
+//import org.apache.log.Logger;
 
 /**
  * 
@@ -39,10 +39,10 @@ import org.apache.log.Logger;
 public class XPathAssertionGui extends AbstractAssertionGui 
 {
 
-	private static transient Logger log = LoggingManager.getLoggerForClass();
-	private static final String OPERATOR_KEY = null;
+	//private static transient Logger log = LoggingManager.getLoggerForClass();
+	//private static final String OPERATOR_KEY = null;
 
-	private int execState;
+	//private int execState;
 	private XPathPanel xpath;
 	private XMLConfPanel xml;
 	
