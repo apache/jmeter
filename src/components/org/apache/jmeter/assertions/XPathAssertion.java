@@ -54,7 +54,7 @@ public class XPathAssertion extends AbstractTestElement implements
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
 
-	private static XPathAPI xpath = null;
+	//private static XPathAPI xpath = null;
 
 	private static final String XPATH_KEY		= "XPath.xpath";
 	private static final String WHITESPACE_KEY	= "XPath.whitespace";
