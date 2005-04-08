@@ -618,10 +618,55 @@ TBC
 </component>
 
 <component name="TCP Sampler" index="16.1.11" screenshot="">
-<description>TBA
+<note>ALPHA CODE</note>
+	<description>
+		<p>
+		The TCP Sampler opens a TCP/IP connection to the specified server.
+		It then sends the text, and waits for a response.
+		Once established, the same connection is re-used by the Sampler that created it.
+		Connections are not shared between Samplers, even in the same thread.
+		<br></br>
+		The following properties can be used to control its operation:
+		</p>
+		<ul>
+			<li>tcp.status.prefix - text that precedes a status number</li>
+			<li>tcp.status.suffix - text that follows a status number</li>
+			<li>tcp.status.properties - name of property file</li>
+			<li>tcp.handler - Name of TCP Handler class (default TCPClientImpl)</li>
+		</ul>
+		The class that handles the connection is defined by the property tcp.handler. 
+		If not found, the class is then searched for in the package org.apache.jmeter.protocol.tcp.sampler.
+		<p>
+		Users can provide their own implementation to replace the supplied class TCPClientImpl.
+		The class must extend org.apache.jmeter.protocol.tcp.sampler.TCPClient.
+		</p>
+		If tcp.status.prefix is defined, then the response message is searched for the text following
+		that up to the suffix. If any such text is found, it is used to set the response code.
+		The response message is then fetched from the properties file (if provided).
+		<br></br>
+		For example, if the prefix = "[" and the suffix = "]", then the following repsonse:
+		<br></br>
+		[J28] XI123,23,GBP,CR
+		<br></br>
+		would have the response code J28.
+		<br></br>
+		Response codes in the range "400"-"499" and "500"-"599" are currently regarded as failures;
+		all others are successful. [This needs to be made configurable!]
+		<br></br>
+<note>The login name/password are not used by the supplied TCP implementation.</note>
+		<br></br>
+		Sockets are disconnected at the end of a test run.
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="ServerName or IP" required="Yes">Name or IP of TCP server</property>
+  <property name="Port Number" required="Yes">Port to be used</property>
+  <property name="Timeout (milliseconds)" required="No">Timeout for replies</property>
+  <property name="Set Nodelay" required="No">Should the nodelay property be set?</property>
+  <property name="Text to Send" required="Yes">Text to be sent</property>
+  <property name="Login User" required="No">User Name</property>
+  <property name="Password" required="No">Password</property>
 </properties>
 </component>
 
@@ -1601,10 +1646,32 @@ The variables in User Defined Variables components will take precedence over tho
 </component>
 
 <component index="16.4.15" name="TCP Sampler Config" screenshot="">
-<description>ALPHA Code
+	<note>ALPHA CODE</note>
+<description>
+	The TCP Sampler Config provides default data for the TCP Sampler
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="ServerName or IP" required="">Name or IP of TCP server</property>
+  <property name="Port Number" required="">Port to be used</property>
+  <property name="Timeout (milliseconds)" required="">Timeout for replies</property>
+  <property name="Set Nodelay" required="">Should the nodelay property be set?</property>
+  <property name="Text to Send" required="">Text to be sent</property>
+</properties>
+</component>
+
+<component index="16.4.16" name="CSV Data Set Config" screenshot="">
+<description>
+	CSV DataSet Config is used to read lines from a file, and split them into variables.
+	<p>
+	As a special case, the string "\\t" (without quotes) is treated as a Tab.
+	</p>
+</description>
+<properties>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="Filename" required="Yes">Name of the file to be read.</property>
+  <property name="Variable Names" required="Yes">List of variable names (comma-delimited)</property>
+  <property name="Delimiter" required="Yes">Delimiter to be used to split the records in the file.</property>
 </properties>
 </component>
 
