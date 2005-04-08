@@ -36,7 +36,7 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport
     public CSVDataSetBeanInfo()
     {
         super(CSVDataSet.class);
-        createPropertyGroup("csv_data",new String[]{"filename","variableNames"});
+        createPropertyGroup("csv_data",new String[]{"filename","variableNames","delimiter"});
         PropertyDescriptor p = property("filename");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
@@ -44,6 +44,10 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport
         p = property("variableNames");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
+        p.setValue(NOT_EXPRESSION,Boolean.TRUE);
+        p = property("delimiter");
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, ",");
         p.setValue(NOT_EXPRESSION,Boolean.TRUE);
     }
 }
