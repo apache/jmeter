@@ -107,4 +107,33 @@ public class AssertionResult implements Serializable
     {
         failureMessage = message;
     }
+	
+    /**
+     * Convenience method for setting up failed results 
+     * 
+     * @param message the message to set
+     * @return this
+     * 
+     */
+    public AssertionResult setResultForFailure(String message)
+    {
+		error=false;
+		failure=true;
+        failureMessage = message;
+		return this;
+    }
+	
+    /**
+     * Convenience method for setting up results where the response was null 
+     * 
+     * @param message the message to set
+     * @return this
+     */	
+    public AssertionResult setResultForNull(){
+		error=false;
+		failure=true;
+        failureMessage = "Response was null";
+		return this;
+    }
+	
 }
