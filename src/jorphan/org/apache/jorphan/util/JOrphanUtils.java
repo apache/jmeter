@@ -255,6 +255,29 @@ public final class JOrphanUtils
     	if (start == 0) return replace+source.substring(len);
     	return source.substring(0,start)+replace+source.substring(start+len);
     }
+    /**
+     * Returns a slice of a byte array.
+     * 
+     * TODO - add bounds checking?
+     * 
+     * @param array - input array
+     * @param begin - start of slice
+     * @param end - end of slice
+     * @return slice from the input array
+     */
+    public static byte[] getByteArraySlice(byte[] array, int begin, int end) 
+    {
+        byte[] slice = new byte[(end - begin + 1)];
+        int count = 0;
+        for (int i = begin; i <= end; i++) 
+        {
+            slice[count] = array[i];
+            count++;
+        }
+
+        return slice;
+    }
+
     
     public static class Test extends TestCase
     {
