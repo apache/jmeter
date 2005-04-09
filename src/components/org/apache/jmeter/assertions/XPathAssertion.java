@@ -76,7 +76,7 @@ public class XPathAssertion extends AbstractTestElement implements
 		// no error as default
 		AssertionResult result = new AssertionResult();
 		if (response.getResponseData() == null) {
-			return setResultForNull(result);
+			return result.setResultForNull();
 		}
 		result.setFailure(false);
 		result.setFailureMessage("");
@@ -140,13 +140,6 @@ public class XPathAssertion extends AbstractTestElement implements
 		result.setFailure(isNegated());
 		if (isNegated()) 
 			result.setFailureMessage("Specified XPath was found... Turn off negate if this is not desired");
-		return result;
-	}
-
-	private AssertionResult setResultForNull(AssertionResult result) {
-		result.setError(false);
-		result.setFailure(true);
-		result.setFailureMessage("Response was null");
 		return result;
 	}
 
