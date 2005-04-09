@@ -101,11 +101,15 @@ public class TestConfigurationTree extends JMeterTestCase {
                 "org.apache.service.dbObjects",
                 tree.getPropertyNames(
                         "services/org.apache.service.sql.ObjectMappingService/packages")[0]);
-        assertEquals(
-                "The system could not find the resource you requested.  Please check your request and try again.\n"
-                        + "If the problem persists, report it to the system administrators.",
+        String expect=
+                "The system could not find the resource you requested.  Please check your request and try again."
+			    + System.getProperty("line.separator")
+                + "If the problem persists, report it to the system administrators.";
+		String actual=
                 tree.getProperty(
-                        "services/org.apache.service.webaction.error.Redirector/exceptions/NoSuchObjectException/msg"));
+                        "services/org.apache.service.webaction.error.Redirector/exceptions/NoSuchObjectException/msg");
+		assertEquals(expect.length(),actual.length());
+		assertEquals(expect,actual);
     }
     
     public void testAsProperties() throws Exception
