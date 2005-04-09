@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Copyright 2003-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,7 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.StringReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Random;
@@ -38,7 +36,6 @@ import org.apache.jorphan.logging.LoggingManager;
 
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.protocol.http.util.DOMPool;
-import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Logger;
@@ -58,7 +55,7 @@ import org.w3c.dom.Document;
  * 
  * @version $Revision$
  */
-public class WebServiceSampler extends HTTPSampler
+public class WebServiceSampler extends HTTPSamplerBase
 {
     private static Logger log = LoggingManager.getLoggerForClass();
 
@@ -76,23 +73,6 @@ public class WebServiceSampler extends HTTPSampler
     public static final String WSDL_URL = "WebserviceSampler.wsdl_url";
 
     /**
-     * The SOAPAction is required by MS
-     * webservices and is defined by the
-     * WSDL.
-     */
-    private String SOAPACTION = null;
-
-    /**
-     * SampleResult which holds the response
-     */
-    private transient SampleResult RESULT = null;
-
-    /**
-     * The XML document
-     */
-    private Document XMLMSG = null;
-
-    /**
      * size of File[] array
      */
     private int FILE_COUNT = -1;
@@ -107,16 +87,6 @@ public class WebServiceSampler extends HTTPSampler
      * numbers.
      */
     private Random RANDOM = new Random();
-
-    /**
-     * We make DocumentBuilder static. I'm not sure that this is thread safe.
-     * Should investigate this further to make sure it's ok. Making it
-     * non-static could mean a performance hit to get a new DocumentBuilder for
-     * each request. If it's not safe to use static here, then we should
-     * consider using Apache commons pool to create a pool of document builders
-     * or make sure XMLParserUtils creates builders efficiently.
-     */
-    private DocumentBuilder XDB = null;
 
 	private String FILE_CONTENTS = null;
 	
@@ -396,8 +366,7 @@ public class WebServiceSampler extends HTTPSampler
             String next = this.getRandomFileName();
             if (DOMPool.getDocument(next) != null)
             {
-                return ((Document) DOMPool.getDocument(next))
-                    .getDocumentElement();
+                return DOMPool.getDocument(next).getDocumentElement();
             }
             else
             {
@@ -417,7 +386,12 @@ public class WebServiceSampler extends HTTPSampler
      */
     protected Document openDocument(String key)
     {
-		XDB = XMLParserUtils.getXMLDocBuilder();
+	    /*
+	     * Consider using Apache commons pool to create a pool of document builders
+	     * or make sure XMLParserUtils creates builders efficiently.
+	     */
+	    DocumentBuilder XDB = XMLParserUtils.getXMLDocBuilder();
+
 		Document doc = null;
     	// if either a file or path location is given,
     	// get the file object.
@@ -449,27 +423,14 @@ public class WebServiceSampler extends HTTPSampler
 		return doc;
     }
 
-    /**
-     * sample(Entry e) simply calls sample().
-     * @param e - ignored
-     * @return the sample Result
-     */
-    public SampleResult sample(Entry e)
-    {
-        return sample();
-    }
-
-    /**
-     * sample() does the following: create a new SampleResult, call
-     * sampleWithApache, and return the result.
-     * @return SampleResult
-     */
-    public SampleResult sample()
-    {
-        RESULT = new SampleResult();
-        sampleWithApache();
-        return RESULT;
-    }
+	/*
+	 *  Required to satisfy HTTPSamplerBase
+	 *  Should not be called, as we override sample()
+	 */
+	
+	protected HTTPSampleResult sample(URL u, String s, boolean b, int i) {
+		throw new RuntimeException("Not implemented - should not be called");
+	}
 
     /**
      * Sample the URL using Apache SOAP driver. Implementation note for myself
@@ -478,8 +439,8 @@ public class WebServiceSampler extends HTTPSampler
      * reader will read, but do nothing with it. Essentially, the stream from
      * the server goes into the ether.
      */
-    public void sampleWithApache()
-    {
+	public SampleResult sample() {
+		SampleResult RESULT = new SampleResult();
         try
         {
 			org.w3c.dom.Element rdoc = createDocument();
@@ -598,6 +559,7 @@ public class WebServiceSampler extends HTTPSampler
             log.debug(exception.getMessage());
             RESULT.setSuccessful(false);
         }
+		return RESULT;
     }
 
     /**
@@ -607,27 +569,6 @@ public class WebServiceSampler extends HTTPSampler
      */
     public void addEncodedArgument(String name, String value, String metaData)
     {
-    }
-
-    /**
-     * We override this to prevent the wrong encoding and provide no
-     * implementation. We want to reuse the other parts of HTTPSampler, but not
-     * the connection. The connection is handled by the Apache SOAP driver.
-     */
-    protected HttpURLConnection setupConnection(URL u, String method)
-        throws IOException
-    {
-        return null;
-    }
-
-    /**
-     * We override this to prevent the wrong encoding and provide no
-     * implementation. We want to reuse the other parts of HTTPSampler, but not
-     * the connection. The connection is handled by the Apache SOAP driver.
-     */
-    protected long connect() throws IOException
-    {
-        return -1;
     }
     
     public String convertSoapHeaders(Hashtable ht){
