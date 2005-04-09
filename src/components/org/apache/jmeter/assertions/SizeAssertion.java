@@ -63,7 +63,7 @@ public class SizeAssertion
         result.setFailure(false);
         if (response.getResponseData() == null)
         {
-            return setResultForNull(result);
+            return result.setResultForNull();
         }
         // is the Sample the correct size?
         resultData = response.getResponseData();
@@ -101,14 +101,6 @@ public class SizeAssertion
     {
         setProperty(new IntegerProperty(OPERATOR_KEY, operator));
 
-    }
-
-    protected AssertionResult setResultForNull(AssertionResult result)
-    {
-        result.setError(false);
-        result.setFailure(true);
-        result.setFailureMessage("Response was null");
-        return result;
     }
 
     /**

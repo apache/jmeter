@@ -281,7 +281,7 @@ public class ResponseAssertion
 
       if(toCheck.length()==0)
       {
-          return setResultForNull(result);
+          return result.setResultForNull();
       }
 
       try
@@ -372,13 +372,6 @@ private String getFailText(String stringPattern) {
 	}
 
 	return "Test failed, " + what + text + "/" + stringPattern + "/";
-}
-protected AssertionResult setResultForNull(AssertionResult result)
-{
-    result.setError(false);
-      result.setFailure(true);
-      result.setFailureMessage("Response (or URL) was null");
-      return result;
 }
    public static class Test extends junit.framework.TestCase
    {

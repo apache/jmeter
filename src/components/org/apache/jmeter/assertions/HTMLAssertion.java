@@ -74,7 +74,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
     AssertionResult result = new AssertionResult();
 
     if (inResponse.getResponseData() == null) {
-      return setResultForNull(result);
+      return result.setResultForNull();
     }
 
     result.setFailure(false);
@@ -200,17 +200,6 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
         }
       }
     }
-  }
-
-  /**
-   * @param inResult
-   * @return result
-   */
-  protected AssertionResult setResultForNull(AssertionResult inResult) {
-    inResult.setError(false);
-    inResult.setFailure(true);
-    inResult.setFailureMessage("Response was null");
-    return inResult;
   }
 
   /**

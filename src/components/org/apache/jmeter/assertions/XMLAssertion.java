@@ -54,7 +54,7 @@ public class XMLAssertion
         AssertionResult result = new AssertionResult();
         if(response.getResponseData() == null)
              {
-                 return setResultForNull(result);
+                 return result.setResultForNull();
              }
         result.setFailure(false);
 
@@ -96,14 +96,6 @@ public class XMLAssertion
 
         return result;
     }
-    
-    protected AssertionResult setResultForNull(AssertionResult result)
-        {
-            result.setError(false);
-            result.setFailure(true);
-            result.setFailureMessage("Response was null");
-            return result;
-        }
 
     /**
      * Return the body of the http return.
