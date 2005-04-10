@@ -1884,7 +1884,14 @@ on XPath.
 <property name="True if nothing matches"	required="No">True if a XPath expression is not matched</property>
 </properties>
 </component>
+<component index="16.5.9" name="XML Schema Assertion" screenshot="assertion/XMLSchemaAssertion.png">
+<description><p>The XML Schema Assertion allows the user to validate a response against an XML Schema.</p></description>
 
+<properties>
+<property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+<property name="File Name" required="Yes">Specify XML Schema File Name</property>
+</properties>
+</component>
 </section>
 
 <section name="16.6 Timers" anchor="timers">
