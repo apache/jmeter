@@ -45,7 +45,8 @@ import org.xml.sax.SAXParseException;
 public class XMLSchemaAssertion extends AbstractTestElement implements
         Serializable, Assertion 
 {
-    public static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
+    public static final String FILE_NAME_IS_REQUIRED = "FileName is required";
+	public static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
     public static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
     public static final String JAXP_SCHEMA_SOURCE = "http://java.sun.com/xml/jaxp/properties/schemaSource";
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -59,12 +60,13 @@ public class XMLSchemaAssertion extends AbstractTestElement implements
     public AssertionResult getResult(SampleResult response) 
     {
         AssertionResult result = new AssertionResult();
-        if (response.getResponseData() == null) {
+		// Note: initialised with error = failure = false
+		
+		byte data[] = response.getResponseData(); 
+        if (data == null || data.length == 0) {
             return result.setResultForNull();
         }
-        result.setFailure(false);
-        String resultData = new String(
-                getResultBody(response.getResponseData()));
+        String resultData = new String(getResultBody(data));
         
         String xsdFileName = getXsdFileName();
 		if (log.isDebugEnabled()){
@@ -72,7 +74,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements
 		    log.debug("xsdFileName: "+xsdFileName);
 		}
         if (xsdFileName == null || xsdFileName.length() == 0) {
-            result.setResultForFailure("FileName is required");
+            result.setResultForFailure(FILE_NAME_IS_REQUIRED);
         } else {
             setSchemaResult(result, resultData, xsdFileName);
         }
@@ -133,22 +135,48 @@ public class XMLSchemaAssertion extends AbstractTestElement implements
             //doc = 
 			parser.parse(new InputSource(new StringReader(xmlStr)));
             //if everything went fine then xml schema validation is valid
+        } catch (SAXParseException e) {
+
+			// Only set message if error not yet flagged
+			if (!result.isError() && !result.isFailure()){
+				result.setError(true);
+				result.setFailureMessage(errorDetails(e));
+			}
+
         } catch (SAXException e) {
 
+			log.warn(e.toString());
 			result.setResultForFailure(e.getMessage());
 
 		} catch (IOException e) {
 
+			log.warn("IO error",e);
 			result.setResultForFailure(e.getMessage());
 
 		} catch (ParserConfigurationException e) {
 
+			log.warn("Problem with Parser Config",e);
 			result.setResultForFailure(e.getMessage());
 
 		}
 
     }
 
+	// Helper method to construct SAX error details
+	private static String errorDetails(SAXParseException spe){
+		StringBuffer str = new StringBuffer(80);
+		int i;
+		i=spe.getLineNumber();
+		if (i != -1){
+			str.append("line=");
+			str.append(i);
+			str.append(" col=");
+			str.append(spe.getColumnNumber());
+			str.append(" ");
+		}
+		str.append(spe.getLocalizedMessage());
+		return str.toString();
+	}
     /**
      * SAXErrorHandler class
      */
@@ -161,26 +189,52 @@ public class XMLSchemaAssertion extends AbstractTestElement implements
             this.result = result;
         }
 
+		/*
+		 * Can be caused by:
+		 * - failure to read XSD file
+		 * - xml does not match XSD
+		 */
         public void error(SAXParseException exception)
 		        throws SAXParseException 
         {
 
+			String msg="error: "+errorDetails(exception);
+			log.debug(msg);
+			result.setFailureMessage(msg);
+			result.setError(true);
             throw exception;
         }
 
+		/*
+		 * Can be caused by:
+		 * - premature end of file
+		 * - non-whitespace content after trailer
+		*/
         public void fatalError(SAXParseException exception)
                 throws SAXParseException 
         {
 
+			String msg="fatal: "+errorDetails(exception);
+			log.debug(msg);
+			result.setFailureMessage(msg);
+			result.setError(true);
             throw exception;
         }
 
+		/*
+		 * Not clear what can cause this
+         * ? conflicting versions perhaps
+		 */
         public void warning(SAXParseException exception)
                 throws SAXParseException 
         {
 
-            throw exception;
+			String msg="warning: "+errorDetails(exception);
+			log.debug(msg);
+			result.setFailureMessage(msg);
+			//result.setError(true); // TODO is this the correct strategy?
+            //throw exception; // allow assertion to pass
+
         }
     }
-// TODO add some test cases
 }
