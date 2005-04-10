@@ -26,7 +26,9 @@ import java.io.Serializable;
  */
 public class AssertionResult implements Serializable
 {
-    /** True if the assertion failed. */
+    public static final String RESPONSE_WAS_NULL = "Response was null";
+
+	/** True if the assertion failed. */
     private boolean failure;
     
     /** True if there was an error checking the assertion. */
@@ -132,7 +134,7 @@ public class AssertionResult implements Serializable
     public AssertionResult setResultForNull(){
 		error=false;
 		failure=true;
-        failureMessage = "Response was null";
+        failureMessage = RESPONSE_WAS_NULL;
 		return this;
     }
 	
