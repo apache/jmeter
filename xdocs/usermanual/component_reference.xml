@@ -573,6 +573,8 @@ If a script file is supplied, that will be used, otherwise the script will be us
 			<li>ResponseCode = 200</li>
 			<li>ResponseMessage = "OK"</li>
 			<li>IsSuccess = true</li>
+			<li>ctx - JMeterContext</li>
+			<li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value");</li>
 		</ul>
 		<p>When the script completes, control is returned to the Sampler, and it copies the contents
 			of the following script variables into the corresponding variables in the SampleResult:</p>
@@ -1830,6 +1832,8 @@ These are strings unless otherwise noted:
 	<li>RequestHeaders - contains the HTTP headers sent to the server</li>
 	<li>SampleLabel</li>
 	<li>SamplerData - data that was sent to the server</li>
+	<li>ctx - JMeterContext</li>
+	<li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value");</li>
 </ul>
 </p>
 <p>The following methods of the Response object may be useful:
