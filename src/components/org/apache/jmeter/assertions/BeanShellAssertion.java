@@ -23,6 +23,9 @@ import java.io.Serializable;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -121,6 +124,12 @@ public class BeanShellAssertion extends AbstractTestElement
 			bshInterpreter.set("FailureMessage","");//$NON-NLS-1$ //$NON-NLS-2$
 			bshInterpreter.set("Failure",false);//$NON-NLS-1$
 
+			// Add variables for access to context and variables
+	    	JMeterContext jmctx = JMeterContextService.getContext();
+	        JMeterVariables vars = jmctx.getVariables();
+			bshInterpreter.set("ctx",jmctx);//$NON-NLS-1$
+			bshInterpreter.set("vars",vars);//$NON-NLS-1$
+			
 			//Object bshOut;
 			
 			if (fileName.length() == 0){
