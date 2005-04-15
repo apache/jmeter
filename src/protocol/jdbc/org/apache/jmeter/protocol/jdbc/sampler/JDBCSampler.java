@@ -48,6 +48,7 @@ public class JDBCSampler extends AbstractTestElement implements Sampler,TestBean
     
     public String query = "";
     public String dataSource = "";
+    public boolean queryOnly = true;
 
     /**
      * Creates a JDBCSampler.
@@ -79,12 +80,12 @@ public class JDBCSampler extends AbstractTestElement implements Sampler,TestBean
             stmt = conn.createStatement();
             
             // Based on query return value, get results
-            if (stmt.execute(getQuery()))
+            if (isQueryOnly())
             {
                 ResultSet rs = null;
                 try
                 {
-                    rs = stmt.getResultSet();
+                    rs = stmt.executeQuery(getQuery());
                     Data data = getDataFromResultSet(rs);
                     res.setResponseData(data.toString().getBytes());
                 }
@@ -105,6 +106,7 @@ public class JDBCSampler extends AbstractTestElement implements Sampler,TestBean
             }
             else
             {
+                stmt.execute(getQuery());
                 int updateCount = stmt.getUpdateCount();
                 String results = updateCount + " updates";
                 res.setResponseData(results.getBytes());
@@ -221,4 +223,18 @@ public class JDBCSampler extends AbstractTestElement implements Sampler,TestBean
    {
       this.dataSource = dataSource;
    }
+
+/**
+ * @return Returns the queryOnly.
+ */
+public boolean isQueryOnly() {
+    return queryOnly;
+}
+
+/**
+ * @param queryOnly The queryOnly to set.
+ */
+public void setQueryOnly(boolean queryOnly) {
+    this.queryOnly = queryOnly;
+}
 }
