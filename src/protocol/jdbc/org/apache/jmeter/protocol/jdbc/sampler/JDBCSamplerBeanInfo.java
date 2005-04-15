@@ -27,13 +27,17 @@ public class JDBCSamplerBeanInfo extends BeanInfoSupport
    {
       super(JDBCSampler.class);
       
-      createPropertyGroup("varName", new String[]{"dataSource"});
+      createPropertyGroup("varName", new String[]{"dataSource","queryOnly"});
       
       createPropertyGroup("sql", new String[]{"query"});
       
       PropertyDescriptor p = property("dataSource");
       p.setValue(NOT_UNDEFINED, Boolean.TRUE);
       p.setValue(DEFAULT, "");
+      
+      p = property("queryOnly");
+      p.setValue(NOT_UNDEFINED,Boolean.TRUE);
+      p.setValue(DEFAULT,new Boolean(true));
       
       p = property("query");
       p.setValue(NOT_UNDEFINED, Boolean.TRUE);
