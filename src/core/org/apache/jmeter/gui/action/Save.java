@@ -19,6 +19,7 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -34,6 +35,7 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.save.OldSaveService;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
@@ -153,8 +155,15 @@ public class Save implements Command
         Writer writer = null;
         try
         {
-            writer = new FileWriter(updateFile);
-            SaveService.saveTree(subTree,writer);
+            if(JMeterUtils.getPropDefault("file_format","2.1").equals("2.0"))
+            {
+                OldSaveService.saveSubTree(subTree,new FileOutputStream(updateFile));
+            }
+            else
+            {
+                writer = new FileWriter(updateFile);
+                SaveService.saveTree(subTree,writer);
+            }
         }
         catch (Throwable ex)
         {
