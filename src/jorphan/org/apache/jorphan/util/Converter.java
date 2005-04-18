@@ -46,6 +46,8 @@ public class Converter {
             return value;
         } else if (toType.equals(float.class) || toType.equals(Float.class)) {
             return new Float(getFloat(value));
+        } else if (toType.equals(double.class) || toType.equals(Double.class)) {
+            return new Double(getDouble(value));
         } else if (toType.equals(String.class)) {
             return getString(value);
         } else if (toType.equals(int.class) || toType.equals(Integer.class)) {
@@ -179,6 +181,25 @@ public class Converter {
 
     public static float getFloat(Object o) {
         return getFloat(o, 0);
+    }
+
+    public static double getDouble(Object o, double defaultValue) {
+        try {
+            if (o == null) {
+                return defaultValue;
+            }
+            if (o instanceof Number) {
+                return ((Number) o).doubleValue();
+            } else {
+                return Double.parseDouble(o.toString());
+            }
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    public static double getDouble(Object o) {
+        return getDouble(o, 0);
     }
 
     public static boolean getBoolean(Object o) {

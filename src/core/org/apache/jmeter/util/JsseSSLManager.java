@@ -245,12 +245,12 @@ public class JsseSSLManager extends SSLManager
         {
             try
             {
-                java.util.Enumeration enum = store.aliases();
+                java.util.Enumeration enumer = store.aliases();
                 java.util.ArrayList list =
                     new java.util.ArrayList(store.size());
-                while (enum.hasMoreElements())
+                while (enumer.hasMoreElements())
                 {
-                    String alias = (String) enum.nextElement();
+                    String alias = (String) enumer.nextElement();
                     log.info("AlwaysTrustManager alias: " + alias);
                     if (store.isCertificateEntry(alias))
                     {
