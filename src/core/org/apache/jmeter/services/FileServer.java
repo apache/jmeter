@@ -27,8 +27,15 @@ import org.apache.log.Logger;
 /**
  * @author mstover
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * The point of this class is to provide thread-safe access to files, and to provide 
+ * some simplifying assumptions about where to find files and how to name them.  For instance,
+ * putting supporting files in the same directory as the saved test plan file allows users
+ * to refer to the file with just it's name - this FileServer class will find the file without
+ * a problem.  Eventually, I want all in-test file access to be done through here, with the goal
+ * of packaging up entire test plans as a directory structure that can be sent via rmi to
+ * remote servers (currently, one must make sure the remote server has all support files in
+ * a relative-same location) and to package up test plans to execute on unknown boxes that 
+ * only have Java installed.
  */
 public class FileServer
 {

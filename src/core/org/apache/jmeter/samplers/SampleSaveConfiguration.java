@@ -206,7 +206,7 @@ public class SampleSaveConfiguration implements Cloneable,Serializable
        _label =
            TRUE.equalsIgnoreCase(props.getProperty(SAVE_LABEL_PROP, TRUE));
 
-       _code = // TODO is this correct?
+       _code = // TODO is this correct? - yes
            TRUE.equalsIgnoreCase(
                props.getProperty(SAVE_RESPONSE_CODE_PROP, TRUE));
 
