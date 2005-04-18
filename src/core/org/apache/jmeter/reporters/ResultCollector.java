@@ -533,7 +533,15 @@ public class ResultCollector extends AbstractListenerElement implements
     */
    public SampleSaveConfiguration getSaveConfig()
    {
-      return (SampleSaveConfiguration)getProperty(SAVE_CONFIG).getObjectValue();
+      try 
+      {
+          return (SampleSaveConfiguration)getProperty(SAVE_CONFIG).getObjectValue();
+      }
+      catch(ClassCastException e)
+      {
+          setSaveConfig(new SampleSaveConfiguration());
+          return getSaveConfig();
+      }
    }
    /**
     * @param saveConfig The saveConfig to set.
