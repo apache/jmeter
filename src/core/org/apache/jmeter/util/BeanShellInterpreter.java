@@ -128,18 +128,31 @@ public class BeanShellInterpreter
 		}
 	}
 	
+	private Object bshInvoke(Method m, String s) throws JMeterException
+	{
+		Object r=null;
+		try {
+			r = m.invoke(bshInstance, new Object[] {s});
+		} catch (IllegalArgumentException e) { // Programming error
+			log.error("Error invoking bsh method "+m.getName()+"\n",e);
+			throw new JMeterError("Error invoking bsh method "+m.getName(),e);
+		} catch (IllegalAccessException e) { // Also programming error
+			log.error("Error invoking bsh method "+m.getName()+"\n",e);
+			throw new JMeterError("Error invoking bsh method "+m.getName(),e);
+		} catch (InvocationTargetException e) { // Can occur at run-time
+			//could be caused by the bsh Exceptions:
+			// EvalError, ParseException or TargetError
+			log.error("Error invoking bsh method "+m.getName()+"\n",e);
+			throw new JMeterException("Error invoking bsh method "+m.getName(),e);
+		}		
+		return r;
+	}
+
 	private Object bshInvoke(Method m, String s, Object o) throws JMeterException
 	{
 		Object r=null;
 		try {
-			if (o == null)
-			{
-				r = m.invoke(bshInstance, new Object[] {s});
-			}
-			else
-			{
-			    r = m.invoke(bshInstance, new Object[] {s, o});
-			}
+		    r = m.invoke(bshInstance, new Object[] {s, o});
 		} catch (IllegalArgumentException e) { // Programming error
 			log.error("Error invoking bsh method "+m.getName()+"\n",e);
 			throw new JMeterError("Error invoking bsh method "+m.getName(),e);
@@ -156,7 +169,7 @@ public class BeanShellInterpreter
 	}
 
 	public Object eval(String s) throws JMeterException{
-		return bshInvoke(bshEval,s, null);
+		return bshInvoke(bshEval,s);
 	}
 	public Object set(String s, Object o) throws JMeterException{
 		return bshInvoke(bshSet,s, o);
@@ -165,13 +178,10 @@ public class BeanShellInterpreter
 		return bshInvoke(bshSet,s, b ? Boolean.TRUE : Boolean.FALSE);//JDK1.4 Boolean.vaueof
 	}
 	public Object source(String s) throws JMeterException{
-		return bshInvoke(bshSource,s, null);
+		return bshInvoke(bshSource,s);
 	}
 
 	public Object get(String s) throws JMeterException{
-		return bshInvoke(bshGet,s,null);
+		return bshInvoke(bshGet,s);
 	}
-	// These don't vary between executes, so can be done once TODO is this true?
-//	bshInvoke(bshSet,"log",log); //$NON-NLS-1$
-//	;
 }
