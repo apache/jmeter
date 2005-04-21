@@ -24,6 +24,9 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Vector;
 
+import org.apache.log.Logger;
+import org.apache.jorphan.logging.LoggingManager;
+
 import junit.framework.TestCase;
 
 /**
@@ -35,6 +38,8 @@ import junit.framework.TestCase;
  */
 public final class JOrphanUtils
 {
+	private static Logger log = LoggingManager.getLoggerForClass();
+	
     /**
      * Private constructor to prevent instantiation.
      */
@@ -202,11 +207,11 @@ public final class JOrphanUtils
             }
             catch (Exception e)
             {
-				e.printStackTrace();
+				log.warn("Error trying to encode",e);
             	return string;
             }
 		} else {
-			return URLEncoder.encode(string);
+			return URLEncoder.encode(string);// JDK1.3
 		}
 		
 	}  
@@ -230,11 +235,11 @@ public final class JOrphanUtils
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				log.warn("Error trying to decode",e);
 				return string;
 			}
 		} else {
-			return URLDecoder.decode(string);
+			return URLDecoder.decode(string); //JDK1.3
 		}
 	}  
 
