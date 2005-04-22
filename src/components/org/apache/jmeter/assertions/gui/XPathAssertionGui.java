@@ -106,8 +106,6 @@ public class XPathAssertionGui extends AbstractAssertionGui
 	    sizePanel.add(xpath);
 	    
 	    xml = new XMLConfPanel();
-	    xpath = new XPathPanel();
-	    
 	    xml.setBorder(
 		        BorderFactory.createTitledBorder(
 		            BorderFactory.createEtchedBorder(),
