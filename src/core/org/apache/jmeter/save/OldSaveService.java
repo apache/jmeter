@@ -385,50 +385,50 @@ public final class OldSaveService implements SaveServiceConstants
      */
     public static Configuration getConfiguration(
         SampleResult result,
-        boolean funcTest)
+        SampleSaveConfiguration saveConfig)
     {
         DefaultConfiguration config =
             new DefaultConfiguration(
                 SAMPLE_RESULT_TAG_NAME,
                 "JMeter Save Service");
 
-        if (_saveConfig.saveTime())
+        if (saveConfig.saveTime())
         {
             config.setAttribute(TIME, "" + result.getTime());
         }
-        if (_saveConfig.saveLabel())
+        if (saveConfig.saveLabel())
         {
             config.setAttribute(LABEL, result.getSampleLabel());
         }
-        if (_saveConfig.saveCode())
+        if (saveConfig.saveCode())
         {
             config.setAttribute(RESPONSE_CODE, result.getResponseCode());
         }
-        if (_saveConfig.saveMessage())
+        if (saveConfig.saveMessage())
         {
             config.setAttribute(RESPONSE_MESSAGE, result.getResponseMessage());
         }
-        if (_saveConfig.saveThreadName())
+        if (saveConfig.saveThreadName())
         {
             config.setAttribute(THREAD_NAME, result.getThreadName());
         }
-        if (_saveConfig.saveDataType())
+        if (saveConfig.saveDataType())
         {
             config.setAttribute(DATA_TYPE, result.getDataType());
         }
 
-        if (_saveConfig.printMilliseconds())
+        if (saveConfig.printMilliseconds())
         {
             config.setAttribute(TIME_STAMP, "" + result.getTimeStamp());
         }
-        else if (_saveConfig.formatter() != null)
+        else if (saveConfig.formatter() != null)
         {
-            String stamp = _saveConfig.formatter().format(new Date(result.getTimeStamp()));
+            String stamp = saveConfig.formatter().format(new Date(result.getTimeStamp()));
 
             config.setAttribute(TIME_STAMP, stamp);
         }
 
-        if (_saveConfig.saveSuccess())
+        if (saveConfig.saveSuccess())
         {
             config.setAttribute(
                 SUCCESSFUL,
@@ -441,55 +441,27 @@ public final class OldSaveService implements SaveServiceConstants
         {
             for (int i = 0; i < subResults.length; i++)
             {
-                config.addChild(getConfiguration(subResults[i], funcTest));
+                config.addChild(getConfiguration(subResults[i], saveConfig));
             }
         }
 
         AssertionResult[] assResults = result.getAssertionResults();
 
-        if (funcTest)
+        if (saveConfig.saveSamplerData())
         {
             config.addChild(
                 createConfigForString("samplerData", result.getSamplerData()));
-            if (assResults != null)
-            {
-                for (int i = 0; i < assResults.length; i++)
+        }
+        if(saveConfig.saveAssertions() && assResults != null)
+        {
+            for (int i = 0; i < assResults.length; i++)
                 {
                     config.addChild(getConfiguration(assResults[i]));
                 }
-            }
-            config.addChild(getConfiguration(result.getResponseData()));
         }
-        // Determine which of the assertion results to save and
-        // whether to save the response data
-        else
-        {
-            if (_saveConfig.assertionsResultsToSave() == SampleSaveConfiguration.SAVE_ALL_ASSERTIONS)
-            {
-                config.addChild(
-                    createConfigForString(
-                        "samplerData",
-                        result.getSamplerData()));
-                if (assResults != null)
-                {
-                    for (int i = 0; i < assResults.length; i++)
-                    {
-                        config.addChild(getConfiguration(assResults[i]));
-                    }
-                }
-            }
-            else if (
-                (_saveConfig.assertionsResultsToSave() == SampleSaveConfiguration.SAVE_FIRST_ASSERTION)
-                    && assResults != null
-                    && assResults.length > 0)
-            {
-                config.addChild(getConfiguration(assResults[0]));
-            }
-
-            if (_saveConfig.saveResponseData())
-            {
-                config.addChild(getConfiguration(result.getResponseData()));
-            }
+        if(saveConfig.saveResponseData())
+        {    
+            config.addChild(getConfiguration(result.getResponseData()));
         }
         return config;
     }
