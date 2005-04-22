@@ -45,6 +45,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.alias.CannotResolveClassException;
 import com.thoughtworks.xstream.alias.ClassMapper;
 import com.thoughtworks.xstream.converters.Converter;
 
@@ -293,7 +294,7 @@ public class SaveService
          wrapper = (ScriptWrapper) saver.fromXML(new InputStreamReader(reader));
          return wrapper.testPlan;
       }
-      catch (RuntimeException e)
+      catch (CannotResolveClassException e)
       {
          log.warn("Problem loading new style: ", e);
          reader.reset();
