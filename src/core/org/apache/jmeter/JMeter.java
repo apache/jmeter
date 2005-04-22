@@ -57,6 +57,7 @@ import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.save.SaveService;
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.NullProperty;
@@ -537,6 +538,7 @@ public class JMeter implements JMeterPlugin
                 println("Could not open " + testFile);
                 return;
             }
+            FileServer.getFileServer().setBasedir(f.getAbsolutePath());
 
             reader = new FileInputStream(f);
             log.info("Loading file: " + f);
