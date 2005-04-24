@@ -237,7 +237,7 @@ public class JMSConfigGui extends JPanel {
 		providerPanel.add(providerUrl);
 		jndiPanel.add(providerPanel, BorderLayout.SOUTH);
 
-		jndiPropertiesPanel = new ArgumentsPanel(JMeterUtils.getResString("jndi_props"));
+		jndiPropertiesPanel = new ArgumentsPanel(JMeterUtils.getResString("jms_jndi_props"));
 		jndiPanel.add(jndiPropertiesPanel);
 		return jndiPanel;
 	}
