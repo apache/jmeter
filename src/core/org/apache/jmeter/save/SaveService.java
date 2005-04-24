@@ -296,7 +296,7 @@ public class SaveService
       }
       catch (CannotResolveClassException e)
       {
-         log.warn("Problem loading new style: ", e);
+         log.warn("Problem loading new style: "+e.getLocalizedMessage());
          reader.reset();
          return OldSaveService.loadSubTree(reader);
       }
