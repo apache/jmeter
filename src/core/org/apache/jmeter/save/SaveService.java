@@ -61,7 +61,7 @@ public class SaveService
    // Version information for test plan header
    static String version = "1.0";
    static String propertiesVersion = "";//read from properties file
-   private static final String PROPVERSION = "1.5";
+   private static final String PROPVERSION = "1.6";
 
    // Helper method to simplify alias creation from properties
    private static void makeAlias(String alias, String clazz)
