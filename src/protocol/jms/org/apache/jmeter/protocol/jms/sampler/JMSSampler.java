@@ -19,8 +19,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -28,6 +26,8 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * Sampler for JMS Communication.
@@ -52,13 +52,13 @@ public class JMSSampler extends AbstractSampler {
 	public final static String SEND_QUEUE = "JMSSampler.SendQueue";
 	public final static String QUEUE_CONNECTION_FACTORY_JNDI = "JMSSampler.queueconnectionfactory";
 
-	private static final Log LOGGER = LogFactory.getLog(JMSSampler.class);
+	private static final Logger LOGGER = LoggingManager.getLoggerForClass(); 
 	
 	//
 	// Member variables
 	//
 	/** Factory for the connections to the queueing system. */
-	private QueueConnectionFactory factory;
+	//NOTUSED private QueueConnectionFactory factory;
 	/** Queue for receiving messages (if applicable). */
 	private Queue receiveQueue;
 	/** The session with the queueing system. */
@@ -68,7 +68,7 @@ public class JMSSampler extends AbstractSampler {
 	/** Queue for sending messages. */
 	private Queue sendQueue;
 	/** Is the communication oneway? */
-	private boolean oneway;
+	//NOTUSED private boolean oneway;
 	/** The executor for (pseudo) synchronous communication. */
 	private QueueExecutor executor;
 	/** Producer of the messages. */
@@ -110,7 +110,7 @@ public class JMSSampler extends AbstractSampler {
 				}
 			}
 		} catch (Exception e) {
-			LOGGER.warn(e);
+			LOGGER.warn(e.getLocalizedMessage());
 			res.setResponseData(new byte[0]);
 			res.setSuccessful(false);
 		}
@@ -247,9 +247,9 @@ public class JMSSampler extends AbstractSampler {
 
 			connection.start();
 		} catch (JMSException e) {
-			LOGGER.warn(e);
+			LOGGER.warn(e.getLocalizedMessage());
 		} catch (NamingException e) {
-			LOGGER.warn(e);
+			LOGGER.warn(e.getLocalizedMessage());
 		} finally {
 			if (context != null) {
 				try {
@@ -347,14 +347,14 @@ public class JMSSampler extends AbstractSampler {
 			try {
 				session.close();
 			} catch (JMSException e) {
-				LOGGER.info(e);
+				LOGGER.info(e.getLocalizedMessage());
 
 			}
 		if (connection != null)
 			try {
 				connection.close();
 			} catch (JMSException e) {
-				LOGGER.info(e);
+				LOGGER.info(e.getLocalizedMessage());
 			}
 	}
 
