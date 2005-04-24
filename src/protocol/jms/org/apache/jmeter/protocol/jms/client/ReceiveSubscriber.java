@@ -40,19 +40,19 @@ import org.apache.log.Logger;
  */
 public class ReceiveSubscriber implements Runnable {
 
-	static Logger log = LoggingManager.getLoggerForClass();
+	private static Logger log = LoggingManager.getLoggerForClass();
 
 	private TopicConnection CONN = null;
 	private TopicSession SESSION = null;
 	private Topic TOPIC = null;
 	private TopicSubscriber SUBSCRIBER = null;
 	private byte[] RESULT = null;
-	private Object OBJ_RESULT = null;
-	private long time = System.currentTimeMillis();
+	private Object OBJ_RESULT = null;//TODO never read
+	//private long time = System.currentTimeMillis();
 	private int counter;
-	private int loop = 1;
+	private int loop = 1; //TODO never read
 	private StringBuffer buffer = new StringBuffer();
-	private boolean RUN = true;
+	private volatile boolean RUN = true;// Needs to be volatile to ensure value is picked up
 	private Thread CLIENTTHREAD = null;
 	
     /**
@@ -104,7 +104,7 @@ public class ReceiveSubscriber implements Runnable {
 	 */    
     public void initConnection(Context ctx, String connfactory, String topic){
     	try {
-			TopicConnectionFactory connfac =
+			TopicConnectionFactory connfac = //TODO never read
 				ConnectionFactory.getTopicConnectionFactory(ctx,connfactory);
 			this.CONN = ConnectionFactory.getTopicConnection();
 			this.TOPIC = InitialContextFactory.lookupTopic(ctx,topic);
@@ -129,6 +129,10 @@ public class ReceiveSubscriber implements Runnable {
 	 * messages from the JMS provider.
 	 */	
 	public void resume(){
+		if (this.CONN==null){
+			log.error("Connection not set up");
+			return;
+		}
 		try {
 			this.CONN.start();
 		} catch (JMSException e){
@@ -236,6 +240,10 @@ public class ReceiveSubscriber implements Runnable {
     protected void listen() {
         log.info("Subscriber2.listen() called");
         while (RUN) {
+			if (SUBSCRIBER == null){
+				log.error("Subscriber has not been set up");
+				break;
+			}
             try {
                 Message message = this.SUBSCRIBER.receive();
                 if (message != null && message instanceof TextMessage) {
