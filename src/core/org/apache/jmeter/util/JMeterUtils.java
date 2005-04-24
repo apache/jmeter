@@ -312,7 +312,7 @@ public class JMeterUtils implements UnitTestManager
         }
         catch (MissingResourceException mre)
         {
-            log.warn("ERROR! Resource string not found: [" + key + "]");
+            log.warn("ERROR! Resource string not found: [" + key + "]",mre);
             resString = defaultValue;
         }
         return resString;
