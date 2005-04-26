@@ -323,7 +323,7 @@ public class ResponseAssertion
       {
          result.setError(true);
          result.setFailure(false);
-         result.setFailureMessage("Bad test configuration" + e);
+         result.setFailureMessage("Bad test configuration " + e);
       }
       return result;
    }
