@@ -1235,12 +1235,14 @@ are part of the test plan.</p></description>
 response for any sample.  In addition to showing the response, you can see the time it took to get
 this response, and some response codes.
 <p>
-There are two ways two view the response, controllable by a push
+There are three ways to view the response, controllable by a push
 button.  The default view shows all of the text contained in the
 response.  The alternative view attempts to render the response as
 HTML.  The rendered HTML is likely to compare poorly to the view one
 would get in any web browser; however, it does provide a quick
-approximation that is helpful for initial result evaluation.</p>
+approximation that is helpful for initial result evaluation. The rendered XML 
+will show response in tree style. All DTD nodes and Prolog nodes will not show up 
+in tree; however, response may contain those nodes.</p>
 </description>
 </component>
 

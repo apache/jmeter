@@ -21,8 +21,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 
 import javax.swing.BorderFactory;
@@ -32,6 +35,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -58,6 +62,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
@@ -65,6 +72,17 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.w3c.dom.Attr;
+import org.w3c.dom.CDATASection;
+import org.w3c.dom.Comment;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
  * Allows the tester to view the textual response from sampling an Entry. This
@@ -85,12 +103,17 @@ public class ViewResultsFullVisualizer
 
     private static final String DOWNLOAD_LABEL = "Download embedded resources";
     private static final String HTML_BUTTON_LABEL = "Render HTML";
+    private static final String XML_BUTTON_LABEL = "Render XML";
     private static final String TEXT_BUTTON_LABEL = "Show Text";
 
     private static final String TEXT_HTML = "text/html"; // $NON-NLS-1$
     private static final String HTML_COMMAND = "html"; // $NON-NLS-1$
+    private static final String XML_COMMAND = "xml"; // $NON-NLS-1$
     private static final String TEXT_COMMAND = "text"; // $NON-NLS-1$
     private boolean textMode = true;
+   
+	//set default command to Text
+    private String command = TEXT_COMMAND; 
     
     // Keep copies of the two editors needed
     private static EditorKit customisedEditor = new LocalHTMLEditorKit();
@@ -108,6 +131,7 @@ public class ViewResultsFullVisualizer
 
     private JRadioButton textButton;
     private JRadioButton htmlButton;
+    private JRadioButton xmlButton;
     private JCheckBox downloadAll;
 
     private JTree jTree;
@@ -319,14 +343,18 @@ public class ViewResultsFullVisualizer
                     if ((SampleResult.TEXT).equals(res.getDataType())) // equals(null) is OK
                     {
 	                    String response = getResponseAsString(res);
-	                    if (textMode)
-	                    {
-	                        showTextResponse(response);
+	                    if (command.equals(TEXT_COMMAND))
+ 	                    {
+ 	                        showTextResponse(response);
+ 	                    }
+	                    else if(command.equals(HTML_COMMAND))
+ 	                    {
+ 	                        showRenderedResponse(response,res);
 	                    }
-	                    else
-	                    {
-	                        showRenderedResponse(response,res);
-	                    }
+						else if(command.equals(XML_COMMAND)) 
+						{
+	                        showRenderXMLResponse(response);
+ 	                    }
                     }
                     else
                     {
@@ -353,6 +381,7 @@ public class ViewResultsFullVisualizer
         resultsScrollPane.setViewportView(imageLabel);
         textButton.setEnabled(false);
         htmlButton.setEnabled(false);
+        xmlButton.setEnabled(false);
     }
 
     protected void showTextResponse(String response)
@@ -364,6 +393,61 @@ public class ViewResultsFullVisualizer
 
         textButton.setEnabled(true);
         htmlButton.setEnabled(true);
+        xmlButton.setEnabled(true);
+    }
+    
+	SAXErrorHandler saxErrorHandler = new SAXErrorHandler();
+
+    private void showRenderXMLResponse(String response)
+    {
+        results.setContentType("text/xml");
+        results.setText(response == null ? "" : response);
+        results.setCaretPosition(0);
+		
+		Component view=results;
+        
+        //there is duplicate Document class. Therefore I needed to declare the specific
+        //class that I want
+        org.w3c.dom.Document document = null;
+        
+
+		try {
+
+			DocumentBuilderFactory parserFactory = DocumentBuilderFactory
+					.newInstance();
+			parserFactory.setValidating(false);
+			parserFactory.setNamespaceAware(false);
+
+			// create a parser:
+			DocumentBuilder parser = parserFactory.newDocumentBuilder();
+			
+			parser.setErrorHandler(saxErrorHandler);
+			document = parser.parse(new InputSource(new StringReader(response)));
+					
+			
+			JPanel domTreePanel = new DOMTreePanel(document);
+			
+			document.normalize();
+
+			view=domTreePanel;
+		}
+		catch (SAXParseException e) {
+			showErrorMessageDialog(saxErrorHandler.getErrorMessage(),saxErrorHandler.getMessageType());
+			log.debug(e.getMessage());
+		} catch (SAXException e) {
+			showErrorMessageDialog(e.getMessage(),JOptionPane.ERROR_MESSAGE);
+			log.debug(e.getMessage());
+		} catch (IOException e) {
+			showErrorMessageDialog(e.getMessage(),JOptionPane.ERROR_MESSAGE);
+			log.debug(e.getMessage());
+		} catch (ParserConfigurationException e) {
+			showErrorMessageDialog(e.getMessage(),JOptionPane.ERROR_MESSAGE);
+			log.debug(e.getMessage());
+		}
+		resultsScrollPane.setViewportView(view);
+		textButton.setEnabled(true);
+        htmlButton.setEnabled(true);
+        xmlButton.setEnabled(true);
     }
 
     private static String getResponseAsString(SampleResult res)
@@ -408,13 +492,15 @@ public class ViewResultsFullVisualizer
      */
     public void actionPerformed(ActionEvent e)
     {
-        String command = e.getActionCommand();
+        command = e.getActionCommand();
 
         if (command != null
             && (
                 command.equals(TEXT_COMMAND)
                 ||
                 command.equals(HTML_COMMAND)
+                ||
+                command.equals(XML_COMMAND)
                )
             )
         {
@@ -432,13 +518,18 @@ public class ViewResultsFullVisualizer
 
             SampleResult res = (SampleResult) node.getUserObject();
             String response = getResponseAsString(res);
-            if (textMode)
+ 
+            if (command.equals(TEXT_COMMAND))
             {
                 showTextResponse(response);
             }
-            else
+            else if(command.equals(HTML_COMMAND))
             {
                 showRenderedResponse(response,res);
+            }
+			else if(command.equals(XML_COMMAND)) 
+			{
+                showRenderXMLResponse(response);
             }
         }
     }
@@ -499,8 +590,11 @@ public class ViewResultsFullVisualizer
 
         textButton.setEnabled(true);
         htmlButton.setEnabled(true);
+        xmlButton.setEnabled(true);
     }
-
+    
+	//TODO this method changed because Render XML button added
+	// Could probably be private anyway, because it's only used locally
     protected Component createHtmlOrTextPane()
     {
         ButtonGroup group = new ButtonGroup();
@@ -516,12 +610,22 @@ public class ViewResultsFullVisualizer
         htmlButton.addActionListener(this);
         htmlButton.setSelected(!textMode);
         group.add(htmlButton);
+        
+        
+        xmlButton = new JRadioButton(XML_BUTTON_LABEL);
+        xmlButton.setActionCommand(XML_COMMAND);
+        xmlButton.addActionListener(this);
+        xmlButton.setSelected(!textMode);
+        group.add(xmlButton);
+        
+        
 
         downloadAll = new JCheckBox(DOWNLOAD_LABEL);
 
         JPanel pane = new JPanel();
         pane.add(textButton);
         pane.add(htmlButton);
+        pane.add(xmlButton);
         pane.add(downloadAll);
         return pane;
     }
@@ -627,7 +731,7 @@ public class ViewResultsFullVisualizer
             boolean expanded,
             boolean leaf,
             int row,
-            boolean hasFocus)
+            boolean focus)
         {
             super.getTreeCellRendererComponent(
                 tree,
@@ -636,7 +740,7 @@ public class ViewResultsFullVisualizer
                 expanded,
                 leaf,
                 row,
-                hasFocus);
+                focus);
             if (!((SampleResult) ((DefaultMutableTreeNode) value)
                 .getUserObject())
                 .isSuccessful())
@@ -664,6 +768,7 @@ public class ViewResultsFullVisualizer
     		 * - FRAMEs
     		 * - IMAGEs
     		 * TODO create better dummy displays
+    		 * TODO suppress LINK somehow
     		 */
     		public View create(Element elem) 
     		{
@@ -684,4 +789,330 @@ public class ViewResultsFullVisualizer
     		}
     	}
     }
+    
+    /**
+    *A extended class of DefaultMutableTreeNode except that it also attached
+    *XML node and convert XML document into DefaultMutableTreeNode
+    * author <a href="mailto:d.maung@mdl.com">Dave Maung</a>
+    * 
+    */
+    public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode 
+    {
+
+    	boolean isRoot;
+    	private Node xmlNode;
+    	public XMLDefaultMutableTreeNode(Node root) throws SAXException 
+    	{
+    	    super(root.getNodeName());
+    		initRoot(root);
+    		
+    	}
+    	
+    	public XMLDefaultMutableTreeNode(String name,Node xmlNode) 
+    	{
+    		super(name);
+    		this.xmlNode = xmlNode;
+    		
+    	}
+    	/**
+    	 * init root
+    	 * @param root
+    	 * @throws SAXException
+    	 */
+    	private void initRoot(Node xmlRoot) throws SAXException {
+    		
+    	
+    		NodeList childNodes = xmlRoot.getChildNodes();
+    		if(childNodes == null) 
+    			initAttributeNode(xmlRoot, this);
+    		
+    		for (int i = 0; i < childNodes.getLength(); i++) {
+    			Node childNode = childNodes.item(i);
+    			initNode(childNode, this);
+    		}
+
+    	}
+    	/**
+    	 * init node
+    	 * @param node
+    	 * @param mTreeNode
+    	 * @throws SAXException
+    	 */
+    	private void initNode(Node node, XMLDefaultMutableTreeNode mTreeNode)
+    			throws SAXException 
+    			{
+
+    		switch (node.getNodeType())
+    		{
+    		case Node.ELEMENT_NODE:
+    			initElementNode(node, mTreeNode);
+    			break;
+    			
+    		case Node.TEXT_NODE:
+    			 initTextNode((Text)node, mTreeNode);
+    			break;
+    			
+
+    		case Node.CDATA_SECTION_NODE:
+    			initCDATASectionNode((CDATASection)node, mTreeNode);
+    			break;
+    		case Node.COMMENT_NODE:
+    			initCommentNode((Comment)node,mTreeNode);
+    			break;
+    		
+    		default:
+    		    //if other node type, we will just skip it
+    			break;
+
+    		}
+
+    	}
+    	/**
+    	 * init element node
+    	 * @param node
+    	 * @param mTreeNode
+    	 * @throws SAXException
+    	 */
+    	private void initElementNode(Node node, DefaultMutableTreeNode mTreeNode)
+    			throws SAXException {
+    		String nodeName = node.getNodeName();
+    		
+    		NodeList childNodes = node.getChildNodes();
+    		XMLDefaultMutableTreeNode childTreeNode = new XMLDefaultMutableTreeNode(nodeName
+    				,node);
+
+    		mTreeNode.add(childTreeNode);
+    		initAttributeNode(node, childTreeNode);
+    		for (int i = 0; i < childNodes.getLength(); i++) 
+    		{
+    			Node childNode = childNodes.item(i);
+    			initNode(childNode, childTreeNode);
+    		}
+
+    	}
+    	/**
+    	 * init attribute node
+    	 * @param node
+    	 * @param mTreeNode
+    	 * @throws SAXException
+    	 */
+    	private void initAttributeNode(Node node, DefaultMutableTreeNode mTreeNode)
+    			throws SAXException {
+    		NamedNodeMap nm = node.getAttributes();
+    		for (int i = 0; i < nm.getLength(); i++) 
+    		{
+    			Attr nmNode = (Attr)nm.item(i);
+    			String value = nmNode.getName() + " = \"" + nmNode.getValue() + "\"";
+    			XMLDefaultMutableTreeNode attributeNode = new XMLDefaultMutableTreeNode(
+    					value,nmNode);
+    			mTreeNode.add(attributeNode);
+
+    		}
+    	}
+    	/**
+    	 * init comment Node
+    	 * @param node
+    	 * @param mTreeNode
+    	 * @throws SAXException
+    	 */
+    	private void initCommentNode(Comment node, DefaultMutableTreeNode mTreeNode) throws SAXException{
+    		String data = node.getData();
+    		if(data != null || data.length() > 0)
+    		{
+    			String value = "<!--" + node.getData() + "-->";
+    			XMLDefaultMutableTreeNode commentNode = new XMLDefaultMutableTreeNode(value,node);
+    			mTreeNode.add(commentNode);
+    		}
+    	}
+    	/**
+    	 * init CDATASection Node
+    	 * @param node
+    	 * @param mTreeNode
+    	 * @throws SAXException
+    	 */
+    	private void initCDATASectionNode(CDATASection node, DefaultMutableTreeNode mTreeNode) throws SAXException 
+    	{
+    		String data = node.getData();
+    		if(data != null || data.length() > 0) 
+    		{
+    			String value = "<!-[CDATA" + node.getData() + "]]>";
+    			XMLDefaultMutableTreeNode commentNode = new XMLDefaultMutableTreeNode(value,node);
+    			mTreeNode.add(commentNode);
+    		}
+    	}
+    	/**
+    	 * init the TextNode
+    	 * @param node
+    	 * @param mTreeNode
+    	 * @throws SAXException
+    	 */
+    	private void initTextNode(Text node, DefaultMutableTreeNode mTreeNode) throws SAXException 
+    	{
+    		String text = node.getNodeValue().trim();
+    		if(text != null && text.length() > 0) 
+    		{
+    			XMLDefaultMutableTreeNode textNode = new XMLDefaultMutableTreeNode(node
+    				.getNodeValue(),node);
+    			mTreeNode.add(textNode);
+    		}
+    	}
+    	
+    	
+    	
+    	/**
+    	 * get the xml node
+    	 * @return
+    	 */
+    	public Node getXMLNode() 
+    	{
+    		return xmlNode;
+    	}
+    	
+
+    }
+    
+    
+     /**
+     *
+     * A Dom tree panel for to display response as tree view
+     * author <a href="mailto:d.maung@mdl.com">Dave Maung</a>
+     * TODO implement to find any nodes in the tree using TreePath.
+     * TODO implement tooltip to display long string of node value
+     * 
+     */
+    private class DOMTreePanel extends JPanel {
+
+    	private JTree domJTree;
+    	public DOMTreePanel(org.w3c.dom.Document document) {
+    		super(new GridLayout(1, 0));
+    		try {
+    		    
+    		    Node firstElement = getFirstElement(document);
+    			DefaultMutableTreeNode top = new XMLDefaultMutableTreeNode(
+    					firstElement);
+    			domJTree = new JTree(top);
+    		
+    		    domJTree.getSelectionModel().setSelectionMode(
+    		            TreeSelectionModel.SINGLE_TREE_SELECTION);
+    		    domJTree.setShowsRootHandles(true);
+    		    JScrollPane domJScrollPane = new JScrollPane(domJTree);
+    			domJTree.setAutoscrolls(true);
+    			this.add(domJScrollPane);
+    			this.setSize(800, 600);
+    			this.setPreferredSize(new Dimension(800, 600));
+    		} catch (SAXException e) {
+    			log.warn("",e);
+    		}
+
+    	}
+    	/**
+    	 * Skip all DTD nodes, all prolog nodes. They dont support in tree view
+    	 * We let user to insert them however in DOMTreeView, we dont display it
+    	 * @param root
+    	 * @return
+    	 */
+    	private Node getFirstElement(Node parent) {
+    		NodeList childNodes = parent.getChildNodes();
+    		Node toReturn = null;
+    		for (int i = 0; i < childNodes.getLength(); i++) {
+    			Node childNode = childNodes.item(i);
+    			toReturn = childNode;
+    			if (childNode.getNodeType() == Node.ELEMENT_NODE)
+    				break;
+
+    		}
+    		return toReturn;
+    	}
+
+    
+    	
+    	
+    }
+
+    private static void showErrorMessageDialog(String message,int messageType) {
+        JOptionPane.showMessageDialog(null, message, "Error", messageType); 
+    } 
+  
+  
+   //Helper method to construct SAX error details
+	private static String errorDetails(SAXParseException spe){
+		StringBuffer str = new StringBuffer(80);
+		int i;
+		i=spe.getLineNumber();
+		if (i != -1){
+			str.append("line=");
+			str.append(i);
+			str.append(" col=");
+			str.append(spe.getColumnNumber());
+			str.append(" ");
+		}
+		str.append(spe.getLocalizedMessage());
+		return str.toString();
+	}
+	
+	private class SAXErrorHandler implements ErrorHandler 
+    {
+        private String msg;
+        private int messageType;
+        public SAXErrorHandler()
+        {
+           msg = new String("");
+           
+        }
+
+		
+        public void error(SAXParseException exception)
+		        throws SAXParseException 
+        {
+            msg = "error: "+errorDetails(exception);
+			
+			log.debug(msg);
+			messageType = JOptionPane.ERROR_MESSAGE;
+            throw exception;
+        }
+
+		/*
+		 * Can be caused by:
+		 * - premature end of file
+		 * - non-whitespace content after trailer
+		*/
+        public void fatalError(SAXParseException exception)
+                throws SAXParseException 
+        {
+
+			msg="fatal: " + errorDetails(exception);
+			messageType = JOptionPane.ERROR_MESSAGE;			
+			log.debug(msg);
+			
+            throw exception;
+        }
+
+		/*
+		 * Not clear what can cause this
+         * ? conflicting versions perhaps
+		 */
+        public void warning(SAXParseException exception)
+                throws SAXParseException 
+        {
+             msg="warning: "+errorDetails(exception);
+			 log.debug(msg);
+			 messageType = JOptionPane.WARNING_MESSAGE;
+        }
+        /**
+         * get the JOptionPaneMessage Type
+         * @return
+         */
+        public int getMessageType() {
+            return messageType;
+        }
+        
+        /**
+         * get error message
+         * @return
+         */
+        public String getErrorMessage() {
+            return msg;
+        }
+    }
+    
 }
