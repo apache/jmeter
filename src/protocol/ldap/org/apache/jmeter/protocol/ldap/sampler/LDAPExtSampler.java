@@ -107,8 +107,6 @@ public class LDAPExtSampler extends AbstractSampler  {
     //create the new entry in the server
     public static int counter=0;
     
-    private DirContext dirContext;
-    private  LdapExtClient temp_client ;
     public static Hashtable ldapConnections=new Hashtable();
     public static Hashtable ldapContexts=new Hashtable();
    
@@ -721,8 +719,8 @@ public class LDAPExtSampler extends AbstractSampler  {
         String iets;
         NamingEnumeration attrlist;
         res.setSampleLabel(getLabel()+":"+getPropertyAsString(TEST)+":"+Thread.currentThread().getName()+";"+System.currentTimeMillis());
-        temp_client =(LdapExtClient) ldapConnections.get(Thread.currentThread().getName());
-        dirContext =(DirContext) ldapContexts.get(Thread.currentThread().getName());
+		LdapExtClient temp_client =(LdapExtClient) ldapConnections.get(Thread.currentThread().getName());
+		DirContext dirContext =(DirContext) ldapContexts.get(Thread.currentThread().getName());
         if (temp_client == null) {
           	 temp_client =new LdapExtClient();
              try {
