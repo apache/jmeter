@@ -20,11 +20,13 @@ package org.apache.jmeter.protocol.jms.control.gui;
 import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.protocol.jms.sampler.JMSSampler;
 import org.apache.jmeter.testelement.TestElement;
@@ -43,7 +45,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * @author Martijn Blankestijn
  * @version $Id$ 
  */
-public class JMSConfigGui extends JPanel {
+public class JMSConfigGui extends AbstractConfigGui {
 
 	private JLabeledTextField queueuConnectionFactory =
 		new JLabeledTextField(JMeterUtils.getResString("jms_queue_connection_factory"));
@@ -74,15 +76,6 @@ public class JMSConfigGui extends JPanel {
 	}
 
 	/**
-	 * @param element
-	 */
-	protected void configureTestElement(TestElement element) {
-		element.setProperty(TestElement.NAME, getName());
-		element.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
-		element.setProperty(TestElement.TEST_CLASS, element.getClass().getName());
-	}
-
-	/**
 	 * Clears all fields.
 	 */
 	public void clear() {
@@ -99,13 +92,19 @@ public class JMSConfigGui extends JPanel {
 		jndiPropertiesPanel.clear();
 	}
 
+    public TestElement createTestElement()
+    {
+        ConfigTestElement element = new ConfigTestElement();
+        modifyTestElement(element);
+        return element;
+    }
+
 	/**
 	 * @return
 	 */
-	public TestElement createTestElement() {
-		ConfigTestElement element = new ConfigTestElement();
+	public void modifyTestElement(TestElement element) {
+        super.configureTestElement(element);
 
-		this.configureTestElement(element);
 		element.setProperty(
 			JMSSampler.QUEUE_CONNECTION_FACTORY_JNDI,
 			queueuConnectionFactory.getText());
@@ -127,14 +126,13 @@ public class JMSConfigGui extends JPanel {
 
 		Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
 		element.setProperty(new TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
-		return element;
 	}
 
 	/**
 	 * @param el
 	 */
 	public void configure(TestElement el) {
-		setName(el.getPropertyAsString(TestElement.NAME));
+		super.configure(el);
 		queueuConnectionFactory.setText(
 			el.getPropertyAsString(JMSSampler.QUEUE_CONNECTION_FACTORY_JNDI));
 		sendQueue.setText(el.getPropertyAsString(JMSSampler.SEND_QUEUE));
@@ -168,6 +166,10 @@ public class JMSConfigGui extends JPanel {
 	 */
 	private void init() {
 		setLayout(new BorderLayout());
+        setBorder(makeBorder());
+        add(makeTitlePanel(), BorderLayout.NORTH);
+
+        Box mainPanel = Box.createVerticalBox();
 
 		JPanel jmsQueueingPanel = new JPanel(new BorderLayout());
 		jmsQueueingPanel.setBorder(
@@ -213,9 +215,11 @@ public class JMSConfigGui extends JPanel {
 		jmsPropertiesPanel = new ArgumentsPanel(JMeterUtils.getResString("jms_props"));
 		messagePanel.add(jmsPropertiesPanel, BorderLayout.SOUTH);
 
-		add(jmsQueueingPanel, BorderLayout.NORTH);
-		add(messagePanel, BorderLayout.CENTER);
-		add(jndiPanel, BorderLayout.SOUTH);
+		mainPanel.add(jmsQueueingPanel, BorderLayout.NORTH);
+		mainPanel.add(messagePanel, BorderLayout.CENTER);
+		mainPanel.add(jndiPanel, BorderLayout.SOUTH);
+
+        add(mainPanel, BorderLayout.CENTER);
 	}
 
 	/**
@@ -240,6 +244,10 @@ public class JMSConfigGui extends JPanel {
 		jndiPropertiesPanel = new ArgumentsPanel(JMeterUtils.getResString("jms_jndi_props"));
 		jndiPanel.add(jndiPropertiesPanel);
 		return jndiPanel;
+	}
+
+	public String getLabelResource() {
+		return "jms_config_title";// TODO - probably wrong
 	}
 
 }
