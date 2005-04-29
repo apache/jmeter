@@ -50,7 +50,7 @@ public class AccessLogSamplerBeanInfo extends BeanInfoSupport
          p.setValue(NOT_EXPRESSION,Boolean.TRUE);
          log.info("found parsers: " +ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),new Class[]{LogParser.class}));
          p.setValue(TAGS,
-               (String[])ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
+               ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
                      new Class[]{LogParser.class}).toArray(new String[0]));
          
          p = property("filterClassName");
@@ -58,7 +58,7 @@ public class AccessLogSamplerBeanInfo extends BeanInfoSupport
          p.setValue(DEFAULT,"");
          p.setValue(NOT_EXPRESSION,Boolean.TRUE);
          p.setValue(TAGS,
-               (String[])ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
+               ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
                      new Class[]{Filter.class},false).toArray(new String[0]));
       
       p = property("logFile");

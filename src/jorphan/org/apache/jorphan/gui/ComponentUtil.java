@@ -90,10 +90,10 @@ public final class ComponentUtil
         Component toBeCentered)
     {
         toBeCentered.setLocation(
-            (int) parent.getX()
-                + (int) ((parent.getWidth() - toBeCentered.getWidth()) / 2),
-            (int) parent.getY()
-                + (int) ((parent.getHeight() - toBeCentered.getHeight()) / 2));
+            parent.getX()
+                + (parent.getWidth() - toBeCentered.getWidth()) / 2,
+            parent.getY()
+                + (parent.getHeight() - toBeCentered.getHeight()) / 2);
 
         toBeCentered.validate();
         toBeCentered.repaint();
