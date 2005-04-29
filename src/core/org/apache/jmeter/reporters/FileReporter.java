@@ -411,8 +411,8 @@ class graphPanel extends JPanel
             g.setColor((Color) colorList.elementAt(t % colorList.size()));
             for (int i = 0; i < v.size() - 1; i++)
             {
-                float y1 = (float) ((Integer) v.elementAt(i)).intValue();
-                float y2 = (float) ((Integer) v.elementAt(i + 1)).intValue();
+                float y1 = ((Integer) v.elementAt(i)).intValue();
+                float y2 = ((Integer) v.elementAt(i + 1)).intValue();
 
                 y1 = y1 - minValue;
                 y2 = y2 - minValue;
