@@ -136,7 +136,7 @@ public class ValueReplacer
             }
             if (val instanceof StringProperty)
             {
-                val = transform.transformValue((StringProperty) val);
+                val = transform.transformValue(val);
                 if (log.isDebugEnabled())
                 {
                     log.debug("Replacement result: " +val);
