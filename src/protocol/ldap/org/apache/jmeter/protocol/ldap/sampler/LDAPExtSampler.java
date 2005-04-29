@@ -832,7 +832,7 @@ public class LDAPExtSampler extends AbstractSampler  {
 			responseData=responseData + "</ldapanswer>";
 			res.setResponseData(responseData.getBytes());
         	res.setThreadName(Thread.currentThread().getName());
-        	res.setDataType("text");
+        	res.setDataType(SampleResult.TEXT);
             res.setSuccessful(isSuccessful);
         }
         return res;
