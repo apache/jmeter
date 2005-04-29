@@ -109,7 +109,7 @@ public class FloatProperty extends NumberProperty
      */
     public double getDoubleValue()
     {
-        return (double)value;
+        return value;
     }
 
     /**

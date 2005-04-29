@@ -226,7 +226,7 @@ public class Data implements Serializable
     {
         int x = start, y = end - 1;
         String basis =
-            ((List) data.get(column)).get((int) ((x + y) / 2)).toString();
+            ((List) data.get(column)).get((x + y) / 2).toString();
         if (x == y)
         {
             return;
