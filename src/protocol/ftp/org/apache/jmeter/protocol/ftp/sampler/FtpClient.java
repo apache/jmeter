@@ -109,9 +109,9 @@ public class FtpClient
             int lower = getLower(dataPort);
             String ip =
                 InetAddress.getLocalHost().getHostAddress().replace('.', ',');
-            String port = ip + "," + upper + "," + lower;
-            log.info("port:" + port);
-            send("PORT " + port);
+            String ports = ip + "," + upper + "," + lower;
+            log.info("port:" + ports);
+            send("PORT " + ports);
             getResponse();
             dataGrabber grab = new dataGrabber(ip, dataPort);
             while (!grab.isPortCreated())
@@ -133,32 +133,31 @@ public class FtpClient
         else
         {
             send("PASV");
-            String port = getResponse();
-            while (!port.startsWith("227"))
+            String portResp = getResponse();
+            while (!portResp.startsWith("227"))
             {
-                port = getResponse();
+                portResp = getResponse();
             }
-            int start = port.indexOf('(');
-            int end = port.indexOf(')');
-            port = port.substring(start + 1, end);
-            int a = port.indexOf(',');
-            int b = port.indexOf(',', a + 1);
-            int c = port.indexOf(',', b + 1);
-            int d = port.indexOf(',', c + 1);
-            int e = port.indexOf(',', d + 1);
+            int start = portResp.indexOf('(');
+            int end = portResp.indexOf(')');
+            portResp = portResp.substring(start + 1, end);
+            int a = portResp.indexOf(',');
+            int b = portResp.indexOf(',', a + 1);
+            int c = portResp.indexOf(',', b + 1);
+            int d = portResp.indexOf(',', c + 1);
+            int e = portResp.indexOf(',', d + 1);
             String ip =
-                port.substring(0, a)
+                portResp.substring(0, a)
                     + "."
-                    + port.substring(a + 1, b)
+                    + portResp.substring(a + 1, b)
                     + "."
-                    + port.substring(b + 1, c)
+                    + portResp.substring(b + 1, c)
                     + "."
-                    + port.substring(c + 1, d);
-            int upper = Integer.parseInt(port.substring(d + 1, e));
-            int lower = Integer.parseInt(port.substring(e + 1));
-            int dataPort = getPort(upper, lower);
+                    + portResp.substring(c + 1, d);
+            int upper = Integer.parseInt(portResp.substring(d + 1, e));
+            int lower = Integer.parseInt(portResp.substring(e + 1));
             send("RETR " + file);
-            dataGrabber grab = new dataGrabber(ip, dataPort);
+            dataGrabber grab = new dataGrabber(ip, getPort(upper, lower));
             getResponse();
             while (!grab.isDone())
             {
@@ -237,9 +236,9 @@ public class FtpClient
      * Gets the Upper attribute of the FtpClient class.
      * @return       the Upper value
      */
-    public static int getUpper(int port)
+    public static int getUpper(int lport)
     {
-        return port / 256;
+        return lport / 256;
     }
 
     /**
@@ -247,9 +246,9 @@ public class FtpClient
      *
      * @return       the Lower value
      */
-    public static int getLower(int port)
+    public static int getLower(int lport)
     {
-        return port % 256;
+        return lport % 256;
     }
 
     /**
@@ -262,11 +261,11 @@ public class FtpClient
     public class dataGrabber implements Runnable
     {
         StringBuffer buffer = new StringBuffer();
-        Socket s;
+        Socket sock;
         boolean done = false;
         boolean portCreated = false;
         String host = "";
-        int port = 22;
+        int dgPort = 22;
 
         /**
          * Constructor for the dataGrabber object.
@@ -274,8 +273,8 @@ public class FtpClient
         public dataGrabber(String host, int port) throws Exception
         {
             this.host = host;
-            this.port = port;
-            new Thread((Runnable) this).start();
+            this.dgPort = port;
+            new Thread(this).start();
         }
 
         /**
@@ -317,15 +316,15 @@ public class FtpClient
             {
                 if (passive)
                 {
-                    s = new Socket(host, port);
+                    sock = new Socket(host, dgPort);
                 }
                 else
                 {
-                    log.info("creating socket on " + port);
-                    ServerSocket server = new ServerSocket(port);
+                    log.info("creating socket on " + dgPort);
+                    ServerSocket server = new ServerSocket(dgPort);
                     log.info("accepting...");
                     portCreated = true;
-                    s = server.accept();
+                    sock = server.accept();
                     log.info("accepted");
                 }
             }
@@ -334,8 +333,8 @@ public class FtpClient
             }
             try
             {
-                InputStream in = s.getInputStream();
-                BufferedInputStream dataIn = new BufferedInputStream(in);
+                InputStream inStr = sock.getInputStream();
+                BufferedInputStream dataIn = new BufferedInputStream(inStr);
                 int bufferSize = 4096;
                 byte[] inputBuffer = new byte[bufferSize];
                 int i = 0;
@@ -344,7 +343,7 @@ public class FtpClient
                     buffer.append((char) i);
                 }
                 dataIn.close();
-                s.close();
+                sock.close();
             }
             catch (Exception e)
             {
