@@ -51,7 +51,7 @@ public class XPathWrapper
     private static final int NO_LINE = -1;
     
     private static String defaultFile = ""; // for omitted file names
-    private String xpathString;
+    //private String xpathString;
     
 	private static Map fileContainers = new HashMap(); // Map file names to containers
     
