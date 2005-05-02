@@ -19,7 +19,7 @@ public class SyncTimer extends AbstractTestElement implements Timer,Serializable
     private static final long serialVersionUID = 1;
     static Logger log = LoggingManager.getLoggerForClass();
     int[] timerCounter = new int[] {0};
-    Object sync = new Object();
+    transient Object sync = new Object();
     
     int groupSize;
     
