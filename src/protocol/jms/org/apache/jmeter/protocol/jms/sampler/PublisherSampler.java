@@ -48,7 +48,7 @@ public class PublisherSampler
 	
 	private Publisher PUB = null;
 	private StringBuffer BUFFER = new StringBuffer();
-	private FileServer FSERVER = FileServer.getFileServer();
+	private static FileServer FSERVER = FileServer.getFileServer();
 	private String file_contents = null;
 	static Logger log = LoggingManager.getLoggerForClass();
 	
