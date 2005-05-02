@@ -47,7 +47,7 @@ public class LagDetector extends Thread
      */
     public float getAveLag()
     {
-        return (float) ((float) totalLag / (float) count);
+        return ((float) totalLag / (float) count);
     }
 
     /**
