@@ -455,7 +455,7 @@ public class Spline3
         for (int i = 0; i < width; i++)
         {
             plot[i] =
-                (int) Math.round(((y[i] - min) * (height - 1)) / (max - min));
+                Math.round(((y[i] - min) * (height - 1)) / (max - min));
         }
         return plot;
     }
