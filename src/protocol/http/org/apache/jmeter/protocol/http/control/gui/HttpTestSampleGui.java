@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,8 @@ import junit.framework.TestCase;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.protocol.http.config.gui.MultipartUrlConfigGui;
 import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -53,14 +54,13 @@ public class HttpTestSampleGui extends AbstractSamplerGui
     {
         super.configure(element);
         urlConfigGui.configure(element);
-        //NOTUSED String testClass = element.getPropertyAsString(TestElement.TEST_CLASS);
-        getImages.setSelected(((HTTPSampler) element).isImageParser());
-        isMon.setSelected(((HTTPSampler) element).isMonitor());
+        getImages.setSelected(((HTTPSamplerBase) element).isImageParser());
+        isMon.setSelected(((HTTPSamplerBase) element).isMonitor());
     }
 
     public TestElement createTestElement()
     {
-        HTTPSampler sampler = new HTTPSampler();
+        HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance("HTTPSampler");
         modifyTestElement(sampler);
         return sampler;
     }
@@ -76,16 +76,16 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         sampler.addTestElement(el);
         if (getImages.isSelected())
         {
-            ((HTTPSampler)sampler).setImageParser(true);
+            ((HTTPSamplerBase)sampler).setImageParser(true);
         }
         else
         {
-            ((HTTPSampler)sampler).setImageParser(false);
+            ((HTTPSamplerBase)sampler).setImageParser(false);
         }
         if (isMon.isSelected()){
-			((HTTPSampler)sampler).setMonitor("true");
+			((HTTPSamplerBase)sampler).setMonitor("true");
         } else {
-			((HTTPSampler)sampler).setMonitor("false");
+			((HTTPSamplerBase)sampler).setMonitor("false");
         }
         this.configureTestElement(sampler);
     }
@@ -95,7 +95,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         return "web_testing_title";
     }
 
-    private void init()
+    protected void init()
     {
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
@@ -155,9 +155,9 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         
         public void testCloneSampler() throws Exception
         {
-            HTTPSampler sampler = (HTTPSampler)gui.createTestElement();
+            HTTPSamplerBase sampler = (HTTPSamplerBase)gui.createTestElement();
             sampler.addArgument("param","value");
-            HTTPSampler clonedSampler = (HTTPSampler)sampler.clone();
+            HTTPSamplerBase clonedSampler = (HTTPSamplerBase)sampler.clone();
             clonedSampler.setRunningVersion(true);
             sampler.getArguments().getArgument(0).setValue("new value");
             assertEquals(
