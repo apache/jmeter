@@ -27,6 +27,23 @@
 
 <b>Changes: for more info, contact <a href="mailto:mstover1@apache.org">Michael Stover</a></b>
 
+<h3>Version 2.1</h3>
+<h4>New functionality:</h4>
+<ul>
+<li>XSchema Assertion</li>
+<li>XML Tree display</li>
+<li>New JMX and Results format. Previous formats still available.</li>
+<li>CSV DataSet Config item</li>
+<li>Synchronisation Timer</li>
+<li>setProperty function</li>
+</ul>
+<h4>Bug fixes:</h4>
+<ul>
+<li>Bug 34586 - XPath always remained as /</li>
+<li>BeanShellInterpreter did not handle null objects properly</li>
+<li>Fix Chinese resource bundle names</li>
+</ul>
+	
 <h3>Version 2.0.3</h3>
 <h4>New functionality:</h4>
 <ul>
