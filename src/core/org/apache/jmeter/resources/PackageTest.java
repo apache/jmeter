@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 
@@ -109,7 +108,7 @@ public class PackageTest extends TestCase
     	if (lang.length()==0){
 			return "messages.properties";
     	} else {
-			return "messages_"+lang.toLowerCase(Locale.ENGLISH)+".properties";
+			return "messages_"+lang+".properties";
     	}
     }
 	
@@ -177,7 +176,8 @@ public class PackageTest extends TestCase
 		ts.addTest(new PackageTest("atestDE"));
 		ts.addTest(new PackageTest("atestNO"));
 		ts.addTest(new PackageTest("atestJA"));
-		ts.addTest(new PackageTest("atestCN"));
+		ts.addTest(new PackageTest("atestzh_CN"));
+		ts.addTest(new PackageTest("atestzh_TW"));
 		ts.addTest(new PackageTest("atestFR"));
 		return ts;
 	}
@@ -192,24 +192,28 @@ public class PackageTest extends TestCase
 
     public void atestDE() throws Exception
 	{
-		check("DE");
+		check("de");
 	}
 
     public void atestJA() throws Exception
 	{
-		check("JA");
+		check("ja");
 	}
-    public void atestCN() throws Exception
+    public void atestzh_CN() throws Exception
 	{
-		check("CN");
+		check("zh_CN");
+	}
+    public void atestzh_TW() throws Exception
+	{
+		check("zh_TW");
 	}
 	public void atestNO() throws Exception
 	{
-		check("NO");
+		check("no");
 	}
 	public void atestFR() throws Exception
 	{
-		check("FR");
+		check("fr");
 	}
 	public void atestDefault() throws Exception
 	{
