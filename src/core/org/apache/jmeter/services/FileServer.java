@@ -187,11 +187,11 @@ public class FileServer
 			File src = new File(basedir);
 			if (src.isDirectory() && src.list() != null)
 			{
-				File[] files =
+				File[] lfiles =
 					src.listFiles(
 						new JMeterFileFilter(extensions));
-				int count = files.length;
-				input = files[random.nextInt(count)];
+				int count = lfiles.length;
+				input = lfiles[random.nextInt(count)];
 			}
 		}
 		return input;
