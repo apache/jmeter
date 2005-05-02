@@ -43,9 +43,10 @@ is wrapped in ${}.</p>
         <li><a href="#__machineName">machineName - get the local machine name</a></li>
         <li><a href="#__javaScript">JavaScript (Apache Rhino)</a></li>
         <li><a href="#__Random">random number</a></li>
-        <li><a href="#__CSVRead">CSVRead -read from CSV delimited file</a></li>
+        <li><a href="#__CSVRead">CSVRead - read from CSV delimited file</a></li>
         <li><a href="#__property">read a property</a></li>
-        <li><a href="#__P">P -read a property</a></li>
+        <li><a href="#__P">P - read a property</a></li>
+        <li><a href="#__setProperty">setProperty - set a property</a></li>
         <li><a href="#__log">log - log a message</a></li>
         <li><a href="#__logn">logn - log a message</a></li>
         <li><a href="#__BeanShell">BeanShell - run BeanShell</a></li>
@@ -553,6 +554,23 @@ If omitted, "," is used. Note that "," would need to be specified as "\,".
         <property name="XPath" required="Yes"> a XPath expression to match nodes in the XML file</property>        
 </properties>
 </component>
+
+<component index="16.5.16" name="__setProperty">
+<description>
+	<p>The setProperty function sets the value of a JMeter property. 
+		The return value from the function is the empty string,
+		so the function call can be used anywhere functions are valid.</p>
+	<p>Properties are global to JMeter,
+		so can be used to communicate between threads and thread groups</p>
+	</description>
+
+<properties>
+        <property name="Property Name" required="Yes">The property name to be set.</property>
+        <property name="Property Value" required="Yes">The value for the property.</property>
+</properties>
+</component>
+
+
 </subsection>
 
 </section>
