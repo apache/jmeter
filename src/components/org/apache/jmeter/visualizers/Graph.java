@@ -186,7 +186,7 @@ public class Graph extends JComponent implements Scrollable, Clearable
          repaint();
          return;
       }
-      final int xPos = (int) model.getCount();
+      final int xPos = model.getCount();
 
       SwingUtilities.invokeLater(new Runnable()
       {
