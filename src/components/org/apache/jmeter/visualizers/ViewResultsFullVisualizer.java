@@ -61,6 +61,7 @@ import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -167,6 +168,10 @@ public class ViewResultsFullVisualizer
         DefaultMutableTreeNode currNode = new DefaultMutableTreeNode(res);
         treeModel.insertNodeInto(currNode, root, root.getChildCount());
         addSubResults(currNode, res);
+
+         if(root.getChildCount() == 1) {
+         	jTree.expandPath(new TreePath(root));
+         }
         log.debug("End : updateGui1");
     }
 
@@ -665,7 +670,8 @@ public class ViewResultsFullVisualizer
         jTree.getSelectionModel().setSelectionMode(
             TreeSelectionModel.SINGLE_TREE_SELECTION);
         jTree.addTreeSelectionListener(this);
-        jTree.setShowsRootHandles(true);
+        jTree.setRootVisible(false);
+		jTree.setShowsRootHandles(true);
 
         JScrollPane treePane = new JScrollPane(jTree);
         treePane.setPreferredSize(new Dimension(200, 300));
