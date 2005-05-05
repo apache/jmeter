@@ -53,27 +53,28 @@
 				
 				.page_details
 				{
-				   position=relative;
-				   top: 0px;
-				   height: 0px;
-				   background-color: "#BBBBB0";
-				   visibility: visible;
-				   overflow: hidden;
+				   display: none;
 				}
+                                
+                                .page_details_expanded
+                                {
+                                    display: block;
+                                    display/* hide this definition from  IE5/6 */: table-row;
+                                }
 
 
 			</style>
-			<script language="JavaScript">
-			   function expand(details_id)
+			<script language="JavaScript"><![CDATA[
+                           function expand(details_id)
 			   {
 			      
-			      document.getElementById(details_id).style.overflow = "visible";
+			      document.getElementById(details_id).className = "page_details_expanded";
 			   }
 			   
 			   function collapse(details_id)
 			   {
 			      
-			      document.getElementById(details_id).style.overflow = "hidden";
+			      document.getElementById(details_id).className = "page_details";
 			   }
 			   
 			   function change(details_id)
@@ -89,7 +90,7 @@
 			         collapse(details_id);
 			      } 
                            }
-			</script>
+			]]></script>
 		</head>
 		<body>
 		
@@ -183,7 +184,7 @@
 
 <xsl:template name="pagelist">
 	<h2>Pages</h2>
-	<table class="details" border="1" bordercolor="#FFFFFF" cellpadding="0" cellspacing="0" width="95%">
+	<table class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
 		<tr valign="top">
 			<th>URL</th>
 			<th>Tests</th>
@@ -255,11 +256,10 @@
 				</td>
 			</tr>
 			
-                        <tr>
-                           <td colspan="8">
-                              <xsl:attribute name="bgcolor"><xsl:text/>"#FF0000"</xsl:attribute>
-                              <div id="page_details_1" class="page_details" align="center">
-				 <xsl:attribute name="id"><xsl:text/>page_details_<xsl:value-of select="position()" /></xsl:attribute>
+                        <tr class="page_details">
+                           <xsl:attribute name="id"><xsl:text/>page_details_<xsl:value-of select="position()" /></xsl:attribute>
+                           <td colspan="8" bgcolor="#FF0000">
+                              <div align="center">
 			         <b>Details for Page "<xsl:value-of select="$label" />"</b>
 			         <table bordercolor="#000000" border="1"  cellpadding="0" cellspacing="0" width="95%">
 			         <tr>
