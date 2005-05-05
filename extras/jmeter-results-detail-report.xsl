@@ -220,7 +220,14 @@
 					</xsl:choose>
 				</xsl:attribute>
 				<td>
-					<xsl:value-of select="$label" />
+				<xsl:if test="$failureCount > 0">
+				  <a><xsl:attribute name="href">#<xsl:value-of select="$label" /></xsl:attribute>
+				  <xsl:value-of select="$label" />
+				  </a>
+				</xsl:if>
+				<xsl:if test="0 >= $failureCount">
+				  <xsl:value-of select="$label" />
+				</xsl:if>
 				</td>
 				<td>
 					<xsl:value-of select="$count" />
@@ -308,7 +315,7 @@
 			<xsl:variable name="failureCount" select="count(../sampleResult[@label = current()/@label][attribute::success='false'])" />
 
 			<xsl:if test="$failureCount > 0">
-				<h3><xsl:value-of select="@label" /></h3>
+				<h3><xsl:value-of select="@label" /><a><xsl:attribute name="name">#<xsl:value-of select="@label" /></xsl:attribute></a></h3>
 
 				<table class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
 				<tr valign="top">
