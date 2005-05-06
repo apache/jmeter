@@ -1,6 +1,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 <xsl:output method="html" indent="yes" encoding="US-ASCII" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
 
+<!-- Defined parameters (overrideable) -->
+<xsl:param    name="showData" select="'N'"/>
+
 <xsl:template match="testResults">
 	<html>
 		<head>
@@ -321,12 +324,18 @@
 				<tr valign="top">
 					<th>Response</th>
 					<th>Failure Message</th>
+					<xsl:if test="$showData = 'y'">
+					   <th>Response Data</th>
+					</xsl:if>
 				</tr>
 			
 				<xsl:for-each select="/testResults/sampleResult[@label = current()/@label][attribute::success='false']">
 					<tr>
 						<td><xsl:value-of select="@responseCode" /> - <xsl:value-of select="@responseMessage" /></td>
 						<td><xsl:value-of select="assertionResult/@failureMessage" /></td>
+						<xsl:if test="$showData = 'y'">
+							<td><xsl:value-of select="./binary" /></td>
+						</xsl:if>
 					</tr>
 				</xsl:for-each>
 				
