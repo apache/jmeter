@@ -110,7 +110,7 @@ public class JMSSampler extends AbstractSampler {
 				}
 			}
 		} catch (Exception e) {
-			LOGGER.warn(e.getLocalizedMessage());
+			LOGGER.warn(e.getLocalizedMessage(), e);
 			res.setResponseData(new byte[0]);
 			res.setSuccessful(false);
 		}
@@ -212,8 +212,14 @@ public class JMSSampler extends AbstractSampler {
 		Context context = null;
 		try {
 			context = getInitialContext();
+            Object obj  = context.lookup(getQueueConnectionFactory());
+            if (! (obj instanceof QueueConnectionFactory)) {
+                String msg = "QueueConnectionFactory expected, but got " + obj.getClass().getName();
+                LOGGER.fatalError(msg);
+                throw new IllegalStateException(msg);
+            }
 			QueueConnectionFactory factory =
-				(QueueConnectionFactory) context.lookup(getQueueConnectionFactory());
+				(QueueConnectionFactory) obj;
 			Queue queue = (Queue) context.lookup(getSendQueue());
 
 			sendQueue = queue;
@@ -246,14 +252,17 @@ public class JMSSampler extends AbstractSampler {
 			}
 
 			connection.start();
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Connection started");
+            }
 		} catch (JMSException e) {
-			LOGGER.warn(e.getLocalizedMessage());
+			LOGGER.warn(e.getLocalizedMessage(), e);
 		} catch (NamingException e) {
-			LOGGER.warn(e.getLocalizedMessage());
+			LOGGER.warn(e.getLocalizedMessage(), e);
 		} finally {
 			if (context != null) {
 				try {
-
 					context.close();
 				} catch (NamingException e1) {
 					// ignore
