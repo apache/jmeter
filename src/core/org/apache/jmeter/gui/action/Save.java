@@ -156,7 +156,7 @@ public class Save implements Command
 		FileOutputStream ostream=null;
         try
         {
-            if(JMeterUtils.getPropDefault("file_format","2.1").equals("2.0"))
+            if(SaveService.isSaveTestPlanFormat20())
             {
 				ostream=new FileOutputStream(updateFile);
                 OldSaveService.saveSubTree(subTree,ostream);

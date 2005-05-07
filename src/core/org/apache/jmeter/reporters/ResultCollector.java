@@ -57,7 +57,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.ObjectProperty;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.xml.sax.SAXException;
@@ -421,8 +420,8 @@ public class ResultCollector extends AbstractListenerElement implements
     private void recordResult(SampleResult result) throws Exception {
         if (out != null) {
             if (!isResultMarked(result) && !this.isStats) {
-                if (JMeterUtils.getPropDefault("file_format", "2.1").equals(
-                        "2.0")) {
+                if (SaveService.isSaveTestLogFormat20())
+                {
                     if (serializer == null)
                         serializer = new DefaultConfigurationSerializer();
                     out.write(getSerializedSampleResult(result));
