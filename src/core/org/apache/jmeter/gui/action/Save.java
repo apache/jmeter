@@ -153,11 +153,13 @@ public class Save implements Command
         {
         }
         Writer writer = null;
+		FileOutputStream ostream=null;
         try
         {
             if(JMeterUtils.getPropDefault("file_format","2.1").equals("2.0"))
             {
-                OldSaveService.saveSubTree(subTree,new FileOutputStream(updateFile));
+				ostream=new FileOutputStream(updateFile);
+                OldSaveService.saveSubTree(subTree,ostream);
             }
             else
             {
@@ -175,6 +177,7 @@ public class Save implements Command
         finally
         {
             closeWriter(writer);
+            closeStream(ostream);
             if(testPlanFile != null)
             {
                 GuiPackage.getInstance().getMainFrame().setTitle(JMeterUtils.getExtendedFrameTitle(testPlanFile));
@@ -195,7 +198,37 @@ public class Save implements Command
         }
     }
 
-    public static class Test extends junit.framework.TestCase
+    private void closeWriter(Writer writer)
+    {
+        if (writer != null)
+        {
+            try
+            {
+                writer.close();
+            }
+            catch (Exception ex)
+            {
+                log.error("", ex);
+            }
+        }
+    }
+
+    private void closeStream(FileOutputStream fos)
+    {
+        if (fos != null)
+        {
+            try
+            {
+                fos.close();
+            }
+            catch (Exception ex)
+            {
+                log.error("", ex);
+            }
+        }
+    }
+
+	public static class Test extends junit.framework.TestCase
     {
         Save save;
         public Test(String name)
@@ -229,21 +262,6 @@ public class Save implements Command
                     .getClass()
                     .getName(),
                 root.getTestElement().getClass().getName());
-        }
-    }
-
-    private void closeWriter(Writer writer)
-    {
-        if (writer != null)
-        {
-            try
-            {
-                writer.close();
-            }
-            catch (Exception ex)
-            {
-                log.error("", ex);
-            }
         }
     }
 }
