@@ -54,7 +54,7 @@ public abstract class AbstractProperty implements JMeterProperty
    protected static final Logger log = LoggingManager.getLoggerForClass();
    private String name;
    transient private boolean runningVersion = false;
-   private static StringProperty defaultProperty = new StringProperty();
+   //private static StringProperty defaultProperty = new StringProperty();
 
    public AbstractProperty(String name)
    {
