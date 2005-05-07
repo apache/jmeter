@@ -779,11 +779,11 @@ count to three, JMeter will send a total of 2 * 3 = 6 HTTP Requests.
 
 <example title="Looping Example" anchor="loop_example">
 
-<p><a href="../demos/LoopTestPlan.jmx">Download</a> this example (see Figure 3).
+<p><a href="../demos/LoopTestPlan.jmx">Download</a> this example (see Figure 4).
 In this example, we created a Test Plan that sends a particular HTTP Request
 only once and sends another HTTP Request five times.</p>
 
-<figure image="logic-controller/loop-example.gif">Figure 3 - Loop Controller Example</figure>
+<figure image="logic-controller/loop-example.gif">Figure 4 - Loop Controller Example</figure>
 
 <p>We configured the Thread Group for a single thread and a loop count value of
 one. Instead of letting the Thread Group control the looping, we used a Loop
@@ -814,12 +814,12 @@ to login once to establish a session.</p>
 </properties>
 
 <example title="Once Only Example" anchor="once_only_example">
-<p><a href="../demos/OnceOnlyTestPlan.jmx">Download</a> this example (see Figure 4).
+<p><a href="../demos/OnceOnlyTestPlan.jmx">Download</a> this example (see Figure 5).
 In this example, we created a Test Plan that has two threads that send HTTP request.
 Each thread sends one request to the Home Page, followed by three requests to the Bug Page.
 Although we configured the Thread Group to iterate three times, each JMeter thread only
 sends one request to the Home Page because this request lives inside a Once Only Controller.</p>
-<figure image="logic-controller/once-only-example.png">Figure 4. Once Only Controller Example</figure>
+<figure image="logic-controller/once-only-example.png">Figure 5. Once Only Controller Example</figure>
 <p>Each JMeter thread will send the requests in the following order: Home Page, Bug Page,
 Bug Page, Bug Page. Note, the File Reporter is configured to store the results in a file named "loop-test.dat" in the current directory.</p>
 
@@ -837,7 +837,7 @@ storage device.</p>
 </properties>
 
 <example title="Using the Simple Controller" anchor="simple_controller_example">
-<p><a href="../demos/SimpleTestPlan.jmx">Download</a> this example (see Figure 5).
+<p><a href="../demos/SimpleTestPlan.jmx">Download</a> this example (see Figure 6).
 In this example, we created a Test Plan that sends two Ant HTTP requests and two
 Log4J HTTP requests.  We grouped the Ant and Log4J requests by placing them inside
 Simple Logic Controllers.  Remember, the Simple Logic Controller has no effect on how JMeter
@@ -845,7 +845,7 @@ processes the controller(s) you add to it.  So, in this example, JMeter sends th
 following order: Ant Home Page, Ant News Page, Log4J Home Page, Log4J History Page.
 Note, the File Reporter
 is configured to store the results in a file named "simple-test.dat" in the current directory.</p>
-<figure image="logic-controller/simple-example.gif">Figure 5 Simple Controller Example</figure>
+<figure image="logic-controller/simple-example.gif">Figure 6 Simple Controller Example</figure>
 
 </example>
 </component>
@@ -970,11 +970,11 @@ This would be the case if the Regular Expression returned no matches.</note>
 
 <example title="ForEach Example" anchor="foreach_example">
 
-<p><a href="../demos/forEachTestPlan.jmx">Download</a> this example (see Figure 11).
+<p><a href="../demos/forEachTestPlan.jmx">Download</a> this example (see Figure 7).
 In this example, we created a Test Plan that sends a particular HTTP Request
 only once and sends another HTTP Request to every link that can be found on the page.</p>
 
-<figure image="logic-controller/foreach-example.png">Figure 10 - ForEach Controller Example</figure>
+<figure image="logic-controller/foreach-example.png">Figure 7 - ForEach Controller Example</figure>
 
 <p>We configured the Thread Group for a single thread and a loop count value of
 one. You can see that we added one HTTP Request to the Thread Group and
@@ -988,7 +988,7 @@ out of the return page and puts them in the inputVar variable</p>
 This has two Regular Expressions and ForEach Controllers.
 The first RE matches, but the second does not match, 
 so no samples are run by the second ForEach Controller</p>
-<figure image="logic-controller/foreach-example2.png">Figure 11 - ForEach Controller Example 2</figure>
+<figure image="logic-controller/foreach-example2.png">Figure 8 - ForEach Controller Example 2</figure>
 <p>The Thread Group has a single thread and a loop count of two.
 </p><p>
 Sample 1 uses the JavaTest Sampler to return the string "a b c d".
@@ -1235,15 +1235,27 @@ are part of the test plan.</p></description>
 response for any sample.  In addition to showing the response, you can see the time it took to get
 this response, and some response codes.
 <p>
-There are three ways to view the response, controllable by a push
-button.  The default view shows all of the text contained in the
-response.  The alternative view attempts to render the response as
+There are three ways to view the response, selectable by a radio
+button.</p>
+<p>The default view shows all of the text contained in the
+response.</p>
+<p>The HTML view attempts to render the response as
 HTML.  The rendered HTML is likely to compare poorly to the view one
 would get in any web browser; however, it does provide a quick
-approximation that is helpful for initial result evaluation. The rendered XML 
-will show response in tree style. All DTD nodes and Prolog nodes will not show up 
-in tree; however, response may contain those nodes.</p>
+approximation that is helpful for initial result evaluation. 
+If the "Download embedded resources" check-box is selected, the renderer
+may download images and style-sheets etc referenced by the HTML. 
+If the checkbox is not selected, the renderer will not download images etc.
+</p>
+<p>The Render XML view will show response in tree style. 
+Any DTD nodes or Prolog nodes will not show up in tree; however, response may contain those nodes.
+</p>
 </description>
+<p>
+	The Control Panel (above) shows an example of an HTML display.
+	Figure 9 (below) shows an example of an XML display.
+<figure image="view_results_tree_xml.png">Figure 9 Sample XML display</figure>
+</p>
 </component>
 
 <component index="16.3.7" name="Aggregate Report" screenshot="aggregate_report.png">
@@ -1360,15 +1372,15 @@ table entries.</note>
 <example title="Authorization Example" anchor="authorization_example">
 
 <p><a href="../demos/AuthManagerTestPlan.jmx">Download</a> this example.  In this example, we created a Test Plan on a local server that sends three HTTP requests, two requiring a login and the
-other is open to everyone.  See figure 6 to see the makeup of our Test Plan.  On our server, we have a restricted
+other is open to everyone.  See figure 10 to see the makeup of our Test Plan.  On our server, we have a restricted
 directory named, "secret", which contains two files, "index.html" and "index2.html".  We created a login id named, "kevin",
 which has a password of "spot".  So, in our Authorization Manager, we created an entry for the restricted directory and
-a username and password (see figure 7).  The two HTTP requests named "SecretPage1" and "SecretPage2" make requests
+a username and password (see figure 11).  The two HTTP requests named "SecretPage1" and "SecretPage2" make requests
 to "/secret/index1.html" and "/secret/index2.html".  The other HTTP request, named "NoSecretPage" makes a request to
 "/index.html".</p>
 
-<figure image="http-config/auth-manager-example1a.gif">Figure 6 - Test Plan</figure>
-<figure image="http-config/auth-manager-example1b.gif">Figure 7 - Authorization Manager Control Panel</figure>
+<figure image="http-config/auth-manager-example1a.gif">Figure 10 - Test Plan</figure>
+<figure image="http-config/auth-manager-example1b.gif">Figure 11 - Authorization Manager Control Panel</figure>
 
 <p>When we run the Test Plan, JMeter looks in the Authorization table for the URL it is requesting.  If the Base URL matches
 the URL, then JMeter passes this information along with the request.</p>
@@ -1585,8 +1597,8 @@ header table entries.</property>
 that tells JMeter to override the default "User-Agent" request header and use a particular Internet Explorer agent string
 instead. (see figures 9 and 10).</p>
 
-<figure image="http-config/header-manager-example1a.gif">Figure 9 - Test Plan</figure>
-<figure image="http-config/header-manager-example1b.gif">Figure 10 - Header Manager Control Panel</figure>
+<figure image="http-config/header-manager-example1a.gif">Figure 12 - Test Plan</figure>
+<figure image="http-config/header-manager-example1b.gif">Figure 13 - Header Manager Control Panel</figure>
 </example>
 
 </component>
@@ -1739,10 +1751,10 @@ pattern. You can attach multiple assertions to any controller for additional fle
 	The pattern is a Perl5-style regular expression, but without the enclosing brackets.
 </p>
 <example title="Assertion Examples" anchor="assertion_examples">
-<figure image="assertion/example1a.png">Figure 7 - Test Plan</figure>
-<figure image="assertion/example1b.gif">Figure 8 - Assertion Control Panel with Pattern</figure>
-<figure image="assertion/example1c-pass.gif">Figure 9 - Assertion Listener Results (Pass)</figure>
-<figure image="assertion/example1c-fail.gif">Figure 10 - Assertion Listener Results (Fail)</figure>
+<figure image="assertion/example1a.png">Figure 14 - Test Plan</figure>
+<figure image="assertion/example1b.gif">Figure 15 - Assertion Control Panel with Pattern</figure>
+<figure image="assertion/example1c-pass.gif">Figure 16 - Assertion Listener Results (Pass)</figure>
+<figure image="assertion/example1c-fail.gif">Figure 17 - Assertion Listener Results (Fail)</figure>
 </example>
 
 
@@ -2016,7 +2028,7 @@ anything, the modifier will probably have a list of radio buttons to choose from
 will choose at random, and replace the value in your URL test sample.  Each time through
 the test, a new random value will be chosen.</p>
 
-<figure image="modification.png">Figure 8 - Online Poll Example</figure>
+<figure image="modification.png">Figure 18 - Online Poll Example</figure>
 
 <note>One important thing to remember is that you must create a test sample immediately
 prior that will return an HTML page with the links and forms that are relevant to
