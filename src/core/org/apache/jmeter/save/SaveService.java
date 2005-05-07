@@ -302,6 +302,22 @@ public class SaveService
       }
    }
 
+   public static boolean isSaveTestPlanFormat20()
+   {
+       return 
+       JMeterUtils.getPropDefault("file_format.testplan","2.1").equals("2.0")
+       || 
+       JMeterUtils.getPropDefault("file_format","2.1").equals("2.0");
+   }
+   
+   public static boolean isSaveTestLogFormat20()
+   {
+       return 
+       JMeterUtils.getPropDefault("file_format.testlog","2.1").equals("2.0")
+       || 
+       JMeterUtils.getPropDefault("file_format","2.1").equals("2.0");
+   }
+   
    public static class Test extends JMeterTestCase
    {
       public Test()
