@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry output="build/jorphan" kind="src" path="src/jorphan"/>
-	<classpathentry output="build/test" kind="src" path="test"/>
-	<classpathentry output="build/jms" kind="src" path="src/protocol/jms"/>
+	<classpathentry output="build/test" kind="src" path="test/src"/>
+	<classpathentry output="build/protocol/jms" kind="src" path="src/protocol/jms"/>
 	<classpathentry output="build/protocol/mail" kind="src" path="src/protocol/mail"/>
-	<classpathentry excluding="org/apache/jmeter/images/|org/apache/jmeter/util/keystore/PKCS12KeyStore.java" output="build/core" kind="src" path="src/core"/>
+	<classpathentry excluding="org/apache/jmeter/images/|org/apache/jmeter/resources/*.properties|org/apache/jmeter/util/keystore/PKCS12KeyStore.java" output="build/core" kind="src" path="src/core"/>
 	<classpathentry output="build/components" kind="src" path="src/components"/>
 	<classpathentry output="build/functions" kind="src" path="src/functions"/>
 	<classpathentry output="build/protocol/http" kind="src" path="src/protocol/http"/>
@@ -17,8 +17,6 @@
 	<classpathentry output="build/monitor/components" kind="src" path="src/monitor/components"/>
 	<classpathentry output="build/htmlparser" kind="src" path="src/htmlparser"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/excalibur-compatibility-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/excalibur-i18n-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-logger-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-oro-2.0.8.jar"/>
