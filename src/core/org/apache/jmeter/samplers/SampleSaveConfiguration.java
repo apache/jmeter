@@ -188,8 +188,13 @@ public class SampleSaveConfiguration implements Cloneable,Serializable
    static
    {
 	   // TODO - get from properties?
-	   _subresults = _encoding = _assertions= _latency = _samplerData = true;
-	   _responseHeaders = _requestHeaders = true;
+	   _subresults = true;
+	   _assertions = true;
+	   _latency = true;
+	   _samplerData = false;
+	   _responseHeaders = false;
+	   _requestHeaders = false;
+	   _encoding = false;
 	   
 	   
 		Properties props = JMeterUtils.getJMeterProperties();
