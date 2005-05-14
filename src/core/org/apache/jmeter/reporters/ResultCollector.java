@@ -297,16 +297,20 @@ public class ResultCollector extends AbstractListenerElement implements
             }
             raf.setLength(pos + end);// Truncate the file
             raf.close();
+            raf=null;
         } catch (FileNotFoundException e) {
             return false;
         } catch (IOException e) {
             log.warn("Error trying to find XML terminator " + e.toString());
+            return false;
+        }
+        finally {
             try {
                 if (raf != null)
                     raf.close();
             } catch (IOException e1) {
-            }
-            return false;
+            	log.info("Could not close " + filename + " " + e1.getLocalizedMessage());
+            }        	
         }
         return true;
     }
