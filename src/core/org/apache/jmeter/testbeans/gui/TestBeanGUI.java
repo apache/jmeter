@@ -138,7 +138,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements
    public TestBeanGUI(Class testBeanClass)
    {
       super();
-      log.warn("testing class: " + testBeanClass.getName());
+      log.debug("testing class: " + testBeanClass.getName());
       // A quick verification, just in case:
       if (!TestBean.class.isAssignableFrom(testBeanClass))
       {
