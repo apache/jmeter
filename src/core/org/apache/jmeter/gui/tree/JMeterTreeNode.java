@@ -85,7 +85,18 @@ public class JMeterTreeNode
                     Image img= Introspector.getBeanInfo(
                         getTestElement().getClass())
                             .getIcon(BeanInfo.ICON_COLOR_16x16);
-                    if (img == null) return null;
+					// If icon has not been defined, then use GUI_CLASS property
+                    if (img == null) {//
+						Object clazz = Introspector.getBeanInfo(
+		                        getTestElement().getClass())
+		                        .getBeanDescriptor().getValue(TestElement.GUI_CLASS);
+						if (clazz == null) {
+							log.error("Can't obtain GUI class for "
+									+getTestElement().getClass().getName());
+							return null;
+						}
+		                return GUIFactory.getIcon(Class.forName((String) clazz));
+                    }
                     return new ImageIcon(img);
                 }
                 catch (IntrospectionException e1)

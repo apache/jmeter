@@ -18,6 +18,7 @@ package org.apache.jmeter.testbeans.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.Customizer;
 import java.beans.IntrospectionException;
@@ -35,14 +36,20 @@ import javax.swing.JPopupMenu;
 
 import org.apache.commons.collections.LRUMap;
 import org.apache.jmeter.assertions.Assertion;
+import org.apache.jmeter.assertions.gui.AbstractAssertionGui;
 import org.apache.jmeter.config.ConfigElement;
+import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.control.Controller;
+import org.apache.jmeter.control.gui.AbstractControllerGui;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.processor.PreProcessor;
+import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
+import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
@@ -50,8 +57,10 @@ import org.apache.jmeter.testelement.property.AbstractProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.timers.Timer;
+import org.apache.jmeter.timers.gui.AbstractTimerGui;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Visualizer;
+import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -342,46 +351,69 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements
    public Collection getMenuCategories()
    {
       List menuCategories = new LinkedList();
+	  BeanDescriptor bd = beanInfo.getBeanDescriptor();
 
       // We don't want to show expert beans in the menus unless we're
       // in expert mode:
-      if (beanInfo.getBeanDescriptor().isExpert()
+      if (bd.isExpert()
             && !JMeterUtils.isExpertMode()) { return null; }
 
+	  int matches=0; // How many classes can we assign from?
       // TODO: there must be a nicer way...
       if (Assertion.class.isAssignableFrom(testBeanClass))
       {
          menuCategories.add(MenuFactory.ASSERTIONS);
+		 bd.setValue(TestElement.GUI_CLASS,AbstractAssertionGui.class.getName());
+		 matches++;
       }
       if (ConfigElement.class.isAssignableFrom(testBeanClass))
       {
          menuCategories.add(MenuFactory.CONFIG_ELEMENTS);
+		 bd.setValue(TestElement.GUI_CLASS,AbstractConfigGui.class.getName());
+		 matches++;
       }
       if (Controller.class.isAssignableFrom(testBeanClass))
       {
          menuCategories.add(MenuFactory.CONTROLLERS);
+		 bd.setValue(TestElement.GUI_CLASS,AbstractControllerGui.class.getName());
+		 matches++;
       }
       if (Visualizer.class.isAssignableFrom(testBeanClass))
       {
          menuCategories.add(MenuFactory.LISTENERS);
+		 bd.setValue(TestElement.GUI_CLASS,AbstractVisualizer.class.getName());
+		 matches++;
       }
       if (PostProcessor.class.isAssignableFrom(testBeanClass))
       {
          menuCategories.add(MenuFactory.POST_PROCESSORS);
+		 bd.setValue(TestElement.GUI_CLASS,AbstractPostProcessorGui.class.getName());
+		 matches++;
       }
       if (PreProcessor.class.isAssignableFrom(testBeanClass))
       {
+		 matches++;
          menuCategories.add(MenuFactory.PRE_PROCESSORS);
+		 bd.setValue(TestElement.GUI_CLASS,AbstractPreProcessorGui.class.getName());
       }
       if (Sampler.class.isAssignableFrom(testBeanClass))
       {
+		 matches++;
          menuCategories.add(MenuFactory.SAMPLERS);
+		 bd.setValue(TestElement.GUI_CLASS,AbstractSamplerGui.class.getName());
       }
       if (Timer.class.isAssignableFrom(testBeanClass))
       {
+		 matches++;
          menuCategories.add(MenuFactory.TIMERS);
+		 bd.setValue(TestElement.GUI_CLASS,AbstractTimerGui.class.getName());
       }
-      return menuCategories;
+	  if (matches == 0) {
+		  log.error("Could not assign GUI class to "+testBeanClass.getName());
+	  } else if (matches > 1) {// may be impossible, but no harm in checking ...
+		  log.error("More than 1 GUI class found for "+testBeanClass.getName());
+      }
+	  return menuCategories;
    }
 
    private void init()
