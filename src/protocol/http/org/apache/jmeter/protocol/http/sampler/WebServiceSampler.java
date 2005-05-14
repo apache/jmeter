@@ -44,6 +44,7 @@ import org.apache.soap.messaging.Message;
 import org.apache.soap.transport.SOAPTransport;
 import org.apache.soap.transport.http.SOAPHTTPConnection;
 import org.apache.soap.util.xml.XMLParserUtils;
+import org.apache.soap.SOAPException;
 import org.w3c.dom.Document;
 
 /**
@@ -400,6 +401,7 @@ public class WebServiceSampler extends HTTPSamplerBase
 				doc = XDB.parse(new FileInputStream(retrieveRuntimeXmlData()));
     		} catch (Exception e){
     			// there should be a file, if not fail silently
+                log.debug(e.getMessage());
     		}
     	} else {
     		FILE_CONTENTS = getXmlData();
@@ -448,6 +450,7 @@ public class WebServiceSampler extends HTTPSamplerBase
             // create a new message
             Message msg = new Message();
             RESULT.setURL(this.getUrl());
+            RESULT.setSampleLabel(this.getUrl().toString());
             RESULT.sampleStart();
 			SOAPHTTPConnection spconn = null;
 			// if a blank HeaderManager exists, try to
@@ -497,33 +500,47 @@ public class WebServiceSampler extends HTTPSamplerBase
 			}
 
             SOAPTransport st = msg.getSOAPTransport();
-            BufferedReader br = st.receive();
             RESULT.setDataType(SampleResult.TEXT);
-            if (this.getPropertyAsBoolean(READ_RESPONSE))
-            {
-                StringBuffer buf = new StringBuffer();
-                String line;
-                while ((line = br.readLine()) != null)
+            BufferedReader br = null;
+            // check to see if SOAPTransport is not nul and receive is
+            // also not null. hopefully this will improve the error
+            // reporting. 5/13/05 peter lin
+            if (st != null && st.receive() != null){
+                br = st.receive();
+                if (this.getPropertyAsBoolean(READ_RESPONSE))
                 {
-                    buf.append(line);
+                    StringBuffer buf = new StringBuffer();
+                    String line;
+                    while ((line = br.readLine()) != null)
+                    {
+                        buf.append(line);
+                    }
+                    RESULT.sampleEnd();
+                    // set the response
+                    RESULT.setResponseData(buf.toString().getBytes());
                 }
-                RESULT.sampleEnd();
-                // set the response
-                RESULT.setResponseData(buf.toString().getBytes());
-            }
-            else
-            {
-                // by not reading the response
-                // for real, it improves the
-                // performance on slow clients
-                br.read();
-				RESULT.sampleEnd();
+                else
+                {
+                    // by not reading the response
+                    // for real, it improves the
+                    // performance on slow clients
+                    br.read();
+                    RESULT.sampleEnd();
+                    RESULT.setResponseData(
+                        JMeterUtils
+                            .getResString("read_response_message")
+                            .getBytes());
+                }
+                RESULT.setSuccessful(true);
+                RESULT.setResponseCode("200");
+                RESULT.setResponseHeaders(this.convertSoapHeaders(st.getHeaders()));
+            } else {
+                RESULT.setSuccessful(false);
                 RESULT.setResponseData(
-                    JMeterUtils
-                        .getResString("read_response_message")
-                        .getBytes());
+                        st.getResponseSOAPContext().getContentType().getBytes());
+                RESULT.setResponseCode("000");
+                RESULT.setResponseHeaders("error");
             }
-            RESULT.setSuccessful(true);
             // 1-22-04 updated the sampler so that when read
             // response is set, it also sets SamplerData with
             // the XML message, so users can see what was
@@ -544,15 +561,18 @@ public class WebServiceSampler extends HTTPSamplerBase
             // soap will return a descriptive error
             // message, soap errors within the response
             // are preferred.
-            RESULT.setResponseCode("200");
-			RESULT.setResponseHeaders(this.convertSoapHeaders(st.getHeaders()));
-			RESULT.setSampleLabel(this.getUrl().toString());
-            br.close();
+            if (br != null){
+                br.close();
+            }
             msg = null;
             st = null;
             // reponse code doesn't really apply, since
             // the soap driver doesn't provide a
             // response code
+        }
+        catch (SOAPException exception){
+            log.debug(exception.getMessage());
+            RESULT.setSuccessful(false);
         }
         catch (Exception exception)
         {
