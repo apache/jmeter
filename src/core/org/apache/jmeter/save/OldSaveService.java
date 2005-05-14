@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -162,70 +162,72 @@ public final class OldSaveService implements SaveServiceConstants
     }
 
     /**
-     * Return whether the field names should be printed to the output file.
-     * @return whether the field names should be printed to the output file
+     * Generates the field names for the output file
+     * 
+     * @return the field names as a string
      */
     public static String printableFieldNamesToString()
     {
         StringBuffer text = new StringBuffer();
+        String delim = _saveConfig.getDelimiter();
 
         if (_saveConfig.printMilliseconds() || (_saveConfig.formatter() != null))
         {
             text.append(SaveServiceConstants.TIME_STAMP);
-            text.append(_saveConfig.getDelimiter());
+            text.append(delim);
         }
 
         if (_saveConfig.saveTime())
         {
             text.append(SaveServiceConstants.TIME);
-            text.append(_saveConfig.getDelimiter());
+            text.append(delim);
         }
 
         if (_saveConfig.saveLabel())
         {
             text.append(SaveServiceConstants.LABEL);
-            text.append(_saveConfig.getDelimiter());
+            text.append(delim);
         }
 
         if (_saveConfig.saveCode())
         {
             text.append(SaveServiceConstants.RESPONSE_CODE);
-            text.append(_saveConfig.getDelimiter());
+            text.append(delim);
         }
 
         if (_saveConfig.saveMessage())
         {
             text.append(SaveServiceConstants.RESPONSE_MESSAGE);
-            text.append(_saveConfig.getDelimiter());
+            text.append(delim);
         }
 
         if (_saveConfig.saveThreadName())
         {
             text.append(SaveServiceConstants.THREAD_NAME);
-            text.append(_saveConfig.getDelimiter());
+            text.append(delim);
         }
 
         if (_saveConfig.saveDataType())
         {
             text.append(SaveServiceConstants.DATA_TYPE);
-            text.append(_saveConfig.getDelimiter());
+            text.append(delim);
         }
 
         if (_saveConfig.saveSuccess())
         {
             text.append(SaveServiceConstants.SUCCESSFUL);
-            text.append(_saveConfig.getDelimiter());
+            text.append(delim);
         }
 
         if (_saveConfig.saveAssertionResultsFailureMessage())
         {
             text.append(SaveServiceConstants.FAILURE_MESSAGE);
-            text.append(_saveConfig.getDelimiter());
+            text.append(delim);
         }
 
         String resultString = null;
         int size = text.length();
-        int delSize = _saveConfig.getDelimiter().length();
+        int delSize = delim.length();
 
         // Strip off the trailing delimiter
         if (size >= delSize)
@@ -500,7 +502,7 @@ public final class OldSaveService implements SaveServiceConstants
         }
         else if (saveConfig.formatter() != null)
         {
-            String stamp = _saveConfig.formatter().format(new Date(sample.getTimeStamp()));
+            String stamp = saveConfig.formatter().format(new Date(sample.getTimeStamp()));
             text.append(stamp);
             text.append(delimiter);
         }
