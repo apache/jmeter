@@ -29,7 +29,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.TestElement;
@@ -199,15 +198,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
       }
    }
 
-   protected void setMode()
-   {
-      SearchByClass testPlan = new SearchByClass(TestPlan.class);
-      getTestTree().traverse(testPlan);
-      Object[] plan = testPlan.getSearchResults().toArray();
-      ResultCollector.enableFunctionalMode(((TestPlan) plan[0])
-            .isFunctionalMode());
-   }
-
    protected void notifyTestListenersOfStart()
    {
       Iterator iter = testListeners.getSearchResults().iterator();
@@ -353,7 +343,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
             getTestTree().getArray()[0]));
       removeThreadGroups(testLevelElements);
       SearchByClass searcher = new SearchByClass(ThreadGroup.class);
-      setMode();
       getTestTree().traverse(searcher);
       TestCompiler.initialize();
       //for each thread group, generate threads
