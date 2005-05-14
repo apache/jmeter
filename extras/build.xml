@@ -80,8 +80,7 @@
 			<property name="jmeter.save.saveservice.output_format" value="xml"/>
 			<property name="jmeter.save.saveservice.assertion_results" value="all"/>
 			<property name="file_format.testlog" value="2.0"/>
-			<!-- TODO: replace with errors only property when possible -->
-			<property name="jmeter.save.saveservice.response_data" value="${funcMode}"/>
+			<property name="jmeter.save.saveservice.response_data.on_error" value="${funcMode}"/>
 		</jmeter>
 	</target>
 
