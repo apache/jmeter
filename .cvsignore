@@ -11,3 +11,4 @@ jmeter-fb.*
 .settings
 reports
 local
+.checkstyle
