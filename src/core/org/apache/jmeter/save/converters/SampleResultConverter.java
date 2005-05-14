@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 The Apache Software Foundation.
+ * Copyright 2004-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -106,7 +106,7 @@ public class SampleResultConverter extends AbstractCollectionConverter
    protected void saveResponseData(HierarchicalStreamWriter writer,
          SampleResult res, SampleSaveConfiguration save)
    {
-      if (save.saveResponseData())
+      if (save.saveResponseData(res))
       {
          writer.startNode("responseData");
          try
