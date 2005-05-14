@@ -60,7 +60,6 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
-import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.threads.gui.ThreadGroupGui;
 import org.apache.jmeter.timers.gui.AbstractTimerGui;
 import org.apache.jmeter.util.BeanShellServer;
