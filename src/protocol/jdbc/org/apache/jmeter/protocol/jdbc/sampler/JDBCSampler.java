@@ -27,9 +27,8 @@ import java.sql.Statement;
 import org.apache.avalon.excalibur.datasource.DataSourceComponent;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jorphan.collections.Data;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -41,7 +40,7 @@ import org.apache.log.Logger;
  * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
  * @version $Revision$
  */
-public class JDBCSampler extends AbstractTestElement implements Sampler,TestBean
+public class JDBCSampler extends AbstractSampler implements TestBean
 {
     private static Logger log = LoggingManager.getLoggerForClass();
     public static final String QUERY = "query";
