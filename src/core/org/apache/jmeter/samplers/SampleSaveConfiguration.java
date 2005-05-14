@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
 
+import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -99,6 +100,9 @@ public class SampleSaveConfiguration implements Cloneable,Serializable
    public static final String SAVE_RESPONSE_DATA_PROP
            = "jmeter.save.saveservice.response_data";
 
+   public static final String SAVE_RESPONSE_DATA_ON_ERROR_PROP
+   = "jmeter.save.saveservice.response_data.on_error";
+
    /** The name of the property indicating whether the response message
     should be saved.  **/
    public static final String SAVE_RESPONSE_MESSAGE_PROP
@@ -167,6 +171,8 @@ public class SampleSaveConfiguration implements Cloneable,Serializable
    _dataType, _encoding, _assertions, _latency,
    _subresults,  _samplerData, _fieldNames, _responseHeaders, _requestHeaders;
    
+   private static final boolean _responseDataOnError;
+
    private static final boolean _saveAssertionResultsFailureMessage;
    private static final String _timeStampFormat;
    private static int _assertionsResultsToSave;
@@ -218,6 +224,9 @@ public class SampleSaveConfiguration implements Cloneable,Serializable
        _responseData =
            TRUE.equalsIgnoreCase(
                props.getProperty(SAVE_RESPONSE_DATA_PROP, FALSE));
+
+       _responseDataOnError = TRUE.equalsIgnoreCase(
+	       props.getProperty(SAVE_RESPONSE_DATA_ON_ERROR_PROP, FALSE));
 
        _message =
            TRUE.equalsIgnoreCase(
@@ -463,12 +472,17 @@ public class SampleSaveConfiguration implements Cloneable,Serializable
    }
 
    /**
-    * @return Returns the responseData.
+    * Should samplerData be saved for the current result?
+    * 
+    * @return Returns whether to save the samplerData.
     */
-   public boolean saveResponseData()
+   public boolean saveResponseData(SampleResult res)
    {
-      return responseData;
+      return responseData 
+      || TestPlan.getFunctionalMode()
+      || (_responseDataOnError && !res.isSuccessful());
    }
+
 
    /**
     * @param responseData
@@ -480,7 +494,7 @@ public class SampleSaveConfiguration implements Cloneable,Serializable
    }
 
    /**
-    * @return Returns the samplerData.
+    * @return Returns whether to save the samplerData.
     */
    public boolean saveSamplerData()
    {
