@@ -247,6 +247,8 @@ public class ResultCollector extends AbstractListenerElement implements
         if (writer == null) {
             if (saveConfig.saveAsXml()) {
                 trimmed = trimLastLine(filename);
+            } else {
+            	trimmed = new File(filename).exists();
             }
             // Find the name of the directory containing the file
             // and create it - if there is one
