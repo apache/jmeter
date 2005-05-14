@@ -21,12 +21,15 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.Enumeration;
 import java.util.Random;
 import java.util.Hashtable;
 
+import javax.mail.MessagingException;
 import javax.xml.parsers.DocumentBuilder;
 
 import org.xml.sax.InputSource;
@@ -574,10 +577,14 @@ public class WebServiceSampler extends HTTPSamplerBase
             log.debug(exception.getMessage());
             RESULT.setSuccessful(false);
         }
-        catch (Exception exception)
-        {
+        catch (MalformedURLException exception){
             log.debug(exception.getMessage());
-            RESULT.setSuccessful(false);
+        }
+        catch (IOException exception){
+            log.debug(exception.getMessage());
+        }
+        catch (MessagingException exception){
+            log.debug(exception.getMessage());
         }
 		return RESULT;
     }
