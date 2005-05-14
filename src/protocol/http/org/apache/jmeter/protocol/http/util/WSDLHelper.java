@@ -132,6 +132,10 @@ public class WSDLHelper
 						servlist =
 						pnode.getElementsByTagName("wsdlsoap:address");
                     }
+                    if (servlist.getLength() == 0){
+                        servlist =
+                        pnode.getElementsByTagName("SOAP:address");
+                    }
                     Element addr = (Element) servlist.item(0);
                     this.SOAPBINDING = addr.getAttribute("location");
                     return this.SOAPBINDING;
@@ -258,10 +262,19 @@ public class WSDLHelper
 				opers =
 					((Element) act).getElementsByTagName("wsdl:operation");
 			}
+            if (opers.getLength() == 0){
+                opers =
+                    ((Element) act).getElementsByTagName("operation");
+            }
             
             // there should only be one soap:operation node per operation
             Element op = (Element) opers.item(0);
-            String value = op.getAttribute("soapAction");
+            String value;
+            if (op != null){
+                value = op.getAttribute("soapAction");
+            } else {
+                value = "";
+            }
             String key = ((Element) act).getAttribute("name");
             this.ACTIONS.put(key, value);
         }
@@ -304,6 +317,10 @@ public class WSDLHelper
         if (WSDLDOC.getElementsByTagName(soapBind).getLength() == 0){
 			soapBind = "wsdlsoap:binding";
         }
+        if (WSDLDOC.getElementsByTagName(soapBind).getLength() == 0){
+            soapBind = "SOAP:binding";
+        }
+
         for (int idx = 0; idx < bindings.getLength(); idx++)
         {
             Element nd = (Element) bindings.item(idx);
@@ -368,6 +385,8 @@ public class WSDLHelper
                 if (soapnode.getLength() > 0)
                 {
                     ops.add(child);
+                } else {
+                    ops.add(child);
                 }
             }
         }
@@ -386,7 +405,8 @@ public class WSDLHelper
 			WSDLHelper help =
 			// 	new WSDLHelper("http://localhost/WSTest/WSTest.asmx?WSDL");
 			//	new WSDLHelper("http://localhost/AxisWSDL.xml");
-				new WSDLHelper("http://localhost/test-setup.xml");
+			//	new WSDLHelper("http://localhost/test-setup.xml");
+            new WSDLHelper("http://localhost:8080/gsoap.wsdl");
             long start = System.currentTimeMillis();
             help.parse();
             String[] methods = help.getWebMethods();
