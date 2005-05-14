@@ -62,6 +62,9 @@ public class TestPlan extends AbstractTestElement implements Serializable,TestLi
     private static List itemsCanAdd = new LinkedList();
     private static TestPlan plan;
     
+    // There's only 1 test plan, so can cache the mode here
+    private static boolean functionalMode = false;
+    
     static {
         // WARNING! This String value must be identical to the String value
         // returned in org.apache.jmeter.threads.ThreadGroup.getClassLabel()
@@ -85,10 +88,10 @@ public class TestPlan extends AbstractTestElement implements Serializable,TestLi
         setProperty(new CollectionProperty(THREAD_GROUPS, threadGroups));
     }
 
-    public boolean isFunctionalMode()
-    {
-        return getPropertyAsBoolean(FUNCTIONAL_MODE);
-    }
+//    public boolean isFunctionalMode()
+//    {
+//        return getPropertyAsBoolean(FUNCTIONAL_MODE);
+//    }
 
     public void setUserDefinedVariables(Arguments vars)
     {
@@ -126,6 +129,12 @@ public class TestPlan extends AbstractTestElement implements Serializable,TestLi
     public void setFunctionalMode(boolean funcMode)
     {
         setProperty(new BooleanProperty(FUNCTIONAL_MODE, funcMode));
+        functionalMode = funcMode;
+    }
+    
+    public static boolean getFunctionalMode()
+    {
+    	return functionalMode;
     }
     
     public void setSerialized(boolean serializeTGs)

@@ -83,8 +83,6 @@ public class ResultCollector extends AbstractListenerElement implements
 
     public final static String SAVE_CONFIG = "saveConfig";
 
-    private static boolean functionalMode = false;
-
     public static final String ERROR_LOGGING = "ResultCollector.error_logging";
 
     // protected List results = Collections.synchronizedList(new ArrayList());
@@ -311,14 +309,6 @@ public class ResultCollector extends AbstractListenerElement implements
             return false;
         }
         return true;
-    }
-
-    public static void enableFunctionalMode(boolean mode) {
-        functionalMode = mode;
-    }
-
-    public boolean getFunctionalMode() {
-        return functionalMode || isErrorLogging();
     }
 
     /**
