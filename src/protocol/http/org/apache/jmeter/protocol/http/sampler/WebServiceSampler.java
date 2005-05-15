@@ -580,7 +580,7 @@ public class WebServiceSampler extends HTTPSamplerBase
         catch (MalformedURLException exception){
             // keep this debug, since a bad URL, means the
             // soap driver can't get to it anyways
-            log.debug(exception.getMessage());
+            log.warn(exception.getMessage());
         }
         catch (IOException exception){
             // if the Webservice is unable or the stream
@@ -591,7 +591,7 @@ public class WebServiceSampler extends HTTPSamplerBase
             // keep this one debug, since it means soap isn't
             // able to parse the document, so it can't continue
             // anyways
-            log.debug(exception.getMessage());
+            log.warn(exception.getMessage());
         }
 		return RESULT;
     }
