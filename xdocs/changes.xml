@@ -36,12 +36,17 @@
 <li>CSV DataSet Config item</li>
 <li>Synchronisation Timer</li>
 <li>setProperty function</li>
+<li>Save response data on error</li>
+<li>Ant JMeter XSLT now optionally shows failed responses and has internal links</li>
 </ul>
 <h4>Bug fixes:</h4>
 <ul>
 <li>Bug 34586 - XPath always remained as /</li>
 <li>BeanShellInterpreter did not handle null objects properly</li>
 <li>Fix Chinese resource bundle names</li>
+<li>Save field names if required to CSV files</li>
+<li>Ensure XML file is closed</li>
+<li>Correct icons now displayed for TestBean components</li>
 </ul>
 	
 <h3>Version 2.0.3</h3>
