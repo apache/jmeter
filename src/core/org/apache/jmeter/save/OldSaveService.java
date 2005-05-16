@@ -461,7 +461,7 @@ public final class OldSaveService implements SaveServiceConstants
                     config.addChild(getConfiguration(assResults[i]));
                 }
         }
-        if(saveConfig.saveResponseData())
+        if(saveConfig.saveResponseData(result))
         {    
             config.addChild(getConfiguration(result.getResponseData()));
         }
