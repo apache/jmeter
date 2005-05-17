@@ -115,7 +115,7 @@ public class IntegerProperty extends NumberProperty
      */
     public double getDoubleValue()
     {
-        return (double) value;
+        return value;
     }
 
     /**
@@ -123,7 +123,7 @@ public class IntegerProperty extends NumberProperty
      */
     public float getFloatValue()
     {
-        return (float) value;
+        return value;
     }
 
     /**
@@ -139,6 +139,6 @@ public class IntegerProperty extends NumberProperty
      */
     public long getLongValue()
     {
-        return (long) value;
+        return value;
     }
 }
