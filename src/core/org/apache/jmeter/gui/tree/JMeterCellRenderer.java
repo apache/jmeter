@@ -40,7 +40,7 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer
                                                   boolean expanded,
                                                   boolean leaf,
                                                   int row,
-                                                  boolean hasFocus)
+                                                  boolean p_hasFocus)
     {
         super.getTreeCellRendererComponent(
             tree,
@@ -49,7 +49,7 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer
             expanded,
             leaf,
             row,
-            hasFocus);
+            p_hasFocus);
         this.setEnabled(((JMeterTreeNode)value).isEnabled());
         ImageIcon ic = ((JMeterTreeNode)value).getIcon();
         if (ic != null)

@@ -107,52 +107,52 @@ public class Functor
       }
    }
 
-   public Object invoke(Object invokee)
+   public Object invoke(Object p_invokee)
    {
-      this.invokee = invokee;
+      this.invokee = p_invokee;
       return invoke();
    }
 
-   public Object invoke(Object[] args)
+   public Object invoke(Object[] p_args)
    {
-      this.args = args;
+      this.args = p_args;
       return invoke();
    }
 
-   public Object invoke(Object invokee, Object[] args)
+   public Object invoke(Object p_invokee, Object[] p_args)
    {
-      this.args = args;
-      this.invokee = invokee;
+      this.args = p_args;
+      this.invokee = p_invokee;
       return invoke();
    }
 
-   private Method createMethod(Class[] types)
+   private Method createMethod(Class[] p_types)
    {
-      log.debug("Trying to functorize invokee: " + invokee.getClass().getName() + " method: " + methodName + " types: " + Arrays.asList(types));
+      log.debug("Trying to functorize invokee: " + invokee.getClass().getName() + " method: " + methodName + " types: " + Arrays.asList(p_types));
       if (methodToInvoke == null)
       {
          try
          {
-            methodToInvoke = invokee.getClass().getMethod(methodName, types);
+            methodToInvoke = invokee.getClass().getMethod(methodName, p_types);
          }
          catch (Exception e)
          {
-            for (int i = 0; i < types.length; i++)
+            for (int i = 0; i < p_types.length; i++)
             {
-               Class primitive = getPrimitive(types[i]);
+               Class primitive = getPrimitive(p_types[i]);
                if(primitive != null)
                {
-                  methodToInvoke = createMethod(getNewArray(i,primitive,types));
+                  methodToInvoke = createMethod(getNewArray(i,primitive,p_types));
                   if(methodToInvoke != null) return methodToInvoke;
                }
-               Class[] interfaces = types[i].getInterfaces();
+               Class[] interfaces = p_types[i].getInterfaces();
                for (int j = 0; j < interfaces.length; j++)
                {
-                  methodToInvoke = createMethod(getNewArray(i, interfaces[j], types));
+                  methodToInvoke = createMethod(getNewArray(i, interfaces[j], p_types));
                   if (methodToInvoke != null) { return methodToInvoke; }
                }
-               Class parent = types[i].getSuperclass();
-               methodToInvoke = createMethod(getNewArray(i, parent, types));
+               Class parent = p_types[i].getSuperclass();
+               methodToInvoke = createMethod(getNewArray(i, parent, p_types));
                if (methodToInvoke != null) { return methodToInvoke; }
             }
          }
