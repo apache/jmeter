@@ -135,7 +135,7 @@ public class JMeterTreeModel extends DefaultTreeModel
         guicomp.modifyTestElement(component);
         GuiPackage.getInstance().getCurrentGui(); //put the gui object back to the way it was.
         JMeterTreeNode newNode =
-            new JMeterTreeNode((TestElement) component, this);
+            new JMeterTreeNode(component, this);
 
         // This check the state of the TestElement and if returns false it
         // disable the loaded node

@@ -392,7 +392,7 @@ public class GraphAccum extends JComponent implements Scrollable,
         {
             for (int i = 0; i < resultList.length; i++)
             {
-                SampleResult componentRes = (SampleResult) resultList[i];
+                SampleResult componentRes = resultList[i];
 
                 if (log.isDebugEnabled())
                 {
