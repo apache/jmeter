@@ -51,7 +51,7 @@ public class AddParent implements Command
         String name = ((Component)e.getSource()).getName();
         try
         {
-            TestElement controller = (TestElement)GuiPackage.getInstance().createTestElement(name);
+            TestElement controller = GuiPackage.getInstance().createTestElement(name);
             addParentToTree(controller);
         }
         catch(Exception err)
