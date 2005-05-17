@@ -299,7 +299,7 @@ public class JavaSampler extends AbstractSampler implements TestListener
          * Return SampleResult with data on error.
          * @see JavaSamplerClient#runTest()
          */
-        public SampleResult runTest(JavaSamplerContext context)
+        public SampleResult runTest(JavaSamplerContext p_context)
         {
             log.debug(whoAmI() + "\trunTest");
             Thread.yield();

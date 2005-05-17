@@ -193,9 +193,9 @@ public class ProxyControlGui
         element.setExcludeList(excludeList);
     }
 
-    private List getDataList(PowerTableModel model, String colName)
+    private List getDataList(PowerTableModel p_model, String colName)
     {
-        String[] dataArray = model.getData().getColumn(colName);
+        String[] dataArray = p_model.getData().getColumn(colName);
         List list = new LinkedList();
         for (int i = 0; i < dataArray.length; i++)
         {
@@ -232,14 +232,14 @@ public class ProxyControlGui
         repaint();
     }
 
-    private void populateTable(PowerTableModel model, PropertyIterator iter)
+    private void populateTable(PowerTableModel p_model, PropertyIterator iter)
     {
-        model.clearData();
+        p_model.clearData();
         while (iter.hasNext())
         {
-            model.addRow(new Object[] { iter.next().getStringValue()});
+            p_model.addRow(new Object[] { iter.next().getStringValue()});
         }
-        model.fireTableDataChanged();
+        p_model.fireTableDataChanged();
     }
 
     public void focusLost(FocusEvent e)
