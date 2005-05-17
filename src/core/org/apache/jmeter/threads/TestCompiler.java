@@ -158,7 +158,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         {
             ObjectPair pair =
                 new ObjectPair(
-                    (TestElement) child,
+                    child,
                     (TestElement) stack.getLast());
 			synchronized (pairing){//Called from multiple threads
                 if (!pairing.contains(pair))
@@ -170,12 +170,12 @@ public class TestCompiler implements HashTreeTraverser, SampleListener
         }
     }
 
-    private void trackIterationListeners(LinkedList stack)
+    private void trackIterationListeners(LinkedList p_stack)
     {
-        TestElement child = (TestElement) stack.getLast();
+        TestElement child = (TestElement) p_stack.getLast();
         if (child instanceof LoopIterationListener)
         {
-            ListIterator iter = stack.listIterator(stack.size());
+            ListIterator iter = p_stack.listIterator(p_stack.size());
             while (iter.hasPrevious())
             {
                 TestElement item = (TestElement) iter.previous();
