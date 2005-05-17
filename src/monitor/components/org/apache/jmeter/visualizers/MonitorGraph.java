@@ -197,8 +197,8 @@ public class MonitorGraph
 	private void drawSample(int x, MonitorModel model,
 		Graphics g, MonitorModel last)
 	{
-		double width = (double)getWidth();
-		double height = (double)getHeight() - 10.0;
+		double width =  getWidth();
+		double height = getHeight() - 10.0;
 		int xaxis = (int)(width * (x /width));
 		int lastx = (int)(width * ((x - 1)/width));
 		
@@ -227,9 +227,9 @@ public class MonitorGraph
 		if (HEALTH)
 		{
 			int hly =
-				(int)(height - (height * ((double)model.getHealth()/3.0)));
+				(int)(height - (height * (model.getHealth()/3.0)));
 			int lasty =
-				(int)(height - (height * ((double)last.getHealth()/3.0)));
+				(int)(height - (height * (last.getHealth()/3.0)));
 
 			g.setColor(Color.green);
 			g.drawLine(lastx,lasty,xaxis,hly);
@@ -238,9 +238,9 @@ public class MonitorGraph
 		if (LOAD)
 		{
 			int ldy =
-				(int)(height - (height * ((double)model.getLoad()/100.0)));
+				(int)(height - (height * (model.getLoad()/100.0)));
 			int lastldy =
-				(int)(height - (height * ((double)last.getLoad()/100.0)));
+				(int)(height - (height * (last.getLoad()/100.0)));
 
 			g.setColor(Color.blue);
 			g.drawLine(lastx,lastldy,xaxis,ldy);
@@ -249,9 +249,9 @@ public class MonitorGraph
 		if (MEM)
 		{
 			int mmy =
-				(int)(height - (height * ((double)model.getMemload()/100.0)));
+				(int)(height - (height * (model.getMemload()/100.0)));
 			int lastmmy =
-				(int)(height - (height * ((double)last.getMemload()/100.0)));
+				(int)(height - (height * (last.getMemload()/100.0)));
 
 			g.setColor(Color.orange);
 			g.drawLine(lastx,lastmmy,xaxis,mmy);
@@ -260,9 +260,9 @@ public class MonitorGraph
 		if (THREAD)
 		{
 			int thy =
-				(int)(height - (height * ((double)model.getThreadload()/100.0)));
+				(int)(height - (height * (model.getThreadload()/100.0)));
 			int lastthy =
-				(int)(height - (height * ((double)last.getThreadload()/100.0)));
+				(int)(height - (height * (last.getThreadload()/100.0)));
 
 			g.setColor(Color.red);
 			g.drawLine(lastx,lastthy,xaxis,thy);
