@@ -134,8 +134,8 @@ public class Stats
 	public static int calculateMemoryLoad(Status stat){
 		double load = 0;
 		if (stat != null){
-			double total = (double)stat.getJvm().getMemory().getTotal();
-			double free = (double)stat.getJvm().getMemory().getFree();
+			double total = stat.getJvm().getMemory().getTotal();
+			double free =  stat.getJvm().getMemory().getFree();
 			double used = total - free;
 			load = (used/total);
 		}
@@ -154,9 +154,8 @@ public class Stats
 		int load = 0;
 		if (stat != null && stat.getConnector().size() > 0){
 			Connector cntr = (Connector)stat.getConnector().get(0);
-			double max = (double)cntr.getThreadInfo().getMaxThreads();
-			double current =
-				(double)cntr.getThreadInfo().getCurrentThreadsBusy();
+			double max     = cntr.getThreadInfo().getMaxThreads();
+			double current = cntr.getThreadInfo().getCurrentThreadsBusy();
 			load = (int)((current/max) * 100);
 		}
 		return load;
