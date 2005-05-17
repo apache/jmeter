@@ -251,7 +251,7 @@ public class Summariser
         sb.append(longToSb(tmp,s.getCount(),5));
         sb.append(" in ");
         long elapsed = s.getElapsed();
-		sb.append(doubleToSb(tmp,(double)elapsed/1000.0,5,1));
+		sb.append(doubleToSb(tmp,elapsed/1000.0,5,1));
 		sb.append("s = ");
 		if (elapsed > 0)
 		{

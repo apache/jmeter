@@ -18,7 +18,6 @@
 package org.apache.jmeter.save.converters;
 
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -90,7 +89,7 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter
          TestElementProperty prop = (TestElementProperty) createCollection(context
                .getRequiredType());
          prop.setName(ConversionHelp.decode(reader.getAttribute("name")));
-         prop.setObjectValue((TestElement) Class.forName(
+         prop.setObjectValue(Class.forName(
                reader.getAttribute("elementType")).newInstance());
          while (reader.hasMoreChildren())
          {
