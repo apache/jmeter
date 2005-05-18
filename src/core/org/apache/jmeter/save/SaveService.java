@@ -76,6 +76,10 @@ public class SaveService
       {
          log.warn("Could not set up alias " + alias + " " + e.toString());
       }
+      catch (NoClassDefFoundError e)
+      {
+         log.warn("Could not set up alias " + alias + " " + e.toString());
+      }
    }
 
    private static void initProps()
@@ -313,6 +317,11 @@ public class SaveService
          log.warn("Problem loading new style: "+e.getLocalizedMessage());
          reader.reset();
          return OldSaveService.loadSubTree(reader);
+      }
+      catch (NoClassDefFoundError e)
+      {
+         log.warn("Missing class ",e);
+         return null;
       }
    }
 
