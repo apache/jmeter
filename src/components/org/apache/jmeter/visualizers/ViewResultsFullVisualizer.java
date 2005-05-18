@@ -945,7 +945,7 @@ public class ViewResultsFullVisualizer
         private int messageType;
         public SAXErrorHandler()
         {
-           msg = new String("");
+           msg = "";
            
         }
 
