@@ -27,8 +27,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.UnknownHostException;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -49,6 +47,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterError;
 import org.apache.log.Logger;
 
 
@@ -282,17 +281,21 @@ public class MailerVisualizer extends AbstractVisualizer
 				log.error("Invalid Mail Server ", e1);
 				displayMessage(JMeterUtils.getResString("invalid_mail_server"), true);
 			}
-			catch (AddressException ex)
+			catch (Exception ex)
 			{
+				if (ex.getClass().getName().equals("javax.mail.internet.AddressException"))
+				{
 				log.error("Invalid mail address ", ex);
 				displayMessage(JMeterUtils.getResString("invalid_mail_address")
 						+ "\n" + ex.getMessage(), true);
-			}
-			catch (MessagingException ex)
-			{
-				log.error("Couldn't send mail...", ex);
-				displayMessage(JMeterUtils.getResString("invalid_mail")
-						+"\n"+ex.getMessage(), true);
+				} else if (ex.getClass().getName().equals("javax.mail.MessagingException"))
+				{
+					log.error("Couldn't send mail...", ex);
+					displayMessage(JMeterUtils.getResString("invalid_mail")
+							+"\n"+ex.getMessage(), true);
+				} else {
+					throw new JMeterError("Unexpected error",ex);
+				}
 			}
 		}
     }
