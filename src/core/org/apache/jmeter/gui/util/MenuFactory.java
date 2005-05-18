@@ -433,9 +433,14 @@ public final class MenuFactory
                         item = (JMeterGUIComponent) c.newInstance();
                     }
                 }
+                catch (NoClassDefFoundError e)
+                {
+                    log.warn("Missing jar? Could not create "+name+". "+e);
+                    continue;
+                }
                 catch (Throwable e)
                 {
-                    log.info("Could not instantiate "+name, e);
+                    log.warn("Could not instantiate "+name, e);
                     continue;
                 }
                 if (elementsToSkip.contains(name)
