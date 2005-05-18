@@ -244,6 +244,7 @@ public class JMeter implements JMeterPlugin
             catch (Exception e)
             {
                 log.error("Failure loading test file", e);
+                JMeterUtils.reportErrorToUser(e.toString());
             }
         }
     }
