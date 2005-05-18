@@ -103,6 +103,16 @@ public class Load implements Command
                 isTestPlan = insertLoadedTree(e.getID(), tree);
             }
         }
+        catch (NoClassDefFoundError ex) // Allow for missing optional jars
+        {
+            String msg = ex.getMessage();
+            if (msg == null)
+            {
+                msg = "Missing jar file - see log for details";
+                log.warn("Missing jar file", ex);
+            }
+            JMeterUtils.reportErrorToUser(msg);        	
+        }
         catch (Exception ex)
         {
             String msg = ex.getMessage();
