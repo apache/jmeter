@@ -19,10 +19,12 @@ package org.apache.jmeter.save;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
@@ -133,15 +135,27 @@ public class SaveService
                         saver.registerConverter((Converter)Class.forName(key).newInstance());
                      }
                   }
-                  catch (Exception e1)
+                  catch (IllegalAccessException e1)
                   {
                      log.warn("Can't register a converter: " + key,e1);
-                  }
+                  } catch (InstantiationException e1) {
+                      log.warn("Can't register a converter: " + key,e1);
+				} catch (ClassNotFoundException e1) {
+                    log.warn("Can't register a converter: " + key,e1);
+				} catch (IllegalArgumentException e1) {
+                    log.warn("Can't register a converter: " + key,e1);
+				} catch (SecurityException e1) {
+                    log.warn("Can't register a converter: " + key,e1);
+				} catch (InvocationTargetException e1) {
+                    log.warn("Can't register a converter: " + key,e1);
+				} catch (NoSuchMethodException e1) {
+                    log.warn("Can't register a converter: " + key,e1);
+				}
                }
             }
          }
       }
-      catch (Exception e)
+      catch (IOException e)
       {
          log.error("Bad saveservice properties file", e);
       }
