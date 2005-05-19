@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ public class FTPSampler extends AbstractSampler
         SampleResult res = new SampleResult();
         boolean isSuccessful = false;
         //FtpConfig ftpConfig = (FtpConfig)e.getConfigElement(FtpConfig.class);
-        res.setSampleLabel(getLabel());
+        res.setSampleLabel(getName());
         //LoginConfig loginConfig =
         //  (LoginConfig)e.getConfigElement(LoginConfig.class);
         res.sampleStart();
@@ -93,7 +93,7 @@ public class FTPSampler extends AbstractSampler
             // this should probably come from the setup dialog
             String s = ftp.get(getFilename());
             res.setResponseData(s.getBytes());
-            // set the response code here somewhere
+            // TODO set the response code here somewhere
             ftp.disconnect();
             isSuccessful = true;
         }
