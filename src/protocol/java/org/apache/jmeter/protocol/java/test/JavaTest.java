@@ -25,6 +25,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.TestElement;
 
 /**
  * The <code>JavaTest</code> class is a simple sampler which
@@ -96,7 +97,7 @@ public class JavaTest
     private String label;
 
     /** The default value of the Label parameter. */
-    private static final String LABEL_DEFAULT = "JavaTest";
+    //private static final String LABEL_DEFAULT = "JavaTest";
     
     /** The name used to store the Label parameter. */
     private static final String LABEL_NAME = "Label";
@@ -187,7 +188,9 @@ public class JavaTest
                 SUCCESS_DEFAULT).equalsIgnoreCase(
                 "OK");
 
-        label = context.getParameter(LABEL_NAME, LABEL_DEFAULT);
+        label = context.getParameter(LABEL_NAME,"");
+        if (label.length() == 0)
+        	label=context.getParameter(TestElement.NAME); // default to name of element
 
         samplerData =
             context.getParameter(SAMPLER_DATA_NAME, SAMPLER_DATA_DEFAULT);
@@ -230,7 +233,7 @@ public class JavaTest
         Arguments params = new Arguments();
         params.addArgument(SLEEP_NAME, String.valueOf(DEFAULT_SLEEP_TIME));
         params.addArgument(MASK_NAME, DEFAULT_MASK_STRING);
-        params.addArgument(LABEL_NAME, LABEL_DEFAULT);
+        params.addArgument(LABEL_NAME, "");
         params.addArgument(RESPONSE_CODE_NAME, RESPONSE_CODE_DEFAULT);
         params.addArgument(RESPONSE_MESSAGE_NAME, RESPONSE_MESSAGE_DEFAULT);
         params.addArgument(SUCCESS_NAME, SUCCESS_DEFAULT);
@@ -248,7 +251,7 @@ public class JavaTest
      * The following fields are always set:
      * - responseCode (default "")
      * - responseMessage (default "")
-     * - label (default "JavaTest")
+     * - label (set from LABEL_NAME parameter if it exists, else element name)
      * - success (default true)
      * </pre>
      * The following fields are set from the user-defined
