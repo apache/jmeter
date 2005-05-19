@@ -18,6 +18,7 @@
 package org.apache.jmeter.protocol.jms.sampler;
 
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.jms.Message;
 
@@ -32,12 +33,12 @@ import org.apache.log.Logger;
  */
 public class MessageAdmin {
 	private static final MessageAdmin SINGLETON = new MessageAdmin();
-	private Hashtable table = new Hashtable();
+	private Map table = new Hashtable();
 	static Logger log = LoggingManager.getLoggerForClass();
 	
 	private MessageAdmin() {
-		
 	}
+
 	public static synchronized MessageAdmin getAdmin() {
 		return SINGLETON;
 	}
@@ -54,19 +55,22 @@ public class MessageAdmin {
 	public void putReply(String id, Message reply) {
 		PlaceHolder holder = (PlaceHolder)table.get(id);
 		if (log.isDebugEnabled()) {
-			log.debug("put reply id " + id + " for holder " + holder);
+			log.debug("Reply id: " + id + " for holder " + holder);
 		}
 		if (holder!=null) {
 			holder.setReply(reply);
-			synchronized (holder.getRequest()) {
-				holder.getRequest().notify();
+            Object obj = holder.getRequest();
+			synchronized (obj) {
+				obj.notify();
 			}
 			
 		}
 	}
 	/**
-	 * @param string
-	 * @return
+     * Get the reply message.
+     *
+	 * @param id the id of the message
+	 * @return the received message or <code>null</code>
 	 */
 	public Message get(String id) {
 		PlaceHolder holder = (PlaceHolder)table.remove(id);
@@ -74,7 +78,7 @@ public class MessageAdmin {
 			log.debug("get reply for " + id + " for " + holder);
 		}
 		if (!holder.hasReply()) {
-			log.debug("Message " + id + " not found.");
+			log.info("Message with " + id + " not found.");
 		}
 		return (Message) holder.getReply();
 	}
@@ -98,4 +102,7 @@ class PlaceHolder {
 	boolean hasReply() {
 		return reply !=null;
 	}
+    public String toString() {
+        return "request=" + request + ", reply=" + reply;
+    }
 }

@@ -46,7 +46,13 @@ public class Receiver implements Runnable {
 		conn = factory.createQueueConnection();
 		session = conn.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 		consumer = session.createReceiver(receiveQueue);
+        if (log.isDebugEnabled()) {
+            log.debug("Receiver - ctor. Starting connection now");
+        }
 		conn.start();
+        if (log.isInfoEnabled()) {
+            log.info("Receiver - ctor. Connection to messaging system established");
+        }
 	}
 	
 	public static synchronized Receiver createReceiver(QueueConnectionFactory factory, Queue receiveQueue) throws JMSException {
@@ -66,9 +72,12 @@ public class Receiver implements Runnable {
 			reply = null;
 			try {
 				reply = consumer.receive();
-				log.debug("CorrId:" + reply.getJMSCorrelationID());
-				if (reply.getJMSCorrelationID()==null) {
-					log.debug("Received message with correlation id null, will discard message");
+                if (log.isDebugEnabled()) {
+				    log.debug("Received message, correlation id:" + reply.getJMSCorrelationID());
+                }
+
+                if (reply.getJMSCorrelationID()==null) {
+					log.warn("Received message with correlation id null. Discarding message ...");
 				}
 				else {
 					MessageAdmin.getAdmin().putReply(reply.getJMSCorrelationID(), reply);
