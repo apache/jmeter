@@ -99,7 +99,9 @@ public class JMSSampler extends AbstractSampler {
 				Message replyMsg = executor.sendAndReceive(msg);
 				if (replyMsg == null) {
 					res.setSuccessful(false);
-					LOGGER.debug("No reply message received");
+                    if (LOGGER.isDebugEnabled()) {
+					    LOGGER.debug("No reply message received");
+                    }
 				} else {
 					if (replyMsg instanceof TextMessage) {
 						res.setResponseData(((TextMessage) replyMsg).getText().getBytes());
@@ -119,6 +121,9 @@ public class JMSSampler extends AbstractSampler {
 	}
 
 	private TextMessage createMessage() throws JMSException {
+        if (session==null) {
+            throw new IllegalStateException("Session may not be null while creating message");
+        }
 		TextMessage msg = session.createTextMessage();
 		msg.setText(getContent());
 		addJMSProperties(msg);
@@ -137,6 +142,14 @@ public class JMSSampler extends AbstractSampler {
 			msg.setStringProperty(name, value);
 		}
 	}
+
+    public Arguments getJMSProperties() {
+        return getArguments(JMSSampler.JMS_PROPERTIES);
+    }
+
+    public Arguments getJNDIProperties() {
+        return getArguments(JMSSampler.JNDI_PROPERTIES);
+    }
 
 	public String getQueueConnectionFactory() {
 		return getPropertyAsString(QUEUE_CONNECTION_FACTORY_JNDI);
@@ -279,8 +292,6 @@ public class JMSSampler extends AbstractSampler {
 				LOGGER.debug("Using InitialContext [" + getInitialContextFactory() + "]");
 			table.put(Context.INITIAL_CONTEXT_FACTORY, getInitialContextFactory());
 		}
-		if (LOGGER.isDebugEnabled())
-			LOGGER.debug("Using Provider [" + getContextProvider() + "]");
 		if (getContextProvider() != null && getContextProvider().trim().length() > 0) {
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("Using Provider [" + getContextProvider() + "]");
