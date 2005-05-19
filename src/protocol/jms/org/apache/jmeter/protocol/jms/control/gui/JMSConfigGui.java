@@ -33,6 +33,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
@@ -45,7 +46,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * @author Martijn Blankestijn
  * @version $Id$ 
  */
-public class JMSConfigGui extends AbstractConfigGui {
+public class JMSConfigGui extends AbstractSamplerGui {
 
 	private JLabeledTextField queueuConnectionFactory =
 		new JLabeledTextField(JMeterUtils.getResString("jms_queue_connection_factory"));
@@ -94,18 +95,48 @@ public class JMSConfigGui extends AbstractConfigGui {
 
     public TestElement createTestElement()
     {
-        ConfigTestElement element = new ConfigTestElement();
-        modifyTestElement(element);
-        return element;
+        //org.activemq.jndi.ActiveMQInitialContextFactory
+        //ConfigTestElement element = new ConfigTestElement();
+        JMSSampler sampler = new JMSSampler();
+        this.configureTestElement(sampler);
+        transfer(sampler);
+        return sampler;
     }
 
-	/**
-	 * @return
-	 */
-	public void modifyTestElement(TestElement element) {
-        super.configureTestElement(element);
+    private void transfer(JMSSampler element) {
+        element.setProperty(
+            JMSSampler.QUEUE_CONNECTION_FACTORY_JNDI,
+            queueuConnectionFactory.getText());
+        element.setProperty(JMSSampler.SEND_QUEUE, sendQueue.getText());
+        element.setProperty(JMSSampler.RECEIVE_QUEUE, receiveQueue.getText());
 
-		element.setProperty(
+        boolean isOneway = oneWay.getText().equals(JMeterUtils.getResString("jms_request"));
+        element.setProperty(new BooleanProperty(JMSSampler.IS_ONE_WAY, isOneway));
+
+        element.setProperty(JMSSampler.TIMEOUT, timeout.getText());
+        element.setProperty(JMSSampler.XML_DATA, soapXml.getText());
+
+        element.setProperty(
+            JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY,
+            initialContextFactory.getText());
+        element.setProperty(JMSSampler.JNDI_CONTEXT_PROVIDER_URL, providerUrl.getText());
+        Arguments jndiArgs = (Arguments) jndiPropertiesPanel.createTestElement();
+        element.setProperty(new TestElementProperty(JMSSampler.JNDI_PROPERTIES, jndiArgs));
+
+        Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
+        element.setProperty(new TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
+
+    }
+    /**
+     *
+     * @param element
+     */
+	public void modifyTestElement(TestElement element) {
+        JMSSampler sampler = (JMSSampler) element;
+        this.configureTestElement(sampler);
+        transfer(sampler);
+
+/*		element.setProperty(
 			JMSSampler.QUEUE_CONNECTION_FACTORY_JNDI,
 			queueuConnectionFactory.getText());
 		element.setProperty(JMSSampler.SEND_QUEUE, sendQueue.getText());
@@ -126,38 +157,37 @@ public class JMSConfigGui extends AbstractConfigGui {
 
 		Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
 		element.setProperty(new TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
-	}
+*/	}
 
 	/**
 	 * @param el
 	 */
 	public void configure(TestElement el) {
 		super.configure(el);
-		queueuConnectionFactory.setText(
-			el.getPropertyAsString(JMSSampler.QUEUE_CONNECTION_FACTORY_JNDI));
-		sendQueue.setText(el.getPropertyAsString(JMSSampler.SEND_QUEUE));
-		receiveQueue.setText(el.getPropertyAsString(JMSSampler.RECEIVE_QUEUE));
+        JMSSampler sampler = (JMSSampler)el;
+		queueuConnectionFactory.setText(sampler.getQueueConnectionFactory());
+		sendQueue.setText(sampler.getSendQueue());
+		receiveQueue.setText(sampler.getReceiveQueue());
 
 		JComboBox box = (JComboBox) oneWay.getComponentList().get(1);
 		String selected = null;
-		if (el.getPropertyAsBoolean(JMSSampler.IS_ONE_WAY)) {
+        if (sampler.isOneway()) {
 			selected = JMeterUtils.getResString("jms_request");
 		} else {
 			selected = JMeterUtils.getResString("jms_requestreply");
 		}
 		box.setSelectedItem(selected);
 
-		timeout.setText(el.getPropertyAsString(JMSSampler.TIMEOUT));
-		soapXml.setText(el.getPropertyAsString(JMSSampler.XML_DATA));
-		initialContextFactory.setText(
-			el.getPropertyAsString(JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY));
-		providerUrl.setText(el.getPropertyAsString(JMSSampler.JNDI_CONTEXT_PROVIDER_URL));
+		timeout.setText(String.valueOf(sampler.getTimeout()));
+		soapXml.setText(sampler.getContent());
+		initialContextFactory.setText(sampler.getInitialContextFactory());
+		providerUrl.setText(sampler.getContextProvider());
 
-		jmsPropertiesPanel.configure(
-			(TestElement) el.getProperty(JMSSampler.JMS_PROPERTIES).getObjectValue());
+		jmsPropertiesPanel.configure(sampler.getJMSProperties());
+//			(TestElement) el.getProperty(JMSSampler.JMS_PROPERTIES).getObjectValue());
 
-		jndiPropertiesPanel.configure(
-			(TestElement) el.getProperty(JMSSampler.JNDI_PROPERTIES).getObjectValue());
+		jndiPropertiesPanel.configure(sampler.getJNDIProperties());
+			//(TestElement) el.getProperty(JMSSampler.JNDI_PROPERTIES).getObjectValue());
 	}
 
 	/**
@@ -247,7 +277,7 @@ public class JMSConfigGui extends AbstractConfigGui {
 	}
 
 	public String getLabelResource() {
-		return "jms_config_title";// TODO - probably wrong
+		return "jms_point_to_point";// TODO - probably wrong
 	}
 
 }
