@@ -27,6 +27,7 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jorphan.logging.LoggingManager;
@@ -157,7 +158,9 @@ public class JavaSampler extends AbstractSampler implements TestListener
      */
     public SampleResult sample(Entry entry)
     {
-        context = new JavaSamplerContext(getArguments());
+    	Arguments args = getArguments();
+    	args.addArgument(TestElement.NAME,getName()); // Allow Sampler access to test element name
+        context = new JavaSamplerContext(args);
         if (javaClient == null)
         {
             log.debug(whoAmI() + "Creating Java Client");
