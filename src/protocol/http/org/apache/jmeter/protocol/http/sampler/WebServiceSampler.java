@@ -379,7 +379,9 @@ public class WebServiceSampler extends HTTPSamplerBase
         }
         else
         {
-            return openDocument(null).getDocumentElement();
+        	Document doc = openDocument(null);
+        	if (doc == null) return null;
+            return doc.getDocumentElement();
         }
     }
 
@@ -448,12 +450,13 @@ public class WebServiceSampler extends HTTPSamplerBase
 		SampleResult RESULT = new SampleResult();
         try
         {
+            RESULT.setURL(this.getUrl());
+            RESULT.setSampleLabel(getName());
 			org.w3c.dom.Element rdoc = createDocument();
+			if (rdoc == null) throw new SOAPException("Could not create document",null);
             Envelope msgEnv = Envelope.unmarshall(rdoc);
             // create a new message
             Message msg = new Message();
-            RESULT.setURL(this.getUrl());
-            RESULT.setSampleLabel(this.getUrl().toString());
             RESULT.sampleStart();
 			SOAPHTTPConnection spconn = null;
 			// if a blank HeaderManager exists, try to
@@ -574,7 +577,7 @@ public class WebServiceSampler extends HTTPSamplerBase
             // response code
         }
         catch (SOAPException exception){
-            log.debug(exception.getMessage());
+            log.warn(exception.getMessage());
             RESULT.setSuccessful(false);
         }
         catch (MalformedURLException exception){
