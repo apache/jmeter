@@ -72,7 +72,8 @@ public class JavaScript extends AbstractFunction implements Serializable
         JMeterVariables vars = getVariables();
 
         String script = ((CompoundVariable) values[0]).execute();
-        String varName =
+        // Allow variable to be omitted
+        String varName = values.length < 2 ? null :
             ((CompoundVariable) values[1]).execute();
         String resultStr = "";
 
@@ -84,7 +85,7 @@ public class JavaScript extends AbstractFunction implements Serializable
             Object result = cx.evaluateString(scope, script, "<cmd>", 1, null);
 
             resultStr = Context.toString(result);
-            vars.put(varName, resultStr);
+            if (varName != null) vars.put(varName, resultStr);
 
         }
         catch (WrappedException e)
@@ -120,10 +121,10 @@ public class JavaScript extends AbstractFunction implements Serializable
 
         values = parameters.toArray();
 
-        if (values.length != 2)
+        if (values.length < 1 || values.length > 2)
         {
             throw new InvalidVariableException(
-            		"Expecting 2 parameters, but found " + values.length);//$NON-NLS-1$
+            		"Expecting 1 or 2 parameters, but found " + values.length);//$NON-NLS-1$
         }
 
     }
