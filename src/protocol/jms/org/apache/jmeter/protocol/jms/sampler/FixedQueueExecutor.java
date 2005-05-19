@@ -58,12 +58,19 @@ public class FixedQueueExecutor implements QueueExecutor
     public Message sendAndReceive(Message request) throws JMSException
     {
         producer.send(request);
-        MessageAdmin.getAdmin().putRequest(request.getJMSMessageID(), request);
+        String id = request.getJMSMessageID();
+        MessageAdmin.getAdmin().putRequest(id, request);
         try
         {
+            if (log.isDebugEnabled()) {
+                log.debug("wait for reply " + id + " started on " + System.currentTimeMillis());
+            }
             synchronized (request)
             {
                 request.wait(timeout);
+            }
+            if (log.isDebugEnabled()) {
+                log.debug("done waiting for " + id + " ended on " + System.currentTimeMillis());
             }
 
         }
