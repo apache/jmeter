@@ -718,7 +718,7 @@ public class LDAPExtSampler extends AbstractSampler  {
         SearchResult sr;
         String iets;
         NamingEnumeration attrlist;
-        res.setSampleLabel(getLabel()+":"+getPropertyAsString(TEST)+":"+Thread.currentThread().getName()+";"+System.currentTimeMillis());
+        res.setSampleLabel(getName());
 		LdapExtClient temp_client =(LdapExtClient) ldapConnections.get(Thread.currentThread().getName());
 		DirContext dirContext =(DirContext) ldapContexts.get(Thread.currentThread().getName());
         if (temp_client == null) {

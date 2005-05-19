@@ -491,7 +491,7 @@ public class LDAPSampler extends AbstractSampler
     {
         SampleResult res = new SampleResult();
         boolean isSuccessful = false;
-        res.setSampleLabel(getLabel());
+        res.setSampleLabel(getName());
 		res.setSamplerData(getPropertyAsString(TEST));//TODO improve this
         LdapClient ldap = new LdapClient();
 
