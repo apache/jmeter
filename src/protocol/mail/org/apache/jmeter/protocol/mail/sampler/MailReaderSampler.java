@@ -73,9 +73,8 @@ public class MailReaderSampler
 	{
 		SampleResult res = new SampleResult();
 		boolean isOK = false; // Did sample succeed?
-		String response=null;
 		
-		res.setSampleLabel(getTitle());
+		res.setSampleLabel(getName());
 		/*
 		 * Perform the sampling
 		 */
@@ -148,8 +147,6 @@ public class MailReaderSampler
 			folder.close(true);
 			store.close();
 
-			response=Thread.currentThread().getName();
-
 			/*
 			 * Set up the sample result details
 			 */
@@ -170,11 +167,6 @@ public class MailReaderSampler
 		res.sampleEnd();
 		res.setSuccessful(isOK);
 		return res;
-	}
-
-	private String getTitle()
-	{
-		return this.getName();
 	}
 
 	/**
