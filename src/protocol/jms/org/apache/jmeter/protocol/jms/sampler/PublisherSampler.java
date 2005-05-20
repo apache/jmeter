@@ -137,7 +137,7 @@ public class PublisherSampler
 	 */    
     public SampleResult sample(){
     	SampleResult result = new SampleResult();
-    	result.setSampleLabel("PublisherSampler:" + this.getTopic());
+    	result.setSampleLabel(getName());
         if (this.PUB == null) {
             this.initClient();
         }
