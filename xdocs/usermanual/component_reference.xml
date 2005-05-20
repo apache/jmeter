@@ -672,7 +672,81 @@ TBC
 </properties>
 </component>
 
-<component name="Test Action" index="16.1.12" screenshot="test_action.png">
+<component name="JMS Publisher" index="16.1.12" screenshot="">
+<note>ALPHA CODE</note>
+	<description>
+		<p>
+		JMS Publisher will publish messages to a given pub/sub topic. For those not
+		familiar with JMS, it is the J2EE specification for messaging. There are
+		numerous JMS servers on the market and several open source options.
+		</p>
+		<br></br>
+	</description>
+<properties>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="use JNDI properties file" required="Yes">use jndi.properties to create topic</property>
+  <property name="JNDI Initial Context Factory" required="No">Name of the context factory</property>
+  <property name="Provider URL" required="No">The URL for the jms provider</property>
+  <property name="Topic" required="Yes">the message topic</property>
+  <property name="Authentication" required="Yes">Authentication requirement for the JMS provider</property>
+  <property name="User" required="No">User Name</property>
+  <property name="Password" required="No">Password</property>
+  <property name="Number of samples to aggregate" required="Yes">number of samples to aggregate</property>
+  <property name="configuration" required="Yes">setting for the message</property>
+  <property name="Message type" required="Yes">text or object message</property>
+</properties>
+</component>
+
+<component name="JMS Subscriber" index="16.1.13" screenshot="">
+<note>ALPHA CODE</note>
+	<description>
+		<p>
+		JMS Publisher will subscribe to messages in a given pub/sub topic. For those not
+		familiar with JMS, it is the J2EE specification for messaging. There are
+		numerous JMS servers on the market and several open source options.
+		</p>
+		<br></br>
+	</description>
+<properties>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="use JNDI properties file" required="Yes">use jndi.properties to create topic</property>
+  <property name="JNDI Initial Context Factory" required="No">Name of the context factory</property>
+  <property name="Provider URL" required="No">The URL for the jms provider</property>
+  <property name="Topic" required="Yes">the message topic</property>
+  <property name="Authentication" required="Yes">Authentication requirement for the JMS provider</property>
+  <property name="User" required="No">User Name</property>
+  <property name="Password" required="No">Password</property>
+  <property name="Number of samples to aggregate" required="Yes">number of samples to aggregate</property>
+  <property name="Read response" required="Yes">should the sampler read the response</property>
+  <property name="Client" required="Yes">Which client to use</property>
+</properties>
+</component>
+
+<component name="Messaging Request" index="16.1.14" screenshot="">
+<note>ALPHA CODE</note>
+	<description>
+		<p>
+		Messaging request uses JMS queue messaging. It is different from pub/sub messages
+		and is generally used for handling transactions.
+		</p>
+		<br></br>
+	</description>
+<properties>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="QueueConnection Factory" required="Yes">factory for creating the connection</property>
+  <property name="send queue" required="No">the name of the send queue</property>
+  <property name="receive queue" required="No">the name of the receive queue</property>
+  <property name="message" required="Yes">the message</property>
+  <property name="timeout" required="Yes">timeout value</property>
+  <property name="content of message" required="No">the message</property>
+  <property name="jms properties" required="No">the properties for jms</property>
+  <property name="JNDI Initial Context Factory" required="No">Name of the context factory</property>
+  <property name="JNDI properties" required="No">the jndi properties to look up a jms service</property>
+  <property name="Provider URL" required="No">The URL for the jms provider</property>
+</properties>
+</component>
+
+<component name="Test Action" index="16.1.15" screenshot="test_action.png">
 <description>TBA
 </description>
 <properties>
