@@ -186,7 +186,7 @@ public class TCLogParser implements LogParser
         {
             log.error("Problem creating samples",exception);
         }
-        return 0;
+        return -1;// indicate that an error occured
     }
 
     /**
