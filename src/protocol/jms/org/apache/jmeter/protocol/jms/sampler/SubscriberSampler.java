@@ -170,7 +170,7 @@ public class SubscriberSampler
 	 */
 	public SampleResult sampleWithListener(){
 		SampleResult result = new SampleResult();
-		result.setSampleLabel("SubscriberSampler:" + this.getTopic());
+		result.setSampleLabel(getName());
 		OnMessageSubscriber sub = initListenerClient();
 		
 		this.loop = this.getIterationCount();
@@ -206,7 +206,7 @@ public class SubscriberSampler
 	 */
 	public SampleResult sampleWithReceive(){
 		SampleResult result = new SampleResult();
-		result.setSampleLabel("SubscriberSampler:" + this.getTopic());
+		result.setSampleLabel(getName());
 		if (this.SUBSCRIBER == null){
 			this.initReceiveClient();
 			this.SUBSCRIBER.start();
