@@ -22,6 +22,7 @@ import java.awt.Container;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -34,6 +35,7 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.visualizers.Printable;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -56,7 +58,7 @@ import org.apache.log.Logger;
  */
 public abstract class AbstractJMeterGuiComponent
     extends JPanel
-    implements JMeterGUIComponent
+    implements JMeterGUIComponent, Printable
 {
     /** Logging */
     private static Logger log = LoggingManager.getLoggerForClass();
@@ -322,6 +324,15 @@ public abstract class AbstractJMeterGuiComponent
 		return getStaticLabel().replace(' ', '_');
 	}
 	
+    /**
+     * Subclasses need to over-ride this method, if they wish to
+     * return something other than the Visualizer itself.
+     * @return
+     */    
+    public JComponent getPrintableComponent(){
+        return this;
+    }
+
 //	/* 
 //	 * Dummy implementation so existing code still compiles.
 //	 * Throws an error because it should not be invoked - and cannot provide a useful value.
