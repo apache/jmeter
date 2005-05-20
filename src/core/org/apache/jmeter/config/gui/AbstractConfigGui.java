@@ -20,10 +20,12 @@ package org.apache.jmeter.config.gui;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
+import org.apache.jmeter.visualizers.Printable;
 
 /**
  * This is the base class for JMeter GUI components which provide configuration
@@ -33,6 +35,7 @@ import org.apache.jmeter.gui.util.MenuFactory;
  * @version   $Revision$
  */
 public abstract class AbstractConfigGui extends AbstractJMeterGuiComponent
+implements Printable
 {
     /**
      * When a user right-clicks on the component in the test tree, or
@@ -62,5 +65,14 @@ public abstract class AbstractConfigGui extends AbstractJMeterGuiComponent
     public Collection getMenuCategories()
     {
         return Arrays.asList(new String[]{MenuFactory.CONFIG_ELEMENTS});
+    }
+
+    /**
+     * Subclasses need to over this method, if they wish to
+     * return something other than the Visualizer itself.
+     * @return
+     */    
+    public JComponent getPrintableComponent(){
+        return this;
     }
 }
