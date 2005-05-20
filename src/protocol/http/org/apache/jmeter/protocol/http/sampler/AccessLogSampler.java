@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
+import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.util.accesslog.Filter;
 import org.apache.jmeter.protocol.http.util.accesslog.LogParser;
 import org.apache.jmeter.samplers.Entry;
@@ -26,6 +27,7 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestCloneable;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterException;
 import org.apache.log.Logger;
 
 /**
@@ -127,6 +129,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean
       try
       {
 
+    	  if (PARSER == null) throw new JMeterException("No Parser available");
          /*
           * samp.setDomain(this.getDomain()); samp.setPort(this.getPort());
           */
@@ -138,6 +141,10 @@ public class AccessLogSampler extends HTTPSampler implements TestBean
          // huge gigabyte log file and they only want to
          // use a quarter of the entries.
          int thisCount = PARSER.parseAndConfigure(1, this);
+         if (thisCount < 0) // Was there an error?
+         {
+             return errorResult(new Error("Problem parsing the log file"), new HTTPSampleResult());
+         }
          if (thisCount == 0)
          {
             if (count == 0 || filter == null)
@@ -146,9 +153,10 @@ public class AccessLogSampler extends HTTPSampler implements TestBean
             }
             if(filter != null)
                filter.reset();
-            getCookieManager().clear();
+            CookieManager cm = getCookieManager();
+            if (cm != null) cm.clear();
             count = 0;
-            return null;
+            return errorResult(new Error("No entries found"), new HTTPSampleResult());
          }
          count = thisCount;
          res = sample();
@@ -156,7 +164,8 @@ public class AccessLogSampler extends HTTPSampler implements TestBean
       }
       catch (Exception e)
       {
-         log.warn("Sampling failure", e);// e.printStackTrace();
+         log.warn("Sampling failure", e);
+         return errorResult(e, new HTTPSampleResult());
       }
       return res;
    }
@@ -194,14 +203,18 @@ public class AccessLogSampler extends HTTPSampler implements TestBean
                   PARSER.setSourceFile(this.getLogFile());
                   PARSER.setFilter(filter);
                }
+               else
+               {
+            	   log.error("No log file specified");
+               }
             }
-         }
-         catch (Exception e)
-         {
-            // since samplers shouldn't deal with
-            // gui stuff, bad class names will
-            // fail silently.
-         }
+         } catch (InstantiationException e) {
+        	 log.error("",e);
+		} catch (IllegalAccessException e) {
+			 log.error("",e);
+		} catch (ClassNotFoundException e) {
+       	     log.error("",e);
+		}
       }
    }
 
