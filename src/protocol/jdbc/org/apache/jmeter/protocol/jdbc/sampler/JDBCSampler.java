@@ -73,6 +73,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean
         try
         {
             
+        	if (pool == null) throw new Exception("No pool created");
             // TODO: Consider creating a sub-result with the time to get the
             //       connection.
             conn = pool.getConnection();
