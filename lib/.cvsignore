@@ -12,3 +12,4 @@ smtp.jar
 w3c_http.jar
 bsh*.jar
 bsf*.jar
+jms*.jar
