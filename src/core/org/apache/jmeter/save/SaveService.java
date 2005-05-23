@@ -275,10 +275,10 @@ public class SaveService
       checkVersion(IntegerPropertyConverter.class, "1.3");
       checkVersion(LongPropertyConverter.class, "1.3");
       checkVersion(MultiPropertyConverter.class, "1.3");
-      checkVersion(SampleResultConverter.class, "1.5");
+      checkVersion(SampleResultConverter.class, "1.6");
       checkVersion(StringPropertyConverter.class, "1.6");
       checkVersion(TestElementConverter.class, "1.2");
-      checkVersion(TestElementPropertyConverter.class, "1.3");
+      checkVersion(TestElementPropertyConverter.class, "1.4");
       checkVersion(ScriptWrapperConverter.class, "1.3");
       if (!PROPVERSION.equalsIgnoreCase(propertiesVersion))
       {
