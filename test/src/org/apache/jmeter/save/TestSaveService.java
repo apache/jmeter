@@ -10,6 +10,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 
@@ -40,6 +41,9 @@ public class TestSaveService extends JMeterTestCase
                "GuiTest.jmx",
                };
 
+       private static boolean saveOut = 
+    	   System.getProperty("testsaveservice.saveout","false").equalsIgnoreCase("true");
+       
        public TestSaveService(String name)
        {
            super(name);
@@ -82,10 +86,19 @@ public class TestSaveService extends JMeterTestCase
                   	failed=true;
                   	System.out.println();
                       System.out.println(
-                          "Loading file bin/testfiles/"
+                          "Loading file testfiles/"
                               + FILES[i]
                               + " and "
                               + "saving it back changes its size from "+len+" to "+out.size()+".");
+                      if (saveOut) {
+                    	  String outfile="testfiles/"+FILES[i]+".out";
+                    	  System.out.println("Write "+outfile);
+                    	  FileOutputStream outf = new FileOutputStream(
+                    			  new File(outfile));
+                    	  outf.write(out.toByteArray());
+                    	  outf.close();
+                    	  System.out.println("Wrote "+outfile);
+                      }
                   }
 
                   // Note this test will fail if a property is added or
