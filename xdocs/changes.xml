@@ -38,6 +38,9 @@
 <li>setProperty function</li>
 <li>Save response data on error</li>
 <li>Ant JMeter XSLT now optionally shows failed responses and has internal links</li>
+<li>Allow JavaScript variable name to be omitted</li>
+<li>Changed following Samplers to set sample label from sampler name</li>
+<li>All Test elements can be saved as a graphics image to a file</li>
 </ul>
 <h4>Bug fixes:</h4>
 <ul>
@@ -47,6 +50,9 @@
 <li>Save field names if required to CSV files</li>
 <li>Ensure XML file is closed</li>
 <li>Correct icons now displayed for TestBean components</li>
+<li>Allow for missing optional jar(s) in creating menus</li>
+<li>Changed Samplers to set sample label from sampler name as was the case for HTTP</li>
+<li>Fix various samplers to avoid NPEs when incomplete data is provided</li>
 </ul>
 	
 <h3>Version 2.0.3</h3>
