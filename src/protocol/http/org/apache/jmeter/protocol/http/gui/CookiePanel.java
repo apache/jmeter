@@ -225,7 +225,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener
             try
             {
                 File tmp =
-                    FileDialoger.promptToSaveFile(null).getSelectedFile();
+                    FileDialoger.promptToSaveFile("cookies.txt").getSelectedFile();
                 if (tmp != null)
                 {
                     ((CookieManager) createTestElement()).save(
