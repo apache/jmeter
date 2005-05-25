@@ -22,13 +22,16 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.Box;
+import javax.swing.JCheckBox;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
@@ -43,6 +46,7 @@ public class HttpDefaultsGui extends AbstractConfigGui
     JLabeledTextField path;
     JLabeledTextField port;
     HTTPArgumentsPanel argPanel;
+    private JCheckBox imageParser;
 
     public HttpDefaultsGui()
     {
@@ -80,6 +84,12 @@ public class HttpDefaultsGui extends AbstractConfigGui
                 HTTPSamplerBase.ARGUMENTS,
                 argPanel.createTestElement()));
         config.setProperty(HTTPSamplerBase.PORT, port.getText());
+        if(imageParser.isSelected())
+            config.setProperty(new BooleanProperty(HTTPSamplerBase.IMAGE_PARSER,true));
+        else
+        {
+            config.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
+        }
     }
 
     public void configure(TestElement el)
@@ -93,6 +103,8 @@ public class HttpDefaultsGui extends AbstractConfigGui
             (TestElement) el
                 .getProperty(HTTPSamplerBase.ARGUMENTS)
                 .getObjectValue());
+        imageParser.setSelected(((AbstractTestElement)el).getPropertyAsBoolean(
+                HTTPSamplerBase.IMAGE_PARSER));
     }
 
     private void init()
@@ -128,6 +140,9 @@ public class HttpDefaultsGui extends AbstractConfigGui
         mainPanel.add(argPanel);
 
         add(mainPanel, BorderLayout.CENTER);
+
+        imageParser = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images"));
+        add(imageParser,BorderLayout.SOUTH);
     }
 
     public Dimension getPreferredSize()

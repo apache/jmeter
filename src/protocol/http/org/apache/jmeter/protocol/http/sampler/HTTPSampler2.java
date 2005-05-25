@@ -532,44 +532,7 @@ public class HTTPSampler2 extends HTTPSamplerBase
             saveConnectionCookies(httpState, getCookieManager());
 
             // Follow redirects and download page resources if appropriate:
-            if (!areFollowingRedirect)
-            {
-                boolean didFollowRedirects= false;
-                if (res.isRedirect())
-                {
-                    log.debug("Location set to - " + res.getRedirectLocation());
-                    
-                    if (getFollowRedirects())
-                    {
-                        res= followRedirects(res, frameDepth);
-                        didFollowRedirects= true;
-                    }
-                }
-
-                if (isImageParser()
-                    && (HTTPSampleResult.TEXT).equals(res.getDataType())
-                    && res.isSuccessful())
-                {
-                    if (frameDepth > MAX_FRAME_DEPTH)
-                    {
-                        res.addSubResult(
-                            errorResult(
-                                new Exception("Maximum frame/iframe nesting depth exceeded."),
-                                res));
-                    }
-                    else
-                    {
-                        // If we followed redirects, we already have a container:
-                        boolean createContainerResults= !didFollowRedirects;
-
-                        res=
-                            downloadPageResources(
-                                res,
-                                createContainerResults,
-                                frameDepth);
-                    }
-                }
-            }
+            res = resultProcessing(areFollowingRedirect, frameDepth, res);
 
             log.debug("End : sample");
             if (httpMethod != null) httpMethod.releaseConnection();
@@ -593,84 +556,6 @@ public class HTTPSampler2 extends HTTPSamplerBase
         {
             if (httpMethod != null) httpMethod.releaseConnection();
         }
-    }
-
-    /**
-     * Iteratively download the redirect targets of a redirect response.
-     * <p>
-     * The returned result will contain one subsample for each request issued,
-     * including the original one that was passed in. It will be an
-     * HTTPSampleResult that should mostly look as if the final destination
-     * of the redirect chain had been obtained in a single shot.
-     * 
-     * @param res result of the initial request - must be a redirect response
-     * @param frameDepth    Depth of this target in the frame structure.
-     *                      Used only to prevent infinite recursion.
-     * @return "Container" result with one subsample per request issued
-     */
-    private HTTPSampleResult followRedirects(
-        HTTPSampleResult res,
-        int frameDepth)
-    {
-        HTTPSampleResult totalRes= new HTTPSampleResult(res);
-        HTTPSampleResult lastRes= res;
-
-        int redirect;
-        for (redirect= 0; redirect < MAX_REDIRECTS; redirect++)
-        {
-            String location= encodeSpaces(lastRes.getRedirectLocation());
-                // Browsers seem to tolerate Location headers with spaces,
-                // replacing them automatically with %20. We want to emulate
-                // this behaviour.
-            try
-            {
-                lastRes=
-                    sample(
-                        new URL(lastRes.getURL(), location),
-                        GET,
-                        true,
-                        frameDepth);
-            }
-            catch (MalformedURLException e)
-            {
-                lastRes= errorResult(e, lastRes);
-            }
-            totalRes.addSubResult(lastRes);
-
-            if (!lastRes.isRedirect())
-            {
-                break;
-            }
-        }
-        if (redirect >= MAX_REDIRECTS)
-        {
-            lastRes=
-                errorResult(
-                    new IOException("Exceeeded maximum number of redirects: "+MAX_REDIRECTS),
-                    lastRes);
-            totalRes.addSubResult(lastRes);
-        }
-
-        // Now populate the any totalRes fields that need to
-        // come from lastRes:
-        totalRes.setSampleLabel(
-            totalRes.getSampleLabel() + "->" + lastRes.getSampleLabel());
-        // The following three can be discussed: should they be from the
-        // first request or from the final one? I chose to do it this way
-        // because that's what browsers do: they show the final URL of the
-        // redirect chain in the location field. 
-        totalRes.setURL(lastRes.getURL());
-        totalRes.setHTTPMethod(lastRes.getHTTPMethod());
-        totalRes.setQueryString(lastRes.getQueryString());
-        totalRes.setRequestHeaders(lastRes.getRequestHeaders());
-
-        totalRes.setResponseData(lastRes.getResponseData());
-        totalRes.setResponseCode(lastRes.getResponseCode());
-        totalRes.setSuccessful(lastRes.isSuccessful());
-        totalRes.setResponseMessage(lastRes.getResponseMessage());
-        totalRes.setDataType(lastRes.getDataType());
-        totalRes.setResponseHeaders(lastRes.getResponseHeaders());
-        return totalRes;
     }
 
     /**

@@ -80,7 +80,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui
         }
         else
         {
-            ((HTTPSamplerBase)sampler).setImageParser(false);
+            sampler.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
         }
         if (isMon.isSelected()){
 			((HTTPSamplerBase)sampler).setMonitor("true");
