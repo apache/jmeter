@@ -216,6 +216,7 @@ public class CookieManager
      */
     public void add(Cookie c)
     {
+    	if (log.isDebugEnabled()) log.debug("Add cookie "+c.toString());
 		String cv = c.getValue();
 		if (DELETE_NULL_COOKIES && (null == cv || "".equals(cv))){
 			removeCookieNamed(c.getName());
@@ -287,18 +288,27 @@ public class CookieManager
      */
     public String getCookieHeaderForURL(URL url)
     {
+    	boolean debugEnabled = log.isDebugEnabled();
+		if (debugEnabled) log.debug("Get cookie for URL= "+url);
         if (!url.getProtocol().toUpperCase().trim().equals("HTTP")
             && !url.getProtocol().toUpperCase().trim().equals("HTTPS"))
             return null;
 
         StringBuffer header = new StringBuffer();
+        String host= "."+url.getHost();
+        if (debugEnabled) log.debug("URL Host="+host);
         for (PropertyIterator iter = getCookies().iterator(); iter.hasNext();)
         {
             Cookie cookie = (Cookie) iter.next().getObjectValue();
             // Add a leading dot to the host name so that host X matches
             // domain .X. This is a breach of the standard, but it's how
             // browsers behave:
-            String host= "."+url.getHost();
+            if (debugEnabled) {
+            	log.debug("Cookie domain="+cookie.getDomain()
+            			+" path="+cookie.getPath()
+            			+" expires="+cookie.getExpires()
+            			);
+            }
             if (host.endsWith(cookie.getDomain())
                 && url.getFile().startsWith(cookie.getPath())
                 && ((cookie.getExpires()==0) // treat as never expiring (bug 27713)
@@ -309,6 +319,7 @@ public class CookieManager
                 {
                     header.append("; ");
                 }
+                if (debugEnabled) log.debug("Cookie value = "+cookie.getValue());
                 header.append(cookie.getName()).append("=").append(
                     cookie.getValue());
             }
@@ -316,6 +327,7 @@ public class CookieManager
 
         if (header.length() != 0)
         {
+        	if (debugEnabled) log.debug(header.toString());
             return header.toString();
         }
         else
