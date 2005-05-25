@@ -53,6 +53,7 @@
 <li>Allow for missing optional jar(s) in creating menus</li>
 <li>Changed Samplers to set sample label from sampler name as was the case for HTTP</li>
 <li>Fix various samplers to avoid NPEs when incomplete data is provided</li>
+<li>Fix Cookie Manager to use seconds; add debug</li>
 </ul>
 	
 <h3>Version 2.0.3</h3>
