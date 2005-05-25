@@ -297,6 +297,7 @@ public class CookieManager
         StringBuffer header = new StringBuffer();
         String host= "."+url.getHost();
         if (debugEnabled) log.debug("URL Host="+host);
+        if (debugEnabled) log.debug("Time now (secs)"+(System.currentTimeMillis() / 1000));
         for (PropertyIterator iter = getCookies().iterator(); iter.hasNext();)
         {
             Cookie cookie = (Cookie) iter.next().getObjectValue();
