@@ -71,6 +71,7 @@ public class SampleResult implements Serializable
 	private static final SampleResult [] EMPTY_SR = new SampleResult[0];
 	private static final AssertionResult [] EMPTY_AR = new AssertionResult[0];
 	private SampleSaveConfiguration saveConfig;
+    private SampleResult parent = null;
 
    /**
     * @param propertiesToSave The propertiesToSave to set.
@@ -336,6 +337,7 @@ public class SampleResult implements Serializable
         }
         subResults.add(subResult);
         setTime(getTime()+subResult.getTime());
+        subResult.setParent(this);
     }
 
     /**
@@ -808,4 +810,18 @@ public class SampleResult implements Serializable
 	public URL getURL() {
 	    return location;
 	}
+
+    /**
+     * @return Returns the parent.
+     */
+    public SampleResult getParent() {
+        return parent;
+    }
+
+    /**
+     * @param parent The parent to set.
+     */
+    public void setParent(SampleResult parent) {
+        this.parent = parent;
+    }
 }
