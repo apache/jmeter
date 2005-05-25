@@ -83,6 +83,7 @@ public class CookieManager
 		// The cookie specification requires that the timezone be GMT.
 		// See http://developer.netscape.com/docs/manuals/communicator/jsguide4/cookies.htm
 		// See http://www.cookiecentral.com/faq/
+    	// See http://wp.netscape.com/newsref/std/cookie_spec.html 
 		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         setProperty(new CollectionProperty(COOKIES, new ArrayList()));
@@ -134,10 +135,14 @@ public class CookieManager
         PrintWriter writer = new PrintWriter(new FileWriter(file));
         writer.println("# JMeter generated Cookie file");
         PropertyIterator cookies = getCookies().iterator();
+        long now = System.currentTimeMillis() / 1000;
         while (cookies.hasNext())
         {
             Cookie cook = (Cookie) cookies.next().getObjectValue();
-            writer.println(cook.toString());
+            // Note: now is always > 0, so no need to check for that separately
+            if (cook.getExpires() > now) { // only save unexpired cookies
+                writer.println(cook.toString());
+            }
         }
         writer.flush();
         writer.close();
@@ -305,7 +310,8 @@ public class CookieManager
             // domain .X. This is a breach of the standard, but it's how
             // browsers behave:
             if (debugEnabled) {
-            	log.debug("Cookie domain="+cookie.getDomain()
+            	log.debug("Cookie name="+cookie.getName()
+            			+" domain="+cookie.getDomain()
             			+" path="+cookie.getPath()
             			+" expires="+cookie.getExpires()
             			);
@@ -320,7 +326,7 @@ public class CookieManager
                 {
                     header.append("; ");
                 }
-                if (debugEnabled) log.debug("Cookie value = "+cookie.getValue());
+                if (debugEnabled) log.debug("matched cookie, value = "+cookie.getValue());
                 header.append(cookie.getName()).append("=").append(
                     cookie.getValue());
             }
@@ -366,7 +372,7 @@ public class CookieManager
                 domain,
                 path,
                 false,
-                System.currentTimeMillis() + 1000 * 60 * 60 * 24);
+                0); // No expiry means session cookie
         // check the rest of the headers
         while (st.hasMoreTokens())
         {
@@ -385,7 +391,7 @@ public class CookieManager
                     String expires = nvp.substring(index + 1);
                     Date date = dateFormat.parse(expires);
                     //Always set expiry date - see Bugzilla id 29493
-                    newCookie.setExpires(date.getTime());
+                    newCookie.setExpires(date.getTime() / 1000); // Set time in seconds
                 }
                 catch (ParseException pe)
                 {
@@ -454,7 +460,9 @@ public class CookieManager
             remove(index);
         }
 
-        if (newCookie.getExpires() >= System.currentTimeMillis())
+        long exp = newCookie.getExpires();
+        // Store session cookies as well as unexpired ones
+        if (exp == 0 || exp >= System.currentTimeMillis() / 1000)
         {
             add(newCookie);
         }
@@ -617,6 +625,33 @@ public class CookieManager
             man.addCookieFromHeader("test=1", url);
             url= new URL("http://jakarta.apache.org/");
             assertNull(man.getCookieHeaderForURL(url));
+        }
+        
+        // Test session cookie is returned
+        public void testSessionCookie() throws Exception
+        {
+            URL url= new URL("http://a.b.c/");
+            man.addCookieFromHeader("test=1", url);
+            String s = man.getCookieHeaderForURL(url);
+            assertNotNull(s);
+            assertEquals("test=1",s);
+        }
+        // Test Old cookie is not returned
+        public void testOldCookie() throws Exception
+        {
+            URL url= new URL("http://a.b.c/");
+            man.addCookieFromHeader("test=1; expires=Mon, 01-Jan-1990 00:00:00 GMT", url);
+            String s = man.getCookieHeaderForURL(url);
+            assertNull(s);
+        }
+        // Test New cookie is returned
+        public void testNewCookie() throws Exception
+        {
+            URL url= new URL("http://a.b.c/");
+            man.addCookieFromHeader("test=1; expires=Mon, 01-Jan-2990 00:00:00 GMT", url);
+            String s = man.getCookieHeaderForURL(url);
+            assertNotNull(s);
+            assertEquals("test=1",s);
         }
     }
 }
