@@ -352,6 +352,9 @@ public class CookieManager
      */
     public void addCookieFromHeader(String cookieHeader, URL url)
     {
+        if (log.isDebugEnabled()) {
+            log.debug("addCookieFromHeader("+cookieHeader+","+url.toExternalForm()+")");
+        }
         StringTokenizer st = new StringTokenizer(cookieHeader, ";");
         String nvp;
 
@@ -363,7 +366,9 @@ public class CookieManager
         String domain = "."+url.getHost(); // this is the default
                 // the leading dot breaks the standard, but helps in
                 // reproducing actual browser behaviour.
-        String path = "/"; // this is the default
+        // The default is the path of the reques URL
+        String path = url.getPath();
+        if (path.length() == 0) path = "/"; // default if no path specified
 
         Cookie newCookie =
             new Cookie(
