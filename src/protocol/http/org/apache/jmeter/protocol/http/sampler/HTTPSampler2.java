@@ -584,8 +584,7 @@ public class HTTPSampler2 extends HTTPSamplerBase
 								c[i].getDomain(),
 								c[i].getPath(),
 								c[i].getSecure(),
-								exp != null ? exp.getTime()
-								: System.currentTimeMillis() + 1000 * 60 * 60 * 24 //cf CookieManager
+								exp == null ? 0 : exp.getTime() /1000
 							  )
 						);
             }
