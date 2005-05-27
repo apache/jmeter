@@ -95,9 +95,8 @@ public abstract class AbstractAction implements Command
      */
     protected void popupShouldSave(ActionEvent e)
     {
-        if(!( ((Save) ActionRouter.getInstance().getAction(
-                "save",
-                "org.apache.jmeter.gui.action.Save")).hasTestPlanFile()))
+        log.debug("popupShouldSave");
+        if(GuiPackage.getInstance().getTestPlanFile() == null)
         {
             if(JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
                     JMeterUtils.getResString("should_save"),JMeterUtils.getResString("warning"),

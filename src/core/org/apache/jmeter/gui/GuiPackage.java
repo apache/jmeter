@@ -21,6 +21,7 @@ package org.apache.jmeter.gui;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.beans.Introspector;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +32,7 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.testelement.TestElement;
@@ -244,15 +246,15 @@ public final class GuiPackage implements LocaleChangeListener
         try
         {
             updateCurrentNode();
-            TestElement currentNode =
+            TestElement curNode =
                 treeListener.getCurrentNode().getTestElement();
-            JMeterGUIComponent comp = getGui(currentNode);
+            JMeterGUIComponent comp = getGui(curNode);
             if(!(comp instanceof AbstractVisualizer))  // TODO: a hack that needs to be fixed for 2.0
             {
                 comp.clear();
             }
             log.debug("Updating gui to new node");
-            comp.configure(currentNode);
+            comp.configure(curNode);
             currentNodeUpdated = false;
             return comp;
         }
@@ -647,4 +649,30 @@ public final class GuiPackage implements LocaleChangeListener
         	mf.setEditMenu(getTreeListener().getCurrentNode().createPopupMenu());
         }
     }
+
+    private String testPlanFile;
+
+	/**
+	 * Sets the filepath of the current test plan. It's shown in the main frame
+	 * title and used on saving.
+	 * @param f
+	 */
+    public void setTestPlanFile(String f)
+    {
+        testPlanFile = f;
+        GuiPackage.getInstance().getMainFrame().setTitle(JMeterUtils.getExtendedFrameTitle(testPlanFile));
+        try
+        {
+            FileServer.getFileServer().setBasedir(testPlanFile);
+        }
+        catch(IOException e1)
+        {
+            log.error("Failure setting file server's base dir",e1);
+        } 
+	}
+	
+	public String getTestPlanFile()
+	{
+		return testPlanFile;
+	}
 }
