@@ -136,10 +136,7 @@ public class Load implements Command
         // don't change name if merging
         if (!merging && isTestPlan && f != null)
         {
-            ((Save) ActionRouter.getInstance().getAction(
-                    "save",
-                    "org.apache.jmeter.gui.action.Save")).setTestPlanFile(
-                f.getAbsolutePath());
+            GuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
         }
     }
 
