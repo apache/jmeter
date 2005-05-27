@@ -239,6 +239,9 @@ public class JMeter implements JMeterPlugin
                 log.info("Loading file: " + f);
                 FileInputStream reader = new FileInputStream(f);
                 HashTree tree = SaveService.loadTree(reader);
+
+                GuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
+
                 new Load().insertLoadedTree(1, tree);
             }
             catch (Exception e)

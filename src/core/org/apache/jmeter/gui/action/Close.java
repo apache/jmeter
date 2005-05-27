@@ -92,11 +92,7 @@ public class Close implements Command
         guiPackage.getTreeListener().getJTree().setSelectionRow(1);
 
         // Clear the name of the test plan file
-        Save save =
-            (Save) ActionRouter.getInstance().getAction(
-                "save",
-                "org.apache.jmeter.gui.action.Save");
-        save.setTestPlanFile(null);
+        GuiPackage.getInstance().setTestPlanFile(null);
 
         ActionRouter.getInstance().actionPerformed(
             new ActionEvent(e.getSource(), e.getID(), CheckDirty.ADD_ALL));

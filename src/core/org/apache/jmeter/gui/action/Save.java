@@ -21,7 +21,6 @@ package org.apache.jmeter.gui.action;
 import java.awt.event.ActionEvent;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Writer;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,9 +36,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.OldSaveService;
 import org.apache.jmeter.save.SaveService;
-import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
@@ -57,7 +54,6 @@ public class Save implements Command
     public final static String SAVE_AS = "save_as";
     public final static String SAVE = "save";
     //NOTUSED private String chosenFile;
-    private String testPlanFile;
 
     private static Set commands = new HashSet();
     static {
@@ -83,25 +79,6 @@ public class Save implements Command
         return commands;
     }
     
-    public boolean hasTestPlanFile()
-    {
-        return testPlanFile != null;
-    }
-
-    public void setTestPlanFile(String f)
-    {
-        testPlanFile = f;
-        GuiPackage.getInstance().getMainFrame().setTitle(JMeterUtils.getExtendedFrameTitle(testPlanFile));
-        try
-        {
-            FileServer.getFileServer().setBasedir(testPlanFile);
-        }
-        catch(IOException e1)
-        {
-            log.error("Failure setting file server's base dir",e1);
-        } 
-    }
-
     public void doAction(ActionEvent e) throws IllegalUserActionException
     {
         HashTree subTree = null;
@@ -118,9 +95,9 @@ public class Save implements Command
             subTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
         }
 
-        String updateFile = testPlanFile; 
+        String updateFile = GuiPackage.getInstance().getTestPlanFile(); 
         if (!SAVE.equals(e.getActionCommand())
-            || testPlanFile == null)
+            || updateFile == null)
         {
             JFileChooser chooser =
                 FileDialoger.promptToSaveFile(
@@ -137,7 +114,7 @@ public class Save implements Command
             updateFile = chooser.getSelectedFile().getAbsolutePath();
             if (!e.getActionCommand().equals(SAVE_AS))
             {
-                setTestPlanFile(updateFile);
+                GuiPackage.getInstance().setTestPlanFile(updateFile);
             }
         }
         // TODO: doesn't putting this here mark the tree as
@@ -169,7 +146,7 @@ public class Save implements Command
         }
         catch (Throwable ex)
         {
-            testPlanFile = null;
+            GuiPackage.getInstance().setTestPlanFile(null);
             log.error("", ex);
             throw new IllegalUserActionException(
                 "Couldn't save test plan to file: " + updateFile);
@@ -178,11 +155,6 @@ public class Save implements Command
         {
             closeWriter(writer);
             closeStream(ostream);
-            if(testPlanFile != null)
-            {
-                GuiPackage.getInstance().getMainFrame().setTitle(JMeterUtils.getExtendedFrameTitle(testPlanFile));
-            }
-            GuiPackage.getInstance().getMainFrame().repaint();
         }
     }
 
