@@ -38,6 +38,8 @@ import org.apache.jorphan.io.TextFile;
 import org.apache.jorphan.logging.LoggingManager;
 
 import org.apache.jmeter.gui.JMeterFileFilter;
+import org.apache.jmeter.protocol.http.control.AuthManager;
+import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.util.DOMPool;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
@@ -469,7 +471,15 @@ public class WebServiceSampler extends HTTPSamplerBase
 					getSOAPHeader();
 			} else {
 				spconn = new SOAPHTTPConnection();
-			} 
+			}
+            // set the auth. thanks to KiYun Roe for contributing the patch
+            // I cleaned up the patch slightly. 5-26-05
+            if (getAuthManager() != null) {
+                AuthManager authmanager = getAuthManager();
+                Authorization auth = authmanager.getAuthForURL(getUrl());
+                spconn.setUserName(auth.getUser());
+                spconn.setPassword(auth.getPass());
+            }
 			// check the proxy
 			String phost = "";
 			int pport = 0;
