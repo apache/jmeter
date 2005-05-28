@@ -57,6 +57,7 @@
 <li>Fix Cookie Manager to use seconds; add debug</li>
 <li>Bug 35067 - set up filename when using -t option</li>
 <li>Don't substitute TestElement.* properties by UDVs in Proxy</li>
+<li>Bug 35065 - don't save old extensions in File Saver</li>
 </ul>
 	
 <h3>Version 2.0.3</h3>
