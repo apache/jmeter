@@ -95,6 +95,15 @@ public class ValueReplacer
         setProperties(el, newProps);
     }
         
+    public void reverseReplace(TestElement el, boolean regexMatch) throws InvalidVariableException
+    {
+        Collection newProps =
+            replaceValues(
+                el.propertyIterator(),
+                new ReplaceFunctionsWithStrings(masterFunction, variables, regexMatch));
+        setProperties(el, newProps);
+    }
+        
     public void undoReverseReplace(TestElement el)
         throws InvalidVariableException
     {
@@ -131,15 +140,19 @@ public class ValueReplacer
             JMeterProperty val = iter.next();
             if (log.isDebugEnabled())
             {
-                log.debug("About to replace in property of tipe: "
+                log.debug("About to replace in property of type: "
                   +val.getClass()+": "+val);
             }
             if (val instanceof StringProperty)
             {
-                val = transform.transformValue(val);
-                if (log.isDebugEnabled())
-                {
-                    log.debug("Replacement result: " +val);
+                // Must not convert TestElement.gui_class etc
+                // TODO but perhaps we want to convert TestElement.name ?
+                if (!val.getName().startsWith("TestElement.")) {
+                    val = transform.transformValue(val);
+                    if (log.isDebugEnabled())
+                    {
+                        log.debug("Replacement result: " +val);
+                    }
                 }
             }
             else if (val instanceof MultiProperty)
@@ -161,7 +174,7 @@ public class ValueReplacer
             else {
                 if (log.isDebugEnabled())
                 {
-                    log.debug("Won't replace.");
+                    log.debug("Won't replace "+val);
                 }
             }
             props.add(val);

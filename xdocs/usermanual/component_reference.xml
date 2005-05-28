@@ -1509,6 +1509,10 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Port" required="Yes">The port that the Proxy Server listens to.  8080 is the default, but you can change it.</property>
+		<property name="Capture HTTP Headers" required="Yes">Should headers be added to the plan?</property>
+		<property name="Set Keep-Alive" required="Yes">Automatically set Keep-Alive in the generated samplers?</property>
+		<property name="Add Assertions" required="Yes">Add a blank assertion to each sampler?</property>
+		<property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables?</property>
         <!--TODO: there's some undocumented flags here -->
         <property name="Target Controller" required="Yes">The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.</property>
         <property name="Grouping" required="Yes">Whether to group samplers for requests from a single "click" (requests received without significant time separation), and how to represent that grouping in the recording:
@@ -1527,7 +1531,6 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
         recorded</b>.</property>
         <property name="Patterns to Exclude" required="No">Regular expressions that are matched against the URL that is sampled.
         <b>Any requests that match one or more Exclude pattern are <i>not</i> recorded</b>.</property>
-        <property name="Clear Buttons" required="N/A">Remove all regular expressions from the list.</property>
         <property name="Start Button" required="N/A">Start the proxy server.  JMeter writes the following message to the console once the proxy server has started up and is ready to take requests: "Proxy up and running!".</property>
         <property name="Stop Button" required="N/A">Stop the proxy server.</property>
         <property name="Restart Button" required="N/A">Stops and restarts the proxy server.  This is
@@ -1574,12 +1577,28 @@ HTTP Request Defaults element directly within the HTTP Proxy Server, whose non-b
 those in the other HTTP Request Defaults. See <a href="best-practices.html#proxy_server"> Best
 Practices with the Proxy Server</a> for more info.</p>
 
-<p>Similarly, if the HTTP Proxy Server finds <complink name="User Defined Variables"/> directly within the
+<p>Similarly, if the HTTP Proxy Server finds <complink name="User Defined Variables"/> (UDV) directly within the
 controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
 will have any occurences of the values of those variables replaced by the corresponding variable. Again, you can
 place User Defined Variables directly within the HTTP Proxy Server to override the values to be replaced. See
 <a href="best-practices.html#proxy_server"> Best Practices with the Proxy Server</a> for more info.</p>
 
+<p>Replacement by Variables: by default, the Proxy server looks for all occurences of UDV values. 
+If you define the variable "WEB" with the value "www", for example, 
+the string "www" will be replaced by ${WEB} wherever it is found.
+To avoid this happening everywhere, set the "Regex Matching" check-box.
+This tells the proxy server to treat values as Regexes (using ORO).
+<br></br>
+If you want to match a whole string only, enclose it in ^$, e.g. "^thus$".
+<br></br>
+If you want to match /images at the start of a string only, use the value "^/images".
+Jakarta ORO also supports zero-width look-ahead, so one can match /images/... 
+but retain the trailing / in the output by using "^/images(?=/)".
+Note that the current version of Jakara ORO does not support look-behind - i.e. "(?<=...)".
+<br></br>
+If there are any problems interpreting any variables as patterns, these are reported in jmeter.log,
+so be sure to check this if UDVs are not working as expected.
+</p>
 <p>When you are done recording your test samples, stop the proxy server (hit the &quot;stop&quot; button).  Remember to reset
 your browser's proxy settings.  Now, you may want to sort and re-order the test script, add timers, listeners, a
 cookie manager, etc.</p>

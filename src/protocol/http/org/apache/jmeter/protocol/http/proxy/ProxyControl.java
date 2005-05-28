@@ -88,6 +88,7 @@ public class ProxyControl extends GenericController implements Serializable
 	public static final String ADD_ASSERTIONS = "ProxyControlGui.add_assertion";
 	public static final String GROUPING_MODE = "ProxyControlGui.grouping_mode";
 	public static final String USE_KEEPALIVE  = "ProxyControlGui.use_keepalive";
+    public static final String REGEX_MATCH  = "ProxyControlGui.regex_match";
 
     public static final int GROUPING_NO_GROUPS = 0;
     public static final int GROUPING_ADD_SEPARATORS = 1;
@@ -100,6 +101,7 @@ public class ProxyControl extends GenericController implements Serializable
 	private boolean addAssertions;
 	private int groupingMode;
 	private boolean useKeepAlive;
+    private boolean regexMatch=false;// Should we match using regexes?
     
     /**
      * Tree node where the samples should be stored.
@@ -162,14 +164,36 @@ public class ProxyControl extends GenericController implements Serializable
         setProperty(new CollectionProperty(EXCLUDE_LIST, new HashSet(list)));
     }
 
+    /**
+     * @param b
+     */
+    public void setRegexMatch(boolean b)
+    {
+        regexMatch=b;
+        setProperty(new BooleanProperty(REGEX_MATCH,b));
+    }
+
     public String getClassLabel()
     {
         return JMeterUtils.getResString("proxy_title");
     }
 
+    public boolean getAssertions() {
+        return getPropertyAsBoolean(ADD_ASSERTIONS);
+    }
+
+    public int getGroupingMode() {
+        return getPropertyAsInt(GROUPING_MODE);
+    }
+
     public int getPort()
     {
         return getPropertyAsInt(PORT);
+    }
+
+    public String getPortString()
+    {
+        return getPropertyAsString(PORT);
     }
 
     public int getDefaultPort()
@@ -182,6 +206,16 @@ public class ProxyControl extends GenericController implements Serializable
         return getPropertyAsBoolean(CAPTURE_HTTP_HEADERS);
     }
 
+    public boolean getUseKeepalive()
+    {
+        return getPropertyAsBoolean(USE_KEEPALIVE,true);
+    }
+    
+    public boolean getRegexMatch()
+    {
+        return getPropertyAsBoolean(REGEX_MATCH,false);
+    }
+    
     public Class getGuiClass()
     {
         return org.apache.jmeter.protocol.http.proxy.gui.ProxyControlGui.class;
@@ -267,7 +301,7 @@ public class ProxyControl extends GenericController implements Serializable
             replaceValues(sampler, subConfigs, userDefinedVariables);
             sampler.setUseKeepAlive(useKeepAlive);
             sampler.setProperty(
-                TestElement.GUI_CLASS,
+                TestElement.GUI_CLASS, //TODO - allow for HttpClient sampler ...
                 "org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui");
 
             placeSampler(sampler, subConfigs, myTarget);
@@ -746,12 +780,12 @@ public class ProxyControl extends GenericController implements Serializable
         
         try
         {
-            replacer.reverseReplace(sampler);
+            replacer.reverseReplace(sampler,regexMatch);
             for (int i = 0; i < configs.length; i++)
             {
                 if (configs[i] != null)
                 {
-                    replacer.reverseReplace(configs[i]);
+                    replacer.reverseReplace(configs[i],regexMatch);
                 }
 
             }
