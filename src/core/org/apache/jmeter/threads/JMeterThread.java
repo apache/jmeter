@@ -18,11 +18,9 @@
 
 package org.apache.jmeter.threads;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
 
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.AssertionResult;
@@ -51,13 +49,12 @@ import org.apache.log.Logger;
  * The JMeter interface to the sampling process, allowing JMeter to see the
  * timing, add listeners for sampling events and to stop the sampling process.
  *
- * @author    unattributed
  * @version   $Revision$ Last updated: $Date$
  */
 public class JMeterThread implements Runnable, java.io.Serializable
 {
     transient private static Logger log = LoggingManager.getLoggerForClass();
-    private static Map samplers = new HashMap();
+    //NOT USED private static Map samplers = new HashMap();
     private int initialDelay = 0;
     private Controller controller;
     private boolean running;
@@ -75,6 +72,8 @@ public class JMeterThread implements Runnable, java.io.Serializable
     private boolean scheduler = false;
     //based on this scheduler is enabled or disabled
     
+    private ThreadGroup threadGroup; // Gives access to parent thread threadGroup
+
     
     private StandardJMeterEngine engine = null; // For access to stop methods.
 	private boolean onErrorStopTest;
@@ -331,6 +330,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
     protected void initRun()
     {
         JMeterContextService.incrNumberOfThreads();
+        threadGroup.incrNumberOfThreads();
         threadContext = JMeterContextService.getContext();
         threadContext.setVariables(threadVars);
         threadContext.setThreadNum(getThreadNum());
@@ -372,6 +372,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
 		Traverser shut = new Traverser(false);
         testTree.traverse(shut);
         JMeterContextService.decrNumberOfThreads();
+        threadGroup.decrNumberOfThreads();
 	}
 
     private class Traverser implements HashTreeTraverser
@@ -529,7 +530,7 @@ public class JMeterThread implements Runnable, java.io.Serializable
     }
 
     /**
-     * Initial delay if ramp-up period is active for this group.
+     * Initial delay if ramp-up period is active for this threadGroup.
      */
     private void rampUpDelay()
     {
@@ -600,6 +601,14 @@ public class JMeterThread implements Runnable, java.io.Serializable
     public void setOnErrorStopThread(boolean b)
     {
         onErrorStopThread = b;
+    }
+
+    public ThreadGroup getThreadGroup() {
+        return threadGroup;
+    }
+
+    public void setThreadGroup(ThreadGroup group) {
+        this.threadGroup = group;
     }
 
 }

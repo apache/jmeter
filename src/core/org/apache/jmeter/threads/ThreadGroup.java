@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ public class ThreadGroup
     extends AbstractTestElement
     implements SampleListener, Serializable, Controller
 {
-    private static Logger log = LoggingManager.getLoggerForClass();
+    private final static Logger log = LoggingManager.getLoggerForClass();
 
     public final static String NUM_THREADS = "ThreadGroup.num_threads";
     public final static String RAMP_TIME = "ThreadGroup.ramp_time";
@@ -75,6 +75,8 @@ public class ThreadGroup
     private LinkedList listeners = new LinkedList();
     private LinkedList remoteListeners = new LinkedList();
 
+    private int numberOfThreads=0; // Number of threads currently running in this group
+    
     /**
      * No-arg constructor.
      */
@@ -83,7 +85,7 @@ public class ThreadGroup
     }
 
     /**
-     * Set the nuber of threads.
+     * Set the number of threads to start
      *
      * @param numThreads the number of threads.
      */
@@ -91,6 +93,22 @@ public class ThreadGroup
     {
         setProperty(new IntegerProperty(NUM_THREADS, numThreads));
     }
+
+    synchronized void incrNumberOfThreads()
+    {
+       numberOfThreads++;
+    }
+    
+    synchronized void decrNumberOfThreads()
+    {
+       numberOfThreads--;
+    }
+    
+    public synchronized int getNumberOfThreads()
+    {
+       return numberOfThreads;
+    }
+    
 
     public boolean isDone()
     {

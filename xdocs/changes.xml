@@ -42,6 +42,7 @@
 <li>Changed following Samplers to set sample label from sampler name</li>
 <li>All Test elements can be saved as a graphics image to a file</li>
 <li>Bug 35026 - add RE pattern matching to Proxy</li>
+<li>Bug 34739 - Enhance constant Throughput timer</li>
 </ul>
 <h4>Bug fixes:</h4>
 <ul>
