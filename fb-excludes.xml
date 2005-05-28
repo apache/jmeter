@@ -12,7 +12,8 @@
      	MS - mutable static field
      	Se - serialisation
      	SIC - should be static inner class?
+		HE - hashcode/equals
      	-->
-       <BugCode name="EI,EI2,IS2" />
+       <BugCode name="EI,EI2,IS2,HE" />
      </Match>
 </FindBugsFilter>
