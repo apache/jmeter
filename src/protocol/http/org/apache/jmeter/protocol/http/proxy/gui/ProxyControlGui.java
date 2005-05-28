@@ -103,6 +103,11 @@ public class ProxyControlGui
 	 */
 	private JCheckBox useKeepAlive;
 
+    /*
+     * Use regexes to match the source data
+     */
+    private JCheckBox regexMatch;
+    
     /**
      * List of available target controllers
      */
@@ -169,6 +174,7 @@ public class ProxyControlGui
 			model.setGroupingMode(groupingMode.getSelectedIndex());
 			model.setAssertions(addAssertions.isSelected());
 			model.setUseKeepAlive(useKeepAlive.isSelected());
+            model.setRegexMatch(regexMatch.isSelected());
             TreeNodeWrapper nw= (TreeNodeWrapper)targetNodes.getSelectedItem();
             if (nw == null)
             {
@@ -219,13 +225,14 @@ public class ProxyControlGui
         log.debug("Configuring gui with " + element);
         super.configure(element);
         model = (ProxyControl)element;
-        portField.setText(model.getPropertyAsString(ProxyControl.PORT));
-		httpHeaders.setSelected(model.getPropertyAsBoolean(ProxyControl.CAPTURE_HTTP_HEADERS));
-		groupingMode.setSelectedIndex(model.getPropertyAsInt(ProxyControl.GROUPING_MODE));
-		addAssertions.setSelected(model.getPropertyAsBoolean(ProxyControl.ADD_ASSERTIONS));
-		useKeepAlive.setSelected(model.getPropertyAsBoolean(ProxyControl.USE_KEEPALIVE,true));
+        portField.setText(model.getPortString());
+		httpHeaders.setSelected(model.getCaptureHttpHeaders());
+		groupingMode.setSelectedIndex(model.getGroupingMode());
+		addAssertions.setSelected(model.getAssertions());
+		useKeepAlive.setSelected(model.getUseKeepalive());
+        regexMatch.setSelected(model.getRegexMatch());
         
-        reinitializeTargetCombo();
+        reinitializeTargetCombo();//TODO is this needed? What does it do?
 
         populateTable(includeModel, model.getIncludePatterns().iterator());
         populateTable(excludeModel, model.getExcludePatterns().iterator());
@@ -284,6 +291,7 @@ public class ProxyControlGui
 		        || command.equals(ProxyControl.ADD_ASSERTIONS)
                 || command.equals(ProxyControl.GROUPING_MODE)
                 || command.equals(ProxyControl.USE_KEEPALIVE)
+                || command.equals(ProxyControl.REGEX_MATCH)
                  )
         {
             enableRestart();
@@ -485,6 +493,12 @@ public class ProxyControlGui
 		useKeepAlive.addActionListener(this);
 		useKeepAlive.setActionCommand(ProxyControl.USE_KEEPALIVE);
 
+        regexMatch = new JCheckBox(JMeterUtils.getResString("proxy_regex"));
+        regexMatch.setName(ProxyControl.REGEX_MATCH);
+        regexMatch.setSelected(false);
+        regexMatch.addActionListener(this);
+        regexMatch.setActionCommand(ProxyControl.REGEX_MATCH);
+
         HorizontalPanel panel = new HorizontalPanel();
         panel.add(label);
         panel.add(portField);
@@ -494,6 +508,7 @@ public class ProxyControlGui
 
 		panel.add(useKeepAlive);
 		panel.add(addAssertions);
+        panel.add(regexMatch);
 
         return panel;
     }
@@ -720,9 +735,7 @@ public class ProxyControlGui
                     name.append(seperator);
                     buildNodesModel(cur, name.toString(), 0);
                 }
-                else {
-                	log.error("Cannot process "+te);
-                }
+                // Ignore everything else
             }
         }
     }
