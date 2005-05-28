@@ -2053,6 +2053,24 @@ to the random delay.</property>
 </properties>
 
 </component>
+
+<component index="16.6.5" name="Synchronizing Timer" screenshot="timers/sync_timer.png">
+
+<description>
+<p>
+The purpose of the SyncTimer is to block threads until X number of threads have been blocked, and
+then they are all released at once.  A SyncTimer can thus create large instant loads at various
+points of the test plan.
+</p>
+</description>
+
+<properties>
+  <property name="Name" required="No">Descriptive name for this timer that is shown in the tree. </property>
+  <property name="Number of Simultaneous Users to Group by" required="Yes">Number of threads to release at once.</property>
+</properties>
+
+</component>
+
 </section>
 
 <section name="16.7 Pre Processors" anchor="preprocessors">
