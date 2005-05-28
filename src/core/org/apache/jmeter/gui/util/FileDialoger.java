@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,6 @@ public final class FileDialoger
      */
     private static String lastJFCDirectory = null;
     private static JFileChooser jfc = new JFileChooser();
-    private static String[] extensions = null;
 
     /**
      * Prevent instantiation of utility class.
@@ -101,18 +100,6 @@ public final class FileDialoger
         return promptToOpenFile(new String[0]);
     }
 
-	/**
-	 * Get a JFileChooser with a new FileFilter.
-	 * @param filename
-	 * @param filters
-	 * @return
-	 */
-	public static JFileChooser promptToSaveFile(String filename, String[] filters){
-		extensions = filters;
-		JFileChooser chooser = promptToSaveFile(filename);
-		return chooser;
-	}
-	
     /**
      * Prompts the user to choose a file from their filesystems for our own
      * devious uses. This method maintains the last directory the user visited
@@ -125,7 +112,18 @@ public final class FileDialoger
      *           are finished using it (accept or otherwise).
      * @see             #promptToOpenFile
      */
-    public static JFileChooser promptToSaveFile(String filename)
+	public static JFileChooser promptToSaveFile(String filename)
+	{
+		return promptToSaveFile(filename, null);
+	}
+	
+    /**
+     * Get a JFileChooser with a new FileFilter.
+     * @param filename
+     * @param filters
+     * @return
+     */
+    public static JFileChooser promptToSaveFile(String filename, String[] extensions)
     {
         if (lastJFCDirectory == null)
         {
@@ -141,7 +139,7 @@ public final class FileDialoger
         {
             jfc.setSelectedFile(new File(lastJFCDirectory, filename));
             int i = -1;
-            if ((i = filename.indexOf(".")) > -1)
+            if ((i = filename.lastIndexOf(".")) > -1)
             {
                 ext = filename.substring(i);
             }
