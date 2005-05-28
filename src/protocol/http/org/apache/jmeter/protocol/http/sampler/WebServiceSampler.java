@@ -475,10 +475,15 @@ public class WebServiceSampler extends HTTPSamplerBase
             // set the auth. thanks to KiYun Roe for contributing the patch
             // I cleaned up the patch slightly. 5-26-05
             if (getAuthManager() != null) {
-                AuthManager authmanager = getAuthManager();
-                Authorization auth = authmanager.getAuthForURL(getUrl());
-                spconn.setUserName(auth.getUser());
-                spconn.setPassword(auth.getPass());
+                if (getAuthManager().getAuthForURL(getUrl()) != null){
+                    AuthManager authmanager = getAuthManager();
+                    Authorization auth = authmanager.getAuthForURL(getUrl());
+                    spconn.setUserName(auth.getUser());
+                    spconn.setPassword(auth.getPass());
+                } else {
+                    log.warn("the URL for the auth was null." + 
+                            " Username and password not set");
+                }
             }
 			// check the proxy
 			String phost = "";
