@@ -77,7 +77,7 @@ public class StatVisualizer extends AbstractVisualizer implements
       super();
       model = new ObjectTableModel(COLUMNS, new Functor[] {
             new Functor("getLabel"), new Functor("getCount"),
-            new Functor("getMean"), new Functor("getMedian"),
+            new Functor("getMeanAsNumber"), new Functor("getMedian"),
             new Functor("getPercentPoint", new Object[] { new Float(.900)}),
             new Functor("getMin"), new Functor("getMax"),
             new Functor("getErrorPercentageString"),
