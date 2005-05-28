@@ -419,6 +419,10 @@ public class SamplingStatCalculator implements Serializable
    {
       return calculator.getMean();
    }
+   public Number getMeanAsNumber()
+   {
+      return new Long((long) calculator.getMean());
+   }
    /**
     * @return
     */
