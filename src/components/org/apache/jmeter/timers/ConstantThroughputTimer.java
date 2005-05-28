@@ -35,8 +35,9 @@ import org.apache.log.Logger;
 public class ConstantThroughputTimer extends AbstractTestElement implements Timer, TestListener,
       TestBean
 {
-    private static final long serialVersionUID = 1;
+   private static final long serialVersionUID = 2;
    private static final Logger log = LoggingManager.getLoggerForClass();
+   private static final double MILLISEC_PER_MIN = 60000.0;
 
    /**
     * Target time for the start of the next request. The delay provided by the
@@ -44,22 +45,9 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     */
    private long previousTime = 0;
    
-   private boolean legacyMode = true;
+   private String calcMode; // String representing the mode (Locale-specific)
+   private int modeInt; // mode as an integer
 
-/**
- * @return Returns the legacyMode.
- */
-public boolean isLegacyMode()
-{
-    return legacyMode;
-}
-/**
- * @param legacyMode The legacyMode to set.
- */
-public void setLegacyMode(boolean legacyMode)
-{
-    this.legacyMode = legacyMode;
-}
    /**
     * Desired throughput, in samples per minute.
     */
@@ -93,6 +81,16 @@ public void setLegacyMode(boolean legacyMode)
       return throughput;
    }
 
+   public String getCalcMode() {
+       return calcMode;
+   }
+
+   public void setCalcMode(String mode) {
+       // TODO find better way to get modeInt
+       this.modeInt = ConstantThroughputTimerBeanInfo.getCalcModeAsInt(calcMode);
+       this.calcMode = mode;
+   }
+
    /**
     * Retrieve the delay to use during test execution.
     * 
@@ -101,8 +99,8 @@ public void setLegacyMode(boolean legacyMode)
    public synchronized long delay()
    {
       long currentTime = System.currentTimeMillis();
-      long currentTarget = calculateCurrentTarget(currentTime);
-      previousTime = currentTarget;
+      long currentTarget = previousTime == 0 ? currentTime : previousTime;
+      previousTime = currentTarget + calculateDelay();
       if (currentTime > currentTarget)
       {
          // We're behind schedule -- try to catch up:
@@ -112,28 +110,42 @@ public void setLegacyMode(boolean legacyMode)
    }
 
    /**
- * @param currentTime
- * @return
- */
-protected long calculateCurrentTarget(long currentTime)
-{
-    long currentTarget = currentTime;
-    if(previousTime == 0)
+    * @param currentTime
+    * @return new Target time
+    */
+    protected long calculateCurrentTarget(long currentTime)
     {
-        currentTarget = currentTime + (
-        		(legacyMode) ? (long) (60000.0 / getThroughput()) :
-        		    (JMeterContextService.getContext().getThreadNum() + 1) * (long) (60000.0 / getThroughput())
-        		);
+        return currentTime + calculateDelay();
     }
-    else
+
+
+    // Calculate the delay based on the mode
+    private long calculateDelay()
     {
-        currentTarget = currentTime + (
-        		(legacyMode) ? (long) (60000.0 / getThroughput()) :
-        		    (JMeterContextService.getNumberOfThreads()) * (long) (60000.0 / getThroughput())
-        		);
+        long offset=0;
+        long rate = (long) (MILLISEC_PER_MIN / getThroughput());
+        switch(modeInt)
+        {
+            case 1: // Total number of threads
+                offset = (
+//                            previousTime == 0 ? //TODO - why is this needed?
+//                            (JMeterContextService.getContext().getThreadNum() + 1)
+//                            : 
+                            JMeterContextService.getNumberOfThreads()
+                          )
+                          * rate;
+                break;
+            case 2: // Active threads in this group
+                offset = JMeterContextService.getContext().getThread()
+                         .getThreadGroup().getNumberOfThreads() * rate;
+                break;
+            default:
+                offset = rate; // i.e. rate * 1
+            break;
+        }
+        return offset;
     }
-    return currentTarget;
-}
+
 /**
     * Provide a description of this timer class.
     * 
@@ -174,6 +186,7 @@ protected long calculateCurrentTarget(long currentTime)
     */
    public void testStarted(String host)
    {
+       testStarted();
    }
 
    /*
