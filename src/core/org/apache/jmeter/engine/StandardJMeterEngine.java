@@ -399,6 +399,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor,
             threads[i] = new JMeterThread(cloneTree(threadGroupTree), this,
                   notifier);
             threads[i].setThreadNum(i);
+            threads[i].setThreadGroup(group);
             threads[i].setInitialContext(JMeterContextService.getContext());
             threads[i].setInitialDelay((int) (perThreadDelay * i));
             threads[i].setThreadName(groupName + " " + (groupCount) + "-" + (i + 1));
