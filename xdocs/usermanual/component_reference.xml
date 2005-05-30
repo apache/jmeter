@@ -722,27 +722,57 @@ TBC
 </properties>
 </component>
 
-<component name="Messaging Request" index="16.1.14" screenshot="">
+<component name="JMS Point-to-Point" index="16.1.14" screenshot="jms/JMS_Point-to-Point.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
-		Messaging request uses JMS queue messaging. It is different from pub/sub messages
-		and is generally used for handling transactions.
+		This sampler sends and optionally receives JMS Messages through point-to-point connections (queues).
+        It is different from pub/sub messages and is generally used for handling transactions.
 		</p>
 		<br></br>
 	</description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="QueueConnection Factory" required="Yes">factory for creating the connection</property>
-  <property name="send queue" required="No">the name of the send queue</property>
-  <property name="receive queue" required="No">the name of the receive queue</property>
-  <property name="message" required="Yes">the message</property>
-  <property name="timeout" required="Yes">timeout value</property>
-  <property name="content of message" required="No">the message</property>
-  <property name="jms properties" required="No">the properties for jms</property>
-  <property name="JNDI Initial Context Factory" required="No">Name of the context factory</property>
-  <property name="JNDI properties" required="No">the jndi properties to look up a jms service</property>
-  <property name="Provider URL" required="No">The URL for the jms provider</property>
+  <property name="QueueConnection Factory" required="Yes">
+    The JNDI name of the queue connection factory to use for connecting to the messaging system.
+  </property>
+  <property name="JNDI Name Request queue" required="Yes">
+    This is the JNDI name of the queue to which the messages are sent.
+  </property>
+  <property name="JNDI Name Reply queue" required="No">
+    The JNDI name of the receiving queue. If a value is provided here and the communication style is Request Response
+    this queue will be monitored for responses to the requests sent.
+  </property>
+  <property name="Communication style" required="Yes">
+    The Communication style can be Request Only (also known as Fire and Forget) or Request Reply.
+    Request Only will only sent messages and will not monitor replies. As such it can be used to put load on a system.
+    Request Reply will sent messages and monitor the replies it receives. Behaviour is depended on the value of the JNDI Name Reply Queue.
+    If JNDI Name Reply Queue has a value, this queue is used to monitor the results. Matching of request and reply is done with
+    the message id of the request with the correlation id of the reply. If the JNDI Name Reply Queue is empty, then
+    temporary queues will be used for the communication between the requestor and the server. This is very different from
+    the fixed reply queue. With temporary queues the diffent threads will block until the reply message has been received.
+  </property>
+  <property name="Timeout" required="Yes">
+      The timeout in milliseconds for the reply-messages. If a reply has not been received within the specified
+      time, the specific testcase failes and the specific reply message received after the timeout is discarded.
+  </property>
+  <property name="Content" required="No">
+      The content of the message.
+  </property>
+  <property name="JMS Properties" required="No">
+      The JMS Properties are properties specific for the underlying messaging system.
+      For example: for WebSphere 5.1 web services you will need to set the JMS Property targetService to test
+      webservices through JMS.
+  </property>
+  <property name="Initial Context Factory" required="No">
+    The Initial Context Factory is the factory to be used to look up the JMS Resources.
+  </property>
+  <property name="JNDI properties" required="No">
+     The JNDI Properties are the specific properties for the underlying JNDI implementation.
+  </property>
+  <property name="Provider URL" required="No">
+    The URL for the jms provider.
+  </property>
 </properties>
 </component>
 
