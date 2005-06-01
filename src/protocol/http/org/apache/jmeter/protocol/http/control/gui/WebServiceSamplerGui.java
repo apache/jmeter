@@ -21,8 +21,6 @@ package org.apache.jmeter.protocol.http.control.gui;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -62,8 +60,12 @@ public class WebServiceSamplerGui
     implements java.awt.event.ActionListener
 {
 
-    JLabeledTextField urlField =
-        new JLabeledTextField(JMeterUtils.getResString("url"));
+    JLabeledTextField domain =
+        new JLabeledTextField(JMeterUtils.getResString("web_server_domain"));
+    JLabeledTextField port = 
+        new JLabeledTextField(JMeterUtils.getResString("web_server_port"));
+    JLabeledTextField path = 
+        new JLabeledTextField(JMeterUtils.getResString("path"));
     JLabeledTextField soapAction =
         new JLabeledTextField(
             JMeterUtils.getResString("webservice_soap_action"));
@@ -170,74 +172,54 @@ public class WebServiceSamplerGui
     {
         WebServiceSampler sampler = new WebServiceSampler();
         this.configureTestElement(sampler);
-        try
-        {
-            URL url = new URL(urlField.getText());
-            sampler.setDomain(url.getHost());
-            if (url.getPort() != -1)
-            {
-                sampler.setPort(url.getPort());
-            }
-            else
-            {
-                sampler.setPort(80);
-            }
-            sampler.setProtocol(url.getProtocol());
-            sampler.setMethod(HTTPSamplerBase.POST);
-            sampler.setPath(url.getPath());
-            sampler.setSoapAction(soapAction.getText());
-            sampler.setXmlData(soapXml.getText());
-            sampler.setXmlFile(soapXmlFile.getFilename());
-            sampler.setXmlPathLoc(randomXmlFile.getText());
-            sampler.setMemoryCache(memCache.isSelected());
-            sampler.setReadResponse(readResponse.isSelected());
-            sampler.setUseProxy(useProxy.isSelected());
-            sampler.setProxyHost(proxyHost.getText());
-            sampler.setProxyPort(proxyPort.getText());
+        sampler.setDomain(domain.getText());
+        if (port.getText() != null && port.getText().length() > 0){
+            sampler.setPort(Integer.parseInt(port.getText()));
+        } else {
+            sampler.setPort(80);
         }
-        catch (MalformedURLException e)
-        {
-        }
-        return sampler;
+        sampler.setPath(path.getText());
+        sampler.setMethod(HTTPSamplerBase.POST);
+        sampler.setSoapAction(soapAction.getText());
+        sampler.setXmlData(soapXml.getText());
+        sampler.setXmlFile(soapXmlFile.getFilename());
+        sampler.setXmlPathLoc(randomXmlFile.getText());
+        sampler.setMemoryCache(memCache.isSelected());
+        sampler.setReadResponse(readResponse.isSelected());
+        sampler.setUseProxy(useProxy.isSelected());
+        sampler.setProxyHost(proxyHost.getText());
+        sampler.setProxyPort(proxyPort.getText());
+
+		return sampler;
     }
 
     /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
     public void modifyTestElement(TestElement s)
     {
         WebServiceSampler sampler = (WebServiceSampler) s;
         this.configureTestElement(sampler);
-        try
-        {
-            URL url = new URL(urlField.getText());
-            sampler.setDomain(url.getHost());
-            if (url.getPort() != -1)
-            {
-                sampler.setPort(url.getPort());
-            }
-            else
-            {
-                sampler.setPort(80);
-            }
-			sampler.setWsdlURL(wsdlField.getText());
-            sampler.setProtocol(url.getProtocol());
-            sampler.setMethod(HTTPSamplerBase.POST);
-            sampler.setPath(url.getPath());
-            sampler.setSoapAction(soapAction.getText());
-            sampler.setXmlData(soapXml.getText());
-            sampler.setXmlFile(soapXmlFile.getFilename());
-            sampler.setXmlPathLoc(randomXmlFile.getText());
-            sampler.setMemoryCache(memCache.isSelected());
-            sampler.setReadResponse(readResponse.isSelected());
-			sampler.setUseProxy(useProxy.isSelected());
-			sampler.setProxyHost(proxyHost.getText());
-			sampler.setProxyPort(proxyPort.getText());
+        sampler.setDomain(domain.getText());
+        if (port.getText() != null && port.getText().length() > 0){
+            sampler.setPort(Integer.parseInt(port.getText()));
+        } else {
+            sampler.setPort(80);
         }
-        catch (MalformedURLException e)
-        {
-        }
+        sampler.setPath(path.getText());
+        sampler.setWsdlURL(wsdlField.getText());
+        sampler.setMethod(HTTPSamplerBase.POST);
+        sampler.setSoapAction(soapAction.getText());
+        sampler.setXmlData(soapXml.getText());
+        sampler.setXmlFile(soapXmlFile.getFilename());
+        sampler.setXmlPathLoc(randomXmlFile.getText());
+        sampler.setMemoryCache(memCache.isSelected());
+        sampler.setReadResponse(readResponse.isSelected());
+		sampler.setUseProxy(useProxy.isSelected());
+        sampler.setProxyHost(proxyHost.getText());
+        sampler.setProxyPort(proxyPort.getText());
     }
 
     /**
@@ -291,7 +273,9 @@ public class WebServiceSamplerGui
         listPanel.add(selectButton);
         selectButton.addActionListener(this);
 
-        mainPanel.add(urlField);
+        mainPanel.add(domain);
+        mainPanel.add(port);
+        mainPanel.add(path);
         mainPanel.add(soapAction);
         // OPTIONAL TASKS
         // we create a preferred size for the soap text area
@@ -337,27 +321,10 @@ public class WebServiceSamplerGui
         super.configure(el);
         WebServiceSampler sampler = (WebServiceSampler) el;
         wsdlField.setText(sampler.getWsdlURL());
-        try
-        {
-            // only set the URL if the host is not null
-            if (sampler.getUrl() != null && sampler.getUrl().getHost() != null)
-            {
-                urlField.setText(sampler.getUrl().toString());
-            }
-            soapAction.setText(sampler.getSoapAction());
-        }
-        catch (MalformedURLException e)
-        {
-        }
-        // we build the string URL
-        int port = sampler.getPort();
-        String strUrl = sampler.getProtocol() + "://" + sampler.getDomain();
-        if (port != -1 && port != 80)
-        {
-            strUrl += ":" + sampler.getPort();
-        }
-        strUrl += sampler.getPath() + "?" + sampler.getQueryString();
-        urlField.setText(strUrl);
+        domain.setText(sampler.getDomain());
+        port.setText(String.valueOf(sampler.getPort()));
+        path.setText(sampler.getPath());
+        soapAction.setText(sampler.getSoapAction());
         soapXml.setText(sampler.getXmlData());
         soapXmlFile.setFilename(sampler.getXmlFile());
         randomXmlFile.setText(sampler.getXmlPathLoc());
@@ -388,22 +355,13 @@ public class WebServiceSamplerGui
     {
         if (HELPER.getBinding() != null)
         {
-            this.urlField.setText(HELPER.getBinding());
-        }
-        else
-        {
-            StringBuffer buf = new StringBuffer();
-            buf.append("http://" + HELPER.getURL().getHost());
-            if (HELPER.getURL().getPort() != -1)
-            {
-                buf.append(":" + HELPER.getURL().getPort());
+            this.domain.setText(HELPER.getURL().getHost());
+            if (HELPER.getURL().getPort() > 0){
+                this.port.setText(String.valueOf(HELPER.getURL().getPort()));
+            } else {
+                this.port.setText("80");
             }
-            else
-            {
-                buf.append(":" + 80);
-            }
-            buf.append(HELPER.getURL().getPath());
-            this.urlField.setText(buf.toString());
+            this.path.setText(HELPER.getURL().getPath());
         }
         this.soapAction.setText(
             HELPER.getSoapAction(this.wsdlMethods.getText()));
@@ -469,7 +427,7 @@ public class WebServiceSamplerGui
         }
         else
         {
-            if (this.urlField.getText() != null)
+            if (this.domain.getText() != null)
             {
                 String[] wsdlData = browseWSDL(wsdlField.getText());
                 if (wsdlData != null)
