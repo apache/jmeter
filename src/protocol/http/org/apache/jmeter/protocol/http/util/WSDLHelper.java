@@ -121,25 +121,22 @@ public class WSDLHelper
             {
                 Element pnode = (Element) ports.item(idx);
                 String portname = pnode.getAttribute("name");
-                // got the port name. now check it against the
-                // binding name.
-                if (this.BINDNAME.indexOf(portname) > -1)
-                {
-                    NodeList servlist =
-                        pnode.getElementsByTagName("soap:address");
-                    // check wsdlsoap
-                    if (servlist.getLength() == 0){
-						servlist =
-						pnode.getElementsByTagName("wsdlsoap:address");
-                    }
-                    if (servlist.getLength() == 0){
-                        servlist =
-                        pnode.getElementsByTagName("SOAP:address");
-                    }
-                    Element addr = (Element) servlist.item(0);
-                    this.SOAPBINDING = addr.getAttribute("location");
-                    return this.SOAPBINDING;
+                // used to check binding, but now it doesn't. it was 
+                // failing when wsdl did not using binding as expected
+                NodeList servlist =
+                    pnode.getElementsByTagName("soap:address");
+                // check wsdlsoap
+                if (servlist.getLength() == 0){
+                    servlist =
+                        pnode.getElementsByTagName("wsdlsoap:address");
                 }
+                if (servlist.getLength() == 0){
+                    servlist =
+                        pnode.getElementsByTagName("SOAP:address");
+                }
+                Element addr = (Element) servlist.item(0);
+                this.SOAPBINDING = addr.getAttribute("location");
+                return this.SOAPBINDING;
             }
             return null;
         }
@@ -406,7 +403,7 @@ public class WSDLHelper
 			// 	new WSDLHelper("http://localhost/WSTest/WSTest.asmx?WSDL");
 			//	new WSDLHelper("http://localhost/AxisWSDL.xml");
 			//	new WSDLHelper("http://localhost/test-setup.xml");
-            new WSDLHelper("http://localhost:8080/gsoap.wsdl");
+            new WSDLHelper("http://services.bio.ifi.lmu.de:1046/prothesaurus/services/BiologicalNameService?wsdl");
             long start = System.currentTimeMillis();
             help.parse();
             String[] methods = help.getWebMethods();
@@ -416,6 +413,7 @@ public class WSDLHelper
                 System.out.println("method name: " + methods[idx]);
             }
             System.out.println("service url: " + help.getBinding());
+            System.out.println("port=" + help.getURL().getPort());
         }
         catch (Exception exception)
         {
