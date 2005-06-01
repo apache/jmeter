@@ -47,7 +47,7 @@ public class MessageAdmin {
 	 */
 	public void putRequest(String id, Message request) {
 		if (log.isDebugEnabled()) {
-			log.debug("put request id " + id);
+			log.debug("REQ_ID [" + id + "]");
 		}
 		table.put(id, new PlaceHolder(request));
 	}
@@ -55,7 +55,7 @@ public class MessageAdmin {
 	public void putReply(String id, Message reply) {
 		PlaceHolder holder = (PlaceHolder)table.get(id);
 		if (log.isDebugEnabled()) {
-			log.debug("Reply id: " + id + " for holder " + holder);
+			log.debug("RPL_ID [" + id + "] for holder " + holder);
 		}
 		if (holder!=null) {
 			holder.setReply(reply);
@@ -75,7 +75,7 @@ public class MessageAdmin {
 	public Message get(String id) {
 		PlaceHolder holder = (PlaceHolder)table.remove(id);
 		if (log.isDebugEnabled()) {
-			log.debug("get reply for " + id + " for " + holder);
+			log.debug("GET_ID [" + id + "] for " + holder);
 		}
 		if (!holder.hasReply()) {
 			log.info("Message with " + id + " not found.");
