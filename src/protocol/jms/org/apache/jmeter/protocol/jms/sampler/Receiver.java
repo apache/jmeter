@@ -33,7 +33,7 @@ public class Receiver implements Runnable {
     private QueueSession session;
     private QueueReceiver consumer;
     private QueueConnection conn;
-    private static Receiver receiver;
+//    private static Receiver receiver;
     static Logger log = LoggingManager.getLoggerForClass();
 
     private Receiver(QueueConnectionFactory factory, Queue receiveQueue) throws JMSException {
@@ -50,11 +50,11 @@ public class Receiver implements Runnable {
     }
 
     public static synchronized Receiver createReceiver(QueueConnectionFactory factory, Queue receiveQueue) throws JMSException {
-        if (receiver == null) {
-            receiver = new Receiver(factory, receiveQueue);
+//        if (receiver == null) {
+            Receiver receiver = new Receiver(factory, receiveQueue);
             Thread thread = new Thread(receiver);
             thread.start();
-        }
+//        }
         return receiver;
     }
 
