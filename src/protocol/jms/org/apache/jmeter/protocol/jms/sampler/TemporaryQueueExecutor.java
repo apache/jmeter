@@ -38,7 +38,7 @@ public class TemporaryQueueExecutor implements QueueExecutor
     /**
      * Constructor.
      * @param session the session to use to send the message
-     * @param queue the queue to send the message on
+     * @param destination the queue to send the message on
      * @throws JMSException
      */
     public TemporaryQueueExecutor(QueueSession session, Queue destination)
