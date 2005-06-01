@@ -35,7 +35,7 @@ import org.apache.log.Logger;
  * Created on:  October 28, 2004
  *
  * @author Martijn Blankestijn
- * @version $Id$ 
+ * @version $Id$
  */
 public class JMSSampler extends AbstractSampler {
 
@@ -52,8 +52,8 @@ public class JMSSampler extends AbstractSampler {
 	public final static String SEND_QUEUE = "JMSSampler.SendQueue";
 	public final static String QUEUE_CONNECTION_FACTORY_JNDI = "JMSSampler.queueconnectionfactory";
 
-	private static final Logger LOGGER = LoggingManager.getLoggerForClass(); 
-	
+	private static final Logger LOGGER = LoggingManager.getLoggerForClass();
+
 	//
 	// Member variables
 	//
@@ -73,6 +73,8 @@ public class JMSSampler extends AbstractSampler {
 	private QueueExecutor executor;
 	/** Producer of the messages. */
 	private QueueSender producer;
+
+	private Receiver receiverThread = null;
 
 	/* (non-Javadoc)
 	 * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
@@ -238,7 +240,7 @@ public class JMSSampler extends AbstractSampler {
 			sendQueue = queue;
 			if (!useTemporyQueue()) {
 				receiveQueue = (Queue) context.lookup(getReceiveQueue());
-				Receiver.createReceiver(factory, receiveQueue);
+				receiverThread = Receiver.createReceiver(factory, receiveQueue);
 			}
 
 			connection = factory.createQueueConnection();
@@ -311,7 +313,7 @@ public class JMSSampler extends AbstractSampler {
 			String key = (String)it.next();
 			table.put(key, map.get(key));
 		}
-		
+
 		Context context = new InitialContext(table);
 		if (LOGGER.isDebugEnabled()) {
 			printEnvironment(context);
@@ -376,6 +378,7 @@ public class JMSSampler extends AbstractSampler {
 			} catch (JMSException e) {
 				LOGGER.info(e.getLocalizedMessage());
 			}
+		if(receiverThread != null) receiverThread.deactivate();
 	}
 
 	private boolean useTemporyQueue() {
