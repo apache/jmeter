@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 The Apache Software Foundation.
+ * Copyright 2004-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,6 @@ import org.apache.log.Logger;
 /**
  * @author Michael Stover
  * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
  */
 public class DataSourceElement extends AbstractTestElement implements ConfigElement,
       TestListener,TestBean
@@ -137,6 +135,17 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
    {
       excaliburSource = new ResourceLimitingJdbcDataSource();
       DefaultConfiguration config = new DefaultConfiguration("rl-jdbc");
+      
+      if (log.isDebugEnabled()){
+          StringBuffer sb = new StringBuffer(40);
+          sb.append("MaxPool: ");
+          sb.append(getPoolMax());
+          sb.append(" Timeout: ");
+          sb.append(getTimeout());
+          sb.append(" TrimInt: ");
+          sb.append(getTrimInterval());
+          log.debug(sb.toString());
+      }
       DefaultConfiguration poolController = new DefaultConfiguration(
             "pool-controller");
       poolController.setAttribute("max", getPoolMax());
@@ -147,11 +156,33 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
       poolController
             .setAttribute("auto-commit", String.valueOf(isAutocommit()));
       config.addChild(poolController);
+
+      if (log.isDebugEnabled()){
+          StringBuffer sb = new StringBuffer(40);
+          sb.append("KeepAlive: ");
+          sb.append(isKeepAlive());
+          sb.append(" Age: ");
+          sb.append(getConnectionAge());
+          sb.append(" CheckQuery: ");
+          sb.append(getCheckQuery());
+          log.debug(sb.toString());
+      }
       DefaultConfiguration cfgKeepAlive = new DefaultConfiguration("keep-alive");
       cfgKeepAlive.setAttribute("disable", String.valueOf(!isKeepAlive()));
       cfgKeepAlive.setAttribute("age", getConnectionAge());
       cfgKeepAlive.setValue(getCheckQuery());
       poolController.addChild(cfgKeepAlive);
+      
+      if (log.isDebugEnabled()){
+          StringBuffer sb = new StringBuffer(40);
+          sb.append("Driver: ");
+          sb.append(getDriver());
+          sb.append(" DbUrl: ");
+          sb.append(getDbUrl());
+          sb.append(" User: ");
+          sb.append(getUsername());
+          log.debug(sb.toString());
+      }
       DefaultConfiguration cfgDriver = new DefaultConfiguration("driver");
       cfgDriver.setValue(getDriver());
       config.addChild(cfgDriver);
