@@ -155,7 +155,8 @@ public class SampleSaveConfiguration implements Cloneable,Serializable
          dataType = _dataType, encoding = _encoding, assertions = _assertions,
          subresults = _subresults, responseData = _responseData, samplerData = _samplerData,
          xml = _xml, fieldNames = _fieldNames, responseHeaders = _responseHeaders,
-         requestHeaders = _requestHeaders;
+         requestHeaders = _requestHeaders,
+         responseDataOnError = _responseDataOnError;
    
    private boolean saveAssertionResultsFailureMessage=_saveAssertionResultsFailureMessage;
    private int assertionsResultsToSave =_assertionsResultsToSave;
@@ -329,6 +330,7 @@ public class SampleSaveConfiguration implements Cloneable,Serializable
 	  s.saveAssertionResultsFailureMessage = saveAssertionResultsFailureMessage;
 	  s.delimiter = delimiter;
 	  s.printMilliseconds = printMilliseconds;
+      s.responseDataOnError = responseDataOnError;
       return s;
    }
    
@@ -480,7 +482,7 @@ public class SampleSaveConfiguration implements Cloneable,Serializable
    {
       return responseData 
       || TestPlan.getFunctionalMode()
-      || (_responseDataOnError && !res.isSuccessful());
+      || (responseDataOnError && !res.isSuccessful());
    }
 
 
@@ -498,7 +500,8 @@ public class SampleSaveConfiguration implements Cloneable,Serializable
     */
    public boolean saveSamplerData()
    {
-      return samplerData;
+      return samplerData 
+      || TestPlan.getFunctionalMode(); // as per 2.0 branch
    }
 
    /**
