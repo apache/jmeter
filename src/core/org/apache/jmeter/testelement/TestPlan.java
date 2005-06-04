@@ -88,10 +88,15 @@ public class TestPlan extends AbstractTestElement implements Serializable,TestLi
         setProperty(new CollectionProperty(THREAD_GROUPS, threadGroups));
     }
 
-//    public boolean isFunctionalMode()
-//    {
-//        return getPropertyAsBoolean(FUNCTIONAL_MODE);
-//    }
+    /**
+     * Fetches the functional mode property
+     * 
+     * @return functional mode
+     */
+    public boolean isFunctionalMode()
+    {
+        return getPropertyAsBoolean(FUNCTIONAL_MODE);
+    }
 
     public void setUserDefinedVariables(Arguments vars)
     {
@@ -132,6 +137,11 @@ public class TestPlan extends AbstractTestElement implements Serializable,TestLi
         functionalMode = funcMode;
     }
     
+    /**
+     * Gets the static copy of the functional mode
+     * 
+     * @return mode
+     */
     public static boolean getFunctionalMode()
     {
     	return functionalMode;
@@ -142,6 +152,11 @@ public class TestPlan extends AbstractTestElement implements Serializable,TestLi
         setProperty(new BooleanProperty(SERIALIZE_THREADGROUPS, serializeTGs));
     }
     
+    /**
+     * Fetch the serialize threadgroups property
+     * 
+     * @return serialized setting
+     */
     public boolean isSerialized()
     {
         return getPropertyAsBoolean(SERIALIZE_THREADGROUPS);
