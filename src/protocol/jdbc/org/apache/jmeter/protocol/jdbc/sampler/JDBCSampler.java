@@ -73,7 +73,8 @@ public class JDBCSampler extends AbstractSampler implements TestBean
         try
         {
             
-        	if (pool == null) throw new Exception("No pool created");
+        	if (pool == null) throw new SQLException("No pool created");
+            
             // TODO: Consider creating a sub-result with the time to get the
             //       connection.
             conn = pool.getConnection();
@@ -93,14 +94,8 @@ public class JDBCSampler extends AbstractSampler implements TestBean
                 {
                     if (rs != null)
                     {
-                        try
-                        {
-                            rs.close();
-                        }
-                        catch (SQLException exc)
-                        {
-                            log.warn("Error closing ResultSet", exc);
-                        }
+                        try { rs.close(); }
+                        catch (SQLException exc) {log.warn("Error closing ResultSet", exc);}
                     }
                 }
             }
@@ -115,40 +110,21 @@ public class JDBCSampler extends AbstractSampler implements TestBean
             res.setDataType(SampleResult.TEXT);
             res.setSuccessful(true);
         }
-        catch (Exception ex)
+        catch (SQLException ex)
         {
             log.error("Error in JDBC sampling", ex);
-            res.setResponseData(ex.toString().getBytes());
+            res.setResponseMessage(ex.toString());
             res.setSuccessful(false);
         }
         finally
         {
-            if (stmt != null)
-            {
-                try
-                {
-                    stmt.close();
-                }
-                catch (SQLException err)
-                {
-                   log.error("Error in JDBC sampling", err);
-                   res.setResponseData(err.toString().getBytes());
-                   res.setSuccessful(false);
-                }
+            if (stmt != null) {
+                try { stmt.close(); } 
+                catch (SQLException ex) { log.warn("Error closing statement", ex); }
             }
-
-            if (conn != null)
-            {
-                try
-               {
-                  conn.close();
-               }
-               catch (SQLException e1)
-               {
-                  log.error("Error in JDBC sampling", e1);
-                  res.setResponseData(e1.toString().getBytes());
-                  res.setSuccessful(false);
-               }
+            if (conn != null) {
+               try { conn.close(); }
+               catch (SQLException ex) { log.warn("Error closing connection", ex); }
             }
         }
 
