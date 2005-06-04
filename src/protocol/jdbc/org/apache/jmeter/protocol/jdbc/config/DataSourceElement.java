@@ -36,7 +36,7 @@ import org.apache.log.Logger;
 public class DataSourceElement extends AbstractTestElement implements ConfigElement,
       TestListener,TestBean
 {
-   static Logger log = LoggingManager.getLoggerForClass();
+   private static final Logger log = LoggingManager.getLoggerForClass();
    transient String dataSource, driver, dbUrl, username, password, checkQuery, poolMax,
          connectionAge, timeout, trimInterval;
    transient boolean keepAlive, autocommit;
@@ -147,23 +147,25 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
       poolController
             .setAttribute("auto-commit", String.valueOf(isAutocommit()));
       config.addChild(poolController);
-      DefaultConfiguration keepAlive = new DefaultConfiguration("keep-alive");
-      keepAlive.setAttribute("disable", String.valueOf(!isKeepAlive()));
-      keepAlive.setAttribute("age", getConnectionAge());
-      keepAlive.setValue(getCheckQuery());
-      poolController.addChild(keepAlive);
-      DefaultConfiguration driver = new DefaultConfiguration("driver");
-      driver.setValue(getDriver());
-      config.addChild(driver);
-      DefaultConfiguration dbUrl = new DefaultConfiguration("dburl");
-      dbUrl.setValue(getDbUrl());
-      config.addChild(dbUrl);
-      DefaultConfiguration username = new DefaultConfiguration("user");
-      username.setValue(getUsername());
-      config.addChild(username);
-      DefaultConfiguration password = new DefaultConfiguration("password");
-      password.setValue(getPassword());
-      config.addChild(password);
+      DefaultConfiguration cfgKeepAlive = new DefaultConfiguration("keep-alive");
+      cfgKeepAlive.setAttribute("disable", String.valueOf(!isKeepAlive()));
+      cfgKeepAlive.setAttribute("age", getConnectionAge());
+      cfgKeepAlive.setValue(getCheckQuery());
+      poolController.addChild(cfgKeepAlive);
+      DefaultConfiguration cfgDriver = new DefaultConfiguration("driver");
+      cfgDriver.setValue(getDriver());
+      config.addChild(cfgDriver);
+      DefaultConfiguration cfgDbUrl = new DefaultConfiguration("dburl");
+      cfgDbUrl.setValue(getDbUrl());
+      config.addChild(cfgDbUrl);
+      DefaultConfiguration cfgUsername = new DefaultConfiguration("user");
+      cfgUsername.setValue(getUsername());
+      config.addChild(cfgUsername);
+      DefaultConfiguration cfgPassword = new DefaultConfiguration("password");
+      cfgPassword.setValue(getPassword());
+      config.addChild(cfgPassword);
+      
+      // log is required to ensure errors are available
       excaliburSource.enableLogging(new LogKitLogger(log));
       excaliburSource.configure(config);
       excaliburSource.setInstrumentableName(getDataSource());
