@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -274,16 +275,21 @@ public class UrlConfigGui extends JPanel
         useKeepAlive.setName(USE_KEEPALIVE);
         useKeepAlive.setSelected(true);
 
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panel.add(label);
-        panel.add(Box.createHorizontalStrut(5));
-        panel.add(path);
-        panel.add(Box.createHorizontalStrut(10));
-        panel.add(autoRedirects);
-        panel.add(followRedirects);
-        panel.add(Box.createHorizontalStrut(5));
-        panel.add(useKeepAlive);
-        panel.setMinimumSize(panel.getPreferredSize());
+        JPanel pathPanel = new JPanel(new BorderLayout(5, 0));
+        pathPanel.add(label, BorderLayout.WEST);
+        pathPanel.add(path, BorderLayout.CENTER);
+        pathPanel.setMinimumSize(pathPanel.getPreferredSize());
+        
+        JPanel optionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        optionPanel.add(autoRedirects);
+        optionPanel.add(followRedirects);
+        optionPanel.add(useKeepAlive);
+        optionPanel.setMinimumSize(optionPanel.getPreferredSize());
+        
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(pathPanel);
+        panel.add(optionPanel);
         return panel;
     }
 

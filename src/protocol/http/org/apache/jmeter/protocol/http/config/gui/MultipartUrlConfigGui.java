@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -132,19 +132,22 @@ public class MultipartUrlConfigGui
         webServerPanel.add(getDomainPanel());
         webServerPanel.add(getPortPanel());
 
+        JPanel northPanel = new JPanel();
+        northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
+        northPanel.add(getProtocolAndMethodPanel());
+        northPanel.add(getPathPanel());
+
         // WEB REQUEST PANEL
         JPanel webRequestPanel = new JPanel();
-        webRequestPanel.setLayout(
-            new BoxLayout(webRequestPanel, BoxLayout.Y_AXIS));
+        webRequestPanel.setLayout(new BorderLayout());
         webRequestPanel.setBorder(
             BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("web_request")));
         
-        webRequestPanel.add(getProtocolAndMethodPanel());
-        webRequestPanel.add(getPathPanel());
-        webRequestPanel.add(getParameterPanel());
-        webRequestPanel.add(getFilePanel());
+        webRequestPanel.add(northPanel,BorderLayout.NORTH);
+        webRequestPanel.add(getParameterPanel(),BorderLayout.CENTER);
+        webRequestPanel.add(getFilePanel(),BorderLayout.SOUTH );
         
         this.add(webServerPanel, BorderLayout.NORTH);
         this.add(webRequestPanel, BorderLayout.CENTER);
