@@ -60,6 +60,7 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.gui.ThreadGroupGui;
 import org.apache.jmeter.timers.gui.AbstractTimerGui;
 import org.apache.jmeter.util.BeanShellServer;
@@ -616,7 +617,14 @@ public class JMeter implements JMeterPlugin
 			{
 				TestElement item = (TestElement) iter.next();
 				if (item.isEnabled())
-				{//TODO handle ReplaceableControllers
+				{
+                    // This is done for GUI runs in JMeterTreeModel.addSubTree()
+                    if (item instanceof TestPlan) {
+                        TestPlan tp = (TestPlan) item;
+                        tp.setFunctionalMode(tp.isFunctionalMode());
+                        tp.setSerialized(tp.isSerialized());
+                    }
+                    //TODO handle ReplaceableControllers
 //					if (item instanceof ReplaceableController)
 //					{
 //						System.out.println("Replaceable "+item.getClass().getName());
