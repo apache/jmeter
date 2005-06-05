@@ -29,6 +29,7 @@ import org.apache.commons.httpclient.HttpConnection;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.HttpState;
+import org.apache.commons.httpclient.NTCredentials;
 import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -36,6 +37,7 @@ import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.jmeter.config.Argument;
 
 import org.apache.jmeter.protocol.http.control.AuthManager;
+import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 
@@ -76,6 +78,12 @@ public class HTTPSampler2 extends HTTPSamplerBase
      */
     private transient HttpMethodBase httpMethod = null;
     private transient HttpState httpState = null;
+
+    private static boolean basicAuth = JMeterUtils.getPropDefault("httpsampler2.basicauth",false);
+    
+    static {
+        log.info("httpsampler2.basicauth="+basicAuth);
+    }
 
     /**
 	 * Constructor for the HTTPSampler2 object.
@@ -399,29 +407,29 @@ public class HTTPSampler2 extends HTTPSamplerBase
     {
         if (authManager != null)
         {
-        	// Old method
-            String authHeader= authManager.getAuthHeaderForURL(u);
-            if (authHeader != null)
-            {
-                method.setRequestHeader("Authorization", authHeader);
+            if (basicAuth ) {
+                String authHeader = authManager.getAuthHeaderForURL(u);
+                if (authHeader != null)
+                {
+                    method.setRequestHeader("Authorization", authHeader);
+                }
+            } else {
+                Authorization auth = authManager.getAuthForURL(u);
+                if (auth != null)
+                {
+                	// TODO - set up realm, thishost and domain
+                	httpState.setCredentials(
+                    	null,         // "realm"
+    					auth.getURL(),
+                    	new NTCredentials(// Includes other types of Credentials
+                    			auth.getUser(),
+    							auth.getPass(),
+                    			null, // "thishost",
+    							null  // "targetdomain"
+    							)
+    					);
+                }
             }
-
-            //TODO: replace with something like this:
-//            Authorization auth= authManager.getAuthForURL(u);
-//            if (auth != null)
-//            {
-//            	// TODO - set up realm, thishost and domain
-//            	httpState.setCredentials(
-//                	null,         // "realm"
-//					auth.getURL(),
-//                	new NTCredentials(// Includes other types of Credentials
-//                			auth.getUser(),
-//							auth.getPass(),
-//                			null, // "thishost",
-//							null  // "targetdomain"
-//							)
-//					);
-//            }
         }
     }
 
