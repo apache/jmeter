@@ -146,30 +146,15 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
 <component name="JDBC Request" index="16.1.3" screenshot="gen-controller/jdbc-request.gif">
 
 <description><p>This sampler lets you send an JDBC Request (an SQL query) to a database.</p>
-<p>If you are going to send multiple requests to the same database, consider
-using one or more of the Defaults Configuration Elements:
-<complink name="JDBC Connection Configuration"/>,
-<complink name="JDBC SQL Query Defaults"/>.
-This way, you do not have to enter the same information for each JDBC Request
-controller.</p></description>
+<p>Before using this you need to set up a
+<complink name="JDBC Connection Configuration"/> Configuration element
+</p></description>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-        <property name="JDBC URL" required="Yes">URL of the database (for example,
-"jdbc:weblogic:oracle"). Refer to your database's JDBC documentation for the
-URL you should use.</property>
-        <property name="Driver Class" required="Yes">The database driver Java class (for example,
-"weblogic.jdbc.oci.Driver"). Refer to your database's JDBC documentation for
-the name of the JDBC driver class you should use.</property>
-        <property name="Username" required="Usually (database dependent)">FTP account username.</property>
-        <property name="Password" required="Usually (database dependent)">FTP account password.</property>
-        <property name="Number of Connections in Pool" required="Yes">Number of database connection
-instances to create and keep active. The maximum value depends on your database.
-Also, JMeter imposes a maximum of 100 connections.</property>
-        <property name="Max Usage For Each Connection" required="Yes">Maximum number of times JMeter
-uses a database connection instance before recycling it (destroying and creating
-a new instance).</property>
-        <property name="SQL Query String" required="Yes">SQL query (for example, "select * from t_customers").</property>
+		<property name="Variable Name" required="Yes">Name of the JMeter variable that the connection pool is bound to</property>
+		<property name="Query Only" required="Yes">Set this to true for Selects, otherwise False</property>
+        <property name="SQL Query" required="Yes">SQL query (for example, "select * from t_customers").</property>
 </properties>
 
 <links>
