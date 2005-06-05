@@ -42,7 +42,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  */
 public class SampleResultConverter extends AbstractCollectionConverter
 {
-   private static Logger log = LoggingManager.getLoggerForClass();
+   private static final Logger log = LoggingManager.getLoggerForClass();
 
    /**
     * Returns the converter version; used to check for possible
@@ -92,7 +92,7 @@ public class SampleResultConverter extends AbstractCollectionConverter
    protected void saveSamplerData(HierarchicalStreamWriter writer,
          SampleResult res, SampleSaveConfiguration save)
    {
-      if (save.saveSamplerData())
+      if (save.saveSamplerData(res))
       {
          writeString(writer, "samplerData", res.getSamplerData());
       }
