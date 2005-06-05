@@ -78,7 +78,7 @@ public class HTTPResultConverter extends SampleResultConverter
          MarshallingContext context, HTTPSampleResult res,
          SampleSaveConfiguration save)
    {
-      if (save.saveSamplerData())
+      if (save.saveSamplerData(res))
       {
          writeString(writer, "cookies", res.getCookies());
          writeString(writer, "method", res.getHTTPMethod());

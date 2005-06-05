@@ -498,10 +498,11 @@ public class SampleSaveConfiguration implements Cloneable,Serializable
    /**
     * @return Returns whether to save the samplerData.
     */
-   public boolean saveSamplerData()
+   public boolean saveSamplerData(SampleResult res)
    {
       return samplerData 
-      || TestPlan.getFunctionalMode(); // as per 2.0 branch
+      || TestPlan.getFunctionalMode() // as per 2.0 branch
+      || (responseDataOnError && !res.isSuccessful());
    }
 
    /**
