@@ -449,7 +449,7 @@ public final class OldSaveService implements SaveServiceConstants
 
         AssertionResult[] assResults = result.getAssertionResults();
 
-        if (saveConfig.saveSamplerData())
+        if (saveConfig.saveSamplerData(result))
         {
             config.addChild(
                 createConfigForString("samplerData", result.getSamplerData()));
