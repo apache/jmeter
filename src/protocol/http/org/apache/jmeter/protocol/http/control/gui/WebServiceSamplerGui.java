@@ -186,11 +186,7 @@ public class WebServiceSamplerGui
         WebServiceSampler sampler = (WebServiceSampler) s;
         this.configureTestElement(sampler);
         sampler.setDomain(domain.getText());
-        if (port.getText() != null && port.getText().length() > 0){
-            sampler.setPort(Integer.parseInt(port.getText()));
-        } else {
-            sampler.setPort(80);
-        }
+        sampler.setPort(80);
         sampler.setPath(path.getText());
         sampler.setWsdlURL(wsdlField.getText());
         sampler.setMethod(HTTPSamplerBase.POST);
@@ -305,7 +301,15 @@ public class WebServiceSamplerGui
         WebServiceSampler sampler = (WebServiceSampler) el;
         wsdlField.setText(sampler.getWsdlURL());
         domain.setText(sampler.getDomain());
-        port.setText(String.valueOf(sampler.getPort()));
+        String portstring = sampler.getPropertyAsString(HTTPSamplerBase.PORT);
+        if (portstring.equals("" + HTTPSamplerBase.UNSPECIFIED_PORT))
+        {
+                port.setText("");
+        }
+        else
+        {
+            port.setText(portstring);
+        }
         path.setText(sampler.getPath());
         soapAction.setText(sampler.getSoapAction());
         soapXml.setText(sampler.getXmlData());
