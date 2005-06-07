@@ -172,24 +172,7 @@ public class WebServiceSamplerGui
     {
         WebServiceSampler sampler = new WebServiceSampler();
         this.configureTestElement(sampler);
-        sampler.setDomain(domain.getText());
-        if (port.getText() != null && port.getText().length() > 0){
-            sampler.setPort(Integer.parseInt(port.getText()));
-        } else {
-            sampler.setPort(80);
-        }
-        sampler.setPath(path.getText());
-        sampler.setMethod(HTTPSamplerBase.POST);
-        sampler.setSoapAction(soapAction.getText());
-        sampler.setXmlData(soapXml.getText());
-        sampler.setXmlFile(soapXmlFile.getFilename());
-        sampler.setXmlPathLoc(randomXmlFile.getText());
-        sampler.setMemoryCache(memCache.isSelected());
-        sampler.setReadResponse(readResponse.isSelected());
-        sampler.setUseProxy(useProxy.isSelected());
-        sampler.setProxyHost(proxyHost.getText());
-        sampler.setProxyPort(proxyPort.getText());
-
+        this.modifyTestElement(sampler);
 		return sampler;
     }
 
