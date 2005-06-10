@@ -1660,9 +1660,29 @@ resource requires query string parameters, add them below in the
 
 <component index="16.4.6" name="JDBC Connection Configuration"
                 screenshot="jdbc-config/jdbc-conn-config.png">
-	<description>Defines the JDBC Connection settings to be used by 
-		the <complink name="JDBC Request"/>Sampler.
+	<description>Creates a database connection pool (used by <complink name="JDBC Request"/>Sampler)
+	 with JDBC Connection settings.
 	</description>
+	<properties>
+		<property name="Name" required="No">Descriptive name for the connection pool that is shown in the tree.</property>
+		<property name="Variable Name" required="Yes">The name of the variable the connection pool is tied to.  
+		Multiple connection pools can be used, each tied to a different variable, allowing JDBC Samplers
+		to select the pool to draw connections from.</property>
+		<property name="Max Number of Connections" required="Yes">Maximum number of connections allowed in the pool</property>
+		<property name="Pool timeout" required="Yes">Pool throws an error if the timeout period is exceeded in the 
+		process of trying to retrieve a connection</property>
+		<property name="Idle Cleanup Interval (ms)" required="Yes">Uncertain what exactly this does.</property>
+		<property name="Auto Commit" required="Yes">Turn auto commit on or off for the connections.</property>
+		<property name="Keep-alive" required="Yes">Uncertain what exactly this does.</property>
+		<property name="Max Connection Age (ms)" required="Yes">Uncertain what exactly this does.</property>
+		<property name="Validation Query" required="Yes">A simple query used to determine if the database is still
+		responding.</property>
+		<property name="Database URL" required="Yes">JDBC Connection string for the database.</property>
+		<property name="JDBC Driver class" required="Yes">Fully qualified name of driver class. (Must be in
+		JMeter's classpath - easiest to copy .jar file into JMeter's /lib directory).</property>
+		<property name="Username" required="Yes">Name of user to connect as.</property>
+		<property name="Password" required="Yes">Password to connect with.</property>
+	</properties>
 </component>
 
 <component index="16.4.7" name="JDBC SQL Query Defaults"
