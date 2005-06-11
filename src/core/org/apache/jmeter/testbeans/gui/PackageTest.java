@@ -71,6 +71,7 @@ public class PackageTest extends JMeterTestCase
 	public void setUp()
 	{
 		JMeterUtils.setLocale(new Locale(language,""));
+        Introspector.flushFromCaches(testBeanClass);
 		try
 		{
 			beanInfo= Introspector.getBeanInfo(testBeanClass);
