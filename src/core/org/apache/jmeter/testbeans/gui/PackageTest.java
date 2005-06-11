@@ -54,14 +54,27 @@ public class PackageTest extends JMeterTestCase
 
 	private Class testBeanClass;
 
-	private String language;
+    //ResourceBundle i18nEdit= ResourceBundle.getBundle("org.apache.jmeter.resources.i18nedit");
+    private static final Locale defaultLocale= new Locale("en"); //i18nEdit.getString("locale.default");
+    // TODO: find a clean way to get these from i18nedit.properties
 
+    private static final Locale[] locales = new Locale[] {
+        //new Locale("de"), // No resources yet
+        new Locale("ja"),
+        //new Locale("no"), // No resources yet
+        //new Locale("fr"), // No resources yet
+        //new Locale("zh","CN"), //No resources yet
+        new Locale("zh","TW")
+        };
+
+    private Locale testLocale;
+    
 	private PackageTest(
-		Class testBeanClass, String language, ResourceBundle defaultBundle)
+		Class testBeanClass, Locale locale, ResourceBundle defaultBundle)
 	{
-		super(testBeanClass.getName()+" - "+language);
+		super(testBeanClass.getName()+" - "+locale.getLanguage()+" - "+locale.getCountry());
 		this.testBeanClass= testBeanClass;
-		this.language= language;
+        this.testLocale = locale;
 		this.defaultBundle= defaultBundle;
 	}
 	
@@ -70,7 +83,7 @@ public class PackageTest extends JMeterTestCase
 
 	public void setUp()
 	{
-		JMeterUtils.setLocale(new Locale(language,""));
+		JMeterUtils.setLocale(testLocale);
         Introspector.flushFromCaches(testBeanClass);
 		try
 		{
@@ -151,11 +164,6 @@ public class PackageTest extends JMeterTestCase
 	{
 		TestSuite suite = new TestSuite("Bean Resource Test Suite");
 
-		//ResourceBundle i18nEdit= ResourceBundle.getBundle("org.apache.jmeter.resources.i18nedit");
-		String[] languages= new String[] { "de", "ja", "no" };
-		String defaultLanguage= "en"; //i18nEdit.getString("locale.default");
-			// TODO: find a clean way to get these from i18nedit.properties
-
 		Iterator iter =
 			ClassFinder
 				.findClassesThatExtend(
@@ -167,7 +175,7 @@ public class PackageTest extends JMeterTestCase
         {
         	String className = (String)iter.next();
             Class testBeanClass= Class.forName(className);
-            JMeterUtils.setLocale(new Locale(defaultLanguage,""));
+            JMeterUtils.setLocale(defaultLocale);
             ResourceBundle defaultBundle;
             try
             {
@@ -193,11 +201,11 @@ public class PackageTest extends JMeterTestCase
 				throw new Error("No default bundle for class " + className);
 			}
 
-			suite.addTest(new PackageTest(testBeanClass, defaultLanguage, defaultBundle));
+			suite.addTest(new PackageTest(testBeanClass, defaultLocale, defaultBundle));
 
-			for (int i=0; i<languages.length; i++)
+			for (int i=0; i<locales.length; i++)
 			{
-				suite.addTest(new PackageTest(testBeanClass, languages[i], defaultBundle));
+				suite.addTest(new PackageTest(testBeanClass, locales[i], defaultBundle));
 			}
 		}
 
