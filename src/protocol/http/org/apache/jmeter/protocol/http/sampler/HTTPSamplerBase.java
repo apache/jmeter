@@ -42,6 +42,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -597,9 +598,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements
         return path;
     }
 
-    protected static final int MAX_REDIRECTS = 5;
+    protected static final int MAX_REDIRECTS = 
+        JMeterUtils.getPropDefault("httpsampler.max_redirects",5);
 
-    protected static final int MAX_FRAME_DEPTH = 5;
+    protected static final int MAX_FRAME_DEPTH =
+        JMeterUtils.getPropDefault("httpsampler.max_frame_depth",5);
 
     /*
      * (non-Javadoc)
