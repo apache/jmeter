@@ -275,7 +275,7 @@ public class SaveService
       checkVersion(IntegerPropertyConverter.class, "1.3");
       checkVersion(LongPropertyConverter.class, "1.3");
       checkVersion(MultiPropertyConverter.class, "1.3");
-      checkVersion(SampleResultConverter.class, "1.6");
+      checkVersion(SampleResultConverter.class, "1.7");
       checkVersion(StringPropertyConverter.class, "1.6");
       checkVersion(TestElementConverter.class, "1.2");
       checkVersion(TestElementPropertyConverter.class, "1.4");
