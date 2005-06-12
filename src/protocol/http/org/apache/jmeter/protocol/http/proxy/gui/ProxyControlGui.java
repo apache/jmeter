@@ -24,6 +24,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Arrays;
@@ -72,6 +74,7 @@ public class ProxyControlGui
     implements
         JMeterGUIComponent,
         ActionListener,
+        ItemListener,
         KeyListener,
         FocusListener,
         UnsharedComponent
@@ -232,7 +235,7 @@ public class ProxyControlGui
 		useKeepAlive.setSelected(model.getUseKeepalive());
         regexMatch.setSelected(model.getRegexMatch());
         
-        reinitializeTargetCombo();//TODO is this needed? What does it do?
+        reinitializeTargetCombo();// Set up list of potential targets and enable listener
 
         populateTable(includeModel, model.getIncludePatterns().iterator());
         populateTable(excludeModel, model.getExcludePatterns().iterator());
@@ -262,6 +265,16 @@ public class ProxyControlGui
     public void focusGained(FocusEvent e)
     {}
 
+    /* 
+     * Handles groupingMode.
+     * actionPerfomed is not suitable, as that seems to be activated
+     * whenever the Proxy is selected in the Test Plan
+     */
+    public void itemStateChanged(ItemEvent e) {
+        //System.err.println(e.paramString());
+        enableRestart();
+    }
+
     /****************************************
      * !ToDo (Method description)
      *
@@ -271,6 +284,8 @@ public class ProxyControlGui
     {
         String command = action.getActionCommand();
 
+        //System.err.println(action.paramString()+" "+command+ " "+action.getModifiers());
+        
         if (command.equals(STOP))
         {
             model.stopProxy();
@@ -289,7 +304,6 @@ public class ProxyControlGui
         }
         else if ( command.equals(ProxyControl.CAPTURE_HTTP_HEADERS)
 		        || command.equals(ProxyControl.ADD_ASSERTIONS)
-                || command.equals(ProxyControl.GROUPING_MODE)
                 || command.equals(ProxyControl.USE_KEEPALIVE)
                 || command.equals(ProxyControl.REGEX_MATCH)
                  )
@@ -326,6 +340,7 @@ public class ProxyControlGui
             log.debug("In model "+model);
             TreeNodeWrapper nw= (TreeNodeWrapper)targetNodes.getSelectedItem();
             model.setTarget(nw.getTreeNode());
+            enableRestart();
         }
     }
 
@@ -355,6 +370,7 @@ public class ProxyControlGui
     {
         if (stop.isEnabled())
         {
+            //System.err.println("Enable Restart");
             restart.setEnabled(true);
         }
     }
@@ -575,8 +591,7 @@ public class ProxyControlGui
         groupingMode = new JComboBox(m);
         groupingMode.setName(ProxyControl.GROUPING_MODE);
         groupingMode.setSelectedIndex(0);
-        groupingMode.addActionListener(this);
-        groupingMode.setActionCommand(ProxyControl.GROUPING_MODE);
+        groupingMode.addItemListener(this);
 
         JLabel label2 = new JLabel(JMeterUtils.getResString("grouping_mode"));
         label2.setLabelFor(groupingMode);
