@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.assertions;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import org.apache.jmeter.samplers.SampleResult;
@@ -27,7 +28,9 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.log.Logger;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Pattern;
@@ -43,6 +46,8 @@ public class ResponseAssertion
    extends AbstractTestElement
    implements Serializable, Assertion
 {
+    private static final Logger log = LoggingManager.getLoggerForClass();
+    
    public final static String TEST_FIELD = "Assertion.test_field";
    // Values for TEST_FIELD
    public final static String SAMPLE_LABEL = "Assertion.sample_label";
@@ -263,7 +268,15 @@ public class ResponseAssertion
       // What are we testing against?
       if (ResponseAssertion.RESPONSE_DATA.equals(getTestField()))
       {
-		toCheck = new StringBuffer(response.getResponseHeaders()).append(new String(response.responseDataAsBA())).toString();
+          // TODO treat header separately from response? (would not apply to all samplers)
+          String data;
+          try {// get encoding from response and use to generate the string (bug25052)
+              data = new String(response.responseDataAsBA(),response.getDataEncoding());  
+          } catch (UnsupportedEncodingException e) { // Use default encoding instead
+              log.warn("Problem with response encoding: "+e);
+              data = new String(response.responseDataAsBA());
+          }
+          toCheck=new StringBuffer(response.getResponseHeaders()).append(data).toString();
       }
       else if (ResponseAssertion.RESPONSE_CODE.equals(getTestField()))
       {
