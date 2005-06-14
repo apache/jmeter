@@ -122,7 +122,7 @@ public class JMeterUtils implements UnitTestManager
             File f = new File(file);
             p.load(new FileInputStream(f));
         }
-        catch (Exception e)
+        catch (IOException e)
         {
             try
             {
@@ -148,6 +148,41 @@ public class JMeterUtils implements UnitTestManager
         else
         {
             setLocale(Locale.getDefault());
+        }
+        return p;
+    }
+
+    /**
+     * This method loads a property file that
+     * may reside in the user space, or in the classpath
+     *
+     *@param  file  the file to load 
+     *@return       the Properties from the file
+     */
+    public static Properties loadProperties(String file)
+    {
+        Properties p = new Properties();
+        try
+        {
+            File f = new File(file);
+            p.load(new FileInputStream(f));
+        }
+        catch (IOException e)
+        {
+            try
+            {
+                InputStream is = JMeterUtils.class.getClassLoader().getResource(file).openStream();
+                if (is == null) {
+                    log.warn("Cannot find "+file);
+                    return null;
+                }
+                p.load(is);
+            }
+            catch (IOException ex)
+            {
+                log.warn("Error reading "+file+" "+ex.toString());
+                return null;
+            }
         }
         return p;
     }
