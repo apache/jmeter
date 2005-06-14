@@ -41,6 +41,9 @@ public final class GUIFactory
     /** A Map from String to ImageIcon of registered icons. */
     private static final Map ICON_MAP = new HashMap();
 
+    /** A Map from String to ImageIcon of registered icons. */
+    private static final Map DISABLED_ICON_MAP = new HashMap();
+
     /**
      * Prevent instantiation since this is a static utility class.
      */
@@ -58,8 +61,24 @@ public final class GUIFactory
      */
     public static ImageIcon getIcon(Class elementClass)
     {
+        return getIcon(elementClass, true);
+        
+    }
+
+    /**
+     * Get icon/disabledicon which has previously been registered for this class object.
+     * 
+     * @param elementClass the class object which we want to get an icon for
+     * @param enabled - is icon enabled
+     * 
+     * @return the associated icon, or null if this class or its superclass
+     *         has not been registered
+     */
+public static ImageIcon getIcon(Class elementClass, boolean enabled)
+    {
         String key = elementClass.getName();
-        ImageIcon icon = (ImageIcon) ICON_MAP.get(key);
+        ImageIcon icon = (ImageIcon) (enabled ? 
+                ICON_MAP.get(key) : DISABLED_ICON_MAP.get(key));
 
         if (icon != null)
         {
@@ -68,7 +87,7 @@ public final class GUIFactory
         
         if (elementClass.getSuperclass() != null)
         {
-            return getIcon(elementClass.getSuperclass());
+            return getIcon(elementClass.getSuperclass(),enabled);
         }
         
         return null;
@@ -118,6 +137,19 @@ public final class GUIFactory
         ICON_MAP.put(key, icon);
     }
 
+    /**
+     * Register an icon so that it can later be retrieved via
+     * {@link #getIcon(Class)}.  The key should match the fully-qualified
+     * class name for the class used as the parameter when retrieving the
+     * icon.
+     * 
+     * @param key   the name which can be used to retrieve this icon later
+     * @param icon  the icon to store
+     */
+    public static void registerDisabledIcon(String key, ImageIcon icon)
+    {
+        DISABLED_ICON_MAP.put(key, icon);
+    }
 
     /**
      * Register a GUI class so that it can later be retrieved via
