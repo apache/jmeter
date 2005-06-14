@@ -768,7 +768,8 @@ some of its classes - at present JMeter can only run from jar files.
     <jar jarfile="${dest.jar}/ApacheJMeter_core.jar" excludes="**/NewDriver*">
       <!-- Only include class files from build tree - see above -->
       <fileset dir="${build.core}" includes="**/*.class"/>
-      <fileset dir="${src.core}" includes="org/apache/jmeter/images/"/>
+      <fileset dir="${src.core}" includes="org/apache/jmeter/images/**" 
+		excludes="**/*.properties"/>
       <fileset dir="${src.core}" includes="**/*.properties">
         <exclude name="*eucJP*"/>
       </fileset>
