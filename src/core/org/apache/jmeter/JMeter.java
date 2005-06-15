@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Authenticator;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,8 +51,8 @@ import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
-import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
-import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
+//import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
+//import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.samplers.Remoteable;
@@ -69,6 +70,7 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -746,40 +748,64 @@ public class JMeter implements JMeterPlugin
         System.out.println(str);
     }
 
+    private static final String[][] DEFAULT_ICONS = {
+        {
+            TestPlanGui.class.getName(),
+            "org/apache/jmeter/images/beaker.gif" },
+        {
+            AbstractTimerGui.class.getName(),
+                "org/apache/jmeter/images/timer.gif" },
+        {
+            ThreadGroupGui.class.getName(),
+                "org/apache/jmeter/images/thread.gif" },
+        {
+            AbstractVisualizer.class.getName(),
+                "org/apache/jmeter/images/meter.png" },
+        {
+            AbstractConfigGui.class.getName(),
+                "org/apache/jmeter/images/testtubes.png" },
+// Note: these were the original settings (just moved to a static array)
+// Commented out because there is no such file
+//        {
+//            AbstractPreProcessorGui.class.getName(),
+//                "org/apache/jmeter/images/testtubes.gif" },
+//        {
+//            AbstractPostProcessorGui.class.getName(),
+//                "org/apache/jmeter/images/testtubes.gif" },
+        {
+            AbstractControllerGui.class.getName(),
+                "org/apache/jmeter/images/knob.gif" },
+        {
+            WorkBenchGui.class.getName(),
+                "org/apache/jmeter/images/clipboard.gif" },
+        {
+            AbstractSamplerGui.class.getName(),
+                "org/apache/jmeter/images/pipet.png" }
+// AbstractAssertionGUI not defined
+    };
+    
     public String[][] getIconMappings()
     {
-        return new String[][] {
-            {
-                TestPlanGui.class.getName(),
-                "org/apache/jmeter/images/beaker.gif" },
-            {
-                AbstractTimerGui.class.getName(),
-                    "org/apache/jmeter/images/timer.gif" },
-                    {
-                ThreadGroupGui.class.getName(),
-                    "org/apache/jmeter/images/thread.gif" },
-                    {
-                AbstractVisualizer.class.getName(),
-                    "org/apache/jmeter/images/meter.png" },
-                    {
-                AbstractConfigGui.class.getName(),
-                    "org/apache/jmeter/images/testtubes.png" },
-                    {
-                AbstractPreProcessorGui.class.getName(),
-                    "org/apache/jmeter/images/testtubes.gif" },
-                    {
-                AbstractPostProcessorGui.class.getName(),
-                    "org/apache/jmeter/images/testtubes.gif" },
-                    {
-                AbstractControllerGui.class.getName(),
-                    "org/apache/jmeter/images/knob.gif" },
-                    {
-                WorkBenchGui.class.getName(),
-                    "org/apache/jmeter/images/clipboard.gif" },
-                    {
-                AbstractSamplerGui.class.getName(),
-                    "org/apache/jmeter/images/pipet.png" }
-        };
+        String iconProp = JMeterUtils.getPropDefault("jmeter.icons",
+                "org/apache/jmeter/images/icon.properties");
+        Properties p = JMeterUtils.loadProperties(iconProp);
+        if (p == null) {
+            log.info(iconProp+" not found - using default icon set");
+            return DEFAULT_ICONS;
+        }
+        log.info("Loaded icon properties from "+iconProp);
+        String[][] iconlist = new String[p.size()][3];
+        Enumeration pe = p.keys();
+        int i = 0;
+        while(pe.hasMoreElements()){
+            String key = (String) pe.nextElement();
+            String icons[]=JOrphanUtils.split(p.getProperty(key)," ");
+            iconlist[i][0]=key;
+            iconlist[i][1]=icons[0];
+            if (icons.length > 1) iconlist[i][2]=icons[1];
+            i++;
+        }
+        return iconlist;
     }
 
     public String[][] getResourceBundles()
