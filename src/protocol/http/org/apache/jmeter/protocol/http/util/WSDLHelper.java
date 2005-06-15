@@ -120,7 +120,7 @@ public class WSDLHelper
             for (int idx = 0; idx < ports.getLength(); idx++)
             {
                 Element pnode = (Element) ports.item(idx);
-                String portname = pnode.getAttribute("name");
+                String portname = pnode.getAttribute("name");//TODO - why not used?
                 // used to check binding, but now it doesn't. it was 
                 // failing when wsdl did not using binding as expected
                 NodeList servlist =
@@ -179,9 +179,9 @@ public class WSDLHelper
     {
         try
         {
-            CONN.getInputStream().close();
+            if (CONN != null) CONN.getInputStream().close();
         }
-        catch (Exception exception)
+        catch (IOException exception)
         {
             // do nothing
         }
@@ -227,15 +227,21 @@ public class WSDLHelper
             this.connect();
             this.buildDocument();
             SOAPOPS = this.getOperations();
-            this.close();
         }
         catch (IOException exception)
         {
             throw (new WSDLException(exception));
         }
-        catch (Exception exception)
+        catch (SAXException exception)
         {
             throw (new WSDLException(exception));
+        } 
+        catch (ParserConfigurationException exception) {
+            throw (new WSDLException(exception));
+        }
+        finally
+        {
+            this.close();            
         }
     }
 
