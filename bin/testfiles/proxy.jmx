@@ -1,7 +1,7 @@
-<jmeterTestPlan version="1.0" properties="1.5">
+<jmeterTestPlan version="1.0" properties="1.7">
   <hashTree>
     <TestPlan>
-      <collectionProp name="TestPlan.thread_groups"/>
+      <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.TestPlanGui</stringProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="org.apache.jmeter.config.Arguments">
         <stringProp name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</stringProp>
         <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
@@ -9,12 +9,12 @@
         <stringProp name="TestElement.name">User+Defined+Variables</stringProp>
         <boolProp name="TestElement.enabled">true</boolProp>
       </elementProp>
-      <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.TestPlanGui</stringProp>
-      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <collectionProp name="TestPlan.thread_groups"/>
       <stringProp name="TestElement.test_class">org.apache.jmeter.testelement.TestPlan</stringProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
       <stringProp name="TestElement.name">Test+Plan</stringProp>
-      <boolProp name="TestPlan.functional_mode">false</boolProp>
       <boolProp name="TestElement.enabled">true</boolProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
       <stringProp name="TestPlan.comments"></stringProp>
     </TestPlan>
     <hashTree>
@@ -29,8 +29,8 @@
         <stringProp name="TestElement.gui_class">org.apache.jmeter.threads.gui.ThreadGroupGui</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="org.apache.jmeter.control.LoopController">
           <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</stringProp>
-          <intProp name="LoopController.loops">-1</intProp>
           <stringProp name="TestElement.test_class">org.apache.jmeter.control.LoopController</stringProp>
+          <intProp name="LoopController.loops">-1</intProp>
           <stringProp name="TestElement.name">Loop+Controller</stringProp>
           <boolProp name="TestElement.enabled">true</boolProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -49,13 +49,14 @@
         </GenericController>
         <hashTree>
           <ConfigTestElement>
-            <stringProp name="HTTPSampler.path"></stringProp>
             <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui</stringProp>
+            <stringProp name="HTTPSampler.path"></stringProp>
             <stringProp name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</stringProp>
             <stringProp name="TestElement.name">HTTP+Request+Defaults</stringProp>
             <stringProp name="HTTPSampler.domain">jakarta.apache.org</stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <boolProp name="TestElement.enabled">true</boolProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
             <elementProp name="HTTPsampler.Arguments" elementType="org.apache.jmeter.config.Arguments">
               <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</stringProp>
               <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
@@ -63,7 +64,6 @@
               <stringProp name="TestElement.name"></stringProp>
               <boolProp name="TestElement.enabled">true</boolProp>
             </elementProp>
-            <stringProp name="HTTPSampler.port"></stringProp>
           </ConfigTestElement>
           <hashTree/>
         </hashTree>
