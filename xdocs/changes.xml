@@ -43,6 +43,9 @@
 <li>All Test elements can be saved as a graphics image to a file</li>
 <li>Bug 35026 - add RE pattern matching to Proxy</li>
 <li>Bug 34739 - Enhance constant Throughput timer</li>
+<li>Bug 25052 - use response encoding to create comparison string in Response Assertion</li>
+<li>New optional icons</li>
+<li>Allow icons to be defined via property files</li>
 </ul>
 <h4>Bug fixes:</h4>
 <ul>
@@ -59,6 +62,7 @@
 <li>Bug 35067 - set up filename when using -t option</li>
 <li>Don't substitute TestElement.* properties by UDVs in Proxy</li>
 <li>Bug 35065 - don't save old extensions in File Saver</li>
+<li>Bug 25413 - don't enable Restart button unnecessarily</li>
 </ul>
 	
 <h3>Version 2.0.3</h3>
