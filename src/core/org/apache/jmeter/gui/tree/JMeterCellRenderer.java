@@ -50,12 +50,29 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer
             leaf,
             row,
             p_hasFocus);
-        this.setEnabled(((JMeterTreeNode)value).isEnabled());
-        ImageIcon ic = ((JMeterTreeNode)value).getIcon();
+        boolean enabled=((JMeterTreeNode)value).isEnabled();
+        ImageIcon ic = ((JMeterTreeNode)value).getIcon(enabled);
         if (ic != null)
         {
-            setIcon(ic);
+            if (enabled)
+            {
+                setIcon(ic);
+            }
+            else
+            {
+                setDisabledIcon(ic);
+            }
         }
+        else
+        {
+            if (!enabled)// i.e. no disabled icon found
+            {
+                // Must therefore set the enabled icon so there is at least some icon
+                ic = ((JMeterTreeNode)value).getIcon();
+                if (ic != null) setIcon(ic);
+            }
+        }
+        this.setEnabled(enabled);
         return this;
     }
 }
