@@ -76,13 +76,17 @@ public class JMeterTreeNode
 
     public ImageIcon getIcon()
     {
+        return getIcon(true);
+    }
+    public ImageIcon getIcon(boolean enabled)
+    {
         try
         {
             if (getTestElement() instanceof TestBean)
             {
                 try
                 {
-                    Image img= Introspector.getBeanInfo(
+                    Image img = Introspector.getBeanInfo(
                         getTestElement().getClass())
                             .getIcon(BeanInfo.ICON_COLOR_16x16);
 					// If icon has not been defined, then use GUI_CLASS property
@@ -95,7 +99,8 @@ public class JMeterTreeNode
 									+getTestElement().getClass().getName());
 							return null;
 						}
-		                return GUIFactory.getIcon(Class.forName((String) clazz));
+		                return GUIFactory.getIcon(Class.forName((String) clazz),
+                                enabled);
                     }
                     return new ImageIcon(img);
                 }
@@ -110,7 +115,7 @@ public class JMeterTreeNode
                 return GUIFactory.getIcon(
                     Class.forName(
                         getTestElement().getPropertyAsString(
-                            TestElement.GUI_CLASS)));
+                            TestElement.GUI_CLASS)),enabled);
             }
         }
         catch (ClassNotFoundException e)
