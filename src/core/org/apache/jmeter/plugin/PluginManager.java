@@ -23,6 +23,8 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 
 import org.apache.jmeter.gui.GUIFactory;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * @author Oliver Rossmueller
@@ -32,6 +34,7 @@ public final class PluginManager
 {
     private static final PluginManager instance = new PluginManager();
 
+    private static final Logger log = LoggingManager.getLoggerForClass();
     private PluginManager()
     {
     }
@@ -60,11 +63,19 @@ public final class PluginManager
 
             if (resource == null)
             {
-                // todo: log or throw exception
+                log.warn("Can't find icon for "+icons[i][0]+" - "+icons[i][1]);
             }
             else
             {
                 GUIFactory.registerIcon(icons[i][0], new ImageIcon(resource));
+                if (icons[i].length > 2 && icons[i][2] != null){
+                    URL resource2 = classloader.getResource(icons[i][2].trim());
+                    if (resource2 == null) {
+                        log.info("Can't find disabled icon for "+icons[i][0]+" - "+icons[i][2]);
+                    } else {
+                        GUIFactory.registerDisabledIcon(icons[i][0], new ImageIcon(resource2));
+                    }
+                }
             }
         }
     }
