@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 
 /**
@@ -42,7 +43,7 @@ public class TestSaveService extends JMeterTestCase
                };
 
        private static boolean saveOut = 
-    	   System.getProperty("testsaveservice.saveout","false").equalsIgnoreCase("true");
+    	   JMeterUtils.getPropDefault("testsaveservice.saveout",false);
        
        public TestSaveService(String name)
        {
