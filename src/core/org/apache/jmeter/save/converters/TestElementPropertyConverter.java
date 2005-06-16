@@ -18,6 +18,8 @@
 package org.apache.jmeter.save.converters;
 
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.protocol.http.control.Header;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -75,6 +77,22 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter
       }
    }
 
+/*
+ * TODO - convert to woek more like upgrade.properties/NameUpdater.java
+ * 
+ * Special processing is carried out for the Header Class
+ * The String property TestElement.name is converted to Header.name
+ * for example:
+   <elementProp name="User-Agent" elementType="org.apache.jmeter.protocol.http.control.Header">
+      <stringProp name="Header.value">Mozilla%2F4.0+%28compatible%3B+MSIE+5.5%3B+Windows+98%29</stringProp>
+       <stringProp name="TestElement.name">User-Agent</stringProp>
+    </elementProp>  
+ *   becomes
+   <elementProp name="User-Agent" elementType="org.apache.jmeter.protocol.http.control.Header">
+      <stringProp name="Header.value">Mozilla%2F4.0+%28compatible%3B+MSIE+5.5%3B+Windows+98%29</stringProp>
+       <stringProp name="Header.name">User-Agent</stringProp>
+    </elementProp>
+*/
    /*
     * (non-Javadoc)
     * 
@@ -89,13 +107,20 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter
          TestElementProperty prop = (TestElementProperty) createCollection(context
                .getRequiredType());
          prop.setName(ConversionHelp.decode(reader.getAttribute("name")));
-         prop.setObjectValue(Class.forName(
-               reader.getAttribute("elementType")).newInstance());
+         String element = reader.getAttribute("elementType");
+         boolean isHeader = "org.apache.jmeter.protocol.http.control.Header".equals(element);
+         prop.setObjectValue(Class.forName(element).newInstance());
          while (reader.hasMoreChildren())
          {
             reader.moveDown();
             JMeterProperty subProp = (JMeterProperty) readItem(reader, context,
                   prop);
+            if (isHeader) {
+                String name = subProp.getName();
+                if (TestElement.NAME.equals(name)){
+                    subProp.setName(Header.HNAME);
+                }
+            }
             prop.addProperty(subProp);
             reader.moveUp();
          }

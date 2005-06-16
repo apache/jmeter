@@ -31,7 +31,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
  */
 public class Header extends AbstractTestElement implements Serializable
 {
-    private static final String HNAME = "Header.name";
+    public  static final String HNAME = "Header.name";
     private static final String VALUE = "Header.value";
 
     /**
@@ -67,7 +67,7 @@ public class Header extends AbstractTestElement implements Serializable
     }
 
     /**
-     * Get the value for this object.
+     * Get the name for this object.
      */
     public synchronized String getName()
     {
@@ -75,7 +75,7 @@ public class Header extends AbstractTestElement implements Serializable
     }
 
     /**
-     * Set the value for this object.
+     * Set the name for this object.
      */
     public synchronized void setName(String name)
     {
