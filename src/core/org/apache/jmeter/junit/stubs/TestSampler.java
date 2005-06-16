@@ -37,14 +37,28 @@ import org.apache.jmeter.samplers.SampleResult;
 public class TestSampler extends AbstractSampler
 {
 
+    private long wait = 0;
+    
     /* (non-Javadoc)
      * @see 
 org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
      */
     public SampleResult sample(Entry e)
     {
-        // TODO Auto-generated method stub
+        if (wait > 0) {
+            try {
+                Thread.sleep(wait);
+            } catch (InterruptedException e1) {
+                // ignore
+            }
+        }
         return null;
+    }
+
+    public TestSampler(String name, long wait)
+    {
+        setName(name);
+        this.wait=wait;
     }
 
     public TestSampler(String name)
