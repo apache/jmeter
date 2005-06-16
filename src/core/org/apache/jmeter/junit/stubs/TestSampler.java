@@ -38,6 +38,7 @@ public class TestSampler extends AbstractSampler
 {
 
     private long wait = 0;
+    private long samples = 0; // number of samples taken
     
     /* (non-Javadoc)
      * @see 
@@ -52,6 +53,7 @@ org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
                 // ignore
             }
         }
+        samples++;
         return null;
     }
 
@@ -74,5 +76,9 @@ org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
         return getName();
     }
 
+    public long getSamples()
+    {
+        return samples;
+    }
 }
 
