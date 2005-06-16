@@ -305,6 +305,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements
     }
 
     public void setAuthManager(AuthManager value) {
+        AuthManager mgr =getAuthManager(); 
+        if (mgr!=null) {
+            log.warn("Existing Manager "+mgr.getName()+" superseded by "+value.getName());
+        }
         setProperty(new TestElementProperty(AUTH_MANAGER, value));
     }
 
@@ -313,6 +317,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements
     }
 
     public void setHeaderManager(HeaderManager value) {
+        HeaderManager mgr =getHeaderManager(); 
+        if (mgr!=null) {
+            log.warn("Existing Manager "+mgr.getName()+" superseded by "+value.getName());
+        }
         setProperty(new TestElementProperty(HEADER_MANAGER, value));
     }
 
@@ -321,6 +329,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements
     }
 
     public void setCookieManager(CookieManager value) {
+        CookieManager mgr =getCookieManager(); 
+        if (mgr!=null) {
+            log.warn("Existing Manager "+mgr.getName()+" superseded by "+value.getName());
+        }
         setProperty(new TestElementProperty(COOKIE_MANAGER, value));
     }
 
