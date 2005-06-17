@@ -252,6 +252,7 @@ public class CookieManager
         /*      boolean clear = getClearEachIteration();
                 super.clear();
                 setClearEachIteration(clear);*/
+        log.debug("Clear all cookies");
         setProperty(new CollectionProperty(COOKIES, new ArrayList()));
     }
 
@@ -455,6 +456,9 @@ public class CookieManager
                 && cookie.getDomain().equals(newCookie.getDomain())
                 && cookie.getName().equals(newCookie.getName()))
             {
+                if (log.isDebugEnabled()){
+                log.debug("New Cookie = "+newCookie.toString()+ " removing matching Cookie "+cookie.toString());
+                }
                 removeIndices.addElement(new Integer(i));
             }
         }
@@ -475,6 +479,7 @@ public class CookieManager
 
     public void removeCookieNamed(String name)
     {
+        if (log.isDebugEnabled()) log.debug("Remove cookie named "+name);
         PropertyIterator iter = getCookies().iterator();
         while (iter.hasNext())
         {
