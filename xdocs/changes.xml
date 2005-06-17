@@ -63,6 +63,7 @@
 <li>Don't substitute TestElement.* properties by UDVs in Proxy</li>
 <li>Bug 35065 - don't save old extensions in File Saver</li>
 <li>Bug 25413 - don't enable Restart button unnecessarily</li>
+<li>Bug 35059 - Runtime Controller stopped working</li>
 </ul>
 	
 <h3>Version 2.0.3</h3>
