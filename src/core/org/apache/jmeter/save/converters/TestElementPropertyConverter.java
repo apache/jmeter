@@ -18,7 +18,6 @@
 package org.apache.jmeter.save.converters;
 
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -118,7 +117,8 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter
             if (isHeader) {
                 String name = subProp.getName();
                 if (TestElement.NAME.equals(name)){
-                    subProp.setName(Header.HNAME);
+                    subProp.setName("Header.name");
+                    // Must be same as Header.HNAME - but that is built later
                 }
             }
             prop.addProperty(subProp);
