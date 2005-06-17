@@ -31,7 +31,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
  */
 public class Header extends AbstractTestElement implements Serializable
 {
-    public  static final String HNAME = "Header.name";
+    private static final String HNAME = "Header.name"; // See TestElementPropertyConverter
     private static final String VALUE = "Header.value";
 
     /**
