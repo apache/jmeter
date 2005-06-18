@@ -23,7 +23,7 @@
 
 <body>
 
-<section name="4.0 Elements of a Test Plan">
+<section name="4. Elements of a Test Plan">
 
 <p>The Test Plan object has a new checkbox to select called "Functional Testing".  If selected, it
 will cause JMeter to record the data returned from the server for each sample.  If you have 
