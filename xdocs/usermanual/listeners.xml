@@ -23,7 +23,7 @@
 
 <body>
 
-<section name="12. Introduction to listeners" anchor="intro">
+<section name="14. Introduction to listeners" anchor="intro">
 <p>For those new to JMeter, a listener is a component that shows the results of the
 samples. The results can be shown in a tree, tables, graphs or simply written to a log
 file. To view the contents of a response from any given sampler, add either view
@@ -33,7 +33,7 @@ each listener, please go to the components page.</p>
 
 </section>
 
-<section name="12.1 Screen captures" anchor="screencap">
+<section name="14.1 Screen captures" anchor="screencap">
 <p>JMeter is capable of saving any listener as a PNG file. To do so, select the
 listener in the left panel. Click edit -> Save As Image. A file dialog will
 appear. Enter the desired name and save the listener.
