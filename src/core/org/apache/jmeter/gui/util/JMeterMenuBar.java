@@ -22,6 +22,7 @@ import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Locale;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -284,6 +285,12 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
     
     private JMenu makeLanguageMenu()
     {
+        /*
+         * Note: the item name is used by ChangeLanguage to create a Locale for
+         * that language, so need to ensure that the language strings are valid
+         * If they exist, use the Locale language constants
+         */
+        //TODO: do accelerator keys make sense? The key may not be present in translations
         JMenu languageMenu =
             new JMenu(JMeterUtils.getResString("choose_language"));
         languageMenu.setMnemonic('C');
@@ -291,38 +298,44 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
         JMenuItem english = new JMenuItem(JMeterUtils.getResString("en"), 'E');
         english.addActionListener(ActionRouter.getInstance());
         english.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
-        english.setName("en");
+        english.setName(Locale.ENGLISH.getLanguage());
         languageMenu.add(english);
         //add Japanese
         JMenuItem japanese = new JMenuItem(JMeterUtils.getResString("jp"), 'J');
         japanese.addActionListener(ActionRouter.getInstance());
         japanese.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
-        japanese.setName("ja");
+        japanese.setName(Locale.JAPANESE.getLanguage());
         languageMenu.add(japanese);
         //add Norwegian
         JMenuItem norway = new JMenuItem(JMeterUtils.getResString("no"), 'N');
         norway.addActionListener(ActionRouter.getInstance());
         norway.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
-        norway.setName("no");
+        norway.setName("no"); // No default for Norwegian
         languageMenu.add(norway);
         //add German
         JMenuItem german = new JMenuItem(JMeterUtils.getResString("de"), 'G');
         german.addActionListener(ActionRouter.getInstance());
         german.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
-        german.setName("de");
+        german.setName(Locale.GERMAN.getLanguage());
         languageMenu.add(german);
         //add French
         JMenuItem french = new JMenuItem(JMeterUtils.getResString("fr"), 'F');
         french.addActionListener(ActionRouter.getInstance());
         french.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
-        french.setName("fr");
+        french.setName(Locale.FRENCH.getLanguage());
         languageMenu.add(french);
-        //add chinese
-        JMenuItem chinese = new JMenuItem(JMeterUtils.getResString("cn"), 'C');
-        chinese.addActionListener(ActionRouter.getInstance());
-        chinese.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
-        chinese.setName("cn");
-        languageMenu.add(chinese);
+        //add chinese (simple)
+        JMenuItem chineseSimple = new JMenuItem(JMeterUtils.getResString("zh_cn"));
+        chineseSimple.addActionListener(ActionRouter.getInstance());
+        chineseSimple.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
+        chineseSimple.setName(Locale.SIMPLIFIED_CHINESE.toString());
+        languageMenu.add(chineseSimple);
+        //add chinese (traditional)
+        JMenuItem chineseTrad = new JMenuItem(JMeterUtils.getResString("zh_TW"));
+        chineseTrad.addActionListener(ActionRouter.getInstance());
+        chineseTrad.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
+        chineseTrad.setName(Locale.TRADITIONAL_CHINESE.toString());
+        languageMenu.add(chineseTrad);
         return languageMenu;
     }
 
