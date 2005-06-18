@@ -250,17 +250,27 @@ public class JMeterUtils implements UnitTestManager
          * before it defaults to the base property file, so we need to change
          * the default Locale to ensure the base property file is found.
          */
-        if(loc.getLanguage() == Locale.ENGLISH.getLanguage()
-                && // Don't change locale from en_GB to en 
-           Locale.getDefault().getLanguage() != Locale.ENGLISH.getLanguage()
-           ) {
-            Locale.setDefault(Locale.ENGLISH);
+        Locale def = null;
+        if(loc.getLanguage() == Locale.ENGLISH.getLanguage()){
+            def = Locale.getDefault(); 
+            // Don't change locale from en_GB to en 
+            if (def.getLanguage() != Locale.ENGLISH.getLanguage()) {
+                Locale.setDefault(Locale.ENGLISH);
+            } else {
+                def = null; // no need to reset Locale
+            }
         }
         resources =
             ResourceBundle.getBundle(
                 "org.apache.jmeter.resources.messages",
                 locale);
         notifyLocaleChangeListeners();
+        /*
+         * Reset Locale if necessary so other locales are properly handled
+         */
+        if (def != null) {
+            Locale.setDefault(def);
+        }
     }
 
     /**
