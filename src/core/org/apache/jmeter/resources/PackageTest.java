@@ -78,8 +78,19 @@ public class PackageTest extends TestCase
        	String s;
         while((s=fileReader.readLine())!=null)
         {
-           	if (s.length() > 0 && !s.startsWith("#"))  {
-           		l.add(s.substring(0,s.indexOf('='))); // Store the key
+           	if (s.length() > 0 && !s.startsWith("#") &&!s.startsWith("!"))  {
+                int equ = s.indexOf('=');
+                String key = s.substring(0,equ);
+                /*
+                 * JMeterUtils.getResString() converts space to _ and lowercases
+                 * the key, so make sure all keys pass the test
+                 */
+                if ((key.indexOf(' ') >=0) || !key.toLowerCase().equals(key)) {
+                    System.out.println("Invalid key for JMeterUtils "+key);
+                    fails++;
+                }
+                String val = s.substring(equ+1);
+           		l.add(key); // Store the key
            		/*
            		 *  Now check for invalid message format:
            		 *  if string contains {0} and ' there may  be a problem,
@@ -87,13 +98,13 @@ public class PackageTest extends TestCase
            		 *  is a { in the output.
            		 *  A bit crude, but should be enough for now.
            		 */
-    			if (s.indexOf("{0}") > 0 && s.indexOf("'") > 0)
+    			if (val.indexOf("{0}") > 0 && val.indexOf("'") > 0)
     			{
-    				String m = java.text.MessageFormat.format(s,DUMMY_PARAMS);
+    				String m = java.text.MessageFormat.format(val,DUMMY_PARAMS);
     				if (m.indexOf("{") > 0) {
     					fails++;
     					System.out.println("Incorrect message format ? (input/output): ");
-    				    System.out.println(s);
+    				    System.out.println(val);
     				    System.out.println(m);
     				}
     			}
