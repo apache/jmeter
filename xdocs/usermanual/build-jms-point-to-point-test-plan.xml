@@ -15,7 +15,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<document prev="build-jms-topic-plan.html" next="build-monitor-test-plan.html" date="$Date$">
+<document prev="build-ws-test-plan.html" next="build-jms-topic-test-plan.html" date="$Date$">
 
     <properties>
         <title>User's Manual: Building a JMS (Java Messaging Service) Point-to-Point Test Plan</title>
@@ -23,7 +23,7 @@
 
     <body>
 
-        <section name="10. Building a JMS Point-to-Point Test Plan" anchor="building">
+        <section name="11. Building a JMS Point-to-Point Test Plan" anchor="building">
             <p>In this section, you will learn how to create a
                 <a href="build-test-plan.html">Test Plan</a> to test a JMS Point-to-Point messaging solution.
 The setup of the test is 1 threadgroup with 5 threads sending 4 messages each through a request queue.
@@ -42,7 +42,7 @@ consumed by multiple subscribers. </p>
 
         </section>
 
-        <section name="10.1 Adding a Thread Group" anchor="adding_threadgroup">
+        <section name="11.1 Adding a Thread Group" anchor="adding_threadgroup">
             <p>The first step you want to do with every JMeter Test Plan is to add a
                 <a href="test_plan.html#thread_group">Thread Group</a> element.  The Thread Group tells
 JMeter the number of users you want to simulate, how often the users should send
@@ -59,11 +59,11 @@ Test Plan element.</p>
 
             <p>Next, you need to modify the default properties.  Select the Thread Group element
 in the tree, if you have not already selected it. You should now see the Thread
-Group Control Panel in the right section of the JMeter window (see Figure 10.1
+Group Control Panel in the right section of the JMeter window (see Figure 11.1
 below)</p>
 
             <figure image="webtest/threadgroup.png">
-Figure 10.1. Thread Group with Default Values</figure>
+Figure 11.1. Thread Group with Default Values</figure>
 
             <p>Start by providing a more descriptive name for our Thread Group. In the name
 field, enter Point-to-Point.</p>
@@ -93,7 +93,7 @@ leave the Control Panel (for example, when selecting another tree element).</not
 
         </section>
 
-        <section name="10.2 Adding JMS Point-to-Point Sampler" anchor="adding_point_to_point_sampler">
+        <section name="11.2 Adding JMS Point-to-Point Sampler" anchor="adding_point_to_point_sampler">
 
             <note>
                 Make sure the required jar files are in JMeter's lib directory. If they are not, shutdown JMeter,
@@ -182,7 +182,7 @@ Then, select the JMS Point-to-Point sampler element in the tree.
 
         </section>
 
-        <section name="10.3 Adding a Listener to View Store the Test Results" anchor="adding_listener">
+        <section name="11.3 Adding a Listener to View Store the Test Results" anchor="adding_listener">
             <p>The final element you need to add to your Test Plan is a
                 <a href="component_reference.html#listeners">Listener</a>. This element is
 responsible for storing all of the results of your HTTP requests in a file and presenting
@@ -197,11 +197,11 @@ Browse button and browse to a directory and then enter a filename.
             </p>
 
             <figure image="graph_results.png">
-Figure 10.7. Graph Results Listener</figure>
+Figure 11.2. Graph Results Listener</figure>
 
         </section>
 
-        <section name="10.4 Saving the Test Plan" anchor="saving">
+        <section name="11.4 Saving the Test Plan" anchor="saving">
             <p>Although it is not required, we recommend that you save the Test Plan to a
 file before running it.  To save the Test Plan, select Save Test Plan from the
 File menu (with the latest release, it is no longer necessary to select the
@@ -217,7 +217,7 @@ the Edit menu.
 
         </section>
 
-        <section name="10.5 Running the Test Plan" anchor="running">
+        <section name="11.5 Running the Test Plan" anchor="running">
 
             <p>From the Run menu, select Run.</p>
 
@@ -235,7 +235,7 @@ will ensure during the test run that no sample is recorded to the same file more
 
         </section>
 
-        <section name="10.6 Libraries for ActiveMQ 3.0" anchor="libraries_activemq">
+        <section name="11.6 Libraries for ActiveMQ 3.0" anchor="libraries_activemq">
             <p>The following libraries have to be supplied in the lib\ext directory of JMeter:
                 <ol>
                     <li>activation.jar</li>
