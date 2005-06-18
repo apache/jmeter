@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
    $Header$
-   Copyright 2001-2004 The Apache Software Foundation
+   Copyright 2001-2005 The Apache Software Foundation
  
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,7 +15,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<document prev="build-ws-jms-point-to-point-test-plan.html" next="build-monitor-test-plan.html" date="$Date$">
+<!DOCTYPE document
+[
+<!ENTITY sect-num '12'>
+]>
+<document prev="build-jms-point-to-point-test-plan.html" next="build-monitor-test-plan.html" date="$Date$">
 
 <properties>
   <title>User's Manual: Building a JMS (Java Messaging Service) Test Plan</title>
@@ -23,7 +27,7 @@
 
 <body>
 
-<section name="12. Building a JMS Topic Test Plan" anchor="building">
+<section name="&sect-num;. Building a JMS Topic Test Plan" anchor="building">
 <p>In this section, you will learn how to create a 
 <a href="build-test-plan.html">Test Plan</a> to test JMS Providers. You will
 create five subscribers and one publisher. You will create 2 thread groups and set
@@ -45,7 +49,7 @@ Messaging system can work in sychronous and asynchronous mode.</p>
 
 </section>
 
-<section name="12.1 Adding Users" anchor="adding_users">
+<section name="&sect-num;.1 Adding Users" anchor="adding_users">
 <p>The first step is add a <a href="test_plan.html#thread_group">Thread Group</a>
  element.  The Thread Group tells JMeter the number of users you want to simulate,
  how often the users should send requests, and the how many requests they should 
@@ -61,11 +65,11 @@ Test Plan element.</p>
 
 <p>Next, you need to modify the default properties.  Select the Thread Group element
 in the tree, if you have not already selected it. You should now see the Thread
-Group Control Panel in the right section of the JMeter window (see Figure 12.1
+Group Control Panel in the right section of the JMeter window (see Figure &sect-num;.1
 below)</p>
 
 <figure image="webtest/threadgroup.png">
-Figure 12.1. Thread Group with Default Values</figure>
+Figure &sect-num;.1. Thread Group with Default Values</figure>
 
 <p>Start by providing a more descriptive name for our Thread Group. In the name
 field, enter Subscribers.</p>
@@ -87,7 +91,7 @@ once. To have JMeter repeatedly run your Test Plan, select the Forever
 checkbox.</p>
 
 <p>Repeat the process and add another thread group. For the second thread
-group, leave the number of threads 1 and change the iteration to 12.</p>
+group, leave the number of threads 1 and change the iteration to 10.</p>
 
 <note>In most applications, you have to manually accept
 changes you make in a Control Panel.  However, in JMeter, the Control Panel
@@ -98,7 +102,7 @@ leave the Control Panel (for example, when selecting another tree element).</not
 
 </section>
 
-<section name="12.2 Adding JMS Subscriber and Publisher" anchor="adding_subscriber_publisher">
+<section name="&sect-num;.2 Adding JMS Subscriber and Publisher" anchor="adding_subscriber_publisher">
 
 <p>Make sure the required jar files are in JMeter's lib directory. If they are
 not, shutdown JMeter, copy the jar files over and restart JMeter.</p>
@@ -128,7 +132,7 @@ exhibits zombie threads with one client, try the other.</li>
 </p>
 
 <figure image="jms/jms_sub.png">
-Figure 12.2. JMS Subscriber</figure>
+Figure &sect-num;.2. JMS Subscriber</figure>
 
 <ol>
 <li>Change the Name field to "sample publisher".</li>
@@ -152,12 +156,12 @@ message is generated correctly.</li>
 </ol>
 <p></p>
 <figure image="jms/jms_pub.png">
-Figure 12.3. JMS Publisher</figure>
+Figure &sect-num;.3. JMS Publisher</figure>
 
 
 </section>
 
-<section name="12.3 Adding a Listener to View Store the Test Results" anchor="adding_listener">
+<section name="&sect-num;.3 Adding a Listener to View Store the Test Results" anchor="adding_listener">
 <p>The final element you need to add to your Test Plan is a
  <a href="component_reference.html#listeners">Listener</a>. This element is
 responsible for storing all of the results of your HTTP requests in a file and presenting
@@ -169,11 +173,11 @@ output file.  You can either type it into the filename field, or select the
 Browse button and browse to a directory and then enter a filename.</p>
 
 <figure image="graph_results.png">
-Figure 12.4. Graph Results Listener</figure>
+Figure &sect-num;.4. Graph Results Listener</figure>
 
 </section>
 
-<section name="12.4 Saving the Test Plan" anchor="saving">
+<section name="&sect-num;.4 Saving the Test Plan" anchor="saving">
 <p>Although it is not required, we recommend that you save the Test Plan to a
 file before running it.  To save the Test Plan, select Save Test Plan from the
 File menu (with the latest release, it is no longer necessary to select the
@@ -189,7 +193,7 @@ the Edit menu.
 
 </section>
 
-<section name="12.5 Running the Test Plan" anchor="running">
+<section name="&sect-num;.5 Running the Test Plan" anchor="running">
 
 <p>From the Run menu, select Run.</p>
 
