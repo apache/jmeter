@@ -242,7 +242,20 @@ public class JMeterUtils implements UnitTestManager
      */
     public static void setLocale(Locale loc)
     {
+        log.info("Setting Locale to "+loc.toString());
         locale = loc;
+        /*
+         * See bug 29920.
+         * getBundle() defaults to the property file for the default Locale
+         * before it defaults to the base property file, so we need to change
+         * the default Locale to ensure the base property file is found.
+         */
+        if(loc.getLanguage() == Locale.ENGLISH.getLanguage()
+                && // Don't change locale from en_GB to en 
+           Locale.getDefault().getLanguage() != Locale.ENGLISH.getLanguage()
+           ) {
+            Locale.setDefault(Locale.ENGLISH);
+        }
         resources =
             ResourceBundle.getBundle(
                 "org.apache.jmeter.resources.messages",
@@ -338,8 +351,8 @@ public class JMeterUtils implements UnitTestManager
         {
             return null;
         }
-        key = key.replace(' ', '_');
-        key = key.toLowerCase();
+        key = key.replace(' ', '_'); //TODO - why does it do this?
+        key = key.toLowerCase();     //(it's been here since v1.1)
         String resString = null;
         try
         {
