@@ -1942,7 +1942,7 @@ in each thread in a test script, but the same Interpreter is used for subsequent
 This means that variables persist across calls to the assertion.
 </p>
 <p>
-All Assertions are called from a single thread - the one that controls the thread Group.
+All Assertions are called from the same thread as the sampler.
 </p>
 <p>
 If the property "beanshell.assertion.init" is defined, it is passed to the Interpreter
