@@ -128,8 +128,7 @@ public class AssertionResult implements Serializable
     /**
      * Convenience method for setting up results where the response was null 
      * 
-     * @param message the message to set
-     * @return this
+     * @return assertion result with appropriate fields set up
      */	
     public AssertionResult setResultForNull(){
 		error=false;
