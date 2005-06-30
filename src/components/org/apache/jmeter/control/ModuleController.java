@@ -18,8 +18,9 @@
 
 package org.apache.jmeter.control;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
@@ -30,6 +31,8 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * The goal of ModuleController is to add modularity to JMeter. The general idea
@@ -50,7 +53,7 @@ public class ModuleController
     extends GenericController
     implements ReplaceableController
 {
-
+    private static final Logger log = LoggingManager.getLoggerForClass();
     private static final String NODE_PATH = "ModuleController.node_path";
     private JMeterTreeNode selectedNode = null;
 
@@ -114,13 +117,14 @@ public class ModuleController
      * @return JMeterTreeNode
      */
     public JMeterTreeNode getSelectedNode()
-    {
+    {      
+        if(selectedNode == null) restoreSelected();
         return selectedNode;
     }
 
     private void setNodePath()
     {
-        Vector nodePath = new Vector();
+        List nodePath = new ArrayList();
         if (selectedNode != null)
         {
             TreeNode[] path = selectedNode.getPath();
@@ -128,17 +132,17 @@ public class ModuleController
             {
                 nodePath.add(((JMeterTreeNode) path[i]).getName());
             }
-            nodePath.add(selectedNode.getName());
+            //nodePath.add(selectedNode.getName());
         }
         setProperty(new CollectionProperty(NODE_PATH, nodePath));
     }
 
-    private Vector getNodePath()
+    public List getNodePath()
     {
         JMeterProperty prop = getProperty(NODE_PATH);
         if (!(prop instanceof NullProperty))
         {
-            return (Vector) ((CollectionProperty) prop).getObjectValue();
+            return (List) ((CollectionProperty) prop).getObjectValue();
         }
         else
         {
@@ -150,7 +154,7 @@ public class ModuleController
     {
         if (selectedNode == null)
         {
-            Vector nodePath = getNodePath();
+            List nodePath = getNodePath();
             if (nodePath != null && nodePath.size() > 0)
             {
                 GuiPackage gp = GuiPackage.getInstance();
@@ -158,25 +162,23 @@ public class ModuleController
                 {
                     JMeterTreeNode root =
                         (JMeterTreeNode) gp.getTreeModel().getRoot();
-                    nodePath.remove(0);
-                    traverse(root, nodePath);
+                    traverse(root, nodePath,1);
                 }
             }
         }
     }
 
-    private void traverse(JMeterTreeNode node, Vector nodePath)
+    private void traverse(JMeterTreeNode node, List nodePath,int level)
     {
-        if (node != null && nodePath.size() > 0)
+        if (node != null && nodePath.size() > level)
         {
             for (int i = 0; i < node.getChildCount(); i++)
             {
                 JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
-                if (cur.getName().equals(nodePath.elementAt(0).toString()))
+                if (cur.getName().equals(nodePath.get(level).toString()))
                 {
-                    selectedNode = cur;
-                    nodePath.remove(0);
-                    traverse(cur, nodePath);
+                    if(nodePath.size() == (level + 1)) selectedNode = cur;
+                    traverse(cur, nodePath,level + 1);
                 }
             }
         }
