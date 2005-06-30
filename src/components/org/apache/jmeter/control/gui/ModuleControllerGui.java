@@ -19,6 +19,8 @@
 package org.apache.jmeter.control.gui;
 
 import java.awt.FlowLayout;
+import java.util.Collection;
+import java.util.Iterator;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -52,6 +54,7 @@ public class ModuleControllerGui
 
     private JComboBox nodes;
     private DefaultComboBoxModel nodesModel;
+    private JLabel warningLabel;
 
     public static final String CONTROLLER = "Module To Run";
     //TODO should be a resource, and probably ought to be resolved at run-time (to allow language change)
@@ -75,8 +78,31 @@ public class ModuleControllerGui
     public void configure(TestElement el)
     {
         super.configure(el);
-        this.selected = ((ModuleController) el).getSelectedNode();
+        ModuleController controller = (ModuleController) el;
+        this.selected = controller.getSelectedNode();
+        if(selected == null && controller.getNodePath() != null) warningLabel.setText(JMeterUtils.getResString("module_controller_warning") +
+                renderPath(controller.getNodePath()));
+        else warningLabel.setText("");
         reinitialize();
+    }
+    
+    private String renderPath(Collection path)
+    {
+        Iterator iter = path.iterator();
+        StringBuffer buf = new StringBuffer();
+        boolean first = true;
+        while(iter.hasNext())
+        {
+            if(first)
+            {
+                first = false;
+                iter.next();
+                continue;
+            }
+            buf.append(iter.next());
+            if(iter.hasNext()) buf.append(" > ");
+        }
+        return buf.toString();
     }
 
     /* (non-Javadoc)
@@ -100,7 +126,7 @@ public class ModuleControllerGui
     {
         configureTestElement(element);
         TreeNodeWrapper tnw = (TreeNodeWrapper) nodesModel.getSelectedItem();
-        if (tnw != null)
+        if (tnw != null && tnw.getTreeNode() != null)
         {
             selected = tnw.getTreeNode();
             if (selected != null)
@@ -137,12 +163,14 @@ public class ModuleControllerGui
         add(makeTitlePanel());
 
         // DROP-DOWN MENU
-        JPanel modulesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel modulesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,20,5));
         modulesPanel.add(new JLabel(CONTROLLER));
         nodesModel = new DefaultComboBoxModel();
         nodes = new JComboBox(nodesModel);
         reinitialize();
         modulesPanel.add(nodes);
+        warningLabel = new JLabel("");
+        modulesPanel.add(warningLabel);
         add(modulesPanel);
     }
 
@@ -166,7 +194,8 @@ public class ModuleControllerGui
             for (int i = 0; i < nodesModel.getSize(); i++)
             {
                 current = (TreeNodeWrapper) nodesModel.getElementAt(i);
-                if (current.getTreeNode().equals(selected))
+                if ((current.getTreeNode() == null && selected == null) || 
+                        (current.getTreeNode() != null && current.getTreeNode().equals(selected)))
                 {
                     nodesModel.setSelectedItem(current);
                     break;
@@ -180,6 +209,10 @@ public class ModuleControllerGui
         String parent_name,
         int level)
     {
+        if(level == 0 && (parent_name == null || parent_name.length() == 0))
+        {
+            nodesModel.addElement(new TreeNodeWrapper(null,""));
+        }
         String seperator = " > ";
         if (node != null)
         {
