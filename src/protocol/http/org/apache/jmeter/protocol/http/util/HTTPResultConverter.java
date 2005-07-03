@@ -40,6 +40,15 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class HTTPResultConverter extends SampleResultConverter
 {
 
+    /**
+     * Returns the converter version; used to check for possible
+     * incompatibilities
+     */
+    public static String getVersion()
+    {
+       return "$Revision$";
+    }
+
    /**
     * @param arg0
     * @param arg1
