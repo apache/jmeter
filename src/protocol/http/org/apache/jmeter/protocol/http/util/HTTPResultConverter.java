@@ -71,12 +71,12 @@ public class HTTPResultConverter extends SampleResultConverter
    {
       HTTPSampleResult res = (HTTPSampleResult) obj;
       SampleSaveConfiguration save = res.getSaveConfig();
-      setAttributes(writer, res, save);
+      setAttributes(writer, context, res, save);
       saveAssertions(writer, context, res, save);
-      saveRequestHeaders(writer, res, save);
       saveSubResults(writer, context, res, save);
-      saveResponseHeaders(writer, res, save);
-      saveResponseData(writer, res, save);
+      saveResponseHeaders(writer, context, res, save);
+      saveRequestHeaders(writer, context, res, save);
+      saveResponseData(writer, context, res, save);
       saveSamplerData(writer, context, res, save);
    }
 
