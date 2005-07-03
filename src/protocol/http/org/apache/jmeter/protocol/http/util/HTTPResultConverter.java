@@ -112,7 +112,7 @@ public class HTTPResultConverter extends SampleResultConverter
    {
       HTTPSampleResult res = (HTTPSampleResult) createCollection(context
             .getRequiredType());
-      retrieveAttributes(reader, res);
+      retrieveAttributes(reader, context, res);
       while (reader.hasMoreChildren())
       {
          reader.moveDown();
