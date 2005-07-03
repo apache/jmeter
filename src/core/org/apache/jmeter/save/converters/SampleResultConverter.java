@@ -75,13 +75,13 @@ public class SampleResultConverter extends AbstractCollectionConverter
    {
       SampleResult res = (SampleResult) obj;
       SampleSaveConfiguration save = res.getSaveConfig();
-      setAttributes(writer, res, save);
+      setAttributes(writer, context, res, save);
       saveAssertions(writer, context, res, save);
       saveSubResults(writer, context, res, save);
-      saveResponseHeaders(writer, res, save);
-      saveRequestHeaders(writer, res, save);
-      saveResponseData(writer, res, save);
-      saveSamplerData(writer, res, save);
+      saveResponseHeaders(writer, context, res, save);
+      saveRequestHeaders(writer, context, res, save);
+      saveResponseData(writer, context, res, save);
+      saveSamplerData(writer, context, res, save);
    }
 
    /**
@@ -90,7 +90,7 @@ public class SampleResultConverter extends AbstractCollectionConverter
     * @param save
     */
    protected void saveSamplerData(HierarchicalStreamWriter writer,
-         SampleResult res, SampleSaveConfiguration save)
+         MarshallingContext context, SampleResult res, SampleSaveConfiguration save)
    {
       if (save.saveSamplerData(res))
       {
@@ -104,7 +104,7 @@ public class SampleResultConverter extends AbstractCollectionConverter
     * @param save
     */
    protected void saveResponseData(HierarchicalStreamWriter writer,
-         SampleResult res, SampleSaveConfiguration save)
+         MarshallingContext context, SampleResult res, SampleSaveConfiguration save)
    {
       if (save.saveResponseData(res))
       {
@@ -130,7 +130,7 @@ public class SampleResultConverter extends AbstractCollectionConverter
     * @param save
     */
    protected void saveRequestHeaders(HierarchicalStreamWriter writer,
-         SampleResult res, SampleSaveConfiguration save)
+         MarshallingContext context, SampleResult res, SampleSaveConfiguration save)
    {
       if (save.saveRequestHeaders())
       {
@@ -144,7 +144,7 @@ public class SampleResultConverter extends AbstractCollectionConverter
     * @param save
     */
    protected void saveResponseHeaders(HierarchicalStreamWriter writer,
-         SampleResult res, SampleSaveConfiguration save)
+         MarshallingContext context, SampleResult res, SampleSaveConfiguration save)
    {
       if (save.saveResponseHeaders())
       {
@@ -199,7 +199,7 @@ public class SampleResultConverter extends AbstractCollectionConverter
     * @param save
     */
    protected void setAttributes(HierarchicalStreamWriter writer,
-         SampleResult res, SampleSaveConfiguration save)
+         MarshallingContext context, SampleResult res, SampleSaveConfiguration save)
    {
       if (save.saveTime())
             writer.addAttribute("t", Long.toString(res.getTime()));
@@ -256,7 +256,7 @@ public class SampleResultConverter extends AbstractCollectionConverter
    {
       SampleResult res = (SampleResult) createCollection(context
             .getRequiredType());
-      retrieveAttributes(reader, res);
+      retrieveAttributes(reader, context, res);
       while (reader.hasMoreChildren())
       {
          reader.moveDown();
@@ -320,7 +320,7 @@ public class SampleResultConverter extends AbstractCollectionConverter
     * @param res
     */
    protected void retrieveAttributes(HierarchicalStreamReader reader,
-         SampleResult res)
+         UnmarshallingContext context, SampleResult res)
    {
       res.setSampleLabel(ConversionHelp.decode(reader.getAttribute("lb")));
       res.setDataEncoding(ConversionHelp.decode(reader.getAttribute("de")));
