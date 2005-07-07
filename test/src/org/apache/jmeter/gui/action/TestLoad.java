@@ -8,10 +8,8 @@ package org.apache.jmeter.gui.action;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 
-import junit.framework.TestCase;
-
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jorphan.collections.HashTree;
 
@@ -20,7 +18,7 @@ import org.apache.jorphan.collections.HashTree;
   * 
   * @version    $Revision$  Last updated: $Date$
   */
- public class TestLoad extends TestCase
+ public class TestLoad extends JMeterTestCase
  {
      File testFile1,
          testFile2,
