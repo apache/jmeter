@@ -61,7 +61,7 @@ public class ScriptWrapperConverter implements Converter
       ScriptWrapper wrap = (ScriptWrapper)arg0;
       writer.addAttribute("version",SaveService.version);
       writer.addAttribute("properties",SaveService.propertiesVersion);
-      writer.startNode(classMapper.lookupName(wrap.testPlan.getClass()));
+      writer.startNode(classMapper.serializedClass(wrap.testPlan.getClass()));
       context.convertAnother(wrap.testPlan);
       writer.endNode();
    }
@@ -84,9 +84,9 @@ public class ScriptWrapperConverter implements Converter
       String classAttribute = reader.getAttribute("class");
       Class type;
       if (classAttribute == null) {
-          type = classMapper.lookupType(reader.getNodeName());
+          type = classMapper.realClass(reader.getNodeName());
       } else {
-          type = classMapper.lookupType(classAttribute);
+          type = classMapper.realClass(classAttribute);
       }
       return type;
    }
