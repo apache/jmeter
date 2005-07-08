@@ -71,12 +71,12 @@ public class TestElementConverter extends AbstractCollectionConverter
    public Object unmarshal(HierarchicalStreamReader reader,
          UnmarshallingContext context)
    {
-      String classAttribute = reader.getAttribute(classAttributeIdentifier);
+      String classAttribute = reader.getAttribute("class");
       Class type;
       if (classAttribute == null) {
-          type = classMapper.lookupType(reader.getNodeName());
+          type = mapper().realClass(reader.getNodeName());
       } else {
-          type = classMapper.lookupType(classAttribute);
+          type = mapper().realClass(classAttribute);
       }
       try
       {
