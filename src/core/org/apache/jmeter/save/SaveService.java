@@ -283,9 +283,9 @@ public class SaveService
        * 
        */
       checkVersion(StringPropertyConverter.class, "1.6");
-      checkVersion(TestElementConverter.class, "1.2");
+      checkVersion(TestElementConverter.class, "1.3");
       checkVersion(TestElementPropertyConverter.class, "1.6");
-      checkVersion(ScriptWrapperConverter.class, "1.3");
+      checkVersion(ScriptWrapperConverter.class, "1.4");
       if (!PROPVERSION.equalsIgnoreCase(propertiesVersion))
       {
          log.warn("Property file - expected " + PROPVERSION + ", found "
