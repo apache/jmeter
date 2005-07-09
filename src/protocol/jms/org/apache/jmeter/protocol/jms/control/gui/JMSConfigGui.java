@@ -25,8 +25,6 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.protocol.jms.sampler.JMSSampler;
 import org.apache.jmeter.testelement.TestElement;
