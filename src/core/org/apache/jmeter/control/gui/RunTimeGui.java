@@ -57,9 +57,6 @@ public class RunTimeGui
      */
     private boolean displayName = true;
     
-    /** The name of the seconds field component. */
-    private static final String SECONDS = "Seconds Field";
-
     /**
      * Create a new LoopControlPanel as a standalone component.
      */
