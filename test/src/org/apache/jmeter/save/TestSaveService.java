@@ -74,7 +74,9 @@ public class TestSaveService extends JMeterTestCase
 
                   ByteArrayOutputStream out = new ByteArrayOutputStream(1000000);
 
-                  SaveService.saveTree(tree, new OutputStreamWriter(out));
+                  OutputStreamWriter outs= new OutputStreamWriter(out);
+                  SaveService.saveTree(tree,outs);
+                  outs.close();// Make sure all the data is flushed out
                   out.close();
 
                   // We only check the length of the result. Comparing the
