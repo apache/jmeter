@@ -44,8 +44,10 @@ import org.apache.jmeter.testelement.property.StringProperty;
 
 public class LDAPArgument extends AbstractTestElement implements Serializable
 {
+    //TODO should these be public?
+    
     /** Name used to store the argument's name. */
-    public static final String NAME = "Argument.name";
+    public static final String ARG_NAME = "Argument.name";
 
     /** Name used to store the argument's value. */
     public static final String VALUE = "Argument.value";
@@ -72,7 +74,7 @@ public class LDAPArgument extends AbstractTestElement implements Serializable
      */
     public LDAPArgument(String name, String value, String opcode)
     {
-        setProperty(new StringProperty(NAME, name));
+        setProperty(new StringProperty(ARG_NAME, name));
         setProperty(new StringProperty(VALUE, value));
         setProperty(new StringProperty(OPCODE, opcode));
     }
@@ -86,7 +88,7 @@ public class LDAPArgument extends AbstractTestElement implements Serializable
      */
     public LDAPArgument(String name, String value, String opcode, String metadata)
     {
-        setProperty(new StringProperty(NAME, name));
+        setProperty(new StringProperty(ARG_NAME, name));
         setProperty(new StringProperty(VALUE, value));
         setProperty(new StringProperty(OPCODE, opcode));
         setProperty(new StringProperty(METADATA, metadata));
@@ -99,7 +101,7 @@ public class LDAPArgument extends AbstractTestElement implements Serializable
      */
     public void setName(String newName)
     {
-        setProperty(new StringProperty(NAME, newName));
+        setProperty(new StringProperty(ARG_NAME, newName));
     }
 
     /**
@@ -109,7 +111,7 @@ public class LDAPArgument extends AbstractTestElement implements Serializable
      */
     public String getName()
     {
-        return getPropertyAsString(NAME);
+        return getPropertyAsString(ARG_NAME);
     }
 
     /**
