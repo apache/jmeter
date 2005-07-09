@@ -359,14 +359,14 @@ public class URLRewritingModifier
             {
                 response = new SampleResult();
                 response.setResponseData(html[i].getBytes());
-                URLRewritingModifier mod = new URLRewritingModifier();
-                mod.setThreadContext(context);
-                mod.setArgumentName("sid");
-                mod.setPathExtension(false);
+                URLRewritingModifier newMod = new URLRewritingModifier();
+                newMod.setThreadContext(context);
+                newMod.setArgumentName("sid");
+                newMod.setPathExtension(false);
                 HTTPSamplerBase sampler = createSampler();
                 context.setCurrentSampler(sampler);
                 context.setPreviousResult(response);
-                mod.process();
+                newMod.process();
                 Arguments args = sampler.getArguments();
                 assertEquals(
                     "For case i="+i,
