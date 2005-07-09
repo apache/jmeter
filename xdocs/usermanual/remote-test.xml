@@ -90,7 +90,7 @@ Use the "-s" option with the jmeter startup script ("jmeter -s").</p>
 </subsection>
 <subsection name="15.2 Tips" anchor="tips">
 <p>If you're running Suse Linux, these tips may help. The default installation may enable the firewall. In that case, remote testing will not work properly. The following tips were contributed by Sergey Ten.</p>
-<p>If you see connectios refused, turn on debugging by passing the following options.</p>
+<p>If you see connections refused, turn on debugging by passing the following options.</p>
      rmiregistry -J-Dsun.rmi.log.debug=true
      -J-Dsun.rmi.server.exceptionTrace=true
      -J-Dsun.rmi.loader.logLevel=verbose
