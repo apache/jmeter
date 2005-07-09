@@ -37,8 +37,27 @@ public class ConversionHelp
    private static final String CHAR_SET = "UTF-8";
    transient private static final Logger log = LoggingManager.getLoggerForClass();
 
+   /*
+    *  These must be set before reading/writing the XML. 
+    *  Rather a hack, but saves changing all the method calls to include an extra variable.
+    */
+   private static String inVersion;
+   private static String outVersion = "1.1"; // Default for writing
+   
+   public static void setInVersion(String v)
+   {
+       inVersion=v;
+   }
+   
+   public static void setOutVersion(String v)
+   {
+       outVersion=v;
+   }
+   
    public static String encode(String p)
    {
+       if (!"1.0".equals(outVersion)) return p;
+       // Only encode strings if inVersion = 1.0
       if(p == null)
       {
          return "";
@@ -57,6 +76,8 @@ public class ConversionHelp
    
    public static String decode(String p)
    {
+       if (!"1.0".equals(inVersion)) return p;
+       // Only decode strings if inVersion = 1.0
       if(p == null)
       {
          return null;
