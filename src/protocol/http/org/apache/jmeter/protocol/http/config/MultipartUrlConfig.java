@@ -93,26 +93,26 @@ public class MultipartUrlConfig implements Serializable
 
     public void addArgument(String name, String value)
     {
-        Arguments args = this.getArguments();
-        args.addArgument(new HTTPArgument(name, value));
+        Arguments myArgs = this.getArguments();
+        myArgs.addArgument(new HTTPArgument(name, value));
     }
 
     public void addArgument(String name, String value, String metadata)
     {
-        Arguments args = this.getArguments();
-        args.addArgument(new HTTPArgument(name, value, metadata));
+        Arguments myArgs = this.getArguments();
+        myArgs.addArgument(new HTTPArgument(name, value, metadata));
     }
 
     public void addEncodedArgument(String name, String value)
     {
-        Arguments args = getArguments();
+        Arguments myArgs = getArguments();
         HTTPArgument arg = new HTTPArgument(name, value, true);
         if (arg.getName().equals(arg.getEncodedName())
             && arg.getValue().equals(arg.getEncodedValue()))
         {
             arg.setAlwaysEncoded(false);
         }
-        args.addArgument(arg);
+        myArgs.addArgument(arg);
     }
 
     /**
@@ -131,17 +131,17 @@ public class MultipartUrlConfig implements Serializable
                 String name =
                     parts[i].substring(index, parts[i].indexOf("\"", index));
                 index = parts[i].indexOf("filename=\"") + 10;
-                String filename =
+                String fn =
                     parts[i].substring(index, parts[i].indexOf("\"", index));
                 index = parts[i].indexOf("\n", index);
                 index = parts[i].indexOf(":", index) + 1;
-                String mimetype =
+                String mt =
                     parts[i]
                         .substring(index, parts[i].indexOf("\n", index))
                         .trim();
                 this.setFileFieldName(name);
-                this.setFilename(filename);
-                this.setMimeType(mimetype);
+                this.setFilename(fn);
+                this.setMimeType(mt);
             }
             else if (parts[i].indexOf("name=") > -1)
             {
