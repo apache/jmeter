@@ -40,6 +40,7 @@ import org.apache.jmeter.save.converters.SampleResultConverter;
 import org.apache.jmeter.save.converters.StringPropertyConverter;
 import org.apache.jmeter.save.converters.TestElementConverter;
 import org.apache.jmeter.save.converters.TestElementPropertyConverter;
+import org.apache.jmeter.save.converters.TestResultWrapperConverter;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -61,7 +62,7 @@ public class SaveService
    private static Logger log = LoggingManager.getLoggerForClass();
 
    // Version information for test plan header
-   static String version = "1.0";
+   public static final String version = "1.1";
    static String propertiesVersion = "";//read from properties file
    private static final String PROPVERSION = "1.7";
 
@@ -195,6 +196,7 @@ public class SaveService
       ScriptWrapper wrapper = new ScriptWrapper();
       wrapper.testPlan = tree;
       saver.toXML(wrapper, writer);
+      writer.write('\n');// Ensure terminated properly
    }
    
    public static void saveElement(Object el,Writer writer) throws Exception
@@ -285,7 +287,8 @@ public class SaveService
       checkVersion(StringPropertyConverter.class, "1.6");
       checkVersion(TestElementConverter.class, "1.3");
       checkVersion(TestElementPropertyConverter.class, "1.6");
-      checkVersion(ScriptWrapperConverter.class, "1.4");
+      checkVersion(ScriptWrapperConverter.class, "1.5");
+      checkVersion(TestResultWrapperConverter.class, "1.3");
       if (!PROPVERSION.equalsIgnoreCase(propertiesVersion))
       {
          log.warn("Property file - expected " + PROPVERSION + ", found "
