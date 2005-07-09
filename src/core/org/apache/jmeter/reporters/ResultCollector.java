@@ -66,9 +66,12 @@ import org.xml.sax.SAXException;
 public class ResultCollector extends AbstractListenerElement implements
         SampleListener, Clearable, Serializable, TestListener, Remoteable,
         NoThreadClone {
-    static final long serialVersionUID = 1;
+    static final long serialVersionUID = 2;
 
     private static final String TESTRESULTS_START = "<testResults>";
+    private static final String TESTRESULTS_START_V1_1 = "<testResults version=\""
+        +SaveService.version
+        +"\">";
 
     private static final String TESTRESULTS_END = "</testResults>";
 
@@ -220,7 +223,7 @@ public class ResultCollector extends AbstractListenerElement implements
             SampleSaveConfiguration saveConfig) {
         if (saveConfig.saveAsXml()) {
             writer.println(XML_HEADER);
-            writer.println(TESTRESULTS_START);
+            writer.println(TESTRESULTS_START_V1_1);
         } else if (saveConfig.saveFieldNames()) {
             writer.println(OldSaveService.printableFieldNamesToString());
         }
@@ -231,6 +234,7 @@ public class ResultCollector extends AbstractListenerElement implements
         if (saveConfig.saveAsXml()) {
             pw.print("\n");
             pw.print(TESTRESULTS_END);
+            pw.print("\n");// Added in version 1.1
         }
     }
 
@@ -273,14 +277,11 @@ public class ResultCollector extends AbstractListenerElement implements
             if (len < MIN_XML_FILE_LEN) {
                 return false;
             }
-            raf.seek(len - TESTRESULTS_END.length() - 10);// TODO: may not
-                                                            // work on
-            // all OSes?
+            raf.seek(len - TESTRESULTS_END.length() - 10);// TODO: may not work on all OSes?
             String line;
             long pos = raf.getFilePointer();
             int end = 0;
-            while ((line = raf.readLine()) != null)// reads to end of line OR
-                                                    // file
+            while ((line = raf.readLine()) != null)// reads to end of line OR file
             {
                 end = line.indexOf(TESTRESULTS_END);
                 if (end >= 0) // found the string

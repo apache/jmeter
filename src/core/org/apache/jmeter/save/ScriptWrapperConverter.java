@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.save;
 
+import org.apache.jmeter.save.converters.ConversionHelp;
 import org.apache.jorphan.collections.HashTree;
 
 import com.thoughtworks.xstream.alias.ClassMapper;
@@ -59,6 +60,7 @@ public class ScriptWrapperConverter implements Converter
          MarshallingContext context)
    {
       ScriptWrapper wrap = (ScriptWrapper)arg0;
+      ConversionHelp.setOutVersion(SaveService.version);// Ensure output follows version
       writer.addAttribute("version",SaveService.version);
       writer.addAttribute("properties",SaveService.propertiesVersion);
       writer.startNode(classMapper.serializedClass(wrap.testPlan.getClass()));
@@ -74,6 +76,7 @@ public class ScriptWrapperConverter implements Converter
    {
       ScriptWrapper wrap = new ScriptWrapper();
       wrap.version = reader.getAttribute("version");
+      ConversionHelp.setInVersion(wrap.version);// Make sure decoding follows input file
       reader.moveDown();
       wrap.testPlan = (HashTree)context.convertAnother(wrap,getNextType(reader));
       return wrap;
