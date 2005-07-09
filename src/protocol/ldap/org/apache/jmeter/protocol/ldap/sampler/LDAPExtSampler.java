@@ -602,7 +602,7 @@ public class LDAPExtSampler extends AbstractSampler  {
      * TestCase
      *@return    executed time for the give test case
      ***********************************************************/
-    public void addTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws Exception{
+    public void addTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException{
 		res.sampleStart();
 		ldap.createTest(dirContext, getUserAttributes(), getPropertyAsString(BASE_ENTRY_DN));
 		res.sampleEnd();
@@ -614,7 +614,7 @@ public class LDAPExtSampler extends AbstractSampler  {
      * TestCase
      *@return    executed time for the give test case
      ***********************************************************/
-    public void deleteTest(LdapExtClient ldap, DirContext dirContext, SampleResult res)throws Exception {
+    public void deleteTest(LdapExtClient ldap, DirContext dirContext, SampleResult res)throws NamingException {
         res.sampleStart();
         ldap.deleteTest(dirContext, getPropertyAsString(DELETE));
         res.sampleEnd();
@@ -625,7 +625,7 @@ public class LDAPExtSampler extends AbstractSampler  {
      * TestCase
      *@return    executed time for the give test case
      ***********************************************************/
-    public void searchTest(LdapExtClient ldap, DirContext dirContext, SampleResult res)throws Exception {
+    public void searchTest(LdapExtClient ldap, DirContext dirContext, SampleResult res)throws NamingException {
         res.sampleStart();
         ldap.searchTest(dirContext, getPropertyAsString(SEARCHBASE),getPropertyAsString(SEARCHFILTER)
         	,getPropertyAsInt(SCOPE),getPropertyAsLong(COUNTLIM),getPropertyAsInt(TIMELIM)
@@ -638,7 +638,7 @@ public class LDAPExtSampler extends AbstractSampler  {
      * TestCase
      *@return    executed time for the give test case
      ***********************************************************/
-    public void modifyTest(LdapExtClient ldap, DirContext dirContext, SampleResult res)throws Exception{
+    public void modifyTest(LdapExtClient ldap, DirContext dirContext, SampleResult res)throws NamingException{
             res.sampleStart();
             ldap.modifyTest(dirContext, getUserModAttributes(), getPropertyAsString(BASE_ENTRY_DN));
             res.sampleEnd();
@@ -649,7 +649,7 @@ public class LDAPExtSampler extends AbstractSampler  {
      * Thread, this bind is used for the whole context
      *@return    executed time for the bind op
      ***********************************************************/
-    public void bindOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws Exception{
+    public void bindOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException{
         res.sampleStart();
         dirContext=ldap.connect(getServername(),getPort(),getRootdn(),getUserDN(),getUserPw());
 		res.sampleEnd();
@@ -657,15 +657,17 @@ public class LDAPExtSampler extends AbstractSampler  {
     }
          
     /************************************************************
-     * This will do the bind  for the User defined 
+     * This will do the bind and unbind for the User defined 
      * TestCase  
      *@return    executed time for the bind op
      ***********************************************************/
-    public void singleBindOp(SampleResult res) throws Exception{
+    public void singleBindOp(SampleResult res) throws NamingException{
         LdapExtClient ldap_temp;
         ldap_temp=new LdapExtClient();
 		res.sampleStart();
-        ldap_temp.sbind(getServername(),getPort(),getRootdn(),getSuserDN(),getSuserPw());
+        DirContext ctx =
+        ldap_temp.connect(getServername(),getPort(),getRootdn(),getSuserDN(),getSuserPw());
+        ldap_temp.disconnect(ctx);
 		res.sampleEnd();
     }
          
@@ -673,7 +675,7 @@ public class LDAPExtSampler extends AbstractSampler  {
      * This will do a compare Opp for the User and attribute/value pair defined 
      *@return    executed time for the compare op
      ***********************************************************/
-    public void compareOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws Exception{
+    public void compareOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException{
 		res.sampleStart();
         ldap.compare(dirContext, getPropertyAsString(COMPAREFILT), getPropertyAsString(COMPAREDN));
 		res.sampleEnd();
@@ -683,7 +685,7 @@ public class LDAPExtSampler extends AbstractSampler  {
      * This will do a moddn Opp for the User new DN defined 
      *@return    executed time for the moddn op
      ***********************************************************/
-    public void renameTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws Exception{
+    public void renameTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException{
 		res.sampleStart();
         ldap.moddnOp(dirContext, getPropertyAsString(MODDDN), getPropertyAsString(NEWDN));
 		res.sampleEnd();
@@ -694,7 +696,7 @@ public class LDAPExtSampler extends AbstractSampler  {
      * TestCase  as well as inbuilt test case
      *@return    executed time for the bind op
      ***********************************************************/
-    public void unbindOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws Exception{
+    public void unbindOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException{
 		res.sampleStart();
         ldap.disconnect(dirContext);
 		res.sampleEnd();
@@ -725,7 +727,7 @@ public class LDAPExtSampler extends AbstractSampler  {
           	 temp_client =new LdapExtClient();
              try {
           	    dirContext=new InitialDirContext();
-             } catch (Exception err) {
+             } catch (NamingException err) {
                 log.error("Ldap client context creation - ",err);
              }
         	 ldapConnections.put(Thread.currentThread().getName(), temp_client);
@@ -816,15 +818,11 @@ public class LDAPExtSampler extends AbstractSampler  {
              if (returnData.indexOf("LDAP: error code") >=0) {
             	res.setResponseMessage(returnData.substring(returnData.indexOf("LDAP: error code")+22,returnData.indexOf("]")));
             	res.setResponseCode(returnData.substring(returnData.indexOf("LDAP: error code")+17,returnData.indexOf("LDAP: error code")+19));
+             } else {
+                 res.setResponseMessage(returnData);
+                 res.setResponseCode("800");
              }
             isSuccessful = false;
-        }
-        catch (Exception ex) {
-            res.setResponseData(ex.toString().getBytes());
-            log.error("Ldap client - ",ex);
-            isSuccessful = false;
-            res.setResponseMessage("internal error");
-            res.setResponseCode("800");
         }
         finally {
            	responseData=responseData + "<responsecode>" + res.getResponseCode() + "</responsecode>";
