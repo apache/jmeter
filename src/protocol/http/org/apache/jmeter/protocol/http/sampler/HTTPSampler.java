@@ -48,7 +48,7 @@ import org.apache.log.Logger;
  * 
  */
 public class HTTPSampler extends HTTPSamplerBase {
-    transient static Logger log = LoggingManager.getLoggerForClass();
+    private transient static Logger log = LoggingManager.getLoggerForClass();
 
     private static final int MAX_CONN_RETRIES = 10; // Maximum connection
                                                     // retries

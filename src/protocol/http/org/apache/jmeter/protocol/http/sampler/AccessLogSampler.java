@@ -67,7 +67,7 @@ import org.apache.log.Logger;
  */
 public class AccessLogSampler extends HTTPSampler implements TestBean
 {
-   static Logger log = LoggingManager.getLoggerForClass();
+   private static Logger log = LoggingManager.getLoggerForClass();
    public static final String DEFAULT_CLASS = "org.apache.jmeter.protocol.http.util.accesslog.TCLogParser";
 
    /** private members used by class * */
