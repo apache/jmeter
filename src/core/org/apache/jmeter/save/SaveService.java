@@ -257,7 +257,7 @@ public class SaveService
                null);
          actual = extractVersion(actual);
       }
-      catch (Exception e)
+      catch (Exception ignored)
       {
          //Not needed
       }
@@ -288,7 +288,7 @@ public class SaveService
       checkVersion(TestElementConverter.class, "1.3");
       checkVersion(TestElementPropertyConverter.class, "1.6");
       checkVersion(ScriptWrapperConverter.class, "1.5");
-      checkVersion(TestResultWrapperConverter.class, "1.3");
+      checkVersion(TestResultWrapperConverter.class, "1.4");
       if (!PROPVERSION.equalsIgnoreCase(propertiesVersion))
       {
          log.warn("Property file - expected " + PROPVERSION + ", found "
