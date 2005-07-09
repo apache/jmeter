@@ -19,7 +19,6 @@
 package org.apache.jmeter.protocol.ldap.sampler;
 
 import java.util.Hashtable;
-import  java.lang.Exception;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -30,7 +29,7 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchControls;
 
-import org.apache.log.Hierarchy;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 
@@ -54,11 +53,12 @@ import org.apache.log.Logger;
  *****************************************************/
 public class LdapExtClient
 {
-    transient private static Logger log = Hierarchy.getDefaultHierarchy()
-    .getLoggerFor("jmeter.protocol.ldap");
-   public final static String CONNECTOR = "ldap_con";
-   public NamingEnumeration answer;
-   public NamingEnumeration compareAnswer;
+    transient private static Logger log = LoggingManager.getLoggerForClass();
+    
+    // Used by Sampler
+    NamingEnumeration answer;
+    NamingEnumeration compareAnswer;
+    
     /**
      *  Constructor for the LdapClient object
      */
@@ -71,10 +71,12 @@ public class LdapExtClient
      *@param  host           Description of Parameter
      *@param  username       Description of Parameter
      *@param  password       Description of Parameter
-     *@exception  Exception  Description of Exception
+     *@exception  NamingException  Description of Exception
      */
     public DirContext connect(String host,String port,String rootdn,String username,
-                        String password) throws Exception{
+                        String password) 
+        throws NamingException
+    {
         DirContext dirContext;
         Hashtable env = new Hashtable();
         env.put(Context.INITIAL_CONTEXT_FACTORY,"com.sun.jndi.ldap.LdapCtxFactory");
@@ -88,27 +90,19 @@ public class LdapExtClient
         return dirContext;
     }
 
-    public void sbind(String host,String port,String rootdn,String username,
-                        String password) throws Exception{
-        DirContext dirContext;
-        Hashtable env = new Hashtable();
-        env.put(Context.INITIAL_CONTEXT_FACTORY,"com.sun.jndi.ldap.LdapCtxFactory");
-        env.put(Context.PROVIDER_URL,"ldap://"+host +":"+port+"/"+rootdn);
-        env.put(Context.REFERRAL,"throw"); 
-        env.put("java.naming.batchsize", "0");
-        env.put(Context.SECURITY_CREDENTIALS,password);
-        env.put(Context.SECURITY_PRINCIPAL,username);
-        dirContext = new InitialDirContext(env);
-    }
-
     /**
      *  disconnect from the server
      */
     public void disconnect(DirContext dirContext) {
+        if (dirContext == null) {
+            log.info("Cannot disconnect null context");
+            return;
+        }
+        
         try {
             dirContext.close();
-        } catch (Exception e) {
-            log.error("Ldap client disconnect - ",e);
+        } catch (NamingException e) {
+            log.warn("Ldap client disconnect - ",e);
         }
     }
 
@@ -119,7 +113,8 @@ public class LdapExtClient
      *@param  search filter filter this value from the base  
      ***********************************************************/
     public void searchTest(DirContext dirContext, String searchBase, String searchFilter, int scope, long countlim, int timelim, String[] attrs, boolean retobj, boolean deref )
-        throws Exception{
+        throws NamingException
+    {
         SearchControls searchcontrols= null;
         searchcontrols = new SearchControls(scope, countlim, timelim, attrs, retobj, deref); 
         log.debug("scope, countlim, timelim, attrs, retobj, deref= "+searchFilter+scope+ countlim+ timelim+ attrs+ retobj+ deref);
@@ -132,7 +127,9 @@ public class LdapExtClient
      *@param  search base  where the search should start
      *@param  search filter filter this value from the base  
      ***********************************************************/
-   public void compare(DirContext dirContext, String filter, String entrydn) throws Exception{
+   public void compare(DirContext dirContext, String filter, String entrydn) 
+       throws NamingException
+   {
        SearchControls searchcontrols = new SearchControls(0, 1, 0, new String[0], false, false); 
        compareAnswer=dirContext.search(entrydn, filter, searchcontrols);
     }
@@ -143,7 +140,9 @@ public class LdapExtClient
      *@param  search base  where the search should start
      *@param  search filter filter this value from the base  
      ***********************************************************/
-   public void moddnOp(DirContext dirContext, String ddn, String newdn) throws Exception{
+   public void moddnOp(DirContext dirContext, String ddn, String newdn) 
+       throws NamingException
+   {
        log.debug("ddn and newDn= "+ddn+"@@@@"+newdn);
        dirContext.rename(ddn, newdn);
     }
@@ -177,7 +176,9 @@ public class LdapExtClient
      * Delete the attribute from the ldap directory
      *@param  value  The  string (dn) value 
      ***********************************************************/
-    public void deleteTest(DirContext dirContext, String string) throws Exception{
+    public void deleteTest(DirContext dirContext, String string) 
+        throws NamingException
+    {
         dirContext.destroySubcontext(string);
     }
 }
