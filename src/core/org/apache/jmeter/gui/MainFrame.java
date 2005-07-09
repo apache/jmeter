@@ -420,9 +420,9 @@ public class MainFrame extends JFrame implements TestListener, Remoteable
      */
     private JScrollPane createTreePanel()
     {
-        JScrollPane treePanel = new JScrollPane(tree);
-        treePanel.setMinimumSize(new Dimension(100, 0));
-        return treePanel;
+        JScrollPane treeP = new JScrollPane(tree);
+        treeP.setMinimumSize(new Dimension(100, 0));
+        return treeP;
     }
 
     /**
@@ -445,18 +445,18 @@ public class MainFrame extends JFrame implements TestListener, Remoteable
      */
     private JTree makeTree(TreeModel treeModel, JMeterTreeListener treeListener)
     {
-        JTree tree = new JTree(treeModel);
-        tree.setCellRenderer(getCellRenderer());
-        tree.setRootVisible(false);
-        tree.setShowsRootHandles(true);
+        JTree treevar = new JTree(treeModel);
+        treevar.setCellRenderer(getCellRenderer());
+        treevar.setRootVisible(false);
+        treevar.setShowsRootHandles(true);
 
-        treeListener.setJTree(tree);
-        tree.addTreeSelectionListener(treeListener);
-        tree.addMouseListener(treeListener);
-        tree.addMouseMotionListener(treeListener);
-        tree.addKeyListener(treeListener);
+        treeListener.setJTree(treevar);
+        treevar.addTreeSelectionListener(treeListener);
+        treevar.addMouseListener(treeListener);
+        treevar.addMouseMotionListener(treeListener);
+        treevar.addKeyListener(treeListener);
 
-        return tree;
+        return treevar;
     }
 
     /**
