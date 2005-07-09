@@ -1,4 +1,4 @@
-<jmeterTestPlan version="1.0" properties="1.7">
+<jmeterTestPlan version="1.1" properties="1.7">
   <hashTree>
     <TestPlan>
       <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.TestPlanGui</stringProp>
@@ -6,15 +6,15 @@
         <stringProp name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</stringProp>
         <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
         <collectionProp name="Arguments.arguments"/>
-        <stringProp name="TestElement.name">User+Defined+Variables</stringProp>
+        <stringProp name="TestElement.name">User Defined Variables</stringProp>
         <boolProp name="TestElement.enabled">true</boolProp>
       </elementProp>
       <collectionProp name="TestPlan.thread_groups"/>
       <stringProp name="TestElement.test_class">org.apache.jmeter.testelement.TestPlan</stringProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
-      <stringProp name="TestElement.name">Test+Plan</stringProp>
-      <boolProp name="TestElement.enabled">true</boolProp>
+      <stringProp name="TestElement.name">Test Plan</stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestElement.enabled">true</boolProp>
       <stringProp name="TestPlan.comments"></stringProp>
     </TestPlan>
     <hashTree>
@@ -29,13 +29,13 @@
         <stringProp name="TestElement.gui_class">org.apache.jmeter.threads.gui.ThreadGroupGui</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="org.apache.jmeter.control.LoopController">
           <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.LoopController</stringProp>
           <stringProp name="LoopController.loops">1</stringProp>
-          <stringProp name="TestElement.name">Loop+Controller</stringProp>
+          <stringProp name="TestElement.test_class">org.apache.jmeter.control.LoopController</stringProp>
+          <stringProp name="TestElement.name">Loop Controller</stringProp>
           <boolProp name="TestElement.enabled">true</boolProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="TestElement.name">Thread+Group</stringProp>
+        <stringProp name="TestElement.name">Thread Group</stringProp>
         <longProp name="ThreadGroup.end_time">0</longProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <stringProp name="ThreadGroup.ramp_time">0</stringProp>
@@ -44,11 +44,11 @@
         <AuthManager>
           <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.AuthPanel</stringProp>
           <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.control.AuthManager</stringProp>
-          <stringProp name="TestElement.name">HTTP+Authorization+Manager</stringProp>
+          <stringProp name="TestElement.name">HTTP Authorization Manager</stringProp>
           <boolProp name="TestElement.enabled">true</boolProp>
           <collectionProp name="AuthManager.auth_list">
             <elementProp name="" elementType="org.apache.jmeter.protocol.http.control.Authorization">
-              <stringProp name="Authorization.url">http%3A%2F%2Flocalhost%2Fsecret</stringProp>
+              <stringProp name="Authorization.url">http://localhost/secret</stringProp>
               <stringProp name="Authorization.password">spot</stringProp>
               <stringProp name="Authorization.username">kevin</stringProp>
             </elementProp>
@@ -56,13 +56,14 @@
         </AuthManager>
         <hashTree/>
         <ConfigTestElement>
-          <stringProp name="HTTPSampler.path">%2F</stringProp>
           <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui</stringProp>
+          <stringProp name="HTTPSampler.path">/</stringProp>
           <stringProp name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</stringProp>
-          <stringProp name="TestElement.name">HTTP+Request+Defaults</stringProp>
+          <stringProp name="TestElement.name">HTTP Request Defaults</stringProp>
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <boolProp name="TestElement.enabled">true</boolProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
           <elementProp name="HTTPsampler.Arguments" elementType="org.apache.jmeter.config.Arguments">
             <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</stringProp>
             <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
@@ -70,11 +71,10 @@
             <stringProp name="TestElement.name"></stringProp>
             <boolProp name="TestElement.enabled">true</boolProp>
           </elementProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
         </ConfigTestElement>
         <hashTree/>
         <HTTPSampler>
-          <stringProp name="HTTPSampler.path">%2Fsecret%2Findex.html</stringProp>
+          <stringProp name="HTTPSampler.path">/secret/index.html</stringProp>
           <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
@@ -94,14 +94,14 @@
           <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</stringProp>
           <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
           <stringProp name="TestElement.name">SecretPage1</stringProp>
-          <stringProp name="HTTPSampler.domain"></stringProp>
           <stringProp name="HTTPSampler.monitor">false</stringProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
           <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
         </HTTPSampler>
         <hashTree/>
         <HTTPSampler>
-          <stringProp name="HTTPSampler.path">%2Fsecret%2Findex2.html</stringProp>
+          <stringProp name="HTTPSampler.path">/secret/index2.html</stringProp>
           <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
@@ -121,14 +121,14 @@
           <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</stringProp>
           <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
           <stringProp name="TestElement.name">SecretPage2</stringProp>
-          <stringProp name="HTTPSampler.domain"></stringProp>
           <stringProp name="HTTPSampler.monitor">false</stringProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
           <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
         </HTTPSampler>
         <hashTree/>
         <HTTPSampler>
-          <stringProp name="HTTPSampler.path">%2Findex.html</stringProp>
+          <stringProp name="HTTPSampler.path">/index.html</stringProp>
           <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
@@ -148,8 +148,8 @@
           <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</stringProp>
           <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
           <stringProp name="TestElement.name">NoSecretPage</stringProp>
-          <stringProp name="HTTPSampler.domain"></stringProp>
           <stringProp name="HTTPSampler.monitor">false</stringProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
           <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
         </HTTPSampler>
@@ -157,7 +157,7 @@
         <ResultCollector>
           <stringProp name="TestElement.gui_class">org.apache.jmeter.visualizers.GraphVisualizer</stringProp>
           <stringProp name="TestElement.test_class">org.apache.jmeter.reporters.ResultCollector</stringProp>
-          <stringProp name="TestElement.name">File+Reporter</stringProp>
+          <stringProp name="TestElement.name">File Reporter</stringProp>
           <objProp>
             <value class="org.apache.jmeter.samplers.SampleSaveConfiguration">
               <time>true</time>
