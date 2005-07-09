@@ -61,9 +61,9 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener
 {
-    private final static String ROOTDN = "rootDn";
-    private final static String TEST = "tesT";
-    private static String testValue="NNNN";
+    //private final static String ROOTDN = "rootDn";
+    //private final static String TEST = "tesT";
+    //private static String testValue="NNNN";
 
     private JTextField rootdn = new JTextField(20);
     private JTextField searchbase = new JTextField(20);
@@ -256,8 +256,8 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener
         if (bind.isSelected()) {
             element.setProperty(new StringProperty(LDAPExtSampler.TEST,LDAPExtSampler.BIND));
         }
-        if (bind.isSelected()) {
-            element.setProperty(new StringProperty(LDAPExtSampler.TEST,LDAPExtSampler.BIND));
+        if (sbind.isSelected()) {
+            element.setProperty(new StringProperty(LDAPExtSampler.TEST,LDAPExtSampler.SBIND));
         }
         if (compare.isSelected()) {
             element.setProperty(new StringProperty(LDAPExtSampler.TEST,LDAPExtSampler.COMPARE));
