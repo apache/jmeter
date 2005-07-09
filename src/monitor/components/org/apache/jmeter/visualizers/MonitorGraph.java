@@ -39,7 +39,7 @@ public class MonitorGraph
 	private MonitorAccumModel MODEL;
 	private MonitorModel CURRENT;
 	
-	private boolean CPU = false;
+	private boolean CPU = false;//TODO is this needed? It's never read
 	private boolean HEALTH = true;
 	private boolean LOAD = true;
 	private boolean MEM = true;
@@ -47,8 +47,7 @@ public class MonitorGraph
 	private boolean YGRID = true;
 	private boolean XGRID = true;
 
-	private int COUNT = 0;
-	private int GRAPHMAX = 0;
+	private int GRAPHMAX = 0;//TODO is this needed? It's never read
 
     /**
      * 
