@@ -32,6 +32,7 @@ import javax.naming.NamingEnumeration;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.LoginConfig;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.ldap.config.LdapExtConfig;
 import org.apache.jmeter.protocol.ldap.config.gui.LDAPArgument;
 import org.apache.jmeter.protocol.ldap.config.gui.LDAPArguments;
@@ -40,6 +41,7 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -66,7 +68,9 @@ import org.apache.log.Logger;
  * This will control all the test available in the LDAP Test.
  *****************************************************/
 
-public class LDAPExtSampler extends AbstractSampler  {
+public class LDAPExtSampler extends AbstractSampler
+    implements TestListener
+{
 
     transient private static Logger log = LoggingManager.getLoggerForClass();
 
@@ -105,10 +109,10 @@ public class LDAPExtSampler extends AbstractSampler  {
     public final static String NEWDN = "newdn";
     //For In build test case using this counter 
     //create the new entry in the server
-    public static int counter=0;
+    //private static int counter=0;
     
-    public static Hashtable ldapConnections=new Hashtable();
-    public static Hashtable ldapContexts=new Hashtable();
+    private static Hashtable ldapConnections=new Hashtable();
+    private static Hashtable ldapContexts=new Hashtable();
    
  
     /************************************************************
@@ -602,7 +606,7 @@ public class LDAPExtSampler extends AbstractSampler  {
      * TestCase
      *@return    executed time for the give test case
      ***********************************************************/
-    public void addTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException{
+    private void addTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException{
 		res.sampleStart();
 		ldap.createTest(dirContext, getUserAttributes(), getPropertyAsString(BASE_ENTRY_DN));
 		res.sampleEnd();
@@ -614,7 +618,7 @@ public class LDAPExtSampler extends AbstractSampler  {
      * TestCase
      *@return    executed time for the give test case
      ***********************************************************/
-    public void deleteTest(LdapExtClient ldap, DirContext dirContext, SampleResult res)throws NamingException {
+    private void deleteTest(LdapExtClient ldap, DirContext dirContext, SampleResult res)throws NamingException {
         res.sampleStart();
         ldap.deleteTest(dirContext, getPropertyAsString(DELETE));
         res.sampleEnd();
@@ -625,7 +629,7 @@ public class LDAPExtSampler extends AbstractSampler  {
      * TestCase
      *@return    executed time for the give test case
      ***********************************************************/
-    public void searchTest(LdapExtClient ldap, DirContext dirContext, SampleResult res)throws NamingException {
+    private void searchTest(LdapExtClient ldap, DirContext dirContext, SampleResult res)throws NamingException {
         res.sampleStart();
         ldap.searchTest(dirContext, getPropertyAsString(SEARCHBASE),getPropertyAsString(SEARCHFILTER)
         	,getPropertyAsInt(SCOPE),getPropertyAsLong(COUNTLIM),getPropertyAsInt(TIMELIM)
@@ -638,7 +642,7 @@ public class LDAPExtSampler extends AbstractSampler  {
      * TestCase
      *@return    executed time for the give test case
      ***********************************************************/
-    public void modifyTest(LdapExtClient ldap, DirContext dirContext, SampleResult res)throws NamingException{
+    private void modifyTest(LdapExtClient ldap, DirContext dirContext, SampleResult res)throws NamingException{
             res.sampleStart();
             ldap.modifyTest(dirContext, getUserModAttributes(), getPropertyAsString(BASE_ENTRY_DN));
             res.sampleEnd();
@@ -649,11 +653,16 @@ public class LDAPExtSampler extends AbstractSampler  {
      * Thread, this bind is used for the whole context
      *@return    executed time for the bind op
      ***********************************************************/
-    public void bindOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException{
+    private void bindOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException{
+        DirContext ctx = (DirContext) ldapContexts.remove(getThreadName());
+        if (ctx != null){
+            log.warn("Closing previous context for thread: "+getThreadName());
+            ctx.close();
+        }
         res.sampleStart();
         dirContext=ldap.connect(getServername(),getPort(),getRootdn(),getUserDN(),getUserPw());
 		res.sampleEnd();
-        ldapContexts.put(Thread.currentThread().getName(), dirContext);
+        ldapContexts.put(getThreadName(), dirContext);
     }
          
     /************************************************************
@@ -661,7 +670,7 @@ public class LDAPExtSampler extends AbstractSampler  {
      * TestCase  
      *@return    executed time for the bind op
      ***********************************************************/
-    public void singleBindOp(SampleResult res) throws NamingException{
+    private void singleBindOp(SampleResult res) throws NamingException{
         LdapExtClient ldap_temp;
         ldap_temp=new LdapExtClient();
 		res.sampleStart();
@@ -675,7 +684,7 @@ public class LDAPExtSampler extends AbstractSampler  {
      * This will do a compare Opp for the User and attribute/value pair defined 
      *@return    executed time for the compare op
      ***********************************************************/
-    public void compareOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException{
+    private void compareOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException{
 		res.sampleStart();
         ldap.compare(dirContext, getPropertyAsString(COMPAREFILT), getPropertyAsString(COMPAREDN));
 		res.sampleEnd();
@@ -685,7 +694,7 @@ public class LDAPExtSampler extends AbstractSampler  {
      * This will do a moddn Opp for the User new DN defined 
      *@return    executed time for the moddn op
      ***********************************************************/
-    public void renameTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException{
+    private void renameTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException{
 		res.sampleStart();
         ldap.moddnOp(dirContext, getPropertyAsString(MODDDN), getPropertyAsString(NEWDN));
 		res.sampleEnd();
@@ -696,10 +705,12 @@ public class LDAPExtSampler extends AbstractSampler  {
      * TestCase  as well as inbuilt test case
      *@return    executed time for the bind op
      ***********************************************************/
-    public void unbindOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException{
+    private void unbindOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException{
 		res.sampleStart();
         ldap.disconnect(dirContext);
 		res.sampleEnd();
+        ldapConnections.remove(getThreadName());
+        ldapContexts.remove(getThreadName());
         log.info("context and LdapExtClients removed");
     }
          
@@ -721,8 +732,8 @@ public class LDAPExtSampler extends AbstractSampler  {
         String iets;
         NamingEnumeration attrlist;
         res.setSampleLabel(getName());
-		LdapExtClient temp_client =(LdapExtClient) ldapConnections.get(Thread.currentThread().getName());
-		DirContext dirContext =(DirContext) ldapContexts.get(Thread.currentThread().getName());
+		LdapExtClient temp_client =(LdapExtClient) ldapConnections.get(getThreadName());
+		DirContext dirContext =(DirContext) ldapContexts.get(getThreadName());
         if (temp_client == null) {
           	 temp_client =new LdapExtClient();
              try {
@@ -730,12 +741,12 @@ public class LDAPExtSampler extends AbstractSampler  {
              } catch (NamingException err) {
                 log.error("Ldap client context creation - ",err);
              }
-        	 ldapConnections.put(Thread.currentThread().getName(), temp_client);
+        	 ldapConnections.put(getThreadName(), temp_client);
         }
 
          try
         {
-//        	log.error("performing test: "+getPropertyAsString(TEST));
+        	log.debug("performing test: "+getPropertyAsString(TEST));
             if (getPropertyAsString(TEST).equals("unbind")) {
                 res.setSamplerData("Unbind");
                 responseData=responseData + "<operation><opertype>unbind</opertype>";
@@ -829,10 +840,47 @@ public class LDAPExtSampler extends AbstractSampler  {
            	responseData=responseData + "<responsemessage>" + res.getResponseMessage() + "</responsemessage>";
 			responseData=responseData + "</ldapanswer>";
 			res.setResponseData(responseData.getBytes());
-        	res.setThreadName(Thread.currentThread().getName());
         	res.setDataType(SampleResult.TEXT);
             res.setSuccessful(isSuccessful);
         }
         return res;
+    }
+
+
+    public void testStarted() {
+        testStarted("");
+    }
+
+
+    public void testEnded() {
+        testEnded("");
+    }
+
+
+    public void testStarted(String host) {
+        // ignored        
+    }
+
+
+    // Ensure any remaining contexts are closed
+    public void testEnded(String host) {
+        Iterator it =ldapContexts.entrySet().iterator();
+        while (it.hasNext()){
+            Map.Entry entry = (Map.Entry) it.next();
+            String key = (String) entry.getKey();
+            DirContext dc = (DirContext) entry.getValue(); 
+            try {
+                log.warn("Tidying old Context for thread: "+key);
+                dc.close();
+            } catch (NamingException ignored) {
+                // ignored
+            }
+            it.remove();// Make sure the entry is not left around for the next run
+        }
+        
+    }
+
+    public void testIterationStart(LoopIterationEvent event) {
+        // ignored
     }
 }
