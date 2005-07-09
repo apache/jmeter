@@ -42,6 +42,9 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class TestResultWrapperConverter extends AbstractCollectionConverter
 {
 
+    /** Returns the converter version; used to check for possible incompatibilities */
+    public static String getVersion(){  return "$Revision$";}
+
    /**
     * @param arg0
     * @param arg1
