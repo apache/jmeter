@@ -21,7 +21,6 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
-import org.apache.jmeter.config.gui.LoginConfigGui;
 import org.apache.jmeter.protocol.ldap.config.gui.LdapExtConfigGui;
 import org.apache.jmeter.protocol.ldap.sampler.LDAPExtSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
@@ -41,7 +40,6 @@ import org.apache.jmeter.testelement.TestElement;
  ***************************************/
 
 public class LdapExtTestSamplerGui extends AbstractSamplerGui {
-    private LoginConfigGui loginPanel;
     private LdapExtConfigGui ldapDefaultPanel;
 
     /****************************************
