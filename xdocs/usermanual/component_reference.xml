@@ -1013,6 +1013,13 @@ setting is reset when a parent Loop Controller restarts.
     <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
 	<property name="Condition" required="yes">Javascript code that returns "true" or "false"</property>
 </properties>
+	<p>Examples:
+		<ul>
+			<li>${COUNT} &lt; 10</li>
+			<li>"${VAR}" == "abcd"</li>
+		</ul>
+		If there is an error interpreting the code, the condition is assumed to be false, and a message is logged in jmeter.log.
+	</p>
 </component>
 
 <component name="Random Order Controller" index="&sect-num;.2.10" screenshot="">
@@ -1121,7 +1128,6 @@ which clearly won't match. Thus the For 2 Sampler will not be run.
 </component>
 <component name="While Controller" index="15.2.13" screenshot="">
 	<description>
-<note>ALPHA CODE</note>
 <p>
 The While Controller runs its children until the condition is "false".
 </p>
@@ -1131,20 +1137,20 @@ The While Controller runs its children until the condition is "false".
 <li>blank - exit loop when last sample in loop fails</li>
 <li>LAST - exit loop when last sample in loop fails. 
 If the last sample just before the loop failed, don't enter loop.</li>
-<li>Otherwise - exit (or don't enter) the loop when the condition is "false"</li>
+<li>Otherwise - exit (or don't enter) the loop when the condition is equal to the string "false"</li>
 </ul>
-<p>Note: unlike the IfController, the condition is not evaluated as a JavaScript expression. 
-The condition can be any variable or function that eventually evaluates to "false". 
-This allows one to use JavaScript, BeanShell, properties or variables as needed.
+<note>In contrast to the IfController, the condition is not evaluated as a JavaScript expression.
+The condition can be any variable or function that eventually evaluates to the string "false". 
+This allows the use of JavaScript, BeanShell, properties or variables as needed.
+</note>
 <br></br>
 For example:
 <ul>
 	<li>${VAR} - where VAR is set to false by some other test element</li>
 	<li>${__javaScript(${C}==10,dummy)}</li>
-	<li>${_P(property)}</li>
-	<li>etc</li>
+	<li>${__javaScript("${VAR2}"=="abcd",dummy)}</li>
+	<li>${_P(property)} - where property is set to "false" somewhere else</li>
 </ul>
-</p>
 	</description>
 <properties>
 	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
@@ -1154,7 +1160,6 @@ For example:
 
 <component name="Switch Controller" index="&sect-num;.2.14" screenshot="">
 	<description>
-<note>ALPHA CODE</note>
 <p>
 The Switch Controller acts like the <complink name="Interleave Controller"/> 
 in that it runs one of the subordinate elements on each iteration, but rather than
