@@ -359,7 +359,9 @@ public class JMeterTest extends JMeterTestCase
 			String title = guiItem.getStaticLabel();
 			boolean ct =guiTitles.containsKey(title); 
 			if (ct) guiTitles.put(title,Boolean.TRUE);// So we can detect extra entries
-			if (// Is this a work in progress ?
+			if (// Is this a work in progress or an internal GUI component?
+                (title.length() > 0) // Will be "" for internal components
+                &&
 			    (title.toUpperCase().indexOf("(ALPHA") == -1)
 			    &&
 			    (title.toUpperCase().indexOf("(BETA")  == -1)
@@ -428,8 +430,10 @@ public class JMeterTest extends JMeterTestCase
         	try{
 	        	String label = guiItem.getLabelResource();
 	            assertTrue(label.length() > 0);
+                if (!label.equals("unused")) { //TODO use constant
 	            assertFalse("'"+label+"' should be in resource file for "+name
 	            		,JMeterUtils.getResString(label).startsWith(JMeterUtils.RES_KEY_PFX));
+                }
         	}
             catch(UnsupportedOperationException uoe)
 			{
