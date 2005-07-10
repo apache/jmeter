@@ -283,6 +283,9 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
         optionsMenu.add(makeLanguageMenu());
     }
     
+    // TODO fetch list of languages from a file?
+    // N.B. Changes to language list need to be reflected in
+    // resources/PackageTest.java
     private JMenu makeLanguageMenu()
     {
         /*
@@ -336,6 +339,12 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener
         chineseTrad.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
         chineseTrad.setName(Locale.TRADITIONAL_CHINESE.toString());
         languageMenu.add(chineseTrad);
+        //add spanish
+        JMenuItem spanish = new JMenuItem(JMeterUtils.getResString("es"));
+        spanish.addActionListener(ActionRouter.getInstance());
+        spanish.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
+        spanish.setName("es");
+        languageMenu.add(spanish);
         return languageMenu;
     }
 
