@@ -18,7 +18,10 @@
 
 package org.apache.jmeter.protocol.ldap.sampler;
 
-import java.util.*;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.BasicAttribute;
@@ -31,16 +34,13 @@ import javax.naming.NamingEnumeration;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.config.LoginConfig;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.protocol.ldap.config.LdapExtConfig;
 import org.apache.jmeter.protocol.ldap.config.gui.LDAPArgument;
 import org.apache.jmeter.protocol.ldap.config.gui.LDAPArguments;
 import org.apache.jmeter.protocol.ldap.sampler.LdapExtClient;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -120,19 +120,6 @@ public class LDAPExtSampler extends AbstractSampler
      ***********************************************************/
     public LDAPExtSampler()
     {
-    }
-
-
-    /************************************************************
-     *  
-     ***********************************************************/
-
-    public void addCustomTestElement(TestElement element)
-    {
-        if(element instanceof LdapExtConfig || element instanceof LoginConfig)
-        {
-            mergeIn(element);
-        }
     }
 
     /************************************************************
