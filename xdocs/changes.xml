@@ -47,6 +47,10 @@
 <li>New optional icons</li>
 <li>Allow icons to be defined via property files</li>
 <li>New stylesheets for 2.1 format XML test output</li>
+<li>Save samplers, config element and listeners as PNG</li>
+<li>Enhanced support for WSDL processing</li>
+<li>New JMS sampler for topic and queue messages</li>
+<li>How-to for JMS samplers</li>
 </ul>
 <h4>Bug fixes:</h4>
 <ul>
@@ -69,6 +73,8 @@
 <li>Bug 23248 - module controller didn't remember stuff between save and reload</li>
 <li>Fix Chinese locales</li>
 <li>Bug 29920 - change default locale if necessary to ensure default properties are picked up when English is selected.</li>
+<li>Bug fixes for Tomcat monitor captions</li> 
+<li>Fixed webservice sampler so it works with user defined variables</li>
 </ul>
 	
 <h3>Version 2.0.3</h3>
