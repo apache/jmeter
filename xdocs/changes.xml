@@ -78,6 +78,8 @@
 <li>Bug fixes for Tomcat monitor captions</li> 
 <li>Fixed webservice sampler so it works with user defined variables</li>
 <li>Fixed screen borders for LDAP config GUI elements</li>
+<li>Bug 31184 - make sure encoding is specified in JDBC sampler</li>
+</ul>	
 	
 <h3>Version 2.0.3</h3>
 <h4>New functionality:</h4>
