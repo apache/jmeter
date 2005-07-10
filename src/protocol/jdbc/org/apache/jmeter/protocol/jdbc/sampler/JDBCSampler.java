@@ -108,6 +108,8 @@ public class JDBCSampler extends AbstractSampler implements TestBean
             }
 
             res.setDataType(SampleResult.TEXT);
+            // Bug 31184 - make sure encoding is specified
+            res.setDataEncoding(System.getProperty("file.encoding"));
             res.setSuccessful(true);
         }
         catch (SQLException ex)
