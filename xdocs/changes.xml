@@ -75,7 +75,7 @@
 <li>Bug 29920 - change default locale if necessary to ensure default properties are picked up when English is selected.</li>
 <li>Bug fixes for Tomcat monitor captions</li> 
 <li>Fixed webservice sampler so it works with user defined variables</li>
-</ul>
+<li>Fixed screen borders for LDAP config GUI elements</li>
 	
 <h3>Version 2.0.3</h3>
 <h4>New functionality:</h4>
