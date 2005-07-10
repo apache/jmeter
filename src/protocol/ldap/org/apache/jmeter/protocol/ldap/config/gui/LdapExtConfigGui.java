@@ -303,7 +303,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener
      * This will create the servername
      *panel in the LdapConfigGui
      ***************************************/
-    public JPanel createServernamePanel() {
+    private JPanel createServernamePanel() {
         JPanel serverPanel = new JPanel(new BorderLayout(5, 0));
         JLabel label = new JLabel(JMeterUtils.getResString("servername"));
         label.setLabelFor(servername);
@@ -619,6 +619,15 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener
      *all the panel in the LdapConfigGui
      ***************************************/
     private void init() {
+        setLayout(new BorderLayout(0, 5));
+        if(displayName) {
+            setBorder(makeBorder());
+            add(makeTitlePanel(),BorderLayout.NORTH);
+        }
+        VerticalPanel mainPanel = new VerticalPanel();
+        mainPanel.add(createTestPanel());
+        mainPanel.add(testPanel());
+        add(mainPanel,BorderLayout.CENTER);
         bind.addItemListener(this);
         sbind.addItemListener(this);
         unbind.addItemListener(this);
@@ -628,14 +637,5 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener
         rename.addItemListener(this);
         deleteTest.addItemListener(this);
         searchTest.addItemListener(this);
-        setLayout(new BorderLayout(0, 5));
-        VerticalPanel mainPanel = new VerticalPanel();
-        if(displayName) {
-            mainPanel.setBorder(makeBorder());
-            add(makeTitlePanel(),BorderLayout.NORTH);
-        }
-            mainPanel.add(createTestPanel());
-            mainPanel.add(testPanel());
-            add(mainPanel,BorderLayout.CENTER);
     }
 }
