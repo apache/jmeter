@@ -1828,6 +1828,19 @@ The variables in User Defined Variables components will take precedence over tho
 </properties>
 </component>
 
+<component name="JNDI Default Configuration" index="&sect-num;.4.17" screenshot="jndi_config.png">
+<description>
+	<p>
+		TBA.
+	</p>
+</description>
+<properties>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="Initial Context Factory" required="No">TBA</property>
+  <property name="Provider URL" required="No">TBA</property>
+</properties>
+</component>
+
 </section>
 
 <section name="&sect-num;.5 Assertions" anchor="assertions">
