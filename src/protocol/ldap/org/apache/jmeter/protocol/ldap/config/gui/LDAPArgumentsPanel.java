@@ -129,9 +129,14 @@ public class LDAPArgumentsPanel
         return null;
     }
 
+    public String getStaticLabel()
+    {
+        return ""; // This is not an independently displayable item
+    }
+    
     public String getLabelResource()
     {
-        return "ldap_argument_list";
+        return "unused";//TODO use constant
     }
 
     /* Implements JMeterGUIComponent.createTestElement() */
