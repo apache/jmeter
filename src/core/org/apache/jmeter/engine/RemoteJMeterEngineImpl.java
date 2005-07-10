@@ -23,6 +23,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -38,7 +39,8 @@ public class RemoteJMeterEngineImpl
     transient private static Logger log = LoggingManager.getLoggerForClass();
     JMeterEngine backingEngine;
 
-    public static final int DEFAULT_RMI_PORT = 1099;
+    public static final int DEFAULT_RMI_PORT = 
+        JMeterUtils.getPropDefault("server.rmi.port",1099);
     
     public RemoteJMeterEngineImpl() throws RemoteException
     {
