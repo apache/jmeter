@@ -451,35 +451,25 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener
      */
     private void init()
     {
+        setLayout(new BorderLayout(0, 5));
+
+        if(displayName)
+        {
+            setBorder(makeBorder());
+            add(makeTitlePanel(),BorderLayout.NORTH);
+        }
+        VerticalPanel mainPanel = new VerticalPanel();
+        mainPanel.add(createServernamePanel());
+        mainPanel.add(createPortPanel());
+        mainPanel.add(createRootdnPanel());
+        mainPanel.add(createTestPanel());
+        mainPanel.add(testPanel());
+        add(mainPanel,BorderLayout.CENTER);
+
         user_Defined.addItemListener(this);
         addTest.addItemListener(this);
         modifyTest.addItemListener(this);
         deleteTest.addItemListener(this);
         searchTest.addItemListener(this);
-        setLayout(new BorderLayout(0, 5));
-
-        if(displayName)
-        {
-            VerticalPanel mainPanel = new VerticalPanel();
-            mainPanel.setBorder(makeBorder());
-            add(makeTitlePanel(),BorderLayout.NORTH);
-            mainPanel.setBorder(makeBorder());
-            mainPanel.add(createServernamePanel());
-            mainPanel.add(createPortPanel());
-            mainPanel.add(createRootdnPanel());
-            mainPanel.add(createTestPanel());
-            mainPanel.add(testPanel());
-            add(mainPanel,BorderLayout.CENTER);
-        }
-        else
-        {
-            VerticalPanel mainPanel = new VerticalPanel();
-            mainPanel.add(createServernamePanel());
-            mainPanel.add(createPortPanel());
-            mainPanel.add(createRootdnPanel());
-            mainPanel.add(createTestPanel());
-            mainPanel.add(testPanel());
-            add(mainPanel,BorderLayout.CENTER);
-        }
     }
 }
