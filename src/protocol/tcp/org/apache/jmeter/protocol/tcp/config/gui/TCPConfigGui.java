@@ -38,7 +38,7 @@ public class TCPConfigGui extends AbstractConfigGui
 {
     private final static String SERVER = "server";     //$NON-NLS-1$
     private final static String PORT = "port";         //$NON-NLS-1$   
-	private final static String FILENAME = "filename"; //$NON-NLS-1$ 
+	//NOTUSED yet private final static String FILENAME = "filename"; //$NON-NLS-1$ 
 	private final static String TIMEOUT = "timeout";   //$NON-NLS-1$
 	private final static String NODELAY = "nodelay";   //$NON-NLS-1$
 	private final static String REQUEST = "request";   //$NON-NLS-1$
