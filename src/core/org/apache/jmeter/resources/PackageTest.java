@@ -190,6 +190,7 @@ public class PackageTest extends TestCase
 		ts.addTest(new PackageTest("atestzh_CN"));
 		ts.addTest(new PackageTest("atestzh_TW"));
 		ts.addTest(new PackageTest("atestFR"));
+        ts.addTest(new PackageTest("atestES"));
 		return ts;
 	}
 
@@ -226,6 +227,10 @@ public class PackageTest extends TestCase
 	{
 		check("fr");
 	}
+    public void atestES() throws Exception
+    {
+        check("es");
+    }
 	public void atestDefault() throws Exception
 	{
 		check("");

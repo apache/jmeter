@@ -51,6 +51,7 @@
 <li>Enhanced support for WSDL processing</li>
 <li>New JMS sampler for topic and queue messages</li>
 <li>How-to for JMS samplers</li>
+<li>Bug 35525 - Added Spanish localisation</li>
 </ul>
 <h4>Bug fixes:</h4>
 <ul>
