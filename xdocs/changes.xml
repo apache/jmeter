@@ -46,6 +46,7 @@
 <li>Bug 25052 - use response encoding to create comparison string in Response Assertion</li>
 <li>New optional icons</li>
 <li>Allow icons to be defined via property files</li>
+<li>New stylesheets for 2.1 format XML test output</li>
 </ul>
 <h4>Bug fixes:</h4>
 <ul>
@@ -64,6 +65,10 @@
 <li>Bug 35065 - don't save old extensions in File Saver</li>
 <li>Bug 25413 - don't enable Restart button unnecessarily</li>
 <li>Bug 35059 - Runtime Controller stopped working</li>
+<li>Clear up any left-over connections created by LDAP Extended Sampler</li>
+<li>Bug 23248 - module controller didn't remember stuff between save and reload</li>
+<li>Fix Chinese locales</li>
+<li>Bug 29920 - change default locale if necessary to ensure default properties are picked up when English is selected.</li>
 </ul>
 	
 <h3>Version 2.0.3</h3>
