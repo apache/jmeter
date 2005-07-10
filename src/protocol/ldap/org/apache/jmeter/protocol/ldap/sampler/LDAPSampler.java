@@ -28,12 +28,9 @@ import javax.naming.directory.ModificationItem;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.config.LoginConfig;
-import org.apache.jmeter.protocol.ldap.config.LdapConfig;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -76,15 +73,6 @@ public class LDAPSampler extends AbstractSampler
 
     public LDAPSampler()
     {
-    }
-
-
-    public void addCustomTestElement(TestElement element)
-    {
-        if(element instanceof LdapConfig || element instanceof LoginConfig)
-        {
-            mergeIn(element);
-        }
     }
 
     /**
