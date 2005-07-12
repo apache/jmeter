@@ -20,138 +20,138 @@ import java.io.Serializable;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
 
-public class MonitorStats extends AbstractTestElement implements Serializable
-{
+public class MonitorStats extends AbstractTestElement implements Serializable {
 
 	public static String HEALTH = "stats.health";
+
 	public static String LOAD = "stats.load";
+
 	public static String CPULOAD = "stats.cpuload";
+
 	public static String MEMLOAD = "stats.memload";
+
 	public static String THREADLOAD = "stats.threadload";
+
 	public static String HOST = "stats.host";
+
 	public static String PORT = "stats.port";
+
 	public static String PROTOCOL = "stats.protocol";
+
 	public static String TIMESTAMP = "stats.timestamp";
-	
-    /**
-     * 
-     */
-    public MonitorStats()
-    {
-        super();
-    }
-    
-    /**
-     * Default constructor
-     * @param health
-     * @param load
-     * @param cpuload
-     * @param memload
-     * @param threadload
-     * @param host
-     * @param port
-     * @param protocol
-     * @param time
-     */
-    public MonitorStats(int health,
-    	int load,
-    	int cpuload,
-    	int memload,
-    	int threadload,
-    	String host,
-    	String port,
-    	String protocol,
-    	long time){
-    		this.setHealth(health);
-    		this.setLoad(load);
-    		this.setCpuLoad(cpuload);
-    		this.setMemLoad(memload);
-    		this.setThreadLoad(threadload);
-    		this.setHost(host);
-    		this.setPort(port);
-    		this.setProtocol(protocol);
-    		this.setTimeStamp(time);
-    	}
 
 	/**
-	 * For convienance, this method returns the protocol,
-	 * host and port as a URL.
+	 * 
+	 */
+	public MonitorStats() {
+		super();
+	}
+
+	/**
+	 * Default constructor
+	 * 
+	 * @param health
+	 * @param load
+	 * @param cpuload
+	 * @param memload
+	 * @param threadload
+	 * @param host
+	 * @param port
+	 * @param protocol
+	 * @param time
+	 */
+	public MonitorStats(int health, int load, int cpuload, int memload, int threadload, String host, String port,
+			String protocol, long time) {
+		this.setHealth(health);
+		this.setLoad(load);
+		this.setCpuLoad(cpuload);
+		this.setMemLoad(memload);
+		this.setThreadLoad(threadload);
+		this.setHost(host);
+		this.setPort(port);
+		this.setProtocol(protocol);
+		this.setTimeStamp(time);
+	}
+
+	/**
+	 * For convienance, this method returns the protocol, host and port as a
+	 * URL.
+	 * 
 	 * @return protocol://host:port
 	 */
-	public String getURL(){
-		return this.getProtocol() + "://" + 
-		this.getHost() + ":" + this.getPort();
+	public String getURL() {
+		return this.getProtocol() + "://" + this.getHost() + ":" + this.getPort();
 	}
-	
-	public void setHealth(int health){
-		this.setProperty(HEALTH,String.valueOf(health));
+
+	public void setHealth(int health) {
+		this.setProperty(HEALTH, String.valueOf(health));
 	}
-	
-	public void setLoad(int load){
-		this.setProperty(LOAD,String.valueOf(load));
+
+	public void setLoad(int load) {
+		this.setProperty(LOAD, String.valueOf(load));
 	}
-	
-	public void setCpuLoad(int load){
-		this.setProperty(CPULOAD,String.valueOf(load));
+
+	public void setCpuLoad(int load) {
+		this.setProperty(CPULOAD, String.valueOf(load));
 	}
-	
-	public void setMemLoad(int load){
-		this.setProperty(MEMLOAD,String.valueOf(load));
+
+	public void setMemLoad(int load) {
+		this.setProperty(MEMLOAD, String.valueOf(load));
 	}
-	
-	public void setThreadLoad(int load){
-		this.setProperty(THREADLOAD,String.valueOf(load));
+
+	public void setThreadLoad(int load) {
+		this.setProperty(THREADLOAD, String.valueOf(load));
 	}
-	
-	public void setHost(String host){
-		this.setProperty(HOST,host);
+
+	public void setHost(String host) {
+		this.setProperty(HOST, host);
 	}
-	
-	public void setPort(String port){
-		this.setProperty(PORT,port);
+
+	public void setPort(String port) {
+		this.setProperty(PORT, port);
 	}
-	
-	public void setProtocol(String protocol){
-		this.setProperty(PROTOCOL,protocol);
+
+	public void setProtocol(String protocol) {
+		this.setProperty(PROTOCOL, protocol);
 	}
-	
-	public void setTimeStamp(long time){
-		this.setProperty(TIMESTAMP,String.valueOf(time));
+
+	public void setTimeStamp(long time) {
+		this.setProperty(TIMESTAMP, String.valueOf(time));
 	}
-	
-	public int getHealth(){
+
+	public int getHealth() {
 		return this.getPropertyAsInt(HEALTH);
 	}
-	
-	public int getLoad(){
+
+	public int getLoad() {
 		return this.getPropertyAsInt(LOAD);
 	}
-	
-	public int getCpuLoad(){
+
+	public int getCpuLoad() {
 		return this.getPropertyAsInt(CPULOAD);
 	}
-	
-	public int getMemLoad(){
+
+	public int getMemLoad() {
 		return this.getPropertyAsInt(MEMLOAD);
 	}
-	
-	public int getThreadLoad(){
+
+	public int getThreadLoad() {
 		return this.getPropertyAsInt(THREADLOAD);
 	}
-	
-	public String getHost(){
+
+	public String getHost() {
 		return this.getPropertyAsString(HOST);
 	}
-	
-	public String getPort(){
+
+	public String getPort() {
 		return this.getPropertyAsString(PORT);
 	}
-	
-	public String getProtocol(){
+
+	public String getProtocol() {
 		return this.getPropertyAsString(PROTOCOL);
 	}
-	
-	public long getTimeStamp(){
+
+	public long getTimeStamp() {
 		return this.getPropertyAsLong(TIMESTAMP);
 	}
 }

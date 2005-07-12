@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 /*
  * Created on May 16, 2004
@@ -28,34 +28,32 @@ import org.apache.jmeter.testbeans.gui.TextAreaEditor;
 
 /**
  * @author mstover
- *
+ * 
  */
-public class JDBCSamplerBeanInfo extends BeanInfoSupport
-{
-   
-   /**
-    *
-    */
-   public JDBCSamplerBeanInfo()
-   {
-      super(JDBCSampler.class);
-      
-      createPropertyGroup("varName", new String[]{"dataSource"});
-      
-      createPropertyGroup("sql", new String[]{"queryOnly","query"});
-      
-      PropertyDescriptor p = property("dataSource");
-      p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-      p.setValue(DEFAULT, "");
-      
-      p = property("queryOnly");
-      p.setValue(NOT_UNDEFINED,Boolean.TRUE);
-      p.setValue(DEFAULT,new Boolean(true));
-      
-      p = property("query");
-      p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-      p.setValue(DEFAULT, "");
-      p.setPropertyEditorClass(TextAreaEditor.class);
-      
-   }
+public class JDBCSamplerBeanInfo extends BeanInfoSupport {
+
+	/**
+	 * 
+	 */
+	public JDBCSamplerBeanInfo() {
+		super(JDBCSampler.class);
+
+		createPropertyGroup("varName", new String[] { "dataSource" });
+
+		createPropertyGroup("sql", new String[] { "queryOnly", "query" });
+
+		PropertyDescriptor p = property("dataSource");
+		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+		p.setValue(DEFAULT, "");
+
+		p = property("queryOnly");
+		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+		p.setValue(DEFAULT, new Boolean(true));
+
+		p = property("query");
+		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+		p.setValue(DEFAULT, "");
+		p.setPropertyEditorClass(TextAreaEditor.class);
+
+	}
 }

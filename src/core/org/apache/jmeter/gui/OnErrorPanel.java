@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui;
+
 import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
@@ -31,69 +32,64 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  * @version $Revision$ $Date$
  */
-public class OnErrorPanel extends JPanel 
-{
+public class OnErrorPanel extends JPanel {
 	// Sampler error action buttons
 	private JRadioButton continueBox;
+
 	private JRadioButton stopThrdBox;
+
 	private JRadioButton stopTestBox;
 
-	private JPanel createOnErrorPanel()
-	{
+	private JPanel createOnErrorPanel() {
 		JPanel panel = new JPanel();
-		panel.setBorder(
-			BorderFactory.createTitledBorder(
-				JMeterUtils.getResString("sampler_on_error_action")));
+		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("sampler_on_error_action")));
 
 		ButtonGroup group = new ButtonGroup();
 
-		continueBox =
-			new JRadioButton(JMeterUtils.getResString("sampler_on_error_continue"));
+		continueBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_continue"));
 		group.add(continueBox);
 		continueBox.setSelected(true);
 		panel.add(continueBox);
 
-		stopThrdBox =
-			new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_thread"));
+		stopThrdBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_thread"));
 		group.add(stopThrdBox);
 		panel.add(stopThrdBox);
 
-		stopTestBox =
-			new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test"));
+		stopTestBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test"));
 		group.add(stopTestBox);
 		panel.add(stopTestBox);
 
 		return panel;
 	}
-    /**
-     * Create a new NamePanel with the default name.
-     */
-    public OnErrorPanel()
-    {
-        init();
-    }
 
-    /**
-     * Initialize the GUI components and layout.
-     */
-    private void init()
-    {
-        setLayout(new BorderLayout(5, 0));
-        add(createOnErrorPanel());
-    }
-    public void configure(int errorAction)
-    {
+	/**
+	 * Create a new NamePanel with the default name.
+	 */
+	public OnErrorPanel() {
+		init();
+	}
+
+	/**
+	 * Initialize the GUI components and layout.
+	 */
+	private void init() {
+		setLayout(new BorderLayout(5, 0));
+		add(createOnErrorPanel());
+	}
+
+	public void configure(int errorAction) {
 		stopTestBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_STOPTEST);
 		stopThrdBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_STOPTHREAD);
 		continueBox.setSelected(errorAction == OnErrorTestElement.ON_ERROR_CONTINUE);
-    }
-    
-    public int getOnErrorSetting()
-    {
-		if (stopTestBox.isSelected()) return OnErrorTestElement.ON_ERROR_STOPTEST;
-		if (stopThrdBox.isSelected()) return OnErrorTestElement.ON_ERROR_STOPTHREAD;
+	}
+
+	public int getOnErrorSetting() {
+		if (stopTestBox.isSelected())
+			return OnErrorTestElement.ON_ERROR_STOPTEST;
+		if (stopThrdBox.isSelected())
+			return OnErrorTestElement.ON_ERROR_STOPTHREAD;
 
 		// Defaults to continue
 		return OnErrorTestElement.ON_ERROR_CONTINUE;
-    }
+	}
 }

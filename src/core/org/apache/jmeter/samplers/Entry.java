@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.samplers;
 
 import java.util.HashMap;
-//import java.util.HashSet;
+// import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-//import java.util.Set;
+// import java.util.Set;
 
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.config.ConfigElement;
@@ -31,96 +31,78 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author     Michael Stover
- * @version    $Revision$
+ * @author Michael Stover
+ * @version $Revision$
  */
-public class Entry
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
-    Map configSet;
-    //Set clonedSet;
-    Class sampler;
-    List assertions;
+public class Entry {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    public Entry()
-    {
-        configSet = new HashMap();
-        //clonedSet = new HashSet();
-        assertions = new LinkedList();
-    }
+	Map configSet;
 
-    public void addAssertion(Assertion assertion)
-    {
-        assertions.add(assertion);
-    }
+	// Set clonedSet;
+	Class sampler;
 
-    public List getAssertions()
-    {
-        return assertions;
-    }
+	List assertions;
 
-    public void setSamplerClass(Class samplerClass)
-    {
-        this.sampler = samplerClass;
-    }
+	public Entry() {
+		configSet = new HashMap();
+		// clonedSet = new HashSet();
+		assertions = new LinkedList();
+	}
 
-    public Class getSamplerClass()
-    {
-        return this.sampler;
-    }
+	public void addAssertion(Assertion assertion) {
+		assertions.add(assertion);
+	}
 
-    public ConfigElement getConfigElement(Class configClass)
-    {
-        return (ConfigElement) configSet.get(configClass);
-    }
+	public List getAssertions() {
+		return assertions;
+	}
 
-    public void addConfigElement(ConfigElement config)
-    {
-        addConfigElement(config, config.getClass());
-    }
+	public void setSamplerClass(Class samplerClass) {
+		this.sampler = samplerClass;
+	}
 
-    /**
-     * Add a config element as a specific class.  Usually this is done to add a
-     * subclass as one of it's parent classes.
-     */
-    public void addConfigElement(ConfigElement config, Class asClass)
-    {
-        if (config != null)
-        {
-            ConfigElement current = (ConfigElement) configSet.get(asClass);
-            if (current == null)
-            {
-                configSet.put(asClass, cloneIfNecessary(config));
-            }
-            else
-            {
-                current.addConfigElement(config);
-            }
-        }
-    }
+	public Class getSamplerClass() {
+		return this.sampler;
+	}
 
-    private ConfigElement cloneIfNecessary(ConfigElement config)
-    {
-        if (config.expectsModification())
-        {
-            return config;
-        }
-        else
-        {
-            return (ConfigElement) config.clone();
-        }
-    }
+	public ConfigElement getConfigElement(Class configClass) {
+		return (ConfigElement) configSet.get(configClass);
+	}
 
-    public Object clone()
-    {
-        try
-        {
-            return super.clone();
-        }
-        catch (Exception ex)
-        {
-            log.error("", ex);
-        }
-        return null;
-    }
+	public void addConfigElement(ConfigElement config) {
+		addConfigElement(config, config.getClass());
+	}
+
+	/**
+	 * Add a config element as a specific class. Usually this is done to add a
+	 * subclass as one of it's parent classes.
+	 */
+	public void addConfigElement(ConfigElement config, Class asClass) {
+		if (config != null) {
+			ConfigElement current = (ConfigElement) configSet.get(asClass);
+			if (current == null) {
+				configSet.put(asClass, cloneIfNecessary(config));
+			} else {
+				current.addConfigElement(config);
+			}
+		}
+	}
+
+	private ConfigElement cloneIfNecessary(ConfigElement config) {
+		if (config.expectsModification()) {
+			return config;
+		} else {
+			return (ConfigElement) config.clone();
+		}
+	}
+
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (Exception ex) {
+			log.error("", ex);
+		}
+		return null;
+	}
 }

@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.scanners;
 
 import org.htmlparser.tags.Span;
@@ -37,28 +36,23 @@ import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 
-public class SpanScanner extends CompositeTagScanner
-{
-    private static final String[] MATCH_ID = { "SPAN" };
+public class SpanScanner extends CompositeTagScanner {
+	private static final String[] MATCH_ID = { "SPAN" };
 
-    public SpanScanner()
-    {
-        this("");
-    }
+	public SpanScanner() {
+		this("");
+	}
 
-    public SpanScanner(String filter)
-    {
-        super(filter, MATCH_ID);
-    }
+	public SpanScanner(String filter) {
+		super(filter, MATCH_ID);
+	}
 
-    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-    {
-        return new Span(tagData, compositeTagData);
-    }
+	public Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
+		return new Span(tagData, compositeTagData);
+	}
 
-    public String[] getID()
-    {
-        return MATCH_ID;
-    }
+	public String[] getID() {
+		return MATCH_ID;
+	}
 
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.proxy;
 
@@ -71,841 +71,743 @@ import org.apache.oro.text.regex.Perl5Matcher;
 /**
  * @version $Revision$ updated on $Date$
  */
-public class ProxyControl extends GenericController implements Serializable
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
-    private transient Daemon server;
-    public static final int DEFAULT_PORT = 8080;
-	public static final String DEFAULT_PORT_S =
-	         Integer.toString(DEFAULT_PORT);// Used by GUI
-    private static PatternCacheLRU patternCache =
-        new PatternCacheLRU(1000, new Perl5Compiler());
-    transient Perl5Matcher matcher;
-    public static final String PORT = "ProxyControlGui.port";
-    public static final String EXCLUDE_LIST = "ProxyControlGui.exclude_list";
-    public static final String INCLUDE_LIST = "ProxyControlGui.include_list";
-    public static final String CAPTURE_HTTP_HEADERS = "ProxyControlGui.capture_http_headers";
+public class ProxyControl extends GenericController implements Serializable {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
+
+	private transient Daemon server;
+
+	public static final int DEFAULT_PORT = 8080;
+
+	public static final String DEFAULT_PORT_S = Integer.toString(DEFAULT_PORT);// Used
+																				// by
+																				// GUI
+
+	private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
+
+	transient Perl5Matcher matcher;
+
+	public static final String PORT = "ProxyControlGui.port";
+
+	public static final String EXCLUDE_LIST = "ProxyControlGui.exclude_list";
+
+	public static final String INCLUDE_LIST = "ProxyControlGui.include_list";
+
+	public static final String CAPTURE_HTTP_HEADERS = "ProxyControlGui.capture_http_headers";
+
 	public static final String ADD_ASSERTIONS = "ProxyControlGui.add_assertion";
+
 	public static final String GROUPING_MODE = "ProxyControlGui.grouping_mode";
-	public static final String USE_KEEPALIVE  = "ProxyControlGui.use_keepalive";
-    public static final String REGEX_MATCH  = "ProxyControlGui.regex_match";
 
-    public static final int GROUPING_NO_GROUPS = 0;
-    public static final int GROUPING_ADD_SEPARATORS = 1;
-    public static final int GROUPING_IN_CONTROLLERS = 2;
-    public static final int GROUPING_STORE_FIRST_ONLY = 3;
+	public static final String USE_KEEPALIVE = "ProxyControlGui.use_keepalive";
 
-	private long lastTime = 0;//When was the last sample seen?
-	private static final long sampleGap = 
-	    JMeterUtils.getPropDefault("proxy.pause",1000);//Detect if user has pressed a new link
+	public static final String REGEX_MATCH = "ProxyControlGui.regex_match";
+
+	public static final int GROUPING_NO_GROUPS = 0;
+
+	public static final int GROUPING_ADD_SEPARATORS = 1;
+
+	public static final int GROUPING_IN_CONTROLLERS = 2;
+
+	public static final int GROUPING_STORE_FIRST_ONLY = 3;
+
+	private long lastTime = 0;// When was the last sample seen?
+
+	private static final long sampleGap = JMeterUtils.getPropDefault("proxy.pause", 1000);// Detect
+																							// if
+																							// user
+																							// has
+																							// pressed
+																							// a
+																							// new
+																							// link
+
 	private boolean addAssertions;
+
 	private int groupingMode;
+
 	private boolean useKeepAlive;
-    private boolean regexMatch=false;// Should we match using regexes?
-    
-    /**
-     * Tree node where the samples should be stored.
-     * <p>
-     * This property is not persistent.
-     */
-    private JMeterTreeNode target;
-    
-    public ProxyControl()
-    {
-        matcher = new Perl5Matcher();
-        setPort(DEFAULT_PORT);
-        setExcludeList(new HashSet());
-        setIncludeList(new HashSet());
-        setCaptureHttpHeaders(true); // maintain original behaviour
-    }
 
-    public void setPort(int port)
-    {
-        this.setProperty(new IntegerProperty(PORT, port));
-    }
-    
-    public void setPort(String port)
-    {
-        setProperty(PORT,port);
-    }
-  
-    public void setCaptureHttpHeaders(boolean capture)
-    {
-        setProperty(new BooleanProperty(CAPTURE_HTTP_HEADERS,capture));
-    }
+	private boolean regexMatch = false;// Should we match using regexes?
 
-	public void setGroupingMode(int grouping)
-	{
-		this.groupingMode= grouping;
-		setProperty(new IntegerProperty(GROUPING_MODE,grouping));
+	/**
+	 * Tree node where the samples should be stored.
+	 * <p>
+	 * This property is not persistent.
+	 */
+	private JMeterTreeNode target;
+
+	public ProxyControl() {
+		matcher = new Perl5Matcher();
+		setPort(DEFAULT_PORT);
+		setExcludeList(new HashSet());
+		setIncludeList(new HashSet());
+		setCaptureHttpHeaders(true); // maintain original behaviour
 	}
 
-	public void setAssertions(boolean b)
-	{
-		addAssertions=b;
-		setProperty(new BooleanProperty(ADD_ASSERTIONS,b));
+	public void setPort(int port) {
+		this.setProperty(new IntegerProperty(PORT, port));
+	}
+
+	public void setPort(String port) {
+		setProperty(PORT, port);
+	}
+
+	public void setCaptureHttpHeaders(boolean capture) {
+		setProperty(new BooleanProperty(CAPTURE_HTTP_HEADERS, capture));
+	}
+
+	public void setGroupingMode(int grouping) {
+		this.groupingMode = grouping;
+		setProperty(new IntegerProperty(GROUPING_MODE, grouping));
+	}
+
+	public void setAssertions(boolean b) {
+		addAssertions = b;
+		setProperty(new BooleanProperty(ADD_ASSERTIONS, b));
 	}
 
 	/**
 	 * @param b
 	 */
-	public void setUseKeepAlive(boolean b)
-	{
-		useKeepAlive=b;
-		setProperty(new BooleanProperty(USE_KEEPALIVE,b));
+	public void setUseKeepAlive(boolean b) {
+		useKeepAlive = b;
+		setProperty(new BooleanProperty(USE_KEEPALIVE, b));
 	}
 
-    public void setIncludeList(Collection list)
-    {
-        setProperty(new CollectionProperty(INCLUDE_LIST, new HashSet(list)));
-    }
-    public void setExcludeList(Collection list)
-    {
-        setProperty(new CollectionProperty(EXCLUDE_LIST, new HashSet(list)));
-    }
+	public void setIncludeList(Collection list) {
+		setProperty(new CollectionProperty(INCLUDE_LIST, new HashSet(list)));
+	}
 
-    /**
-     * @param b
-     */
-    public void setRegexMatch(boolean b)
-    {
-        regexMatch=b;
-        setProperty(new BooleanProperty(REGEX_MATCH,b));
-    }
+	public void setExcludeList(Collection list) {
+		setProperty(new CollectionProperty(EXCLUDE_LIST, new HashSet(list)));
+	}
 
-    public String getClassLabel()
-    {
-        return JMeterUtils.getResString("proxy_title");
-    }
+	/**
+	 * @param b
+	 */
+	public void setRegexMatch(boolean b) {
+		regexMatch = b;
+		setProperty(new BooleanProperty(REGEX_MATCH, b));
+	}
 
-    public boolean getAssertions() {
-        return getPropertyAsBoolean(ADD_ASSERTIONS);
-    }
+	public String getClassLabel() {
+		return JMeterUtils.getResString("proxy_title");
+	}
 
-    public int getGroupingMode() {
-        return getPropertyAsInt(GROUPING_MODE);
-    }
+	public boolean getAssertions() {
+		return getPropertyAsBoolean(ADD_ASSERTIONS);
+	}
 
-    public int getPort()
-    {
-        return getPropertyAsInt(PORT);
-    }
+	public int getGroupingMode() {
+		return getPropertyAsInt(GROUPING_MODE);
+	}
 
-    public String getPortString()
-    {
-        return getPropertyAsString(PORT);
-    }
+	public int getPort() {
+		return getPropertyAsInt(PORT);
+	}
 
-    public int getDefaultPort()
-    {
-        return DEFAULT_PORT;
-    }
+	public String getPortString() {
+		return getPropertyAsString(PORT);
+	}
 
-    public boolean getCaptureHttpHeaders()
-    {
-        return getPropertyAsBoolean(CAPTURE_HTTP_HEADERS);
-    }
+	public int getDefaultPort() {
+		return DEFAULT_PORT;
+	}
 
-    public boolean getUseKeepalive()
-    {
-        return getPropertyAsBoolean(USE_KEEPALIVE,true);
-    }
-    
-    public boolean getRegexMatch()
-    {
-        return getPropertyAsBoolean(REGEX_MATCH,false);
-    }
-    
-    public Class getGuiClass()
-    {
-        return org.apache.jmeter.protocol.http.proxy.gui.ProxyControlGui.class;
-    }
+	public boolean getCaptureHttpHeaders() {
+		return getPropertyAsBoolean(CAPTURE_HTTP_HEADERS);
+	}
 
-    public void addConfigElement(ConfigElement config)
-    {}
+	public boolean getUseKeepalive() {
+		return getPropertyAsBoolean(USE_KEEPALIVE, true);
+	}
 
-    public void startProxy()
-    {
-        notifyTestListenersOfStart();
-        server = new Daemon(getPort(), this);
-        server.start();
-    }
-    
-    public void addExcludedPattern(String pattern)
-    {
-        getExcludePatterns().addItem(pattern);
-    }
+	public boolean getRegexMatch() {
+		return getPropertyAsBoolean(REGEX_MATCH, false);
+	}
 
-    public CollectionProperty getExcludePatterns()
-    {
-        return (CollectionProperty) getProperty(EXCLUDE_LIST);
-    }
+	public Class getGuiClass() {
+		return org.apache.jmeter.protocol.http.proxy.gui.ProxyControlGui.class;
+	}
 
-    public void addIncludedPattern(String pattern)
-    {
-        getIncludePatterns().addItem(pattern);
-    }
+	public void addConfigElement(ConfigElement config) {
+	}
 
-    public CollectionProperty getIncludePatterns()
-    {
-        return (CollectionProperty) getProperty(INCLUDE_LIST);
-    }
+	public void startProxy() {
+		notifyTestListenersOfStart();
+		server = new Daemon(getPort(), this);
+		server.start();
+	}
 
-    public void clearExcludedPatterns()
-    {
-        getExcludePatterns().clear();
-    }
+	public void addExcludedPattern(String pattern) {
+		getExcludePatterns().addItem(pattern);
+	}
 
-    public void clearIncludedPatterns()
-    {
-        getIncludePatterns().clear();
-    }
-    
-    /**
-     * @return the target controller node
-     */
-    public JMeterTreeNode getTarget()
-    {
-        return target;
-    }
-    
-    /**
-     * Sets the target node where the samples generated by the proxy have
-     * to be stored.
-     */
-    public void setTarget(JMeterTreeNode target)
-    {
-        this.target= target;
-    }
+	public CollectionProperty getExcludePatterns() {
+		return (CollectionProperty) getProperty(EXCLUDE_LIST);
+	}
 
-    /**
-     * Receives the recorded sampler from the proxy server for placing in the
-     * test tree.
-     * param serverResponse to be added to allow saving of the server's response
-     *                       while recording.  A future consideration.
-     */
-    public void deliverSampler(
-        HTTPSamplerBase sampler,
-        TestElement[] subConfigs,
-        SampleResult result)
-    {
-        if (filterUrl(sampler))
-        {
-            JMeterTreeNode myTarget= findTargetControllerNode();
-            Collection defaultConfigurations=
-                findApplicableElements(myTarget, ConfigTestElement.class, false);
-            Collection userDefinedVariables = 
-                findApplicableElements(myTarget, Arguments.class, true);
+	public void addIncludedPattern(String pattern) {
+		getIncludePatterns().addItem(pattern);
+	}
 
-            removeValuesFromSampler(sampler, defaultConfigurations);
-            replaceValues(sampler, subConfigs, userDefinedVariables);
-            sampler.setUseKeepAlive(useKeepAlive);
-            sampler.setProperty(
-                TestElement.GUI_CLASS, //TODO - allow for HttpClient sampler ...
-                "org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui");
+	public CollectionProperty getIncludePatterns() {
+		return (CollectionProperty) getProperty(INCLUDE_LIST);
+	}
 
-            placeSampler(sampler, subConfigs, myTarget);
-            
-            notifySampleListeners(new SampleEvent(result,sampler.getName()));
-        }
-    }
+	public void clearExcludedPatterns() {
+		getExcludePatterns().clear();
+	}
 
-    public void stopProxy()
-    {
-        if (server != null)
-        {
-            server.stopServer();
-            try
-            {
-                server.join(1000); // wait for server to stop
-            }
-            catch (InterruptedException e)
-            {
-            }
-            notifyTestListenersOfEnd();
-            server = null;
-        }
-    }
+	public void clearIncludedPatterns() {
+		getIncludePatterns().clear();
+	}
 
-    private boolean filterUrl(HTTPSamplerBase sampler)
-    {
+	/**
+	 * @return the target controller node
+	 */
+	public JMeterTreeNode getTarget() {
+		return target;
+	}
+
+	/**
+	 * Sets the target node where the samples generated by the proxy have to be
+	 * stored.
+	 */
+	public void setTarget(JMeterTreeNode target) {
+		this.target = target;
+	}
+
+	/**
+	 * Receives the recorded sampler from the proxy server for placing in the
+	 * test tree. param serverResponse to be added to allow saving of the
+	 * server's response while recording. A future consideration.
+	 */
+	public void deliverSampler(HTTPSamplerBase sampler, TestElement[] subConfigs, SampleResult result) {
+		if (filterUrl(sampler)) {
+			JMeterTreeNode myTarget = findTargetControllerNode();
+			Collection defaultConfigurations = findApplicableElements(myTarget, ConfigTestElement.class, false);
+			Collection userDefinedVariables = findApplicableElements(myTarget, Arguments.class, true);
+
+			removeValuesFromSampler(sampler, defaultConfigurations);
+			replaceValues(sampler, subConfigs, userDefinedVariables);
+			sampler.setUseKeepAlive(useKeepAlive);
+			sampler.setProperty(TestElement.GUI_CLASS, // TODO - allow for
+														// HttpClient sampler
+														// ...
+					"org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui");
+
+			placeSampler(sampler, subConfigs, myTarget);
+
+			notifySampleListeners(new SampleEvent(result, sampler.getName()));
+		}
+	}
+
+	public void stopProxy() {
+		if (server != null) {
+			server.stopServer();
+			try {
+				server.join(1000); // wait for server to stop
+			} catch (InterruptedException e) {
+			}
+			notifyTestListenersOfEnd();
+			server = null;
+		}
+	}
+
+	private boolean filterUrl(HTTPSamplerBase sampler) {
 		String domain = sampler.getDomain();
-		if (domain == null || domain.length() == 0)
-		{
+		if (domain == null || domain.length() == 0) {
 			return false;
 		}
-    	
+
 		String url = generateMatchUrl(sampler);
 		CollectionProperty includePatterns = getIncludePatterns();
-		if (includePatterns.size() > 0)
-		{
-			if (!matchesPatterns(url, includePatterns))
-			{
+		if (includePatterns.size() > 0) {
+			if (!matchesPatterns(url, includePatterns)) {
 				return false;
 			}
 		}
-    	
+
 		CollectionProperty excludePatterns = getExcludePatterns();
-		if (excludePatterns.size() > 0)
-		{
-			if (matchesPatterns(url, excludePatterns))
-			{
+		if (excludePatterns.size() > 0) {
+			if (matchesPatterns(url, excludePatterns)) {
 				return false;
 			}
 		}
-    	
+
 		return true;
-    }
-
-    /*
-     * Helper method to add a Response Assertion 
-     */
-    private void addAssertion(JMeterTreeModel model,JMeterTreeNode node)
-        throws IllegalUserActionException
-    {
-        ResponseAssertion ra = new ResponseAssertion();
-        ra.setProperty(TestElement.GUI_CLASS,
-            "org.apache.jmeter.assertions.gui.AssertionGui");
-        ra.setName("Check response");
-        ra.setTestField(ResponseAssertion.RESPONSE_DATA);
-        model.addComponent(ra,node);
-    }
-    
-	/*
-	 * Helper method to add a Divider 
-	 */
-	private void addDivider(JMeterTreeModel model,JMeterTreeNode node)
-	    throws IllegalUserActionException
-	{
-        GenericController sc = new GenericController();
-        sc.setProperty(TestElement.GUI_CLASS,
-            "org.apache.jmeter.control.gui.LogicControllerGui");
-        sc.setName("-------------------");
-        model.addComponent(sc,node);
 	}
-    
-    /**
-     * Helper method to add a Simple Controller to contain the samplers.
-     * 
-     * @param model Test component tree model
-     * @param node  Node in the tree where we will add the Controller
-     * @param name  A name for the Controller
-     */
-    private void addSimpleController(
-            JMeterTreeModel model,
-            JMeterTreeNode node,
-            String name)
-        throws IllegalUserActionException
-    {
-        GenericController sc = new GenericController();
-        sc.setProperty(TestElement.GUI_CLASS,
-            "org.apache.jmeter.control.gui.LogicControllerGui");
-        sc.setName(name);
-        model.addComponent(sc,node);
-    }
 
-    /**
-     * Helpler method to replicate any timers found within the Proxy Controller
-     * into the provided sampler, while replacing any occurences of string _T_
-     * in the timer's configuration with the provided deltaT.
-     * 
-     * @param model  Test component tree model
-     * @param node   Sampler node in where we will add the timers
-     * @param deltaT Time interval from the previous request
-     */
-    private void addTimers(
-        JMeterTreeModel model,
-        JMeterTreeNode node,
-        long deltaT)
-    {
-        TestPlan variables= new TestPlan();
-        variables.addParameter("T", Long.toString(deltaT));
-        ValueReplacer replacer= new ValueReplacer(variables);
-        JMeterTreeNode mySelf= model.getNodeOf(this);
-        Enumeration children= mySelf.children();
-        while (children.hasMoreElements())
-        {
-            JMeterTreeNode templateNode= (JMeterTreeNode)children.nextElement();
-            if (templateNode.isEnabled())
-            {
-                TestElement template= templateNode.getTestElement();
-                if (template instanceof Timer)
-                {
-                    TestElement timer= (TestElement)template.clone();
-                    try
-                    {
-                        replacer.undoReverseReplace(timer);
-                        model.addComponent(timer, node);
-                    }
-                    catch (InvalidVariableException e)
-                    {
-                        // Not 100% sure, but I believe this can't happen, so
-                        // I'll log and throw an error:
-                        log.error("Program error",e);
-                        throw new Error(e.toString());//JDK1.4: remove .toString()
-                    } catch (IllegalUserActionException e)
-                    {
-                        // Not 100% sure, but I believe this can't happen, so
-                        // I'll log and throw an error:
-                        log.error("Program error",e);
-                        throw new Error(e.toString());//JDK1.4: remove .toString()
-                    }
-                }
-            }
-        }
-    }
-    
-    /**
-     * Finds the first enabled node of a given type in the tree.
-     * 
-     * @param   type class of the node to be found
-     * 
-     * @return  the first node of the given type in the test component tree,
-     *          or <code>null</code> if none was found.
-     */
-    private JMeterTreeNode findFirstNodeOfType(Class type)
-    {
-        JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
-        List nodes = treeModel.getNodesOfType(type);
-        Iterator iter= nodes.iterator();
-        while (iter.hasNext()) {
-            JMeterTreeNode node= (JMeterTreeNode) iter.next();
-            if (node.isEnabled()) {
-                return node;
-            }
-        }
-        return null;
-    }
+	/*
+	 * Helper method to add a Response Assertion
+	 */
+	private void addAssertion(JMeterTreeModel model, JMeterTreeNode node) throws IllegalUserActionException {
+		ResponseAssertion ra = new ResponseAssertion();
+		ra.setProperty(TestElement.GUI_CLASS, "org.apache.jmeter.assertions.gui.AssertionGui");
+		ra.setName("Check response");
+		ra.setTestField(ResponseAssertion.RESPONSE_DATA);
+		model.addComponent(ra, node);
+	}
 
-    /**
-     * Finds the controller where samplers have to be stored, that is:
-     * <ul>
-     * <li>The controller specified by the <code>target</code> property.
-     * <li>If none was specified, the first RecordingController in the tree.
-     * <li>If none is found, the first ThreadGroup in the tree.
-     * <li>If none is found, the Workspace.
-     * </ul>
-     * 
-     * @return  the tree node for the controller where the proxy must store
-     *          the generated samplers.
-     */
-    private JMeterTreeNode findTargetControllerNode()
-    {
-        JMeterTreeNode myTarget= getTarget();
-        if (myTarget != null) return myTarget;
-        myTarget= findFirstNodeOfType(RecordingController.class);
-        if (myTarget != null) return myTarget;
-        myTarget= findFirstNodeOfType(ThreadGroup.class);
-        if (myTarget != null) return myTarget;
-        myTarget= findFirstNodeOfType(WorkBench.class);
-        if (myTarget != null) return myTarget;
-        log.error("Program error: proxy recording target not found.");
-        return null;          
-    }
+	/*
+	 * Helper method to add a Divider
+	 */
+	private void addDivider(JMeterTreeModel model, JMeterTreeNode node) throws IllegalUserActionException {
+		GenericController sc = new GenericController();
+		sc.setProperty(TestElement.GUI_CLASS, "org.apache.jmeter.control.gui.LogicControllerGui");
+		sc.setName("-------------------");
+		model.addComponent(sc, node);
+	}
 
-    /**
-     * Finds all configuration objects of the given class applicable to
-     * the recorded samplers, that is:
-     * <ul>
-     * <li>All such elements directly within the HTTP Proxy Server (these
-     *      have the highest priority).
-     * <li>All such elements directly within the target controller (higher
-     *      priority) or directly within any containing controller (lower
-     *      priority), including the Test Plan itself (lowest priority).
-     * </ul>
-     * 
-     * @param myTarget  tree node for the recording target controller.
-     * @param myClass   Class of the elements to be found.
-     * @param ascending true if returned elements should be ordered in ascending
-     *                  priority, false if they should be in descending priority.
-     * 
-     * @return  a collection of applicable objects of the given class.
-     */
-    private Collection findApplicableElements(
-        JMeterTreeNode myTarget, 
-        Class myClass,
-        boolean ascending)
-    {
-        JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
-        LinkedList elements= new LinkedList();
-        
-        // Look for elements directly within the HTTP proxy: 
-        Enumeration kids = treeModel.getNodeOf(this).children();
-        while (kids.hasMoreElements())
-        { 
-            JMeterTreeNode subNode =
-                (JMeterTreeNode) kids.nextElement();
-            if (subNode.isEnabled())
-            {
-                TestElement element= (TestElement)subNode.getUserObject();
-                if(myClass.isInstance(element))
-                {
-                    if (ascending) elements.addFirst(element);
-                    else elements.add(element);
-                }
-            }
-        }
+	/**
+	 * Helper method to add a Simple Controller to contain the samplers.
+	 * 
+	 * @param model
+	 *            Test component tree model
+	 * @param node
+	 *            Node in the tree where we will add the Controller
+	 * @param name
+	 *            A name for the Controller
+	 */
+	private void addSimpleController(JMeterTreeModel model, JMeterTreeNode node, String name)
+			throws IllegalUserActionException {
+		GenericController sc = new GenericController();
+		sc.setProperty(TestElement.GUI_CLASS, "org.apache.jmeter.control.gui.LogicControllerGui");
+		sc.setName(name);
+		model.addComponent(sc, node);
+	}
 
-        // Look for arguments elements in the target controller or higher up:
-        for (JMeterTreeNode controller= myTarget;
-             controller != null;
-             controller= (JMeterTreeNode)controller.getParent())
-        {
-            kids = controller.children();
-            while (kids.hasMoreElements())
-            {
-                JMeterTreeNode subNode =
-                    (JMeterTreeNode) kids.nextElement();
-                if (subNode.isEnabled())
-                {
-                    TestElement element= (TestElement)subNode.getUserObject();
-                    if (myClass.isInstance(element))
-                    {
-                        log.debug("Applicable: "+element.getPropertyAsString(TestElement.NAME));
-                        if (ascending) elements.addFirst(element);
-                        else elements.add(element);
-                    }
-                    
-                    // Special case for the TestPlan's Arguments sub-element:
-                    if (element instanceof TestPlan)
-                    {
-                        Arguments args= (Arguments)
-                            element.getProperty(TestPlan.USER_DEFINED_VARIABLES).getObjectValue();
-                        if (myClass.isInstance(args))
-                        {
-                            if (ascending) elements.addFirst(args);
-                            else elements.add(args);
-                        }
-                    }
-                }
-            }
-        }
-        
-        return elements;
-    }
+	/**
+	 * Helpler method to replicate any timers found within the Proxy Controller
+	 * into the provided sampler, while replacing any occurences of string _T_
+	 * in the timer's configuration with the provided deltaT.
+	 * 
+	 * @param model
+	 *            Test component tree model
+	 * @param node
+	 *            Sampler node in where we will add the timers
+	 * @param deltaT
+	 *            Time interval from the previous request
+	 */
+	private void addTimers(JMeterTreeModel model, JMeterTreeNode node, long deltaT) {
+		TestPlan variables = new TestPlan();
+		variables.addParameter("T", Long.toString(deltaT));
+		ValueReplacer replacer = new ValueReplacer(variables);
+		JMeterTreeNode mySelf = model.getNodeOf(this);
+		Enumeration children = mySelf.children();
+		while (children.hasMoreElements()) {
+			JMeterTreeNode templateNode = (JMeterTreeNode) children.nextElement();
+			if (templateNode.isEnabled()) {
+				TestElement template = templateNode.getTestElement();
+				if (template instanceof Timer) {
+					TestElement timer = (TestElement) template.clone();
+					try {
+						replacer.undoReverseReplace(timer);
+						model.addComponent(timer, node);
+					} catch (InvalidVariableException e) {
+						// Not 100% sure, but I believe this can't happen, so
+						// I'll log and throw an error:
+						log.error("Program error", e);
+						throw new Error(e.toString());// JDK1.4: remove
+														// .toString()
+					} catch (IllegalUserActionException e) {
+						// Not 100% sure, but I believe this can't happen, so
+						// I'll log and throw an error:
+						log.error("Program error", e);
+						throw new Error(e.toString());// JDK1.4: remove
+														// .toString()
+					}
+				}
+			}
+		}
+	}
 
-    private void placeSampler(
-        HTTPSamplerBase sampler,
-        TestElement[] subConfigs,
-        JMeterTreeNode myTarget)
-    {
-        try
-        {
-            JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
-            
-            boolean firstInBatch=false;
-            long now = System.currentTimeMillis();
-            long deltaT= now - lastTime;
-            if (deltaT > sampleGap){
-                if (!myTarget.isLeaf() 
-                        && groupingMode == GROUPING_ADD_SEPARATORS)
-                {
-                    addDivider(treeModel, myTarget);
-                }
-                if (groupingMode == GROUPING_IN_CONTROLLERS)
-                {
-                    addSimpleController(treeModel, myTarget, sampler.getName());
-                }
-                firstInBatch=true;//Remember this was first in its batch
-            }
-            if (lastTime == 0) deltaT= 0; // Decent value for timers
-            lastTime = now;
-            
-            if (groupingMode == GROUPING_STORE_FIRST_ONLY)
-            {
-                if (!firstInBatch) return; // Huh! don't store this one!
-                        
-                // If we're not storing subsequent samplers, we'll need the
-                // first sampler to do all the work...:
-                sampler.setFollowRedirects(true);
-                sampler.setImageParser(true);
-            }
-                    
-            if (groupingMode == GROUPING_IN_CONTROLLERS)
-            {
-                // Find the last controller in the target to store the
-                // sampler there:
-                for (int i= myTarget.getChildCount()-1; i>=0; i--)
-                {
-                    JMeterTreeNode c= (JMeterTreeNode)myTarget.getChildAt(i);
-                    if (c.getTestElement() instanceof GenericController)
-                    {
-                        myTarget= c;
-                        break;
-                    }
-                }
-            }
-            
-            JMeterTreeNode newNode =
-                treeModel.addComponent(sampler, myTarget);
-                                
-            if(firstInBatch){
-                if (addAssertions){
-                    addAssertion(treeModel,newNode);
-                }
-                addTimers(treeModel, newNode, deltaT);
-                firstInBatch=false;
-            }
-            
-            for (int i = 0;
-                subConfigs != null && i < subConfigs.length;
-                i++)
-            {
-                if (subConfigs[i] instanceof HeaderManager)
-                {
-                    subConfigs[i].setProperty(
-                        TestElement.GUI_CLASS,
-                        "org.apache.jmeter.protocol.http.gui.HeaderPanel");
-                    treeModel.addComponent(subConfigs[i], newNode);
-                }
-            }
-        }
-        catch (IllegalUserActionException e)
-        {
-                JMeterUtils.reportErrorToUser(e.getMessage());
-        }
-    }
+	/**
+	 * Finds the first enabled node of a given type in the tree.
+	 * 
+	 * @param type
+	 *            class of the node to be found
+	 * 
+	 * @return the first node of the given type in the test component tree, or
+	 *         <code>null</code> if none was found.
+	 */
+	private JMeterTreeNode findFirstNodeOfType(Class type) {
+		JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
+		List nodes = treeModel.getNodesOfType(type);
+		Iterator iter = nodes.iterator();
+		while (iter.hasNext()) {
+			JMeterTreeNode node = (JMeterTreeNode) iter.next();
+			if (node.isEnabled()) {
+				return node;
+			}
+		}
+		return null;
+	}
 
-    /**
-     * Remove from the sampler all values which match the one provided by the
-     * first configuration in the given collection which provides a value for
-     * that property.
-     * 
-     * @param sampler           Sampler to remove values from.
-     * @param configurations    ConfigTestElements in descending priority.
-     */
-    private void removeValuesFromSampler(
-        HTTPSamplerBase sampler,
-        Collection configurations)
-    {
-        for (PropertyIterator props= sampler.propertyIterator();
-             props.hasNext();
-            )
-        {
-            JMeterProperty prop= props.next();
-            String name= prop.getName();
-            String value= prop.getStringValue();
+	/**
+	 * Finds the controller where samplers have to be stored, that is:
+	 * <ul>
+	 * <li>The controller specified by the <code>target</code> property.
+	 * <li>If none was specified, the first RecordingController in the tree.
+	 * <li>If none is found, the first ThreadGroup in the tree.
+	 * <li>If none is found, the Workspace.
+	 * </ul>
+	 * 
+	 * @return the tree node for the controller where the proxy must store the
+	 *         generated samplers.
+	 */
+	private JMeterTreeNode findTargetControllerNode() {
+		JMeterTreeNode myTarget = getTarget();
+		if (myTarget != null)
+			return myTarget;
+		myTarget = findFirstNodeOfType(RecordingController.class);
+		if (myTarget != null)
+			return myTarget;
+		myTarget = findFirstNodeOfType(ThreadGroup.class);
+		if (myTarget != null)
+			return myTarget;
+		myTarget = findFirstNodeOfType(WorkBench.class);
+		if (myTarget != null)
+			return myTarget;
+		log.error("Program error: proxy recording target not found.");
+		return null;
+	}
 
-            // There's a few properties which are excluded from this processing:
-            if (name.equals(TestElement.ENABLED)
-                || name.equals(TestElement.GUI_CLASS)
-                || name.equals(TestElement.NAME)
-                || name.equals(TestElement.TEST_CLASS))
-            {
-                continue; // go on with next property.
-            }
-            
-            for (Iterator configs= configurations.iterator();
-                 configs.hasNext();
-                )
-            {
-                ConfigTestElement config= (ConfigTestElement)configs.next();
+	/**
+	 * Finds all configuration objects of the given class applicable to the
+	 * recorded samplers, that is:
+	 * <ul>
+	 * <li>All such elements directly within the HTTP Proxy Server (these have
+	 * the highest priority).
+	 * <li>All such elements directly within the target controller (higher
+	 * priority) or directly within any containing controller (lower priority),
+	 * including the Test Plan itself (lowest priority).
+	 * </ul>
+	 * 
+	 * @param myTarget
+	 *            tree node for the recording target controller.
+	 * @param myClass
+	 *            Class of the elements to be found.
+	 * @param ascending
+	 *            true if returned elements should be ordered in ascending
+	 *            priority, false if they should be in descending priority.
+	 * 
+	 * @return a collection of applicable objects of the given class.
+	 */
+	private Collection findApplicableElements(JMeterTreeNode myTarget, Class myClass, boolean ascending) {
+		JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
+		LinkedList elements = new LinkedList();
 
-                String configValue= config.getPropertyAsString(name);
+		// Look for elements directly within the HTTP proxy:
+		Enumeration kids = treeModel.getNodeOf(this).children();
+		while (kids.hasMoreElements()) {
+			JMeterTreeNode subNode = (JMeterTreeNode) kids.nextElement();
+			if (subNode.isEnabled()) {
+				TestElement element = (TestElement) subNode.getUserObject();
+				if (myClass.isInstance(element)) {
+					if (ascending)
+						elements.addFirst(element);
+					else
+						elements.add(element);
+				}
+			}
+		}
 
-                if (configValue != null && configValue.length() > 0)
-                {
-                    if (configValue.equals(value)) sampler.setProperty(name, "");
-                    // Property was found in a config element. Whether or not
-                    // it matched the value in the sampler, we're done with
-                    // this property -- don't look at lower-priority configs:
-                    break;
-                }
-            }
-        }
-    }
+		// Look for arguments elements in the target controller or higher up:
+		for (JMeterTreeNode controller = myTarget; controller != null; controller = (JMeterTreeNode) controller
+				.getParent()) {
+			kids = controller.children();
+			while (kids.hasMoreElements()) {
+				JMeterTreeNode subNode = (JMeterTreeNode) kids.nextElement();
+				if (subNode.isEnabled()) {
+					TestElement element = (TestElement) subNode.getUserObject();
+					if (myClass.isInstance(element)) {
+						log.debug("Applicable: " + element.getPropertyAsString(TestElement.NAME));
+						if (ascending)
+							elements.addFirst(element);
+						else
+							elements.add(element);
+					}
 
-	private String generateMatchUrl(HTTPSamplerBase sampler)
-	{
+					// Special case for the TestPlan's Arguments sub-element:
+					if (element instanceof TestPlan) {
+						Arguments args = (Arguments) element.getProperty(TestPlan.USER_DEFINED_VARIABLES)
+								.getObjectValue();
+						if (myClass.isInstance(args)) {
+							if (ascending)
+								elements.addFirst(args);
+							else
+								elements.add(args);
+						}
+					}
+				}
+			}
+		}
+
+		return elements;
+	}
+
+	private void placeSampler(HTTPSamplerBase sampler, TestElement[] subConfigs, JMeterTreeNode myTarget) {
+		try {
+			JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
+
+			boolean firstInBatch = false;
+			long now = System.currentTimeMillis();
+			long deltaT = now - lastTime;
+			if (deltaT > sampleGap) {
+				if (!myTarget.isLeaf() && groupingMode == GROUPING_ADD_SEPARATORS) {
+					addDivider(treeModel, myTarget);
+				}
+				if (groupingMode == GROUPING_IN_CONTROLLERS) {
+					addSimpleController(treeModel, myTarget, sampler.getName());
+				}
+				firstInBatch = true;// Remember this was first in its batch
+			}
+			if (lastTime == 0)
+				deltaT = 0; // Decent value for timers
+			lastTime = now;
+
+			if (groupingMode == GROUPING_STORE_FIRST_ONLY) {
+				if (!firstInBatch)
+					return; // Huh! don't store this one!
+
+				// If we're not storing subsequent samplers, we'll need the
+				// first sampler to do all the work...:
+				sampler.setFollowRedirects(true);
+				sampler.setImageParser(true);
+			}
+
+			if (groupingMode == GROUPING_IN_CONTROLLERS) {
+				// Find the last controller in the target to store the
+				// sampler there:
+				for (int i = myTarget.getChildCount() - 1; i >= 0; i--) {
+					JMeterTreeNode c = (JMeterTreeNode) myTarget.getChildAt(i);
+					if (c.getTestElement() instanceof GenericController) {
+						myTarget = c;
+						break;
+					}
+				}
+			}
+
+			JMeterTreeNode newNode = treeModel.addComponent(sampler, myTarget);
+
+			if (firstInBatch) {
+				if (addAssertions) {
+					addAssertion(treeModel, newNode);
+				}
+				addTimers(treeModel, newNode, deltaT);
+				firstInBatch = false;
+			}
+
+			for (int i = 0; subConfigs != null && i < subConfigs.length; i++) {
+				if (subConfigs[i] instanceof HeaderManager) {
+					subConfigs[i].setProperty(TestElement.GUI_CLASS, "org.apache.jmeter.protocol.http.gui.HeaderPanel");
+					treeModel.addComponent(subConfigs[i], newNode);
+				}
+			}
+		} catch (IllegalUserActionException e) {
+			JMeterUtils.reportErrorToUser(e.getMessage());
+		}
+	}
+
+	/**
+	 * Remove from the sampler all values which match the one provided by the
+	 * first configuration in the given collection which provides a value for
+	 * that property.
+	 * 
+	 * @param sampler
+	 *            Sampler to remove values from.
+	 * @param configurations
+	 *            ConfigTestElements in descending priority.
+	 */
+	private void removeValuesFromSampler(HTTPSamplerBase sampler, Collection configurations) {
+		for (PropertyIterator props = sampler.propertyIterator(); props.hasNext();) {
+			JMeterProperty prop = props.next();
+			String name = prop.getName();
+			String value = prop.getStringValue();
+
+			// There's a few properties which are excluded from this processing:
+			if (name.equals(TestElement.ENABLED) || name.equals(TestElement.GUI_CLASS) || name.equals(TestElement.NAME)
+					|| name.equals(TestElement.TEST_CLASS)) {
+				continue; // go on with next property.
+			}
+
+			for (Iterator configs = configurations.iterator(); configs.hasNext();) {
+				ConfigTestElement config = (ConfigTestElement) configs.next();
+
+				String configValue = config.getPropertyAsString(name);
+
+				if (configValue != null && configValue.length() > 0) {
+					if (configValue.equals(value))
+						sampler.setProperty(name, "");
+					// Property was found in a config element. Whether or not
+					// it matched the value in the sampler, we're done with
+					// this property -- don't look at lower-priority configs:
+					break;
+				}
+			}
+		}
+	}
+
+	private String generateMatchUrl(HTTPSamplerBase sampler) {
 		StringBuffer buf = new StringBuffer(sampler.getDomain());
 		buf.append(':');
 		buf.append(sampler.getPort());
 		buf.append(sampler.getPath());
-		if (sampler.getQueryString().length() > 0)
-		{
+		if (sampler.getQueryString().length() > 0) {
 			buf.append('?');
 			buf.append(sampler.getQueryString());
 		}
 		return buf.toString();
 	}
 
-    private boolean matchesPatterns(String url, CollectionProperty patterns)
-    {
-        PropertyIterator iter = patterns.iterator();
-        while (iter.hasNext())
-        {
-            String item = iter.next().getStringValue();
-            Pattern pattern = null;
-            try
-            {
-                pattern =
-                    patternCache.getPattern(
-                        item,
-                        Perl5Compiler.READ_ONLY_MASK
-                            | Perl5Compiler.SINGLELINE_MASK);
-                if (matcher.matches(url, pattern))
-                {
-                    return true;
-                }
-            }
-            catch (MalformedCachePatternException e)
-            {
-                log.warn("Skipped invalid pattern: " + item, e);
-            }
-        }
-        return false;
-    }
+	private boolean matchesPatterns(String url, CollectionProperty patterns) {
+		PropertyIterator iter = patterns.iterator();
+		while (iter.hasNext()) {
+			String item = iter.next().getStringValue();
+			Pattern pattern = null;
+			try {
+				pattern = patternCache.getPattern(item, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
+				if (matcher.matches(url, pattern)) {
+					return true;
+				}
+			} catch (MalformedCachePatternException e) {
+				log.warn("Skipped invalid pattern: " + item, e);
+			}
+		}
+		return false;
+	}
 
-    /**
-     * Scan all test elements passed in for values matching the value of
-     * any of the variables in any of the variable-holding elements in the
-     * collection.
-     * 
-     * @param sampler   A TestElement to replace values on
-     * @param configs   More TestElements to replace values on
-     * @param variables Collection of Arguments to use to do the replacement,
-     *                  ordered by ascending priority.
-     */
-    private void replaceValues(
-        TestElement sampler,
-        TestElement[] configs,
-        Collection variables)
-    {
-        // Build the replacer from all the variables in the collection:
-        ValueReplacer replacer= new ValueReplacer();
-        for (Iterator vars= variables.iterator(); vars.hasNext(); )
-        {
-            replacer.addVariables(((Arguments)vars.next()).getArgumentsAsMap());
-        }
-        
-        try
-        {
-            replacer.reverseReplace(sampler,regexMatch);
-            for (int i = 0; i < configs.length; i++)
-            {
-                if (configs[i] != null)
-                {
-                    replacer.reverseReplace(configs[i],regexMatch);
-                }
+	/**
+	 * Scan all test elements passed in for values matching the value of any of
+	 * the variables in any of the variable-holding elements in the collection.
+	 * 
+	 * @param sampler
+	 *            A TestElement to replace values on
+	 * @param configs
+	 *            More TestElements to replace values on
+	 * @param variables
+	 *            Collection of Arguments to use to do the replacement, ordered
+	 *            by ascending priority.
+	 */
+	private void replaceValues(TestElement sampler, TestElement[] configs, Collection variables) {
+		// Build the replacer from all the variables in the collection:
+		ValueReplacer replacer = new ValueReplacer();
+		for (Iterator vars = variables.iterator(); vars.hasNext();) {
+			replacer.addVariables(((Arguments) vars.next()).getArgumentsAsMap());
+		}
 
-            }
-        }
-        catch (InvalidVariableException e)
-        {
-            log.warn(
-                "Invalid variables included for replacement into recorded "
-                    + "sample",
-                e);
-        }
-    }
-    
-    /**
-     * This will notify sample listeners directly within the Proxy
-     * of the sampling that just occured -- so that we have a
-     * means to record the server's responses as we go.
-     * 
-     * @param event sampling event to be delivered
-     */
-    private void notifySampleListeners(SampleEvent event)
-    {
-        JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
-        JMeterTreeNode myNode = treeModel.getNodeOf(this);
-        Enumeration kids = myNode.children();
-        while (kids.hasMoreElements())
-        { 
-            JMeterTreeNode subNode =
-                (JMeterTreeNode) kids.nextElement();
-            if (subNode.isEnabled()) {
-                TestElement testElement =
-                    subNode.getTestElement();
-                if (testElement instanceof SampleListener) {
-                    ((SampleListener)testElement).sampleOccurred(event);
-                }
-            }
-        }
-    }
+		try {
+			replacer.reverseReplace(sampler, regexMatch);
+			for (int i = 0; i < configs.length; i++) {
+				if (configs[i] != null) {
+					replacer.reverseReplace(configs[i], regexMatch);
+				}
 
-    /**
-     * This will notify test listeners directly within the Proxy that the 'test'
-     * (here meaning the proxy recording) has started.
-     */
-    private void notifyTestListenersOfStart()
-    {
-        JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
-        JMeterTreeNode myNode = treeModel.getNodeOf(this);
-        Enumeration kids = myNode.children();
-        while (kids.hasMoreElements())
-        {
-            JMeterTreeNode subNode =
-                (JMeterTreeNode) kids.nextElement();
-            if (subNode.isEnabled()) {
-                TestElement testElement =
-                    subNode.getTestElement();
-                if (testElement instanceof TestListener) {
-                    ((TestListener)testElement).testStarted();
-                }
-            }
-        }
-    }
-    
-    /**
-     * This will notify test listeners directly within the Proxy that the 'test'
-     * (here meaning the proxy recording) has ended.
-     */
-    private void notifyTestListenersOfEnd()
-    {
-        JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
-        JMeterTreeNode myNode = treeModel.getNodeOf(this);
-        Enumeration kids = myNode.children();
-        while (kids.hasMoreElements())
-        {
-            JMeterTreeNode subNode =
-                (JMeterTreeNode) kids.nextElement();
-            if (subNode.isEnabled()) {
-                TestElement testElement = subNode.getTestElement();
-                if (testElement instanceof TestListener) {
-                    ((TestListener)testElement).testEnded();
-                }
-            }
-        }
-    }
+			}
+		} catch (InvalidVariableException e) {
+			log.warn("Invalid variables included for replacement into recorded " + "sample", e);
+		}
+	}
 
-    public boolean canRemove(){
-    	return null==server;
-    }
-    public static class Test extends TestCase
-    {
-    	HTTPSamplerBase sampler;
-    	ProxyControl control;
-    	
-        public Test(String name)
-        {
-            super(name);
-        }
-        public void setUp(){
+	/**
+	 * This will notify sample listeners directly within the Proxy of the
+	 * sampling that just occured -- so that we have a means to record the
+	 * server's responses as we go.
+	 * 
+	 * @param event
+	 *            sampling event to be delivered
+	 */
+	private void notifySampleListeners(SampleEvent event) {
+		JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
+		JMeterTreeNode myNode = treeModel.getNodeOf(this);
+		Enumeration kids = myNode.children();
+		while (kids.hasMoreElements()) {
+			JMeterTreeNode subNode = (JMeterTreeNode) kids.nextElement();
+			if (subNode.isEnabled()) {
+				TestElement testElement = subNode.getTestElement();
+				if (testElement instanceof SampleListener) {
+					((SampleListener) testElement).sampleOccurred(event);
+				}
+			}
+		}
+	}
+
+	/**
+	 * This will notify test listeners directly within the Proxy that the 'test'
+	 * (here meaning the proxy recording) has started.
+	 */
+	private void notifyTestListenersOfStart() {
+		JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
+		JMeterTreeNode myNode = treeModel.getNodeOf(this);
+		Enumeration kids = myNode.children();
+		while (kids.hasMoreElements()) {
+			JMeterTreeNode subNode = (JMeterTreeNode) kids.nextElement();
+			if (subNode.isEnabled()) {
+				TestElement testElement = subNode.getTestElement();
+				if (testElement instanceof TestListener) {
+					((TestListener) testElement).testStarted();
+				}
+			}
+		}
+	}
+
+	/**
+	 * This will notify test listeners directly within the Proxy that the 'test'
+	 * (here meaning the proxy recording) has ended.
+	 */
+	private void notifyTestListenersOfEnd() {
+		JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
+		JMeterTreeNode myNode = treeModel.getNodeOf(this);
+		Enumeration kids = myNode.children();
+		while (kids.hasMoreElements()) {
+			JMeterTreeNode subNode = (JMeterTreeNode) kids.nextElement();
+			if (subNode.isEnabled()) {
+				TestElement testElement = subNode.getTestElement();
+				if (testElement instanceof TestListener) {
+					((TestListener) testElement).testEnded();
+				}
+			}
+		}
+	}
+
+	public boolean canRemove() {
+		return null == server;
+	}
+
+	public static class Test extends TestCase {
+		HTTPSamplerBase sampler;
+
+		ProxyControl control;
+
+		public Test(String name) {
+			super(name);
+		}
+
+		public void setUp() {
 			control = new ProxyControl();
 			control.addIncludedPattern(".*\\.jsp");
 			control.addExcludedPattern(".*apache.org.*");
 			sampler = new HTTPNullSampler();
-        }
-        public void testFilter1() throws Exception
-        {
-            sampler.setDomain("jakarta.org");
-            sampler.setPath("index.jsp");
-            assertTrue("Should find jakarta.org/index.jsp",control.filterUrl(sampler));
-        }
-		public void testFilter2() throws Exception
-		{
-			sampler.setPath("index.jsp");
-			sampler.setDomain("www.apache.org");
-			assertFalse("Should not match www.apache.org",control.filterUrl(sampler));
 		}
 
-		public void testFilter3() throws Exception
-		{
+		public void testFilter1() throws Exception {
+			sampler.setDomain("jakarta.org");
+			sampler.setPath("index.jsp");
+			assertTrue("Should find jakarta.org/index.jsp", control.filterUrl(sampler));
+		}
+
+		public void testFilter2() throws Exception {
+			sampler.setPath("index.jsp");
+			sampler.setDomain("www.apache.org");
+			assertFalse("Should not match www.apache.org", control.filterUrl(sampler));
+		}
+
+		public void testFilter3() throws Exception {
 			sampler.setPath("header.gif");
 			sampler.setDomain("jakarta.org");
-			assertFalse("Should not match header.gif",control.filterUrl(sampler));
+			assertFalse("Should not match header.gif", control.filterUrl(sampler));
 		}
-    }
+	}
 }

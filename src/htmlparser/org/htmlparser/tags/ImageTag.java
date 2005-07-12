@@ -29,60 +29,54 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags;
 
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.visitors.NodeVisitor;
 
 /**
- * Identifies an image tag 
+ * Identifies an image tag
  */
-public class ImageTag extends Tag
-{
-    public static final String IMAGE_TAG_FILTER = "-i";
-    /**
-     * The URL where the image is stored.
-     */
-    protected String imageURL;
+public class ImageTag extends Tag {
+	public static final String IMAGE_TAG_FILTER = "-i";
 
-    /**
-     * Constructor creates an HTMLImageNode object, which stores the location
-     * where the image is to be found.
-     * @param tagData Specifies character position and content of the tag.
-     * @param imageURL Location of the image.
-     */
-    public ImageTag(TagData tagData, String imageURL)
-    {
-        super(tagData);
-        this.imageURL = imageURL;
-    }
-    /**
-     * Returns the location of the image
-     */
-    public String getImageURL()
-    {
-        return imageURL;
-    }
-    public String toString()
-    {
-        return "IMAGE TAG : Image at "
-            + imageURL
-            + "; begins at : "
-            + elementBegin()
-            + "; ends at : "
-            + elementEnd();
-    }
+	/**
+	 * The URL where the image is stored.
+	 */
+	protected String imageURL;
 
-    public void setImageURL(String imageURL)
-    {
-        this.imageURL = imageURL;
-        attributes.put("SRC", imageURL);
-    }
+	/**
+	 * Constructor creates an HTMLImageNode object, which stores the location
+	 * where the image is to be found.
+	 * 
+	 * @param tagData
+	 *            Specifies character position and content of the tag.
+	 * @param imageURL
+	 *            Location of the image.
+	 */
+	public ImageTag(TagData tagData, String imageURL) {
+		super(tagData);
+		this.imageURL = imageURL;
+	}
 
-    public void accept(NodeVisitor visitor)
-    {
-        visitor.visitImageTag(this);
-    }
+	/**
+	 * Returns the location of the image
+	 */
+	public String getImageURL() {
+		return imageURL;
+	}
+
+	public String toString() {
+		return "IMAGE TAG : Image at " + imageURL + "; begins at : " + elementBegin() + "; ends at : " + elementEnd();
+	}
+
+	public void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
+		attributes.put("SRC", imageURL);
+	}
+
+	public void accept(NodeVisitor visitor) {
+		visitor.visitImageTag(this);
+	}
 
 }

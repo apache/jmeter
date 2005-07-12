@@ -29,8 +29,8 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.scanners;
+
 /////////////////////////
 // HTML Parser Imports //
 /////////////////////////
@@ -38,32 +38,28 @@ import org.htmlparser.tags.StyleTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
+
 /**
  * The HTMLStyleScanner scans identifies &lt;style&gt; code
  */
 
-public class StyleScanner extends CompositeTagScanner
-{
-    private static final String MATCH_NAME[] = { "STYLE" };
+public class StyleScanner extends CompositeTagScanner {
+	private static final String MATCH_NAME[] = { "STYLE" };
 
-    public StyleScanner()
-    {
-        super(MATCH_NAME);
-    }
+	public StyleScanner() {
+		super(MATCH_NAME);
+	}
 
-    public StyleScanner(String filter)
-    {
-        super(filter, MATCH_NAME);
-    }
+	public StyleScanner(String filter) {
+		super(filter, MATCH_NAME);
+	}
 
-    public String[] getID()
-    {
-        return MATCH_NAME;
-    }
+	public String[] getID() {
+		return MATCH_NAME;
+	}
 
-    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-    {
-        return new StyleTag(tagData, compositeTagData);
-    }
+	public Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
+		return new StyleTag(tagData, compositeTagData);
+	}
 
 }

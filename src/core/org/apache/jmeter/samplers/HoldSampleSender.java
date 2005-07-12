@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 
 package org.apache.jmeter.samplers;
 
@@ -26,75 +26,60 @@ import java.util.ArrayList;
 import java.io.Serializable;
 
 /**
- * Lars-Erik Helander provided the idea (and original implementation)
- * for the caching functionality (sampleStore).
+ * Lars-Erik Helander provided the idea (and original implementation) for the
+ * caching functionality (sampleStore).
  */
 
-public class HoldSampleSender implements SampleSender, Serializable
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+public class HoldSampleSender implements SampleSender, Serializable {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    List sampleStore = new ArrayList();
-    RemoteSampleListener listener;
+	List sampleStore = new ArrayList();
 
-    HoldSampleSender(RemoteSampleListener listener)
-    {
-        log.info("Using Sample store for this test run");
-        this.listener = listener;
-    }
+	RemoteSampleListener listener;
 
-    public void testEnded()
-    {
-        log.info("Test ended()");
-        try
-        {
-        	synchronized(sampleStore)
-            {
+	HoldSampleSender(RemoteSampleListener listener) {
+		log.info("Using Sample store for this test run");
+		this.listener = listener;
+	}
+
+	public void testEnded() {
+		log.info("Test ended()");
+		try {
+			synchronized (sampleStore) {
 				Iterator i = sampleStore.iterator();
-				while (i.hasNext())
-                {
-				    SampleEvent se = (SampleEvent) i.next();
+				while (i.hasNext()) {
+					SampleEvent se = (SampleEvent) i.next();
 					listener.sampleOccurred(se);
 				}
 			}
-        	listener.testEnded();
-            sampleStore = null;
-        }
-        catch (Throwable ex)
-        {
-            log.warn("testEnded()", ex);
-        }
+			listener.testEnded();
+			sampleStore = null;
+		} catch (Throwable ex) {
+			log.warn("testEnded()", ex);
+		}
 
-    }
+	}
 
-    public void testEnded(String host)
-    {
-        log.info("Test Ended on " + host); // should this be debug?
-        try
-        {
-        	Iterator i = sampleStore.iterator();
-			while (i.hasNext())
-            {
-		        SampleEvent se = (SampleEvent) i.next();
-                listener.sampleOccurred(se);
-            }
-            listener.testEnded(host);
-            sampleStore = null;
-        }
-        catch (Throwable ex)
-        {
-            log.error("testEnded(host)", ex);
-        }
+	public void testEnded(String host) {
+		log.info("Test Ended on " + host); // should this be debug?
+		try {
+			Iterator i = sampleStore.iterator();
+			while (i.hasNext()) {
+				SampleEvent se = (SampleEvent) i.next();
+				listener.sampleOccurred(se);
+			}
+			listener.testEnded(host);
+			sampleStore = null;
+		} catch (Throwable ex) {
+			log.error("testEnded(host)", ex);
+		}
 
-    }
+	}
 
-    public void SampleOccurred(SampleEvent e)
-    {
-        log.debug("Sample occurred");
-        synchronized(sampleStore)
-        {
-           sampleStore.add(e);
-        }
-    }
+	public void SampleOccurred(SampleEvent e) {
+		log.debug("Sample occurred");
+		synchronized (sampleStore) {
+			sampleStore.add(e);
+		}
+	}
 }
-

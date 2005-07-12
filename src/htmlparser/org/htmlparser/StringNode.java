@@ -30,7 +30,6 @@
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
 
-
 package org.htmlparser;
 
 import org.htmlparser.util.NodeList;
@@ -39,68 +38,66 @@ import org.htmlparser.visitors.NodeVisitor;
 /**
  * Normal text in the html document is identified and represented by this class.
  */
-public class StringNode extends Node
-{
-    public static final String STRING_FILTER = "-string";
-    /**
-     * The text of the string.
-     */
-    protected StringBuffer textBuffer;
+public class StringNode extends Node {
+	public static final String STRING_FILTER = "-string";
 
-    /** 
-     * Constructor takes in the text string, beginning and ending posns.
-     * @param text The contents of the string line
-     * @param textBegin The beginning position of the string
-     * @param textEnd The ending positiong of the string
-     */
-    public StringNode(StringBuffer textBuffer, int textBegin, int textEnd)
-    {
-        super(textBegin, textEnd);
-        this.textBuffer = textBuffer;
+	/**
+	 * The text of the string.
+	 */
+	protected StringBuffer textBuffer;
 
-    }
+	/**
+	 * Constructor takes in the text string, beginning and ending posns.
+	 * 
+	 * @param text
+	 *            The contents of the string line
+	 * @param textBegin
+	 *            The beginning position of the string
+	 * @param textEnd
+	 *            The ending positiong of the string
+	 */
+	public StringNode(StringBuffer textBuffer, int textBegin, int textEnd) {
+		super(textBegin, textEnd);
+		this.textBuffer = textBuffer;
 
-    /**
-     * Returns the text of the string line
-     */
-    public String getText()
-    {
-        return textBuffer.toString();
-    }
-    /**
-     * Sets the string contents of the node.
-     * @param The new text for the node.
-     */
-    public void setText(String text)
-    {
-        textBuffer = new StringBuffer(text);
-    }
-    public String toPlainTextString()
-    {
-        return textBuffer.toString();
-    }
-    public String toHtml()
-    {
-        return textBuffer.toString();
-    }
-    public String toString()
-    {
-        return "Text = "
-            + getText()
-            + "; begins at : "
-            + elementBegin()
-            + "; ends at : "
-            + elementEnd();
-    }
-    public void collectInto(NodeList collectionList, String filter)
-    {
-        if (filter.equals(STRING_FILTER))
-            collectionList.add(this);
-    }
+	}
 
-    public void accept(NodeVisitor visitor)
-    {
-        visitor.visitStringNode(this);
-    }
+	/**
+	 * Returns the text of the string line
+	 */
+	public String getText() {
+		return textBuffer.toString();
+	}
+
+	/**
+	 * Sets the string contents of the node.
+	 * 
+	 * @param The
+	 *            new text for the node.
+	 */
+	public void setText(String text) {
+		textBuffer = new StringBuffer(text);
+	}
+
+	public String toPlainTextString() {
+		return textBuffer.toString();
+	}
+
+	public String toHtml() {
+		return textBuffer.toString();
+	}
+
+	public String toString() {
+		return "Text = " + getText() + "; begins at : " + elementBegin() + "; ends at : " + elementEnd();
+	}
+
+	public void collectInto(NodeList collectionList, String filter) {
+		if (filter.equals(STRING_FILTER))
+			collectionList.add(this);
+	}
+
+	public void accept(NodeVisitor visitor) {
+		visitor.visitStringNode(this);
+	}
 
 }

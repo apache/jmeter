@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui.action;
 
@@ -28,9 +28,8 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
  * @version $Revision$
  */
 
-public interface Command
-{
-    public void doAction(ActionEvent e) throws IllegalUserActionException;
+public interface Command {
+	public void doAction(ActionEvent e) throws IllegalUserActionException;
 
-    public Set getActionNames();
+	public Set getActionNames();
 }

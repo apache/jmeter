@@ -31,47 +31,41 @@
 // enough to assist JMeter.
 //
 // contributed by Joshua Kerievsky
-
 package org.htmlparser.visitors;
 
 import org.htmlparser.Node;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
 
-public class ObjectFindingVisitor extends NodeVisitor
-{
-    private Class classTypeToFind;
-    private int count = 0;
-    private NodeList tags;
+public class ObjectFindingVisitor extends NodeVisitor {
+	private Class classTypeToFind;
 
-    public ObjectFindingVisitor(Class classTypeToFind)
-    {
-        this(classTypeToFind, false);
-    }
+	private int count = 0;
 
-    public ObjectFindingVisitor(Class classTypeToFind, boolean recurse)
-    {
-        super(recurse);
-        this.classTypeToFind = classTypeToFind;
-        this.tags = new NodeList();
-    }
+	private NodeList tags;
 
-    public int getCount()
-    {
-        return count;
-    }
+	public ObjectFindingVisitor(Class classTypeToFind) {
+		this(classTypeToFind, false);
+	}
 
-    public void visitTag(Tag tag)
-    {
-        if (tag.getClass().getName().equals(classTypeToFind.getName()))
-        {
-            count++;
-            tags.add(tag);
-        }
-    }
+	public ObjectFindingVisitor(Class classTypeToFind, boolean recurse) {
+		super(recurse);
+		this.classTypeToFind = classTypeToFind;
+		this.tags = new NodeList();
+	}
 
-    public Node[] getTags()
-    {
-        return tags.toNodeArray();
-    }
+	public int getCount() {
+		return count;
+	}
+
+	public void visitTag(Tag tag) {
+		if (tag.getClass().getName().equals(classTypeToFind.getName())) {
+			count++;
+			tags.add(tag);
+		}
+	}
+
+	public Node[] getTags() {
+		return tags.toNodeArray();
+	}
 }

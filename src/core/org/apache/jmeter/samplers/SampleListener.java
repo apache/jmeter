@@ -14,32 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.samplers;
 
 /**
  * Allows notification on events occuring during the sampling process.
- * Specifically, when sampling is started,
- * when a specific sample is obtained,
+ * Specifically, when sampling is started, when a specific sample is obtained,
  * and when sampling is stopped.
  * 
  * @version $Revision$
  */
-public interface SampleListener
-{
-    /**
-     * A sample has started and stopped.
-     */
-    public void sampleOccurred(SampleEvent e);
+public interface SampleListener {
+	/**
+	 * A sample has started and stopped.
+	 */
+	public void sampleOccurred(SampleEvent e);
 
-    /**
-     * A sample has started.
-     */
-    public void sampleStarted(SampleEvent e);
+	/**
+	 * A sample has started.
+	 */
+	public void sampleStarted(SampleEvent e);
 
-    /**
-     * A sample has stopped.
-     */
-    public void sampleStopped(SampleEvent e);
+	/**
+	 * A sample has stopped.
+	 */
+	public void sampleStopped(SampleEvent e);
 }

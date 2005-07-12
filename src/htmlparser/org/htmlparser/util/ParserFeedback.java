@@ -29,23 +29,22 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.util;
 
 /**
- * Interface for providing feedback without forcing the output
- * destination to be predefined. A default implementation is
- * provided to output events to the console but alternate
- * implementations that log, watch for specific messages, etc.
- * are also possible.
- *
+ * Interface for providing feedback without forcing the output destination to be
+ * predefined. A default implementation is provided to output events to the
+ * console but alternate implementations that log, watch for specific messages,
+ * etc. are also possible.
+ * 
  * @author Claude Duguay
  * @see DefaultParserFeedback
  * @see FeedbackManager
-**/
-public interface ParserFeedback
-{
-    public void info(String message);
-    public void warning(String message);
-    public void error(String message, ParserException e);
+ */
+public interface ParserFeedback {
+	public void info(String message);
+
+	public void warning(String message);
+
+	public void error(String message, ParserException e);
 }

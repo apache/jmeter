@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.Node;
@@ -43,46 +42,33 @@ import org.htmlparser.util.ParserException;
 
 /**
  * @author Somik Raha
- *
+ * 
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class BulletListScannerTest extends ParserTestCase
-{
+public class BulletListScannerTest extends ParserTestCase {
 
-    public BulletListScannerTest(String name)
-    {
-        super(name);
-    }
+	public BulletListScannerTest(String name) {
+		super(name);
+	}
 
-    public void testScan() throws ParserException
-    {
-        createParser(
-            "<ul TYPE=DISC>"
-                + "<ul TYPE=\"DISC\"><li>Energy supply\n"
-                + " (Campbell)  <A HREF=\"/hansard/37th3rd/h20307p.htm#1646\">1646</A>\n"
-                + " (MacPhail)  <A HREF=\"/hansard/37th3rd/h20307p.htm#1646\">1646</A>\n"
-                + "</ul><A NAME=\"calpinecorp\"></A><B>Calpine Corp.</B>\n"
-                + "<ul TYPE=\"DISC\"><li>Power plant projects\n"
-                + " (Neufeld)  <A HREF=\"/hansard/37th3rd/h20314p.htm#1985\">1985</A>\n"
-                + "</ul>"
-                + "</ul>");
-        parser.registerScanners();
-        parseAndAssertNodeCount(1);
+	public void testScan() throws ParserException {
+		createParser("<ul TYPE=DISC>" + "<ul TYPE=\"DISC\"><li>Energy supply\n"
+				+ " (Campbell)  <A HREF=\"/hansard/37th3rd/h20307p.htm#1646\">1646</A>\n"
+				+ " (MacPhail)  <A HREF=\"/hansard/37th3rd/h20307p.htm#1646\">1646</A>\n"
+				+ "</ul><A NAME=\"calpinecorp\"></A><B>Calpine Corp.</B>\n"
+				+ "<ul TYPE=\"DISC\"><li>Power plant projects\n"
+				+ " (Neufeld)  <A HREF=\"/hansard/37th3rd/h20314p.htm#1985\">1985</A>\n" + "</ul>" + "</ul>");
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
 
-        NodeList nestedBulletLists =
-            ((CompositeTag) node[0]).searchFor(BulletList.class);
-        assertEquals("bullets in first list", 2, nestedBulletLists.size());
-        BulletList firstList = (BulletList) nestedBulletLists.elementAt(0);
-        Bullet firstBullet = (Bullet) firstList.childAt(0);
-        Node firstNodeInFirstBullet = firstBullet.childAt(0);
-        assertType(
-            "first child in bullet",
-            StringNode.class,
-            firstNodeInFirstBullet);
-        assertStringEquals(
-            "expected text",
-            "Energy supply\r\n" + " (Campbell)  ",
-            firstNodeInFirstBullet.toPlainTextString());
-    }
+		NodeList nestedBulletLists = ((CompositeTag) node[0]).searchFor(BulletList.class);
+		assertEquals("bullets in first list", 2, nestedBulletLists.size());
+		BulletList firstList = (BulletList) nestedBulletLists.elementAt(0);
+		Bullet firstBullet = (Bullet) firstList.childAt(0);
+		Node firstNodeInFirstBullet = firstBullet.childAt(0);
+		assertType("first child in bullet", StringNode.class, firstNodeInFirstBullet);
+		assertStringEquals("expected text", "Energy supply\r\n" + " (Campbell)  ", firstNodeInFirstBullet
+				.toPlainTextString());
+	}
 }

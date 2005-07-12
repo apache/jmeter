@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.control;
 
@@ -24,42 +24,38 @@ import org.apache.jmeter.testelement.TestElement;
 
 /**
  * This interface will typically be used in the following manner:
- *
- * Controller controller;  //gets initialized
- * while(!controller.isDone() && controller.hasNext())
- * {
- *    Sampler sampler = controller.next();
- *    return sampler;
- * }
- *
- * @author    Michael Stover
- * @author    Thad Smith
- * @version   $Revision$
+ * 
+ * Controller controller; //gets initialized while(!controller.isDone() &&
+ * controller.hasNext()) { Sampler sampler = controller.next(); return sampler; }
+ * 
+ * @author Michael Stover
+ * @author Thad Smith
+ * @version $Revision$
  */
-public interface Controller extends TestElement
-{ 
-    /**
-     * Delivers the next Sampler.
-     * @return org.apache.jmeter.samplers.Sampler
-     */
-    public Sampler next();
+public interface Controller extends TestElement {
+	/**
+	 * Delivers the next Sampler.
+	 * 
+	 * @return org.apache.jmeter.samplers.Sampler
+	 */
+	public Sampler next();
 
-    /**
-     * Indicates whether the Controller is done delivering Samplers for 
-     * the rest of the test.
-     * @return boolean
-     */
-    public boolean isDone();
+	/**
+	 * Indicates whether the Controller is done delivering Samplers for the rest
+	 * of the test.
+	 * 
+	 * @return boolean
+	 */
+	public boolean isDone();
 
-    /**
-     * Controllers have to notify listeners of when they begin an iteration
-     * through their sub-elements.
-     */
-    public void addIterationListener(LoopIterationListener listener);
+	/**
+	 * Controllers have to notify listeners of when they begin an iteration
+	 * through their sub-elements.
+	 */
+	public void addIterationListener(LoopIterationListener listener);
 
-    /**
-     * Called to initialize a controller at the beginning of a test
-     * iteration.
-     */
-    public void initialize();
+	/**
+	 * Called to initialize a controller at the beginning of a test iteration.
+	 */
+	public void initialize();
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.examples.testbeans.example2;
 
@@ -24,20 +24,23 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 
 /**
- * This TestBean is just an example about how to write testbeans. The intent is to demonstrate
- * usage of the TestBean features to podential TestBean developers. Note that only the class's
- * introspector view matters: the methods do nothing -- nothing useful, in any case.
+ * This TestBean is just an example about how to write testbeans. The intent is
+ * to demonstrate usage of the TestBean features to podential TestBean
+ * developers. Note that only the class's introspector view matters: the methods
+ * do nothing -- nothing useful, in any case.
  */
 public class Example2 extends AbstractSampler implements TestBean {
 	public SampleResult sample(Entry e) {
 		return new SampleResult();
 	}
-	
+
 	// A TestBean is a Java Bean. Just define some properties and they will
 	// autmagically show up in the GUI.
 	// A String property:
-	public void setMyStringProperty(String s)
-	{};
-	public String getMyStringProperty()
-	{return "";}
+	public void setMyStringProperty(String s) {
+	};
+
+	public String getMyStringProperty() {
+		return "";
+	}
 }

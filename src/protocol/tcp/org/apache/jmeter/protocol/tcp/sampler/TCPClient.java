@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 /*
  * Created on 24-Sep-2003
@@ -30,39 +30,45 @@ import java.io.OutputStream;
 /**
  * @version $Revision$ $Date$
  */
-public interface TCPClient
-{
+public interface TCPClient {
 	void setupTest();
+
 	void teardownTest();
-	
+
 	/**
 	 * 
-	 * @param os - OutputStream for socket
-	 * @param is - InputStream to be written to Socket
+	 * @param os -
+	 *            OutputStream for socket
+	 * @param is -
+	 *            InputStream to be written to Socket
 	 */
 	void write(OutputStream os, InputStream is);
 
 	/**
 	 * 
-	 * @param os - OutputStream for socket
-	 * @param s - String to write
+	 * @param os -
+	 *            OutputStream for socket
+	 * @param s -
+	 *            String to write
 	 */
 	void write(OutputStream os, String s);
 
 	/**
 	 * 
-	 * @param is - InputStream for socket
+	 * @param is -
+	 *            InputStream for socket
 	 * @return String read from socket
 	 */
 	String read(InputStream is);
-	
+
 	/**
 	 * @return Returns the eolByte.
 	 */
 	public byte getEolByte();
 
 	/**
-	 * @param eolByte The eolByte to set.
+	 * @param eolByte
+	 *            The eolByte to set.
 	 */
 	public void setEolByte(byte eolByte);
 }

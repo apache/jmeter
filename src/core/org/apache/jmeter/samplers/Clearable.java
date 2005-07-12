@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.samplers;
 
@@ -22,10 +22,9 @@ package org.apache.jmeter.samplers;
  * @author Michael Stover
  * @version $Revision$
  */
-public interface Clearable
-{
-    /**
-     * Clears the current data of the object.
-     */
-    public void clear();
+public interface Clearable {
+	/**
+	 * Clears the current data of the object.
+	 */
+	public void clear();
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jorphan.timer;
 
@@ -22,20 +22,20 @@ package org.apache.jorphan.timer;
  * A package-private collection of constants used by {@link ITimer}
  * implementations in <code>HRTimer</code> and <code>JavaSystemTimer</code>
  * classes.
- *
+ * 
  * @author <a href="mailto:vroubtsov@illinoisalumni.org">Vlad Roubtsov</a>
- * @author Originally published in <a href="http://www.javaworld.com/javaworld/javaqa/2003-01/01-qa-0110-timing.html">JavaWorld</a>
+ * @author Originally published in <a
+ *         href="http://www.javaworld.com/javaworld/javaqa/2003-01/01-qa-0110-timing.html">JavaWorld</a>
  * @version $Revision$
  */
-interface ITimerConstants
-{
-    /**
-     * Timer state enumeration. 
-     */
-    static final int STATE_READY = 0, STATE_STARTED = 1, STATE_STOPPED = 2;
-    
-    /**
-     * User-friendly timer state names indexed by their state values.
-     */
-    static final String [] STATE_NAMES = {"READY", "STARTED", "STOPPED"};
+interface ITimerConstants {
+	/**
+	 * Timer state enumeration.
+	 */
+	static final int STATE_READY = 0, STATE_STARTED = 1, STATE_STOPPED = 2;
+
+	/**
+	 * User-friendly timer state names indexed by their state values.
+	 */
+	static final String[] STATE_NAMES = { "READY", "STARTED", "STOPPED" };
 }

@@ -14,63 +14,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 package org.apache.jmeter.protocol.http.parser;
 
 /**
- * Error class for use with HTMLParser classes.
- * The main rationale for the class is to support chained
- * Errors in JDK 1.3
+ * Error class for use with HTMLParser classes. The main rationale for the class
+ * is to support chained Errors in JDK 1.3
  * 
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision$ updated on $Date$
  */
-public class HTMLParseError extends Error
-{
-	private Throwable savedCause; //Support JDK1.4 getCause() on JDK1.3
-	
-    /**
-     * 
-     */
-    public HTMLParseError()
-    {
-        super();
-    }
+public class HTMLParseError extends Error {
+	private Throwable savedCause; // Support JDK1.4 getCause() on JDK1.3
 
-    /**
-     * @param message
-     */
-    public HTMLParseError(String message)
-    {
-        super(message);
-    }
+	/**
+	 * 
+	 */
+	public HTMLParseError() {
+		super();
+	}
 
-    /**
-     * @param cause
-     */
-    public HTMLParseError(Throwable cause)
-    {
-        //JDK1.4: super(cause);
-        savedCause = cause;
-    }
+	/**
+	 * @param message
+	 */
+	public HTMLParseError(String message) {
+		super(message);
+	}
 
-    /**
-     * @param message
-     * @param cause
-     */
-    public HTMLParseError(String message, Throwable cause)
-    {
-        //JDK1.4: super(message, cause);
-        super(message);
+	/**
+	 * @param cause
+	 */
+	public HTMLParseError(Throwable cause) {
+		// JDK1.4: super(cause);
 		savedCause = cause;
-    }
-    
-    /**
-     * Local verstion of getCause() for JDK1.3 support
-     * 
-     */
-    public Throwable getCause()
-    {
-    	return savedCause;
-    }
+	}
+
+	/**
+	 * @param message
+	 * @param cause
+	 */
+	public HTMLParseError(String message, Throwable cause) {
+		// JDK1.4: super(message, cause);
+		super(message);
+		savedCause = cause;
+	}
+
+	/**
+	 * Local verstion of getCause() for JDK1.3 support
+	 * 
+	 */
+	public Throwable getCause() {
+		return savedCause;
+	}
 }

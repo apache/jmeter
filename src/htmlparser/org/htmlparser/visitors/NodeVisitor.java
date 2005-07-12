@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.visitors;
 
 import org.htmlparser.RemarkNode;
@@ -40,74 +39,62 @@ import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TitleTag;
 
-public abstract class NodeVisitor
-{
-    private boolean recurseChildren;
-    private boolean recurseSelf;
+public abstract class NodeVisitor {
+	private boolean recurseChildren;
 
-    public NodeVisitor()
-    {
-        this(true);
-    }
+	private boolean recurseSelf;
 
-    public NodeVisitor(boolean recurseChildren)
-    {
-        this.recurseChildren = recurseChildren;
-        this.recurseSelf = true;
-    }
+	public NodeVisitor() {
+		this(true);
+	}
 
-    public NodeVisitor(boolean recurseChildren, boolean recurseSelf)
-    {
-        this.recurseChildren = recurseChildren;
-        this.recurseSelf = recurseSelf;
-    }
+	public NodeVisitor(boolean recurseChildren) {
+		this.recurseChildren = recurseChildren;
+		this.recurseSelf = true;
+	}
 
-    public void visitTag(Tag tag)
-    {
+	public NodeVisitor(boolean recurseChildren, boolean recurseSelf) {
+		this.recurseChildren = recurseChildren;
+		this.recurseSelf = recurseSelf;
+	}
 
-    }
+	public void visitTag(Tag tag) {
 
-    public void visitStringNode(StringNode stringNode)
-    {
-    }
+	}
 
-    public void visitLinkTag(LinkTag linkTag)
-    {
-    }
+	public void visitStringNode(StringNode stringNode) {
+	}
 
-    public void visitImageTag(ImageTag imageTag)
-    {
-    }
+	public void visitLinkTag(LinkTag linkTag) {
+	}
 
-    public void visitEndTag(EndTag endTag)
-    {
+	public void visitImageTag(ImageTag imageTag) {
+	}
 
-    }
+	public void visitEndTag(EndTag endTag) {
 
-    public void visitTitleTag(TitleTag titleTag)
-    {
+	}
 
-    }
-    public void visitRemarkNode(RemarkNode remarkNode)
-    {
+	public void visitTitleTag(TitleTag titleTag) {
 
-    }
+	}
 
-    public boolean shouldRecurseChildren()
-    {
-        return recurseChildren;
-    }
+	public void visitRemarkNode(RemarkNode remarkNode) {
 
-    public boolean shouldRecurseSelf()
-    {
-        return recurseSelf;
-    }
+	}
 
-    /**
-     * Override this method if you wish to do special
-     * processing upon completion of parsing 
-     */
-    public void finishedParsing()
-    {
-    }
+	public boolean shouldRecurseChildren() {
+		return recurseChildren;
+	}
+
+	public boolean shouldRecurseSelf() {
+		return recurseSelf;
+	}
+
+	/**
+	 * Override this method if you wish to do special processing upon completion
+	 * of parsing
+	 */
+	public void finishedParsing() {
+	}
 }

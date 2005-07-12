@@ -29,137 +29,133 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * This class implements a property editor for non-null String properties
- * that supports custom editing (i.e.: provides a GUI component) based
- * on a text field.
+ * This class implements a property editor for non-null String properties that
+ * supports custom editing (i.e.: provides a GUI component) based on a text
+ * field.
  * <p>
  * The provided GUI is a simple text field.
  * 
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision$ updated on $Date$
  */
-class FieldStringEditor extends PropertyEditorSupport
-	implements ActionListener, FocusListener
-{
-	protected static Logger log= LoggingManager.getLoggerForClass();
+class FieldStringEditor extends PropertyEditorSupport implements ActionListener, FocusListener {
+	protected static Logger log = LoggingManager.getLoggerForClass();
 
 	/**
-	 * This will hold the text editing component, either a plain JTextField
-	 * (in cases where the combo box would not have other options
-	 * than 'Edit'), or the text editing component in the combo box.  
+	 * This will hold the text editing component, either a plain JTextField (in
+	 * cases where the combo box would not have other options than 'Edit'), or
+	 * the text editing component in the combo box.
 	 */
 	private JTextField textField;
 
-    /**
-     * Value on which we started the editing. Used to avoid firing
-     * PropertyChanged events when there's not been such change.
-     */
-    private String initialValue= "";
+	/**
+	 * Value on which we started the editing. Used to avoid firing
+	 * PropertyChanged events when there's not been such change.
+	 */
+	private String initialValue = "";
 
-    protected FieldStringEditor()
-    {
-    	super();
+	protected FieldStringEditor() {
+		super();
 
-		textField= new JTextField();
+		textField = new JTextField();
 		textField.addActionListener(this);
 		textField.addFocusListener(this);
-    }
+	}
 
-	public String getAsText()
-	{
+	public String getAsText() {
 		return textField.getText();
 	}
-	
-	public void setAsText(String value)
-	{
-        initialValue= value;
+
+	public void setAsText(String value) {
+		initialValue = value;
 		textField.setText(value);
 	}
-	
-	public Object getValue()
-	{
+
+	public Object getValue() {
 		return getAsText();
 	}
-	
-	public void setValue(Object value)
-	{
-		if (value instanceof String) setAsText((String)value);
-		else throw new IllegalArgumentException();
+
+	public void setValue(Object value) {
+		if (value instanceof String)
+			setAsText((String) value);
+		else
+			throw new IllegalArgumentException();
 	}
-	
-    /* (non-Javadoc)
-     * @see java.beans.PropertyEditor#getCustomEditor()
-     */
-    public Component getCustomEditor()
-    {
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.beans.PropertyEditor#getCustomEditor()
+	 */
+	public Component getCustomEditor() {
 		return textField;
-    }
+	}
 
-    /* (non-Javadoc)
-     * Avoid needlessly firing PropertyChanged events.
-     */
-    public void firePropertyChange()
-    {
-        String newValue= getAsText();
+	/*
+	 * (non-Javadoc) Avoid needlessly firing PropertyChanged events.
+	 */
+	public void firePropertyChange() {
+		String newValue = getAsText();
 
-        if (initialValue.equals(newValue)) return;
-        initialValue= newValue;
+		if (initialValue.equals(newValue))
+			return;
+		initialValue = newValue;
 
-        super.firePropertyChange();
-    }
+		super.firePropertyChange();
+	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
-	public void actionPerformed(ActionEvent e)
-    {
-        firePropertyChange();
-    }
-    
-	/* (non-Javadoc)
-	 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
-	 */
-	public void focusGained(FocusEvent e)
-	{
-	}
-
-	/* (non-Javadoc)
-	 * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
-	 */
-	public void focusLost(FocusEvent e)
-	{
+	public void actionPerformed(ActionEvent e) {
 		firePropertyChange();
 	}
-	
-	public static class Test extends junit.framework.TestCase
-	{
-		public Test(String name)
-		{
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
+	 */
+	public void focusGained(FocusEvent e) {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
+	 */
+	public void focusLost(FocusEvent e) {
+		firePropertyChange();
+	}
+
+	public static class Test extends junit.framework.TestCase {
+		public Test(String name) {
 			super(name);
 		}
 
-		private void testSetGet(ComboStringEditor e, Object value) throws Exception
-		{
+		private void testSetGet(ComboStringEditor e, Object value) throws Exception {
 			e.setValue(value);
 			assertEquals(value, e.getValue());
 		}
-		private void testSetGetAsText(ComboStringEditor e, String text) throws Exception
-		{
+
+		private void testSetGetAsText(ComboStringEditor e, String text) throws Exception {
 			e.setAsText(text);
 			assertEquals(text, e.getAsText());
 		}
-		public void testSetGet() throws Exception
-		{
-			ComboStringEditor e= new ComboStringEditor();
-				
+
+		public void testSetGet() throws Exception {
+			ComboStringEditor e = new ComboStringEditor();
+
 			testSetGet(e, "any string");
 			testSetGet(e, "");
 			testSetGet(e, "${var}");
 		}
-		public void testSetGetAsText() throws Exception
-		{
-			ComboStringEditor e= new ComboStringEditor();
-				
+
+		public void testSetGetAsText() throws Exception {
+			ComboStringEditor e = new ComboStringEditor();
+
 			testSetGetAsText(e, "any string");
 			testSetGetAsText(e, "");
 			testSetGetAsText(e, "${var}");

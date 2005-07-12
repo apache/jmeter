@@ -14,10 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.visualizers;
-
 
 import java.util.Collection;
 
@@ -25,150 +24,127 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 
-
 /**
- * @author     Michael Stover
- * @version    $Revision$
+ * @author Michael Stover
+ * @version $Revision$
  */
-public class SplineModel implements Clearable
-{
-    public final int DEFAULT_NUMBER_OF_NODES = 10;
-    public final int DEFAULT_REFRESH_PERIOD = 1;
+public class SplineModel implements Clearable {
+	public final int DEFAULT_NUMBER_OF_NODES = 10;
 
-    protected final boolean SHOW_INCOMING_SAMPLES = true;
-    protected int numberOfNodes = DEFAULT_NUMBER_OF_NODES;
-    protected int refreshPeriod = DEFAULT_REFRESH_PERIOD;
+	public final int DEFAULT_REFRESH_PERIOD = 1;
 
-    /** Current Spline curve. */
-    protected Spline3 dataCurve = null;
-    SamplingStatCalculator samples;
+	protected final boolean SHOW_INCOMING_SAMPLES = true;
 
-    private GraphListener listener;
+	protected int numberOfNodes = DEFAULT_NUMBER_OF_NODES;
 
-    private String name;
+	protected int refreshPeriod = DEFAULT_REFRESH_PERIOD;
 
-    public SplineModel()
-    {
-        samples = new SamplingStatCalculator("Spline");
-    }
+	/** Current Spline curve. */
+	protected Spline3 dataCurve = null;
 
-    public void setListener(GraphListener vis)
-    {
-        listener = vis;
-    }
+	SamplingStatCalculator samples;
 
-    public void setName(String newName)
-    {
-        name = newName;
-    }
+	private GraphListener listener;
 
-    public boolean isEditable()
-    {
-        return true;
-    }
+	private String name;
 
-    public Spline3 getDataCurve()
-    {
-        return dataCurve;
-    }
+	public SplineModel() {
+		samples = new SamplingStatCalculator("Spline");
+	}
 
-    public Class getGuiClass()
-    {
-        return org.apache.jmeter.visualizers.SplineVisualizer.class;
-    }
+	public void setListener(GraphListener vis) {
+		listener = vis;
+	}
 
-    public Collection getAddList()
-    {
-        return null;
-    }
+	public void setName(String newName) {
+		name = newName;
+	}
 
-    public String getClassLabel()
-    {
-        return JMeterUtils.getResString("spline_visualizer_title");
-    }
+	public boolean isEditable() {
+		return true;
+	}
 
-    public long getMinimum()
-    {
-        return samples.getMin().longValue();
-    }
+	public Spline3 getDataCurve() {
+		return dataCurve;
+	}
 
-    public long getMaximum()
-    {
-        return samples.getMax().longValue();
-    }
+	public Class getGuiClass() {
+		return org.apache.jmeter.visualizers.SplineVisualizer.class;
+	}
 
-    public long getAverage()
-    {
-        return (long)samples.getMean();
-    }
+	public Collection getAddList() {
+		return null;
+	}
 
-    public long getCurrent()
-    {
-        return samples.getCurrentSample().data;
-    }
+	public String getClassLabel() {
+		return JMeterUtils.getResString("spline_visualizer_title");
+	}
 
-    public long getSample(int i)
-    {
-        return samples.getSample(i).data;
-    }
+	public long getMinimum() {
+		return samples.getMin().longValue();
+	}
 
-    public long getNumberOfCollectedSamples()
-    {
-        return samples.getCount();
-    }
+	public long getMaximum() {
+		return samples.getMax().longValue();
+	}
 
-    public String getName()
-    {
-        return name;
-    }
+	public long getAverage() {
+		return (long) samples.getMean();
+	}
 
-    public void uncompile()
-    {
-        clear();
-    }
+	public long getCurrent() {
+		return samples.getCurrentSample().data;
+	}
 
-    public synchronized void clear()
-    {
-        // this.graph.clear();
-        samples.clear();
+	public long getSample(int i) {
+		return samples.getSample(i).data;
+	}
 
-        this.dataCurve = null;
+	public long getNumberOfCollectedSamples() {
+		return samples.getCount();
+	}
 
-        if (listener != null)
-        {
-            listener.updateGui();
-        }
-    }
+	public String getName() {
+		return name;
+	}
 
-    public synchronized void add(SampleResult sampleResult)
-    {
-       samples.addSample(sampleResult);
-        long n = samples.getCount();
+	public void uncompile() {
+		clear();
+	}
 
-        if ((n % (numberOfNodes * refreshPeriod)) == 0)
-        {
-            float[] floatNode = new float[numberOfNodes];
-            //NOTUSED: long[] longSample = getSamples();
-            // load each node
-            long loadFactor = n / numberOfNodes;
+	public synchronized void clear() {
+		// this.graph.clear();
+		samples.clear();
 
-            for (int i = 0; i < numberOfNodes; i++)
-            {
-                for (int j = 0; j < loadFactor; j++)
-                {
-                    floatNode[i] += samples.getSample((int)((i * loadFactor) + j)).data;
-                }
-                floatNode[i] = floatNode[i] / loadFactor;
-            }
-            // compute the new Spline curve
-            dataCurve = new Spline3(floatNode);
-            if (listener != null)
-            {
-                listener.updateGui();
-            }
-        }
-        else
-        {// do nothing, wait for the next pile to complete
-        }
-    }
+		this.dataCurve = null;
+
+		if (listener != null) {
+			listener.updateGui();
+		}
+	}
+
+	public synchronized void add(SampleResult sampleResult) {
+		samples.addSample(sampleResult);
+		long n = samples.getCount();
+
+		if ((n % (numberOfNodes * refreshPeriod)) == 0) {
+			float[] floatNode = new float[numberOfNodes];
+			// NOTUSED: long[] longSample = getSamples();
+			// load each node
+			long loadFactor = n / numberOfNodes;
+
+			for (int i = 0; i < numberOfNodes; i++) {
+				for (int j = 0; j < loadFactor; j++) {
+					floatNode[i] += samples.getSample((int) ((i * loadFactor) + j)).data;
+				}
+				floatNode[i] = floatNode[i] / loadFactor;
+			}
+			// compute the new Spline curve
+			dataCurve = new Spline3(floatNode);
+			if (listener != null) {
+				listener.updateGui();
+			}
+		} else {// do nothing, wait for the next pile to complete
+		}
+	}
 }

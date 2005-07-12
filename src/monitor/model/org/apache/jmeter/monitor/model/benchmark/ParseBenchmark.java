@@ -20,32 +20,29 @@ package org.apache.jmeter.monitor.model.benchmark;
  * 
  * @version $Revision$ on $Date$
  */
-public class ParseBenchmark
-{
+public class ParseBenchmark {
 
-    /**
-     * 
-     */
-    public ParseBenchmark()
-    {
-        super();
-    }
+	/**
+	 * 
+	 */
+	public ParseBenchmark() {
+		super();
+	}
 
-    public static void main(String[] args)
-    {
-    	if (args.length == 3){
-    		int parser = 0;
-    		String file = null;
-    		int loops = 1000;
-    		if (args[0] != null){
-    			if (!args[0].equals("jaxb")){
-    				parser = 1;
-    			}
-    		}
-			if (args[1] != null){
+	public static void main(String[] args) {
+		if (args.length == 3) {
+			int parser = 0;
+			String file = null;
+			int loops = 1000;
+			if (args[0] != null) {
+				if (!args[0].equals("jaxb")) {
+					parser = 1;
+				}
+			}
+			if (args[1] != null) {
 				file = args[1];
 			}
-			if (args[2] != null){
+			if (args[2] != null) {
 				loops = Integer.parseInt(args[2]);
 			}
 
@@ -58,10 +55,10 @@ public class ParseBenchmark
 				isr = new java.io.InputStreamReader(fis);
 				java.io.BufferedReader br = new java.io.BufferedReader(isr);
 				String line = null;
-				while ((line = br.readLine()) != null){
+				while ((line = br.readLine()) != null) {
 					buf.append(line);
 				}
-			} catch (Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			long start = 0;
@@ -70,41 +67,36 @@ public class ParseBenchmark
 			System.out.println("start test: " + loops + " iterations");
 			System.out.println("content:");
 			System.out.println(contents);
-			
-			if (parser == 0){
+
+			if (parser == 0) {
 				/**
-				try {
-					JAXBContext jxbc = 
-						new org.apache.jorphan.tomcat.manager.ObjectFactory();
-					Unmarshaller mar = jxbc.createUnmarshaller();
-						
-					start = System.currentTimeMillis();
-					for (int idx=0; idx < loops; idx++){
-						StreamSource ss = new StreamSource(
-							new ByteArrayInputStream(contents.getBytes()));
-						Object ld = mar.unmarshal(ss);
-					}
-					end = System.currentTimeMillis();
-					System.out.println("elapsed Time: " + (end - start));
-				} catch (JAXBException e){
-				}
-				**/
+				 * try { JAXBContext jxbc = new
+				 * org.apache.jorphan.tomcat.manager.ObjectFactory();
+				 * Unmarshaller mar = jxbc.createUnmarshaller();
+				 * 
+				 * start = System.currentTimeMillis(); for (int idx=0; idx <
+				 * loops; idx++){ StreamSource ss = new StreamSource( new
+				 * ByteArrayInputStream(contents.getBytes())); Object ld =
+				 * mar.unmarshal(ss); } end = System.currentTimeMillis();
+				 * System.out.println("elapsed Time: " + (end - start)); } catch
+				 * (JAXBException e){ }
+				 */
 			} else {
-				org.apache.jmeter.monitor.model.ObjectFactory of = 
-					org.apache.jmeter.monitor.model.ObjectFactory.getInstance();
+				org.apache.jmeter.monitor.model.ObjectFactory of = org.apache.jmeter.monitor.model.ObjectFactory
+						.getInstance();
 				start = System.currentTimeMillis();
-				for (int idx=0; idx < loops; idx++){
-					//NOTUSED org.apache.jmeter.monitor.model.Status st =
-						of.parseBytes(contents.getBytes());
+				for (int idx = 0; idx < loops; idx++) {
+					// NOTUSED org.apache.jmeter.monitor.model.Status st =
+					of.parseBytes(contents.getBytes());
 				}
 				end = System.currentTimeMillis();
 				System.out.println("elapsed Time: " + (end - start));
 			}
-    		
-    	} else {
-    		System.out.println("missing paramters:");
-    		System.out.println("parser file iterations");
-    		System.out.println("example: jaxb status.xml 1000");
-    	}
-    }
+
+		} else {
+			System.out.println("missing paramters:");
+			System.out.println("parser file iterations");
+			System.out.println("example: jaxb status.xml 1000");
+		}
+	}
 }

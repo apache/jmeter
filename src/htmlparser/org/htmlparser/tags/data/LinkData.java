@@ -29,58 +29,48 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags.data;
 
-public class LinkData
-{
-    private String link;
-    private String linkText;
-    private String accessKey;
-    private boolean mailLink;
-    private boolean javascriptLink;
+public class LinkData {
+	private String link;
 
-    public LinkData(
-        String link,
-        String linkText,
-        String accessKey,
-        boolean mailLink,
-        boolean javascriptLink)
-    {
-        this.link = link;
-        this.linkText = linkText;
-        this.accessKey = accessKey;
-        this.mailLink = mailLink;
-        this.javascriptLink = javascriptLink;
-    }
+	private String linkText;
 
-    public String getAccessKey()
-    {
-        return accessKey;
-    }
+	private String accessKey;
 
-    public boolean isJavascriptLink()
-    {
-        return javascriptLink;
-    }
+	private boolean mailLink;
 
-    public String getLink()
-    {
-        return link;
-    }
+	private boolean javascriptLink;
 
-    public String getLinkText()
-    {
-        return linkText;
-    }
+	public LinkData(String link, String linkText, String accessKey, boolean mailLink, boolean javascriptLink) {
+		this.link = link;
+		this.linkText = linkText;
+		this.accessKey = accessKey;
+		this.mailLink = mailLink;
+		this.javascriptLink = javascriptLink;
+	}
 
-    public boolean isMailLink()
-    {
-        return mailLink;
-    }
+	public String getAccessKey() {
+		return accessKey;
+	}
 
-    public String toString()
-    {
-        return "";
-    }
+	public boolean isJavascriptLink() {
+		return javascriptLink;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public String getLinkText() {
+		return linkText;
+	}
+
+	public boolean isMailLink() {
+		return mailLink;
+	}
+
+	public String toString() {
+		return "";
+	}
 }

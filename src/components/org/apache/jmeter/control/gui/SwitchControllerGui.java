@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.control.gui;
 
@@ -29,49 +29,43 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @version   $Revision$ on $Date$
+ * @version $Revision$ on $Date$
  */
-public class SwitchControllerGui extends AbstractControllerGui
-{
-   private static final String SWITCH_LABEL = "switch_controller_label";
+public class SwitchControllerGui extends AbstractControllerGui {
+	private static final String SWITCH_LABEL = "switch_controller_label";
 
 	private JTextField switchValue;
 
-    public SwitchControllerGui()
-    {
-        init();
-    }
+	public SwitchControllerGui() {
+		init();
+	}
 
-    public TestElement createTestElement()
-    {
-        SwitchController ic = new SwitchController();
-        modifyTestElement(ic);
-        return ic;
-    }
+	public TestElement createTestElement() {
+		SwitchController ic = new SwitchController();
+		modifyTestElement(ic);
+		return ic;
+	}
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement ic)
-    {
-        configureTestElement(ic);
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement ic) {
+		configureTestElement(ic);
 		((SwitchController) ic).setSelection(switchValue.getText());
-    }
+	}
 
-    public void configure(TestElement el)
-    {
-        super.configure(el);
-        switchValue.setText(((SwitchController) el).getSelection());
-    }
+	public void configure(TestElement el) {
+		super.configure(el);
+		switchValue.setText(((SwitchController) el).getSelection());
+	}
 
-    public String getLabelResource()
-    {
-        return "switch_controller_title";
-    }
+	public String getLabelResource() {
+		return "switch_controller_title";
+	}
 
-    private void init()
-    {
+	private void init() {
 		setLayout(new BorderLayout(0, 5));
 		setBorder(makeBorder());
 		add(makeTitlePanel(), BorderLayout.NORTH);
@@ -79,16 +73,15 @@ public class SwitchControllerGui extends AbstractControllerGui
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		mainPanel.add(createSwitchPanel(), BorderLayout.NORTH);
 		add(mainPanel, BorderLayout.CENTER);
-    }
+	}
 
-	private JPanel createSwitchPanel()  {
+	private JPanel createSwitchPanel() {
 		JPanel switchPanel = new JPanel(new BorderLayout(5, 0));
-		JLabel selectionLabel =
-		new JLabel(JMeterUtils.getResString( SWITCH_LABEL ));
+		JLabel selectionLabel = new JLabel(JMeterUtils.getResString(SWITCH_LABEL));
 		switchValue = new JTextField("");
 		selectionLabel.setLabelFor(switchValue);
-        switchPanel.add(selectionLabel, BorderLayout.WEST);
-        switchPanel.add(switchValue, BorderLayout.CENTER);
+		switchPanel.add(selectionLabel, BorderLayout.WEST);
+		switchPanel.add(switchValue, BorderLayout.CENTER);
 		return switchPanel;
 	}
 

@@ -37,23 +37,22 @@ import org.apache.log.Logger;
 /**
  * SaveGraphics action is meant to be a generic reusable Action. The class will
  * use GUIPackage to get the current gui. Once it does, it checks to see if the
- * element implements Printable interface. If it does, it call getPrintable()
- * to get the JComponent. By default, it will use SaveGraphicsService to save a
- * PNG file if no extension is provided. If either .png or .tif is in the
- * filename, it will call SaveGraphicsService to save in the format.
+ * element implements Printable interface. If it does, it call getPrintable() to
+ * get the JComponent. By default, it will use SaveGraphicsService to save a PNG
+ * file if no extension is provided. If either .png or .tif is in the filename,
+ * it will call SaveGraphicsService to save in the format.
  */
 public class SaveGraphics implements Command {
 	transient private static Logger log = LoggingManager.getLoggerForClass();
+
 	public final static String SAVE_GRAPHICS = "save_graphics";
 
 	private static Set commands = new HashSet();
 	static {
 		commands.add(SAVE_GRAPHICS);
 	}
-	public static String[] extensions =
-		{
-			SaveGraphicsService.TIFF_EXTENSION,
-			SaveGraphicsService.PNG_EXTENSION};
+
+	public static String[] extensions = { SaveGraphicsService.TIFF_EXTENSION, SaveGraphicsService.PNG_EXTENSION };
 
 	/**
 	 * Constructor for the Save object.
@@ -74,8 +73,7 @@ public class SaveGraphics implements Command {
 		JMeterGUIComponent component = null;
 		JComponent comp = null;
 		if (!commands.contains(e.getActionCommand())) {
-			throw new IllegalUserActionException(
-				"Invalid user command:" + e.getActionCommand());
+			throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
 		}
 		if (e.getActionCommand().equals(SAVE_GRAPHICS)) {
 			component = GuiPackage.getInstance().getCurrentGui();
@@ -84,13 +82,8 @@ public class SaveGraphics implements Command {
 				comp = ((Printable) component).getPrintableComponent();
 
 				String filename;
-				JFileChooser chooser =
-					FileDialoger.promptToSaveFile(
-						GuiPackage
-							.getInstance()
-							.getTreeListener()
-							.getCurrentNode()
-							.getName(),extensions);
+				JFileChooser chooser = FileDialoger.promptToSaveFile(GuiPackage.getInstance().getTreeListener()
+						.getCurrentNode().getName(), extensions);
 				if (chooser == null) {
 					return;
 				}
@@ -102,21 +95,11 @@ public class SaveGraphics implements Command {
 					String ext = filename.substring(filename.length() - 4);
 					String name = filename.substring(0, filename.length() - 4);
 					if (ext.equals(SaveGraphicsService.PNG_EXTENSION)) {
-						save.saveJComponent(
-							name,
-							SaveGraphicsService.PNG,
-							comp);
-					} else if (
-						ext.equals(SaveGraphicsService.TIFF_EXTENSION)) {
-						save.saveJComponent(
-							name,
-							SaveGraphicsService.TIFF,
-							comp);
+						save.saveJComponent(name, SaveGraphicsService.PNG, comp);
+					} else if (ext.equals(SaveGraphicsService.TIFF_EXTENSION)) {
+						save.saveJComponent(name, SaveGraphicsService.TIFF, comp);
 					} else {
-						save.saveJComponent(
-							filename,
-							SaveGraphicsService.PNG,
-							comp);
+						save.saveJComponent(filename, SaveGraphicsService.PNG, comp);
 					}
 				}
 			}
@@ -134,9 +117,8 @@ public class SaveGraphics implements Command {
 			save = new SaveGraphics();
 		}
 
-		public void testSomething()
-		{
-			//TODO write some tests
+		public void testSomething() {
+			// TODO write some tests
 		}
 	}
 

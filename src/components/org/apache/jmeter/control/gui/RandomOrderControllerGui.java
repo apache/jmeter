@@ -21,33 +21,33 @@ import org.apache.jmeter.testelement.TestElement;
 
 /**
  * GUI for RandomOrderController.
- *
+ * 
  * @version $Revision$ updated on $Date$
  */
-public class RandomOrderControllerGui extends LogicControllerGui
-{
+public class RandomOrderControllerGui extends LogicControllerGui {
 
-    public String getLabelResource()
-    {
-        return "random_order_control_title";
-    }
+	public String getLabelResource() {
+		return "random_order_control_title";
+	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-     */
-    public TestElement createTestElement()
-    {
-        RandomOrderController ic = new RandomOrderController();
-        modifyTestElement(ic);
-        return ic;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+	 */
+	public TestElement createTestElement() {
+		RandomOrderController ic = new RandomOrderController();
+		modifyTestElement(ic);
+		return ic;
+	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
-     */
-    public void modifyTestElement(TestElement ic)
-    {
-        configureTestElement(ic);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
+	 */
+	public void modifyTestElement(TestElement ic) {
+		configureTestElement(ic);
+	}
 
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.modifier;
 
@@ -29,44 +29,40 @@ import org.xml.sax.XMLReader;
 /**
  * Parse an XML file to obtain parameter name and value information for all
  * users defined in the XML file.
- *
- * @author     Mark Walsh
- * @version    $Revision$
+ * 
+ * @author Mark Walsh
+ * @version $Revision$
  */
-public class UserParameterXMLParser
-{
-    //private String vendorParseClass = "org.apache.xerces.parsers.SAXParser";
+public class UserParameterXMLParser {
+	// private String vendorParseClass = "org.apache.xerces.parsers.SAXParser";
 
-    /**
-     * Parse all user parameter data defined in XML file.
-     * 
-     * @param xmlURI  name of the XML to load users parameter data
-     * @return        all users name value pairs obtained from XML file
-     */
-    public List getXMLParameters(String xmlURI)
-        throws SAXException, IOException
-    {
-        //create instances needed for parsing
-        XMLReader reader = JMeterUtils.getXMLParser();
-        //XMLReaderFactory.createXMLReader(vendorParseClass);
-        UserParameterXMLContentHandler threadParametersContentHandler =
-            new UserParameterXMLContentHandler();
-        UserParameterXMLErrorHandler parameterErrorHandler =
-            new UserParameterXMLErrorHandler();
+	/**
+	 * Parse all user parameter data defined in XML file.
+	 * 
+	 * @param xmlURI
+	 *            name of the XML to load users parameter data
+	 * @return all users name value pairs obtained from XML file
+	 */
+	public List getXMLParameters(String xmlURI) throws SAXException, IOException {
+		// create instances needed for parsing
+		XMLReader reader = JMeterUtils.getXMLParser();
+		// XMLReaderFactory.createXMLReader(vendorParseClass);
+		UserParameterXMLContentHandler threadParametersContentHandler = new UserParameterXMLContentHandler();
+		UserParameterXMLErrorHandler parameterErrorHandler = new UserParameterXMLErrorHandler();
 
-        //register content handler
-        reader.setContentHandler(threadParametersContentHandler);
+		// register content handler
+		reader.setContentHandler(threadParametersContentHandler);
 
-        // register error handler
-        reader.setErrorHandler(parameterErrorHandler);
+		// register error handler
+		reader.setErrorHandler(parameterErrorHandler);
 
-        // Request validation
-        reader.setFeature("http://xml.org/sax/features/validation", true);
+		// Request validation
+		reader.setFeature("http://xml.org/sax/features/validation", true);
 
-        //parse
-        InputSource inputSource = new InputSource(xmlURI);
-        reader.parse(inputSource);
+		// parse
+		InputSource inputSource = new InputSource(xmlURI);
+		reader.parse(inputSource);
 
-        return threadParametersContentHandler.getParsedParameters();
-    }
+		return threadParametersContentHandler.getParsedParameters();
+	}
 }

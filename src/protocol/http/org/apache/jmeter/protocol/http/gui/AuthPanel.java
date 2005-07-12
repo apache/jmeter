@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.gui;
 
@@ -54,412 +54,324 @@ import org.apache.log.Logger;
  * Handles input for determining if authentication services are required for a
  * Sampler. It also understands how to get AuthManagers for the files that the
  * user selects.
- *
- * @version   $Revision$  Last updated: $Date$
+ * 
+ * @version $Revision$ Last updated: $Date$
  */
-public class AuthPanel extends AbstractConfigGui implements ActionListener
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+public class AuthPanel extends AbstractConfigGui implements ActionListener {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    private static final String ADD_COMMAND = "Add";
-    private static final String DELETE_COMMAND = "Delete";
-    private static final String LOAD_COMMAND = "Load";
-    private static final String SAVE_COMMAND = "Save";
+	private static final String ADD_COMMAND = "Add";
 
-    private InnerTableModel tableModel;
+	private static final String DELETE_COMMAND = "Delete";
 
-    /**
-     * A table to show the authentication information.
-     */
-    private JTable authTable;
+	private static final String LOAD_COMMAND = "Load";
 
-    private JButton addButton;
-    private JButton deleteButton;
-    private JButton loadButton;
-    private JButton saveButton;
+	private static final String SAVE_COMMAND = "Save";
 
-    /**
-     * Default Constructor.
-     */
-    public AuthPanel()
-    {
-        tableModel = new InnerTableModel();
-        init();
-    }
+	private InnerTableModel tableModel;
 
-    public TestElement createTestElement()
-    {
-        AuthManager authMan = tableModel.manager;
-        configureTestElement(authMan);
-        return (TestElement) authMan.clone();
-    }
+	/**
+	 * A table to show the authentication information.
+	 */
+	private JTable authTable;
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement el)
-    {
-       if (authTable.isEditing())
-       {
-          authTable.getCellEditor().stopCellEditing();
-       }
-        el.clear();
-        el.addTestElement((TestElement) tableModel.manager.clone());
-        configureTestElement(el);
-    }
+	private JButton addButton;
 
-    public void configure(TestElement el)
-    {
-        super.configure(el);
-        tableModel.manager.clear();
-        tableModel.manager.addTestElement((AuthManager) el.clone());
-    }
+	private JButton deleteButton;
 
-    public String getLabelResource()
-    {
-        return "auth_manager_title";
-    }
+	private JButton loadButton;
 
-    /**
-     * Shows the main authentication panel for this object.
-     */
-    public void init()
-    {
-        setLayout(new BorderLayout());
-        setBorder(makeBorder());
+	private JButton saveButton;
 
-        add(makeTitlePanel(), BorderLayout.NORTH);
-        add(createAuthTablePanel(), BorderLayout.CENTER);
-    }
+	/**
+	 * Default Constructor.
+	 */
+	public AuthPanel() {
+		tableModel = new InnerTableModel();
+		init();
+	}
 
-    public void actionPerformed(ActionEvent e)
-    {
-        String action = e.getActionCommand();
+	public TestElement createTestElement() {
+		AuthManager authMan = tableModel.manager;
+		configureTestElement(authMan);
+		return (TestElement) authMan.clone();
+	}
 
-        if (action.equals(DELETE_COMMAND))
-        {
-            if (tableModel.getRowCount() > 0)
-            {
-                // If a table cell is being edited, we must cancel the editing
-                // before deleting the row.
-                if (authTable.isEditing())
-                {
-                    TableCellEditor cellEditor =
-                        authTable.getCellEditor(
-                            authTable.getEditingRow(),
-                            authTable.getEditingColumn());
-                    cellEditor.cancelCellEditing();
-                }
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement el) {
+		if (authTable.isEditing()) {
+			authTable.getCellEditor().stopCellEditing();
+		}
+		el.clear();
+		el.addTestElement((TestElement) tableModel.manager.clone());
+		configureTestElement(el);
+	}
 
-                int rowSelected = authTable.getSelectedRow();
+	public void configure(TestElement el) {
+		super.configure(el);
+		tableModel.manager.clear();
+		tableModel.manager.addTestElement((AuthManager) el.clone());
+	}
 
-                if (rowSelected != -1)
-                {
-                    tableModel.removeRow(rowSelected);
-                    tableModel.fireTableDataChanged();
+	public String getLabelResource() {
+		return "auth_manager_title";
+	}
 
-                    // Disable the DELETE and SAVE buttons if no rows remaining
-                    // after delete.
-                    if (tableModel.getRowCount() == 0)
-                    {
-                        deleteButton.setEnabled(false);
-                        saveButton.setEnabled(false);
-                    }
+	/**
+	 * Shows the main authentication panel for this object.
+	 */
+	public void init() {
+		setLayout(new BorderLayout());
+		setBorder(makeBorder());
 
-                    // Table still contains one or more rows, so highlight
-                    // (select) the appropriate one.
-                    else
-                    {
-                        int rowToSelect = rowSelected;
+		add(makeTitlePanel(), BorderLayout.NORTH);
+		add(createAuthTablePanel(), BorderLayout.CENTER);
+	}
 
-                        if (rowSelected >= tableModel.getRowCount())
-                        {
-                            rowToSelect = rowSelected - 1;
-                        }
+	public void actionPerformed(ActionEvent e) {
+		String action = e.getActionCommand();
 
-                        authTable.setRowSelectionInterval(
-                            rowToSelect,
-                            rowToSelect);
-                    }
-                }
-            }
-        }
-        else if (action.equals(ADD_COMMAND))
-        {
-            // If a table cell is being edited, we should accept the current
-            // value and stop the editing before adding a new row.
-            if (authTable.isEditing())
-            {
-                TableCellEditor cellEditor =
-                    authTable.getCellEditor(
-                        authTable.getEditingRow(),
-                        authTable.getEditingColumn());
-                cellEditor.stopCellEditing();
-            }
+		if (action.equals(DELETE_COMMAND)) {
+			if (tableModel.getRowCount() > 0) {
+				// If a table cell is being edited, we must cancel the editing
+				// before deleting the row.
+				if (authTable.isEditing()) {
+					TableCellEditor cellEditor = authTable.getCellEditor(authTable.getEditingRow(), authTable
+							.getEditingColumn());
+					cellEditor.cancelCellEditing();
+				}
 
-            tableModel.addNewRow();
-            tableModel.fireTableDataChanged();
+				int rowSelected = authTable.getSelectedRow();
 
-            // Enable the DELETE and SAVE buttons if they are currently
-            // disabled.
-            if (!deleteButton.isEnabled())
-            {
-                deleteButton.setEnabled(true);
-            }
-            if (!saveButton.isEnabled())
-            {
-                saveButton.setEnabled(true);
-            }
+				if (rowSelected != -1) {
+					tableModel.removeRow(rowSelected);
+					tableModel.fireTableDataChanged();
 
-            // Highlight (select) the appropriate row.
-            int rowToSelect = tableModel.getRowCount() - 1;
-            authTable.setRowSelectionInterval(rowToSelect, rowToSelect);
-        }
-        else if (action.equals(LOAD_COMMAND))
-        {
-            try
-            {
-                File tmp = FileDialoger.promptToOpenFile().getSelectedFile();
-                if (tmp != null)
-                {
-                    tableModel.manager.addFile(tmp.getAbsolutePath());
-                    tableModel.fireTableDataChanged();
+					// Disable the DELETE and SAVE buttons if no rows remaining
+					// after delete.
+					if (tableModel.getRowCount() == 0) {
+						deleteButton.setEnabled(false);
+						saveButton.setEnabled(false);
+					}
 
-                    if (tableModel.getRowCount() > 0)
-                    {
-                        deleteButton.setEnabled(true);
-                        saveButton.setEnabled(true);
-                    }
-                }
-            }
-            catch (IOException ex)
-            {
-                log.error("", ex);
-            }
-            catch (NullPointerException err)
-            {
-            }
-        }
-        else if (action.equals(SAVE_COMMAND))
-        {
-            try
-            {
-                File tmp =
-                    FileDialoger.promptToSaveFile(null).getSelectedFile();
-                if (tmp != null)
-                {
-                    tableModel.manager.save(tmp.getAbsolutePath());
-                }
-            }
-            catch (IOException ex)
-            {
-                log.error("", ex);
-            }
-            catch (NullPointerException err)
-            {
-            }
-        }
-    }
+					// Table still contains one or more rows, so highlight
+					// (select) the appropriate one.
+					else {
+						int rowToSelect = rowSelected;
 
-    public JPanel createAuthTablePanel()
-    {
-        // create the JTable that holds auth per row
-        authTable = new JTable(tableModel);
-        authTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        authTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
+						if (rowSelected >= tableModel.getRowCount()) {
+							rowToSelect = rowSelected - 1;
+						}
 
-        TableColumn passwordColumn = authTable.getColumnModel().getColumn(2);
-        passwordColumn.setCellEditor(
-            new DefaultCellEditor(new JPasswordField()));
-        passwordColumn.setCellRenderer(new PasswordCellRenderer());
+						authTable.setRowSelectionInterval(rowToSelect, rowToSelect);
+					}
+				}
+			}
+		} else if (action.equals(ADD_COMMAND)) {
+			// If a table cell is being edited, we should accept the current
+			// value and stop the editing before adding a new row.
+			if (authTable.isEditing()) {
+				TableCellEditor cellEditor = authTable.getCellEditor(authTable.getEditingRow(), authTable
+						.getEditingColumn());
+				cellEditor.stopCellEditing();
+			}
 
-        JPanel panel = new JPanel(new BorderLayout(0, 5));
-        panel.setBorder(
-            BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
-                JMeterUtils.getResString("auths_stored")));
-        panel.add(new JScrollPane(authTable));
-        panel.add(createButtonPanel(), BorderLayout.SOUTH);
-        return panel;
-    }
+			tableModel.addNewRow();
+			tableModel.fireTableDataChanged();
 
-    private JButton createButton(
-        String resName,
-        char mnemonic,
-        String command,
-        boolean enabled)
-    {
-        JButton button = new JButton(JMeterUtils.getResString(resName));
-        button.setMnemonic(mnemonic);
-        button.setActionCommand(command);
-        button.setEnabled(enabled);
-        button.addActionListener(this);
-        return button;
-    }
+			// Enable the DELETE and SAVE buttons if they are currently
+			// disabled.
+			if (!deleteButton.isEnabled()) {
+				deleteButton.setEnabled(true);
+			}
+			if (!saveButton.isEnabled()) {
+				saveButton.setEnabled(true);
+			}
 
-    private JPanel createButtonPanel()
-    {
-        boolean tableEmpty = (tableModel.getRowCount() == 0);
+			// Highlight (select) the appropriate row.
+			int rowToSelect = tableModel.getRowCount() - 1;
+			authTable.setRowSelectionInterval(rowToSelect, rowToSelect);
+		} else if (action.equals(LOAD_COMMAND)) {
+			try {
+				File tmp = FileDialoger.promptToOpenFile().getSelectedFile();
+				if (tmp != null) {
+					tableModel.manager.addFile(tmp.getAbsolutePath());
+					tableModel.fireTableDataChanged();
 
-        addButton = createButton("add", 'A', ADD_COMMAND, true);
-        deleteButton = createButton("delete", 'D', DELETE_COMMAND, !tableEmpty);
-        loadButton = createButton("load", 'L', LOAD_COMMAND, true);
-        saveButton = createButton("save", 'S', SAVE_COMMAND, !tableEmpty);
+					if (tableModel.getRowCount() > 0) {
+						deleteButton.setEnabled(true);
+						saveButton.setEnabled(true);
+					}
+				}
+			} catch (IOException ex) {
+				log.error("", ex);
+			} catch (NullPointerException err) {
+			}
+		} else if (action.equals(SAVE_COMMAND)) {
+			try {
+				File tmp = FileDialoger.promptToSaveFile(null).getSelectedFile();
+				if (tmp != null) {
+					tableModel.manager.save(tmp.getAbsolutePath());
+				}
+			} catch (IOException ex) {
+				log.error("", ex);
+			} catch (NullPointerException err) {
+			}
+		}
+	}
 
-        // Button Panel
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(addButton);
-        buttonPanel.add(deleteButton);
-        buttonPanel.add(loadButton);
-        buttonPanel.add(saveButton);
-        return buttonPanel;
-    }
+	public JPanel createAuthTablePanel() {
+		// create the JTable that holds auth per row
+		authTable = new JTable(tableModel);
+		authTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		authTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
-    /**
-     * @version   $Revision$
-     */
-    private class InnerTableModel extends AbstractTableModel
-    {
-        AuthManager manager;
+		TableColumn passwordColumn = authTable.getColumnModel().getColumn(2);
+		passwordColumn.setCellEditor(new DefaultCellEditor(new JPasswordField()));
+		passwordColumn.setCellRenderer(new PasswordCellRenderer());
 
-        public InnerTableModel(AuthManager man)
-        {
-            manager = man;
-        }
+		JPanel panel = new JPanel(new BorderLayout(0, 5));
+		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+				.getResString("auths_stored")));
+		panel.add(new JScrollPane(authTable));
+		panel.add(createButtonPanel(), BorderLayout.SOUTH);
+		return panel;
+	}
 
-        public InnerTableModel()
-        {
-            manager = new AuthManager();
-        }
+	private JButton createButton(String resName, char mnemonic, String command, boolean enabled) {
+		JButton button = new JButton(JMeterUtils.getResString(resName));
+		button.setMnemonic(mnemonic);
+		button.setActionCommand(command);
+		button.setEnabled(enabled);
+		button.addActionListener(this);
+		return button;
+	}
 
-        public void removeRow(int row)
-        {
-            manager.remove(row);
-        }
+	private JPanel createButtonPanel() {
+		boolean tableEmpty = (tableModel.getRowCount() == 0);
 
-        public void addNewRow()
-        {
-            manager.addAuth();
-        }
+		addButton = createButton("add", 'A', ADD_COMMAND, true);
+		deleteButton = createButton("delete", 'D', DELETE_COMMAND, !tableEmpty);
+		loadButton = createButton("load", 'L', LOAD_COMMAND, true);
+		saveButton = createButton("save", 'S', SAVE_COMMAND, !tableEmpty);
 
-        public boolean isCellEditable(int row, int column)
-        {
-            // all table cells are editable
-            return true;
-        }
+		// Button Panel
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(addButton);
+		buttonPanel.add(deleteButton);
+		buttonPanel.add(loadButton);
+		buttonPanel.add(saveButton);
+		return buttonPanel;
+	}
 
-        public Class getColumnClass(int column)
-        {
-            return getValueAt(0, column).getClass();
-        }
+	/**
+	 * @version $Revision$
+	 */
+	private class InnerTableModel extends AbstractTableModel {
+		AuthManager manager;
 
-        /**
-         * Required by table model interface.
-         */
-        public int getRowCount()
-        {
-            return manager.getAuthObjects().size();
-        }
+		public InnerTableModel(AuthManager man) {
+			manager = man;
+		}
 
-        /**
-         * Required by table model interface.
-         */
-        public int getColumnCount()
-        {
-            return manager.getColumnCount();
-        }
+		public InnerTableModel() {
+			manager = new AuthManager();
+		}
 
-        /**
-         * Required by table model interface.
-         */
-        public String getColumnName(int column)
-        {
-            return manager.getColumnName(column);
-        }
+		public void removeRow(int row) {
+			manager.remove(row);
+		}
 
-        /**
-         * Required by table model interface.
-         */
-        public Object getValueAt(int row, int column)
-        {
-            Authorization auth = manager.getAuthObjectAt(row);
+		public void addNewRow() {
+			manager.addAuth();
+		}
 
-            if (column == 0)
-            {
-                return auth.getURL();
-            }
-            else if (column == 1)
-            {
-                return auth.getUser();
-            }
-            else if (column == 2)
-            {
-                return auth.getPass();
-            }
-            return null;
-        }
+		public boolean isCellEditable(int row, int column) {
+			// all table cells are editable
+			return true;
+		}
 
-        public void setValueAt(Object value, int row, int column)
-        {
-            Authorization auth = manager.getAuthObjectAt(row);
-            log.debug("Setting auth value: " + value);
-            if (column == 0)
-            {
-                auth.setURL((String) value);
-            }
-            else if (column == 1)
-            {
-                auth.setUser((String) value);
-            }
-            else if (column == 2)
-            {
-                auth.setPass((String) value);
-            }
-        }
-    }
+		public Class getColumnClass(int column) {
+			return getValueAt(0, column).getClass();
+		}
 
-    /**
-     * @version   $Revision$
-     */
-    private class PasswordCellRenderer
-        extends JPasswordField
-        implements TableCellRenderer
-    {
-        private Border myBorder;
+		/**
+		 * Required by table model interface.
+		 */
+		public int getRowCount() {
+			return manager.getAuthObjects().size();
+		}
 
-        public PasswordCellRenderer()
-        {
-            super();
-            myBorder = new EmptyBorder(1, 2, 1, 2);
-            setOpaque(true);
-            setBorder(myBorder);
-        }
+		/**
+		 * Required by table model interface.
+		 */
+		public int getColumnCount() {
+			return manager.getColumnCount();
+		}
 
-        public Component getTableCellRendererComponent(
-            JTable table,
-            Object value,
-            boolean isSelected,
-            boolean hasFocus,
-            int row,
-            int column)
-        {
-            setText((String) value);
+		/**
+		 * Required by table model interface.
+		 */
+		public String getColumnName(int column) {
+			return manager.getColumnName(column);
+		}
 
-            setBackground(
-                isSelected
-                    && !hasFocus
-                        ? table.getSelectionBackground()
-                        : table.getBackground());
-            setForeground(
-                isSelected
-                    && !hasFocus
-                        ? table.getSelectionForeground()
-                        : table.getForeground());
+		/**
+		 * Required by table model interface.
+		 */
+		public Object getValueAt(int row, int column) {
+			Authorization auth = manager.getAuthObjectAt(row);
 
-            setFont(table.getFont());
+			if (column == 0) {
+				return auth.getURL();
+			} else if (column == 1) {
+				return auth.getUser();
+			} else if (column == 2) {
+				return auth.getPass();
+			}
+			return null;
+		}
 
-            return this;
-        }
-    }
+		public void setValueAt(Object value, int row, int column) {
+			Authorization auth = manager.getAuthObjectAt(row);
+			log.debug("Setting auth value: " + value);
+			if (column == 0) {
+				auth.setURL((String) value);
+			} else if (column == 1) {
+				auth.setUser((String) value);
+			} else if (column == 2) {
+				auth.setPass((String) value);
+			}
+		}
+	}
+
+	/**
+	 * @version $Revision$
+	 */
+	private class PasswordCellRenderer extends JPasswordField implements TableCellRenderer {
+		private Border myBorder;
+
+		public PasswordCellRenderer() {
+			super();
+			myBorder = new EmptyBorder(1, 2, 1, 2);
+			setOpaque(true);
+			setBorder(myBorder);
+		}
+
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+				boolean hasFocus, int row, int column) {
+			setText((String) value);
+
+			setBackground(isSelected && !hasFocus ? table.getSelectionBackground() : table.getBackground());
+			setForeground(isSelected && !hasFocus ? table.getSelectionForeground() : table.getForeground());
+
+			setFont(table.getFont());
+
+			return this;
+		}
+	}
 }

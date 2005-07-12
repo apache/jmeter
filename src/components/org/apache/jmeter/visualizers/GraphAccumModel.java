@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.visualizers;
 
@@ -29,183 +29,171 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-
 /**
  * The model that collects the average of the set of pages to be sampled.
- *
- * @author     Khor Soon Hin
- * Created      2001/08/11
- * @version    $Revision$ Last updated: $Date$
+ * 
+ * @author Khor Soon Hin Created 2001/08/11
+ * @version $Revision$ Last updated: $Date$
  */
 
-public class GraphAccumModel implements Clearable, Serializable
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+public class GraphAccumModel implements Clearable, Serializable {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    protected String name;
-    protected List samples;
-    protected List listeners;
+	protected String name;
 
-    protected long averageSum = 0;
-    protected long variationSum = 0;
-    protected long counter = 0;
-    protected long previous = 0;
-    protected long max = 1;
-    protected boolean bigChange = false;
-    protected SampleResult current;
+	protected List samples;
 
-    /**
-     * Constructor.
-     */
-    public GraphAccumModel()
-    {
-        log.debug("Start : GraphAccumModel1");
-        listeners = new LinkedList();
-        samples = Collections.synchronizedList(new LinkedList());
-        log.debug("End : GraphAccumModel1");
-    }
+	protected List listeners;
 
-    /**
-     * Sets the Name attribute of the GraphModel object.
-     *
-     * @param  name  the new Name value
-     */
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+	protected long averageSum = 0;
 
-    /**
-     * Gets the SampleCount attribute of the GraphAccumModel object.
-     *
-     * @return    the SampleCount value
-     */
-    public int getSampleCount()
-    {
-        return samples.size();
-    }
+	protected long variationSum = 0;
 
-    /**
-     * Gets the List attribute of the GraphAccumModel object.
-     *
-     * @return    the List value
-     */
-    public List getList()
-    {
-        return samples;
-    }
+	protected long counter = 0;
 
-    /**
-     * Gets the Name attribute of the GraphModel object.
-     *
-     * @return    the Name value
-     */
-    public String getName()
-    {
-        return name;
-    }
+	protected long previous = 0;
 
-    /**
-     * Gets the Max attribute of the GraphAccumModel object.
-     *
-     * @return    the Max value
-     */
-    public long getMax()
-    {
-        log.debug("getMax1 : Returning - " + max);
-        return max;
-    }
+	protected long max = 1;
 
-    /**
-     * Adds a feature to the ModelListener attribute of the GraphAccumModel
-     * object.
-     *
-     * @param  listener   the feature to be added to the GraphAccumListener
-     *                    attribute.
-     */
-    public void addGraphAccumListener(GraphAccumListener listener)
-    {
-        listeners.add(listener);
-    }
+	protected boolean bigChange = false;
 
-    /**
-     * Clear the results.
-     */
-    public void clear()
-    {
-        log.debug("Start : clear1");
-        samples.clear();
-        max = 1;
-        bigChange = true;
-        this.fireDataChanged();
-        log.debug("End : clear1");
-    }
+	protected SampleResult current;
 
-    /**
-     * Add the new sample to the results.
-     *
-     * @param  res  sample containing the results
-     */
-    public void addNewSample(SampleResult res)
-    {
-        log.debug("Start : addNewSample1");
-        // Set time to time taken to load this url without components (e.g.
-        // images etc)
-        long totalTime = res.getTime();
+	/**
+	 * Constructor.
+	 */
+	public GraphAccumModel() {
+		log.debug("Start : GraphAccumModel1");
+		listeners = new LinkedList();
+		samples = Collections.synchronizedList(new LinkedList());
+		log.debug("End : GraphAccumModel1");
+	}
 
-        if (log.isDebugEnabled())
-        {
-            log.debug("addNewSample1 : time - " + totalTime);
-            log.debug("addNewSample1 : max - " + max);
-        }
-        if (totalTime > max)
-        {
-            bigChange = true;
-            max = totalTime;
-        }
-        current = res;
-        samples.add(res);
-        log.debug("End : addNewSample1");
-        fireDataChanged();
-    }
+	/**
+	 * Sets the Name attribute of the GraphModel object.
+	 * 
+	 * @param name
+	 *            the new Name value
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    /**
-     *  Depending on whether the graph needs to be rescale call the appropriate
-     *  methods.
-     */
-    protected void fireDataChanged()
-    {
-        log.debug("Start : fireDataChanged1");
-        Iterator iter = listeners.iterator();
+	/**
+	 * Gets the SampleCount attribute of the GraphAccumModel object.
+	 * 
+	 * @return the SampleCount value
+	 */
+	public int getSampleCount() {
+		return samples.size();
+	}
 
-        if (bigChange)
-        {
-            while (iter.hasNext())
-            {
-                ((GraphAccumListener) iter.next()).updateGui();
-            }
-            bigChange = false;
-        }
-        else
-        {
-            quickUpdate(current);
-        }
-        log.debug("End : fireDataChanged1");
-    }
+	/**
+	 * Gets the List attribute of the GraphAccumModel object.
+	 * 
+	 * @return the List value
+	 */
+	public List getList() {
+		return samples;
+	}
 
-    /**
-     * The sample to be added did not exceed the current set of samples so do
-     * not need to rescale graph.
-     */
-    protected void quickUpdate(SampleResult s)
-    {
-        Iterator iter = listeners.iterator();
-        {
-            while (iter.hasNext())
-            {
-                ((GraphAccumListener) iter.next()).updateGui(s);
-            }
-        }
-    }
+	/**
+	 * Gets the Name attribute of the GraphModel object.
+	 * 
+	 * @return the Name value
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Gets the Max attribute of the GraphAccumModel object.
+	 * 
+	 * @return the Max value
+	 */
+	public long getMax() {
+		log.debug("getMax1 : Returning - " + max);
+		return max;
+	}
+
+	/**
+	 * Adds a feature to the ModelListener attribute of the GraphAccumModel
+	 * object.
+	 * 
+	 * @param listener
+	 *            the feature to be added to the GraphAccumListener attribute.
+	 */
+	public void addGraphAccumListener(GraphAccumListener listener) {
+		listeners.add(listener);
+	}
+
+	/**
+	 * Clear the results.
+	 */
+	public void clear() {
+		log.debug("Start : clear1");
+		samples.clear();
+		max = 1;
+		bigChange = true;
+		this.fireDataChanged();
+		log.debug("End : clear1");
+	}
+
+	/**
+	 * Add the new sample to the results.
+	 * 
+	 * @param res
+	 *            sample containing the results
+	 */
+	public void addNewSample(SampleResult res) {
+		log.debug("Start : addNewSample1");
+		// Set time to time taken to load this url without components (e.g.
+		// images etc)
+		long totalTime = res.getTime();
+
+		if (log.isDebugEnabled()) {
+			log.debug("addNewSample1 : time - " + totalTime);
+			log.debug("addNewSample1 : max - " + max);
+		}
+		if (totalTime > max) {
+			bigChange = true;
+			max = totalTime;
+		}
+		current = res;
+		samples.add(res);
+		log.debug("End : addNewSample1");
+		fireDataChanged();
+	}
+
+	/**
+	 * Depending on whether the graph needs to be rescale call the appropriate
+	 * methods.
+	 */
+	protected void fireDataChanged() {
+		log.debug("Start : fireDataChanged1");
+		Iterator iter = listeners.iterator();
+
+		if (bigChange) {
+			while (iter.hasNext()) {
+				((GraphAccumListener) iter.next()).updateGui();
+			}
+			bigChange = false;
+		} else {
+			quickUpdate(current);
+		}
+		log.debug("End : fireDataChanged1");
+	}
+
+	/**
+	 * The sample to be added did not exceed the current set of samples so do
+	 * not need to rescale graph.
+	 */
+	protected void quickUpdate(SampleResult s) {
+		Iterator iter = listeners.iterator();
+		{
+			while (iter.hasNext()) {
+				((GraphAccumListener) iter.next()).updateGui(s);
+			}
+		}
+	}
 }
-

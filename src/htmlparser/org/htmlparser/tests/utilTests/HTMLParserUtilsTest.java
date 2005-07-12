@@ -29,26 +29,19 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.utilTests;
 
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserUtils;
 
-public class HTMLParserUtilsTest extends ParserTestCase
-{
+public class HTMLParserUtilsTest extends ParserTestCase {
 
-    public HTMLParserUtilsTest(String name)
-    {
-        super(name);
-    }
+	public HTMLParserUtilsTest(String name) {
+		super(name);
+	}
 
-    public void testRemoveTrailingSpaces()
-    {
-        String text = "Hello World  ";
-        assertStringEquals(
-            "modified text",
-            "Hello World",
-            ParserUtils.removeTrailingBlanks(text));
-    }
+	public void testRemoveTrailingSpaces() {
+		String text = "Hello World  ";
+		assertStringEquals("modified text", "Hello World", ParserUtils.removeTrailingBlanks(text));
+	}
 }

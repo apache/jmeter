@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui.util;
+
 import java.awt.Component;
 
 import javax.swing.SwingUtilities;
@@ -27,30 +28,25 @@ import org.apache.log.Logger;
 /**
  * Note: This helper class appeared in JavaWorld in June 2001
  * (http://www.javaworld.com) and was written by Michael Daconta.
- *
- * @author    Kevin Hammond
- * @version   $Revision$
+ * 
+ * @author Kevin Hammond
+ * @version $Revision$
  */
-public class FocusRequester implements Runnable
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
-    private Component comp;
+public class FocusRequester implements Runnable {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    public FocusRequester(Component comp)
-    {
-        this.comp = comp;
-        try
-        {
-            SwingUtilities.invokeLater(this);
-        }
-        catch (Exception e)
-        {
-            log.error("", e);
-        }
-    }
+	private Component comp;
 
-    public void run()
-    {
-        comp.requestFocus();
-    }
+	public FocusRequester(Component comp) {
+		this.comp = comp;
+		try {
+			SwingUtilities.invokeLater(this);
+		} catch (Exception e) {
+			log.error("", e);
+		}
+	}
+
+	public void run() {
+		comp.requestFocus();
+	}
 }

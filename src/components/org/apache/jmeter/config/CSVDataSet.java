@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.config;
 
@@ -30,85 +30,83 @@ import org.apache.log.Logger;
 
 /**
  * @author mstover
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * 
+ * TODO To change the template for this generated type comment go to Window -
+ * Preferences - Java - Code Style - Code Templates
  */
-public class CSVDataSet extends ConfigTestElement implements TestBean, LoopIterationListener
-{
-    private static Logger log = LoggingManager.getLoggerForClass();
-    static final public long serialVersionUID = 1;
-    
-    transient String filename;
-    transient String variableNames;
+public class CSVDataSet extends ConfigTestElement implements TestBean, LoopIterationListener {
+	private static Logger log = LoggingManager.getLoggerForClass();
+
+	static final public long serialVersionUID = 1;
+
+	transient String filename;
+
+	transient String variableNames;
+
 	transient String delimiter;
 
 	transient private String[] vars;
-    
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
-     */
-    public void iterationStart(LoopIterationEvent iterEvent)
-    {
-        FileServer server = FileServer.getFileServer();
-        if(vars == null)
-        {
-            server.reserveFile(getFilename());
-            vars = JOrphanUtils.split(getVariableNames(),",");
-        }
-        try
-        {
-			String delim=getDelimiter();
-			if (delim.equals("\\t")) delim="\t";// Make it easier to enter a Tab
-            String[] lineValues = JOrphanUtils.split(server.readLine(getFilename()),delim);
-	        for(int a = 0;a < vars.length && a < lineValues.length;a++)
-	        {
-	            this.getThreadContext().getVariables().put(vars[a],lineValues[a]);
-	        }
-        }
-        catch(IOException e)
-        {
-            log.error("Failed to read file: " + getFilename());
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+	 */
+	public void iterationStart(LoopIterationEvent iterEvent) {
+		FileServer server = FileServer.getFileServer();
+		if (vars == null) {
+			server.reserveFile(getFilename());
+			vars = JOrphanUtils.split(getVariableNames(), ",");
+		}
+		try {
+			String delim = getDelimiter();
+			if (delim.equals("\\t"))
+				delim = "\t";// Make it easier to enter a Tab
+			String[] lineValues = JOrphanUtils.split(server.readLine(getFilename()), delim);
+			for (int a = 0; a < vars.length && a < lineValues.length; a++) {
+				this.getThreadContext().getVariables().put(vars[a], lineValues[a]);
+			}
+		} catch (IOException e) {
+			log.error("Failed to read file: " + getFilename());
+		}
+	}
 
-    /**
-     * @return Returns the filename.
-     */
-    public String getFilename()
-    {
-        return filename;
-    }
-    /**
-     * @param filename The filename to set.
-     */
-    public void setFilename(String filename)
-    {
-        this.filename = filename;
-    }
-    /**
-     * @return Returns the variableNames.
-     */
-    public String getVariableNames()
-    {
-        return variableNames;
-    }
-    /**
-     * @param variableNames The variableNames to set.
-     */
-    public void setVariableNames(String variableNames)
-    {
-        this.variableNames = variableNames;
-    }
+	/**
+	 * @return Returns the filename.
+	 */
+	public String getFilename() {
+		return filename;
+	}
+
+	/**
+	 * @param filename
+	 *            The filename to set.
+	 */
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+
+	/**
+	 * @return Returns the variableNames.
+	 */
+	public String getVariableNames() {
+		return variableNames;
+	}
+
+	/**
+	 * @param variableNames
+	 *            The variableNames to set.
+	 */
+	public void setVariableNames(String variableNames) {
+		this.variableNames = variableNames;
+	}
 
 	public String getDelimiter() {
 		return delimiter;
 	}
-	
 
 	public void setDelimiter(String delimiter) {
 		this.delimiter = delimiter;
 	}
-	
+
 }

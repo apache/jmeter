@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.util;
 
@@ -26,36 +26,29 @@ import org.apache.oro.util.CacheLRU;
 
 /**
  * @author Administrator
- *
+ * 
  * @version $Revision$ last updated $Date$
  */
-public class EncoderCache
-{
-    Cache cache;
+public class EncoderCache {
+	Cache cache;
 
-    public EncoderCache(int cacheSize)
-    {
-       cache = new CacheLRU(cacheSize);
-    }
-    
-    public String getEncoded(String k)
-    {
-        Object encodedValue = cache.getElement(k);
-        if(encodedValue != null)
-        {
-            return (String)encodedValue;
-        }
-        try
-        {
-            encodedValue = JOrphanUtils.encode(k, "utf8");
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            // This can't happen (how should utf8 not be supported!?!),
-            // so just throw an Error:
-            throw new Error("Should not happen: "+e.toString());
-        }
-        cache.addElement(k,encodedValue);
-        return (String)encodedValue;
-    }
+	public EncoderCache(int cacheSize) {
+		cache = new CacheLRU(cacheSize);
+	}
+
+	public String getEncoded(String k) {
+		Object encodedValue = cache.getElement(k);
+		if (encodedValue != null) {
+			return (String) encodedValue;
+		}
+		try {
+			encodedValue = JOrphanUtils.encode(k, "utf8");
+		} catch (UnsupportedEncodingException e) {
+			// This can't happen (how should utf8 not be supported!?!),
+			// so just throw an Error:
+			throw new Error("Should not happen: " + e.toString());
+		}
+		cache.addElement(k, encodedValue);
+		return (String) encodedValue;
+	}
 }

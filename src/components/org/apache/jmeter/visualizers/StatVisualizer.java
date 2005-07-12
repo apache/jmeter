@@ -52,112 +52,98 @@ import org.apache.jorphan.reflect.Functor;
  * 
  * @version $Revision$ on $Date$
  */
-public class StatVisualizer extends AbstractVisualizer implements
-      Clearable
-{
-   private final String[] COLUMNS = { JMeterUtils.getResString("URL"),
-         JMeterUtils.getResString("aggregate_report_count"),
-         JMeterUtils.getResString("average"),
-         JMeterUtils.getResString("aggregate_report_median"),
-         JMeterUtils.getResString("aggregate_report_90%_line"), 
-         JMeterUtils.getResString("aggregate_report_min"),
-         JMeterUtils.getResString("aggregate_report_max"), 
-         JMeterUtils.getResString("aggregate_report_error%"),
-         JMeterUtils.getResString("aggregate_report_rate"),
-         JMeterUtils.getResString("aggregate_report_bandwidth")};
-   private final String TOTAL_ROW_LABEL = JMeterUtils.getResString("aggregate_report_total_label");
-   protected JTable myJTable;
+public class StatVisualizer extends AbstractVisualizer implements Clearable {
+	private final String[] COLUMNS = { JMeterUtils.getResString("URL"),
+			JMeterUtils.getResString("aggregate_report_count"), JMeterUtils.getResString("average"),
+			JMeterUtils.getResString("aggregate_report_median"), JMeterUtils.getResString("aggregate_report_90%_line"),
+			JMeterUtils.getResString("aggregate_report_min"), JMeterUtils.getResString("aggregate_report_max"),
+			JMeterUtils.getResString("aggregate_report_error%"), JMeterUtils.getResString("aggregate_report_rate"),
+			JMeterUtils.getResString("aggregate_report_bandwidth") };
 
-   protected JScrollPane myScrollPane;
-   transient private ObjectTableModel model;
-   Map tableRows = Collections.synchronizedMap(new HashMap());
+	private final String TOTAL_ROW_LABEL = JMeterUtils.getResString("aggregate_report_total_label");
 
-   public StatVisualizer()
-   {
-      super();
-      model = new ObjectTableModel(COLUMNS, new Functor[] {
-            new Functor("getLabel"), new Functor("getCount"),
-            new Functor("getMeanAsNumber"), new Functor("getMedian"),
-            new Functor("getPercentPoint", new Object[] { new Float(.900)}),
-            new Functor("getMin"), new Functor("getMax"),
-            new Functor("getErrorPercentageString"),
-            new Functor("getRateString"),
-			new Functor("getPageSizeString")}, new Functor[] { null, null, null,
-            null, null, null, null, null, null, null}, new Class[] { String.class,
-            Long.class, Long.class, Long.class, Long.class, Long.class,
-            Long.class, String.class, String.class, String.class});
-      clear();
-      init();
-   }
+	protected JTable myJTable;
 
-   public String getLabelResource()
-   {
-      return "aggregate_report";
-   }
+	protected JScrollPane myScrollPane;
 
-   public void add(SampleResult res)
-   {
-      SamplingStatCalculator row = null;
-      synchronized (tableRows)
-      {
-         row = (SamplingStatCalculator) tableRows.get(res.getSampleLabel());
-         if (row == null)
-         {
-            row = new SamplingStatCalculator(res.getSampleLabel());
-            tableRows.put(row.getLabel(), row);
-            model.insertRow(row,model.getRowCount()-1);
-         }
-      }
-      row.addSample(res);
-      ((SamplingStatCalculator)tableRows.get(TOTAL_ROW_LABEL)).addSample(res);
-      model.fireTableDataChanged();
-   }
+	transient private ObjectTableModel model;
 
-   /**
-    * Clears this visualizer and its model, and forces a repaint of the table.
-    */
-   public void clear()
-   {
-      model.clearData();
-      tableRows.clear();
-      tableRows.put(TOTAL_ROW_LABEL,new SamplingStatCalculator(TOTAL_ROW_LABEL));
-      model.addRow(tableRows.get(TOTAL_ROW_LABEL));
-   }
+	Map tableRows = Collections.synchronizedMap(new HashMap());
 
-   // overrides AbstractVisualizer
-   // forces GUI update after sample file has been read
-   public TestElement createTestElement()
-   {
-      TestElement t = super.createTestElement();
+	public StatVisualizer() {
+		super();
+		model = new ObjectTableModel(COLUMNS, new Functor[] { new Functor("getLabel"), new Functor("getCount"),
+				new Functor("getMeanAsNumber"), new Functor("getMedian"),
+				new Functor("getPercentPoint", new Object[] { new Float(.900) }), new Functor("getMin"),
+				new Functor("getMax"), new Functor("getErrorPercentageString"), new Functor("getRateString"),
+				new Functor("getPageSizeString") }, new Functor[] { null, null, null, null, null, null, null, null,
+				null, null }, new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, Long.class,
+				Long.class, String.class, String.class, String.class });
+		clear();
+		init();
+	}
 
-      //sleepTill = 0;
-      return t;
-   }
+	public String getLabelResource() {
+		return "aggregate_report";
+	}
 
-   /**
-    * Main visualizer setup.
-    */
-   private void init()
-   {
-      this.setLayout(new BorderLayout());
+	public void add(SampleResult res) {
+		SamplingStatCalculator row = null;
+		synchronized (tableRows) {
+			row = (SamplingStatCalculator) tableRows.get(res.getSampleLabel());
+			if (row == null) {
+				row = new SamplingStatCalculator(res.getSampleLabel());
+				tableRows.put(row.getLabel(), row);
+				model.insertRow(row, model.getRowCount() - 1);
+			}
+		}
+		row.addSample(res);
+		((SamplingStatCalculator) tableRows.get(TOTAL_ROW_LABEL)).addSample(res);
+		model.fireTableDataChanged();
+	}
 
-      // MAIN PANEL
-      JPanel mainPanel = new JPanel();
-      Border margin = new EmptyBorder(10, 10, 5, 10);
+	/**
+	 * Clears this visualizer and its model, and forces a repaint of the table.
+	 */
+	public void clear() {
+		model.clearData();
+		tableRows.clear();
+		tableRows.put(TOTAL_ROW_LABEL, new SamplingStatCalculator(TOTAL_ROW_LABEL));
+		model.addRow(tableRows.get(TOTAL_ROW_LABEL));
+	}
 
-      mainPanel.setBorder(margin);
-      mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+	// overrides AbstractVisualizer
+	// forces GUI update after sample file has been read
+	public TestElement createTestElement() {
+		TestElement t = super.createTestElement();
 
-      mainPanel.add(makeTitlePanel());
-      
-      // SortFilterModel mySortedModel =
-      //       new SortFilterModel(myStatTableModel);
-      myJTable = new JTable(model);
-      myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
-      myScrollPane = new JScrollPane(myJTable);
-      this.add(mainPanel, BorderLayout.NORTH);
-      this.add(myScrollPane, BorderLayout.CENTER);
-   }
+		// sleepTill = 0;
+		return t;
+	}
+
+	/**
+	 * Main visualizer setup.
+	 */
+	private void init() {
+		this.setLayout(new BorderLayout());
+
+		// MAIN PANEL
+		JPanel mainPanel = new JPanel();
+		Border margin = new EmptyBorder(10, 10, 5, 10);
+
+		mainPanel.setBorder(margin);
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
+		mainPanel.add(makeTitlePanel());
+
+		// SortFilterModel mySortedModel =
+		// new SortFilterModel(myStatTableModel);
+		myJTable = new JTable(model);
+		myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
+		myScrollPane = new JScrollPane(myJTable);
+		this.add(mainPanel, BorderLayout.NORTH);
+		this.add(myScrollPane, BorderLayout.CENTER);
+	}
 }
 
 /**
@@ -168,102 +154,86 @@ public class StatVisualizer extends AbstractVisualizer implements
  * @version $Revision$
  */
 
-class SortFilterModel extends AbstractTableModel
-{
-   private TableModel model;
-   private int sortColumn;
-   private Row[] rows;
+class SortFilterModel extends AbstractTableModel {
+	private TableModel model;
 
-   public SortFilterModel(TableModel m)
-   {
-      model = m;
-      rows = new Row[model.getRowCount()];
-      for (int i = 0; i < rows.length; i++)
-      {
-         rows[i] = new Row();
-         rows[i].index = i;
-      }
-   }
+	private int sortColumn;
 
-   public SortFilterModel()
-   {
-   }
+	private Row[] rows;
 
-   public void setValueAt(Object aValue, int r, int c)
-   {
-      model.setValueAt(aValue, rows[r].index, c);
-   }
+	public SortFilterModel(TableModel m) {
+		model = m;
+		rows = new Row[model.getRowCount()];
+		for (int i = 0; i < rows.length; i++) {
+			rows[i] = new Row();
+			rows[i].index = i;
+		}
+	}
 
-   public Object getValueAt(int r, int c)
-   {
-      return model.getValueAt(rows[r].index, c);
-   }
+	public SortFilterModel() {
+	}
 
-   public boolean isCellEditable(int r, int c)
-   {
-      return model.isCellEditable(rows[r].index, c);
-   }
+	public void setValueAt(Object aValue, int r, int c) {
+		model.setValueAt(aValue, rows[r].index, c);
+	}
 
-   public int getRowCount()
-   {
-      return model.getRowCount();
-   }
+	public Object getValueAt(int r, int c) {
+		return model.getValueAt(rows[r].index, c);
+	}
 
-   public int getColumnCount()
-   {
-      return model.getColumnCount();
-   }
+	public boolean isCellEditable(int r, int c) {
+		return model.isCellEditable(rows[r].index, c);
+	}
 
-   public String getColumnName(int c)
-   {
-      return model.getColumnName(c);
-   }
+	public int getRowCount() {
+		return model.getRowCount();
+	}
 
-   public Class getColumnClass(int c)
-   {
-      return model.getColumnClass(c);
-   }
+	public int getColumnCount() {
+		return model.getColumnCount();
+	}
 
-   public void sort(int c)
-   {
-      sortColumn = c;
-      Arrays.sort(rows);
-      fireTableDataChanged();
-   }
+	public String getColumnName(int c) {
+		return model.getColumnName(c);
+	}
 
-   public void addMouseListener(final JTable table)
-   {
-      table.getTableHeader().addMouseListener(new MouseAdapter()
-      {
-         public void mouseClicked(MouseEvent event)
-         {
-            if (event.getClickCount() < 2) { return; }
-            int tableColumn = table.columnAtPoint(event.getPoint());
-            int modelColumn = table.convertColumnIndexToModel(tableColumn);
+	public Class getColumnClass(int c) {
+		return model.getColumnClass(c);
+	}
 
-            sort(modelColumn);
-         }
-      });
-   }
+	public void sort(int c) {
+		sortColumn = c;
+		Arrays.sort(rows);
+		fireTableDataChanged();
+	}
 
-   private class Row implements Comparable
-   {
-      public int index;
+	public void addMouseListener(final JTable table) {
+		table.getTableHeader().addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent event) {
+				if (event.getClickCount() < 2) {
+					return;
+				}
+				int tableColumn = table.columnAtPoint(event.getPoint());
+				int modelColumn = table.convertColumnIndexToModel(tableColumn);
 
-      public int compareTo(Object other)
-      {
-         Row otherRow = (Row) other;
-         Object a = model.getValueAt(index, sortColumn);
-         Object b = model.getValueAt(otherRow.index, sortColumn);
+				sort(modelColumn);
+			}
+		});
+	}
 
-         if (a instanceof Comparable)
-         {
-            return ((Comparable) a).compareTo(b);
-         }
-         else
-         {
-            return index - otherRow.index;
-         }
-      }
-   }
+	private class Row implements Comparable {
+		public int index;
+
+		public int compareTo(Object other) {
+			Row otherRow = (Row) other;
+			Object a = model.getValueAt(index, sortColumn);
+			Object b = model.getValueAt(otherRow.index, sortColumn);
+
+			if (a instanceof Comparable) {
+				return ((Comparable) a).compareTo(b);
+			} else {
+				return index - otherRow.index;
+			}
+		}
+	}
 } // class SortFilterModel

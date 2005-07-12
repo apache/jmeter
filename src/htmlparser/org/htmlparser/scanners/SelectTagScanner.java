@@ -29,9 +29,7 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.scanners;
-
 
 import org.htmlparser.Node;
 import org.htmlparser.tags.OptionTag;
@@ -41,41 +39,34 @@ import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 
+public class SelectTagScanner extends CompositeTagScanner {
+	private static final String MATCH_NAME[] = { "SELECT" };
 
-public class SelectTagScanner extends CompositeTagScanner
-{
-    private static final String MATCH_NAME[] = { "SELECT" };
-    private NodeList optionTags;
+	private NodeList optionTags;
 
-    public SelectTagScanner()
-    {
-        super(MATCH_NAME);
-    }
+	public SelectTagScanner() {
+		super(MATCH_NAME);
+	}
 
-    public SelectTagScanner(String filter)
-    {
-        super(filter, MATCH_NAME);
-    }
+	public SelectTagScanner(String filter) {
+		super(filter, MATCH_NAME);
+	}
 
-    public String[] getID()
-    {
-        return MATCH_NAME;
-    }
+	public String[] getID() {
+		return MATCH_NAME;
+	}
 
-    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-    {
-        return new SelectTag(tagData, compositeTagData, optionTags);
-    }
+	public Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
+		return new SelectTag(tagData, compositeTagData, optionTags);
+	}
 
-    public void childNodeEncountered(Node node)
-    {
-        if (node instanceof OptionTag)
-            optionTags.add(node);
-    }
+	public void childNodeEncountered(Node node) {
+		if (node instanceof OptionTag)
+			optionTags.add(node);
+	}
 
-    public void beforeScanningStarts()
-    {
-        optionTags = new NodeList();
-    }
+	public void beforeScanningStarts() {
+		optionTags = new NodeList();
+	}
 
 }

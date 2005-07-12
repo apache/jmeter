@@ -24,53 +24,57 @@ import java.util.Collection;
 
 /**
  * @author mstover
- *
+ * 
  */
-public class TestResultWrapper
-{
-   String version = "";
-   Collection sampleResults;
-   long testStartTime;
-   /**
-    * @return Returns the sampleResults.
-    */
-   public Collection getSampleResults()
-   {
-      return sampleResults;
-   }
-   /**
-    * @param sampleResults The sampleResults to set.
-    */
-   public void setSampleResults(Collection sampleResults)
-   {
-      this.sampleResults = sampleResults;
-   }
-   /**
-    * @return Returns the testStartTime.
-    */
-   public long getTestStartTime()
-   {
-      return testStartTime;
-   }
-   /**
-    * @param testStartTime The testStartTime to set.
-    */
-   public void setTestStartTime(long testStartTime)
-   {
-      this.testStartTime = testStartTime;
-   }
-   /**
-    * @return Returns the version.
-    */
-   public String getVersion()
-   {
-      return version;
-   }
-   /**
-    * @param version The version to set.
-    */
-   public void setVersion(String version)
-   {
-      this.version = version;
-   }
+public class TestResultWrapper {
+	String version = "";
+
+	Collection sampleResults;
+
+	long testStartTime;
+
+	/**
+	 * @return Returns the sampleResults.
+	 */
+	public Collection getSampleResults() {
+		return sampleResults;
+	}
+
+	/**
+	 * @param sampleResults
+	 *            The sampleResults to set.
+	 */
+	public void setSampleResults(Collection sampleResults) {
+		this.sampleResults = sampleResults;
+	}
+
+	/**
+	 * @return Returns the testStartTime.
+	 */
+	public long getTestStartTime() {
+		return testStartTime;
+	}
+
+	/**
+	 * @param testStartTime
+	 *            The testStartTime to set.
+	 */
+	public void setTestStartTime(long testStartTime) {
+		this.testStartTime = testStartTime;
+	}
+
+	/**
+	 * @return Returns the version.
+	 */
+	public String getVersion() {
+		return version;
+	}
+
+	/**
+	 * @param version
+	 *            The version to set.
+	 */
+	public void setVersion(String version) {
+		this.version = version;
+	}
 }

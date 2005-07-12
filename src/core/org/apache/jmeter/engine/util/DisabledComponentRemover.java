@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.engine.util;
 
@@ -27,31 +27,26 @@ import org.apache.jorphan.collections.HashTreeTraverser;
 /**
  * @version $Revision$
  */
-public class DisabledComponentRemover implements HashTreeTraverser
-{
-    HashTree tree;
-    LinkedList stack = new LinkedList();
-    
-    public DisabledComponentRemover(HashTree tree)
-    {
-        this.tree = tree;
-    }
+public class DisabledComponentRemover implements HashTreeTraverser {
+	HashTree tree;
 
-    public void addNode(Object node, HashTree subTree)
-    {
-        stack.addLast(node);
-    }
+	LinkedList stack = new LinkedList();
 
-    public void subtractNode()
-    {
-        TestElement lastNode = (TestElement)stack.removeLast();
-        if(!lastNode.getPropertyAsBoolean(TestElement.ENABLED))
-        {
-            tree.getTree(stack).remove(lastNode);
-        }
-    }
+	public DisabledComponentRemover(HashTree tree) {
+		this.tree = tree;
+	}
 
-    public void processPath()
-    {
-    }
+	public void addNode(Object node, HashTree subTree) {
+		stack.addLast(node);
+	}
+
+	public void subtractNode() {
+		TestElement lastNode = (TestElement) stack.removeLast();
+		if (!lastNode.getPropertyAsBoolean(TestElement.ENABLED)) {
+			tree.getTree(stack).remove(lastNode);
+		}
+	}
+
+	public void processPath() {
+	}
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.save;
 
@@ -54,884 +54,637 @@ import org.apache.log.Logger;
 import org.xml.sax.SAXException;
 
 /**
- * This class provides a means for saving test results.  Test results are
+ * This class provides a means for saving test results. Test results are
  * typically saved in an XML file, but other storage mechanisms may also be
  * used, for instance, CSV files or databases.
- *
- * @version    $Revision$ $Date$
+ * 
+ * @version $Revision$ $Date$
  */
-public final class OldSaveService implements SaveServiceConstants
-{
-    transient private static final Logger log = LoggingManager.getLoggerForClass();
+public final class OldSaveService implements SaveServiceConstants {
+	transient private static final Logger log = LoggingManager.getLoggerForClass();
 
 	// Initial config from properties
 	static private final SampleSaveConfiguration _saveConfig = SampleSaveConfiguration.staticConfig();
-	
-    private static DefaultConfigurationBuilder builder =
-        new DefaultConfigurationBuilder();
 
-    /**
-     * Private constructor to prevent instantiation.
-     */
-    private OldSaveService()
-    {
-    }
+	private static DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
 
-    /**
-     * Make a SampleResult given a delimited string.
-     * @param delim
-     * @return
-     * SampleResult
-     */
-    public static SampleResult makeResultFromDelimitedString(String delim)
-    {
-        SampleResult result = null;
-        long timeStamp = 0;
-        long elapsed = 0;
-        StringTokenizer splitter = new StringTokenizer(delim,_saveConfig.getDelimiter());
-        String text = null;
-        
-        try {
-				if (_saveConfig.printMilliseconds())
-				{
-				    text = splitter.nextToken();
-				    timeStamp = Long.parseLong(text);
-				}
-			   else if (_saveConfig.formatter() != null)
-			   {
-			        text = splitter.nextToken();
-			        Date stamp = _saveConfig.formatter().parse(text);
-					timeStamp = stamp.getTime();
-			   }
-			
-			   if (_saveConfig.saveTime())
-			   {
-			       text = splitter.nextToken();
-			       elapsed = Long.parseLong(text);
-			   }
-			
-			   result = new SampleResult(timeStamp,elapsed);
-			   
-			   if (_saveConfig.saveLabel())
-			   {
-			       text = splitter.nextToken();
-			       result.setSampleLabel(text);  
-			   }
-			   if (_saveConfig.saveCode())
-			   {
-			       text = splitter.nextToken();
-			       result.setResponseCode(text);
-			   }
-			
-			   if (_saveConfig.saveMessage())
-			   {
-			       text = splitter.nextToken();
-			       result.setResponseMessage(text);
-			   }
-			
-			   if (_saveConfig.saveThreadName())
-			   {
-			       text = splitter.nextToken();
-			       result.setThreadName(text);
-			   }
-			
-			   if (_saveConfig.saveDataType())
-			   {
-			       text = splitter.nextToken();
-			       result.setDataType(text);
-			   }
-			
-			   if (_saveConfig.saveSuccess())
-			   {
-			       text = splitter.nextToken();
-			       result.setSuccessful(Boolean.valueOf(text).booleanValue());
-			   }
-			
-			   if (_saveConfig.saveAssertionResultsFailureMessage())
-			   {
-			       text = splitter.nextToken();
-			   }
+	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private OldSaveService() {
+	}
+
+	/**
+	 * Make a SampleResult given a delimited string.
+	 * 
+	 * @param delim
+	 * @return SampleResult
+	 */
+	public static SampleResult makeResultFromDelimitedString(String delim) {
+		SampleResult result = null;
+		long timeStamp = 0;
+		long elapsed = 0;
+		StringTokenizer splitter = new StringTokenizer(delim, _saveConfig.getDelimiter());
+		String text = null;
+
+		try {
+			if (_saveConfig.printMilliseconds()) {
+				text = splitter.nextToken();
+				timeStamp = Long.parseLong(text);
+			} else if (_saveConfig.formatter() != null) {
+				text = splitter.nextToken();
+				Date stamp = _saveConfig.formatter().parse(text);
+				timeStamp = stamp.getTime();
+			}
+
+			if (_saveConfig.saveTime()) {
+				text = splitter.nextToken();
+				elapsed = Long.parseLong(text);
+			}
+
+			result = new SampleResult(timeStamp, elapsed);
+
+			if (_saveConfig.saveLabel()) {
+				text = splitter.nextToken();
+				result.setSampleLabel(text);
+			}
+			if (_saveConfig.saveCode()) {
+				text = splitter.nextToken();
+				result.setResponseCode(text);
+			}
+
+			if (_saveConfig.saveMessage()) {
+				text = splitter.nextToken();
+				result.setResponseMessage(text);
+			}
+
+			if (_saveConfig.saveThreadName()) {
+				text = splitter.nextToken();
+				result.setThreadName(text);
+			}
+
+			if (_saveConfig.saveDataType()) {
+				text = splitter.nextToken();
+				result.setDataType(text);
+			}
+
+			if (_saveConfig.saveSuccess()) {
+				text = splitter.nextToken();
+				result.setSuccessful(Boolean.valueOf(text).booleanValue());
+			}
+
+			if (_saveConfig.saveAssertionResultsFailureMessage()) {
+				text = splitter.nextToken();
+			}
 		} catch (NumberFormatException e) {
-			log.warn("Error parsing number "+e);
+			log.warn("Error parsing number " + e);
 			throw e;
 		} catch (ParseException e) {
-			log.warn("Error parsing line "+e);
+			log.warn("Error parsing line " + e);
 			throw new RuntimeException(e.toString());
 		}
-        return result;
-    }
+		return result;
+	}
 
-    /**
-     * Generates the field names for the output file
-     * 
-     * @return the field names as a string
-     */
-    public static String printableFieldNamesToString()
-    {
-        StringBuffer text = new StringBuffer();
-        String delim = _saveConfig.getDelimiter();
+	/**
+	 * Generates the field names for the output file
+	 * 
+	 * @return the field names as a string
+	 */
+	public static String printableFieldNamesToString() {
+		StringBuffer text = new StringBuffer();
+		String delim = _saveConfig.getDelimiter();
 
-        if (_saveConfig.printMilliseconds() || (_saveConfig.formatter() != null))
-        {
-            text.append(SaveServiceConstants.TIME_STAMP);
-            text.append(delim);
-        }
+		if (_saveConfig.printMilliseconds() || (_saveConfig.formatter() != null)) {
+			text.append(SaveServiceConstants.TIME_STAMP);
+			text.append(delim);
+		}
 
-        if (_saveConfig.saveTime())
-        {
-            text.append(SaveServiceConstants.TIME);
-            text.append(delim);
-        }
+		if (_saveConfig.saveTime()) {
+			text.append(SaveServiceConstants.TIME);
+			text.append(delim);
+		}
 
-        if (_saveConfig.saveLabel())
-        {
-            text.append(SaveServiceConstants.LABEL);
-            text.append(delim);
-        }
+		if (_saveConfig.saveLabel()) {
+			text.append(SaveServiceConstants.LABEL);
+			text.append(delim);
+		}
 
-        if (_saveConfig.saveCode())
-        {
-            text.append(SaveServiceConstants.RESPONSE_CODE);
-            text.append(delim);
-        }
+		if (_saveConfig.saveCode()) {
+			text.append(SaveServiceConstants.RESPONSE_CODE);
+			text.append(delim);
+		}
 
-        if (_saveConfig.saveMessage())
-        {
-            text.append(SaveServiceConstants.RESPONSE_MESSAGE);
-            text.append(delim);
-        }
+		if (_saveConfig.saveMessage()) {
+			text.append(SaveServiceConstants.RESPONSE_MESSAGE);
+			text.append(delim);
+		}
 
-        if (_saveConfig.saveThreadName())
-        {
-            text.append(SaveServiceConstants.THREAD_NAME);
-            text.append(delim);
-        }
+		if (_saveConfig.saveThreadName()) {
+			text.append(SaveServiceConstants.THREAD_NAME);
+			text.append(delim);
+		}
 
-        if (_saveConfig.saveDataType())
-        {
-            text.append(SaveServiceConstants.DATA_TYPE);
-            text.append(delim);
-        }
+		if (_saveConfig.saveDataType()) {
+			text.append(SaveServiceConstants.DATA_TYPE);
+			text.append(delim);
+		}
 
-        if (_saveConfig.saveSuccess())
-        {
-            text.append(SaveServiceConstants.SUCCESSFUL);
-            text.append(delim);
-        }
+		if (_saveConfig.saveSuccess()) {
+			text.append(SaveServiceConstants.SUCCESSFUL);
+			text.append(delim);
+		}
 
-        if (_saveConfig.saveAssertionResultsFailureMessage())
-        {
-            text.append(SaveServiceConstants.FAILURE_MESSAGE);
-            text.append(delim);
-        }
+		if (_saveConfig.saveAssertionResultsFailureMessage()) {
+			text.append(SaveServiceConstants.FAILURE_MESSAGE);
+			text.append(delim);
+		}
 
-        String resultString = null;
-        int size = text.length();
-        int delSize = delim.length();
+		String resultString = null;
+		int size = text.length();
+		int delSize = delim.length();
 
-        // Strip off the trailing delimiter
-        if (size >= delSize)
-        {
-            resultString = text.substring(0, size - delSize);
-        }
-        else
-        {
-            resultString = text.toString();
-        }
-        return resultString;
-    }
+		// Strip off the trailing delimiter
+		if (size >= delSize) {
+			resultString = text.substring(0, size - delSize);
+		} else {
+			resultString = text.toString();
+		}
+		return resultString;
+	}
 
-    public static void saveSubTree(HashTree subTree, OutputStream writer)
-        throws IOException
-    {
-        Configuration config =
-            (Configuration) getConfigsFromTree(subTree).get(0);
-        DefaultConfigurationSerializer saver =
-            new DefaultConfigurationSerializer();
+	public static void saveSubTree(HashTree subTree, OutputStream writer) throws IOException {
+		Configuration config = (Configuration) getConfigsFromTree(subTree).get(0);
+		DefaultConfigurationSerializer saver = new DefaultConfigurationSerializer();
 
-        saver.setIndent(true);
-        try
-        {
-            saver.serialize(writer, config);
-        }
-        catch (SAXException e)
-        {
-            throw new IOException("SAX implementation problem");
-        }
-        catch (ConfigurationException e)
-        {
-            throw new IOException("Problem using Avalon Configuration tools");
-        }
-    }
+		saver.setIndent(true);
+		try {
+			saver.serialize(writer, config);
+		} catch (SAXException e) {
+			throw new IOException("SAX implementation problem");
+		} catch (ConfigurationException e) {
+			throw new IOException("Problem using Avalon Configuration tools");
+		}
+	}
 
-    public static SampleResult getSampleResult(Configuration config)
-    {
-        SampleResult result = new SampleResult(
-		                          config.getAttributeAsLong(TIME_STAMP, 0L),
-		                          config.getAttributeAsLong(TIME, 0L));
+	public static SampleResult getSampleResult(Configuration config) {
+		SampleResult result = new SampleResult(config.getAttributeAsLong(TIME_STAMP, 0L), config.getAttributeAsLong(
+				TIME, 0L));
 
-        result.setThreadName(config.getAttribute(THREAD_NAME, ""));
-        result.setDataType(config.getAttribute(DATA_TYPE, ""));
-        result.setResponseCode(config.getAttribute(RESPONSE_CODE, ""));
-        result.setResponseMessage(config.getAttribute(RESPONSE_MESSAGE, ""));
-        result.setSuccessful(config.getAttributeAsBoolean(SUCCESSFUL, false));
-        result.setSampleLabel(config.getAttribute(LABEL, ""));
-        result.setResponseData(getBinaryData(config.getChild(BINARY)));
-        Configuration[] subResults = config.getChildren(SAMPLE_RESULT_TAG_NAME);
+		result.setThreadName(config.getAttribute(THREAD_NAME, ""));
+		result.setDataType(config.getAttribute(DATA_TYPE, ""));
+		result.setResponseCode(config.getAttribute(RESPONSE_CODE, ""));
+		result.setResponseMessage(config.getAttribute(RESPONSE_MESSAGE, ""));
+		result.setSuccessful(config.getAttributeAsBoolean(SUCCESSFUL, false));
+		result.setSampleLabel(config.getAttribute(LABEL, ""));
+		result.setResponseData(getBinaryData(config.getChild(BINARY)));
+		Configuration[] subResults = config.getChildren(SAMPLE_RESULT_TAG_NAME);
 
-        for (int i = 0; i < subResults.length; i++)
-        {
-            result.addSubResult(getSampleResult(subResults[i]));
-        }
-        Configuration[] assResults =
-            config.getChildren(ASSERTION_RESULT_TAG_NAME);
+		for (int i = 0; i < subResults.length; i++) {
+			result.addSubResult(getSampleResult(subResults[i]));
+		}
+		Configuration[] assResults = config.getChildren(ASSERTION_RESULT_TAG_NAME);
 
-        for (int i = 0; i < assResults.length; i++)
-        {
-            result.addAssertionResult(getAssertionResult(assResults[i]));
-        }
+		for (int i = 0; i < assResults.length; i++) {
+			result.addAssertionResult(getAssertionResult(assResults[i]));
+		}
 
-        Configuration[] samplerData = config.getChildren("property");
-        for (int i = 0; i < samplerData.length; i++)
-        {
-            result.setSamplerData(samplerData[i].getValue(""));
-        }
-        return result;
-    }
+		Configuration[] samplerData = config.getChildren("property");
+		for (int i = 0; i < samplerData.length; i++) {
+			result.setSamplerData(samplerData[i].getValue(""));
+		}
+		return result;
+	}
 
-    private static List getConfigsFromTree(HashTree subTree)
-    {
-        Iterator iter = subTree.list().iterator();
-        List configs = new LinkedList();
+	private static List getConfigsFromTree(HashTree subTree) {
+		Iterator iter = subTree.list().iterator();
+		List configs = new LinkedList();
 
-        while (iter.hasNext())
-        {
-            TestElement item = (TestElement) iter.next();
-            DefaultConfiguration config =
-                new DefaultConfiguration("node", "node");
+		while (iter.hasNext()) {
+			TestElement item = (TestElement) iter.next();
+			DefaultConfiguration config = new DefaultConfiguration("node", "node");
 
-            config.addChild(getConfigForTestElement(null, item));
-            List configList = getConfigsFromTree(subTree.getTree(item));
-            Iterator iter2 = configList.iterator();
+			config.addChild(getConfigForTestElement(null, item));
+			List configList = getConfigsFromTree(subTree.getTree(item));
+			Iterator iter2 = configList.iterator();
 
-            while (iter2.hasNext())
-            {
-                config.addChild((Configuration) iter2.next());
-            }
-            configs.add(config);
-        }
-        return configs;
-    }
+			while (iter2.hasNext()) {
+				config.addChild((Configuration) iter2.next());
+			}
+			configs.add(config);
+		}
+		return configs;
+	}
 
-    public static Configuration getConfiguration(byte[] bin)
-    {
-        DefaultConfiguration config =
-            new DefaultConfiguration(BINARY, "JMeter Save Service");
+	public static Configuration getConfiguration(byte[] bin) {
+		DefaultConfiguration config = new DefaultConfiguration(BINARY, "JMeter Save Service");
 
-        try
-        {
-            config.setValue(new String(bin, "UTF-8"));
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            log.error("", e);
-        }
-        return config;
-    }
+		try {
+			config.setValue(new String(bin, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			log.error("", e);
+		}
+		return config;
+	}
 
-    public static byte[] getBinaryData(Configuration config)
-    {
-        if (config == null)
-        {
-            return new byte[0];
-        }
-        try
-        {
-            return config.getValue("").getBytes("UTF-8");
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            return new byte[0];
-        }
-    }
+	public static byte[] getBinaryData(Configuration config) {
+		if (config == null) {
+			return new byte[0];
+		}
+		try {
+			return config.getValue("").getBytes("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return new byte[0];
+		}
+	}
 
-    public static AssertionResult getAssertionResult(Configuration config)
-    {
-        AssertionResult result = new AssertionResult();
-        result.setError(config.getAttributeAsBoolean(ERROR, false));
-        result.setFailure(config.getAttributeAsBoolean(FAILURE, false));
-        result.setFailureMessage(config.getAttribute(FAILURE_MESSAGE, ""));
-        return result;
-    }
+	public static AssertionResult getAssertionResult(Configuration config) {
+		AssertionResult result = new AssertionResult();
+		result.setError(config.getAttributeAsBoolean(ERROR, false));
+		result.setFailure(config.getAttributeAsBoolean(FAILURE, false));
+		result.setFailureMessage(config.getAttribute(FAILURE_MESSAGE, ""));
+		return result;
+	}
 
-    public static Configuration getConfiguration(AssertionResult assResult)
-    {
-        DefaultConfiguration config =
-            new DefaultConfiguration(
-                ASSERTION_RESULT_TAG_NAME,
-                "JMeter Save Service");
+	public static Configuration getConfiguration(AssertionResult assResult) {
+		DefaultConfiguration config = new DefaultConfiguration(ASSERTION_RESULT_TAG_NAME, "JMeter Save Service");
 
-        config.setAttribute(FAILURE_MESSAGE, assResult.getFailureMessage());
-        config.setAttribute(ERROR, "" + assResult.isError());
-        config.setAttribute(FAILURE, "" + assResult.isFailure());
-        return config;
-    }
+		config.setAttribute(FAILURE_MESSAGE, assResult.getFailureMessage());
+		config.setAttribute(ERROR, "" + assResult.isError());
+		config.setAttribute(FAILURE, "" + assResult.isFailure());
+		return config;
+	}
 
-    /**
-     * This method determines the content of the result data that will be
-     * stored.
-     * @param result   the object containing all of the data that has been
-     *                 collected.
-     * @param funcTest an indicator of whether the user wants all data
-     *                 recorded.
-     */
-    public static Configuration getConfiguration(
-        SampleResult result,
-        SampleSaveConfiguration saveConfig)
-    {
-        DefaultConfiguration config =
-            new DefaultConfiguration(
-                SAMPLE_RESULT_TAG_NAME,
-                "JMeter Save Service");
+	/**
+	 * This method determines the content of the result data that will be
+	 * stored.
+	 * 
+	 * @param result
+	 *            the object containing all of the data that has been collected.
+	 * @param funcTest
+	 *            an indicator of whether the user wants all data recorded.
+	 */
+	public static Configuration getConfiguration(SampleResult result, SampleSaveConfiguration saveConfig) {
+		DefaultConfiguration config = new DefaultConfiguration(SAMPLE_RESULT_TAG_NAME, "JMeter Save Service");
 
-        if (saveConfig.saveTime())
-        {
-            config.setAttribute(TIME, "" + result.getTime());
-        }
-        if (saveConfig.saveLabel())
-        {
-            config.setAttribute(LABEL, result.getSampleLabel());
-        }
-        if (saveConfig.saveCode())
-        {
-            config.setAttribute(RESPONSE_CODE, result.getResponseCode());
-        }
-        if (saveConfig.saveMessage())
-        {
-            config.setAttribute(RESPONSE_MESSAGE, result.getResponseMessage());
-        }
-        if (saveConfig.saveThreadName())
-        {
-            config.setAttribute(THREAD_NAME, result.getThreadName());
-        }
-        if (saveConfig.saveDataType())
-        {
-            config.setAttribute(DATA_TYPE, result.getDataType());
-        }
+		if (saveConfig.saveTime()) {
+			config.setAttribute(TIME, "" + result.getTime());
+		}
+		if (saveConfig.saveLabel()) {
+			config.setAttribute(LABEL, result.getSampleLabel());
+		}
+		if (saveConfig.saveCode()) {
+			config.setAttribute(RESPONSE_CODE, result.getResponseCode());
+		}
+		if (saveConfig.saveMessage()) {
+			config.setAttribute(RESPONSE_MESSAGE, result.getResponseMessage());
+		}
+		if (saveConfig.saveThreadName()) {
+			config.setAttribute(THREAD_NAME, result.getThreadName());
+		}
+		if (saveConfig.saveDataType()) {
+			config.setAttribute(DATA_TYPE, result.getDataType());
+		}
 
-        if (saveConfig.printMilliseconds())
-        {
-            config.setAttribute(TIME_STAMP, "" + result.getTimeStamp());
-        }
-        else if (saveConfig.formatter() != null)
-        {
-            String stamp = saveConfig.formatter().format(new Date(result.getTimeStamp()));
+		if (saveConfig.printMilliseconds()) {
+			config.setAttribute(TIME_STAMP, "" + result.getTimeStamp());
+		} else if (saveConfig.formatter() != null) {
+			String stamp = saveConfig.formatter().format(new Date(result.getTimeStamp()));
 
-            config.setAttribute(TIME_STAMP, stamp);
-        }
+			config.setAttribute(TIME_STAMP, stamp);
+		}
 
-        if (saveConfig.saveSuccess())
-        {
-            config.setAttribute(
-                SUCCESSFUL,
-                JOrphanUtils.booleanToString(result.isSuccessful()));
-        }
+		if (saveConfig.saveSuccess()) {
+			config.setAttribute(SUCCESSFUL, JOrphanUtils.booleanToString(result.isSuccessful()));
+		}
 
-        SampleResult[] subResults = result.getSubResults();
+		SampleResult[] subResults = result.getSubResults();
 
-        if (subResults != null)
-        {
-            for (int i = 0; i < subResults.length; i++)
-            {
-                config.addChild(getConfiguration(subResults[i], saveConfig));
-            }
-        }
+		if (subResults != null) {
+			for (int i = 0; i < subResults.length; i++) {
+				config.addChild(getConfiguration(subResults[i], saveConfig));
+			}
+		}
 
-        AssertionResult[] assResults = result.getAssertionResults();
+		AssertionResult[] assResults = result.getAssertionResults();
 
-        if (saveConfig.saveSamplerData(result))
-        {
-            config.addChild(
-                createConfigForString("samplerData", result.getSamplerData()));
-        }
-        if(saveConfig.saveAssertions() && assResults != null)
-        {
-            for (int i = 0; i < assResults.length; i++)
-                {
-                    config.addChild(getConfiguration(assResults[i]));
-                }
-        }
-        if(saveConfig.saveResponseData(result))
-        {    
-            config.addChild(getConfiguration(result.getResponseData()));
-        }
-        return config;
-    }
+		if (saveConfig.saveSamplerData(result)) {
+			config.addChild(createConfigForString("samplerData", result.getSamplerData()));
+		}
+		if (saveConfig.saveAssertions() && assResults != null) {
+			for (int i = 0; i < assResults.length; i++) {
+				config.addChild(getConfiguration(assResults[i]));
+			}
+		}
+		if (saveConfig.saveResponseData(result)) {
+			config.addChild(getConfiguration(result.getResponseData()));
+		}
+		return config;
+	}
 
-    /**
-     * Convert a result into a string, where the fields of the result are
-     * separated by the default delimiter.
-     * 
-     * @param sample the test result to be converted
-     * @return       the separated value representation of the result
-     */
-    public static String resultToDelimitedString(SampleResult sample)
-    {
-        return resultToDelimitedString(sample, sample.getSaveConfig().getDelimiter());
-    }
+	/**
+	 * Convert a result into a string, where the fields of the result are
+	 * separated by the default delimiter.
+	 * 
+	 * @param sample
+	 *            the test result to be converted
+	 * @return the separated value representation of the result
+	 */
+	public static String resultToDelimitedString(SampleResult sample) {
+		return resultToDelimitedString(sample, sample.getSaveConfig().getDelimiter());
+	}
 
-    /**
-     * Convert a result into a string, where the fields of the result are
-     * separated by a specified String.
-     * 
-     * @param sample    the test result to be converted
-     * @param delimiter the separation string
-     * @return          the separated value representation of the result
-     */
-    public static String resultToDelimitedString(
-        SampleResult sample,
-        String delimiter)
-    {
-        StringBuffer text = new StringBuffer();
-		SampleSaveConfiguration saveConfig=sample.getSaveConfig();
+	/**
+	 * Convert a result into a string, where the fields of the result are
+	 * separated by a specified String.
+	 * 
+	 * @param sample
+	 *            the test result to be converted
+	 * @param delimiter
+	 *            the separation string
+	 * @return the separated value representation of the result
+	 */
+	public static String resultToDelimitedString(SampleResult sample, String delimiter) {
+		StringBuffer text = new StringBuffer();
+		SampleSaveConfiguration saveConfig = sample.getSaveConfig();
 
-        if (saveConfig.saveTimestamp())
-        {
-            text.append(sample.getTimeStamp());
-            text.append(delimiter);
-        }
-        else if (saveConfig.formatter() != null)
-        {
-            String stamp = saveConfig.formatter().format(new Date(sample.getTimeStamp()));
-            text.append(stamp);
-            text.append(delimiter);
-        }
+		if (saveConfig.saveTimestamp()) {
+			text.append(sample.getTimeStamp());
+			text.append(delimiter);
+		} else if (saveConfig.formatter() != null) {
+			String stamp = saveConfig.formatter().format(new Date(sample.getTimeStamp()));
+			text.append(stamp);
+			text.append(delimiter);
+		}
 
-        if (saveConfig.saveTime())
-        {
-            text.append(sample.getTime());
-            text.append(delimiter);
-        }
+		if (saveConfig.saveTime()) {
+			text.append(sample.getTime());
+			text.append(delimiter);
+		}
 
-        if (saveConfig.saveLabel())
-        {
-            text.append(sample.getSampleLabel());
-            text.append(delimiter);
-        }
+		if (saveConfig.saveLabel()) {
+			text.append(sample.getSampleLabel());
+			text.append(delimiter);
+		}
 
-        if (saveConfig.saveCode())
-        {
-            text.append(sample.getResponseCode());
-            text.append(delimiter);
-        }
+		if (saveConfig.saveCode()) {
+			text.append(sample.getResponseCode());
+			text.append(delimiter);
+		}
 
-        if (saveConfig.saveMessage())
-        {
-            text.append(sample.getResponseMessage());
-            text.append(delimiter);
-        }
+		if (saveConfig.saveMessage()) {
+			text.append(sample.getResponseMessage());
+			text.append(delimiter);
+		}
 
-        if (saveConfig.saveThreadName())
-        {
-            text.append(sample.getThreadName());
-            text.append(delimiter);
-        }
+		if (saveConfig.saveThreadName()) {
+			text.append(sample.getThreadName());
+			text.append(delimiter);
+		}
 
-        if (saveConfig.saveDataType())
-        {
-            text.append(sample.getDataType());
-            text.append(delimiter);
-        }
+		if (saveConfig.saveDataType()) {
+			text.append(sample.getDataType());
+			text.append(delimiter);
+		}
 
-        if (saveConfig.saveSuccess())
-        {
-            text.append(sample.isSuccessful());
-            text.append(delimiter);
-        }
+		if (saveConfig.saveSuccess()) {
+			text.append(sample.isSuccessful());
+			text.append(delimiter);
+		}
 
-        if (saveConfig.saveAssertionResultsFailureMessage())
-        {
-            String message = null;
-            AssertionResult[] results = sample.getAssertionResults();
+		if (saveConfig.saveAssertionResultsFailureMessage()) {
+			String message = null;
+			AssertionResult[] results = sample.getAssertionResults();
 
-            if ((results != null) && (results.length > 0))
-            {
-                message = results[0].getFailureMessage();
-            }
+			if ((results != null) && (results.length > 0)) {
+				message = results[0].getFailureMessage();
+			}
 
-            if (message != null)
-            {
-	            text.append(message);
-            }
-            text.append(delimiter);
-        }
-        // text.append(sample.getSamplerData().toString());
-        // text.append(getAssertionResult(sample));
+			if (message != null) {
+				text.append(message);
+			}
+			text.append(delimiter);
+		}
+		// text.append(sample.getSamplerData().toString());
+		// text.append(getAssertionResult(sample));
 
-        String resultString = null;
-        int size = text.length();
-        int delSize = delimiter.length();
+		String resultString = null;
+		int size = text.length();
+		int delSize = delimiter.length();
 
-        // Strip off the trailing delimiter
-        if (size >= delSize)
-        {
-            resultString = text.substring(0, size - delSize);
-        }
-        else
-        {
-            resultString = text.toString();
-        }
-        return resultString;
-    }
+		// Strip off the trailing delimiter
+		if (size >= delSize) {
+			resultString = text.substring(0, size - delSize);
+		} else {
+			resultString = text.toString();
+		}
+		return resultString;
+	}
 
-    public static Configuration getConfigForTestElement(
-        String named,
-        TestElement item)
-    {
-        TestElementSaver saver = new TestElementSaver(named);
-        item.traverse(saver);
-        Configuration config = saver.getConfiguration();
-        /* DefaultConfiguration config =
-           new DefaultConfiguration("testelement", "testelement");
-        
-         if (named != null)
-         {
-             config.setAttribute("name", named);
-         }
-         if (item.getProperty(TestElement.TEST_CLASS) != null)
-         {
-             config.setAttribute("class",
-                    (String) item.getProperty(TestElement.TEST_CLASS));
-         }
-         else
-         {
-             config.setAttribute("class", item.getClass().getName());
-         }
-         Iterator iter = item.getPropertyNames().iterator();
-        
-         while (iter.hasNext())
-         {
-             String name = (String) iter.next();
-             Object value = item.getProperty(name);
-        
-             if (value instanceof TestElement)
-             {
-                 config.addChild(getConfigForTestElement(name,
-                        (TestElement) value));
-             }
-             else if (value instanceof Collection)
-             {
-                 config.addChild(createConfigForCollection(name,
-                        (Collection) value));
-             }
-             else if (value != null)
-             {
-                 config.addChild(createConfigForString(name, value.toString()));
-             }
-         }*/
-        return config;
-    }
+	public static Configuration getConfigForTestElement(String named, TestElement item) {
+		TestElementSaver saver = new TestElementSaver(named);
+		item.traverse(saver);
+		Configuration config = saver.getConfiguration();
+		/*
+		 * DefaultConfiguration config = new DefaultConfiguration("testelement",
+		 * "testelement");
+		 * 
+		 * if (named != null) { config.setAttribute("name", named); } if
+		 * (item.getProperty(TestElement.TEST_CLASS) != null) {
+		 * config.setAttribute("class", (String)
+		 * item.getProperty(TestElement.TEST_CLASS)); } else {
+		 * config.setAttribute("class", item.getClass().getName()); } Iterator
+		 * iter = item.getPropertyNames().iterator();
+		 * 
+		 * while (iter.hasNext()) { String name = (String) iter.next(); Object
+		 * value = item.getProperty(name);
+		 * 
+		 * if (value instanceof TestElement) {
+		 * config.addChild(getConfigForTestElement(name, (TestElement) value)); }
+		 * else if (value instanceof Collection) {
+		 * config.addChild(createConfigForCollection(name, (Collection) value)); }
+		 * else if (value != null) { config.addChild(createConfigForString(name,
+		 * value.toString())); } }
+		 */
+		return config;
+	}
 
-    /*
-     * 
-     *   NOTUSED
-    private static Configuration createConfigForCollection(
-        String propertyName,
-        Collection list)
-    {
-        DefaultConfiguration config =
-            new DefaultConfiguration("collection", "collection");
-
-        if (propertyName != null)
-        {
-            config.setAttribute("name", propertyName);
-        }
-        config.setAttribute("class", list.getClass().getName());
-        Iterator iter = list.iterator();
-
-        while (iter.hasNext())
-        {
-            Object item = iter.next();
-
-            if (item instanceof TestElement)
-            {
-                config.addChild(
-                    getConfigForTestElement(null, (TestElement) item));
-            }
-            else if (item instanceof Collection)
-            {
-                config.addChild(
-                    createConfigForCollection(null, (Collection) item));
-            }
-            else
-            {
-                config.addChild(createConfigForString(item.toString()));
-            }
-        }
-        return config;
-    }
-    */
+	/*
+	 * 
+	 * NOTUSED private static Configuration createConfigForCollection( String
+	 * propertyName, Collection list) { DefaultConfiguration config = new
+	 * DefaultConfiguration("collection", "collection");
+	 * 
+	 * if (propertyName != null) { config.setAttribute("name", propertyName); }
+	 * config.setAttribute("class", list.getClass().getName()); Iterator iter =
+	 * list.iterator();
+	 * 
+	 * while (iter.hasNext()) { Object item = iter.next();
+	 * 
+	 * if (item instanceof TestElement) { config.addChild(
+	 * getConfigForTestElement(null, (TestElement) item)); } else if (item
+	 * instanceof Collection) { config.addChild( createConfigForCollection(null,
+	 * (Collection) item)); } else {
+	 * config.addChild(createConfigForString(item.toString())); } } return
+	 * config; }
+	 */
 
 	/*
 	 * NOTUSED
-	 *
-    private static Configuration createConfigForString(String value)
-    {
-        DefaultConfiguration config =
-            new DefaultConfiguration("string", "string");
+	 * 
+	 * private static Configuration createConfigForString(String value) {
+	 * DefaultConfiguration config = new DefaultConfiguration("string",
+	 * "string");
+	 * 
+	 * config.setValue(value); config.setAttribute(XML_SPACE, PRESERVE); return
+	 * config; }
+	 */
 
-        config.setValue(value);
-        config.setAttribute(XML_SPACE, PRESERVE);
-        return config;
-    }
-    */
+	private static Configuration createConfigForString(String name, String value) {
+		if (value == null) {
+			value = "";
+		}
+		DefaultConfiguration config = new DefaultConfiguration("property", "property");
 
+		config.setAttribute("name", name);
+		config.setValue(value);
+		config.setAttribute(XML_SPACE, PRESERVE);
+		return config;
+	}
 
-    private static Configuration createConfigForString(
-        String name,
-        String value)
-    {
-        if (value == null)
-        {
-            value = "";
-        }
-        DefaultConfiguration config =
-            new DefaultConfiguration("property", "property");
+	public synchronized static HashTree loadSubTree(InputStream in) throws IOException {
+		try {
+			Configuration config = builder.build(in);
+			HashTree loadedTree = generateNode(config);
 
-        config.setAttribute("name", name);
-        config.setValue(value);
-        config.setAttribute(XML_SPACE, PRESERVE);
-        return config;
-    }
+			return loadedTree;
+		} catch (ConfigurationException e) {
+			String message = "Problem loading using Avalon Configuration tools";
+			log.error(message, e);
+			throw new IOException(message);
+		} catch (SAXException e) {
+			String message = "Problem with SAX implementation";
+			log.error(message, e);
+			throw new IOException(message);
+		}
+	}
 
-    public synchronized static HashTree loadSubTree(InputStream in)
-        throws IOException
-    {
-        try
-        {
-            Configuration config = builder.build(in);
-            HashTree loadedTree = generateNode(config);
+	public static TestElement createTestElement(Configuration config) throws ConfigurationException,
+			ClassNotFoundException, IllegalAccessException, InstantiationException {
+		TestElement element = null;
 
-            return loadedTree;
-        }
-        catch (ConfigurationException e)
-        {
-            String message = "Problem loading using Avalon Configuration tools";
-            log.error(message, e);
-            throw new IOException(message);
-        }
-        catch (SAXException e)
-        {
-            String message = "Problem with SAX implementation";
-            log.error(message, e);
-            throw new IOException(message);
-        }
-    }
+		String testClass = config.getAttribute("class");
+		element = (TestElement) Class.forName(NameUpdater.getCurrentName(testClass)).newInstance();
+		Configuration[] children = config.getChildren();
 
-    public static TestElement createTestElement(Configuration config)
-        throws
-            ConfigurationException,
-            ClassNotFoundException,
-            IllegalAccessException,
-            InstantiationException
-    {
-        TestElement element = null;
+		for (int i = 0; i < children.length; i++) {
+			if (children[i].getName().equals("property")) {
+				try {
+					element.setProperty(createProperty(children[i], testClass));
+				} catch (Exception ex) {
+					log.error("Problem loading property", ex);
+					element.setProperty(children[i].getAttribute("name"), "");
+				}
+			} else if (children[i].getName().equals("testelement")) {
+				element.setProperty(new TestElementProperty(children[i].getAttribute("name", ""),
+						createTestElement(children[i])));
+			} else if (children[i].getName().equals("collection")) {
+				element.setProperty(new CollectionProperty(children[i].getAttribute("name", ""), createCollection(
+						children[i], testClass)));
+			} else if (children[i].getName().equals("map")) {
+				element.setProperty(new MapProperty(children[i].getAttribute("name", ""), createMap(children[i],
+						testClass)));
+			}
+		}
+		return element;
+	}
 
-		String testClass= config.getAttribute("class");
-        element = (TestElement) Class.forName(
-        	NameUpdater.getCurrentName(testClass)).newInstance();
-        Configuration[] children = config.getChildren();
+	private static Collection createCollection(Configuration config, String testClass) throws ConfigurationException,
+			ClassNotFoundException, IllegalAccessException, InstantiationException {
+		Collection coll = (Collection) Class.forName(config.getAttribute("class")).newInstance();
+		Configuration[] items = config.getChildren();
 
-        for (int i = 0; i < children.length; i++)
-        {
-            if (children[i].getName().equals("property"))
-            {
-                try
-                {
-                    element.setProperty(createProperty(children[i], testClass));
-                }
-                catch (Exception ex)
-                {
-                    log.error("Problem loading property", ex);
-                    element.setProperty(children[i].getAttribute("name"), "");
-                }
-            }
-            else if (children[i].getName().equals("testelement"))
-            {
-                element.setProperty(
-                    new TestElementProperty(
-                        children[i].getAttribute("name",""),
-                        createTestElement(children[i])));
-            }
-            else if (children[i].getName().equals("collection"))
-            {
-                element.setProperty(
-                    new CollectionProperty(
-                        children[i].getAttribute("name",""),
-                        createCollection(children[i], testClass)));
-            }
-            else if (children[i].getName().equals("map"))
-            {
-                element.setProperty(
-                    new MapProperty(
-                        children[i].getAttribute("name",""),
-                        createMap(children[i], testClass)));
-            }
-        }
-        return element;
-    }
+		for (int i = 0; i < items.length; i++) {
+			if (items[i].getName().equals("property")) {
+				coll.add(createProperty(items[i], testClass));
+			} else if (items[i].getName().equals("testelement")) {
+				coll.add(new TestElementProperty(items[i].getAttribute("name", ""), createTestElement(items[i])));
+			} else if (items[i].getName().equals("collection")) {
+				coll.add(new CollectionProperty(items[i].getAttribute("name", ""),
+						createCollection(items[i], testClass)));
+			} else if (items[i].getName().equals("string")) {
+				coll.add(createProperty(items[i], testClass));
+			} else if (items[i].getName().equals("map")) {
+				coll.add(new MapProperty(items[i].getAttribute("name", ""), createMap(items[i], testClass)));
+			}
+		}
+		return coll;
+	}
 
-    private static Collection createCollection(
-    		Configuration config, String testClass)
-        throws
-            ConfigurationException,
-            ClassNotFoundException,
-            IllegalAccessException,
-            InstantiationException
-    {
-        Collection coll =
-            (Collection) Class
-                .forName(config.getAttribute("class"))
-                .newInstance();
-        Configuration[] items = config.getChildren();
+	private static JMeterProperty createProperty(Configuration config, String testClass) throws IllegalAccessException,
+			ClassNotFoundException, InstantiationException {
+		String value = config.getValue("");
+		String name = config.getAttribute("name", value);
+		String type = config.getAttribute("propType", StringProperty.class.getName());
 
-        for (int i = 0; i < items.length; i++)
-        {
-            if (items[i].getName().equals("property"))
-            {
-                coll.add(createProperty(items[i], testClass));
-            }
-            else if (items[i].getName().equals("testelement"))
-            {
-                coll.add(
-                    new TestElementProperty(
-                        items[i].getAttribute("name", ""),
-                        createTestElement(items[i])));
-            }
-            else if (items[i].getName().equals("collection"))
-            {
-                coll.add(
-                    new CollectionProperty(
-                        items[i].getAttribute("name", ""),
-                        createCollection(items[i], testClass)));
-            }
-            else if (items[i].getName().equals("string"))
-            {
-                coll.add(createProperty(items[i], testClass));
-            }
-            else if (items[i].getName().equals("map"))
-            {
-                coll.add(
-                    new MapProperty(
-                        items[i].getAttribute("name", ""),
-                        createMap(items[i], testClass)));
-            }
-        }
-        return coll;
-    }
-
-    private static JMeterProperty createProperty(Configuration config, String testClass)
-        throws
-            IllegalAccessException,
-            ClassNotFoundException,
-            InstantiationException
-    {
-        String value = config.getValue("");
-        String name= config.getAttribute("name", value);
-		String type= config.getAttribute("propType", StringProperty.class.getName());
-		
 		// Do upgrade translation:
-		name= NameUpdater.getCurrentName(name, testClass);
-		if (TestElement.GUI_CLASS.equals(name) || TestElement.TEST_CLASS.equals(name))
-		{
-			value= NameUpdater.getCurrentName(value);
+		name = NameUpdater.getCurrentName(name, testClass);
+		if (TestElement.GUI_CLASS.equals(name) || TestElement.TEST_CLASS.equals(name)) {
+			value = NameUpdater.getCurrentName(value);
+		} else {
+			value = NameUpdater.getCurrentName(value, name, testClass);
 		}
-		else
-		{
-			value= NameUpdater.getCurrentName(value, name, testClass);
+
+		// Create the property:
+		JMeterProperty prop = (JMeterProperty) Class.forName(type).newInstance();
+		prop.setName(name);
+		prop.setObjectValue(value);
+
+		return prop;
+	}
+
+	private static Map createMap(Configuration config, String testClass) throws ConfigurationException,
+			ClassNotFoundException, IllegalAccessException, InstantiationException {
+		Map map = (Map) Class.forName(config.getAttribute("class")).newInstance();
+		Configuration[] items = config.getChildren();
+
+		for (int i = 0; i < items.length; i++) {
+			if (items[i].getName().equals("property")) {
+				JMeterProperty prop = createProperty(items[i], testClass);
+				map.put(prop.getName(), prop);
+			} else if (items[i].getName().equals("testelement")) {
+				map.put(items[i].getAttribute("name", ""), new TestElementProperty(items[i].getAttribute("name", ""),
+						createTestElement(items[i])));
+			} else if (items[i].getName().equals("collection")) {
+				map.put(items[i].getAttribute("name"), new CollectionProperty(items[i].getAttribute("name", ""),
+						createCollection(items[i], testClass)));
+			} else if (items[i].getName().equals("map")) {
+				map.put(items[i].getAttribute("name", ""), new MapProperty(items[i].getAttribute("name", ""),
+						createMap(items[i], testClass)));
+			}
 		}
-		
-        // Create the property:
-        JMeterProperty prop = (JMeterProperty) Class.forName(type).newInstance();
-        prop.setName(name);
-        prop.setObjectValue(value);
+		return map;
+	}
 
-        return prop;
-    }
+	private static HashTree generateNode(Configuration config) {
+		TestElement element = null;
 
-    private static Map createMap(Configuration config, String testClass)
-        throws
-            ConfigurationException,
-            ClassNotFoundException,
-            IllegalAccessException,
-            InstantiationException
-    {
-        Map map =
-            (Map) Class
-                .forName(config.getAttribute("class"))
-                .newInstance();
-        Configuration[] items = config.getChildren();
+		try {
+			element = createTestElement(config.getChild("testelement"));
+		} catch (Exception e) {
+			log.error("Problem loading part of file", e);
+			return null;
+		}
+		HashTree subTree = new ListedHashTree(element);
+		Configuration[] subNodes = config.getChildren("node");
 
-        for (int i = 0; i < items.length; i++)
-        {
-            if (items[i].getName().equals("property"))
-            {
-                JMeterProperty prop = createProperty(items[i], testClass);
-                map.put(prop.getName(), prop);
-            }
-            else if (items[i].getName().equals("testelement"))
-            {
-                map.put(
-                    items[i].getAttribute("name",""),
-                    new TestElementProperty(
-                        items[i].getAttribute("name", ""),
-                        createTestElement(items[i])));
-            }
-            else if (items[i].getName().equals("collection"))
-            {
-                map.put(
-                    items[i].getAttribute("name"),
-                    new CollectionProperty(
-                        items[i].getAttribute("name", ""),
-                        createCollection(items[i], testClass)));
-            }
-            else if (items[i].getName().equals("map"))
-            {
-                map.put(
-                    items[i].getAttribute("name", ""),
-                    new MapProperty(
-                        items[i].getAttribute("name", ""),
-                        createMap(items[i], testClass)));
-            }
-        }
-        return map;
-    }
+		for (int i = 0; i < subNodes.length; i++) {
+			HashTree t = generateNode(subNodes[i]);
 
-    private static HashTree generateNode(Configuration config)
-    {
-        TestElement element = null;
-
-        try
-        {
-            element = createTestElement(config.getChild("testelement"));
-        }
-        catch (Exception e)
-        {
-            log.error("Problem loading part of file", e);
-            return null;
-        }
-        HashTree subTree = new ListedHashTree(element);
-        Configuration[] subNodes = config.getChildren("node");
-
-        for (int i = 0; i < subNodes.length; i++)
-        {
-            HashTree t = generateNode(subNodes[i]);
-
-            if (t != null)
-            {
-                subTree.add(element, t);
-            }
-        }
-        return subTree;
-    }    
+			if (t != null) {
+				subTree.add(element, t);
+			}
+		}
+		return subTree;
+	}
 }

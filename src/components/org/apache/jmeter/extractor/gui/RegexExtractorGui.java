@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.extractor.gui;
 
@@ -38,168 +38,144 @@ import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  */
-public class RegexExtractorGui extends AbstractPostProcessorGui
-{
-    private JLabeledTextField regexField;
-    private JLabeledTextField templateField;
-    private JLabeledTextField defaultField;
-    private JLabeledTextField matchNumberField;
-    private JLabeledTextField refNameField;
-    
-    //NOTUSED private JCheckBox scanHeader;
+public class RegexExtractorGui extends AbstractPostProcessorGui {
+	private JLabeledTextField regexField;
+
+	private JLabeledTextField templateField;
+
+	private JLabeledTextField defaultField;
+
+	private JLabeledTextField matchNumberField;
+
+	private JLabeledTextField refNameField;
+
+	// NOTUSED private JCheckBox scanHeader;
 	private JRadioButton useBody;
+
 	private JRadioButton useHeaders;
-    
-    public RegexExtractorGui()
-    {
-        super();
-        init();
-    }
 
-    public String getLabelResource()
-    {
-        return "regex_extractor_title";
-    }
-    
-    public void configure(TestElement el)
-    {
-        super.configure(el);
-        useHeaders.setSelected(el.getPropertyAsBoolean(RegexExtractor.USEHEADERS));
-        useBody.setSelected(!el.getPropertyAsBoolean(RegexExtractor.USEHEADERS));
-        regexField.setText(el.getPropertyAsString(RegexExtractor.REGEX));
-        templateField.setText(el.getPropertyAsString(RegexExtractor.TEMPLATE));
-        defaultField.setText(el.getPropertyAsString(RegexExtractor.DEFAULT));
-        matchNumberField.setText(
-            el.getPropertyAsString(RegexExtractor.MATCH_NUMBER));
-        refNameField.setText(el.getPropertyAsString(RegexExtractor.REFNAME));
-    }
+	public RegexExtractorGui() {
+		super();
+		init();
+	}
 
-    /**
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-     */
-    public TestElement createTestElement()
-    {
-        RegexExtractor extractor = new RegexExtractor();
-        modifyTestElement(extractor);
-        return extractor;
-    }
+	public String getLabelResource() {
+		return "regex_extractor_title";
+	}
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement extractor)
-    {
-        super.configureTestElement(extractor);
-        extractor.setProperty(
-                RegexExtractor.USEHEADERS,
-                JOrphanUtils.booleanToString(useHeaders.isSelected()));
-        extractor.setProperty(
-            RegexExtractor.MATCH_NUMBER,
-            matchNumberField.getText());
-        if(extractor instanceof RegexExtractor)
-        {
-            RegexExtractor regex = (RegexExtractor)extractor;
-            regex.setRefName(refNameField.getText());
-            regex.setRegex(regexField.getText());
-            regex.setTemplate(templateField.getText());
-            regex.setDefaultValue(defaultField.getText());
-        }
-    }
-    
-    private void init()
-    {
-        setLayout(new BorderLayout());
-        setBorder(makeBorder());
-        
-        Box box = Box.createVerticalBox();
-        box.add(makeTitlePanel());
-        box.add(makeSourcePanel());
-        add(box,BorderLayout.NORTH);
-        add(makeParameterPanel(),BorderLayout.CENTER);
-    }
-    
-    private JPanel makeSourcePanel()
-    {
-        JPanel panel = new JPanel();
-        panel.setBorder(
-            BorderFactory.createTitledBorder(
-                JMeterUtils.getResString("regex_source")));
+	public void configure(TestElement el) {
+		super.configure(el);
+		useHeaders.setSelected(el.getPropertyAsBoolean(RegexExtractor.USEHEADERS));
+		useBody.setSelected(!el.getPropertyAsBoolean(RegexExtractor.USEHEADERS));
+		regexField.setText(el.getPropertyAsString(RegexExtractor.REGEX));
+		templateField.setText(el.getPropertyAsString(RegexExtractor.TEMPLATE));
+		defaultField.setText(el.getPropertyAsString(RegexExtractor.DEFAULT));
+		matchNumberField.setText(el.getPropertyAsString(RegexExtractor.MATCH_NUMBER));
+		refNameField.setText(el.getPropertyAsString(RegexExtractor.REFNAME));
+	}
 
-        useBody =
-            new JRadioButton(JMeterUtils.getResString("regex_src_body"));
-        useHeaders =
-            new JRadioButton(JMeterUtils.getResString("regex_src_hdrs"));
-		
-        ButtonGroup group = new ButtonGroup();
-        group.add(useBody);
-        group.add(useHeaders);
-		
-        panel.add(useBody);
-        panel.add(useHeaders);
-		
-        useBody.setSelected(true);
-        return panel;
-    }
+	/**
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+	 */
+	public TestElement createTestElement() {
+		RegexExtractor extractor = new RegexExtractor();
+		modifyTestElement(extractor);
+		return extractor;
+	}
 
-    private JPanel makeParameterPanel()
-    {
-        regexField =
-            new JLabeledTextField(JMeterUtils.getResString("regex_field"));
-        templateField =
-            new JLabeledTextField(JMeterUtils.getResString("template_field"));
-        defaultField =
-            new JLabeledTextField(
-                JMeterUtils.getResString("default_value_field"));
-        refNameField =
-            new JLabeledTextField(JMeterUtils.getResString("ref_name_field"));
-        matchNumberField =
-            new JLabeledTextField(JMeterUtils.getResString("match_num_field"));
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement extractor) {
+		super.configureTestElement(extractor);
+		extractor.setProperty(RegexExtractor.USEHEADERS, JOrphanUtils.booleanToString(useHeaders.isSelected()));
+		extractor.setProperty(RegexExtractor.MATCH_NUMBER, matchNumberField.getText());
+		if (extractor instanceof RegexExtractor) {
+			RegexExtractor regex = (RegexExtractor) extractor;
+			regex.setRefName(refNameField.getText());
+			regex.setRegex(regexField.getText());
+			regex.setTemplate(templateField.getText());
+			regex.setDefaultValue(defaultField.getText());
+		}
+	}
 
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        initConstraints(gbc);
-        addField(panel,refNameField,gbc);
-        resetContraints(gbc);
-        addField(panel,regexField,gbc);
-        resetContraints(gbc);
-        addField(panel,templateField,gbc);
-        resetContraints(gbc);
-        addField(panel,matchNumberField,gbc);
-        resetContraints(gbc);
-        gbc.weighty = 1;
-        addField(panel,defaultField,gbc);
-        return panel;
-    }
-    
-    private void addField(
-        JPanel panel,
-        JLabeledTextField field,
-        GridBagConstraints gbc)
-    {
-        List item = field.getComponentList();
-        panel.add((Component)item.get(0),gbc.clone());
-        gbc.gridx++;
-        gbc.weightx = 1;;
-        panel.add((Component)item.get(1),gbc.clone());
-    }
-    
-    private void resetContraints(GridBagConstraints gbc)
-    {
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gbc.weightx = 0;
-    }
-    
-    private void initConstraints(GridBagConstraints gbc)
-    {
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.gridheight = 1;
-        gbc.gridwidth = 1;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 0;
-        gbc.weighty = 0;
-    }
+	private void init() {
+		setLayout(new BorderLayout());
+		setBorder(makeBorder());
+
+		Box box = Box.createVerticalBox();
+		box.add(makeTitlePanel());
+		box.add(makeSourcePanel());
+		add(box, BorderLayout.NORTH);
+		add(makeParameterPanel(), BorderLayout.CENTER);
+	}
+
+	private JPanel makeSourcePanel() {
+		JPanel panel = new JPanel();
+		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("regex_source")));
+
+		useBody = new JRadioButton(JMeterUtils.getResString("regex_src_body"));
+		useHeaders = new JRadioButton(JMeterUtils.getResString("regex_src_hdrs"));
+
+		ButtonGroup group = new ButtonGroup();
+		group.add(useBody);
+		group.add(useHeaders);
+
+		panel.add(useBody);
+		panel.add(useHeaders);
+
+		useBody.setSelected(true);
+		return panel;
+	}
+
+	private JPanel makeParameterPanel() {
+		regexField = new JLabeledTextField(JMeterUtils.getResString("regex_field"));
+		templateField = new JLabeledTextField(JMeterUtils.getResString("template_field"));
+		defaultField = new JLabeledTextField(JMeterUtils.getResString("default_value_field"));
+		refNameField = new JLabeledTextField(JMeterUtils.getResString("ref_name_field"));
+		matchNumberField = new JLabeledTextField(JMeterUtils.getResString("match_num_field"));
+
+		JPanel panel = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		initConstraints(gbc);
+		addField(panel, refNameField, gbc);
+		resetContraints(gbc);
+		addField(panel, regexField, gbc);
+		resetContraints(gbc);
+		addField(panel, templateField, gbc);
+		resetContraints(gbc);
+		addField(panel, matchNumberField, gbc);
+		resetContraints(gbc);
+		gbc.weighty = 1;
+		addField(panel, defaultField, gbc);
+		return panel;
+	}
+
+	private void addField(JPanel panel, JLabeledTextField field, GridBagConstraints gbc) {
+		List item = field.getComponentList();
+		panel.add((Component) item.get(0), gbc.clone());
+		gbc.gridx++;
+		gbc.weightx = 1;
+		;
+		panel.add((Component) item.get(1), gbc.clone());
+	}
+
+	private void resetContraints(GridBagConstraints gbc) {
+		gbc.gridx = 0;
+		gbc.gridy++;
+		gbc.weightx = 0;
+	}
+
+	private void initConstraints(GridBagConstraints gbc) {
+		gbc.anchor = GridBagConstraints.NORTHWEST;
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.gridheight = 1;
+		gbc.gridwidth = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.weightx = 0;
+		gbc.weighty = 0;
+	}
 }

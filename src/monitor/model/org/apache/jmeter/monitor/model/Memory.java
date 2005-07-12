@@ -22,13 +22,17 @@ package org.apache.jmeter.monitor.model;
 /**
  * @version $Revision$ on $Date4
  */
-public interface Memory
-{
+public interface Memory {
 	long getMax();
+
 	void setMax(long value);
+
 	long getFree();
+
 	void setFree(long value);
+
 	long getTotal();
+
 	void setTotal(long value);
 
 }

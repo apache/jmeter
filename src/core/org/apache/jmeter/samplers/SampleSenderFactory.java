@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 
 package org.apache.jmeter.samplers;
 
@@ -22,36 +22,30 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * @author Michael Freeman
  */
-public class SampleSenderFactory
-{
-    /**
-     * Checks for the Jmeter property mode and returns the required class.
-     * @param listener
-     * @return the appropriate class. Standard Jmeter functionality, hold_samples until end of test or 
-     * batch samples.
-     */
-    static SampleSender getInstance(RemoteSampleListener listener)
-    {
-    	// Support original property name
-        boolean holdSamples = JMeterUtils.getPropDefault("hold_samples",false);
-        
-        // Extended property name
-        String type = JMeterUtils.getPropDefault("mode","Standard");
-        
-        if(holdSamples || type.equalsIgnoreCase("Hold"))
-        {
-            HoldSampleSender h = new HoldSampleSender(listener);
-            return h;
-        }
-        else if(type.equalsIgnoreCase("Batch"))
-        {
-            BatchSampleSender b = new BatchSampleSender(listener);
-            return b;
-        }
-        else
-        {
-            StandardSampleSender s = new StandardSampleSender(listener);
-            return s;
-        }
-    }
+public class SampleSenderFactory {
+	/**
+	 * Checks for the Jmeter property mode and returns the required class.
+	 * 
+	 * @param listener
+	 * @return the appropriate class. Standard Jmeter functionality,
+	 *         hold_samples until end of test or batch samples.
+	 */
+	static SampleSender getInstance(RemoteSampleListener listener) {
+		// Support original property name
+		boolean holdSamples = JMeterUtils.getPropDefault("hold_samples", false);
+
+		// Extended property name
+		String type = JMeterUtils.getPropDefault("mode", "Standard");
+
+		if (holdSamples || type.equalsIgnoreCase("Hold")) {
+			HoldSampleSender h = new HoldSampleSender(listener);
+			return h;
+		} else if (type.equalsIgnoreCase("Batch")) {
+			BatchSampleSender b = new BatchSampleSender(listener);
+			return b;
+		} else {
+			StandardSampleSender s = new StandardSampleSender(listener);
+			return s;
+		}
+	}
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.samplers;
 
@@ -26,124 +26,104 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testelement.TestListener;
 
 /**
- * @version    $Revision$
+ * @version $Revision$
  */
-public class RemoteSampleListenerImpl
-    extends java.rmi.server.UnicastRemoteObject
-    implements RemoteSampleListener, SampleListener, TestListener
-{
-    TestListener testListener;
-    SampleListener sampleListener;
+public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObject implements RemoteSampleListener,
+		SampleListener, TestListener {
+	TestListener testListener;
 
-    public RemoteSampleListenerImpl() throws RemoteException
-    {
-        super();
-    }
+	SampleListener sampleListener;
 
-    public void setListener(Object listener)
-    {
-        if (listener instanceof TestListener)
-        {
-            testListener = (TestListener) listener;
-        }
-        if (listener instanceof SampleListener)
-        {
-            sampleListener = (SampleListener) listener;
-        }
-    }
+	public RemoteSampleListenerImpl() throws RemoteException {
+		super();
+	}
 
-    public RemoteSampleListenerImpl(Object listener) throws RemoteException
-    {
-        super();
-        setListener(listener);
-    }
+	public void setListener(Object listener) {
+		if (listener instanceof TestListener) {
+			testListener = (TestListener) listener;
+		}
+		if (listener instanceof SampleListener) {
+			sampleListener = (SampleListener) listener;
+		}
+	}
 
-    public void testStarted()
-    {
-        if (testListener != null)
-        {
-            testListener.testStarted();
-        }
-    }
+	public RemoteSampleListenerImpl(Object listener) throws RemoteException {
+		super();
+		setListener(listener);
+	}
 
-    public void testStarted(String host)
-    {
-        if (testListener != null)
-        {
-            testListener.testStarted(host);
-        }
-    }
+	public void testStarted() {
+		if (testListener != null) {
+			testListener.testStarted();
+		}
+	}
 
-    public void testEnded()
-    {
-        if (testListener != null)
-        {
-            testListener.testEnded();
-        }
-    }
+	public void testStarted(String host) {
+		if (testListener != null) {
+			testListener.testStarted(host);
+		}
+	}
 
-    public void testEnded(String host)
-    {
-        if (testListener != null)
-        {
-            testListener.testEnded(host);
-        }
-    }
-    /**
-     * This method is called remotely and fires a list of samples events recieved locally.
-     * The function is to reduce network load when using remote testing.
-     * @param samples the list of sample events to be fired locally
-     */
-    public void processBatch(List samples)
-    {
-        Iterator iter = samples.iterator();
+	public void testEnded() {
+		if (testListener != null) {
+			testListener.testEnded();
+		}
+	}
 
-        if(samples != null)
-        {
-            while(iter.hasNext())
-		    {
-                SampleEvent e = (SampleEvent) iter.next();
-                sampleOccurred(e);
-            }
-        }
-     }
+	public void testEnded(String host) {
+		if (testListener != null) {
+			testListener.testEnded(host);
+		}
+	}
 
+	/**
+	 * This method is called remotely and fires a list of samples events
+	 * recieved locally. The function is to reduce network load when using
+	 * remote testing.
+	 * 
+	 * @param samples
+	 *            the list of sample events to be fired locally
+	 */
+	public void processBatch(List samples) {
+		Iterator iter = samples.iterator();
 
+		if (samples != null) {
+			while (iter.hasNext()) {
+				SampleEvent e = (SampleEvent) iter.next();
+				sampleOccurred(e);
+			}
+		}
+	}
 
-    public void sampleOccurred(SampleEvent e)
-    {
-        if (sampleListener != null)
-        {
-            sampleListener.sampleOccurred(e);
-        }
-    }
+	public void sampleOccurred(SampleEvent e) {
+		if (sampleListener != null) {
+			sampleListener.sampleOccurred(e);
+		}
+	}
 
-    /**
-     * A sample has started.
-     */
-    public void sampleStarted(SampleEvent e)
-    {
-        if (sampleListener != null)
-        {
-            sampleListener.sampleStarted(e);
-        }
-    }
+	/**
+	 * A sample has started.
+	 */
+	public void sampleStarted(SampleEvent e) {
+		if (sampleListener != null) {
+			sampleListener.sampleStarted(e);
+		}
+	}
 
-    /**
-     * A sample has stopped.
-     */
-    public void sampleStopped(SampleEvent e)
-    {
-        if (sampleListener != null)
-        {
-            sampleListener.sampleStopped(e);
-        }
-    }
-    
-    /* (non-Javadoc)
-     * @see TestListener#testIterationStart(LoopIterationEvent)
-     */
-    public void testIterationStart(LoopIterationEvent event)
-    {
-    }
+	/**
+	 * A sample has stopped.
+	 */
+	public void sampleStopped(SampleEvent e) {
+		if (sampleListener != null) {
+			sampleListener.sampleStopped(e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see TestListener#testIterationStart(LoopIterationEvent)
+	 */
+	public void testIterationStart(LoopIterationEvent event) {
+	}
 }

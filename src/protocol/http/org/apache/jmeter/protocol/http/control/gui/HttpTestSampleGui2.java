@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.control.gui;
 
@@ -23,25 +23,21 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
- * @version   $Revision$ on $Date$
+ * @version $Revision$ on $Date$
  */
-public class HttpTestSampleGui2 extends HttpTestSampleGui
-{
+public class HttpTestSampleGui2 extends HttpTestSampleGui {
 
-    public HttpTestSampleGui2()
-    {
-        super.init();
-    }
+	public HttpTestSampleGui2() {
+		super.init();
+	}
 
-    public TestElement createTestElement()
-    {
-        HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance("HTTPSampler2");
-        modifyTestElement(sampler);
-        return sampler;
-    }
+	public TestElement createTestElement() {
+		HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance("HTTPSampler2");
+		modifyTestElement(sampler);
+		return sampler;
+	}
 
-    public String getStaticLabel()
-	{
-    	return super.getStaticLabel()+" HTTPCLient (ALPHA)";
-    }
+	public String getStaticLabel() {
+		return super.getStaticLabel() + " HTTPCLient (ALPHA)";
+	}
 }

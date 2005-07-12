@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.sampler;
 
@@ -33,201 +33,139 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 /**
  */
 
-public class PostWriter
-{
-    protected final static String BOUNDARY =
-        "---------------------------7d159c1302d0y0";
-    private final static byte[] CRLF = { 0x0d, 0x0A };
-    //protected static int fudge = -20;
-    protected static final String encoding = "iso-8859-1";
+public class PostWriter {
+	protected final static String BOUNDARY = "---------------------------7d159c1302d0y0";
 
-    /**
-     * Send POST data from Entry to the open connection.
-     */
-    public void sendPostData(URLConnection connection, HTTPSampler sampler)
-        throws IOException
-    {
-        // If filename was specified then send the post using multipart syntax
-        String filename = sampler.getFilename();
-        if ((filename != null) && (filename.trim().length() > 0))
-        {
-            OutputStream out = connection.getOutputStream();
-            //new FileOutputStream("c:\\data\\experiment.txt");
-            //new ByteArrayOutputStream();
-            writeln(out, "--" + BOUNDARY);
-            PropertyIterator args = sampler.getArguments().iterator();
-            while (args.hasNext())
-            {
-                Argument arg = (Argument) args.next().getObjectValue();
-                writeFormMultipartStyle(
-                    out,
-                    arg.getName(),
-                    arg.getValue());
-                writeln(out, "--" + BOUNDARY);
-            }
-            writeFileToURL(
-                out,
-                filename,
-                sampler.getFileField(),
-                getFileStream(filename),
-                sampler.getMimetype());
+	private final static byte[] CRLF = { 0x0d, 0x0A };
 
-            writeln(out, "--" + BOUNDARY + "--");
-            out.flush();
-            out.close();
-        }
+	// protected static int fudge = -20;
+	protected static final String encoding = "iso-8859-1";
 
-        // No filename specified, so send the post using normal syntax
-        else
-        {
-            String postData = sampler.getQueryString();
-            PrintWriter out = new PrintWriter(connection.getOutputStream());
-            out.print(postData);
-            out.flush();
-        }
-    }
+	/**
+	 * Send POST data from Entry to the open connection.
+	 */
+	public void sendPostData(URLConnection connection, HTTPSampler sampler) throws IOException {
+		// If filename was specified then send the post using multipart syntax
+		String filename = sampler.getFilename();
+		if ((filename != null) && (filename.trim().length() > 0)) {
+			OutputStream out = connection.getOutputStream();
+			// new FileOutputStream("c:\\data\\experiment.txt");
+			// new ByteArrayOutputStream();
+			writeln(out, "--" + BOUNDARY);
+			PropertyIterator args = sampler.getArguments().iterator();
+			while (args.hasNext()) {
+				Argument arg = (Argument) args.next().getObjectValue();
+				writeFormMultipartStyle(out, arg.getName(), arg.getValue());
+				writeln(out, "--" + BOUNDARY);
+			}
+			writeFileToURL(out, filename, sampler.getFileField(), getFileStream(filename), sampler.getMimetype());
 
-    public void setHeaders(URLConnection connection, HTTPSampler sampler)
-        throws IOException
-    {
-        ((HttpURLConnection) connection).setRequestMethod("POST");
+			writeln(out, "--" + BOUNDARY + "--");
+			out.flush();
+			out.close();
+		}
 
-        // If filename was specified then send the post using multipart syntax
-        String filename = sampler.getFileField();
-        if ((filename != null) && (filename.trim().length() > 0))
-        {
-            connection.setRequestProperty(
-                "Content-Type",
-                "multipart/form-data; boundary=" + BOUNDARY);
-            connection.setDoOutput(true);
-            connection.setDoInput(true);
-        }
+		// No filename specified, so send the post using normal syntax
+		else {
+			String postData = sampler.getQueryString();
+			PrintWriter out = new PrintWriter(connection.getOutputStream());
+			out.print(postData);
+			out.flush();
+		}
+	}
 
-        // No filename specified, so send the post using normal syntax
-        else
-        {
-            String postData = sampler.getQueryString();
-            connection.setRequestProperty(
-                "Content-Length",
-                "" + postData.length());
-            connection.setRequestProperty(
-                "Content-Type",
-                "application/x-www-form-urlencoded");
-            connection.setDoOutput(true);
-        }
-    }
+	public void setHeaders(URLConnection connection, HTTPSampler sampler) throws IOException {
+		((HttpURLConnection) connection).setRequestMethod("POST");
 
-    private InputStream getFileStream(String filename) throws IOException
-    {
-        return new BufferedInputStream(new FileInputStream(filename));
-    }
+		// If filename was specified then send the post using multipart syntax
+		String filename = sampler.getFileField();
+		if ((filename != null) && (filename.trim().length() > 0)) {
+			connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+		}
 
-	/* NOTUSED
-    private String getContentLength(MultipartUrlConfig config)
-    {
-        long size = 0;
-        size += BOUNDARY.length() + 2;
-        PropertyIterator iter = config.getArguments().iterator();
-        while (iter.hasNext())
-        {
-            Argument item = (Argument) iter.next().getObjectValue();
-            size += item.getName().length()
-                + item.getValue().toString().length();
-            size += CRLF.length * 4;
-            size += BOUNDARY.length() + 2;
-            size += 39;
-        }
-        size += new File(config.getFilename()).length();
-        size += CRLF.length * 5;
-        size += BOUNDARY.length() + 2;
-        size += encode(config.getFileFieldName()).length();
-        size += encode(config.getFilename()).length();
-        size += config.getMimeType().length();
-        size += 66;
-        size += 2 + (CRLF.length * 1);
-        return Long.toString(size);
-    }
-	*/
-	
-    /**
-     *  Writes out the contents of a file in correct multipart format.
-     */
-    private void writeFileToURL(
-        OutputStream out,
-        String filename,
-        String fieldname,
-        InputStream in,
-        String mimetype)
-        throws IOException
-    {
-        writeln(
-            out,
-            "Content-Disposition: form-data; name=\""
-                + encode(fieldname)
-                + "\"; filename=\""
-                + encode(filename)
-                + "\"");
-        writeln(out, "Content-Type: " + mimetype);
-        out.write(CRLF);
+		// No filename specified, so send the post using normal syntax
+		else {
+			String postData = sampler.getQueryString();
+			connection.setRequestProperty("Content-Length", "" + postData.length());
+			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			connection.setDoOutput(true);
+		}
+	}
 
-        byte[] buf = new byte[1024];
-	        //1k - the previous 100k made no sense (there's tons of buffers
-	        // elsewhere in the chain) and it caused OOM when many concurrent 
-	        // uploads were being done. Could be fixed by increasing the evacuation
-	        // ratio in bin/jmeter[.bat], but this is better.
-        int read;
-        while ((read = in.read(buf)) > 0)
-        {
-            out.write(buf, 0, read);
-        }
-        out.write(CRLF);
-        in.close();
-    }
+	private InputStream getFileStream(String filename) throws IOException {
+		return new BufferedInputStream(new FileInputStream(filename));
+	}
 
-    /**
-     *  Writes form data in multipart format.
-     */
-    private void writeFormMultipartStyle(
-        OutputStream out,
-        String name,
-        String value)
-        throws IOException
-    {
-        writeln(out, "Content-Disposition: form-data; name=\"" + name + "\"");
-        out.write(CRLF);
-        writeln(out, value);
-    }
+	/*
+	 * NOTUSED private String getContentLength(MultipartUrlConfig config) { long
+	 * size = 0; size += BOUNDARY.length() + 2; PropertyIterator iter =
+	 * config.getArguments().iterator(); while (iter.hasNext()) { Argument item =
+	 * (Argument) iter.next().getObjectValue(); size += item.getName().length() +
+	 * item.getValue().toString().length(); size += CRLF.length * 4; size +=
+	 * BOUNDARY.length() + 2; size += 39; } size += new
+	 * File(config.getFilename()).length(); size += CRLF.length * 5; size +=
+	 * BOUNDARY.length() + 2; size +=
+	 * encode(config.getFileFieldName()).length(); size +=
+	 * encode(config.getFilename()).length(); size +=
+	 * config.getMimeType().length(); size += 66; size += 2 + (CRLF.length * 1);
+	 * return Long.toString(size); }
+	 */
 
-    private String encode(String value)
-    {
-        StringBuffer newValue = new StringBuffer();
-        char[] chars = value.toCharArray();
-        for (int i = 0; i < chars.length; i++)
-        {
-            if (chars[i] == '\\')
-            {
-                newValue.append("\\\\");
-            }
-            else
-            {
-                newValue.append(chars[i]);
-            }
-        }
-        return newValue.toString();
-    }
+	/**
+	 * Writes out the contents of a file in correct multipart format.
+	 */
+	private void writeFileToURL(OutputStream out, String filename, String fieldname, InputStream in, String mimetype)
+			throws IOException {
+		writeln(out, "Content-Disposition: form-data; name=\"" + encode(fieldname) + "\"; filename=\""
+				+ encode(filename) + "\"");
+		writeln(out, "Content-Type: " + mimetype);
+		out.write(CRLF);
 
-	/* NOTUSED
-    private void write(OutputStream out, String value)
-        throws UnsupportedEncodingException, IOException
-    {
-        out.write(value.getBytes(encoding));
-    }
-    */
+		byte[] buf = new byte[1024];
+		// 1k - the previous 100k made no sense (there's tons of buffers
+		// elsewhere in the chain) and it caused OOM when many concurrent
+		// uploads were being done. Could be fixed by increasing the evacuation
+		// ratio in bin/jmeter[.bat], but this is better.
+		int read;
+		while ((read = in.read(buf)) > 0) {
+			out.write(buf, 0, read);
+		}
+		out.write(CRLF);
+		in.close();
+	}
 
-    private void writeln(OutputStream out, String value)
-        throws UnsupportedEncodingException, IOException
-    {
-        out.write(value.getBytes(encoding));
-        out.write(CRLF);
-    }
+	/**
+	 * Writes form data in multipart format.
+	 */
+	private void writeFormMultipartStyle(OutputStream out, String name, String value) throws IOException {
+		writeln(out, "Content-Disposition: form-data; name=\"" + name + "\"");
+		out.write(CRLF);
+		writeln(out, value);
+	}
+
+	private String encode(String value) {
+		StringBuffer newValue = new StringBuffer();
+		char[] chars = value.toCharArray();
+		for (int i = 0; i < chars.length; i++) {
+			if (chars[i] == '\\') {
+				newValue.append("\\\\");
+			} else {
+				newValue.append(chars[i]);
+			}
+		}
+		return newValue.toString();
+	}
+
+	/*
+	 * NOTUSED private void write(OutputStream out, String value) throws
+	 * UnsupportedEncodingException, IOException {
+	 * out.write(value.getBytes(encoding)); }
+	 */
+
+	private void writeln(OutputStream out, String value) throws UnsupportedEncodingException, IOException {
+		out.write(value.getBytes(encoding));
+		out.write(CRLF);
+	}
 }

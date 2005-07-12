@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jorphan.gui;
 
@@ -35,250 +35,224 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class JLabeledChoice extends JPanel implements JLabeledField
-{
-    private JLabel mLabel = new JLabel();
-    private JComboBox choiceList;
-    
-    // Maybe move to vector if MT problems occur
-    private ArrayList mChangeListeners = new ArrayList(3);
-    
-    private JButton delete, add;
+public class JLabeledChoice extends JPanel implements JLabeledField {
+	private JLabel mLabel = new JLabel();
 
-    /**
-     * Default constructor, The label and the Text field are left empty.
-     */
-    public JLabeledChoice()
-    {
-        super();
-        choiceList = new JComboBox();
-        init();
-    }
+	private JComboBox choiceList;
 
-    public List getComponentList()
-    {
-        List comps = new LinkedList();
-        comps.add(mLabel);
-        comps.add(choiceList);
-        return comps;
-    }
+	// Maybe move to vector if MT problems occur
+	private ArrayList mChangeListeners = new ArrayList(3);
 
-    public JLabeledChoice(String pLabel, boolean editable)
-    {
-        super();
-        choiceList = new JComboBox();
-        mLabel.setText(pLabel);
-        choiceList.setEditable(editable);
-        init();
-    }
+	private JButton delete, add;
 
-    public void setEditable(boolean editable)
-    {
-        choiceList.setEditable(false);//TODO - is this correct?
-    }
+	/**
+	 * Default constructor, The label and the Text field are left empty.
+	 */
+	public JLabeledChoice() {
+		super();
+		choiceList = new JComboBox();
+		init();
+	}
 
-    public void addValue(String item)
-    {
-        choiceList.addItem(item);
-    }
+	public List getComponentList() {
+		List comps = new LinkedList();
+		comps.add(mLabel);
+		comps.add(choiceList);
+		return comps;
+	}
 
-    public void setValues(String[] items)
-    {
-        choiceList.removeAllItems();
-        for (int i = 0; i < items.length; i++)
-        {
-            choiceList.addItem(items[i]);
-        }
-    }
+	public JLabeledChoice(String pLabel, boolean editable) {
+		super();
+		choiceList = new JComboBox();
+		mLabel.setText(pLabel);
+		choiceList.setEditable(editable);
+		init();
+	}
 
-    /**
-     * Constructs a new component with the label displaying the
-     * passed text.
-     *
-     * @param pLabel The text to in the label.
-     */
-    public JLabeledChoice(String pLabel, String[] items)
-    {
-        super();
-        mLabel.setText(pLabel);
-        choiceList = new JComboBox(items);
-        choiceList.setEditable(false);
-        init();
-    }
+	public void setEditable(boolean editable) {
+		choiceList.setEditable(false);// TODO - is this correct?
+	}
 
-    public JLabeledChoice(String pLabel, String[] items, boolean editable)
-    {
-        super();
-        mLabel.setText(pLabel);
-        choiceList = new JComboBox(items);
-        choiceList.setEditable(editable);
-        init();
-    }
+	public void addValue(String item) {
+		choiceList.addItem(item);
+	}
 
-    /**
-     * Initialises all of the components on this panel.
-     */
-    private void init()
-    {
-        /*if(choiceList.isEditable())
-        {
-            choiceList.addActionListener(new ComboListener());
-        }*/
-        choiceList.setBorder(BorderFactory.createLoweredBevelBorder());
-        // Register the handler for focus listening. This handler will
-        // only notify the registered when the text changes from when
-        // the focus is gained to when it is lost.
-        choiceList.addItemListener(new ItemListener()
-        {
-            /**
-             * Callback method when the focus to the Text Field component
-             * is lost.
-             *
-             * @param pFocusEvent The focus event that occured.
-             */
-            public void itemStateChanged(ItemEvent e)
-            {
-                if (e.getStateChange() == ItemEvent.SELECTED)
-                {
-                    notifyChangeListeners();
-                }
-            }
-        });
+	public void setValues(String[] items) {
+		choiceList.removeAllItems();
+		for (int i = 0; i < items.length; i++) {
+			choiceList.addItem(items[i]);
+		}
+	}
 
-        // Add the sub components
-        this.add(mLabel);
-        this.add(choiceList);
-        if (choiceList.isEditable())
-        {
-            add = new JButton("Add");
-            add.setMargin(new Insets(1, 1, 1, 1));
-            add.addActionListener(new AddListener());
-            this.add(add);
-            delete = new JButton("Del");
-            delete.setMargin(new Insets(1, 1, 1, 1));
-            delete.addActionListener(new DeleteListener());
-            this.add(delete);
-        }
+	/**
+	 * Constructs a new component with the label displaying the passed text.
+	 * 
+	 * @param pLabel
+	 *            The text to in the label.
+	 */
+	public JLabeledChoice(String pLabel, String[] items) {
+		super();
+		mLabel.setText(pLabel);
+		choiceList = new JComboBox(items);
+		choiceList.setEditable(false);
+		init();
+	}
 
-    }
+	public JLabeledChoice(String pLabel, String[] items, boolean editable) {
+		super();
+		mLabel.setText(pLabel);
+		choiceList = new JComboBox(items);
+		choiceList.setEditable(editable);
+		init();
+	}
 
-    /**
-     * Set the text displayed in the label.
-     *
-     * @param pLabel The new label text.
-     */
-    public void setLabel(String pLabel)
-    {
-        mLabel.setText(pLabel);
-    }
+	/**
+	 * Initialises all of the components on this panel.
+	 */
+	private void init() {
+		/*
+		 * if(choiceList.isEditable()) { choiceList.addActionListener(new
+		 * ComboListener()); }
+		 */
+		choiceList.setBorder(BorderFactory.createLoweredBevelBorder());
+		// Register the handler for focus listening. This handler will
+		// only notify the registered when the text changes from when
+		// the focus is gained to when it is lost.
+		choiceList.addItemListener(new ItemListener() {
+			/**
+			 * Callback method when the focus to the Text Field component is
+			 * lost.
+			 * 
+			 * @param pFocusEvent
+			 *            The focus event that occured.
+			 */
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					notifyChangeListeners();
+				}
+			}
+		});
 
-    /**
-     * Set the text displayed in the Text Field.
-     *
-     * @param pText The new text to display in the text field.
-     */
-    public void setText(String pText)
-    {
-        choiceList.setSelectedItem(pText);
-    }
+		// Add the sub components
+		this.add(mLabel);
+		this.add(choiceList);
+		if (choiceList.isEditable()) {
+			add = new JButton("Add");
+			add.setMargin(new Insets(1, 1, 1, 1));
+			add.addActionListener(new AddListener());
+			this.add(add);
+			delete = new JButton("Del");
+			delete.setMargin(new Insets(1, 1, 1, 1));
+			delete.addActionListener(new DeleteListener());
+			this.add(delete);
+		}
 
-    /**
-     * Returns the text in the Text Field.
-     *
-     * @return The text in the Text Field.
-     */
-    public String getText()
-    {
-        return (String) choiceList.getSelectedItem();
-    }
+	}
 
-    public Object[] getSelectedItems()
-    {
-        return choiceList.getSelectedObjects();
-    }
+	/**
+	 * Set the text displayed in the label.
+	 * 
+	 * @param pLabel
+	 *            The new label text.
+	 */
+	public void setLabel(String pLabel) {
+		mLabel.setText(pLabel);
+	}
 
-    public String[] getItems()
-    {
-        String[] items = new String[choiceList.getItemCount()];
-        for (int i = 0; i < items.length; i++)
-        {
-            items[i] = (String) choiceList.getItemAt(i);
-        }
-        return items;
-    }
+	/**
+	 * Set the text displayed in the Text Field.
+	 * 
+	 * @param pText
+	 *            The new text to display in the text field.
+	 */
+	public void setText(String pText) {
+		choiceList.setSelectedItem(pText);
+	}
 
-    /**
-     * Returns the text of the label.
-     *
-     * @return The text of the label.
-     */
-    public String getLabel()
-    {
-        return mLabel.getText();
-    }
+	/**
+	 * Returns the text in the Text Field.
+	 * 
+	 * @return The text in the Text Field.
+	 */
+	public String getText() {
+		return (String) choiceList.getSelectedItem();
+	}
 
-    /**
-     * Adds a change listener, that will be notified when the text in the
-     * text field is changed. The ChangeEvent that will be passed
-     * to registered listeners will contain this object as the source, allowing
-     * the new text to be extracted using the {@link #getText() getText} method.
-     *
-     * @param pChangeListener The listener to add
-     */
-    public void addChangeListener(ChangeListener pChangeListener)
-    {
-        mChangeListeners.add(pChangeListener);
-    }
+	public Object[] getSelectedItems() {
+		return choiceList.getSelectedObjects();
+	}
 
-    /**
-     * Removes a change listener.
-     *
-     * @param pChangeListener The change listener to remove.
-     */
-    public void removeChangeListener(ChangeListener pChangeListener)
-    {
-        mChangeListeners.remove(pChangeListener);
-    }
+	public String[] getItems() {
+		String[] items = new String[choiceList.getItemCount()];
+		for (int i = 0; i < items.length; i++) {
+			items[i] = (String) choiceList.getItemAt(i);
+		}
+		return items;
+	}
 
-    /**
-     * Notify all registered change listeners that the
-     * text in the text field has changed.
-     */
-    private void notifyChangeListeners()
-    {
-        ChangeEvent ce = new ChangeEvent(this);
-        for (int index = 0; index < mChangeListeners.size(); index++)
-        {
-            ((ChangeListener) mChangeListeners.get(index)).stateChanged(ce);
-        }
-    }
+	/**
+	 * Returns the text of the label.
+	 * 
+	 * @return The text of the label.
+	 */
+	public String getLabel() {
+		return mLabel.getText();
+	}
 
-    private class AddListener implements ActionListener
-    {
+	/**
+	 * Adds a change listener, that will be notified when the text in the text
+	 * field is changed. The ChangeEvent that will be passed to registered
+	 * listeners will contain this object as the source, allowing the new text
+	 * to be extracted using the {@link #getText() getText} method.
+	 * 
+	 * @param pChangeListener
+	 *            The listener to add
+	 */
+	public void addChangeListener(ChangeListener pChangeListener) {
+		mChangeListeners.add(pChangeListener);
+	}
 
-        public void actionPerformed(ActionEvent e)
-        {
-            Object item = choiceList.getSelectedItem();
-            int index = choiceList.getSelectedIndex();
-            if (!item.equals(choiceList.getItemAt(index)))
-            {
-                choiceList.addItem(item);
-            }
-            choiceList.setSelectedItem(item);
-            notifyChangeListeners();
-        }
-    }
+	/**
+	 * Removes a change listener.
+	 * 
+	 * @param pChangeListener
+	 *            The change listener to remove.
+	 */
+	public void removeChangeListener(ChangeListener pChangeListener) {
+		mChangeListeners.remove(pChangeListener);
+	}
 
-    private class DeleteListener implements ActionListener
-    {
+	/**
+	 * Notify all registered change listeners that the text in the text field
+	 * has changed.
+	 */
+	private void notifyChangeListeners() {
+		ChangeEvent ce = new ChangeEvent(this);
+		for (int index = 0; index < mChangeListeners.size(); index++) {
+			((ChangeListener) mChangeListeners.get(index)).stateChanged(ce);
+		}
+	}
 
-        public void actionPerformed(ActionEvent e)
-        {
-            if (choiceList.getItemCount() > 1)
-            {
-                choiceList.removeItemAt(choiceList.getSelectedIndex());
-                notifyChangeListeners();
-            }
-        }
-    }
+	private class AddListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			Object item = choiceList.getSelectedItem();
+			int index = choiceList.getSelectedIndex();
+			if (!item.equals(choiceList.getItemAt(index))) {
+				choiceList.addItem(item);
+			}
+			choiceList.setSelectedItem(item);
+			notifyChangeListeners();
+		}
+	}
+
+	private class DeleteListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			if (choiceList.getItemCount() > 1) {
+				choiceList.removeItemAt(choiceList.getSelectedIndex());
+				notifyChangeListeners();
+			}
+		}
+	}
 }

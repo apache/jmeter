@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.modifier;
 
@@ -32,132 +32,106 @@ import org.xml.sax.SAXException;
 /**
  * The handler used to read in XML parameter data.
  * 
- * @author     Mark Walsh
- * @version    $Revision$
+ * @author Mark Walsh
+ * @version $Revision$
  */
-public class UserParameterXMLContentHandler implements ContentHandler
-{
-    //-------------------------------------------
-    // Constants and Data Members
-    //-------------------------------------------
+public class UserParameterXMLContentHandler implements ContentHandler {
+	// -------------------------------------------
+	// Constants and Data Members
+	// -------------------------------------------
 
-    // Note UserParameterXML accesses this variable
-    // to obtain the Set data via method getParsedParameters()
-    private List userThreads = new LinkedList();
+	// Note UserParameterXML accesses this variable
+	// to obtain the Set data via method getParsedParameters()
+	private List userThreads = new LinkedList();
 
-    private String paramname = "";
-    private String paramvalue = "";
-    private Map nameValuePair = new HashMap();
+	private String paramname = "";
 
-    /** Buffer for collecting data from the "characters" SAX event. */
-    private CharArrayWriter contents = new CharArrayWriter();
+	private String paramvalue = "";
 
-    //-------------------------------------------
-    // Methods
-    //-------------------------------------------
+	private Map nameValuePair = new HashMap();
 
-    /*-------------------------------------------------------------------------
-     * Methods implemented from org.xml.sax.ContentHandler
-     *----------------------------------------------------------------------- */
-    public void setDocumentLocator(Locator locator)
-    {
-    }
+	/** Buffer for collecting data from the "characters" SAX event. */
+	private CharArrayWriter contents = new CharArrayWriter();
 
-    public void startDocument() throws SAXException
-    {
-    }
+	// -------------------------------------------
+	// Methods
+	// -------------------------------------------
 
-    public void endDocument() throws SAXException
-    {
-    }
+	/*-------------------------------------------------------------------------
+	 * Methods implemented from org.xml.sax.ContentHandler
+	 *----------------------------------------------------------------------- */
+	public void setDocumentLocator(Locator locator) {
+	}
 
-    public void startPrefixMapping(String prefix, String uri)
-        throws SAXException
-    {
-    }
+	public void startDocument() throws SAXException {
+	}
 
-    public void endPrefixMapping(String prefix) throws SAXException
-    {
-    }
+	public void endDocument() throws SAXException {
+	}
 
-    public void startElement(
-        String namespaceURL,
-        String localName,
-        String qName,
-        Attributes atts)
-        throws SAXException
-    {
+	public void startPrefixMapping(String prefix, String uri) throws SAXException {
+	}
 
-        contents.reset();
+	public void endPrefixMapping(String prefix) throws SAXException {
+	}
 
-        // haven't got to reset paramname & paramvalue
-        // but did it to keep the code looking correct
-        if (qName.equals("parameter"))
-        {
-            paramname = "";
-            paramvalue = "";
-        }
+	public void startElement(String namespaceURL, String localName, String qName, Attributes atts) throws SAXException {
 
-        // must create a new object,
-        // or else end up with a set full of the same Map object
-        if (qName.equals("thread"))
-        {
-            nameValuePair = new HashMap();
-        }
+		contents.reset();
 
-    }
+		// haven't got to reset paramname & paramvalue
+		// but did it to keep the code looking correct
+		if (qName.equals("parameter")) {
+			paramname = "";
+			paramvalue = "";
+		}
 
-    public void endElement(String namespaceURI, String localName, String qName)
-        throws SAXException
-    {
-        if (qName.equals("paramname"))
-        {
-            paramname = contents.toString();
-        }
-        if (qName.equals("paramvalue"))
-        {
-            paramvalue = contents.toString();
-        }
-        if (qName.equals("parameter"))
-        {
-            nameValuePair.put(paramname, paramvalue);
-        }
-        if (qName.equals("thread"))
-        {
-            userThreads.add(nameValuePair);
-        }
-    }
+		// must create a new object,
+		// or else end up with a set full of the same Map object
+		if (qName.equals("thread")) {
+			nameValuePair = new HashMap();
+		}
 
-    public void characters(char ch[], int start, int length)
-        throws SAXException
-    {
-        contents.write(ch, start, length);
-    }
+	}
 
-    public void ignorableWhitespace(char ch[], int start, int length)
-        throws SAXException
-    {
-    }
+	public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
+		if (qName.equals("paramname")) {
+			paramname = contents.toString();
+		}
+		if (qName.equals("paramvalue")) {
+			paramvalue = contents.toString();
+		}
+		if (qName.equals("parameter")) {
+			nameValuePair.put(paramname, paramvalue);
+		}
+		if (qName.equals("thread")) {
+			userThreads.add(nameValuePair);
+		}
+	}
 
-    public void processingInstruction(String target, String date)
-        throws SAXException
-    {
-    }
+	public void characters(char ch[], int start, int length) throws SAXException {
+		contents.write(ch, start, length);
+	}
 
-    public void skippedEntity(String name) throws SAXException
-    {
-    }
+	public void ignorableWhitespace(char ch[], int start, int length) throws SAXException {
+	}
 
-    /*-------------------------------------------------------------------------
-     * Methods (used by UserParameterXML to get XML parameters from XML file)
-     *----------------------------------------------------------------------- */
+	public void processingInstruction(String target, String date) throws SAXException {
+	}
 
-    /**
-     * results of parsing all user parameter data defined in XML file.
-     * @return all users name value pairs obtained from XML file
-     */
-    public List getParsedParameters()
-    {
-        return userThreads;
-    }
+	public void skippedEntity(String name) throws SAXException {
+	}
+
+	/*-------------------------------------------------------------------------
+	 * Methods (used by UserParameterXML to get XML parameters from XML file)
+	 *----------------------------------------------------------------------- */
+
+	/**
+	 * results of parsing all user parameter data defined in XML file.
+	 * 
+	 * @return all users name value pairs obtained from XML file
+	 */
+	public List getParsedParameters() {
+		return userThreads;
+	}
 }

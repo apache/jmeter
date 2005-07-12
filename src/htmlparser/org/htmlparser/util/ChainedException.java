@@ -33,7 +33,6 @@
 // This class was contributed by 
 // Claude Duguay
 //
-
 package org.htmlparser.util;
 
 /**
@@ -71,103 +70,78 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChainedException extends Exception
-{
-    protected Throwable throwable;
+public class ChainedException extends Exception {
+	protected Throwable throwable;
 
-    public ChainedException()
-    {
-    }
+	public ChainedException() {
+	}
 
-    public ChainedException(String message)
-    {
-        super(message);
-    }
+	public ChainedException(String message) {
+		super(message);
+	}
 
-    public ChainedException(Throwable throwable)
-    {
-        this.throwable = throwable;
-    }
+	public ChainedException(Throwable throwable) {
+		this.throwable = throwable;
+	}
 
-    public ChainedException(String message, Throwable throwable)
-    {
-        super(message);
-        this.throwable = throwable;
-    }
+	public ChainedException(String message, Throwable throwable) {
+		super(message);
+		this.throwable = throwable;
+	}
 
-    public String[] getMessageChain()
-    {
-        List list = getMessageList();
-        String[] chain = new String[list.size()];
-        for (int i = 0; i < list.size(); i++)
-        {
-            chain[i] = (String) list.get(i);
-        }
-        return chain;
-    }
+	public String[] getMessageChain() {
+		List list = getMessageList();
+		String[] chain = new String[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			chain[i] = (String) list.get(i);
+		}
+		return chain;
+	}
 
-    public List getMessageList()
-    {
-        ArrayList list = new ArrayList();
-        list.add(getMessage());
-        if (throwable != null)
-        {
-            if (throwable instanceof ChainedException)
-            {
-                ChainedException chain = (ChainedException) throwable;
-                list.addAll(chain.getMessageList());
-            }
-            else
-            {
-                String message = throwable.getMessage();
-                if (message != null && !message.equals(""))
-                {
-                    list.add(message);
-                }
-            }
-        }
-        return list;
-    }
+	public List getMessageList() {
+		ArrayList list = new ArrayList();
+		list.add(getMessage());
+		if (throwable != null) {
+			if (throwable instanceof ChainedException) {
+				ChainedException chain = (ChainedException) throwable;
+				list.addAll(chain.getMessageList());
+			} else {
+				String message = throwable.getMessage();
+				if (message != null && !message.equals("")) {
+					list.add(message);
+				}
+			}
+		}
+		return list;
+	}
 
-    public Throwable getThrowable()
-    {
-        return throwable;
-    }
+	public Throwable getThrowable() {
+		return throwable;
+	}
 
-    public void printStackTrace()
-    {
-        printStackTrace(System.err);
-    }
+	public void printStackTrace() {
+		printStackTrace(System.err);
+	}
 
-    public void printStackTrace(PrintStream out)
-    {
-        synchronized (out)
-        {
-            if (throwable != null)
-            {
-                out.println(getClass().getName() + ": " + getMessage() + ";");
-                throwable.printStackTrace(out);
-            }
-            else
-            {
-                super.printStackTrace(out);
-            }
-        }
-    }
+	public void printStackTrace(PrintStream out) {
+		synchronized (out) {
+			if (throwable != null) {
+				out.println(getClass().getName() + ": " + getMessage() + ";");
+				throwable.printStackTrace(out);
+			} else {
+				super.printStackTrace(out);
+			}
+		}
+	}
 
-    public void printStackTrace(PrintWriter out)
-    {
-        synchronized (out)
-        {
-            if (throwable != null)
-            {
-                out.println(getClass().getName() + ": " + getMessage() + ";");
-                throwable.printStackTrace(out);
-            }
-            else
-            {
-                super.printStackTrace(out);
-            }
-        }
-    }
+	public void printStackTrace(PrintWriter out) {
+		synchronized (out) {
+			if (throwable != null) {
+				out.println(getClass().getName() + ": " + getMessage() + ";");
+				throwable.printStackTrace(out);
+			} else {
+				super.printStackTrace(out);
+			}
+		}
+	}
 }

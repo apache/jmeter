@@ -29,35 +29,28 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.util;
 
 /**
  * Library-specific support for chained exceptions.
- *
+ * 
  * @see ChainedException
  * @author Claude Duguay
- **/
+ */
 
+public class ParserException extends ChainedException {
+	public ParserException() {
+	}
 
-public class ParserException extends ChainedException
-{
-    public ParserException()
-    {
-    }
+	public ParserException(String message) {
+		super(message);
+	}
 
-    public ParserException(String message)
-    {
-        super(message);
-    }
+	public ParserException(Throwable throwable) {
+		super(throwable);
+	}
 
-    public ParserException(Throwable throwable)
-    {
-        super(throwable);
-    }
-
-    public ParserException(String message, Throwable throwable)
-    {
-        super(message, throwable);
-    }
+	public ParserException(String message, Throwable throwable) {
+		super(message, throwable);
+	}
 }

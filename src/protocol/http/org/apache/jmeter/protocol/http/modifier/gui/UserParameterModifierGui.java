@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.modifier.gui;
 
@@ -35,101 +35,91 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * A swing panel to allow UI with the UserParameterModifier class.
- *
- * @version    $Revision$ on $Date$
+ * 
+ * @version $Revision$ on $Date$
  */
-public class UserParameterModifierGui extends AbstractPreProcessorGui
-{
-    //-------------------------------------------
-    // Constants and Data Members
-    //-------------------------------------------
-    private JTextField fileNameField;
- 
-    //-------------------------------------------
-    // Constructors
-    //-------------------------------------------
- 
-    public UserParameterModifierGui()
-    {
-        super();
-        init();
-    }
-    
-    public TestElement createTestElement()
-    {
-        UserParameterModifier mod = new UserParameterModifier();
-        modifyTestElement(mod);
-        return mod;
-    }
+public class UserParameterModifierGui extends AbstractPreProcessorGui {
+	// -------------------------------------------
+	// Constants and Data Members
+	// -------------------------------------------
+	private JTextField fileNameField;
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement mod)
-    {
-        this.configureTestElement(mod);
-        ((UserParameterModifier) mod).setXmlUri(fileNameField.getText());
-    }
+	// -------------------------------------------
+	// Constructors
+	// -------------------------------------------
 
-    public void updateGui()
-    {
-    }
+	public UserParameterModifierGui() {
+		super();
+		init();
+	}
 
-    public String getLabelResource()
-    {
-        return "http_user_parameter_modifier";
-    }
+	public TestElement createTestElement() {
+		UserParameterModifier mod = new UserParameterModifier();
+		modifyTestElement(mod);
+		return mod;
+	}
 
-    public void configure(TestElement el)
-    {
-        super.configure(el);
-        fileNameField.setText(((UserParameterModifier) el).getXmlUri());
-    }
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement mod) {
+		this.configureTestElement(mod);
+		((UserParameterModifier) mod).setXmlUri(fileNameField.getText());
+	}
 
-    /*-------------------------------------------------------------------------
-     * Methods Private
-     *------------------------------------------------------------------------*/
-    private void init()
-    {
-        setLayout(new BorderLayout(0, 5));
-        setBorder(makeBorder());
-        add(makeTitlePanel(), BorderLayout.NORTH);
+	public void updateGui() {
+	}
 
-        JPanel mainPanel = new JPanel(new BorderLayout(0, 5));
-        mainPanel.add(getFileLocator(), BorderLayout.NORTH);
+	public String getLabelResource() {
+		return "http_user_parameter_modifier";
+	}
 
-        // We want the help text to look like a label, but wrap like a text area
-        JTextArea helpText =
-            new JTextArea(JMeterUtils.getResString("user_param_mod_help_note"));
-        helpText.setLineWrap(true);
-        helpText.setWrapStyleWord(true);
-        helpText.setBackground(getBackground());
-        helpText.setEditable(false);
-        JLabel dummyLabel = new JLabel();
-        helpText.setFont(dummyLabel.getFont());
-        helpText.setForeground(dummyLabel.getForeground());
-        JScrollPane scroller = new JScrollPane(helpText);
-        scroller.setBorder(BorderFactory.createEmptyBorder());
-        mainPanel.add(scroller, BorderLayout.CENTER);
+	public void configure(TestElement el) {
+		super.configure(el);
+		fileNameField.setText(((UserParameterModifier) el).getXmlUri());
+	}
 
-        add(mainPanel, BorderLayout.CENTER);
-    }
+	/*-------------------------------------------------------------------------
+	 * Methods Private
+	 *------------------------------------------------------------------------*/
+	private void init() {
+		setLayout(new BorderLayout(0, 5));
+		setBorder(makeBorder());
+		add(makeTitlePanel(), BorderLayout.NORTH);
 
-    private JPanel getFileLocator()
-    {
-        fileNameField = new JTextField("users.xml", 15);
-        JLabel label = new JLabel(JMeterUtils.getResString("filename"));
-        label.setLabelFor(fileNameField);
+		JPanel mainPanel = new JPanel(new BorderLayout(0, 5));
+		mainPanel.add(getFileLocator(), BorderLayout.NORTH);
 
-        JPanel fileLocator = new JPanel(new BorderLayout());
-        fileLocator.add(label, BorderLayout.WEST);
-        fileLocator.add(fileNameField, BorderLayout.CENTER);
-        return fileLocator;
-    }
+		// We want the help text to look like a label, but wrap like a text area
+		JTextArea helpText = new JTextArea(JMeterUtils.getResString("user_param_mod_help_note"));
+		helpText.setLineWrap(true);
+		helpText.setWrapStyleWord(true);
+		helpText.setBackground(getBackground());
+		helpText.setEditable(false);
+		JLabel dummyLabel = new JLabel();
+		helpText.setFont(dummyLabel.getFont());
+		helpText.setForeground(dummyLabel.getForeground());
+		JScrollPane scroller = new JScrollPane(helpText);
+		scroller.setBorder(BorderFactory.createEmptyBorder());
+		mainPanel.add(scroller, BorderLayout.CENTER);
 
-    public Dimension getPreferredSize()
-    {
-        return getMinimumSize();
-    }
+		add(mainPanel, BorderLayout.CENTER);
+	}
+
+	private JPanel getFileLocator() {
+		fileNameField = new JTextField("users.xml", 15);
+		JLabel label = new JLabel(JMeterUtils.getResString("filename"));
+		label.setLabelFor(fileNameField);
+
+		JPanel fileLocator = new JPanel(new BorderLayout());
+		fileLocator.add(label, BorderLayout.WEST);
+		fileLocator.add(fileNameField, BorderLayout.CENTER);
+		return fileLocator;
+	}
+
+	public Dimension getPreferredSize() {
+		return getMinimumSize();
+	}
 }

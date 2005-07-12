@@ -37,105 +37,96 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * For performance reasons, I am using tabs for the
- * visualizers. Since a visualizer is heavy weight,
- * I don not want to have two separate result
- * collectors rather the same information. Instead,
- * I would rather have the visualizer be the
- * container for the data and simply pass the data
- * to child JComponents. In the future, we may want
- * to add email alerts as a third tab.
+ * For performance reasons, I am using tabs for the visualizers. Since a
+ * visualizer is heavy weight, I don not want to have two separate result
+ * collectors rather the same information. Instead, I would rather have the
+ * visualizer be the container for the data and simply pass the data to child
+ * JComponents. In the future, we may want to add email alerts as a third tab.
  */
-public class MonitorHealthVisualizer extends AbstractVisualizer
-	implements ImageVisualizer, ItemListener, GraphListener, Clearable
-{
+public class MonitorHealthVisualizer extends AbstractVisualizer implements ImageVisualizer, ItemListener,
+		GraphListener, Clearable {
 	private MonitorTabPane TABPANE;
-	private MonitorHealthPanel HEALTHPANE;
-	private MonitorPerformancePanel PERFPANE;
-	private MonitorAccumModel MODEL;
-	private MonitorGraph GRAPH;
-	
-	public static final String BUFFER = "monitor.buffer.size";
-	private static transient Logger log = LoggingManager.getLoggerForClass();
-	
-    /**
-     * Constructor for the GraphVisualizer object.
-     */
-    public MonitorHealthVisualizer()
-    {
-    	this.isStats = true;
-		initModel();
-    	init();
-    }
 
-	public void initModel(){
-		MODEL = new MonitorAccumModel();
-		GRAPH = new MonitorGraph(MODEL);
-		MODEL.setBufferSize(JMeterUtils.getPropDefault(BUFFER,800));
-	}
-	
-    public String getLabelResource()
-    {
-        return "monitor_health_title";
-    }
+	private MonitorHealthPanel HEALTHPANE;
+
+	private MonitorPerformancePanel PERFPANE;
+
+	private MonitorAccumModel MODEL;
+
+	private MonitorGraph GRAPH;
+
+	public static final String BUFFER = "monitor.buffer.size";
+
+	private static transient Logger log = LoggingManager.getLoggerForClass();
 
 	/**
-	 * Because of the unique requirements of a monitor
-	 * We have to handle the results differently than
-	 * normal GUI components. A monitor should be able
-	 * to run for a very long time without eating up
-	 * all the memory.
+	 * Constructor for the GraphVisualizer object.
 	 */
-    public void add(SampleResult res) {
-        MODEL.addSample(res);
-        try {
-            collector.recordStats(
-                this.MODEL.getLastSample().cloneMonitorStats());
-        } catch (Exception e) {
-            // for now just swallow the exception
-            log.debug("StatsModel was null", e);
-        }
-    }
-	
-	public Image getImage()
-	{
-		Image result = GRAPH.createImage(this.getWidth(),this.getHeight());
+	public MonitorHealthVisualizer() {
+		this.isStats = true;
+		initModel();
+		init();
+	}
+
+	public void initModel() {
+		MODEL = new MonitorAccumModel();
+		GRAPH = new MonitorGraph(MODEL);
+		MODEL.setBufferSize(JMeterUtils.getPropDefault(BUFFER, 800));
+	}
+
+	public String getLabelResource() {
+		return "monitor_health_title";
+	}
+
+	/**
+	 * Because of the unique requirements of a monitor We have to handle the
+	 * results differently than normal GUI components. A monitor should be able
+	 * to run for a very long time without eating up all the memory.
+	 */
+	public void add(SampleResult res) {
+		MODEL.addSample(res);
+		try {
+			collector.recordStats(this.MODEL.getLastSample().cloneMonitorStats());
+		} catch (Exception e) {
+			// for now just swallow the exception
+			log.debug("StatsModel was null", e);
+		}
+	}
+
+	public Image getImage() {
+		Image result = GRAPH.createImage(this.getWidth(), this.getHeight());
 		Graphics image = result.getGraphics();
 		GRAPH.paintComponent(image);
 		return result;
 	}
 
-	public void itemStateChanged(ItemEvent e)
-	{
+	public void itemStateChanged(ItemEvent e) {
 	}
-	
-	public synchronized void updateGui()
-	{
+
+	public synchronized void updateGui() {
 		this.repaint();
 	}
 
-	public synchronized void updateGui(Sample s)
-	{
+	public synchronized void updateGui(Sample s) {
 		this.repaint();
 	}
 
 	/**
 	 * Initialize the GUI.
 	 */
-	private void init()
-	{
+	private void init() {
 		this.setLayout(new BorderLayout());
 
 		// MAIN PANEL
 		Border margin = new EmptyBorder(10, 10, 5, 10);
 		this.setBorder(margin);
-		
+
 		// Add the main panel and the graph
 		this.add(this.makeTitlePanel(), BorderLayout.NORTH);
 		this.createTabs();
 	}
-	
-	protected void createTabs(){
+
+	protected void createTabs() {
 		TABPANE = new MonitorTabPane();
 		createHealthPane(TABPANE);
 		createPerformancePane(TABPANE);
@@ -144,26 +135,25 @@ public class MonitorHealthVisualizer extends AbstractVisualizer
 
 	/**
 	 * Create the JPanel
+	 * 
 	 * @param pane
-	 */	
-	public void createHealthPane(MonitorTabPane pane){
+	 */
+	public void createHealthPane(MonitorTabPane pane) {
 		HEALTHPANE = new MonitorHealthPanel(MODEL);
-		pane.addTab(JMeterUtils.getResString("monitor_health_tab_title"),
-			HEALTHPANE);
+		pane.addTab(JMeterUtils.getResString("monitor_health_tab_title"), HEALTHPANE);
 	}
 
 	/**
 	 * Create the JSplitPane for the performance history
+	 * 
 	 * @param pane
-	 */	
-	public void createPerformancePane(MonitorTabPane pane){
-		PERFPANE = new MonitorPerformancePanel(MODEL,GRAPH);
-		pane.addTab(JMeterUtils.getResString("monitor_performance_tab_title"),
-			PERFPANE);
+	 */
+	public void createPerformancePane(MonitorTabPane pane) {
+		PERFPANE = new MonitorPerformancePanel(MODEL, GRAPH);
+		pane.addTab(JMeterUtils.getResString("monitor_performance_tab_title"), PERFPANE);
 	}
-	
-	protected Container makeTitlePanel()
-	{
+
+	protected Container makeTitlePanel() {
 		VerticalPanel titlePanel = new VerticalPanel();
 		titlePanel.add(createTitleLabel());
 		titlePanel.add(getNamePanel());
@@ -172,13 +162,12 @@ public class MonitorHealthVisualizer extends AbstractVisualizer
 	}
 
 	/**
-	 * Clear will clear the MonitorAccumModel and create a
-	 * new instance.
+	 * Clear will clear the MonitorAccumModel and create a new instance.
 	 */
-	public void clear(){
+	public void clear() {
 		this.MODEL.clear();
 		this.HEALTHPANE.clear();
 		this.PERFPANE.clear();
 	}
-	
+
 }

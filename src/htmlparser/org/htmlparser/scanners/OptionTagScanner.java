@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.scanners;
 
 import org.htmlparser.tags.OptionTag;
@@ -37,30 +36,26 @@ import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 
-public class OptionTagScanner extends CompositeTagScanner
-{
-    private static final String MATCH_NAME[] = { "OPTION" };
-    private static final String[] ENDERS = {
-    };
-    private static final String[] END_TAG_ENDERS = { "SELECT", "BODY", "HTML" };
+public class OptionTagScanner extends CompositeTagScanner {
+	private static final String MATCH_NAME[] = { "OPTION" };
 
-    public OptionTagScanner()
-    {
-        super(MATCH_NAME[0], ENDERS, END_TAG_ENDERS, false);
-    }
+	private static final String[] ENDERS = {};
 
-    public OptionTagScanner(String filter)
-    {
-        super(filter, MATCH_NAME, ENDERS, END_TAG_ENDERS, false);
-    }
+	private static final String[] END_TAG_ENDERS = { "SELECT", "BODY", "HTML" };
 
-    public String[] getID()
-    {
-        return MATCH_NAME;
-    }
+	public OptionTagScanner() {
+		super(MATCH_NAME[0], ENDERS, END_TAG_ENDERS, false);
+	}
 
-    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-    {
-        return new OptionTag(tagData, compositeTagData);
-    }
+	public OptionTagScanner(String filter) {
+		super(filter, MATCH_NAME, ENDERS, END_TAG_ENDERS, false);
+	}
+
+	public String[] getID() {
+		return MATCH_NAME;
+	}
+
+	public Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
+		return new OptionTag(tagData, compositeTagData);
+	}
 }

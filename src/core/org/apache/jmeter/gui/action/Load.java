@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui.action;
 
@@ -44,125 +44,102 @@ import org.apache.log.Logger;
 import com.thoughtworks.xstream.XStream;
 
 /**
- * @author    Michael Stover
- * @version   $Revision$
+ * @author Michael Stover
+ * @version $Revision$
  */
-public class Load implements Command
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
-    XStream loadService = new XStream();
- 
-    private static Set commands = new HashSet();
-    static {
-        commands.add("open");
+public class Load implements Command {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
+
+	XStream loadService = new XStream();
+
+	private static Set commands = new HashSet();
+	static {
+		commands.add("open");
 		commands.add("merge");
-    }
+	}
 
-    public Load()
-    {
+	public Load() {
 		super();
-    }
+	}
 
-    public Set getActionNames()
-    {
-        return commands;
-    }
+	public Set getActionNames() {
+		return commands;
+	}
 
-    public void doAction(ActionEvent e)
-    {
-    	boolean merging = e.getActionCommand().equals("merge");
-    	
-		if (!merging)
-		{
-			ActionRouter.getInstance().doActionNow(
-		        new ActionEvent(e.getSource(),e.getID(),"close"));
+	public void doAction(ActionEvent e) {
+		boolean merging = e.getActionCommand().equals("merge");
+
+		if (!merging) {
+			ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), "close"));
 		}
 
-        JFileChooser chooser =
-            FileDialoger.promptToOpenFile(new String[] { ".jmx" });
-        if (chooser == null)
-        {
-            return;
-        }
-        boolean isTestPlan = false;
-        InputStream reader = null;
-        File f = null;
-        try
-        {
-            f = chooser.getSelectedFile();
-            if (f != null)
-            {
-            	if (merging){
+		JFileChooser chooser = FileDialoger.promptToOpenFile(new String[] { ".jmx" });
+		if (chooser == null) {
+			return;
+		}
+		boolean isTestPlan = false;
+		InputStream reader = null;
+		File f = null;
+		try {
+			f = chooser.getSelectedFile();
+			if (f != null) {
+				if (merging) {
 					log.info("Merging file: " + f);
-            	} else {
+				} else {
 					log.info("Loading file: " + f);
 					FileServer.getFileServer().setBasedir(f.getAbsolutePath());
-            	}
-                reader = new FileInputStream(f);
-                HashTree tree = SaveService.loadTree(reader);
-                isTestPlan = insertLoadedTree(e.getID(), tree);
-            }
-        }
-        catch (NoClassDefFoundError ex) // Allow for missing optional jars
-        {
-            String msg = ex.getMessage();
-            if (msg == null)
-            {
-                msg = "Missing jar file - see log for details";
-                log.warn("Missing jar file", ex);
-            }
-            JMeterUtils.reportErrorToUser(msg);        	
-        }
-        catch (Exception ex)
-        {
-            String msg = ex.getMessage();
-            if (msg == null)
-            {
-                msg = "Unexpected error - see log for details";
-                log.warn("Unexpected error", ex);
-            }
-            JMeterUtils.reportErrorToUser(msg);
-        }
-        finally
-        {
+				}
+				reader = new FileInputStream(f);
+				HashTree tree = SaveService.loadTree(reader);
+				isTestPlan = insertLoadedTree(e.getID(), tree);
+			}
+		} catch (NoClassDefFoundError ex) // Allow for missing optional jars
+		{
+			String msg = ex.getMessage();
+			if (msg == null) {
+				msg = "Missing jar file - see log for details";
+				log.warn("Missing jar file", ex);
+			}
+			JMeterUtils.reportErrorToUser(msg);
+		} catch (Exception ex) {
+			String msg = ex.getMessage();
+			if (msg == null) {
+				msg = "Unexpected error - see log for details";
+				log.warn("Unexpected error", ex);
+			}
+			JMeterUtils.reportErrorToUser(msg);
+		} finally {
 			try {
 				reader.close();
 			} catch (IOException e1) {
 				// ignored
 			}
-            GuiPackage.getInstance().updateCurrentGui();
-            GuiPackage.getInstance().getMainFrame().repaint();
-        }
-        // don't change name if merging
-        if (!merging && isTestPlan && f != null)
-        {
-            GuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
-        }
-    }
+			GuiPackage.getInstance().updateCurrentGui();
+			GuiPackage.getInstance().getMainFrame().repaint();
+		}
+		// don't change name if merging
+		if (!merging && isTestPlan && f != null) {
+			GuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
+		}
+	}
 
-    /**
-     * Returns a boolean indicating whether the loaded tree was a full test plan
-     */
-    public boolean insertLoadedTree(int id, HashTree tree)
-        throws Exception, IllegalUserActionException
-    {
-        //convertTree(tree);
-        if (tree == null)
-        {
-            throw new Exception("Error in TestPlan - see log file");
-        }
-        boolean isTestPlan = tree.getArray()[0] instanceof TestPlan;
-        HashTree newTree = GuiPackage.getInstance().addSubTree(tree);
-        GuiPackage.getInstance().updateCurrentGui();
-        GuiPackage.getInstance().getMainFrame().getTree().setSelectionPath(
-            new TreePath(((JMeterTreeNode) newTree.getArray()[0]).getPath()));
-        tree = GuiPackage.getInstance().getCurrentSubTree();
-        ActionRouter.getInstance().actionPerformed(
-            new ActionEvent(
-                tree.get(tree.getArray()[tree.size() - 1]),
-                id,
-                CheckDirty.SUB_TREE_LOADED));
+	/**
+	 * Returns a boolean indicating whether the loaded tree was a full test plan
+	 */
+	public boolean insertLoadedTree(int id, HashTree tree) throws Exception, IllegalUserActionException {
+		// convertTree(tree);
+		if (tree == null) {
+			throw new Exception("Error in TestPlan - see log file");
+		}
+		boolean isTestPlan = tree.getArray()[0] instanceof TestPlan;
+		HashTree newTree = GuiPackage.getInstance().addSubTree(tree);
+		GuiPackage.getInstance().updateCurrentGui();
+		GuiPackage.getInstance().getMainFrame().getTree().setSelectionPath(
+				new TreePath(((JMeterTreeNode) newTree.getArray()[0]).getPath()));
+		tree = GuiPackage.getInstance().getCurrentSubTree();
+		ActionRouter.getInstance().actionPerformed(
+				new ActionEvent(tree.get(tree.getArray()[tree.size() - 1]), id, CheckDirty.SUB_TREE_LOADED));
 
-        return isTestPlan;
-    }
+		return isTestPlan;
+	}
 }

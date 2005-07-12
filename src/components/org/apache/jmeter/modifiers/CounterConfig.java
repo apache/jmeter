@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.modifiers;
 
@@ -34,126 +34,102 @@ import org.apache.log.Logger;
 /**
  * @version $Revision$
  */
-public class CounterConfig
-    extends AbstractTestElement
-    implements Serializable, LoopIterationListener, NoThreadClone
-{
-    private static Logger log = LoggingManager.getLoggerForClass();
-    public final static String START = "CounterConfig.start";
-    public final static String END = "CounterConfig.end";
-    public final static String INCREMENT = "CounterConfig.incr";
-    public final static String PER_USER = "CounterConfig.per_user";
-    public final static String VAR_NAME = "CounterConfig.name";
+public class CounterConfig extends AbstractTestElement implements Serializable, LoopIterationListener, NoThreadClone {
+	private static Logger log = LoggingManager.getLoggerForClass();
 
-    private int globalCounter = -1;
-    
-    /**
-     * @see LoopIterationListener#iterationStart(LoopIterationEvent)
-     */
-    public synchronized void iterationStart(LoopIterationEvent event)
-    {
-    	// Cannot use getThreadContext() as not cloned per thread
-        JMeterVariables variables = 
-        	JMeterContextService.getContext().getVariables();
-        int start = getStart(), end = getEnd(), increment = getIncrement();
-        if (!isPerUser())
-        {
-            if (globalCounter == -1 || globalCounter > end)
-            {
-                globalCounter = start;
-            }
-            variables.put(getVarName(), Integer.toString(globalCounter));
-            globalCounter += increment;
-        }
-        else
-        {
-            String value = variables.get(getVarName());
-            if (value == null)
-            {
-                variables.put(getVarName(), Integer.toString(start));
-            }
-            else
-            {
-                try
-                {
-                    int current = Integer.parseInt(value);
-                    current += increment;
-                    if (current > end)
-                    {
-                        current = start;
-                    }
-                    variables.put(getVarName(), Integer.toString(current));
-                }
-                catch (NumberFormatException e)
-                {
-                    log.info("Bad number in Counter config", e);
-                }
-            }
-        }
-    }
+	public final static String START = "CounterConfig.start";
 
-    public void setStart(int start)
-    {
-        setProperty(new IntegerProperty(START, start));
-    }
+	public final static String END = "CounterConfig.end";
 
-    public void setStart(String start)
-    {
-        setProperty(START, start);
-    }
+	public final static String INCREMENT = "CounterConfig.incr";
 
-    public int getStart()
-    {
-        return getPropertyAsInt(START);
-    }
+	public final static String PER_USER = "CounterConfig.per_user";
 
-    public void setEnd(int end)
-    {
-        setProperty(new IntegerProperty(END, end));
-    }
+	public final static String VAR_NAME = "CounterConfig.name";
 
-    public void setEnd(String end)
-    {
-        setProperty(END, end);
-    }
+	private int globalCounter = -1;
 
-    public int getEnd()
-    {
-        return getPropertyAsInt(END);
-    }
+	/**
+	 * @see LoopIterationListener#iterationStart(LoopIterationEvent)
+	 */
+	public synchronized void iterationStart(LoopIterationEvent event) {
+		// Cannot use getThreadContext() as not cloned per thread
+		JMeterVariables variables = JMeterContextService.getContext().getVariables();
+		int start = getStart(), end = getEnd(), increment = getIncrement();
+		if (!isPerUser()) {
+			if (globalCounter == -1 || globalCounter > end) {
+				globalCounter = start;
+			}
+			variables.put(getVarName(), Integer.toString(globalCounter));
+			globalCounter += increment;
+		} else {
+			String value = variables.get(getVarName());
+			if (value == null) {
+				variables.put(getVarName(), Integer.toString(start));
+			} else {
+				try {
+					int current = Integer.parseInt(value);
+					current += increment;
+					if (current > end) {
+						current = start;
+					}
+					variables.put(getVarName(), Integer.toString(current));
+				} catch (NumberFormatException e) {
+					log.info("Bad number in Counter config", e);
+				}
+			}
+		}
+	}
 
-    public void setIncrement(int inc)
-    {
-        setProperty(new IntegerProperty(INCREMENT, inc));
-    }
+	public void setStart(int start) {
+		setProperty(new IntegerProperty(START, start));
+	}
 
-    public void setIncrement(String incr)
-    {
-        setProperty(INCREMENT, incr);
-    }
+	public void setStart(String start) {
+		setProperty(START, start);
+	}
 
-    public int getIncrement()
-    {
-        return getPropertyAsInt(INCREMENT);
-    }
+	public int getStart() {
+		return getPropertyAsInt(START);
+	}
 
-    public void setIsPerUser(boolean isPer)
-    {
-        setProperty(new BooleanProperty(PER_USER, isPer));
-    }
+	public void setEnd(int end) {
+		setProperty(new IntegerProperty(END, end));
+	}
 
-    public boolean isPerUser()
-    {
-        return getPropertyAsBoolean(PER_USER);
-    }
+	public void setEnd(String end) {
+		setProperty(END, end);
+	}
 
-    public void setVarName(String name)
-    {
-        setProperty(VAR_NAME, name);
-    }
+	public int getEnd() {
+		return getPropertyAsInt(END);
+	}
 
-    public String getVarName()
-    {
-        return getPropertyAsString(VAR_NAME);
-    }
+	public void setIncrement(int inc) {
+		setProperty(new IntegerProperty(INCREMENT, inc));
+	}
+
+	public void setIncrement(String incr) {
+		setProperty(INCREMENT, incr);
+	}
+
+	public int getIncrement() {
+		return getPropertyAsInt(INCREMENT);
+	}
+
+	public void setIsPerUser(boolean isPer) {
+		setProperty(new BooleanProperty(PER_USER, isPer));
+	}
+
+	public boolean isPerUser() {
+		return getPropertyAsBoolean(PER_USER);
+	}
+
+	public void setVarName(String name) {
+		setProperty(VAR_NAME, name);
+	}
+
+	public String getVarName() {
+		return getPropertyAsString(VAR_NAME);
+	}
 }

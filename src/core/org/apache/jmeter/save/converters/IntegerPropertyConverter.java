@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.save.converters;
 
@@ -27,41 +27,50 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 /**
  * @author mstover
- *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * 
+ * To change the template for this generated type comment go to Window -
+ * Preferences - Java - Code Generation - Code and Comments
  */
-public class IntegerPropertyConverter implements Converter
-{
-    /** Returns the converter version; used to check for possible incompatibilities */
-	public static String getVersion(){	return "$Revision$";}
+public class IntegerPropertyConverter implements Converter {
+	/**
+	 * Returns the converter version; used to check for possible
+	 * incompatibilities
+	 */
+	public static String getVersion() {
+		return "$Revision$";
+	}
 
-   /* (non-Javadoc)
-    * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
-    */
-   public boolean canConvert(Class arg0)
-   {
-      return arg0.equals(IntegerProperty.class);
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
+	 */
+	public boolean canConvert(Class arg0) {
+		return arg0.equals(IntegerProperty.class);
+	}
 
-   /* (non-Javadoc)
-    * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object, com.thoughtworks.xstream.io.HierarchicalStreamWriter, com.thoughtworks.xstream.converters.MarshallingContext)
-    */
-   public void marshal(Object obj, HierarchicalStreamWriter writer,
-         MarshallingContext arg2)
-   {
-      IntegerProperty prop = (IntegerProperty)obj;
-      writer.addAttribute("name",ConversionHelp.encode(prop.getName()));
-      writer.setValue(prop.getStringValue());
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object,
+	 *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
+	 *      com.thoughtworks.xstream.converters.MarshallingContext)
+	 */
+	public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext arg2) {
+		IntegerProperty prop = (IntegerProperty) obj;
+		writer.addAttribute("name", ConversionHelp.encode(prop.getName()));
+		writer.setValue(prop.getStringValue());
+	}
 
-   /* (non-Javadoc)
-    * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader, com.thoughtworks.xstream.converters.UnmarshallingContext)
-    */
-   public Object unmarshal(HierarchicalStreamReader reader,
-         UnmarshallingContext arg1)
-   {
-      IntegerProperty prop = new IntegerProperty(ConversionHelp.decode(reader.getAttribute("name")),Integer.parseInt(reader.getValue()));
-      return prop;
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
+	 *      com.thoughtworks.xstream.converters.UnmarshallingContext)
+	 */
+	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext arg1) {
+		IntegerProperty prop = new IntegerProperty(ConversionHelp.decode(reader.getAttribute("name")), Integer
+				.parseInt(reader.getValue()));
+		return prop;
+	}
 }

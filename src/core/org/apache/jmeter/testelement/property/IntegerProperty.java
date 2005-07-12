@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.testelement.property;
 
@@ -23,122 +23,110 @@ import org.apache.jmeter.testelement.TestElement;
 /**
  * @version $Revision$
  */
-public class IntegerProperty extends NumberProperty
-{
-    int value;
-    int savedValue;
+public class IntegerProperty extends NumberProperty {
+	int value;
 
-    public IntegerProperty(String name, int value)
-    {
-        super(name);
-        this.value = value;
-    }
-    
-    /* (non-Javadoc)
-         * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
-         */
-        public void setRunningVersion(boolean runningVersion)
-        {
-            savedValue = value;
-            super.setRunningVersion(runningVersion);
-        }
+	int savedValue;
 
-        /* (non-Javadoc)
-         * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
-         */
-        public void recoverRunningVersion(TestElement owner)
-        {
-            value = savedValue;
-        }
+	public IntegerProperty(String name, int value) {
+		super(name);
+		this.value = value;
+	}
 
-    public IntegerProperty(String name)
-    {
-        super(name);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
+	 */
+	public void setRunningVersion(boolean runningVersion) {
+		savedValue = value;
+		super.setRunningVersion(runningVersion);
+	}
 
-    public IntegerProperty()
-    {
-        super();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+	 */
+	public void recoverRunningVersion(TestElement owner) {
+		value = savedValue;
+	}
 
-    public void setValue(int value)
-    {
-        this.value = value;
-    }
+	public IntegerProperty(String name) {
+		super(name);
+	}
 
-    protected void setNumberValue(Number n)
-    {
-        value = n.intValue();
-    }
+	public IntegerProperty() {
+		super();
+	}
 
-    protected void setNumberValue(String n) throws NumberFormatException
-    {
-        value = Integer.parseInt(n);
-    }
+	public void setValue(int value) {
+		this.value = value;
+	}
 
-    /**
-     * @see JMeterProperty#getStringValue()
-     */
-    public String getStringValue()
-    {
-        return Integer.toString(value);
-    }
+	protected void setNumberValue(Number n) {
+		value = n.intValue();
+	}
 
-    /**
-     * @see JMeterProperty#getObjectValue()
-     */
-    public Object getObjectValue()
-    {
-        return new Integer(value);
-    }
+	protected void setNumberValue(String n) throws NumberFormatException {
+		value = Integer.parseInt(n);
+	}
 
-    /**
-     * @see Object#clone()
-     */
-    public Object clone()
-    {
-        IntegerProperty prop = (IntegerProperty) super.clone();
-        prop.value = value;
-        return prop;
-    }
+	/**
+	 * @see JMeterProperty#getStringValue()
+	 */
+	public String getStringValue() {
+		return Integer.toString(value);
+	}
 
-    /**
-     * @see JMeterProperty#getBooleanValue()
-     */
-    public boolean getBooleanValue()
-    {
-        return getIntValue() > 0 ? true : false;
-    }
+	/**
+	 * @see JMeterProperty#getObjectValue()
+	 */
+	public Object getObjectValue() {
+		return new Integer(value);
+	}
 
-    /**
-     * @see JMeterProperty#getDoubleValue()
-     */
-    public double getDoubleValue()
-    {
-        return value;
-    }
+	/**
+	 * @see Object#clone()
+	 */
+	public Object clone() {
+		IntegerProperty prop = (IntegerProperty) super.clone();
+		prop.value = value;
+		return prop;
+	}
 
-    /**
-     * @see JMeterProperty#getFloatValue()
-     */
-    public float getFloatValue()
-    {
-        return value;
-    }
+	/**
+	 * @see JMeterProperty#getBooleanValue()
+	 */
+	public boolean getBooleanValue() {
+		return getIntValue() > 0 ? true : false;
+	}
 
-    /**
-     * @see JMeterProperty#getIntValue()
-     */
-    public int getIntValue()
-    {
-        return value;
-    }
+	/**
+	 * @see JMeterProperty#getDoubleValue()
+	 */
+	public double getDoubleValue() {
+		return value;
+	}
 
-    /**
-     * @see JMeterProperty#getLongValue()
-     */
-    public long getLongValue()
-    {
-        return value;
-    }
+	/**
+	 * @see JMeterProperty#getFloatValue()
+	 */
+	public float getFloatValue() {
+		return value;
+	}
+
+	/**
+	 * @see JMeterProperty#getIntValue()
+	 */
+	public int getIntValue() {
+		return value;
+	}
+
+	/**
+	 * @see JMeterProperty#getLongValue()
+	 */
+	public long getLongValue() {
+		return value;
+	}
 }

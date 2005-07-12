@@ -14,10 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.visualizers;
-
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -51,355 +50,319 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-
 /*
- * TODO :
- * - Create a subpanel for other visualizers
- * - connect to the properties.
- * - Get the specific URL that is failing.
- * - add a seperate interface to collect the thrown failure messages.
- * -
- * - suggestions ;-)
+ * TODO : - Create a subpanel for other visualizers - connect to the properties. -
+ * Get the specific URL that is failing. - add a seperate interface to collect
+ * the thrown failure messages. - - suggestions ;-)
  */
 
 /**
- * This class implements a visualizer that mails a message when an error
- * occurs.
- *
- * @version    $Revision$ $Date$
+ * This class implements a visualizer that mails a message when an error occurs.
+ * 
+ * @version $Revision$ $Date$
  */
-public class MailerVisualizer extends AbstractVisualizer
-        implements ActionListener, Clearable, ChangeListener
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+public class MailerVisualizer extends AbstractVisualizer implements ActionListener, Clearable, ChangeListener {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    private JButton testerButton;
-    private JTextField addressField;
-    private JTextField fromField;
-    private JTextField smtpHostField;
-    private JTextField failureSubjectField;
-    private JTextField successSubjectField;
-    private JTextField failureField;
-    private JTextField failureLimitField;
-    private JTextField successLimitField;
+	private JButton testerButton;
 
-    //private JPanel mainPanel;
-    //private JLabel panelTitleLabel;
+	private JTextField addressField;
 
+	private JTextField fromField;
 
-    /**
-     * Constructs the MailerVisualizer and initializes its GUI.
-     */
-    public MailerVisualizer()
-    {
-        super();
-        setModel(new MailerResultCollector());
-        // initialize GUI.
-        initGui();
-    }
+	private JTextField smtpHostField;
 
-    public JPanel getControlPanel()
-    {
-        return this;
-    }
+	private JTextField failureSubjectField;
 
-    /**
-     * Clears any stored sampling-informations.
-     */
-    public synchronized void clear()
-    {
-        if(getModel() != null)
-        {
-            ((MailerResultCollector)getModel()).getMailerModel().clear();
-        }
-    }
-    
-    public void add(SampleResult res)
-    {
-    }
+	private JTextField successSubjectField;
 
-    public String toString()
-    {
-        return "E-Mail Notification";
-    }
+	private JTextField failureField;
 
-    /**
-     * Initializes the GUI. Lays out components and adds them to the
-     * container.
-     */
-    private void initGui()
-    {
-        this.setLayout(new BorderLayout());
+	private JTextField failureLimitField;
 
-        // MAIN PANEL
-        JPanel mainPanel = new VerticalPanel();
-        Border margin = new EmptyBorder(10, 10, 5, 10);
+	private JTextField successLimitField;
 
-        this.setBorder(margin);
+	// private JPanel mainPanel;
+	// private JLabel panelTitleLabel;
 
-        // NAME
-        mainPanel.add(makeTitlePanel());
+	/**
+	 * Constructs the MailerVisualizer and initializes its GUI.
+	 */
+	public MailerVisualizer() {
+		super();
+		setModel(new MailerResultCollector());
+		// initialize GUI.
+		initGui();
+	}
 
-        // mailer panel
-        JPanel mailerPanel = new JPanel();
+	public JPanel getControlPanel() {
+		return this;
+	}
 
-        mailerPanel.setBorder(
-            BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
-                getAttributesTitle()));
-        GridBagLayout g = new GridBagLayout();
+	/**
+	 * Clears any stored sampling-informations.
+	 */
+	public synchronized void clear() {
+		if (getModel() != null) {
+			((MailerResultCollector) getModel()).getMailerModel().clear();
+		}
+	}
 
-        mailerPanel.setLayout(g);
-        GridBagConstraints c = new GridBagConstraints();
+	public void add(SampleResult res) {
+	}
 
-        c.anchor = GridBagConstraints.NORTHWEST;
-        c.insets = new Insets(0, 0, 0, 0);
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("From:"));
+	public String toString() {
+		return "E-Mail Notification";
+	}
 
-        fromField = new JTextField(25);
-        fromField.setEditable(true);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(fromField, c);
-        mailerPanel.add(fromField);
+	/**
+	 * Initializes the GUI. Lays out components and adds them to the container.
+	 */
+	private void initGui() {
+		this.setLayout(new BorderLayout());
 
-        c.anchor = GridBagConstraints.NORTHWEST;
-        c.insets = new Insets(0, 0, 0, 0);
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("Addressee(s):"));
+		// MAIN PANEL
+		JPanel mainPanel = new VerticalPanel();
+		Border margin = new EmptyBorder(10, 10, 5, 10);
 
-        addressField = new JTextField(25);
-        addressField.setEditable(true);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(addressField, c);
-        mailerPanel.add(addressField);
+		this.setBorder(margin);
 
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("SMTP Host:"));
+		// NAME
+		mainPanel.add(makeTitlePanel());
 
-        smtpHostField = new JTextField(25);
-        smtpHostField.setEditable(true);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(smtpHostField, c);
-        mailerPanel.add(smtpHostField);
+		// mailer panel
+		JPanel mailerPanel = new JPanel();
 
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("Failure Subject:"));
+		mailerPanel.setBorder(BorderFactory
+				.createTitledBorder(BorderFactory.createEtchedBorder(), getAttributesTitle()));
+		GridBagLayout g = new GridBagLayout();
 
-        failureSubjectField = new JTextField(25);
-        failureSubjectField.setEditable(true);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(failureSubjectField, c);
-        mailerPanel.add(failureSubjectField);
+		mailerPanel.setLayout(g);
+		GridBagConstraints c = new GridBagConstraints();
 
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("Success Subject:"));
+		c.anchor = GridBagConstraints.NORTHWEST;
+		c.insets = new Insets(0, 0, 0, 0);
+		c.gridwidth = 1;
+		mailerPanel.add(new JLabel("From:"));
 
-        successSubjectField = new JTextField(25);
-        successSubjectField.setEditable(true);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(successSubjectField, c);
-        mailerPanel.add(successSubjectField);
+		fromField = new JTextField(25);
+		fromField.setEditable(true);
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		g.setConstraints(fromField, c);
+		mailerPanel.add(fromField);
 
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("Failure Limit:"));
+		c.anchor = GridBagConstraints.NORTHWEST;
+		c.insets = new Insets(0, 0, 0, 0);
+		c.gridwidth = 1;
+		mailerPanel.add(new JLabel("Addressee(s):"));
 
-        failureLimitField = new JTextField("2",25);
-        failureLimitField.setEditable(true);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(failureLimitField, c);
-        mailerPanel.add(failureLimitField);
+		addressField = new JTextField(25);
+		addressField.setEditable(true);
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		g.setConstraints(addressField, c);
+		mailerPanel.add(addressField);
 
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("Success Limit:"));
+		c.gridwidth = 1;
+		mailerPanel.add(new JLabel("SMTP Host:"));
 
-        successLimitField = new JTextField("2",25);
-        successLimitField.setEditable(true);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(successLimitField, c);
-        mailerPanel.add(successLimitField);
+		smtpHostField = new JTextField(25);
+		smtpHostField.setEditable(true);
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		g.setConstraints(smtpHostField, c);
+		mailerPanel.add(smtpHostField);
 
-        testerButton = new JButton("Test Mail");
-        testerButton.addActionListener(this);
-        testerButton.setEnabled(true);
-        c.gridwidth = 1;
-        g.setConstraints(testerButton, c);
-        mailerPanel.add(testerButton);
+		c.gridwidth = 1;
+		mailerPanel.add(new JLabel("Failure Subject:"));
 
-        c.gridwidth = 1;
-        mailerPanel.add(new JLabel("Failures:"));
-        failureField = new JTextField(6);
-        failureField.setEditable(false);
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        g.setConstraints(failureField, c);
-        mailerPanel.add(failureField);
+		failureSubjectField = new JTextField(25);
+		failureSubjectField.setEditable(true);
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		g.setConstraints(failureSubjectField, c);
+		mailerPanel.add(failureSubjectField);
 
-        mainPanel.add(mailerPanel);
+		c.gridwidth = 1;
+		mailerPanel.add(new JLabel("Success Subject:"));
 
-        this.add(mainPanel,BorderLayout.WEST);
-    }
+		successSubjectField = new JTextField(25);
+		successSubjectField.setEditable(true);
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		g.setConstraints(successSubjectField, c);
+		mailerPanel.add(successSubjectField);
 
-    public String getLabelResource()
-    {
-        return "mailer_visualizer_title";
-    }
+		c.gridwidth = 1;
+		mailerPanel.add(new JLabel("Failure Limit:"));
 
-    /**
-     * Returns a String for the title of the attributes-panel
-     * as set up in the properties-file using the lookup-constant
-     * "mailer_attributes_panel".
-     *
-     *@return  The title of the component.
-     */
-    public String getAttributesTitle()
-    {
-        return JMeterUtils.getResString("mailer_attributes_panel");
-    }
+		failureLimitField = new JTextField("2", 25);
+		failureLimitField.setEditable(true);
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		g.setConstraints(failureLimitField, c);
+		mailerPanel.add(failureLimitField);
 
-    // ////////////////////////////////////////////////////////////
-    //
-    // Implementation of the ActionListener-Interface.
-    //
-    // ////////////////////////////////////////////////////////////
+		c.gridwidth = 1;
+		mailerPanel.add(new JLabel("Success Limit:"));
 
-    /**
-     * Reacts on an ActionEvent (like pressing a button).
-     *
-     * @param e The ActionEvent with information about the event and its source.
-     */
-    public void actionPerformed(ActionEvent e)
-    {
-		if (e.getSource() == testerButton)
-		{
-			try
-			{
-				MailerModel model=((MailerResultCollector)getModel()).getMailerModel();
+		successLimitField = new JTextField("2", 25);
+		successLimitField.setEditable(true);
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		g.setConstraints(successLimitField, c);
+		mailerPanel.add(successLimitField);
+
+		testerButton = new JButton("Test Mail");
+		testerButton.addActionListener(this);
+		testerButton.setEnabled(true);
+		c.gridwidth = 1;
+		g.setConstraints(testerButton, c);
+		mailerPanel.add(testerButton);
+
+		c.gridwidth = 1;
+		mailerPanel.add(new JLabel("Failures:"));
+		failureField = new JTextField(6);
+		failureField.setEditable(false);
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		g.setConstraints(failureField, c);
+		mailerPanel.add(failureField);
+
+		mainPanel.add(mailerPanel);
+
+		this.add(mainPanel, BorderLayout.WEST);
+	}
+
+	public String getLabelResource() {
+		return "mailer_visualizer_title";
+	}
+
+	/**
+	 * Returns a String for the title of the attributes-panel as set up in the
+	 * properties-file using the lookup-constant "mailer_attributes_panel".
+	 * 
+	 * @return The title of the component.
+	 */
+	public String getAttributesTitle() {
+		return JMeterUtils.getResString("mailer_attributes_panel");
+	}
+
+	// ////////////////////////////////////////////////////////////
+	//
+	// Implementation of the ActionListener-Interface.
+	//
+	// ////////////////////////////////////////////////////////////
+
+	/**
+	 * Reacts on an ActionEvent (like pressing a button).
+	 * 
+	 * @param e
+	 *            The ActionEvent with information about the event and its
+	 *            source.
+	 */
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == testerButton) {
+			try {
+				MailerModel model = ((MailerResultCollector) getModel()).getMailerModel();
 				model.sendTestMail();
 				displayMessage(JMeterUtils.getResString("mail_sent"), false);
-			}
-			catch (UnknownHostException e1)
-			{
+			} catch (UnknownHostException e1) {
 				log.error("Invalid Mail Server ", e1);
 				displayMessage(JMeterUtils.getResString("invalid_mail_server"), true);
-			}
-			catch (AddressException ex)
-			{
+			} catch (AddressException ex) {
 				log.error("Invalid mail address ", ex);
-				displayMessage(JMeterUtils.getResString("invalid_mail_address")
-						+ "\n" + ex.getMessage(), true);
-			}
-			catch (MessagingException ex)
-			{
+				displayMessage(JMeterUtils.getResString("invalid_mail_address") + "\n" + ex.getMessage(), true);
+			} catch (MessagingException ex) {
 				log.error("Couldn't send mail...", ex);
-				displayMessage(JMeterUtils.getResString("invalid_mail")
-						+"\n"+ex.getMessage(), true);
+				displayMessage(JMeterUtils.getResString("invalid_mail") + "\n" + ex.getMessage(), true);
 			}
 		}
-    }
+	}
 
-    // ////////////////////////////////////////////////////////////
-    //
-    // Methods used to store and retrieve the MailerVisualizer.
-    //
-    // ////////////////////////////////////////////////////////////
+	// ////////////////////////////////////////////////////////////
+	//
+	// Methods used to store and retrieve the MailerVisualizer.
+	//
+	// ////////////////////////////////////////////////////////////
 
-    /**
-     * Restores MailerVisualizer.
-     */
-    public void configure(TestElement el)
-    {
-        super.configure(el);
-        updateVisualizer(((MailerResultCollector)el).getMailerModel());
-    }
+	/**
+	 * Restores MailerVisualizer.
+	 */
+	public void configure(TestElement el) {
+		super.configure(el);
+		updateVisualizer(((MailerResultCollector) el).getMailerModel());
+	}
 
-    /**
-     * Makes MailerVisualizer storable.
-     */
-    public TestElement createTestElement()
-    {
-        if (getModel() == null)
-        {
-            setModel( new MailerResultCollector());
-        }
-        modifyTestElement(getModel());
-        return getModel();
-    }
+	/**
+	 * Makes MailerVisualizer storable.
+	 */
+	public TestElement createTestElement() {
+		if (getModel() == null) {
+			setModel(new MailerResultCollector());
+		}
+		modifyTestElement(getModel());
+		return getModel();
+	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement c)
-    {
-        super.modifyTestElement(c);
-        MailerModel mailerModel = ((MailerResultCollector)c).getMailerModel();
-        mailerModel.setFailureLimit(failureLimitField.getText());
-        mailerModel.setFailureSubject(failureSubjectField.getText());
-        mailerModel.setFromAddress(fromField.getText());
-        mailerModel.setSmtpHost(smtpHostField.getText());
-        mailerModel.setSuccessLimit(successLimitField.getText());
-        mailerModel.setSuccessSubject(successSubjectField.getText());
-        mailerModel.setToAddress(addressField.getText());
-    }
-    
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement c) {
+		super.modifyTestElement(c);
+		MailerModel mailerModel = ((MailerResultCollector) c).getMailerModel();
+		mailerModel.setFailureLimit(failureLimitField.getText());
+		mailerModel.setFailureSubject(failureSubjectField.getText());
+		mailerModel.setFromAddress(fromField.getText());
+		mailerModel.setSmtpHost(smtpHostField.getText());
+		mailerModel.setSuccessLimit(successLimitField.getText());
+		mailerModel.setSuccessSubject(successSubjectField.getText());
+		mailerModel.setToAddress(addressField.getText());
+	}
 
+	// ////////////////////////////////////////////////////////////
+	//
+	// Methods to implement the ModelListener.
+	//
+	// ////////////////////////////////////////////////////////////
 
-    // ////////////////////////////////////////////////////////////
-    //
-    // Methods to implement the ModelListener.
-    //
-    // ////////////////////////////////////////////////////////////
+	/**
+	 * Notifies this Visualizer about model-changes. Causes the Visualizer to
+	 * query the model about its new state.
+	 */
+	public void updateVisualizer(MailerModel model) {
+		addressField.setText(model.getToAddress());
+		fromField.setText(model.getFromAddress());
+		smtpHostField.setText(model.getSmtpHost());
+		successSubjectField.setText(model.getSuccessSubject());
+		failureSubjectField.setText(model.getFailureSubject());
+		failureLimitField.setText(String.valueOf(model.getFailureLimit()));
+		failureField.setText(String.valueOf(model.getFailureCount()));
+		successLimitField.setText(String.valueOf(model.getSuccessLimit()));
+		repaint();
+	}
 
-    /**
-     * Notifies this Visualizer about model-changes. Causes the Visualizer to
-     * query the model about its new state.
-     */
-    public void updateVisualizer(MailerModel model)
-    {
-        addressField.setText(model.getToAddress());
-        fromField.setText(model.getFromAddress());
-        smtpHostField.setText(model.getSmtpHost());
-        successSubjectField.setText(model.getSuccessSubject());
-        failureSubjectField.setText(model.getFailureSubject());
-        failureLimitField.setText(String.valueOf(model.getFailureLimit()));
-        failureField.setText(String.valueOf(model.getFailureCount()));
-        successLimitField.setText(String.valueOf(model.getSuccessLimit()));
-        repaint();
-    }
+	/**
+	 * Shows a message using a DialogBox.
+	 */
+	private void displayMessage(String message, boolean isError) {
+		int type = 0;
 
-    /**
-     * Shows a message using a DialogBox.
-     */
-    private void displayMessage(String message, boolean isError)
-    {
-        int type = 0;
+		if (isError) {
+			type = JOptionPane.ERROR_MESSAGE;
+		} else {
+			type = JOptionPane.INFORMATION_MESSAGE;
+		}
+		JOptionPane.showMessageDialog(null, message, isError ? "Error" : "Information", type);
+	}
 
-        if (isError)
-        {
-            type = JOptionPane.ERROR_MESSAGE;
-        }
-        else
-        {
-            type = JOptionPane.INFORMATION_MESSAGE;
-        }
-        JOptionPane.showMessageDialog(null, message, 
-        		isError? "Error" : "Information", type);
-    }
-
-    /* (non-Javadoc)
-     * @see ChangeListener#stateChanged(ChangeEvent)
-     */
-    public void stateChanged(ChangeEvent e)
-    {
-        if(e.getSource() instanceof MailerModel)
-        {
-            MailerModel testModel = (MailerModel)e.getSource();
-            updateVisualizer(testModel);
-        }
-        else
-        {
-            super.stateChanged(e);
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ChangeListener#stateChanged(ChangeEvent)
+	 */
+	public void stateChanged(ChangeEvent e) {
+		if (e.getSource() instanceof MailerModel) {
+			MailerModel testModel = (MailerModel) e.getSource();
+			updateVisualizer(testModel);
+		} else {
+			super.stateChanged(e);
+		}
+	}
 
 }
-

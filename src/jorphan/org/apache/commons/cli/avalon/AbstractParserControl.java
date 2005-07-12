@@ -15,26 +15,26 @@
  * limitations under the License.
  */
 package org.apache.commons.cli.avalon;
-//Renamed from org.apache.avalon.excalibur.cli
+
+// Renamed from org.apache.avalon.excalibur.cli
 
 /**
- * Class to inherit from so when in future when new controls are added
- * clients will no have to implement them.
+ * Class to inherit from so when in future when new controls are added clients
+ * will no have to implement them.
+ * 
  * @version $Revision$
  * @see ParserControl
  */
-public abstract class AbstractParserControl
-        implements ParserControl
-{
-    /**
-     * By default always continue parsing by returning false.
-     *
-     * @param lastOptionCode the code of last option parsed
-     * @return return true to halt, false to continue parsing
-     * @see ParserControl#isFinished(int)
-     */
-    public boolean isFinished( int lastOptionCode )
-    {
-        return false;
-    }
+public abstract class AbstractParserControl implements ParserControl {
+	/**
+	 * By default always continue parsing by returning false.
+	 * 
+	 * @param lastOptionCode
+	 *            the code of last option parsed
+	 * @return return true to halt, false to continue parsing
+	 * @see ParserControl#isFinished(int)
+	 */
+	public boolean isFinished(int lastOptionCode) {
+		return false;
+	}
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.control.gui;
 
@@ -23,41 +23,35 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
- * @version   $Revision$ on $Date$
+ * @version $Revision$ on $Date$
  */
-public class OnceOnlyControllerGui extends AbstractControllerGui
-{
-    public OnceOnlyControllerGui()
-    {
-        init();
-    }
+public class OnceOnlyControllerGui extends AbstractControllerGui {
+	public OnceOnlyControllerGui() {
+		init();
+	}
 
-    public TestElement createTestElement()
-    {
-        OnceOnlyController oc = new OnceOnlyController();
-        modifyTestElement(oc);
-        return oc;
-    }
+	public TestElement createTestElement() {
+		OnceOnlyController oc = new OnceOnlyController();
+		modifyTestElement(oc);
+		return oc;
+	}
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement oc)
-    {
-        configureTestElement(oc);
-    }
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement oc) {
+		configureTestElement(oc);
+	}
 
-    public String getLabelResource()
-    {
-        return "once_only_controller_title";
-    }
+	public String getLabelResource() {
+		return "once_only_controller_title";
+	}
 
-    private void init()
-    {
-        setLayout(
-            new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-        setBorder(makeBorder());
-        add(makeTitlePanel());
-    }
+	private void init() {
+		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setBorder(makeBorder());
+		add(makeTitlePanel());
+	}
 }

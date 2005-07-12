@@ -14,22 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui.util;
 
 /**
- * @author    Michael Stover
- * @version   $Revision$
+ * @author Michael Stover
+ * @version $Revision$
  */
-public class MenuInfo
-{
-    public String label;
-    public String className;
+public class MenuInfo {
+	public String label;
 
-    public MenuInfo(String l, String cn)
-    {
-        label = l;
-        className = cn;
-    }
+	public String className;
+
+	public MenuInfo(String l, String cn) {
+		label = l;
+		className = cn;
+	}
 }

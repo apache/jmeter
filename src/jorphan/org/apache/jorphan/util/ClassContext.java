@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jorphan.util;
 
@@ -26,41 +26,38 @@ package org.apache.jorphan.util;
  * 
  * @version $Revision$ last updated $Date$
  */
-public final class ClassContext extends SecurityManager
-{
-    /**
-     * Private constructor to prevent instantiation.
-     */
-    private ClassContext()
-    {
-    }
+public final class ClassContext extends SecurityManager {
+	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private ClassContext() {
+	}
 
-    private static ClassContext _instance = new ClassContext();
+	private static ClassContext _instance = new ClassContext();
 
-    /*
-     * N.B. Both static routines pick up the instance context directly
-     * This ensures that both return the same stack depth
-     */
+	/*
+	 * N.B. Both static routines pick up the instance context directly This
+	 * ensures that both return the same stack depth
+	 */
 
-    /**
-     * Gets the calling context as an array of classes
-     * Class[0] is this class.
-     *  
-     * @return Class[] - list of classes in the callers context
-     */
-    public static Class[] getMyClassContext()
-    {
-        return _instance.getClassContext();
-    }
-    /**
-     * Get the name of the class at a particular stack depth
-     * i=0 gives this class
-     * 
-     * @param i - stack depth
-     * @return String - name of class at depth i
-     */
-    public static String getCallerClassNameAt(int i)
-    {
-        return _instance.getClassContext()[i].getName();
-    }
+	/**
+	 * Gets the calling context as an array of classes Class[0] is this class.
+	 * 
+	 * @return Class[] - list of classes in the callers context
+	 */
+	public static Class[] getMyClassContext() {
+		return _instance.getClassContext();
+	}
+
+	/**
+	 * Get the name of the class at a particular stack depth i=0 gives this
+	 * class
+	 * 
+	 * @param i -
+	 *            stack depth
+	 * @return String - name of class at depth i
+	 */
+	public static String getCallerClassNameAt(int i) {
+		return _instance.getClassContext()[i].getName();
+	}
 }

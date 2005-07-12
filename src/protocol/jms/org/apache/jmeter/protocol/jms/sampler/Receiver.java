@@ -24,87 +24,92 @@ import javax.jms.*;
 
 /**
  * Receiver of pseudo-synchronous reply messages.
- *
+ * 
  * @author Martijn Blankestijn
  * @version $Id$.
  */
 public class Receiver implements Runnable {
-    private boolean active;
-    private QueueSession session;
-    private QueueReceiver consumer;
-    private QueueConnection conn;
-//    private static Receiver receiver;
-    static Logger log = LoggingManager.getLoggerForClass();
+	private boolean active;
 
-    private Receiver(QueueConnectionFactory factory, Queue receiveQueue) throws JMSException {
-        conn = factory.createQueueConnection();
-        session = conn.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
-        consumer = session.createReceiver(receiveQueue);
-        if (log.isDebugEnabled()) {
-            log.debug("Receiver - ctor. Starting connection now");
-        }
-        conn.start();
-        if (log.isInfoEnabled()) {
-            log.info("Receiver - ctor. Connection to messaging system established");
-        }
-    }
+	private QueueSession session;
 
-    public static synchronized Receiver createReceiver(QueueConnectionFactory factory, Queue receiveQueue) throws JMSException {
-//        if (receiver == null) {
-            Receiver receiver = new Receiver(factory, receiveQueue);
-            Thread thread = new Thread(receiver);
-            thread.start();
-//        }
-        return receiver;
-    }
+	private QueueReceiver consumer;
 
-    public void run() {
-        activate();
-        Message reply;
+	private QueueConnection conn;
 
-        while (isActive()) {
-            reply = null;
-            try {
-                reply = consumer.receive(5000);
-                if (reply != null) {
+	// private static Receiver receiver;
+	static Logger log = LoggingManager.getLoggerForClass();
 
-                    if (log.isDebugEnabled()) {
-                        log.debug("Received message, correlation id:" + reply.getJMSCorrelationID());
-                    }
+	private Receiver(QueueConnectionFactory factory, Queue receiveQueue) throws JMSException {
+		conn = factory.createQueueConnection();
+		session = conn.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+		consumer = session.createReceiver(receiveQueue);
+		if (log.isDebugEnabled()) {
+			log.debug("Receiver - ctor. Starting connection now");
+		}
+		conn.start();
+		if (log.isInfoEnabled()) {
+			log.info("Receiver - ctor. Connection to messaging system established");
+		}
+	}
 
-                    if (reply.getJMSCorrelationID() == null) {
-                        log.warn("Received message with correlation id null. Discarding message ...");
-                    } else {
-                        MessageAdmin.getAdmin().putReply(reply.getJMSCorrelationID(), reply);
-                    }
-                }
+	public static synchronized Receiver createReceiver(QueueConnectionFactory factory, Queue receiveQueue)
+			throws JMSException {
+		// if (receiver == null) {
+		Receiver receiver = new Receiver(factory, receiveQueue);
+		Thread thread = new Thread(receiver);
+		thread.start();
+		// }
+		return receiver;
+	}
 
-            } catch (JMSException e1) {
-                e1.printStackTrace();
-            }
-        }
-        // not active anymore
-        if (session != null) {
-            try {
-                session.close();
-                if (conn != null) conn.close();
-            } catch (JMSException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+	public void run() {
+		activate();
+		Message reply;
 
-    public synchronized void activate() {
-        active = true;
-    }
+		while (isActive()) {
+			reply = null;
+			try {
+				reply = consumer.receive(5000);
+				if (reply != null) {
 
-    public synchronized void deactivate() {
-        active = false;
-    }
+					if (log.isDebugEnabled()) {
+						log.debug("Received message, correlation id:" + reply.getJMSCorrelationID());
+					}
 
-    private synchronized boolean isActive() {
-        return active;
-    }
+					if (reply.getJMSCorrelationID() == null) {
+						log.warn("Received message with correlation id null. Discarding message ...");
+					} else {
+						MessageAdmin.getAdmin().putReply(reply.getJMSCorrelationID(), reply);
+					}
+				}
 
+			} catch (JMSException e1) {
+				e1.printStackTrace();
+			}
+		}
+		// not active anymore
+		if (session != null) {
+			try {
+				session.close();
+				if (conn != null)
+					conn.close();
+			} catch (JMSException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public synchronized void activate() {
+		active = true;
+	}
+
+	public synchronized void deactivate() {
+		active = false;
+	}
+
+	private synchronized boolean isActive() {
+		return active;
+	}
 
 }

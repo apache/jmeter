@@ -29,23 +29,25 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.util;
 
 import org.htmlparser.Node;
 
-public interface NodeIterator
-{
-    /**
-     * Check if more nodes are available.
-     * @return <code>true</code> if a call to <code>nextHTMLNode()</code> will succeed.
-     */
-    public boolean hasMoreNodes() throws ParserException;
+public interface NodeIterator {
+	/**
+	 * Check if more nodes are available.
+	 * 
+	 * @return <code>true</code> if a call to <code>nextHTMLNode()</code>
+	 *         will succeed.
+	 */
+	public boolean hasMoreNodes() throws ParserException;
 
-    /**
-     * Get the next node.
-     * @return The next node in the HTML stream, or null if there are no more nodes.
-     */
-    public Node nextNode() throws ParserException;
+	/**
+	 * Get the next node.
+	 * 
+	 * @return The next node in the HTML stream, or null if there are no more
+	 *         nodes.
+	 */
+	public Node nextNode() throws ParserException;
 
 }

@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui.action;
+
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
@@ -28,51 +29,35 @@ import org.apache.jmeter.reporters.FileReporter;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author    Michael Stover
- * @version   $Revision$
+ * @author Michael Stover
+ * @version $Revision$
  */
-public class Analyze implements Command
-{
-    private static Set commands = new HashSet();
+public class Analyze implements Command {
+	private static Set commands = new HashSet();
 
-    static
-    {
-        commands.add("Analyze File");
-    }
+	static {
+		commands.add("Analyze File");
+	}
 
-    public Analyze()
-    {
-    }
+	public Analyze() {
+	}
 
-    public Set getActionNames()
-    {
-        return commands;
-    }
+	public Set getActionNames() {
+		return commands;
+	}
 
-    public void doAction(ActionEvent e)
-    {
-        FileReporter analyzer = new FileReporter();
-        try
-        {
-            File f =
-                FileDialoger
-                    .promptToOpenFile(new String[] { ".jtl" })
-                    .getSelectedFile();
-            if (f != null)
-            {
-                try
-                {
-                    analyzer.init(f.getPath());
-                }
-                catch (IOException err)
-                {
-                    JMeterUtils.reportErrorToUser(
-                        "The file you selected could not be analyzed");
-                }
-            }
-        }
-        catch (NullPointerException err)
-        {
-        }
-    }
+	public void doAction(ActionEvent e) {
+		FileReporter analyzer = new FileReporter();
+		try {
+			File f = FileDialoger.promptToOpenFile(new String[] { ".jtl" }).getSelectedFile();
+			if (f != null) {
+				try {
+					analyzer.init(f.getPath());
+				} catch (IOException err) {
+					JMeterUtils.reportErrorToUser("The file you selected could not be analyzed");
+				}
+			}
+		} catch (NullPointerException err) {
+		}
+	}
 }

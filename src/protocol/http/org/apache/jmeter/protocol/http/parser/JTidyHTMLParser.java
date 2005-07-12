@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.parser;
 
@@ -37,207 +37,188 @@ import org.xml.sax.SAXException;
  * 
  * @version $Revision$ updated on $Date$
  */
-class JTidyHTMLParser extends HTMLParser
-{
-    /** Used to store the Logger (used for debug and error messages). */
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+class JTidyHTMLParser extends HTMLParser {
+	/** Used to store the Logger (used for debug and error messages). */
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    protected JTidyHTMLParser()
-    {
-        super();
-    }
+	protected JTidyHTMLParser() {
+		super();
+	}
 
-	protected boolean isReusable()
-	{
+	protected boolean isReusable() {
 		return true;
 	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.http.parser.HTMLParser#getEmbeddedResourceURLs(byte[], java.net.URL)
-     */
-    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls)
-        throws HTMLParseException
-    {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.protocol.http.parser.HTMLParser#getEmbeddedResourceURLs(byte[],
+	 *      java.net.URL)
+	 */
+	public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) throws HTMLParseException {
 		Document dom = null;
-		try
-		{
-			dom = (Document)getDOM(html);
+		try {
+			dom = (Document) getDOM(html);
+		} catch (SAXException se) {
+			throw new HTMLParseException(se);
 		}
-		catch(SAXException se)
-		{
-            throw new HTMLParseException(se);
-		}
-        
+
 		// Now parse the DOM tree
-		
-		scanNodes(dom,urls, baseUrl);
+
+		scanNodes(dom, urls, baseUrl);
 
 		return urls.iterator();
 	}
 
-    /** 
+	/**
 	 * Scan nodes recursively, looking for embedded resources
-	 * @param node - initial node
-	 * @param urls - container for URLs
-	 * @param baseUrl - used to create absolute URLs
-     * 
-     * @return new base URL
+	 * 
+	 * @param node -
+	 *            initial node
+	 * @param urls -
+	 *            container for URLs
+	 * @param baseUrl -
+	 *            used to create absolute URLs
+	 * 
+	 * @return new base URL
 	 */
-	private URL scanNodes(Node node, URLCollection urls, URL baseUrl) throws HTMLParseException
-	{
-		if ( node == null ) {
-		  return baseUrl;
-	    }
+	private URL scanNodes(Node node, URLCollection urls, URL baseUrl) throws HTMLParseException {
+		if (node == null) {
+			return baseUrl;
+		}
 
-	    String name = node.getNodeName();
+		String name = node.getNodeName();
 
-	    int type = node.getNodeType();
+		int type = node.getNodeType();
 
-	    switch ( type ) {
+		switch (type) {
 
-	    case Node.DOCUMENT_NODE:
-		  scanNodes(((Document)node).getDocumentElement(),urls,baseUrl);
-		  break;
-
-	    case Node.ELEMENT_NODE:
-	   
-		  NamedNodeMap attrs = node.getAttributes();
-		  if (name.equalsIgnoreCase("base"))
-		  {
-		  	String tmp=getValue(attrs,"href");
-		  	if (tmp!=null) try
-            {
-                baseUrl= new URL(baseUrl, tmp);
-            }
-            catch (MalformedURLException e)
-            {
-            	throw new HTMLParseException(e);
-            }
-		  	break;
-		  }
-		  
-		  if (name.equalsIgnoreCase("img"))
-		  {
-		  	urls.addURL(getValue(attrs,"src"),baseUrl);
+		case Node.DOCUMENT_NODE:
+			scanNodes(((Document) node).getDocumentElement(), urls, baseUrl);
 			break;
-          }
-          
-		  if (name.equalsIgnoreCase("applet"))
-		  {
-		  	urls.addURL(getValue(attrs,"code"),baseUrl);
-			  break;
+
+		case Node.ELEMENT_NODE:
+
+			NamedNodeMap attrs = node.getAttributes();
+			if (name.equalsIgnoreCase("base")) {
+				String tmp = getValue(attrs, "href");
+				if (tmp != null)
+					try {
+						baseUrl = new URL(baseUrl, tmp);
+					} catch (MalformedURLException e) {
+						throw new HTMLParseException(e);
+					}
+				break;
 			}
-			if (name.equalsIgnoreCase("input"))
-			{
-				String src=getValue(attrs,"src");
-				String typ=getValue(attrs,"type");
-				if ((src!=null) &&(typ.equalsIgnoreCase("image")) ){ 
-					urls.addURL(src,baseUrl);
+
+			if (name.equalsIgnoreCase("img")) {
+				urls.addURL(getValue(attrs, "src"), baseUrl);
+				break;
+			}
+
+			if (name.equalsIgnoreCase("applet")) {
+				urls.addURL(getValue(attrs, "code"), baseUrl);
+				break;
+			}
+			if (name.equalsIgnoreCase("input")) {
+				String src = getValue(attrs, "src");
+				String typ = getValue(attrs, "type");
+				if ((src != null) && (typ.equalsIgnoreCase("image"))) {
+					urls.addURL(src, baseUrl);
 				}
-			  break;
-			}
-			if (name.equalsIgnoreCase("link") 
-					&& getValue(attrs,"rel").equalsIgnoreCase("stylesheet"))
-			{
-				urls.addURL(getValue(attrs,"href"),baseUrl);
-			  break;
-			}
-			if (name.equalsIgnoreCase("script"))
-			{
-				urls.addURL(getValue(attrs,"src"),baseUrl);
-			  break;
-			}
-			if (name.equalsIgnoreCase("frame"))
-			{
-				urls.addURL(getValue(attrs,"src"),baseUrl);
-			  break;
-			}
-			String back=getValue(attrs,"background");
-			if (back != null){
-				urls.addURL(back,baseUrl);
 				break;
 			}
-			if (name.equalsIgnoreCase("bgsound"))
-			{
-				urls.addURL(getValue(attrs,"src"),baseUrl);
+			if (name.equalsIgnoreCase("link") && getValue(attrs, "rel").equalsIgnoreCase("stylesheet")) {
+				urls.addURL(getValue(attrs, "href"), baseUrl);
 				break;
 			}
-			if (name.equalsIgnoreCase("frame"))
-			{
-				urls.addURL(getValue(attrs,"src"),baseUrl);
+			if (name.equalsIgnoreCase("script")) {
+				urls.addURL(getValue(attrs, "src"), baseUrl);
+				break;
+			}
+			if (name.equalsIgnoreCase("frame")) {
+				urls.addURL(getValue(attrs, "src"), baseUrl);
+				break;
+			}
+			String back = getValue(attrs, "background");
+			if (back != null) {
+				urls.addURL(back, baseUrl);
+				break;
+			}
+			if (name.equalsIgnoreCase("bgsound")) {
+				urls.addURL(getValue(attrs, "src"), baseUrl);
+				break;
+			}
+			if (name.equalsIgnoreCase("frame")) {
+				urls.addURL(getValue(attrs, "src"), baseUrl);
 				break;
 			}
 
-		  NodeList children = node.getChildNodes();
-		  if ( children != null ) {
-			 int len = children.getLength();
-			 for ( int i = 0; i < len; i++ ) {
-				baseUrl= scanNodes(children.item(i),urls,baseUrl);
-			 }
-		  }
-		  break;
+			NodeList children = node.getChildNodes();
+			if (children != null) {
+				int len = children.getLength();
+				for (int i = 0; i < len; i++) {
+					baseUrl = scanNodes(children.item(i), urls, baseUrl);
+				}
+			}
+			break;
 
-//	   case Node.TEXT_NODE:
-//		  break;
+		// case Node.TEXT_NODE:
+		// break;
 
-	   }
-       
-       return baseUrl;
+		}
+
+		return baseUrl;
 
 	}
 
-    /*
-     * Helper method to get an attribute value, if it exists
-     * @param attrs list of attributs
-     * @param attname attribute name
-     * @return
-     */
-    private String getValue(NamedNodeMap attrs, String attname)
-    {
-    	String v=null;
-    	Node n = attrs.getNamedItem(attname);
-    	if (n != null) v=n.getNodeValue();
-        return v;
-    }
+	/*
+	 * Helper method to get an attribute value, if it exists @param attrs list
+	 * of attributs @param attname attribute name @return
+	 */
+	private String getValue(NamedNodeMap attrs, String attname) {
+		String v = null;
+		Node n = attrs.getNamedItem(attname);
+		if (n != null)
+			v = n.getNodeValue();
+		return v;
+	}
 
-    /**
-     * Returns <code>tidy</code> as HTML parser.
-     *
-     * @return  a <code>tidy</code> HTML parser
-     */
-    private static Tidy getTidyParser()
-    {
-        log.debug("Start : getParser");
-        Tidy tidy = new Tidy();
-        tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
-        tidy.setQuiet(true);
-        tidy.setShowWarnings(false);
-        if(log.isDebugEnabled())
-        {
-            log.debug("getParser : tidy parser created - " + tidy);
-        }
-        log.debug("End   : getParser");
-        return tidy;
-    }
+	/**
+	 * Returns <code>tidy</code> as HTML parser.
+	 * 
+	 * @return a <code>tidy</code> HTML parser
+	 */
+	private static Tidy getTidyParser() {
+		log.debug("Start : getParser");
+		Tidy tidy = new Tidy();
+		tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
+		tidy.setQuiet(true);
+		tidy.setShowWarnings(false);
+		if (log.isDebugEnabled()) {
+			log.debug("getParser : tidy parser created - " + tidy);
+		}
+		log.debug("End   : getParser");
+		return tidy;
+	}
 
-    /**
-     * Returns a node representing a whole xml given an xml document.
-     *
-     * @param text  an xml document (as a byte array)
-     * @return      a node representing a whole xml
-     *
-     * @throws SAXException indicates an error parsing the xml document
-     */
-    private static Node getDOM(byte [] text) throws SAXException
-    {
-        log.debug("Start : getDOM");
-        Node node = getTidyParser().parseDOM(new
-          ByteArrayInputStream(text), null);
-        if(log.isDebugEnabled())
-        {
-            log.debug("node : " + node);
-        }
-        log.debug("End   : getDOM");
-        return node;
-    }
+	/**
+	 * Returns a node representing a whole xml given an xml document.
+	 * 
+	 * @param text
+	 *            an xml document (as a byte array)
+	 * @return a node representing a whole xml
+	 * 
+	 * @throws SAXException
+	 *             indicates an error parsing the xml document
+	 */
+	private static Node getDOM(byte[] text) throws SAXException {
+		log.debug("Start : getDOM");
+		Node node = getTidyParser().parseDOM(new ByteArrayInputStream(text), null);
+		if (log.isDebugEnabled()) {
+			log.debug("node : " + node);
+		}
+		log.debug("End   : getDOM");
+		return node;
+	}
 }

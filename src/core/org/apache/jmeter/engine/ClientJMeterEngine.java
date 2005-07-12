@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.engine;
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -29,135 +30,117 @@ import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-
 /**
- * @author     unattributed
- * @version    $Revision$ Updated on: $Date$
+ * @author unattributed
+ * @version $Revision$ Updated on: $Date$
  */
-public class ClientJMeterEngine implements JMeterEngine,Runnable
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
-    RemoteJMeterEngine remote;
-    HashTree test;
-    SearchByClass testListeners;
-    ConvertListeners sampleListeners;
-    private String host;
+public class ClientJMeterEngine implements JMeterEngine, Runnable {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    private static RemoteJMeterEngine getEngine(String h) throws MalformedURLException, RemoteException, NotBoundException
-    {
-        return (RemoteJMeterEngine) Naming.lookup("//" + h + "/JMeterEngine");
-    }
+	RemoteJMeterEngine remote;
 
-    public ClientJMeterEngine(String host)
-        throws MalformedURLException, NotBoundException, RemoteException
-    {
-        this(getEngine(host));
-        this.host = host;
-    }
+	HashTree test;
 
-    public ClientJMeterEngine(RemoteJMeterEngine remote)
-    {
-        this.remote = remote;
-    }
+	SearchByClass testListeners;
 
-    protected HashTree getTestTree()
-    {
-        return test;
-    }
+	ConvertListeners sampleListeners;
 
-    public void configure(HashTree testTree)
-    {
-        test = testTree;
-    }
+	private String host;
 
-    public void setHost(String host)
-    {
-        this.host = host;
-    }
+	private static RemoteJMeterEngine getEngine(String h) throws MalformedURLException, RemoteException,
+			NotBoundException {
+		return (RemoteJMeterEngine) Naming.lookup("//" + h + "/JMeterEngine");
+	}
 
-    public void runTest()
-    {
-        log.info("about to run remote test");
-        new Thread(this).start();
-        log.info("done initiating run command");
-    }
+	public ClientJMeterEngine(String host) throws MalformedURLException, NotBoundException, RemoteException {
+		this(getEngine(host));
+		this.host = host;
+	}
 
-    public void stopTest()
-    {
-        try
-        {
-            remote.stopTest();
-        }
-        catch (Exception ex)
-        {
-            log.error("", ex);
-        }
-    }
+	public ClientJMeterEngine(RemoteJMeterEngine remote) {
+		this.remote = remote;
+	}
 
-    public void reset()
-    {
-        try
-        {
-            try {
+	protected HashTree getTestTree() {
+		return test;
+	}
+
+	public void configure(HashTree testTree) {
+		test = testTree;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public void runTest() {
+		log.info("about to run remote test");
+		new Thread(this).start();
+		log.info("done initiating run command");
+	}
+
+	public void stopTest() {
+		try {
+			remote.stopTest();
+		} catch (Exception ex) {
+			log.error("", ex);
+		}
+	}
+
+	public void reset() {
+		try {
+			try {
 				remote.reset();
 			} catch (java.rmi.ConnectException e) {
-				remote=getEngine(host);
+				remote = getEngine(host);
 				remote.reset();
 			}
-        }
-        catch (Exception ex)
-        {
-            log.error("", ex);
-        }
-    }
+		} catch (Exception ex) {
+			log.error("", ex);
+		}
+	}
 
-    /* (non-Javadoc)
-     * @see java.lang.Runnable#run()
-     */
-    public void run()
-    {
-        log.info("running clientengine run method");
-        testListeners = new SearchByClass(TestListener.class);
-        getTestTree().traverse(testListeners);
-        sampleListeners = new ConvertListeners();
-        
-        //TODO this is a temporary fix - see bug 23487 
-        try {
-            getTestTree().traverse(sampleListeners);
-        }
-        catch(IndexOutOfBoundsException e)
-        {
-        	log.warn("Error replacing sample listeners",e);
-        }
-        
-        try
-        {
-           JMeterContextService.startTest();
-            remote.setHost(host);
-            log.info("sent host ="+host);
-            remote.configure(test);
-            log.info("sent test");
-            remote.runTest();
-            log.info("sent run command");
-        }
-        catch(Exception ex)
-        {
-            log.error("",ex);
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
+	public void run() {
+		log.info("running clientengine run method");
+		testListeners = new SearchByClass(TestListener.class);
+		getTestTree().traverse(testListeners);
+		sampleListeners = new ConvertListeners();
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.engine.JMeterEngine#exit()
-     */
-    public void exit()
-    {
-    	try
-        {
-            remote.exit();
-        }
-        catch (RemoteException e)
-        {
-        	log.warn("Could not perform remote exit: "+e.toString());
-        }
-    }
+		// TODO this is a temporary fix - see bug 23487
+		try {
+			getTestTree().traverse(sampleListeners);
+		} catch (IndexOutOfBoundsException e) {
+			log.warn("Error replacing sample listeners", e);
+		}
+
+		try {
+			JMeterContextService.startTest();
+			remote.setHost(host);
+			log.info("sent host =" + host);
+			remote.configure(test);
+			log.info("sent test");
+			remote.runTest();
+			log.info("sent run command");
+		} catch (Exception ex) {
+			log.error("", ex);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.engine.JMeterEngine#exit()
+	 */
+	public void exit() {
+		try {
+			remote.exit();
+		} catch (RemoteException e) {
+			log.warn("Could not perform remote exit: " + e.toString());
+		}
+	}
 }

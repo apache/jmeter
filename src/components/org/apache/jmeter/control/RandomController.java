@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.control;
 
@@ -25,36 +25,29 @@ import java.util.Random;
  * @author Michael Stover
  * @version $Revision$
  */
-public class RandomController extends InterleaveControl implements Serializable
-{
-    static Random rand = new Random();
+public class RandomController extends InterleaveControl implements Serializable {
+	static Random rand = new Random();
 
-    public RandomController()
-    {
-    }
+	public RandomController() {
+	}
 
-    /**
-     * @see org.apache.jmeter.control.GenericController#resetCurrent()
-     */
-    protected void resetCurrent()
-    {
-        if (getSubControllers().size() > 0)
-        {
-            current = rand.nextInt(this.getSubControllers().size());
-        }
-        else
-        {
-            current = 0;
-        }
-    }
+	/**
+	 * @see org.apache.jmeter.control.GenericController#resetCurrent()
+	 */
+	protected void resetCurrent() {
+		if (getSubControllers().size() > 0) {
+			current = rand.nextInt(this.getSubControllers().size());
+		} else {
+			current = 0;
+		}
+	}
 
-    /**
-     * @see org.apache.jmeter.control.GenericController#incrementCurrent()
-     */
-    protected void incrementCurrent()
-    {
-        super.incrementCurrent();
-        current = rand.nextInt(this.getSubControllers().size());
-    }
+	/**
+	 * @see org.apache.jmeter.control.GenericController#incrementCurrent()
+	 */
+	protected void incrementCurrent() {
+		super.incrementCurrent();
+		current = rand.nextInt(this.getSubControllers().size());
+	}
 
 }

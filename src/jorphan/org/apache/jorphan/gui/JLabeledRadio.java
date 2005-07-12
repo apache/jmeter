@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jorphan.gui;
 
@@ -34,42 +34,44 @@ import javax.swing.event.ChangeListener;
 
 /**
  * @author pete
- *
+ * 
  * JLabeledRadio will create a set of Radio buttons with a label.
  */
 public class JLabeledRadio extends JPanel implements JLabeledField, ActionListener {
 
 	private JLabel mLabel = new JLabel();
+
 	private ButtonGroup bGroup = new ButtonGroup();
 
 	private ArrayList mChangeListeners = new ArrayList(3);
 
-    /**
-     * 
-     */
-    public JLabeledRadio() {
-        super();
-		this.add(mLabel);
-    }
-
-	public JLabeledRadio(String label, String[] items){
-		mLabel.setText(label);
-		init(items,null);
-	}
-	
-	public JLabeledRadio(String label, String[] items, String selectedItem){
-		mLabel.setText(label);
-		init(items,selectedItem);
-	}
-	
 	/**
-	 * Method is responsible for creating the JRadioButtons
-	 * and adding them to the ButtonGroup.
+	 * 
+	 */
+	public JLabeledRadio() {
+		super();
+		this.add(mLabel);
+	}
+
+	public JLabeledRadio(String label, String[] items) {
+		mLabel.setText(label);
+		init(items, null);
+	}
+
+	public JLabeledRadio(String label, String[] items, String selectedItem) {
+		mLabel.setText(label);
+		init(items, selectedItem);
+	}
+
+	/**
+	 * Method is responsible for creating the JRadioButtons and adding them to
+	 * the ButtonGroup.
+	 * 
 	 * @param items
 	 */
-	public void init(String[] items, String selected){
+	public void init(String[] items, String selected) {
 		this.add(mLabel);
-		for (int idx=0; idx < items.length; idx++){
+		for (int idx = 0; idx < items.length; idx++) {
 			JRadioButton btn = new JRadioButton(items[idx]);
 			btn.setActionCommand(items[idx]);
 			btn.addActionListener(this);
@@ -77,98 +79,101 @@ public class JLabeledRadio extends JPanel implements JLabeledField, ActionListen
 			this.bGroup.add(btn);
 			// add the button
 			this.add(btn);
-			if (selected != null && selected.equals(items[idx])){
+			if (selected != null && selected.equals(items[idx])) {
 				btn.setSelected(true);
 			}
 		}
 	}
-	
+
 	/**
-	 * setItems will set the radio button items. The implementation
-	 * first removes the old JRadioButton, then it creates new ones.
+	 * setItems will set the radio button items. The implementation first
+	 * removes the old JRadioButton, then it creates new ones.
+	 * 
 	 * @param items
 	 */
-	public void setItems(String[] items){
+	public void setItems(String[] items) {
 		Enumeration en = this.bGroup.getElements();
-		while (en.hasMoreElements()){
-			JComponent comp = (JComponent)en.nextElement();
-			this.bGroup.remove((JRadioButton)comp);
+		while (en.hasMoreElements()) {
+			JComponent comp = (JComponent) en.nextElement();
+			this.bGroup.remove((JRadioButton) comp);
 			this.remove(comp);
 		}
-		init(items,null);
+		init(items, null);
 	}
-	
-    /**
-     * The implementation will get the Text value from the
-     * selected radio button in the JButtonGroup.
-     */
-    public String getText() {
-        return this.bGroup.getSelection().getActionCommand();
-    }
-
-    /**
-     * The implementation will iterate through the radio buttons
-     * and find the match. It then sets it to selected and sets
-     * all other radion buttons as not selected.
-     */
-    public void setText(String text) {
-		Enumeration en = this.bGroup.getElements();
-		while (en.hasMoreElements()){
-			JRadioButton jrb = (JRadioButton)en.nextElement();
-			if (jrb.getText().equals(text)){
-				this.bGroup.setSelected(jrb.getModel(),true);
-			} else {
-				this.bGroup.setSelected(jrb.getModel(),false);
-			}
-		}
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.jorphan.gui.JLabeledField#setLabel(java.lang.String)
-     */
-    public void setLabel(String pLabel) {
-		this.mLabel.setText(pLabel);
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.jorphan.gui.JLabeledField#addChangeListener(javax.swing.event.ChangeListener)
-     */
-    public void addChangeListener(ChangeListener pChangeListener) {
-		this.mChangeListeners.add(pChangeListener);
-    }
 
 	/**
-	 * Notify all registered change listeners that the
-	 * text in the text field has changed.
+	 * The implementation will get the Text value from the selected radio button
+	 * in the JButtonGroup.
 	 */
-	private void notifyChangeListeners()
-	{
+	public String getText() {
+		return this.bGroup.getSelection().getActionCommand();
+	}
+
+	/**
+	 * The implementation will iterate through the radio buttons and find the
+	 * match. It then sets it to selected and sets all other radion buttons as
+	 * not selected.
+	 */
+	public void setText(String text) {
+		Enumeration en = this.bGroup.getElements();
+		while (en.hasMoreElements()) {
+			JRadioButton jrb = (JRadioButton) en.nextElement();
+			if (jrb.getText().equals(text)) {
+				this.bGroup.setSelected(jrb.getModel(), true);
+			} else {
+				this.bGroup.setSelected(jrb.getModel(), false);
+			}
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jorphan.gui.JLabeledField#setLabel(java.lang.String)
+	 */
+	public void setLabel(String pLabel) {
+		this.mLabel.setText(pLabel);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jorphan.gui.JLabeledField#addChangeListener(javax.swing.event.ChangeListener)
+	 */
+	public void addChangeListener(ChangeListener pChangeListener) {
+		this.mChangeListeners.add(pChangeListener);
+	}
+
+	/**
+	 * Notify all registered change listeners that the text in the text field
+	 * has changed.
+	 */
+	private void notifyChangeListeners() {
 		ChangeEvent ce = new ChangeEvent(this);
-		for (int index = 0; index < mChangeListeners.size(); index++)
-		{
+		for (int index = 0; index < mChangeListeners.size(); index++) {
 			((ChangeListener) mChangeListeners.get(index)).stateChanged(ce);
 		}
 	}
 
-    /**
-     * Method will return all the label and JRadioButtons. ButtonGroup
-     * is excluded from the list.
-     */
-    public List getComponentList() {
+	/**
+	 * Method will return all the label and JRadioButtons. ButtonGroup is
+	 * excluded from the list.
+	 */
+	public List getComponentList() {
 		List comps = new LinkedList();
 		comps.add(mLabel);
 		Enumeration en = this.bGroup.getElements();
-		while (en.hasMoreElements()){
+		while (en.hasMoreElements()) {
 			comps.add(en.nextElement());
 		}
 		return comps;
-    }
+	}
 
 	/**
 	 * When a radio button is clicked, an ActionEvent is triggered.
 	 */
-	public void actionPerformed(ActionEvent e){
+	public void actionPerformed(ActionEvent e) {
 		this.notifyChangeListeners();
 	}
-	
+
 }

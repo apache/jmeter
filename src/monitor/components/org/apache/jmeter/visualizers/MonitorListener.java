@@ -16,7 +16,6 @@
  */
 package org.apache.jmeter.visualizers;
 
-public interface MonitorListener
-{
+public interface MonitorListener {
 	public void addSample(MonitorModel model);
 }

@@ -22,10 +22,10 @@ package org.apache.jmeter.testbeans;
 
 /**
  * Marker interface to tell JMeter to make a Test Bean Gui for the class.
+ * 
  * @author mstover
- *
+ * 
  */
-public interface TestBean
-{
+public interface TestBean {
 
 }

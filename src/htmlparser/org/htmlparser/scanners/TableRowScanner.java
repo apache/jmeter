@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.scanners;
 
 import org.htmlparser.Parser;
@@ -40,49 +39,30 @@ import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 
-public class TableRowScanner extends CompositeTagScanner
-{
-    private final static String MATCH_STRING[] = { "TR" };
+public class TableRowScanner extends CompositeTagScanner {
+	private final static String MATCH_STRING[] = { "TR" };
 
-    public TableRowScanner(Parser parser)
-    {
-        this("", parser);
-    }
+	public TableRowScanner(Parser parser) {
+		this("", parser);
+	}
 
-    public TableRowScanner(String filter, Parser parser)
-    {
-        this(filter, parser, MATCH_STRING, new String[] {
-        }, new String[] {
-        }, false);
-    }
+	public TableRowScanner(String filter, Parser parser) {
+		this(filter, parser, MATCH_STRING, new String[] {}, new String[] {}, false);
+	}
 
-    public TableRowScanner(
-        String filter,
-        Parser parser,
-        String[] nameOfTagToMatch,
-        String[] tagEnders,
-        String[] endTagEnders,
-        boolean allowSelfChildren)
-    {
-        super(
-            filter,
-            nameOfTagToMatch,
-            tagEnders,
-            endTagEnders,
-            allowSelfChildren);
-        parser.addScanner(new TableColumnScanner());
-    }
+	public TableRowScanner(String filter, Parser parser, String[] nameOfTagToMatch, String[] tagEnders,
+			String[] endTagEnders, boolean allowSelfChildren) {
+		super(filter, nameOfTagToMatch, tagEnders, endTagEnders, allowSelfChildren);
+		parser.addScanner(new TableColumnScanner());
+	}
 
-    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-    {
-        NodeList columns =
-            compositeTagData.getChildren().searchFor(TableColumn.class);
-        return new TableRow(tagData, compositeTagData, columns);
-    }
+	public Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
+		NodeList columns = compositeTagData.getChildren().searchFor(TableColumn.class);
+		return new TableRow(tagData, compositeTagData, columns);
+	}
 
-    public String[] getID()
-    {
-        return MATCH_STRING;
-    }
+	public String[] getID() {
+		return MATCH_STRING;
+	}
 
 }

@@ -19,15 +19,14 @@ package org.apache.jmeter.testbeans.gui;
 import java.beans.Customizer;
 
 /**
- * Tagging interface to mark a customizer class as shareable among elements
- * of the same type.
+ * Tagging interface to mark a customizer class as shareable among elements of
+ * the same type.
  * <p>
- * The interface is equivalent to Customizer -- the only difference is that setElement
- * can be called multiple times to change the element it works on.
+ * The interface is equivalent to Customizer -- the only difference is that
+ * setElement can be called multiple times to change the element it works on.
  * 
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision$ updated on $Date$
  */
-public interface SharedCustomizer extends Customizer
-{
+public interface SharedCustomizer extends Customizer {
 }

@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.visualizers;
-
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -39,429 +38,358 @@ import org.apache.jmeter.util.ColorHelper;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-
 /**
  * Draws the graph.
- *
- * Created      2001/08/11
+ * 
+ * Created 2001/08/11
  */
-public class GraphAccum extends JComponent implements Scrollable,
-        GraphAccumListener
-{
-    private GraphAccumModel model;
-    private GraphAccumVisualizer visualizer;
+public class GraphAccum extends JComponent implements Scrollable, GraphAccumListener {
+	private GraphAccumModel model;
 
-    /** Ensure that the legends are only drawn once. */
-    private boolean noLegendYet = true;
+	private GraphAccumVisualizer visualizer;
 
-    /**
-     * Keep track of previous point.  Needed to draw a line joining the
-     * previous point with the current one.
-     */
-    private Point[] previousPts;
+	/** Ensure that the legends are only drawn once. */
+	private boolean noLegendYet = true;
 
-    /**
-     * Ensure that previousPts is allocated once only.  It'll be reused at each
-     * drawSample.  It can't be allocated outside drawSample 'cos the sample
-     * is only passed in here.
-     */
-    private boolean previousPtsAlloc = false;
+	/**
+	 * Keep track of previous point. Needed to draw a line joining the previous
+	 * point with the current one.
+	 */
+	private Point[] previousPts;
 
-    protected final static int width = 2000;
+	/**
+	 * Ensure that previousPts is allocated once only. It'll be reused at each
+	 * drawSample. It can't be allocated outside drawSample 'cos the sample is
+	 * only passed in here.
+	 */
+	private boolean previousPtsAlloc = false;
 
-    private final static int PLOT_X_WIDTH = 10;
-    transient private static final Logger log = LoggingManager.getLoggerForClass();
+	protected final static int width = 2000;
 
+	private final static int PLOT_X_WIDTH = 10;
 
-    /**
-     * Constructor.
-     */
-    public GraphAccum()
-    {
-        log.debug("Start : GraphAnnum1");
-        log.debug("End : GraphAnnum1");
-    }
+	transient private static final Logger log = LoggingManager.getLoggerForClass();
 
-    /**
-     * Constructor with model set.
-     * 
-     * @param  model  model which this object represents
-     */
-    public GraphAccum(GraphAccumModel model)
-    {
-        this();
-        log.debug("Start : GraphAnnum2");
-        setModel(model);
-        log.debug("End : GraphAnnum2");
-    }
+	/**
+	 * Constructor.
+	 */
+	public GraphAccum() {
+		log.debug("Start : GraphAnnum1");
+		log.debug("End : GraphAnnum1");
+	}
 
-    /**
-     * Set model which this object represents.
-     *
-     * @param  model  model which this object represents
-     */
-    private void setModel(Object model)
-    {
-        log.debug("Start : setModel1");
-        this.model = (GraphAccumModel) model;
-        this.model.addGraphAccumListener(this);
-        repaint();
-        log.debug("End : setModel1");
-    }
+	/**
+	 * Constructor with model set.
+	 * 
+	 * @param model
+	 *            model which this object represents
+	 */
+	public GraphAccum(GraphAccumModel model) {
+		this();
+		log.debug("Start : GraphAnnum2");
+		setModel(model);
+		log.debug("End : GraphAnnum2");
+	}
 
-    /**
-     * Set the visualizer.
-     *
-     * @param  visualizer  visualizer of this object
-     */
-    public void setVisualizer(Object visualizer)
-    {
-        if (log.isDebugEnabled())
-        {
-            log.debug("setVisualizer1 : Setting visualizer - " + visualizer);
-        }
-        this.visualizer = (GraphAccumVisualizer) visualizer;
-    }
+	/**
+	 * Set model which this object represents.
+	 * 
+	 * @param model
+	 *            model which this object represents
+	 */
+	private void setModel(Object model) {
+		log.debug("Start : setModel1");
+		this.model = (GraphAccumModel) model;
+		this.model.addGraphAccumListener(this);
+		repaint();
+		log.debug("End : setModel1");
+	}
 
-    /**
-     * The legend is only printed once during sampling. This sets the variable
-     * that indicates whether the legend has been printed yet or not.
-     *
-     * @param  value  variable that indicates whether the legend has been
-     *                printed yet
-     */
-    public void setNoLegendYet(boolean value)
-    {
-        noLegendYet = value;
-    }
+	/**
+	 * Set the visualizer.
+	 * 
+	 * @param visualizer
+	 *            visualizer of this object
+	 */
+	public void setVisualizer(Object visualizer) {
+		if (log.isDebugEnabled()) {
+			log.debug("setVisualizer1 : Setting visualizer - " + visualizer);
+		}
+		this.visualizer = (GraphAccumVisualizer) visualizer;
+	}
 
-    /**
-     * Gets the PreferredScrollableViewportSize attribute of the Graph object.
-     *
-     * @return    the PreferredScrollableViewportSize value
-     */
-    public Dimension getPreferredScrollableViewportSize()
-    {
-        return this.getPreferredSize();
-    }
+	/**
+	 * The legend is only printed once during sampling. This sets the variable
+	 * that indicates whether the legend has been printed yet or not.
+	 * 
+	 * @param value
+	 *            variable that indicates whether the legend has been printed
+	 *            yet
+	 */
+	public void setNoLegendYet(boolean value) {
+		noLegendYet = value;
+	}
 
-    /**
-     * Gets the ScrollableUnitIncrement attribute of the Graph object.
-     * @return              the ScrollableUnitIncrement value
-     */
-    public int getScrollableUnitIncrement(
-        Rectangle visibleRect,
-        int orientation,
-        int direction)
-    {
-        return 5;
-    }
+	/**
+	 * Gets the PreferredScrollableViewportSize attribute of the Graph object.
+	 * 
+	 * @return the PreferredScrollableViewportSize value
+	 */
+	public Dimension getPreferredScrollableViewportSize() {
+		return this.getPreferredSize();
+	}
 
-    /**
-     * Gets the ScrollableBlockIncrement attribute of the Graph object.
-     * @return              the ScrollableBlockIncrement value
-     */
-    public int getScrollableBlockIncrement(
-        Rectangle visibleRect,
-        int orientation,
-        int direction)
-    {
-        return (int) (visibleRect.width * .9);
-    }
+	/**
+	 * Gets the ScrollableUnitIncrement attribute of the Graph object.
+	 * 
+	 * @return the ScrollableUnitIncrement value
+	 */
+	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+		return 5;
+	}
 
-    /**
-     * Gets the ScrollableTracksViewportWidth attribute of the Graph object.
-     *
-     * @return    the ScrollableTracksViewportWidth value
-     */
-    public boolean getScrollableTracksViewportWidth()
-    {
-        return false;
-    }
+	/**
+	 * Gets the ScrollableBlockIncrement attribute of the Graph object.
+	 * 
+	 * @return the ScrollableBlockIncrement value
+	 */
+	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+		return (int) (visibleRect.width * .9);
+	}
 
-    /**
-     * Gets the ScrollableTracksViewportHeight attribute of the Graph object.
-     *
-     * @return    the ScrollableTracksViewportHeight value
-     */
-    public boolean getScrollableTracksViewportHeight()
-    {
-        return true;
-    }
+	/**
+	 * Gets the ScrollableTracksViewportWidth attribute of the Graph object.
+	 * 
+	 * @return the ScrollableTracksViewportWidth value
+	 */
+	public boolean getScrollableTracksViewportWidth() {
+		return false;
+	}
 
-    /**
-     * The legend is only printed once during sampling. This returns the
-     * variable that indicates whether the legend has been printed yet or not.
-     *
-     * @return   value variable that indicates whether the legend has been
-     *           printed yet
-     */
-    public boolean getNoLegendYet()
-    {
-        return noLegendYet;
-    }
+	/**
+	 * Gets the ScrollableTracksViewportHeight attribute of the Graph object.
+	 * 
+	 * @return the ScrollableTracksViewportHeight value
+	 */
+	public boolean getScrollableTracksViewportHeight() {
+		return true;
+	}
 
-    /**
-     * Redraws the gui.
-     */
-    public void updateGui()
-    {
-        log.debug("Start : updateGui1");
-        repaint();
-        log.debug("End : updateGui1");
-    }
+	/**
+	 * The legend is only printed once during sampling. This returns the
+	 * variable that indicates whether the legend has been printed yet or not.
+	 * 
+	 * @return value variable that indicates whether the legend has been printed
+	 *         yet
+	 */
+	public boolean getNoLegendYet() {
+		return noLegendYet;
+	}
 
-    /**
-     * Redraws the gui if no rescaling of the graph is needed.
-     *
-     * @param  oneSample  sample to be added
-     */
-    public void updateGui(final SampleResult oneSample)
-    {
-        log.debug("Start : updateGui2");
-        final int xPos = model.getSampleCount();
+	/**
+	 * Redraws the gui.
+	 */
+	public void updateGui() {
+		log.debug("Start : updateGui1");
+		repaint();
+		log.debug("End : updateGui1");
+	}
 
-        SwingUtilities.invokeLater(
-                new Runnable()
-                {
-                    public void run()
-                    {
-                        Graphics g = getGraphics();
+	/**
+	 * Redraws the gui if no rescaling of the graph is needed.
+	 * 
+	 * @param oneSample
+	 *            sample to be added
+	 */
+	public void updateGui(final SampleResult oneSample) {
+		log.debug("Start : updateGui2");
+		final int xPos = model.getSampleCount();
 
-                        if (g != null)
-                        {
-                            drawSample(xPos * PLOT_X_WIDTH, oneSample, g);
-                        }
-                    }
-                }
-                );
-        log.debug("End : updateGui2");
-    }
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				Graphics g = getGraphics();
 
-    public void paintComponent(Graphics g)
-    {
-        super.paintComponent(g);
-        log.debug("Start : paintComponent1");
-        
-        synchronized (model.getList())
-        {
-            // For repainting set this to false because all the points needs to
-            // be redrawn so no need(shouldn't) use the previousPts.
-            previousPtsAlloc = false;
-            Iterator e = model.getList().iterator();
+				if (g != null) {
+					drawSample(xPos * PLOT_X_WIDTH, oneSample, g);
+				}
+			}
+		});
+		log.debug("End : updateGui2");
+	}
 
-            for (int i = 0; e.hasNext(); i++)
-            {
-                SampleResult s = (SampleResult) e.next();
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		log.debug("Start : paintComponent1");
 
-                drawSample(i * PLOT_X_WIDTH, s, g);
-            }
-        }
-        log.debug("End : paintComponent1");
-    }
+		synchronized (model.getList()) {
+			// For repainting set this to false because all the points needs to
+			// be redrawn so no need(shouldn't) use the previousPts.
+			previousPtsAlloc = false;
+			Iterator e = model.getList().iterator();
 
-    /**
-     * Clears this graph.
-     */
-    public void clear()
-    {
-        setNoLegendYet(true);
-        ((JPanel) visualizer.getWhiteCanvas()).removeAll();
-        previousPts = null;
-    }
+			for (int i = 0; e.hasNext(); i++) {
+				SampleResult s = (SampleResult) e.next();
 
-    private void drawSample(int x, SampleResult oneSample, Graphics g)
-    {
-        log.debug("Start : drawSample1");
+				drawSample(i * PLOT_X_WIDTH, s, g);
+			}
+		}
+		log.debug("End : paintComponent1");
+	}
 
-        // Used to keep track of accumulated load times of components.
-        int lastLevel = 0;
+	/**
+	 * Clears this graph.
+	 */
+	public void clear() {
+		setNoLegendYet(true);
+		((JPanel) visualizer.getWhiteCanvas()).removeAll();
+		previousPts = null;
+	}
 
-        // Number of components
-        int compCount = 0;
+	private void drawSample(int x, SampleResult oneSample, Graphics g) {
+		log.debug("Start : drawSample1");
 
-        SampleResult[] resultList = oneSample.getSubResults();
-        int resultListCount = 0;
+		// Used to keep track of accumulated load times of components.
+		int lastLevel = 0;
 
-        // Allocate previousPts only the first time
-        if (!previousPtsAlloc)
-        {
-            resultListCount += resultList.length;
-            previousPts = new Point[resultListCount + 2];
-        }
+		// Number of components
+		int compCount = 0;
 
-        Color currColor = Color.black;
-        JPanel lPanel = (JPanel) visualizer.getWhiteCanvas();
-        JPanel legendPanel = new JPanel();
-        GridBagLayout gridBag = new GridBagLayout();
-        GridBagConstraints gbc = new GridBagConstraints();
+		SampleResult[] resultList = oneSample.getSubResults();
+		int resultListCount = 0;
 
-        legendPanel.setLayout(gridBag);
-        lPanel.add(legendPanel);
-        Dimension d = this.getSize();
+		// Allocate previousPts only the first time
+		if (!previousPtsAlloc) {
+			resultListCount += resultList.length;
+			previousPts = new Point[resultListCount + 2];
+		}
 
-        // Set the total time to load the sample
-        long totalTime = oneSample.getTime();
+		Color currColor = Color.black;
+		JPanel lPanel = (JPanel) visualizer.getWhiteCanvas();
+		JPanel legendPanel = new JPanel();
+		GridBagLayout gridBag = new GridBagLayout();
+		GridBagConstraints gbc = new GridBagConstraints();
 
-        // If the page has other components then set the total time to be that
-        // including all its components' load time.
-        if (log.isDebugEnabled())
-        {
-            log.debug("drawSample1 : total time - " + totalTime);
-        }
-        int data = (int) (totalTime * d.height / model.getMax());
+		legendPanel.setLayout(gridBag);
+		lPanel.add(legendPanel);
+		Dimension d = this.getSize();
 
-        g.setColor(currColor);
-        if (!previousPtsAlloc)
-        {
-            // If first dot, just draw the point.
-            g.drawLine(
-                x % width,
-                d.height - data,
-                x % width,
-                d.height - data - 1);
-        }
-        else
-        {
-            // Otherwise, draw from previous point.
-            g.drawLine((previousPts[0].x) % width, previousPts[0].y, x % width,
-                    d.height - data);
-        }
-        
-        // Store current total time point
-        previousPts[0] = new Point(x % width, d.height - data);
-        if (noLegendYet)
-        {
-            gbc.gridx = 0;
-            gbc.gridy = compCount++;
-            gbc.anchor = GridBagConstraints.WEST;
-            gbc.weightx = 1.0;
-            gbc.insets = new Insets(0, 10, 0, 0);
-            JLabel totalTimeLabel =
-                new JLabel("Total time - " + oneSample.toString());
+		// Set the total time to load the sample
+		long totalTime = oneSample.getTime();
 
-            totalTimeLabel.setForeground(currColor);
-            gridBag.setConstraints(totalTimeLabel, gbc);
-            legendPanel.add(totalTimeLabel);
-        }
+		// If the page has other components then set the total time to be that
+		// including all its components' load time.
+		if (log.isDebugEnabled()) {
+			log.debug("drawSample1 : total time - " + totalTime);
+		}
+		int data = (int) (totalTime * d.height / model.getMax());
 
-        // Plot the time of the page itself without all its components
-        if (log.isDebugEnabled())
-        {
-            log.debug(
-                "drawSample1 : main page load time - " + oneSample.getTime());
-        }
-        data = (int) (oneSample.getTime() * d.height / model.getMax());
-        currColor = ColorHelper.changeColorCyclicIncrement(currColor, 40);
-        g.setColor(currColor);
-        if (!previousPtsAlloc)
-        {
-            // If first dot, just draw the point
-            g.drawLine(
-                x % width,
-                d.height - data,
-                x % width,
-                d.height - data - 1);
-        }
-        else
-        {
-            // Otherwise, draw from previous point
-            g.drawLine((previousPts[1].x) % width, previousPts[1].y, x % width,
-                    d.height - data);
-        }
-        // Store load time without components
-        previousPts[1] = new Point(x % width, d.height - data);
-        if (noLegendYet)
-        {
-            gbc.gridx = 0;
-            gbc.gridy = compCount++;
-            gbc.anchor = GridBagConstraints.WEST;
-            gbc.weightx = 1.0;
-            gbc.insets = new Insets(0, 10, 0, 0);
-            JLabel mainTimeLabel = new JLabel(oneSample.toString());
+		g.setColor(currColor);
+		if (!previousPtsAlloc) {
+			// If first dot, just draw the point.
+			g.drawLine(x % width, d.height - data, x % width, d.height - data - 1);
+		} else {
+			// Otherwise, draw from previous point.
+			g.drawLine((previousPts[0].x) % width, previousPts[0].y, x % width, d.height - data);
+		}
 
-            mainTimeLabel.setForeground(currColor);
-            gridBag.setConstraints(mainTimeLabel, gbc);
-            legendPanel.add(mainTimeLabel);
-        }
-        lastLevel += data;
-        // Plot the times of the total times components
-        int currPreviousPts = 2;
+		// Store current total time point
+		previousPts[0] = new Point(x % width, d.height - data);
+		if (noLegendYet) {
+			gbc.gridx = 0;
+			gbc.gridy = compCount++;
+			gbc.anchor = GridBagConstraints.WEST;
+			gbc.weightx = 1.0;
+			gbc.insets = new Insets(0, 10, 0, 0);
+			JLabel totalTimeLabel = new JLabel("Total time - " + oneSample.toString());
 
-        if (resultList != null)
-        {
-            for (int i = 0; i < resultList.length; i++)
-            {
-                SampleResult componentRes = resultList[i];
+			totalTimeLabel.setForeground(currColor);
+			gridBag.setConstraints(totalTimeLabel, gbc);
+			legendPanel.add(totalTimeLabel);
+		}
 
-                if (log.isDebugEnabled())
-                {
-                    log.debug(
-                        "drawSample1 : componentRes - "
-                            + componentRes.getSampleLabel()
-                            + " loading time - "
-                            + componentRes.getTime());
-                }
-                data =
-                    (int) (componentRes.getTime() * d.height / model.getMax());
-                data += lastLevel;
-                currColor =
-                    ColorHelper.changeColorCyclicIncrement(currColor, 100);
-                g.setColor(currColor);
-                if (!previousPtsAlloc)
-                {
-                    // If first dot, just draw the point
-                    g.drawLine(
-                        x % width,
-                        d.height - data,
-                        x % width,
-                        d.height - data - 1);
-                }
-                else
-                {
-                    // Otherwise, draw from previous point
-                    g.drawLine(
-                        (previousPts[currPreviousPts].x) % width,
-                        previousPts[currPreviousPts].y,
-                        x % width,
-                        d.height - data);
-                }
-                // Store the current plot
-                previousPts[currPreviousPts++] =
-                    new Point(x % width, d.height - data);
-                if (noLegendYet)
-                {
-                    gbc.gridx = 0;
-                    gbc.gridy = compCount++;
-                    gbc.anchor = GridBagConstraints.WEST;
-                    gbc.weightx = 1.0;
-                    gbc.insets = new Insets(0, 10, 0, 0);
-                    JLabel compTimeLabel =
-                        new JLabel(componentRes.getSampleLabel());
+		// Plot the time of the page itself without all its components
+		if (log.isDebugEnabled()) {
+			log.debug("drawSample1 : main page load time - " + oneSample.getTime());
+		}
+		data = (int) (oneSample.getTime() * d.height / model.getMax());
+		currColor = ColorHelper.changeColorCyclicIncrement(currColor, 40);
+		g.setColor(currColor);
+		if (!previousPtsAlloc) {
+			// If first dot, just draw the point
+			g.drawLine(x % width, d.height - data, x % width, d.height - data - 1);
+		} else {
+			// Otherwise, draw from previous point
+			g.drawLine((previousPts[1].x) % width, previousPts[1].y, x % width, d.height - data);
+		}
+		// Store load time without components
+		previousPts[1] = new Point(x % width, d.height - data);
+		if (noLegendYet) {
+			gbc.gridx = 0;
+			gbc.gridy = compCount++;
+			gbc.anchor = GridBagConstraints.WEST;
+			gbc.weightx = 1.0;
+			gbc.insets = new Insets(0, 10, 0, 0);
+			JLabel mainTimeLabel = new JLabel(oneSample.toString());
 
-                    compTimeLabel.setForeground(currColor);
-                    gridBag.setConstraints(compTimeLabel, gbc);
-                    legendPanel.add(compTimeLabel);
-                }
-                lastLevel = data;
-            }
-        }
+			mainTimeLabel.setForeground(currColor);
+			gridBag.setConstraints(mainTimeLabel, gbc);
+			legendPanel.add(mainTimeLabel);
+		}
+		lastLevel += data;
+		// Plot the times of the total times components
+		int currPreviousPts = 2;
 
-        if (noLegendYet)
-        {
-            noLegendYet = false;
-            lPanel.repaint();
-            lPanel.revalidate();
-        }
-        
-        // Set the previousPtsAlloc to true here and not after allocation
-        // because the rest of the codes also depend on previousPtsAlloc to be
-        // false if first time plotting the graph i.e. there are no previous
-        // points.
-        if (!previousPtsAlloc)
-        {
-            previousPtsAlloc = true;
-        }
-        log.debug("End : drawSample1");
-    }
+		if (resultList != null) {
+			for (int i = 0; i < resultList.length; i++) {
+				SampleResult componentRes = resultList[i];
+
+				if (log.isDebugEnabled()) {
+					log.debug("drawSample1 : componentRes - " + componentRes.getSampleLabel() + " loading time - "
+							+ componentRes.getTime());
+				}
+				data = (int) (componentRes.getTime() * d.height / model.getMax());
+				data += lastLevel;
+				currColor = ColorHelper.changeColorCyclicIncrement(currColor, 100);
+				g.setColor(currColor);
+				if (!previousPtsAlloc) {
+					// If first dot, just draw the point
+					g.drawLine(x % width, d.height - data, x % width, d.height - data - 1);
+				} else {
+					// Otherwise, draw from previous point
+					g.drawLine((previousPts[currPreviousPts].x) % width, previousPts[currPreviousPts].y, x % width,
+							d.height - data);
+				}
+				// Store the current plot
+				previousPts[currPreviousPts++] = new Point(x % width, d.height - data);
+				if (noLegendYet) {
+					gbc.gridx = 0;
+					gbc.gridy = compCount++;
+					gbc.anchor = GridBagConstraints.WEST;
+					gbc.weightx = 1.0;
+					gbc.insets = new Insets(0, 10, 0, 0);
+					JLabel compTimeLabel = new JLabel(componentRes.getSampleLabel());
+
+					compTimeLabel.setForeground(currColor);
+					gridBag.setConstraints(compTimeLabel, gbc);
+					legendPanel.add(compTimeLabel);
+				}
+				lastLevel = data;
+			}
+		}
+
+		if (noLegendYet) {
+			noLegendYet = false;
+			lPanel.repaint();
+			lPanel.revalidate();
+		}
+
+		// Set the previousPtsAlloc to true here and not after allocation
+		// because the rest of the codes also depend on previousPtsAlloc to be
+		// false if first time plotting the graph i.e. there are no previous
+		// points.
+		if (!previousPtsAlloc) {
+			previousPtsAlloc = true;
+		}
+		log.debug("End : drawSample1");
+	}
 }

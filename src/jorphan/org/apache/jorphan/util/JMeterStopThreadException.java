@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jorphan.util;
 
@@ -24,11 +24,11 @@ package org.apache.jorphan.util;
  * 
  * @version $Revision$ $Date$
  */
-public class JMeterStopThreadException extends RuntimeException
-{
+public class JMeterStopThreadException extends RuntimeException {
 	public JMeterStopThreadException() {
 		super();
 	}
+
 	public JMeterStopThreadException(String s) {
 		super(s);
 	}

@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.util;
 
 import java.util.ArrayList;
@@ -38,142 +37,114 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Simple command like parser/handler.
- * A dashed argument is one preceded by a dash character.
- * In a sequence of arguments:
- * 1) If a dashed argument starts with a command character
- *    the rest of the argument, if any, is assume to be a value.
- * 2) If a dashed argument is followed by a non-dashed
- *    argument value. The value is assumed to be associated
- *    with the preceding dashed argument name.
- * 2) If an argument with a dash prefix is not followed by
- *    a non-dashed value, and does not use a command character,
- *    it is assumed to be a flag.
- * 3) If none of the above is true, the argument is a name.
- *
- * Command characters can be added with the addCommand method.
- * Values can be retrieved with the getValue method.
- * Flag states can be retrieved with the getFlag method.
- * Names can be retieved with the getNameCount and getName methods.
- *
+ * Simple command like parser/handler. A dashed argument is one preceded by a
+ * dash character. In a sequence of arguments: 1) If a dashed argument starts
+ * with a command character the rest of the argument, if any, is assume to be a
+ * value. 2) If a dashed argument is followed by a non-dashed argument value.
+ * The value is assumed to be associated with the preceding dashed argument
+ * name. 2) If an argument with a dash prefix is not followed by a non-dashed
+ * value, and does not use a command character, it is assumed to be a flag. 3)
+ * If none of the above is true, the argument is a name.
+ * 
+ * Command characters can be added with the addCommand method. Values can be
+ * retrieved with the getValue method. Flag states can be retrieved with the
+ * getFlag method. Names can be retieved with the getNameCount and getName
+ * methods.
+ * 
  * @author Claude Duguay
-**/
+ */
 
-public class CommandLine
-{
-    public static boolean VERBOSE = false;
+public class CommandLine {
+	public static boolean VERBOSE = false;
 
-    protected List commands = new ArrayList();
+	protected List commands = new ArrayList();
 
-    protected List flags = new ArrayList();
-    protected List names = new ArrayList();
-    protected Map values = new HashMap();
+	protected List flags = new ArrayList();
 
-    public CommandLine(String chars, String[] args)
-    {
-        for (int i = 0; i < chars.length(); i++)
-        {
-            addCommand(chars.charAt(i));
-        }
-        parse(args);
-    }
+	protected List names = new ArrayList();
 
-    public CommandLine(String[] args)
-    {
-        parse(args);
-    }
+	protected Map values = new HashMap();
 
-    protected void parse(String[] args)
-    {
-        for (int i = 0; i < args.length; i++)
-        {
-            String thisArg = args[i];
-            String nextArg = null;
-            if (i < args.length - 1)
-            {
-                nextArg = args[i + 1];
-            }
+	public CommandLine(String chars, String[] args) {
+		for (int i = 0; i < chars.length(); i++) {
+			addCommand(chars.charAt(i));
+		}
+		parse(args);
+	}
 
-            if (thisArg.startsWith("-"))
-            {
-                if (thisArg.length() > 2)
-                {
-                    Character chr = new Character(thisArg.charAt(1));
-                    if (commands.contains(chr))
-                    {
-                        String key = chr.toString();
-                        String val = thisArg.substring(2);
-                        if (VERBOSE)
-                        {
-                            System.out.println("Value " + key + "=" + val);
-                        }
-                        values.put(key, val);
-                    }
-                }
-                if (nextArg != null && !nextArg.startsWith("-"))
-                {
-                    String key = thisArg.substring(1);
-                    String val = nextArg;
-                    if (VERBOSE)
-                    {
-                        System.out.println("Value " + key + "=" + val);
-                    }
-                    values.put(key, val);
-                    i++;
-                }
-                else
-                {
-                    String flag = thisArg.substring(1);
-                    flags.add(flag);
-                    if (VERBOSE)
-                    {
-                        System.out.println("Flag " + flag);
-                    }
-                }
-            }
-            else
-            {
-                if (VERBOSE)
-                {
-                    System.out.println("Name " + thisArg);
-                }
-                names.add(thisArg);
-            }
-        }
-    }
+	public CommandLine(String[] args) {
+		parse(args);
+	}
 
-    public void addCommand(char command)
-    {
-        commands.add(new Character(command));
-    }
+	protected void parse(String[] args) {
+		for (int i = 0; i < args.length; i++) {
+			String thisArg = args[i];
+			String nextArg = null;
+			if (i < args.length - 1) {
+				nextArg = args[i + 1];
+			}
 
-    public boolean hasValue(String key)
-    {
-        return values.containsKey(key);
-    }
+			if (thisArg.startsWith("-")) {
+				if (thisArg.length() > 2) {
+					Character chr = new Character(thisArg.charAt(1));
+					if (commands.contains(chr)) {
+						String key = chr.toString();
+						String val = thisArg.substring(2);
+						if (VERBOSE) {
+							System.out.println("Value " + key + "=" + val);
+						}
+						values.put(key, val);
+					}
+				}
+				if (nextArg != null && !nextArg.startsWith("-")) {
+					String key = thisArg.substring(1);
+					String val = nextArg;
+					if (VERBOSE) {
+						System.out.println("Value " + key + "=" + val);
+					}
+					values.put(key, val);
+					i++;
+				} else {
+					String flag = thisArg.substring(1);
+					flags.add(flag);
+					if (VERBOSE) {
+						System.out.println("Flag " + flag);
+					}
+				}
+			} else {
+				if (VERBOSE) {
+					System.out.println("Name " + thisArg);
+				}
+				names.add(thisArg);
+			}
+		}
+	}
 
-    public String getValue(String key)
-    {
-        return (String) values.get(key);
-    }
+	public void addCommand(char command) {
+		commands.add(new Character(command));
+	}
 
-    public boolean getFlag(String key)
-    {
-        return flags.contains(key);
-    }
+	public boolean hasValue(String key) {
+		return values.containsKey(key);
+	}
 
-    public int getNameCount()
-    {
-        return names.size();
-    }
+	public String getValue(String key) {
+		return (String) values.get(key);
+	}
 
-    public String getName(int index)
-    {
-        return (String) names.get(index);
-    }
+	public boolean getFlag(String key) {
+		return flags.contains(key);
+	}
 
-    public static void main(String[] args)
-    {
-        CommandLine cmd = new CommandLine("f", args);
-    }
+	public int getNameCount() {
+		return names.size();
+	}
+
+	public String getName(int index) {
+		return (String) names.get(index);
+	}
+
+	public static void main(String[] args) {
+		CommandLine cmd = new CommandLine("f", args);
+	}
 }

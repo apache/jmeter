@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.engine;
 
@@ -26,12 +26,16 @@ import org.apache.jorphan.collections.HashTree;
 /**
  * @version $Revision$ Last updated $Date$
  */
-public interface RemoteJMeterEngine extends Remote
-{
-    void configure(HashTree testTree) throws RemoteException;
-    void runTest() throws RemoteException,JMeterEngineException;
-    void stopTest() throws RemoteException;
-    void reset() throws RemoteException;
-    void setHost(String host) throws RemoteException;
+public interface RemoteJMeterEngine extends Remote {
+	void configure(HashTree testTree) throws RemoteException;
+
+	void runTest() throws RemoteException, JMeterEngineException;
+
+	void stopTest() throws RemoteException;
+
+	void reset() throws RemoteException;
+
+	void setHost(String host) throws RemoteException;
+
 	void exit() throws RemoteException;
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.tcp.control.gui;
 
@@ -30,70 +30,61 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @version   $Revision$ $Date$
+ * @version $Revision$ $Date$
  */
-public class TCPSamplerGui extends AbstractSamplerGui
-{
-	
+public class TCPSamplerGui extends AbstractSamplerGui {
+
 	private LoginConfigGui loginPanel;
 
-    private TCPConfigGui TcpDefaultPanel;
+	private TCPConfigGui TcpDefaultPanel;
 
-    public TCPSamplerGui()
-    {
-        init();
-    }
+	public TCPSamplerGui() {
+		init();
+	}
 
-    public void configure(TestElement element)
-    {
-        super.configure(element);
+	public void configure(TestElement element) {
+		super.configure(element);
 		loginPanel.configure(element);
-        TcpDefaultPanel.configure(element);
-    }
+		TcpDefaultPanel.configure(element);
+	}
 
-    public TestElement createTestElement()
-    {
-        TCPSampler sampler = new TCPSampler();
-        modifyTestElement(sampler);
-        return sampler;
-    }
+	public TestElement createTestElement() {
+		TCPSampler sampler = new TCPSampler();
+		modifyTestElement(sampler);
+		return sampler;
+	}
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement sampler)
-    {
-        sampler.clear();
-        ((TCPSampler) sampler).addTestElement(
-            TcpDefaultPanel.createTestElement());
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement sampler) {
+		sampler.clear();
+		((TCPSampler) sampler).addTestElement(TcpDefaultPanel.createTestElement());
 		((TCPSampler) sampler).addTestElement(loginPanel.createTestElement());
-        this.configureTestElement(sampler);
-    }
+		this.configureTestElement(sampler);
+	}
 
-    public String getLabelResource()
-    {
-    	return "tcp_sample_title";
-    }
-    
-    private void init()
-    {
-        setLayout(new BorderLayout(0, 5));
-        setBorder(makeBorder());
+	public String getLabelResource() {
+		return "tcp_sample_title";
+	}
 
-        add(makeTitlePanel(), BorderLayout.NORTH);
+	private void init() {
+		setLayout(new BorderLayout(0, 5));
+		setBorder(makeBorder());
 
-        VerticalPanel mainPanel = new VerticalPanel();
+		add(makeTitlePanel(), BorderLayout.NORTH);
 
-        TcpDefaultPanel = new TCPConfigGui(false);
-        mainPanel.add(TcpDefaultPanel);
+		VerticalPanel mainPanel = new VerticalPanel();
+
+		TcpDefaultPanel = new TCPConfigGui(false);
+		mainPanel.add(TcpDefaultPanel);
 
 		loginPanel = new LoginConfigGui(false);
-		loginPanel.setBorder(
-			BorderFactory.createTitledBorder(
-				JMeterUtils.getResString("login_config")));
+		loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config")));
 		mainPanel.add(loginPanel);
 
-        add(mainPanel, BorderLayout.CENTER);
-    }
+		add(mainPanel, BorderLayout.CENTER);
+	}
 }

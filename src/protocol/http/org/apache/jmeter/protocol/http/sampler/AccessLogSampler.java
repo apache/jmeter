@@ -65,301 +65,265 @@ import org.apache.log.Logger;
  * @author Peter Lin
  * @version $Revision$ last updated $Date$
  */
-public class AccessLogSampler extends HTTPSampler implements TestBean
-{
-   private static Logger log = LoggingManager.getLoggerForClass();
-   public static final String DEFAULT_CLASS = "org.apache.jmeter.protocol.http.util.accesslog.TCLogParser";
+public class AccessLogSampler extends HTTPSampler implements TestBean {
+	private static Logger log = LoggingManager.getLoggerForClass();
 
-   /** private members used by class * */
-   transient private LogParser PARSER = null;
-   //NOTUSED private Class PARSERCLASS = null;
-   private String logFile, parserClassName, filterClassName;
-   transient private Filter filter;
-   private int count = 0;
-   private boolean started = false;
+	public static final String DEFAULT_CLASS = "org.apache.jmeter.protocol.http.util.accesslog.TCLogParser";
 
-   /**
-    * Set the path where XML messages are stored for random selection.
-    */
-   public void setLogFile(String path)
-   {
-      logFile = path;
-   }
+	/** private members used by class * */
+	transient private LogParser PARSER = null;
 
-   /**
-    * Get the path where XML messages are stored. this is the directory where
-    * JMeter will randomly select a file.
-    */
-   public String getLogFile()
-   {
-      return logFile;
-   }
+	// NOTUSED private Class PARSERCLASS = null;
+	private String logFile, parserClassName, filterClassName;
 
-   /**
-    * it's kinda obvious, but we state it anyways. Set the xml file with a
-    * string path.
-    * 
-    * @param classname -
-    *            parser class name
-    */
-   public void setParserClassName(String classname)
-   {
-      parserClassName = classname;
-   }
+	transient private Filter filter;
 
-   /**
-    * Get the file location of the xml file.
-    * 
-    * @return String file path.
-    */
-   public String getParserClassName()
-   {
-      return parserClassName;
-   }
+	private int count = 0;
 
-   /**
-    * sample gets a new HTTPSampler from the generator and calls it's sample()
-    * method.
-    */
-   public SampleResult sampleWithParser()
-   {
-      initFilter();
-      instantiateParser();
-      SampleResult res = null;
-      try
-      {
+	private boolean started = false;
 
-    	  if (PARSER == null) throw new JMeterException("No Parser available");
-         /*
-          * samp.setDomain(this.getDomain()); samp.setPort(this.getPort());
-          */
-         // we call parse with 1 to get only one.
-         // this also means if we change the implementation
-         // to use 2, it would use every other entry and
-         // so on. Not that it is really useful, but a
-         // person could use it that way if they have a
-         // huge gigabyte log file and they only want to
-         // use a quarter of the entries.
-         int thisCount = PARSER.parseAndConfigure(1, this);
-         if (thisCount < 0) // Was there an error?
-         {
-             return errorResult(new Error("Problem parsing the log file"), new HTTPSampleResult());
-         }
-         if (thisCount == 0)
-         {
-            if (count == 0 || filter == null)
-            {
-               JMeterContextService.getContext().getThread().stop();
-            }
-            if(filter != null)
-               filter.reset();
-            CookieManager cm = getCookieManager();
-            if (cm != null) cm.clear();
-            count = 0;
-            return errorResult(new Error("No entries found"), new HTTPSampleResult());
-         }
-         count = thisCount;
-         res = sample();
-         res.setSampleLabel(toString());
-      }
-      catch (Exception e)
-      {
-         log.warn("Sampling failure", e);
-         return errorResult(e, new HTTPSampleResult());
-      }
-      return res;
-   }
+	/**
+	 * Set the path where XML messages are stored for random selection.
+	 */
+	public void setLogFile(String path) {
+		logFile = path;
+	}
 
-   /**
-    * sample(Entry e) simply calls sample().
-    * 
-    * @param e -
-    *            ignored
-    * @return the new sample
-    */
-   public SampleResult sample(Entry e)
-   {
-      return sampleWithParser();
-   }
+	/**
+	 * Get the path where XML messages are stored. this is the directory where
+	 * JMeter will randomly select a file.
+	 */
+	public String getLogFile() {
+		return logFile;
+	}
 
-   /**
-    * Method will instantiate the log parser based on the class in the text
-    * field. This was done to make it easier for people to plugin their own log
-    * parser and use different log parser.
-    */
-   public void instantiateParser()
-   {
-      if (PARSER == null)
-      {
-         try
-         {
-            if (this.getParserClassName() != null
-                  && this.getParserClassName().length() > 0)
-            {
-               if (this.getLogFile() != null && this.getLogFile().length() > 0)
-               {
-                  PARSER = (LogParser) Class.forName(getParserClassName())
-                        .newInstance();
-                  PARSER.setSourceFile(this.getLogFile());
-                  PARSER.setFilter(filter);
-               }
-               else
-               {
-            	   log.error("No log file specified");
-               }
-            }
-         } catch (InstantiationException e) {
-        	 log.error("",e);
-		} catch (IllegalAccessException e) {
-			 log.error("",e);
-		} catch (ClassNotFoundException e) {
-       	     log.error("",e);
+	/**
+	 * it's kinda obvious, but we state it anyways. Set the xml file with a
+	 * string path.
+	 * 
+	 * @param classname -
+	 *            parser class name
+	 */
+	public void setParserClassName(String classname) {
+		parserClassName = classname;
+	}
+
+	/**
+	 * Get the file location of the xml file.
+	 * 
+	 * @return String file path.
+	 */
+	public String getParserClassName() {
+		return parserClassName;
+	}
+
+	/**
+	 * sample gets a new HTTPSampler from the generator and calls it's sample()
+	 * method.
+	 */
+	public SampleResult sampleWithParser() {
+		initFilter();
+		instantiateParser();
+		SampleResult res = null;
+		try {
+
+			if (PARSER == null)
+				throw new JMeterException("No Parser available");
+			/*
+			 * samp.setDomain(this.getDomain()); samp.setPort(this.getPort());
+			 */
+			// we call parse with 1 to get only one.
+			// this also means if we change the implementation
+			// to use 2, it would use every other entry and
+			// so on. Not that it is really useful, but a
+			// person could use it that way if they have a
+			// huge gigabyte log file and they only want to
+			// use a quarter of the entries.
+			int thisCount = PARSER.parseAndConfigure(1, this);
+			if (thisCount < 0) // Was there an error?
+			{
+				return errorResult(new Error("Problem parsing the log file"), new HTTPSampleResult());
+			}
+			if (thisCount == 0) {
+				if (count == 0 || filter == null) {
+					JMeterContextService.getContext().getThread().stop();
+				}
+				if (filter != null)
+					filter.reset();
+				CookieManager cm = getCookieManager();
+				if (cm != null)
+					cm.clear();
+				count = 0;
+				return errorResult(new Error("No entries found"), new HTTPSampleResult());
+			}
+			count = thisCount;
+			res = sample();
+			res.setSampleLabel(toString());
+		} catch (Exception e) {
+			log.warn("Sampling failure", e);
+			return errorResult(e, new HTTPSampleResult());
 		}
-      }
-   }
+		return res;
+	}
 
-   /**
-    * @return Returns the filterClassName.
-    */
-   public String getFilterClassName()
-   {
-      return filterClassName;
-   }
+	/**
+	 * sample(Entry e) simply calls sample().
+	 * 
+	 * @param e -
+	 *            ignored
+	 * @return the new sample
+	 */
+	public SampleResult sample(Entry e) {
+		return sampleWithParser();
+	}
 
-   /**
-    * @param filterClassName
-    *            The filterClassName to set.
-    */
-   public void setFilterClassName(String filterClassName)
-   {
-      this.filterClassName = filterClassName;
-   }
+	/**
+	 * Method will instantiate the log parser based on the class in the text
+	 * field. This was done to make it easier for people to plugin their own log
+	 * parser and use different log parser.
+	 */
+	public void instantiateParser() {
+		if (PARSER == null) {
+			try {
+				if (this.getParserClassName() != null && this.getParserClassName().length() > 0) {
+					if (this.getLogFile() != null && this.getLogFile().length() > 0) {
+						PARSER = (LogParser) Class.forName(getParserClassName()).newInstance();
+						PARSER.setSourceFile(this.getLogFile());
+						PARSER.setFilter(filter);
+					} else {
+						log.error("No log file specified");
+					}
+				}
+			} catch (InstantiationException e) {
+				log.error("", e);
+			} catch (IllegalAccessException e) {
+				log.error("", e);
+			} catch (ClassNotFoundException e) {
+				log.error("", e);
+			}
+		}
+	}
 
-   /**
-    * @return Returns the domain.
-    */
-   public String getDomain()
-   {
-      return super.getDomain();
-   }
+	/**
+	 * @return Returns the filterClassName.
+	 */
+	public String getFilterClassName() {
+		return filterClassName;
+	}
 
-   /**
-    * @param domain
-    *            The domain to set.
-    */
-   public void setDomain(String domain)
-   {
-      super.setDomain(domain);
-   }
+	/**
+	 * @param filterClassName
+	 *            The filterClassName to set.
+	 */
+	public void setFilterClassName(String filterClassName) {
+		this.filterClassName = filterClassName;
+	}
 
-   /**
-    * @return Returns the imageParsing.
-    */
-   public boolean isImageParsing()
-   {
-      return super.isImageParser();
-   }
+	/**
+	 * @return Returns the domain.
+	 */
+	public String getDomain() {
+		return super.getDomain();
+	}
 
-   /**
-    * @param imageParsing
-    *            The imageParsing to set.
-    */
-   public void setImageParsing(boolean imageParsing)
-   {
-      super.setImageParser(imageParsing);
-   }
+	/**
+	 * @param domain
+	 *            The domain to set.
+	 */
+	public void setDomain(String domain) {
+		super.setDomain(domain);
+	}
 
-   /**
-    * @return Returns the port.
-    */
-   public String getPortString()
-   {
-      return super.getPropertyAsString(HTTPSamplerBase.PORT);
-   }
+	/**
+	 * @return Returns the imageParsing.
+	 */
+	public boolean isImageParsing() {
+		return super.isImageParser();
+	}
 
-   /**
-    * @param port
-    *            The port to set.
-    */
-   public void setPortString(String port)
-   {
-      super.setProperty(HTTPSamplerBase.PORT, port);
-   }
+	/**
+	 * @param imageParsing
+	 *            The imageParsing to set.
+	 */
+	public void setImageParsing(boolean imageParsing) {
+		super.setImageParser(imageParsing);
+	}
 
-   /**
-    *  
-    */
-   public AccessLogSampler()
-   {
-      super();
-   }
+	/**
+	 * @return Returns the port.
+	 */
+	public String getPortString() {
+		return super.getPropertyAsString(HTTPSamplerBase.PORT);
+	}
 
-   protected void initFilter()
-   {
-      if (filter == null && filterClassName != null && filterClassName.length() > 0)
-      {
-         try
-         {
-            filter = (Filter) Class.forName(filterClassName).newInstance();
-         }
-         catch (Exception e)
-         {
-            log
-                  .warn(
-                        "Couldn't instantiate filter '" + filterClassName + "'",
-                        e);
-         }
-      }
-   }
+	/**
+	 * @param port
+	 *            The port to set.
+	 */
+	public void setPortString(String port) {
+		super.setProperty(HTTPSamplerBase.PORT, port);
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see java.lang.Object#clone()
-    */
-   public Object clone()
-   {
-      AccessLogSampler s = (AccessLogSampler) super.clone();
-      if(started)
-      {
-	      if (filterClassName != null && filterClassName.length() > 0)
-	      {
-	
-	         try
-	         {
-	            if (TestCloneable.class.isAssignableFrom(Class
-	                  .forName(filterClassName)))
-	            {
-	               initFilter();
-	               s.filter = (Filter) ((TestCloneable) filter).clone();
-	            }
-	         }
-	         catch (Exception e)
-	         {
-	            log.warn("Could not clone cloneable filter", e);
-	         }
-	      }
-      }
-      return s;
-   }
-   /* (non-Javadoc)
-    * @see org.apache.jmeter.testelement.TestListener#testEnded()
-    */
-   public void testEnded()
-   {
-      if(PARSER != null)
-      {
-         PARSER.close();
-      }
-      started = false;
-      super.testEnded();
-   }
-   /* (non-Javadoc)
-    * @see org.apache.jmeter.testelement.TestListener#testStarted()
-    */
-   public void testStarted()
-   {
-      started = true;
-      super.testStarted();
-   }
+	/**
+	 * 
+	 */
+	public AccessLogSampler() {
+		super();
+	}
+
+	protected void initFilter() {
+		if (filter == null && filterClassName != null && filterClassName.length() > 0) {
+			try {
+				filter = (Filter) Class.forName(filterClassName).newInstance();
+			} catch (Exception e) {
+				log.warn("Couldn't instantiate filter '" + filterClassName + "'", e);
+			}
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#clone()
+	 */
+	public Object clone() {
+		AccessLogSampler s = (AccessLogSampler) super.clone();
+		if (started) {
+			if (filterClassName != null && filterClassName.length() > 0) {
+
+				try {
+					if (TestCloneable.class.isAssignableFrom(Class.forName(filterClassName))) {
+						initFilter();
+						s.filter = (Filter) ((TestCloneable) filter).clone();
+					}
+				} catch (Exception e) {
+					log.warn("Could not clone cloneable filter", e);
+				}
+			}
+		}
+		return s;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.TestListener#testEnded()
+	 */
+	public void testEnded() {
+		if (PARSER != null) {
+			PARSER.close();
+		}
+		started = false;
+		super.testEnded();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.TestListener#testStarted()
+	 */
+	public void testStarted() {
+		started = true;
+		super.testStarted();
+	}
 }

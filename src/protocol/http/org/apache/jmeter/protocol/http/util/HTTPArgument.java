@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.util;
 
@@ -37,201 +37,162 @@ import org.apache.log.Logger;
 /*
  * 
  * @author unattributed
+ * 
  * @version $Revision$ $Date$
  */
-public class HTTPArgument extends Argument implements Serializable
-{
+public class HTTPArgument extends Argument implements Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
-    private static final String ALWAYS_ENCODE = "HTTPArgument.always_encode";
-    private static final String USE_EQUALS = "HTTPArgument.use_equals";
 
-    private static EncoderCache cache = new EncoderCache(1000);
+	private static final String ALWAYS_ENCODE = "HTTPArgument.always_encode";
 
-    /**
-     * Constructor for the Argument object.
-     */
-    public HTTPArgument(String name, String value, String metadata)
-    {
-        this(name, value, false);
-        this.setMetaData(metadata);
-    }
-    
-    public void setUseEquals(boolean ue)
-    {
-        if(ue)
-        {
-            setMetaData("=");
-        }
-        else
-        {
-            setMetaData("");
-        }
-        setProperty(new BooleanProperty(USE_EQUALS,ue));
-    }
-    
-    public boolean isUseEquals()
-    {
-        boolean eq = getPropertyAsBoolean(USE_EQUALS);
-        if (getMetaData().equals("=")
-            || (getValue() != null && getValue().length() > 0))
-        {
-            setUseEquals(true);
-            return true;
-        }
-        return eq;
-        
-    }
+	private static final String USE_EQUALS = "HTTPArgument.use_equals";
 
-    public void setAlwaysEncoded(boolean ae)
-    {
-        setProperty(new BooleanProperty(ALWAYS_ENCODE, ae));
-    }
+	private static EncoderCache cache = new EncoderCache(1000);
 
-    public boolean isAlwaysEncoded()
-    {
-        return getPropertyAsBoolean(ALWAYS_ENCODE);
-    }
+	/**
+	 * Constructor for the Argument object.
+	 */
+	public HTTPArgument(String name, String value, String metadata) {
+		this(name, value, false);
+		this.setMetaData(metadata);
+	}
 
-    /**
-     * Constructor for the Argument object.
-     */
-    public HTTPArgument(String name, String value)
-    {
-        this(name, value, false);
-    }
+	public void setUseEquals(boolean ue) {
+		if (ue) {
+			setMetaData("=");
+		} else {
+			setMetaData("");
+		}
+		setProperty(new BooleanProperty(USE_EQUALS, ue));
+	}
 
-    public HTTPArgument(String name, String value, boolean alreadyEncoded)
-    {
-        setAlwaysEncoded(true);
-        if (alreadyEncoded)
-        {
-            try
-            {
-                name = JOrphanUtils.decode(name, "UTF-8");
-                value = JOrphanUtils.decode(value, "UTF-8");
-            }
-            catch (UnsupportedEncodingException e)
-            {
-                // UTF-8 unsupported? You must be joking!
-                log.error("UTF-8 encoding not supported!");
-                throw new Error(e.toString());
-            }
-        }
-        setName(name);
-        setValue(value);
-        setMetaData("=");
-    }
+	public boolean isUseEquals() {
+		boolean eq = getPropertyAsBoolean(USE_EQUALS);
+		if (getMetaData().equals("=") || (getValue() != null && getValue().length() > 0)) {
+			setUseEquals(true);
+			return true;
+		}
+		return eq;
 
-    public HTTPArgument(
-        String name,
-        String value,
-        String metaData,
-        boolean alreadyEncoded)
-    {
-        this(name, value, alreadyEncoded);
-        setMetaData(metaData);
-    }
+	}
 
-    public HTTPArgument(Argument arg)
-    {
-        this(arg.getName(), arg.getValue(), arg.getMetaData());
-    }
+	public void setAlwaysEncoded(boolean ae) {
+		setProperty(new BooleanProperty(ALWAYS_ENCODE, ae));
+	}
 
-    /**
-     * Constructor for the Argument object
-     */
-    public HTTPArgument()
-    {}
+	public boolean isAlwaysEncoded() {
+		return getPropertyAsBoolean(ALWAYS_ENCODE);
+	}
 
-    /**
-     * Sets the Name attribute of the Argument object.
-     *
-     * @param newName  the new Name value
-     */
-    public void setName(String newName)
-    {
-        if (newName == null || !newName.equals(getName()))
-        {
-            super.setName(newName);
-        }
-    }
+	/**
+	 * Constructor for the Argument object.
+	 */
+	public HTTPArgument(String name, String value) {
+		this(name, value, false);
+	}
 
-    public String getEncodedValue()
-    {
-        if (isAlwaysEncoded())
-        {
-            return cache.getEncoded(getValue());
-        }
-        else
-        {
-            return getValue();
-        }
-    }
+	public HTTPArgument(String name, String value, boolean alreadyEncoded) {
+		setAlwaysEncoded(true);
+		if (alreadyEncoded) {
+			try {
+				name = JOrphanUtils.decode(name, "UTF-8");
+				value = JOrphanUtils.decode(value, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				// UTF-8 unsupported? You must be joking!
+				log.error("UTF-8 encoding not supported!");
+				throw new Error(e.toString());
+			}
+		}
+		setName(name);
+		setValue(value);
+		setMetaData("=");
+	}
 
-    public String getEncodedName()
-    {
-        if (isAlwaysEncoded())
-        {
-            return cache.getEncoded(getName());
-        }
-        else
-        {
-            return getName();
-        }
+	public HTTPArgument(String name, String value, String metaData, boolean alreadyEncoded) {
+		this(name, value, alreadyEncoded);
+		setMetaData(metaData);
+	}
 
-    }
+	public HTTPArgument(Argument arg) {
+		this(arg.getName(), arg.getValue(), arg.getMetaData());
+	}
 
-    public static void convertArgumentsToHTTP(Arguments args)
-    {
-        List newArguments = new LinkedList();
-        PropertyIterator iter = args.getArguments().iterator();
-        while (iter.hasNext())
-        {
-            Argument arg = (Argument) iter.next().getObjectValue();
-            if (!(arg instanceof HTTPArgument))
-            {
-                newArguments.add(new HTTPArgument(arg));
-            }
-            else
-            {
-                newArguments.add(arg);
-            }
-        }
-        args.removeAllArguments();
-        args.setArguments(newArguments);
-    }
+	/**
+	 * Constructor for the Argument object
+	 */
+	public HTTPArgument() {
+	}
 
-    public static class Test extends TestCase
-    {
-        public Test(String name)
-        {
-            super(name);
-        }
+	/**
+	 * Sets the Name attribute of the Argument object.
+	 * 
+	 * @param newName
+	 *            the new Name value
+	 */
+	public void setName(String newName) {
+		if (newName == null || !newName.equals(getName())) {
+			super.setName(newName);
+		}
+	}
 
-        public void testCloning() throws Exception
-        {
-            HTTPArgument arg = new HTTPArgument("name.?", "value_ here");
-            assertEquals("name.%3F", arg.getEncodedName());
-            assertEquals("value_+here", arg.getEncodedValue());
-            HTTPArgument clone = (HTTPArgument) arg.clone();
-            assertEquals("name.%3F", clone.getEncodedName());
-            assertEquals("value_+here", clone.getEncodedValue());
-        }
+	public String getEncodedValue() {
+		if (isAlwaysEncoded()) {
+			return cache.getEncoded(getValue());
+		} else {
+			return getValue();
+		}
+	}
 
-        public void testConversion() throws Exception
-        {
-            Arguments args = new Arguments();
-            args.addArgument("name.?", "value_ here");
-            args.addArgument("name$of property", "value_.+");
-            HTTPArgument.convertArgumentsToHTTP(args);
-            CollectionProperty argList = args.getArguments();
-            HTTPArgument httpArg =
-                (HTTPArgument) argList.get(0).getObjectValue();
-            assertEquals("name.%3F", httpArg.getEncodedName());
-            assertEquals("value_+here", httpArg.getEncodedValue());
-            httpArg = (HTTPArgument) argList.get(1).getObjectValue();
-            assertEquals("name%24of+property", httpArg.getEncodedName());
-            assertEquals("value_.%2B", httpArg.getEncodedValue());
-        }
-    }
+	public String getEncodedName() {
+		if (isAlwaysEncoded()) {
+			return cache.getEncoded(getName());
+		} else {
+			return getName();
+		}
+
+	}
+
+	public static void convertArgumentsToHTTP(Arguments args) {
+		List newArguments = new LinkedList();
+		PropertyIterator iter = args.getArguments().iterator();
+		while (iter.hasNext()) {
+			Argument arg = (Argument) iter.next().getObjectValue();
+			if (!(arg instanceof HTTPArgument)) {
+				newArguments.add(new HTTPArgument(arg));
+			} else {
+				newArguments.add(arg);
+			}
+		}
+		args.removeAllArguments();
+		args.setArguments(newArguments);
+	}
+
+	public static class Test extends TestCase {
+		public Test(String name) {
+			super(name);
+		}
+
+		public void testCloning() throws Exception {
+			HTTPArgument arg = new HTTPArgument("name.?", "value_ here");
+			assertEquals("name.%3F", arg.getEncodedName());
+			assertEquals("value_+here", arg.getEncodedValue());
+			HTTPArgument clone = (HTTPArgument) arg.clone();
+			assertEquals("name.%3F", clone.getEncodedName());
+			assertEquals("value_+here", clone.getEncodedValue());
+		}
+
+		public void testConversion() throws Exception {
+			Arguments args = new Arguments();
+			args.addArgument("name.?", "value_ here");
+			args.addArgument("name$of property", "value_.+");
+			HTTPArgument.convertArgumentsToHTTP(args);
+			CollectionProperty argList = args.getArguments();
+			HTTPArgument httpArg = (HTTPArgument) argList.get(0).getObjectValue();
+			assertEquals("name.%3F", httpArg.getEncodedName());
+			assertEquals("value_+here", httpArg.getEncodedValue());
+			httpArg = (HTTPArgument) argList.get(1).getObjectValue();
+			assertEquals("name%24of+property", httpArg.getEncodedName());
+			assertEquals("value_.%2B", httpArg.getEncodedValue());
+		}
+	}
 }

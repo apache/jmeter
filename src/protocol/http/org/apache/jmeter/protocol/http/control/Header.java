@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.control;
 
@@ -25,84 +25,75 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 
 /**
  * This class is an HTTP Header encapsulator.
- *
- * @author  <a href="mailto:giacomo@apache.org">Giacomo Pati</a>
+ * 
+ * @author <a href="mailto:giacomo@apache.org">Giacomo Pati</a>
  * @version $Revision$ last updated $Date$
  */
-public class Header extends AbstractTestElement implements Serializable
-{
-    private static final String HNAME = "Header.name"; // See TestElementPropertyConverter
-    private static final String VALUE = "Header.value";
+public class Header extends AbstractTestElement implements Serializable {
+	private static final String HNAME = "Header.name"; // See
+														// TestElementPropertyConverter
 
-    /**
-     * Create the header.
-     */
-    public Header()
-    {
-        this.setName("");
-        this.setValue("");
-    }
+	private static final String VALUE = "Header.value";
 
-    /**
-     * Create the coookie.
-     */
-    public Header(String name, String value)
-    {
-        this.setName(name);
-        this.setValue(value);
-    }
+	/**
+	 * Create the header.
+	 */
+	public Header() {
+		this.setName("");
+		this.setValue("");
+	}
 
-    public void addConfigElement(ConfigElement config)
-    {
-    }
+	/**
+	 * Create the coookie.
+	 */
+	public Header(String name, String value) {
+		this.setName(name);
+		this.setValue(value);
+	}
 
-    public boolean expectsModification()
-    {
-        return false;
-    }
+	public void addConfigElement(ConfigElement config) {
+	}
 
-    public String getClassLabel()
-    {
-        return "Header";
-    }
+	public boolean expectsModification() {
+		return false;
+	}
 
-    /**
-     * Get the name for this object.
-     */
-    public synchronized String getName()
-    {
-        return getPropertyAsString(HNAME);
-    }
+	public String getClassLabel() {
+		return "Header";
+	}
 
-    /**
-     * Set the name for this object.
-     */
-    public synchronized void setName(String name)
-    {
-        this.setProperty(HNAME, name);
-    }
+	/**
+	 * Get the name for this object.
+	 */
+	public synchronized String getName() {
+		return getPropertyAsString(HNAME);
+	}
 
-    /**
-     * Get the value for this object.
-     */
-    public synchronized String getValue()
-    {
-        return getPropertyAsString(VALUE);
-    }
+	/**
+	 * Set the name for this object.
+	 */
+	public synchronized void setName(String name) {
+		this.setProperty(HNAME, name);
+	}
 
-    /**
-     * Set the value for this object.
-     */
-    public synchronized void setValue(String value)
-    {
-        this.setProperty(VALUE, value);
-    }
+	/**
+	 * Get the value for this object.
+	 */
+	public synchronized String getValue() {
+		return getPropertyAsString(VALUE);
+	}
 
-    /**
-     * Creates a string representation of this header.
-     */
-    public String toString()
-    {
-        return getName() + "\t" + getValue();
-    }
+	/**
+	 * Set the value for this object.
+	 */
+	public synchronized void setValue(String value) {
+		this.setProperty(VALUE, value);
+	}
+
+	/**
+	 * Creates a string representation of this header.
+	 */
+	public String toString() {
+		return getName() + "\t" + getValue();
+	}
 }

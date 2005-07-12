@@ -14,29 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.util.accesslog;
 
 /**
  * Description:<br>
  * <br>
- * @author		Peter Lin<br>
- * @version 	$Revision$ last updated $Date$
- * Created on:	Jun 23, 2003<br>
+ * 
+ * @author Peter Lin<br>
+ * @version $Revision$ last updated $Date$ Created
+ *          on: Jun 23, 2003<br>
  */
 
 public class NVPair {
 
 	protected String NAME = "";
+
 	protected String VALUE = "";
-	
+
 	public NVPair() {
 	}
-	
+
 	/**
-	 * The constructor takes a name and value
-	 * which represent HTTP request parameters.
+	 * The constructor takes a name and value which represent HTTP request
+	 * parameters.
+	 * 
 	 * @param name
 	 * @param value
 	 */
@@ -47,32 +50,36 @@ public class NVPair {
 
 	/**
 	 * Set the name
+	 * 
 	 * @param name
-	 */	
+	 */
 	public void setName(String name) {
 		this.NAME = name;
 	}
 
 	/**
 	 * Set the value
+	 * 
 	 * @param value
-	 */	
+	 */
 	public void setValue(String value) {
 		this.VALUE = value;
 	}
 
 	/**
 	 * Return the name
+	 * 
 	 * @return name
-	 */	
+	 */
 	public String getName() {
 		return this.NAME;
 	}
 
 	/**
 	 * Return the value
+	 * 
 	 * @return value
-	 */	
+	 */
 	public String getValue() {
 		return this.VALUE;
 	}

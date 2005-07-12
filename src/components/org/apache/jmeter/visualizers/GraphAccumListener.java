@@ -14,23 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.visualizers;
 
-
 import org.apache.jmeter.samplers.SampleResult;
 
-
 /**
- * @author  Khor Soon Hin
- * Created   2001/08/12
- * @version $Revision$  Last updated: $Date$
+ * @author Khor Soon Hin Created 2001/08/12
+ * @version $Revision$ Last updated: $Date$
  */
 
+public interface GraphAccumListener {
+	public void updateGui(SampleResult s);
 
-public interface GraphAccumListener
-{
-    public void updateGui(SampleResult s);
-    public void updateGui();
+	public void updateGui();
 }

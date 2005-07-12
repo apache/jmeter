@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.control.gui;
 
@@ -43,184 +43,158 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * JMeter GUI component representing the test plan which will be executed when
  * the test is run.
- *
- * @version   $Revision$ Last Updated: $Date$
+ * 
+ * @version $Revision$ Last Updated: $Date$
  */
-public class TestPlanGui extends AbstractJMeterGuiComponent
-{
+public class TestPlanGui extends AbstractJMeterGuiComponent {
 
-    /**
-     * A checkbox allowing the user to specify whether or not JMeter should
-     * do functional testing.
-     */
-    private JCheckBox functionalMode;
-    
-    private JCheckBox serializedMode;
-    
-    /** A panel allowing the user to define variables. */
-    private ArgumentsPanel argsPanel;
+	/**
+	 * A checkbox allowing the user to specify whether or not JMeter should do
+	 * functional testing.
+	 */
+	private JCheckBox functionalMode;
 
-    /** A panel to contain comments on the test plan. */
+	private JCheckBox serializedMode;
+
+	/** A panel allowing the user to define variables. */
+	private ArgumentsPanel argsPanel;
+
+	/** A panel to contain comments on the test plan. */
 	private JTextArea commentPanel;
 
-    /**
-     * Create a new TestPlanGui.
-     */
-    public TestPlanGui()
-    {
-        init();
-    }
+	/**
+	 * Create a new TestPlanGui.
+	 */
+	public TestPlanGui() {
+		init();
+	}
 
-    /**
-     * When a user right-clicks on the component in the test tree, or
-     * selects the edit menu when the component is selected, the 
-     * component will be asked to return a JPopupMenu that provides
-     * all the options available to the user from this component.
-     * <p>
-     * The TestPlan will return a popup menu allowing you to add ThreadGroups,
-     * Listeners, Configuration Elements, Assertions, PreProcessors,
-     * PostProcessors, and Timers.
-     * 
-     * @return   a JPopupMenu appropriate for the component.
-     */
-    public JPopupMenu createPopupMenu()
-    {
-        JPopupMenu pop = new JPopupMenu();
-        JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
-        addMenu.add(MenuFactory.makeMenuItem(
-                new ThreadGroupGui().getStaticLabel(),
-                ThreadGroupGui.class.getName(),
-                "Add"));
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.LISTENERS, "Add"));
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.CONFIG_ELEMENTS, "Add"));
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.ASSERTIONS, "Add"));
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, "Add"));
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.POST_PROCESSORS, "Add"));
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.TIMERS, "Add"));
-        pop.add(addMenu);
-        MenuFactory.addFileMenu(pop);
-        return pop;
-    }
+	/**
+	 * When a user right-clicks on the component in the test tree, or selects
+	 * the edit menu when the component is selected, the component will be asked
+	 * to return a JPopupMenu that provides all the options available to the
+	 * user from this component.
+	 * <p>
+	 * The TestPlan will return a popup menu allowing you to add ThreadGroups,
+	 * Listeners, Configuration Elements, Assertions, PreProcessors,
+	 * PostProcessors, and Timers.
+	 * 
+	 * @return a JPopupMenu appropriate for the component.
+	 */
+	public JPopupMenu createPopupMenu() {
+		JPopupMenu pop = new JPopupMenu();
+		JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
+		addMenu.add(MenuFactory.makeMenuItem(new ThreadGroupGui().getStaticLabel(), ThreadGroupGui.class.getName(),
+				"Add"));
+		addMenu.add(MenuFactory.makeMenu(MenuFactory.LISTENERS, "Add"));
+		addMenu.add(MenuFactory.makeMenu(MenuFactory.CONFIG_ELEMENTS, "Add"));
+		addMenu.add(MenuFactory.makeMenu(MenuFactory.ASSERTIONS, "Add"));
+		addMenu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, "Add"));
+		addMenu.add(MenuFactory.makeMenu(MenuFactory.POST_PROCESSORS, "Add"));
+		addMenu.add(MenuFactory.makeMenu(MenuFactory.TIMERS, "Add"));
+		pop.add(addMenu);
+		MenuFactory.addFileMenu(pop);
+		return pop;
+	}
 
-    /* Implements JMeterGUIComponent.createTestElement() */
-    public TestElement createTestElement()
-    {
-        TestPlan tp = new TestPlan();
-        modifyTestElement(tp);
-        return tp;
-    }
+	/* Implements JMeterGUIComponent.createTestElement() */
+	public TestElement createTestElement() {
+		TestPlan tp = new TestPlan();
+		modifyTestElement(tp);
+		return tp;
+	}
 
-    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
-    public void modifyTestElement(TestElement plan)
-    {
-        super.configureTestElement(plan);
-        if (plan instanceof TestPlan)
-        {
-            TestPlan tp = (TestPlan) plan;
-            tp.setFunctionalMode(functionalMode.isSelected());
-            tp.setSerialized(serializedMode.isSelected());
-            tp.setUserDefinedVariables(
-                (Arguments) argsPanel.createTestElement());
-			tp.setProperty(TestPlan.COMMENTS,commentPanel.getText());
-        }
-    }
+	/* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+	public void modifyTestElement(TestElement plan) {
+		super.configureTestElement(plan);
+		if (plan instanceof TestPlan) {
+			TestPlan tp = (TestPlan) plan;
+			tp.setFunctionalMode(functionalMode.isSelected());
+			tp.setSerialized(serializedMode.isSelected());
+			tp.setUserDefinedVariables((Arguments) argsPanel.createTestElement());
+			tp.setProperty(TestPlan.COMMENTS, commentPanel.getText());
+		}
+	}
 
-    public String getLabelResource()
-    {
-        return "test_plan";
-    }
+	public String getLabelResource() {
+		return "test_plan";
+	}
 
-    /**
-     * This is the list of menu categories this gui component will be available
-     * under. This implementation returns null, since the TestPlan appears at
-     * the top level of the tree and cannot be added elsewhere.
-     *
-     * @return   a Collection of Strings, where each element is one of the
-     *           constants defined in MenuFactory
-     */
-    public Collection getMenuCategories()
-    {
-        return null;
-    }
+	/**
+	 * This is the list of menu categories this gui component will be available
+	 * under. This implementation returns null, since the TestPlan appears at
+	 * the top level of the tree and cannot be added elsewhere.
+	 * 
+	 * @return a Collection of Strings, where each element is one of the
+	 *         constants defined in MenuFactory
+	 */
+	public Collection getMenuCategories() {
+		return null;
+	}
 
-    /**
-     * A newly created component can be initialized with the contents of
-     * a Test Element object by calling this method.  The component is
-     * responsible for querying the Test Element object for the
-     * relevant information to display in its GUI.
-     *
-     * @param el the TestElement to configure 
-     */
-    public void configure(TestElement el)
-    {
-        super.configure(el);
-        functionalMode.setSelected(
-            ((AbstractTestElement) el).getPropertyAsBoolean(
-                TestPlan.FUNCTIONAL_MODE));
-        
-        serializedMode.setSelected(
-            ((AbstractTestElement) el).getPropertyAsBoolean(
-                TestPlan.SERIALIZE_THREADGROUPS));
+	/**
+	 * A newly created component can be initialized with the contents of a Test
+	 * Element object by calling this method. The component is responsible for
+	 * querying the Test Element object for the relevant information to display
+	 * in its GUI.
+	 * 
+	 * @param el
+	 *            the TestElement to configure
+	 */
+	public void configure(TestElement el) {
+		super.configure(el);
+		functionalMode.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(TestPlan.FUNCTIONAL_MODE));
 
-        if (el.getProperty(TestPlan.USER_DEFINED_VARIABLES) != null)
-        {
-            argsPanel.configure(
-                (Arguments) el
-                    .getProperty(TestPlan.USER_DEFINED_VARIABLES)
-                    .getObjectValue());
-        }
-        commentPanel.setText(el.getPropertyAsString(TestPlan.COMMENTS));
-    }
+		serializedMode.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(TestPlan.SERIALIZE_THREADGROUPS));
 
-    /**
-     * Create a panel allowing the user to define variables for the test.
-     * 
-     * @return a panel for user-defined variables
-     */
-    private JPanel createVariablePanel()
-    {
-        argsPanel =
-            new ArgumentsPanel(
-                JMeterUtils.getResString("user_defined_variables"));
+		if (el.getProperty(TestPlan.USER_DEFINED_VARIABLES) != null) {
+			argsPanel.configure((Arguments) el.getProperty(TestPlan.USER_DEFINED_VARIABLES).getObjectValue());
+		}
+		commentPanel.setText(el.getPropertyAsString(TestPlan.COMMENTS));
+	}
 
-        return argsPanel;
-    }
+	/**
+	 * Create a panel allowing the user to define variables for the test.
+	 * 
+	 * @return a panel for user-defined variables
+	 */
+	private JPanel createVariablePanel() {
+		argsPanel = new ArgumentsPanel(JMeterUtils.getResString("user_defined_variables"));
 
-    private Container createCommentPanel(){
+		return argsPanel;
+	}
+
+	private Container createCommentPanel() {
 		Container panel = makeTitlePanel();
 		commentPanel = new JTextArea();
 		JLabel label = new JLabel(JMeterUtils.getResString("testplan_comments"));
 		label.setLabelFor(commentPanel);
 		panel.add(label);
 		panel.add(commentPanel);
-    	return panel;
-    }
-    /**
-     * Initialize the components and layout of this component.
-     */
-    private void init()
-    {
-        setLayout(new BorderLayout(10, 10));
-        setBorder(makeBorder());
-        
-        add(createCommentPanel(), BorderLayout.NORTH);
+		return panel;
+	}
 
-        add(createVariablePanel(), BorderLayout.CENTER);
+	/**
+	 * Initialize the components and layout of this component.
+	 */
+	private void init() {
+		setLayout(new BorderLayout(10, 10));
+		setBorder(makeBorder());
 
-        VerticalPanel southPanel = new VerticalPanel();
-        serializedMode =
-            new JCheckBox(JMeterUtils.getResString("testplan.serialized"));
-        southPanel.add(serializedMode);
-        functionalMode =
-            new JCheckBox(JMeterUtils.getResString("functional_mode"));
-        southPanel.add(functionalMode);
-        JTextArea explain =
-            new JTextArea(
-                JMeterUtils.getResString("functional_mode_explanation"));
-        explain.setEditable(false);
-        explain.setBackground(this.getBackground());
-        southPanel.add(explain);
+		add(createCommentPanel(), BorderLayout.NORTH);
 
-        add(southPanel, BorderLayout.SOUTH);
-    }
+		add(createVariablePanel(), BorderLayout.CENTER);
+
+		VerticalPanel southPanel = new VerticalPanel();
+		serializedMode = new JCheckBox(JMeterUtils.getResString("testplan.serialized"));
+		southPanel.add(serializedMode);
+		functionalMode = new JCheckBox(JMeterUtils.getResString("functional_mode"));
+		southPanel.add(functionalMode);
+		JTextArea explain = new JTextArea(JMeterUtils.getResString("functional_mode_explanation"));
+		explain.setEditable(false);
+		explain.setBackground(this.getBackground());
+		southPanel.add(explain);
+
+		add(southPanel, BorderLayout.SOUTH);
+	}
 }

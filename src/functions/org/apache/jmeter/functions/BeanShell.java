@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.functions;
 
@@ -39,130 +39,120 @@ import org.apache.log.Logger;
 /**
  * A function which understands BeanShell
  * 
- * @version    $Revision$ Updated on: $Date$
+ * @version $Revision$ Updated on: $Date$
  */
 
-public class BeanShell extends AbstractFunction implements Serializable
-{
+public class BeanShell extends AbstractFunction implements Serializable {
 
 	private static Logger log = LoggingManager.getLoggerForClass();
 
-    private static final List desc = new LinkedList();
-    private static final String KEY = "__BeanShell";  //$NON-NLS-1$
-    public static final String INIT_FILE = "beanshell.function.init";  //$NON-NLS-1$
+	private static final List desc = new LinkedList();
 
-	
-    static {
-        desc.add(JMeterUtils.getResString("bsh_function_expression"));//$NON-NLS1$
-        desc.add(JMeterUtils.getResString("function_name_param"));//$NON-NLS1$
-    }
+	private static final String KEY = "__BeanShell"; //$NON-NLS-1$
 
-    transient private Object[] values;
-	transient private BeanShellInterpreter bshInterpreter=null;
-	
-    public BeanShell()
-    {
-    }
+	public static final String INIT_FILE = "beanshell.function.init"; //$NON-NLS-1$
 
-    public Object clone()
-    {
-        return new BeanShell();
-    }
+	static {
+		desc.add(JMeterUtils.getResString("bsh_function_expression"));// $NON-NLS1$
+		desc.add(JMeterUtils.getResString("function_name_param"));// $NON-NLS1$
+	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-     */
-    public synchronized String execute(
-        SampleResult previousResult,
-        Sampler currentSampler)
-        throws InvalidVariableException
-    {
+	transient private Object[] values;
 
-    	if (bshInterpreter == null) // did we find BeanShell?
-    	{
-    		throw new InvalidVariableException("BeanShell not found");
-    	}
-    	
-    	JMeterContext jmctx = JMeterContextService.getContext();
-        JMeterVariables vars = jmctx.getVariables();
+	transient private BeanShellInterpreter bshInterpreter = null;
 
-        String script  = ((CompoundVariable) values[0]).execute();
-        String varName = "";
-        if (values.length > 1){
+	public BeanShell() {
+	}
+
+	public Object clone() {
+		return new BeanShell();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
+	 */
+	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+			throws InvalidVariableException {
+
+		if (bshInterpreter == null) // did we find BeanShell?
+		{
+			throw new InvalidVariableException("BeanShell not found");
+		}
+
+		JMeterContext jmctx = JMeterContextService.getContext();
+		JMeterVariables vars = jmctx.getVariables();
+
+		String script = ((CompoundVariable) values[0]).execute();
+		String varName = "";
+		if (values.length > 1) {
 			varName = ((CompoundVariable) values[1]).execute();
-        }
-        
-        String resultStr = "";
-        
-		log.debug("Script="+script);
+		}
 
-        try
-        {
+		String resultStr = "";
+
+		log.debug("Script=" + script);
+
+		try {
 
 			// Pass in some variables
-        	if (currentSampler != null)
-        	{
-				bshInterpreter.set("Sampler",currentSampler);  //$NON-NLS-1$
-        	}
-			
-			if (previousResult != null)
-			{
-				bshInterpreter.set("SampleResult",previousResult);  //$NON-NLS-1$
+			if (currentSampler != null) {
+				bshInterpreter.set("Sampler", currentSampler); //$NON-NLS-1$
 			}
-			
+
+			if (previousResult != null) {
+				bshInterpreter.set("SampleResult", previousResult); //$NON-NLS-1$
+			}
+
 			// Allow access to context and variables directly
-			bshInterpreter.set("ctx",jmctx);  //$NON-NLS-1$
-			bshInterpreter.set("vars",vars); //$NON-NLS-1$
-			bshInterpreter.set("threadName",Thread.currentThread().getName());  //$NON-NLS-1$
-			
-            // Execute the script
-            Object bshOut = bshInterpreter.eval(script);
+			bshInterpreter.set("ctx", jmctx); //$NON-NLS-1$
+			bshInterpreter.set("vars", vars); //$NON-NLS-1$
+			bshInterpreter.set("threadName", Thread.currentThread().getName()); //$NON-NLS-1$
+
+			// Execute the script
+			Object bshOut = bshInterpreter.eval(script);
 			if (bshOut != null) {
 				resultStr = bshOut.toString();
 			}
-			if (varName.length() > 0)
-			{
+			if (varName.length() > 0) {
 				vars.put(varName, resultStr);
 			}
-        }
-		catch (Exception ex) // Mainly for bsh.EvalError
+		} catch (Exception ex) // Mainly for bsh.EvalError
 		{
-			log.warn("Error running BSH script",ex);
+			log.warn("Error running BSH script", ex);
 		}
 
-        log.debug("Output="+resultStr);
-        return resultStr;
+		log.debug("Output=" + resultStr);
+		return resultStr;
 
-    }
+	}
 
-    /*
-     * Helper method for use by scripts 
-     *
-     */
-    public void log_info(String s){
-    	log.info(s);
-    }
+	/*
+	 * Helper method for use by scripts
+	 * 
+	 */
+	public void log_info(String s) {
+		log.info(s);
+	}
 
-	
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-     */
-    public void setParameters(Collection parameters)
-        throws InvalidVariableException
-    {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
+	 */
+	public void setParameters(Collection parameters) throws InvalidVariableException {
 
-        values = parameters.toArray();
+		values = parameters.toArray();
 
-        if (values.length < 1 || values.length > 2)
-        {
-            throw new InvalidVariableException(
-            		"Expecting 1 or 2 parameters, but found "+values.length);//$NON-NLS-1$
-        }
-        
+		if (values.length < 1 || values.length > 2) {
+			throw new InvalidVariableException("Expecting 1 or 2 parameters, but found " + values.length);//$NON-NLS-1$
+		}
+
 		try {
 			bshInterpreter = new BeanShellInterpreter();
 			try {
-				bshInterpreter.init(JMeterUtils.getProperty(INIT_FILE),	log);
+				bshInterpreter.init(JMeterUtils.getProperty(INIT_FILE), log);
 			} catch (IOException e) {
 				log.warn("Can't init interpreter");
 			} catch (JMeterException e) {
@@ -171,22 +161,24 @@ public class BeanShell extends AbstractFunction implements Serializable
 		} catch (ClassNotFoundException e) {
 			throw new InvalidVariableException("BeanShell not found");
 		}
-    }
+	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.functions.Function#getReferenceKey()
-     */
-    public String getReferenceKey()
-    {
-        return KEY;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.functions.Function#getReferenceKey()
+	 */
+	public String getReferenceKey() {
+		return KEY;
+	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.functions.Function#getArgumentDesc()
-     */
-    public List getArgumentDesc()
-    {
-        return desc;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.functions.Function#getArgumentDesc()
+	 */
+	public List getArgumentDesc() {
+		return desc;
+	}
 
 }

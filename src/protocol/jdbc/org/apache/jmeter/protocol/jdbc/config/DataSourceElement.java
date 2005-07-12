@@ -31,399 +31,357 @@ import org.apache.log.Logger;
  * @author Michael Stover
  * 
  */
-public class DataSourceElement extends AbstractTestElement implements ConfigElement,
-      TestListener,TestBean
-{
-   private static final Logger log = LoggingManager.getLoggerForClass();
-   transient String dataSource, driver, dbUrl, username, password, checkQuery, poolMax,
-         connectionAge, timeout, trimInterval;
-   transient boolean keepAlive, autocommit;
-   transient ResourceLimitingJdbcDataSource excaliburSource;
-   transient boolean[] started;
+public class DataSourceElement extends AbstractTestElement implements ConfigElement, TestListener, TestBean {
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-   public DataSourceElement()
-   {
-      started = new boolean[] { false};
-   }
+	transient String dataSource, driver, dbUrl, username, password, checkQuery, poolMax, connectionAge, timeout,
+			trimInterval;
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see org.apache.jmeter.testelement.TestListener#testEnded()
-    */
-   public void testEnded()
-   {
-      if (started[0])
-      {
-         synchronized (excaliburSource)
-         {
-            if (started[0])
-            {
-               excaliburSource.dispose();
-            }
-         }
-      }
-      excaliburSource = null;
-      started[0] = false;
-   }
+	transient boolean keepAlive, autocommit;
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
-    */
-   public void testEnded(String host)
-   {
-      testEnded();
-   }
+	transient ResourceLimitingJdbcDataSource excaliburSource;
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
-    */
-   public void testIterationStart(LoopIterationEvent event)
-   {
-   }
+	transient boolean[] started;
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see org.apache.jmeter.testelement.TestListener#testStarted()
-    */
-   public void testStarted()
-   {
-      if (!started[0])
-      {
-         try
-         {
-            initPool();
-         }
-         catch (Exception e)
-         {
-            log.error("Unable to start database connection pool.", e);
-         }
-      }
-      getThreadContext().getVariables().putObject(getDataSource(),
-            excaliburSource);
-   }
+	public DataSourceElement() {
+		started = new boolean[] { false };
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
-    */
-   public void testStarted(String host)
-   {
-      testStarted();
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.TestListener#testEnded()
+	 */
+	public void testEnded() {
+		if (started[0]) {
+			synchronized (excaliburSource) {
+				if (started[0]) {
+					excaliburSource.dispose();
+				}
+			}
+		}
+		excaliburSource = null;
+		started[0] = false;
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see java.lang.Object#clone()
-    */
-   public Object clone()
-   {
-      DataSourceElement el = (DataSourceElement) super.clone();
-      el.excaliburSource = excaliburSource;
-      el.started = started;
-      return el;
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
+	 */
+	public void testEnded(String host) {
+		testEnded();
+	}
 
-   public DataSourceComponent initPool() throws Exception
-   {
-      excaliburSource = new ResourceLimitingJdbcDataSource();
-      DefaultConfiguration config = new DefaultConfiguration("rl-jdbc");
-      
-      if (log.isDebugEnabled()){
-          StringBuffer sb = new StringBuffer(40);
-          sb.append("MaxPool: ");
-          sb.append(getPoolMax());
-          sb.append(" Timeout: ");
-          sb.append(getTimeout());
-          sb.append(" TrimInt: ");
-          sb.append(getTrimInterval());
-          log.debug(sb.toString());
-      }
-      DefaultConfiguration poolController = new DefaultConfiguration(
-            "pool-controller");
-      poolController.setAttribute("max", getPoolMax());
-      poolController.setAttribute("max-strict", "true");
-      poolController.setAttribute("blocking", "true");
-      poolController.setAttribute("timeout", getTimeout());
-      poolController.setAttribute("trim-interval", getTrimInterval());
-      poolController
-            .setAttribute("auto-commit", String.valueOf(isAutocommit()));
-      config.addChild(poolController);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+	 */
+	public void testIterationStart(LoopIterationEvent event) {
+	}
 
-      if (log.isDebugEnabled()){
-          StringBuffer sb = new StringBuffer(40);
-          sb.append("KeepAlive: ");
-          sb.append(isKeepAlive());
-          sb.append(" Age: ");
-          sb.append(getConnectionAge());
-          sb.append(" CheckQuery: ");
-          sb.append(getCheckQuery());
-          log.debug(sb.toString());
-      }
-      DefaultConfiguration cfgKeepAlive = new DefaultConfiguration("keep-alive");
-      cfgKeepAlive.setAttribute("disable", String.valueOf(!isKeepAlive()));
-      cfgKeepAlive.setAttribute("age", getConnectionAge());
-      cfgKeepAlive.setValue(getCheckQuery());
-      poolController.addChild(cfgKeepAlive);
-      
-      if (log.isDebugEnabled()){
-          StringBuffer sb = new StringBuffer(40);
-          sb.append("Driver: ");
-          sb.append(getDriver());
-          sb.append(" DbUrl: ");
-          sb.append(getDbUrl());
-          sb.append(" User: ");
-          sb.append(getUsername());
-          log.debug(sb.toString());
-      }
-      DefaultConfiguration cfgDriver = new DefaultConfiguration("driver");
-      cfgDriver.setValue(getDriver());
-      config.addChild(cfgDriver);
-      DefaultConfiguration cfgDbUrl = new DefaultConfiguration("dburl");
-      cfgDbUrl.setValue(getDbUrl());
-      config.addChild(cfgDbUrl);
-      DefaultConfiguration cfgUsername = new DefaultConfiguration("user");
-      cfgUsername.setValue(getUsername());
-      config.addChild(cfgUsername);
-      DefaultConfiguration cfgPassword = new DefaultConfiguration("password");
-      cfgPassword.setValue(getPassword());
-      config.addChild(cfgPassword);
-      
-      // log is required to ensure errors are available
-      excaliburSource.enableLogging(new LogKitLogger(log));
-      excaliburSource.configure(config);
-      excaliburSource.setInstrumentableName(getDataSource());
-      started[0] = true;
-      return excaliburSource;
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.TestListener#testStarted()
+	 */
+	public void testStarted() {
+		if (!started[0]) {
+			try {
+				initPool();
+			} catch (Exception e) {
+				log.error("Unable to start database connection pool.", e);
+			}
+		}
+		getThreadContext().getVariables().putObject(getDataSource(), excaliburSource);
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see org.apache.jmeter.config.ConfigElement#addConfigElement(org.apache.jmeter.config.ConfigElement)
-    */
-   public void addConfigElement(ConfigElement config)
-   {
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
+	 */
+	public void testStarted(String host) {
+		testStarted();
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see org.apache.jmeter.config.ConfigElement#expectsModification()
-    */
-   public boolean expectsModification()
-   {
-      return false;
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#clone()
+	 */
+	public Object clone() {
+		DataSourceElement el = (DataSourceElement) super.clone();
+		el.excaliburSource = excaliburSource;
+		el.started = started;
+		return el;
+	}
 
-   /**
-    * @return Returns the checkQuery.
-    */
-   public String getCheckQuery()
-   {
-      return checkQuery;
-   }
+	public DataSourceComponent initPool() throws Exception {
+		excaliburSource = new ResourceLimitingJdbcDataSource();
+		DefaultConfiguration config = new DefaultConfiguration("rl-jdbc");
 
-   /**
-    * @param checkQuery
-    *            The checkQuery to set.
-    */
-   public void setCheckQuery(String checkQuery)
-   {
-      this.checkQuery = checkQuery;
-   }
+		if (log.isDebugEnabled()) {
+			StringBuffer sb = new StringBuffer(40);
+			sb.append("MaxPool: ");
+			sb.append(getPoolMax());
+			sb.append(" Timeout: ");
+			sb.append(getTimeout());
+			sb.append(" TrimInt: ");
+			sb.append(getTrimInterval());
+			log.debug(sb.toString());
+		}
+		DefaultConfiguration poolController = new DefaultConfiguration("pool-controller");
+		poolController.setAttribute("max", getPoolMax());
+		poolController.setAttribute("max-strict", "true");
+		poolController.setAttribute("blocking", "true");
+		poolController.setAttribute("timeout", getTimeout());
+		poolController.setAttribute("trim-interval", getTrimInterval());
+		poolController.setAttribute("auto-commit", String.valueOf(isAutocommit()));
+		config.addChild(poolController);
 
-   /**
-    * @return Returns the connectionAge.
-    */
-   public String getConnectionAge()
-   {
-      return connectionAge;
-   }
+		if (log.isDebugEnabled()) {
+			StringBuffer sb = new StringBuffer(40);
+			sb.append("KeepAlive: ");
+			sb.append(isKeepAlive());
+			sb.append(" Age: ");
+			sb.append(getConnectionAge());
+			sb.append(" CheckQuery: ");
+			sb.append(getCheckQuery());
+			log.debug(sb.toString());
+		}
+		DefaultConfiguration cfgKeepAlive = new DefaultConfiguration("keep-alive");
+		cfgKeepAlive.setAttribute("disable", String.valueOf(!isKeepAlive()));
+		cfgKeepAlive.setAttribute("age", getConnectionAge());
+		cfgKeepAlive.setValue(getCheckQuery());
+		poolController.addChild(cfgKeepAlive);
 
-   /**
-    * @param connectionAge
-    *            The connectionAge to set.
-    */
-   public void setConnectionAge(String connectionAge)
-   {
-      this.connectionAge = connectionAge;
-   }
+		if (log.isDebugEnabled()) {
+			StringBuffer sb = new StringBuffer(40);
+			sb.append("Driver: ");
+			sb.append(getDriver());
+			sb.append(" DbUrl: ");
+			sb.append(getDbUrl());
+			sb.append(" User: ");
+			sb.append(getUsername());
+			log.debug(sb.toString());
+		}
+		DefaultConfiguration cfgDriver = new DefaultConfiguration("driver");
+		cfgDriver.setValue(getDriver());
+		config.addChild(cfgDriver);
+		DefaultConfiguration cfgDbUrl = new DefaultConfiguration("dburl");
+		cfgDbUrl.setValue(getDbUrl());
+		config.addChild(cfgDbUrl);
+		DefaultConfiguration cfgUsername = new DefaultConfiguration("user");
+		cfgUsername.setValue(getUsername());
+		config.addChild(cfgUsername);
+		DefaultConfiguration cfgPassword = new DefaultConfiguration("password");
+		cfgPassword.setValue(getPassword());
+		config.addChild(cfgPassword);
 
-   /**
-    * @return Returns the dataSource.
-    */
-   public String getDataSource()
-   {
-      return dataSource;
-   }
+		// log is required to ensure errors are available
+		excaliburSource.enableLogging(new LogKitLogger(log));
+		excaliburSource.configure(config);
+		excaliburSource.setInstrumentableName(getDataSource());
+		started[0] = true;
+		return excaliburSource;
+	}
 
-   /**
-    * @param dataSource
-    *            The dataSource to set.
-    */
-   public void setDataSource(String dataSource)
-   {
-      this.dataSource = dataSource;
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.config.ConfigElement#addConfigElement(org.apache.jmeter.config.ConfigElement)
+	 */
+	public void addConfigElement(ConfigElement config) {
+	}
 
-   /**
-    * @return Returns the dbUrl.
-    */
-   public String getDbUrl()
-   {
-      return dbUrl;
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.config.ConfigElement#expectsModification()
+	 */
+	public boolean expectsModification() {
+		return false;
+	}
 
-   /**
-    * @param dbUrl
-    *            The dbUrl to set.
-    */
-   public void setDbUrl(String dbUrl)
-   {
-      this.dbUrl = dbUrl;
-   }
+	/**
+	 * @return Returns the checkQuery.
+	 */
+	public String getCheckQuery() {
+		return checkQuery;
+	}
 
-   /**
-    * @return Returns the driver.
-    */
-   public String getDriver()
-   {
-      return driver;
-   }
+	/**
+	 * @param checkQuery
+	 *            The checkQuery to set.
+	 */
+	public void setCheckQuery(String checkQuery) {
+		this.checkQuery = checkQuery;
+	}
 
-   /**
-    * @param driver
-    *            The driver to set.
-    */
-   public void setDriver(String driver)
-   {
-      this.driver = driver;
-   }
+	/**
+	 * @return Returns the connectionAge.
+	 */
+	public String getConnectionAge() {
+		return connectionAge;
+	}
 
-   /**
-    * @return Returns the password.
-    */
-   public String getPassword()
-   {
-      return password;
-   }
+	/**
+	 * @param connectionAge
+	 *            The connectionAge to set.
+	 */
+	public void setConnectionAge(String connectionAge) {
+		this.connectionAge = connectionAge;
+	}
 
-   /**
-    * @param password
-    *            The password to set.
-    */
-   public void setPassword(String password)
-   {
-      this.password = password;
-   }
+	/**
+	 * @return Returns the dataSource.
+	 */
+	public String getDataSource() {
+		return dataSource;
+	}
 
-   /**
-    * @return Returns the poolMax.
-    */
-   public String getPoolMax()
-   {
-      return poolMax;
-   }
+	/**
+	 * @param dataSource
+	 *            The dataSource to set.
+	 */
+	public void setDataSource(String dataSource) {
+		this.dataSource = dataSource;
+	}
 
-   /**
-    * @param poolMax
-    *            The poolMax to set.
-    */
-   public void setPoolMax(String poolMax)
-   {
-      this.poolMax = poolMax;
-   }
+	/**
+	 * @return Returns the dbUrl.
+	 */
+	public String getDbUrl() {
+		return dbUrl;
+	}
 
-   /**
-    * @return Returns the timeout.
-    */
-   public String getTimeout()
-   {
-      return timeout;
-   }
+	/**
+	 * @param dbUrl
+	 *            The dbUrl to set.
+	 */
+	public void setDbUrl(String dbUrl) {
+		this.dbUrl = dbUrl;
+	}
 
-   /**
-    * @param timeout
-    *            The timeout to set.
-    */
-   public void setTimeout(String timeout)
-   {
-      this.timeout = timeout;
-   }
+	/**
+	 * @return Returns the driver.
+	 */
+	public String getDriver() {
+		return driver;
+	}
 
-   /**
-    * @return Returns the trimInterval.
-    */
-   public String getTrimInterval()
-   {
-      return trimInterval;
-   }
+	/**
+	 * @param driver
+	 *            The driver to set.
+	 */
+	public void setDriver(String driver) {
+		this.driver = driver;
+	}
 
-   /**
-    * @param trimInterval
-    *            The trimInterval to set.
-    */
-   public void setTrimInterval(String trimInterval)
-   {
-      this.trimInterval = trimInterval;
-   }
+	/**
+	 * @return Returns the password.
+	 */
+	public String getPassword() {
+		return password;
+	}
 
-   /**
-    * @return Returns the username.
-    */
-   public String getUsername()
-   {
-      return username;
-   }
+	/**
+	 * @param password
+	 *            The password to set.
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-   /**
-    * @param username
-    *            The username to set.
-    */
-   public void setUsername(String username)
-   {
-      this.username = username;
-   }
+	/**
+	 * @return Returns the poolMax.
+	 */
+	public String getPoolMax() {
+		return poolMax;
+	}
 
-   /**
-    * @return Returns the autocommit.
-    */
-   public boolean isAutocommit()
-   {
-      return autocommit;
-   }
+	/**
+	 * @param poolMax
+	 *            The poolMax to set.
+	 */
+	public void setPoolMax(String poolMax) {
+		this.poolMax = poolMax;
+	}
 
-   /**
-    * @param autocommit
-    *            The autocommit to set.
-    */
-   public void setAutocommit(boolean autocommit)
-   {
-      this.autocommit = autocommit;
-   }
+	/**
+	 * @return Returns the timeout.
+	 */
+	public String getTimeout() {
+		return timeout;
+	}
 
-   /**
-    * @return Returns the keepAlive.
-    */
-   public boolean isKeepAlive()
-   {
-      return keepAlive;
-   }
+	/**
+	 * @param timeout
+	 *            The timeout to set.
+	 */
+	public void setTimeout(String timeout) {
+		this.timeout = timeout;
+	}
 
-   /**
-    * @param keepAlive
-    *            The keepAlive to set.
-    */
-   public void setKeepAlive(boolean keepAlive)
-   {
-      this.keepAlive = keepAlive;
-   }
+	/**
+	 * @return Returns the trimInterval.
+	 */
+	public String getTrimInterval() {
+		return trimInterval;
+	}
+
+	/**
+	 * @param trimInterval
+	 *            The trimInterval to set.
+	 */
+	public void setTrimInterval(String trimInterval) {
+		this.trimInterval = trimInterval;
+	}
+
+	/**
+	 * @return Returns the username.
+	 */
+	public String getUsername() {
+		return username;
+	}
+
+	/**
+	 * @param username
+	 *            The username to set.
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	/**
+	 * @return Returns the autocommit.
+	 */
+	public boolean isAutocommit() {
+		return autocommit;
+	}
+
+	/**
+	 * @param autocommit
+	 *            The autocommit to set.
+	 */
+	public void setAutocommit(boolean autocommit) {
+		this.autocommit = autocommit;
+	}
+
+	/**
+	 * @return Returns the keepAlive.
+	 */
+	public boolean isKeepAlive() {
+		return keepAlive;
+	}
+
+	/**
+	 * @param keepAlive
+	 *            The keepAlive to set.
+	 */
+	public void setKeepAlive(boolean keepAlive) {
+		this.keepAlive = keepAlive;
+	}
 }

@@ -30,7 +30,6 @@
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
 
-
 package org.htmlparser;
 
 import org.htmlparser.util.NodeList;
@@ -39,66 +38,62 @@ import org.htmlparser.visitors.NodeVisitor;
 /**
  * The remark tag is identified and represented by this class.
  */
-public class RemarkNode extends Node
-{
-    public final static String REMARK_NODE_FILTER = "-r";
+public class RemarkNode extends Node {
+	public final static String REMARK_NODE_FILTER = "-r";
 
-    /**
-     * Tag contents will have the contents of the comment tag.
-    	 */
-    String tagContents;
-    /**
-     * The HTMLRemarkTag is constructed by providing the beginning posn, ending posn
-     * and the tag contents.
-     * @param nodeBegin beginning position of the tag
-     * @param nodeEnd ending position of the tag
-     * @param tagContents contents of the remark tag
-     * @param tagLine The current line being parsed, where the tag was found	 
-     */
-    public RemarkNode(int tagBegin, int tagEnd, String tagContents)
-    {
-        super(tagBegin, tagEnd);
-        this.tagContents = tagContents;
-    }
+	/**
+	 * Tag contents will have the contents of the comment tag.
+	 */
+	String tagContents;
 
-    /** 
-     * Returns the text contents of the comment tag.
-     */
-    public String getText()
-    {
-        return tagContents;
-    }
-    public String toPlainTextString()
-    {
-        return tagContents;
-    }
-    public String toHtml()
-    {
-        return "<!--" + tagContents + "-->";
-    }
-    /**
-     * Print the contents of the remark tag.
-     */
-    public String toString()
-    {
-        return "Comment Tag : "
-            + tagContents
-            + "; begins at : "
-            + elementBegin()
-            + "; ends at : "
-            + elementEnd()
-            + "\n";
-    }
+	/**
+	 * The HTMLRemarkTag is constructed by providing the beginning posn, ending
+	 * posn and the tag contents.
+	 * 
+	 * @param nodeBegin
+	 *            beginning position of the tag
+	 * @param nodeEnd
+	 *            ending position of the tag
+	 * @param tagContents
+	 *            contents of the remark tag
+	 * @param tagLine
+	 *            The current line being parsed, where the tag was found
+	 */
+	public RemarkNode(int tagBegin, int tagEnd, String tagContents) {
+		super(tagBegin, tagEnd);
+		this.tagContents = tagContents;
+	}
 
-    public void collectInto(NodeList collectionList, String filter)
-    {
-        if (filter.equals(REMARK_NODE_FILTER))
-            collectionList.add(this);
-    }
+	/**
+	 * Returns the text contents of the comment tag.
+	 */
+	public String getText() {
+		return tagContents;
+	}
 
-    public void accept(NodeVisitor visitor)
-    {
-        visitor.visitRemarkNode(this);
-    }
+	public String toPlainTextString() {
+		return tagContents;
+	}
+
+	public String toHtml() {
+		return "<!--" + tagContents + "-->";
+	}
+
+	/**
+	 * Print the contents of the remark tag.
+	 */
+	public String toString() {
+		return "Comment Tag : " + tagContents + "; begins at : " + elementBegin() + "; ends at : " + elementEnd()
+				+ "\n";
+	}
+
+	public void collectInto(NodeList collectionList, String filter) {
+		if (filter.equals(REMARK_NODE_FILTER))
+			collectionList.add(this);
+	}
+
+	public void accept(NodeVisitor visitor) {
+		visitor.visitRemarkNode(this);
+	}
 
 }

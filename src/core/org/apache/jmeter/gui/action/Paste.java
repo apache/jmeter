@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui.action;
 
@@ -28,48 +28,41 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 
 /**
  * Places a copied JMeterTreeNode under the selected node.
- *
+ * 
  * @author Thad Smith
  * @version $Revision$
  */
-public class Paste extends AbstractAction
-{
+public class Paste extends AbstractAction {
 
-    public final static String PASTE = "Paste";
-    private static Set commands = new HashSet();
-    static {
-        commands.add(PASTE);
-    }
+	public final static String PASTE = "Paste";
 
-    /**
-     * @see Command#getActionNames()
-     */
-    public Set getActionNames()
-    {
-        return commands;
-    }
+	private static Set commands = new HashSet();
+	static {
+		commands.add(PASTE);
+	}
 
-    /**
-     * @see Command#doAction(ActionEvent)
-     */
-    public void doAction(ActionEvent e)
-    {
-    	JMeterTreeNode draggedNodes[] = Copy.getCopiedNodes();
- 		JMeterTreeListener treeListener =
- 					GuiPackage.getInstance().getTreeListener();
- 		JMeterTreeNode currentNode = treeListener.getCurrentNode();
-        if (DragNDrop.canAddTo(currentNode))
-        {
-	 		for(int i=0;i<draggedNodes.length;i++) { 
-	 			if (draggedNodes[i] != null)
-	 			{
-	 				GuiPackage.getInstance().getTreeModel().insertNodeInto(
-	 					draggedNodes[i], 
-						currentNode,
-	 					currentNode.getChildCount());
+	/**
+	 * @see Command#getActionNames()
+	 */
+	public Set getActionNames() {
+		return commands;
+	}
+
+	/**
+	 * @see Command#doAction(ActionEvent)
+	 */
+	public void doAction(ActionEvent e) {
+		JMeterTreeNode draggedNodes[] = Copy.getCopiedNodes();
+		JMeterTreeListener treeListener = GuiPackage.getInstance().getTreeListener();
+		JMeterTreeNode currentNode = treeListener.getCurrentNode();
+		if (DragNDrop.canAddTo(currentNode)) {
+			for (int i = 0; i < draggedNodes.length; i++) {
+				if (draggedNodes[i] != null) {
+					GuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], currentNode,
+							currentNode.getChildCount());
 				}
-	 		}
-        }
-        GuiPackage.getInstance().getMainFrame().repaint();
-    }
+			}
+		}
+		GuiPackage.getInstance().getMainFrame().repaint();
+	}
 }

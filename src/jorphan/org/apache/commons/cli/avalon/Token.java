@@ -15,58 +15,56 @@
  * limitations under the License.
  */
 package org.apache.commons.cli.avalon;
-//Renamed from org.apache.avalon.excalibur.cli
+
+// Renamed from org.apache.avalon.excalibur.cli
 
 /**
  * Token handles tokenizing the CLI arguments
- *
+ * 
  * @version $Revision$ $Date$
  * @since 4.0
  */
-class Token
-{
-    /** Type for a separator token */
-    public static final int TOKEN_SEPARATOR = 0;
-    /** Type for a text token */
-    public static final int TOKEN_STRING = 1;
+class Token {
+	/** Type for a separator token */
+	public static final int TOKEN_SEPARATOR = 0;
 
-    private final int m_type;
-    private final String m_value;
+	/** Type for a text token */
+	public static final int TOKEN_STRING = 1;
 
-    /**
-     * New Token object with a type and value
-     */
-    Token( final int type, final String value )
-    {
-        m_type = type;
-        m_value = value;
-    }
+	private final int m_type;
 
-    /**
-     * Get the value of the token
-     */
-    final String getValue()
-    {
-        return m_value;
-    }
+	private final String m_value;
 
-    /**
-     * Get the type of the token
-     */
-    final int getType()
-    {
-        return m_type;
-    }
+	/**
+	 * New Token object with a type and value
+	 */
+	Token(final int type, final String value) {
+		m_type = type;
+		m_value = value;
+	}
 
-    /**
-     * Convert to a string
-     */
-    public final String toString()
-    {
-        final StringBuffer sb = new StringBuffer();
-        sb.append( m_type );
-        sb.append( ":" );
-        sb.append( m_value );
-        return sb.toString();
-    }
+	/**
+	 * Get the value of the token
+	 */
+	final String getValue() {
+		return m_value;
+	}
+
+	/**
+	 * Get the type of the token
+	 */
+	final int getType() {
+		return m_type;
+	}
+
+	/**
+	 * Convert to a string
+	 */
+	public final String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append(m_type);
+		sb.append(":");
+		sb.append(m_value);
+		return sb.toString();
+	}
 }

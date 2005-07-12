@@ -14,10 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.visualizers;
-
 
 import java.awt.BorderLayout;
 
@@ -25,63 +24,52 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
+/*******************************************************************************
+ * This listener can record results to a file but not to the UI. It is meant to
+ * provide an efficient means of recording data by eliminating GUI overhead.
+ * 
+ * @version $Revision$ $Date$
+ ******************************************************************************/
 
-/************************************************************
- *  This listener can record results to a file
- *  but not to the UI.  It is meant to provide an efficient means of
- *  recording data by eliminating GUI overhead.
- *
- *@version    $Revision$ $Date$
- ***********************************************************/
+public class SimpleDataWriter extends AbstractVisualizer implements Clearable {
+	/***************************************************************************
+	 * Create the SimpleDataWriter.
+	 **************************************************************************/
 
-public class SimpleDataWriter
-    extends AbstractVisualizer
-    implements Clearable
-{
-    /****************************************
-     * Create the SimpleDataWriter.
-     ***************************************/
+	public SimpleDataWriter() {
+		init();
+		setName(getStaticLabel());
+	}
 
-    public SimpleDataWriter()
-    {
-        init();
-        setName(getStaticLabel());
-    }
+	public String getLabelResource() {
+		return "simple_data_writer_title";
+	}
 
-    public String getLabelResource()
-    {
-        return "simple_data_writer_title";
-    }
+	/**
+	 * Initialize the component in the UI
+	 */
 
+	private void init() {
+		setLayout(new BorderLayout());
+		setBorder(makeBorder());
 
-    /**
-        Initialize the component in the UI
-    **/
+		add(makeTitlePanel(), BorderLayout.NORTH);
+	}
 
-    private void init()
-    {
-        setLayout(new BorderLayout());
-        setBorder(makeBorder());
-        
-        add(makeTitlePanel(), BorderLayout.NORTH);
-    }
+	/**
+	 * Does nothing, but required by interface.
+	 */
 
+	public void clear() {
+	}
 
-    /**
-        Does nothing, but required by interface.
-    **/
+	/**
+	 * Does nothing, but required by interface.
+	 * 
+	 * @param sample
+	 *            ignored
+	 */
 
-    public void clear()
-    {
-    }
-
-
-    /**
-        Does nothing, but required by interface.
-        @param sample ignored
-    **/
-
-    public void add(SampleResult sample)
-    {
-    }
+	public void add(SampleResult sample) {
+	}
 }

@@ -29,30 +29,24 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags;
 
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 
-
 /**
  * A Body Tag
  */
-public class BodyTag extends CompositeTag
-{
-    public BodyTag(TagData tagData, CompositeTagData compositeTagData)
-    {
-        super(tagData, compositeTagData);
-    }
+public class BodyTag extends CompositeTag {
+	public BodyTag(TagData tagData, CompositeTagData compositeTagData) {
+		super(tagData, compositeTagData);
+	}
 
-    public String getBody()
-    {
-        return toPlainTextString();
-    }
+	public String getBody() {
+		return toPlainTextString();
+	}
 
-    public String toString()
-    {
-        return "BODY: " + getBody();
-    }
+	public String toString() {
+		return "BODY: " + getBody();
+	}
 }

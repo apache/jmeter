@@ -29,107 +29,108 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.util;
 
 import java.io.Serializable;
 
 /**
- * Default implementation of the HTMLParserFeedback interface.
- * This implementation prints output to the console but users
- * can implement their own classes to support alternate behavior.
- *
+ * Default implementation of the HTMLParserFeedback interface. This
+ * implementation prints output to the console but users can implement their own
+ * classes to support alternate behavior.
+ * 
  * @author Claude Duguay
  * @see ParserFeedback
  * @see FeedbackManager
-**/
-public class DefaultParserFeedback implements ParserFeedback, Serializable
-{
-    /**
-     * Constructor argument for a quiet feedback.
-     */
-    public static final int QUIET = 0;
+ */
+public class DefaultParserFeedback implements ParserFeedback, Serializable {
+	/**
+	 * Constructor argument for a quiet feedback.
+	 */
+	public static final int QUIET = 0;
 
-    /**
-     * Constructor argument for a normal feedback.
-     */
-    public static final int NORMAL = 1;
+	/**
+	 * Constructor argument for a normal feedback.
+	 */
+	public static final int NORMAL = 1;
 
-    /**
-     * Constructor argument for a debugging feedback.
-     */
-    public static final int DEBUG = 2;
+	/**
+	 * Constructor argument for a debugging feedback.
+	 */
+	public static final int DEBUG = 2;
 
-    /**
-     * Verbosity level.
-     * Corresponds to constructor arguments:
-     * <pre>
-     *   DEBUG = 2;
-     *   NORMAL = 1;
-     *   QUIET = 0;
-     * </pre>
-     */
-    protected int mode;
+	/**
+	 * Verbosity level. Corresponds to constructor arguments:
+	 * 
+	 * <pre>
+	 * DEBUG = 2;
+	 * NORMAL = 1;
+	 * QUIET = 0;
+	 * </pre>
+	 */
+	protected int mode;
 
-    /**
-     * Construct a feedback object of the given type.
-     * @param mode The type of feedback:
-     * <pre>
-     *   DEBUG - verbose debugging with stack traces
-     *   NORMAL - normal messages
-     *   QUIET - no messages
-     * </pre>
-     */
-    public DefaultParserFeedback(int mode)
-    {
-        if (mode < QUIET || mode > DEBUG)
-            throw new IllegalArgumentException(
-                "illegal mode ("
-                    + mode
-                    + "), must be one of: QUIET, NORMAL, DEBUG");
-        this.mode = mode;
-    }
+	/**
+	 * Construct a feedback object of the given type.
+	 * 
+	 * @param mode
+	 *            The type of feedback:
+	 * 
+	 * <pre>
+	 * 
+	 *    DEBUG - verbose debugging with stack traces
+	 *    NORMAL - normal messages
+	 *    QUIET - no messages
+	 *  
+	 * </pre>
+	 */
+	public DefaultParserFeedback(int mode) {
+		if (mode < QUIET || mode > DEBUG)
+			throw new IllegalArgumentException("illegal mode (" + mode + "), must be one of: QUIET, NORMAL, DEBUG");
+		this.mode = mode;
+	}
 
-    /**
-     * Construct a NORMAL feedback object.
-     */
-    public DefaultParserFeedback()
-    {
-        this(NORMAL);
-    }
+	/**
+	 * Construct a NORMAL feedback object.
+	 */
+	public DefaultParserFeedback() {
+		this(NORMAL);
+	}
 
-    /**
-     * Print an info message.
-     * @param message The message to print.
-     */
-    public void info(String message)
-    {
-        if (mode != QUIET)
-            System.out.println("INFO: " + message);
-    }
+	/**
+	 * Print an info message.
+	 * 
+	 * @param message
+	 *            The message to print.
+	 */
+	public void info(String message) {
+		if (mode != QUIET)
+			System.out.println("INFO: " + message);
+	}
 
-    /**
-     * Print an warning message.
-     * @param message The message to print.
-     */
-    public void warning(String message)
-    {
-        if (mode != QUIET)
-            System.out.println("WARNING: " + message);
-    }
+	/**
+	 * Print an warning message.
+	 * 
+	 * @param message
+	 *            The message to print.
+	 */
+	public void warning(String message) {
+		if (mode != QUIET)
+			System.out.println("WARNING: " + message);
+	}
 
-    /**
-     * Print an error message.
-     * @param message The message to print.
-     * @param exception The exception for stack tracing.
-     */
-    public void error(String message, ParserException exception)
-    {
-        if (mode != QUIET)
-        {
-            System.out.println("ERROR: " + message);
-            if (mode == DEBUG && (exception != null))
-                exception.printStackTrace();
-        }
-    }
+	/**
+	 * Print an error message.
+	 * 
+	 * @param message
+	 *            The message to print.
+	 * @param exception
+	 *            The exception for stack tracing.
+	 */
+	public void error(String message, ParserException exception) {
+		if (mode != QUIET) {
+			System.out.println("ERROR: " + message);
+			if (mode == DEBUG && (exception != null))
+				exception.printStackTrace();
+		}
+	}
 }

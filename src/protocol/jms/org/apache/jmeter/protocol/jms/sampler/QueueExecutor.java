@@ -14,28 +14,29 @@
  * limitations under the License.
  * 
  */
- 
+
 package org.apache.jmeter.protocol.jms.sampler;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 
 /**
- * Executor for (pseudo) synchronous communication.
- * <br>
- * Created on:  October 28, 2004
- *
+ * Executor for (pseudo) synchronous communication. <br>
+ * Created on: October 28, 2004
+ * 
  * @author Martijn Blankestijn
- * @version $Id$ 
+ * @version $Id$
  */
 public interface QueueExecutor {
-    /**
-     * Sends and receives a message.
-	 * @param request the message to send
+	/**
+	 * Sends and receives a message.
+	 * 
+	 * @param request
+	 *            the message to send
 	 * @return the received message or <code>null</code>
-	 * @throws JMSException in case of an exception from the messaging system
+	 * @throws JMSException
+	 *             in case of an exception from the messaging system
 	 */
-	public abstract Message sendAndReceive(Message request)
-        throws JMSException;
+	public abstract Message sendAndReceive(Message request) throws JMSException;
 
 }

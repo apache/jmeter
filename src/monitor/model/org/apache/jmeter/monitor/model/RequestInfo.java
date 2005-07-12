@@ -20,8 +20,7 @@ package org.apache.jmeter.monitor.model;
 /**
  * @version $Revision$ on $Date$
  */
-public interface RequestInfo
-{
+public interface RequestInfo {
 	long getBytesReceived();
 
 	void setBytesReceived(long value);

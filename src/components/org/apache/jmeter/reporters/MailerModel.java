@@ -14,13 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.reporters;
 
-
 import java.io.Serializable;
-//import java.net.InetAddress;
+// import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -42,402 +41,347 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-
 /**
  * The model for a MailerVisualizer.
- *
- * @author     <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
- * @version    $Revision$ $Date$
+ * 
+ * @author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
+ * @version $Revision$ $Date$
  */
-public class MailerModel extends AbstractTestElement implements Serializable
-{
-    private static final String MAIL_SMTP_HOST = "mail.smtp.host";
+public class MailerModel extends AbstractTestElement implements Serializable {
+	private static final String MAIL_SMTP_HOST = "mail.smtp.host";
+
 	private long failureCount = 0;
-    private long successCount = 0;
-    private boolean failureMsgSent = false;
-    private boolean siteDown = false;
-    private boolean successMsgSent = false;
 
-    private static final String FROM_KEY = "MailerModel.fromAddress";
-    private static final String TO_KEY = "MailerModel.addressie";
-    private static final String HOST_KEY = "MailerModel.smtpHost";
-    private static final String SUCCESS_SUBJECT = "MailerModel.successSubject";
-    private static final String FAILURE_SUBJECT = "MailerModel.failureSubject";
-    private static final String FAILURE_LIMIT_KEY = "MailerModel.failureLimit";
-    private static final String SUCCESS_LIMIT_KEY = "MailerModel.successLimit";
+	private long successCount = 0;
 
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+	private boolean failureMsgSent = false;
 
-    /** The listener for changes. */
-    ChangeListener changeListener;
+	private boolean siteDown = false;
 
-    /**
-     * Constructs a MailerModel.
-     */
-    public MailerModel()
-    {
-        super();
+	private boolean successMsgSent = false;
 
-        setProperty(
-            SUCCESS_LIMIT_KEY,
-            JMeterUtils.getPropDefault("mailer.successlimit", "2"));
-        setProperty(
-            FAILURE_LIMIT_KEY,
-            JMeterUtils.getPropDefault("mailer.failurelimit", "2"));
-    }
-    
-    public void addChangeListener(ChangeListener list)
-    {
-        changeListener = list;
-    }
-    
-    public Object clone()
-    {
-        MailerModel m = (MailerModel)super.clone();
-        m.changeListener = changeListener;
-        return m;
-    }
+	private static final String FROM_KEY = "MailerModel.fromAddress";
 
-    /**
-     * Returns wether there had been more failures than acceptable.
-     *
-     * @return a boolean value indicating whether the limit of acceptable
-     *         failures has been reached.
-     */
-    public synchronized boolean isFailing()
-    {
-        return (failureCount > getFailureLimit());
-    }
-    
-    public void notifyChangeListeners()
-    {
-        if(changeListener != null)
-        {
-            changeListener.stateChanged(new ChangeEvent(this));
-        }
-    }
+	private static final String TO_KEY = "MailerModel.addressie";
 
-    /**
-     * Gets a Vector of String-objects. Each String is one mail-address
-     * of the addresses-String set by <code>setToAddress(str)</code>.
-     * The addresses must be seperated by commas. Only String-objects
-     * containing a "@" are added to the returned Vector.
-     *
-     * @return a Vector of String-objects wherein each String represents a
-     *         mail-address.
-     */
-    public synchronized Vector getAddressVector()
-    {
-        String theAddressie = getToAddress();
-        Vector addressVector = new Vector();
+	private static final String HOST_KEY = "MailerModel.smtpHost";
 
-        if (theAddressie != null)
-        {
-            String addressSep = ",";
+	private static final String SUCCESS_SUBJECT = "MailerModel.successSubject";
 
-            StringTokenizer next =
-                new StringTokenizer(theAddressie, addressSep);
+	private static final String FAILURE_SUBJECT = "MailerModel.failureSubject";
 
-            while (next.hasMoreTokens())
-            {
-                String theToken = next.nextToken().trim();
+	private static final String FAILURE_LIMIT_KEY = "MailerModel.failureLimit";
 
-                if (theToken.indexOf("@") > 0)
-                {
-                    addressVector.addElement(theToken);
-                }
-            }
-        }
-        else
-        {
-            return new Vector(0);
-        }
+	private static final String SUCCESS_LIMIT_KEY = "MailerModel.successLimit";
 
-        return addressVector;
-    }
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    /**
-     * Adds a SampleResult. If SampleResult represents a change concerning
-     * the failure/success of the sampling a message might be send to the
-     * addressies according to the settings of <code>successCount</code>
-     * and <code>failureCount</code>.
-     *
-     * @param sample the SampleResult encapsulating informations about the last
-     *               sample.
-     */
-    public synchronized void add(SampleResult sample)
-    {
+	/** The listener for changes. */
+	ChangeListener changeListener;
 
-        // -1 is the code for a failed sample.
-        //
-        if (!sample.isSuccessful())
-        {
-            failureCount++;
-            successCount = 0;
-        }
-        else
-        {
-            successCount++;
-        }
+	/**
+	 * Constructs a MailerModel.
+	 */
+	public MailerModel() {
+		super();
 
-        if (this.isFailing() && !siteDown && !failureMsgSent)
-        {
-            // Send the mail ...
-            Vector addressVector = getAddressVector();
+		setProperty(SUCCESS_LIMIT_KEY, JMeterUtils.getPropDefault("mailer.successlimit", "2"));
+		setProperty(FAILURE_LIMIT_KEY, JMeterUtils.getPropDefault("mailer.failurelimit", "2"));
+	}
 
-            if (addressVector.size() != 0)
-            {
-                try
-                {
-                    sendMail(
-                        getFromAddress(),
-                        addressVector,
-                        getFailureSubject(),
-                        "URL Failed: " + sample.getSampleLabel(),
-                        getSmtpHost());
-                }
-                catch (Exception e)
-                {
-                    log.error("Problem sending mail", e);
-                }
-                siteDown = true;
-                failureMsgSent = true;
-                successCount = 0;
-                successMsgSent = false;
-            }
-        }
+	public void addChangeListener(ChangeListener list) {
+		changeListener = list;
+	}
 
-        if (siteDown && (sample.getTime() != -1) && !successMsgSent)
-        {
-            // Send the mail ...
-            if (successCount > getSuccessLimit())
-            {
-                Vector addressVector = getAddressVector();
+	public Object clone() {
+		MailerModel m = (MailerModel) super.clone();
+		m.changeListener = changeListener;
+		return m;
+	}
 
-                try
-                {
-                    sendMail(
-                        getFromAddress(),
-                        addressVector,
-                        getSuccessSubject(),
-                        "URL Restarted: " + sample.getSampleLabel(),
-                        getSmtpHost());
-                }
-                catch (Exception e)
-                {
-                    log.error("Problem sending mail", e);
-                }
-                siteDown = false;
-                successMsgSent = true;
-                failureCount = 0;
-                failureMsgSent = false;
-            }
-        }
+	/**
+	 * Returns wether there had been more failures than acceptable.
+	 * 
+	 * @return a boolean value indicating whether the limit of acceptable
+	 *         failures has been reached.
+	 */
+	public synchronized boolean isFailing() {
+		return (failureCount > getFailureLimit());
+	}
 
-        if (successMsgSent && failureMsgSent)
-        {
-            clear();
-        }
-        notifyChangeListeners();
-    }
+	public void notifyChangeListeners() {
+		if (changeListener != null) {
+			changeListener.stateChanged(new ChangeEvent(this));
+		}
+	}
 
-    /**
-     * Resets the state of this object to its default. But: This method does not
-     * reset any mail-specific attributes (like sender, mail-subject...)
-     * since they are independent of the sampling.
-     */
-    public synchronized void clear()
-    {
-        failureCount = 0;
-        successCount = 0;
-        siteDown = false;
-        successMsgSent = false;
-        failureMsgSent = false;
-        notifyChangeListeners();
-    }
+	/**
+	 * Gets a Vector of String-objects. Each String is one mail-address of the
+	 * addresses-String set by <code>setToAddress(str)</code>. The addresses
+	 * must be seperated by commas. Only String-objects containing a "@" are
+	 * added to the returned Vector.
+	 * 
+	 * @return a Vector of String-objects wherein each String represents a
+	 *         mail-address.
+	 */
+	public synchronized Vector getAddressVector() {
+		String theAddressie = getToAddress();
+		Vector addressVector = new Vector();
 
-    /**
-     * Returns a String-representation of this object. Returns always
-     * "E-Mail-Notification". Might be enhanced in future versions to return
-     * some kind of String-representation of the mail-parameters (like
-     * sender, addressies, smtpHost...).
-     *
-     * @return A String-representation of this object.
-     */
-    public String toString()
-    {
-        return "E-Mail Notification";
-    }
+		if (theAddressie != null) {
+			String addressSep = ",";
 
-    /**
-     * Sends a mail with the given parameters using SMTP.
-     *
-     * @param  from     the sender of the mail as shown in the mail-client.
-     * @param  vEmails  all receivers of the mail. The receivers are seperated
-     *                  by commas.
-     * @param  subject  the subject of the mail.
-     * @param  attText  the message-body.
-     * @param  smtpHost the smtp-server used to send the mail.
-     */
-    public synchronized void sendMail(
-        String from,
-        Vector vEmails,
-        String subject,
-        String attText,
-        String smtpHost)
-        throws UnknownHostException, AddressException, MessagingException
-    {
-        String host = smtpHost;
-        boolean debug = Boolean.valueOf(host).booleanValue();
-        //InetAddress remote = InetAddress.getByName(host);
+			StringTokenizer next = new StringTokenizer(theAddressie, addressSep);
 
-        InternetAddress[] address = new InternetAddress[vEmails.size()];
+			while (next.hasMoreTokens()) {
+				String theToken = next.nextToken().trim();
 
-        for (int k = 0; k < vEmails.size(); k++)
-        {
-            address[k] = new InternetAddress(vEmails.elementAt(k).toString());
-        }
+				if (theToken.indexOf("@") > 0) {
+					addressVector.addElement(theToken);
+				}
+			}
+		} else {
+			return new Vector(0);
+		}
 
-        // create some properties and get the default Session
-        Properties props = new Properties();
+		return addressVector;
+	}
 
-        props.put(MAIL_SMTP_HOST, host);
-        Session session = Session.getDefaultInstance(props, null);
-        //N.B. properties are only used when the default session is first created
-        //so check if the mail host needs to be reset...
-        props = session.getProperties();
-        if (!host.equalsIgnoreCase(props.getProperty(MAIL_SMTP_HOST)))
-        {
-        	props.setProperty(MAIL_SMTP_HOST,host);
-        }
+	/**
+	 * Adds a SampleResult. If SampleResult represents a change concerning the
+	 * failure/success of the sampling a message might be send to the addressies
+	 * according to the settings of <code>successCount</code> and
+	 * <code>failureCount</code>.
+	 * 
+	 * @param sample
+	 *            the SampleResult encapsulating informations about the last
+	 *            sample.
+	 */
+	public synchronized void add(SampleResult sample) {
 
-        session.setDebug(debug);
+		// -1 is the code for a failed sample.
+		//
+		if (!sample.isSuccessful()) {
+			failureCount++;
+			successCount = 0;
+		} else {
+			successCount++;
+		}
 
-        // create a message
-        Message msg = new MimeMessage(session);
+		if (this.isFailing() && !siteDown && !failureMsgSent) {
+			// Send the mail ...
+			Vector addressVector = getAddressVector();
 
-        msg.setFrom(new InternetAddress(from));
-        msg.setRecipients(Message.RecipientType.TO, address);
-        msg.setSubject(subject);
-        msg.setText(attText);
-        Transport.send(msg);
-    }
-    public synchronized void sendTestMail()
-            throws UnknownHostException, AddressException, MessagingException
-        {
-    		String to = getToAddress();
-            String from = getFromAddress();
-	        String subject = "Testing mail-addresses";
-	        String smtpHost = getSmtpHost();
-	        String attText = "JMeter-Testmail" + "\n" 
-			+ "To:  " + to + "\n"
-			+ "From: " + from + "\n"
-            + "Via:  " + smtpHost + "\n"
-			+ "Fail Subject:  " + getFailureSubject() + "\n"
-            + "Success Subject:  " + getSuccessSubject();
+			if (addressVector.size() != 0) {
+				try {
+					sendMail(getFromAddress(), addressVector, getFailureSubject(), "URL Failed: "
+							+ sample.getSampleLabel(), getSmtpHost());
+				} catch (Exception e) {
+					log.error("Problem sending mail", e);
+				}
+				siteDown = true;
+				failureMsgSent = true;
+				successCount = 0;
+				successMsgSent = false;
+			}
+		}
 
-	        log.info(attText);
+		if (siteDown && (sample.getTime() != -1) && !successMsgSent) {
+			// Send the mail ...
+			if (successCount > getSuccessLimit()) {
+				Vector addressVector = getAddressVector();
 
-	        Vector destination= new Vector();
-            destination.add(to);
+				try {
+					sendMail(getFromAddress(), addressVector, getSuccessSubject(), "URL Restarted: "
+							+ sample.getSampleLabel(), getSmtpHost());
+				} catch (Exception e) {
+					log.error("Problem sending mail", e);
+				}
+				siteDown = false;
+				successMsgSent = true;
+				failureCount = 0;
+				failureMsgSent = false;
+			}
+		}
 
-    		sendMail(from, destination, subject, attText, smtpHost);
-            log.info("Test mail sent successfully!!");
-        }
-    // ////////////////////////////////////////////////////////////
-    //
-    // setter/getter - JavaDoc-Comments not needed...
-    //
-    // ////////////////////////////////////////////////////////////
+		if (successMsgSent && failureMsgSent) {
+			clear();
+		}
+		notifyChangeListeners();
+	}
 
-    public void setToAddress(String str)
-    {
-       setProperty(TO_KEY,str);
-    }
+	/**
+	 * Resets the state of this object to its default. But: This method does not
+	 * reset any mail-specific attributes (like sender, mail-subject...) since
+	 * they are independent of the sampling.
+	 */
+	public synchronized void clear() {
+		failureCount = 0;
+		successCount = 0;
+		siteDown = false;
+		successMsgSent = false;
+		failureMsgSent = false;
+		notifyChangeListeners();
+	}
 
-    public void setFromAddress(String str)
-    {
-        setProperty(FROM_KEY,str);
-    }
+	/**
+	 * Returns a String-representation of this object. Returns always
+	 * "E-Mail-Notification". Might be enhanced in future versions to return
+	 * some kind of String-representation of the mail-parameters (like sender,
+	 * addressies, smtpHost...).
+	 * 
+	 * @return A String-representation of this object.
+	 */
+	public String toString() {
+		return "E-Mail Notification";
+	}
 
-    public void setSmtpHost(String str)
-    {
-        setProperty(HOST_KEY,str);
-    }
+	/**
+	 * Sends a mail with the given parameters using SMTP.
+	 * 
+	 * @param from
+	 *            the sender of the mail as shown in the mail-client.
+	 * @param vEmails
+	 *            all receivers of the mail. The receivers are seperated by
+	 *            commas.
+	 * @param subject
+	 *            the subject of the mail.
+	 * @param attText
+	 *            the message-body.
+	 * @param smtpHost
+	 *            the smtp-server used to send the mail.
+	 */
+	public synchronized void sendMail(String from, Vector vEmails, String subject, String attText, String smtpHost)
+			throws UnknownHostException, AddressException, MessagingException {
+		String host = smtpHost;
+		boolean debug = Boolean.valueOf(host).booleanValue();
+		// InetAddress remote = InetAddress.getByName(host);
 
-    public void setFailureSubject(String str)
-    {
-        setProperty(FAILURE_SUBJECT,str);
-    }
+		InternetAddress[] address = new InternetAddress[vEmails.size()];
 
-    public void setSuccessSubject(String str)
-    {
-        setProperty(SUCCESS_SUBJECT,str);
-    }
+		for (int k = 0; k < vEmails.size(); k++) {
+			address[k] = new InternetAddress(vEmails.elementAt(k).toString());
+		}
 
-    public void setSuccessLimit(String limit)
-    {
-        setProperty(SUCCESS_LIMIT_KEY,limit);
-    }
+		// create some properties and get the default Session
+		Properties props = new Properties();
 
-//    private  void setSuccessCount(long count)
-//    {
-//        this.successCount = count;
-//    }
+		props.put(MAIL_SMTP_HOST, host);
+		Session session = Session.getDefaultInstance(props, null);
+		// N.B. properties are only used when the default session is first
+		// created
+		// so check if the mail host needs to be reset...
+		props = session.getProperties();
+		if (!host.equalsIgnoreCase(props.getProperty(MAIL_SMTP_HOST))) {
+			props.setProperty(MAIL_SMTP_HOST, host);
+		}
 
-    public void setFailureLimit(String limit)
-    {
-        setProperty(FAILURE_LIMIT_KEY,limit);
-    }
+		session.setDebug(debug);
 
-//    private void setFailureCount(long count)
-//    {
-//        this.failureCount = count;
-//    }
+		// create a message
+		Message msg = new MimeMessage(session);
 
-    public String getToAddress()
-    {
-        return getPropertyAsString(TO_KEY);
-    }
+		msg.setFrom(new InternetAddress(from));
+		msg.setRecipients(Message.RecipientType.TO, address);
+		msg.setSubject(subject);
+		msg.setText(attText);
+		Transport.send(msg);
+	}
 
-    public String getFromAddress()
-    {
-        return getPropertyAsString(FROM_KEY);
-    }
+	public synchronized void sendTestMail() throws UnknownHostException, AddressException, MessagingException {
+		String to = getToAddress();
+		String from = getFromAddress();
+		String subject = "Testing mail-addresses";
+		String smtpHost = getSmtpHost();
+		String attText = "JMeter-Testmail" + "\n" + "To:  " + to + "\n" + "From: " + from + "\n" + "Via:  " + smtpHost
+				+ "\n" + "Fail Subject:  " + getFailureSubject() + "\n" + "Success Subject:  " + getSuccessSubject();
 
-    public String getSmtpHost()
-    {
-        return getPropertyAsString(HOST_KEY);
-    }
+		log.info(attText);
 
-    public String getFailureSubject()
-    {
-        return getPropertyAsString(FAILURE_SUBJECT);
-    }
+		Vector destination = new Vector();
+		destination.add(to);
 
-    public String getSuccessSubject()
-    {
-        return getPropertyAsString(SUCCESS_SUBJECT);
-    }
+		sendMail(from, destination, subject, attText, smtpHost);
+		log.info("Test mail sent successfully!!");
+	}
 
-    public long getSuccessLimit()
-    {
-        return getPropertyAsLong(SUCCESS_LIMIT_KEY);
-    }
+	// ////////////////////////////////////////////////////////////
+	//
+	// setter/getter - JavaDoc-Comments not needed...
+	//
+	// ////////////////////////////////////////////////////////////
 
-    public long getSuccessCount()
-    {
-        return successCount;
-    }
+	public void setToAddress(String str) {
+		setProperty(TO_KEY, str);
+	}
 
-    public long getFailureLimit()
-    {
-        return getPropertyAsLong(FAILURE_LIMIT_KEY);
-    }
+	public void setFromAddress(String str) {
+		setProperty(FROM_KEY, str);
+	}
 
-    public long getFailureCount()
-    {
-        return this.failureCount;
-    }
+	public void setSmtpHost(String str) {
+		setProperty(HOST_KEY, str);
+	}
+
+	public void setFailureSubject(String str) {
+		setProperty(FAILURE_SUBJECT, str);
+	}
+
+	public void setSuccessSubject(String str) {
+		setProperty(SUCCESS_SUBJECT, str);
+	}
+
+	public void setSuccessLimit(String limit) {
+		setProperty(SUCCESS_LIMIT_KEY, limit);
+	}
+
+	// private void setSuccessCount(long count)
+	// {
+	// this.successCount = count;
+	// }
+
+	public void setFailureLimit(String limit) {
+		setProperty(FAILURE_LIMIT_KEY, limit);
+	}
+
+	// private void setFailureCount(long count)
+	// {
+	// this.failureCount = count;
+	// }
+
+	public String getToAddress() {
+		return getPropertyAsString(TO_KEY);
+	}
+
+	public String getFromAddress() {
+		return getPropertyAsString(FROM_KEY);
+	}
+
+	public String getSmtpHost() {
+		return getPropertyAsString(HOST_KEY);
+	}
+
+	public String getFailureSubject() {
+		return getPropertyAsString(FAILURE_SUBJECT);
+	}
+
+	public String getSuccessSubject() {
+		return getPropertyAsString(SUCCESS_SUBJECT);
+	}
+
+	public long getSuccessLimit() {
+		return getPropertyAsLong(SUCCESS_LIMIT_KEY);
+	}
+
+	public long getSuccessCount() {
+		return successCount;
+	}
+
+	public long getFailureLimit() {
+		return getPropertyAsLong(FAILURE_LIMIT_KEY);
+	}
+
+	public long getFailureCount() {
+		return this.failureCount;
+	}
 }
-

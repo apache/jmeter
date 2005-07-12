@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.junit.protocol.http.config;
 
@@ -30,56 +30,48 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
  * @author Michael Stover
  * @version $Revision$
  */
-public class UrlConfigTest extends JMeterTestCase
-{
-    HTTPSamplerBase config;
-    HTTPSamplerBase defaultConfig;
-    HTTPSamplerBase partialConfig;
+public class UrlConfigTest extends JMeterTestCase {
+	HTTPSamplerBase config;
 
-    public UrlConfigTest(String name)
-    {
-        super(name);
-    }
+	HTTPSamplerBase defaultConfig;
 
-    protected void setUp()
-    {
-        Arguments args = new Arguments();
-        args.addArgument("username", "mstover");
-        args.addArgument("password", "pass");
-        args.addArgument("action", "login");
-        config = new HTTPNullSampler();
-        config.setName("Full Config");
-        config.setProperty(HTTPSamplerBase.DOMAIN, "www.lazer.com");
-        config.setProperty(HTTPSamplerBase.PATH, "login.jsp");
-        config.setProperty(HTTPSamplerBase.METHOD, HTTPSamplerBase.POST);
-        config.setProperty(
-            new TestElementProperty(HTTPSamplerBase.ARGUMENTS, args));
-        defaultConfig = new HTTPNullSampler();
-        defaultConfig.setName("default");
-        defaultConfig.setProperty(HTTPSamplerBase.DOMAIN, "www.xerox.com");
-        defaultConfig.setProperty(HTTPSamplerBase.PATH, "default.html");
-        partialConfig = new HTTPNullSampler();
-        partialConfig.setProperty(HTTPSamplerBase.PATH, "main.jsp");
-        partialConfig.setProperty(HTTPSamplerBase.METHOD, HTTPSamplerBase.GET);
-    }
+	HTTPSamplerBase partialConfig;
 
-    public void testSimpleConfig()
-    {
-        assertTrue(config.getName().equals("Full Config"));
-        assertEquals(config.getDomain(), "www.lazer.com");
-    }
+	public UrlConfigTest(String name) {
+		super(name);
+	}
 
-    public void testOverRide()
-    {
-    	JMeterProperty jmp =partialConfig.getProperty(HTTPSamplerBase.DOMAIN);
-        assertTrue(jmp instanceof NullProperty);
-        assertTrue(new NullProperty(HTTPSamplerBase.DOMAIN).equals(jmp));
-        partialConfig.addTestElement(defaultConfig);
-        assertEquals(
-            partialConfig.getPropertyAsString(HTTPSamplerBase.DOMAIN),
-            "www.xerox.com");
-        assertEquals(
-            partialConfig.getPropertyAsString(HTTPSamplerBase.PATH),
-            "main.jsp");
-    }
+	protected void setUp() {
+		Arguments args = new Arguments();
+		args.addArgument("username", "mstover");
+		args.addArgument("password", "pass");
+		args.addArgument("action", "login");
+		config = new HTTPNullSampler();
+		config.setName("Full Config");
+		config.setProperty(HTTPSamplerBase.DOMAIN, "www.lazer.com");
+		config.setProperty(HTTPSamplerBase.PATH, "login.jsp");
+		config.setProperty(HTTPSamplerBase.METHOD, HTTPSamplerBase.POST);
+		config.setProperty(new TestElementProperty(HTTPSamplerBase.ARGUMENTS, args));
+		defaultConfig = new HTTPNullSampler();
+		defaultConfig.setName("default");
+		defaultConfig.setProperty(HTTPSamplerBase.DOMAIN, "www.xerox.com");
+		defaultConfig.setProperty(HTTPSamplerBase.PATH, "default.html");
+		partialConfig = new HTTPNullSampler();
+		partialConfig.setProperty(HTTPSamplerBase.PATH, "main.jsp");
+		partialConfig.setProperty(HTTPSamplerBase.METHOD, HTTPSamplerBase.GET);
+	}
+
+	public void testSimpleConfig() {
+		assertTrue(config.getName().equals("Full Config"));
+		assertEquals(config.getDomain(), "www.lazer.com");
+	}
+
+	public void testOverRide() {
+		JMeterProperty jmp = partialConfig.getProperty(HTTPSamplerBase.DOMAIN);
+		assertTrue(jmp instanceof NullProperty);
+		assertTrue(new NullProperty(HTTPSamplerBase.DOMAIN).equals(jmp));
+		partialConfig.addTestElement(defaultConfig);
+		assertEquals(partialConfig.getPropertyAsString(HTTPSamplerBase.DOMAIN), "www.xerox.com");
+		assertEquals(partialConfig.getPropertyAsString(HTTPSamplerBase.PATH), "main.jsp");
+	}
 }

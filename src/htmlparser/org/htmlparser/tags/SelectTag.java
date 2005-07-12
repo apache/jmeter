@@ -29,51 +29,40 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags;
-
 
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserUtils;
 
-public class SelectTag extends CompositeTag
-{
-    private OptionTag[] optionTags = null;
-    private NodeList optionTagList;
+public class SelectTag extends CompositeTag {
+	private OptionTag[] optionTags = null;
 
-    public SelectTag(
-        TagData tagData,
-        CompositeTagData compositeTagData,
-        NodeList optionTagList)
-    {
-        super(tagData, compositeTagData);
-        this.optionTagList = optionTagList;
-    }
+	private NodeList optionTagList;
 
-    public OptionTag[] getOptionTags()
-    {
-        if (optionTags == null)
-        {
-            optionTags = new OptionTag[optionTagList.size()];
-            for (int i = 0; i < optionTagList.size(); i++)
-            {
-                optionTags[i] = (OptionTag) optionTagList.elementAt(i);
-            }
-        }
-        return optionTags;
-    }
+	public SelectTag(TagData tagData, CompositeTagData compositeTagData, NodeList optionTagList) {
+		super(tagData, compositeTagData);
+		this.optionTagList = optionTagList;
+	}
 
-    public String toString()
-    {
-        StringBuffer lString = new StringBuffer(ParserUtils.toString(this));
-        for (int i = 0; i < childTags.size(); i++)
-        {
-            OptionTag optionTag = (OptionTag) childTags.elementAt(i);
-            lString.append(optionTag.toString()).append("\n");
-        }
+	public OptionTag[] getOptionTags() {
+		if (optionTags == null) {
+			optionTags = new OptionTag[optionTagList.size()];
+			for (int i = 0; i < optionTagList.size(); i++) {
+				optionTags[i] = (OptionTag) optionTagList.elementAt(i);
+			}
+		}
+		return optionTags;
+	}
 
-        return lString.toString();
-    }
+	public String toString() {
+		StringBuffer lString = new StringBuffer(ParserUtils.toString(this));
+		for (int i = 0; i < childTags.size(); i++) {
+			OptionTag optionTag = (OptionTag) childTags.elementAt(i);
+			lString.append(optionTag.toString()).append("\n");
+		}
+
+		return lString.toString();
+	}
 }

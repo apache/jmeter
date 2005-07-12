@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.visitors;
 
 import org.htmlparser.StringNode;
@@ -38,69 +37,57 @@ import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TitleTag;
 import org.htmlparser.util.Translate;
 
-
 /**
- * Extracts text from a web page.
- * Usage:
- * <code>
+ * Extracts text from a web page. Usage: <code>
  * Parser parser = new Parser(...);
  * TextExtractingVisitor visitor = new TextExtractingVisitor();
  * parser.visitAllNodesWith(visitor);
  * String textInPage = visitor.getExtractedText();
  * </code>
  */
-public class TextExtractingVisitor extends NodeVisitor
-{
-    private StringBuffer textAccumulator;
-    private boolean preTagBeingProcessed;
+public class TextExtractingVisitor extends NodeVisitor {
+	private StringBuffer textAccumulator;
 
-    public TextExtractingVisitor()
-    {
-        textAccumulator = new StringBuffer();
-        preTagBeingProcessed = false;
-    }
+	private boolean preTagBeingProcessed;
 
-    public String getExtractedText()
-    {
-        return textAccumulator.toString();
-    }
+	public TextExtractingVisitor() {
+		textAccumulator = new StringBuffer();
+		preTagBeingProcessed = false;
+	}
 
-    public void visitStringNode(StringNode stringNode)
-    {
-        String text = stringNode.getText();
-        if (!preTagBeingProcessed)
-        {
-            text = Translate.decode(text);
-            text = replaceNonBreakingSpaceWithOrdinarySpace(text);
-        }
-        textAccumulator.append(text);
-    }
+	public String getExtractedText() {
+		return textAccumulator.toString();
+	}
 
-    public void visitTitleTag(TitleTag titleTag)
-    {
-        textAccumulator.append(titleTag.getTitle());
-    }
+	public void visitStringNode(StringNode stringNode) {
+		String text = stringNode.getText();
+		if (!preTagBeingProcessed) {
+			text = Translate.decode(text);
+			text = replaceNonBreakingSpaceWithOrdinarySpace(text);
+		}
+		textAccumulator.append(text);
+	}
 
-    private String replaceNonBreakingSpaceWithOrdinarySpace(String text)
-    {
-        return text.replace('\u00a0', ' ');
-    }
+	public void visitTitleTag(TitleTag titleTag) {
+		textAccumulator.append(titleTag.getTitle());
+	}
 
-    public void visitEndTag(EndTag endTag)
-    {
-        if (isPreTag(endTag))
-            preTagBeingProcessed = false;
-    }
+	private String replaceNonBreakingSpaceWithOrdinarySpace(String text) {
+		return text.replace('\u00a0', ' ');
+	}
 
-    public void visitTag(Tag tag)
-    {
-        if (isPreTag(tag))
-            preTagBeingProcessed = true;
-    }
+	public void visitEndTag(EndTag endTag) {
+		if (isPreTag(endTag))
+			preTagBeingProcessed = false;
+	}
 
-    private boolean isPreTag(Tag tag)
-    {
-        return tag.getTagName().equals("PRE");
-    }
+	public void visitTag(Tag tag) {
+		if (isPreTag(tag))
+			preTagBeingProcessed = true;
+	}
+
+	private boolean isPreTag(Tag tag) {
+		return tag.getTagName().equals("PRE");
+	}
 
 }

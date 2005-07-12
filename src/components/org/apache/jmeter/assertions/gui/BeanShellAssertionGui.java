@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.assertions.gui;
 
@@ -23,7 +23,7 @@ import java.awt.BorderLayout;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane; 
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -32,58 +32,55 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @version   $Revision$ $Date$
+ * @version $Revision$ $Date$
  */
-public class BeanShellAssertionGui extends AbstractAssertionGui
-{
-	
+public class BeanShellAssertionGui extends AbstractAssertionGui {
+
 	private JTextField filename;// script file name (if present)
-	private JTextField parameters;// parameters to pass to script file (or script)
+
+	private JTextField parameters;// parameters to pass to script file (or
+									// script)
+
 	private JTextArea scriptField;// script area
 
+	public BeanShellAssertionGui() {
+		init();
+	}
 
-	public BeanShellAssertionGui()
-    {
-        init();
-    }
-
-    public void configure(TestElement element)
-    {
-    	scriptField.setText(element.getPropertyAsString(BeanShellAssertion.SCRIPT));
+	public void configure(TestElement element) {
+		scriptField.setText(element.getPropertyAsString(BeanShellAssertion.SCRIPT));
 		filename.setText(element.getPropertyAsString(BeanShellAssertion.FILENAME));
 		parameters.setText(element.getPropertyAsString(BeanShellAssertion.PARAMETERS));
-        super.configure(element);
-    }
+		super.configure(element);
+	}
 
-    public TestElement createTestElement()
-    {
-        BeanShellAssertion sampler = new BeanShellAssertion();
-        modifyTestElement(sampler);
-        return sampler;
-    }
+	public TestElement createTestElement() {
+		BeanShellAssertion sampler = new BeanShellAssertion();
+		modifyTestElement(sampler);
+		return sampler;
+	}
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement te)
-    {
-        te.clear();
-        this.configureTestElement(te);
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement te) {
+		te.clear();
+		this.configureTestElement(te);
 		te.setProperty(BeanShellAssertion.SCRIPT, scriptField.getText());
 		te.setProperty(BeanShellAssertion.FILENAME, filename.getText());
 		te.setProperty(BeanShellAssertion.PARAMETERS, parameters.getText());
-    }
+	}
 
-    public String getLabelResource()
-    {
-        return "bsh_assertion_title";
-    }
+	public String getLabelResource() {
+		return "bsh_assertion_title";
+	}
 
-	private JPanel createFilenamePanel()//TODO ought to be a FileChooser ...
+	private JPanel createFilenamePanel()// TODO ought to be a FileChooser ...
 	{
 		JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_file"));
-		
+
 		filename = new JTextField(10);
 		filename.setName(BeanShellAssertion.FILENAME);
 		label.setLabelFor(filename);
@@ -94,42 +91,36 @@ public class BeanShellAssertionGui extends AbstractAssertionGui
 		return filenamePanel;
 	}
 
-    private JPanel createParameterPanel()
-    {
-    	JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_parameters"));
+	private JPanel createParameterPanel() {
+		JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_parameters"));
 
 		parameters = new JTextField(10);
 		parameters.setName(BeanShellAssertion.PARAMETERS);
 		label.setLabelFor(parameters);
 
-    	JPanel parameterPanel = new JPanel(new BorderLayout(5,0));
-    	parameterPanel.add(label,BorderLayout.WEST);
+		JPanel parameterPanel = new JPanel(new BorderLayout(5, 0));
+		parameterPanel.add(label, BorderLayout.WEST);
 		parameterPanel.add(parameters, BorderLayout.CENTER);
-    	return parameterPanel;
-    }
+		return parameterPanel;
+	}
 
-    private void init()
-    {
-        setLayout(new BorderLayout(0, 5));
-        setBorder(makeBorder());
+	private void init() {
+		setLayout(new BorderLayout(0, 5));
+		setBorder(makeBorder());
 
 		Box box = Box.createVerticalBox();
 		box.add(makeTitlePanel());
 		box.add(createParameterPanel());
 		box.add(createFilenamePanel());
-		add(box,BorderLayout.NORTH);
+		add(box, BorderLayout.NORTH);
 
 		JPanel panel = createScriptPanel();
 		add(panel, BorderLayout.CENTER);
 		// Don't let the input field shrink too much
-		add(
-			Box.createVerticalStrut(panel.getPreferredSize().height),
-			BorderLayout.WEST);
-    }
+		add(Box.createVerticalStrut(panel.getPreferredSize().height), BorderLayout.WEST);
+	}
 
-
-	private JPanel createScriptPanel()
-	{
+	private JPanel createScriptPanel() {
 		scriptField = new JTextArea();
 		scriptField.setRows(4);
 		scriptField.setLineWrap(true);
@@ -142,11 +133,10 @@ public class BeanShellAssertionGui extends AbstractAssertionGui
 		panel.add(label, BorderLayout.NORTH);
 		panel.add(new JScrollPane(scriptField), BorderLayout.CENTER);
 
-		JTextArea explain = new JTextArea(
-				JMeterUtils.getResString("bsh_assertion_script_variables"));
+		JTextArea explain = new JTextArea(JMeterUtils.getResString("bsh_assertion_script_variables"));
 		explain.setLineWrap(true);
-        explain.setEditable(false);
-        explain.setBackground(this.getBackground());
+		explain.setEditable(false);
+		explain.setBackground(this.getBackground());
 		panel.add(explain, BorderLayout.SOUTH);
 
 		return panel;

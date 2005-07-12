@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui.action;
 
@@ -31,67 +31,48 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author     Michael Stover
- * @version    $Revision$
+ * @author Michael Stover
+ * @version $Revision$
  */
-public class Clear implements Command
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
-    public final static String CLEAR = "action.clear";
-    public final static String CLEAR_ALL = "action.clear_all";
+public class Clear implements Command {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    private static Set commands = new HashSet();
-    static
-    {
-        commands.add(CLEAR);
-        commands.add(CLEAR_ALL);
-    }
+	public final static String CLEAR = "action.clear";
 
-    public Clear()
-    {
-    }
+	public final static String CLEAR_ALL = "action.clear_all";
 
-    public Set getActionNames()
-    {
-        return commands;
-    }
+	private static Set commands = new HashSet();
+	static {
+		commands.add(CLEAR);
+		commands.add(CLEAR_ALL);
+	}
 
-    public void doAction(ActionEvent e)
-    {
-        GuiPackage guiPackage = GuiPackage.getInstance();
-        if (e.getActionCommand().equals(CLEAR))
-        {
-            JMeterGUIComponent model = guiPackage.getCurrentGui();
-            try
-            {
-                ((Clearable) model).clear();
-            }
-            catch (Throwable ex)
-            {
-                log.error("", ex);
-            }
-        }
-        else
-        {
-            Iterator iter =
-                guiPackage
-                    .getTreeModel()
-                    .getNodesOfType(Clearable.class)
-                    .iterator();
-            while (iter.hasNext())
-            {
-                try
-                {
-                    Clearable item =
-                        (Clearable) guiPackage.getGui(
-                            ((JMeterTreeNode) iter.next()).getTestElement());
-                    item.clear();
-                }
-                catch (Exception ex)
-                {
-                    log.error("", ex);
-                }
-            }
-        }
-    }
+	public Clear() {
+	}
+
+	public Set getActionNames() {
+		return commands;
+	}
+
+	public void doAction(ActionEvent e) {
+		GuiPackage guiPackage = GuiPackage.getInstance();
+		if (e.getActionCommand().equals(CLEAR)) {
+			JMeterGUIComponent model = guiPackage.getCurrentGui();
+			try {
+				((Clearable) model).clear();
+			} catch (Throwable ex) {
+				log.error("", ex);
+			}
+		} else {
+			Iterator iter = guiPackage.getTreeModel().getNodesOfType(Clearable.class).iterator();
+			while (iter.hasNext()) {
+				try {
+					Clearable item = (Clearable) guiPackage.getGui(((JMeterTreeNode) iter.next()).getTestElement());
+					item.clear();
+				} catch (Exception ex) {
+					log.error("", ex);
+				}
+			}
+		}
+	}
 }
